@@ -52,6 +52,7 @@ func _run() -> void:
 	main.manual_store = SaveStore.new(path + "/manual")
 	main.auto_store = SaveStore.new(path + "/auto")
 	root.add_child(main)
+	main.session.encounters_enabled = false
 	main.name_input.text = "青禾"
 	main._begin()
 	main.session.combat_rng.seed = 42

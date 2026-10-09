@@ -40,6 +40,7 @@ func _calendar() -> void:
 
 func _unified_time() -> void:
 	var game = Session.new()
+	game.encounters_enabled = false
 	game.new_game("行路", 11)
 	check(game.age() == 16 and game.lifespan() == 120, "starting age and realm lifespan")
 	var before: Dictionary = game.snapshot()
@@ -48,10 +49,10 @@ func _unified_time() -> void:
 	game.realm_name()
 	check(game.snapshot() == before, "viewing and invalid travel do not move time")
 	game.travel("wild")
-	check(game.world.day == game.content.route_days("sect", "wild"), "travel uses route length")
+	check(game.world.day == game.content.path_days(game.content.find_path("sect", "wild", {})), "travel uses route lengths")
 	var entry: Dictionary = game.chronicle.entries.back()
-	check(entry.id == "travel" and entry.args.days == 30 and entry.args.location == "wild", "travel recorded with structured arguments")
-	check(game.journal_lines().back().begins_with("【1年2月初一】跋涉 1 个月，抵达落霞谷"), "chronicle renders from template and date")
+	check(entry.id == "travel" and entry.args.days == 3 and entry.args.location == "wild", "each leg recorded with structured arguments")
+	check(game.journal_lines().back().begins_with("【1年1月初八】跋涉 3 日，抵达落霞谷"), "chronicle renders from template and date")
 	game.travel("market")
 	var day: int = game.world.day
 	game.act("sell")
@@ -82,9 +83,11 @@ func _migration() -> void:
 	var settled: Dictionary = done.snapshot()
 	done.start_battle("serpent")
 	check(done.snapshot() == settled, "migrated world keeps the serpent slain")
+	done.encounters_enabled = false
+	var way_home: int = done.content.path_days(done.path_to("sect"))
 	done.travel("sect")
 	done.act("cultivate")
-	check(done.world.day == int(settled.world.day) + 60, "migrated journey keeps going")
+	check(done.world.day == int(settled.world.day) + way_home + 30, "migrated journey keeps going")
 
 	var future: Dictionary = fresh.snapshot()
 	future.version = Session.SAVE_VERSION + 1

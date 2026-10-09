@@ -1,0 +1,139 @@
+{
+	"battle": {},
+	"chronicle": [
+		{
+			"args": {},
+			"day": 0,
+			"id": "start",
+			"major": true
+		},
+		{
+			"args": {
+				"days": 4,
+				"location": "ridge"
+			},
+			"day": 4,
+			"id": "travel",
+			"major": false
+		},
+		{
+			"args": {
+				"days": 3,
+				"location": "wild"
+			},
+			"day": 7,
+			"id": "travel",
+			"major": false
+		},
+		{
+			"args": {
+				"days": 2,
+				"location": "ruin"
+			},
+			"day": 9,
+			"id": "travel",
+			"major": false
+		},
+		{
+			"args": {
+				"enemy": "ruin_rogue"
+			},
+			"day": 9,
+			"id": "battle_start",
+			"major": false
+		},
+		{
+			"args": {
+				"choice": "fight",
+				"event": "ruin_occupied",
+				"part": "choice"
+			},
+			"day": 9,
+			"id": "event",
+			"major": false
+		},
+		{
+			"args": {
+				"amount": 15,
+				"skill": "sword"
+			},
+			"day": 9,
+			"id": "skill_attack",
+			"major": false
+		},
+		{
+			"args": {
+				"enemy": "ruin_rogue",
+				"herbs": 2,
+				"stones": 60,
+				"xp": 25
+			},
+			"day": 9,
+			"id": "battle_victory",
+			"major": false
+		},
+		{
+			"args": {},
+			"day": 9,
+			"id": "ruin_cleared",
+			"major": true
+		},
+		{
+			"args": {
+				"days": 5,
+				"herbs": 2,
+				"pills": 0,
+				"stones": 14
+			},
+			"day": 15,
+			"id": "search_ruin",
+			"major": false
+		}
+	],
+	"ended": {},
+	"pending_event": {},
+	"player": {
+		"birth_day": -5760,
+		"cooldowns": {
+			"search_ruin": 105
+		},
+		"cultivation_carry": 0,
+		"herbs": 4,
+		"hp": 90,
+		"items": {},
+		"journey": {},
+		"location": "ruin",
+		"max_hp": 90,
+		"max_qi": 30,
+		"name": "探洞",
+		"pills": 0,
+		"qi": 30,
+		"realm": 0,
+		"sect": "wanderer",
+		"stones": 104,
+		"warned_for": -1,
+		"xp": 25
+	},
+	"rng": {
+		"combat": "7705986573385308754",
+		"world": "3267399280975162111"
+	},
+	"version": 4,
+	"world": {
+		"day": 15,
+		"events": {
+			"ruin_occupied": {
+				"count": 1,
+				"last_day": 9,
+				"last_occurrence": 0,
+				"reminded": -1,
+				"state": ""
+			}
+		},
+		"flags": {
+			"found_ruin": true,
+			"ruin_cleared": true
+		},
+		"people": {}
+	}
+}

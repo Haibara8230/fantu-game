@@ -17,6 +17,7 @@ var hero
 var enemy
 var background: Texture2D
 var enemy_id := ""
+var human_enemy := false
 var hero_name := ""
 var enemy_name := ""
 var hero_hp: int
@@ -43,8 +44,9 @@ func configure(snapshot: Dictionary, enemy_definition: Dictionary) -> void:
 	hero_sect = snapshot.player.get("sect", "wanderer")
 	enemy_sect = snapshot.battle.get("opponent_sect", "qingyun")
 	enemy_id = snapshot.battle.enemy_id
+	human_enemy = bool(enemy_definition.get("human", false))
 	hero_name = snapshot.player.name + " · " + str(sects[hero_sect].name)
-	enemy_name = enemy_definition.name + (" · " + str(sects[enemy_sect].name) if snapshot.battle.enemy_id == "disciple" else "")
+	enemy_name = enemy_definition.name + (" · " + str(sects[enemy_sect].name) if enemy_definition.get("human", false) else "")
 	hero_hp = int(snapshot.player.hp)
 	hero_max_hp = int(snapshot.player.max_hp)
 	enemy_hp = int(snapshot.battle.hp)
@@ -86,7 +88,7 @@ func _draw() -> void:
 	for actor in [hero, enemy]:
 		if actor == null:
 			continue
-		var width: float = actor.visual_height * (0.18 if actor == hero or enemy_id == "disciple" else 0.35)
+		var width: float = actor.visual_height * (0.18 if actor == hero or human_enemy else 0.35)
 		draw_set_transform(actor.position + Vector2(0, -5), 0, Vector2(1, 0.22))
 		draw_circle(Vector2.ZERO, width, Color(0.1, 0.18, 0.14, 0.22))
 	draw_set_transform(Vector2.ZERO)

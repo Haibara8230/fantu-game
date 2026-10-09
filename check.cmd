@@ -5,11 +5,14 @@ if not exist "%TASK_GODOT%" (
   echo Godot executable missing.
   exit /b 1
 )
+"%TASK_GODOT%" --headless --path . --import >nul 2>&1
 "%TASK_GODOT%" --headless --path . --script res://tests/core_smoke.gd
 if errorlevel 1 exit /b 1
 "%TASK_GODOT%" --headless --path . --script res://tests/world_smoke.gd
 if errorlevel 1 exit /b 1
 "%TASK_GODOT%" --headless --path . --script res://tests/events_smoke.gd
+if errorlevel 1 exit /b 1
+"%TASK_GODOT%" --headless --path . --script res://tests/region_smoke.gd
 if errorlevel 1 exit /b 1
 "%TASK_GODOT%" --headless --path . --script res://tests/ui_smoke.gd
 if errorlevel 1 exit /b 1

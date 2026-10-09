@@ -113,12 +113,19 @@ static func apply(s, effects: Array) -> void:
 			"relation":
 				var person := _person(s, value[0])
 				person.met = true
-				person.relation = int(person.relation) + int(value[1])
+				person.relation = clampi(int(person.relation) + int(value[1]), -s.content.FAVOR_MAX, s.content.FAVOR_MAX)
+			"leave":
+				s.npc_depart(s.acting_npc)
+			"battle":
+				s.begin_battle(value, "event")
 
 static func _person(s, person_id: String) -> Dictionary:
 	if not s.world.people.has(person_id):
-		s.world.people[person_id] = {"met": false, "relation": 0}
+		s.world.people[person_id] = {"met": false, "relation": 0, "last": {}, "absent_until": -1, "talks": 0}
 	return s.world.people[person_id]
+
+static func person(s, person_id: String) -> Dictionary:
+	return _person(s, person_id)
 
 static func _progress(s, event_id: String) -> Dictionary:
 	if not s.world.events.has(event_id):
@@ -148,14 +155,7 @@ static func _mark_fired(s, event_id: String, window: Dictionary, day: int) -> vo
 		progress.state = "completed"
 
 static func _sorted_ids(s) -> Array[String]:
-	var ids: Array[String] = []
-	for id: String in s.content.events:
-		ids.append(id)
-	ids.sort_custom(func(a: String, b: String) -> bool:
-		var pa := int(s.content.events[a].get("priority", 0))
-		var pb := int(s.content.events[b].get("priority", 0))
-		return pa > pb or (pa == pb and a < b))
-	return ids
+	return s.content.events_by_priority()
 
 # --- Scheduler -----------------------------------------------------------------
 
@@ -230,8 +230,9 @@ static func fire(s, due: Dictionary) -> Dictionary:
 # --- Location triggers and choices ----------------------------------------------
 
 ## Fires location events available where the player stands. At most one choice event becomes pending.
+## When only passing through a node on a journey, choice events wait until the player stops there.
 ## Returns the chronicle texts produced.
-static func check_location(s) -> Array[String]:
+static func check_location(s, passing: bool = false) -> Array[String]:
 	var messages: Array[String] = []
 	if not s.pending_event.is_empty() or not s.ended.is_empty() or not s.battle.is_empty():
 		return messages
@@ -240,6 +241,8 @@ static func check_location(s) -> Array[String]:
 	for event_id: String in _sorted_ids(s):
 		var definition: Dictionary = s.content.events[event_id]
 		if definition.trigger != "location" or definition.location != s.player.location:
+			continue
+		if passing and definition.has("choices"):
 			continue
 		var group: String = definition.get("group", "")
 		if not group.is_empty() and used_groups.has(group):
@@ -257,6 +260,9 @@ static func check_location(s) -> Array[String]:
 			s.pending_event = {"id": event_id, "day": day}
 		else:
 			messages.append(s.log_event("event", {"event": event_id, "part": "chronicle"}, bool(definition.get("major", false))))
+	# Stopping somewhere means seeing who is there (after first-meeting stories have had their say).
+	if not passing:
+		s.meet_present()
 	return messages
 
 static func choose(s, choice_id: String) -> String:
@@ -275,6 +281,52 @@ static func choose(s, choice_id: String) -> String:
 		var follow := check_location(s)
 		return " ".join([text] + follow)
 	return "没有这个选项。"
+
+## Danger left after the player's realm: each realm above the first takes one level off.
+static func effective_danger(s, route: Dictionary) -> int:
+	return maxi(0, int(route.danger) - int(s.player.realm))
+
+static func encounter_chance(s, route: Dictionary) -> float:
+	return float(s.content.rules.encounter_chance[effective_danger(s, route)])
+
+## Rolls for something on the road just travelled. Uses only the world random stream.
+## Returns the chronicle text of a plain encounter, or "" (a choice encounter becomes pending).
+static func roll_encounter(s, route: Dictionary) -> String:
+	if s.world_rng.randf() >= encounter_chance(s, route):
+		return ""
+	var danger := effective_danger(s, route)
+	var candidates: Array[String] = []
+	var total := 0
+	for event_id: String in _sorted_ids(s):
+		var definition: Dictionary = s.content.events[event_id]
+		if definition.trigger != "route" or int(definition.min_danger) > danger:
+			continue
+		var on_route := false
+		for pair: Array in definition.routes:
+			on_route = on_route or (pair[0] in route.between and pair[1] in route.between)
+		if not on_route or not open_for(s, event_id, {"occurrence": 0}, int(s.world.day)) or not all_met(s, definition.get("conditions", [])):
+			continue
+		candidates.append(event_id)
+		total += int(definition.weight)
+	if candidates.is_empty():
+		return ""
+	var pick: int = s.world_rng.randi_range(1, total)
+	for event_id: String in candidates:
+		pick -= int(s.content.events[event_id].weight)
+		if pick <= 0:
+			return start(s, event_id)
+	return ""
+
+## Fires an event directly (route encounters). Choice events become pending; others return their text.
+static func start(s, event_id: String) -> String:
+	var definition: Dictionary = s.content.events[event_id]
+	var day: int = s.world.day
+	_mark_fired(s, event_id, {"occurrence": 0}, day)
+	apply(s, definition.get("effects", []))
+	if definition.has("choices"):
+		s.pending_event = {"id": event_id, "day": day}
+		return ""
+	return s.log_event("event", {"event": event_id, "part": "chronicle"}, bool(definition.get("major", false)))
 
 ## Upcoming windows the player knows about (reminder conditions hold), soonest first.
 static func upcoming(s) -> Array[Dictionary]:

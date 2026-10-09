@@ -1,19 +1,88 @@
 {
+  "map": {
+    "name": "青云山周边",
+    "aspect": 1.6,
+    "start": "sect"
+  },
   "locations": {
     "sect": {
       "name": "青云山",
       "subtitle": "山中无甲子，修行亦有时。",
-      "description": "青云山外门的静室与演武坪。你可以闭关修炼，休整伤势，或与同门切磋。"
+      "description": "青云剑宗外门所在。云雾绕着峰腰，钟声每日三响。",
+      "terrain": "mountain",
+      "map": [0.24, 0.24],
+      "spots": [
+        {"id": "chamber", "name": "静室", "description": "外门弟子的静修之所，灵气清润，可闭关、休整与突破。", "actions": ["cultivate", "rest", "breakthrough"]},
+        {"id": "arena", "name": "演武坪", "description": "青石铺就的演武坪，同门常在此切磋。", "actions": ["battle:disciple"]},
+        {"id": "hall", "name": "传功堂", "description": "堂中供着各派传承玉简，可择一研习。", "actions": ["study"]}
+      ]
+    },
+    "town": {
+      "name": "青石镇",
+      "subtitle": "山门脚下，凡俗烟火。",
+      "description": "青云山脚下的凡人小镇。往来修士常在此歇脚，也在茶馆里打听消息。",
+      "terrain": "town",
+      "map": [0.4, 0.42],
+      "spots": [
+        {"id": "inn", "name": "青石客栈", "description": "掌柜识得修士，备有净室与药膳。花几块灵石便能好好歇上一日。", "actions": ["inn_rest"]},
+        {"id": "teahouse", "name": "听雨茶馆", "description": "说书先生醒木一拍，南来北往的消息都汇在这里。", "actions": []}
+      ]
+    },
+    "ferry": {
+      "name": "白鹭渡",
+      "subtitle": "一水横陈，舟渡东西。",
+      "description": "云溪上游的渡口，渡船往返于青石镇与坊市之间，白鹭常在浅滩起落。",
+      "terrain": "ferry",
+      "map": [0.6, 0.5],
+      "spots": [
+        {"id": "dock", "name": "渡口", "description": "老艄公撑着竹篙，等客满便开船。", "actions": []}
+      ]
     },
     "market": {
       "name": "云溪坊市",
       "subtitle": "半城烟火，半城仙缘。",
-      "description": "药香浮过长街。药商收购灵草，往来的散修在这里售卖丹药。"
+      "description": "药香浮过长街。散修在这里买卖丹药与灵材，消息也传得最快。",
+      "terrain": "market",
+      "map": [0.8, 0.62],
+      "spots": [
+        {"id": "street", "name": "长街", "description": "丹铺、器铺与散修地摊挤满长街。", "actions": ["buy_pill"]},
+        {"id": "pharmacy", "name": "云溪药铺", "description": "沈墨的药铺，收购灵草，出价公道。", "actions": ["sell"]}
+      ]
+    },
+    "ridge": {
+      "name": "松风岭",
+      "subtitle": "松涛万壑，山径通幽。",
+      "description": "青云山与落霞谷之间的山岭，松林里偶尔也生着灵草。",
+      "terrain": "ridge",
+      "map": [0.2, 0.6],
+      "gather": [1, 2],
+      "spots": [
+        {"id": "pines", "name": "松林", "description": "古松参天，林下偶见灵草。", "actions": ["gather"]}
+      ]
     },
     "wild": {
       "name": "落霞谷",
       "subtitle": "机缘藏于险处。",
-      "description": "谷中灵草繁盛，也有妖兽出没。深处的赤鳞妖蟒守着一处灵泉，筑基后方可挑战。"
+      "description": "谷中灵草繁盛，也有妖兽出没。深处的赤鳞妖蟒守着一处灵泉，筑基后方可挑战。",
+      "terrain": "valley",
+      "map": [0.44, 0.8],
+      "gather": [2, 4],
+      "spots": [
+        {"id": "entrance", "name": "谷口", "description": "乱石嶙峋，常有妖狼出没。", "actions": ["battle:wolf"]},
+        {"id": "slope", "name": "灵草坡", "description": "向阳的缓坡上灵草丛生。", "actions": ["gather"]},
+        {"id": "spring", "name": "深谷灵泉", "description": "谷底的灵泉被赤鳞妖蟒盘踞。", "actions": ["battle:serpent"]}
+      ]
+    },
+    "ruin": {
+      "name": "古修洞府",
+      "subtitle": "苔封石门，旧主无踪。",
+      "description": "落霞谷深处的古修洞府，石门半掩，似乎有人先一步占据了这里。",
+      "terrain": "ruin",
+      "map": [0.24, 0.88],
+      "hidden_until": "found_ruin",
+      "spots": [
+        {"id": "stone_room", "name": "洞府石室", "description": "石室中散落着前人遗物，仔细翻找或许还有收获。", "actions": ["search_ruin"], "requires_flag": "ruin_cleared"}
+      ]
     }
   },
   "skills": {
@@ -177,7 +246,8 @@
       "reward_xp": 12,
       "reward_herbs": 0,
       "locations": ["sect"],
-      "min_realm": 0
+      "min_realm": 0,
+      "human": true
     },
     "wolf": {
       "name": "山谷妖狼",
@@ -202,6 +272,34 @@
       "min_realm": 1,
       "world_flag": "serpent_slain",
       "flag_event": "serpent_slain"
+    },
+    "rogue": {
+      "name": "拦路劫修",
+      "hp": 70,
+      "damage_min": 9,
+      "damage_max": 14,
+      "reward_stones": 30,
+      "reward_xp": 15,
+      "reward_herbs": 0,
+      "locations": [],
+      "min_realm": 0,
+      "human": true,
+      "sect": "chixiao"
+    },
+    "ruin_rogue": {
+      "name": "占据洞府的散修",
+      "hp": 95,
+      "damage_min": 11,
+      "damage_max": 16,
+      "reward_stones": 60,
+      "reward_xp": 25,
+      "reward_herbs": 2,
+      "locations": [],
+      "min_realm": 0,
+      "human": true,
+      "sect": "xuanyue",
+      "world_flag": "ruin_cleared",
+      "flag_event": "ruin_cleared"
     }
   },
   "rules": {
@@ -213,8 +311,10 @@
     "wait_options": [1, 10],
     "pill_price": 60,
     "herb_price": 8,
-    "gather_min": 2,
-    "gather_max": 4
+    "inn_price": 5,
+    "encounter_chance": [0.08, 0.18, 0.3, 0.42],
+    "ruin_search": {"stones": [10, 30], "herbs": [1, 3], "pill_chance": 0.1},
+    "action_cooldowns": {"search_ruin": 90}
   },
   "realms": [
     {
@@ -236,9 +336,14 @@
     }
   ],
   "routes": [
-    {"between": ["sect", "market"], "days": 30},
-    {"between": ["sect", "wild"], "days": 30},
-    {"between": ["market", "wild"], "days": 30}
+    {"between": ["sect", "town"], "days": 2, "danger": 0},
+    {"between": ["town", "ferry"], "days": 3, "danger": 1},
+    {"between": ["ferry", "market"], "days": 2, "danger": 0},
+    {"between": ["sect", "ridge"], "days": 4, "danger": 1},
+    {"between": ["town", "ridge"], "days": 3, "danger": 1},
+    {"between": ["ridge", "wild"], "days": 3, "danger": 2},
+    {"between": ["market", "wild"], "days": 6, "danger": 2},
+    {"between": ["wild", "ruin"], "days": 2, "danger": 3}
   ],
   "actions": {
     "cultivate": 30,
@@ -249,16 +354,12 @@
     "breakthrough": 90,
     "battle_victory": 30,
     "battle_defeat": 30,
-    "flee": 30
+    "flee": 30,
+    "inn_rest": 1,
+    "search_ruin": 5,
+    "road_recovery": 1
   },
-  "world_flags": ["serpent_slain", "heard_auction_rumor"],
-  "people": {
-    "shen_mo": {
-      "name": "沈墨",
-      "title": "云溪药铺掌柜",
-      "home": "market"
-    }
-  },
+  "world_flags": ["serpent_slain", "heard_auction_rumor", "found_ruin", "ruin_cleared", "helped_wanderer"],
   "items": {
     "auction_invitation": {
       "name": "云溪请柬",

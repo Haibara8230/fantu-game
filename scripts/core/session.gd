@@ -11,6 +11,9 @@ const PLAYER_COUNTS := ["realm", "xp", "hp", "qi", "stones", "herbs", "pills", "
 const LIMIT := 1000000000.0
 const MAX_SPAN_DAYS := 3600
 const MAX_DUE_PER_SPAN := 100000
+const TALK_COOLDOWN_DAYS := 30
+# How long someone stays away after leaving, when their data gives no time.
+const LONG_ABSENCE_DAYS := 3600
 signal changed
 var content = Content.new()
 # Separate streams: world-side draws (gathering, later simulation) never shift duel results.
@@ -23,6 +26,10 @@ var battle: Dictionary = {}
 var pending_event: Dictionary = {}
 # Set when this life is over: {"kind", "day"}.
 var ended: Dictionary = {}
+# Road encounters can be switched off by tests that exercise other systems along fixed paths.
+var encounters_enabled := true
+# The person whose interaction is being applied, for effects such as "leave".
+var acting_npc := ""
 var chronicle = Chronicle.new()
 # Ephemeral presentation events; not part of the save format.
 var combat_events: Array[Dictionary] = []
@@ -44,6 +51,7 @@ func new_game(character_name: String = "无名", seed_value: int = -1) -> void:
 		"name": chosen_name, "birth_day": -int(content.rules.starting_age) * Calendar.DAYS_PER_YEAR,
 		"realm": 0, "xp": 0, "hp": 0, "qi": 0, "cultivation_carry": 0, "warned_for": -1,
 		"stones": int(content.rules.starting_stones), "herbs": 0, "pills": 0, "items": {},
+		"journey": {}, "cooldowns": {},
 		"location": "sect", "sect": "wanderer"
 	}
 	_refresh_realm_stats()
@@ -162,12 +170,12 @@ func act(action: String) -> String:
 	if not blocked.is_empty():
 		return blocked
 	var days := content.action_days(action)
+	if action in content.PLAIN_ACTIONS and not available_here(action):
+		return "此地无法如此行事。"
 	match action:
 		"cultivate":
 			return cultivate(days)
 		"rest":
-			if player.location != "sect":
-				return "请返回青云山休整。"
 			var passed := advance_days(days)
 			if not ended.is_empty():
 				return conclude("", passed)
@@ -175,17 +183,44 @@ func act(action: String) -> String:
 			player.qi = player.max_qi
 			return conclude(log_event("rest", {"days": passed.elapsed}), passed)
 		"gather":
-			if player.location != "wild":
-				return "落霞谷中才有灵草。"
 			var passed := advance_days(days)
 			if not ended.is_empty():
 				return conclude("", passed)
-			var amount := world_rng.randi_range(int(content.rules.gather_min), int(content.rules.gather_max))
+			var span: Array = content.locations[player.location].gather
+			var amount := world_rng.randi_range(int(span[0]), int(span[1]))
 			player.herbs += amount
-			return conclude(log_event("gather", {"days": passed.elapsed, "amount": amount}), passed)
+			return conclude(log_event("gather_at", {"days": passed.elapsed, "amount": amount, "location": player.location}), passed)
+		"inn_rest":
+			var price := int(content.rules.inn_price)
+			if int(player.stones) < price:
+				return "灵石不足：客栈歇息需要 %d 灵石。" % price
+			player.stones -= price
+			var passed := advance_days(days)
+			if not ended.is_empty():
+				return conclude("", passed)
+			player.hp = player.max_hp
+			player.qi = player.max_qi
+			return conclude(log_event("inn_rest", {"days": passed.elapsed, "price": price}), passed)
+		"search_ruin":
+			var ready := int(player.cooldowns.get(action, 0))
+			if int(world.day) < ready:
+				return "石室刚翻找过，%s后再来或许会有新发现。" % Calendar.duration_text(ready - int(world.day))
+			var passed := advance_days(days)
+			if not ended.is_empty():
+				return conclude("", passed)
+			var loot: Dictionary = content.rules.ruin_search
+			var found := {
+				"days": passed.elapsed,
+				"stones": world_rng.randi_range(int(loot.stones[0]), int(loot.stones[1])),
+				"herbs": world_rng.randi_range(int(loot.herbs[0]), int(loot.herbs[1])),
+				"pills": 1 if world_rng.randf() < float(loot.pill_chance) else 0,
+			}
+			player.stones += found.stones
+			player.herbs += found.herbs
+			player.pills += found.pills
+			player.cooldowns[action] = int(world.day) + int(content.rules.action_cooldowns.get(action, 0))
+			return conclude(log_event("search_ruin", found), passed)
 		"sell":
-			if player.location != "market":
-				return "请前往坊市交易。"
 			if int(player.herbs) == 0:
 				return "背包中没有灵草。"
 			var revenue := int(player.herbs) * int(content.rules.herb_price)
@@ -196,8 +231,6 @@ func act(action: String) -> String:
 			player.herbs = 0
 			return conclude(log_event("sell", {"revenue": revenue}), passed)
 		"buy_pill":
-			if player.location != "market":
-				return "请前往坊市购买丹药。"
 			var price := int(content.rules.pill_price)
 			if int(player.stones) < price:
 				return "灵石不足：筑基丹需要 %d 灵石。" % price
@@ -208,8 +241,6 @@ func act(action: String) -> String:
 			player.pills += 1
 			return conclude(log_event("buy_pill", {"price": price}), passed)
 		"breakthrough":
-			if player.location != "sect":
-				return "请返回青云山，在静室中突破。"
 			var need := next_breakthrough()
 			if need.is_empty():
 				return "后续境界尚未开放。"
@@ -233,8 +264,8 @@ func cultivate(days: int) -> String:
 	var blocked := _blocked()
 	if not blocked.is_empty():
 		return blocked
-	if player.location != "sect":
-		return "请返回青云山修炼。"
+	if not available_here("cultivate"):
+		return "此地无法闭关，请回青云山静室。"
 	if days < 1 or days > MAX_SPAN_DAYS:
 		return "闭关天数不合常理。"
 	var passed := advance_days(days, true)
@@ -266,6 +297,121 @@ func _gain_cultivation(days: int) -> int:
 	player.xp += gained
 	return gained
 
+# --- People ------------------------------------------------------------------------
+# People live in the world on their own: residents stay home, wanderers follow a schedule computed
+# from the date. The player only sees who is at the place where they stop; anyone seen there becomes
+# an acquaintance whose whereabouts can be looked up. Nothing about people stops a journey.
+
+## Where a person is today, or "" when absent (left, outside their window, or somewhere undiscovered).
+func npc_location(person_id: String) -> String:
+	var person: Dictionary = content.people[person_id]
+	var day := int(world.day)
+	if int(world.people.get(person_id, {}).get("absent_until", -1)) > day:
+		return ""
+	if person.has("window"):
+		var from: Array = person.window.from
+		var to: Array = person.window.to
+		if day < Calendar.to_day(from[0], from[1], from[2]) or day > Calendar.to_day(to[0], to[1], to[2]):
+			return ""
+	if not Events.all_met(self, person.get("present_if", [])):
+		return ""
+	var location: String = content.person_base_location(person_id, day)
+	return location if location_visible(location) else ""
+
+func present_npcs() -> Array[String]:
+	var result: Array[String] = []
+	for person_id: String in content.people:
+		if npc_location(person_id) == player.location:
+			result.append(person_id)
+	return result
+
+func known_npcs() -> Array[String]:
+	var result: Array[String] = []
+	for person_id: String in world.people:
+		if content.people.has(person_id) and bool(world.people[person_id].get("met", false)):
+			result.append(person_id)
+	return result
+
+func meet_present() -> void:
+	for person_id: String in present_npcs():
+		Events.person(self, person_id).met = true
+
+func favor(person_id: String) -> int:
+	return int(world.people.get(person_id, {}).get("relation", 0))
+
+## The person goes away for their leave time (paid off, defeated, healed and moving on).
+func npc_depart(person_id: String) -> void:
+	if person_id.is_empty():
+		return
+	var days := int(content.people[person_id].get("leave_days", LONG_ABSENCE_DAYS))
+	Events.person(self, person_id).absent_until = int(world.day) + days
+
+## Everything the player could do with a person here: {"id", "label", "available", "reason"}.
+func npc_options(person_id: String) -> Array[Dictionary]:
+	var options: Array[Dictionary] = []
+	var person: Dictionary = content.people[person_id]
+	if person.attitude != "hostile" and not person.get("talk", []).is_empty():
+		options.append({"id": "talk", "label": "交谈", "cooldown_days": TALK_COOLDOWN_DAYS})
+	if person.attitude != "hostile" and int(person.get("gift_favor", 0)) > 0:
+		options.append({"id": "gift", "label": "赠一株灵草（好感 +%d）" % int(person.gift_favor), "conditions": [{"herbs_at_least": 1}], "cooldown_days": TALK_COOLDOWN_DAYS})
+	for interaction: Dictionary in person.get("interactions", []):
+		options.append(interaction)
+	var result: Array[Dictionary] = []
+	var here: bool = npc_location(person_id) == str(player.get("location", ""))
+	var last: Dictionary = world.people.get(person_id, {}).get("last", {})
+	var blocked := _blocked()
+	for option: Dictionary in options:
+		# Interactions repeat unless marked "once"; "cooldown_days" spaces repeats out.
+		var reason := ""
+		if not blocked.is_empty():
+			reason = blocked
+		elif not here:
+			reason = "此人不在这里。"
+		elif bool(option.get("once", false)) and last.has(option.id):
+			reason = "此事已了。"
+		elif last.has(option.id) and int(world.day) < int(last[option.id]) + int(option.get("cooldown_days", 0)):
+			reason = "%s后再来。" % Calendar.duration_text(int(last[option.id]) + int(option.cooldown_days) - int(world.day))
+		elif not Events.all_met(self, option.get("conditions", [])):
+			reason = "条件不足。"
+		result.append({"id": option.id, "label": option.label, "available": reason.is_empty(), "reason": reason})
+	return result
+
+func interact(person_id: String, option_id: String) -> String:
+	if not content.people.has(person_id):
+		return "未知人物。"
+	var chosen: Dictionary = {}
+	for option: Dictionary in npc_options(person_id):
+		if option.id == option_id:
+			chosen = option
+	if chosen.is_empty():
+		return "没有这个选项。"
+	if not chosen.available:
+		return chosen.reason
+	var person: Dictionary = content.people[person_id]
+	var progress := Events.person(self, person_id)
+	progress.met = true
+	progress.last[option_id] = int(world.day)
+	var text := ""
+	match option_id:
+		"talk":
+			var lines: Array = person.talk
+			text = log_event("talk", {"npc": person_id, "line": int(progress.talks) % lines.size()})
+			progress.talks = int(progress.talks) + 1
+			Events.apply(self, [{"relation": [person_id, int(person.get("talk_favor", 0))]}])
+		"gift":
+			Events.apply(self, [{"herbs": -1}, {"relation": [person_id, int(person.gift_favor)]}])
+			text = log_event("gift", {"npc": person_id, "favor": int(person.gift_favor)})
+		_:
+			for interaction: Dictionary in person.interactions:
+				if interaction.id == option_id:
+					acting_npc = person_id
+					Events.apply(self, interaction.get("effects", []))
+					acting_npc = ""
+					if not battle.is_empty():
+						battle.npc = person_id
+			text = log_event("npc", {"npc": person_id, "interaction": option_id})
+	return conclude(text)
+
 func choose_event(choice_id: String) -> String:
 	if pending_event.is_empty():
 		return "眼下没有需要抉择的事。"
@@ -273,22 +419,67 @@ func choose_event(choice_id: String) -> String:
 	changed.emit()
 	return message
 
+func available_here(action: String) -> bool:
+	return action in content.spot_actions(player.location, world.flags)
+
+func location_visible(location_id: String) -> bool:
+	return content.location_visible(location_id, world.flags)
+
+func path_to(location_id: String) -> Array[String]:
+	return content.find_path(player.location, location_id, world.flags)
+
+## Sets out for a destination along the shortest known path and walks it leg by leg.
 func travel(location_id: String) -> String:
 	var blocked := _blocked()
 	if not blocked.is_empty():
 		return "斗法中无法离开。" if not battle.is_empty() else blocked
-	if not content.locations.has(location_id):
+	if not content.locations.has(location_id) or not location_visible(location_id):
 		return "未知地点。"
 	if player.location == location_id:
 		return "你已在此处。"
-	var days := content.route_days(player.location, location_id)
-	if days < 0:
+	if path_to(location_id).is_empty():
 		return "两地之间没有可走的路。"
-	var passed := advance_days(days)
-	if not ended.is_empty():
-		return conclude("", passed)
-	player.location = location_id
-	return conclude(log_event("travel", {"days": passed.elapsed, "location": location_id}), passed)
+	player.journey = {"to": location_id}
+	return _walk()
+
+## Resumes a journey interrupted by an encounter or an event on the way.
+func continue_journey() -> String:
+	var blocked := _blocked()
+	if not blocked.is_empty():
+		return blocked
+	if player.journey.is_empty():
+		return "眼下没有未竟的行程。"
+	return _walk()
+
+## Each leg: time passes on the road, the player arrives at the next node, the road may bring an
+## encounter, then the node's own events fire. Anything that needs the player stops the journey there.
+func _walk() -> String:
+	var parts: Array[String] = []
+	while not player.journey.is_empty():
+		var path := path_to(player.journey.to)
+		if path.size() < 2:
+			player.journey = {}
+			parts.append("前路已断，行程作罢。")
+			break
+		var next: String = path[1]
+		var route: Dictionary = content.route_between(player.location, next)
+		var passed := advance_days(int(route.days))
+		parts.append_array(passed.messages)
+		if not ended.is_empty():
+			player.journey = {}
+			break
+		player.location = next
+		if next == player.journey.to:
+			player.journey = {}
+		parts.append(log_event("travel", {"days": passed.elapsed, "location": next}))
+		if encounters_enabled:
+			parts.append(Events.roll_encounter(self, route))
+		if pending_event.is_empty():
+			parts.append_array(Events.check_location(self, not player.journey.is_empty()))
+		if not pending_event.is_empty() or not battle.is_empty():
+			break
+	changed.emit()
+	return " ".join(parts.filter(func(part: String) -> bool: return not part.is_empty()))
 
 func active_skills() -> Array[String]:
 	var result: Array[String] = []
@@ -304,8 +495,8 @@ func choose_sect(sect_id: String) -> String:
 	var blocked := _blocked()
 	if not blocked.is_empty():
 		return blocked
-	if player.location != "sect":
-		return "请返回青云山研习门派传承。"
+	if not available_here("study"):
+		return "请回青云山传功堂研习门派传承。"
 	if player.get("sect", "wanderer") == sect_id:
 		return "你已在研习此传承。"
 	player.sect = sect_id
@@ -315,20 +506,27 @@ func start_battle(enemy_id: String, opponent_sect: String = "") -> String:
 	if not _blocked().is_empty() or not content.enemies.has(enemy_id):
 		return "当前无法开始斗法。"
 	var enemy: Dictionary = content.enemies[enemy_id]
-	if not player.location in enemy.locations:
+	if not available_here("battle:" + enemy_id):
 		return "此地没有这个对手。"
-	if opponent_sect.is_empty():
-		opponent_sect = str(player.get("sect", "wanderer"))
-		if opponent_sect == "wanderer":
-			opponent_sect = "qingyun"
-	if not content.sects.has(opponent_sect):
+	if not opponent_sect.is_empty() and not content.sects.has(opponent_sect):
 		return "未知对手传承。"
 	if int(player.realm) < int(enemy.min_realm):
 		return "%s气息凶险，需达到%s。" % [enemy.name, content.realm(int(enemy.min_realm)).name]
 	if enemy.has("world_flag") and has_flag(enemy.world_flag):
 		return "%s已经伏诛，此地重归安宁。" % enemy.name
+	return finish(begin_battle(enemy_id, "", opponent_sect))
+
+## Starts a duel without location checks; used by spots and by event effects (context "event").
+func begin_battle(enemy_id: String, context: String = "", opponent_sect: String = "") -> String:
+	var enemy: Dictionary = content.enemies[enemy_id]
+	if opponent_sect.is_empty():
+		opponent_sect = str(enemy.get("sect", player.get("sect", "wanderer")))
+		if opponent_sect == "wanderer":
+			opponent_sect = "qingyun"
 	battle = {"enemy_id": enemy_id, "hp": int(enemy.hp), "turn": 1, "cooldowns": {}, "opponent_sect": opponent_sect}
-	return finish(log_event("battle_start", {"enemy": enemy_id}))
+	if not context.is_empty():
+		battle.context = context
+	return log_event("battle_start", {"enemy": enemy_id})
 
 func use_skill(skill_id: String) -> String:
 	return Combat.use_skill(self, skill_id)
@@ -390,6 +588,17 @@ func restore(data: Variant) -> bool:
 	var items: Variant = saved_player.get("items")
 	if not items is Dictionary:
 		return false
+	var journey: Variant = saved_player.get("journey")
+	if not journey is Dictionary or (not journey.is_empty() and (not journey.get("to") is String or not content.location_visible(journey.to, saved_world.flags))):
+		return false
+	var cooldowns: Variant = saved_player.get("cooldowns")
+	if not cooldowns is Dictionary:
+		return false
+	for action_id: Variant in cooldowns:
+		if not action_id is String or not _whole_nonnegative(cooldowns[action_id]):
+			return false
+	if not content.location_visible(saved_player.location, saved_world.flags):
+		return false
 	for item_id: Variant in items:
 		if not item_id is String or not _whole_nonnegative(items[item_id]) or int(items[item_id]) < 1:
 			return false
@@ -411,6 +620,10 @@ func restore(data: Variant) -> bool:
 		for skill_id: Variant in saved_battle.cooldowns:
 			if not content.skills.has(skill_id) or not _whole_nonnegative(saved_battle.cooldowns[skill_id]):
 				return false
+		if saved_battle.has("context") and saved_battle.context != "event":
+			return false
+		if saved_battle.has("npc") and (not saved_battle.npc is String or not content.people.has(saved_battle.npc)):
+			return false
 		var opponent: Variant = saved_battle.get("opponent_sect")
 		if not opponent is String or not content.sects.has(opponent):
 			return false
@@ -437,6 +650,9 @@ func restore(data: Variant) -> bool:
 	player.warned_for = int(warned)
 	for item_id: String in player.items:
 		player.items[item_id] = int(player.items[item_id])
+	player.journey = {} if journey.is_empty() else {"to": journey.to}
+	for action_id: String in player.cooldowns:
+		player.cooldowns[action_id] = int(player.cooldowns[action_id])
 	_refresh_realm_stats()
 	battle = saved_battle.duplicate(true)
 	if not battle.is_empty():
@@ -474,7 +690,16 @@ func _valid_people(data: Dictionary) -> Variant:
 		var person: Variant = data[person_id]
 		if not person_id is String or not person is Dictionary or not person.get("met") is bool or not _whole_signed(person.get("relation")):
 			return null
-		result[person_id] = {"met": person.met, "relation": int(person.relation)}
+		if absi(int(person.relation)) > content.FAVOR_MAX or not person.get("last") is Dictionary:
+			return null
+		if not _whole_signed(person.get("absent_until")) or int(person.absent_until) < -1 or not _whole_nonnegative(person.get("talks")):
+			return null
+		var last := {}
+		for option_id: Variant in person.last:
+			if not option_id is String or not _whole_nonnegative(person.last[option_id]):
+				return null
+			last[option_id] = int(person.last[option_id])
+		result[person_id] = {"met": person.met, "relation": int(person.relation), "last": last, "absent_until": int(person.absent_until), "talks": int(person.talks)}
 	return result
 
 func _whole_nonnegative(value: Variant) -> bool:

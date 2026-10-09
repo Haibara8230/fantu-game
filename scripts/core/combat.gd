@@ -52,11 +52,15 @@ static func flee(s) -> String:
 	if s.battle.is_empty():
 		return "当前无需撤退。"
 	s.combat_events.append({"type": "end", "result": "flee"})
+	var days := _recovery_days(s, "flee")
 	s.battle.clear()
 	# Outcomes are recorded on the day they happen; the recovery time follows.
-	var days: int = s.content.action_days("flee")
 	var message: String = s.log_event("flee", {"days": days})
 	return s.conclude(message, s.advance_days(days))
+
+## Duels started by events (road encounters, ruins) only cost a short rest afterwards.
+static func _recovery_days(s, action: String) -> int:
+	return s.content.action_days("road_recovery" if s.battle.get("context", "") == "event" else action)
 
 static func _tick_cooldowns(s) -> void:
 	for cooldown_id: String in s.battle.cooldowns:
@@ -77,6 +81,7 @@ static func _enemy_turn(s, guarding: bool) -> String:
 		var lost := mini(int(s.player.stones), 10)
 		s.player.stones -= lost
 		s.player.location = "sect"
+		s.player.journey = {}
 		var message: String = s.log_event("battle_defeat", {"lost": lost})
 		var passed: Dictionary = s.advance_days(s.content.action_days("battle_defeat"))
 		s.player.hp = maxi(1, int(s.player.max_hp) / 2)
@@ -87,7 +92,7 @@ static func _enemy_turn(s, guarding: bool) -> String:
 	return "轮到你施展神通。"
 
 static func _counter_style(s) -> String:
-	if s.battle.enemy_id != "disciple":
+	if not bool(s.content.enemies[s.battle.enemy_id].get("human", false)):
 		return "enemy"
 	var sect_id: String = s.battle.get("opponent_sect", "qingyun")
 	return str(s.content.sects[sect_id].skills[0])
@@ -96,6 +101,8 @@ static func _win(s) -> String:
 	s.combat_events.append({"type": "end", "result": "win"})
 	var enemy_id: String = s.battle.enemy_id
 	var enemy: Dictionary = s.content.enemies[enemy_id]
+	var days := _recovery_days(s, "battle_victory")
+	var npc: String = s.battle.get("npc", "")
 	s.player.stones += int(enemy.reward_stones)
 	s.player.xp += int(enemy.reward_xp)
 	s.player.herbs += int(enemy.reward_herbs)
@@ -106,4 +113,5 @@ static func _win(s) -> String:
 	if not flag.is_empty() and not s.has_flag(flag):
 		s.world.flags[flag] = true
 		message += " " + s.log_event(enemy.flag_event, {}, true)
-	return s.conclude(message, s.advance_days(s.content.action_days("battle_victory")))
+	s.npc_depart(npc)
+	return s.conclude(message, s.advance_days(days))

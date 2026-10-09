@@ -13,14 +13,21 @@ var people: Dictionary = {}
 var items: Dictionary = {}
 var events: Dictionary = {}
 var chronicle: Dictionary = {}
+var map: Dictionary = {}
 var error_message: String = ""
+const DANGER_LEVELS := 4
+const FAVOR_MAX := 200
+const FAVOR_STAGES := [[0, "初识"], [40, "相熟"], [80, "友好"], [140, "信赖"], [200, "亲密"]]
+const ATTITUDES := {"friendly": "友善", "neutral": "中立", "hostile": "敌意"}
+const BUILT_IN_INTERACTIONS := ["talk", "gift"]
+const PLAIN_ACTIONS := ["cultivate", "rest", "breakthrough", "study", "sell", "buy_pill", "gather", "inn_rest", "search_ruin"]
 
 func load_data() -> bool:
 	var parsed: Variant = _read_json("res://data/world.json")
 	if not parsed is Dictionary:
 		error_message = "世界配置格式错误。"
 		return false
-	for section: String in ["locations", "skills", "enemies", "rules", "sects", "actions", "people", "items"]:
+	for section: String in ["map", "locations", "skills", "enemies", "rules", "sects", "actions", "items"]:
 		if not parsed.get(section) is Dictionary or parsed[section].is_empty():
 			error_message = "世界配置缺少：" + section
 			return false
@@ -37,6 +44,12 @@ func load_data() -> bool:
 		error_message = "事件配置格式错误。"
 		return false
 	events = event_data
+	var npc_data: Variant = _read_json("res://data/npcs.json")
+	if not npc_data is Dictionary or npc_data.is_empty():
+		error_message = "人物配置格式错误。"
+		return false
+	people = npc_data
+	map = parsed.map
 	locations = parsed.locations
 	skills = parsed.skills
 	enemies = parsed.enemies
@@ -46,7 +59,6 @@ func load_data() -> bool:
 	routes = parsed.routes
 	actions = parsed.actions
 	world_flags = parsed.world_flags
-	people = parsed.people
 	items = parsed.items
 	chronicle = templates
 	error_message = _validate()
@@ -82,22 +94,42 @@ func _validate() -> String:
 		for location_id: Variant in route.between:
 			if not locations.has(location_id):
 				return "路线引用了未知地点：%s" % location_id
+		if route.between[0] == route.between[1]:
+			return "路线两端相同：%s" % route.between[0]
 		if not _whole(route.get("days")) or int(route.days) < 1:
 			return "路线天数错误。"
+		if not _whole(route.get("danger")) or int(route.danger) >= DANGER_LEVELS:
+			return "路线危险度错误：%s" % "—".join(route.between)
 	for action_id: String in actions:
 		if not _whole(actions[action_id]):
 			return "行为耗时错误：" + action_id
 	for enemy_id: String in enemies:
 		var enemy: Dictionary = enemies[enemy_id]
-		if not enemy.get("locations") is Array or enemy.locations.is_empty():
-			return "敌人缺少出没地点：" + enemy_id
-		for location_id: Variant in enemy.locations:
-			if not locations.has(location_id):
-				return "敌人引用了未知地点：" + enemy_id
 		if not _whole(enemy.get("min_realm")) or int(enemy.min_realm) >= realms.size():
 			return "敌人境界要求错误：" + enemy_id
 		if enemy.has("world_flag") and (not enemy.world_flag in world_flags or not chronicle.has(enemy.get("flag_event", ""))):
 			return "敌人引用了未知世界标记：" + enemy_id
+		if enemy.has("sect") and not sects.has(enemy.sect):
+			return "敌人引用了未知门派：" + enemy_id
+	var chance: Variant = rules.get("encounter_chance")
+	if not chance is Array or chance.size() != DANGER_LEVELS:
+		return "遭遇几率需要按危险度给出 %d 档。" % DANGER_LEVELS
+	for value: Variant in chance:
+		if not (value is int or value is float) or float(value) < 0.0 or float(value) > 1.0:
+			return "遭遇几率必须在 0 到 1 之间。"
+	if not _whole(rules.get("inn_price")):
+		return "客栈价格无效。"
+	var search: Variant = rules.get("ruin_search")
+	if not search is Dictionary or not search.get("stones") is Array or not search.get("herbs") is Array or not (search.get("pill_chance") is float or search.get("pill_chance") is int):
+		return "洞府搜寻配置无效。"
+	if not rules.get("action_cooldowns") is Dictionary:
+		return "行为冷却配置无效。"
+	for action_id: String in rules.action_cooldowns:
+		if not action_id in PLAIN_ACTIONS or not _whole(rules.action_cooldowns[action_id]):
+			return "行为冷却配置无效：" + action_id
+	var problem := _validate_map()
+	if not problem.is_empty():
+		return problem
 	for rule: String in ["cultivate_options", "wait_options"]:
 		if not rules.get(rule) is Array or rules[rule].is_empty():
 			return "规则缺少：" + rule
@@ -105,10 +137,162 @@ func _validate() -> String:
 			if not _whole(days) or int(days) < 1 or int(days) > 3600:
 				return "规则天数错误：" + rule
 	for event_id: String in events:
-		var problem := _validate_event(event_id, events[event_id])
+		problem = _validate_event(event_id, events[event_id])
 		if not problem.is_empty():
 			return "事件 %s：%s" % [event_id, problem]
+	for person_id: String in people:
+		problem = _validate_person(people[person_id])
+		if not problem.is_empty():
+			return "人物 %s：%s" % [person_id, problem]
+	return _validate_reveals()
+
+# --- Map static checks --------------------------------------------------------
+
+func _validate_map() -> String:
+	if not locations.has(map.get("start", "")) or locations[map.start].has("hidden_until"):
+		return "地图起点无效。"
+	if not (map.get("aspect") is float or map.get("aspect") is int) or float(map.aspect) <= 0.0:
+		return "地图比例无效。"
+	for location_id: String in locations:
+		var location: Dictionary = locations[location_id]
+		var point: Variant = location.get("map")
+		if not point is Array or point.size() != 2:
+			return "地点缺少地图坐标：" + location_id
+		for value: Variant in point:
+			if not (value is float or value is int) or float(value) < 0.0 or float(value) > 1.0:
+				return "地图坐标超出范围：" + location_id
+		if not location.get("terrain") is String:
+			return "地点缺少地貌：" + location_id
+		if location.has("hidden_until") and not location.hidden_until in world_flags:
+			return "隐藏地点引用了未知标记：" + location_id
+		if location.has("gather"):
+			var span: Variant = location.gather
+			if not span is Array or span.size() != 2 or not _whole(span[0]) or not _whole(span[1]) or int(span[0]) > int(span[1]):
+				return "采集数量错误：" + location_id
+		if not location.get("spots") is Array or location.spots.is_empty():
+			return "地点缺少场景：" + location_id
+		var ids := {}
+		for spot: Variant in location.spots:
+			if not spot is Dictionary or not spot.get("id") is String or ids.has(spot.id) or not spot.get("name") is String or not spot.get("actions") is Array:
+				return "场景配置错误：" + location_id
+			ids[spot.id] = true
+			if spot.has("requires_flag") and not spot.requires_flag in world_flags:
+				return "场景引用了未知标记：%s.%s" % [location_id, spot.id]
+			for action: Variant in spot.actions:
+				if not action is String:
+					return "场景行为错误：%s.%s" % [location_id, spot.id]
+				if action.begins_with("battle:"):
+					if not enemies.has(action.trim_prefix("battle:")):
+						return "场景引用了未知敌人：%s" % action
+				elif not action in PLAIN_ACTIONS:
+					return "场景引用了未知行为：%s" % action
+				if action == "gather" and not location.has("gather"):
+					return "可采集的地点缺少采集数量：" + location_id
+	# Every location must be reachable once everything is revealed; unhidden ones without any reveal.
+	var everything := {}
+	for flag: String in world_flags:
+		everything[flag] = true
+	for location_id: String in locations:
+		if find_path(map.start, location_id, everything).is_empty():
+			return "地点无法到达：" + location_id
+		if not location_visible(location_id, {}):
+			continue
+		if find_path(map.start, location_id, {}).is_empty():
+			return "未解锁隐藏地点前无法到达：" + location_id
 	return ""
+
+## Hidden locations and gated spots need something in the content that sets their flag.
+func _validate_reveals() -> String:
+	var settable := {}
+	for enemy: Dictionary in enemies.values():
+		if enemy.has("world_flag"):
+			settable[enemy.world_flag] = true
+	var sources: Array = events.values() + people.values()
+	for definition: Dictionary in sources:
+		var effects: Array = definition.get("effects", []).duplicate()
+		for choice: Dictionary in definition.get("choices", []) + definition.get("interactions", []):
+			effects.append_array(choice.get("effects", []))
+		for effect: Dictionary in effects:
+			if effect.has("flag"):
+				settable[effect.flag] = true
+	for location_id: String in locations:
+		var location: Dictionary = locations[location_id]
+		if location.has("hidden_until") and not settable.has(location.hidden_until):
+			return "隐藏地点永远无法发现：" + location_id
+		for spot: Dictionary in location.spots:
+			if spot.has("requires_flag") and not settable.has(spot.requires_flag):
+				return "场景永远无法开放：%s.%s" % [location_id, spot.id]
+	return ""
+
+# --- Map queries ----------------------------------------------------------------
+
+func location_visible(location_id: String, flags: Dictionary) -> bool:
+	var location: Dictionary = locations.get(location_id, {})
+	return not location.is_empty() and (not location.has("hidden_until") or bool(flags.get(location.hidden_until, false)))
+
+func route_between(from_id: String, to_id: String) -> Dictionary:
+	for route: Dictionary in routes:
+		if from_id in route.between and to_id in route.between and from_id != to_id:
+			return route
+	return {}
+
+func neighbors(location_id: String, flags: Dictionary) -> Array[String]:
+	var result: Array[String] = []
+	for route: Dictionary in routes:
+		if location_id in route.between:
+			var other: String = route.between[1] if route.between[0] == location_id else route.between[0]
+			if location_visible(other, flags):
+				result.append(other)
+	return result
+
+## Shortest path by days over visible locations, including both ends; empty when unreachable.
+## Ties prefer the lower total danger, then the alphabetical order of ids, so paths are stable.
+func find_path(from_id: String, to_id: String, flags: Dictionary) -> Array[String]:
+	var empty: Array[String] = []
+	if not location_visible(from_id, flags) or not location_visible(to_id, flags):
+		return empty
+	var best := {from_id: [0, 0]}
+	var previous := {}
+	var open: Array[String] = [from_id]
+	var done := {}
+	while not open.is_empty():
+		open.sort_custom(func(a: String, b: String) -> bool:
+			return best[a][0] < best[b][0] or (best[a][0] == best[b][0] and (best[a][1] < best[b][1] or (best[a][1] == best[b][1] and a < b))))
+		var current: String = open.pop_front()
+		if done.has(current):
+			continue
+		done[current] = true
+		if current == to_id:
+			break
+		for other: String in neighbors(current, flags):
+			var route := route_between(current, other)
+			var cost := [int(best[current][0]) + int(route.days), int(best[current][1]) + int(route.danger)]
+			if not best.has(other) or cost[0] < best[other][0] or (cost[0] == best[other][0] and cost[1] < best[other][1]):
+				best[other] = cost
+				previous[other] = current
+				open.append(other)
+	if not done.has(to_id):
+		return empty
+	var path: Array[String] = [to_id]
+	while path[0] != from_id:
+		path.push_front(previous[path[0]])
+	return path
+
+func path_days(path: Array[String]) -> int:
+	var total := 0
+	for index: int in range(1, path.size()):
+		total += int(route_between(path[index - 1], path[index]).days)
+	return total
+
+## Actions offered by the spots at a location; gated spots appear once their flag is set.
+func spot_actions(location_id: String, flags: Dictionary) -> Array[String]:
+	var result: Array[String] = []
+	for spot: Dictionary in locations.get(location_id, {}).get("spots", []):
+		if spot.has("requires_flag") and not bool(flags.get(spot.requires_flag, false)):
+			continue
+		for action: String in spot.actions:
+			result.append(action)
+	return result
 
 # --- Event static checks -----------------------------------------------------
 
@@ -117,6 +301,9 @@ func _validate_event(event_id: String, definition: Variant) -> String:
 		return "定义必须是对象"
 	if not definition.get("title") is String or definition.title.is_empty():
 		return "缺少标题"
+	# Retired events never fire; they stay only so old chronicle entries keep their text.
+	if definition.get("retired", false):
+		return ""
 	var trigger: Variant = definition.get("trigger")
 	if trigger == "location":
 		if not locations.has(definition.get("location", "")):
@@ -126,6 +313,21 @@ func _validate_event(event_id: String, definition: Variant) -> String:
 			return "日期事件必须有时间窗口或周期"
 		if definition.has("choices") or definition.has("repeat"):
 			return "日期事件不能带选项或冷却"
+	elif trigger == "route":
+		if not definition.get("routes") is Array or definition.routes.is_empty():
+			return "途中事件需要路线"
+		for pair: Variant in definition.routes:
+			if not pair is Array or pair.size() != 2 or route_between(str(pair[0]), str(pair[1])).is_empty():
+				return "途中事件引用了不存在的路线"
+		if not _whole(definition.get("min_danger")) or int(definition.min_danger) >= DANGER_LEVELS:
+			return "途中事件危险度无效"
+		if not _whole(definition.get("weight")) or int(definition.weight) < 1:
+			return "途中事件权重无效"
+		if definition.has("window") or definition.has("periodic"):
+			return "途中事件不使用时间窗口或周期"
+		# People are met where the player stops, never forced on the road; road encounters are beasts and the like.
+		if not definition.has("choices"):
+			return "途中遭遇需要选项"
 	else:
 		return "未知触发方式"
 	if definition.has("priority") and not _whole(definition.priority):
@@ -265,6 +467,10 @@ func _validate_effects(effects: Variant) -> String:
 				ok = people.has(value)
 			"relation":
 				ok = value is Array and value.size() == 2 and people.has(value[0]) and (value[1] is int or value[1] is float)
+			"battle":
+				ok = enemies.has(value)
+			"leave":
+				ok = value == true
 		if not ok:
 			return "效果无效：%s" % key
 	return ""
@@ -289,9 +495,94 @@ func realm(index: int) -> Dictionary:
 func action_days(action_id: String) -> int:
 	return int(actions.get(action_id, 0))
 
-## Direct route length in days, or -1 when the two places are not connected.
-func route_days(from_id: String, to_id: String) -> int:
-	for route: Dictionary in routes:
-		if from_id in route.between and to_id in route.between and from_id != to_id:
-			return int(route.days)
-	return -1
+## Event ids by descending priority, then id. Cached; rebuilt if the event set changes size.
+var _by_priority: Array[String] = []
+var _by_priority_source := -1
+
+func events_by_priority() -> Array[String]:
+	if _by_priority_source != events.size():
+		_by_priority_source = events.size()
+		_by_priority.clear()
+		for id: String in events:
+			if not events[id].get("retired", false):
+				_by_priority.append(id)
+		_by_priority.sort_custom(func(a: String, b: String) -> bool:
+			var pa := int(events[a].get("priority", 0))
+			var pb := int(events[b].get("priority", 0))
+			return pa > pb or (pa == pb and a < b))
+	return _by_priority
+
+# --- People ------------------------------------------------------------------------
+
+func _validate_person(person: Variant) -> String:
+	if not person is Dictionary:
+		return "定义必须是对象"
+	for key: String in ["name", "title", "realm_text", "affiliation", "personality", "description"]:
+		if not person.get(key) is String or person[key].is_empty():
+			return "缺少资料：" + key
+	if not _whole(person.get("age")) or not ATTITUDES.has(person.get("attitude", "")):
+		return "年龄或态度无效"
+	if person.has("home") == person.has("schedule"):
+		return "必须二选一：常驻某地（home）或按行程走动（schedule）"
+	if person.has("home"):
+		if not locations.has(person.home):
+			return "常驻地点未知"
+		if person.has("spot") and not locations[person.home].spots.any(func(spot: Dictionary) -> bool: return spot.id == person.spot):
+			return "常驻场景未知"
+	else:
+		if not person.schedule is Array or person.schedule.is_empty():
+			return "行程不能为空"
+		for stop: Variant in person.schedule:
+			if not stop is Dictionary or not locations.has(stop.get("location", "")) or not _whole(stop.get("days")) or int(stop.days) < 1:
+				return "行程中有无效的一站"
+		if person.has("offset") and not _whole(person.offset):
+			return "行程偏移无效"
+	if person.has("window"):
+		var window: Variant = person.window
+		if not window is Dictionary or not _valid_date(window.get("from")) or not _valid_date(window.get("to")) or _date_day(window.from) > _date_day(window.to):
+			return "出现时段无效"
+	var problem := _validate_conditions(person.get("present_if", []))
+	if not problem.is_empty():
+		return problem
+	for key: String in ["talk_favor", "gift_favor", "leave_days"]:
+		if person.has(key) and not _whole(person[key]):
+			return "数值无效：" + key
+	if person.has("talk") and (not person.talk is Array or person.talk.any(func(line: Variant) -> bool: return not line is String)):
+		return "对话必须是文字列表"
+	var ids := {}
+	for interaction: Variant in person.get("interactions", []):
+		if not interaction is Dictionary or not interaction.get("id") is String or ids.has(interaction.id) or interaction.id in BUILT_IN_INTERACTIONS:
+			return "交互缺少唯一 ID"
+		ids[interaction.id] = true
+		if not interaction.get("label") is String or not interaction.get("chronicle") is String:
+			return "交互 %s 缺少文字" % interaction.id
+		if interaction.has("cooldown_days") and not _whole(interaction.cooldown_days):
+			return "交互 %s 冷却无效" % interaction.id
+		problem = _validate_conditions(interaction.get("conditions", []))
+		if problem.is_empty():
+			problem = _validate_effects(interaction.get("effects", []))
+		if not problem.is_empty():
+			return "交互 %s：%s" % [interaction.id, problem]
+	return ""
+
+## Where a person would be on `day` by home or schedule, before presence conditions are applied.
+func person_base_location(person_id: String, day: int) -> String:
+	var person: Dictionary = people[person_id]
+	if person.has("home"):
+		return person.home
+	var total := 0
+	for stop: Dictionary in person.schedule:
+		total += int(stop.days)
+	var position := (day + int(person.get("offset", 0))) % total
+	for stop: Dictionary in person.schedule:
+		position -= int(stop.days)
+		if position < 0:
+			return stop.location
+	return person.schedule[0].location
+
+func favor_stage(favor: int) -> String:
+	var name: String = FAVOR_STAGES[0][1]
+	for stage: Array in FAVOR_STAGES:
+		if favor >= int(stage[0]):
+			name = stage[1]
+	return name

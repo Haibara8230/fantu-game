@@ -1,0 +1,182 @@
+{
+	"battle": {},
+	"chronicle": [
+		{
+			"args": {},
+			"day": 0,
+			"id": "start",
+			"major": true
+		},
+		{
+			"args": {
+				"days": 2,
+				"location": "town"
+			},
+			"day": 2,
+			"id": "travel",
+			"major": false
+		},
+		{
+			"args": {
+				"days": 3,
+				"location": "ferry"
+			},
+			"day": 5,
+			"id": "travel",
+			"major": false
+		},
+		{
+			"args": {
+				"event": "ferry_boatman",
+				"part": "chronicle"
+			},
+			"day": 5,
+			"id": "event",
+			"major": false
+		},
+		{
+			"args": {
+				"days": 2,
+				"location": "market"
+			},
+			"day": 7,
+			"id": "travel",
+			"major": false
+		},
+		{
+			"args": {
+				"event": "meet_shen",
+				"part": "chronicle"
+			},
+			"day": 7,
+			"id": "event",
+			"major": false
+		},
+		{
+			"args": {
+				"days": 1,
+				"location": "market"
+			},
+			"day": 8,
+			"id": "wait",
+			"major": false
+		},
+		{
+			"args": {
+				"choice": "give",
+				"event": "shen_request",
+				"part": "choice"
+			},
+			"day": 8,
+			"id": "event",
+			"major": false
+		},
+		{
+			"args": {
+				"days": 90,
+				"location": "market"
+			},
+			"day": 98,
+			"id": "wait",
+			"major": false
+		},
+		{
+			"args": {
+				"choice": "give",
+				"event": "shen_request",
+				"part": "choice"
+			},
+			"day": 98,
+			"id": "event",
+			"major": false
+		},
+		{
+			"args": {
+				"days": 2,
+				"location": "ferry"
+			},
+			"day": 100,
+			"id": "travel",
+			"major": false
+		},
+		{
+			"args": {
+				"days": 3,
+				"location": "town"
+			},
+			"day": 103,
+			"id": "travel",
+			"major": false
+		}
+	],
+	"ended": {},
+	"pending_event": {
+		"day": 103,
+		"id": "teahouse_story"
+	},
+	"player": {
+		"birth_day": -5760,
+		"cooldowns": {},
+		"cultivation_carry": 0,
+		"herbs": 0,
+		"hp": 90,
+		"items": {},
+		"journey": {},
+		"location": "town",
+		"max_hp": 90,
+		"max_qi": 30,
+		"name": "药友",
+		"pills": 0,
+		"qi": 30,
+		"realm": 0,
+		"sect": "wanderer",
+		"stones": 130,
+		"warned_for": -1,
+		"xp": 0
+	},
+	"rng": {
+		"combat": "-7592411489953497294",
+		"world": "-3308482033838912274"
+	},
+	"version": 4,
+	"world": {
+		"day": 103,
+		"events": {
+			"ferry_boatman": {
+				"count": 1,
+				"last_day": 5,
+				"last_occurrence": 0,
+				"reminded": -1,
+				"state": "completed"
+			},
+			"meet_shen": {
+				"count": 1,
+				"last_day": 7,
+				"last_occurrence": 0,
+				"reminded": -1,
+				"state": "completed"
+			},
+			"shen_request": {
+				"count": 2,
+				"last_day": 98,
+				"last_occurrence": 0,
+				"reminded": -1,
+				"state": ""
+			},
+			"teahouse_story": {
+				"count": 1,
+				"last_day": 103,
+				"last_occurrence": 0,
+				"reminded": -1,
+				"state": ""
+			}
+		},
+		"flags": {},
+		"people": {
+			"shen_mo": {
+				"met": true,
+				"relation": 2
+			}
+		}
+	}
+}

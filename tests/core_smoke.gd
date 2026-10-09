@@ -12,6 +12,8 @@ func check(condition: bool, message: String) -> void:
 
 func _initialize() -> void:
 	var game = Session.new()
+	# Road encounters have their own suite; this one follows fixed paths.
+	game.encounters_enabled = false
 	check(game.content.error_message.is_empty(), "content loads")
 	game.new_game("测试修士", 42)
 	check(game.player.hp == 90 and game.player.location == "sect", "starting state")
@@ -62,9 +64,10 @@ func _initialize() -> void:
 			game.use_skill("sword")
 	check(game.has_flag("serpent_slain"), "full legal progression slays the serpent")
 	var after_serpent: int = game.world.day
+	var way_home: int = game.content.path_days(game.path_to("sect"))
 	game.travel("sect")
 	game.act("cultivate")
-	check(game.world.day == after_serpent + 60 and game.player.location == "sect", "world continues after the serpent falls")
+	check(game.world.day == after_serpent + way_home + 30 and game.player.location == "sect", "world continues after the serpent falls")
 	game.travel("wild")
 	var settled: Dictionary = game.snapshot()
 	game.start_battle("serpent")

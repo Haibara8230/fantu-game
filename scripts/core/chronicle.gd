@@ -4,7 +4,7 @@ extends RefCounted
 const Calendar = preload("res://scripts/core/calendar.gd")
 const RECENT_LIMIT := 100
 const MAJOR_LIMIT := 5000
-const NAMED_ARGS := {"location": "locations", "enemy": "enemies", "skill": "skills", "sect": "sects"}
+const NAMED_ARGS := {"location": "locations", "enemy": "enemies", "skill": "skills", "sect": "sects", "npc": "people"}
 var entries: Array[Dictionary] = []
 
 func clear() -> void:
@@ -39,7 +39,14 @@ func _trim() -> void:
 	entries = kept
 
 func format(entry: Dictionary, content) -> String:
-	var template: String = _event_text(entry.args, content) if entry.id == "event" else str(content.chronicle.get(entry.id, "（失传的记载）"))
+	var template: String
+	match str(entry.id):
+		"event":
+			template = _event_text(entry.args, content)
+		"talk", "npc":
+			template = _person_text(entry.id, entry.args, content)
+		_:
+			template = str(content.chronicle.get(entry.id, "（失传的记载）"))
 	var values: Dictionary = entry.args.duplicate()
 	for key: String in NAMED_ARGS:
 		if values.has(key):
@@ -51,6 +58,20 @@ func format(entry: Dictionary, content) -> String:
 	if values.has("days"):
 		values["duration"] = Calendar.duration_text(int(values.days))
 	return template.format(values)
+
+## Talks and interactions point into data/npcs.json.
+static func _person_text(kind: String, args: Dictionary, content) -> String:
+	var person: Variant = content.people.get(args.get("npc", ""))
+	if not person is Dictionary:
+		return "（失传的记载）"
+	if kind == "talk":
+		var lines: Array = person.get("talk", [])
+		var index := int(args.get("line", 0))
+		return "{npc_name}：" + str(lines[index]) if index >= 0 and index < lines.size() else "（失传的记载）"
+	for interaction: Dictionary in person.get("interactions", []):
+		if interaction.id == args.get("interaction", ""):
+			return interaction.chronicle
+	return "（失传的记载）"
 
 ## Event records point into data/events.json: the event's own text, a choice, a reminder or an expiry.
 static func _event_text(args: Dictionary, content) -> String:

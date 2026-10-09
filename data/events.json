@@ -9,6 +9,7 @@
     "chronicle": "你在云溪药铺结识掌柜沈墨。他收灵草出价公道，也乐于打听各路消息。"
   },
   "shen_request": {
+    "retired": true,
     "title": "沈墨的托付",
     "trigger": "location",
     "location": "market",
@@ -61,7 +62,7 @@
     "conditions": [
       {"any": [
         {"all": [{"realm_at_least": 1}, {"item_at_least": ["auction_invitation", 1]}]},
-        {"relation_at_least": ["shen_mo", 2]}
+        {"relation_at_least": ["shen_mo", 40]}
       ]}
     ],
     "effects": [{"take_item": "auction_invitation"}],
@@ -124,5 +125,113 @@
     "priority": 5,
     "periodic": {"start_year": 10, "every_years": 10, "month": 6, "from_day": 1, "to_day": 1},
     "chronicle": "青云剑宗外门小比如期举行，胜者得入内门观经。"
+  },
+  "road_wolf": {
+    "title": "山道妖狼",
+    "trigger": "route",
+    "routes": [["ridge", "wild"], ["market", "wild"], ["wild", "ruin"]],
+    "min_danger": 1,
+    "weight": 3,
+    "repeat": {"cooldown_days": 1},
+    "text": "山道转角，一头妖狼伏在乱石后，眼冒绿光，喉中低吼。",
+    "choices": [
+      {"id": "fight", "label": "迎战", "effects": [{"battle": "wolf"}], "chronicle": "你在山道上与妖狼斗法。"},
+      {"id": "lure", "label": "抛出一株灵草引开它", "conditions": [{"herbs_at_least": 1}], "effects": [{"herbs": -1}], "chronicle": "你抛出一株灵草引开妖狼，绕路而行。"}
+    ]
+  },
+  "road_rogue": {
+    "retired": true,
+    "title": "劫修拦路",
+    "trigger": "route",
+    "routes": [["town", "ferry"], ["sect", "ridge"], ["town", "ridge"], ["ridge", "wild"], ["market", "wild"]],
+    "min_danger": 1,
+    "weight": 2,
+    "repeat": {"cooldown_days": 1},
+    "text": "一名蒙面修士横剑拦路：“此路是我开，留下十块灵石，放你过去。”",
+    "choices": [
+      {"id": "pay", "label": "交出十块灵石", "conditions": [{"stones_at_least": 10}], "effects": [{"stones": -10}], "chronicle": "你交出十块灵石，劫修让开了路。"},
+      {"id": "fight", "label": "拔剑相向", "effects": [{"battle": "rogue"}], "chronicle": "你拔剑与拦路劫修斗法。"}
+    ]
+  },
+  "road_peddler": {
+    "retired": true,
+    "title": "行脚药贩",
+    "trigger": "route",
+    "routes": [["sect", "town"], ["town", "ferry"], ["ferry", "market"], ["sect", "ridge"], ["town", "ridge"]],
+    "min_danger": 0,
+    "weight": 2,
+    "repeat": {"cooldown_days": 30},
+    "text": "路边树下歇着一位行脚药贩，担子里装着些丹药和灵草，见你过来便招呼。",
+    "choices": [
+      {"id": "buy_pill", "label": "买一枚筑基丹（70 灵石）", "conditions": [{"stones_at_least": 70}], "effects": [{"stones": -70}, {"pills": 1}], "chronicle": "你从行脚药贩手中买下一枚筑基丹。"},
+      {"id": "sell_herbs", "label": "卖给他三株灵草（20 灵石）", "conditions": [{"herbs_at_least": 3}], "effects": [{"herbs": -3}, {"stones": 20}], "chronicle": "你把三株灵草卖给行脚药贩，得灵石二十。"},
+      {"id": "leave", "label": "点头告辞", "chronicle": "你与行脚药贩寒暄几句，各自赶路。"}
+    ]
+  },
+  "road_wounded": {
+    "retired": true,
+    "title": "林间伤者",
+    "trigger": "route",
+    "routes": [["sect", "ridge"], ["town", "ridge"], ["ridge", "wild"]],
+    "min_danger": 0,
+    "weight": 2,
+    "text": "松林小径旁倚着一名受伤的散修，衣襟染血，脸色苍白。",
+    "choices": [
+      {"id": "help", "label": "以两株灵草为他疗伤", "conditions": [{"herbs_at_least": 2}], "effects": [{"herbs": -2}, {"flag": "helped_wanderer"}], "chronicle": "你以两株灵草为林间的伤者疗伤，他道谢后蹒跚离去。"},
+      {"id": "leave", "label": "无暇顾及", "chronicle": "你无暇顾及林间的伤者，匆匆走过。"}
+    ]
+  },
+  "wanderer_thanks": {
+    "title": "故人致谢",
+    "trigger": "location",
+    "location": "town",
+    "priority": 12,
+    "conditions": [{"flag": "helped_wanderer"}],
+    "effects": [{"stones": 30}],
+    "chronicle": "那名曾在林间受伤的散修在青石镇寻到你，奉上三十灵石作谢。"
+  },
+  "ferry_boatman": {
+    "title": "老艄公",
+    "trigger": "location",
+    "location": "ferry",
+    "priority": 5,
+    "chronicle": "老艄公一边撑篙一边念叨：这渡口撑了四十年，什么样的修士都载过。"
+  },
+  "teahouse_story": {
+    "retired": true,
+    "title": "茶馆说书",
+    "trigger": "location",
+    "location": "town",
+    "priority": 8,
+    "repeat": {"cooldown_days": 30},
+    "conditions": [{"not": {"flag": "found_ruin"}}],
+    "text": "说书先生正讲到落霞谷深处的古修洞府，说到紧要处却停了下来，笑眯眯地看着茶客。",
+    "choices": [
+      {"id": "listen", "label": "添一壶好茶，听他讲完（5 灵石）", "conditions": [{"stones_at_least": 5}], "effects": [{"stones": -5}, {"flag": "found_ruin"}], "chronicle": "说书先生讲完了古修洞府的来历，你记下了它在落霞谷深处的方位。"},
+      {"id": "leave", "label": "改日再来", "chronicle": "你没有续茶，起身离开了茶馆。"}
+    ]
+  },
+  "valley_trail": {
+    "title": "谷底小径",
+    "trigger": "location",
+    "location": "wild",
+    "priority": 6,
+    "conditions": [{"realm_at_least": 1}, {"not": {"flag": "found_ruin"}}],
+    "effects": [{"flag": "found_ruin"}],
+    "chronicle": "筑基后神识敏锐了许多，你在谷底察觉一条被藤蔓遮住的小径，通往一处古修洞府。"
+  },
+  "ruin_occupied": {
+    "retired": true,
+    "title": "洞府有主",
+    "trigger": "location",
+    "location": "ruin",
+    "priority": 20,
+    "repeat": {"cooldown_days": 1},
+    "conditions": [{"not": {"flag": "ruin_cleared"}}],
+    "text": "石门后传来一声冷笑：“此地已有主人，识相的快走。”",
+    "choices": [
+      {"id": "fight", "label": "踏入石门", "effects": [{"battle": "ruin_rogue"}], "chronicle": "你踏入石门，与占据洞府的散修斗法。"},
+      {"id": "leave", "label": "暂且退走", "chronicle": "你没有贸然闯入古修洞府。"}
+    ]
   }
 }

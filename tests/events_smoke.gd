@@ -30,6 +30,7 @@ func _initialize() -> void:
 
 func _game(seed_value: int) -> Session:
 	var game := Session.new()
+	game.encounters_enabled = false
 	game.new_game("事件", seed_value)
 	return game
 
@@ -88,18 +89,14 @@ func _introduction_path_and_cooldown() -> void:
 	var game := _game(3)
 	game.travel("market")
 	game.player.herbs = 5
-	game.wait(1)
-	check(game.pending_event.get("id", "") == "shen_request", "shopkeeper asks for herbs")
-	game.choose_event("give")
-	check(int(game.world.people.shen_mo.relation) == 1 and int(game.player.herbs) == 0, "favor done")
-	game.player.herbs = 5
-	game.wait(10)
-	check(game.pending_event.is_empty(), "repeatable event waits for its cooldown")
-	game.wait(90)
-	check(game.pending_event.get("id", "") == "shen_request", "repeatable event returns after cooldown")
-	game.choose_event("give")
-	check(int(game.world.events.shen_request.count) == 2, "repeat count tracked")
+	check(game.pending_event.is_empty(), "the shopkeeper never forces a request on the player")
+	game.interact("shen_mo", "request")
+	check(game.favor("shen_mo") == 10 and int(game.player.herbs) == 0, "favor done by choice")
 	_jump(game, 5, 3, 10)
+	game.world.people.shen_mo.relation = 39
+	game.wait(1)
+	check(game.pending_event.is_empty(), "an introduction needs the 相熟 stage")
+	game.world.people.shen_mo.relation = 40
 	game.wait(1)
 	check(game.pending_event.get("id", "") == "special_auction" and int(game.player.realm) == 0, "introduction opens the auction without foundation or invitation")
 	game.choose_event("watch")
@@ -161,12 +158,12 @@ func _lifespan() -> void:
 func _pending_event_rules() -> void:
 	var game := _game(10)
 	game.travel("market")
-	game.player.herbs = 5
+	_jump(game, 3, 9, 5)
 	game.wait(1)
 	var held := game.snapshot()
 	check(game.travel("sect") == "眼前之事尚未了结。" and game.cultivate(30) != "" and game.snapshot() == held, "pending choice blocks other actions and time")
 	var copy := Session.new()
-	check(copy.restore(JSON.parse_string(JSON.stringify(held))) and copy.pending_event.id == "shen_request", "pending choice persists through saves")
+	check(copy.restore(JSON.parse_string(JSON.stringify(held))) and copy.pending_event.id == "night_market", "pending choice persists through saves")
 	var bad: Dictionary = held.duplicate(true)
 	bad.pending_event.id = "missing_event"
 	check(not copy.restore(bad), "unknown pending event rejected")
@@ -174,7 +171,7 @@ func _pending_event_rules() -> void:
 	bad.ended = {"kind": "ascension", "day": 0}
 	check(not copy.restore(bad), "unknown ending rejected")
 	bad = held.duplicate(true)
-	bad.world.events.shen_request.state = "lost"
+	bad.world.events.night_market.state = "lost"
 	check(not copy.restore(bad), "unknown event state rejected")
 
 func _comparable(game: Session) -> Dictionary:
@@ -213,7 +210,7 @@ func _long_simulation() -> void:
 func _broken(event: Dictionary) -> String:
 	var content := Content.new()
 	content.load_data()
-	content.events = {"probe": event}
+	content.events["probe"] = event
 	return content._validate()
 
 func _static_checks() -> void:

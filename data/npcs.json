@@ -1,0 +1,205 @@
+{
+  "shen_mo": {
+    "name": "沈墨",
+    "title": "云溪药铺掌柜",
+    "attitude": "friendly",
+    "realm_text": "炼气后期",
+    "affiliation": "散修",
+    "age": 54,
+    "personality": "精明和气",
+    "description": "在云溪坊市开了三十年药铺，收灵草从不压价，坊间消息也数他知道得多。",
+    "home": "market",
+    "spot": "pharmacy",
+    "talk_favor": 3,
+    "gift_favor": 4,
+    "talk": [
+      "“灵草要连根采，须子断了，药性就跑了一半。”",
+      "“最近落霞谷不太平，进谷记得多带两株回春草。”",
+      "“坊市里的消息，十句有三句真，就看你会不会听。”",
+      "“道友若缺灵石，药铺随时收草。”"
+    ],
+    "interactions": [
+      {
+        "id": "request",
+        "label": "代他收五株灵草（灵石 +50）",
+        "conditions": [{"herbs_at_least": 5}],
+        "effects": [{"herbs": -5}, {"stones": 50}, {"relation": ["shen_mo", 10]}],
+        "cooldown_days": 90,
+        "chronicle": "你交给沈墨五株灵草，得灵石五十，彼此更熟络了些。"
+      },
+      {
+        "id": "ask_auction",
+        "label": "打听特殊拍卖的门路",
+        "conditions": [{"flag": "heard_auction_rumor"}, {"relation_at_least": ["shen_mo", 40]}],
+        "cooldown_days": 360,
+        "chronicle": "沈墨压低声音：“那场拍卖我有一席。你若信得过我，届时随我入场便是。”"
+      }
+    ]
+  },
+  "boatman": {
+    "name": "老艄公",
+    "title": "白鹭渡艄公",
+    "attitude": "friendly",
+    "realm_text": "凡人",
+    "affiliation": "白鹭渡",
+    "age": 67,
+    "personality": "健谈",
+    "description": "在白鹭渡撑了四十年船，载过的修士比坊市的灯笼还多。",
+    "home": "ferry",
+    "spot": "dock",
+    "talk_favor": 2,
+    "gift_favor": 2,
+    "talk": [
+      "“这条云溪啊，上游是青石镇，下游就是坊市，涨水的时候可别急着过河。”",
+      "“前些年有位剑修，一剑劈开了河面的冰，老汉到现在都记得。”",
+      "“白鹭飞得低，明日就有雨。”"
+    ],
+    "interactions": []
+  },
+  "storyteller": {
+    "name": "何三更",
+    "title": "听雨茶馆说书人",
+    "attitude": "neutral",
+    "realm_text": "凡人",
+    "affiliation": "听雨茶馆",
+    "age": 61,
+    "personality": "卖关子",
+    "description": "醒木一拍，南来北往的奇闻都能讲出三分真七分趣。讲到紧要处，总要等茶客续茶。",
+    "home": "town",
+    "spot": "teahouse",
+    "talk_favor": 2,
+    "gift_favor": 2,
+    "talk": [
+      "“客官，今日讲的是落霞谷的古修洞府——且听下回分解。”",
+      "“青云剑宗的外门小比，十年一回，热闹得很。”"
+    ],
+    "interactions": [
+      {
+        "id": "story",
+        "label": "添一壶好茶，听他讲完古修洞府（5 灵石）",
+        "conditions": [{"stones_at_least": 5}, {"not": {"flag": "found_ruin"}}],
+        "effects": [{"stones": -5}, {"flag": "found_ruin"}, {"relation": ["storyteller", 5]}],
+        "chronicle": "说书先生讲完了古修洞府的来历，你记下了它在落霞谷深处的方位。"
+      }
+    ]
+  },
+  "peddler": {
+    "name": "钱货郎",
+    "title": "行脚药贩",
+    "attitude": "friendly",
+    "realm_text": "炼气初期",
+    "affiliation": "行商",
+    "age": 38,
+    "personality": "圆滑",
+    "description": "挑着一副担子走遍青云山周边，丹药灵草都卖，价钱看心情。",
+    "schedule": [
+      {"location": "town", "days": 6},
+      {"location": "ferry", "days": 3},
+      {"location": "market", "days": 8},
+      {"location": "ferry", "days": 3},
+      {"location": "town", "days": 4},
+      {"location": "ridge", "days": 5}
+    ],
+    "talk_favor": 2,
+    "gift_favor": 3,
+    "talk": [
+      "“小本买卖，童叟无欺。”",
+      "“白鹭渡往东的路上常有劫修，道友小心。”"
+    ],
+    "interactions": [
+      {
+        "id": "buy_pill",
+        "label": "买一枚筑基丹（70 灵石）",
+        "conditions": [{"stones_at_least": 70}],
+        "effects": [{"stones": -70}, {"pills": 1}],
+        "chronicle": "你从行脚药贩手中买下一枚筑基丹。"
+      },
+      {
+        "id": "sell_herbs",
+        "label": "卖给他三株灵草（20 灵石）",
+        "conditions": [{"herbs_at_least": 3}],
+        "effects": [{"herbs": -3}, {"stones": 20}],
+        "chronicle": "你把三株灵草卖给行脚药贩，得灵石二十。"
+      }
+    ]
+  },
+  "wounded": {
+    "name": "柳寒舟",
+    "title": "受伤的散修",
+    "attitude": "friendly",
+    "realm_text": "炼气中期",
+    "affiliation": "散修",
+    "age": 27,
+    "personality": "沉默",
+    "description": "倚在路旁的年轻散修，衣襟染血，像是刚从一场恶斗中逃出来。",
+    "home": "ridge",
+    "spot": "pines",
+    "window": {"from": [1, 2, 1], "to": [2, 12, 30]},
+    "present_if": [{"not": {"flag": "helped_wanderer"}}],
+    "talk_favor": 1,
+    "gift_favor": 0,
+    "talk": [
+      "“……不碍事。只是被妖狼抓了一下。”"
+    ],
+    "interactions": [
+      {
+        "id": "heal",
+        "label": "以两株灵草为他疗伤",
+        "conditions": [{"herbs_at_least": 2}],
+        "effects": [{"herbs": -2}, {"flag": "helped_wanderer"}, {"relation": ["wounded", 30]}, {"leave": true}],
+        "chronicle": "你以两株灵草为柳寒舟疗伤，他道谢后蹒跚离去。"
+      }
+    ]
+  },
+  "rogue": {
+    "name": "蒙面修士",
+    "title": "拦路劫修",
+    "attitude": "hostile",
+    "realm_text": "炼气后期",
+    "affiliation": "赤霄门弃徒",
+    "age": 35,
+    "personality": "贪婪",
+    "description": "横剑立在路边的蒙面修士，掌心隐有火光，开口便要十块灵石的买路钱。",
+    "schedule": [
+      {"location": "ridge", "days": 20},
+      {"location": "wild", "days": 25},
+      {"location": "ferry", "days": 15}
+    ],
+    "leave_days": 120,
+    "interactions": [
+      {
+        "id": "fight",
+        "label": "拔剑相向",
+        "effects": [{"battle": "rogue"}],
+        "chronicle": "你拔剑与拦路劫修斗法。"
+      },
+      {
+        "id": "pay",
+        "label": "交出十块灵石，让他离开",
+        "conditions": [{"stones_at_least": 10}],
+        "effects": [{"stones": -10}, {"leave": true}],
+        "chronicle": "你交出十块灵石，劫修收起剑扬长而去。"
+      }
+    ]
+  },
+  "squatter": {
+    "name": "石寒",
+    "title": "占据洞府的散修",
+    "attitude": "hostile",
+    "realm_text": "炼气圆满",
+    "affiliation": "玄岳宗弃徒",
+    "age": 49,
+    "personality": "多疑",
+    "description": "盘坐在石门内的散修，把这座古修洞府当作了自己的地盘，谁靠近便冷眼相向。",
+    "home": "ruin",
+    "present_if": [{"not": {"flag": "ruin_cleared"}}],
+    "interactions": [
+      {
+        "id": "fight",
+        "label": "踏入石门，与他斗法",
+        "effects": [{"battle": "ruin_rogue"}],
+        "chronicle": "你踏入石门，与占据洞府的散修斗法。"
+      }
+    ]
+  }
+}

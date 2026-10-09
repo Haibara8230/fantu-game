@@ -1,0 +1,66 @@
+{
+	"battle": {},
+	"chronicle": [
+		{
+			"args": {},
+			"day": 0,
+			"id": "start",
+			"major": true
+		},
+		{
+			"args": {
+				"days": 4,
+				"location": "ridge"
+			},
+			"day": 4,
+			"id": "travel",
+			"major": false
+		}
+	],
+	"ended": {},
+	"pending_event": {
+		"day": 4,
+		"id": "road_rogue"
+	},
+	"player": {
+		"birth_day": -5760,
+		"cooldowns": {},
+		"cultivation_carry": 0,
+		"herbs": 0,
+		"hp": 90,
+		"items": {},
+		"journey": {
+			"to": "wild"
+		},
+		"location": "ridge",
+		"max_hp": 90,
+		"max_qi": 30,
+		"name": "夜行",
+		"pills": 0,
+		"qi": 30,
+		"realm": 0,
+		"sect": "wanderer",
+		"stones": 30,
+		"warned_for": -1,
+		"xp": 0
+	},
+	"rng": {
+		"combat": "4490196359909261317",
+		"world": "-1827540420307748802"
+	},
+	"version": 4,
+	"world": {
+		"day": 4,
+		"events": {
+			"road_rogue": {
+				"count": 1,
+				"last_day": 4,
+				"last_occurrence": 0,
+				"reminded": -1,
+				"state": ""
+			}
+		},
+		"flags": {},
+		"people": {}
+	}
+}

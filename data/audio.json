@@ -1,0 +1,42 @@
+{
+  "music": {
+    "sect": "res://assets/audio/music/qingyun_mountain.ogg",
+    "town": "res://assets/audio/music/qingshi_town.ogg",
+    "ferry": "res://assets/audio/music/bailu_ferry.ogg",
+    "market": "res://assets/audio/music/yunxi_market.ogg",
+    "ridge": "res://assets/audio/music/songfeng_ridge.ogg",
+    "wild": "res://assets/audio/music/luoxia_valley.ogg",
+    "ruin": "res://assets/audio/music/ancient_cave.ogg",
+    "map": "res://assets/audio/music/journey.ogg",
+    "event": "res://assets/audio/music/encounter.ogg",
+    "battle": "res://assets/audio/music/duel.ogg",
+    "ending": "res://assets/audio/music/life_ends.ogg"
+  },
+  "ambience": {
+    "sect": "res://assets/audio/ambience/mountain_wind_bells.ogg",
+    "town": "res://assets/audio/ambience/town_street.ogg",
+    "ferry": "res://assets/audio/ambience/river_egrets.ogg",
+    "market": "res://assets/audio/ambience/market_crowd.ogg",
+    "ridge": "res://assets/audio/ambience/pine_wind.ogg",
+    "wild": "res://assets/audio/ambience/valley_insects.ogg",
+    "ruin": "res://assets/audio/ambience/cave_drips.ogg"
+  },
+  "sfx": {
+    "click": "res://assets/audio/sfx/ui_click.ogg",
+    "page": "res://assets/audio/sfx/ui_page.ogg",
+    "depart": "res://assets/audio/sfx/travel_depart.ogg",
+    "arrive": "res://assets/audio/sfx/travel_arrive.ogg",
+    "event": "res://assets/audio/sfx/event_open.ogg",
+    "choice": "res://assets/audio/sfx/event_choice.ogg",
+    "reminder": "res://assets/audio/sfx/reminder_bell.ogg",
+    "prepare": "res://assets/audio/sfx/battle_prepare.ogg",
+    "release": "res://assets/audio/sfx/battle_release.ogg",
+    "impact": "res://assets/audio/sfx/battle_impact.ogg",
+    "heal": "res://assets/audio/sfx/battle_heal.ogg",
+    "guard": "res://assets/audio/sfx/battle_guard.ogg",
+    "victory": "res://assets/audio/sfx/battle_victory.ogg",
+    "defeat": "res://assets/audio/sfx/battle_defeat.ogg",
+    "breakthrough": "res://assets/audio/sfx/realm_breakthrough.ogg",
+    "ending": "res://assets/audio/sfx/life_ends.ogg"
+  }
+}

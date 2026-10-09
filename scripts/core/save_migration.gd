@@ -1,6 +1,6 @@
 extends RefCounted
 ## Upgrades saved sessions one version at a time. Output still goes through Session validation.
-const CURRENT_VERSION := 3
+const CURRENT_VERSION := 5
 const DAYS_PER_MONTH := 30
 const DAYS_PER_YEAR := 360
 # Version 1 had no ages; every journey began at sixteen on day 0.
@@ -19,6 +19,10 @@ static func migrate(data: Dictionary) -> Dictionary:
 		result = _v1_to_v2(result)
 	if not result.is_empty() and int(result.version) == 2:
 		result = _v2_to_v3(result)
+	if not result.is_empty() and int(result.version) == 3:
+		result = _v3_to_v4(result)
+	if not result.is_empty() and int(result.version) == 4:
+		result = _v4_to_v5(result)
 	return result
 
 static func _v1_to_v2(data: Dictionary) -> Dictionary:
@@ -89,4 +93,38 @@ static func _v2_to_v3(data: Dictionary) -> Dictionary:
 	data["pending_event"] = {}
 	data["ended"] = {}
 	data["version"] = 3
+	return data
+
+## Version 4 adds multi-leg journeys and per-action cooldowns. Location ids are unchanged.
+static func _v3_to_v4(data: Dictionary) -> Dictionary:
+	var player: Variant = data.get("player")
+	if not player is Dictionary:
+		return {}
+	player["journey"] = {}
+	player["cooldowns"] = {}
+	data["version"] = 4
+	return data
+
+# Choice pop-ups that became people one can visit (v5). Pending ones are dropped: the person is
+# simply where they live or wander, and can be approached there.
+const V4_RETIRED_EVENTS := ["shen_request", "teahouse_story", "ruin_occupied", "road_rogue", "road_peddler", "road_wounded"]
+
+## Version 5 turns relations into favor (0–200 scale), adds per-person state and retires forced
+## NPC pop-ups in favour of people the player can look up and approach.
+static func _v4_to_v5(data: Dictionary) -> Dictionary:
+	var world: Variant = data.get("world")
+	var pending: Variant = data.get("pending_event")
+	if not world is Dictionary or not world.get("people") is Dictionary or not pending is Dictionary:
+		return {}
+	for person_id: Variant in world.people:
+		var person: Variant = world.people[person_id]
+		if not person is Dictionary or not (person.get("relation") is int or person.get("relation") is float):
+			return {}
+		person["relation"] = clampi(int(person.relation) * 20, -200, 200)
+		person["last"] = {}
+		person["absent_until"] = -1
+		person["talks"] = 0
+	if pending.get("id", "") in V4_RETIRED_EVENTS:
+		data["pending_event"] = {}
+	data["version"] = 5
 	return data

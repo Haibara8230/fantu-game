@@ -4,6 +4,9 @@ const SaveStore = preload("res://scripts/core/save_store.gd")
 const Landscape = preload("res://scripts/ui/landscape.gd")
 const BattleStage = preload("res://scripts/presentation/battle_stage.gd")
 const Calendar = preload("res://scripts/core/calendar.gd")
+const WorldMap = preload("res://scripts/ui/world_map.gd")
+const AudioDirector = preload("res://scripts/presentation/audio_director.gd")
+const ArtLibrary = preload("res://scripts/ui/art_library.gd")
 const GOLD := Color("#d5b777")
 const INK := Color("#e3e8dc")
 const MUTED := Color("#97aaa4")
@@ -14,7 +17,17 @@ var started := false
 var autosave_error := ""
 var stats: VBoxContainer
 var center: VBoxContainer
-var travel_buttons: Dictionary = {}
+var view := "place"
+var selected_spot := ""
+# The person whose profile is open in the centre panel ("" when none).
+var selected_npc := ""
+var shown_location := ""
+var map_target := ""
+var world_map
+var audio
+var settings_dialog: AcceptDialog
+var view_buttons: Dictionary = {}
+var journey_button: Button
 var journal_text: RichTextLabel
 var status_label: Label
 var clock_label: Label
@@ -31,6 +44,8 @@ var preview_opponent := "qingyun"
 func _ready() -> void:
 	get_window().min_size = Vector2i(1000, 640)
 	_build_theme()
+	audio = AudioDirector.new()
+	add_child(audio)
 	_build_layout()
 	if not session.content.error_message.is_empty():
 		notice(session.content.error_message)
@@ -99,6 +114,7 @@ func _button(text_value: String, callback: Callable, tooltip: String = "") -> Bu
 	button.tooltip_text = tooltip
 	button.custom_minimum_size.y = 42
 	button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	button.pressed.connect(func() -> void: audio.cue("click"))
 	button.pressed.connect(callback)
 	return button
 
@@ -128,10 +144,15 @@ func _build_layout() -> void:
 	header.add_child(spacer)
 	clock_label = _label("", 16, GOLD)
 	header.add_child(clock_label)
+	view_buttons.place = _button("此地", func() -> void: _set_view("place"))
+	header.add_child(view_buttons.place)
+	view_buttons.map = _button("舆图", func() -> void: _set_view("map"))
+	header.add_child(view_buttons.map)
 	header.add_child(_button("保存 F5", _save_manual))
 	load_button = _button("读取 F9", _load_manual)
 	header.add_child(load_button)
 	header.add_child(_button("新旅程", _ask_new_game))
+	header.add_child(_button("设置", _open_settings))
 	var body := HBoxContainer.new()
 	body.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	body.add_theme_constant_override("separation", 16)
@@ -178,6 +199,7 @@ func _build_layout() -> void:
 	new_game_dialog.cancel_button_text = "返回"
 	new_game_dialog.confirmed.connect(_show_welcome)
 	add_child(new_game_dialog)
+	_build_settings()
 
 func _clear(container: Node) -> void:
 	for child: Node in container.get_children():
@@ -200,6 +222,9 @@ func _render() -> void:
 		return
 	var p: Dictionary = session.player
 	clock_label.text = session.time_name()
+	if p.location != shown_location:
+		shown_location = p.location
+		selected_npc = ""
 	_clear(stats)
 	stats.add_child(_label(p.name, 25))
 	stats.add_child(_label(session.realm_name(), 18, GOLD))
@@ -212,34 +237,37 @@ func _render() -> void:
 	stats.add_child(_label("筑基丹  %d" % p.pills, 16))
 	for item_id: String in p.items:
 		stats.add_child(_label("%s  %d" % [session.content.items[item_id].name, p.items[item_id]], 16))
-	for person_id: String in session.world.people:
-		var person: Dictionary = session.world.people[person_id]
-		if person.met and session.content.people.has(person_id):
-			var known: Dictionary = session.content.people[person_id]
-			stats.add_child(_label("相识 · %s（%s）交情 %d" % [known.name, known.title, person.relation], 14, MUTED))
+	_render_acquaintances()
 	_render_upcoming()
 	stats.add_child(HSeparator.new())
 	stats.add_child(_label("山 川 行 旅", 16, GOLD))
-	travel_buttons.clear()
-	var settled: bool = session.battle.is_empty() and session.pending_event.is_empty() and session.ended.is_empty()
-	for location_id: String in ["sect", "market", "wild"]:
-		var definition: Dictionary = session.content.locations[location_id]
-		var current: bool = p.location == location_id
-		var days: int = session.content.route_days(p.location, location_id)
-		var button := _button(definition.name + ("  ·  当前" if current else "  →"), func() -> void: _run(func() -> String: return session.travel(location_id)), "" if current else "路程 " + Calendar.duration_text(days))
-		button.disabled = current or not settled
-		stats.add_child(button)
-		travel_buttons[location_id] = button
+	stats.add_child(_label("身在 · " + session.content.locations[p.location].name, 15))
+	journey_button = null
+	if not p.journey.is_empty():
+		var destination: String = session.content.locations[p.journey.to].name
+		var remaining: int = session.content.path_days(session.path_to(p.journey.to))
+		stats.add_child(_paragraph("行程未竟 · 前往%s，尚余约 %d 日" % [destination, remaining], INK))
+		journey_button = _button("继续赶路", func() -> void: _run(session.continue_journey), "沿原定路线继续前进")
+		journey_button.disabled = not _settled()
+		stats.add_child(journey_button)
+	var open_map := _button("展开舆图", func() -> void: _set_view("map"), "选择目的地，查看路程与危险")
+	open_map.disabled = not _settled()
+	stats.add_child(open_map)
 	load_button.disabled = not manual_store.has_save()
+	view_buttons.place.disabled = view == "place"
+	view_buttons.map.disabled = view == "map" or not _settled()
 	_clear(center)
 	if not session.ended.is_empty():
 		_render_ending()
 	elif not session.pending_event.is_empty():
 		_render_event()
-	elif session.battle.is_empty():
-		_render_location()
-	else:
+	elif not session.battle.is_empty():
 		_render_battle()
+	elif view == "map":
+		_render_map()
+	else:
+		_render_location()
+	_update_audio()
 	journal_text.text = "\n".join(session.journal_lines())
 
 func _objective() -> String:
@@ -266,50 +294,325 @@ func _realm_bonus_text() -> String:
 func _render_location() -> void:
 	if preview_mode:
 		_sect_choices(center, true)
-	var location: Dictionary = session.content.locations[session.player.location]
+	var location_id: String = session.player.location
+	var location: Dictionary = session.content.locations[location_id]
 	var title_row := HBoxContainer.new()
 	title_row.add_theme_constant_override("separation", 20)
 	center.add_child(title_row)
 	title_row.add_child(_label(location.name, 30, GOLD))
 	title_row.add_child(_label(location.subtitle, 16, MUTED))
-	var landscape = Landscape.new()
-	landscape.location_id = session.player.location
-	landscape.custom_minimum_size.y = 145
-	center.add_child(landscape)
 	center.add_child(_paragraph(location.description))
 	center.add_child(_paragraph(_objective(), GOLD))
+	_render_people_here()
+	if not selected_npc.is_empty():
+		_render_person(selected_npc)
+		return
+	# Second-level scenes: each spot has its own banner, text and actions; moving between them is free.
+	var spots := _open_spots(location_id)
+	if not spots.any(func(spot: Dictionary) -> bool: return spot.id == selected_spot):
+		selected_spot = spots[0].id
+	var tabs := HBoxContainer.new()
+	tabs.add_theme_constant_override("separation", 8)
+	center.add_child(tabs)
+	var spot: Dictionary = {}
+	for candidate: Dictionary in spots:
+		var spot_id: String = candidate.id
+		var tab := _button(candidate.name, func() -> void: _select_spot(spot_id))
+		tab.disabled = spot_id == selected_spot
+		tabs.add_child(tab)
+		if spot_id == selected_spot:
+			spot = candidate
+	var landscape = Landscape.new()
+	landscape.location_id = location_id
+	landscape.terrain = location.terrain
+	landscape.spot_id = spot.id
+	landscape.custom_minimum_size.y = 190
+	center.add_child(landscape)
+	center.add_child(_paragraph(spot.description, INK))
 	var grid := GridContainer.new()
 	grid.columns = 2
 	grid.add_theme_constant_override("h_separation", 12)
 	grid.add_theme_constant_override("v_separation", 10)
 	center.add_child(grid)
-	match session.player.location:
-		"sect":
-			for days: Variant in session.content.rules.cultivate_options:
-				var span := int(days)
-				var gain := span * int(session.content.rules.cultivate_xp) / Calendar.DAYS_PER_MONTH
-				_timed(grid, "闭关  ·  " + Calendar.duration_text(span), func() -> String: return session.cultivate(span), "修为约 +%d，恢复全部灵力；约定或寿元告急时会提前出关" % gain)
-			_action(grid, "静室休整  ·  " + _duration("rest"), "rest", "恢复全部气血与灵力")
-			_enemy_action(grid, "同门切磋", "disciple", "获胜获得 12 修为与 12 灵石，斗法有受伤风险")
-			_action(grid, "突破境界  ·  " + _duration("breakthrough"), "breakthrough", _breakthrough_tooltip())
-		"market":
-			_action(grid, "出售全部灵草", "sell", "每株灵草可换取 8 灵石")
-			_action(grid, "购买筑基丹  ·  60 灵石", "buy_pill", "突破筑基所需丹药")
-			center.add_child(_paragraph("坊市交易不耗时日。灵草可从落霞谷采集，也能通过斗法获得。"))
-		"wild":
-			_action(grid, "采集灵草  ·  " + _duration("gather"), "gather", "采得 2–4 株灵草")
-			_enemy_action(grid, "讨伐妖狼", "wolf", "获胜获得 24 灵石、18 修为、2 灵草")
-			var boss_button := _enemy_action(grid, "挑战赤鳞妖蟒", "serpent", "需达到筑基初期；平定后落霞谷重归安宁")
-			boss_button.disabled = int(session.player.realm) < int(session.content.enemies.serpent.min_realm) or session.has_flag("serpent_slain")
+	for action: String in spot.actions:
+		_spot_action(grid, action)
 	for days: Variant in session.content.rules.wait_options:
 		var span := int(days)
 		_timed(grid, "停留  ·  " + Calendar.duration_text(span), func() -> String: return session.wait(span), "原地停留，等候时机；约定临近时会提醒")
-	if session.player.location == "sect" and not preview_mode:
+	if "study" in spot.actions and not preview_mode:
 		_sect_choices(center, false)
 	var names: Array[String] = []
 	for id: String in session.active_skills():
 		names.append(session.content.skills[id].name)
 	center.add_child(_paragraph("已习神通 · " + " / ".join(names) + "。悬停神通按钮可查看效果。"))
+
+# --- People ------------------------------------------------------------------------
+
+## Acquaintances with where they are now; clicking opens their profile.
+func _render_acquaintances() -> void:
+	var known: Array[String] = session.known_npcs()
+	if known.is_empty():
+		return
+	stats.add_child(_label("相 识", 15, GOLD))
+	for person_id: String in known:
+		var person: Dictionary = session.content.people[person_id]
+		var where: String = session.npc_location(person_id)
+		var place: String = session.content.locations[where].name if not where.is_empty() else "下落不明"
+		var favor: int = session.favor(person_id)
+		var entry := _button("%s · %s\n%s · %s %d" % [person.name, place, person.title, session.content.favor_stage(favor), favor], func() -> void: _open_person(person_id), "查看资料")
+		entry.alignment = HORIZONTAL_ALIGNMENT_LEFT
+		entry.add_theme_font_size_override("font_size", 14)
+		stats.add_child(entry)
+
+func _render_people_here() -> void:
+	var here: Array[String] = session.present_npcs()
+	if here.is_empty():
+		return
+	var row := HBoxContainer.new()
+	row.add_theme_constant_override("separation", 8)
+	center.add_child(row)
+	row.add_child(_label("此地人物", 15, GOLD))
+	for person_id: String in here:
+		var person: Dictionary = session.content.people[person_id]
+		var hostile: bool = person.attitude == "hostile"
+		var chip := _button(("⚔ " if hostile else "") + person.name + " · " + person.title, func() -> void: _open_person(person_id), "查看资料与交互")
+		if hostile:
+			chip.add_theme_color_override("font_color", Color("#e39a82"))
+		chip.disabled = person_id == selected_npc
+		row.add_child(chip)
+
+func _open_person(person_id: String) -> void:
+	if presenting:
+		return
+	selected_npc = person_id
+	view = "place"
+	audio.cue("page")
+	_render()
+
+func _close_person() -> void:
+	selected_npc = ""
+	_render()
+
+## Profile card: who they are, how they feel about you, and what you can do with them here.
+func _render_person(person_id: String) -> void:
+	var person: Dictionary = session.content.people[person_id]
+	var progress: Dictionary = session.world.people.get(person_id, {})
+	var favor: int = session.favor(person_id)
+	var card := HBoxContainer.new()
+	card.add_theme_constant_override("separation", 18)
+	center.add_child(card)
+	card.add_child(_portrait(person_id, person))
+	var info := VBoxContainer.new()
+	info.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	card.add_child(info)
+	info.add_child(_label("%s  ·  %s" % [person.name, person.title], 24, GOLD))
+	var attitude_color := Color("#e39a82") if person.attitude == "hostile" else INK
+	info.add_child(_label("态度  %s" % session.content.ATTITUDES[person.attitude], 15, attitude_color))
+	var grid := GridContainer.new()
+	grid.columns = 2
+	grid.add_theme_constant_override("h_separation", 24)
+	info.add_child(grid)
+	for pair: Array in [["境界", person.realm_text], ["出身", person.affiliation], ["年岁", "%d" % (int(person.age) + Calendar.year(int(session.world.day)) - 1)], ["性情", person.personality]]:
+		grid.add_child(_label("%s  %s" % [pair[0], pair[1]], 15))
+	if bool(progress.get("met", false)):
+		_meter(info, "好感 · " + session.content.favor_stage(favor), maxi(favor, 0), session.content.FAVOR_MAX, GOLD)
+	else:
+		info.add_child(_label("初次相见", 15, MUTED))
+	center.add_child(_paragraph(person.description, INK))
+	var where: String = session.npc_location(person_id)
+	if where != session.player.location:
+		var place: String = session.content.locations[where].name if not where.is_empty() else "下落不明"
+		center.add_child(_paragraph("此人现在 · " + place + "。须到当地才能与其交往。", MUTED))
+	var options := GridContainer.new()
+	options.columns = 2
+	options.add_theme_constant_override("h_separation", 12)
+	options.add_theme_constant_override("v_separation", 10)
+	center.add_child(options)
+	if where == session.player.location:
+		for option: Dictionary in session.npc_options(person_id):
+			var option_id: String = option.id
+			var button := _button(option.label, func() -> void: _run(func() -> String: return session.interact(person_id, option_id)), option.reason)
+			button.disabled = not option.available
+			button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+			options.add_child(button)
+	elif not where.is_empty():
+		var locate := _button("在舆图上查看", func() -> void:
+			map_target = where
+			selected_npc = ""
+			_set_view("map"))
+		options.add_child(locate)
+	options.add_child(_button("返回", _close_person))
+
+func _portrait(person_id: String, person: Dictionary) -> Control:
+	var texture: Texture2D = ArtLibrary.texture(ArtLibrary.portrait_path(person_id))
+	if texture != null:
+		var image := TextureRect.new()
+		image.texture = texture
+		image.custom_minimum_size = Vector2(120, 150)
+		image.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		image.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
+		return image
+	# Placeholder: an ink seal with the person's first character until portrait art exists.
+	var seal := PanelContainer.new()
+	seal.custom_minimum_size = Vector2(120, 150)
+	seal.add_theme_stylebox_override("panel", _style(Color("#1b3236"), Color("#e39a82") if person.attitude == "hostile" else GOLD, 0))
+	var initial := _label(str(person.name).left(1), 56, GOLD)
+	initial.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	initial.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	seal.add_child(initial)
+	return seal
+
+func _open_spots(location_id: String) -> Array[Dictionary]:
+	var result: Array[Dictionary] = []
+	for spot: Dictionary in session.content.locations[location_id].spots:
+		if not spot.has("requires_flag") or session.has_flag(spot.requires_flag):
+			result.append(spot)
+	if result.is_empty():
+		result.append({"id": "", "name": "此地", "description": "", "actions": []})
+	return result
+
+func _select_spot(spot_id: String) -> void:
+	selected_spot = spot_id
+	audio.cue("page")
+	_render()
+
+func _spot_action(grid: GridContainer, action: String) -> void:
+	var rules: Dictionary = session.content.rules
+	if action.begins_with("battle:"):
+		var enemy_id := action.trim_prefix("battle:")
+		var enemy: Dictionary = session.content.enemies[enemy_id]
+		var tooltip := "获胜得 %d 灵石、%d 修为、%d 灵草，斗法有受伤风险" % [enemy.reward_stones, enemy.reward_xp, enemy.reward_herbs]
+		if int(enemy.min_realm) > 0:
+			tooltip = "需达到%s。" % session.content.realm(int(enemy.min_realm)).name + tooltip
+		var button := _enemy_action(grid, ("切磋 · " if enemy_id == "disciple" else "挑战 · ") + enemy.name, enemy_id, tooltip)
+		button.disabled = int(session.player.realm) < int(enemy.min_realm) or (enemy.has("world_flag") and session.has_flag(enemy.world_flag))
+		return
+	match action:
+		"cultivate":
+			for days: Variant in rules.cultivate_options:
+				var span := int(days)
+				var gain := span * int(rules.cultivate_xp) / Calendar.DAYS_PER_MONTH
+				_timed(grid, "闭关  ·  " + Calendar.duration_text(span), func() -> String: return session.cultivate(span), "修为约 +%d，恢复全部灵力；约定或寿元告急时会提前出关" % gain)
+		"rest":
+			_action(grid, "静室休整  ·  " + _duration("rest"), "rest", "恢复全部气血与灵力")
+		"breakthrough":
+			_action(grid, "突破境界  ·  " + _duration("breakthrough"), "breakthrough", _breakthrough_tooltip())
+		"sell":
+			_action(grid, "出售全部灵草", "sell", "每株灵草可换取 %d 灵石，不耗时日" % int(rules.herb_price))
+		"buy_pill":
+			_action(grid, "购买筑基丹  ·  %d 灵石" % int(rules.pill_price), "buy_pill", "突破筑基所需丹药，不耗时日")
+		"gather":
+			var span: Array = session.content.locations[session.player.location].gather
+			_action(grid, "采集灵草  ·  " + _duration("gather"), "gather", "采得 %d–%d 株灵草" % [int(span[0]), int(span[1])])
+		"inn_rest":
+			_action(grid, "客栈歇息  ·  %s · %d 灵石" % [_duration("inn_rest"), int(rules.inn_price)], "inn_rest", "恢复全部气血与灵力")
+		"search_ruin":
+			_action(grid, "翻找石室  ·  " + _duration("search_ruin"), "search_ruin", "或得灵石、灵草，偶有丹药；搜过后需隔些时日")
+		"study":
+			pass
+
+## Map view: pick a node to see the route, days and danger, then set out.
+func _render_map() -> void:
+	world_map = WorldMap.new()
+	world_map.custom_minimum_size.y = 430
+	world_map.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	center.add_child(world_map)
+	var path: Array[String] = []
+	if not map_target.is_empty() and map_target != session.player.location:
+		path = session.path_to(map_target)
+	var people_at := {}
+	for person_id: String in session.known_npcs():
+		var where: String = session.npc_location(person_id)
+		if not where.is_empty():
+			if not people_at.has(where):
+				people_at[where] = []
+			people_at[where].append(session.content.people[person_id].name)
+	world_map.configure(session.content, session.world.flags, session.player.location, map_target, path, str(session.player.journey.get("to", "")), people_at)
+	world_map.location_selected.connect(_select_map_target)
+	if map_target.is_empty() or not session.location_visible(map_target):
+		center.add_child(_paragraph("点选舆图上的地点，查看路线与危险。路上每段都可能有遭遇，境界越高越少受扰。", MUTED))
+		return
+	var target: Dictionary = session.content.locations[map_target]
+	center.add_child(_label("%s  ·  %s" % [target.name, target.subtitle], 20, GOLD))
+	center.add_child(_paragraph(target.description))
+	if map_target == session.player.location:
+		center.add_child(_paragraph("你就在此地。", INK))
+		return
+	if path.is_empty():
+		center.add_child(_paragraph("眼下没有通往此地的路。", INK))
+		return
+	var names: Array[String] = []
+	var worst := 0
+	for index: int in path.size():
+		names.append(session.content.locations[path[index]].name)
+		if index > 0:
+			worst = maxi(worst, int(session.content.route_between(path[index - 1], path[index]).danger))
+	var danger_names := ["太平", "略有风险", "颇为凶险", "九死一生"]
+	center.add_child(_paragraph("路线 · %s\n共 %d 日 · 沿途%s" % [" → ".join(names), session.content.path_days(path), danger_names[worst]], INK))
+	var go := _button("启程前往" + target.name, func() -> void: _depart(map_target))
+	go.disabled = not _settled()
+	center.add_child(go)
+
+func _select_map_target(location_id: String) -> void:
+	map_target = location_id
+	audio.cue("page")
+	_render()
+
+func _depart(location_id: String) -> void:
+	audio.cue("depart")
+	view = "place"
+	_run(func() -> String: return session.travel(location_id))
+
+func _set_view(next_view: String) -> void:
+	if presenting:
+		return
+	view = next_view
+	if next_view == "map" and map_target.is_empty():
+		map_target = str(session.player.journey.get("to", ""))
+	_render()
+
+func _settled() -> bool:
+	return session.battle.is_empty() and session.pending_event.is_empty() and session.ended.is_empty()
+
+func _update_audio() -> void:
+	if not session.ended.is_empty():
+		audio.play_music("ending")
+	elif not session.battle.is_empty():
+		audio.play_music("battle")
+	elif not session.pending_event.is_empty():
+		audio.play_music("event")
+	elif view == "map":
+		audio.play_music("map")
+	else:
+		audio.play_music(session.player.location)
+	audio.play_ambience(session.player.location)
+
+func _build_settings() -> void:
+	settings_dialog = AcceptDialog.new()
+	settings_dialog.title = "设置"
+	settings_dialog.ok_button_text = "完成"
+	var rows := VBoxContainer.new()
+	rows.add_theme_constant_override("separation", 10)
+	settings_dialog.add_child(rows)
+	for entry: Array in [["Master", "总音量"], ["Music", "配乐"], ["SFX", "音效"], ["Ambience", "环境声"]]:
+		var bus_name: String = entry[0]
+		var row := HBoxContainer.new()
+		row.add_child(_label(entry[1], 16))
+		var slider := HSlider.new()
+		slider.name = bus_name
+		slider.min_value = 0.0
+		slider.max_value = 1.0
+		slider.step = 0.05
+		slider.custom_minimum_size.x = 260
+		slider.value_changed.connect(func(value: float) -> void: audio.set_volume(bus_name, value))
+		row.add_child(slider)
+		rows.add_child(row)
+	add_child(settings_dialog)
+
+func _open_settings() -> void:
+	for slider: HSlider in settings_dialog.find_children("*", "HSlider", true, false):
+		slider.set_value_no_signal(float(audio.volumes.get(slider.name, 0.0)))
+	settings_dialog.popup_centered(Vector2i(420, 240))
 
 func _timed(parent: GridContainer, title: String, callback: Callable, tooltip: String) -> void:
 	var button := _button(title, func() -> void: _run(callback), tooltip)
@@ -380,6 +683,7 @@ func _render_battle() -> void:
 	battle_stage.custom_minimum_size.y = 245 if preview_mode else 300
 	battle_stage.configure(session.snapshot(), enemy)
 	center.add_child(battle_stage)
+	battle_stage.cue.connect(audio.cue)
 	center.add_child(_paragraph("选择神通 · 守御回灵并减伤 · 出招期间请等待命中与对手反击"))
 	var grid := GridContainer.new()
 	grid.columns = 5
@@ -415,8 +719,12 @@ func _battle_action(action: String) -> void:
 		message = session.flee()
 	else:
 		message = session.use_skill(action)
-	if is_instance_valid(battle_stage) and not session.combat_events.is_empty():
-		await battle_stage.play(session.combat_events.duplicate(true))
+	var events: Array[Dictionary] = session.combat_events.duplicate(true)
+	if is_instance_valid(battle_stage) and not events.is_empty():
+		await battle_stage.play(events)
+	for event: Dictionary in events:
+		if event.get("type") == "end" and event.get("result") in ["win", "lose"]:
+			audio.cue("victory" if event.result == "win" else "defeat")
 	presenting = false
 	for entry: Dictionary in locked_buttons:
 		if is_instance_valid(entry.button):
@@ -435,8 +743,29 @@ func _lock_buttons(node: Node) -> void:
 func _run(callback: Callable) -> void:
 	if presenting:
 		return
+	var before := _cue_state()
 	var message: String = callback.call()
+	_cue_changes(before)
 	notice(message + (" 自动存档失败：" + autosave_error if not autosave_error.is_empty() else ""))
+
+## A small snapshot of what the player would hear change.
+func _cue_state() -> Dictionary:
+	return {"location": session.player.get("location", ""), "pending": session.pending_event.duplicate(), "realm": int(session.player.get("realm", 0)), "ended": not session.ended.is_empty(), "battle": not session.battle.is_empty()}
+
+func _cue_changes(before: Dictionary) -> void:
+	var after := _cue_state()
+	if after.ended and not before.ended:
+		audio.cue("ending")
+	elif after.realm > before.realm:
+		audio.cue("breakthrough")
+	elif not after.pending.is_empty() and after.pending != before.pending:
+		audio.cue("event")
+	elif after.battle and not before.battle:
+		audio.cue("prepare")
+	elif after.location != before.location:
+		audio.cue("arrive")
+	elif not before.pending.is_empty() and after.pending.is_empty():
+		audio.cue("choice")
 
 func notice(message: String) -> void:
 	status_label.text = message

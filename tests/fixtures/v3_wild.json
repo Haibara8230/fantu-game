@@ -1,0 +1,127 @@
+{
+	"battle": {},
+	"chronicle": [
+		{
+			"args": {},
+			"day": 0,
+			"id": "start",
+			"major": true
+		},
+		{
+			"args": {
+				"days": 30,
+				"location": "market"
+			},
+			"day": 30,
+			"id": "travel",
+			"major": false
+		},
+		{
+			"args": {
+				"event": "meet_shen",
+				"part": "chronicle"
+			},
+			"day": 30,
+			"id": "event",
+			"major": false
+		},
+		{
+			"args": {
+				"days": 1,
+				"location": "market"
+			},
+			"day": 31,
+			"id": "wait",
+			"major": false
+		},
+		{
+			"args": {
+				"choice": "give",
+				"event": "shen_request",
+				"part": "choice"
+			},
+			"day": 31,
+			"id": "event",
+			"major": false
+		},
+		{
+			"args": {
+				"days": 100,
+				"location": "market"
+			},
+			"day": 131,
+			"id": "wait",
+			"major": false
+		},
+		{
+			"args": {
+				"choice": "give",
+				"event": "shen_request",
+				"part": "choice"
+			},
+			"day": 131,
+			"id": "event",
+			"major": false
+		},
+		{
+			"args": {
+				"days": 30,
+				"location": "wild"
+			},
+			"day": 161,
+			"id": "travel",
+			"major": false
+		}
+	],
+	"ended": {},
+	"pending_event": {},
+	"player": {
+		"birth_day": -5760,
+		"cultivation_carry": 0,
+		"herbs": 0,
+		"hp": 90,
+		"items": {},
+		"location": "wild",
+		"max_hp": 90,
+		"max_qi": 30,
+		"name": "青禾",
+		"pills": 0,
+		"qi": 30,
+		"realm": 0,
+		"sect": "wanderer",
+		"stones": 130,
+		"warned_for": -1,
+		"xp": 0
+	},
+	"rng": {
+		"combat": "-3810933657430013885",
+		"world": "8713521006035899764"
+	},
+	"version": 3,
+	"world": {
+		"day": 161,
+		"events": {
+			"meet_shen": {
+				"count": 1,
+				"last_day": 30,
+				"last_occurrence": 0,
+				"reminded": -1,
+				"state": "completed"
+			},
+			"shen_request": {
+				"count": 2,
+				"last_day": 131,
+				"last_occurrence": 0,
+				"reminded": -1,
+				"state": ""
+			}
+		},
+		"flags": {},
+		"people": {
+			"shen_mo": {
+				"met": true,
+				"relation": 2
+			}
+		}
+	}
+}

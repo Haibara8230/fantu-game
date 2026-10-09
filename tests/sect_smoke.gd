@@ -70,6 +70,7 @@ func _run() -> void:
 	main.manual_store = Store.new(path + "/manual")
 	main.auto_store = Store.new(path + "/auto")
 	root.add_child(main)
+	main.session.encounters_enabled = false
 	main.name_input.text = "青禾"
 	main._begin()
 	main.preview_mode = true

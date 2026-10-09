@@ -1,0 +1,118 @@
+{
+	"battle": {},
+	"chronicle": [
+		{
+			"args": {},
+			"day": 0,
+			"id": "start",
+			"major": true
+		},
+		{
+			"args": {
+				"days": 30,
+				"location": "market"
+			},
+			"day": 1260,
+			"id": "travel",
+			"major": false
+		},
+		{
+			"args": {
+				"event": "meet_shen",
+				"part": "chronicle"
+			},
+			"day": 1260,
+			"id": "event",
+			"major": false
+		},
+		{
+			"args": {
+				"event": "auction_rumor",
+				"part": "chronicle"
+			},
+			"day": 1260,
+			"id": "event",
+			"major": false
+		},
+		{
+			"args": {
+				"days": 30,
+				"location": "sect"
+			},
+			"day": 1290,
+			"id": "travel",
+			"major": false
+		},
+		{
+			"args": {
+				"event": "sect_invitation",
+				"part": "chronicle"
+			},
+			"day": 1290,
+			"id": "event",
+			"major": false
+		}
+	],
+	"ended": {},
+	"pending_event": {},
+	"player": {
+		"birth_day": -5760,
+		"cultivation_carry": 0,
+		"herbs": 0,
+		"hp": 90,
+		"items": {
+			"auction_invitation": 1
+		},
+		"location": "sect",
+		"max_hp": 140,
+		"max_qi": 50,
+		"name": "持柬",
+		"pills": 0,
+		"qi": 30,
+		"realm": 1,
+		"sect": "wanderer",
+		"stones": 30,
+		"warned_for": -1,
+		"xp": 0
+	},
+	"rng": {
+		"combat": "2553202566416779120",
+		"world": "-2426307853974109599"
+	},
+	"version": 3,
+	"world": {
+		"day": 1290,
+		"events": {
+			"auction_rumor": {
+				"count": 1,
+				"last_day": 1260,
+				"last_occurrence": 0,
+				"reminded": -1,
+				"state": "completed"
+			},
+			"meet_shen": {
+				"count": 1,
+				"last_day": 1260,
+				"last_occurrence": 0,
+				"reminded": -1,
+				"state": "completed"
+			},
+			"sect_invitation": {
+				"count": 1,
+				"last_day": 1290,
+				"last_occurrence": 0,
+				"reminded": -1,
+				"state": "completed"
+			}
+		},
+		"flags": {
+			"heard_auction_rumor": true
+		},
+		"people": {
+			"shen_mo": {
+				"met": true,
+				"relation": 0
+			}
+		}
+	}
+}
