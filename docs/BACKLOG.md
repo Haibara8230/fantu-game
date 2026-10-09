@@ -24,10 +24,17 @@
 | 生成人物立绘图池 | 文件夹已建好，尚无图片，生成人物显示首字印章 | `docs/PORTRAIT_POOL_BRIEF.md`，建议 180 张以上，`disciple_` 占最多 |
 | 配乐 11 首、环境声 7 段 | 尚无文件，播放时为静音 | `docs/AUDIO_ASSETS.md` |
 | 音效 16 个 | 尚无文件，现用程序合成的占位音 | `docs/AUDIO_ASSETS.md` |
-| 按地区区分的斗法背景 | 所有斗法共用 `bamboo_arena_v1.png` | 待写规格 |
-| 劫修、生成修士的斗法人物图 | 沿用同门的人物图集 | 待写规格（可做成按门派换色或换装的图集） |
+| 按地点区分的斗法背景 8 张 | 所有斗法共用 `bamboo_arena_v1.png` | `docs/ART_BRIEF_M4.md` A 组 |
+| 劫修、生成修士的斗法人物图集 14 张 | 沿用同门的人物图集 | `docs/ART_BRIEF_M4.md` B 组（劫修 2 张；生成修士按门派 × 性别 12 张） |
+| 事件关键插图 7 张 | 尚无，事件只有文字面板 | `docs/ART_BRIEF_M4.md` C 组；演出版式确定后可能调整尺寸 |
 | 舆图位置微调 | 云溪坊市画在约 87% 处，标记在 80% | 可重画，或把数据中的坐标改成 0.86 |
 | 多余文件 | `assets/art/map/region_qingyun_preview_v1.png` 游戏不使用 | 可删除 |
+
+**素材接入（图片到位前后需要的代码工作）**
+- 斗法背景：`data/art.json` 改为按地点（含途中遭遇 `road`）选择 `assets/art/battle/<地点>.png`，缺图回退到 `bamboo_arena_v1.png`。
+- 劫修图集：把 `data/art.json` 中 `rogue`、`ruin_rogue` 的 `texture` 指向 `assets/art/actors/` 下的新图，只改数据。
+- 生成修士图集：斗法数据记录对手的门派与性别，按 `cultivator_<门派>_<性别>.png` 选图集，缺图回退到 `rival_atlas_v2.png`。
+- 事件插图：随 M4 对话与事件演出一起接入，事件数据中引用 `assets/art/events/` 下的图片。
 
 ## 三、系统层面尚未开始（M5 以后）
 

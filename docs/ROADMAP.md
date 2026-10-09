@@ -23,7 +23,7 @@
 详细数值与规则见 `docs/DESIGN_BASELINE.md`。
 
 ## 里程碑
-当前进度：M0–M3 的系统与内容已完成（M3 分 a–d 四步：小阶段与灵根、物品与行囊、生成功法与法宝、生成人口与社会）。正式美术与音频按 `docs/ART_BRIEF.md`、`docs/AUDIO_ASSETS.md` 制作中，到位后替换占位。下一步是 M4：前 5 小时打磨与试玩校准。尚未完成的功能、素材与已知问题见 `docs/BACKLOG.md`。
+当前进度：M0–M3 的系统与内容已完成（M3 分 a–d 四步：小阶段与灵根、物品与行囊、生成功法与法宝、生成人口与社会）。正式美术与音频按 `docs/ART_BRIEF.md`、`docs/ART_BRIEF_M4.md`、`docs/PORTRAIT_POOL_BRIEF.md`、`docs/AUDIO_ASSETS.md` 制作中，到位后替换占位。下一步是 M4：前 5 小时打磨与试玩校准。尚未完成的功能、素材与已知问题见 `docs/BACKLOG.md`。
 
 | 里程碑 | 内容 | 验收标准 |
 |---|---|---|
