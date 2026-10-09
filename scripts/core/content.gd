@@ -14,14 +14,19 @@ var items: Dictionary = {}
 var events: Dictionary = {}
 var chronicle: Dictionary = {}
 var map: Dictionary = {}
+var technique_data: Dictionary = {}
+var equipment_data: Dictionary = {}
+var vfx_tiers: Array = []
+var vfx_styles: Dictionary = {}
 var error_message: String = ""
 const DANGER_LEVELS := 4
 const FAVOR_MAX := 200
 const FAVOR_STAGES := [[0, "初识"], [40, "相熟"], [80, "友好"], [140, "信赖"], [200, "亲密"]]
 const ATTITUDES := {"friendly": "友善", "neutral": "中立", "hostile": "敌意"}
 const BUILT_IN_INTERACTIONS := ["talk", "gift"]
-const PLAIN_ACTIONS := ["cultivate", "rest", "breakthrough", "study", "sell", "shop", "gather", "inn_rest", "search_ruin"]
-const ITEM_CATEGORIES := {"herb": "灵草", "pill": "丹药", "material": "材料", "quest": "信物"}
+const PLAIN_ACTIONS := ["cultivate", "rest", "breakthrough", "study", "teach", "sell", "shop", "gather", "inn_rest", "search_ruin"]
+const ITEM_CATEGORIES := {"herb": "灵草", "pill": "丹药", "manual": "玉简", "equipment": "法宝", "material": "材料", "quest": "信物"}
+const Arsenal = preload("res://scripts/core/arsenal.gd")
 
 func load_data() -> bool:
 	var parsed: Variant = _read_json("res://data/world.json")
@@ -55,6 +60,20 @@ func load_data() -> bool:
 		error_message = "物品配置格式错误。"
 		return false
 	items = item_data
+	for pair: Array in [["techniques", "res://data/techniques.json"], ["equipment", "res://data/equipment.json"], ["vfx_tiers", "res://data/vfx_tiers.json"], ["vfx", "res://data/vfx.json"]]:
+		var loaded: Variant = _read_json(pair[1])
+		if not loaded is Dictionary:
+			error_message = "配置格式错误：" + pair[1]
+			return false
+		match pair[0]:
+			"techniques":
+				technique_data = loaded
+			"equipment":
+				equipment_data = loaded
+			"vfx_tiers":
+				vfx_tiers = loaded.get("tiers", [])
+			"vfx":
+				vfx_styles = loaded
 	map = parsed.map
 	locations = parsed.locations
 	skills = parsed.skills
@@ -131,6 +150,10 @@ func _validate() -> String:
 			return "敌人引用了未知世界标记：" + enemy_id
 		if enemy.has("sect") and not sects.has(enemy.sect):
 			return "敌人引用了未知门派：" + enemy_id
+		if enemy.has("drops"):
+			var drops: Variant = enemy.drops
+			if not drops is Dictionary or not (drops.get("chance") is float or drops.get("chance") is int) or not drops.get("tiers") is Array or drops.tiers.size() != 2:
+				return "敌人掉落配置错误：" + enemy_id
 	var chance: Variant = rules.get("encounter_chance")
 	if not chance is Array or chance.size() != DANGER_LEVELS:
 		return "遭遇几率需要按危险度给出 %d 档。" % DANGER_LEVELS
@@ -171,6 +194,9 @@ func _validate() -> String:
 		problem = _validate_event(event_id, events[event_id])
 		if not problem.is_empty():
 			return "事件 %s：%s" % [event_id, problem]
+	problem = _validate_arsenal()
+	if not problem.is_empty():
+		return problem
 	for item_id: String in items:
 		problem = _validate_item(items[item_id])
 		if not problem.is_empty():
@@ -215,6 +241,13 @@ func _validate_map() -> String:
 		for category: Variant in location.get("buys", []):
 			if not ITEM_CATEGORIES.has(category):
 				return "收购品类未知：" + location_id
+		if location.has("stock"):
+			var stock: Variant = location.stock
+			if not stock is Dictionary or not _whole(stock.get("restock_days")) or int(stock.restock_days) < 1 or not stock.get("lines") is Array:
+				return "轮换货品配置错误：" + location_id
+			for line: Variant in stock.lines:
+				if not line is Dictionary or not line.get("kind") in ["manual", "equipment"] or not _whole(line.get("count")) or not line.get("tiers") is Array or line.tiers.size() != 2 or int(line.tiers[0]) < 1 or int(line.tiers[1]) > technique_data.tiers.size() or int(line.tiers[0]) > int(line.tiers[1]):
+					return "轮换货品条目错误：" + location_id
 		if not location.get("spots") is Array or location.spots.is_empty():
 			return "地点缺少场景：" + location_id
 		var ids := {}
@@ -224,6 +257,11 @@ func _validate_map() -> String:
 			ids[spot.id] = true
 			if spot.has("requires_flag") and not spot.requires_flag in world_flags:
 				return "场景引用了未知标记：%s.%s" % [location_id, spot.id]
+			for taught: Variant in spot.get("teach", []):
+				if not taught is String or technique(taught).is_empty():
+					return "场景传授了无效的功法：%s" % taught
+			if spot.has("teach") != ("teach" in spot.actions):
+				return "传授功法的场景须有 teach 行为与传授列表：%s.%s" % [location_id, spot.id]
 			for action: Variant in spot.actions:
 				if not action is String:
 					return "场景行为错误：%s.%s" % [location_id, spot.id]
@@ -694,3 +732,79 @@ func herbs_by_value() -> Array[String]:
 	ids.sort_custom(func(a: String, b: String) -> bool:
 		return int(items[a].price) < int(items[b].price) or (int(items[a].price) == int(items[b].price) and a < b))
 	return ids
+
+# --- Techniques, equipment, manuals ----------------------------------------------------
+
+func technique(id: String) -> Dictionary:
+	return Arsenal.technique(self, id)
+
+func equipment(id: String) -> Dictionary:
+	return Arsenal.equipment(self, id)
+
+## Any item by id: catalogue items, generated equipment ("e:") and manuals ("j:"). {} when unknown.
+func item(id: String) -> Dictionary:
+	if items.has(id):
+		return items[id]
+	if id.begins_with("e:"):
+		return equipment(id)
+	if id.begins_with("j:"):
+		return Arsenal.manual(self, id)
+	return {}
+
+func tier_layers(tier: int) -> Dictionary:
+	return vfx_tiers[clampi(tier - 1, 0, vfx_tiers.size() - 1)]
+
+func _validate_arsenal() -> String:
+	var data := technique_data
+	for key: String in ["tiers", "elements", "archetypes", "affixes"]:
+		if not data.has(key):
+			return "功法配置缺少：" + key
+	if not data.tiers is Array or data.tiers.is_empty():
+		return "功法品阶为空。"
+	var previous_power := 0.0
+	for tier: Variant in data.tiers:
+		if not tier is Dictionary or not tier.get("name") is String or float(tier.get("power", 0)) <= previous_power or not _whole(tier.get("affixes")) or not _whole(tier.get("value")) or not _whole(tier.get("study_days")):
+			return "功法品阶配置错误。"
+		previous_power = float(tier.power)
+	if not _whole(data.get("inheritance_tier")) or int(data.inheritance_tier) < 1 or int(data.inheritance_tier) > data.tiers.size():
+		return "传承功法品阶无效。"
+	for element: Variant in rules.spirit_roots.elements:
+		if not data.elements.has(element) or data.elements[element].get("words", []).is_empty():
+			return "功法缺少属性：%s" % element
+	for archetype_id: String in data.archetypes:
+		var archetype: Dictionary = data.archetypes[archetype_id]
+		if not archetype.get("slot") in ["art", "method"] or archetype.get("nouns", []).is_empty():
+			return "功法原型配置错误：" + archetype_id
+		if archetype.slot == "art":
+			if not archetype.get("kind") in ["attack", "heal", "guard"] or not _whole(archetype.get("qi")) or not _whole(archetype.get("cooldown")):
+				return "神通原型配置错误：" + archetype_id
+			for element: String in data.elements:
+				if not vfx_styles.has(archetype.get("vfx", {}).get(element, "")):
+					return "神通原型缺少特效：%s.%s" % [archetype_id, element]
+		elif not archetype.get("passive") is Dictionary or archetype.passive.is_empty():
+			return "心法原型缺少效果：" + archetype_id
+	for affix_id: String in data.affixes:
+		var affix: Dictionary = data.affixes[affix_id]
+		if not affix.get("name") is String or not affix.get("text") is String or not affix.get("applies") is Array or not affix.get("effect") is Dictionary:
+			return "功法词条配置错误：" + affix_id
+		for archetype_id: Variant in affix.applies:
+			if not data.archetypes.has(archetype_id):
+				return "功法词条引用了未知原型：" + affix_id
+	for skill_id: String in skills:
+		if not data.elements.has(skills[skill_id].get("element", "")):
+			return "传承神通缺少属性：" + skill_id
+	var gear := equipment_data
+	if not gear.get("tiers") is Array or gear.tiers.size() != data.tiers.size():
+		return "装备品阶须与功法品阶一一对应。"
+	for base_id: String in gear.get("bases", {}):
+		var base: Dictionary = gear.bases[base_id]
+		if not gear.slots.has(base.get("slot", "")) or not gear.materials.has(base.get("material", "")) or gear.materials[base.material].size() < gear.tiers.size() or base.get("nouns", []).is_empty():
+			return "装备底材配置错误：" + base_id
+	# Tier effects must escalate on every measure, so a stronger art never looks weaker.
+	if vfx_tiers.size() != data.tiers.size():
+		return "特效品阶须与功法品阶一一对应。"
+	for index: int in range(1, vfx_tiers.size()):
+		for key: String in vfx_tiers[0]:
+			if float(vfx_tiers[index].get(key, 0)) <= float(vfx_tiers[index - 1].get(key, 0)):
+				return "特效第 %d 阶的 %s 没有高于上一阶。" % [index + 1, key]
+	return ""

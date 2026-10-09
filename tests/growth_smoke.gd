@@ -82,7 +82,8 @@ func _stages() -> void:
 	stronger.start_battle("disciple")
 	stronger.use_skill("sword")
 	var hit: int = stronger.combat_events[0].amount
-	check(hit >= 11 + 6 and hit <= 15 + 6, "a higher stage hits harder (%d)" % hit)
+	var boost: float = stronger.element_multiplier(stronger.content.technique("sword"))
+	check(is_equal_approx(boost, 1.1) and hit >= int(round((11 + 6) * boost)) and hit <= int(round((15 + 6) * boost)), "a higher stage hits harder, and a matching root a little more (%d)" % hit)
 
 func _pacing() -> void:
 	var game := _game()

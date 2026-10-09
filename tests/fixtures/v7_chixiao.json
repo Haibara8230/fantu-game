@@ -1,0 +1,84 @@
+{
+	"battle": {},
+	"chronicle": [
+		{
+			"args": {},
+			"day": 0,
+			"id": "start",
+			"major": true
+		},
+		{
+			"args": {
+				"sect": "chixiao"
+			},
+			"day": 0,
+			"id": "choose_sect",
+			"major": true
+		},
+		{
+			"args": {
+				"days": 360,
+				"xp": 1008
+			},
+			"day": 360,
+			"id": "cultivate",
+			"major": false
+		},
+		{
+			"args": {
+				"realm": 0,
+				"stage": 1
+			},
+			"day": 360,
+			"id": "stage_up",
+			"major": true
+		},
+		{
+			"args": {
+				"realm": 0,
+				"stage": 2
+			},
+			"day": 360,
+			"id": "stage_up",
+			"major": true
+		}
+	],
+	"ended": {},
+	"pending_event": {},
+	"player": {
+		"birth_day": -5760,
+		"cooldowns": {},
+		"cultivation_carry": 0,
+		"hp": 110,
+		"items": {
+			"liaoshang_pill": 2
+		},
+		"journey": {},
+		"location": "sect",
+		"max_hp": 110,
+		"max_qi": 38,
+		"name": "持剑",
+		"qi": 38,
+		"realm": 0,
+		"roots": [
+			"metal",
+			"fire"
+		],
+		"sect": "chixiao",
+		"stage": 2,
+		"stones": 30,
+		"warned_for": -1,
+		"xp": 1008
+	},
+	"rng": {
+		"combat": "-7499901735492016309",
+		"world": "5184824286576689064"
+	},
+	"version": 7,
+	"world": {
+		"day": 360,
+		"events": {},
+		"flags": {},
+		"people": {}
+	}
+}

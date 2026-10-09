@@ -14,7 +14,7 @@
       "spots": [
         {"id": "chamber", "name": "静室", "description": "外门弟子的静修之所，灵气清润，可闭关、休整与突破。", "actions": ["cultivate", "rest", "breakthrough"]},
         {"id": "arena", "name": "演武坪", "description": "青石铺就的演武坪，同门常在此切磋。", "actions": ["battle:disciple"]},
-        {"id": "hall", "name": "传功堂", "description": "堂中供着各派传承玉简，可择一研习。", "actions": ["study"]}
+        {"id": "hall", "name": "传功堂", "description": "堂中供着各派传承玉简，可择一研习；执事也传授几门入门功法，参悟需要时日。", "actions": ["study", "teach"], "teach": ["t:breath:wood:1::0", "t:body:earth:1::5", "t:focus:water:1::10", "t:bolt:metal:1::15"]}
       ]
     },
     "town": {
@@ -50,7 +50,15 @@
         {"item": "liaoshang_pill", "price": 20},
         {"item": "ningqi_pill", "price": 60}
       ],
-      "buys": ["herb"],
+      "buys": ["herb", "pill", "manual", "equipment"],
+      "stock": {
+        "restock_days": 30,
+        "lines": [
+          {"kind": "manual", "count": 2, "tiers": [1, 2], "slot": "art"},
+          {"kind": "manual", "count": 1, "tiers": [1, 2], "slot": "method"},
+          {"kind": "equipment", "count": 2, "tiers": [1, 2]}
+        ]
+      },
       "spots": [
         {"id": "street", "name": "长街", "description": "丹铺、器铺与散修地摊挤满长街。丹铺明码标价。", "actions": ["shop"]},
         {"id": "pharmacy", "name": "云溪药铺", "description": "沈墨的药铺，收购各色灵草，出价公道。", "actions": ["sell"]}
@@ -95,6 +103,7 @@
   "skills": {
     "sword": {
       "name": "御剑诀",
+      "element": "metal",
       "description": "造成 11–15 点伤害，不消耗灵力。",
       "damage_min": 11,
       "damage_max": 15,
@@ -105,6 +114,7 @@
     },
     "fire": {
       "name": "离火术",
+      "element": "fire",
       "description": "造成 23–29 点伤害，消耗 10 灵力，冷却 2 回合。",
       "damage_min": 23,
       "damage_max": 29,
@@ -115,6 +125,7 @@
     },
     "wood": {
       "name": "回春诀",
+      "element": "wood",
       "description": "恢复 25 点气血，消耗 8 灵力，冷却 3 回合。",
       "heal": 25,
       "qi_cost": 8,
@@ -124,6 +135,7 @@
     },
     "sword_rain": {
       "name": "三才剑阵",
+      "element": "metal",
       "description": "造成 24–30 点伤害，消耗 10 灵力，冷却 2 回合。",
       "damage_min": 24,
       "damage_max": 30,
@@ -135,6 +147,7 @@
     },
     "sword_arc": {
       "name": "断月斩",
+      "element": "metal",
       "description": "造成 29–35 点伤害，消耗 14 灵力，冷却 3 回合。",
       "damage_min": 29,
       "damage_max": 35,
@@ -145,6 +158,7 @@
     },
     "flame_bolt": {
       "name": "火萤诀",
+      "element": "fire",
       "description": "造成 11–15 点伤害，消耗 0 灵力，冷却 0 回合。",
       "damage_min": 11,
       "damage_max": 15,
@@ -155,6 +169,7 @@
     },
     "fire_burst": {
       "name": "焚天印",
+      "element": "fire",
       "description": "造成 30–36 点伤害，消耗 14 灵力，冷却 3 回合。",
       "damage_min": 30,
       "damage_max": 36,
@@ -165,6 +180,7 @@
     },
     "vine": {
       "name": "青藤刺",
+      "element": "wood",
       "description": "造成 10–14 点伤害，消耗 0 灵力，冷却 0 回合。",
       "damage_min": 10,
       "damage_max": 14,
@@ -175,6 +191,7 @@
     },
     "leaf_blade": {
       "name": "飞叶千刃",
+      "element": "wood",
       "description": "造成 23–29 点伤害，消耗 10 灵力，冷却 2 回合。",
       "damage_min": 23,
       "damage_max": 29,
@@ -186,6 +203,7 @@
     },
     "water": {
       "name": "沧浪诀",
+      "element": "water",
       "description": "造成 11–15 点伤害，消耗 0 灵力，冷却 0 回合。",
       "damage_min": 11,
       "damage_max": 15,
@@ -196,6 +214,7 @@
     },
     "ice_lance": {
       "name": "寒霜刺",
+      "element": "water",
       "description": "造成 24–30 点伤害，消耗 10 灵力，冷却 2 回合。",
       "damage_min": 24,
       "damage_max": 30,
@@ -206,6 +225,7 @@
     },
     "water_heal": {
       "name": "灵泉引",
+      "element": "water",
       "description": "恢复 25 气血，消耗 8 灵力，冷却 3 回合。",
       "heal": 25,
       "qi_cost": 8,
@@ -215,6 +235,7 @@
     },
     "earth": {
       "name": "碎岩掌",
+      "element": "earth",
       "description": "造成 12–16 点伤害，消耗 0 灵力，冷却 0 回合。",
       "damage_min": 12,
       "damage_max": 16,
@@ -225,6 +246,7 @@
     },
     "rock_spire": {
       "name": "地脉冲",
+      "element": "earth",
       "description": "造成 27–33 点伤害，消耗 12 灵力，冷却 2 回合。",
       "damage_min": 27,
       "damage_max": 33,
@@ -235,6 +257,7 @@
     },
     "earth_guard": {
       "name": "玄岩护体",
+      "element": "earth",
       "description": "恢复 18 气血，本回合伤害减半。消耗 8 灵力，冷却 3 回合。",
       "heal": 18,
       "qi_cost": 8,
@@ -277,6 +300,7 @@
       "reward_herbs": 5,
       "locations": ["wild"],
       "min_realm": 1,
+      "drops": {"chance": 1.0, "tiers": [2, 3]},
       "world_flag": "serpent_slain",
       "flag_event": "serpent_slain"
     },
@@ -291,7 +315,8 @@
       "locations": [],
       "min_realm": 0,
       "human": true,
-      "sect": "chixiao"
+      "sect": "chixiao",
+      "drops": {"chance": 0.5, "tiers": [1, 2]}
     },
     "ruin_rogue": {
       "name": "占据洞府的散修",
@@ -305,6 +330,7 @@
       "min_realm": 0,
       "human": true,
       "sect": "xuanyue",
+      "drops": {"chance": 1.0, "tiers": [2, 2]},
       "world_flag": "ruin_cleared",
       "flag_event": "ruin_cleared"
     }
@@ -326,11 +352,13 @@
       ]
     },
     "lifespan_warning_years": 5,
+    "art_slots": 4,
+    "method_slots": 2,
     "cultivate_options": [30, 90, 360],
     "wait_options": [1, 10],
     "inn_price": 5,
     "encounter_chance": [0.08, 0.18, 0.3, 0.42],
-    "ruin_search": {"stones": [10, 30], "herbs": [1, 3], "pill_chance": 0.1},
+    "ruin_search": {"stones": [10, 30], "herbs": [1, 3], "pill_chance": 0.1, "manual_chance": 0.15, "manual_tiers": [2, 2]},
     "action_cooldowns": {"search_ruin": 90}
   },
   "realms": [

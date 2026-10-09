@@ -5,6 +5,7 @@ const Calendar = preload("res://scripts/core/calendar.gd")
 const Chronicle = preload("res://scripts/core/chronicle.gd")
 const Combat = preload("res://scripts/core/combat.gd")
 const Events = preload("res://scripts/core/events.gd")
+const Arsenal = preload("res://scripts/core/arsenal.gd")
 const SaveMigration = preload("res://scripts/core/save_migration.gd")
 const SAVE_VERSION := SaveMigration.CURRENT_VERSION
 const PLAYER_COUNTS := ["realm", "xp", "hp", "qi", "stones", "cultivation_carry"]
@@ -49,14 +50,18 @@ func new_game(character_name: String = "无名", seed_value: int = -1, roots: Ar
 	var chosen_name := character_name.strip_edges().left(16)
 	if chosen_name.is_empty():
 		chosen_name = "无名"
-	world = {"day": 0, "flags": {}, "events": {}, "people": {}}
+	world = {"day": 0, "flags": {}, "events": {}, "people": {}, "seed": seed_value if seed_value >= 0 else absi(int(world_rng.randi())), "stock_sold": {}}
 	player = {
 		"name": chosen_name, "birth_day": -int(content.rules.starting_age) * Calendar.DAYS_PER_YEAR,
 		"realm": 0, "stage": 0, "xp": 0, "hp": 0, "qi": 0, "cultivation_carry": 0, "warned_for": -1, "roots": roots.duplicate(),
 		"stones": int(content.rules.starting_stones), "items": {},
 		"journey": {}, "cooldowns": {},
-		"location": "sect", "sect": "wanderer"
+		"location": "sect", "sect": "wanderer",
+		"learned": [], "arts": [], "methods": [], "equipment": {"weapon": "", "robe": "", "accessory": ""}
 	}
+	for skill_id: String in content.sects.wanderer.skills:
+		player.learned.append(skill_id)
+		player.arts.append(skill_id)
 	_refresh_realm_stats()
 	player.hp = player.max_hp
 	player.qi = player.max_qi
@@ -153,7 +158,7 @@ func root_title() -> String:
 	return content.root_title(player.get("roots", []))
 
 func cultivation_speed() -> float:
-	return float(content.root_grade(player.get("roots", [])).speed)
+	return float(content.root_grade(player.get("roots", [])).speed) * (1.0 + float(bonuses().cultivation))
 
 ## Xp gained per 30 days of closed-door cultivation with these roots.
 func cultivation_rate() -> int:
@@ -204,8 +209,12 @@ func settle_stage() -> Array[String]:
 
 func _refresh_realm_stats() -> void:
 	var current: Dictionary = stage_stats()
-	player.max_hp = int(current.max_hp)
-	player.max_qi = int(current.max_qi)
+	var extra := bonuses()
+	player.max_hp = int(current.max_hp) + int(extra.max_hp)
+	player.max_qi = int(current.max_qi) + int(extra.max_qi)
+	if player.has("hp"):
+		player.hp = mini(int(player.hp), int(player.max_hp))
+		player.qi = mini(int(player.qi), int(player.max_qi))
 
 ## Why the player cannot act right now, or an empty String.
 func _blocked() -> String:
@@ -405,13 +414,18 @@ func set_item_count(item_id: String, count: int) -> void:
 
 ## What this place pays for one of the item, or 0 when it does not buy it here.
 func sell_price(item_id: String) -> int:
-	if not available_here("sell") or not content.items.has(item_id):
+	if not available_here("sell") or content.item(item_id).is_empty():
 		return 0
-	var item: Dictionary = content.items[item_id]
+	var item: Dictionary = content.item(item_id)
 	return int(item.price) if item.category in content.locations[player.location].get("buys", []) else 0
 
+## Fixed goods plus this period's rotating stock (manuals, equipment).
 func shop_goods() -> Array:
-	return content.locations[player.location].get("shop", []) if available_here("shop") else []
+	if not available_here("shop"):
+		return []
+	var goods: Array = content.locations[player.location].get("shop", []).duplicate()
+	goods.append_array(rotating_stock(player.location))
+	return goods
 
 ## Compact loot record for the chronicle: "id:count,id:count".
 func loot_code(found: Dictionary) -> String:
@@ -453,9 +467,11 @@ func buy(item_id: String) -> String:
 	for good: Dictionary in shop_goods():
 		if good.item == item_id:
 			if int(player.stones) < int(good.price):
-				return "灵石不足：%s需要 %d 灵石。" % [content.items[item_id].name, int(good.price)]
+				return "灵石不足：%s需要 %d 灵石。" % [content.item(item_id).name, int(good.price)]
 			player.stones -= int(good.price)
 			add_item(item_id, 1)
+			if good.has("key"):
+				world.stock_sold[good.key] = true
 			return conclude(log_event("buy_item", {"item": item_id, "price": int(good.price)}))
 	return "这里买不到这件东西。"
 
@@ -464,7 +480,7 @@ func use_block(item_id: String) -> String:
 	var blocked := _blocked()
 	if not blocked.is_empty():
 		return blocked
-	if not content.items.has(item_id) or not content.items[item_id].has("use"):
+	if not content.item(item_id).has("use"):
 		return "此物不能直接服用。"
 	if item_count(item_id) < 1:
 		return "行囊里没有此物。"
@@ -477,13 +493,195 @@ func use_item(item_id: String) -> String:
 	var reason := use_block(item_id)
 	if not reason.is_empty():
 		return reason
-	var item: Dictionary = content.items[item_id]
+	var item: Dictionary = content.item(item_id)
 	remove_item(item_id, 1)
 	if item.has("use_cooldown_days"):
 		player.cooldowns["use:" + item_id] = int(world.day) + int(item.use_cooldown_days)
 	var text := log_event("use_item", {"item": item_id})
 	Events.apply(self, item.use)
 	return conclude(text)
+
+# --- Techniques and equipment ------------------------------------------------------------
+# player.learned lists every technique known; player.arts (up to rules.art_slots) are usable in duels
+# and player.methods (up to rules.method_slots) are passive 心法. player.equipment holds one item id
+# per slot; equipped items leave the 行囊 and return to it when taken off.
+
+## Totals from 心法 and equipment: attack, max_hp, max_qi, defense, cultivation, element_damage {element|"*": x}.
+func bonuses(holder: Dictionary = {}) -> Dictionary:
+	if holder.is_empty():
+		holder = player
+	var total := {"attack": 0, "max_hp": 0, "max_qi": 0, "defense": 0.0, "cultivation": 0.0, "element_damage": {}}
+	var sources: Array[Dictionary] = []
+	for technique_id: Variant in holder.get("methods", []):
+		var method: Dictionary = content.technique(str(technique_id))
+		if not method.is_empty():
+			sources.append({"stats": method.passive, "element": method.element})
+	for slot: String in holder.get("equipment", {}):
+		var gear: Dictionary = content.equipment(str(holder.equipment[slot]))
+		if not gear.is_empty():
+			sources.append({"stats": gear.stats, "element": "*" if gear.element == "none" else gear.element})
+	for source: Dictionary in sources:
+		for key: String in source.stats:
+			if key == "element_damage":
+				total.element_damage[source.element] = float(total.element_damage.get(source.element, 0.0)) + float(source.stats[key])
+			elif key in ["defense", "cultivation"]:
+				total[key] = float(total[key]) + float(source.stats[key])
+			else:
+				total[key] = int(total[key]) + int(source.stats[key])
+	return total
+
+func attack_bonus() -> int:
+	return int(stage_stats().attack_bonus) + int(bonuses().attack)
+
+## Share of incoming damage avoided by equipment, capped at half.
+func defense() -> float:
+	return minf(0.5, float(bonuses().defense))
+
+## Damage multiplier for a technique: element bonuses, plus a little extra when it matches a spirit root.
+func element_multiplier(t: Dictionary) -> float:
+	var damage: Dictionary = bonuses().element_damage
+	var multiplier := 1.0 + float(damage.get(t.element, 0.0)) + float(damage.get("*", 0.0))
+	if t.element in player.get("roots", []):
+		multiplier += float(content.technique_data.root_bonus)
+	return multiplier
+
+## Why the player cannot learn this technique now, or "".
+func learn_block(technique_id: String) -> String:
+	var t: Dictionary = content.technique(technique_id)
+	if t.is_empty():
+		return "此法无从参悟。"
+	if technique_id in player.learned:
+		return "你已习得此法。"
+	if int(player.realm) < int(t.min_realm):
+		return "%s之法，需达到%s方可参悟。" % [t.tier_name, content.realm_title(int(t.min_realm), 0)]
+	return _blocked()
+
+## Studies a technique for its tier's days; the new technique goes into a free slot if there is one.
+func _study(technique_id: String) -> Dictionary:
+	var t: Dictionary = content.technique(technique_id)
+	var passed := advance_days(int(t.study_days))
+	if not ended.is_empty():
+		return passed
+	player.learned.append(technique_id)
+	var slots: Array = player.arts if t.slot == "art" else player.methods
+	if slots.size() < int(content.rules.art_slots if t.slot == "art" else content.rules.method_slots):
+		slots.append(technique_id)
+	_refresh_realm_stats()
+	passed.text = log_event("learn", {"technique": technique_id, "days": passed.elapsed}, int(t.tier) >= 3)
+	return passed
+
+## Studies the technique written in a jade slip from the 行囊.
+func study_manual(item_id: String) -> String:
+	var manual: Dictionary = content.item(item_id)
+	if manual.get("category", "") != "manual" or item_count(item_id) < 1:
+		return "行囊里没有这枚玉简。"
+	var reason := learn_block(manual.teaches)
+	if not reason.is_empty():
+		return reason
+	remove_item(item_id, 1)
+	var passed := _study(manual.teaches)
+	return conclude(str(passed.get("text", "")), passed)
+
+## Techniques taught by the scene here (the sect's 传功堂).
+func teachings() -> Array[String]:
+	var result: Array[String] = []
+	if not available_here("teach"):
+		return result
+	for spot: Dictionary in content.locations[player.location].spots:
+		for technique_id: String in spot.get("teach", []):
+			result.append(technique_id)
+	return result
+
+func learn_here(technique_id: String) -> String:
+	if not technique_id in teachings():
+		return "这里不传授此法。"
+	var reason := learn_block(technique_id)
+	if not reason.is_empty():
+		return reason
+	var passed := _study(technique_id)
+	return conclude(str(passed.get("text", "")), passed)
+
+## Puts a learned technique into its slots, replacing `replace` when the slots are full.
+func equip_technique(technique_id: String, replace: String = "") -> String:
+	var t: Dictionary = content.technique(technique_id)
+	if not technique_id in player.learned or t.is_empty():
+		return "尚未习得此法。"
+	if not battle.is_empty():
+		return "斗法中无法更换功法。"
+	var slots: Array = player.arts if t.slot == "art" else player.methods
+	var limit := int(content.rules.art_slots if t.slot == "art" else content.rules.method_slots)
+	if technique_id in slots:
+		return "此法已在运转。"
+	if slots.size() >= limit:
+		if not replace in slots:
+			return "栏位已满，请先选择要替换的功法。"
+		slots.erase(replace)
+	slots.append(technique_id)
+	_refresh_realm_stats()
+	return finish("改为运转%s。" % t.name)
+
+func unequip_technique(technique_id: String) -> String:
+	if not battle.is_empty():
+		return "斗法中无法更换功法。"
+	var t: Dictionary = content.technique(technique_id)
+	var slots: Array = player.arts if t.get("slot", "art") == "art" else player.methods
+	if not technique_id in slots:
+		return "此法并未运转。"
+	if t.get("slot", "art") == "art" and slots.size() <= 1:
+		return "至少保留一门神通。"
+	slots.erase(technique_id)
+	_refresh_realm_stats()
+	return finish("停下了%s。" % t.name)
+
+func equip_item(item_id: String) -> String:
+	var gear: Dictionary = content.equipment(item_id)
+	if gear.is_empty() or item_count(item_id) < 1:
+		return "行囊里没有这件法宝。"
+	if not battle.is_empty():
+		return "斗法中无法更换法宝。"
+	var worn := str(player.equipment.get(gear.slot, ""))
+	remove_item(item_id, 1)
+	if not worn.is_empty():
+		add_item(worn, 1)
+	player.equipment[gear.slot] = item_id
+	_refresh_realm_stats()
+	return finish("换上了%s。" % gear.name)
+
+func unequip_slot(slot: String) -> String:
+	var worn := str(player.equipment.get(slot, ""))
+	if worn.is_empty():
+		return "此处没有佩戴法宝。"
+	if not battle.is_empty():
+		return "斗法中无法更换法宝。"
+	player.equipment[slot] = ""
+	add_item(worn, 1)
+	_refresh_realm_stats()
+	return finish("取下了%s。" % content.equipment(worn).name)
+
+## A place's stock that changes every restock period: deterministic per world, place and period.
+## Returns [{"item", "price", "key"}]; sold goods are left out until the next restock.
+func rotating_stock(location_id: String) -> Array[Dictionary]:
+	var goods: Array[Dictionary] = []
+	var location: Dictionary = content.locations[location_id]
+	if not location.has("stock"):
+		return goods
+	var period := int(world.day) / int(location.stock.restock_days)
+	var rng := RandomNumberGenerator.new()
+	rng.seed = hash([int(world.get("seed", 0)), location_id, period])
+	var index := 0
+	for line: Dictionary in location.stock.lines:
+		for count: int in int(line.count):
+			var tier := rng.randi_range(int(line.tiers[0]), int(line.tiers[1]))
+			var item_id := ""
+			if line.kind == "manual":
+				item_id = "j:" + Arsenal.generate_technique(content, rng, tier, {"slot": line.slot} if line.has("slot") else {})
+			else:
+				item_id = Arsenal.generate_equipment(content, rng, tier)
+			var key := "%s:%d:%d" % [location_id, period, index]
+			index += 1
+			if not world.stock_sold.has(key):
+				goods.append({"item": item_id, "price": int(content.item(item_id).price) * 2, "key": key})
+	return goods
 
 # --- People ------------------------------------------------------------------------
 # People live in the world on their own: residents stay home, wanderers follow a schedule computed
@@ -671,8 +869,8 @@ func _walk() -> String:
 
 func active_skills() -> Array[String]:
 	var result: Array[String] = []
-	for id: String in content.sects[player.get("sect", "wanderer")].skills:
-		result.append(id)
+	for id: Variant in player.get("arts", []):
+		result.append(str(id))
 	return result
 
 func choose_sect(sect_id: String) -> String:
@@ -687,7 +885,13 @@ func choose_sect(sect_id: String) -> String:
 		return "请回青云山传功堂研习门派传承。"
 	if player.get("sect", "wanderer") == sect_id:
 		return "你已在研习此传承。"
+	# Taking up a lineage teaches its three arts and puts them in the art slots.
 	player.sect = sect_id
+	player.arts = []
+	for skill_id: String in content.sects[sect_id].skills:
+		if not skill_id in player.learned:
+			player.learned.append(skill_id)
+		player.arts.append(skill_id)
 	return finish(log_event("choose_sect", {"sect": sect_id}, true))
 
 func start_battle(enemy_id: String, opponent_sect: String = "") -> String:
@@ -711,7 +915,7 @@ func begin_battle(enemy_id: String, context: String = "", opponent_sect: String 
 		opponent_sect = str(enemy.get("sect", player.get("sect", "wanderer")))
 		if opponent_sect == "wanderer":
 			opponent_sect = "qingyun"
-	battle = {"enemy_id": enemy_id, "hp": int(enemy.hp), "turn": 1, "cooldowns": {}, "opponent_sect": opponent_sect}
+	battle = {"enemy_id": enemy_id, "hp": int(enemy.hp), "turn": 1, "cooldowns": {}, "opponent_sect": opponent_sect, "status": {}}
 	if not context.is_empty():
 		battle.context = context
 	return log_event("battle_start", {"enemy": enemy_id})
@@ -794,8 +998,12 @@ func restore(data: Variant) -> bool:
 		return false
 	# The sub-stage always follows from xp; stat caps follow from the stage.
 	var saved_stage: int = content.stage_index(int(saved_player.realm), int(saved_player.xp))
+	var loadout := _valid_loadout(saved_player)
+	if loadout.is_empty():
+		return false
 	var caps: Dictionary = content.stage(int(saved_player.realm), saved_stage)
-	if int(saved_player.hp) <= 0 or int(saved_player.hp) > int(caps.max_hp) or int(saved_player.qi) > int(caps.max_qi):
+	var extra := bonuses(loadout)
+	if int(saved_player.hp) <= 0 or int(saved_player.hp) > int(caps.max_hp) + int(extra.max_hp) or int(saved_player.qi) > int(caps.max_qi) + int(extra.max_qi):
 		return false
 	var roots: Variant = saved_player.get("roots")
 	if not roots is Array or roots.is_empty() or roots.size() > content.rules.spirit_roots.elements.size():
@@ -814,10 +1022,16 @@ func restore(data: Variant) -> bool:
 		if not _whole_nonnegative(saved_battle.get("turn")) or int(saved_battle.turn) < 1 or not saved_battle.get("cooldowns") is Dictionary:
 			return false
 		for skill_id: Variant in saved_battle.cooldowns:
-			if not content.skills.has(skill_id) or not _whole_nonnegative(saved_battle.cooldowns[skill_id]):
+			if not skill_id is String or content.technique(skill_id).is_empty() or not _whole_nonnegative(saved_battle.cooldowns[skill_id]):
 				return false
 		if saved_battle.has("context") and saved_battle.context != "event":
 			return false
+		var status: Variant = saved_battle.get("status", {})
+		if not status is Dictionary:
+			return false
+		for key: Variant in status:
+			if not key in ["burn", "weaken"] or not status[key] is Array or status[key].size() != 2:
+				return false
 		if saved_battle.has("npc") and (not saved_battle.npc is String or not content.people.has(saved_battle.npc)):
 			return false
 		var opponent: Variant = saved_battle.get("opponent_sect")
@@ -838,13 +1052,20 @@ func restore(data: Variant) -> bool:
 	var saved_chronicle: Variant = Chronicle.parse(saved.get("chronicle"), day)
 	if saved_chronicle == null:
 		return false
-	world = {"day": day, "flags": saved_world.flags.duplicate(), "events": events, "people": people}
+	var sold := {}
+	for key: Variant in saved_world.get("stock_sold", {}):
+		if key is String:
+			sold[key] = true
+	var seed_value: Variant = saved_world.get("seed", 0)
+	world = {"day": day, "flags": saved_world.flags.duplicate(), "events": events, "people": people, "seed": int(seed_value) if _whole_nonnegative(seed_value) else 0, "stock_sold": sold}
 	player = saved_player.duplicate(true)
 	for key: String in PLAYER_COUNTS:
 		player[key] = int(player[key])
 	player.birth_day = int(birth)
 	player.stage = saved_stage
 	player.roots = roots.duplicate()
+	for key: String in loadout:
+		player[key] = loadout[key]
 	player.warned_for = int(warned)
 	for item_id: String in player.items:
 		player.items[item_id] = int(player.items[item_id])
@@ -854,6 +1075,8 @@ func restore(data: Variant) -> bool:
 	_refresh_realm_stats()
 	battle = saved_battle.duplicate(true)
 	if not battle.is_empty():
+		if not battle.has("status"):
+			battle.status = {}
 		battle.hp = int(battle.hp)
 		battle.turn = int(battle.turn)
 		for skill_id: String in battle.cooldowns:
@@ -907,3 +1130,35 @@ func _whole_signed(value: Variant) -> bool:
 	if not (value is int or value is float):
 		return false
 	return is_finite(float(value)) and float(value) == floor(float(value)) and absf(float(value)) <= LIMIT
+
+## The saved techniques and equipment, keeping only what the content still knows. {} when malformed.
+## Unknown ids are dropped instead of rejecting the save, so retired content cannot lock a journey.
+func _valid_loadout(saved_player: Dictionary) -> Dictionary:
+	for key: String in ["learned", "arts", "methods"]:
+		if not saved_player.get(key) is Array:
+			return {}
+	if not saved_player.get("equipment") is Dictionary:
+		return {}
+	var learned: Array = []
+	for technique_id: Variant in saved_player.learned:
+		if technique_id is String and not content.technique(technique_id).is_empty() and not technique_id in learned:
+			learned.append(technique_id)
+	var arts: Array = []
+	var methods: Array = []
+	for pair: Array in [["arts", arts, "art", int(content.rules.art_slots)], ["methods", methods, "method", int(content.rules.method_slots)]]:
+		for technique_id: Variant in saved_player[pair[0]]:
+			if technique_id in learned and content.technique(technique_id).slot == pair[2] and not technique_id in pair[1] and pair[1].size() < pair[3]:
+				pair[1].append(technique_id)
+	if arts.is_empty():
+		# Older journeys knew exactly their lineage's three arts.
+		var lineage: String = saved_player.get("sect", "wanderer") if content.sects.has(saved_player.get("sect", "")) else "wanderer"
+		for skill_id: String in content.sects[lineage].skills:
+			if not skill_id in learned:
+				learned.append(skill_id)
+			arts.append(skill_id)
+	var equipment := {}
+	for slot: String in content.equipment_data.slots:
+		var worn: Variant = saved_player.equipment.get(slot, "")
+		var gear: Dictionary = content.equipment(str(worn)) if worn is String else {}
+		equipment[slot] = worn if not gear.is_empty() and gear.slot == slot else ""
+	return {"learned": learned, "arts": arts, "methods": methods, "equipment": equipment}

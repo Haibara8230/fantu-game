@@ -7,6 +7,8 @@ var duration := 0.4
 var elapsed := 0.0
 var variation: int = 0
 var tint := Color("#d8f8f1")
+# Tier layers (data/vfx_tiers.json): extra glow, rings, sparks and trails on top of the base effect.
+var layers: Dictionary = {}
 
 func setup(effect_kind: String, origin: Vector2, target: Vector2, seconds: float, color: Color, variant: int = 0) -> void:
 	kind = effect_kind
@@ -30,6 +32,7 @@ func _draw() -> void:
 	if direction.is_zero_approx():
 		direction = Vector2.RIGHT
 	var normal := Vector2(-direction.y, direction.x)
+	_draw_layers(t, fade, direction)
 	match kind:
 		"sword":
 			var point := start.lerp(finish, t)
@@ -230,3 +233,22 @@ func _rune(point: Vector2, radius: float, color: Color, alpha: float, ground: bo
 		var angle := i * TAU / 8 + elapsed
 		var axis := Vector2(cos(angle), sin(angle) * (0.28 if ground else 1.0))
 		draw_line(point + axis * (radius - 6), point + axis * (radius + 2), Color(color,alpha), 2, true)
+
+## Higher tiers stack more of everything around the travelling point; tier 1 draws nothing extra.
+func _draw_layers(t: float, fade: float, direction: Vector2) -> void:
+	if layers.is_empty():
+		return
+	var point := start.lerp(finish, t)
+	var size := float(layers.get("scale", 1.0))
+	for index: int in int(layers.get("glow", 0)):
+		draw_circle(point, (12.0 + index * 8.0) * size, Color(tint, 0.07 * fade))
+	for index: int in int(layers.get("rings", 0)):
+		draw_arc(point, (20.0 + index * 11.0) * size * (0.6 + 0.4 * t), 0.0, TAU, 40, Color(tint, 0.35 * fade), 2.0, true)
+	var sparks := int(layers.get("sparks", 0))
+	for index: int in sparks:
+		var angle := TAU * float(index) / float(maxi(1, sparks)) + t * 4.0 + float(variation)
+		var radius := (22.0 + float(index % 3) * 9.0) * size
+		draw_circle(point + Vector2.from_angle(angle) * radius, 2.2, Color(tint.lightened(0.45), 0.85 * fade))
+	for index: int in int(layers.get("trail", 0)):
+		var near := (12.0 + index * 20.0) * size
+		draw_line(point - direction * (near + 18.0 * size), point - direction * near, Color(tint, 0.3 * fade / float(index + 1)), 4.0, true)

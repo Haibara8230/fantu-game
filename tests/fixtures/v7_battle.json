@@ -1,0 +1,88 @@
+{
+	"battle": {
+		"cooldowns": {
+			"ice_lance": 2
+		},
+		"enemy_id": "disciple",
+		"hp": 17,
+		"opponent_sect": "canglan",
+		"turn": 2
+	},
+	"chronicle": [
+		{
+			"args": {},
+			"day": 0,
+			"id": "start",
+			"major": true
+		},
+		{
+			"args": {
+				"sect": "canglan"
+			},
+			"day": 0,
+			"id": "choose_sect",
+			"major": true
+		},
+		{
+			"args": {
+				"enemy": "disciple"
+			},
+			"day": 0,
+			"id": "battle_start",
+			"major": false
+		},
+		{
+			"args": {
+				"amount": 28,
+				"skill": "ice_lance"
+			},
+			"day": 0,
+			"id": "skill_attack",
+			"major": false
+		},
+		{
+			"args": {
+				"amount": 8,
+				"enemy": "disciple"
+			},
+			"day": 0,
+			"id": "enemy_attack",
+			"major": false
+		}
+	],
+	"ended": {},
+	"pending_event": {},
+	"player": {
+		"birth_day": -5760,
+		"cooldowns": {},
+		"cultivation_carry": 0,
+		"hp": 82,
+		"items": {},
+		"journey": {},
+		"location": "sect",
+		"max_hp": 90,
+		"max_qi": 30,
+		"name": "斗者",
+		"qi": 20,
+		"realm": 0,
+		"roots": [
+			"water"
+		],
+		"sect": "canglan",
+		"stage": 0,
+		"stones": 30,
+		"warned_for": -1,
+		"xp": 0
+	},
+	"rng": {
+		"combat": "4914472725462611146",
+		"world": "-436547823770653547"
+	},
+	"version": 7,
+	"world": {
+		"day": 0,
+		"events": {},
+		"flags": {},
+		"people": {}
+	}
+}

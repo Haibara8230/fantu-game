@@ -1,0 +1,33 @@
+{
+  "slots": {"weapon": "兵刃", "robe": "法袍", "accessory": "佩饰"},
+  "tiers": [
+    {"name": "凡品", "power": 1.0, "affixes": 0, "value": 15},
+    {"name": "黄阶", "power": 1.4, "affixes": 1, "value": 50},
+    {"name": "玄阶", "power": 1.9, "affixes": 2, "value": 160},
+    {"name": "地阶", "power": 2.6, "affixes": 3, "value": 450},
+    {"name": "天阶", "power": 3.5, "affixes": 4, "value": 1300}
+  ],
+  "materials": {
+    "metal": ["凡铁", "青钢", "玄铁", "寒铁", "星陨"],
+    "cloth": ["粗布", "青丝", "玄蚕", "云锦", "天衣"],
+    "jade": ["顽石", "青玉", "墨玉", "寒玉", "星辰"]
+  },
+  "bases": {
+    "sword": {"slot": "weapon", "material": "metal", "nouns": ["剑", "长剑"], "stats": {"attack": 3}},
+    "saber": {"slot": "weapon", "material": "metal", "nouns": ["刀", "雁翎刀"], "stats": {"attack": 4}},
+    "fan": {"slot": "weapon", "material": "jade", "nouns": ["扇", "折扇"], "stats": {"attack": 2, "element_damage": 0.05}},
+    "bell": {"slot": "weapon", "material": "metal", "nouns": ["铃", "摄魂铃"], "stats": {"attack": 2, "max_qi": 4}},
+    "robe": {"slot": "robe", "material": "cloth", "nouns": ["法袍", "道袍"], "stats": {"max_hp": 12}},
+    "vest": {"slot": "robe", "material": "metal", "nouns": ["软甲", "护心甲"], "stats": {"max_hp": 8, "defense": 0.05}},
+    "pendant": {"slot": "accessory", "material": "jade", "nouns": ["佩", "玉佩"], "stats": {"max_qi": 5}},
+    "ring": {"slot": "accessory", "material": "jade", "nouns": ["戒", "指环"], "stats": {"attack": 1, "cultivation": 0.04}}
+  },
+  "affixes": {
+    "sharp": {"name": "锋锐", "stats": {"attack": 2}},
+    "tough": {"name": "坚韧", "stats": {"max_hp": 10}},
+    "spirit": {"name": "聚灵", "stats": {"max_qi": 5}},
+    "guard": {"name": "护身", "stats": {"defense": 0.04}},
+    "attune": {"name": "契灵", "stats": {"element_damage": 0.05}},
+    "calm": {"name": "静心", "stats": {"cultivation": 0.04}}
+  }
+}

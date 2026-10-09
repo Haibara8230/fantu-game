@@ -18,6 +18,7 @@ var enemy
 var background: Texture2D
 var enemy_id := ""
 var human_enemy := false
+var tier_layers: Array = []
 var hero_name := ""
 var enemy_name := ""
 var hero_hp: int
@@ -112,10 +113,17 @@ func _emit_cue(kind: String) -> void:
 	cue_count += 1
 	cue.emit(kind)
 
-func _effect(kind: String, from: Vector2, to: Vector2, duration: float, color: Color, variation: int = 0) -> void:
+func _effect(kind: String, from: Vector2, to: Vector2, duration: float, color: Color, variation: int = 0, tier: int = 1) -> void:
 	var effect = Effect.new()
 	effect.setup(kind, from, to, duration, color, variation)
+	effect.layers = _layers(tier)
 	world.add_child(effect)
+
+## Tier layers from data/vfx_tiers.json (tier 1 adds nothing).
+func _layers(tier: int) -> Dictionary:
+	if tier_layers.is_empty():
+		tier_layers = JSON.parse_string(FileAccess.get_file_as_string("res://data/vfx_tiers.json")).tiers
+	return tier_layers[clampi(tier - 1, 0, tier_layers.size() - 1)]
 
 func _number(actor, amount: int, healing: bool = false) -> void:
 	var label := Label.new()
@@ -148,10 +156,10 @@ func play(events: Array[Dictionary]) -> void:
 				await _attack(event)
 			"heal":
 				var skill: Dictionary = skills.get(event.get("style", "wood"), skills.wood)
-				var healing_profile: Dictionary = profiles[skill.vfx]
-				banner = skill.name
+				var healing_profile: Dictionary = profiles.get(str(event.get("vfx", skill.vfx)), profiles.heal)
+				banner = str(event.get("name", skill.name))
 				hero.set_pose("cast")
-				_effect(healing_profile.kind, hero.chest(), hero.chest() + Vector2(0, 35), 0.85, Color(healing_profile.color))
+				_effect(healing_profile.kind, hero.chest(), hero.chest() + Vector2(0, 35), 0.85, Color(healing_profile.color), 0, int(event.get("tier", 1)))
 				_emit_cue("heal")
 				await _pause(0.3)
 				hero_hp = int(event.hp_after)
@@ -161,9 +169,9 @@ func play(events: Array[Dictionary]) -> void:
 			"guard":
 				var guard_skill: Dictionary = skills.get(event.get("style", ""), {})
 				var sect: Dictionary = sects[hero_sect]
-				banner = str(guard_skill.get("name", "凝神守御"))
+				banner = str(event.get("name", guard_skill.get("name", "凝神守御")))
 				hero.set_pose("guard")
-				_effect(sect.guard_vfx, hero.chest(), hero.chest(), 1.6, Color(sect.color))
+				_effect(sect.guard_vfx, hero.chest(), hero.chest(), 1.6, Color(sect.color), 0, int(event.get("tier", 1)))
 				if event.has("hp_after"):
 					hero_hp = int(event.hp_after)
 					_number(hero, int(event.amount), true)
@@ -190,12 +198,14 @@ func _attack(event: Dictionary) -> void:
 	var target_home: Vector2 = target.position
 	var push_direction: float = 1.0 if event.actor == "player" else -1.0
 	var skill: Dictionary = skills.get(event.style, {})
-	var visual_id: String = str(skill.get("vfx", event.style))
+	var visual_id: String = str(event.get("vfx", skill.get("vfx", event.style)))
+	var tier: int = int(event.get("tier", 1))
+	var layers := _layers(tier)
 	var profile: Dictionary = profiles.get(visual_id, profiles.enemy)
 	var color := Color(profile.color)
 	var melee: bool = profile.delivery == "melee"
-	var hit_count: int = int(skill.get("hits", 1))
-	banner = str(skill.get("name", enemy_name)) + (" · 反击" if event.actor == "enemy" else "")
+	var hit_count: int = int(event.get("hits", skill.get("hits", 1)))
+	banner = str(event.get("name", skill.get("name", enemy_name))) + (" · 反击" if event.actor == "enemy" else "")
 	attacking.idle_enabled = false
 	attacking.set_pose(profile.prepare_pose)
 	if not str(profile.charge).is_empty():
@@ -214,20 +224,20 @@ func _attack(event: Dictionary) -> void:
 	var travel_time: float = float(profile.travel)
 	# Effects begin before the cue, so frame capture and UI see the actual release.
 	if not melee:
-		_effect(profile.kind, attacking.chest(), target.chest(), travel_time + (0.3 if profile.delivery == "ground" else 0.0), color)
+		_effect(profile.kind, attacking.chest(), target.chest(), travel_time + (0.3 if profile.delivery == "ground" else 0.0), color, 0, tier)
 	_emit_cue("release")
 	var before_hp: int = enemy_hp if event.actor == "player" else hero_hp
 	var total: int = int(event.amount)
 	for hit_index: int in range(hit_count):
 		if hit_index > 0:
 			attacking.set_pose(profile.release_pose)
-			_effect(profile.kind, attacking.chest(), target.chest(), travel_time, color, hit_index)
+			_effect(profile.kind, attacking.chest(), target.chest(), travel_time, color, hit_index, tier)
 			_emit_cue("release")
 		await _pause(travel_time)
 		var portion: int = total / hit_count + (1 if hit_index < total % hit_count else 0)
 		before_hp = maxi(0, before_hp - portion)
 		var displayed_hp: int = int(event.hp_after) if hit_index == hit_count - 1 else before_hp
-		await _hit(target, target_home, event.actor == "player", portion, displayed_hp, push_direction, profile, color)
+		await _hit(target, target_home, event.actor == "player", portion, displayed_hp, push_direction, profile, color, layers)
 		if hit_index < hit_count - 1:
 			await _pause(0.08)
 	var recovery := create_tween()
@@ -241,7 +251,7 @@ func _attack(event: Dictionary) -> void:
 	target.flash(0)
 	await _pause(0.08)
 
-func _hit(target, home: Vector2, enemy_target: bool, amount: int, hp_after: int, direction: float, profile: Dictionary, color: Color) -> void:
+func _hit(target, home: Vector2, enemy_target: bool, amount: int, hp_after: int, direction: float, profile: Dictionary, color: Color, layers: Dictionary = {}) -> void:
 	if recoil_handle != null and recoil_handle.is_running():
 		recoil_handle.kill()
 	if flash_handle != null and flash_handle.is_running():
@@ -256,8 +266,8 @@ func _hit(target, home: Vector2, enemy_target: bool, amount: int, hp_after: int,
 	_number(target, amount)
 	hit_resolved.emit(enemy_target, amount, hp_after)
 	_effect(profile.impact, target.chest(), target.chest(), 0.48, color)
-	shake = float(profile.shake) if motion_enabled else 0
-	flash_alpha = 0.055 if profile.impact == "fire_explosion" and motion_enabled else 0
+	shake = float(profile.shake) * float(layers.get("shake", 1.0)) if motion_enabled else 0
+	flash_alpha = (0.055 if profile.impact == "fire_explosion" else 0.0) + float(layers.get("flash", 0.0)) if motion_enabled else 0
 	_emit_cue("impact")
 	await _pause(float(profile.hit_stop))
 	recoil_handle = create_tween()

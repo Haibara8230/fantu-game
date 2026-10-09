@@ -32,5 +32,7 @@
   "sell_all": "售出{loot_text}，得灵石 {revenue}。",
   "sell_item": "售出{item_name}×{count}，得灵石 {revenue}。",
   "buy_item": "花费 {price} 灵石，购得{item_name}。",
-  "use_item": "服下{item_name}。"
+  "use_item": "服下{item_name}。",
+  "loot": "缴获{loot_text}。",
+  "learn": "参悟 {duration}，习得{technique_name}。"
 }

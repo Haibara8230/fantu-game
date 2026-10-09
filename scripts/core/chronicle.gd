@@ -4,7 +4,7 @@ extends RefCounted
 const Calendar = preload("res://scripts/core/calendar.gd")
 const RECENT_LIMIT := 100
 const MAJOR_LIMIT := 5000
-const NAMED_ARGS := {"location": "locations", "enemy": "enemies", "skill": "skills", "sect": "sects", "npc": "people", "item": "items"}
+const NAMED_ARGS := {"location": "locations", "enemy": "enemies", "sect": "sects", "npc": "people"}
 var entries: Array[Dictionary] = []
 
 func clear() -> void:
@@ -55,6 +55,14 @@ func format(entry: Dictionary, content) -> String:
 			values[key + "_name"] = definition.name if definition is Dictionary else str(values[key])
 	if values.has("realm"):
 		values["realm_name"] = content.realm_title(int(values.realm), int(values.get("stage", 0)))
+	# Techniques and items may be generated, so their names come from the content resolvers.
+	for key: String in ["skill", "technique"]:
+		if values.has(key):
+			var t: Dictionary = content.technique(str(values[key]))
+			values[key + "_name"] = t.name if not t.is_empty() else str(values[key])
+	if values.has("item"):
+		var named: Dictionary = content.item(str(values.item))
+		values["item_name"] = named.name if not named.is_empty() else str(values.item)
 	if values.has("loot"):
 		values["loot_text"] = loot_text(str(values.loot), content)
 	if values.has("days"):
@@ -66,8 +74,8 @@ static func loot_text(code: String, content) -> String:
 	var parts: Array[String] = []
 	for piece: String in code.split(",", false):
 		var pair := piece.split(":")
-		var item: Variant = content.items.get(pair[0])
-		var name: String = item.name if item is Dictionary else pair[0]
+		var item: Dictionary = content.item(pair[0])
+		var name: String = item.name if not item.is_empty() else pair[0]
 		var count := int(pair[1]) if pair.size() > 1 else 1
 		parts.append(name if count == 1 else "%s×%d" % [name, count])
 	return "、".join(parts) if not parts.is_empty() else "一无所获"

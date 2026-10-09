@@ -3,38 +3,52 @@ extends RefCounted
 
 static func use_skill(s, skill_id: String) -> String:
 	s.combat_events.clear()
-	if s.battle.is_empty() or not s.content.skills.has(skill_id):
+	var t: Dictionary = s.content.technique(skill_id)
+	if s.battle.is_empty() or t.is_empty() or t.slot != "art":
 		return "当前无法施展神通。"
 	if skill_id not in s.active_skills():
-		return "尚未研习此门派神通。"
-	var skill: Dictionary = s.content.skills[skill_id]
+		return "此神通未在运转。"
 	if int(s.battle.cooldowns.get(skill_id, 0)) > 0:
 		return "此神通仍在冷却。"
-	if int(s.player.qi) < int(skill.qi_cost):
+	if int(s.player.qi) < int(t.qi_cost):
 		return "灵力不足。"
 	_tick_cooldowns(s)
-	s.player.qi -= int(skill.qi_cost)
-	s.battle.cooldowns[skill_id] = int(skill.cooldown)
-	if skill.kind == "heal":
-		var recovered := mini(int(skill.heal), int(s.player.max_hp) - int(s.player.hp))
-		s.player.hp += recovered
-		s.combat_events.append({"type": "heal", "amount": recovered, "hp_after": int(s.player.hp), "style": skill_id})
-		s.log_event("skill_heal", {"skill": skill_id, "amount": recovered})
-	elif skill.kind == "guard":
-		var recovered := mini(int(skill.heal), int(s.player.max_hp) - int(s.player.hp))
-		s.player.hp += recovered
-		s.combat_events.append({"type": "guard", "style": skill_id, "amount": recovered, "hp_after": int(s.player.hp)})
-		s.log_event("skill_guard", {"skill": skill_id, "amount": recovered})
-		return _enemy_turn(s, true)
-	else:
-		var bonus := int(s.stage_stats().attack_bonus)
-		var damage: int = s.combat_rng.randi_range(int(skill.damage_min), int(skill.damage_max)) + bonus
-		s.battle.hp = maxi(0, int(s.battle.hp) - damage)
-		s.combat_events.append({"type": "attack", "actor": "player", "style": skill_id, "amount": damage, "hp_after": int(s.battle.hp)})
-		s.log_event("skill_attack", {"skill": skill_id, "amount": damage})
+	s.player.qi -= int(t.qi_cost)
+	s.battle.cooldowns[skill_id] = int(t.cooldown)
+	var look := {"style": skill_id, "name": t.name, "vfx": t.vfx, "tier": int(t.tier), "element": t.element}
+	var guarding := false
+	match str(t.kind):
+		"heal", "guard":
+			var recovered := mini(int(t.heal), int(s.player.max_hp) - int(s.player.hp))
+			s.player.hp += recovered
+			guarding = t.kind == "guard"
+			s.combat_events.append(_event({"type": t.kind, "amount": recovered, "hp_after": int(s.player.hp)}, look))
+			s.log_event("skill_guard" if guarding else "skill_heal", {"skill": skill_id, "amount": recovered})
+		_:
+			var roll: int = s.combat_rng.randi_range(int(t.damage_min), int(t.damage_max)) + s.attack_bonus()
+			var damage := maxi(1, int(round(float(roll) * s.element_multiplier(t))))
+			s.battle.hp = maxi(0, int(s.battle.hp) - damage)
+			s.combat_events.append(_event({"type": "attack", "actor": "player", "hits": int(t.hits), "amount": damage, "hp_after": int(s.battle.hp)}, look))
+			s.log_event("skill_attack", {"skill": skill_id, "amount": damage})
+			if t.has("lifesteal"):
+				var healed := mini(int(round(damage * float(t.lifesteal))), int(s.player.max_hp) - int(s.player.hp))
+				if healed > 0:
+					s.player.hp += healed
+					s.combat_events.append(_event({"type": "heal", "amount": healed, "hp_after": int(s.player.hp)}, look))
+			for status: String in ["burn", "weaken"]:
+				if t.has(status):
+					s.battle.status[status] = t[status].duplicate()
+	if t.has("qi_gain"):
+		s.player.qi = mini(int(s.player.max_qi), int(s.player.qi) + int(t.qi_gain))
 	if int(s.battle.hp) <= 0:
 		return _win(s)
-	return _enemy_turn(s, false)
+	return _enemy_turn(s, guarding)
+
+## Presentation fields travel with each event, so generated techniques need no lookup tables.
+static func _event(fields: Dictionary, look: Dictionary) -> Dictionary:
+	var event := look.duplicate()
+	event.merge(fields, true)
+	return event
 
 static func defend(s) -> String:
 	s.combat_events.clear()
@@ -69,7 +83,21 @@ static func _tick_cooldowns(s) -> void:
 static func _enemy_turn(s, guarding: bool) -> String:
 	var enemy_id: String = s.battle.enemy_id
 	var enemy: Dictionary = s.content.enemies[enemy_id]
+	# Lingering effects on the opponent act first: burning can finish a fight.
+	var status: Dictionary = s.battle.get("status", {})
+	if status.has("burn"):
+		var burn: Array = status.burn
+		s.battle.hp = maxi(0, int(s.battle.hp) - int(burn[0]))
+		s.combat_events.append({"type": "attack", "actor": "player", "style": "burn", "name": "灼烧", "vfx": "flame_bolt", "tier": 1, "hits": 1, "amount": int(burn[0]), "hp_after": int(s.battle.hp)})
+		_count_down(status, "burn")
+		if int(s.battle.hp) <= 0:
+			return _win(s)
 	var damage: int = s.combat_rng.randi_range(int(enemy.damage_min), int(enemy.damage_max))
+	var factor: float = 1.0 - s.defense()
+	if status.has("weaken"):
+		factor *= 1.0 - float(status.weaken[0])
+		_count_down(status, "weaken")
+	damage = maxi(1, int(round(float(damage) * factor)))
 	if guarding:
 		damage = maxi(1, damage / 2)
 	s.player.hp = maxi(0, int(s.player.hp) - damage)
@@ -90,6 +118,11 @@ static func _enemy_turn(s, guarding: bool) -> String:
 	s.battle.turn += 1
 	s.changed.emit()
 	return "轮到你施展神通。"
+
+static func _count_down(status: Dictionary, key: String) -> void:
+	status[key][1] = int(status[key][1]) - 1
+	if int(status[key][1]) <= 0:
+		status.erase(key)
 
 static func _counter_style(s) -> String:
 	if not bool(s.content.enemies[s.battle.enemy_id].get("human", false)):
@@ -113,6 +146,11 @@ static func _win(s) -> String:
 	if not flag.is_empty() and not s.has_flag(flag):
 		s.world.flags[flag] = true
 		message += " " + s.log_event(enemy.flag_event, {}, true)
+	if enemy.has("drops") and s.world_rng.randf() < float(enemy.drops.chance):
+		var tier: int = s.world_rng.randi_range(int(enemy.drops.tiers[0]), int(enemy.drops.tiers[1]))
+		var loot: String = "j:" + s.Arsenal.generate_technique(s.content, s.world_rng, tier) if s.world_rng.randf() < 0.5 else s.Arsenal.generate_equipment(s.content, s.world_rng, tier)
+		s.add_item(loot, 1)
+		message += " " + s.log_event("loot", {"loot": loot + ":1"})
 	var milestones: Array[String] = s.settle_stage()
 	if not milestones.is_empty():
 		message += " " + " ".join(milestones)

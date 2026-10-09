@@ -152,6 +152,8 @@ func _build_layout() -> void:
 	header.add_child(view_buttons.map)
 	view_buttons.bag = _button("行囊", func() -> void: _set_view("bag"))
 	header.add_child(view_buttons.bag)
+	view_buttons.arts = _button("功法", func() -> void: _set_view("arts"))
+	header.add_child(view_buttons.arts)
 	header.add_child(_button("保存 F5", _save_manual))
 	load_button = _button("读取 F9", _load_manual)
 	header.add_child(load_button)
@@ -259,6 +261,7 @@ func _render() -> void:
 	view_buttons.place.disabled = view == "place"
 	view_buttons.map.disabled = view == "map" or not _settled()
 	view_buttons.bag.disabled = view == "bag"
+	view_buttons.arts.disabled = view == "arts"
 	_clear(center)
 	if not session.ended.is_empty():
 		_render_ending()
@@ -270,6 +273,8 @@ func _render() -> void:
 		_render_map()
 	elif view == "bag":
 		_render_bag()
+	elif view == "arts":
+		_render_arts()
 	else:
 		_render_location()
 	_update_audio()
@@ -300,7 +305,7 @@ func _breakthrough_tooltip() -> String:
 	return "需修至%s，并有 %d 修为与 %d 枚筑基丹" % [session.content.realm_title(int(session.player.realm), session.content.realm(int(session.player.realm)).stages.size() - 1), int(need.xp), int(need.pills)]
 
 func _realm_bonus_text() -> String:
-	var bonus := int(session.stage_stats().attack_bonus)
+	var bonus: int = session.attack_bonus()
 	return " 境界加成：攻击伤害 +%d。" % bonus if bonus > 0 else ""
 
 func _render_location() -> void:
@@ -515,16 +520,16 @@ func _spot_action(grid: GridContainer, action: String) -> void:
 				var price: int = session.sell_price(item_id)
 				if price > 0:
 					var sold := item_id
-					_timed(grid, "出售%s（%d）· 每件 %d" % [session.content.items[item_id].name, session.item_count(item_id), price], func() -> String: return session.sell(sold, 1), session.content.items[item_id].description)
+					_timed(grid, "出售%s（%d）· 每件 %d" % [session.content.item(item_id).name, session.item_count(item_id), price], func() -> String: return session.sell(sold, 1), session.content.item(item_id).description)
 		"shop":
 			for good: Dictionary in session.shop_goods():
 				var bought: String = good.item
-				_timed(grid, "购买%s  ·  %d 灵石" % [session.content.items[bought].name, int(good.price)], func() -> String: return session.buy(bought), session.content.items[bought].description)
+				_timed(grid, "购买%s  ·  %d 灵石" % [session.content.item(bought).name, int(good.price)], func() -> String: return session.buy(bought), session.content.item(bought).description)
 		"gather":
 			var gather: Dictionary = session.content.locations[session.player.location].gather
 			var kinds: Array[String] = []
 			for entry: Dictionary in gather.table:
-				kinds.append(session.content.items[entry.item].name)
+				kinds.append(session.content.item(entry.item).name)
 			_action(grid, "采集灵草  ·  " + _duration("gather"), "gather", "采得 %d–%d 株，此地出产：%s" % [int(gather.picks[0]), int(gather.picks[1]), "、".join(kinds)])
 		"inn_rest":
 			_action(grid, "客栈歇息  ·  %s · %d 灵石" % [_duration("inn_rest"), int(rules.inn_price)], "inn_rest", "恢复全部气血与灵力")
@@ -532,6 +537,15 @@ func _spot_action(grid: GridContainer, action: String) -> void:
 			_action(grid, "翻找石室  ·  " + _duration("search_ruin"), "search_ruin", "或得灵石、灵草，偶有丹药；搜过后需隔些时日")
 		"study":
 			pass
+		"teach":
+			for technique_id: String in session.teachings():
+				var taught: Dictionary = session.content.technique(technique_id)
+				var reason: String = session.learn_block(technique_id)
+				var learned_id := technique_id
+				var button := _button("参悟%s  ·  %s · %d 日" % [taught.name, taught.tier_name, int(taught.study_days)], func() -> void: _run(func() -> String: return session.learn_here(learned_id)), reason if not reason.is_empty() else taught.description)
+				button.disabled = not reason.is_empty()
+				button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+				grid.add_child(button)
 
 ## Map view: pick a node to see the route, days and danger, then set out.
 func _render_map() -> void:
@@ -575,19 +589,80 @@ func _render_map() -> void:
 	go.disabled = not _settled()
 	center.add_child(go)
 
+## 功法: arts and 心法 in their slots, everything learned, worn equipment and the resulting stats.
+func _render_arts() -> void:
+	center.add_child(_label("功 法", 26, GOLD))
+	var extra: Dictionary = session.bonuses()
+	var elements: Array[String] = []
+	for element: String in extra.element_damage:
+		var label: String = "全属性" if element == "*" else session.content.technique_data.elements[element].name
+		elements.append("%s +%d%%" % [label, int(round(float(extra.element_damage[element]) * 100.0))])
+	center.add_child(_paragraph("攻击加成 +%d · 受伤 -%d%% · 修炼 ×%.2f%s" % [session.attack_bonus(), int(round(session.defense() * 100.0)), session.cultivation_speed(), " · " + "，".join(elements) if not elements.is_empty() else ""], INK))
+	var rules: Dictionary = session.content.rules
+	for group: Array in [["art", "主动神通", session.player.arts, int(rules.art_slots)], ["method", "心法", session.player.methods, int(rules.method_slots)]]:
+		center.add_child(_label("%s  %d / %d" % [group[1], group[2].size(), group[3]], 17, GOLD))
+		for technique_id: String in group[2]:
+			_technique_row(technique_id, true)
+	var idle: Array = session.player.learned.filter(func(technique_id: String) -> bool: return not technique_id in session.player.arts and not technique_id in session.player.methods)
+	if not idle.is_empty():
+		center.add_child(_label("已习得", 17, GOLD))
+		for technique_id: String in idle:
+			_technique_row(technique_id, false)
+	center.add_child(_label("法 宝", 17, GOLD))
+	for slot: String in session.content.equipment_data.slots:
+		var worn: String = str(session.player.equipment.get(slot, ""))
+		var row := HBoxContainer.new()
+		row.add_theme_constant_override("separation", 10)
+		center.add_child(row)
+		var slot_label := _label(session.content.equipment_data.slots[slot], 16, MUTED)
+		slot_label.custom_minimum_size.x = 60
+		row.add_child(slot_label)
+		if worn.is_empty():
+			row.add_child(_label("未佩戴", 15, MUTED))
+			continue
+		var gear: Dictionary = session.content.equipment(worn)
+		var text := _paragraph("%s · %s" % [gear.name, gear.description], INK)
+		text.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		row.add_child(text)
+		var taken := slot
+		row.add_child(_button("取下", func() -> void: _run(func() -> String: return session.unequip_slot(taken))))
+	center.add_child(_button("返回", func() -> void: _set_view("place")))
+
+func _technique_row(technique_id: String, active: bool) -> void:
+	var t: Dictionary = session.content.technique(technique_id)
+	var row := HBoxContainer.new()
+	row.add_theme_constant_override("separation", 10)
+	center.add_child(row)
+	var title := _label("%s\n%s · %s" % [t.name, t.tier_name, session.content.technique_data.elements[t.element].name], 15, GOLD if int(t.tier) >= 3 else INK)
+	title.custom_minimum_size.x = 120
+	row.add_child(title)
+	var text := _paragraph(t.description)
+	text.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	row.add_child(text)
+	var chosen := technique_id
+	if active:
+		row.add_child(_button("停下", func() -> void: _run(func() -> String: return session.unequip_technique(chosen))))
+		return
+	var slots: Array = session.player.arts if t.slot == "art" else session.player.methods
+	var limit := int(session.content.rules.art_slots if t.slot == "art" else session.content.rules.method_slots)
+	var full := slots.size() >= limit
+	var button := _button("运转", func() -> void: _run(func() -> String: return session.equip_technique(chosen)), "栏位已满，先停下一门" if full else "放入栏位")
+	button.disabled = full or not session.battle.is_empty()
+	row.add_child(button)
+
 ## 行囊: everything carried, grouped by category, with use and (where bought) sell buttons.
 func _render_bag() -> void:
 	center.add_child(_label("行 囊", 26, GOLD))
 	if session.player.items.is_empty():
 		center.add_child(_paragraph("行囊空空如也。", MUTED))
 	for category: String in session.content.ITEM_CATEGORIES:
-		var ids: Array = session.player.items.keys().filter(func(item_id: String) -> bool: return session.content.items.get(item_id, {}).get("category", "") == category)
+		var ids: Array = session.player.items.keys().filter(func(item_id: String) -> bool: return session.content.item(item_id).get("category", "") == category)
 		if ids.is_empty():
 			continue
 		ids.sort()
 		center.add_child(_label(session.content.ITEM_CATEGORIES[category], 17, GOLD))
 		for item_id: String in ids:
-			var item: Dictionary = session.content.items[item_id]
+			var item: Dictionary = session.content.item(item_id)
 			var row := HBoxContainer.new()
 			row.add_theme_constant_override("separation", 10)
 			center.add_child(row)
@@ -603,6 +678,13 @@ func _render_bag() -> void:
 				var use_button := _button("服用", func() -> void: _run(func() -> String: return session.use_item(used)), reason)
 				use_button.disabled = not reason.is_empty()
 				row.add_child(use_button)
+			if item.get("category", "") == "manual":
+				var block: String = session.learn_block(item.teaches)
+				var study := _button("参悟 · %d 日" % int(session.content.technique(item.teaches).study_days), func() -> void: _run(func() -> String: return session.study_manual(used)), block)
+				study.disabled = not block.is_empty()
+				row.add_child(study)
+			if item.get("category", "") == "equipment":
+				row.add_child(_button("装备", func() -> void: _run(func() -> String: return session.equip_item(used)), "换上这件法宝"))
 			var price: int = session.sell_price(item_id)
 			if price > 0:
 				row.add_child(_button("出售 · %d" % price, func() -> void: _run(func() -> String: return session.sell(used, 1)), "在此地出售一件"))
@@ -741,16 +823,16 @@ func _render_battle() -> void:
 	battle_stage.cue.connect(audio.cue)
 	center.add_child(_paragraph("选择神通 · 守御回灵并减伤 · 出招期间请等待命中与对手反击"))
 	var grid := GridContainer.new()
-	grid.columns = 5
+	grid.columns = 6
 	grid.add_theme_constant_override("h_separation", 8)
 	grid.add_theme_constant_override("v_separation", 10)
 	center.add_child(grid)
 	var index := 1
 	for skill_id: String in session.active_skills():
-		var skill: Dictionary = session.content.skills[skill_id]
+		var skill: Dictionary = session.content.technique(skill_id)
 		var remaining := int(b.cooldowns.get(skill_id, 0))
 		var suffix := "\n冷却 %d" % remaining if remaining > 0 else "\n%d 灵力" % int(skill.qi_cost)
-		var button := _button("[%d] %s%s" % [index, skill.name, suffix], func() -> void: _skill(skill_id), skill.description + _realm_bonus_text())
+		var button := _button("[%d] %s%s" % [index, skill.name, suffix], func() -> void: _skill(skill_id), "%s · %s\n%s%s" % [skill.tier_name, session.content.technique_data.elements[skill.element].name, skill.description, _realm_bonus_text()])
 		button.disabled = remaining > 0 or int(session.player.qi) < int(skill.qi_cost)
 		button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		grid.add_child(button)
@@ -941,10 +1023,11 @@ func _unhandled_key_input(event: InputEvent) -> void:
 			_save_manual()
 		KEY_F9:
 			_load_manual()
-		KEY_1, KEY_2, KEY_3:
+		KEY_1, KEY_2, KEY_3, KEY_4:
 			if not session.battle.is_empty():
 				var ids := session.active_skills()
-				_skill(ids[event.keycode - KEY_1])
+				if event.keycode - KEY_1 < ids.size():
+					_skill(ids[event.keycode - KEY_1])
 		KEY_SPACE:
 			if not session.battle.is_empty():
 				_battle_action("guard")
