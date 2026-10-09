@@ -17,6 +17,7 @@ var hero
 var enemy
 var background: Texture2D
 var enemy_id := ""
+var enemy_art: Dictionary = {}
 var human_enemy := false
 var tier_layers: Array = []
 var hero_name := ""
@@ -37,7 +38,7 @@ var effect_font := SystemFont.new()
 
 func configure(snapshot: Dictionary, enemy_definition: Dictionary) -> void:
 	art = JSON.parse_string(FileAccess.get_file_as_string("res://data/art.json"))
-	background = load(art.background)
+	background = load(art_path([str(art.place_background) % str(snapshot.battle.get("place", "")), art.background]))
 	var definitions: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://data/world.json"))
 	skills = definitions.skills
 	sects = definitions.sects
@@ -60,16 +61,38 @@ func configure(snapshot: Dictionary, enemy_definition: Dictionary) -> void:
 	hero.configure(art.actors.hero, true)
 	world.add_child(hero)
 	enemy = Actor.new()
-	enemy.configure(art.actors[enemy_id], false)
+	enemy_art = _enemy_art(enemy_id, snapshot.battle)
+	enemy.configure(enemy_art, false)
 	world.add_child(enemy)
 	resized.connect(_layout)
 	_layout()
+
+## The first image path that exists, so art dropped into its folder replaces the shared fallback.
+static func art_path(candidates: Array) -> String:
+	for path: Variant in candidates:
+		if ResourceLoader.exists(str(path)):
+			return str(path)
+	return str(candidates.back())
+
+## The opponent's atlas: a generated person's sect-and-gender look, a named foe's own sprite,
+## else the shared one. Every candidate uses the same grid as the shared atlas.
+func _enemy_art(id: String, battle: Dictionary) -> Dictionary:
+	var definition: Dictionary = art.actors[id].duplicate()
+	var foe: Dictionary = battle.get("foe", {})
+	var candidates: Array = []
+	if definition.has("look") and foe.has("sect") and foe.has("gender"):
+		candidates.append(str(definition.look) % [foe.sect, foe.gender])
+	if definition.has("preferred"):
+		candidates.append(definition.preferred)
+	candidates.append(definition.texture)
+	definition.texture = art_path(candidates)
+	return definition
 
 func _layout() -> void:
 	if not is_instance_valid(hero):
 		return
 	hero.set_height(minf(size.y * float(art.actors.hero.height_ratio), maxf(0.0, size.y - 70.0)))
-	enemy.set_height(minf(size.y * float(art.actors[enemy_id].height_ratio), maxf(0.0, size.y - 70.0)))
+	enemy.set_height(minf(size.y * float(enemy_art.height_ratio), maxf(0.0, size.y - 70.0)))
 	hero.position = Vector2(size.x * 0.24, size.y * 0.94)
 	enemy.position = Vector2(size.x * 0.76, size.y * 0.94)
 	queue_redraw()

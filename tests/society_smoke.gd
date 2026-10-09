@@ -127,6 +127,17 @@ func _sparring() -> void:
 	var stones := int(game.player.stones)
 	game.interact(rival, "spar")
 	check(game.battle.get("context", "") == "spar" and int(game.battle.hp) == int(game.content.stage(int(person.realm), int(person.stage)).max_hp), "a spar uses the person's own strength")
+	check(game.battle.place == "sect" and game.battle.foe.sect == person.sect and game.battle.foe.gender == person.gender, "a spar records where it is fought and how the foe looks")
+	var saved: Dictionary = JSON.parse_string(JSON.stringify(game.snapshot()))
+	var older: Dictionary = saved.duplicate(true)
+	older.battle.erase("place")
+	older.battle.foe.erase("sect")
+	older.battle.foe.erase("gender")
+	check(_game().restore(older), "a duel saved before backdrops and looks still loads")
+	for broken: Callable in [func(b: Dictionary) -> void: b.place = "moon", func(b: Dictionary) -> void: b.place = 3, func(b: Dictionary) -> void: b.foe.sect = "nowhere", func(b: Dictionary) -> void: b.foe.gender = "x"]:
+		var bad: Dictionary = saved.duplicate(true)
+		broken.call(bad.battle)
+		check(not _game().restore(bad), "a duel with a broken place or look is rejected")
 	game.use_skill("sword")
 	var counter: Dictionary = game.combat_events.filter(func(event: Dictionary) -> bool: return event.get("actor", "") == "enemy")[0]
 	check(counter.style == game.battle.foe.art and counter.has("vfx"), "they answer with their own art")

@@ -121,6 +121,7 @@ func _encounters() -> void:
 	check(stopped.player.location == "wild" and stopped.pending_event.get("id", "") == "road_wolf" and stopped.player.journey.get("to", "") == "ruin", "a beast ambush stops the journey on the road")
 	stopped.choose_event("fight")
 	check(stopped.battle.get("context", "") == "event" and stopped.battle.enemy_id == "wolf", "fighting the ambush")
+	check(stopped.battle.get("place", "") == "road", "an ambush is fought on the road, not at the node reached")
 	var day := int(stopped.world.day)
 	stopped.flee()
 	check(int(stopped.world.day) == day + 1, "a road skirmish costs a day, not a month")

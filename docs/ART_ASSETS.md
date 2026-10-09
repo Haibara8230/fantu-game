@@ -81,7 +81,7 @@ Art is unmistakably 2D DRAWN: crisp dark contours, flat color areas, simple cel 
 
 ## M4 待制作：斗法背景、斗法人物图集与事件插图
 
-规格与提示词见 `docs/ART_BRIEF_M4.md`（可整份交给图像生成 AI）：按地点的斗法背景 8 张、劫修与生成修士的六姿态图集 14 张、事件关键插图 7 张。除两张劫修图集只需改 `data/art.json` 外，其余需要先接入代码，见 `docs/BACKLOG.md`。
+规格与提示词见 `docs/ART_BRIEF_M4.md`（可整份交给图像生成 AI）：按地点的斗法背景 8 张、劫修与生成修士的六姿态图集 14 张、事件关键插图 7 张。斗法背景与人物图集已接入，放到指定路径即生效，缺图时回退到 `bamboo_arena_v1.png` 与 `rival_atlas_v2.png`；事件插图要等演出接入，见 `docs/BACKLOG.md`。
 
 ## M2 待制作：区域地图、地点与场景（规格）
 

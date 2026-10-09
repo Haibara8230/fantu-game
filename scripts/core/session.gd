@@ -1137,7 +1137,7 @@ func begin_spar(person_id: String) -> void:
 	var someone: Dictionary = person(person_id)
 	var foe: Dictionary = Population.foe(content, person_id, someone)
 	var lineage: String = str(someone.get("sect", "qingyun"))
-	battle = {"enemy_id": "cultivator", "hp": int(foe.hp), "turn": 1, "cooldowns": {}, "opponent_sect": "qingyun" if lineage == "wanderer" else lineage, "status": {}, "context": "spar", "npc": person_id, "foe": foe}
+	battle = {"enemy_id": "cultivator", "hp": int(foe.hp), "turn": 1, "cooldowns": {}, "opponent_sect": "qingyun" if lineage == "wanderer" else lineage, "status": {}, "context": "spar", "npc": person_id, "foe": foe, "place": _battle_place()}
 	log_event("spar_start", {"npc": person_id})
 
 func favor(person_id: String) -> int:
@@ -1335,10 +1335,16 @@ func begin_battle(enemy_id: String, context: String = "", opponent_sect: String 
 		opponent_sect = str(enemy.get("sect", player.get("sect", "wanderer")))
 		if opponent_sect == "wanderer":
 			opponent_sect = "qingyun"
-	battle = {"enemy_id": enemy_id, "hp": int(enemy.hp), "turn": 1, "cooldowns": {}, "opponent_sect": opponent_sect, "status": {}}
+	battle = {"enemy_id": enemy_id, "hp": int(enemy.hp), "turn": 1, "cooldowns": {}, "opponent_sect": opponent_sect, "status": {}, "place": _battle_place()}
 	if not context.is_empty():
 		battle.context = context
 	return log_event("battle_start", {"enemy": enemy_id})
+
+## Where a duel is fought, for its backdrop: "road" while a road encounter is open, otherwise here.
+func _battle_place() -> String:
+	if not pending_event.is_empty() and str(content.events[pending_event.id].get("trigger", "")) == "route":
+		return "road"
+	return str(player.location)
 
 func use_skill(skill_id: String) -> String:
 	return Combat.use_skill(self, skill_id)
@@ -1452,6 +1458,15 @@ func restore(data: Variant) -> bool:
 			return false
 		var foe: Variant = saved_battle.get("foe", {})
 		if not foe is Dictionary or (not foe.is_empty() and (not _whole_nonnegative(foe.get("hp")) or not _whole_nonnegative(foe.get("damage_min")) or not _whole_nonnegative(foe.get("damage_max")) or not foe.get("name") is String)):
+			return false
+		# Saves before duel looks lack the foe's sect and gender; the stage then uses the shared sprite.
+		if foe.has("sect") and (not foe.sect is String or not content.sects.has(foe.sect)):
+			return false
+		if foe.has("gender") and not foe.gender in ["male", "female"]:
+			return false
+		# Saves before duel backdrops lack the place; the stage then uses the shared background.
+		var place: Variant = saved_battle.get("place", "road")
+		if not place is String or (place != "road" and not content.locations.has(place)):
 			return false
 		var hp_cap: int = int(foe.hp) if not foe.is_empty() else int(content.enemies[saved_battle.enemy_id].hp)
 		if not _whole_nonnegative(saved_battle.get("hp")) or int(saved_battle.hp) <= 0 or int(saved_battle.hp) > hp_cap:

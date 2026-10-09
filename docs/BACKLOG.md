@@ -30,10 +30,8 @@
 | 舆图位置微调 | 云溪坊市画在约 87% 处，标记在 80% | 可重画，或把数据中的坐标改成 0.86 |
 | 多余文件 | `assets/art/map/region_qingyun_preview_v1.png` 游戏不使用 | 可删除 |
 
-**素材接入（图片到位前后需要的代码工作）**
-- 斗法背景：`data/art.json` 改为按地点（含途中遭遇 `road`）选择 `assets/art/battle/<地点>.png`，缺图回退到 `bamboo_arena_v1.png`。
-- 劫修图集：把 `data/art.json` 中 `rogue`、`ruin_rogue` 的 `texture` 指向 `assets/art/actors/` 下的新图，只改数据。
-- 生成修士图集：斗法数据记录对手的门派与性别，按 `cultivator_<门派>_<性别>.png` 选图集，缺图回退到 `rival_atlas_v2.png`。
+**素材接入**
+- 斗法背景与斗法人物图集已接入，图片放好即生效，缺图时回退到共用图。
 - 事件插图：随 M4 对话与事件演出一起接入，事件数据中引用 `assets/art/events/` 下的图片。
 
 ## 三、系统层面尚未开始（M5 以后）

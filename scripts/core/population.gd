@@ -211,4 +211,5 @@ static func foe(content, person_id: String, person: Dictionary) -> Dictionary:
 		"name": person.name, "hp": int(caps.max_hp), "damage_min": int(round(float(best.damage_min) * 0.8)) + bonus,
 		"damage_max": int(round(float(best.damage_max) * 0.8)) + bonus, "art": best.id, "art_name": best.name,
 		"vfx": best.vfx, "tier": int(best.tier), "xp": 10 * (int(person.stage) + 1) + 30 * int(person.realm), "npc": person_id,
+		"sect": person.sect, "gender": person.gender,
 	}

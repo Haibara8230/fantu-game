@@ -1,5 +1,6 @@
 {
   "background": "res://assets/art/bamboo_arena_v1.png",
+  "place_background": "res://assets/art/battle/%s.png",
   "actors": {
     "hero": {
       "texture": "res://assets/art/cultivator_atlas_v2.png",
@@ -33,6 +34,7 @@
     },
     "rogue": {
       "texture": "res://assets/art/rival_atlas_v2.png",
+      "preferred": "res://assets/art/actors/rogue.png",
       "columns": 3,
       "rows": 2,
       "frames": {
@@ -48,6 +50,7 @@
     },
     "ruin_rogue": {
       "texture": "res://assets/art/rival_atlas_v2.png",
+      "preferred": "res://assets/art/actors/ruin_rogue.png",
       "columns": 3,
       "rows": 2,
       "frames": {
@@ -63,6 +66,7 @@
     },
     "cultivator": {
       "texture": "res://assets/art/rival_atlas_v2.png",
+      "look": "res://assets/art/actors/cultivator_%s_%s.png",
       "columns": 3,
       "rows": 2,
       "frames": {

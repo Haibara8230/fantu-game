@@ -3,12 +3,10 @@
 > 给人类读者：这份文档写给图像生成 AI，可以整份交给它，与 `docs/ART_BRIEF.md`（地图、横幅、立绘）和 `docs/PORTRAIT_POOL_BRIEF.md`（生成人物立绘图池）配套。
 >
 > **接入状态（交付前请看）：**
-> - B1 两张劫修图集：放好后只需把 `data/art.json` 里 `rogue`、`ruin_rogue` 的 `texture` 改成新路径，不需要改代码。
-> - A 组斗法背景：`data/art.json` 目前只有一张固定的 `background`，需要先接入"按地点选背景、缺图回退到 `bamboo_arena_v1.png`"。
-> - B2、B3 生成修士图集：斗法数据里还没有对手的性别与门派，需要先接入"按门派与性别选图集、缺图回退到 `rival_atlas_v2.png`"。
-> - C 组事件插图：对话与事件演出（M4）还未制作，图片先按本规格准备，版式确定后可能调整尺寸。
->
-> 以上接入工作记录在 `docs/BACKLOG.md`。
+> - A、B 组已接入：图片放到指定路径后运行 `play.cmd` 或 `check.cmd`（会先导入资源）即可生效，不需要改代码；缺哪张就继续用 `bamboo_arena_v1.png` 或 `rival_atlas_v2.png`。
+>   - 斗法背景按斗法地点选择；途中遭遇（妖狼、劫修拦路）用 `road.png`。路径规则见 `data/art.json` 的 `place_background`。
+>   - 劫修图集见 `data/art.json` 中 `rogue`、`ruin_rogue` 的 `preferred`；生成修士按其门派与性别选 `cultivator_<门派>_<性别>.png`（`look`）。
+> - C 组事件插图：对话与事件演出（M4）还未制作，图片先按本规格准备，版式确定后可能调整尺寸。接入工作记录在 `docs/BACKLOG.md`。
 
 This brief is self-contained. Read it fully before generating anything.
 
@@ -82,7 +80,7 @@ This brief is self-contained. Read it fully before generating anything.
 | `ferry.png` | Bailu Ferry | Flat sandy riverbank and shallows, reeds at the edges, a small wooden pier at the far right, wide calm river and far mountains behind |
 | `market.png` | Yunxi Market | Open stone-paved square just outside the market at dusk, closed stalls and hanging lanterns at the edges, river roofs behind |
 | `ridge.png` | Songfeng Ridge | Needle-covered forest clearing on a ridge, ancient pines framing both edges, layered ridge lines behind |
-| `wild.png` | Luoxia Valley: deep valley floor (serpent's lair) | Rocky valley floor with mist, a faint glowing spring far in the background (not behind the characters), a few large red scales on the rocks, rose-gold sunset light high on the cliffs; uneasy mood |
+| `wild.png` | Luoxia Valley: every fight in the valley (wolves at its mouth, the serpent at its spring) | Rocky valley floor with mist, a faint glowing spring far in the background (not behind the characters), a few large red scales on the rocks, rose-gold sunset light high on the cliffs; uneasy mood |
 | `ruin.png` | Ancient Cave: in front of the stone door | Narrow ledge at the foot of a vine-covered cliff, the old stone door half visible at the far right edge, quiet and slightly dim |
 | `road.png` | Roadside ambushes while travelling (wolves, the masked rogue) | Winding mountain road at a bend, scattered rocks and shrubs at the edges, hills and distant pines behind; neutral daylight so it suits any route |
 
