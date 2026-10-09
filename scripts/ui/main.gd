@@ -3,6 +3,7 @@ const Session = preload("res://scripts/core/session.gd")
 const SaveStore = preload("res://scripts/core/save_store.gd")
 const Landscape = preload("res://scripts/ui/landscape.gd")
 const BattleStage = preload("res://scripts/presentation/battle_stage.gd")
+const Calendar = preload("res://scripts/core/calendar.gd")
 const GOLD := Color("#d5b777")
 const INK := Color("#e3e8dc")
 const MUTED := Color("#97aaa4")
@@ -121,7 +122,7 @@ func _build_layout() -> void:
 	header.add_theme_constant_override("separation", 12)
 	page.add_child(header)
 	header.add_child(_label("凡 途", 32, GOLD))
-	header.add_child(_label("修仙纪事  /  首章 · 青云初志", 16, MUTED))
+	header.add_child(_label("修仙纪事", 16, MUTED))
 	var spacer := Control.new()
 	spacer.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	header.add_child(spacer)
@@ -205,7 +206,8 @@ func _render() -> void:
 	stats.add_child(_label(session.content.sects[session.player.get("sect", "wanderer")].name, 16, MUTED))
 	_meter(stats, "气血", p.hp, p.max_hp, Color("#a96f66"))
 	_meter(stats, "灵力", p.qi, p.max_qi, Color("#5f999b"))
-	_meter(stats, "修为", p.xp, maxi(int(p.xp), int(session.content.rules.breakthrough_xp)), GOLD)
+	stats.add_child(_label("年岁 %d  ·  寿元 %d" % [session.age(), session.lifespan()], 15, MUTED))
+	_meter(stats, "修为", p.xp, maxi(1, maxi(int(p.xp), int(session.next_breakthrough().get("xp", 0)))), GOLD)
 	stats.add_child(_label("灵石  %d    灵草  %d" % [p.stones, p.herbs], 16))
 	stats.add_child(_label("筑基丹  %d" % p.pills, 16))
 	stats.add_child(HSeparator.new())
@@ -214,7 +216,8 @@ func _render() -> void:
 	for location_id: String in ["sect", "market", "wild"]:
 		var definition: Dictionary = session.content.locations[location_id]
 		var current: bool = p.location == location_id
-		var button := _button(definition.name + ("  ·  当前" if current else "  →"), func() -> void: _run(func() -> String: return session.travel(location_id)), "旅行耗时一月")
+		var days: int = session.content.route_days(p.location, location_id)
+		var button := _button(definition.name + ("  ·  当前" if current else "  →"), func() -> void: _run(func() -> String: return session.travel(location_id)), "" if current else "路程 " + Calendar.duration_text(days))
 		button.disabled = current or not session.battle.is_empty()
 		stats.add_child(button)
 		travel_buttons[location_id] = button
@@ -224,15 +227,28 @@ func _render() -> void:
 		_render_location()
 	else:
 		_render_battle()
-	journal_text.text = "\n".join(session.journal)
+	journal_text.text = "\n".join(session.journal_lines())
 
 func _objective() -> String:
-	var p: Dictionary = session.player
-	if p.completed:
-		return "首章已完成 · 灵泉重现。你仍可自由游历，后续章节待扩展。"
-	if int(p.realm) == 1:
-		return "当前目标 · 休整后前往落霞谷，击败赤鳞妖蟒。"
-	return "当前目标 · 积攒 %d 修为与一枚筑基丹，在青云山突破。" % int(session.content.rules.breakthrough_xp)
+	if session.has_flag("serpent_slain"):
+		return "落霞谷灵泉已复。世事仍在流转，你可以继续修炼与游历。"
+	var need: Dictionary = session.next_breakthrough()
+	if need.is_empty():
+		return "当前目标 · 休整后前往落霞谷，平定赤鳞妖蟒。"
+	return "当前目标 · 积攒 %d 修为与 %d 枚筑基丹，在青云山突破。" % [int(need.xp), int(need.pills)]
+
+func _duration(action: String) -> String:
+	return Calendar.duration_text(session.content.action_days(action))
+
+func _breakthrough_tooltip() -> String:
+	var need: Dictionary = session.next_breakthrough()
+	if need.is_empty():
+		return "后续境界尚未开放"
+	return "需要 %d 修为与 %d 枚筑基丹" % [int(need.xp), int(need.pills)]
+
+func _realm_bonus_text() -> String:
+	var bonus := int(session.content.realm(int(session.player.realm)).attack_bonus)
+	return " 境界加成：攻击伤害 +%d。" % bonus if bonus > 0 else ""
 
 func _render_location() -> void:
 	if preview_mode:
@@ -256,19 +272,19 @@ func _render_location() -> void:
 	center.add_child(grid)
 	match session.player.location:
 		"sect":
-			_action(grid, "闭关修炼  ·  一月", "cultivate", "修为 +18，恢复全部灵力")
-			_action(grid, "静室休整  ·  一月", "rest", "恢复全部气血与灵力")
+			_action(grid, "闭关修炼  ·  " + _duration("cultivate"), "cultivate", "修为 +18，恢复全部灵力")
+			_action(grid, "静室休整  ·  " + _duration("rest"), "rest", "恢复全部气血与灵力")
 			_enemy_action(grid, "同门切磋", "disciple", "获胜获得 12 修为与 12 灵石，斗法有受伤风险")
-			_action(grid, "突破筑基  ·  三月", "breakthrough", "需要 100 修为与一枚筑基丹")
+			_action(grid, "突破境界  ·  " + _duration("breakthrough"), "breakthrough", _breakthrough_tooltip())
 		"market":
 			_action(grid, "出售全部灵草", "sell", "每株灵草可换取 8 灵石")
 			_action(grid, "购买筑基丹  ·  60 灵石", "buy_pill", "突破筑基所需丹药")
-			center.add_child(_paragraph("坊市交易不消耗月份。灵草可从落霞谷采集，也能通过斗法获得。"))
+			center.add_child(_paragraph("坊市交易不耗时日。灵草可从落霞谷采集，也能通过斗法获得。"))
 		"wild":
-			_action(grid, "采集灵草  ·  一月", "gather", "采得 2–4 株灵草")
+			_action(grid, "采集灵草  ·  " + _duration("gather"), "gather", "采得 2–4 株灵草")
 			_enemy_action(grid, "讨伐妖狼", "wolf", "获胜获得 24 灵石、18 修为、2 灵草")
-			var boss_button := _enemy_action(grid, "挑战赤鳞妖蟒", "serpent", "筑基后开放；首章最终挑战")
-			boss_button.disabled = int(session.player.realm) == 0 or bool(session.player.completed)
+			var boss_button := _enemy_action(grid, "挑战赤鳞妖蟒", "serpent", "需达到筑基初期；平定后落霞谷重归安宁")
+			boss_button.disabled = int(session.player.realm) < int(session.content.enemies.serpent.min_realm) or session.has_flag("serpent_slain")
 	if session.player.location == "sect" and not preview_mode:
 		_sect_choices(center, false)
 	var names: Array[String] = []
@@ -308,13 +324,13 @@ func _render_battle() -> void:
 		var skill: Dictionary = session.content.skills[skill_id]
 		var remaining := int(b.cooldowns.get(skill_id, 0))
 		var suffix := "\n冷却 %d" % remaining if remaining > 0 else "\n%d 灵力" % int(skill.qi_cost)
-		var button := _button("[%d] %s%s" % [index, skill.name, suffix], func() -> void: _skill(skill_id), skill.description + (" 筑基后攻击伤害 +8。" if int(session.player.realm) == 1 else ""))
+		var button := _button("[%d] %s%s" % [index, skill.name, suffix], func() -> void: _skill(skill_id), skill.description + _realm_bonus_text())
 		button.disabled = remaining > 0 or int(session.player.qi) < int(skill.qi_cost)
 		button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		grid.add_child(button)
 		index += 1
 	grid.add_child(_button("守御\n空格", func() -> void: _battle_action("guard"), "恢复 6 灵力，受到伤害减半"))
-	grid.add_child(_button("撤离\n耗时一月", func() -> void: _battle_action("flee"), "消耗一月，保留资源"))
+	grid.add_child(_button("撤离\n耗时 " + _duration("flee"), func() -> void: _battle_action("flee"), "保留资源，耗时 " + _duration("flee")))
 	center.add_child(_paragraph("落败可休整后继续 · 最多损失 10 灵石", MUTED))
 
 func _skill(skill_id: String) -> void:
@@ -406,7 +422,7 @@ func _show_welcome() -> void:
 	panel.add_child(box)
 	box.add_child(_label("凡 途", 48, GOLD))
 	box.add_child(_label("一介凡身，问道长生。", 22))
-	box.add_child(_paragraph("首章 · 青云初志\n从青云山出发，在修炼与历练中积累资源，突破筑基，寻找落霞谷的灵泉。"))
+	box.add_child(_paragraph("历元元年 · 青云山外门\n修炼、游历、结交，在流转的岁月里寻求长生之道。"))
 	name_input = LineEdit.new()
 	name_input.placeholder_text = "道号（最多 16 字）"
 	name_input.max_length = 16
@@ -420,7 +436,7 @@ func _show_welcome() -> void:
 	box.add_child(continue_button)
 	if started:
 		box.add_child(_button("返回当前旅程", _close_welcome))
-	box.add_child(_paragraph("开发首版 · Windows 单机 · 本地存档\n二维手绘角色 · 施法演出 · 命中与受击反馈"))
+	box.add_child(_paragraph("开发版 · Windows 单机 · 本地存档\n二维手绘角色 · 施法演出 · 命中与受击反馈"))
 	name_input.grab_focus()
 
 func _close_welcome() -> void:

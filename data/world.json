@@ -3,20 +3,17 @@
     "sect": {
       "name": "青云山",
       "subtitle": "山中无甲子，修行亦有时。",
-      "description": "青云山外门的静室与演武坪。你可以闭关修炼，休整伤势，或与同门切磋。",
-      "travel_months": 1
+      "description": "青云山外门的静室与演武坪。你可以闭关修炼，休整伤势，或与同门切磋。"
     },
     "market": {
       "name": "云溪坊市",
       "subtitle": "半城烟火，半城仙缘。",
-      "description": "药香浮过长街。药商收购灵草，往来的散修在这里售卖丹药。",
-      "travel_months": 1
+      "description": "药香浮过长街。药商收购灵草，往来的散修在这里售卖丹药。"
     },
     "wild": {
       "name": "落霞谷",
       "subtitle": "机缘藏于险处。",
-      "description": "谷中灵草繁盛，也有妖兽出没。深处的赤鳞妖蟒守着一处灵泉，筑基后方可挑战。",
-      "travel_months": 1
+      "description": "谷中灵草繁盛，也有妖兽出没。深处的赤鳞妖蟒守着一处灵泉，筑基后方可挑战。"
     }
   },
   "skills": {
@@ -179,7 +176,8 @@
       "reward_stones": 12,
       "reward_xp": 12,
       "reward_herbs": 0,
-      "boss": false
+      "locations": ["sect"],
+      "min_realm": 0
     },
     "wolf": {
       "name": "山谷妖狼",
@@ -189,7 +187,8 @@
       "reward_stones": 24,
       "reward_xp": 18,
       "reward_herbs": 2,
-      "boss": false
+      "locations": ["wild"],
+      "min_realm": 0
     },
     "serpent": {
       "name": "赤鳞妖蟒",
@@ -199,23 +198,57 @@
       "reward_stones": 100,
       "reward_xp": 40,
       "reward_herbs": 5,
-      "boss": true
+      "locations": ["wild"],
+      "min_realm": 1,
+      "world_flag": "serpent_slain",
+      "flag_event": "serpent_slain"
     }
   },
   "rules": {
-    "starting_hp": 90,
-    "starting_qi": 30,
+    "starting_age": 16,
     "starting_stones": 30,
     "cultivate_xp": 18,
-    "breakthrough_xp": 100,
     "pill_price": 60,
     "herb_price": 8,
     "gather_min": 2,
-    "gather_max": 4,
-    "foundation_hp": 140,
-    "foundation_qi": 50,
-    "foundation_attack_bonus": 8
+    "gather_max": 4
   },
+  "realms": [
+    {
+      "id": "qi_refining",
+      "name": "炼气期",
+      "max_hp": 90,
+      "max_qi": 30,
+      "attack_bonus": 0,
+      "lifespan_years": 120,
+      "breakthrough": {"xp": 100, "pills": 1}
+    },
+    {
+      "id": "foundation_early",
+      "name": "筑基初期",
+      "max_hp": 140,
+      "max_qi": 50,
+      "attack_bonus": 8,
+      "lifespan_years": 220
+    }
+  ],
+  "routes": [
+    {"between": ["sect", "market"], "days": 30},
+    {"between": ["sect", "wild"], "days": 30},
+    {"between": ["market", "wild"], "days": 30}
+  ],
+  "actions": {
+    "cultivate": 30,
+    "rest": 30,
+    "gather": 30,
+    "sell": 0,
+    "buy_pill": 0,
+    "breakthrough": 90,
+    "battle_victory": 30,
+    "battle_defeat": 30,
+    "flee": 30
+  },
+  "world_flags": ["serpent_slain"],
   "sects": {
     "wanderer": {
       "name": "散修",

@@ -39,11 +39,10 @@ func _run() -> void:
 	var legacy = Session.new()
 	legacy.new_game("旧档", 42)
 	legacy.start_battle("disciple")
-	var old: Dictionary = legacy.snapshot()
-	old.player.erase("sect")
-	old.battle.erase("opponent_sect")
+	# Genuine version 1 save captured before sects existed.
+	var old: Variant = JSON.parse_string(FileAccess.get_file_as_string("res://tests/fixtures/v1_battle_before_sects.json"))
 	var migrated = Session.new()
-	check(migrated.restore(JSON.parse_string(JSON.stringify(old))), "old active-battle save migrates")
+	check(migrated.restore(old), "old active-battle save migrates")
 	check(migrated.player.sect == "wanderer" and migrated.battle.opponent_sect == "qingyun", "old loadout and opponent defaults preserved")
 	var bad: Dictionary = legacy.snapshot()
 	bad.player.sect = "missing"
@@ -78,7 +77,7 @@ func _run() -> void:
 	for sect_id: String in ["qingyun", "chixiao", "changqing", "canglan", "xuanyue"]:
 		for slot: int in range(3):
 			main._reset_preview(sect_id, sect_id)
-			main.session.rng.seed = 73
+			main.session.combat_rng.seed = 73
 			var id: String = main.session.active_skills()[slot]
 			print("CHECKING: " + sect_id + " / " + id)
 			var definition: Dictionary = main.session.content.skills[id]

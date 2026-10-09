@@ -1,0 +1,33 @@
+{
+	"battle": {
+		"cooldowns": {
+			"fire": 2
+		},
+		"enemy_id": "disciple",
+		"hp": 16,
+		"turn": 2
+	},
+	"journal": [
+		"【1年1月】你拜入青云山。先修炼功法、积攒灵石，再寻筑基之机。",
+		"【1年1月】与外门同门展开斗法。",
+		"【1年1月】施展离火术，造成 29 点伤害。",
+		"【1年1月】外门同门反击，造成 9 点伤害。"
+	],
+	"player": {
+		"completed": false,
+		"herbs": 0,
+		"hp": 81,
+		"location": "sect",
+		"max_hp": 90,
+		"max_qi": 30,
+		"month": 0,
+		"name": "旧档",
+		"pills": 0,
+		"qi": 20,
+		"realm": 0,
+		"stones": 30,
+		"xp": 0
+	},
+	"rng_state": "7483708920899584422",
+	"version": 1
+}

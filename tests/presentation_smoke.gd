@@ -54,7 +54,7 @@ func _run() -> void:
 	root.add_child(main)
 	main.name_input.text = "青禾"
 	main._begin()
-	main.session.rng.seed = 42
+	main.session.combat_rng.seed = 42
 	main._run(func() -> String: return main.session.start_battle("disciple"))
 	await _capture("art_duel_idle")
 	check(main.battle_stage.hero.sprite.texture.get_width() == 1536, "hero atlas loaded")

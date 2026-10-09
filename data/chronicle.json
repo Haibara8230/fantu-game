@@ -1,0 +1,22 @@
+{
+  "legacy": "{text}",
+  "start": "你拜入青云山。先修炼功法、积攒灵石，再寻筑基之机。",
+  "cultivate": "闭关 {duration}，修为增加 {xp}，灵力恢复。",
+  "rest": "静养 {duration}，气血与灵力尽复。",
+  "gather": "在山谷采得 {amount} 株灵草。",
+  "sell": "售出全部灵草，获得 {revenue} 灵石。",
+  "buy_pill": "花费 {price} 灵石，购入一枚筑基丹。",
+  "breakthrough": "闭关 {duration}，丹田化海，你已踏入{realm_name}。",
+  "travel": "跋涉 {duration}，抵达{location_name}。",
+  "choose_sect": "开始研习{sect_name}传承，神通已更换。",
+  "battle_start": "与{enemy_name}展开斗法。",
+  "skill_attack": "施展{skill_name}，造成 {amount} 点伤害。",
+  "skill_heal": "施展{skill_name}，恢复 {amount} 气血。",
+  "skill_guard": "施展{skill_name}，恢复 {amount} 气血，本回合伤害减半。",
+  "defend": "凝神守御，恢复 {amount} 灵力，本回合受到的伤害减半。",
+  "enemy_attack": "{enemy_name}反击，造成 {amount} 点伤害。",
+  "battle_victory": "斗法获胜，获得 {stones} 灵石、{xp} 修为、{herbs} 灵草。",
+  "battle_defeat": "斗法落败，被救回青云山。损失 {lost} 灵石，静养后可再出发。",
+  "flee": "收起神通，撤出斗法。修为与物品保留，耗时 {duration}。",
+  "serpent_slain": "赤鳞妖蟒伏诛，落霞谷灵泉重现。山中消息渐渐传开，世事仍在流转。"
+}

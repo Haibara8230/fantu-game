@@ -7,6 +7,8 @@ if not exist "%TASK_GODOT%" (
 )
 "%TASK_GODOT%" --headless --path . --script res://tests/core_smoke.gd
 if errorlevel 1 exit /b 1
+"%TASK_GODOT%" --headless --path . --script res://tests/world_smoke.gd
+if errorlevel 1 exit /b 1
 "%TASK_GODOT%" --headless --path . --script res://tests/ui_smoke.gd
 if errorlevel 1 exit /b 1
 "%TASK_GODOT%" --headless --path . --script res://tests/presentation_smoke.gd

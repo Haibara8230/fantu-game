@@ -22,7 +22,7 @@ func _initialize() -> void:
 	check(game.player.realm == 0, "breakthrough requirements enforced")
 	for i: int in range(6):
 		game.act("cultivate")
-	check(game.player.xp == 108 and game.player.month == 6, "cultivation progression")
+	check(game.player.xp == 108 and game.world.day == 180, "cultivation progression")
 	game.travel("wild")
 	game.start_battle("serpent")
 	check(game.battle.is_empty(), "boss gated by realm")
@@ -58,7 +58,15 @@ func _initialize() -> void:
 			game.use_skill("fire")
 		else:
 			game.use_skill("sword")
-	check(game.player.completed, "full legal progression reaches chapter ending")
+	check(game.has_flag("serpent_slain"), "full legal progression slays the serpent")
+	var after_serpent: int = game.world.day
+	game.travel("sect")
+	game.act("cultivate")
+	check(game.world.day == after_serpent + 60 and game.player.location == "sect", "world continues after the serpent falls")
+	game.travel("wild")
+	var settled: Dictionary = game.snapshot()
+	game.start_battle("serpent")
+	check(game.snapshot() == settled, "slain serpent cannot be fought again")
 	var defeated = Session.new()
 	defeated.new_game("落败测试", 3)
 	defeated.player.hp = 1
@@ -70,7 +78,7 @@ func _initialize() -> void:
 	escaping.new_game("撤离测试", 6)
 	escaping.start_battle("disciple")
 	escaping.flee()
-	check(escaping.battle.is_empty() and escaping.player.month == 1, "retreat consumes a month")
+	check(escaping.battle.is_empty() and escaping.world.day == 30, "retreat consumes configured days")
 	var corrupt: Dictionary = game.snapshot()
 	corrupt.player.hp = -1
 	unchanged = copy.snapshot()
@@ -81,7 +89,7 @@ func _initialize() -> void:
 	var path := "res://.godot/test_saves_%d" % Time.get_ticks_usec()
 	var store = SaveStore.new(path)
 	check(store.save_game(game), "first save writes")
-	var old_month: int = game.player.month
+	var old_day: int = game.world.day
 	game.act("gather")
 	check(store.save_game(game), "second save writes")
 	var loaded = Session.new()
@@ -89,6 +97,6 @@ func _initialize() -> void:
 	var broken_file := FileAccess.open(path.path_join("journey_0.json"), FileAccess.WRITE)
 	broken_file.store_string("{broken")
 	broken_file.close()
-	check(store.load_game(loaded) and loaded.player.month == old_month, "damaged newest save falls back to previous generation")
+	check(store.load_game(loaded) and loaded.world.day == old_day, "damaged newest save falls back to previous generation")
 	print("CORE: %d checks, %d failures" % [checks, failures])
 	quit(0 if failures == 0 else 1)
