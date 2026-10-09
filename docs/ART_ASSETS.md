@@ -182,3 +182,209 @@ Style: NON-REALISTIC hand-drawn 2D game portrait, clear dark ink outlines, flat 
 
 ### 尚未规划
 战斗背景目前所有地点共用 `bamboo_arena_v1.png`。按地区区分的战斗背景、劫修专属人物图集（目前沿用同门图集），放在 M3–M4 一并规划。
+
+
+## 2026-10-09：青云山区域地图首张样图
+
+- 文件：`assets/art/map/region_qingyun_preview_v1.png`
+- 工具：内置 imagegen，未使用 CLI/API fallback。
+- 实际尺寸：1586×992，PNG；未缩放、裁切或修改原始生成图。
+- 用途：先供用户确认视觉效果，未接入正式地图路径。正式地图要求精确 2560×1600，本样图尚未满足该尺寸。
+- 目视检查：二维手绘青黛山水、清晰墨线、局部暖色灵泉；未见文字、水印、UI 或连接道路。地标位置与标记留白仍需在正式版进一步校准，洞府表现也需更低调。
+- 本次仅生成这一张样图；没有启动可见游戏或编辑器。
+
+提示词：
+
+```text
+Use case: stylized-concept.
+Create ONE original production art asset: the Qingyun Mountains regional map background for 凡途, a 2D Chinese cultivation RPG. PNG landscape image, EXACTLY 2560x1600 pixels (8:5 aspect ratio).
+Style: unmistakably TWO-DIMENSIONAL hand-drawn Chinese fantasy game art, in the illustrated visual family of 觅长生. Match the project art direction: clear dark ink outlines, flat muted jade and slate-blue color areas, economical simplified painterly shapes, restrained washes and one or two shadow tones, warm pale stone highlights. Calm slightly mysterious atmosphere. Overall muted and moderately dark for gold UI markers, but readable terrain. No photographic textures, no realistic rendering, no 3D, no CGI, no cinematic lighting, no glossy detail, no heavy film grain, no chibi or pixel art.
+Composition: a coherent painted landscape MAP of a mountain region, high oblique bird''s-eye view, looking down across the whole terrain rather than a horizon landscape. Terrain fills the entire rectangular image edge to edge. No large sky area.
+Place seven features carefully at these normalized coordinates (x from left, y from top):
+1. (24%,24%): tall misty mountain main peak, elegant Chinese sword-sect halls and pavilions halfway up, clouds encircling the mountain waist.
+2. (40%,42%): small mortal town at the mountain foot, clustered grey-tiled roofs, a little cooking smoke.
+3. (60%,50%): river ferry crossing with shallows, reeds, small wooden pier, tiny white egrets.
+4. (80%,62%): larger riverside market town with dense roofs and a few completely plain blank banners.
+5. (20%,60%): rolling ridge covered with old pine forest.
+6. (44%,80%): deep valley with localized subtle rose-gold sunset illumination, faint glowing spring on valley floor.
+7. (24%,88%): subtle mossy stone door in a cliff, small and easy to overlook, a secret cave, NOT a dominant landmark.
+A single coherent winding Yunxi river enters from the north edge, passes between the ferry at (60%,50%) and the market at (80%,62%), and flows out towards the southeast corner.
+Around each specified coordinate keep approximately 80-pixel-radius calm low-contrast terrain where the game will overlay a marker. Integrate landmark structures just adjacent to those calm centres, avoid high-contrast clutter around marker positions. Do not draw any marker placeholders.
+STRICT NEGATIVES: NO roads, NO paths, NO streets visible as connecting routes, NO route lines, NO labels, NO text or letters, NO signs with writing, NO compass, NO legend, NO borders, NO frame, NO UI elements, NO map markers, NO characters, NO signature, NO watermark. Terrain and buildings only. One complete image, not a collage or sheet.
+```
+
+
+
+## 2026-10-09：青云山区域完整美术批次
+
+已完成 `docs/ART_BRIEF.md` 的 28 个正式文件：1 张地图、7 张地点横幅、7 张 NPC 立绘和 13 张二级场景。首张地图样图保留，正式地图通过 imagegen 修正洞府表现与标记附近留白后另存。
+
+所有绘画由内置 imagegen 生成或编辑，未使用 CLI/API fallback。用户明确授权常规图像工具仅做裁切和尺寸调整，因此使用 Pillow 的 ImageOps.fit 与 Lanczos 重采样统一尺寸，没有用它重绘画面或改变配色。生成工具原图仍保留在 Codex generated_images；正式游戏资源均在仓库内。
+
+横幅采用居中裁切；静室使用 `(0.5, 0.72)` 的裁切中心，以保留蒲团和香炉。地图仅作极小比例校正与尺寸调整。按游戏显示比例检查地点/场景横幅（900×190）与立绘（120×150），未见文字、水印或主体严重裁断。地图地标是图像模型近似排布，未作像素级地形坐标测量。
+
+### 正式文件与最终尺寸
+
+| 文件 | 尺寸 | 内容 |
+|---|---|---|
+| `assets/art/locations/sect.png` | 2400×600 | 青云山 |
+| `assets/art/locations/town.png` | 2400×600 | 青石镇 |
+| `assets/art/locations/ferry.png` | 2400×600 | 白鹭渡 |
+| `assets/art/locations/market.png` | 2400×600 | 云溪坊市 |
+| `assets/art/locations/ridge.png` | 2400×600 | 松风岭 |
+| `assets/art/locations/wild.png` | 2400×600 | 落霞谷 |
+| `assets/art/locations/ruin.png` | 2400×600 | 古修洞府 |
+| `assets/art/portraits/shen_mo.png` | 512×640 | 沈墨 |
+| `assets/art/portraits/boatman.png` | 512×640 | 老艄公 |
+| `assets/art/portraits/storyteller.png` | 512×640 | 何三更 |
+| `assets/art/portraits/peddler.png` | 512×640 | 钱货郎 |
+| `assets/art/portraits/wounded.png` | 512×640 | 柳寒舟 |
+| `assets/art/portraits/rogue.png` | 512×640 | 蒙面修士 |
+| `assets/art/portraits/squatter.png` | 512×640 | 石寒 |
+| `assets/art/scenes/sect_chamber.png` | 2400×600 | 静室 |
+| `assets/art/scenes/sect_arena.png` | 2400×600 | 演武坪 |
+| `assets/art/scenes/sect_hall.png` | 2400×600 | 传功堂 |
+| `assets/art/scenes/town_inn.png` | 2400×600 | 青石客栈 |
+| `assets/art/scenes/town_teahouse.png` | 2400×600 | 听雨茶馆 |
+| `assets/art/scenes/ferry_dock.png` | 2400×600 | 渡口 |
+| `assets/art/scenes/market_street.png` | 2400×600 | 坊市长街 |
+| `assets/art/scenes/market_pharmacy.png` | 2400×600 | 云溪药铺 |
+| `assets/art/scenes/ridge_pines.png` | 2400×600 | 松林 |
+| `assets/art/scenes/wild_entrance.png` | 2400×600 | 落霞谷口 |
+| `assets/art/scenes/wild_slope.png` | 2400×600 | 灵草坡 |
+| `assets/art/scenes/wild_spring.png` | 2400×600 | 深谷灵泉 |
+| `assets/art/scenes/ruin_stone_room.png` | 2400×600 | 洞府石室 |
+| `assets/art/map/region_qingyun.png` | 2560×1600 | 青云山周边区域地图（洞府与留白修正版） |
+
+### 批次提示词：横幅公共模板
+
+除 `locations/sect.png` 外的横幅均使用以下模板。`{KIND}` 为地点图的 `location` 或场景图的 `sub-area scene`；`{SUBJECT}` 与追加要求逐项列于后文。
+
+```text
+Use case: stylized-concept.
+Asset: ONE original {KIND} banner for 凡途, a 2D Chinese cultivation RPG in the illustrated visual family of 觅长生.
+Output: 2400x600 PNG, 4:1 extra-wide panoramic composition, painting fills the whole canvas. One image, no collage.
+Subject: {SUBJECT}
+Composition: MAIN SUBJECT IN CENTRAL THIRD, ALL KEY CONTENT INSIDE CENTRAL 70% WIDTH AND CENTRAL 45% HEIGHT of the entire canvas so a very shallow centre crop keeps the subject. Keep upper and lower edges as quiet expendable scenery. Camera pulled back enough that complete main architecture fits inside the middle horizontal band. Designed for a 900x190 UI strip. No dominant people, only tiny distant adults if specified.
+Style: unmistakably TWO-DIMENSIONAL HAND-DRAWN Chinese game background, clear economical dark ink outlines, FLAT color blocks, simple restrained washes, one or two simple shadow tones, simplified painterly shapes matching cel-shaded character sprites. Muted jade, deep teal, ink green, slate blue, warm pale stone and parchment, small warm accents, calm slightly mysterious spirit-world mood. Readable without extreme darkness. NO photorealism, 3D, CGI, realistic textures, glossy detail, cinematic lighting, heavy grain, chibi, pixel art.
+NO text, lettering, calligraphy, labels, logo, watermark, signature, UI, frame or border. Every signboard, banner, book, slip and jar entirely blank or abstract pattern only.
+```
+
+### 批次提示词：立绘公共模板
+
+```text
+Use case: stylized-concept.
+Asset: ONE original NPC bust portrait for 凡途, a 2D Chinese cultivation RPG in the illustrated visual family of 觅长生, matching clear ink outlined flat-color cel-shaded characters.
+Output: 512x640 PNG portrait, EXACT 4:5 aspect ratio.
+Subject: {SUBJECT}
+Composition: ONE ADULT Chinese man, modest traditional clothing, half-body bust, THREE-QUARTER VIEW FACING TO THE RIGHT OF THE IMAGE, head and eyes directed toward image right. Clear readable silhouette and expressive simplified face in upper third, head fully inside frame with margin, hands and held object readable. Face readable displayed at 120x150. Plain muted slate-teal background with no scenery, no floor and no decorative halo.
+Style: NON-REALISTIC HAND-DRAWN 2D GAME PORTRAIT, very clear dark ink contours, flat opaque color blocks, restrained two-tone cel shading, simple economical clothing folds and grouped hair shapes, slightly stylized face, adult proportions. Muted jade, slate, warm parchment and earth tones. Do not render a realistic person.
+NO photorealism, semi-realistic concept painting, 3D, glossy CGI, cinematic lighting, realistic skin detail, intricate embroidery, brocade, realistic fabric weave, heavy grain, chibi, anime moe or pixel art.
+NO text, letters, calligraphy, labels, watermark, signature, frame, border, logos, UI or decorative background. One complete portrait, not sheet or collage.
+```
+
+### 各图 Subject 与追加要求
+
+- `assets/art/locations/town.png`
+  - Subject: Qingshi Town, a small mortal town street at a mountain foot: wooden inn with completely blank signboard, teahouse, cooking smoke, willow trees, grey tiled roofs.
+- `assets/art/locations/ferry.png`
+  - Subject: Bailu Ferry: wide calm jade river, a wooden bamboo-pole ferry boat at a small pier, white egrets on reed-fringed shallows, muted distant mountains across the water.
+- `assets/art/locations/market.png`
+  - Subject: Yunxi Market: Chinese cultivation-town market street at dusk, warm lanterns, a herb shop, small stalls with herbs and pottery, a few tiny distant blurred adult passers-by, every signboard and hanging banner entirely blank.
+- `assets/art/locations/ridge.png`
+  - Subject: Songfeng Ridge: rolling jade mountain ridges covered in ancient Chinese pines, wind in layered pine branches, one narrow mountain walking path, mist between distant ridges.
+  - 追加要求: Critical subject constraint: Only forest and natural ridges with ONE narrow dirt walking trail. ABSOLUTELY NO buildings, no temples, no sect halls, no pavilions, no stairs, no stone bridges, no lanterns, no people. Pine-covered rolling ridges are the hero subject.
+- `assets/art/locations/wild.png`
+  - Subject: Luoxia Valley, dangerous wilderness: a deep Chinese mountain valley beneath muted rose-gold sunset sky, slopes of faintly glowing spirit herbs, mist at its floor, restrained atmosphere of concealed danger.
+  - 追加要求: Critical subject constraint: Untamed dangerous wilderness only. ABSOLUTELY NO buildings, temples, sect halls, pavilions, bridges, stone stairs, roads, gateways or people. Deep valley, rocky herb-covered slopes, faint glowing spirit herbs and bottom mist are the hero subject.
+- `assets/art/locations/ruin.png`
+  - Subject: Ancient cultivator cave: mossy stone cliff covered in hanging vines surrounding an old modest stone door, faint jade light leaking from the narrow door gap, quiet mysterious secluded atmosphere.
+- `assets/art/portraits/shen_mo.png`
+  - Subject: Shen Mo, male herb-shop owner aged 54, shrewd but kindly, neat grey-blue scholar's robe, small goatee, holding a simple wooden abacus with correctly arranged beads, friendly knowing expression.
+- `assets/art/portraits/boatman.png`
+  - Subject: An old male mortal ferryman aged 67, talkative, conical woven straw hat and simple straw rain cape, weathered tanned face, warm smile. Simplified graphic woven shapes, not realistic texture.
+- `assets/art/portraits/storyteller.png`
+  - Subject: He Sangeng, male storyteller aged 61, theatrical expression with one raised eyebrow, long plain muted blue-grey Chinese robe, holding a folding fan and a small plain wooden storyteller's gavel.
+- `assets/art/portraits/peddler.png`
+  - Subject: Qian the peddler, male travelling herb seller aged 38, smooth-talking confident smile, simple modest traveller's clothes, wooden carrying pole resting across one shoulder with herb baskets partly visible at the lower edges.
+- `assets/art/portraits/wounded.png`
+  - Subject: Liu Hanzhou, male wandering cultivator aged 27, quiet young swordsman, pale face, small restrained blood stain on his modest robe collar, holding a plain straight Chinese jian sword, tired but proud expression. No gore.
+- `assets/art/portraits/rogue.png`
+  - Subject: Hostile male rogue cultivator aged 35, cloth mask covering only the lower face, modest dark Chinese robe with restrained red trim, small controlled orange flame in one palm, cold threatening eyes.
+- `assets/art/portraits/squatter.png`
+  - Subject: Shi Han, male cultivator aged 49, suspicious, rough plain brown Taoist robe, stony guarded expression, earth-toned clothing, seated cross-legged, upper-body bust framing with only a hint of folded knees at bottom.
+- `assets/art/scenes/sect_chamber.png`
+  - Subject: Qingyun sword sect meditation chamber: quiet modest wooden room, one meditation cushion, bronze incense burner with a thin wisp of smoke, open window looking onto a jade mountain sea of clouds.
+  - 追加要求: No people in this scene. Depict the specified environment only. All jade slips and weapons undecorated, without writing.
+- `assets/art/scenes/sect_arena.png`
+  - Subject: Qingyun sword sect training plaza: open worn pale stone platform for sparring, simple wooden weapon racks containing plain Chinese swords and staffs near sides, elegant Chinese sect halls behind, mountain mist.
+  - 追加要求: No people in this scene. Depict the specified environment only. All jade slips and weapons undecorated, without writing.
+- `assets/art/scenes/sect_hall.png`
+  - Subject: Qingyun sword sect technique hall: wooden shelves holding orderly smooth jade slips without inscriptions, a long wooden reading table, hanging silk curtains, calm scholarly cultivation interior.
+  - 追加要求: Depict the specified room as an environment without people. No writing on any scroll, book, sign, container or jade slip. Keep key table/cushion/dishes and window/stage inside the central horizontal band.
+- `assets/art/scenes/town_inn.png`
+  - Subject: Qingshi Town wooden inn hall: wooden tables and benches, a visible staircase, soft steam rising from simple bowls of medicinal dishes, warm restrained interior light, no people in foreground.
+  - 追加要求: Depict the specified room as an environment without people. No writing on any scroll, book, sign, container or jade slip. Keep key table/cushion/dishes and window/stage inside the central horizontal band.
+- `assets/art/scenes/town_teahouse.png`
+  - Subject: Qingshi Town listening-to-rain teahouse: a small empty storyteller's stage with plain wooden table, tea tables and cups, fine rain curtain outside open windows, calm intimate Chinese wooden interior.
+  - 追加要求: Depict the specified room as an environment without people. No writing on any scroll, book, sign, container or jade slip. Keep key table/cushion/dishes and window/stage inside the central horizontal band.
+- `assets/art/scenes/ferry_dock.png`
+  - Subject: Bailu Ferry dock close view: aged wooden pier posts, a wooden ferry boat moored beside the pier, one small old boatman viewed from behind in conical straw hat, calm jade river with reeds and distant mountains. Boatman is a small environmental figure, not dominant.
+  - 追加要求: Only ONE small old boatman from behind, wearing straw hat and cape. No other people, no character portrait framing. Ferry boat and wooden pier are main subjects.
+- `assets/art/scenes/market_street.png`
+  - Subject: Yunxi cultivation market main street: pill shop, artifact shop, small street stalls, hanging warm lanterns, grey tiled Chinese buildings, all signboards completely blank and without writing; tiny distant passers-by only.
+  - 追加要求: No foreground people. All signboards, drawers and jars must be COMPLETELY BLANK with no letters or symbols.
+- `assets/art/scenes/market_pharmacy.png`
+  - Subject: Yunxi herb shop interior: orderly wall of small plain wooden medicine drawers with simple ring handles, wooden counter, hanging bundles of dried spirit herbs, a few ceramic jars, every drawer and jar completely unlabelled.
+  - 追加要求: No foreground people. All signboards, drawers and jars must be COMPLETELY BLANK with no letters or symbols.
+- `assets/art/scenes/ridge_pines.png`
+  - Subject: Songfeng Ridge pine forest close view: ancient twisted Chinese pines, restrained dappled light through flat foliage, mossy rocks, a few faintly glowing spirit herbs on the forest floor, peaceful mountain mist.
+  - 追加要求: STRICT SUBJECT CONSTRAINT: wild natural environment ONLY. NO buildings, temples, pavilions, stairs, gates, bridges, lanterns, furniture or people. No visible monsters. Keep the distinctive forest-floor herbs / rock claw scratches / glowing herb patches clearly visible inside the middle horizontal band. Use simple flat outlined vegetation, not photographic forest texture.
+- `assets/art/scenes/wild_entrance.png`
+  - Subject: Luoxia Valley mouth: jagged rocks forming an uneasy narrow valley entrance, distinct claw scratches on a foreground rock, low mist, sparse pines and muted sunset light, dangerous atmosphere without visible monsters.
+  - 追加要求: STRICT SUBJECT CONSTRAINT: wild natural environment ONLY. NO buildings, temples, pavilions, stairs, gates, bridges, lanterns, furniture or people. No visible monsters. Keep the distinctive forest-floor herbs / rock claw scratches / glowing herb patches clearly visible inside the middle horizontal band. Use simple flat outlined vegetation, not photographic forest texture.
+- `assets/art/scenes/wild_slope.png`
+  - Subject: Luoxia Valley spirit-herb slope: sunny gentle hillside with patches of faintly jade-glowing spirit herbs, rocks and small grasses, surrounding Chinese mountain valley, restrained warm daylight and clear flat leaf silhouettes.
+  - 追加要求: STRICT SUBJECT CONSTRAINT: wild natural environment ONLY. NO buildings, temples, pavilions, stairs, gates, bridges, lanterns, furniture or people. No visible monsters. Keep the distinctive forest-floor herbs / rock claw scratches / glowing herb patches clearly visible inside the middle horizontal band. Use simple flat outlined vegetation, not photographic forest texture.
+- `assets/art/scenes/wild_spring.png`
+  - Subject: Luoxia Valley deep spring, a serpent's lair: small softly jade-glowing spring at the rocky valley floor, delicate mist, a few large crimson red shed serpent scales lying on rocks, dark jade vegetation, no visible serpent.
+  - 追加要求: Wild natural serpent lair ONLY: NO buildings, temples, pavilions, bridges, stairs, statues, people or visible serpent. Show a few distinctly red fallen serpent scales ON rocks near the glowing spring, within the central band; keep spring glow restrained.
+- `assets/art/scenes/ruin_stone_room.png`
+  - Subject: Ancient cultivator cave stone room: stone bed, worn meditation cushion, scattered plain jade slips without inscriptions and clay jars, dust in a restrained shaft of daylight, old quiet Chinese cultivation retreat.
+  - 追加要求: Old abandoned modest stone cell carved inside a mountain, NOT a palace, NOT a modern room. Stone bed, visibly worn cushion, scattered jade slips and jars near center; slips entirely blank. No people, no inscriptions, no readable marks. Restrained dusty daylight, not theatrical cinematic light.
+
+### 青云山地点图首张提示词
+
+```text
+Use case: stylized-concept.
+Asset: ONE original location banner for 凡途, a 2D Chinese cultivation RPG in the illustrated visual family of 觅长生.
+OUTPUT SIZE: 2400x600 PNG, EXACTLY FOUR TIMES AS WIDE AS TALL (4:1). Extremely wide horizontal panorama, edge-to-edge painting, no letterboxing.
+Subject: Qingyun Mountain sword sect outer court: elegant Chinese sect halls and pavilions halfway up a mountain above a sea of clouds, long worn pale stone stairs, the tall main peak in the distance.
+Composition: main subject in central third; all important content inside central 70% width and middle 80% height; quieter edges, designed for centre cropping into a 900x190 UI strip. No dominant people; only tiny distant adult figures when specified.
+Style: unmistakably two-dimensional hand-painted Chinese fantasy game background, clear restrained dark ink outlines, flat color areas, simplified economical painterly shapes, one or two simple shadow tones and limited washes. Cohesive muted jade, ink green, slate blue, warm stone and parchment palette, small warm accents. Calm slightly mysterious spirit-world mood; comfortably readable beside dark teal UI. Match a hand-drawn cel-shaded game, not a realistic concept painting.
+No photorealism, 3D, CGI, cinematic lighting, glossy surfaces, photographic textures, heavy film grain, chibi or pixel art. NO text, lettering, labels, calligraphy, logos, watermark, signature, UI, frame, borders. All signs blank. One complete image only, not collage or sprite sheet.
+```
+
+### 正式地图修正提示词
+
+输入目标：`assets/art/map/region_qingyun_preview_v1.png`。
+
+```text
+Use case: precise-object-edit.
+Edit target: the attached Qingyun regional map. Preserve its original 2D hand-drawn Chinese game style, clear dark ink contours, flat muted jade/slate/teal palette, warm local spring glow, high oblique bird's-eye view, complete coherent river, overall atmosphere and rectangular 8:5 composition. Output 2560x1600 PNG; terrain fills entire canvas.
+Make a focused production-map correction:
+- The secret cave stone door is currently far too prominent in the lower-left. Remove the ornamental temple-like entrance and replace with a TINY weathered plain stone door almost concealed by moss and vines, located at x24%, y88%. It should be easy to overlook, no glow or pavilion or lamps.
+- Align landmark areas to the following normalized coordinates measured from top-left: mountain sword-sect halls at (24%,24%); small grey-roof mortal town at (40%,42%); reed shallows and wooden ferry pier at (60%,50%); larger riverside market town at (80%,62%); ancient pine-covered ridge at (20%,60%); deep rose-gold sunset valley and faint glowing spring at (44%,80%); tiny secret cave stone door at (24%,88%).
+- Integrate a calm low-contrast terrain patch of approximately 80px radius at each of these marker coordinates, with architecture and busy vegetation nearby rather than occupying the exact centre. These calm areas must look natural, not circles or holes; the game will place a marker and label there.
+Keep one Yunxi river entering from the north, passing between ferry and market, exiting southeast. No new extra settlements or sect buildings elsewhere.
+Absolute negatives: NO roads, paths, streets or route lines; NO text, letters, calligraphy, labels, marker icons, circles, dots, compass, legend, frame, border, UI, watermark or signature; NO characters. No realistic textures, 3D or cinematic lighting. One complete original painted regional map.
+```
+
+### 验证记录
+
+- 28 张正式 PNG 均存在、可解码，且尺寸严格符合最终规格。
+- Godot `--headless --path . --import` 成功，无脚本或导入错误。
+- 视觉检查图保存在忽略目录 `builds/previews/art_batch/`；未打开可见游戏或编辑器窗口。
+
+- check.cmd passed: CORE 25 / WORLD 42 / EVENTS 66 / REGION 126 / UI 26 / PRESENTATION 17 / SECTS 237; 539 checks, 0 failures. All launches used --headless, with no visible windows and no script/resource errors in output.
+- After syncing origin/main at c1c7979, check.cmd passed again: CORE 28 / WORLD 42 / EVENTS 66 / REGION 126 / GROWTH 54 / ARSENAL 77 / UI 30 / PRESENTATION 17 / SECTS 237; 677 checks, 0 failures. All launches used --headless; no script/resource errors in output.
