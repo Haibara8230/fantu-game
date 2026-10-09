@@ -81,6 +81,8 @@ Art is unmistakably 2D DRAWN: crisp dark contours, flat color areas, simple cel 
 
 ## M2 待制作：区域地图、地点与场景（规格）
 
+> 交给图像生成 AI 时，直接使用 `docs/ART_BRIEF.md`：那是一份自成一体的完整说明（含人物立绘）。本节保留同样的规格，供开发参考。
+
 M2 已把地图、地点横幅和二级场景接好。下列图片放到指定路径后，运行 `play.cmd` 或 `check.cmd`（都会先导入资源）就会直接替换代码绘制的占位图，不需要改代码。缺哪张就继续用占位图。
 
 **通用要求**
