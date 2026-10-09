@@ -23,6 +23,7 @@ static func _person(content, data: Dictionary, world_seed: int, index: int, take
 	var personalities: Array = data.personalities.keys()
 	personalities.sort()
 	var personality: String = personalities[rng.randi_range(0, personalities.size() - 1)]
+	var gender: String = "female" if rng.randf() < 0.5 else "male"
 	var name := ""
 	for attempt: int in range(20):
 		name = _name(rng, data)
@@ -52,7 +53,7 @@ static func _person(content, data: Dictionary, world_seed: int, index: int, take
 	var person := {
 		"name": name, "title": kind.title, "attitude": kind.attitude, "realm_text": realm_text,
 		"affiliation": content.sects[sect_id].name, "sect": sect_id, "age": rng.randi_range(int(data.age[0]) + realm * 12, int(data.age[1])),
-		"personality": personality, "generated": true, "realm": realm, "stage": stage,
+		"personality": personality, "generated": true, "realm": realm, "stage": stage, "gender": gender, "kind": kind_id,
 		"description": "一名%s的%s，修为%s，惯用%s。" % [personality, kind.title, realm_text, main_art.name],
 		"talk_favor": 2, "gift_favor": 3, "talk": data.personalities[personality].duplicate(),
 		"loadout": {"arts": arts, "methods": methods, "equipment": equipment},

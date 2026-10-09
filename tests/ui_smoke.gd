@@ -91,8 +91,15 @@ func _run() -> void:
 	main._run(func() -> String: return main.session.travel("market"))
 	check(main.session.pending_event.is_empty() and _button("沈墨 · 云溪药铺掌柜") != null, "people here listed without forcing anything")
 	check(_texts(main.stats, "Button").contains("沈墨 · 云溪坊市"), "acquaintance listed with whereabouts")
+	var local_root := test_path + "/local_portraits"
+	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(local_root))
+	var face := Image.create(16, 20, false, Image.FORMAT_RGB8)
+	face.save_png(local_root.path_join("shen_mo.png"))
+	main.portrait_root = local_root
 	main.session.set_item_count("huichun_grass", 5)
 	_button("沈墨 · 云溪药铺掌柜").pressed.emit()
+	var portraits: Array = main.center.find_children("*", "TextureRect", true, false)
+	check(not portraits.is_empty() and portraits[0].texture.get_width() == 16, "a local image replaces the portrait")
 	await _capture("person")
 	var card := _texts(main.center, "Label")
 	check(card.contains("精明和气") and card.contains("炼气后期") and card.contains("好感 · 初识"), "profile shows who they are and how they feel")

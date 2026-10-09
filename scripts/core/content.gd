@@ -634,6 +634,8 @@ func _validate_person(person: Variant) -> String:
 			return "缺少资料：" + key
 	if not _whole(person.get("age")) or not ATTITUDES.has(person.get("attitude", "")):
 		return "年龄或态度无效"
+	if person.has("gender") and not person.gender in ["male", "female"]:
+		return "性别无效"
 	if person.has("home") == person.has("schedule"):
 		return "必须二选一：常驻某地（home）或按行程走动（schedule）"
 	if person.has("home"):

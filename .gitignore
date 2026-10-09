@@ -2,3 +2,5 @@
 .tools/
 builds/
 *.tmp
+# Personal, local-only art (e.g. portraits for private play). Never committed.
+assets/local/

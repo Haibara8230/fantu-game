@@ -23,6 +23,10 @@ var selected_spot := ""
 var selected_npc := ""
 var shown_location := ""
 var welcome_roots: Array = []
+# Local, never-committed portrait pack (see ArtLibrary); tests point this elsewhere.
+var portrait_root := ArtLibrary.LOCAL_PORTRAITS
+var _pool_assignments := {}
+var _pool_key := ""
 var roots_label: Label
 var map_target := ""
 var world_map
@@ -492,7 +496,9 @@ func _render_person(person_id: String) -> void:
 	options.add_child(_button("返回", _close_person))
 
 func _portrait(person_id: String, person: Dictionary) -> Control:
-	var texture: Texture2D = ArtLibrary.texture(ArtLibrary.portrait_path(person_id))
+	var texture: Texture2D = ArtLibrary.local_texture(_local_portrait(person_id))
+	if texture == null:
+		texture = ArtLibrary.texture(ArtLibrary.portrait_path(person_id))
 	if texture != null:
 		var image := TextureRect.new()
 		image.texture = texture
@@ -509,6 +515,18 @@ func _portrait(person_id: String, person: Dictionary) -> Control:
 	initial.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	seal.add_child(initial)
 	return seal
+
+## A person's image from the local pack: their own file first, then their assigned pool image.
+func _local_portrait(person_id: String) -> String:
+	var own := ArtLibrary.find_image(portrait_root.path_join(person_id.replace(":", "_")))
+	if not own.is_empty() or not person_id.begins_with("g:"):
+		return own
+	var index := ArtLibrary.pool_index(portrait_root)
+	var key := "%d:%s" % [int(session.world.get("seed", 0)), str(index.hash())]
+	if key != _pool_key:
+		_pool_key = key
+		_pool_assignments = ArtLibrary.assign_pool(session.content.people, int(session.world.get("seed", 0)), index)
+	return str(_pool_assignments.get(person_id, ""))
 
 func _open_spots(location_id: String) -> Array[Dictionary]:
 	var result: Array[Dictionary] = []

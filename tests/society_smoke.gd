@@ -23,6 +23,7 @@ func _initialize() -> void:
 	_commissions()
 	_tournament()
 	_meetings_and_saves()
+	_portraits()
 	print("SOCIETY: %d checks, %d failures" % [checks, failures])
 	quit(0 if failures == 0 else 1)
 
@@ -214,6 +215,53 @@ func _tournament() -> void:
 	out.player.hp = 1
 	out.defend()
 	check(out.battle.is_empty() and out.player.location == "sect" and int(out.player.stones) == 30 and out.journal_lines().any(func(line: String) -> bool: return line.contains("止步")), "losing a round ends the run without penalty")
+
+func _portraits() -> void:
+	var ArtLibrary = load("res://scripts/ui/art_library.gd")
+	var game := _game()
+	var people: Dictionary = game.content.people
+	var generated: Array = people.keys().filter(func(person_id: String) -> bool: return person_id.begins_with("g:"))
+	check(generated.all(func(person_id: String) -> bool: return people[person_id].gender in ["male", "female"] and people[person_id].has("kind")), "generated people have a gender and a role")
+	# A fake pool: twenty images in every group, a few named for roles.
+	var index := {}
+	for gender: String in ["male", "female"]:
+		for band: String in ["young", "middle", "old"]:
+			var files: Array = []
+			for n: int in range(20):
+				files.append("pool/%s_%s/%s%02d.png" % [gender, band, "disciple_" if n < 5 else "", n])
+			index["%s_%s" % [gender, band]] = files
+	var assigned: Dictionary = ArtLibrary.assign_pool(people, 5, index)
+	check(assigned.size() == generated.size() and assigned.values().size() == _unique(assigned.values()).size(), "every generated person gets their own pool image")
+	var matched := true
+	for person_id: String in assigned:
+		var person: Dictionary = people[person_id]
+		matched = matched and str(assigned[person_id]).contains("%s_%s" % [person.gender, ArtLibrary.age_band(int(person.age))])
+		if person.kind == "disciple":
+			matched = matched and str(assigned[person_id]).get_file().begins_with("disciple_")
+	check(matched, "images follow gender, age band and role")
+	check(ArtLibrary.assign_pool(people, 5, index) == assigned and ArtLibrary.assign_pool(people, 6, index) != assigned, "the same world keeps the same faces; another world deals them anew")
+	var tiny := {"any": ["pool/a.png", "pool/b.png"]}
+	check(ArtLibrary.assign_pool(people, 5, tiny).size() == generated.size(), "a small pool is shared rather than leaving people blank")
+	# Real files on disk, read without import.
+	var root := "res://.godot/portrait_test_%d" % Time.get_ticks_usec()
+	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(root.path_join("pool/female_young")))
+	var image := Image.create(8, 10, false, Image.FORMAT_RGB8)
+	image.fill(Color.DARK_SLATE_GRAY)
+	image.save_png(root.path_join("shen_mo.png"))
+	image.save_png(root.path_join("pool/female_young/a.png"))
+	image.save_png(root.path_join("pool/loose.png"))
+	check(ArtLibrary.find_image(root.path_join("shen_mo")).ends_with("shen_mo.png") and ArtLibrary.find_image(root.path_join("boatman")).is_empty(), "a person's own image is found by id")
+	var found: Dictionary = ArtLibrary.pool_index(root)
+	check(found.keys().size() == 2 and found.has("any") and found.has("female_young"), "the pool is scanned by group")
+	var texture: Texture2D = ArtLibrary.local_texture(root.path_join("shen_mo.png"))
+	check(texture != null and texture.get_width() == 8, "local images load straight from disk")
+	check(ArtLibrary.local_texture(root.path_join("missing.png")) == null, "missing local images are simply absent")
+
+func _unique(values: Array) -> Dictionary:
+	var seen := {}
+	for value: Variant in values:
+		seen[value] = true
+	return seen
 
 func _meetings_and_saves() -> void:
 	var game := _game()
