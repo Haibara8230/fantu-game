@@ -79,17 +79,26 @@ func _run() -> void:
 	main._run(func() -> String: return main.session.travel("market"))
 	check(main.session.pending_event.is_empty() and _button("沈墨 · 云溪药铺掌柜") != null, "people here listed without forcing anything")
 	check(_texts(main.stats, "Button").contains("沈墨 · 云溪坊市"), "acquaintance listed with whereabouts")
-	main.session.player.herbs = 5
+	main.session.set_item_count("huichun_grass", 5)
 	_button("沈墨 · 云溪药铺掌柜").pressed.emit()
 	await _capture("person")
 	var card := _texts(main.center, "Label")
 	check(card.contains("精明和气") and card.contains("炼气后期") and card.contains("好感 · 初识"), "profile shows who they are and how they feel")
-	check(_button("代他收五株灵草") != null and _button("交谈") != null and _button("赠一株灵草") != null, "interactions offered")
-	_button("代他收五株灵草").pressed.emit()
+	check(_button("代他收五株回春草") != null and _button("交谈") != null and _button("赠一株灵草") != null, "interactions offered")
+	_button("代他收五株回春草").pressed.emit()
 	await process_frame
-	check(main.session.favor("shen_mo") == 10 and _button("代他收五株灵草").disabled, "interaction applied; the repeat waits for its cooldown")
+	check(main.session.favor("shen_mo") == 10 and _button("代他收五株回春草").disabled, "interaction applied; the repeat waits for its cooldown")
 	_button("返回").pressed.emit()
 	check(main.selected_npc.is_empty() and _button("闭关") == null, "back to the market scenes")
+	# The street shop and the 行囊.
+	main._select_spot("street")
+	check(_button("购买筑基丹  ·  120 灵石") != null and _button("购买回气丹") != null, "the street shop lists its goods")
+	main.session.player.stones = 40
+	_button("购买疗伤丹").pressed.emit()
+	main._set_view("bag")
+	await _capture("bag")
+	check(_texts(main.center, "Label").contains("疗伤丹 ×1") and _button("服用") != null, "the 行囊 lists items with a use button")
+	main._set_view("place")
 	# The region map: hidden places stay hidden; picking a node previews the route; departing travels it.
 	main._set_view("map")
 	await _capture("map")

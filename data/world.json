@@ -44,9 +44,16 @@
       "description": "药香浮过长街。散修在这里买卖丹药与灵材，消息也传得最快。",
       "terrain": "market",
       "map": [0.8, 0.62],
+      "shop": [
+        {"item": "foundation_pill", "price": 120},
+        {"item": "huiqi_pill", "price": 15},
+        {"item": "liaoshang_pill", "price": 20},
+        {"item": "ningqi_pill", "price": 60}
+      ],
+      "buys": ["herb"],
       "spots": [
-        {"id": "street", "name": "长街", "description": "丹铺、器铺与散修地摊挤满长街。", "actions": ["buy_pill"]},
-        {"id": "pharmacy", "name": "云溪药铺", "description": "沈墨的药铺，收购灵草，出价公道。", "actions": ["sell"]}
+        {"id": "street", "name": "长街", "description": "丹铺、器铺与散修地摊挤满长街。丹铺明码标价。", "actions": ["shop"]},
+        {"id": "pharmacy", "name": "云溪药铺", "description": "沈墨的药铺，收购各色灵草，出价公道。", "actions": ["sell"]}
       ]
     },
     "ridge": {
@@ -55,7 +62,7 @@
       "description": "青云山与落霞谷之间的山岭，松林里偶尔也生着灵草。",
       "terrain": "ridge",
       "map": [0.2, 0.6],
-      "gather": [1, 2],
+      "gather": {"picks": [1, 2], "table": [{"item": "huichun_grass", "weight": 50}, {"item": "ninglu_grass", "weight": 50}]},
       "spots": [
         {"id": "pines", "name": "松林", "description": "古松参天，林下偶见灵草。", "actions": ["gather"]}
       ]
@@ -66,7 +73,7 @@
       "description": "谷中灵草繁盛，也有妖兽出没。深处的赤鳞妖蟒守着一处灵泉，筑基后方可挑战。",
       "terrain": "valley",
       "map": [0.44, 0.8],
-      "gather": [1, 3],
+      "gather": {"picks": [1, 3], "table": [{"item": "huichun_grass", "weight": 60}, {"item": "chiyan_flower", "weight": 35}, {"item": "lingzhi", "weight": 2}]},
       "spots": [
         {"id": "entrance", "name": "谷口", "description": "乱石嶙峋，常有妖狼出没。", "actions": ["battle:wolf"]},
         {"id": "slope", "name": "灵草坡", "description": "向阳的缓坡上灵草丛生。", "actions": ["gather"]},
@@ -321,8 +328,6 @@
     "lifespan_warning_years": 5,
     "cultivate_options": [30, 90, 360],
     "wait_options": [1, 10],
-    "pill_price": 120,
-    "herb_price": 4,
     "inn_price": 5,
     "encounter_chance": [0.08, 0.18, 0.3, 0.42],
     "ruin_search": {"stones": [10, 30], "herbs": [1, 3], "pill_chance": 0.1},
@@ -378,12 +383,6 @@
     "road_recovery": 1
   },
   "world_flags": ["serpent_slain", "heard_auction_rumor", "found_ruin", "ruin_cleared", "helped_wanderer"],
-  "items": {
-    "auction_invitation": {
-      "name": "云溪请柬",
-      "description": "烫金请柬，凭此可入云溪坊市历元五年春的特殊拍卖。"
-    }
-  },
   "sects": {
     "wanderer": {
       "name": "散修",

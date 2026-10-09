@@ -12,10 +12,13 @@ func check(condition: bool, message: String) -> void:
 		printerr("FAIL: " + message)
 
 func _initialize() -> void:
+	# A script error aborts this function before quit(); the watchdog turns that hang into a failure.
+	create_timer(240.0).timeout.connect(func() -> void: printerr("TIMEOUT: test did not finish (likely a script error)"); quit(1))
 	_roots()
 	_stages()
 	_pacing()
 	_saves()
+	_items()
 	_static_checks()
 	print("GROWTH: %d checks, %d failures" % [checks, failures])
 	quit(0 if failures == 0 else 1)
@@ -68,7 +71,7 @@ func _stages() -> void:
 	check(game.journal_lines().back().contains("你已至炼气中期"), "the stage is recorded")
 	Session.Events.apply(game, [{"xp": 1200}])
 	check(game.player.stage == 3 and game.journal_lines().filter(func(line: String) -> bool: return line.contains("修为精进")).size() == 3, "crossing several stages at once records each one")
-	game.player.pills = 1
+	game.set_item_count("foundation_pill", 1)
 	check(game.act("breakthrough").contains("2000 修为"), "breakthrough needs the full requirement")
 	Session.Events.apply(game, [{"xp": 300}])
 	game.act("breakthrough")
@@ -93,7 +96,7 @@ func _pacing() -> void:
 	day = int(game.world.day)
 	game.act("gather")
 	check(int(game.world.day) == day + 5, "gathering takes five days")
-	check(game.content.rules.pill_price == 120 and game.content.rules.herb_price == 4, "prices follow the slower economy")
+	check(int(game.content.locations.market.shop[0].price) == 120 and int(game.content.items.huichun_grass.price) == 4, "prices follow the slower economy")
 
 func _saves() -> void:
 	var qi := Session.new()
@@ -115,6 +118,58 @@ func _saves() -> void:
 	bad.player.hp = 115
 	check(not copy.restore(bad), "health above the stage cap rejected")
 
+func _items() -> void:
+	var game := _game()
+	game.travel("wild")
+	for i: int in range(30):
+		game.act("gather")
+	var valley: Array = game.player.items.keys()
+	check(valley.all(func(item_id: String) -> bool: return item_id in ["huichun_grass", "chiyan_flower", "lingzhi"]) and "chiyan_flower" in valley, "the valley yields its own herbs")
+	check(game.journal_lines().any(func(line: String) -> bool: return line.contains("在落霞谷采得")), "what was gathered is recorded")
+	game.travel("ridge")
+	game.player.items.clear()
+	for i: int in range(20):
+		game.act("gather")
+	check(game.player.items.keys().all(func(item_id: String) -> bool: return item_id in ["huichun_grass", "ninglu_grass"]), "the ridge yields different herbs")
+	check(game.sell("huichun_grass") == "这里不收这件东西。", "herbs are sold at the herb shop, not on the ridge")
+	game.travel("market")
+	game.player.items.clear()
+	game.set_item_count("huichun_grass", 3)
+	game.set_item_count("chiyan_flower", 2)
+	game.set_item_count("auction_invitation", 1)
+	var stones := int(game.player.stones)
+	game.sell("chiyan_flower", 1)
+	check(int(game.player.stones) == stones + 9 and game.item_count("chiyan_flower") == 1, "each herb sells at its own price")
+	game.act("sell")
+	check(int(game.player.stones) == stones + 9 + 9 + 12 and game.herb_count() == 0 and game.item_count("auction_invitation") == 1, "selling everything keeps what the shop does not buy")
+	game.player.stones = 30
+	check(game.buy("foundation_pill").contains("灵石不足"), "a pill costs 120 at the shop")
+	game.buy("liaoshang_pill")
+	check(game.item_count("liaoshang_pill") == 1 and int(game.player.stones) == 10, "the shop sells pills")
+	game.player.hp = 30
+	game.use_item("liaoshang_pill")
+	check(int(game.player.hp) == 70 and game.item_count("liaoshang_pill") == 0, "a healing pill heals")
+	game.set_item_count("ningqi_pill", 2)
+	var xp := int(game.player.xp)
+	game.use_item("ningqi_pill")
+	check(int(game.player.xp) == xp + 100 and game.use_block("ningqi_pill").contains("丹毒未消"), "condensing pills need thirty days between them")
+	game.wait(30)
+	check(game.use_block("ningqi_pill").is_empty(), "and can be taken again afterwards")
+	game.set_item_count("lingzhi", 1)
+	game.player.xp = 400
+	game.use_item("lingzhi")
+	check(int(game.player.xp) == 700 and game.player.stage == 1, "a hundred-year lingzhi can carry the player into the next stage")
+	game.player.items.clear()
+	game.set_item_count("chiyan_flower", 1)
+	game.set_item_count("ninglu_grass", 1)
+	game.set_item_count("huichun_grass", 1)
+	game.remove_herbs(2)
+	check(game.item_count("chiyan_flower") == 1 and game.herb_count() == 1, "generic herb costs take the cheapest herbs first")
+	check(Session.Chronicle.loot_text("huichun_grass:2,chiyan_flower:1", game.content) == "回春草×2、赤炎花", "loot reads naturally")
+	var old := Session.new()
+	check(old.restore(JSON.parse_string(FileAccess.get_file_as_string("res://tests/fixtures/v6_herbs_pills.json"))), "v6 save migrates")
+	check(old.item_count("huichun_grass") >= 9 and old.item_count("foundation_pill") == 2 and old.item_count("auction_invitation") == 1 and not old.player.has("herbs"), "herbs and pills become items")
+
 func _broken(change: Callable) -> String:
 	var content := Content.new()
 	content.load_data()
@@ -126,3 +181,7 @@ func _static_checks() -> void:
 	check(_broken(func(c) -> void: c.realms[0].stages[0].xp = 10).contains("必须是 0"), "the first stage starts at zero")
 	check(_broken(func(c) -> void: c.realms[0].breakthrough.xp = 900).contains("不能低于"), "breakthrough cannot be easier than the last stage")
 	check(_broken(func(c) -> void: c.rules.spirit_roots.grades[0].count = 9).contains("灵根等级"), "root grades must fit the elements")
+	check(_broken(func(c) -> void: c.locations.wild.gather.table.append({"item": "moonstone", "weight": 5})).contains("采集表条目"), "unknown herb in a gather table reported")
+	check(_broken(func(c) -> void: c.locations.market.shop.append({"item": "moonstone", "price": 5})).contains("商店货品"), "unknown shop goods reported")
+	check(_broken(func(c) -> void: c.locations.town.spots[0].actions.append("sell")).contains("收购品类"), "a place that buys must say what it buys")
+	check(_broken(func(c) -> void: c.items.huiqi_pill.use = [{"mana": 5}]).contains("效果无效"), "unknown item effects reported")

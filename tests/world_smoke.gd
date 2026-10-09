@@ -19,6 +19,8 @@ func _fixture(name: String) -> Dictionary:
 	return parsed if parsed is Dictionary else {}
 
 func _initialize() -> void:
+	# A script error aborts this function before quit(); the watchdog turns that hang into a failure.
+	create_timer(240.0).timeout.connect(func() -> void: printerr("TIMEOUT: test did not finish (likely a script error)"); quit(1))
 	_calendar()
 	_unified_time()
 	_migration()

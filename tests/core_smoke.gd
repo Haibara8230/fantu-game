@@ -11,6 +11,8 @@ func check(condition: bool, message: String) -> void:
 		printerr("FAIL: " + message)
 
 func _initialize() -> void:
+	# A script error aborts this function before quit(); the watchdog turns that hang into a failure.
+	create_timer(240.0).timeout.connect(func() -> void: printerr("TIMEOUT: test did not finish (likely a script error)"); quit(1))
 	var game = Session.new()
 	# Road encounters have their own suite; this one follows fixed paths.
 	game.encounters_enabled = false
@@ -29,14 +31,14 @@ func _initialize() -> void:
 	game.travel("wild")
 	game.start_battle("serpent")
 	check(game.battle.is_empty(), "boss gated by realm")
-	while game.player.herbs < 23:
+	while game.herb_count() * 4 + game.player.stones < 120:
 		game.act("gather")
 	game.travel("market")
 	if not game.pending_event.is_empty():
 		game.choose_event("decline")
 	game.act("sell")
-	game.act("buy_pill")
-	check(game.player.pills == 1, "gather-trade-pill economy")
+	game.buy("foundation_pill")
+	check(game.item_count("foundation_pill") == 1, "gather-trade-pill economy")
 	game.travel("sect")
 	game.act("breakthrough")
 	check(game.player.realm == 0, "breakthrough needs the last sub-stage")
@@ -46,7 +48,7 @@ func _initialize() -> void:
 	check(game.journal_lines().any(func(line: String) -> bool: return line.contains("你已至炼气中期")), "each sub-stage is a recorded milestone")
 	var before_breakthrough: int = game.player.xp
 	game.act("breakthrough")
-	check(game.player.realm == 1 and game.player.stage == 0 and game.player.hp == 140 and game.player.pills == 0 and game.player.xp == before_breakthrough - 2000, "breakthrough consumes resources and upgrades stats")
+	check(game.player.realm == 1 and game.player.stage == 0 and game.player.hp == 140 and game.item_count("foundation_pill") == 0 and game.player.xp == before_breakthrough - 2000, "breakthrough consumes resources and upgrades stats")
 	game.travel("wild")
 	game.start_battle("serpent")
 	game.use_skill("fire")

@@ -1,6 +1,6 @@
 extends RefCounted
 ## Upgrades saved sessions one version at a time. Output still goes through Session validation.
-const CURRENT_VERSION := 6
+const CURRENT_VERSION := 7
 const DAYS_PER_MONTH := 30
 const DAYS_PER_YEAR := 360
 # Version 1 had no ages; every journey began at sixteen on day 0.
@@ -25,6 +25,8 @@ static func migrate(data: Dictionary) -> Dictionary:
 		result = _v4_to_v5(result)
 	if not result.is_empty() and int(result.version) == 5:
 		result = _v5_to_v6(result)
+	if not result.is_empty() and int(result.version) == 6:
+		result = _v6_to_v7(result)
 	return result
 
 static func _v1_to_v2(data: Dictionary) -> Dictionary:
@@ -142,4 +144,19 @@ static func _v5_to_v6(data: Dictionary) -> Dictionary:
 	player["roots"] = V5_DEFAULT_ROOTS.duplicate()
 	player["stage"] = 0
 	data["version"] = 6
+	return data
+
+## Version 7 moves herbs and pills into the item stacks: herbs were all 回春草, pills were 筑基丹.
+static func _v6_to_v7(data: Dictionary) -> Dictionary:
+	var player: Variant = data.get("player")
+	if not player is Dictionary or not player.get("items") is Dictionary:
+		return {}
+	for pair: Array in [["herbs", "huichun_grass"], ["pills", "foundation_pill"]]:
+		var amount: Variant = player.get(pair[0], 0)
+		if not (amount is int or amount is float) or float(amount) < 0 or float(amount) != floor(float(amount)):
+			return {}
+		if int(amount) > 0:
+			player.items[pair[1]] = int(player.items.get(pair[1], 0)) + int(amount)
+		player.erase(pair[0])
+	data["version"] = 7
 	return data

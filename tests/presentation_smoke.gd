@@ -91,13 +91,13 @@ func _run() -> void:
 		main._run(func() -> String: return main.session.cultivate(360))
 	main._run(func() -> String: return main.session.act("rest"))
 	main._run(func() -> String: return main.session.travel("wild"))
-	while int(main.session.player.herbs) * 4 + int(main.session.player.stones) < 120:
+	while int(main.session.herb_count()) * 4 + int(main.session.player.stones) < 120:
 		main._run(func() -> String: return main.session.act("gather"))
 	main._run(func() -> String: return main.session.travel("market"))
 	if not main.session.pending_event.is_empty():
 		main._choose("decline")
 	main._run(func() -> String: return main.session.act("sell"))
-	main._run(func() -> String: return main.session.act("buy_pill"))
+	main._run(func() -> String: return main.session.buy("foundation_pill"))
 	main._run(func() -> String: return main.session.travel("sect"))
 	main._run(func() -> String: return main.session.act("breakthrough"))
 	main._run(func() -> String: return main.session.travel("wild"))

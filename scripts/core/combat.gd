@@ -105,7 +105,7 @@ static func _win(s) -> String:
 	var npc: String = s.battle.get("npc", "")
 	s.player.stones += int(enemy.reward_stones)
 	s.player.xp += int(enemy.reward_xp)
-	s.player.herbs += int(enemy.reward_herbs)
+	s.add_item("huichun_grass", int(enemy.reward_herbs))
 	s.battle.clear()
 	var message: String = s.log_event("battle_victory", {"enemy": enemy_id, "stones": int(enemy.reward_stones), "xp": int(enemy.reward_xp), "herbs": int(enemy.reward_herbs)})
 	# A defeated regional threat changes the world; the journey itself continues.

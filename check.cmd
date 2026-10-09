@@ -6,19 +6,21 @@ if not exist "%TASK_GODOT%" (
   exit /b 1
 )
 "%TASK_GODOT%" --headless --path . --import >nul 2>&1
-"%TASK_GODOT%" --headless --path . --script res://tests/core_smoke.gd
-if errorlevel 1 exit /b 1
-"%TASK_GODOT%" --headless --path . --script res://tests/world_smoke.gd
-if errorlevel 1 exit /b 1
-"%TASK_GODOT%" --headless --path . --script res://tests/events_smoke.gd
-if errorlevel 1 exit /b 1
-"%TASK_GODOT%" --headless --path . --script res://tests/region_smoke.gd
-if errorlevel 1 exit /b 1
-"%TASK_GODOT%" --headless --path . --script res://tests/growth_smoke.gd
-if errorlevel 1 exit /b 1
-"%TASK_GODOT%" --headless --path . --script res://tests/ui_smoke.gd
-if errorlevel 1 exit /b 1
-"%TASK_GODOT%" --headless --path . --script res://tests/presentation_smoke.gd
-if errorlevel 1 exit /b 1
-"%TASK_GODOT%" --headless --path . --script res://tests/sect_smoke.gd
-exit /b %errorlevel%
+for %%T in (core_smoke world_smoke events_smoke region_smoke growth_smoke ui_smoke presentation_smoke sect_smoke) do (
+  call :run %%T || exit /b 1
+)
+exit /b 0
+
+rem Runs one test; fails on a non-zero exit or on any script error in its output,
+rem because Godot keeps running after a script error.
+:run
+set "TASK_LOG=%TEMP%\fantu_%1.log"
+"%TASK_GODOT%" --headless --path . --script res://tests/%1.gd > "%TASK_LOG%" 2>&1
+set "TASK_CODE=%errorlevel%"
+type "%TASK_LOG%"
+if not "%TASK_CODE%"=="0" exit /b 1
+findstr /C:"SCRIPT ERROR" "%TASK_LOG%" >nul && (
+  echo Script errors in %1
+  exit /b 1
+)
+exit /b 0

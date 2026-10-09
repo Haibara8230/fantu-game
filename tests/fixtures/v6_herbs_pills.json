@@ -1,0 +1,106 @@
+{
+	"battle": {},
+	"chronicle": [
+		{
+			"args": {},
+			"day": 0,
+			"id": "start",
+			"major": true
+		},
+		{
+			"args": {
+				"days": 90,
+				"xp": 252
+			},
+			"day": 90,
+			"id": "cultivate",
+			"major": false
+		},
+		{
+			"args": {
+				"days": 4,
+				"location": "ridge"
+			},
+			"day": 94,
+			"id": "travel",
+			"major": false
+		},
+		{
+			"args": {
+				"days": 3,
+				"location": "wild"
+			},
+			"day": 97,
+			"id": "travel",
+			"major": false
+		},
+		{
+			"args": {
+				"amount": 1,
+				"days": 5,
+				"location": "wild"
+			},
+			"day": 102,
+			"id": "gather_at",
+			"major": false
+		},
+		{
+			"args": {
+				"amount": 2,
+				"days": 5,
+				"location": "wild"
+			},
+			"day": 107,
+			"id": "gather_at",
+			"major": false
+		}
+	],
+	"ended": {},
+	"pending_event": {},
+	"player": {
+		"birth_day": -5760,
+		"cooldowns": {},
+		"cultivation_carry": 0,
+		"herbs": 9,
+		"hp": 90,
+		"items": {
+			"auction_invitation": 1
+		},
+		"journey": {},
+		"location": "wild",
+		"max_hp": 90,
+		"max_qi": 30,
+		"name": "药农",
+		"pills": 2,
+		"qi": 30,
+		"realm": 0,
+		"roots": [
+			"water",
+			"fire"
+		],
+		"sect": "wanderer",
+		"stage": 0,
+		"stones": 30,
+		"warned_for": -1,
+		"xp": 252
+	},
+	"rng": {
+		"combat": "2645712320878260105",
+		"world": "8590900129090006565"
+	},
+	"version": 6,
+	"world": {
+		"day": 107,
+		"events": {},
+		"flags": {},
+		"people": {
+			"rogue": {
+				"absent_until": -1,
+				"last": {},
+				"met": true,
+				"relation": 0,
+				"talks": 0
+			}
+		}
+	}
+}

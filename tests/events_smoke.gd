@@ -14,6 +14,8 @@ func check(condition: bool, message: String) -> void:
 		printerr("FAIL: " + message)
 
 func _initialize() -> void:
+	# A script error aborts this function before quit(); the watchdog turns that hang into a failure.
+	create_timer(240.0).timeout.connect(func() -> void: printerr("TIMEOUT: test did not finish (likely a script error)"); quit(1))
 	_arrival_and_rumor()
 	_invitation_path_with_interrupt()
 	_introduction_path_and_cooldown()
@@ -79,7 +81,7 @@ func _invitation_path_with_interrupt() -> void:
 	var refused := game.choose_event("ganoderma")
 	check(refused == "条件不足，无法如此选择。" and not game.pending_event.is_empty(), "unaffordable lot cannot be chosen")
 	game.choose_event("pill")
-	check(game.pending_event.is_empty() and int(game.player.pills) == 1 and int(game.player.stones) == 5, "lot bought")
+	check(game.pending_event.is_empty() and int(game.item_count("foundation_pill")) == 1 and int(game.player.stones) == 5, "lot bought")
 	check(_state(game, "special_auction") == "completed", "auction completed")
 	game.wait(1)
 	check(game.pending_event.is_empty(), "completed event does not repeat")
@@ -88,10 +90,10 @@ func _invitation_path_with_interrupt() -> void:
 func _introduction_path_and_cooldown() -> void:
 	var game := _game(3)
 	game.travel("market")
-	game.player.herbs = 5
+	game.set_item_count("huichun_grass", 5)
 	check(game.pending_event.is_empty(), "the shopkeeper never forces a request on the player")
 	game.interact("shen_mo", "request")
-	check(game.favor("shen_mo") == 10 and int(game.player.herbs) == 0, "favor done by choice")
+	check(game.favor("shen_mo") == 10 and int(game.herb_count()) == 0, "favor done by choice")
 	_jump(game, 5, 3, 10)
 	game.world.people.shen_mo.relation = 39
 	game.wait(1)

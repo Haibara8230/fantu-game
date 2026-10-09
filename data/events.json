@@ -70,16 +70,16 @@
     "choices": [
       {
         "id": "ganoderma",
-        "label": "竞拍百年灵芝（120 灵石，修为 +300）",
+        "label": "竞拍百年灵芝（120 灵石）",
         "conditions": [{"stones_at_least": 120}],
-        "effects": [{"stones": -120}, {"xp": 300}],
-        "chronicle": "你在云溪特殊拍卖中拍得百年灵芝，炼化后修为大进。"
+        "effects": [{"stones": -120}, {"item": ["lingzhi", 1]}],
+        "chronicle": "你在云溪特殊拍卖中拍得一株百年灵芝。"
       },
       {
         "id": "pill",
         "label": "竞拍筑基丹（45 灵石）",
         "conditions": [{"stones_at_least": 45}],
-        "effects": [{"stones": -45}, {"pills": 1}],
+        "effects": [{"stones": -45}, {"item": ["foundation_pill", 1]}],
         "chronicle": "你在云溪特殊拍卖中以四十五灵石拍得一枚筑基丹。"
       },
       {
@@ -109,7 +109,7 @@
         "id": "pill",
         "label": "购入折价筑基丹（40 灵石）",
         "conditions": [{"stones_at_least": 40}],
-        "effects": [{"stones": -40}, {"pills": 1}],
+        "effects": [{"stones": -40}, {"item": ["foundation_pill", 1]}],
         "chronicle": "你在云溪夜市以四十灵石购得一枚折价筑基丹。"
       },
       {

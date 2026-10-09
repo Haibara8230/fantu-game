@@ -1,0 +1,61 @@
+{
+  "huichun_grass": {
+    "name": "回春草",
+    "category": "herb",
+    "price": 4,
+    "description": "最常见的灵草，药性温和，炼制疗伤丹的主材。"
+  },
+  "chiyan_flower": {
+    "name": "赤炎花",
+    "category": "herb",
+    "price": 9,
+    "description": "只生在落霞谷向阳坡上的火性灵花，花瓣摸上去微微发烫。"
+  },
+  "ninglu_grass": {
+    "name": "凝露草",
+    "category": "herb",
+    "price": 7,
+    "description": "松风岭林下阴处的灵草，叶尖常挂露珠，性凉。"
+  },
+  "lingzhi": {
+    "name": "百年灵芝",
+    "category": "herb",
+    "price": 60,
+    "description": "百年方成的灵芝，罕见。炼化可得 300 修为。",
+    "use": [{"xp": 300}]
+  },
+  "foundation_pill": {
+    "name": "筑基丹",
+    "category": "pill",
+    "price": 60,
+    "description": "突破筑基所需的丹药。"
+  },
+  "huiqi_pill": {
+    "name": "回气丹",
+    "category": "pill",
+    "price": 7,
+    "description": "服下恢复 20 点灵力。",
+    "use": [{"qi": 20}]
+  },
+  "liaoshang_pill": {
+    "name": "疗伤丹",
+    "category": "pill",
+    "price": 10,
+    "description": "服下恢复 40 点气血。",
+    "use": [{"hp": 40}]
+  },
+  "ningqi_pill": {
+    "name": "凝气丹",
+    "category": "pill",
+    "price": 30,
+    "description": "服下增加 100 修为。丹毒积累，每 30 日只宜服一枚。",
+    "use": [{"xp": 100}],
+    "use_cooldown_days": 30
+  },
+  "auction_invitation": {
+    "name": "云溪请柬",
+    "category": "quest",
+    "price": 0,
+    "description": "烫金请柬，凭此可入云溪坊市历元五年春的特殊拍卖。"
+  }
+}

@@ -7,7 +7,7 @@ const Combat = preload("res://scripts/core/combat.gd")
 const Events = preload("res://scripts/core/events.gd")
 const SaveMigration = preload("res://scripts/core/save_migration.gd")
 const SAVE_VERSION := SaveMigration.CURRENT_VERSION
-const PLAYER_COUNTS := ["realm", "xp", "hp", "qi", "stones", "herbs", "pills", "cultivation_carry"]
+const PLAYER_COUNTS := ["realm", "xp", "hp", "qi", "stones", "cultivation_carry"]
 const LIMIT := 1000000000.0
 const MAX_SPAN_DAYS := 3600
 const MAX_DUE_PER_SPAN := 100000
@@ -53,7 +53,7 @@ func new_game(character_name: String = "无名", seed_value: int = -1, roots: Ar
 	player = {
 		"name": chosen_name, "birth_day": -int(content.rules.starting_age) * Calendar.DAYS_PER_YEAR,
 		"realm": 0, "stage": 0, "xp": 0, "hp": 0, "qi": 0, "cultivation_carry": 0, "warned_for": -1, "roots": roots.duplicate(),
-		"stones": int(content.rules.starting_stones), "herbs": 0, "pills": 0, "items": {},
+		"stones": int(content.rules.starting_stones), "items": {},
 		"journey": {}, "cooldowns": {},
 		"location": "sect", "sect": "wanderer"
 	}
@@ -240,10 +240,10 @@ func act(action: String) -> String:
 			var passed := advance_days(days)
 			if not ended.is_empty():
 				return conclude("", passed)
-			var span: Array = content.locations[player.location].gather
-			var amount := world_rng.randi_range(int(span[0]), int(span[1]))
-			player.herbs += amount
-			return conclude(log_event("gather_at", {"days": passed.elapsed, "amount": amount, "location": player.location}), passed)
+			var found := _gather_picks(content.locations[player.location].gather)
+			for item_id: String in found:
+				add_item(item_id, int(found[item_id]))
+			return conclude(log_event("gather_items", {"days": passed.elapsed, "location": player.location, "loot": loot_code(found)}), passed)
 		"inn_rest":
 			var price := int(content.rules.inn_price)
 			if int(player.stones) < price:
@@ -270,38 +270,32 @@ func act(action: String) -> String:
 				"pills": 1 if world_rng.randf() < float(loot.pill_chance) else 0,
 			}
 			player.stones += found.stones
-			player.herbs += found.herbs
-			player.pills += found.pills
+			add_item("huichun_grass", int(found.herbs))
+			add_item("foundation_pill", int(found.pills))
 			player.cooldowns[action] = int(world.day) + int(content.rules.action_cooldowns.get(action, 0))
 			return conclude(log_event("search_ruin", found), passed)
 		"sell":
-			if int(player.herbs) == 0:
-				return "背包中没有灵草。"
-			var revenue := int(player.herbs) * int(content.rules.herb_price)
-			var passed := advance_days(days)
-			if not ended.is_empty():
-				return conclude("", passed)
+			# Sell every item this place buys, in one go.
+			var sold := {}
+			for item_id: String in player.items.keys():
+				if sell_price(item_id) > 0:
+					sold[item_id] = item_count(item_id)
+			if sold.is_empty():
+				return "行囊里没有这里收购的东西。"
+			var revenue := 0
+			for item_id: String in sold:
+				revenue += sell_price(item_id) * int(sold[item_id])
+				remove_item(item_id, int(sold[item_id]))
 			player.stones += revenue
-			player.herbs = 0
-			return conclude(log_event("sell", {"revenue": revenue}), passed)
-		"buy_pill":
-			var price := int(content.rules.pill_price)
-			if int(player.stones) < price:
-				return "灵石不足：筑基丹需要 %d 灵石。" % price
-			var passed := advance_days(days)
-			if not ended.is_empty():
-				return conclude("", passed)
-			player.stones -= price
-			player.pills += 1
-			return conclude(log_event("buy_pill", {"price": price}), passed)
+			return conclude(log_event("sell_all", {"loot": loot_code(sold), "revenue": revenue}))
 		"breakthrough":
 			var need := next_breakthrough()
 			if need.is_empty():
 				return "后续境界尚未开放。"
 			var last_stage: int = content.realm(int(player.realm)).stages.size() - 1
-			if int(player.stage) < last_stage or int(player.xp) < int(need.xp) or int(player.pills) < int(need.pills):
+			if int(player.stage) < last_stage or int(player.xp) < int(need.xp) or item_count("foundation_pill") < int(need.pills):
 				return "突破需修至%s，并有 %d 修为与 %d 枚筑基丹。" % [content.realm_title(int(player.realm), last_stage), int(need.xp), int(need.pills)]
-			player.pills -= int(need.pills)
+			remove_item("foundation_pill", int(need.pills))
 			player.xp -= int(need.xp)
 			var passed := advance_days(days)
 			if not ended.is_empty():
@@ -362,6 +356,134 @@ func _gain_cultivation(days: int) -> int:
 	player.cultivation_carry = total % Calendar.DAYS_PER_MONTH
 	player.xp += gained
 	return gained
+
+# --- Inventory -----------------------------------------------------------------------
+# Everything the player carries is an item stack in player.items (id -> count). Content may still
+# speak of "herbs" in general (any herb, cheapest paid first) and "pills" (筑基丹).
+
+func item_count(item_id: String) -> int:
+	return int(player.get("items", {}).get(item_id, 0))
+
+func herb_count() -> int:
+	var total := 0
+	for item_id: String in content.herbs_by_value():
+		total += item_count(item_id)
+	return total
+
+func add_item(item_id: String, count: int) -> void:
+	if count <= 0:
+		return
+	player.items[item_id] = item_count(item_id) + count
+
+## Removes up to `count`; returns false (and removes nothing) when there are not enough.
+func remove_item(item_id: String, count: int) -> bool:
+	if count <= 0:
+		return true
+	if item_count(item_id) < count:
+		return false
+	var left := item_count(item_id) - count
+	if left == 0:
+		player.items.erase(item_id)
+	else:
+		player.items[item_id] = left
+	return true
+
+## Pays a generic herb cost, cheapest herbs first.
+func remove_herbs(count: int) -> bool:
+	if herb_count() < count:
+		return false
+	for item_id: String in content.herbs_by_value():
+		var taken := mini(count, item_count(item_id))
+		remove_item(item_id, taken)
+		count -= taken
+	return true
+
+## Sets a stack directly (tests and tools).
+func set_item_count(item_id: String, count: int) -> void:
+	player.items.erase(item_id)
+	add_item(item_id, count)
+
+## What this place pays for one of the item, or 0 when it does not buy it here.
+func sell_price(item_id: String) -> int:
+	if not available_here("sell") or not content.items.has(item_id):
+		return 0
+	var item: Dictionary = content.items[item_id]
+	return int(item.price) if item.category in content.locations[player.location].get("buys", []) else 0
+
+func shop_goods() -> Array:
+	return content.locations[player.location].get("shop", []) if available_here("shop") else []
+
+## Compact loot record for the chronicle: "id:count,id:count".
+func loot_code(found: Dictionary) -> String:
+	var parts: Array[String] = []
+	for item_id: String in found:
+		parts.append("%s:%d" % [item_id, int(found[item_id])])
+	return ",".join(parts)
+
+func _gather_picks(gather: Dictionary) -> Dictionary:
+	var found := {}
+	var total := 0
+	for entry: Dictionary in gather.table:
+		total += int(entry.weight)
+	for pick: int in world_rng.randi_range(int(gather.picks[0]), int(gather.picks[1])):
+		var roll := world_rng.randi_range(1, total)
+		for entry: Dictionary in gather.table:
+			roll -= int(entry.weight)
+			if roll <= 0:
+				found[entry.item] = int(found.get(entry.item, 0)) + 1
+				break
+	return found
+
+func sell(item_id: String, count: int = 1) -> String:
+	var blocked := _blocked()
+	if not blocked.is_empty():
+		return blocked
+	var price := sell_price(item_id)
+	if price <= 0:
+		return "这里不收这件东西。"
+	if count < 1 or not remove_item(item_id, count):
+		return "行囊里没有那么多。"
+	player.stones += price * count
+	return conclude(log_event("sell_item", {"item": item_id, "count": count, "revenue": price * count}))
+
+func buy(item_id: String) -> String:
+	var blocked := _blocked()
+	if not blocked.is_empty():
+		return blocked
+	for good: Dictionary in shop_goods():
+		if good.item == item_id:
+			if int(player.stones) < int(good.price):
+				return "灵石不足：%s需要 %d 灵石。" % [content.items[item_id].name, int(good.price)]
+			player.stones -= int(good.price)
+			add_item(item_id, 1)
+			return conclude(log_event("buy_item", {"item": item_id, "price": int(good.price)}))
+	return "这里买不到这件东西。"
+
+## Why an item cannot be used right now, or "".
+func use_block(item_id: String) -> String:
+	var blocked := _blocked()
+	if not blocked.is_empty():
+		return blocked
+	if not content.items.has(item_id) or not content.items[item_id].has("use"):
+		return "此物不能直接服用。"
+	if item_count(item_id) < 1:
+		return "行囊里没有此物。"
+	var ready := int(player.cooldowns.get("use:" + item_id, 0))
+	if int(world.day) < ready:
+		return "丹毒未消，%s后再服。" % Calendar.duration_text(ready - int(world.day))
+	return ""
+
+func use_item(item_id: String) -> String:
+	var reason := use_block(item_id)
+	if not reason.is_empty():
+		return reason
+	var item: Dictionary = content.items[item_id]
+	remove_item(item_id, 1)
+	if item.has("use_cooldown_days"):
+		player.cooldowns["use:" + item_id] = int(world.day) + int(item.use_cooldown_days)
+	var text := log_event("use_item", {"item": item_id})
+	Events.apply(self, item.use)
+	return conclude(text)
 
 # --- People ------------------------------------------------------------------------
 # People live in the world on their own: residents stay home, wanderers follow a schedule computed

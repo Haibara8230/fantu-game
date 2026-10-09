@@ -150,6 +150,8 @@ func _build_layout() -> void:
 	header.add_child(view_buttons.place)
 	view_buttons.map = _button("舆图", func() -> void: _set_view("map"))
 	header.add_child(view_buttons.map)
+	view_buttons.bag = _button("行囊", func() -> void: _set_view("bag"))
+	header.add_child(view_buttons.bag)
 	header.add_child(_button("保存 F5", _save_manual))
 	load_button = _button("读取 F9", _load_manual)
 	header.add_child(load_button)
@@ -236,10 +238,7 @@ func _render() -> void:
 	stats.add_child(_label("年岁 %d  ·  寿元 %d" % [session.age(), session.lifespan()], 15, MUTED))
 	stats.add_child(_label("灵根 · %s · 修炼 ×%.2f" % [session.root_title(), session.cultivation_speed()], 14, MUTED))
 	_meter(stats, "修为", p.xp, maxi(1, maxi(int(p.xp), _xp_goal())), GOLD)
-	stats.add_child(_label("灵石  %d    灵草  %d" % [p.stones, p.herbs], 16))
-	stats.add_child(_label("筑基丹  %d" % p.pills, 16))
-	for item_id: String in p.items:
-		stats.add_child(_label("%s  %d" % [session.content.items[item_id].name, p.items[item_id]], 16))
+	stats.add_child(_label("灵石  %d    灵草  %d    筑基丹  %d" % [p.stones, session.herb_count(), session.item_count("foundation_pill")], 15))
 	_render_acquaintances()
 	_render_upcoming()
 	stats.add_child(HSeparator.new())
@@ -259,6 +258,7 @@ func _render() -> void:
 	load_button.disabled = not manual_store.has_save()
 	view_buttons.place.disabled = view == "place"
 	view_buttons.map.disabled = view == "map" or not _settled()
+	view_buttons.bag.disabled = view == "bag"
 	_clear(center)
 	if not session.ended.is_empty():
 		_render_ending()
@@ -268,6 +268,8 @@ func _render() -> void:
 		_render_battle()
 	elif view == "map":
 		_render_map()
+	elif view == "bag":
+		_render_bag()
 	else:
 		_render_location()
 	_update_audio()
@@ -508,12 +510,22 @@ func _spot_action(grid: GridContainer, action: String) -> void:
 		"breakthrough":
 			_action(grid, "突破境界  ·  " + _duration("breakthrough"), "breakthrough", _breakthrough_tooltip())
 		"sell":
-			_action(grid, "出售全部灵草", "sell", "每株灵草可换取 %d 灵石，不耗时日" % int(rules.herb_price))
-		"buy_pill":
-			_action(grid, "购买筑基丹  ·  %d 灵石" % int(rules.pill_price), "buy_pill", "突破筑基所需丹药，不耗时日")
+			_action(grid, "全部出售", "sell", "把这里收购的东西全部卖掉，不耗时日")
+			for item_id: String in session.player.items.keys():
+				var price: int = session.sell_price(item_id)
+				if price > 0:
+					var sold := item_id
+					_timed(grid, "出售%s（%d）· 每件 %d" % [session.content.items[item_id].name, session.item_count(item_id), price], func() -> String: return session.sell(sold, 1), session.content.items[item_id].description)
+		"shop":
+			for good: Dictionary in session.shop_goods():
+				var bought: String = good.item
+				_timed(grid, "购买%s  ·  %d 灵石" % [session.content.items[bought].name, int(good.price)], func() -> String: return session.buy(bought), session.content.items[bought].description)
 		"gather":
-			var span: Array = session.content.locations[session.player.location].gather
-			_action(grid, "采集灵草  ·  " + _duration("gather"), "gather", "采得 %d–%d 株灵草" % [int(span[0]), int(span[1])])
+			var gather: Dictionary = session.content.locations[session.player.location].gather
+			var kinds: Array[String] = []
+			for entry: Dictionary in gather.table:
+				kinds.append(session.content.items[entry.item].name)
+			_action(grid, "采集灵草  ·  " + _duration("gather"), "gather", "采得 %d–%d 株，此地出产：%s" % [int(gather.picks[0]), int(gather.picks[1]), "、".join(kinds)])
 		"inn_rest":
 			_action(grid, "客栈歇息  ·  %s · %d 灵石" % [_duration("inn_rest"), int(rules.inn_price)], "inn_rest", "恢复全部气血与灵力")
 		"search_ruin":
@@ -562,6 +574,39 @@ func _render_map() -> void:
 	var go := _button("启程前往" + target.name, func() -> void: _depart(map_target))
 	go.disabled = not _settled()
 	center.add_child(go)
+
+## 行囊: everything carried, grouped by category, with use and (where bought) sell buttons.
+func _render_bag() -> void:
+	center.add_child(_label("行 囊", 26, GOLD))
+	if session.player.items.is_empty():
+		center.add_child(_paragraph("行囊空空如也。", MUTED))
+	for category: String in session.content.ITEM_CATEGORIES:
+		var ids: Array = session.player.items.keys().filter(func(item_id: String) -> bool: return session.content.items.get(item_id, {}).get("category", "") == category)
+		if ids.is_empty():
+			continue
+		ids.sort()
+		center.add_child(_label(session.content.ITEM_CATEGORIES[category], 17, GOLD))
+		for item_id: String in ids:
+			var item: Dictionary = session.content.items[item_id]
+			var row := HBoxContainer.new()
+			row.add_theme_constant_override("separation", 10)
+			center.add_child(row)
+			var name_label := _label("%s ×%d" % [item.name, session.item_count(item_id)], 16)
+			name_label.custom_minimum_size.x = 150
+			row.add_child(name_label)
+			var text := _paragraph(item.description)
+			text.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+			row.add_child(text)
+			var used := item_id
+			if item.has("use"):
+				var reason: String = session.use_block(item_id)
+				var use_button := _button("服用", func() -> void: _run(func() -> String: return session.use_item(used)), reason)
+				use_button.disabled = not reason.is_empty()
+				row.add_child(use_button)
+			var price: int = session.sell_price(item_id)
+			if price > 0:
+				row.add_child(_button("出售 · %d" % price, func() -> void: _run(func() -> String: return session.sell(used, 1)), "在此地出售一件"))
+	center.add_child(_button("返回", func() -> void: _set_view("place")))
 
 func _select_map_target(location_id: String) -> void:
 	map_target = location_id

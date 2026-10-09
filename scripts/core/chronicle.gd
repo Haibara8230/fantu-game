@@ -4,7 +4,7 @@ extends RefCounted
 const Calendar = preload("res://scripts/core/calendar.gd")
 const RECENT_LIMIT := 100
 const MAJOR_LIMIT := 5000
-const NAMED_ARGS := {"location": "locations", "enemy": "enemies", "skill": "skills", "sect": "sects", "npc": "people"}
+const NAMED_ARGS := {"location": "locations", "enemy": "enemies", "skill": "skills", "sect": "sects", "npc": "people", "item": "items"}
 var entries: Array[Dictionary] = []
 
 func clear() -> void:
@@ -55,9 +55,22 @@ func format(entry: Dictionary, content) -> String:
 			values[key + "_name"] = definition.name if definition is Dictionary else str(values[key])
 	if values.has("realm"):
 		values["realm_name"] = content.realm_title(int(values.realm), int(values.get("stage", 0)))
+	if values.has("loot"):
+		values["loot_text"] = loot_text(str(values.loot), content)
 	if values.has("days"):
 		values["duration"] = Calendar.duration_text(int(values.days))
 	return template.format(values)
+
+## "id:count,id:count" as "回春草×2、赤炎花"; unknown ids keep their id so old records still read.
+static func loot_text(code: String, content) -> String:
+	var parts: Array[String] = []
+	for piece: String in code.split(",", false):
+		var pair := piece.split(":")
+		var item: Variant = content.items.get(pair[0])
+		var name: String = item.name if item is Dictionary else pair[0]
+		var count := int(pair[1]) if pair.size() > 1 else 1
+		parts.append(name if count == 1 else "%s×%d" % [name, count])
+	return "、".join(parts) if not parts.is_empty() else "一无所获"
 
 ## Talks and interactions point into data/npcs.json.
 static func _person_text(kind: String, args: Dictionary, content) -> String:

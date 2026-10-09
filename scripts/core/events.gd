@@ -81,7 +81,7 @@ static func met(s, condition: Dictionary) -> bool:
 		"stones_at_least":
 			return int(s.player.stones) >= int(value)
 		"herbs_at_least":
-			return int(s.player.herbs) >= int(value)
+			return s.herb_count() >= int(value)
 		"met":
 			return bool(s.world.people.get(value, {}).get("met", false))
 		"relation_at_least":
@@ -95,10 +95,24 @@ static func apply(s, effects: Array) -> void:
 		var key: String = effect.keys()[0]
 		var value: Variant = effect[key]
 		match key:
-			"stones", "herbs", "pills", "xp":
+			"stones", "xp":
 				s.player[key] = maxi(0, int(s.player[key]) + int(value))
 				if key == "xp":
 					s.settle_stage()
+			"herbs":
+				if int(value) >= 0:
+					s.add_item("huichun_grass", int(value))
+				else:
+					s.remove_herbs(mini(-int(value), s.herb_count()))
+			"pills":
+				if int(value) >= 0:
+					s.add_item("foundation_pill", int(value))
+				else:
+					s.remove_item("foundation_pill", mini(-int(value), s.item_count("foundation_pill")))
+			"hp":
+				s.player.hp = clampi(int(s.player.hp) + int(value), 1, int(s.player.max_hp))
+			"qi":
+				s.player.qi = clampi(int(s.player.qi) + int(value), 0, int(s.player.max_qi))
 			"item":
 				var count := maxi(0, int(s.player.items.get(value[0], 0)) + int(value[1]))
 				if count == 0:

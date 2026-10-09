@@ -27,5 +27,10 @@
   "search_ruin": "在洞府石室翻找 {duration}，得灵石 {stones}、灵草 {herbs}、筑基丹 {pills}。",
   "ruin_cleared": "占据古修洞府的散修败走，石室从此归于寂静。",
   "gift": "你赠给{npc_name}一株灵草，好感 +{favor}。",
-  "stage_up": "修为精进，你已至{realm_name}。"
+  "stage_up": "修为精进，你已至{realm_name}。",
+  "gather_items": "在{location_name}采得{loot_text}。",
+  "sell_all": "售出{loot_text}，得灵石 {revenue}。",
+  "sell_item": "售出{item_name}×{count}，得灵石 {revenue}。",
+  "buy_item": "花费 {price} 灵石，购得{item_name}。",
+  "use_item": "服下{item_name}。"
 }

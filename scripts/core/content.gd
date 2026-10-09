@@ -20,14 +20,15 @@ const FAVOR_MAX := 200
 const FAVOR_STAGES := [[0, "初识"], [40, "相熟"], [80, "友好"], [140, "信赖"], [200, "亲密"]]
 const ATTITUDES := {"friendly": "友善", "neutral": "中立", "hostile": "敌意"}
 const BUILT_IN_INTERACTIONS := ["talk", "gift"]
-const PLAIN_ACTIONS := ["cultivate", "rest", "breakthrough", "study", "sell", "buy_pill", "gather", "inn_rest", "search_ruin"]
+const PLAIN_ACTIONS := ["cultivate", "rest", "breakthrough", "study", "sell", "shop", "gather", "inn_rest", "search_ruin"]
+const ITEM_CATEGORIES := {"herb": "灵草", "pill": "丹药", "material": "材料", "quest": "信物"}
 
 func load_data() -> bool:
 	var parsed: Variant = _read_json("res://data/world.json")
 	if not parsed is Dictionary:
 		error_message = "世界配置格式错误。"
 		return false
-	for section: String in ["map", "locations", "skills", "enemies", "rules", "sects", "actions", "items"]:
+	for section: String in ["map", "locations", "skills", "enemies", "rules", "sects", "actions"]:
 		if not parsed.get(section) is Dictionary or parsed[section].is_empty():
 			error_message = "世界配置缺少：" + section
 			return false
@@ -49,6 +50,11 @@ func load_data() -> bool:
 		error_message = "人物配置格式错误。"
 		return false
 	people = npc_data
+	var item_data: Variant = _read_json("res://data/items.json")
+	if not item_data is Dictionary or item_data.is_empty():
+		error_message = "物品配置格式错误。"
+		return false
+	items = item_data
 	map = parsed.map
 	locations = parsed.locations
 	skills = parsed.skills
@@ -59,7 +65,6 @@ func load_data() -> bool:
 	routes = parsed.routes
 	actions = parsed.actions
 	world_flags = parsed.world_flags
-	items = parsed.items
 	chronicle = templates
 	error_message = _validate()
 	return error_message.is_empty()
@@ -166,6 +171,10 @@ func _validate() -> String:
 		problem = _validate_event(event_id, events[event_id])
 		if not problem.is_empty():
 			return "事件 %s：%s" % [event_id, problem]
+	for item_id: String in items:
+		problem = _validate_item(items[item_id])
+		if not problem.is_empty():
+			return "物品 %s：%s" % [item_id, problem]
 	for person_id: String in people:
 		problem = _validate_person(people[person_id])
 		if not problem.is_empty():
@@ -192,9 +201,20 @@ func _validate_map() -> String:
 		if location.has("hidden_until") and not location.hidden_until in world_flags:
 			return "隐藏地点引用了未知标记：" + location_id
 		if location.has("gather"):
-			var span: Variant = location.gather
-			if not span is Array or span.size() != 2 or not _whole(span[0]) or not _whole(span[1]) or int(span[0]) > int(span[1]):
-				return "采集数量错误：" + location_id
+			var gather: Variant = location.gather
+			if not gather is Dictionary or not gather.get("picks") is Array or gather.picks.size() != 2 or not _whole(gather.picks[0]) or not _whole(gather.picks[1]) or int(gather.picks[0]) < 1 or int(gather.picks[0]) > int(gather.picks[1]):
+				return "采集次数错误：" + location_id
+			if not gather.get("table") is Array or gather.table.is_empty():
+				return "采集表为空：" + location_id
+			for entry: Variant in gather.table:
+				if not entry is Dictionary or not items.has(entry.get("item", "")) or not _whole(entry.get("weight")) or int(entry.weight) < 1:
+					return "采集表条目错误：" + location_id
+		for good: Variant in location.get("shop", []):
+			if not good is Dictionary or not items.has(good.get("item", "")) or not _whole(good.get("price")) or int(good.price) < 1:
+				return "商店货品错误：" + location_id
+		for category: Variant in location.get("buys", []):
+			if not ITEM_CATEGORIES.has(category):
+				return "收购品类未知：" + location_id
 		if not location.get("spots") is Array or location.spots.is_empty():
 			return "地点缺少场景：" + location_id
 		var ids := {}
@@ -214,6 +234,10 @@ func _validate_map() -> String:
 					return "场景引用了未知行为：%s" % action
 				if action == "gather" and not location.has("gather"):
 					return "可采集的地点缺少采集数量：" + location_id
+				if action == "shop" and location.get("shop", []).is_empty():
+					return "开店的地点没有货品：" + location_id
+				if action == "sell" and location.get("buys", []).is_empty():
+					return "收购的地点没有收购品类：" + location_id
 	# Every location must be reachable once everything is revealed; unhidden ones without any reveal.
 	var everything := {}
 	for flag: String in world_flags:
@@ -495,6 +519,8 @@ func _validate_effects(effects: Variant) -> String:
 				ok = value is Array and value.size() == 2 and people.has(value[0]) and (value[1] is int or value[1] is float)
 			"battle":
 				ok = enemies.has(value)
+			"hp", "qi":
+				ok = (value is int or value is float) and float(value) == floor(float(value))
 			"leave":
 				ok = value == true
 		if not ok:
@@ -645,3 +671,26 @@ func root_title(elements: Array) -> String:
 		if element in elements:
 			names += str(rules.spirit_roots.names[element])
 	return names + str(root_grade(elements).name)
+
+# --- Items ---------------------------------------------------------------------------
+
+func _validate_item(item: Variant) -> String:
+	if not item is Dictionary or not item.get("name") is String or not item.get("description") is String:
+		return "缺少名称或描述"
+	if not ITEM_CATEGORIES.has(item.get("category", "")):
+		return "品类未知"
+	if not _whole(item.get("price")):
+		return "价格无效"
+	if item.has("use_cooldown_days") and not _whole(item.use_cooldown_days):
+		return "服用间隔无效"
+	return _validate_effects(item.get("use", []))
+
+## Herb ids from cheapest to dearest (then by id), the order generic herb costs are paid in.
+func herbs_by_value() -> Array[String]:
+	var ids: Array[String] = []
+	for item_id: String in items:
+		if items[item_id].category == "herb":
+			ids.append(item_id)
+	ids.sort_custom(func(a: String, b: String) -> bool:
+		return int(items[a].price) < int(items[b].price) or (int(items[a].price) == int(items[b].price) and a < b))
+	return ids

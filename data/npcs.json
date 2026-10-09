@@ -21,11 +21,11 @@
     "interactions": [
       {
         "id": "request",
-        "label": "代他收五株灵草（灵石 +50）",
-        "conditions": [{"herbs_at_least": 5}],
-        "effects": [{"herbs": -5}, {"stones": 50}, {"relation": ["shen_mo", 10]}],
+        "label": "代他收五株回春草（灵石 +50）",
+        "conditions": [{"item_at_least": ["huichun_grass", 5]}],
+        "effects": [{"item": ["huichun_grass", -5]}, {"stones": 50}, {"relation": ["shen_mo", 10]}],
         "cooldown_days": 90,
-        "chronicle": "你交给沈墨五株灵草，得灵石五十，彼此更熟络了些。"
+        "chronicle": "你交给沈墨五株回春草，得灵石五十，彼此更熟络了些。"
       },
       {
         "id": "ask_auction",
@@ -111,15 +111,15 @@
         "id": "buy_pill",
         "label": "买一枚筑基丹（70 灵石）",
         "conditions": [{"stones_at_least": 70}],
-        "effects": [{"stones": -70}, {"pills": 1}],
+        "effects": [{"stones": -70}, {"item": ["foundation_pill", 1]}],
         "chronicle": "你从行脚药贩手中买下一枚筑基丹。"
       },
       {
         "id": "sell_herbs",
-        "label": "卖给他三株灵草（20 灵石）",
-        "conditions": [{"herbs_at_least": 3}],
-        "effects": [{"herbs": -3}, {"stones": 20}],
-        "chronicle": "你把三株灵草卖给行脚药贩，得灵石二十。"
+        "label": "卖给他三株赤炎花（36 灵石）",
+        "conditions": [{"item_at_least": ["chiyan_flower", 3]}],
+        "effects": [{"item": ["chiyan_flower", -3]}, {"stones": 36}],
+        "chronicle": "你把三株赤炎花卖给行脚药贩，得灵石三十六。"
       }
     ]
   },
@@ -144,10 +144,10 @@
     "interactions": [
       {
         "id": "heal",
-        "label": "以两株灵草为他疗伤",
-        "conditions": [{"herbs_at_least": 2}],
-        "effects": [{"herbs": -2}, {"flag": "helped_wanderer"}, {"relation": ["wounded", 30]}, {"leave": true}],
-        "chronicle": "你以两株灵草为柳寒舟疗伤，他道谢后蹒跚离去。"
+        "label": "以两株回春草为他疗伤",
+        "conditions": [{"item_at_least": ["huichun_grass", 2]}],
+        "effects": [{"item": ["huichun_grass", -2]}, {"flag": "helped_wanderer"}, {"relation": ["wounded", 30]}, {"leave": true}],
+        "chronicle": "你以两株回春草为柳寒舟疗伤，他道谢后蹒跚离去。"
       }
     ]
   },

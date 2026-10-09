@@ -14,6 +14,8 @@ func check(condition: bool, message: String) -> void:
 		printerr("FAIL: " + message)
 
 func _initialize() -> void:
+	# A script error aborts this function before quit(); the watchdog turns that hang into a failure.
+	create_timer(240.0).timeout.connect(func() -> void: printerr("TIMEOUT: test did not finish (likely a script error)"); quit(1))
 	call_deferred("_run")
 
 func _run() -> void:
@@ -127,12 +129,12 @@ func _encounters() -> void:
 	check(stopped.player.location == "ruin" and stopped.player.journey.is_empty(), "journey resumes to its destination")
 	var lured := _game(6, true)
 	_single_encounter(lured, "road_wolf")
-	lured.player.herbs = 1
+	lured.set_item_count("huichun_grass", 1)
 	lured.travel("wild")
 	lured.travel("wild")
 	check(lured.pending_event.get("id", "") == "road_wolf", "wolves wait on dangerous roads")
 	lured.choose_event("lure")
-	check(lured.battle.is_empty() and int(lured.player.herbs) == 0, "a herb buys a way around the wolf")
+	check(lured.battle.is_empty() and int(lured.herb_count()) == 0, "a herb buys a way around the wolf")
 	var quiet := _game(7, true)
 	_single_encounter(quiet, "road_wolf")
 	quiet.travel("market")
@@ -142,9 +144,9 @@ func _scenes() -> void:
 	var game := _game(8)
 	check(game.act("gather") == "此地无法如此行事。", "no herbs to gather in the sect")
 	game.travel("ridge")
-	var herbs := int(game.player.herbs)
+	var herbs := int(game.herb_count())
 	game.act("gather")
-	check(int(game.player.herbs) - herbs >= 1 and int(game.player.herbs) - herbs <= 2, "the ridge yields its own amount")
+	check(int(game.herb_count()) - herbs >= 1 and int(game.herb_count()) - herbs <= 2, "the ridge yields its own amount")
 	game.travel("town")
 	game.player.hp = 10
 	var stones := int(game.player.stones)
@@ -167,9 +169,9 @@ func _ruin() -> void:
 	game.use_skill("sword")
 	check(game.has_flag("ruin_cleared") and _texts(game).contains("石室从此归于寂静"), "defeating the occupant clears the ruin")
 	check(not "squatter" in game.present_npcs(), "the occupant is gone")
-	var before := int(game.player.stones) + int(game.player.herbs) + int(game.player.pills)
+	var before := int(game.player.stones) + int(game.herb_count()) + int(game.item_count("foundation_pill"))
 	game.act("search_ruin")
-	check(int(game.player.stones) + int(game.player.herbs) + int(game.player.pills) > before, "searching the stone room finds something")
+	check(int(game.player.stones) + int(game.herb_count()) + int(game.item_count("foundation_pill")) > before, "searching the stone room finds something")
 	check(game.act("search_ruin").contains("后再来"), "the stone room needs time before another search")
 	game.wait(90)
 	check(not game.act("search_ruin").contains("后再来"), "searchable again after the cooldown")
@@ -210,10 +212,10 @@ func _people() -> void:
 	check(not _option(trader, "peddler", "buy_pill").available, "a pill needs seventy stones")
 	trader.player.stones = 80
 	trader.interact("peddler", "buy_pill")
-	check(int(trader.player.pills) == 1 and int(trader.player.stones) == 10 and _option(trader, "peddler", "buy_pill").reason == "条件不足。", "trades repeat whenever affordable")
-	trader.player.herbs = 1
+	check(int(trader.item_count("foundation_pill")) == 1 and int(trader.player.stones) == 10 and _option(trader, "peddler", "buy_pill").reason == "条件不足。", "trades repeat whenever affordable")
+	trader.set_item_count("huichun_grass", 1)
 	trader.interact("peddler", "gift")
-	check(trader.favor("peddler") == 5 and int(trader.player.herbs) == 0, "a gift of herbs raises favor")
+	check(trader.favor("peddler") == 5 and int(trader.herb_count()) == 0, "a gift of herbs raises favor")
 	check(trader.content.favor_stage(40) == "相熟" and trader.content.favor_stage(200) == "亲密", "favor stages follow 觅长生")
 	# A hostile rogue on the ridge: no talk, pay him off or fight.
 	var road := _game(15)
@@ -235,7 +237,7 @@ func _people() -> void:
 	check(not "wounded" in forest.present_npcs(), "not there before his window")
 	forest.wait(30)
 	check("wounded" in forest.present_npcs(), "there during his window")
-	forest.player.herbs = 2
+	forest.set_item_count("huichun_grass", 2)
 	forest.interact("wounded", "heal")
 	check(forest.has_flag("helped_wanderer") and not "wounded" in forest.present_npcs() and "wounded" in forest.known_npcs(), "healed, he moves on and is remembered")
 
