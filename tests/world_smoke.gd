@@ -60,10 +60,10 @@ func _unified_time() -> void:
 func _migration() -> void:
 	var fresh = Session.new()
 	check(fresh.restore(_fixture("v1_fresh.json")), "v1 fresh save migrates")
-	check(fresh.snapshot().version == 2 and fresh.world.day == 0 and fresh.age() == 16, "migrated time and age")
+	check(fresh.snapshot().version == Session.SAVE_VERSION and fresh.world.day == 0 and fresh.age() == 16, "migrated time and age")
 	check(fresh.chronicle.entries.size() == 1 and fresh.chronicle.entries[0].major, "v1 journal becomes chronicle with major marker")
 	var copy = Session.new()
-	check(copy.restore(JSON.parse_string(JSON.stringify(fresh.snapshot()))) and copy.snapshot() == fresh.snapshot(), "migrated save round-trips as v2")
+	check(copy.restore(JSON.parse_string(JSON.stringify(fresh.snapshot()))) and copy.snapshot() == fresh.snapshot(), "migrated save round-trips as the current version")
 
 	var done = Session.new()
 	var completed: Dictionary = _fixture("v1_completed.json")
@@ -87,7 +87,7 @@ func _migration() -> void:
 	check(done.world.day == int(settled.world.day) + 60, "migrated journey keeps going")
 
 	var future: Dictionary = fresh.snapshot()
-	future.version = 3
+	future.version = Session.SAVE_VERSION + 1
 	check(not copy.restore(future), "future version rejected")
 	var ancient: Dictionary = _fixture("v1_fresh.json")
 	ancient.version = 0
@@ -106,7 +106,7 @@ func _store_migration() -> void:
 	game.act("cultivate")
 	check(store.save_game(game), "migrated journey saves")
 	var newest: Variant = JSON.parse_string(FileAccess.get_file_as_string(path + "/journey_0.json"))
-	check(newest is Dictionary and int(newest.session.version) == 2, "new generation written as v2")
+	check(newest is Dictionary and int(newest.session.version) == Session.SAVE_VERSION, "new generation written in the current version")
 	check(FileAccess.file_exists(path + "/journey_1.json") and int(JSON.parse_string(FileAccess.get_file_as_string(path + "/journey_1.json")).session.version) == 1, "previous v1 generation kept as backup")
 
 func _validation_from_config() -> void:
@@ -165,7 +165,7 @@ func _chronicle() -> void:
 	check(record.format({"day": 0, "id": "removed_event", "args": {}, "major": false}, game.content) == "（失传的记载）", "removed templates degrade gracefully")
 
 func _time_writes_are_centralized() -> void:
-	# World time may only be assigned inside Session (advance_days, new_game, restore).
+	# World time may only be assigned inside Session.advance_days (new_game and restore rebuild the whole world).
 	var pattern := RegEx.create_from_string("world\\.day\\s*[-+]?=[^=]|world\\[\"day\"\\]\\s*[-+]?=[^=]")
 	var offenders: Array[String] = []
 	for folder: String in ["res://scripts/core", "res://scripts/ui", "res://scripts/presentation"]:
@@ -176,4 +176,7 @@ func _time_writes_are_centralized() -> void:
 			if pattern.search(text) and file_name != "session.gd":
 				offenders.append(file_name)
 	var session_text := FileAccess.get_file_as_string("res://scripts/core/session.gd")
-	check(offenders.is_empty() and pattern.search_all(session_text).size() == 1, "world time changes only through advance_days: %s" % ", ".join(offenders))
+	var start := session_text.find("func advance_days")
+	var body := session_text.substr(start, session_text.find("\nfunc ", start + 1) - start)
+	var inside := pattern.search_all(body).size()
+	check(offenders.is_empty() and inside > 0 and pattern.search_all(session_text).size() == inside, "world time changes only through advance_days: %s" % ", ".join(offenders))

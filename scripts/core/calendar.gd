@@ -41,3 +41,6 @@ static func duration_text(days: int) -> String:
 
 static func age_years(birth_day: int, day: int) -> int:
 	return (day - birth_day) / DAYS_PER_YEAR
+
+static func to_day(year_value: int, month_value: int, day_value: int) -> int:
+	return (year_value - 1) * DAYS_PER_YEAR + (month_value - 1) * DAYS_PER_MONTH + (day_value - 1)

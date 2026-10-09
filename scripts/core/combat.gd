@@ -53,9 +53,10 @@ static func flee(s) -> String:
 		return "当前无需撤退。"
 	s.combat_events.append({"type": "end", "result": "flee"})
 	s.battle.clear()
+	# Outcomes are recorded on the day they happen; the recovery time follows.
 	var days: int = s.content.action_days("flee")
-	s.advance_days(days)
-	return s.finish(s.log_event("flee", {"days": days}))
+	var message: String = s.log_event("flee", {"days": days})
+	return s.conclude(message, s.advance_days(days))
 
 static func _tick_cooldowns(s) -> void:
 	for cooldown_id: String in s.battle.cooldowns:
@@ -76,10 +77,11 @@ static func _enemy_turn(s, guarding: bool) -> String:
 		var lost := mini(int(s.player.stones), 10)
 		s.player.stones -= lost
 		s.player.location = "sect"
-		s.advance_days(s.content.action_days("battle_defeat"))
+		var message: String = s.log_event("battle_defeat", {"lost": lost})
+		var passed: Dictionary = s.advance_days(s.content.action_days("battle_defeat"))
 		s.player.hp = maxi(1, int(s.player.max_hp) / 2)
 		s.player.qi = s.player.max_qi
-		return s.finish(s.log_event("battle_defeat", {"lost": lost}))
+		return s.conclude(message, passed)
 	s.battle.turn += 1
 	s.changed.emit()
 	return "轮到你施展神通。"
@@ -98,11 +100,10 @@ static func _win(s) -> String:
 	s.player.xp += int(enemy.reward_xp)
 	s.player.herbs += int(enemy.reward_herbs)
 	s.battle.clear()
-	s.advance_days(s.content.action_days("battle_victory"))
 	var message: String = s.log_event("battle_victory", {"enemy": enemy_id, "stones": int(enemy.reward_stones), "xp": int(enemy.reward_xp), "herbs": int(enemy.reward_herbs)})
 	# A defeated regional threat changes the world; the journey itself continues.
 	var flag: String = enemy.get("world_flag", "")
 	if not flag.is_empty() and not s.has_flag(flag):
 		s.world.flags[flag] = true
 		message += " " + s.log_event(enemy.flag_event, {}, true)
-	return s.finish(message)
+	return s.conclude(message, s.advance_days(s.content.action_days("battle_victory")))

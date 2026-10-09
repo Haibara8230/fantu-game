@@ -210,20 +210,33 @@ func _render() -> void:
 	_meter(stats, "修为", p.xp, maxi(1, maxi(int(p.xp), int(session.next_breakthrough().get("xp", 0)))), GOLD)
 	stats.add_child(_label("灵石  %d    灵草  %d" % [p.stones, p.herbs], 16))
 	stats.add_child(_label("筑基丹  %d" % p.pills, 16))
+	for item_id: String in p.items:
+		stats.add_child(_label("%s  %d" % [session.content.items[item_id].name, p.items[item_id]], 16))
+	for person_id: String in session.world.people:
+		var person: Dictionary = session.world.people[person_id]
+		if person.met and session.content.people.has(person_id):
+			var known: Dictionary = session.content.people[person_id]
+			stats.add_child(_label("相识 · %s（%s）交情 %d" % [known.name, known.title, person.relation], 14, MUTED))
+	_render_upcoming()
 	stats.add_child(HSeparator.new())
 	stats.add_child(_label("山 川 行 旅", 16, GOLD))
 	travel_buttons.clear()
+	var settled: bool = session.battle.is_empty() and session.pending_event.is_empty() and session.ended.is_empty()
 	for location_id: String in ["sect", "market", "wild"]:
 		var definition: Dictionary = session.content.locations[location_id]
 		var current: bool = p.location == location_id
 		var days: int = session.content.route_days(p.location, location_id)
 		var button := _button(definition.name + ("  ·  当前" if current else "  →"), func() -> void: _run(func() -> String: return session.travel(location_id)), "" if current else "路程 " + Calendar.duration_text(days))
-		button.disabled = current or not session.battle.is_empty()
+		button.disabled = current or not settled
 		stats.add_child(button)
 		travel_buttons[location_id] = button
 	load_button.disabled = not manual_store.has_save()
 	_clear(center)
-	if session.battle.is_empty():
+	if not session.ended.is_empty():
+		_render_ending()
+	elif not session.pending_event.is_empty():
+		_render_event()
+	elif session.battle.is_empty():
 		_render_location()
 	else:
 		_render_battle()
@@ -272,7 +285,10 @@ func _render_location() -> void:
 	center.add_child(grid)
 	match session.player.location:
 		"sect":
-			_action(grid, "闭关修炼  ·  " + _duration("cultivate"), "cultivate", "修为 +18，恢复全部灵力")
+			for days: Variant in session.content.rules.cultivate_options:
+				var span := int(days)
+				var gain := span * int(session.content.rules.cultivate_xp) / Calendar.DAYS_PER_MONTH
+				_timed(grid, "闭关  ·  " + Calendar.duration_text(span), func() -> String: return session.cultivate(span), "修为约 +%d，恢复全部灵力；约定或寿元告急时会提前出关" % gain)
 			_action(grid, "静室休整  ·  " + _duration("rest"), "rest", "恢复全部气血与灵力")
 			_enemy_action(grid, "同门切磋", "disciple", "获胜获得 12 修为与 12 灵石，斗法有受伤风险")
 			_action(grid, "突破境界  ·  " + _duration("breakthrough"), "breakthrough", _breakthrough_tooltip())
@@ -285,12 +301,63 @@ func _render_location() -> void:
 			_enemy_action(grid, "讨伐妖狼", "wolf", "获胜获得 24 灵石、18 修为、2 灵草")
 			var boss_button := _enemy_action(grid, "挑战赤鳞妖蟒", "serpent", "需达到筑基初期；平定后落霞谷重归安宁")
 			boss_button.disabled = int(session.player.realm) < int(session.content.enemies.serpent.min_realm) or session.has_flag("serpent_slain")
+	for days: Variant in session.content.rules.wait_options:
+		var span := int(days)
+		_timed(grid, "停留  ·  " + Calendar.duration_text(span), func() -> String: return session.wait(span), "原地停留，等候时机；约定临近时会提醒")
 	if session.player.location == "sect" and not preview_mode:
 		_sect_choices(center, false)
 	var names: Array[String] = []
 	for id: String in session.active_skills():
 		names.append(session.content.skills[id].name)
 	center.add_child(_paragraph("已习神通 · " + " / ".join(names) + "。悬停神通按钮可查看效果。"))
+
+func _timed(parent: GridContainer, title: String, callback: Callable, tooltip: String) -> void:
+	var button := _button(title, func() -> void: _run(callback), tooltip)
+	button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	parent.add_child(button)
+
+func _render_upcoming() -> void:
+	var soon: Array[Dictionary] = session.upcoming()
+	var lifespan_year := Calendar.year(session.lifespan_end_day())
+	stats.add_child(_label("寿元尽于历元 %d 年" % lifespan_year, 14, MUTED))
+	if soon.is_empty():
+		return
+	stats.add_child(_label("近 期 约 定", 15, GOLD))
+	for entry: Dictionary in soon:
+		var place: String = session.content.locations[entry.location].name
+		var state := "进行中" if int(entry.from) <= int(session.world.day) else "始于 " + Calendar.short_text(int(entry.from))
+		var label := _label("%s · %s\n%s，至 %s" % [entry.title, place, state, Calendar.short_text(int(entry.to))], 14)
+		label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		stats.add_child(label)
+
+func _render_event() -> void:
+	var definition: Dictionary = session.pending_definition()
+	var title_row := HBoxContainer.new()
+	title_row.add_theme_constant_override("separation", 20)
+	center.add_child(title_row)
+	title_row.add_child(_label(definition.title, 30, GOLD))
+	title_row.add_child(_label(session.content.locations[session.player.location].name, 16, MUTED))
+	center.add_child(_paragraph(definition.text, INK))
+	var choices := VBoxContainer.new()
+	choices.add_theme_constant_override("separation", 10)
+	center.add_child(choices)
+	for choice: Dictionary in definition.choices:
+		var choice_id: String = choice.id
+		var button := _button(choice.label, func() -> void: _choose(choice_id), "" if session.choice_available(choice) else "条件不足")
+		button.disabled = not session.choice_available(choice)
+		choices.add_child(button)
+
+func _choose(choice_id: String) -> void:
+	_run(func() -> String: return session.choose_event(choice_id))
+
+func _render_ending() -> void:
+	center.add_child(_label("此 生 已 尽", 30, GOLD))
+	center.add_child(_paragraph("%s，%s，享年 %d 岁。" % [session.player.name, session.realm_name(), session.age()], INK))
+	center.add_child(_label("生 平", 16, GOLD))
+	for entry: Dictionary in session.chronicle.entries:
+		if entry.major:
+			center.add_child(_paragraph("【%s】%s" % [Calendar.short_text(int(entry.day)), session.chronicle.format(entry, session.content)]))
+	center.add_child(_paragraph("可按 F9 读取手动存档，或开启新旅程。", GOLD))
 
 func _action(parent: GridContainer, title: String, action: String, tooltip: String) -> void:
 	var button := _button(title, func() -> void: _run(func() -> String: return session.act(action)), tooltip)

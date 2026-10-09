@@ -93,6 +93,8 @@ func _run() -> void:
 	while main.session.player.herbs < 4:
 		main._run(func() -> String: return main.session.act("gather"))
 	main._run(func() -> String: return main.session.travel("market"))
+	if not main.session.pending_event.is_empty():
+		main._choose("decline")
 	main._run(func() -> String: return main.session.act("sell"))
 	main._run(func() -> String: return main.session.act("buy_pill"))
 	main._run(func() -> String: return main.session.travel("sect"))

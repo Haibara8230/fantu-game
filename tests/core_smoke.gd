@@ -29,6 +29,8 @@ func _initialize() -> void:
 	while game.player.herbs < 4:
 		game.act("gather")
 	game.travel("market")
+	if not game.pending_event.is_empty():
+		game.choose_event("decline")
 	game.act("sell")
 	game.act("buy_pill")
 	check(game.player.pills == 1, "gather-trade-pill economy")

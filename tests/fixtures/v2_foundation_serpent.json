@@ -1,0 +1,311 @@
+{
+	"battle": {},
+	"chronicle": [
+		{
+			"args": {},
+			"day": 0,
+			"id": "start",
+			"major": true
+		},
+		{
+			"args": {
+				"days": 30,
+				"xp": 18
+			},
+			"day": 30,
+			"id": "cultivate",
+			"major": false
+		},
+		{
+			"args": {
+				"days": 30,
+				"xp": 18
+			},
+			"day": 60,
+			"id": "cultivate",
+			"major": false
+		},
+		{
+			"args": {
+				"days": 30,
+				"xp": 18
+			},
+			"day": 90,
+			"id": "cultivate",
+			"major": false
+		},
+		{
+			"args": {
+				"days": 30,
+				"xp": 18
+			},
+			"day": 120,
+			"id": "cultivate",
+			"major": false
+		},
+		{
+			"args": {
+				"days": 30,
+				"xp": 18
+			},
+			"day": 150,
+			"id": "cultivate",
+			"major": false
+		},
+		{
+			"args": {
+				"days": 30,
+				"xp": 18
+			},
+			"day": 180,
+			"id": "cultivate",
+			"major": false
+		},
+		{
+			"args": {
+				"days": 30,
+				"location": "wild"
+			},
+			"day": 210,
+			"id": "travel",
+			"major": false
+		},
+		{
+			"args": {
+				"amount": 4,
+				"days": 30
+			},
+			"day": 240,
+			"id": "gather",
+			"major": false
+		},
+		{
+			"args": {
+				"days": 30,
+				"location": "market"
+			},
+			"day": 270,
+			"id": "travel",
+			"major": false
+		},
+		{
+			"args": {
+				"revenue": 32
+			},
+			"day": 270,
+			"id": "sell",
+			"major": false
+		},
+		{
+			"args": {
+				"price": 60
+			},
+			"day": 270,
+			"id": "buy_pill",
+			"major": false
+		},
+		{
+			"args": {
+				"days": 30,
+				"location": "sect"
+			},
+			"day": 300,
+			"id": "travel",
+			"major": false
+		},
+		{
+			"args": {
+				"days": 90,
+				"realm": 1
+			},
+			"day": 390,
+			"id": "breakthrough",
+			"major": true
+		},
+		{
+			"args": {
+				"days": 30
+			},
+			"day": 420,
+			"id": "rest",
+			"major": false
+		},
+		{
+			"args": {
+				"days": 30,
+				"location": "wild"
+			},
+			"day": 450,
+			"id": "travel",
+			"major": false
+		},
+		{
+			"args": {
+				"enemy": "serpent"
+			},
+			"day": 450,
+			"id": "battle_start",
+			"major": false
+		},
+		{
+			"args": {
+				"amount": 37,
+				"skill": "fire"
+			},
+			"day": 450,
+			"id": "skill_attack",
+			"major": false
+		},
+		{
+			"args": {
+				"amount": 20,
+				"enemy": "serpent"
+			},
+			"day": 450,
+			"id": "enemy_attack",
+			"major": false
+		},
+		{
+			"args": {
+				"amount": 19,
+				"skill": "sword"
+			},
+			"day": 450,
+			"id": "skill_attack",
+			"major": false
+		},
+		{
+			"args": {
+				"amount": 19,
+				"enemy": "serpent"
+			},
+			"day": 450,
+			"id": "enemy_attack",
+			"major": false
+		},
+		{
+			"args": {
+				"amount": 21,
+				"skill": "sword"
+			},
+			"day": 450,
+			"id": "skill_attack",
+			"major": false
+		},
+		{
+			"args": {
+				"amount": 20,
+				"enemy": "serpent"
+			},
+			"day": 450,
+			"id": "enemy_attack",
+			"major": false
+		},
+		{
+			"args": {
+				"amount": 31,
+				"skill": "fire"
+			},
+			"day": 450,
+			"id": "skill_attack",
+			"major": false
+		},
+		{
+			"args": {
+				"amount": 23,
+				"enemy": "serpent"
+			},
+			"day": 450,
+			"id": "enemy_attack",
+			"major": false
+		},
+		{
+			"args": {
+				"amount": 25,
+				"skill": "wood"
+			},
+			"day": 450,
+			"id": "skill_heal",
+			"major": false
+		},
+		{
+			"args": {
+				"amount": 17,
+				"enemy": "serpent"
+			},
+			"day": 450,
+			"id": "enemy_attack",
+			"major": false
+		},
+		{
+			"args": {
+				"amount": 20,
+				"skill": "sword"
+			},
+			"day": 450,
+			"id": "skill_attack",
+			"major": false
+		},
+		{
+			"args": {
+				"amount": 19,
+				"enemy": "serpent"
+			},
+			"day": 450,
+			"id": "enemy_attack",
+			"major": false
+		},
+		{
+			"args": {
+				"amount": 36,
+				"skill": "fire"
+			},
+			"day": 450,
+			"id": "skill_attack",
+			"major": false
+		},
+		{
+			"args": {
+				"enemy": "serpent",
+				"herbs": 5,
+				"stones": 100,
+				"xp": 40
+			},
+			"day": 480,
+			"id": "battle_victory",
+			"major": false
+		},
+		{
+			"args": {},
+			"day": 480,
+			"id": "serpent_slain",
+			"major": true
+		}
+	],
+	"player": {
+		"birth_day": -5760,
+		"herbs": 5,
+		"hp": 47,
+		"location": "wild",
+		"max_hp": 140,
+		"max_qi": 50,
+		"name": "测试修士",
+		"pills": 0,
+		"qi": 12,
+		"realm": 1,
+		"sect": "wanderer",
+		"stones": 102,
+		"xp": 48
+	},
+	"rng": {
+		"combat": "-9104575477565028656",
+		"world": "-1811220126442706882"
+	},
+	"version": 2,
+	"world": {
+		"day": 480,
+		"flags": {
+			"serpent_slain": true
+		}
+	}
+}

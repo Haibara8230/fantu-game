@@ -208,6 +208,9 @@
     "starting_age": 16,
     "starting_stones": 30,
     "cultivate_xp": 18,
+    "lifespan_warning_years": 5,
+    "cultivate_options": [30, 90, 360],
+    "wait_options": [1, 10],
     "pill_price": 60,
     "herb_price": 8,
     "gather_min": 2,
@@ -248,7 +251,20 @@
     "battle_defeat": 30,
     "flee": 30
   },
-  "world_flags": ["serpent_slain"],
+  "world_flags": ["serpent_slain", "heard_auction_rumor"],
+  "people": {
+    "shen_mo": {
+      "name": "沈墨",
+      "title": "云溪药铺掌柜",
+      "home": "market"
+    }
+  },
+  "items": {
+    "auction_invitation": {
+      "name": "云溪请柬",
+      "description": "烫金请柬，凭此可入云溪坊市历元五年春的特殊拍卖。"
+    }
+  },
   "sects": {
     "wanderer": {
       "name": "散修",

@@ -1,0 +1,44 @@
+{
+	"battle": {},
+	"chronicle": [
+		{
+			"args": {},
+			"day": 0,
+			"id": "start",
+			"major": true
+		},
+		{
+			"args": {
+				"days": 30,
+				"location": "market"
+			},
+			"day": 30,
+			"id": "travel",
+			"major": false
+		}
+	],
+	"player": {
+		"birth_day": -5760,
+		"herbs": 0,
+		"hp": 90,
+		"location": "market",
+		"max_hp": 90,
+		"max_qi": 30,
+		"name": "青禾",
+		"pills": 0,
+		"qi": 30,
+		"realm": 0,
+		"sect": "wanderer",
+		"stones": 30,
+		"xp": 0
+	},
+	"rng": {
+		"combat": "-675120422737357875",
+		"world": "2637502522704288600"
+	},
+	"version": 2,
+	"world": {
+		"day": 30,
+		"flags": {}
+	}
+}

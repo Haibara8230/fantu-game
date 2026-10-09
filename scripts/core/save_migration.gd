@@ -1,6 +1,6 @@
 extends RefCounted
 ## Upgrades saved sessions one version at a time. Output still goes through Session validation.
-const CURRENT_VERSION := 2
+const CURRENT_VERSION := 3
 const DAYS_PER_MONTH := 30
 const DAYS_PER_YEAR := 360
 # Version 1 had no ages; every journey began at sixteen on day 0.
@@ -17,6 +17,8 @@ static func migrate(data: Dictionary) -> Dictionary:
 	var result: Dictionary = data.duplicate(true)
 	if int(version) == 1:
 		result = _v1_to_v2(result)
+	if not result.is_empty() and int(result.version) == 2:
+		result = _v2_to_v3(result)
 	return result
 
 static func _v1_to_v2(data: Dictionary) -> Dictionary:
@@ -72,3 +74,19 @@ static func _v1_to_v2(data: Dictionary) -> Dictionary:
 		# The world stream did not exist in version 1; derive it so it differs from combat.
 		"rng": {"combat": combat_state, "world": str(hash(combat_state + ":world"))},
 	}
+
+## Version 3 adds event progress, people, items, per-day cultivation and the pending/ended states.
+static func _v2_to_v3(data: Dictionary) -> Dictionary:
+	var world: Variant = data.get("world")
+	var player: Variant = data.get("player")
+	if not world is Dictionary or not player is Dictionary:
+		return {}
+	world["events"] = {}
+	world["people"] = {}
+	player["items"] = {}
+	player["cultivation_carry"] = 0
+	player["warned_for"] = -1
+	data["pending_event"] = {}
+	data["ended"] = {}
+	data["version"] = 3
+	return data

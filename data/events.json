@@ -1,0 +1,128 @@
+{
+  "meet_shen": {
+    "title": "药铺掌柜",
+    "trigger": "location",
+    "location": "market",
+    "priority": 20,
+    "conditions": [{"not": {"met": "shen_mo"}}],
+    "effects": [{"meet": "shen_mo"}],
+    "chronicle": "你在云溪药铺结识掌柜沈墨。他收灵草出价公道，也乐于打听各路消息。"
+  },
+  "shen_request": {
+    "title": "沈墨的托付",
+    "trigger": "location",
+    "location": "market",
+    "priority": 10,
+    "repeat": {"cooldown_days": 90},
+    "conditions": [{"met": "shen_mo"}, {"herbs_at_least": 5}],
+    "text": "沈墨拨着算盘，抬眼看你：“近来药铺缺货，道友若有五株灵草，我按五十灵石收，比市价高些，也算交个朋友。”",
+    "choices": [
+      {
+        "id": "give",
+        "label": "交出五株灵草（灵石 +50）",
+        "conditions": [{"herbs_at_least": 5}],
+        "effects": [{"herbs": -5}, {"stones": 50}, {"relation": ["shen_mo", 1]}],
+        "chronicle": "你交给沈墨五株灵草，得灵石五十，彼此更熟络了些。"
+      },
+      {
+        "id": "decline",
+        "label": "婉拒",
+        "chronicle": "你婉拒了沈墨的托付。"
+      }
+    ]
+  },
+  "auction_rumor": {
+    "title": "坊间传言",
+    "trigger": "location",
+    "location": "market",
+    "priority": 5,
+    "window": {"from": [4, 1, 1], "to": [5, 4, 30]},
+    "conditions": [{"not": {"flag": "heard_auction_rumor"}}],
+    "effects": [{"flag": "heard_auction_rumor"}],
+    "chronicle": "坊间传言：明年三四月间，云溪坊市将有一场不对外的拍卖，须持请柬，或经熟人引荐方可入场。"
+  },
+  "sect_invitation": {
+    "title": "宗门请柬",
+    "trigger": "location",
+    "location": "sect",
+    "priority": 10,
+    "window": {"from": [4, 1, 1], "to": [5, 2, 30]},
+    "conditions": [{"realm_at_least": 1}],
+    "effects": [{"item": ["auction_invitation", 1]}],
+    "chronicle": "执事将一封烫金请柬交到你手中：云溪坊市来年春日有一场特殊拍卖，宗门为筑基弟子各留一席。"
+  },
+  "special_auction": {
+    "title": "云溪特殊拍卖",
+    "trigger": "location",
+    "location": "market",
+    "priority": 30,
+    "key": true,
+    "window": {"from": [5, 3, 1], "to": [5, 4, 30]},
+    "conditions": [
+      {"any": [
+        {"all": [{"realm_at_least": 1}, {"item_at_least": ["auction_invitation", 1]}]},
+        {"relation_at_least": ["shen_mo", 2]}
+      ]}
+    ],
+    "effects": [{"take_item": "auction_invitation"}],
+    "text": "朱漆小楼里灯火通明，来客皆以帷帽遮面。今日压轴的是一株百年灵芝，另有几枚成色上佳的筑基丹。",
+    "choices": [
+      {
+        "id": "ganoderma",
+        "label": "竞拍百年灵芝（120 灵石，修为 +60）",
+        "conditions": [{"stones_at_least": 120}],
+        "effects": [{"stones": -120}, {"xp": 60}],
+        "chronicle": "你在云溪特殊拍卖中拍得百年灵芝，炼化后修为大进。"
+      },
+      {
+        "id": "pill",
+        "label": "竞拍筑基丹（45 灵石）",
+        "conditions": [{"stones_at_least": 45}],
+        "effects": [{"stones": -45}, {"pills": 1}],
+        "chronicle": "你在云溪特殊拍卖中以四十五灵石拍得一枚筑基丹。"
+      },
+      {
+        "id": "watch",
+        "label": "只看不买",
+        "chronicle": "你在云溪特殊拍卖中旁观了一场，见识了各方修士的手笔。"
+      }
+    ],
+    "remind": {
+      "conditions": [{"any": [{"flag": "heard_auction_rumor"}, {"item_at_least": ["auction_invitation", 1]}]}],
+      "chronicle": "云溪坊市的特殊拍卖已经开场，至四月末为止。"
+    },
+    "expire": {
+      "conditions": [{"any": [{"flag": "heard_auction_rumor"}, {"item_at_least": ["auction_invitation", 1]}]}],
+      "chronicle": "云溪特殊拍卖已经落幕。听说那株百年灵芝被一位外来散修高价拍走。"
+    }
+  },
+  "night_market": {
+    "title": "云溪夜市",
+    "trigger": "location",
+    "location": "market",
+    "priority": 15,
+    "periodic": {"start_year": 3, "every_years": 3, "month": 9, "from_day": 1, "to_day": 10},
+    "text": "三年一度的云溪夜市开张，长街挂满灯笼，散修们把压箱底的丹药都摆了出来。",
+    "choices": [
+      {
+        "id": "pill",
+        "label": "购入折价筑基丹（40 灵石）",
+        "conditions": [{"stones_at_least": 40}],
+        "effects": [{"stones": -40}, {"pills": 1}],
+        "chronicle": "你在云溪夜市以四十灵石购得一枚折价筑基丹。"
+      },
+      {
+        "id": "stroll",
+        "label": "随意逛逛",
+        "chronicle": "你在云溪夜市闲逛半夜，看尽灯火。"
+      }
+    ]
+  },
+  "sect_tournament": {
+    "title": "外门小比",
+    "trigger": "date",
+    "priority": 5,
+    "periodic": {"start_year": 10, "every_years": 10, "month": 6, "from_day": 1, "to_day": 1},
+    "chronicle": "青云剑宗外门小比如期举行，胜者得入内门观经。"
+  }
+}

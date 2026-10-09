@@ -18,5 +18,8 @@
   "battle_victory": "斗法获胜，获得 {stones} 灵石、{xp} 修为、{herbs} 灵草。",
   "battle_defeat": "斗法落败，被救回青云山。损失 {lost} 灵石，静养后可再出发。",
   "flee": "收起神通，撤出斗法。修为与物品保留，耗时 {duration}。",
-  "serpent_slain": "赤鳞妖蟒伏诛，落霞谷灵泉重现。山中消息渐渐传开，世事仍在流转。"
+  "serpent_slain": "赤鳞妖蟒伏诛，落霞谷灵泉重现。山中消息渐渐传开，世事仍在流转。",
+  "wait": "在{location_name}停留 {duration}。",
+  "lifespan_warning": "寿元将尽：你只余 {years} 年光阴。",
+  "lifespan_end": "寿元耗尽，你坐化于{location_name}，享年 {age} 岁。"
 }

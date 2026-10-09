@@ -39,7 +39,7 @@ func _trim() -> void:
 	entries = kept
 
 func format(entry: Dictionary, content) -> String:
-	var template: String = str(content.chronicle.get(entry.id, "（失传的记载）"))
+	var template: String = _event_text(entry.args, content) if entry.id == "event" else str(content.chronicle.get(entry.id, "（失传的记载）"))
 	var values: Dictionary = entry.args.duplicate()
 	for key: String in NAMED_ARGS:
 		if values.has(key):
@@ -51,6 +51,24 @@ func format(entry: Dictionary, content) -> String:
 	if values.has("days"):
 		values["duration"] = Calendar.duration_text(int(values.days))
 	return template.format(values)
+
+## Event records point into data/events.json: the event's own text, a choice, a reminder or an expiry.
+static func _event_text(args: Dictionary, content) -> String:
+	var definition: Variant = content.events.get(args.get("event", ""))
+	if not definition is Dictionary:
+		return "（失传的记载）"
+	match str(args.get("part", "chronicle")):
+		"choice":
+			for choice: Dictionary in definition.get("choices", []):
+				if choice.id == args.get("choice", ""):
+					return choice.chronicle
+		"remind":
+			return definition.get("remind", {}).get("chronicle", "（失传的记载）")
+		"expire":
+			return definition.get("expire", {}).get("chronicle", "（失传的记载）")
+		"chronicle":
+			return definition.get("chronicle", "（失传的记载）")
+	return "（失传的记载）"
 
 func lines(content, limit: int = RECENT_LIMIT) -> Array[String]:
 	var result: Array[String] = []
