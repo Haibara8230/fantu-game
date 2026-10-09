@@ -1,0 +1,30 @@
+{
+  "count": 24,
+  "surnames": ["林", "苏", "陆", "叶", "秦", "顾", "萧", "许", "韩", "江", "温", "宋", "程", "白", "方", "孟", "唐", "罗", "魏", "严", "楚", "沈", "谢", "柳", "吕", "崔", "邵", "范", "章", "褚"],
+  "given": ["青", "远", "清", "岚", "舟", "松", "竹", "云", "川", "晚", "照", "璃", "衡", "砚", "墨", "朔", "澄", "迟", "离", "安", "若", "宁", "初", "霁", "临", "鹤", "棠", "蘅", "琢", "微"],
+  "personalities": {
+    "豪爽": ["“道友若有难处，只管开口！”", "“修行哪来那么多弯弯绕绕，打一场就知道了。”"],
+    "谨慎": ["“落霞谷那边，没把握最好别去。”", "“灵石要省着花，谁知道明天会出什么事。”"],
+    "孤傲": ["“……有事？”", "“我修我的道，与旁人何干。”"],
+    "温和": ["“今日天气不错，适合打坐。”", "“道友修行辛苦，多保重。”"],
+    "好胜": ["“听说你也在修行？改日切磋切磋。”", "“下次外门小比，我定要夺魁。”"],
+    "多疑": ["“你打听这些做什么？”", "“坊市里的人，十个有九个不可信。”"],
+    "健谈": ["“你知道吗？听说青石镇的说书先生年轻时也是修士。”", "“白鹭渡的老艄公认得好多人，你去问问。”"],
+    "沉稳": ["“急不得，修行最忌心浮气躁。”", "“一步一步来。”"]
+  },
+  "kinds": {
+    "disciple": {"title": "青云外门弟子", "affiliation": "qingyun", "weight": 6, "home": ["sect"], "attitude": "friendly"},
+    "wanderer": {"title": "散修", "affiliation": "wanderer", "weight": 8, "schedule": ["town", "ferry", "market", "ridge", "wild"], "attitude": "neutral"},
+    "trader": {"title": "坊市修士", "affiliation": "wanderer", "weight": 4, "home": ["market"], "attitude": "friendly"},
+    "gatherer": {"title": "采药人", "affiliation": "wanderer", "weight": 4, "schedule": ["ridge", "wild", "town"], "attitude": "friendly"},
+    "visitor": {"title": "游方修士", "affiliation": "chixiao", "weight": 2, "schedule": ["ferry", "market", "town"], "attitude": "neutral"}
+  },
+  "realms": [
+    {"realm": 0, "stage": 0, "weight": 25, "tiers": [1, 1]},
+    {"realm": 0, "stage": 1, "weight": 30, "tiers": [1, 2]},
+    {"realm": 0, "stage": 2, "weight": 25, "tiers": [1, 2]},
+    {"realm": 0, "stage": 3, "weight": 12, "tiers": [2, 2]},
+    {"realm": 1, "stage": 0, "weight": 8, "tiers": [2, 3]}
+  ],
+  "age": [18, 70]
+}

@@ -13,6 +13,7 @@
       "map": [0.24, 0.24],
       "spots": [
         {"id": "chamber", "name": "静室", "description": "外门弟子的静修之所，灵气清润，可闭关、休整与突破。", "actions": ["cultivate", "rest", "breakthrough"]},
+        {"id": "office", "name": "执事堂", "description": "执事们在这里张贴宗门的委托，按时完成可得酬劳。", "actions": ["commissions"]},
         {"id": "arena", "name": "演武坪", "description": "青石铺就的演武坪，同门常在此切磋。", "actions": ["battle:disciple"]},
         {"id": "hall", "name": "传功堂", "description": "堂中供着各派传承玉简，可择一研习；执事也传授几门入门功法，参悟需要时日。", "actions": ["study", "teach"], "teach": ["t:breath:wood:1::0", "t:body:earth:1::5", "t:focus:water:1::10", "t:bolt:metal:1::15"]}
       ]
@@ -25,7 +26,7 @@
       "map": [0.4, 0.42],
       "spots": [
         {"id": "inn", "name": "青石客栈", "description": "掌柜识得修士，备有净室与药膳。花几块灵石便能好好歇上一日。", "actions": ["inn_rest"]},
-        {"id": "teahouse", "name": "听雨茶馆", "description": "说书先生醒木一拍，南来北往的消息都汇在这里。", "actions": []}
+        {"id": "teahouse", "name": "听雨茶馆", "description": "说书先生醒木一拍，南来北往的消息都汇在这里。", "actions": ["inquire"]}
       ]
     },
     "ferry": {
@@ -35,7 +36,7 @@
       "terrain": "ferry",
       "map": [0.6, 0.5],
       "spots": [
-        {"id": "dock", "name": "渡口", "description": "老艄公撑着竹篙，等客满便开船。", "actions": []}
+        {"id": "dock", "name": "渡口", "description": "老艄公撑着竹篙，等客满便开船。等船的人最爱闲聊。", "actions": ["inquire"]}
       ]
     },
     "market": {
@@ -60,7 +61,7 @@
         ]
       },
       "spots": [
-        {"id": "street", "name": "长街", "description": "丹铺、器铺与散修地摊挤满长街。丹铺明码标价。", "actions": ["shop"]},
+        {"id": "street", "name": "长街", "description": "丹铺、器铺与散修地摊挤满长街。丹铺明码标价。", "actions": ["shop", "inquire", "commissions"]},
         {"id": "pharmacy", "name": "云溪药铺", "description": "沈墨的药铺，收购各色灵草，出价公道。", "actions": ["sell"]}
       ]
     },
@@ -80,6 +81,7 @@
       "subtitle": "机缘藏于险处。",
       "description": "谷中灵草繁盛，也有妖兽出没。深处的赤鳞妖蟒守着一处灵泉，筑基后方可挑战。",
       "terrain": "valley",
+      "sealed_if": "serpent_rampage",
       "map": [0.44, 0.8],
       "gather": {"picks": [1, 3], "table": [{"item": "huichun_grass", "weight": 60}, {"item": "chiyan_flower", "weight": 35}, {"item": "lingzhi", "weight": 2}]},
       "spots": [
@@ -318,6 +320,17 @@
       "sect": "chixiao",
       "drops": {"chance": 0.5, "tiers": [1, 2]}
     },
+    "cultivator": {
+      "name": "修士",
+      "hp": 90,
+      "damage_min": 8,
+      "damage_max": 12,
+      "reward_stones": 0,
+      "reward_xp": 10,
+      "reward_herbs": 0,
+      "min_realm": 0,
+      "human": true
+    },
     "ruin_rogue": {
       "name": "占据洞府的散修",
       "hp": 95,
@@ -357,6 +370,7 @@
     "cultivate_options": [30, 90, 360],
     "wait_options": [1, 10],
     "inn_price": 5,
+    "inquire": {"days": 1, "price": 2, "repeat_after_days": 90},
     "encounter_chance": [0.08, 0.18, 0.3, 0.42],
     "ruin_search": {"stones": [10, 30], "herbs": [1, 3], "pill_chance": 0.1, "manual_chance": 0.15, "manual_tiers": [2, 2]},
     "action_cooldowns": {"search_ruin": 90}
@@ -410,7 +424,7 @@
     "search_ruin": 5,
     "road_recovery": 1
   },
-  "world_flags": ["serpent_slain", "heard_auction_rumor", "found_ruin", "ruin_cleared", "helped_wanderer"],
+  "world_flags": ["serpent_slain", "heard_auction_rumor", "found_ruin", "ruin_cleared", "helped_wanderer", "serpent_rampage"],
   "sects": {
     "wanderer": {
       "name": "散修",

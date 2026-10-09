@@ -52,6 +52,12 @@ func _run() -> void:
 	_button("传功堂").pressed.emit()
 	check(_texts(main.center, "Label").contains("研习传承") and _button("闭关  ·  1 个月") == null, "scene switch shows only that scene's actions")
 	check(_button("参悟吐纳法") != null or _button("参悟") != null, "the hall offers techniques to study")
+	_button("执事堂").pressed.emit()
+	check(_button("接下：") != null, "the 执事堂 board lists commissions")
+	var disciple: String = main.session.present_npcs().filter(func(person_id: String) -> bool: return person_id.begins_with("g:"))[0]
+	main._open_person(disciple)
+	check(_texts(main.center, "Label").contains("神通 ·") and _button("切磋") != null, "a generated disciple shows a loadout and can spar")
+	main._close_person()
 	main._set_view("arts")
 	await _capture("arts")
 	var arts_text := _texts(main.center, "Label")

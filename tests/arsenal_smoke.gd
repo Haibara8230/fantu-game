@@ -282,5 +282,5 @@ func _static_checks() -> void:
 	check(_broken(func(c) -> void: c.vfx_tiers[2].rings = 1).contains("没有高于上一阶"), "a tier whose effects do not rise is reported")
 	check(_broken(func(c) -> void: c.technique_data.archetypes.bolt.vfx.fire = "meteor").contains("缺少特效"), "an art without a known effect is reported")
 	check(_broken(func(c) -> void: c.technique_data.tiers[3].power = 1.2).contains("品阶配置错误"), "tiers must grow in power")
-	check(_broken(func(c) -> void: c.locations.sect.spots[2].teach.append("t:comet:fire:1::0")).contains("无效的功法"), "teaching an invalid technique is reported")
+	check(_broken(func(c) -> void: c.locations.sect.spots.filter(func(spot: Dictionary) -> bool: return spot.id == "hall")[0].teach.append("t:comet:fire:1::0")).contains("无效的功法"), "teaching an invalid technique is reported")
 	check(_broken(func(c) -> void: c.enemies.rogue.drops = {"chance": 0.5}).contains("掉落配置"), "malformed drops reported")

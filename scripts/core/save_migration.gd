@@ -1,6 +1,6 @@
 extends RefCounted
 ## Upgrades saved sessions one version at a time. Output still goes through Session validation.
-const CURRENT_VERSION := 8
+const CURRENT_VERSION := 9
 const DAYS_PER_MONTH := 30
 const DAYS_PER_YEAR := 360
 # Version 1 had no ages; every journey began at sixteen on day 0.
@@ -29,6 +29,8 @@ static func migrate(data: Dictionary) -> Dictionary:
 		result = _v6_to_v7(result)
 	if not result.is_empty() and int(result.version) == 7:
 		result = _v7_to_v8(result)
+	if not result.is_empty() and int(result.version) == 8:
+		result = _v8_to_v9(result)
 	return result
 
 static func _v1_to_v2(data: Dictionary) -> Dictionary:
@@ -177,4 +179,16 @@ static func _v7_to_v8(data: Dictionary) -> Dictionary:
 	world["seed"] = absi(hash(str(player.get("name", ""))))
 	world["stock_sold"] = {}
 	data["version"] = 8
+	return data
+
+## Version 9 adds commissions and rumors.
+static func _v8_to_v9(data: Dictionary) -> Dictionary:
+	var player: Variant = data.get("player")
+	var world: Variant = data.get("world")
+	if not player is Dictionary or not world is Dictionary:
+		return {}
+	player["quests"] = []
+	world["rumors"] = {}
+	world["quests_taken"] = {}
+	data["version"] = 9
 	return data

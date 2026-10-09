@@ -233,5 +233,44 @@
       {"id": "fight", "label": "踏入石门", "effects": [{"battle": "ruin_rogue"}], "chronicle": "你踏入石门，与占据洞府的散修斗法。"},
       {"id": "leave", "label": "暂且退走", "chronicle": "你没有贸然闯入古修洞府。"}
     ]
+  },
+  "serpent_rampage": {
+    "title": "妖蟒之乱",
+    "trigger": "date",
+    "window": {"from": [6, 3, 1], "to": [6, 3, 1]},
+    "major": true,
+    "conditions": [{"not": {"flag": "serpent_slain"}}],
+    "effects": [{"flag": "serpent_rampage"}],
+    "chronicle": "赤鳞妖蟒冲出灵泉，落霞谷妖气弥漫，青云剑宗下令封谷。"
+  },
+  "serpent_averted": {
+    "title": "落霞谷安然",
+    "trigger": "date",
+    "window": {"from": [6, 3, 1], "to": [6, 3, 1]},
+    "major": true,
+    "conditions": [{"flag": "serpent_slain"}],
+    "effects": [{"relation": ["shen_mo", 10]}],
+    "chronicle": "历元六年春，人们本以为妖蟒将出谷作乱，落霞谷却安然无恙。坊间传开了是谁早早除了这一害。"
+  },
+  "serpent_rampage_ends": {
+    "title": "长老出手",
+    "trigger": "date",
+    "window": {"from": [9, 3, 1], "to": [9, 3, 1]},
+    "major": true,
+    "conditions": [{"flag": "serpent_rampage"}],
+    "effects": [{"clear_flag": "serpent_rampage"}, {"flag": "serpent_slain"}],
+    "chronicle": "封谷三年后，青云剑宗长老出手斩杀赤鳞妖蟒，落霞谷重新开放。"
+  },
+  "tournament_entry": {
+    "title": "外门小比",
+    "trigger": "location",
+    "location": "sect",
+    "priority": 25,
+    "periodic": {"start_year": 10, "every_years": 10, "month": 6, "from_day": 1, "to_day": 15},
+    "text": "演武坪上旌旗招展，十年一度的外门小比开始报名。三轮斗法，点到为止，头名可得宗门赏赐的功法玉简。",
+    "choices": [
+      {"id": "enter", "label": "报名参赛", "effects": [{"tournament": true}], "chronicle": "你报名参加了外门小比。"},
+      {"id": "watch", "label": "在台下观战", "chronicle": "你在台下观看了这一届外门小比。"}
+    ]
   }
 }

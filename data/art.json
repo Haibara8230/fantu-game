@@ -61,6 +61,21 @@
       "faces_right": true,
       "height_ratio": 0.85
     },
+    "cultivator": {
+      "texture": "res://assets/art/rival_atlas_v2.png",
+      "columns": 3,
+      "rows": 2,
+      "frames": {
+        "idle": 0,
+        "prepare": 1,
+        "attack": 2,
+        "cast": 3,
+        "hit": 4,
+        "guard": 5
+      },
+      "faces_right": true,
+      "height_ratio": 0.85
+    },
     "wolf": {
       "texture": "res://assets/art/beasts_atlas_v1.png",
       "columns": 2,

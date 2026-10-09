@@ -182,13 +182,24 @@ func _comparable(game: Session) -> Dictionary:
 	return data
 
 func _equivalence() -> void:
+	# Equivalence holds for spans without player choices: cultivate before the first tournament, and
+	# let the world run for ten years at a place without choice events.
 	var once := _game(11)
 	var pieces := _game(11)
-	once.cultivate(3600)
-	for i: int in range(120):
+	once.cultivate(2160)
+	for i: int in range(72):
 		pieces.cultivate(30)
-	check(_comparable(once) == _comparable(pieces), "one ten-year retreat equals 120 one-month retreats")
-	check(int(once.world.events.sect_tournament.count) == 1 and _state(once, "special_auction") == "expired", "both spans processed the same world events")
+	check(_comparable(once) == _comparable(pieces), "one six-year retreat equals 72 one-month retreats")
+	check(once.has_flag("serpent_rampage") and _state(once, "special_auction") == "expired", "both spans processed the same world events")
+	var town_once := _game(13)
+	var town_pieces := _game(13)
+	for game: Session in [town_once, town_pieces]:
+		game.travel("town")
+	town_once.wait(3600)
+	for i: int in range(120):
+		town_pieces.wait(30)
+	check(_comparable(town_once) == _comparable(town_pieces), "ten years at once equals ten years month by month")
+	check(int(town_once.world.events.sect_tournament.count) == 1 and town_once.has_flag("serpent_slain") and not town_once.has_flag("serpent_rampage"), "the tournament and the whole serpent rampage happen in both")
 
 func _long_simulation() -> void:
 	var whole := _game(12)
@@ -196,13 +207,14 @@ func _long_simulation() -> void:
 	for game: Session in [whole, chunked]:
 		for realm: Dictionary in game.content.realms:
 			realm.lifespan_years = 2000
+		game.travel("town")
 	var started := Time.get_ticks_msec()
-	while int(whole.world.day) < 500 * 360:
+	while int(whole.world.day) < 500 * 360 and whole.pending_event.is_empty():
 		whole.wait(mini(3600, 500 * 360 - int(whole.world.day)))
 	var whole_msec := Time.get_ticks_msec() - started
 	started = Time.get_ticks_msec()
-	while int(chunked.world.day) < 500 * 360:
-		chunked.wait(30)
+	while int(chunked.world.day) < 500 * 360 and chunked.pending_event.is_empty():
+		chunked.wait(mini(30, 500 * 360 - int(chunked.world.day)))
 	var chunked_msec := Time.get_ticks_msec() - started
 	check(_comparable(whole) == _comparable(chunked), "500 years in long spans equals 500 years month by month")
 	check(int(whole.world.events.sect_tournament.count) == 50, "fifty tournaments in five centuries")

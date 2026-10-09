@@ -60,6 +60,8 @@ func format(entry: Dictionary, content) -> String:
 		if values.has(key):
 			var t: Dictionary = content.technique(str(values[key]))
 			values[key + "_name"] = t.name if not t.is_empty() else str(values[key])
+	if values.has("board") and content.commission_data.boards.has(values.board):
+		values["board_name"] = content.commission_data.boards[values.board].name
 	if values.has("item"):
 		var named: Dictionary = content.item(str(values.item))
 		values["item_name"] = named.name if not named.is_empty() else str(values.item)

@@ -6,6 +6,7 @@ const Chronicle = preload("res://scripts/core/chronicle.gd")
 const Combat = preload("res://scripts/core/combat.gd")
 const Events = preload("res://scripts/core/events.gd")
 const Arsenal = preload("res://scripts/core/arsenal.gd")
+const Population = preload("res://scripts/core/population.gd")
 const SaveMigration = preload("res://scripts/core/save_migration.gd")
 const SAVE_VERSION := SaveMigration.CURRENT_VERSION
 const PLAYER_COUNTS := ["realm", "xp", "hp", "qi", "stones", "cultivation_carry"]
@@ -31,6 +32,8 @@ var ended: Dictionary = {}
 var encounters_enabled := true
 # The person whose interaction is being applied, for effects such as "leave".
 var acting_npc := ""
+# Who can ever be found where (homes and schedule stops); rebuilt when the population changes.
+var _people_at := {}
 var chronicle = Chronicle.new()
 # Ephemeral presentation events; not part of the save format.
 var combat_events: Array[Dictionary] = []
@@ -50,14 +53,15 @@ func new_game(character_name: String = "无名", seed_value: int = -1, roots: Ar
 	var chosen_name := character_name.strip_edges().left(16)
 	if chosen_name.is_empty():
 		chosen_name = "无名"
-	world = {"day": 0, "flags": {}, "events": {}, "people": {}, "seed": seed_value if seed_value >= 0 else absi(int(world_rng.randi())), "stock_sold": {}}
+	world = {"day": 0, "flags": {}, "events": {}, "people": {}, "seed": seed_value if seed_value >= 0 else absi(int(world_rng.randi())), "stock_sold": {}, "rumors": {}, "quests_taken": {}}
+	populate()
 	player = {
 		"name": chosen_name, "birth_day": -int(content.rules.starting_age) * Calendar.DAYS_PER_YEAR,
 		"realm": 0, "stage": 0, "xp": 0, "hp": 0, "qi": 0, "cultivation_carry": 0, "warned_for": -1, "roots": roots.duplicate(),
 		"stones": int(content.rules.starting_stones), "items": {},
 		"journey": {}, "cooldowns": {},
 		"location": "sect", "sect": "wanderer",
-		"learned": [], "arts": [], "methods": [], "equipment": {"weapon": "", "robe": "", "accessory": ""}
+		"learned": [], "arts": [], "methods": [], "equipment": {"weapon": "", "robe": "", "accessory": ""}, "quests": []
 	}
 	for skill_id: String in content.sects.wanderer.skills:
 		player.learned.append(skill_id)
@@ -107,6 +111,7 @@ func advance_days(days: int, interruptible: bool = false) -> Dictionary:
 func conclude(text: String, passed: Dictionary = {}) -> String:
 	var parts: Array[String] = [text]
 	parts.append_array(passed.get("messages", []))
+	parts.append_array(_expire_quests())
 	parts.append_array(Events.check_location(self))
 	changed.emit()
 	return " ".join(parts.filter(func(part: String) -> bool: return not part.is_empty()))
@@ -349,9 +354,11 @@ func wait(days: int) -> String:
 		return blocked
 	if days < 1 or days > MAX_SPAN_DAYS:
 		return "停留天数不合常理。"
+	var start := int(world.day)
 	var passed := advance_days(days, true)
 	if not ended.is_empty():
 		return conclude("", passed)
+	meet_during(start + 1, int(world.day))
 	return conclude(log_event("wait", {"days": passed.elapsed, "location": player.location}), passed)
 
 ## Days of quiet rest needed to recover fully: proportional to the missing health, at least one.
@@ -683,15 +690,228 @@ func rotating_stock(location_id: String) -> Array[Dictionary]:
 				goods.append({"item": item_id, "price": int(content.item(item_id).price) * 2, "key": key})
 	return goods
 
+# --- Commissions -----------------------------------------------------------------------
+# Boards post a few offers per period (deterministic per world, board and period). Accepted ones live
+# in player.quests with a deadline; world.quests_taken keeps an offer from being posted twice.
+
+func board_here() -> String:
+	if not available_here("commissions"):
+		return ""
+	for board: String in content.commission_data.boards:
+		if content.commission_data.boards[board].location == player.location:
+			return board
+	return ""
+
+func commission_offers(board: String) -> Array[Dictionary]:
+	var offers: Array[Dictionary] = []
+	var data: Dictionary = content.commission_data
+	var period := int(world.day) / int(data.period_days)
+	var rng := RandomNumberGenerator.new()
+	rng.seed = hash([int(world.get("seed", 0)), "commission", board, period])
+	var kinds: Array = data.templates.keys().filter(func(kind: String) -> bool: return board in data.templates[kind].boards)
+	kinds.sort()
+	var total := 0
+	for kind: String in kinds:
+		total += int(data.templates[kind].weight)
+	for index: int in int(data.offers):
+		var roll := rng.randi_range(1, total)
+		var kind: String = kinds[0]
+		for candidate: String in kinds:
+			roll -= int(data.templates[candidate].weight)
+			if roll <= 0:
+				kind = candidate
+				break
+		var template: Dictionary = data.templates[kind]
+		var offer := {"key": "%s:%d:%d" % [board, period, index], "kind": kind, "board": board, "count": rng.randi_range(int(template.count[0]), int(template.count[1])), "days": int(template.days)}
+		if template.has("items"):
+			offer.item = template.items[rng.randi_range(0, template.items.size() - 1)]
+			offer.reward = {"stones": int(round(float(content.item(offer.item).price) * float(offer.count) * float(template.reward_scale))), "xp": 0}
+		else:
+			offer.enemy = template.enemies[rng.randi_range(0, template.enemies.size() - 1)]
+			offer.reward = {"stones": int(template.reward_stones) * int(offer.count), "xp": int(template.reward_xp) * int(offer.count)}
+		if not world.quests_taken.has(offer.key):
+			offers.append(offer)
+	return offers
+
+## Title and description of an offer or an accepted commission.
+func commission_text(quest: Dictionary) -> Dictionary:
+	var template: Dictionary = content.commission_data.templates[quest.kind]
+	var values := {"count": quest.count, "days": quest.days, "board_name": content.commission_data.boards[quest.board].name}
+	if quest.has("item"):
+		values.item_name = content.item(quest.item).name
+	if quest.has("enemy"):
+		values.enemy_name = content.enemies[quest.enemy].name
+	return {"title": str(template.title).format(values), "text": str(template.text).format(values)}
+
+func accept_commission(key: String) -> String:
+	var blocked := _blocked()
+	if not blocked.is_empty():
+		return blocked
+	var board := board_here()
+	if board.is_empty():
+		return "此地没有委托告示。"
+	if player.quests.size() >= int(content.commission_data.max_active):
+		return "手头的委托已经够多了。"
+	for offer: Dictionary in commission_offers(board):
+		if offer.key == key:
+			var quest := offer.duplicate(true)
+			quest.deadline = int(world.day) + int(offer.days)
+			quest.progress = 0
+			player.quests.append(quest)
+			world.quests_taken[key] = true
+			return conclude(log_event("quest_accept", {"quest_title": commission_text(quest).title}))
+	return "这张委托已经不在了。"
+
+## Why a commission cannot be handed in here and now, or "".
+func delivery_block(quest: Dictionary) -> String:
+	var blocked := _blocked()
+	if not blocked.is_empty():
+		return blocked
+	if board_here() != quest.board:
+		return "须回%s交付。" % content.commission_data.boards[quest.board].name
+	if quest.has("item") and item_count(quest.item) < int(quest.count):
+		return "%s还不够 %d。" % [content.item(quest.item).name, int(quest.count)]
+	if quest.has("enemy") and int(quest.progress) < int(quest.count):
+		return "还差 %d 头。" % (int(quest.count) - int(quest.progress))
+	return ""
+
+func deliver_commission(key: String) -> String:
+	for quest: Dictionary in player.quests:
+		if quest.key != key:
+			continue
+		var reason := delivery_block(quest)
+		if not reason.is_empty():
+			return reason
+		if quest.has("item"):
+			remove_item(quest.item, int(quest.count))
+		player.quests.erase(quest)
+		player.stones += int(quest.reward.stones)
+		player.xp += int(quest.reward.xp)
+		var text := log_event("quest_done", {"quest_title": commission_text(quest).title, "stones": int(quest.reward.stones), "xp": int(quest.reward.xp)})
+		var milestones := settle_stage()
+		if not milestones.is_empty():
+			text += " " + " ".join(milestones)
+		return conclude(text)
+	return "没有这件委托。"
+
+## Counts a defeated enemy toward hunting commissions.
+func record_kill(enemy_id: String) -> void:
+	for quest: Dictionary in player.get("quests", []):
+		if quest.get("enemy", "") == enemy_id and int(quest.progress) < int(quest.count):
+			quest.progress = int(quest.progress) + 1
+
+func _expire_quests() -> Array[String]:
+	var texts: Array[String] = []
+	for quest: Dictionary in player.get("quests", []).duplicate():
+		if int(world.day) > int(quest.deadline):
+			player.quests.erase(quest)
+			texts.append(log_event("quest_expired", {"quest_title": commission_text(quest).title}))
+	return texts
+
+# --- Rumors ----------------------------------------------------------------------------
+# Inquiring at a teahouse, dock or street costs a day and a little money and yields one piece of news
+# drawn from the actual state of the world. world.rumors remembers when each was heard, so the same
+# news is not repeated for a while.
+
+## Everything worth hearing right now: [{"key", "id", "args"}], sorted by key.
+func rumor_candidates() -> Array[Dictionary]:
+	var found: Array[Dictionary] = []
+	var day := int(world.day)
+	var auction_from := Calendar.to_day(4, 1, 1)
+	var auction_to := Calendar.to_day(5, 4, 30)
+	if day >= auction_from and day <= auction_to and not has_flag("heard_auction_rumor"):
+		found.append({"key": "auction", "id": "rumor_auction", "args": {}})
+	if not has_flag("found_ruin"):
+		found.append({"key": "ruin", "id": "rumor_ruin", "args": {}})
+	if has_flag("serpent_rampage"):
+		found.append({"key": "sealed", "id": "rumor_sealed", "args": {}})
+	elif not has_flag("serpent_slain") and day < Calendar.to_day(6, 3, 1):
+		found.append({"key": "serpent", "id": "rumor_serpent", "args": {}})
+	var tournament: Dictionary = Events.next_window(content.events.sect_tournament, day)
+	if not tournament.is_empty() and int(tournament.from) - day <= 2 * Calendar.DAYS_PER_YEAR:
+		found.append({"key": "tournament:%d" % int(tournament.occurrence), "id": "rumor_tournament", "args": {}})
+	for good: Dictionary in rotating_stock("market"):
+		if str(good.item).begins_with("j:"):
+			found.append({"key": "stock:" + str(good.key), "id": "rumor_stock", "args": {"item": good.item}})
+	for board: String in content.commission_data.boards:
+		if not commission_offers(board).is_empty():
+			found.append({"key": "commission:%s:%d" % [board, day / int(content.commission_data.period_days)], "id": "rumor_commission", "args": {"board": board}})
+	for person_id: String in content.people:
+		var where := npc_location(person_id)
+		if where.is_empty() or bool(world.people.get(person_id, {}).get("met", false)):
+			continue
+		found.append({"key": "person:%s:%s" % [person_id, where], "id": "rumor_person", "args": {"npc": person_id, "title": content.people[person_id].title, "location": where}})
+	var recent := int(content.rules.inquire.repeat_after_days)
+	found = found.filter(func(rumor: Dictionary) -> bool: return day - int(world.rumors.get(rumor.key, -recent)) >= recent)
+	found.sort_custom(func(a: Dictionary, b: Dictionary) -> bool: return a.key < b.key)
+	return found
+
+func inquire() -> String:
+	var blocked := _blocked()
+	if not blocked.is_empty():
+		return blocked
+	if not available_here("inquire"):
+		return "此地无处打听消息。"
+	var price := int(content.rules.inquire.price)
+	if int(player.stones) < price:
+		return "囊中羞涩，连一壶茶钱也拿不出。"
+	player.stones -= price
+	var passed := advance_days(int(content.rules.inquire.days))
+	if not ended.is_empty():
+		return conclude("", passed)
+	var candidates := rumor_candidates()
+	if candidates.is_empty():
+		return conclude(log_event("rumor_none"), passed)
+	var rumor: Dictionary = candidates[world_rng.randi_range(0, candidates.size() - 1)]
+	world.rumors[rumor.key] = int(world.day)
+	if rumor.key == "auction":
+		world.flags.heard_auction_rumor = true
+	return conclude(log_event(rumor.id, rumor.args), passed)
+
 # --- People ------------------------------------------------------------------------
+
+## Fills content.people with this world's generated population (ids "g:<index>").
+func populate() -> void:
+	_people_at = {}
+	for person_id: String in content.people.keys():
+		if person_id.begins_with("g:"):
+			content.people.erase(person_id)
+	content.people.merge(Population.generate(content, int(world.get("seed", 0))))
+
+## A tournament round against the sect's outer disciples, weakest first.
+func begin_tournament(round: int) -> void:
+	var disciples: Array = content.people.keys().filter(func(person_id: String) -> bool: return person_id.begins_with("g:") and content.people[person_id].get("sect", "") == "qingyun")
+	disciples.sort_custom(func(a: String, b: String) -> bool:
+		var pa: Dictionary = content.people[a]
+		var pb: Dictionary = content.people[b]
+		var ra := int(pa.realm) * 10 + int(pa.stage)
+		var rb := int(pb.realm) * 10 + int(pb.stage)
+		return ra < rb or (ra == rb and a < b))
+	if disciples.is_empty():
+		begin_battle("disciple", "event")
+		battle.context = "tournament"
+		battle.round = round
+		return
+	var opponent: String = disciples[clampi(round - 1 + disciples.size() / 3 * (round - 1), 0, disciples.size() - 1)]
+	begin_spar(opponent)
+	battle.context = "tournament"
+	battle.round = round
+
+## A friendly bout with a generated person: their stage's health and their best art, nothing at stake.
+func begin_spar(person_id: String) -> void:
+	var person: Dictionary = content.people[person_id]
+	var foe: Dictionary = Population.foe(content, person_id, person)
+	var lineage: String = str(person.get("sect", "qingyun"))
+	battle = {"enemy_id": "cultivator", "hp": int(foe.hp), "turn": 1, "cooldowns": {}, "opponent_sect": "qingyun" if lineage == "wanderer" else lineage, "status": {}, "context": "spar", "npc": person_id, "foe": foe}
+	log_event("spar_start", {"npc": person_id})
 # People live in the world on their own: residents stay home, wanderers follow a schedule computed
 # from the date. The player only sees who is at the place where they stop; anyone seen there becomes
 # an acquaintance whose whereabouts can be looked up. Nothing about people stops a journey.
 
 ## Where a person is today, or "" when absent (left, outside their window, or somewhere undiscovered).
-func npc_location(person_id: String) -> String:
+func npc_location(person_id: String, on_day: int = -1) -> String:
 	var person: Dictionary = content.people[person_id]
-	var day := int(world.day)
+	var day := int(world.day) if on_day < 0 else on_day
 	if int(world.people.get(person_id, {}).get("absent_until", -1)) > day:
 		return ""
 	if person.has("window"):
@@ -704,9 +924,30 @@ func npc_location(person_id: String) -> String:
 	var location: String = content.person_base_location(person_id, day)
 	return location if location_visible(location) else ""
 
+## Staying somewhere for a span means meeting everyone who passes through during it, so one long
+## stay meets the same people as many short ones.
+func meet_during(first_day: int, last_day: int) -> void:
+	present_npcs()
+	for person_id: String in _people_at.get(player.location, []):
+		if bool(world.people.get(person_id, {}).get("met", false)):
+			continue
+		for day: int in range(first_day, last_day + 1):
+			if npc_location(person_id, day) == player.location:
+				Events.person(self, person_id).met = true
+				break
+
 func present_npcs() -> Array[String]:
 	var result: Array[String] = []
-	for person_id: String in content.people:
+	if _people_at.is_empty():
+		for candidate: String in content.people:
+			var person: Dictionary = content.people[candidate]
+			var places: Array = [person.home] if person.has("home") else person.schedule.map(func(stop: Dictionary) -> String: return stop.location)
+			for place: String in places:
+				if not _people_at.has(place):
+					_people_at[place] = []
+				if not candidate in _people_at[place]:
+					_people_at[place].append(candidate)
+	for person_id: String in _people_at.get(player.location, []):
 		if npc_location(person_id) == player.location:
 			result.append(person_id)
 	return result
@@ -821,6 +1062,8 @@ func travel(location_id: String) -> String:
 		return "斗法中无法离开。" if not battle.is_empty() else blocked
 	if not content.locations.has(location_id) or not location_visible(location_id):
 		return "未知地点。"
+	if player.location != location_id and content.location_sealed(location_id, world.flags):
+		return "%s已被封锁，暂时无法进入。" % content.locations[location_id].name
 	if player.location == location_id:
 		return "你已在此处。"
 	if path_to(location_id).is_empty():
@@ -1001,6 +1244,19 @@ func restore(data: Variant) -> bool:
 	var loadout := _valid_loadout(saved_player)
 	if loadout.is_empty():
 		return false
+	var quests: Variant = _valid_quests(saved_player.get("quests"))
+	if quests == null:
+		return false
+	var rumors := {}
+	for key: Variant in saved_world.get("rumors", {}):
+		if not key is String or not _whole_nonnegative(saved_world.rumors[key]):
+			return false
+		rumors[key] = int(saved_world.rumors[key])
+	var taken := {}
+	for key: Variant in saved_world.get("quests_taken", {}):
+		if not key is String:
+			return false
+		taken[key] = true
 	var caps: Dictionary = content.stage(int(saved_player.realm), saved_stage)
 	var extra := bonuses(loadout)
 	if int(saved_player.hp) <= 0 or int(saved_player.hp) > int(caps.max_hp) + int(extra.max_hp) or int(saved_player.qi) > int(caps.max_qi) + int(extra.max_qi):
@@ -1017,14 +1273,18 @@ func restore(data: Variant) -> bool:
 	if not saved_battle.is_empty():
 		if not saved_battle.get("enemy_id") is String or not content.enemies.has(saved_battle.enemy_id):
 			return false
-		if not _whole_nonnegative(saved_battle.get("hp")) or int(saved_battle.hp) <= 0 or int(saved_battle.hp) > int(content.enemies[saved_battle.enemy_id].hp):
+		var foe: Variant = saved_battle.get("foe", {})
+		if not foe is Dictionary or (not foe.is_empty() and (not _whole_nonnegative(foe.get("hp")) or not _whole_nonnegative(foe.get("damage_min")) or not _whole_nonnegative(foe.get("damage_max")) or not foe.get("name") is String)):
+			return false
+		var hp_cap: int = int(foe.hp) if not foe.is_empty() else int(content.enemies[saved_battle.enemy_id].hp)
+		if not _whole_nonnegative(saved_battle.get("hp")) or int(saved_battle.hp) <= 0 or int(saved_battle.hp) > hp_cap:
 			return false
 		if not _whole_nonnegative(saved_battle.get("turn")) or int(saved_battle.turn) < 1 or not saved_battle.get("cooldowns") is Dictionary:
 			return false
 		for skill_id: Variant in saved_battle.cooldowns:
 			if not skill_id is String or content.technique(skill_id).is_empty() or not _whole_nonnegative(saved_battle.cooldowns[skill_id]):
 				return false
-		if saved_battle.has("context") and saved_battle.context != "event":
+		if saved_battle.has("context") and not saved_battle.context in ["event", "spar", "tournament"]:
 			return false
 		var status: Variant = saved_battle.get("status", {})
 		if not status is Dictionary:
@@ -1057,7 +1317,8 @@ func restore(data: Variant) -> bool:
 		if key is String:
 			sold[key] = true
 	var seed_value: Variant = saved_world.get("seed", 0)
-	world = {"day": day, "flags": saved_world.flags.duplicate(), "events": events, "people": people, "seed": int(seed_value) if _whole_nonnegative(seed_value) else 0, "stock_sold": sold}
+	world = {"day": day, "flags": saved_world.flags.duplicate(), "events": events, "people": people, "seed": int(seed_value) if _whole_nonnegative(seed_value) else 0, "stock_sold": sold, "rumors": rumors, "quests_taken": taken}
+	populate()
 	player = saved_player.duplicate(true)
 	for key: String in PLAYER_COUNTS:
 		player[key] = int(player[key])
@@ -1066,6 +1327,7 @@ func restore(data: Variant) -> bool:
 	player.roots = roots.duplicate()
 	for key: String in loadout:
 		player[key] = loadout[key]
+	player.quests = quests
 	player.warned_for = int(warned)
 	for item_id: String in player.items:
 		player.items[item_id] = int(player.items[item_id])
@@ -1162,3 +1424,27 @@ func _valid_loadout(saved_player: Dictionary) -> Dictionary:
 		var gear: Dictionary = content.equipment(str(worn)) if worn is String else {}
 		equipment[slot] = worn if not gear.is_empty() and gear.slot == slot else ""
 	return {"learned": learned, "arts": arts, "methods": methods, "equipment": equipment}
+
+## Normalized accepted commissions, or null when malformed. Quests of retired kinds are dropped.
+func _valid_quests(data: Variant) -> Variant:
+	if not data is Array:
+		return null
+	var result: Array = []
+	for quest: Variant in data:
+		if not quest is Dictionary or not quest.get("key") is String or not quest.get("reward") is Dictionary:
+			return null
+		for key: String in ["count", "days", "deadline", "progress"]:
+			if not _whole_nonnegative(quest.get(key)):
+				return null
+		if not content.commission_data.templates.has(quest.get("kind", "")) or not content.commission_data.boards.has(quest.get("board", "")):
+			continue
+		if quest.has("item") and content.item(str(quest.item)).is_empty():
+			continue
+		if quest.has("enemy") and not content.enemies.has(quest.enemy):
+			continue
+		var normalized: Dictionary = quest.duplicate(true)
+		for key: String in ["count", "days", "deadline", "progress"]:
+			normalized[key] = int(normalized[key])
+		normalized.reward = {"stones": int(quest.reward.get("stones", 0)), "xp": int(quest.reward.get("xp", 0))}
+		result.append(normalized)
+	return result

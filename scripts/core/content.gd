@@ -18,13 +18,15 @@ var technique_data: Dictionary = {}
 var equipment_data: Dictionary = {}
 var vfx_tiers: Array = []
 var vfx_styles: Dictionary = {}
+var population_data: Dictionary = {}
+var commission_data: Dictionary = {}
 var error_message: String = ""
 const DANGER_LEVELS := 4
 const FAVOR_MAX := 200
 const FAVOR_STAGES := [[0, "初识"], [40, "相熟"], [80, "友好"], [140, "信赖"], [200, "亲密"]]
 const ATTITUDES := {"friendly": "友善", "neutral": "中立", "hostile": "敌意"}
 const BUILT_IN_INTERACTIONS := ["talk", "gift"]
-const PLAIN_ACTIONS := ["cultivate", "rest", "breakthrough", "study", "teach", "sell", "shop", "gather", "inn_rest", "search_ruin"]
+const PLAIN_ACTIONS := ["cultivate", "rest", "breakthrough", "study", "teach", "sell", "shop", "gather", "inn_rest", "search_ruin", "inquire", "commissions"]
 const ITEM_CATEGORIES := {"herb": "灵草", "pill": "丹药", "manual": "玉简", "equipment": "法宝", "material": "材料", "quest": "信物"}
 const Arsenal = preload("res://scripts/core/arsenal.gd")
 
@@ -60,7 +62,7 @@ func load_data() -> bool:
 		error_message = "物品配置格式错误。"
 		return false
 	items = item_data
-	for pair: Array in [["techniques", "res://data/techniques.json"], ["equipment", "res://data/equipment.json"], ["vfx_tiers", "res://data/vfx_tiers.json"], ["vfx", "res://data/vfx.json"]]:
+	for pair: Array in [["techniques", "res://data/techniques.json"], ["equipment", "res://data/equipment.json"], ["vfx_tiers", "res://data/vfx_tiers.json"], ["vfx", "res://data/vfx.json"], ["population", "res://data/population.json"], ["commissions", "res://data/commissions.json"]]:
 		var loaded: Variant = _read_json(pair[1])
 		if not loaded is Dictionary:
 			error_message = "配置格式错误：" + pair[1]
@@ -74,6 +76,10 @@ func load_data() -> bool:
 				vfx_tiers = loaded.get("tiers", [])
 			"vfx":
 				vfx_styles = loaded
+			"population":
+				population_data = loaded
+			"commissions":
+				commission_data = loaded
 	map = parsed.map
 	locations = parsed.locations
 	skills = parsed.skills
@@ -226,6 +232,8 @@ func _validate_map() -> String:
 			return "地点缺少地貌：" + location_id
 		if location.has("hidden_until") and not location.hidden_until in world_flags:
 			return "隐藏地点引用了未知标记：" + location_id
+		if location.has("sealed_if") and not location.sealed_if in world_flags:
+			return "封锁地点引用了未知标记：" + location_id
 		if location.has("gather"):
 			var gather: Variant = location.gather
 			if not gather is Dictionary or not gather.get("picks") is Array or gather.picks.size() != 2 or not _whole(gather.picks[0]) or not _whole(gather.picks[1]) or int(gather.picks[0]) < 1 or int(gather.picks[0]) > int(gather.picks[1]):
@@ -278,8 +286,13 @@ func _validate_map() -> String:
 					return "收购的地点没有收购品类：" + location_id
 	# Every location must be reachable once everything is revealed; unhidden ones without any reveal.
 	var everything := {}
+	var seals := {}
+	for location: Dictionary in locations.values():
+		if location.has("sealed_if"):
+			seals[location.sealed_if] = true
 	for flag: String in world_flags:
-		everything[flag] = true
+		if not seals.has(flag):
+			everything[flag] = true
 	for location_id: String in locations:
 		if find_path(map.start, location_id, everything).is_empty():
 			return "地点无法到达：" + location_id
@@ -324,12 +337,17 @@ func route_between(from_id: String, to_id: String) -> Dictionary:
 			return route
 	return {}
 
+## Whether a place is closed to anyone arriving (people already inside may still leave).
+func location_sealed(location_id: String, flags: Dictionary) -> bool:
+	var location: Dictionary = locations.get(location_id, {})
+	return location.has("sealed_if") and bool(flags.get(location.sealed_if, false))
+
 func neighbors(location_id: String, flags: Dictionary) -> Array[String]:
 	var result: Array[String] = []
 	for route: Dictionary in routes:
 		if location_id in route.between:
 			var other: String = route.between[1] if route.between[0] == location_id else route.between[0]
-			if location_visible(other, flags):
+			if location_visible(other, flags) and not location_sealed(other, flags):
 				result.append(other)
 	return result
 
@@ -561,6 +579,10 @@ func _validate_effects(effects: Variant) -> String:
 				ok = (value is int or value is float) and float(value) == floor(float(value))
 			"leave":
 				ok = value == true
+			"clear_flag":
+				ok = value in world_flags
+			"spar", "tournament":
+				ok = value == true
 		if not ok:
 			return "效果无效：%s" % key
 	return ""
@@ -660,9 +682,12 @@ func person_base_location(person_id: String, day: int) -> String:
 	var person: Dictionary = people[person_id]
 	if person.has("home"):
 		return person.home
-	var total := 0
-	for stop: Dictionary in person.schedule:
-		total += int(stop.days)
+	if not person.has("_cycle"):
+		var cycle := 0
+		for stop: Dictionary in person.schedule:
+			cycle += int(stop.days)
+		person["_cycle"] = cycle
+	var total := int(person._cycle)
 	var position := (day + int(person.get("offset", 0))) % total
 	for stop: Dictionary in person.schedule:
 		position -= int(stop.days)

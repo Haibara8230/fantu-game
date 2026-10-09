@@ -124,6 +124,8 @@ static func apply(s, effects: Array) -> void:
 					apply(s, [{"item": [value, -1]}])
 			"flag":
 				s.world.flags[value] = true
+			"clear_flag":
+				s.world.flags.erase(value)
 			"meet":
 				_person(s, value).met = true
 			"relation":
@@ -134,6 +136,10 @@ static func apply(s, effects: Array) -> void:
 				s.npc_depart(s.acting_npc)
 			"battle":
 				s.begin_battle(value, "event")
+			"spar":
+				s.begin_spar(s.acting_npc)
+			"tournament":
+				s.begin_tournament(1)
 
 static func _person(s, person_id: String) -> Dictionary:
 	if not s.world.people.has(person_id):

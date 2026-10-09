@@ -1,0 +1,185 @@
+{
+	"battle": {},
+	"chronicle": [
+		{
+			"args": {},
+			"day": 0,
+			"id": "start",
+			"major": true
+		},
+		{
+			"args": {
+				"days": 10,
+				"technique": "t:breath:wood:1::0"
+			},
+			"day": 10,
+			"id": "learn",
+			"major": false
+		},
+		{
+			"args": {
+				"days": 2,
+				"location": "town"
+			},
+			"day": 12,
+			"id": "travel",
+			"major": false
+		},
+		{
+			"args": {
+				"days": 3,
+				"location": "ferry"
+			},
+			"day": 15,
+			"id": "travel",
+			"major": false
+		},
+		{
+			"args": {
+				"event": "ferry_boatman",
+				"part": "chronicle"
+			},
+			"day": 15,
+			"id": "event",
+			"major": false
+		},
+		{
+			"args": {
+				"days": 2,
+				"location": "market"
+			},
+			"day": 17,
+			"id": "travel",
+			"major": false
+		},
+		{
+			"args": {
+				"event": "meet_shen",
+				"part": "chronicle"
+			},
+			"day": 17,
+			"id": "event",
+			"major": false
+		},
+		{
+			"args": {
+				"item": "e:fan:2:none:calm:9",
+				"price": 120
+			},
+			"day": 17,
+			"id": "buy_item",
+			"major": false
+		},
+		{
+			"args": {
+				"days": 6,
+				"location": "wild"
+			},
+			"day": 23,
+			"id": "travel",
+			"major": false
+		},
+		{
+			"args": {
+				"days": 5,
+				"location": "wild",
+				"loot": "huichun_grass:2"
+			},
+			"day": 28,
+			"id": "gather_items",
+			"major": false
+		}
+	],
+	"ended": {},
+	"pending_event": {},
+	"player": {
+		"arts": [
+			"sword",
+			"fire",
+			"wood"
+		],
+		"birth_day": -5760,
+		"cooldowns": {},
+		"cultivation_carry": 0,
+		"equipment": {
+			"accessory": "",
+			"robe": "",
+			"weapon": ""
+		},
+		"hp": 90,
+		"items": {
+			"e:fan:2:none:calm:9": 1,
+			"huichun_grass": 2
+		},
+		"journey": {},
+		"learned": [
+			"sword",
+			"fire",
+			"wood",
+			"t:breath:wood:1::0"
+		],
+		"location": "wild",
+		"max_hp": 90,
+		"max_qi": 30,
+		"methods": [
+			"t:breath:wood:1::0"
+		],
+		"name": "游方",
+		"qi": 30,
+		"realm": 0,
+		"roots": [
+			"wood",
+			"water"
+		],
+		"sect": "wanderer",
+		"stage": 0,
+		"stones": 180,
+		"warned_for": -1,
+		"xp": 0
+	},
+	"rng": {
+		"combat": "801228281847258893",
+		"world": "-1831553299885327358"
+	},
+	"version": 8,
+	"world": {
+		"day": 28,
+		"events": {
+			"ferry_boatman": {
+				"count": 1,
+				"last_day": 15,
+				"last_occurrence": 0,
+				"reminded": -1,
+				"state": "completed"
+			},
+			"meet_shen": {
+				"count": 1,
+				"last_day": 17,
+				"last_occurrence": 0,
+				"reminded": -1,
+				"state": "completed"
+			}
+		},
+		"flags": {},
+		"people": {
+			"rogue": {
+				"absent_until": -1,
+				"last": {},
+				"met": true,
+				"relation": 0,
+				"talks": 0
+			},
+			"shen_mo": {
+				"absent_until": -1,
+				"last": {},
+				"met": true,
+				"relation": 0,
+				"talks": 0
+			}
+		},
+		"seed": 71,
+		"stock_sold": {
+			"market:0:3": true
+		}
+	}
+}

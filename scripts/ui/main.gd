@@ -241,6 +241,7 @@ func _render() -> void:
 	stats.add_child(_label("灵根 · %s · 修炼 ×%.2f" % [session.root_title(), session.cultivation_speed()], 14, MUTED))
 	_meter(stats, "修为", p.xp, maxi(1, maxi(int(p.xp), _xp_goal())), GOLD)
 	stats.add_child(_label("灵石  %d    灵草  %d    筑基丹  %d" % [p.stones, session.herb_count(), session.item_count("foundation_pill")], 15))
+	_render_quests()
 	_render_acquaintances()
 	_render_upcoming()
 	stats.add_child(HSeparator.new())
@@ -381,6 +382,21 @@ func _render_acquaintances() -> void:
 		entry.add_theme_font_size_override("font_size", 14)
 		stats.add_child(entry)
 
+func _render_quests() -> void:
+	if session.player.get("quests", []).is_empty():
+		return
+	stats.add_child(_label("委 托", 15, GOLD))
+	for quest: Dictionary in session.player.quests:
+		var progress := ""
+		if quest.has("enemy"):
+			progress = " %d/%d" % [int(quest.progress), int(quest.count)]
+		elif quest.has("item"):
+			progress = " %d/%d" % [mini(session.item_count(quest.item), int(quest.count)), int(quest.count)]
+		var label := _label("%s%s
+限 %s · %s" % [session.commission_text(quest).title, progress, Calendar.short_text(int(quest.deadline)), session.content.commission_data.boards[quest.board].name], 14)
+		label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		stats.add_child(label)
+
 func _render_people_here() -> void:
 	var here: Array[String] = session.present_npcs()
 	if here.is_empty():
@@ -436,6 +452,21 @@ func _render_person(person_id: String) -> void:
 	else:
 		info.add_child(_label("初次相见", 15, MUTED))
 	center.add_child(_paragraph(person.description, INK))
+	if person.has("loadout"):
+		var arts: Array[String] = []
+		for art_id: String in person.loadout.arts:
+			var art: Dictionary = session.content.technique(art_id)
+			arts.append("%s（%s）" % [art.name, art.tier_name])
+		var methods: Array[String] = []
+		for method_id: String in person.loadout.methods:
+			methods.append(session.content.technique(method_id).name)
+		var gear: Array[String] = []
+		for slot: String in person.loadout.equipment:
+			if not str(person.loadout.equipment[slot]).is_empty():
+				gear.append(session.content.equipment(person.loadout.equipment[slot]).name)
+		center.add_child(_paragraph("神通 · %s
+心法 · %s%s" % ["、".join(arts), "、".join(methods), "
+法宝 · " + "、".join(gear) if not gear.is_empty() else ""]))
 	var where: String = session.npc_location(person_id)
 	if where != session.player.location:
 		var place: String = session.content.locations[where].name if not where.is_empty() else "下落不明"
@@ -537,6 +568,24 @@ func _spot_action(grid: GridContainer, action: String) -> void:
 			_action(grid, "翻找石室  ·  " + _duration("search_ruin"), "search_ruin", "或得灵石、灵草，偶有丹药；搜过后需隔些时日")
 		"study":
 			pass
+		"inquire":
+			var cost: Dictionary = session.content.rules.inquire
+			_timed(grid, "打听消息  ·  %s · %d 灵石" % [Calendar.duration_text(int(cost.days)), int(cost.price)], session.inquire, "请人喝壶茶，听听最近的消息：人物去向、宝物、委托与世事。")
+		"commissions":
+			var board: String = session.board_here()
+			for offer: Dictionary in session.commission_offers(board):
+				var shown: Dictionary = session.commission_text(offer)
+				var key: String = offer.key
+				_timed(grid, "接下：%s（灵石 %d%s）" % [shown.title, int(offer.reward.stones), "、修为 %d" % int(offer.reward.xp) if int(offer.reward.xp) > 0 else ""], func() -> String: return session.accept_commission(key), shown.text)
+			for quest: Dictionary in session.player.quests:
+				if quest.board != board:
+					continue
+				var reason: String = session.delivery_block(quest)
+				var handed: String = quest.key
+				var deliver := _button("交付：%s" % session.commission_text(quest).title, func() -> void: _run(func() -> String: return session.deliver_commission(handed)), reason)
+				deliver.disabled = not reason.is_empty()
+				deliver.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+				grid.add_child(deliver)
 		"teach":
 			for technique_id: String in session.teachings():
 				var taught: Dictionary = session.content.technique(technique_id)
@@ -814,7 +863,10 @@ func _render_battle() -> void:
 	if preview_mode:
 		_sect_choices(center, true)
 	var b: Dictionary = session.battle
-	var enemy: Dictionary = session.content.enemies[b.enemy_id]
+	var enemy: Dictionary = session.content.enemies[b.enemy_id].duplicate()
+	if b.has("foe"):
+		enemy.name = b.foe.name
+		enemy.hp = b.foe.hp
 	center.add_child(_label("斗 法  ·  %s     第 %d 回合" % [enemy.name, b.turn], 23, GOLD))
 	battle_stage = BattleStage.new()
 	battle_stage.custom_minimum_size.y = 245 if preview_mode else 300

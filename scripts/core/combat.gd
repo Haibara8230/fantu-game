@@ -92,7 +92,9 @@ static func _enemy_turn(s, guarding: bool) -> String:
 		_count_down(status, "burn")
 		if int(s.battle.hp) <= 0:
 			return _win(s)
-	var damage: int = s.combat_rng.randi_range(int(enemy.damage_min), int(enemy.damage_max))
+	var foe: Dictionary = s.battle.get("foe", {})
+	var stats: Dictionary = foe if not foe.is_empty() else enemy
+	var damage: int = s.combat_rng.randi_range(int(stats.damage_min), int(stats.damage_max))
 	var factor: float = 1.0 - s.defense()
 	if status.has("weaken"):
 		factor *= 1.0 - float(status.weaken[0])
@@ -101,10 +103,17 @@ static func _enemy_turn(s, guarding: bool) -> String:
 	if guarding:
 		damage = maxi(1, damage / 2)
 	s.player.hp = maxi(0, int(s.player.hp) - damage)
-	s.combat_events.append({"type": "attack", "actor": "enemy", "style": _counter_style(s), "amount": damage, "hp_after": int(s.player.hp)})
+	var counter := {"type": "attack", "actor": "enemy", "style": _counter_style(s), "amount": damage, "hp_after": int(s.player.hp)}
+	if not foe.is_empty():
+		counter.merge({"style": foe.art, "name": foe.art_name, "vfx": foe.vfx, "tier": int(foe.tier)}, true)
+	s.combat_events.append(counter)
 	s.log_event("enemy_attack", {"enemy": enemy_id, "amount": damage})
 	if int(s.player.hp) <= 0:
 		s.combat_events.append({"type": "end", "result": "lose"})
+		if s.battle.get("context", "") == "spar":
+			return _spar_over(s, false)
+		if s.battle.get("context", "") == "tournament":
+			return _tournament_over(s, false)
 		s.battle.clear()
 		var lost := mini(int(s.player.stones), 10)
 		s.player.stones -= lost
@@ -119,6 +128,46 @@ static func _enemy_turn(s, guarding: bool) -> String:
 	s.changed.emit()
 	return "轮到你施展神通。"
 
+## A spar ends without loss: the loser keeps a sliver of health, both sides gain a little.
+static func _spar_over(s, won: bool) -> String:
+	var npc: String = s.battle.npc
+	var xp: int = int(s.battle.foe.xp) if won else int(s.battle.foe.xp) / 2
+	s.battle.clear()
+	s.player.hp = maxi(int(s.player.hp), 1)
+	s.player.xp += xp
+	s.Events.apply(s, [{"relation": [npc, 5 if won else 2]}])
+	var message: String = s.log_event("spar_win" if won else "spar_lose", {"npc": npc, "xp": xp})
+	var milestones: Array[String] = s.settle_stage()
+	if not milestones.is_empty():
+		message += " " + " ".join(milestones)
+	return s.conclude(message, s.advance_days(s.content.action_days("road_recovery")))
+
+## Tournament rounds: a win leads straight into the next round with some health back; the third
+## win takes the prize. A loss ends the run without any penalty.
+static func _tournament_over(s, won: bool) -> String:
+	var round: int = int(s.battle.get("round", 1))
+	var npc: String = s.battle.get("npc", "")
+	s.battle.clear()
+	if not won:
+		s.player.hp = maxi(int(s.player.hp), 1)
+		return s.conclude(s.log_event("tournament_out", {"round": round, "npc": npc}), s.advance_days(s.content.action_days("road_recovery")))
+	var message: String = s.log_event("tournament_round", {"round": round, "npc": npc})
+	if round < 3:
+		s.player.hp = mini(int(s.player.max_hp), int(s.player.hp) + int(s.player.max_hp) * 3 / 10)
+		s.player.qi = mini(int(s.player.max_qi), int(s.player.qi) + int(s.player.max_qi) * 3 / 10)
+		s.begin_tournament(round + 1)
+		s.changed.emit()
+		return message + " 下一轮开始。"
+	var prize: String = "j:" + s.Arsenal.generate_technique(s.content, s.world_rng, 2, {"slot": "art"})
+	s.add_item(prize, 1)
+	s.player.stones += 100
+	s.player.xp += 150
+	message += " " + s.log_event("tournament_champion", {"stones": 100, "xp": 150, "item": prize}, true)
+	var milestones: Array[String] = s.settle_stage()
+	if not milestones.is_empty():
+		message += " " + " ".join(milestones)
+	return s.conclude(message, s.advance_days(s.content.action_days("road_recovery")))
+
 static func _count_down(status: Dictionary, key: String) -> void:
 	status[key][1] = int(status[key][1]) - 1
 	if int(status[key][1]) <= 0:
@@ -132,10 +181,15 @@ static func _counter_style(s) -> String:
 
 static func _win(s) -> String:
 	s.combat_events.append({"type": "end", "result": "win"})
+	if s.battle.get("context", "") == "spar":
+		return _spar_over(s, true)
+	if s.battle.get("context", "") == "tournament":
+		return _tournament_over(s, true)
 	var enemy_id: String = s.battle.enemy_id
 	var enemy: Dictionary = s.content.enemies[enemy_id]
 	var days := _recovery_days(s, "battle_victory")
 	var npc: String = s.battle.get("npc", "")
+	s.record_kill(enemy_id)
 	s.player.stones += int(enemy.reward_stones)
 	s.player.xp += int(enemy.reward_xp)
 	s.add_item("huichun_grass", int(enemy.reward_herbs))

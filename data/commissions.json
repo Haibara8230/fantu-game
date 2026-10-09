@@ -1,0 +1,42 @@
+{
+  "period_days": 60,
+  "offers": 3,
+  "max_active": 3,
+  "boards": {
+    "sect": {"name": "执事堂告示", "location": "sect"},
+    "market": {"name": "坊市告示", "location": "market"}
+  },
+  "templates": {
+    "gather": {
+      "weight": 3,
+      "boards": ["sect", "market"],
+      "items": ["huichun_grass", "chiyan_flower", "ninglu_grass"],
+      "count": [3, 6],
+      "days": 60,
+      "reward_scale": 2.5,
+      "title": "收购{item_name}",
+      "text": "需要 {count} 株{item_name}，{days} 日内交到{board_name}。"
+    },
+    "hunt": {
+      "weight": 2,
+      "boards": ["sect", "market"],
+      "enemies": ["wolf"],
+      "count": [1, 3],
+      "days": 60,
+      "reward_stones": 30,
+      "reward_xp": 25,
+      "title": "清剿{enemy_name}",
+      "text": "落霞谷谷口的{enemy_name}伤了采药人，{days} 日内斩杀 {count} 头。"
+    },
+    "pills": {
+      "weight": 1,
+      "boards": ["market"],
+      "items": ["liaoshang_pill", "huiqi_pill"],
+      "count": [1, 2],
+      "days": 90,
+      "reward_scale": 2.2,
+      "title": "求购{item_name}",
+      "text": "急需 {count} 枚{item_name}，{days} 日内送到{board_name}。"
+    }
+  }
+}

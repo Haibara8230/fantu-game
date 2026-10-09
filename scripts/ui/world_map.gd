@@ -146,6 +146,9 @@ func _draw_nodes() -> void:
 			draw_circle(center, NODE_RADIUS + 9, Color(0.84, 0.72, 0.47, 0.22))
 		draw_circle(center, NODE_RADIUS, Color("#1b3236"))
 		draw_arc(center, NODE_RADIUS, 0, TAU, 32, GOLD if is_current or is_selected else INK, 3.0 if is_selected else 2.0, true)
+		if content.location_sealed(location_id, flags):
+			draw_line(center + Vector2(-NODE_RADIUS, -NODE_RADIUS), center + Vector2(NODE_RADIUS, NODE_RADIUS), DANGER, 3.0)
+			draw_line(center + Vector2(-NODE_RADIUS, NODE_RADIUS), center + Vector2(NODE_RADIUS, -NODE_RADIUS), DANGER, 3.0)
 		if location_id == journey_to:
 			draw_arc(center, NODE_RADIUS + 5, 0, TAU, 32, DANGER, 2.0, true)
 		draw_circle(center, 4.5, GOLD if is_current else MUTED)
