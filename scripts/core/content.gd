@@ -82,12 +82,27 @@ func _validate() -> String:
 		var realm: Variant = realms[index]
 		if not realm is Dictionary:
 			return "境界配置错误：%d" % index
-		for key: String in ["max_hp", "max_qi", "attack_bonus", "lifespan_years"]:
-			if not _whole(realm.get(key)) or int(realm[key]) < (1 if key != "attack_bonus" else 0):
-				return "境界数值错误：%s.%s" % [realm.get("id", index), key]
+		if not realm.get("name") is String or not _whole(realm.get("lifespan_years")) or int(realm.lifespan_years) < 1:
+			return "境界名称或寿元错误：%s" % realm.get("id", index)
+		if not realm.get("stages") is Array or realm.stages.is_empty():
+			return "境界缺少小阶段：%s" % realm.get("id", index)
+		var previous_xp := -1
+		for stage: Variant in realm.stages:
+			if not stage is Dictionary or not stage.get("name") is String:
+				return "小阶段配置错误：%s" % realm.get("id", index)
+			for key: String in ["xp", "max_hp", "max_qi", "attack_bonus"]:
+				if not _whole(stage.get(key)) or (key in ["max_hp", "max_qi"] and int(stage[key]) < 1):
+					return "小阶段数值错误：%s.%s.%s" % [realm.get("id", index), stage.name, key]
+			if int(stage.xp) <= previous_xp:
+				return "小阶段修为门槛必须递增：%s" % realm.get("id", index)
+			previous_xp = int(stage.xp)
+		if int(realm.stages[0].xp) != 0:
+			return "第一个小阶段的门槛必须是 0：%s" % realm.get("id", index)
 		var breakthrough: Variant = realm.get("breakthrough")
 		if breakthrough != null and (not breakthrough is Dictionary or not _whole(breakthrough.get("xp")) or not _whole(breakthrough.get("pills"))):
 			return "突破条件错误：%s" % realm.get("id", index)
+		if breakthrough != null and int(breakthrough.xp) < int(realm.stages.back().xp):
+			return "突破所需修为不能低于最后一个小阶段：%s" % realm.get("id", index)
 	for route: Variant in routes:
 		if not route is Dictionary or not route.get("between") is Array or route.between.size() != 2:
 			return "路线配置错误。"
@@ -117,6 +132,17 @@ func _validate() -> String:
 	for value: Variant in chance:
 		if not (value is int or value is float) or float(value) < 0.0 or float(value) > 1.0:
 			return "遭遇几率必须在 0 到 1 之间。"
+	var roots: Variant = rules.get("spirit_roots")
+	if not roots is Dictionary or not roots.get("elements") is Array or not roots.get("names") is Dictionary or not roots.get("grades") is Array:
+		return "灵根配置无效。"
+	for element: Variant in roots.elements:
+		if not roots.names.has(element):
+			return "灵根缺少名称：%s" % element
+	for grade: Variant in roots.grades:
+		if not grade is Dictionary or not _whole(grade.get("count")) or int(grade.count) < 1 or int(grade.count) > roots.elements.size() or not _whole(grade.get("weight")) or not (grade.get("speed") is float or grade.get("speed") is int) or float(grade.speed) <= 0.0:
+			return "灵根等级配置无效。"
+	if not _whole(rules.get("rest_full_days")) or int(rules.rest_full_days) < 1:
+		return "静养天数无效。"
 	if not _whole(rules.get("inn_price")):
 		return "客栈价格无效。"
 	var search: Variant = rules.get("ruin_search")
@@ -586,3 +612,36 @@ func favor_stage(favor: int) -> String:
 		if favor >= int(stage[0]):
 			name = stage[1]
 	return name
+
+# --- Realms and stages ----------------------------------------------------------------
+
+## The sub-stage reached with `xp` inside a realm (stages unlock by cumulative xp in that realm).
+func stage_index(realm_index: int, xp: int) -> int:
+	var stages: Array = realm(realm_index).stages
+	var reached := 0
+	for index: int in stages.size():
+		if xp >= int(stages[index].xp):
+			reached = index
+	return reached
+
+func stage(realm_index: int, stage_number: int) -> Dictionary:
+	var stages: Array = realm(realm_index).stages
+	return stages[clampi(stage_number, 0, stages.size() - 1)]
+
+## e.g. "炼气初期".
+func realm_title(realm_index: int, stage_number: int) -> String:
+	return str(realm(realm_index).name) + str(stage(realm_index, stage_number).name)
+
+## Spirit-root grade for a set of elements, e.g. {"name": "双灵根", "speed": 1.4}.
+func root_grade(elements: Array) -> Dictionary:
+	for grade: Dictionary in rules.spirit_roots.grades:
+		if int(grade.count) == elements.size():
+			return grade
+	return {"name": "灵根", "speed": 1.0}
+
+func root_title(elements: Array) -> String:
+	var names := ""
+	for element: String in rules.spirit_roots.elements:
+		if element in elements:
+			names += str(rules.spirit_roots.names[element])
+	return names + str(root_grade(elements).name)

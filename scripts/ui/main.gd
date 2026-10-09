@@ -22,6 +22,8 @@ var selected_spot := ""
 # The person whose profile is open in the centre panel ("" when none).
 var selected_npc := ""
 var shown_location := ""
+var welcome_roots: Array = []
+var roots_label: Label
 var map_target := ""
 var world_map
 var audio
@@ -232,7 +234,8 @@ func _render() -> void:
 	_meter(stats, "气血", p.hp, p.max_hp, Color("#a96f66"))
 	_meter(stats, "灵力", p.qi, p.max_qi, Color("#5f999b"))
 	stats.add_child(_label("年岁 %d  ·  寿元 %d" % [session.age(), session.lifespan()], 15, MUTED))
-	_meter(stats, "修为", p.xp, maxi(1, maxi(int(p.xp), int(session.next_breakthrough().get("xp", 0)))), GOLD)
+	stats.add_child(_label("灵根 · %s · 修炼 ×%.2f" % [session.root_title(), session.cultivation_speed()], 14, MUTED))
+	_meter(stats, "修为", p.xp, maxi(1, maxi(int(p.xp), _xp_goal())), GOLD)
 	stats.add_child(_label("灵石  %d    灵草  %d" % [p.stones, p.herbs], 16))
 	stats.add_child(_label("筑基丹  %d" % p.pills, 16))
 	for item_id: String in p.items:
@@ -276,7 +279,14 @@ func _objective() -> String:
 	var need: Dictionary = session.next_breakthrough()
 	if need.is_empty():
 		return "当前目标 · 休整后前往落霞谷，平定赤鳞妖蟒。"
-	return "当前目标 · 积攒 %d 修为与 %d 枚筑基丹，在青云山突破。" % [int(need.xp), int(need.pills)]
+	return "当前目标 · 修至%s，积攒 %d 修为与 %d 枚筑基丹，在青云山突破。" % [session.content.realm_title(int(session.player.realm), session.content.realm(int(session.player.realm)).stages.size() - 1), int(need.xp), int(need.pills)]
+
+## The next xp milestone: the next sub-stage, or the breakthrough once at the last stage.
+func _xp_goal() -> int:
+	var stages: Array = session.content.realm(int(session.player.realm)).stages
+	if int(session.player.stage) + 1 < stages.size():
+		return int(stages[int(session.player.stage) + 1].xp)
+	return int(session.next_breakthrough().get("xp", 0))
 
 func _duration(action: String) -> String:
 	return Calendar.duration_text(session.content.action_days(action))
@@ -285,10 +295,10 @@ func _breakthrough_tooltip() -> String:
 	var need: Dictionary = session.next_breakthrough()
 	if need.is_empty():
 		return "后续境界尚未开放"
-	return "需要 %d 修为与 %d 枚筑基丹" % [int(need.xp), int(need.pills)]
+	return "需修至%s，并有 %d 修为与 %d 枚筑基丹" % [session.content.realm_title(int(session.player.realm), session.content.realm(int(session.player.realm)).stages.size() - 1), int(need.xp), int(need.pills)]
 
 func _realm_bonus_text() -> String:
-	var bonus := int(session.content.realm(int(session.player.realm)).attack_bonus)
+	var bonus := int(session.stage_stats().attack_bonus)
 	return " 境界加成：攻击伤害 +%d。" % bonus if bonus > 0 else ""
 
 func _render_location() -> void:
@@ -483,7 +493,7 @@ func _spot_action(grid: GridContainer, action: String) -> void:
 		var enemy: Dictionary = session.content.enemies[enemy_id]
 		var tooltip := "获胜得 %d 灵石、%d 修为、%d 灵草，斗法有受伤风险" % [enemy.reward_stones, enemy.reward_xp, enemy.reward_herbs]
 		if int(enemy.min_realm) > 0:
-			tooltip = "需达到%s。" % session.content.realm(int(enemy.min_realm)).name + tooltip
+			tooltip = "需达到%s。" % session.content.realm_title(int(enemy.min_realm), 0) + tooltip
 		var button := _enemy_action(grid, ("切磋 · " if enemy_id == "disciple" else "挑战 · ") + enemy.name, enemy_id, tooltip)
 		button.disabled = int(session.player.realm) < int(enemy.min_realm) or (enemy.has("world_flag") and session.has_flag(enemy.world_flag))
 		return
@@ -491,10 +501,10 @@ func _spot_action(grid: GridContainer, action: String) -> void:
 		"cultivate":
 			for days: Variant in rules.cultivate_options:
 				var span := int(days)
-				var gain := span * int(rules.cultivate_xp) / Calendar.DAYS_PER_MONTH
+				var gain := span * session.cultivation_rate() / Calendar.DAYS_PER_MONTH
 				_timed(grid, "闭关  ·  " + Calendar.duration_text(span), func() -> String: return session.cultivate(span), "修为约 +%d，恢复全部灵力；约定或寿元告急时会提前出关" % gain)
 		"rest":
-			_action(grid, "静室休整  ·  " + _duration("rest"), "rest", "恢复全部气血与灵力")
+			_action(grid, "静室休整  ·  " + Calendar.duration_text(session.rest_days()), "rest", "恢复全部气血与灵力；伤得越重，需要的日子越长")
 		"breakthrough":
 			_action(grid, "突破境界  ·  " + _duration("breakthrough"), "breakthrough", _breakthrough_tooltip())
 		"sell":
@@ -825,6 +835,20 @@ func _show_welcome() -> void:
 	name_input.custom_minimum_size.y = 46
 	name_input.text_submitted.connect(func(_value: String) -> void: _begin())
 	box.add_child(name_input)
+	# Spirit roots are sensed at random; the player may sense again until satisfied.
+	var sense_rng := RandomNumberGenerator.new()
+	sense_rng.randomize()
+	welcome_roots = session.roll_roots(sense_rng)
+	var roots_row := HBoxContainer.new()
+	roots_row.add_theme_constant_override("separation", 12)
+	box.add_child(roots_row)
+	roots_label = _label("", 18, GOLD)
+	roots_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	roots_row.add_child(roots_label)
+	roots_row.add_child(_button("重新感应", func() -> void:
+		welcome_roots = session.roll_roots(sense_rng)
+		_show_roots(), "再测一次灵根"))
+	_show_roots()
 	var begin_button := _button("踏入仙途", _begin)
 	box.add_child(begin_button)
 	var continue_button := _button("继续旅程", _continue)
@@ -835,6 +859,10 @@ func _show_welcome() -> void:
 	box.add_child(_paragraph("开发版 · Windows 单机 · 本地存档\n二维手绘角色 · 施法演出 · 命中与受击反馈"))
 	name_input.grab_focus()
 
+func _show_roots() -> void:
+	var grade: Dictionary = session.content.root_grade(welcome_roots)
+	roots_label.text = "灵根 · %s（修炼 ×%.2f）" % [session.content.root_title(welcome_roots), float(grade.speed)]
+
 func _close_welcome() -> void:
 	remove_child(welcome_layer)
 	welcome_layer.queue_free()
@@ -844,7 +872,7 @@ func _begin() -> void:
 	var character_name := name_input.text
 	_close_welcome()
 	started = true
-	session.new_game(character_name)
+	session.new_game(character_name, -1, welcome_roots)
 	notice("先在青云山修炼，再去落霞谷采草。灵草可在坊市换灵石、购买筑基丹。")
 
 func _continue() -> void:

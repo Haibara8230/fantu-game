@@ -27,7 +27,7 @@ static func use_skill(s, skill_id: String) -> String:
 		s.log_event("skill_guard", {"skill": skill_id, "amount": recovered})
 		return _enemy_turn(s, true)
 	else:
-		var bonus := int(s.content.realm(int(s.player.realm)).attack_bonus)
+		var bonus := int(s.stage_stats().attack_bonus)
 		var damage: int = s.combat_rng.randi_range(int(skill.damage_min), int(skill.damage_max)) + bonus
 		s.battle.hp = maxi(0, int(s.battle.hp) - damage)
 		s.combat_events.append({"type": "attack", "actor": "player", "style": skill_id, "amount": damage, "hp_after": int(s.battle.hp)})
@@ -113,5 +113,8 @@ static func _win(s) -> String:
 	if not flag.is_empty() and not s.has_flag(flag):
 		s.world.flags[flag] = true
 		message += " " + s.log_event(enemy.flag_event, {}, true)
+	var milestones: Array[String] = s.settle_stage()
+	if not milestones.is_empty():
+		message += " " + " ".join(milestones)
 	s.npc_depart(npc)
 	return s.conclude(message, s.advance_days(days))

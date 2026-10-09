@@ -1,0 +1,61 @@
+{
+	"battle": {},
+	"chronicle": [
+		{
+			"args": {},
+			"day": 0,
+			"id": "start",
+			"major": true
+		},
+		{
+			"args": {
+				"days": 4,
+				"location": "ridge"
+			},
+			"day": 4,
+			"id": "travel",
+			"major": false
+		}
+	],
+	"ended": {},
+	"pending_event": {},
+	"player": {
+		"birth_day": -5760,
+		"cooldowns": {},
+		"cultivation_carry": 0,
+		"herbs": 3,
+		"hp": 120,
+		"items": {},
+		"journey": {},
+		"location": "ridge",
+		"max_hp": 140,
+		"max_qi": 50,
+		"name": "筑基者",
+		"pills": 0,
+		"qi": 30,
+		"realm": 1,
+		"sect": "wanderer",
+		"stones": 30,
+		"warned_for": -1,
+		"xp": 33
+	},
+	"rng": {
+		"combat": "708718527385777908",
+		"world": "-4190656213703714949"
+	},
+	"version": 5,
+	"world": {
+		"day": 4,
+		"events": {},
+		"flags": {},
+		"people": {
+			"rogue": {
+				"absent_until": -1,
+				"last": {},
+				"met": true,
+				"relation": 0,
+				"talks": 0
+			}
+		}
+	}
+}

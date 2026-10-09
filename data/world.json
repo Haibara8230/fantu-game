@@ -66,7 +66,7 @@
       "description": "谷中灵草繁盛，也有妖兽出没。深处的赤鳞妖蟒守着一处灵泉，筑基后方可挑战。",
       "terrain": "valley",
       "map": [0.44, 0.8],
-      "gather": [2, 4],
+      "gather": [1, 3],
       "spots": [
         {"id": "entrance", "name": "谷口", "description": "乱石嶙峋，常有妖狼出没。", "actions": ["battle:wolf"]},
         {"id": "slope", "name": "灵草坡", "description": "向阳的缓坡上灵草丛生。", "actions": ["gather"]},
@@ -243,7 +243,7 @@
       "damage_min": 6,
       "damage_max": 10,
       "reward_stones": 12,
-      "reward_xp": 12,
+      "reward_xp": 20,
       "reward_herbs": 0,
       "locations": ["sect"],
       "min_realm": 0,
@@ -255,7 +255,7 @@
       "damage_min": 8,
       "damage_max": 13,
       "reward_stones": 24,
-      "reward_xp": 18,
+      "reward_xp": 25,
       "reward_herbs": 2,
       "locations": ["wild"],
       "min_realm": 0
@@ -266,7 +266,7 @@
       "damage_min": 16,
       "damage_max": 23,
       "reward_stones": 100,
-      "reward_xp": 40,
+      "reward_xp": 200,
       "reward_herbs": 5,
       "locations": ["wild"],
       "min_realm": 1,
@@ -279,7 +279,7 @@
       "damage_min": 9,
       "damage_max": 14,
       "reward_stones": 30,
-      "reward_xp": 15,
+      "reward_xp": 40,
       "reward_herbs": 0,
       "locations": [],
       "min_realm": 0,
@@ -292,7 +292,7 @@
       "damage_min": 11,
       "damage_max": 16,
       "reward_stones": 60,
-      "reward_xp": 25,
+      "reward_xp": 80,
       "reward_herbs": 2,
       "locations": [],
       "min_realm": 0,
@@ -305,12 +305,24 @@
   "rules": {
     "starting_age": 16,
     "starting_stones": 30,
-    "cultivate_xp": 18,
+    "cultivate_xp": 60,
+    "rest_full_days": 12,
+    "spirit_roots": {
+      "elements": ["metal", "wood", "water", "fire", "earth"],
+      "names": {"metal": "金", "wood": "木", "water": "水", "fire": "火", "earth": "土"},
+      "grades": [
+        {"count": 1, "name": "天灵根", "weight": 5, "speed": 1.8},
+        {"count": 2, "name": "双灵根", "weight": 20, "speed": 1.4},
+        {"count": 3, "name": "三灵根", "weight": 35, "speed": 1.0},
+        {"count": 4, "name": "四灵根", "weight": 25, "speed": 0.75},
+        {"count": 5, "name": "伪灵根", "weight": 15, "speed": 0.5}
+      ]
+    },
     "lifespan_warning_years": 5,
     "cultivate_options": [30, 90, 360],
     "wait_options": [1, 10],
-    "pill_price": 60,
-    "herb_price": 8,
+    "pill_price": 120,
+    "herb_price": 4,
     "inn_price": 5,
     "encounter_chance": [0.08, 0.18, 0.3, 0.42],
     "ruin_search": {"stones": [10, 30], "herbs": [1, 3], "pill_chance": 0.1},
@@ -319,20 +331,26 @@
   "realms": [
     {
       "id": "qi_refining",
-      "name": "炼气期",
-      "max_hp": 90,
-      "max_qi": 30,
-      "attack_bonus": 0,
+      "name": "炼气",
       "lifespan_years": 120,
-      "breakthrough": {"xp": 100, "pills": 1}
+      "stages": [
+        {"name": "初期", "xp": 0, "max_hp": 90, "max_qi": 30, "attack_bonus": 0},
+        {"name": "中期", "xp": 500, "max_hp": 100, "max_qi": 34, "attack_bonus": 2},
+        {"name": "后期", "xp": 1000, "max_hp": 110, "max_qi": 38, "attack_bonus": 4},
+        {"name": "圆满", "xp": 1500, "max_hp": 120, "max_qi": 42, "attack_bonus": 6}
+      ],
+      "breakthrough": {"xp": 2000, "pills": 1}
     },
     {
-      "id": "foundation_early",
-      "name": "筑基初期",
-      "max_hp": 140,
-      "max_qi": 50,
-      "attack_bonus": 8,
-      "lifespan_years": 220
+      "id": "foundation",
+      "name": "筑基",
+      "lifespan_years": 220,
+      "stages": [
+        {"name": "初期", "xp": 0, "max_hp": 140, "max_qi": 50, "attack_bonus": 8},
+        {"name": "中期", "xp": 1500, "max_hp": 155, "max_qi": 55, "attack_bonus": 10},
+        {"name": "后期", "xp": 3000, "max_hp": 170, "max_qi": 60, "attack_bonus": 12},
+        {"name": "圆满", "xp": 4500, "max_hp": 185, "max_qi": 65, "attack_bonus": 14}
+      ]
     }
   ],
   "routes": [
@@ -348,13 +366,13 @@
   "actions": {
     "cultivate": 30,
     "rest": 30,
-    "gather": 30,
+    "gather": 5,
     "sell": 0,
     "buy_pill": 0,
     "breakthrough": 90,
-    "battle_victory": 30,
-    "battle_defeat": 30,
-    "flee": 30,
+    "battle_victory": 3,
+    "battle_defeat": 15,
+    "flee": 2,
     "inn_rest": 1,
     "search_ruin": 5,
     "road_recovery": 1

@@ -14,6 +14,8 @@ if errorlevel 1 exit /b 1
 if errorlevel 1 exit /b 1
 "%TASK_GODOT%" --headless --path . --script res://tests/region_smoke.gd
 if errorlevel 1 exit /b 1
+"%TASK_GODOT%" --headless --path . --script res://tests/growth_smoke.gd
+if errorlevel 1 exit /b 1
 "%TASK_GODOT%" --headless --path . --script res://tests/ui_smoke.gd
 if errorlevel 1 exit /b 1
 "%TASK_GODOT%" --headless --path . --script res://tests/presentation_smoke.gd

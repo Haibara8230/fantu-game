@@ -15,7 +15,8 @@ func _initialize() -> void:
 	# Road encounters have their own suite; this one follows fixed paths.
 	game.encounters_enabled = false
 	check(game.content.error_message.is_empty(), "content loads")
-	game.new_game("测试修士", 42)
+	# A plain three-element root cultivates at the base rate, keeping the numbers below predictable.
+	game.new_game("测试修士", 42, ["metal", "wood", "fire"])
 	check(game.player.hp == 90 and game.player.location == "sect", "starting state")
 	var unchanged: Dictionary = game.snapshot()
 	game.act("gather")
@@ -24,11 +25,11 @@ func _initialize() -> void:
 	check(game.player.realm == 0, "breakthrough requirements enforced")
 	for i: int in range(6):
 		game.act("cultivate")
-	check(game.player.xp == 108 and game.world.day == 180, "cultivation progression")
+	check(game.player.xp == 360 and game.world.day == 180 and game.cultivation_rate() == 60, "cultivation progression at the base rate")
 	game.travel("wild")
 	game.start_battle("serpent")
 	check(game.battle.is_empty(), "boss gated by realm")
-	while game.player.herbs < 4:
+	while game.player.herbs < 23:
 		game.act("gather")
 	game.travel("market")
 	if not game.pending_event.is_empty():
@@ -38,7 +39,14 @@ func _initialize() -> void:
 	check(game.player.pills == 1, "gather-trade-pill economy")
 	game.travel("sect")
 	game.act("breakthrough")
-	check(game.player.realm == 1 and game.player.hp == 140 and game.player.pills == 0 and game.player.xp == 8, "breakthrough consumes resources and upgrades stats")
+	check(game.player.realm == 0, "breakthrough needs the last sub-stage")
+	while game.player.xp < 2000:
+		game.cultivate(360)
+	check(game.player.stage == 3 and game.player.max_hp == 120 and game.realm_name() == "炼气圆满", "sub-stages reached by cultivation raise the caps")
+	check(game.journal_lines().any(func(line: String) -> bool: return line.contains("你已至炼气中期")), "each sub-stage is a recorded milestone")
+	var before_breakthrough: int = game.player.xp
+	game.act("breakthrough")
+	check(game.player.realm == 1 and game.player.stage == 0 and game.player.hp == 140 and game.player.pills == 0 and game.player.xp == before_breakthrough - 2000, "breakthrough consumes resources and upgrades stats")
 	game.travel("wild")
 	game.start_battle("serpent")
 	game.use_skill("fire")
@@ -83,7 +91,7 @@ func _initialize() -> void:
 	escaping.new_game("撤离测试", 6)
 	escaping.start_battle("disciple")
 	escaping.flee()
-	check(escaping.battle.is_empty() and escaping.world.day == 30, "retreat consumes configured days")
+	check(escaping.battle.is_empty() and escaping.world.day == escaping.content.action_days("flee"), "retreat consumes configured days")
 	var corrupt: Dictionary = game.snapshot()
 	corrupt.player.hp = -1
 	unchanged = copy.snapshot()

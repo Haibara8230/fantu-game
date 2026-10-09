@@ -26,5 +26,6 @@
   "inn_rest": "在青石客栈歇息 {duration}，花去 {price} 灵石，气血与灵力尽复。",
   "search_ruin": "在洞府石室翻找 {duration}，得灵石 {stones}、灵草 {herbs}、筑基丹 {pills}。",
   "ruin_cleared": "占据古修洞府的散修败走，石室从此归于寂静。",
-  "gift": "你赠给{npc_name}一株灵草，好感 +{favor}。"
+  "gift": "你赠给{npc_name}一株灵草，好感 +{favor}。",
+  "stage_up": "修为精进，你已至{realm_name}。"
 }

@@ -1,6 +1,6 @@
 extends RefCounted
 ## Upgrades saved sessions one version at a time. Output still goes through Session validation.
-const CURRENT_VERSION := 5
+const CURRENT_VERSION := 6
 const DAYS_PER_MONTH := 30
 const DAYS_PER_YEAR := 360
 # Version 1 had no ages; every journey began at sixteen on day 0.
@@ -23,6 +23,8 @@ static func migrate(data: Dictionary) -> Dictionary:
 		result = _v3_to_v4(result)
 	if not result.is_empty() and int(result.version) == 4:
 		result = _v4_to_v5(result)
+	if not result.is_empty() and int(result.version) == 5:
+		result = _v5_to_v6(result)
 	return result
 
 static func _v1_to_v2(data: Dictionary) -> Dictionary:
@@ -127,4 +129,17 @@ static func _v4_to_v5(data: Dictionary) -> Dictionary:
 	if pending.get("id", "") in V4_RETIRED_EVENTS:
 		data["pending_event"] = {}
 	data["version"] = 5
+	return data
+
+# Earlier journeys had no spirit roots; their pace matched an ordinary three-element root.
+const V5_DEFAULT_ROOTS := ["metal", "wood", "fire"]
+
+## Version 6 adds spirit roots and sub-stages (the stage itself is recomputed from xp on restore).
+static func _v5_to_v6(data: Dictionary) -> Dictionary:
+	var player: Variant = data.get("player")
+	if not player is Dictionary:
+		return {}
+	player["roots"] = V5_DEFAULT_ROOTS.duplicate()
+	player["stage"] = 0
+	data["version"] = 6
 	return data

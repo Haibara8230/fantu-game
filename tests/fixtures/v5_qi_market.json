@@ -1,0 +1,160 @@
+{
+	"battle": {},
+	"chronicle": [
+		{
+			"args": {},
+			"day": 0,
+			"id": "start",
+			"major": true
+		},
+		{
+			"args": {
+				"days": 30,
+				"xp": 18
+			},
+			"day": 30,
+			"id": "cultivate",
+			"major": false
+		},
+		{
+			"args": {
+				"days": 30,
+				"xp": 18
+			},
+			"day": 60,
+			"id": "cultivate",
+			"major": false
+		},
+		{
+			"args": {
+				"days": 30,
+				"xp": 18
+			},
+			"day": 90,
+			"id": "cultivate",
+			"major": false
+		},
+		{
+			"args": {
+				"days": 30,
+				"xp": 18
+			},
+			"day": 120,
+			"id": "cultivate",
+			"major": false
+		},
+		{
+			"args": {
+				"days": 4,
+				"location": "ridge"
+			},
+			"day": 124,
+			"id": "travel",
+			"major": false
+		},
+		{
+			"args": {
+				"days": 3,
+				"location": "wild"
+			},
+			"day": 127,
+			"id": "travel",
+			"major": false
+		},
+		{
+			"args": {
+				"amount": 3,
+				"days": 30,
+				"location": "wild"
+			},
+			"day": 157,
+			"id": "gather_at",
+			"major": false
+		},
+		{
+			"args": {
+				"days": 6,
+				"location": "market"
+			},
+			"day": 163,
+			"id": "travel",
+			"major": false
+		},
+		{
+			"args": {
+				"event": "meet_shen",
+				"part": "chronicle"
+			},
+			"day": 163,
+			"id": "event",
+			"major": false
+		},
+		{
+			"args": {
+				"line": 0,
+				"npc": "shen_mo"
+			},
+			"day": 163,
+			"id": "talk",
+			"major": false
+		}
+	],
+	"ended": {},
+	"pending_event": {},
+	"player": {
+		"birth_day": -5760,
+		"cooldowns": {},
+		"cultivation_carry": 0,
+		"herbs": 3,
+		"hp": 70,
+		"items": {},
+		"journey": {},
+		"location": "market",
+		"max_hp": 90,
+		"max_qi": 30,
+		"name": "采药人",
+		"pills": 0,
+		"qi": 30,
+		"realm": 0,
+		"sect": "wanderer",
+		"stones": 30,
+		"warned_for": -1,
+		"xp": 72
+	},
+	"rng": {
+		"combat": "-5655417696461015097",
+		"world": "-6203507983440580715"
+	},
+	"version": 5,
+	"world": {
+		"day": 163,
+		"events": {
+			"meet_shen": {
+				"count": 1,
+				"last_day": 163,
+				"last_occurrence": 0,
+				"reminded": -1,
+				"state": "completed"
+			}
+		},
+		"flags": {},
+		"people": {
+			"rogue": {
+				"absent_until": -1,
+				"last": {},
+				"met": true,
+				"relation": 0,
+				"talks": 0
+			},
+			"shen_mo": {
+				"absent_until": -1,
+				"last": {
+					"talk": 163
+				},
+				"met": true,
+				"relation": 3,
+				"talks": 1
+			}
+		}
+	}
+}

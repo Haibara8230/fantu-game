@@ -54,7 +54,7 @@ func format(entry: Dictionary, content) -> String:
 			var definition: Variant = table.get(values[key])
 			values[key + "_name"] = definition.name if definition is Dictionary else str(values[key])
 	if values.has("realm"):
-		values["realm_name"] = content.realm(int(values.realm)).name
+		values["realm_name"] = content.realm_title(int(values.realm), int(values.get("stage", 0)))
 	if values.has("days"):
 		values["duration"] = Calendar.duration_text(int(values.days))
 	return template.format(values)

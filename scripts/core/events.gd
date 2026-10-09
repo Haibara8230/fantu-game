@@ -97,6 +97,8 @@ static func apply(s, effects: Array) -> void:
 		match key:
 			"stones", "herbs", "pills", "xp":
 				s.player[key] = maxi(0, int(s.player[key]) + int(value))
+				if key == "xp":
+					s.settle_stage()
 			"item":
 				var count := maxi(0, int(s.player.items.get(value[0], 0)) + int(value[1]))
 				if count == 0:

@@ -39,17 +39,20 @@ func _init() -> void:
 	combat_rng.randomize()
 	world_rng.randomize()
 
-func new_game(character_name: String = "无名", seed_value: int = -1) -> void:
+## `roots` are the spirit-root elements chosen at creation; when empty they are sensed (rolled) here.
+func new_game(character_name: String = "无名", seed_value: int = -1, roots: Array = []) -> void:
 	if seed_value >= 0:
 		combat_rng.seed = seed_value
 		world_rng.seed = hash(str(seed_value) + ":world")
+	if roots.is_empty():
+		roots = roll_roots(world_rng)
 	var chosen_name := character_name.strip_edges().left(16)
 	if chosen_name.is_empty():
 		chosen_name = "无名"
 	world = {"day": 0, "flags": {}, "events": {}, "people": {}}
 	player = {
 		"name": chosen_name, "birth_day": -int(content.rules.starting_age) * Calendar.DAYS_PER_YEAR,
-		"realm": 0, "xp": 0, "hp": 0, "qi": 0, "cultivation_carry": 0, "warned_for": -1,
+		"realm": 0, "stage": 0, "xp": 0, "hp": 0, "qi": 0, "cultivation_carry": 0, "warned_for": -1, "roots": roots.duplicate(),
 		"stones": int(content.rules.starting_stones), "herbs": 0, "pills": 0, "items": {},
 		"journey": {}, "cooldowns": {},
 		"location": "sect", "sect": "wanderer"
@@ -118,7 +121,43 @@ func has_flag(flag: String) -> bool:
 	return bool(world.get("flags", {}).get(flag, false))
 
 func realm_name() -> String:
-	return content.realm(int(player.get("realm", 0))).name
+	return content.realm_title(int(player.get("realm", 0)), int(player.get("stage", 0)))
+
+func stage_stats() -> Dictionary:
+	return content.stage(int(player.realm), int(player.stage))
+
+## Spirit roots: a random number of elements, weighted by grade (rarer roots cultivate faster).
+func roll_roots(rng: RandomNumberGenerator) -> Array:
+	var spec: Dictionary = content.rules.spirit_roots
+	var total := 0
+	for grade: Dictionary in spec.grades:
+		total += int(grade.weight)
+	var pick := rng.randi_range(1, total)
+	var count := 3
+	for grade: Dictionary in spec.grades:
+		pick -= int(grade.weight)
+		if pick <= 0:
+			count = int(grade.count)
+			break
+	var pool: Array = spec.elements.duplicate()
+	var chosen: Array = []
+	for index: int in count:
+		chosen.append(pool.pop_at(rng.randi_range(0, pool.size() - 1)))
+	var ordered: Array = []
+	for element: String in spec.elements:
+		if element in chosen:
+			ordered.append(element)
+	return ordered
+
+func root_title() -> String:
+	return content.root_title(player.get("roots", []))
+
+func cultivation_speed() -> float:
+	return float(content.root_grade(player.get("roots", [])).speed)
+
+## Xp gained per 30 days of closed-door cultivation with these roots.
+func cultivation_rate() -> int:
+	return int(round(float(content.rules.cultivate_xp) * cultivation_speed()))
 
 func time_name() -> String:
 	return Calendar.date_text(int(world.get("day", 0)))
@@ -148,8 +187,23 @@ func next_breakthrough() -> Dictionary:
 		return {}
 	return current.breakthrough
 
+## Recomputes the sub-stage from xp. Reaching a higher stage raises the stat caps, gives the new
+## headroom to current hp and qi, and is recorded as a milestone. Returns the milestone texts.
+func settle_stage() -> Array[String]:
+	var texts: Array[String] = []
+	var reached: int = content.stage_index(int(player.realm), int(player.xp))
+	while int(player.stage) < reached:
+		var old_hp := int(player.max_hp)
+		var old_qi := int(player.max_qi)
+		player.stage = int(player.stage) + 1
+		_refresh_realm_stats()
+		player.hp = int(player.hp) + int(player.max_hp) - old_hp
+		player.qi = int(player.qi) + int(player.max_qi) - old_qi
+		texts.append(log_event("stage_up", {"realm": int(player.realm), "stage": int(player.stage)}, true))
+	return texts
+
 func _refresh_realm_stats() -> void:
-	var current: Dictionary = content.realm(int(player.realm))
+	var current: Dictionary = stage_stats()
 	player.max_hp = int(current.max_hp)
 	player.max_qi = int(current.max_qi)
 
@@ -176,7 +230,7 @@ func act(action: String) -> String:
 		"cultivate":
 			return cultivate(days)
 		"rest":
-			var passed := advance_days(days)
+			var passed := advance_days(rest_days())
 			if not ended.is_empty():
 				return conclude("", passed)
 			player.hp = player.max_hp
@@ -244,18 +298,22 @@ func act(action: String) -> String:
 			var need := next_breakthrough()
 			if need.is_empty():
 				return "后续境界尚未开放。"
-			if int(player.xp) < int(need.xp) or int(player.pills) < int(need.pills):
-				return "突破需要 %d 修为与 %d 枚筑基丹。" % [int(need.xp), int(need.pills)]
+			var last_stage: int = content.realm(int(player.realm)).stages.size() - 1
+			if int(player.stage) < last_stage or int(player.xp) < int(need.xp) or int(player.pills) < int(need.pills):
+				return "突破需修至%s，并有 %d 修为与 %d 枚筑基丹。" % [content.realm_title(int(player.realm), last_stage), int(need.xp), int(need.pills)]
 			player.pills -= int(need.pills)
 			player.xp -= int(need.xp)
 			var passed := advance_days(days)
 			if not ended.is_empty():
 				return conclude("", passed)
 			player.realm += 1
+			player.stage = 0
 			_refresh_realm_stats()
 			player.hp = player.max_hp
 			player.qi = player.max_qi
-			return conclude(log_event("breakthrough", {"days": passed.elapsed, "realm": int(player.realm)}, true), passed)
+			var texts: Array[String] = [log_event("breakthrough", {"days": passed.elapsed, "realm": int(player.realm), "stage": 0}, true)]
+			texts.append_array(settle_stage())
+			return conclude(" ".join(texts), passed)
 	return "未知操作。"
 
 ## Closed-door cultivation for a chosen number of days. Reminders and lifespan warnings can end it early;
@@ -274,6 +332,9 @@ func cultivate(days: int) -> String:
 	var gained := _gain_cultivation(int(passed.elapsed))
 	player.qi = player.max_qi
 	var text := log_event("cultivate", {"days": passed.elapsed, "xp": gained})
+	var milestones := settle_stage()
+	if not milestones.is_empty():
+		text += " " + " ".join(milestones)
 	if passed.interrupted:
 		text = "闭关第 %d 日，外事惊动，你提前出关。%s" % [passed.elapsed, text]
 	return conclude(text, passed)
@@ -290,8 +351,13 @@ func wait(days: int) -> String:
 		return conclude("", passed)
 	return conclude(log_event("wait", {"days": passed.elapsed, "location": player.location}), passed)
 
+## Days of quiet rest needed to recover fully: proportional to the missing health, at least one.
+func rest_days() -> int:
+	var missing := float(int(player.max_hp) - int(player.hp)) / float(player.max_hp)
+	return maxi(1, int(ceil(missing * float(content.rules.rest_full_days))))
+
 func _gain_cultivation(days: int) -> int:
-	var total := int(player.cultivation_carry) + days * int(content.rules.cultivate_xp)
+	var total := int(player.cultivation_carry) + days * cultivation_rate()
 	var gained := total / Calendar.DAYS_PER_MONTH
 	player.cultivation_carry = total % Calendar.DAYS_PER_MONTH
 	player.xp += gained
@@ -511,7 +577,7 @@ func start_battle(enemy_id: String, opponent_sect: String = "") -> String:
 	if not opponent_sect.is_empty() and not content.sects.has(opponent_sect):
 		return "未知对手传承。"
 	if int(player.realm) < int(enemy.min_realm):
-		return "%s气息凶险，需达到%s。" % [enemy.name, content.realm(int(enemy.min_realm)).name]
+		return "%s气息凶险，需达到%s。" % [enemy.name, content.realm_title(int(enemy.min_realm), 0)]
 	if enemy.has("world_flag") and has_flag(enemy.world_flag):
 		return "%s已经伏诛，此地重归安宁。" % enemy.name
 	return finish(begin_battle(enemy_id, "", opponent_sect))
@@ -604,9 +670,17 @@ func restore(data: Variant) -> bool:
 			return false
 	if int(saved_player.realm) >= content.realms.size():
 		return false
-	var realm: Dictionary = content.realm(int(saved_player.realm))
-	if int(saved_player.hp) <= 0 or int(saved_player.hp) > int(realm.max_hp) or int(saved_player.qi) > int(realm.max_qi):
+	# The sub-stage always follows from xp; stat caps follow from the stage.
+	var saved_stage: int = content.stage_index(int(saved_player.realm), int(saved_player.xp))
+	var caps: Dictionary = content.stage(int(saved_player.realm), saved_stage)
+	if int(saved_player.hp) <= 0 or int(saved_player.hp) > int(caps.max_hp) or int(saved_player.qi) > int(caps.max_qi):
 		return false
+	var roots: Variant = saved_player.get("roots")
+	if not roots is Array or roots.is_empty() or roots.size() > content.rules.spirit_roots.elements.size():
+		return false
+	for element: Variant in roots:
+		if not element in content.rules.spirit_roots.elements or roots.count(element) != 1:
+			return false
 	var saved_sect: Variant = saved_player.get("sect")
 	if not saved_sect is String or not content.sects.has(saved_sect):
 		return false
@@ -647,6 +721,8 @@ func restore(data: Variant) -> bool:
 	for key: String in PLAYER_COUNTS:
 		player[key] = int(player[key])
 	player.birth_day = int(birth)
+	player.stage = saved_stage
+	player.roots = roots.duplicate()
 	player.warned_for = int(warned)
 	for item_id: String in player.items:
 		player.items[item_id] = int(player.items[item_id])

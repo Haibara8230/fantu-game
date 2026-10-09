@@ -70,9 +70,9 @@
     "choices": [
       {
         "id": "ganoderma",
-        "label": "竞拍百年灵芝（120 灵石，修为 +60）",
+        "label": "竞拍百年灵芝（120 灵石，修为 +300）",
         "conditions": [{"stones_at_least": 120}],
-        "effects": [{"stones": -120}, {"xp": 60}],
+        "effects": [{"stones": -120}, {"xp": 300}],
         "chronicle": "你在云溪特殊拍卖中拍得百年灵芝，炼化后修为大进。"
       },
       {

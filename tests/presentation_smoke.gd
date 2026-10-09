@@ -87,11 +87,11 @@ func _run() -> void:
 	await main._battle_action("flee")
 	# Legal progression so boss presentation also exercises the real game's gate.
 	main._run(func() -> String: return main.session.travel("sect"))
-	for i: int in range(6):
-		main._run(func() -> String: return main.session.act("cultivate"))
+	while main.session.player.xp < 2000:
+		main._run(func() -> String: return main.session.cultivate(360))
 	main._run(func() -> String: return main.session.act("rest"))
 	main._run(func() -> String: return main.session.travel("wild"))
-	while main.session.player.herbs < 4:
+	while int(main.session.player.herbs) * 4 + int(main.session.player.stones) < 120:
 		main._run(func() -> String: return main.session.act("gather"))
 	main._run(func() -> String: return main.session.travel("market"))
 	if not main.session.pending_event.is_empty():

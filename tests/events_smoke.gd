@@ -71,7 +71,7 @@ func _invitation_path_with_interrupt() -> void:
 	var message := game.cultivate(360)
 	check(int(game.world.day) == Calendar.to_day(5, 3, 1), "retreat stops on the day the auction opens")
 	check(message.contains("提前出关") and message.contains("特殊拍卖已经开场"), "interruption explains why")
-	check(int(game.player.xp) == (int(game.world.day) - before) * 18 / 30, "cultivation credited only for elapsed days")
+	check(int(game.player.xp) == (int(game.world.day) - before) * game.cultivation_rate() / 30, "cultivation credited only for elapsed days")
 	game.player.stones = 50
 	game.travel("market")
 	check(game.pending_event.get("id", "") == "special_auction", "arrival inside the window opens the auction")
@@ -259,6 +259,6 @@ func _v2_migration() -> void:
 	var battle := Session.new()
 	check(battle.restore(JSON.parse_string(FileAccess.get_file_as_string("res://tests/fixtures/v2_battle.json"))) and battle.battle.opponent_sect == "canglan", "v2 battle migrates")
 	battle.flee()
-	check(battle.battle.is_empty() and int(battle.world.day) == 30, "migrated battle resolves through the scheduler")
+	check(battle.battle.is_empty() and int(battle.world.day) == battle.content.action_days("flee"), "migrated battle resolves through the scheduler")
 	var serpent := Session.new()
 	check(serpent.restore(JSON.parse_string(FileAccess.get_file_as_string("res://tests/fixtures/v2_foundation_serpent.json"))) and serpent.has_flag("serpent_slain") and int(serpent.player.realm) == 1, "v2 world flags and realm kept")
