@@ -27,7 +27,6 @@
 | 按地点区分的斗法背景 8 张 | 所有斗法共用 `bamboo_arena_v1.png` | `docs/ART_BRIEF_M4.md` A 组 |
 | 劫修、生成修士的斗法人物图集 14 张 | 沿用同门的人物图集 | `docs/ART_BRIEF_M4.md` B 组（劫修 2 张；生成修士按门派 × 性别 12 张） |
 | 事件关键插图 7 张 | 尚无，事件只有文字面板 | `docs/ART_BRIEF_M4.md` C 组；演出版式确定后可能调整尺寸 |
-| 多余文件 | `assets/art/map/region_qingyun_preview_v1.png` 游戏不使用 | 可删除 |
 
 **素材接入**
 - 斗法背景与斗法人物图集已接入，图片放好即生效，缺图时回退到共用图。

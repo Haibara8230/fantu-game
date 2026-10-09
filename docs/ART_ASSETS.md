@@ -184,8 +184,8 @@ Subject: <填入上表对应人物，英文描述>. Half-body, three-quarter vie
 Style: NON-REALISTIC hand-drawn 2D game portrait, clear dark ink outlines, flat color areas, restrained two-tone cel shading, simplified clothing folds, slightly stylized face. Not photorealistic, not 3D, not chibi. Plain muted background or transparent alpha. No text, frame or watermark.
 ```
 
-### 尚未规划
-战斗背景目前所有地点共用 `bamboo_arena_v1.png`。按地区区分的战斗背景、劫修专属人物图集（目前沿用同门图集），放在 M3–M4 一并规划。
+### 斗法背景与人物图集
+按地点区分的斗法背景、劫修与生成修士的斗法人物图集，规格见 `docs/ART_BRIEF_M4.md`，已接入代码；图片到位前沿用 `bamboo_arena_v1.png` 与同门图集。
 
 
 ## 2026-10-09：青云山区域地图首张样图
@@ -196,6 +196,7 @@ Style: NON-REALISTIC hand-drawn 2D game portrait, clear dark ink outlines, flat 
 - 用途：先供用户确认视觉效果，未接入正式地图路径。正式地图要求精确 2560×1600，本样图尚未满足该尺寸。
 - 目视检查：二维手绘青黛山水、清晰墨线、局部暖色灵泉；未见文字、水印、UI 或连接道路。地标位置与标记留白仍需在正式版进一步校准，洞府表现也需更低调。
 - 本次仅生成这一张样图；没有启动可见游戏或编辑器。
+- 正式地图完成后，样图已从仓库删除（可在提交历史中找回）。
 
 提示词：
 
