@@ -127,10 +127,10 @@ static func apply(s, effects: Array) -> void:
 			"clear_flag":
 				s.world.flags.erase(value)
 			"meet":
-				_person(s, value).met = true
+				s.mark_met(value)
 			"relation":
+				s.mark_met(value[0])
 				var person := _person(s, value[0])
-				person.met = true
 				person.relation = clampi(int(person.relation) + int(value[1]), -s.content.FAVOR_MAX, s.content.FAVOR_MAX)
 			"leave":
 				s.npc_depart(s.acting_npc)
@@ -190,6 +190,9 @@ static func next_due(s, from_day: int) -> Dictionary:
 	if int(s.player.get("warned_for", -1)) != lifespan_end:
 		best = _earlier(best, {"day": maxi(from_day, warning_day), "kind": "lifespan_warning", "event": ""})
 	best = _earlier(best, {"day": maxi(from_day, lifespan_end), "kind": "lifespan_end", "event": ""})
+	var obituary: Dictionary = s.next_obituary(from_day)
+	if not obituary.is_empty():
+		best = _earlier(best, {"day": int(obituary.day), "kind": "obituary", "event": obituary.id})
 	for event_id: String in _sorted_ids(s):
 		var definition: Dictionary = s.content.events[event_id]
 		var progress := progress_of(s, event_id)
@@ -221,6 +224,12 @@ static func fire(s, due: Dictionary) -> Dictionary:
 			s.player.warned_for = s.lifespan_end_day()
 			var years: int = int(s.content.rules.lifespan_warning_years)
 			return {"interrupt": true, "message": s.log_event("lifespan_warning", {"years": years}, true)}
+		"obituary":
+			var progress := _person(s, due.event)
+			progress.mourned = true
+			s.obituaries_changed()
+			var life: Dictionary = s.life_by_id(due.event)
+			return {"interrupt": false, "message": s.log_event("obituary", {"npc": due.event, "age": (int(life.death) - int(life.birth)) / 360})}
 		"lifespan_end":
 			s.ended = {"kind": "lifespan", "day": day}
 			return {"interrupt": true, "message": s.log_event("lifespan_end", {"location": s.player.location, "age": s.age()}, true)}
@@ -260,10 +269,8 @@ static func check_location(s, passing: bool = false) -> Array[String]:
 		return messages
 	var day: int = s.world.day
 	var used_groups := {}
-	for event_id: String in _sorted_ids(s):
+	for event_id: String in s.content.location_events(s.player.location):
 		var definition: Dictionary = s.content.events[event_id]
-		if definition.trigger != "location" or definition.location != s.player.location:
-			continue
 		if passing and definition.has("choices"):
 			continue
 		var group: String = definition.get("group", "")

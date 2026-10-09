@@ -74,35 +74,30 @@ static func pool_index(root: String) -> Dictionary:
 static func age_band(age: int) -> String:
 	return "young" if age < 35 else ("middle" if age < 55 else "old")
 
-## Pool image per generated person: same gender and age band first, then same gender, then anything;
-## images named for the person's role are preferred; each image is used once per world while the pool
-## lasts. Pure function of the people, the world seed and the pool, so a person keeps their face.
+## A generated person's pool image: same gender and age band first, then same gender, then anything;
+## images named for the person's role are preferred. A pure function of the person and the pool, so
+## a person always keeps their face; with more people than images, faces repeat across people.
+static func pick_portrait(person_id: String, person: Dictionary, world_seed: int, index: Dictionary) -> String:
+	if index.is_empty() or person.is_empty():
+		return ""
+	var gender: String = person.get("gender", "male")
+	var candidates: Array = index.get("%s_%s" % [gender, age_band(int(person.get("age", 30)))], [])
+	if candidates.is_empty():
+		for key: String in index:
+			if key.begins_with(gender + "_"):
+				candidates = candidates + index[key]
+	if candidates.is_empty():
+		for key: String in index:
+			candidates = candidates + index[key]
+	var role: String = str(person.get("kind", "")) + "_"
+	var preferred := candidates.filter(func(path: String) -> bool: return path.get_file().begins_with(role))
+	var choices: Array = preferred if not preferred.is_empty() else candidates
+	return choices[absi(hash([world_seed, person_id])) % choices.size()]
+
+## Pool images for several people at once (tools and tests).
 static func assign_pool(people: Dictionary, world_seed: int, index: Dictionary) -> Dictionary:
 	var assigned := {}
-	if index.is_empty():
-		return assigned
-	var used := {}
-	var ids: Array = people.keys().filter(func(person_id: String) -> bool: return people[person_id].get("generated", false))
-	ids.sort_custom(func(a: String, b: String) -> bool: return int(a.trim_prefix("g:")) < int(b.trim_prefix("g:")))
-	for person_id: String in ids:
-		var person: Dictionary = people[person_id]
-		var gender: String = person.get("gender", "male")
-		var group := "%s_%s" % [gender, age_band(int(person.age))]
-		var candidates: Array = index.get(group, [])
-		if candidates.is_empty():
-			for key: String in index:
-				if key.begins_with(gender + "_"):
-					candidates = candidates + index[key]
-		if candidates.is_empty():
-			for key: String in index:
-				candidates = candidates + index[key]
-		var role: String = str(person.get("kind", "")) + "_"
-		var preferred := candidates.filter(func(path: String) -> bool: return path.get_file().begins_with(role))
-		var choices: Array = preferred if not preferred.filter(func(path: String) -> bool: return not used.has(path)).is_empty() else candidates
-		var fresh := choices.filter(func(path: String) -> bool: return not used.has(path))
-		if fresh.is_empty():
-			fresh = choices
-		var pick: String = fresh[absi(hash([world_seed, person_id])) % fresh.size()]
-		used[pick] = true
-		assigned[person_id] = pick
+	for person_id: String in people:
+		if people[person_id].get("generated", false):
+			assigned[person_id] = pick_portrait(person_id, people[person_id], world_seed, index)
 	return assigned

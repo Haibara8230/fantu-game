@@ -1,7 +1,16 @@
 {
-  "count": 24,
+  "world_total": 1200,
+  "regions": {"qingyun": 0.15},
+  "life": {
+    "start_age": [16, 20],
+    "speed": [300, 1200],
+    "foundation_chance": 0.35,
+    "accident_chance": 0.15,
+    "lifespan_share": [0.75, 1.0],
+    "successor_gap_days": [30, 720]
+  },
   "surnames": ["林", "苏", "陆", "叶", "秦", "顾", "萧", "许", "韩", "江", "温", "宋", "程", "白", "方", "孟", "唐", "罗", "魏", "严", "楚", "沈", "谢", "柳", "吕", "崔", "邵", "范", "章", "褚"],
-  "given": ["青", "远", "清", "岚", "舟", "松", "竹", "云", "川", "晚", "照", "璃", "衡", "砚", "墨", "朔", "澄", "迟", "离", "安", "若", "宁", "初", "霁", "临", "鹤", "棠", "蘅", "琢", "微"],
+  "given": ["青", "远", "清", "岚", "舟", "松", "竹", "云", "川", "晚", "照", "璃", "衡", "砚", "墨", "朔", "澄", "迟", "离", "安", "若", "宁", "初", "霁", "临", "鹤", "棠", "蘅", "琢", "微", "辰", "昭", "珩", "瑾", "泽", "瑶", "知", "白", "寒", "星", "雪", "峰", "羽", "然", "笙", "歌", "怀", "月", "言", "思", "景", "南", "北", "秋", "春", "华", "玄", "绯", "黛", "芷"],
   "personalities": {
     "豪爽": ["“道友若有难处，只管开口！”", "“修行哪来那么多弯弯绕绕，打一场就知道了。”"],
     "谨慎": ["“落霞谷那边，没把握最好别去。”", "“灵石要省着花，谁知道明天会出什么事。”"],
@@ -17,14 +26,8 @@
     "wanderer": {"title": "散修", "affiliation": "wanderer", "weight": 8, "schedule": ["town", "ferry", "market", "ridge", "wild"], "attitude": "neutral"},
     "trader": {"title": "坊市修士", "affiliation": "wanderer", "weight": 4, "home": ["market"], "attitude": "friendly"},
     "gatherer": {"title": "采药人", "affiliation": "wanderer", "weight": 4, "schedule": ["ridge", "wild", "town"], "attitude": "friendly"},
-    "visitor": {"title": "游方修士", "affiliation": "chixiao", "weight": 2, "schedule": ["ferry", "market", "town"], "attitude": "neutral"}
+    "visitor": {"title": "游方修士", "affiliation": "chixiao", "weight": 2, "schedule": ["ferry", "market", "town", "away", "away"], "attitude": "neutral"}
   },
-  "realms": [
-    {"realm": 0, "stage": 0, "weight": 25, "tiers": [1, 1]},
-    {"realm": 0, "stage": 1, "weight": 30, "tiers": [1, 2]},
-    {"realm": 0, "stage": 2, "weight": 25, "tiers": [1, 2]},
-    {"realm": 0, "stage": 3, "weight": 12, "tiers": [2, 2]},
-    {"realm": 1, "stage": 0, "weight": 8, "tiers": [2, 3]}
-  ],
+  "loadout_tiers": [[1, 1], [1, 2], [1, 2], [2, 2], [2, 3]],
   "age": [18, 70]
 }

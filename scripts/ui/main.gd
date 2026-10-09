@@ -22,6 +22,9 @@ var selected_spot := ""
 # The person whose profile is open in the centre panel ("" when none).
 var selected_npc := ""
 var shown_location := ""
+var show_everyone_here := false
+const SIDEBAR_ACQUAINTANCES := 8
+const PEOPLE_SHOWN_HERE := 12
 var welcome_roots: Array = []
 # Local, never-committed portrait pack (see ArtLibrary); tests point this elsewhere.
 var portrait_root := ArtLibrary.LOCAL_PORTRAITS
@@ -235,6 +238,7 @@ func _render() -> void:
 	if p.location != shown_location:
 		shown_location = p.location
 		selected_npc = ""
+		show_everyone_here = false
 	_clear(stats)
 	stats.add_child(_label(p.name, 25))
 	stats.add_child(_label(session.realm_name(), 18, GOLD))
@@ -280,6 +284,8 @@ func _render() -> void:
 		_render_bag()
 	elif view == "arts":
 		_render_arts()
+	elif view == "people":
+		_render_people_view()
 	else:
 		_render_location()
 	_update_audio()
@@ -371,21 +377,6 @@ func _render_location() -> void:
 # --- People ------------------------------------------------------------------------
 
 ## Acquaintances with where they are now; clicking opens their profile.
-func _render_acquaintances() -> void:
-	var known: Array[String] = session.known_npcs()
-	if known.is_empty():
-		return
-	stats.add_child(_label("相 识", 15, GOLD))
-	for person_id: String in known:
-		var person: Dictionary = session.content.people[person_id]
-		var where: String = session.npc_location(person_id)
-		var place: String = session.content.locations[where].name if not where.is_empty() else "下落不明"
-		var favor: int = session.favor(person_id)
-		var entry := _button("%s · %s\n%s · %s %d" % [person.name, place, person.title, session.content.favor_stage(favor), favor], func() -> void: _open_person(person_id), "查看资料")
-		entry.alignment = HORIZONTAL_ALIGNMENT_LEFT
-		entry.add_theme_font_size_override("font_size", 14)
-		stats.add_child(entry)
-
 func _render_quests() -> void:
 	if session.player.get("quests", []).is_empty():
 		return
@@ -401,22 +392,83 @@ func _render_quests() -> void:
 		label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		stats.add_child(label)
 
+## The most relevant acquaintances (handwritten first, then by favor); everyone is in the 相识 view.
+func _render_acquaintances() -> void:
+	var known := _sorted_acquaintances()
+	if known.is_empty():
+		return
+	stats.add_child(_label("相 识", 15, GOLD))
+	for person_id: String in known.slice(0, SIDEBAR_ACQUAINTANCES):
+		stats.add_child(_acquaintance_button(person_id))
+	if known.size() > SIDEBAR_ACQUAINTANCES:
+		stats.add_child(_button("全部相识 · %d 人" % known.size(), func() -> void: _set_view("people"), "查看所有认识的人与他们的去向"))
+
+func _sorted_acquaintances() -> Array[String]:
+	var known: Array[String] = session.known_npcs()
+	known.sort_custom(func(a: String, b: String) -> bool:
+		var core_a: bool = not session.is_generated(a)
+		var core_b: bool = not session.is_generated(b)
+		if core_a != core_b:
+			return core_a
+		return session.favor(a) > session.favor(b) or (session.favor(a) == session.favor(b) and a < b))
+	return known
+
+func _acquaintance_button(person_id: String) -> Button:
+	var person: Dictionary = session.person(person_id)
+	var where: String = session.npc_location(person_id)
+	var place: String = session.content.locations[where].name if not where.is_empty() else "下落不明"
+	if person.has("death") and int(session.world.day) >= int(person.death):
+		place = "已故"
+	var favor: int = session.favor(person_id)
+	var entry := _button("%s · %s\n%s · %s %d" % [person.name, place, person.title, session.content.favor_stage(favor), favor], func() -> void: _open_person(person_id), "查看资料")
+	entry.alignment = HORIZONTAL_ALIGNMENT_LEFT
+	entry.add_theme_font_size_override("font_size", 14)
+	return entry
+
+## 相识: everyone the player has met, with where they are now.
+func _render_people_view() -> void:
+	var known := _sorted_acquaintances()
+	center.add_child(_label("相 识  ·  %d 人" % known.size(), 26, GOLD))
+	var grid := GridContainer.new()
+	grid.columns = 3
+	grid.add_theme_constant_override("h_separation", 10)
+	grid.add_theme_constant_override("v_separation", 8)
+	center.add_child(grid)
+	for person_id: String in known:
+		var entry := _acquaintance_button(person_id)
+		entry.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		grid.add_child(entry)
+	center.add_child(_button("返回", func() -> void: _set_view("place")))
+
+## People here: handwritten first, then the first few others, with the rest behind 「更多」.
 func _render_people_here() -> void:
 	var here: Array[String] = session.present_npcs()
 	if here.is_empty():
 		return
-	var row := HBoxContainer.new()
-	row.add_theme_constant_override("separation", 8)
-	center.add_child(row)
-	row.add_child(_label("此地人物", 15, GOLD))
+	var flow := HFlowContainer.new()
+	flow.add_theme_constant_override("h_separation", 8)
+	flow.add_theme_constant_override("v_separation", 6)
+	center.add_child(flow)
+	flow.add_child(_label("此地人物 · %d" % here.size(), 15, GOLD))
+	var shown := 0
 	for person_id: String in here:
-		var person: Dictionary = session.content.people[person_id]
+		var generated: bool = session.is_generated(person_id)
+		if generated and not show_everyone_here and shown >= PEOPLE_SHOWN_HERE:
+			continue
+		if generated:
+			shown += 1
+		var person: Dictionary = session.person(person_id)
 		var hostile: bool = person.attitude == "hostile"
 		var chip := _button(("⚔ " if hostile else "") + person.name + " · " + person.title, func() -> void: _open_person(person_id), "查看资料与交互")
 		if hostile:
 			chip.add_theme_color_override("font_color", Color("#e39a82"))
 		chip.disabled = person_id == selected_npc
-		row.add_child(chip)
+		flow.add_child(chip)
+	var hidden: int = here.filter(func(person_id: String) -> bool: return session.is_generated(person_id)).size() - shown
+	if hidden > 0:
+		flow.add_child(_button("更多 · %d 人" % hidden, func() -> void:
+			show_everyone_here = true
+			_render(), "显示此地的所有人"))
 
 func _open_person(person_id: String) -> void:
 	if presenting:
@@ -432,7 +484,7 @@ func _close_person() -> void:
 
 ## Profile card: who they are, how they feel about you, and what you can do with them here.
 func _render_person(person_id: String) -> void:
-	var person: Dictionary = session.content.people[person_id]
+	var person: Dictionary = session.person(person_id)
 	var progress: Dictionary = session.world.people.get(person_id, {})
 	var favor: int = session.favor(person_id)
 	var card := HBoxContainer.new()
@@ -525,8 +577,10 @@ func _local_portrait(person_id: String) -> String:
 	var key := "%d:%s" % [int(session.world.get("seed", 0)), str(index.hash())]
 	if key != _pool_key:
 		_pool_key = key
-		_pool_assignments = ArtLibrary.assign_pool(session.content.people, int(session.world.get("seed", 0)), index)
-	return str(_pool_assignments.get(person_id, ""))
+		_pool_assignments = {}
+	if not _pool_assignments.has(person_id):
+		_pool_assignments[person_id] = ArtLibrary.pick_portrait(person_id, session.person(person_id), int(session.world.get("seed", 0)), index)
+	return str(_pool_assignments[person_id])
 
 func _open_spots(location_id: String) -> Array[Dictionary]:
 	var result: Array[Dictionary] = []
@@ -629,7 +683,7 @@ func _render_map() -> void:
 		if not where.is_empty():
 			if not people_at.has(where):
 				people_at[where] = []
-			people_at[where].append(session.content.people[person_id].name)
+			people_at[where].append(session.person(person_id).name)
 	world_map.configure(session.content, session.world.flags, session.player.location, map_target, path, str(session.player.journey.get("to", "")), people_at)
 	world_map.location_selected.connect(_select_map_target)
 	if map_target.is_empty() or not session.location_visible(map_target):

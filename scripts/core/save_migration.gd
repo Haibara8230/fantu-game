@@ -1,6 +1,6 @@
 extends RefCounted
 ## Upgrades saved sessions one version at a time. Output still goes through Session validation.
-const CURRENT_VERSION := 9
+const CURRENT_VERSION := 10
 const DAYS_PER_MONTH := 30
 const DAYS_PER_YEAR := 360
 # Version 1 had no ages; every journey began at sixteen on day 0.
@@ -31,6 +31,8 @@ static func migrate(data: Dictionary) -> Dictionary:
 		result = _v7_to_v8(result)
 	if not result.is_empty() and int(result.version) == 8:
 		result = _v8_to_v9(result)
+	if not result.is_empty() and int(result.version) == 9:
+		result = _v9_to_v10(result)
 	return result
 
 static func _v1_to_v2(data: Dictionary) -> Dictionary:
@@ -191,4 +193,19 @@ static func _v8_to_v9(data: Dictionary) -> Dictionary:
 	world["rumors"] = {}
 	world["quests_taken"] = {}
 	data["version"] = 9
+	return data
+
+## Version 10 replaces the 24-person population ("g:<index>") with a living one ("g:<seat>:<life>").
+## Old acquaintances cannot be matched to new people, so they are dropped; a spar with one is called off.
+static func _v9_to_v10(data: Dictionary) -> Dictionary:
+	var world: Variant = data.get("world")
+	var battle: Variant = data.get("battle")
+	if not world is Dictionary or not world.get("people") is Dictionary or not battle is Dictionary:
+		return {}
+	for person_id: Variant in world.people.keys():
+		if str(person_id).begins_with("g:") and str(person_id).count(":") == 1:
+			world.people.erase(person_id)
+	if str(battle.get("npc", "")).begins_with("g:") and str(battle.npc).count(":") == 1:
+		data["battle"] = {}
+	data["version"] = 10
 	return data

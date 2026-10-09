@@ -1,7 +1,7 @@
 # Portrait Pool Brief: generated NPCs (local, personal use)
 
 > 给人类读者：这份文档交给图像生成 AI，用来批量生成「生成人物」的立绘图池。每个世界会随机生成 20 多名修士，游戏按性别、年龄段和身份从图池里给每人分配一张，同一世界内不重复、同一个人每次看都是同一张。
-> **这批图只放在本机 `assets/local/portraits/pool/`，该文件夹已被 Git 忽略，永远不会提交。** 仓库是公开的，请不要把这些图放到别处或手动提交。
+> 这批图放在 `assets/local/portraits/pool/`，会随仓库一起提交。注意仓库是公开的。
 > 想更像《觅长生》，可以同时把几张觅长生的人物截图交给图像 AI 作为**画风参考**。
 
 This brief is self-contained. Read it fully before generating anything.
@@ -10,9 +10,9 @@ This brief is self-contained. Read it fully before generating anything.
 
 ## 1. What you are making
 
-A pool of **half-body portraits for ordinary cultivators** in a 2D Chinese cultivation (xianxia) RPG. The game generates 20–30 people per world (outer disciples, wandering cultivators, market cultivators, herb gatherers, travelling cultivators) and deals each one a portrait from this pool. The bigger and more varied the pool, the less often faces repeat between playthroughs.
+A pool of **half-body portraits for ordinary cultivators** in a 2D Chinese cultivation (xianxia) RPG. The world holds about 1200 generated people over its centuries, around 180 of them in the current region at any time (outer disciples, wandering cultivators, market cultivators, herb gatherers, travelling cultivators) and deals each one a portrait from this pool. A person always keeps the same face; with more people than images, faces repeat across people. The bigger and more varied the pool, the less often faces repeat between playthroughs.
 
-**Minimum: 72 images** (12 in each of the 6 gender/age groups). **Better: 120** (20 per group). You can deliver in batches; every new file is picked up automatically.
+**Minimum: 72 images** (12 in each of the 6 gender/age groups). **Better: 180 or more** (30 per group): with about 180 people in the region, faces will repeat less. Outer disciples are the largest group (dozens at the sect), so give `disciple_` images the biggest share. You can deliver in batches; every new file is picked up automatically.
 
 ---
 
@@ -60,7 +60,7 @@ All folders are under `assets/local/portraits/`.
 
 | Group | disciple | wanderer | trader | gatherer | visitor |
 |---|---|---|---|---|---|
-| young (male / female) | 4 | 3 | 2 | 2 | 1 |
+| young (male / female) | 5 | 3 | 1 | 2 | 1 |
 | middle (male / female) | 2 | 4 | 3 | 2 | 1 |
 | old (male / female) | 1 | 4 | 3 | 3 | 1 |
 
@@ -125,6 +125,5 @@ To give a particular character your own image, put it directly in `assets/local/
 - [ ] At least 12 per group (72 in total), 20 per group if possible
 - [ ] Clearly different people within each group; one consistent art style overall
 - [ ] No text, watermark or frame
-- [ ] Nothing from this pool is committed to Git (the folder is ignored; do not move images elsewhere)
 
 To see them in the game, run `play.cmd`, stop somewhere with people around, and open a profile.

@@ -52,5 +52,6 @@
   "quest_expired": "委托「{quest_title}」已过期限，只得作罢。",
   "tournament_round": "小比第 {round} 轮，你胜过了{npc_name}。",
   "tournament_champion": "你在外门小比中连胜三轮，夺得头名，得灵石 {stones}、修为 {xp}与宗门赏赐的{item_name}。",
-  "tournament_out": "小比第 {round} 轮，你败给了{npc_name}，止步于此。"
+  "tournament_out": "小比第 {round} 轮，你败给了{npc_name}，止步于此。",
+  "obituary": "传来消息：{npc_name}已经故去，享年 {age} 岁。"
 }

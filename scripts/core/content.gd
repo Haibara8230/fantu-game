@@ -19,6 +19,8 @@ var equipment_data: Dictionary = {}
 var vfx_tiers: Array = []
 var vfx_styles: Dictionary = {}
 var population_data: Dictionary = {}
+# Resolves people not in the handwritten table (the generated population), set by the session.
+var person_lookup: Callable
 var commission_data: Dictionary = {}
 var error_message: String = ""
 const DANGER_LEVELS := 4
@@ -607,6 +609,14 @@ func realm(index: int) -> Dictionary:
 func action_days(action_id: String) -> int:
 	return int(actions.get(action_id, 0))
 
+## A handwritten person, or one the session can resolve (the generated population); {} otherwise.
+func person_named(person_id: String) -> Dictionary:
+	if people.has(person_id):
+		return people[person_id]
+	if person_lookup.is_valid():
+		return person_lookup.call(person_id)
+	return {}
+
 ## Event ids by descending priority, then id. Cached; rebuilt if the event set changes size.
 var _by_priority: Array[String] = []
 var _by_priority_source := -1
@@ -647,7 +657,8 @@ func _validate_person(person: Variant) -> String:
 		if not person.schedule is Array or person.schedule.is_empty():
 			return "行程不能为空"
 		for stop: Variant in person.schedule:
-			if not stop is Dictionary or not locations.has(stop.get("location", "")) or not _whole(stop.get("days")) or int(stop.days) < 1:
+			# "away" means outside the built regions (travellers who come and go).
+			if not stop is Dictionary or not (locations.has(stop.get("location", "")) or stop.get("location", "") == "away") or not _whole(stop.get("days")) or int(stop.days) < 1:
 				return "行程中有无效的一站"
 		if person.has("offset") and not _whole(person.offset):
 			return "行程偏移无效"
@@ -835,3 +846,18 @@ func _validate_arsenal() -> String:
 			if float(vfx_tiers[index].get(key, 0)) <= float(vfx_tiers[index - 1].get(key, 0)):
 				return "特效第 %d 阶的 %s 没有高于上一阶。" % [index + 1, key]
 	return ""
+
+## Location-triggered events of one place, in priority order (cached with the priority list).
+var _by_location := {}
+
+func location_events(location_id: String) -> Array[String]:
+	var ordered := events_by_priority()
+	if _by_location.get("_size", -1) != ordered.size():
+		_by_location = {"_size": ordered.size()}
+	if not _by_location.has(location_id):
+		var ids: Array[String] = []
+		for event_id: String in ordered:
+			if events[event_id].trigger == "location" and events[event_id].location == location_id:
+				ids.append(event_id)
+		_by_location[location_id] = ids
+	return _by_location[location_id]

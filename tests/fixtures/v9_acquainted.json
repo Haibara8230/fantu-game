@@ -1,0 +1,197 @@
+{
+	"battle": {},
+	"chronicle": [
+		{
+			"args": {},
+			"day": 0,
+			"id": "start",
+			"major": true
+		},
+		{
+			"args": {
+				"line": 0,
+				"npc": "g:1"
+			},
+			"day": 0,
+			"id": "talk",
+			"major": false
+		},
+		{
+			"args": {
+				"quest_title": "收购回春草"
+			},
+			"day": 0,
+			"id": "quest_accept",
+			"major": false
+		},
+		{
+			"args": {
+				"days": 2,
+				"location": "town"
+			},
+			"day": 2,
+			"id": "travel",
+			"major": false
+		}
+	],
+	"ended": {},
+	"pending_event": {},
+	"player": {
+		"arts": [
+			"sword",
+			"fire",
+			"wood"
+		],
+		"birth_day": -5760,
+		"cooldowns": {},
+		"cultivation_carry": 0,
+		"equipment": {
+			"accessory": "",
+			"robe": "",
+			"weapon": ""
+		},
+		"hp": 90,
+		"items": {},
+		"journey": {},
+		"learned": [
+			"sword",
+			"fire",
+			"wood"
+		],
+		"location": "town",
+		"max_hp": 90,
+		"max_qi": 30,
+		"methods": [],
+		"name": "交游",
+		"qi": 30,
+		"quests": [
+			{
+				"board": "sect",
+				"count": 6,
+				"days": 60,
+				"deadline": 60,
+				"item": "huichun_grass",
+				"key": "sect:0:0",
+				"kind": "gather",
+				"progress": 0,
+				"reward": {
+					"stones": 60,
+					"xp": 0
+				}
+			}
+		],
+		"realm": 0,
+		"roots": [
+			"fire"
+		],
+		"sect": "wanderer",
+		"stage": 0,
+		"stones": 30,
+		"warned_for": -1,
+		"xp": 0
+	},
+	"rng": {
+		"combat": "9102358299186534095",
+		"world": "3420475926847083714"
+	},
+	"version": 9,
+	"world": {
+		"day": 2,
+		"events": {},
+		"flags": {},
+		"people": {
+			"g:1": {
+				"absent_until": -1,
+				"last": {
+					"talk": 0
+				},
+				"met": true,
+				"relation": 2,
+				"talks": 1
+			},
+			"g:11": {
+				"absent_until": -1,
+				"last": {},
+				"met": true,
+				"relation": 0,
+				"talks": 0
+			},
+			"g:15": {
+				"absent_until": -1,
+				"last": {},
+				"met": true,
+				"relation": 0,
+				"talks": 0
+			},
+			"g:17": {
+				"absent_until": -1,
+				"last": {},
+				"met": true,
+				"relation": 0,
+				"talks": 0
+			},
+			"g:2": {
+				"absent_until": -1,
+				"last": {},
+				"met": true,
+				"relation": 0,
+				"talks": 0
+			},
+			"g:22": {
+				"absent_until": -1,
+				"last": {},
+				"met": true,
+				"relation": 0,
+				"talks": 0
+			},
+			"g:23": {
+				"absent_until": -1,
+				"last": {},
+				"met": true,
+				"relation": 0,
+				"talks": 0
+			},
+			"g:5": {
+				"absent_until": -1,
+				"last": {},
+				"met": true,
+				"relation": 0,
+				"talks": 0
+			},
+			"g:6": {
+				"absent_until": -1,
+				"last": {},
+				"met": true,
+				"relation": 0,
+				"talks": 0
+			},
+			"g:7": {
+				"absent_until": -1,
+				"last": {},
+				"met": true,
+				"relation": 0,
+				"talks": 0
+			},
+			"peddler": {
+				"absent_until": -1,
+				"last": {},
+				"met": true,
+				"relation": 0,
+				"talks": 0
+			},
+			"storyteller": {
+				"absent_until": -1,
+				"last": {},
+				"met": true,
+				"relation": 0,
+				"talks": 0
+			}
+		},
+		"quests_taken": {
+			"sect:0:0": true
+		},
+		"rumors": {},
+		"seed": 81,
+		"stock_sold": {}
+	}
+}

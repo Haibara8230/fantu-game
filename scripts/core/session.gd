@@ -32,8 +32,18 @@ var ended: Dictionary = {}
 var encounters_enabled := true
 # The person whose interaction is being applied, for effects such as "leave".
 var acting_npc := ""
-# Who can ever be found where (homes and schedule stops); rebuilt when the population changes.
+# Who can be found where today, and the cached people indexes it comes from.
 var _people_at := {}
+var _index_cache: Array[Dictionary] = []
+const SHORT_STAY_DAYS := 700
+# Generated population: seats of built regions, their lives, and per-day views and per-realm loadouts.
+var _local_seats: Array[int] = []
+var _lives := {}
+var _views := {}
+var _loadouts := {}
+var _life_ids := {}
+var _met_through := {}
+var _obituary_cache := {"dirty": true}
 var chronicle = Chronicle.new()
 # Ephemeral presentation events; not part of the save format.
 var combat_events: Array[Dictionary] = []
@@ -836,11 +846,11 @@ func rumor_candidates() -> Array[Dictionary]:
 	for board: String in content.commission_data.boards:
 		if not commission_offers(board).is_empty():
 			found.append({"key": "commission:%s:%d" % [board, day / int(content.commission_data.period_days)], "id": "rumor_commission", "args": {"board": board}})
-	for person_id: String in content.people:
+	for person_id: String in living_people():
 		var where := npc_location(person_id)
 		if where.is_empty() or bool(world.people.get(person_id, {}).get("met", false)):
 			continue
-		found.append({"key": "person:%s:%s" % [person_id, where], "id": "rumor_person", "args": {"npc": person_id, "title": content.people[person_id].title, "location": where}})
+		found.append({"key": "person:%s:%s" % [person_id, where], "id": "rumor_person", "args": {"npc": person_id, "title": person(person_id).title, "location": where}})
 	var recent := int(content.rules.inquire.repeat_after_days)
 	found = found.filter(func(rumor: Dictionary) -> bool: return day - int(world.rumors.get(rumor.key, -recent)) >= recent)
 	found.sort_custom(func(a: Dictionary, b: Dictionary) -> bool: return a.key < b.key)
@@ -869,23 +879,248 @@ func inquire() -> String:
 	return conclude(log_event(rumor.id, rumor.args), passed)
 
 # --- People ------------------------------------------------------------------------
+# Handwritten people live in content.people. Generated people are lives "g:<seat>:<generation>" computed
+# by Population from the world seed; only seats of built regions are tracked here. A person's view (age,
+# realm, loadout) is derived for the current day. Residents stay home, wanderers follow a schedule; the
+# player only sees who is where they stop, and anyone seen becomes an acquaintance whose whereabouts can
+# be looked up. Nothing about people stops a journey.
 
-## Fills content.people with this world's generated population (ids "g:<index>").
+## Resets the population caches for this world; chronicle names of generated people resolve via person().
 func populate() -> void:
+	_local_seats = Population.local_seats(content, int(world.get("seed", 0)))
+	_lives = {}
+	_life_ids = {}
+	_views = {}
+	_loadouts = {}
 	_people_at = {}
-	for person_id: String in content.people.keys():
-		if person_id.begins_with("g:"):
-			content.people.erase(person_id)
-	content.people.merge(Population.generate(content, int(world.get("seed", 0))))
+	_index_cache = []
+	obituaries_changed()
+	content.person_lookup = person
 
-## A tournament round against the sect's outer disciples, weakest first.
+func is_generated(person_id: String) -> bool:
+	if not person_id.begins_with("g:"):
+		return false
+	if _life_ids.has(person_id):
+		return true
+	var parts := person_id.split(":")
+	return parts.size() == 3 and parts[0] == "g" and parts[1].is_valid_int() and parts[2].is_valid_int() and int(parts[1]) >= 0 and int(parts[2]) >= 0 and int(parts[1]) < int(content.population_data.world_total)
+
+func is_person(person_id: String) -> bool:
+	return content.people.has(person_id) or is_generated(person_id)
+
+## A seat's lives, extended until one is still alive after `day` or until `generation` exists.
+func _seat_lives(seat: int, day: int = -1, generation: int = -1) -> Array:
+	if not _lives.has(seat):
+		_lives[seat] = [Population.next_life(content, int(world.seed), seat, {})]
+	var lives: Array = _lives[seat]
+	while (day >= 0 and int(lives.back().death) <= day) or (generation >= 0 and lives.size() <= generation):
+		lives.append(Population.next_life(content, int(world.seed), seat, lives.back()))
+	return lives
+
+func life_by_id(person_id: String) -> Dictionary:
+	if _life_ids.has(person_id):
+		return _life_ids[person_id]
+	if not is_generated(person_id):
+		return {}
+	var parts := person_id.split(":")
+	var life: Dictionary = _seat_lives(int(parts[1]), -1, int(parts[2]))[int(parts[2])]
+	_life_ids[person_id] = life
+	return life
+
+## The life holding a seat on `day`, or {} between lives.
+func life_at(seat: int, day: int) -> Dictionary:
+	for life: Dictionary in _seat_lives(seat, day):
+		if int(life.appear) <= day and day < int(life.death):
+			return life
+	return {}
+
+## A person's profile today: handwritten as written, generated as derived for the current day.
+func person(person_id: String) -> Dictionary:
+	if content.people.has(person_id):
+		return content.people[person_id]
+	if not is_generated(person_id):
+		return {}
+	var day := int(world.day)
+	var cached: Dictionary = _views.get(person_id, {})
+	if int(cached.get("day", -1)) == day:
+		return cached.view
+	var life := life_by_id(person_id)
+	var now: Dictionary = Population.standing(content, life, day)
+	var key := "%s:%d" % [person_id, int(now.realm)]
+	if not _loadouts.has(key):
+		_loadouts[key] = Population.loadout_for(content, int(world.seed), life, int(now.realm), int(now.stage))
+	var view: Dictionary = Population.view(content, int(world.seed), life, day, _loadouts[key])
+	_views[person_id] = {"day": day, "view": view}
+	return view
+
+## Where a person is on a day (today by default), or "" when absent, dead, away or somewhere undiscovered.
+func npc_location(person_id: String, on_day: int = -1) -> String:
+	var day := int(world.day) if on_day < 0 else on_day
+	if int(world.people.get(person_id, {}).get("absent_until", -1)) > day:
+		return ""
+	if is_generated(person_id):
+		var place := Population.location_on(life_by_id(person_id), day)
+		return place if not place.is_empty() and location_visible(place) else ""
+	var someone: Dictionary = content.people[person_id]
+	if someone.has("window"):
+		var from: Array = someone.window.from
+		var to: Array = someone.window.to
+		if day < Calendar.to_day(from[0], from[1], from[2]) or day > Calendar.to_day(to[0], to[1], to[2]):
+			return ""
+	if not Events.all_met(self, someone.get("present_if", [])):
+		return ""
+	var location: String = content.person_base_location(person_id, day)
+	return location if location_visible(location) else ""
+
+## Who can be where today; see _people_on.
+func _refresh_people_index() -> void:
+	_people_at = _people_on(int(world.day))
+
+## Who can be where on a day: handwritten people by home and schedule, generated people by the life
+## holding each seat. Each index stays valid until a life in the region ends or begins; the two most
+## recent are kept.
+func _people_on(day: int) -> Dictionary:
+	for cached: Dictionary in _index_cache:
+		if day >= int(cached.from) and day < int(cached.until):
+			return cached.map
+	var built := _build_people_index(day)
+	_index_cache.push_front(built)
+	if _index_cache.size() > 2:
+		_index_cache.pop_back()
+	return built.map
+
+func _build_people_index(day: int) -> Dictionary:
+	var map := {}
+	var until := 2147483647
+	for person_id: String in content.people:
+		var someone: Dictionary = content.people[person_id]
+		for place: String in ([someone.home] if someone.has("home") else someone.schedule.map(func(stop: Dictionary) -> String: return stop.location)):
+			_index_add(map, place, person_id)
+	for seat: int in _local_seats:
+		var lives := _seat_lives(seat, day)
+		var current := life_at(seat, day)
+		if current.is_empty():
+			until = mini(until, int(lives.back().appear))
+			continue
+		until = mini(until, int(current.death))
+		for place: String in ([current.home] if current.has("home") else current.schedule.map(func(stop: Dictionary) -> String: return stop.location)):
+			if place != "away":
+				_index_add(map, place, current.id)
+	return {"from": day, "until": until, "map": map}
+
+func _index_add(map: Dictionary, place: String, person_id: String) -> void:
+	if not map.has(place):
+		map[place] = []
+	if not person_id in map[place]:
+		map[place].append(person_id)
+
+func present_npcs() -> Array[String]:
+	_refresh_people_index()
+	var result: Array[String] = []
+	for person_id: String in _people_at.get(player.location, []):
+		if npc_location(person_id) == player.location:
+			result.append(person_id)
+	return result
+
+## Everyone alive in the built regions today (handwritten and generated).
+func living_people() -> Array[String]:
+	var result: Array[String] = []
+	for person_id: String in content.people:
+		result.append(person_id)
+	for seat: int in _local_seats:
+		var life := life_at(seat, int(world.day))
+		if not life.is_empty():
+			result.append(life.id)
+	return result
+
+## Staying somewhere for a span means meeting everyone who passes through during it, so one long stay
+## meets the same people as many short ones.
+func meet_during(first_day: int, last_day: int) -> void:
+	var here: String = player.location
+	for person_id: String in content.people:
+		var someone: Dictionary = content.people[person_id]
+		var places: Array = [someone.home] if someone.has("home") else someone.schedule.map(func(stop: Dictionary) -> String: return stop.location)
+		if not here in places or bool(world.people.get(person_id, {}).get("met", false)):
+			continue
+		for day: int in range(first_day, last_day + 1):
+			if npc_location(person_id, day) == here:
+				mark_met(person_id)
+				break
+	# Lives last at least two years, so a short stay only needs the people indexed at its start and end;
+	# a long stay checks every seat.
+	var lives: Array = []
+	if last_day - first_day < SHORT_STAY_DAYS:
+		var ids := {}
+		var start_map := _people_on(first_day)
+		var end_map := _people_on(last_day)
+		for map: Dictionary in ([start_map] if start_map == end_map else [start_map, end_map]):
+			for person_id: String in map.get(here, []):
+				if is_generated(person_id) and not bool(world.people.get(person_id, {}).get("met", false)):
+					ids[person_id] = true
+		for person_id: String in ids:
+			if not bool(world.people.get(person_id, {}).get("met", false)):
+				lives.append(life_by_id(person_id))
+	else:
+		for seat: int in _local_seats:
+			lives.append_array(_seat_lives(seat, last_day))
+	for life: Dictionary in lives:
+		if int(life.death) <= first_day or int(life.appear) > last_day or bool(world.people.get(life.id, {}).get("met", false)):
+			continue
+		if Population.present_during(life, here, first_day, last_day):
+			mark_met(life.id)
+	_met_through = {"location": here, "day": last_day}
+
+func known_npcs() -> Array[String]:
+	var result: Array[String] = []
+	for person_id: String in world.people:
+		if is_person(person_id) and bool(world.people[person_id].get("met", false)):
+			result.append(person_id)
+	return result
+
+func meet_present() -> void:
+	# Right after a stay, everyone generated who was here through today is already met.
+	var covered: bool = _met_through.get("location", "") == player.location and int(_met_through.get("day", -1)) == int(world.day)
+	for person_id: String in present_npcs():
+		if not (covered and is_generated(person_id)):
+			mark_met(person_id)
+
+## Marks someone as met. Meeting a generated person who has already died (heard of during a long stay)
+## records them without an obituary; meeting a living one may schedule one later.
+func mark_met(person_id: String) -> void:
+	var progress := Events.person(self, person_id)
+	if bool(progress.met):
+		return
+	progress.met = true
+	if is_generated(person_id) and int(life_by_id(person_id).death) <= int(world.day):
+		progress.mourned = true
+	obituaries_changed()
+
+func obituaries_changed() -> void:
+	_obituary_cache = {"dirty": true}
+
+## The next death among generated acquaintances not yet mourned: {"day", "id"}, or {}. Cached until
+## someone is newly met or mourned.
+func next_obituary(from_day: int) -> Dictionary:
+	if not bool(_obituary_cache.get("dirty", true)):
+		var cached: Dictionary = _obituary_cache.result
+		return {} if cached.is_empty() else {"day": maxi(from_day, int(cached.day)), "id": cached.id}
+	var best := {}
+	for person_id: String in world.people:
+		var progress: Dictionary = world.people[person_id]
+		if not is_generated(person_id) or not bool(progress.get("met", false)) or bool(progress.get("mourned", false)):
+			continue
+		var due := int(life_by_id(person_id).death)
+		if best.is_empty() or due < int(best.day) or (due == int(best.day) and person_id < str(best.id)):
+			best = {"day": due, "id": person_id}
+	_obituary_cache = {"dirty": false, "result": best}
+	return {} if best.is_empty() else {"day": maxi(from_day, int(best.day)), "id": best.id}
+
+## A tournament round against the sect's outer disciples present, weakest first.
 func begin_tournament(round: int) -> void:
-	var disciples: Array = content.people.keys().filter(func(person_id: String) -> bool: return person_id.begins_with("g:") and content.people[person_id].get("sect", "") == "qingyun")
+	var disciples: Array = present_npcs().filter(func(person_id: String) -> bool: return is_generated(person_id) and person(person_id).kind == "disciple")
 	disciples.sort_custom(func(a: String, b: String) -> bool:
-		var pa: Dictionary = content.people[a]
-		var pb: Dictionary = content.people[b]
-		var ra := int(pa.realm) * 10 + int(pa.stage)
-		var rb := int(pb.realm) * 10 + int(pb.stage)
+		var ra := int(person(a).realm) * 10 + int(person(a).stage)
+		var rb := int(person(b).realm) * 10 + int(person(b).stage)
 		return ra < rb or (ra == rb and a < b))
 	if disciples.is_empty():
 		begin_battle("disciple", "event")
@@ -899,69 +1134,11 @@ func begin_tournament(round: int) -> void:
 
 ## A friendly bout with a generated person: their stage's health and their best art, nothing at stake.
 func begin_spar(person_id: String) -> void:
-	var person: Dictionary = content.people[person_id]
-	var foe: Dictionary = Population.foe(content, person_id, person)
-	var lineage: String = str(person.get("sect", "qingyun"))
+	var someone: Dictionary = person(person_id)
+	var foe: Dictionary = Population.foe(content, person_id, someone)
+	var lineage: String = str(someone.get("sect", "qingyun"))
 	battle = {"enemy_id": "cultivator", "hp": int(foe.hp), "turn": 1, "cooldowns": {}, "opponent_sect": "qingyun" if lineage == "wanderer" else lineage, "status": {}, "context": "spar", "npc": person_id, "foe": foe}
 	log_event("spar_start", {"npc": person_id})
-# People live in the world on their own: residents stay home, wanderers follow a schedule computed
-# from the date. The player only sees who is at the place where they stop; anyone seen there becomes
-# an acquaintance whose whereabouts can be looked up. Nothing about people stops a journey.
-
-## Where a person is today, or "" when absent (left, outside their window, or somewhere undiscovered).
-func npc_location(person_id: String, on_day: int = -1) -> String:
-	var person: Dictionary = content.people[person_id]
-	var day := int(world.day) if on_day < 0 else on_day
-	if int(world.people.get(person_id, {}).get("absent_until", -1)) > day:
-		return ""
-	if person.has("window"):
-		var from: Array = person.window.from
-		var to: Array = person.window.to
-		if day < Calendar.to_day(from[0], from[1], from[2]) or day > Calendar.to_day(to[0], to[1], to[2]):
-			return ""
-	if not Events.all_met(self, person.get("present_if", [])):
-		return ""
-	var location: String = content.person_base_location(person_id, day)
-	return location if location_visible(location) else ""
-
-## Staying somewhere for a span means meeting everyone who passes through during it, so one long
-## stay meets the same people as many short ones.
-func meet_during(first_day: int, last_day: int) -> void:
-	present_npcs()
-	for person_id: String in _people_at.get(player.location, []):
-		if bool(world.people.get(person_id, {}).get("met", false)):
-			continue
-		for day: int in range(first_day, last_day + 1):
-			if npc_location(person_id, day) == player.location:
-				Events.person(self, person_id).met = true
-				break
-
-func present_npcs() -> Array[String]:
-	var result: Array[String] = []
-	if _people_at.is_empty():
-		for candidate: String in content.people:
-			var person: Dictionary = content.people[candidate]
-			var places: Array = [person.home] if person.has("home") else person.schedule.map(func(stop: Dictionary) -> String: return stop.location)
-			for place: String in places:
-				if not _people_at.has(place):
-					_people_at[place] = []
-				if not candidate in _people_at[place]:
-					_people_at[place].append(candidate)
-	for person_id: String in _people_at.get(player.location, []):
-		if npc_location(person_id) == player.location:
-			result.append(person_id)
-	return result
-
-func known_npcs() -> Array[String]:
-	var result: Array[String] = []
-	for person_id: String in world.people:
-		if content.people.has(person_id) and bool(world.people[person_id].get("met", false)):
-			result.append(person_id)
-	return result
-
-func meet_present() -> void:
-	for person_id: String in present_npcs():
-		Events.person(self, person_id).met = true
 
 func favor(person_id: String) -> int:
 	return int(world.people.get(person_id, {}).get("relation", 0))
@@ -970,18 +1147,18 @@ func favor(person_id: String) -> int:
 func npc_depart(person_id: String) -> void:
 	if person_id.is_empty():
 		return
-	var days := int(content.people[person_id].get("leave_days", LONG_ABSENCE_DAYS))
+	var days := int(person(person_id).get("leave_days", LONG_ABSENCE_DAYS))
 	Events.person(self, person_id).absent_until = int(world.day) + days
 
 ## Everything the player could do with a person here: {"id", "label", "available", "reason"}.
 func npc_options(person_id: String) -> Array[Dictionary]:
 	var options: Array[Dictionary] = []
-	var person: Dictionary = content.people[person_id]
-	if person.attitude != "hostile" and not person.get("talk", []).is_empty():
+	var someone: Dictionary = person(person_id)
+	if someone.attitude != "hostile" and not someone.get("talk", []).is_empty():
 		options.append({"id": "talk", "label": "交谈", "cooldown_days": TALK_COOLDOWN_DAYS})
-	if person.attitude != "hostile" and int(person.get("gift_favor", 0)) > 0:
-		options.append({"id": "gift", "label": "赠一株灵草（好感 +%d）" % int(person.gift_favor), "conditions": [{"herbs_at_least": 1}], "cooldown_days": TALK_COOLDOWN_DAYS})
-	for interaction: Dictionary in person.get("interactions", []):
+	if someone.attitude != "hostile" and int(someone.get("gift_favor", 0)) > 0:
+		options.append({"id": "gift", "label": "赠一株灵草（好感 +%d）" % int(someone.gift_favor), "conditions": [{"herbs_at_least": 1}], "cooldown_days": TALK_COOLDOWN_DAYS})
+	for interaction: Dictionary in someone.get("interactions", []):
 		options.append(interaction)
 	var result: Array[Dictionary] = []
 	var here: bool = npc_location(person_id) == str(player.get("location", ""))
@@ -1004,7 +1181,7 @@ func npc_options(person_id: String) -> Array[Dictionary]:
 	return result
 
 func interact(person_id: String, option_id: String) -> String:
-	if not content.people.has(person_id):
+	if not is_person(person_id) or person(person_id).is_empty():
 		return "未知人物。"
 	var chosen: Dictionary = {}
 	for option: Dictionary in npc_options(person_id):
@@ -1014,22 +1191,22 @@ func interact(person_id: String, option_id: String) -> String:
 		return "没有这个选项。"
 	if not chosen.available:
 		return chosen.reason
-	var person: Dictionary = content.people[person_id]
+	var someone: Dictionary = person(person_id)
+	mark_met(person_id)
 	var progress := Events.person(self, person_id)
-	progress.met = true
 	progress.last[option_id] = int(world.day)
 	var text := ""
 	match option_id:
 		"talk":
-			var lines: Array = person.talk
+			var lines: Array = someone.talk
 			text = log_event("talk", {"npc": person_id, "line": int(progress.talks) % lines.size()})
 			progress.talks = int(progress.talks) + 1
-			Events.apply(self, [{"relation": [person_id, int(person.get("talk_favor", 0))]}])
+			Events.apply(self, [{"relation": [person_id, int(someone.get("talk_favor", 0))]}])
 		"gift":
-			Events.apply(self, [{"herbs": -1}, {"relation": [person_id, int(person.gift_favor)]}])
-			text = log_event("gift", {"npc": person_id, "favor": int(person.gift_favor)})
+			Events.apply(self, [{"herbs": -1}, {"relation": [person_id, int(someone.gift_favor)]}])
+			text = log_event("gift", {"npc": person_id, "favor": int(someone.gift_favor)})
 		_:
-			for interaction: Dictionary in person.interactions:
+			for interaction: Dictionary in someone.interactions:
 				if interaction.id == option_id:
 					acting_npc = person_id
 					Events.apply(self, interaction.get("effects", []))
@@ -1292,7 +1469,7 @@ func restore(data: Variant) -> bool:
 		for key: Variant in status:
 			if not key in ["burn", "weaken"] or not status[key] is Array or status[key].size() != 2:
 				return false
-		if saved_battle.has("npc") and (not saved_battle.npc is String or not content.people.has(saved_battle.npc)):
+		if saved_battle.has("npc") and (not saved_battle.npc is String or not is_person(saved_battle.npc)):
 			return false
 		var opponent: Variant = saved_battle.get("opponent_sect")
 		if not opponent is String or not content.sects.has(opponent):
@@ -1383,6 +1560,8 @@ func _valid_people(data: Dictionary) -> Variant:
 				return null
 			last[option_id] = int(person.last[option_id])
 		result[person_id] = {"met": person.met, "relation": int(person.relation), "last": last, "absent_until": int(person.absent_until), "talks": int(person.talks)}
+		if person.get("mourned", false) == true:
+			result[person_id].mourned = true
 	return result
 
 func _whole_nonnegative(value: Variant) -> bool:

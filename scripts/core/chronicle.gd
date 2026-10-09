@@ -4,7 +4,7 @@ extends RefCounted
 const Calendar = preload("res://scripts/core/calendar.gd")
 const RECENT_LIMIT := 100
 const MAJOR_LIMIT := 5000
-const NAMED_ARGS := {"location": "locations", "enemy": "enemies", "sect": "sects", "npc": "people"}
+const NAMED_ARGS := {"location": "locations", "enemy": "enemies", "sect": "sects"}
 var entries: Array[Dictionary] = []
 
 func clear() -> void:
@@ -60,6 +60,9 @@ func format(entry: Dictionary, content) -> String:
 		if values.has(key):
 			var t: Dictionary = content.technique(str(values[key]))
 			values[key + "_name"] = t.name if not t.is_empty() else str(values[key])
+	if values.has("npc"):
+		var someone: Dictionary = content.person_named(str(values.npc))
+		values["npc_name"] = someone.name if not someone.is_empty() else str(values.npc)
 	if values.has("board") and content.commission_data.boards.has(values.board):
 		values["board_name"] = content.commission_data.boards[values.board].name
 	if values.has("item"):
@@ -84,8 +87,8 @@ static func loot_text(code: String, content) -> String:
 
 ## Talks and interactions point into data/npcs.json.
 static func _person_text(kind: String, args: Dictionary, content) -> String:
-	var person: Variant = content.people.get(args.get("npc", ""))
-	if not person is Dictionary:
+	var person: Variant = content.person_named(str(args.get("npc", "")))
+	if person.is_empty():
 		return "（失传的记载）"
 	if kind == "talk":
 		var lines: Array = person.get("talk", [])
