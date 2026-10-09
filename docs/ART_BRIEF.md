@@ -73,12 +73,12 @@ This brief is self-contained. Read it fully before generating anything.
 | Qingyun Mountain 青云山 (sword sect) | 24%, 24% | Tall misty main peak with elegant sect halls and pavilions halfway up, clouds around the waist |
 | Qingshi Town 青石镇 (mortal town) | 40%, 42% | Small town of grey-tiled roofs at the foot of the mountains, a little smoke |
 | Bailu Ferry 白鹭渡 | 60%, 50% | River crossing: shallows, reeds, a small wooden pier, white egrets |
-| Yunxi Market 云溪坊市 | 80%, 62% | Larger riverside market town, dense roofs, a few plain banners |
+| Yunxi Market 云溪坊市 | 86%, 62% | Larger riverside market town, dense roofs, a few plain banners |
 | Songfeng Ridge 松风岭 | 20%, 60% | Rolling ridge covered in old pines |
 | Luoxia Valley 落霞谷 | 44%, 80% | Deep valley lit by rose-gold sunset light, faint glow of a spring at its floor |
 | Ancient Cave 古修洞府 | 24%, 88% | A mossy stone door in a cliff, **subtle and easy to overlook** (it is a secret place the player discovers later) |
 
-**River:** the Yunxi river enters from the **north edge**, flows **between the ferry (60%, 50%) and the market (80%, 62%)**, and leaves toward the **south-east corner**.
+**River:** the Yunxi river enters from the **north edge**, flows **between the ferry (60%, 50%) and the market (86%, 62%)**, and leaves toward the **south-east corner**.
 
 **Leave space for markers:** around each position above, keep a calm, low-contrast area about **80 pixels in radius**. A marker and a name label will be drawn there.
 
@@ -87,8 +87,8 @@ This brief is self-contained. Read it fully before generating anything.
 **Prompt:**
 ```text
 Painted regional map background for a 2D Chinese cultivation RPG, in the illustrated visual family of the game 觅长生. Exactly 2560x1600. High oblique bird's-eye view of one mountain region, like a hand-painted Chinese landscape map.
-Place terrain at these positions (percent of width, percent of height): misty main peak with sword-sect halls and pavilions halfway up, clouds around its waist (24,24); small mortal town of grey-tiled roofs at the foot of the mountains (40,42); river ferry crossing with shallows, reeds, a small wooden pier and white egrets (60,50); larger riverside market town with dense roofs and a few plain banners (80,62); rolling ridge covered in old pine forest (20,60); deep valley lit by rose-gold sunset light with a faint glowing spring at its floor (44,80); a subtle, easily overlooked mossy stone cave door in a cliff (24,88).
-A river enters from the north edge, flows between (60,50) and (80,62), and leaves toward the south-east corner.
+Place terrain at these positions (percent of width, percent of height): misty main peak with sword-sect halls and pavilions halfway up, clouds around its waist (24,24); small mortal town of grey-tiled roofs at the foot of the mountains (40,42); river ferry crossing with shallows, reeds, a small wooden pier and white egrets (60,50); larger riverside market town with dense roofs and a few plain banners (86,62); rolling ridge covered in old pine forest (20,60); deep valley lit by rose-gold sunset light with a faint glowing spring at its floor (44,80); a subtle, easily overlooked mossy stone cave door in a cliff (24,88).
+A river enters from the north edge, flows between (60,50) and (86,62), and leaves toward the south-east corner.
 Keep a calm low-contrast area about 80px in radius around each listed position for game markers.
 NO roads, NO paths, NO text, NO labels, NO compass, NO legend, NO frame, NO characters.
 Style: unmistakably two-dimensional hand-painted Chinese game art, clear ink outlines, flat color areas with restrained washes; muted deep teal, slate blue, jade green, warm parchment highlights; overall slightly dark so gold UI markers stand out. Not a photo, not 3D, not satellite imagery.

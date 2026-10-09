@@ -44,7 +44,7 @@
       "subtitle": "半城烟火，半城仙缘。",
       "description": "药香浮过长街。散修在这里买卖丹药与灵材，消息也传得最快。",
       "terrain": "market",
-      "map": [0.8, 0.62],
+      "map": [0.86, 0.62],
       "shop": [
         {"item": "foundation_pill", "price": 120},
         {"item": "huiqi_pill", "price": 15},

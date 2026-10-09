@@ -106,7 +106,7 @@ M2 已把地图、地点横幅和二级场景接好。下列图片放到指定�
 | 青云山 | 24%, 24% | 云雾环绕的主峰，半山腰有剑宗楼阁 |
 | 青石镇 | 40%, 42% | 山脚下的小镇，青瓦屋顶聚在一起 |
 | 白鹭渡 | 60%, 50% | 河边渡口，浅滩、芦苇与小码头 |
-| 云溪坊市 | 80%, 62% | 河畔较大的集镇，屋舍密集，有几面幡旗 |
+| 云溪坊市 | 86%, 62% | 河畔较大的集镇，屋舍密集，有几面幡旗 |
 | 松风岭 | 20%, 60% | 松林覆盖的山岭 |
 | 落霞谷 | 44%, 80% | 晚霞映照的山谷，谷底一点泉光 |
 | 古修洞府 | 24%, 88% | 落霞谷西南的崖壁石门，要**低调**：开局时它不显示在地图上，被发现后才出现标记 |
@@ -116,7 +116,7 @@ M2 已把地图、地点横幅和二级场景接好。下列图片放到指定�
 ```text
 Use case: stylized-concept
 Asset type: top-down oblique REGIONAL MAP background for a 2D Chinese cultivation RPG, original, in the illustrated visual family of 觅长生. 2560x1600 exact.
-Content: a painted landscape map of one mountain region seen from a high oblique angle. Place terrain features at these positions (percent of width, height): misty main peak with sect pavilions halfway up at (24,24); small mortal town of grey-tiled roofs at the foot of the mountains (40,42); river ferry crossing with shallows, reeds and a tiny pier (60,50); larger riverside market town with dense roofs and a few banners (80,62); pine-covered ridge (20,60); valley glowing with sunset light and a faint spring at its floor (44,80); a subtle mossy stone cave door in a cliff (24,88), understated. A river enters from the north edge, passes between (60,50) and (80,62) and leaves to the south-east.
+Content: a painted landscape map of one mountain region seen from a high oblique angle. Place terrain features at these positions (percent of width, height): misty main peak with sect pavilions halfway up at (24,24); small mortal town of grey-tiled roofs at the foot of the mountains (40,42); river ferry crossing with shallows, reeds and a tiny pier (60,50); larger riverside market town with dense roofs and a few banners (86,62); pine-covered ridge (20,60); valley glowing with sunset light and a faint spring at its floor (44,80); a subtle mossy stone cave door in a cliff (24,88), understated. A river enters from the north edge, passes between (60,50) and (86,62) and leaves to the south-east.
 Keep a calm low-contrast area of about 80px radius around each listed position for game markers. NO roads, NO paths, NO text, NO labels, NO compass, NO frame, NO legend, NO characters.
 Style: unmistakably TWO-DIMENSIONAL hand-painted Chinese game art, ink outlines, flat color areas with restrained washes, muted deep teal, slate blue, jade green, warm parchment highlights; overall slightly dark so gold UI markers stand out. Not a photo, not 3D, not satellite imagery.
 ```
