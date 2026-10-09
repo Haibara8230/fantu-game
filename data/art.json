@@ -1,0 +1,117 @@
+{
+  "background": "res://assets/art/bamboo_arena_v1.png",
+  "actors": {
+    "hero": {
+      "texture": "res://assets/art/cultivator_atlas_v2.png",
+      "columns": 3,
+      "rows": 2,
+      "frames": {
+        "idle": 0,
+        "prepare": 1,
+        "attack": 2,
+        "cast": 3,
+        "hit": 4,
+        "guard": 5
+      },
+      "faces_right": true,
+      "height_ratio": 0.85
+    },
+    "disciple": {
+      "texture": "res://assets/art/rival_atlas_v2.png",
+      "columns": 3,
+      "rows": 2,
+      "frames": {
+        "idle": 0,
+        "prepare": 1,
+        "attack": 2,
+        "cast": 3,
+        "hit": 4,
+        "guard": 5
+      },
+      "faces_right": true,
+      "height_ratio": 0.85
+    },
+    "wolf": {
+      "texture": "res://assets/art/beasts_atlas_v1.png",
+      "columns": 2,
+      "rows": 2,
+      "frames": {
+        "idle": 0,
+        "prepare": 0,
+        "attack": 1,
+        "cast": 0,
+        "hit": 0,
+        "guard": 0
+      },
+      "faces_right": false,
+      "height_ratio": 0.64,
+      "frame_regions": [
+        [
+          0,
+          0,
+          768,
+          464
+        ],
+        [
+          768,
+          0,
+          768,
+          464
+        ],
+        [
+          0,
+          472,
+          768,
+          552
+        ],
+        [
+          768,
+          472,
+          768,
+          552
+        ]
+      ]
+    },
+    "serpent": {
+      "texture": "res://assets/art/beasts_atlas_v1.png",
+      "columns": 2,
+      "rows": 2,
+      "frames": {
+        "idle": 2,
+        "prepare": 2,
+        "attack": 3,
+        "cast": 2,
+        "hit": 2,
+        "guard": 2
+      },
+      "faces_right": false,
+      "height_ratio": 0.83,
+      "frame_regions": [
+        [
+          0,
+          0,
+          768,
+          464
+        ],
+        [
+          768,
+          0,
+          768,
+          464
+        ],
+        [
+          0,
+          472,
+          768,
+          552
+        ],
+        [
+          768,
+          472,
+          768,
+          552
+        ]
+      ]
+    }
+  }
+}

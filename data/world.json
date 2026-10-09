@@ -1,0 +1,293 @@
+{
+  "locations": {
+    "sect": {
+      "name": "青云山",
+      "subtitle": "山中无甲子，修行亦有时。",
+      "description": "青云山外门的静室与演武坪。你可以闭关修炼，休整伤势，或与同门切磋。",
+      "travel_months": 1
+    },
+    "market": {
+      "name": "云溪坊市",
+      "subtitle": "半城烟火，半城仙缘。",
+      "description": "药香浮过长街。药商收购灵草，往来的散修在这里售卖丹药。",
+      "travel_months": 1
+    },
+    "wild": {
+      "name": "落霞谷",
+      "subtitle": "机缘藏于险处。",
+      "description": "谷中灵草繁盛，也有妖兽出没。深处的赤鳞妖蟒守着一处灵泉，筑基后方可挑战。",
+      "travel_months": 1
+    }
+  },
+  "skills": {
+    "sword": {
+      "name": "御剑诀",
+      "description": "造成 11–15 点伤害，不消耗灵力。",
+      "damage_min": 11,
+      "damage_max": 15,
+      "qi_cost": 0,
+      "cooldown": 0,
+      "kind": "attack",
+      "vfx": "sword"
+    },
+    "fire": {
+      "name": "离火术",
+      "description": "造成 23–29 点伤害，消耗 10 灵力，冷却 2 回合。",
+      "damage_min": 23,
+      "damage_max": 29,
+      "qi_cost": 10,
+      "cooldown": 2,
+      "kind": "attack",
+      "vfx": "fire"
+    },
+    "wood": {
+      "name": "回春诀",
+      "description": "恢复 25 点气血，消耗 8 灵力，冷却 3 回合。",
+      "heal": 25,
+      "qi_cost": 8,
+      "cooldown": 3,
+      "kind": "heal",
+      "vfx": "heal"
+    },
+    "sword_rain": {
+      "name": "三才剑阵",
+      "description": "造成 24–30 点伤害，消耗 10 灵力，冷却 2 回合。",
+      "damage_min": 24,
+      "damage_max": 30,
+      "qi_cost": 10,
+      "cooldown": 2,
+      "kind": "attack",
+      "vfx": "sword_rain",
+      "hits": 3
+    },
+    "sword_arc": {
+      "name": "断月斩",
+      "description": "造成 29–35 点伤害，消耗 14 灵力，冷却 3 回合。",
+      "damage_min": 29,
+      "damage_max": 35,
+      "qi_cost": 14,
+      "cooldown": 3,
+      "kind": "attack",
+      "vfx": "sword_arc"
+    },
+    "flame_bolt": {
+      "name": "火萤诀",
+      "description": "造成 11–15 点伤害，消耗 0 灵力，冷却 0 回合。",
+      "damage_min": 11,
+      "damage_max": 15,
+      "qi_cost": 0,
+      "cooldown": 0,
+      "kind": "attack",
+      "vfx": "flame_bolt"
+    },
+    "fire_burst": {
+      "name": "焚天印",
+      "description": "造成 30–36 点伤害，消耗 14 灵力，冷却 3 回合。",
+      "damage_min": 30,
+      "damage_max": 36,
+      "qi_cost": 14,
+      "cooldown": 3,
+      "kind": "attack",
+      "vfx": "fire_burst"
+    },
+    "vine": {
+      "name": "青藤刺",
+      "description": "造成 10–14 点伤害，消耗 0 灵力，冷却 0 回合。",
+      "damage_min": 10,
+      "damage_max": 14,
+      "qi_cost": 0,
+      "cooldown": 0,
+      "kind": "attack",
+      "vfx": "vine"
+    },
+    "leaf_blade": {
+      "name": "飞叶千刃",
+      "description": "造成 23–29 点伤害，消耗 10 灵力，冷却 2 回合。",
+      "damage_min": 23,
+      "damage_max": 29,
+      "qi_cost": 10,
+      "cooldown": 2,
+      "kind": "attack",
+      "vfx": "leaf_blade",
+      "hits": 3
+    },
+    "water": {
+      "name": "沧浪诀",
+      "description": "造成 11–15 点伤害，消耗 0 灵力，冷却 0 回合。",
+      "damage_min": 11,
+      "damage_max": 15,
+      "qi_cost": 0,
+      "cooldown": 0,
+      "kind": "attack",
+      "vfx": "water"
+    },
+    "ice_lance": {
+      "name": "寒霜刺",
+      "description": "造成 24–30 点伤害，消耗 10 灵力，冷却 2 回合。",
+      "damage_min": 24,
+      "damage_max": 30,
+      "qi_cost": 10,
+      "cooldown": 2,
+      "kind": "attack",
+      "vfx": "ice_lance"
+    },
+    "water_heal": {
+      "name": "灵泉引",
+      "description": "恢复 25 气血，消耗 8 灵力，冷却 3 回合。",
+      "heal": 25,
+      "qi_cost": 8,
+      "cooldown": 3,
+      "kind": "heal",
+      "vfx": "water_heal"
+    },
+    "earth": {
+      "name": "碎岩掌",
+      "description": "造成 12–16 点伤害，消耗 0 灵力，冷却 0 回合。",
+      "damage_min": 12,
+      "damage_max": 16,
+      "qi_cost": 0,
+      "cooldown": 0,
+      "kind": "attack",
+      "vfx": "earth"
+    },
+    "rock_spire": {
+      "name": "地脉冲",
+      "description": "造成 27–33 点伤害，消耗 12 灵力，冷却 2 回合。",
+      "damage_min": 27,
+      "damage_max": 33,
+      "qi_cost": 12,
+      "cooldown": 2,
+      "kind": "attack",
+      "vfx": "rock_spire"
+    },
+    "earth_guard": {
+      "name": "玄岩护体",
+      "description": "恢复 18 气血，本回合伤害减半。消耗 8 灵力，冷却 3 回合。",
+      "heal": 18,
+      "qi_cost": 8,
+      "cooldown": 3,
+      "kind": "guard",
+      "vfx": "earth_guard"
+    }
+  },
+  "enemies": {
+    "disciple": {
+      "name": "外门同门",
+      "hp": 45,
+      "damage_min": 6,
+      "damage_max": 10,
+      "reward_stones": 12,
+      "reward_xp": 12,
+      "reward_herbs": 0,
+      "boss": false
+    },
+    "wolf": {
+      "name": "山谷妖狼",
+      "hp": 65,
+      "damage_min": 8,
+      "damage_max": 13,
+      "reward_stones": 24,
+      "reward_xp": 18,
+      "reward_herbs": 2,
+      "boss": false
+    },
+    "serpent": {
+      "name": "赤鳞妖蟒",
+      "hp": 160,
+      "damage_min": 16,
+      "damage_max": 23,
+      "reward_stones": 100,
+      "reward_xp": 40,
+      "reward_herbs": 5,
+      "boss": true
+    }
+  },
+  "rules": {
+    "starting_hp": 90,
+    "starting_qi": 30,
+    "starting_stones": 30,
+    "cultivate_xp": 18,
+    "breakthrough_xp": 100,
+    "pill_price": 60,
+    "herb_price": 8,
+    "gather_min": 2,
+    "gather_max": 4,
+    "foundation_hp": 140,
+    "foundation_qi": 50,
+    "foundation_attack_bonus": 8
+  },
+  "sects": {
+    "wanderer": {
+      "name": "散修",
+      "element": "mixed",
+      "color": "#b6d8c9",
+      "description": "兼修御剑、离火与回春，保留初始传承。",
+      "skills": [
+        "sword",
+        "fire",
+        "wood"
+      ],
+      "guard_vfx": "guard"
+    },
+    "qingyun": {
+      "name": "青云剑宗",
+      "element": "sword",
+      "color": "#c2f3e9",
+      "description": "御剑蓄势，连斩收锋；以剑阵与月弧破敌。",
+      "skills": [
+        "sword",
+        "sword_rain",
+        "sword_arc"
+      ],
+      "guard_vfx": "sword_guard"
+    },
+    "chixiao": {
+      "name": "赤霄门",
+      "element": "fire",
+      "color": "#ffb579",
+      "description": "掌心聚焰，火流贯穿，落点爆燃。",
+      "skills": [
+        "flame_bolt",
+        "fire",
+        "fire_burst"
+      ],
+      "guard_vfx": "fire_guard"
+    },
+    "changqing": {
+      "name": "长青谷",
+      "element": "wood",
+      "color": "#a4e9a6",
+      "description": "藤蔓穿行，叶刃切割；回春护持自身。",
+      "skills": [
+        "vine",
+        "wood",
+        "leaf_blade"
+      ],
+      "guard_vfx": "wood_guard"
+    },
+    "canglan": {
+      "name": "沧澜阁",
+      "element": "water",
+      "color": "#9ddcf4",
+      "description": "水波推掌，冰刺凝锋；灵泉回流疗伤。",
+      "skills": [
+        "water",
+        "ice_lance",
+        "water_heal"
+      ],
+      "guard_vfx": "water_guard"
+    },
+    "xuanyue": {
+      "name": "玄岳宗",
+      "element": "earth",
+      "color": "#e1bf81",
+      "description": "踏地结印，岩柱破土，石甲护体。",
+      "skills": [
+        "earth",
+        "rock_spire",
+        "earth_guard"
+      ],
+      "guard_vfx": "earth_guard"
+    }
+  }
+}
