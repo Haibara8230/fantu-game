@@ -149,7 +149,7 @@ static func apply(s, effects: Array) -> void:
 
 static func _person(s, person_id: String) -> Dictionary:
 	if not s.world.people.has(person_id):
-		s.world.people[person_id] = {"met": false, "relation": 0, "last": {}, "absent_until": -1, "talks": 0}
+		s.world.people[person_id] = {"met": false, "relation": 0, "last": {}, "absent_until": -1, "talks": 0, "met_day": -1, "met_place": ""}
 	return s.world.people[person_id]
 
 static func person(s, person_id: String) -> Dictionary:

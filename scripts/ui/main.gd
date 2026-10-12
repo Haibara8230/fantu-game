@@ -2,7 +2,7 @@ extends Control
 ## The desktop interface: layout, view switching, input, saving and loading, and battle presentation.
 ## Each view is built by its own script from this node's state, using the widget helpers and handlers
 ## here: sidebar.gd, place_view.gd, people_view.gd, map_view.gd, bag_view.gd, arts_view.gd,
-## battle_view.gd, event_view.gd and welcome_screen.gd.
+## battle_view.gd, event_view.gd, chronicle_view.gd and welcome_screen.gd.
 const Session = preload("res://scripts/core/session.gd")
 const SaveStore = preload("res://scripts/core/save_store.gd")
 const Calendar = preload("res://scripts/core/calendar.gd")
@@ -17,6 +17,7 @@ const ArtsView = preload("res://scripts/ui/arts_view.gd")
 const BattleView = preload("res://scripts/ui/battle_view.gd")
 const EventView = preload("res://scripts/ui/event_view.gd")
 const WelcomeScreen = preload("res://scripts/ui/welcome_screen.gd")
+const ChronicleView = preload("res://scripts/ui/chronicle_view.gd")
 const Guide = preload("res://scripts/ui/guide.gd")
 const Settings = preload("res://scripts/ui/settings.gd")
 const GOLD := Color("#d5b777")
@@ -43,6 +44,9 @@ var _pool_assignments := {}
 var _pool_key := ""
 var roots_label: Label
 var map_target := ""
+# The 编年史 view's filter (a group in data/chronicle_groups.json, or "all") and page (0 = newest).
+var chronicle_filter := "all"
+var chronicle_page := 0
 var world_map
 var audio
 var settings_dialog: AcceptDialog
@@ -286,7 +290,14 @@ func _build_layout() -> void:
 	page.add_child(log_panel)
 	var log_box := VBoxContainer.new()
 	log_panel.add_child(log_box)
-	log_box.add_child(label("修 行 手 记", 16, GOLD))
+	var log_title := HBoxContainer.new()
+	log_title.add_theme_constant_override("separation", 12)
+	log_box.add_child(log_title)
+	log_title.add_child(label("修 行 手 记", 16, GOLD))
+	var full_record: Button = button("编年史", func() -> void: set_view("chronicle"), "按类别翻阅一生的记载")
+	full_record.custom_minimum_size.y = 26
+	full_record.add_theme_font_size_override("font_size", 14)
+	log_title.add_child(full_record)
 	journal_text = RichTextLabel.new()
 	journal_text.bbcode_enabled = false
 	journal_text.scroll_following = true
@@ -346,6 +357,8 @@ func render() -> void:
 		ArtsView.render(self)
 	elif view == "people":
 		PeopleView.render_list(self)
+	elif view == "chronicle":
+		ChronicleView.render(self)
 	else:
 		PlaceView.render(self)
 	if new_scene:
@@ -390,8 +403,21 @@ func set_view(next_view: String) -> void:
 	if presenting:
 		return
 	view = next_view
+	if next_view == "chronicle":
+		chronicle_page = 0
 	if next_view == "map" and map_target.is_empty():
 		map_target = str(session.player.journey.get("to", ""))
+	render()
+
+func set_chronicle_filter(filter: String) -> void:
+	chronicle_filter = filter
+	chronicle_page = 0
+	audio.cue("page")
+	render()
+
+func set_chronicle_page(page: int) -> void:
+	chronicle_page = clampi(page, 0, ChronicleView.page_count(self) - 1)
+	audio.cue("page")
 	render()
 
 func select_spot(spot_id: String) -> void:

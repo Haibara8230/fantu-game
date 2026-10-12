@@ -167,6 +167,40 @@ func _run() -> void:
 	await main.battle_action("guard")
 	main._load_manual()
 	check(not main.presenting and main.session.battle.enemy_id == "serpent", "load restores idle stage and active boss")
+	# Tiered staging (data/vfx_tiers.json): a 天阶 sect art gathers, opens a rune circle, shows its
+	# lineage, darkens and tints the stage, pushes the camera in, slows and leaves a mark; 凡品 does none.
+	_step("tiered staging")
+	var stage = main.battle_stage
+	var layer_kinds := {}
+	stage.world.child_entered_tree.connect(func(node: Node) -> void:
+		# Supporting layers carry their settings; an art's own effect has none.
+		if node.get("extra") is Dictionary and not node.extra.is_empty():
+			layer_kinds[str(node.kind)] = true)
+	var staged := {}
+	stage.cue.connect(func(kind: String) -> void:
+		if kind == "release":
+			staged.closeup = stage.closeup
+			staged.tint = stage.tint_alpha
+			staged.backdrop = stage.backdrop_alpha
+		elif kind == "impact" and not staged.has("zoom"):
+			staged.zoom = stage.zoom)
+	_watch_stage("art_tier5")
+	var strike := {"type": "attack", "actor": "player", "style": "sword_rain", "name": "焚天剑雨", "vfx": "sword_rain", "tier": 5, "element": "fire", "legacy": "qingyun", "hits": 1, "amount": 1, "hp_after": int(main.session.battle.hp)}
+	var strikes: Array[Dictionary] = [strike]
+	await stage.play(strikes)
+	check(["gather", "array", "legacy", "residue", "bloom"].all(func(kind: String) -> bool: return layer_kinds.has(kind)), "a 天阶 sect art gathers, opens a rune circle, shows its lineage, leaves a mark and glows")
+	check(staged.get("closeup", "") == "焚天剑雨" and float(staged.get("tint", 0.0)) > 0.1 and float(staged.get("backdrop", 0.0)) > 0.4, "the stage darkens and takes the art's color, its name in close-up")
+	check(float(staged.get("zoom", 0.0)) > 0.0 and cue_sequence.find("surge") >= 0 and cue_sequence.find("surge") < cue_sequence.find("release"), "the camera pushes in and the highest tier adds its sound layer")
+	await create_timer(0.4).timeout
+	check(stage.closeup.is_empty() and stage.zoom < 0.01 and stage.tint_alpha < 0.01 and stage.backdrop_alpha < 0.01, "the staging clears after the strike")
+	layer_kinds.clear()
+	cue_sequence.clear()
+	var plain := strike.duplicate()
+	plain.tier = 1
+	plain.erase("legacy")
+	strikes = [plain]
+	await stage.play(strikes)
+	check(layer_kinds.is_empty() and not "surge" in cue_sequence and stage.tint_alpha == 0.0, "a 凡品 art is drawn without the high tiers' layers")
 	_step("checking skill controls")
 	await process_frame
 	var buttons: Array[Node] = main.center.find_children("*", "Button", true, false)

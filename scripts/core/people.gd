@@ -172,7 +172,7 @@ static func meet_during(s, first_day: int, last_day: int) -> void:
 			continue
 		for day: int in range(first_day, last_day + 1):
 			if npc_location(s, person_id, day) == here:
-				mark_met(s, person_id)
+				mark_met(s, person_id, day)
 				break
 	# Lives last at least two years, so a short stay only needs the people indexed at its start and end;
 	# a long stay checks every seat.
@@ -194,8 +194,9 @@ static func meet_during(s, first_day: int, last_day: int) -> void:
 	for life: Dictionary in lives:
 		if int(life.death) <= first_day or int(life.appear) > last_day or bool(s.world.people.get(life.id, {}).get("met", false)):
 			continue
-		if Population.present_during(life, here, first_day, last_day):
-			mark_met(s, life.id)
+		var met := Population.first_present(life, here, first_day, last_day)
+		if met >= 0:
+			mark_met(s, life.id, met)
 	s._met_through = {"location": here, "day": last_day}
 
 static func known_npcs(s) -> Array[String]:
@@ -212,13 +213,16 @@ static func meet_present(s) -> void:
 		if not (covered and is_generated(s, person_id)):
 			mark_met(s, person_id)
 
-## Marks someone as met. Meeting a generated person who has already died (heard of during a long stay)
-## records them without an obituary; meeting a living one may schedule one later.
-static func mark_met(s, person_id: String) -> void:
+## Marks someone as met, here on `day` (today by default; a long stay passes the day within it).
+## Meeting a generated person who has already died (heard of during a long stay) records them without
+## an obituary; meeting a living one may schedule one later.
+static func mark_met(s, person_id: String, day: int = -1) -> void:
 	var progress := Events.person(s, person_id)
 	if bool(progress.met):
 		return
 	progress.met = true
+	progress.met_day = int(s.world.day) if day < 0 else mini(day, int(s.world.day))
+	progress.met_place = str(s.player.location)
 	if is_generated(s, person_id) and int(life_by_id(s, person_id).death) <= int(s.world.day):
 		progress.mourned = true
 	obituaries_changed(s)

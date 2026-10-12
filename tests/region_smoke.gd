@@ -25,6 +25,7 @@ func _run() -> void:
 	_encounters()
 	_scenes()
 	_ruin()
+	_azhi()
 	_people()
 	_saves()
 	await _audio()
@@ -181,6 +182,52 @@ func _ruin() -> void:
 	trail.refresh_realm_stats()
 	trail.travel("wild")
 	check(trail.has_flag("found_ruin"), "a foundation cultivator finds the trail without the storyteller")
+
+## 阿芷's line: a promise on the ridge, her father's basket in the cleared ruin, the token returned,
+## the spring after the serpent; and the closed valley in between.
+func _azhi() -> void:
+	var game := _game(14)
+	game.travel("ridge")
+	check("azhi" in game.known_npcs() and game.pending_event.is_empty(), "the herb gatherer is met on the ridge without a forced scene")
+	game.travel("town")
+	game.travel("ridge")
+	check(game.pending_event.is_empty(), "her worry waits for some trust")
+	# Test setup: the favor of a few talks and gifts.
+	game.world.people.azhi.relation = 20
+	game.travel("town")
+	game.travel("ridge")
+	check(game.pending_event.get("id", "") == "azhi_father", "with enough trust she tells of her lost father")
+	game.choose_event("promise")
+	check(game.has_flag("azhi_promised"), "the promise is remembered")
+	# Test setup: the ruin found and cleared (its own line, checked in _ruin).
+	game.world.flags.found_ruin = true
+	game.world.flags.ruin_cleared = true
+	game.travel("ruin")
+	check(game.pending_event.get("id", "") == "azhi_token", "the cleared stone room holds her father's basket")
+	game.choose_event("take")
+	check(game.item_count("azhi_token") == 1, "the token is carried as a keepsake")
+	var pills: int = game.item_count("ningqi_pill")
+	game.travel("ridge")
+	check(_option(game, "azhi", "token").get("available", false), "she can be given the token")
+	game.interact("azhi", "token")
+	check(game.item_count("azhi_token") == 0 and game.has_flag("azhi_mourned") and game.item_count("ningqi_pill") == pills + 2 and game.favor("azhi") >= 65, "returning it settles her grief and earns her trust")
+	check(_option(game, "azhi", "token").get("reason", "") == "此事已了。", "the token is returned only once")
+	var herbs: int = game.item_count("huichun_grass")
+	game.world.flags.serpent_slain = true
+	game.travel("town")
+	game.travel("ridge")
+	check(_texts(game).contains("在泉边给父亲立了块木牌") and game.item_count("huichun_grass") == herbs + 3, "once the serpent is gone she visits the spring")
+	# While the valley is sealed she cannot work, and can be helped through it.
+	var sealed := _game(15)
+	sealed.travel("ridge")
+	sealed.world.flags.serpent_rampage = true
+	sealed.player.stones = 40
+	sealed.travel("town")
+	sealed.travel("ridge")
+	check(_texts(sealed).contains("采到的草连买米都不够"), "the sealed valley takes her living")
+	check(_option(sealed, "azhi", "aid").get("available", false) and not _option(game, "azhi", "aid").get("available", true), "she can be helped only while the valley is sealed")
+	sealed.interact("azhi", "aid")
+	check(int(sealed.player.stones) == 20 and sealed.favor("azhi") == 15, "helping her costs twenty stones")
 
 func _option(game: Session, person_id: String, option_id: String) -> Dictionary:
 	for option: Dictionary in game.npc_options(person_id):

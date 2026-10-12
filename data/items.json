@@ -64,5 +64,11 @@
     "category": "quest",
     "price": 0,
     "description": "烫金请柬，凭此可入云溪坊市历元五年春的特殊拍卖。"
+  },
+  "azhi_token": {
+    "name": "刻字竹牌",
+    "category": "quest",
+    "price": 0,
+    "description": "药篓上挂的竹牌，刻着“阿芷”二字，背面是一行采药人的记号。"
   }
 }

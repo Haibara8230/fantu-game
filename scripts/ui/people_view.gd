@@ -1,8 +1,11 @@
 extends RefCounted
-## People in the interface: who is here, the 相识 list, a person's profile card and their portrait.
+## People in the interface: who is here, the 相识 list, a person's profile card with what has passed
+## between you (人物志), and their portrait.
 const Calendar = preload("res://scripts/core/calendar.gd")
 const ArtLibrary = preload("res://scripts/ui/art_library.gd")
 const PEOPLE_SHOWN_HERE := 12
+# How many of the latest chronicle entries about a person their profile shows.
+const RECORD_ENTRIES := 6
 
 static func sorted_acquaintances(ui) -> Array[String]:
 	var session = ui.session
@@ -148,6 +151,81 @@ static func render_person(ui, person_id: String) -> void:
 			ui.set_view("map"))
 		options.add_child(locate)
 	options.add_child(ui.button("返回", ui.close_person))
+	_record(ui, person_id, person)
+
+## 人物志: when and where you met, what has passed between you, the person's life as far as it is
+## known, and the latest chronicle entries about them.
+static func _record(ui, person_id: String, person: Dictionary) -> void:
+	var session = ui.session
+	var progress: Dictionary = session.world.people.get(person_id, {})
+	if not bool(progress.get("met", false)):
+		return
+	var center: VBoxContainer = ui.center
+	center.add_child(HSeparator.new())
+	center.add_child(ui.label("往 来", 16, ui.GOLD))
+	var lines: Array[String] = []
+	var met_day := int(progress.get("met_day", -1))
+	var met_place: String = str(progress.get("met_place", ""))
+	if met_day >= 0:
+		var place: String = session.content.locations[met_place].name if session.content.locations.has(met_place) else ""
+		lines.append("初识 · %s%s" % [Calendar.date_text(met_day), " · " + place if not place.is_empty() else ""])
+	else:
+		lines.append("初识 · 早年相识，未有记载")
+	var dealings: Array[String] = []
+	if int(progress.get("talks", 0)) > 0:
+		dealings.append("交谈 %d 次" % int(progress.talks))
+	var last: Dictionary = progress.get("last", {})
+	for option_id: String in last:
+		dealings.append("上回%s · %s" % [_option_name(person, option_id), Calendar.short_text(int(last[option_id]))])
+	if not dealings.is_empty():
+		lines.append("交往 · " + "；".join(dealings))
+	if session.is_generated(person_id):
+		lines.append("生平 · " + "；".join(_life(session, person_id)))
+	center.add_child(ui.paragraph("\n".join(lines), ui.INK))
+	# Entries the dialogue box above already shows (those since its action) are not repeated.
+	var entries: Array[Dictionary] = session.chronicle.entries
+	var before := entries.size()
+	if str(ui.dialogue.get("npc", "")) == person_id:
+		before -= clampi(int(session.chronicle.added) - int(ui.dialogue.get("mark", session.chronicle.added)), 0, entries.size())
+	var mentions: Array = entries.slice(0, before).filter(func(entry: Dictionary) -> bool: return str(entry.args.get("npc", "")) == person_id)
+	if mentions.is_empty():
+		return
+	center.add_child(ui.label("近 来", 15, ui.GOLD))
+	var recent: Array = mentions.slice(-RECORD_ENTRIES)
+	recent.reverse()
+	for entry: Dictionary in recent:
+		center.add_child(ui.paragraph("【%s】%s" % [Calendar.short_text(int(entry.day)), session.chronicle.format(entry, session.content)]))
+
+static func _option_name(person: Dictionary, option_id: String) -> String:
+	match option_id:
+		"talk":
+			return "交谈"
+		"gift":
+			return "赠礼"
+	for interaction: Dictionary in person.get("interactions", []):
+		if interaction.id == option_id:
+			return str(interaction.label)
+	return option_id
+
+## A generated person's life up to today: birth, foundation, death.
+static func _life(session, person_id: String) -> Array[String]:
+	var life: Dictionary = session.life_by_id(person_id)
+	var today := int(session.world.day)
+	var birth := int(life.birth)
+	var result: Array[String] = ["生于" + _year_text(birth)]
+	if int(life.foundation_age) > 0:
+		var foundation := birth + int(life.foundation_age) * Calendar.DAYS_PER_YEAR
+		if foundation <= today:
+			result.append(_year_text(foundation) + "筑基")
+	if int(life.death) <= today:
+		result.append("%s故去，享年 %d 岁" % [_year_text(int(life.death)), Calendar.age_years(birth, int(life.death))])
+	return result
+
+## A year in the era, or before it (generated people can be born before 历元 1 年).
+static func _year_text(day: int) -> String:
+	if day >= 0:
+		return "%s %d 年" % [Calendar.ERA, Calendar.year(day)]
+	return "%s前 %d 年" % [Calendar.ERA, 1 + (-day - 1) / Calendar.DAYS_PER_YEAR]
 
 ## What was just said: the person's face and name beside their words.
 static func _dialogue_box(ui, person_id: String, person: Dictionary) -> Control:

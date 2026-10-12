@@ -149,19 +149,17 @@ static func location_on(life: Dictionary, day: int) -> String:
 			return "" if stop.location == "away" else str(stop.location)
 	return ""
 
-## Whether a life is at `location` on any day from `first` to `last`, worked out stop by stop rather
+## The first day from `first` to `last` a life is at `location`, or -1; worked out stop by stop rather
 ## than day by day.
-static func present_during(life: Dictionary, location: String, first: int, last: int) -> bool:
+static func first_present(life: Dictionary, location: String, first: int, last: int) -> int:
 	first = maxi(first, int(life.appear))
 	last = mini(last, int(life.death) - 1)
 	if first > last:
-		return false
+		return -1
 	if life.has("home"):
-		return life.home == location
+		return first if life.home == location else -1
+	# Walk the schedule from the stop that contains `first`; one whole cycle passes every stop.
 	var cycle := int(life.cycle)
-	if last - first + 1 >= cycle:
-		return life.schedule.any(func(stop: Dictionary) -> bool: return stop.location == location)
-	# Walk the schedule from the stop that contains `first` until past `last`.
 	var position := posmod(first + int(life.offset), cycle)
 	var index := 0
 	var into := position
@@ -169,14 +167,15 @@ static func present_during(life: Dictionary, location: String, first: int, last:
 		into -= int(life.schedule[index].days)
 		index += 1
 	var day := first
-	while day <= last:
+	var limit := mini(last, first + cycle)
+	while day <= limit:
 		var stop: Dictionary = life.schedule[index]
 		if stop.location == location:
-			return true
+			return day
 		day += int(stop.days) - into
 		into = 0
 		index = (index + 1) % life.schedule.size()
-	return false
+	return -1
 
 static func _name(rng: RandomNumberGenerator, data: Dictionary) -> String:
 	var surname: String = data.surnames[rng.randi_range(0, data.surnames.size() - 1)]

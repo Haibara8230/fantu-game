@@ -190,6 +190,10 @@ func _pending_event_rules() -> void:
 func _comparable(game: Session) -> Dictionary:
 	var data := game.snapshot()
 	data.erase("chronicle")
+	# Like the chronicle, the day someone was met records what the player saw: a retreat meets no one,
+	# so coming out of seclusion every month meets the sect's newcomers sooner than one long retreat.
+	for progress: Dictionary in data.world.people.values():
+		progress.erase("met_day")
 	return data
 
 func _equivalence() -> void:

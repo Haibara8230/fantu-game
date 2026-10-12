@@ -20,6 +20,8 @@ var enemy_id := ""
 var enemy_art: Dictionary = {}
 var human_enemy := false
 var tier_layers: Array = []
+# Each sect's signature motif for its own arts (data/vfx_tiers.json "legacy").
+var legacy_motifs: Dictionary = {}
 var hero_name := ""
 var enemy_name := ""
 var hero_hp: int
@@ -34,6 +36,14 @@ var last_cue := ""
 var banner := ""
 var cue_count := 0
 var flash_alpha := 0.0
+# The high tiers' staging: the stage tinted toward the art's color, darkened behind the duel with
+# streaks, the camera pushed in toward the target, and the art's name in close-up.
+var tint_color := Color.WHITE
+var tint_alpha := 0.0
+var backdrop_alpha := 0.0
+var zoom := 0.0
+var zoom_focus := Vector2.ZERO
+var closeup := ""
 var effect_font := SystemFont.new()
 
 func configure(snapshot: Dictionary, enemy_definition: Dictionary) -> void:
@@ -100,7 +110,9 @@ func _layout() -> void:
 func _process(delta: float) -> void:
 	phase += delta
 	shake = maxf(0.0, shake - delta * 22.0)
-	world.position = Vector2(sin(phase * 80) * shake, cos(phase * 67) * shake * 0.4) if motion_enabled else Vector2.ZERO
+	var offset := Vector2(sin(phase * 80) * shake, cos(phase * 67) * shake * 0.4) if motion_enabled else Vector2.ZERO
+	world.scale = Vector2.ONE * (1.0 + zoom)
+	world.position = offset - zoom_focus * zoom
 	flash_alpha = maxf(0.0, flash_alpha - delta * 2.4)
 	queue_redraw()
 
@@ -108,6 +120,14 @@ func _draw() -> void:
 	if background == null:
 		return
 	draw_texture_rect(background, Rect2(Vector2.ZERO, size), false)
+	if tint_alpha > 0:
+		draw_rect(Rect2(Vector2.ZERO, size), Color(tint_color, tint_alpha))
+	if backdrop_alpha > 0:
+		draw_rect(Rect2(Vector2.ZERO, size), Color(0.02, 0.03, 0.05, backdrop_alpha))
+		for i: int in range(14):
+			var y := fmod(i * 53.0, size.y)
+			var x := fmod(phase * 900.0 + i * 197.0, size.x + 240.0) - 120.0
+			draw_line(Vector2(x, y), Vector2(x + 120 + (i % 3) * 40, y), Color(tint_color, backdrop_alpha * 0.5), 2)
 	# Ground shadows remain separate from sprite art.
 	for actor in [hero, enemy]:
 		if actor == null:
@@ -123,6 +143,11 @@ func _draw() -> void:
 		var text_size := effect_font.get_string_size(banner, HORIZONTAL_ALIGNMENT_LEFT, -1, 18)
 		draw_rect(Rect2(size.x * 0.5 - text_size.x * 0.5 - 14, 62, text_size.x + 28, 32), Color(0.05, 0.12, 0.12, 0.72))
 		draw_string(effect_font, Vector2(size.x * 0.5 - text_size.x * 0.5, 84), banner, HORIZONTAL_ALIGNMENT_LEFT, -1, 18, Color("#f3e4bd"))
+	if not closeup.is_empty():
+		var closeup_size := effect_font.get_string_size(closeup, HORIZONTAL_ALIGNMENT_LEFT, -1, 36)
+		var band := Rect2(0, size.y * 0.3 - 30, size.x, 52)
+		draw_rect(band, Color(0.02, 0.03, 0.05, 0.6))
+		draw_string(effect_font, Vector2(size.x * 0.5 - closeup_size.x * 0.5, size.y * 0.3 + 10), closeup, HORIZONTAL_ALIGNMENT_LEFT, -1, 36, Color(tint_color.lightened(0.5), 1.0))
 	if flash_alpha > 0:
 		draw_rect(Rect2(Vector2.ZERO, size), Color(1, 0.89, 0.65, flash_alpha))
 
@@ -142,11 +167,27 @@ func _effect(kind: String, from: Vector2, to: Vector2, duration: float, color: C
 	effect.layers = _layers(tier)
 	world.add_child(effect)
 
+## A supporting layer (the charge, a rune circle, a sect's signature, a mark left behind, a glow).
+func _layer(kind: String, at: Vector2, duration: float, color: Color, extra: Dictionary = {}) -> void:
+	var effect = Effect.new()
+	effect.setup(kind, at, at, duration, color)
+	effect.extra = extra
+	world.add_child(effect)
+
 ## Tier layers from data/vfx_tiers.json (tier 1 adds nothing).
 func _layers(tier: int) -> Dictionary:
 	if tier_layers.is_empty():
-		tier_layers = JSON.parse_string(FileAccess.get_file_as_string("res://data/vfx_tiers.json")).tiers
+		var data: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://data/vfx_tiers.json"))
+		tier_layers = data.tiers
+		legacy_motifs = data.get("legacy", {})
 	return tier_layers[clampi(tier - 1, 0, tier_layers.size() - 1)]
+
+## Sets the high tiers' staging (0 clears it) over `seconds`.
+func _stage_mood(color: Color, tint: float, backdrop: float, seconds: float) -> void:
+	tint_color = color
+	var mood := create_tween().set_parallel(true)
+	mood.tween_property(self, "tint_alpha", tint, seconds)
+	mood.tween_property(self, "backdrop_alpha", backdrop, seconds)
 
 func _number(actor, amount: int, healing: bool = false) -> void:
 	var label := Label.new()
@@ -228,15 +269,33 @@ func _attack(event: Dictionary) -> void:
 	var color := Color(profile.color)
 	var melee: bool = profile.delivery == "melee"
 	var hit_count: int = int(event.get("hits", skill.get("hits", 1)))
-	banner = str(event.get("name", skill.get("name", enemy_name))) + (" · 反击" if event.actor == "enemy" else "")
+	var art_name: String = str(event.get("name", skill.get("name", enemy_name)))
+	var lineage: String = str(event.get("legacy", ""))
+	banner = art_name + (" · 传承" if not lineage.is_empty() else "") + (" · 反击" if event.actor == "enemy" else "")
+	# From 玄阶 an art gathers before it is released; from 地阶 a rune circle opens under the caster and
+	# the stage takes the art's color; at 天阶 the duel darkens, slows and the camera pushes in.
+	var charge := float(layers.get("charge", 0.0))
+	var slow := float(layers.get("slow", 0.0))
+	var prepare_time := float(profile.prepare) + charge
+	var travel_time: float = float(profile.travel) * (1.0 + slow)
 	attacking.idle_enabled = false
 	attacking.set_pose(profile.prepare_pose)
 	if not str(profile.charge).is_empty():
-		_effect(profile.charge, attacking.chest(), attacking.chest(), float(profile.prepare) + 0.15, color)
+		_effect(profile.charge, attacking.chest(), attacking.chest(), prepare_time + 0.15, color)
+	if charge > 0:
+		_layer("gather", attacking.chest(), prepare_time, color, {"count": int(layers.get("swarm", 10))})
+	if int(layers.get("rune", 0)) > 0:
+		_layer("array", attacking.position + Vector2(0, -6), prepare_time + travel_time + 0.5, color, {"count": int(layers.rune)})
+	if not lineage.is_empty() and sects.has(lineage):
+		_layer("legacy", attacking.chest(), prepare_time + travel_time + 0.4, Color(sects[lineage].color), {"motif": str(legacy_motifs.get(lineage, ""))})
+	if float(layers.get("tint", 0.0)) > 0 or float(layers.get("backdrop", 0.0)) > 0:
+		_stage_mood(color, float(layers.get("tint", 0.0)), float(layers.get("backdrop", 0.0)), prepare_time)
+	if float(layers.get("backdrop", 0.0)) > 0:
+		closeup = art_name
 	var prepare := create_tween().set_parallel(true)
-	prepare.tween_property(attacking, "position:x", origin.x - push_direction * (10 if visual_id.begins_with("sword") else 3), float(profile.prepare)).set_trans(Tween.TRANS_QUAD)
+	prepare.tween_property(attacking, "position:x", origin.x - push_direction * (10 if visual_id.begins_with("sword") else 3), prepare_time).set_trans(Tween.TRANS_QUAD)
 	var stance_offset: float = 4.0 if visual_id in ["earth", "rock_spire"] else (-4.0 if visual_id in ["water", "ice_lance"] else 0.0)
-	prepare.tween_property(attacking, "position:y", origin.y + stance_offset, float(profile.prepare))
+	prepare.tween_property(attacking, "position:y", origin.y + stance_offset, prepare_time)
 	_emit_cue("prepare")
 	await prepare.finished
 	attacking.set_pose(profile.release_pose)
@@ -244,10 +303,15 @@ func _attack(event: Dictionary) -> void:
 	var attack_x: float = target.position.x - push_direction * (target.visual_height * 0.25 + attacking.visual_height * 0.45) if melee else origin.x + push_direction * (18 if visual_id.begins_with("sword") else 5)
 	release.tween_property(attacking, "position:x", attack_x, 0.12).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
 	release.tween_property(attacking, "position:y", origin.y, 0.12)
-	var travel_time: float = float(profile.travel)
+	if float(layers.get("zoom", 0.0)) > 0 and motion_enabled:
+		zoom_focus = target.chest()
+		create_tween().tween_property(self, "zoom", float(layers.zoom), travel_time * 0.8).set_trans(Tween.TRANS_SINE)
 	# Effects begin before the cue, so frame capture and UI see the actual release.
 	if not melee:
 		_effect(profile.kind, attacking.chest(), target.chest(), travel_time + (0.3 if profile.delivery == "ground" else 0.0), color, 0, tier)
+	# The highest tier's own sound layer, under the release.
+	if float(layers.get("surge", 0.0)) > 0:
+		_emit_cue("surge")
 	_emit_cue("release")
 	var before_hp: int = enemy_hp if event.actor == "player" else hero_hp
 	var total: int = int(event.amount)
@@ -260,9 +324,13 @@ func _attack(event: Dictionary) -> void:
 		var portion: int = total / hit_count + (1 if hit_index < total % hit_count else 0)
 		before_hp = maxi(0, before_hp - portion)
 		var displayed_hp: int = int(event.hp_after) if hit_index == hit_count - 1 else before_hp
-		await _hit(target, target_home, event.actor == "player", portion, displayed_hp, push_direction, profile, color, layers)
+		await _hit(target, target_home, event.actor == "player", portion, displayed_hp, push_direction, profile, color, layers, str(event.get("element", "")))
 		if hit_index < hit_count - 1:
 			await _pause(0.08)
+	if zoom > 0 or tint_alpha > 0 or backdrop_alpha > 0:
+		closeup = ""
+		_stage_mood(tint_color, 0.0, 0.0, 0.3)
+		create_tween().tween_property(self, "zoom", 0.0, 0.3).set_trans(Tween.TRANS_SINE)
 	var recovery := create_tween()
 	recovery.tween_property(attacking, "position", origin, 0.26).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
 	await _pause(0.28)
@@ -274,7 +342,7 @@ func _attack(event: Dictionary) -> void:
 	target.flash(0)
 	await _pause(0.08)
 
-func _hit(target, home: Vector2, enemy_target: bool, amount: int, hp_after: int, direction: float, profile: Dictionary, color: Color, layers: Dictionary = {}) -> void:
+func _hit(target, home: Vector2, enemy_target: bool, amount: int, hp_after: int, direction: float, profile: Dictionary, color: Color, layers: Dictionary = {}, element: String = "") -> void:
 	if recoil_handle != null and recoil_handle.is_running():
 		recoil_handle.kill()
 	if flash_handle != null and flash_handle.is_running():
@@ -289,10 +357,14 @@ func _hit(target, home: Vector2, enemy_target: bool, amount: int, hp_after: int,
 	_number(target, amount)
 	hit_resolved.emit(enemy_target, amount, hp_after)
 	_effect(profile.impact, target.chest(), target.chest(), 0.48, color)
+	if float(layers.get("residue", 0.0)) > 0:
+		_layer("residue", target.chest(), float(layers.residue), color, {"element": element})
+	if float(layers.get("bloom", 0.0)) > 0:
+		_layer("bloom", target.chest(), 0.6, color, {"strength": float(layers.bloom)})
 	shake = float(profile.shake) * float(layers.get("shake", 1.0)) if motion_enabled else 0
 	flash_alpha = (0.055 if profile.impact == "fire_explosion" else 0.0) + float(layers.get("flash", 0.0)) if motion_enabled else 0
 	_emit_cue("impact")
-	await _pause(float(profile.hit_stop))
+	await _pause(float(profile.hit_stop) * (1.0 + float(layers.get("slow", 0.0)) * 2.0))
 	recoil_handle = create_tween()
 	recoil_handle.tween_property(target, "position:x", home.x + direction * float(profile.recoil), 0.06)
 	recoil_handle.tween_property(target, "position:x", home.x, 0.18).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)

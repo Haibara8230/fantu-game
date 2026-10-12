@@ -427,7 +427,7 @@
     "search_ruin": 5,
     "road_recovery": 1
   },
-  "world_flags": ["serpent_slain", "heard_auction_rumor", "found_ruin", "ruin_cleared", "helped_wanderer", "serpent_rampage"],
+  "world_flags": ["serpent_slain", "heard_auction_rumor", "found_ruin", "ruin_cleared", "helped_wanderer", "serpent_rampage", "azhi_promised", "azhi_mourned"],
   "sects": {
     "wanderer": {
       "name": "散修",

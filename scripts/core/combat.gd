@@ -73,6 +73,10 @@ static func use_skill(s, skill_id: String) -> String:
 	s.player.qi -= int(t.qi_cost)
 	s.battle.cooldowns[skill_id] = int(t.cooldown)
 	var look := {"style": skill_id, "name": t.name, "vfx": t.vfx, "tier": int(t.tier), "element": t.element}
+	# A sect's own art cast by its disciple carries the lineage's signature layer.
+	var lineage: String = s.content.legacy_sect(skill_id, str(s.player.get("sect", "wanderer")))
+	if not lineage.is_empty():
+		look.legacy = lineage
 	var guarding := false
 	match str(t.kind):
 		"heal", "guard":

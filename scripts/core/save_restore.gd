@@ -33,7 +33,7 @@ static func restore(s, data: Variant) -> bool:
 		if not flag is String or not saved_world.flags[flag] is bool:
 			return false
 	var events: Variant = _valid_event_progress(saved_world.events)
-	var people: Variant = _valid_people(content, saved_world.people)
+	var people: Variant = _valid_people(content, saved_world.people, day)
 	if events == null or people == null:
 		return false
 	if not saved_player.get("name") is String or not saved_player.get("location") is String or not content.locations.has(saved_player.location):
@@ -218,7 +218,7 @@ static func _valid_event_progress(data: Dictionary) -> Variant:
 		result[event_id] = normalized
 	return result
 
-static func _valid_people(content, data: Dictionary) -> Variant:
+static func _valid_people(content, data: Dictionary, day: int) -> Variant:
 	var result := {}
 	for person_id: Variant in data:
 		var person: Variant = data[person_id]
@@ -233,8 +233,14 @@ static func _valid_people(content, data: Dictionary) -> Variant:
 			if not option_id is String or not _whole_nonnegative(person.last[option_id]):
 				return null
 			last[option_id] = int(person.last[option_id])
-		result[person_id] = {"met": person.met, "relation": int(person.relation), "last": last, "absent_until": int(person.absent_until), "talks": int(person.talks)}
-		if person.get("mourned", false) == true:
+		# When and where they were met: optional (saves before 2026-10-12 lack it), -1 and "" when unknown.
+		var met_day: Variant = person.get("met_day", -1)
+		var met_place: Variant = person.get("met_place", "")
+		if not _whole_signed(met_day) or int(met_day) < -1 or int(met_day) > day or not met_place is String or not (met_place.is_empty() or content.locations.has(met_place)):
+			return null
+		result[person_id] = {"met": person.met, "relation": int(person.relation), "last": last, "absent_until": int(person.absent_until), "talks": int(person.talks), "met_day": int(met_day), "met_place": met_place}
+		var mourned: Variant = person.get("mourned", false)
+		if mourned is bool and mourned:
 			result[person_id].mourned = true
 	return result
 

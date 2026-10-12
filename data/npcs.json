@@ -201,5 +201,44 @@
         "chronicle": "你踏入石门，与占据洞府的散修斗法。"
       }
     ]
+  },
+  "azhi": {
+    "name": "阿芷",
+    "title": "松风岭采药人",
+    "attitude": "friendly",
+    "gender": "female",
+    "realm_text": "炼气初期",
+    "affiliation": "松风岭药农",
+    "age": 19,
+    "personality": "爽朗倔强",
+    "description": "背着竹药篓在松林里穿行的姑娘，认得的灵草比坊市药铺还全。说起落霞谷时，笑容会淡下去。",
+    "home": "ridge",
+    "spot": "pines",
+    "talk_favor": 3,
+    "gift_favor": 5,
+    "talk": [
+      "“凝露草要趁日头没出来时采，露水一干，药性就散了。”",
+      "“松风岭的灵草我都认遍啦，可惜好东西都长在落霞谷里。”",
+      "“我爹说，采药的人进山，要给山神留一株。”",
+      "“沈掌柜人好，可他从来不收我爹采的赤鳞果——说那东西长在妖蟒窝边上。”"
+    ],
+    "interactions": [
+      {
+        "id": "aid",
+        "label": "接济她二十灵石，熬过封谷",
+        "conditions": [{"flag": "serpent_rampage"}, {"stones_at_least": 20}],
+        "effects": [{"stones": -20}, {"relation": ["azhi", 15]}],
+        "cooldown_days": 90,
+        "chronicle": "落霞谷封了，药农断了生计。你留给阿芷二十灵石，她红着眼眶收下了。"
+      },
+      {
+        "id": "token",
+        "label": "把竹牌与手记交还给她",
+        "conditions": [{"item_at_least": ["azhi_token", 1]}],
+        "effects": [{"take_item": "azhi_token"}, {"flag": "azhi_mourned"}, {"relation": ["azhi", 40]}, {"item": ["ningqi_pill", 2]}],
+        "once": true,
+        "chronicle": "你把刻着“阿芷”的竹牌和那半本手记交给她。她攥着竹牌沉默良久，只说了一句“我就知道”，又把父亲留下的两枚凝气丹塞进你手里。"
+      }
+    ]
   }
 }

@@ -36,6 +36,7 @@
     "guard": "res://assets/audio/sfx/battle_guard.ogg",
     "victory": "res://assets/audio/sfx/battle_victory.ogg",
     "defeat": "res://assets/audio/sfx/battle_defeat.ogg",
+    "surge": "res://assets/audio/sfx/battle_surge.ogg",
     "breakthrough": "res://assets/audio/sfx/realm_breakthrough.ogg",
     "ending": "res://assets/audio/sfx/life_ends.ogg"
   }

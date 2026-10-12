@@ -9,6 +9,9 @@ var variation: int = 0
 var tint := Color("#d8f8f1")
 # Tier layers (data/vfx_tiers.json): extra glow, rings, sparks and trails on top of the base effect.
 var layers: Dictionary = {}
+# Settings of a supporting layer drawn on its own (gather, array, legacy, residue, bloom): a count,
+# a motif, an element or a strength.
+var extra: Dictionary = {}
 
 func setup(effect_kind: String, origin: Vector2, target: Vector2, seconds: float, color: Color, variant: int = 0) -> void:
 	kind = effect_kind
@@ -204,6 +207,94 @@ func _draw() -> void:
 			elif kind == "root_hit":
 				for i: int in range(3):
 					draw_arc(finish + Vector2(0,i*12-12), radius * 0.6, -PI * 0.7, PI * 0.4, 26, Color(tint, 1-t), 2, true)
+		"gather":
+			# 蓄力: motes drawn in toward the caster while the art gathers.
+			var count := int(extra.get("count", 10))
+			for i: int in range(count):
+				var axis := Vector2.from_angle(TAU * i / count + i * 0.7)
+				var point := finish + axis * (90.0 + (i % 4) * 18.0) * (1.0 - t)
+				draw_circle(point, 2.5, Color(tint.lightened(0.4), fade))
+				draw_line(point, point.lerp(finish, 0.25), Color(tint, fade * 0.5), 1.5, true)
+			draw_circle(finish, 10.0 + t * 14.0, Color(tint, 0.18 * t))
+		"array":
+			# 符文阵 at the caster's feet, one ring per level, with turning spokes.
+			for i: int in range(int(extra.get("count", 1))):
+				_rune(finish, 70.0 + i * 26.0, tint, fade * (0.9 - i * 0.2), true)
+			for i: int in range(12):
+				var angle := i * TAU / 12 - elapsed * 0.8
+				var axis := Vector2(cos(angle), sin(angle) * 0.28)
+				draw_line(finish + axis * 30, finish + axis * 64, Color(tint, fade * 0.35), 2, true)
+		"legacy":
+			_legacy(str(extra.get("motif", "")), t, fade)
+		"residue":
+			_residue(str(extra.get("element", "")), t)
+		"bloom":
+			# 泛光: a soft wide glow where the art lands.
+			var strength := float(extra.get("strength", 0.2))
+			for i: int in range(5):
+				draw_circle(finish, (30.0 + i * 28.0) * (0.6 + 0.4 * t), Color(tint.lightened(0.3), strength * (1.0 - t) * (1.0 - i * 0.17)))
+
+## A sect's signature layer around the caster: Qingyun's circling swords, Chixiao's fire lotus,
+## Changqing's leaf whirl, Canglan's ripples, Xuanyue's stone seal.
+func _legacy(motif: String, t: float, fade: float) -> void:
+	match motif:
+		"swords":
+			for i: int in range(9):
+				var angle := i * TAU / 9 + t * 2.0
+				_blade(finish + Vector2.from_angle(angle) * 78, Vector2.from_angle(angle + PI * 0.5), 30, Color(tint, fade * 0.8))
+		"lotus":
+			for i: int in range(8):
+				var angle := i * TAU / 8 - PI * 0.5
+				var tip := finish + Vector2.from_angle(angle) * (64.0 + sin(t * PI) * 12.0)
+				var side := Vector2.from_angle(angle).orthogonal() * 12.0
+				draw_colored_polygon(PackedVector2Array([finish + Vector2.from_angle(angle) * 26 + side, tip, finish + Vector2.from_angle(angle) * 26 - side]), Color(tint, fade * 0.35))
+				_flame(tip, 13, tint, fade * 0.8)
+		"leaves":
+			for i: int in range(18):
+				var angle := i * 0.9 + t * 4.0
+				_leaf(finish + Vector2.from_angle(angle) * (36.0 + i * 3.2), angle + PI * 0.5, 8, tint, fade * 0.8)
+		"ripples":
+			for i: int in range(3):
+				var spread := fmod(t + i / 3.0, 1.0)
+				draw_arc(finish, 40.0 + spread * 70.0, 0, TAU, 48, Color(tint, fade * (1.0 - spread)), 3, true)
+		"seal":
+			for ring: int in range(2):
+				var corners := PackedVector2Array()
+				for i: int in range(7):
+					corners.append(finish + Vector2.from_angle(i * TAU / 6 + t * (0.6 if ring == 0 else -0.6)) * (72.0 - ring * 22.0))
+				draw_polyline(corners, Color(tint, fade * (0.8 - ring * 0.25)), 3, true)
+		_:
+			_rune(finish, 70, tint, fade, false)
+
+## 受击残留: what an art of a high tier leaves on the target for a moment, by element.
+func _residue(element: String, t: float) -> void:
+	var linger := 1.0 - t
+	match element:
+		"fire":
+			draw_circle(finish + Vector2(0, 12), 24, Color(0.2, 0.08, 0.04, 0.25 * linger))
+			for i: int in range(10):
+				var point := finish + Vector2(sin(i * 2.3) * 30, 20 - t * 60 - (i % 3) * 10)
+				draw_circle(point, 2.5 * linger + 0.5, Color("#ffb05a", linger))
+		"water":
+			for i: int in range(7):
+				var point := finish + Vector2.from_angle(i * TAU / 7 + 0.4) * (22.0 + (i % 2) * 12.0)
+				var axis := Vector2.from_angle(i * 1.3)
+				draw_colored_polygon(PackedVector2Array([point + axis * 8, point + axis.orthogonal() * 3, point - axis * 8, point - axis.orthogonal() * 3]), Color("#dff6ff", linger * 0.9))
+		"wood":
+			for i: int in range(8):
+				_leaf(finish + Vector2(sin(i * 1.9) * 36, -20 + t * 50 + i * 6), i * 0.8 + t * 3, 6, tint, linger)
+		"earth":
+			for i: int in range(6):
+				var axis := Vector2.from_angle(PI * 0.1 + i * PI * 0.16)
+				draw_line(finish + Vector2(0, 40), finish + Vector2(0, 40) + Vector2(axis.x, axis.y * 0.3) * 46, Color("#6b5538", linger), 2, true)
+			for i: int in range(8):
+				draw_circle(finish + Vector2(sin(i * 2.7) * 34, 30 - t * 30 - i * 3), 3, Color("#c9ad84", linger * 0.6))
+		_:
+			for i: int in range(6):
+				var point := finish + Vector2.from_angle(i * 1.7) * (18.0 + i * 5.0)
+				var blink := linger * absf(sin(t * 9.0 + i))
+				draw_line(point - Vector2(6, 0), point + Vector2(6, 0), Color("#ffffff", blink), 2, true)
+				draw_line(point - Vector2(0, 6), point + Vector2(0, 6), Color("#ffffff", blink), 2, true)
 
 
 func _blade(point: Vector2, direction: Vector2, length: float, color: Color) -> void:

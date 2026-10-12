@@ -63,6 +63,7 @@
 | `battle_impact.ogg` | 命中 | 沉闷撞击 |
 | `battle_heal.ogg` | 治疗 | 上行的清亮音 |
 | `battle_guard.ogg` | 守御 | 低沉护罩 |
+| `battle_surge.ogg` | 天阶神通出招（叠在出招音下） | 低频轰鸣，渐强后骤然释放 |
 | `battle_victory.ogg` | 斗法获胜 | 短乐句，上扬 |
 | `battle_defeat.ogg` | 斗法落败 | 短乐句，下沉 |
 | `realm_breakthrough.ogg` | 突破 | 渐强后释放 |

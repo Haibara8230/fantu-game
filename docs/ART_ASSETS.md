@@ -246,6 +246,7 @@ STRICT NEGATIVES: NO roads, NO paths, NO streets visible as connecting routes, N
 | `assets/art/portraits/wounded.png` | 512×640 | 柳寒舟 |
 | `assets/art/portraits/rogue.png` | 512×640 | 蒙面修士 |
 | `assets/art/portraits/squatter.png` | 512×640 | 石寒 |
+| `assets/art/portraits/azhi.png` | 512×640 | 阿芷（2026-10-12 起暂用图池 `gatherer_female_young_02.png` 的副本，待绘专属立绘） |
 | `assets/art/scenes/sect_chamber.png` | 2400×600 | 静室 |
 | `assets/art/scenes/sect_arena.png` | 2400×600 | 演武坪 |
 | `assets/art/scenes/sect_hall.png` | 2400×600 | 传功堂 |

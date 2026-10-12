@@ -272,5 +272,46 @@
       {"id": "enter", "label": "报名参赛", "effects": [{"tournament": true}], "chronicle": "你报名参加了外门小比。"},
       {"id": "watch", "label": "在台下观战", "chronicle": "你在台下观看了这一届外门小比。"}
     ]
+  },
+  "azhi_father": {
+    "title": "阿芷的心事",
+    "trigger": "location",
+    "location": "ridge",
+    "priority": 14,
+    "repeat": {"cooldown_days": 180},
+    "conditions": [{"relation_at_least": ["azhi", 20]}, {"not": {"flag": "azhi_promised"}}],
+    "text": "阿芷把药篓放在松根下，望着落霞谷的方向出神。“三年前我爹进谷采赤鳞果，再也没回来。有人说在谷底见过占了山洞的散修……道友若去得了谷里深处，能不能替我留意一只竹牌？上头刻着我的名字，挂在他的药篓上。”",
+    "choices": [
+      {"id": "promise", "label": "答应替她留意", "effects": [{"flag": "azhi_promised"}, {"relation": ["azhi", 5]}], "chronicle": "你答应阿芷，若在落霞谷深处见到刻着她名字的竹牌，一定带回来。"},
+      {"id": "decline", "label": "眼下无能为力", "chronicle": "你没有答应阿芷的请托。她笑了笑，说本也不该麻烦旁人。"}
+    ]
+  },
+  "azhi_token": {
+    "title": "石室药篓",
+    "trigger": "location",
+    "location": "ruin",
+    "priority": 25,
+    "conditions": [{"flag": "azhi_promised"}, {"flag": "ruin_cleared"}],
+    "text": "石室角落里堆着几只破旧药篓，像是被人随手丢在这里。其中一只挂着竹牌，刻着“阿芷”二字；篓底压着半本采药手记，最后一页字迹潦草：谷底有人占洞，切莫靠近。",
+    "choices": [
+      {"id": "take", "label": "收起竹牌与手记", "effects": [{"item": ["azhi_token", 1]}], "chronicle": "你在古修洞府的石室里找到了阿芷父亲的药篓与竹牌。"}
+    ]
+  },
+  "azhi_sealed": {
+    "title": "封谷之后",
+    "trigger": "location",
+    "location": "ridge",
+    "priority": 12,
+    "conditions": [{"flag": "serpent_rampage"}, {"met": "azhi"}],
+    "chronicle": "落霞谷封了，松风岭的药农断了进谷的路。阿芷说她每天只能在松林里转，采到的草连买米都不够。"
+  },
+  "azhi_spring": {
+    "title": "泉边木牌",
+    "trigger": "location",
+    "location": "ridge",
+    "priority": 13,
+    "conditions": [{"flag": "azhi_mourned"}, {"flag": "serpent_slain"}],
+    "effects": [{"relation": ["azhi", 10]}, {"item": ["huichun_grass", 3]}],
+    "chronicle": "妖蟒既除，阿芷独自进了一趟深谷灵泉，在泉边给父亲立了块木牌。回来时她分给你三株泉边采的回春草，说那里的草长得最好。"
   }
 }

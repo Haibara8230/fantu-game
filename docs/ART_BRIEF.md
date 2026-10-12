@@ -144,7 +144,7 @@ Style: unmistakably two-dimensional hand-painted Chinese game background, restra
 
 ---
 
-## 7. Group D: Character portraits (7 images)
+## 7. Group D: Character portraits (8 images; `azhi.png` added later)
 
 **Folder:** `assets/art/portraits/`
 **Size:** **512×640** (4:5). Half-body bust, three-quarter view **facing right**, plain muted background or transparent (RGBA). Displayed small (about 120×150), so keep a clear silhouette and a readable face in the upper third. All characters are adults, modestly dressed, in the same style as `assets/art/cultivator_atlas_v2.png`.
@@ -158,6 +158,7 @@ Style: unmistakably two-dimensional hand-painted Chinese game background, restra
 | `wounded.png` | Liu Hanzhou 柳寒舟, wandering cultivator, 27 | Quiet young swordsman, pale, blood on his robe collar, holding a plain sword, tired but proud |
 | `rogue.png` | Masked rogue cultivator 蒙面修士, 35 | Hostile, cloth mask over the lower face, dark robe with red trim, small flame in one palm, cold eyes |
 | `squatter.png` | Shi Han 石寒, cave squatter, 49 | Suspicious, rough brown Taoist robe, sitting cross-legged, stony expression, earth-toned |
+| `azhi.png` | A Zhi 阿芷, herb gatherer of Pine Wind Ridge, 19 (added 2026-10-12) | Bright but stubborn, plain grey-green work clothes with rolled sleeves, bamboo herb basket on her back, small hoe, a bamboo name tag at the basket strap, a trace of sadness behind the smile |
 
 **Prompt template:**
 ```text

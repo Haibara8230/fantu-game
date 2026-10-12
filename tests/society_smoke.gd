@@ -324,12 +324,28 @@ func _meetings_and_saves() -> void:
 	var visitors: Array = game._people_at.get("town", []).filter(func(person_id: String) -> bool: return game.is_generated(person_id) and game.person(person_id).has("schedule"))
 	game.wait(120)
 	check(not visitors.is_empty() and visitors.all(func(person_id: String) -> bool: return person_id in game.known_npcs()), "a long stay meets everyone who passes through")
+	var arrived := int(game.world.day) - 120
+	check(visitors.all(func(person_id: String) -> bool:
+		var progress: Dictionary = game.world.people[person_id]
+		var first := -1
+		for day: int in range(arrived, int(game.world.day) + 1):
+			if game.Population.location_on(game.life_by_id(person_id), day) == "town":
+				first = day
+				break
+		return progress.met_place == "town" and int(progress.met_day) == first), "each is recorded as met on the first day they were in town")
+	var tampered: Dictionary = JSON.parse_string(JSON.stringify(game.snapshot()))
+	tampered.world.people[visitors[0]].met_place = "nowhere"
+	check(not Session.new().restore(tampered), "a meeting at an unknown place is rejected")
+	tampered.world.people[visitors[0]].met_place = "town"
+	tampered.world.people[visitors[0]].met_day = int(game.world.day) + 1
+	check(not Session.new().restore(tampered), "a meeting after today is rejected")
 	var old := Session.new()
 	check(old.restore(JSON.parse_string(FileAccess.get_file_as_string("res://tests/fixtures/v8_wild_loadout.json"))), "v8 save migrates")
 	check(old.player.quests.is_empty() and old.world.rumors.is_empty() and old.player.methods == ["t:breath:wood:1::0"], "commissions and rumors added; the loadout kept")
 	var acquainted := Session.new()
 	check(acquainted.restore(JSON.parse_string(FileAccess.get_file_as_string("res://tests/fixtures/v9_acquainted.json"))), "v9 save migrates")
 	check(not acquainted.world.people.keys().any(func(person_id: String) -> bool: return person_id.begins_with("g:") and person_id.count(":") == 1) and acquainted.world.people.has("storyteller") and acquainted.player.quests.size() == 1, "old-style acquaintances give way to the living population; handwritten ones and quests stay")
+	check(int(acquainted.world.people.storyteller.met_day) == -1 and acquainted.world.people.storyteller.met_place == "", "older saves read with the meeting unrecorded")
 	var twin := Session.new()
 	twin.restore(JSON.parse_string(JSON.stringify(old.snapshot())))
 	var someone: String = old.living_people().filter(func(person_id: String) -> bool: return old.is_generated(person_id))[0]

@@ -17,6 +17,9 @@ var map: Dictionary = {}
 var technique_data: Dictionary = {}
 var equipment_data: Dictionary = {}
 var vfx_tiers: Array = []
+# Tier layers that start at some tier instead of rising from the first, and each sect's signature layer.
+var vfx_unlocks: Array = []
+var vfx_legacy: Dictionary = {}
 var vfx_styles: Dictionary = {}
 var population_data: Dictionary = {}
 # Resolves people not in the handwritten table (the generated population), set by the session.
@@ -76,6 +79,8 @@ func load_data() -> bool:
 				equipment_data = loaded
 			"vfx_tiers":
 				vfx_tiers = loaded.get("tiers", [])
+				vfx_unlocks = loaded.get("unlocks", [])
+				vfx_legacy = loaded.get("legacy", {})
 			"vfx":
 				vfx_styles = loaded
 			"population":
@@ -803,6 +808,13 @@ func item(id: String) -> Dictionary:
 func tier_layers(tier: int) -> Dictionary:
 	return vfx_tiers[clampi(tier - 1, 0, vfx_tiers.size() - 1)]
 
+## The sect whose signature layer an art shows when `sect_id`'s disciple casts it: one of that sect's
+## own arts, or "" (wanderers have no lineage).
+func legacy_sect(skill_id: String, sect_id: String) -> String:
+	if sect_id == "wanderer" or not sects.has(sect_id) or not vfx_legacy.has(sect_id):
+		return ""
+	return sect_id if skill_id in sects[sect_id].skills else ""
+
 func _validate_arsenal() -> String:
 	var data := technique_data
 	for key: String in ["tiers", "elements", "archetypes", "affixes"]:
@@ -849,13 +861,24 @@ func _validate_arsenal() -> String:
 		var base: Dictionary = gear.bases[base_id]
 		if not gear.slots.has(base.get("slot", "")) or not gear.materials.has(base.get("material", "")) or gear.materials[base.material].size() < gear.tiers.size() or base.get("nouns", []).is_empty():
 			return "装备底材配置错误：" + base_id
-	# Tier effects must escalate on every measure, so a stronger art never looks weaker.
+	# Tier effects must escalate on every measure, so a stronger art never looks weaker. Layers that
+	# unlock at a tier (the charge, the rune circle, the zoom...) may stay level but never fall back.
 	if vfx_tiers.size() != data.tiers.size():
 		return "特效品阶须与功法品阶一一对应。"
 	for index: int in range(1, vfx_tiers.size()):
 		for key: String in vfx_tiers[0]:
-			if float(vfx_tiers[index].get(key, 0)) <= float(vfx_tiers[index - 1].get(key, 0)):
+			var now := float(vfx_tiers[index].get(key, 0))
+			var before := float(vfx_tiers[index - 1].get(key, 0))
+			if key in vfx_unlocks and now < before:
+				return "特效第 %d 阶的 %s 低于上一阶。" % [index + 1, key]
+			if not key in vfx_unlocks and now <= before:
 				return "特效第 %d 阶的 %s 没有高于上一阶。" % [index + 1, key]
+	for key: Variant in vfx_unlocks:
+		if not vfx_tiers[0].has(key) or float(vfx_tiers.back().get(key, 0)) <= 0.0:
+			return "特效层 %s 在任何品阶都不出现。" % str(key)
+	for sect_id: String in sects:
+		if sect_id != "wanderer" and not vfx_legacy.get(sect_id) is String:
+			return "门派缺少传承特效：" + sect_id
 	return ""
 
 ## Location-triggered events of one place, in priority order (cached with the priority list).

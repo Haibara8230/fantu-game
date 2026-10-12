@@ -154,8 +154,30 @@ func _run() -> void:
 	var said := _texts(main.center, "Label")
 	var first_line: String = main.session.content.people.shen_mo.talk[0]
 	check(said.contains(first_line) and not said.contains("沈墨：" + first_line), "a talk line is shown under the speaker's name, once")
+	var met: Dictionary = main.session.world.people.shen_mo
+	check(said.contains("往 来") and said.contains("初识 · " + main.Calendar.date_text(int(met.met_day)) + " · 云溪坊市") and said.contains("交谈 1 次") and said.contains("上回代他收五株回春草"), "the card records when and where you met and what passed between you")
+	check(said.contains("近 来") and said.contains("你交给沈墨五株回春草"), "and the latest chronicle entries about them, apart from what was just said")
 	_button("返回").pressed.emit()
 	check(main.selected_npc.is_empty() and _button("闭关") == null, "back to the market scenes")
+	# 编年史: the whole record by kind, newest first, a page at a time.
+	main.set_view("chronicle")
+	var record := _texts(main.center, "Label")
+	check(record.contains("编 年 史  ·  %d 条" % main.session.chronicle.entries.size()) and record.contains("历元 1 年") and record.contains("你拜入青云山"), "the chronicle view lists the whole record under years")
+	var kinds: Array = main.session.content.chronicle.keys() + ["event", "talk", "npc"]
+	check(kinds.all(func(kind: String) -> bool: return main.ChronicleView.groups().any(func(group: Dictionary) -> bool: return kind in group.get("entries", []) )), "every kind of entry has a filter")
+	_button("大事").pressed.emit()
+	var majors: Array = main.ChronicleView.shown(main)
+	check(_button("大事").disabled and not majors.is_empty() and majors.size() < main.session.chronicle.entries.size() and majors.all(func(entry: Dictionary) -> bool: return entry.major), "大事 shows only the entries kept for life")
+	_button("人物").pressed.emit()
+	check(_texts(main.center, "Label").contains("沈墨") and not _texts(main.center, "Label").contains("你拜入青云山"), "人物 shows dealings with people")
+	_button("全部").pressed.emit()
+	if main.ChronicleView.page_count(main) > 1:
+		_button("较早").pressed.emit()
+		check(_texts(main.center, "Label").contains("第 2 / ") and not _button("较近").disabled, "older entries are a page further")
+	else:
+		check(_button("较早").disabled, "a short record fits on one page")
+	_button("返回").pressed.emit()
+	check(main.view == "place", "back from the chronicle")
 	# The street shop and the 行囊.
 	main.select_spot("street")
 	check(_button("购买筑基丹  ·  120 灵石") != null and _button("购买回气丹") != null, "the street shop lists its goods")
