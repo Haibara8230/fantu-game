@@ -106,7 +106,7 @@ static func render(ui) -> void:
 				_open(ui, grid, "交易  ·  不耗时日", ui.open_trade, "买卖在一张台面上摆好，确定后才成交")
 			continue
 		_spot_action(ui, grid, action)
-	for days: Variant in session.content.rules.wait_options:
+	for days: Variant in session.wait_options():
 		var span := int(days)
 		_timed(ui, grid, "停留  ·  " + Calendar.duration_text(span), func() -> String: return session.wait(span), "原地停留，等候时机；约定临近时会提醒")
 	if "study" in spot.actions and not ui.preview_mode:

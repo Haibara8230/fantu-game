@@ -406,6 +406,11 @@ func wait(days: int) -> String:
 	meet_during(start + 1, int(world.day))
 	return conclude(log_event("wait", {"days": passed.elapsed, "location": player.location}), passed)
 
+## The stays offered at a place: longer ones open with the realm, when a season is a short while.
+func wait_options() -> Array:
+	var options: Array = content.realm(int(player.realm)).get("wait_options", [])
+	return options if not options.is_empty() else content.rules.wait_options
+
 ## Days of quiet rest needed to recover fully: proportional to the missing health, at least one.
 func rest_days() -> int:
 	var missing := float(int(player.max_hp) - int(player.hp)) / float(player.max_hp)

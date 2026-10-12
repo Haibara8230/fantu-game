@@ -389,6 +389,7 @@
       "name": "炼气",
       "lifespan_years": 120,
       "retreat_step_days": 10,
+      "wait_options": [1, 10],
       "fresh_days": 180,
       "stages": [
         {"name": "初期", "xp": 0, "max_hp": 90, "max_qi": 30, "attack_bonus": 0, "mind": 0, "retreat_days": 90},
@@ -404,6 +405,7 @@
       "breakthrough_text": "丹田中翻涌的灵气渐渐平息，由气凝实为液，余下的灵力沉入经脉与血肉。你只觉周身舒畅，一股从未有过的力量正在凝聚。",
       "lifespan_years": 220,
       "retreat_step_days": 30,
+      "wait_options": [1, 10, 30, 90],
       "fresh_days": 540,
       "stages": [
         {"name": "初期", "xp": 0, "max_hp": 140, "max_qi": 50, "attack_bonus": 8, "mind": 36, "retreat_days": 360},

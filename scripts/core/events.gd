@@ -94,6 +94,8 @@ static func met(s, condition: Dictionary) -> bool:
 			return str(s.player.get("sect", "")) == value
 		"talked":
 			return int(s.world.people.get(value, {}).get("talks", 0)) > 0
+		"at_location":
+			return str(s.player.get("location", "")) == value
 		"deed_at_least":
 			return s.deed_count(value[0]) >= int(value[1])
 		"story_at":

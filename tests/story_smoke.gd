@@ -22,6 +22,7 @@ func _initialize() -> void:
 	_saves(game)
 	_key_people()
 	_requests()
+	_foundation_pace()
 	_older_journeys()
 	print("STORIES: %d checks, %d failures" % [checks, failures])
 	quit(0 if failures == 0 else 1)
@@ -277,6 +278,44 @@ func _requests() -> void:
 	game.interact(asking, "help")
 	check(game.item_count(request.item) == 0 and int(game.player.stones) == stones + int(request.stones) and int(game.player.mind) == mind + 2 and game.favor(asking) == 12, "helping pays, tempers the mind and wins favor")
 	check(not game.request_open(asking) and game.deed_count("help") == 1, "and answers the request for this season")
+
+## After foundation the sect's summons come years apart, each gap longer than the last, and longer stays
+## are offered: a year or two is a short while now.
+func _foundation_pace() -> void:
+	var game := _game("plain", 61)
+	check(game.wait_options().map(func(days: Variant) -> int: return int(days)) == [1, 10], "炼气 offers stays of a day or ten")
+	game.player.realm = 1
+	game.player.mind = 36
+	game.refresh_realm_stats()
+	game.player.hp = game.player.max_hp
+	game.wait(1)
+	check(game.story_state("inner_court") == "active" and game.wait_options().map(func(days: Variant) -> int: return int(days)) == [1, 10, 30, 90], "foundation opens the inner court's storyline and longer stays")
+	var letters: Array[int] = []
+	var start := int(game.world.day)
+	game.wait(400)
+	letters.append(int(game.world.day) - start)
+	check(game.story_at("inner_court", "patrol") and letters[0] == 360, "a year later the first summons ends the stay (%d)" % letters[0])
+	game.record_deed("win:rogue")
+	game.wait(1)
+	check(game.story_step("inner_court").id == "wait_tide", "the patrol done, the court is quiet again")
+	start = int(game.world.day)
+	game.wait(800)
+	letters.append(int(game.world.day) - start)
+	check(game.story_at("inner_court", "tide") and letters[1] == 720, "two years later the spirit tide (%d)" % letters[1])
+	var xp := int(game.player.xp)
+	game.travel("wild")
+	check(game.story_step("inner_court").id == "wait_trial" and int(game.player.xp) == xp + 360, "reaching the spring takes in the tide")
+	# Other appointments of those years (the auction's reminder) may end a stay first.
+	start = int(game.world.storylines.inner_court.since)
+	var stays := 0
+	while not game.story_at("inner_court", "trial") and stays < 10:
+		stays += 1
+		game.wait(1200)
+	letters.append(int(game.world.day) - start)
+	check(game.story_at("inner_court", "trial") and letters[2] == 1080, "three years later the trial (%d)" % letters[2])
+	game.travel("sect")
+	_duel(game, "disciple")
+	check(game.story_state("inner_court") == "done" and game.player.items.keys().any(func(item_id: String) -> bool: return item_id.begins_with("j:")), "the trial ends with the elder's own manual")
 
 ## Journeys from before the storylines are past the introduction, and the sect's storylines begin.
 func _older_journeys() -> void:

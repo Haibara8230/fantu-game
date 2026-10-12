@@ -225,5 +225,45 @@
         "effects": [{"stones": 50}, {"item": ["ningqi_pill", 1]}, {"relation": ["wounded", 20]}, {"mind": 4}]
       }
     ]
+  },
+  "inner_court": {
+    "title": "内门之路",
+    "giver": "gu_changgeng",
+    "begin_if": [{"realm_at_least": 1}],
+    "steps": [
+      {"id": "wait_patrol", "wait_days": 360},
+      {
+        "id": "patrol",
+        "letter": true,
+        "goal": "替宗门巡山：在松风岭、落霞谷或白鹭渡一带拿下蒙面劫修。",
+        "say": "筑基弟子按例轮流巡山。北边山道近来又有劫修出没，这一趟轮到你了。",
+        "deeds": {"win:rogue": 1},
+        "after": "劫修伏法，山道又清静了一阵。宗门记下你一功，赏灵石一百五十。",
+        "effects": [{"stones": 150}, {"mind": 4}, {"relation": ["gu_changgeng", 10]}]
+      },
+      {"id": "wait_tide", "wait_days": 720},
+      {
+        "id": "tide",
+        "letter": true,
+        "goal": "趁灵潮未退，到落霞谷的深谷灵泉吐纳一番。",
+        "place": "wild",
+        "say": "落霞谷灵泉每隔几年灵潮涌动，筑基修士在泉边吐纳一回，胜过闭关半年。这一回的灵潮就在眼下，莫要错过。",
+        "done": [{"at_location": "wild"}],
+        "after": "灵泉上白雾翻涌，你盘坐泉边吐纳了一整夜，周身经脉被灵潮冲刷得通透。",
+        "effects": [{"xp": 360}, {"mind": 3}]
+      },
+      {"id": "wait_trial", "wait_days": 1080},
+      {
+        "id": "trial",
+        "letter": true,
+        "goal": "回青云山演武坪，与同门切磋一场，应内门考校。",
+        "place": "sect",
+        "say": "内门考校将开。筑基弟子都要在演武坪过一过手，老夫亲自看。",
+        "deeds": {"duel": 1},
+        "after": "顾长庚看完你的斗法，只说了两个字：“尚可。”转身却让人送来一枚玉简——是他年轻时用过的功法。",
+        "effects": [{"manual": 3}, {"mind": 5}],
+        "major": true
+      }
+    ]
   }
 }

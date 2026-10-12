@@ -153,6 +153,9 @@ func _validate() -> String:
 		for key: String in ["retreat_step_days", "fresh_days"]:
 			if not _whole(realm.get(key)) or int(realm[key]) < 1:
 				return "境界闭关配置错误：%s.%s" % [realm.get("id", index), key]
+		var waits: Variant = realm.get("wait_options", [])
+		if not waits is Array or waits.any(func(days: Variant) -> bool: return not _whole(days) or int(days) < 1 or int(days) > 3600):
+			return "境界停留选项错误：%s" % realm.get("id", index)
 	for route: Variant in routes:
 		if not route is Dictionary or not route.get("between") is Array or route.between.size() != 2:
 			return "路线配置错误。"
@@ -684,6 +687,8 @@ func _validate_condition(condition: Variant) -> String:
 			return "" if sects.has(value) else "未知门派：%s" % value
 		"talked":
 			return "" if people.has(value) else "未知人物：%s" % value
+		"at_location":
+			return "" if locations.has(value) else "未知地点：%s" % value
 		"deed_at_least":
 			return "" if value is Array and value.size() == 2 and value[0] is String and _known_deed(value[0]) and _whole(value[1]) else "事迹条件无效"
 		"story_at":
