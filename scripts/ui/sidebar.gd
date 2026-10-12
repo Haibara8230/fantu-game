@@ -18,6 +18,7 @@ static func render(ui) -> void:
 	stats.add_child(ui.label("年岁 %d  ·  寿元 %d" % [session.age(), session.lifespan()], 15, ui.MUTED))
 	stats.add_child(ui.label("灵根 · %s · 修炼 ×%.2f" % [session.root_title(), session.cultivation_speed()], 14, ui.MUTED))
 	ui.meter(stats, "修为", p.xp, maxi(1, maxi(int(p.xp), _xp_goal(session))), ui.GOLD)
+	_render_progress(ui)
 	stats.add_child(ui.label("灵石  %d    灵草  %d    筑基丹  %d" % [p.stones, session.herb_count(), session.item_count("foundation_pill")], 15))
 	_render_quests(ui)
 	_render_acquaintances(ui)
@@ -44,6 +45,18 @@ static func _xp_goal(session) -> int:
 	if int(session.player.stage) + 1 < stages.size():
 		return int(stages[int(session.player.stage) + 1].xp)
 	return int(session.next_breakthrough().get("xp", 0))
+
+## The mind after retreats, insight toward the next bottleneck, and the bottleneck itself when reached.
+static func _render_progress(ui) -> void:
+	var session = ui.session
+	var stats: VBoxContainer = ui.stats
+	var efficiency: int = session.retreat_efficiency()
+	var mood := "平和" if efficiency >= 100 else ("浮躁" if efficiency >= 75 else "倦怠")
+	stats.add_child(ui.label("心境 · %s · 闭关收益 %d%%" % [mood, efficiency], 14, ui.MUTED if efficiency >= 100 else ui.INK))
+	if session.xp_limit() >= 0:
+		stats.add_child(ui.label("历练  %d / %d" % [int(session.player.insight), session.insight_needed()], 14, ui.MUTED))
+	if session.at_bottleneck():
+		stats.add_child(ui.paragraph("瓶颈 · 闭关难进，需外出历练或服破障丹", Color("#e39a82")))
 
 ## Accepted commissions with their progress and deadline.
 static func _render_quests(ui) -> void:

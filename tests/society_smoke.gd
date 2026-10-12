@@ -143,8 +143,10 @@ func _sparring() -> void:
 	check(counter.style == game.battle.foe.art and counter.has("vfx"), "they answer with their own art")
 	game.battle.hp = 1
 	var xp := int(game.player.xp)
+	var insight := int(game.player.insight)
 	game.use_skill("sword")
 	check(game.battle.is_empty() and game.favor(rival) == 5 and int(game.player.xp) > xp and int(game.player.stones) == stones, "winning a spar earns respect and insight, not money")
+	check(int(game.player.insight) == insight + 10, "a spar is insight toward the next bottleneck")
 	check(rival in game.present_npcs() and game.npc_options(rival).filter(func(option: Dictionary) -> bool: return option.id == "spar")[0].reason.contains("后再来"), "the rival stays, and spars wait a month")
 	var loser := _game()
 	var other := _a_disciple(loser)
@@ -214,15 +216,19 @@ func _commissions() -> void:
 	check(game.delivery_block(quest).contains("还不够"), "delivery needs the goods")
 	game.set_item_count(quest.item, int(quest.count))
 	var stones := int(game.player.stones)
+	var insight := int(game.player.insight)
 	game.deliver_commission(quest.key)
 	check(game.player.quests.size() == 1 and int(game.player.stones) == stones + int(quest.reward.stones) and game.item_count(quest.item) == 0, "delivering pays and takes the goods")
+	check(int(game.player.insight) == mini(insight + 25, game.insight_needed()), "a finished commission is insight")
 	var hunt: Dictionary = game.player.quests[0]
 	game.travel("wild")
+	insight = int(game.player.insight)
 	for kill: int in int(hunt.count):
 		game.start_battle("wolf")
 		game.battle.hp = 1
 		game.use_skill("sword")
 	check(int(game.player.quests[0].progress) == int(hunt.count), "slain wolves count toward the hunt")
+	check(int(game.player.insight) == mini(insight + 20 * int(hunt.count), game.insight_needed()), "each won duel is insight")
 	check(game.delivery_block(game.player.quests[0]).contains("执事堂告示"), "the hunt is reported back at the board")
 	game.travel("sect")
 	var xp := int(game.player.xp)

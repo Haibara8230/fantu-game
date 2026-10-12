@@ -15,6 +15,7 @@ const Commissions = preload("res://scripts/core/commissions.gd")
 const Rumors = preload("res://scripts/core/rumors.gd")
 const People = preload("res://scripts/core/people.gd")
 const Journey = preload("res://scripts/core/journey.gd")
+const Cultivation = preload("res://scripts/core/cultivation.gd")
 const SaveRestore = preload("res://scripts/core/save_restore.gd")
 const SaveMigration = preload("res://scripts/core/save_migration.gd")
 const SAVE_VERSION := SaveMigration.CURRENT_VERSION
@@ -72,6 +73,7 @@ func new_game(character_name: String = "无名", seed_value: int = -1, roots: Ar
 	player = {
 		"name": chosen_name, "birth_day": -int(content.rules.starting_age) * Calendar.DAYS_PER_YEAR,
 		"realm": 0, "stage": 0, "xp": 0, "hp": 0, "qi": 0, "cultivation_carry": 0, "warned_for": -1, "roots": roots.duplicate(),
+		"fatigue": 0, "fatigue_day": 0, "insight": 0,
 		"stones": int(content.rules.starting_stones), "items": {},
 		"journey": {}, "cooldowns": {},
 		"location": "sect", "sect": "wanderer",
@@ -211,21 +213,6 @@ func next_breakthrough() -> Dictionary:
 		return {}
 	return current.breakthrough
 
-## Recomputes the sub-stage from xp. Reaching a higher stage raises the stat caps, gives the new
-## headroom to current hp and qi, and is recorded as a milestone. Returns the milestone texts.
-func settle_stage() -> Array[String]:
-	var texts: Array[String] = []
-	var reached: int = content.stage_index(int(player.realm), int(player.xp))
-	while int(player.stage) < reached:
-		var old_hp := int(player.max_hp)
-		var old_qi := int(player.max_qi)
-		player.stage = int(player.stage) + 1
-		refresh_realm_stats()
-		player.hp = int(player.hp) + int(player.max_hp) - old_hp
-		player.qi = int(player.qi) + int(player.max_qi) - old_qi
-		texts.append(log_event("stage_up", {"realm": int(player.realm), "stage": int(player.stage)}, true))
-	return texts
-
 ## Sets the stat caps from the stage and the loadout, keeping current hp and qi within them.
 func refresh_realm_stats() -> void:
 	var current: Dictionary = stage_stats()
@@ -339,8 +326,9 @@ func act(action: String) -> String:
 			return conclude(" ".join(texts), passed)
 	return "未知操作。"
 
-## Closed-door cultivation for a chosen number of days. Reminders and lifespan warnings can end it early;
-## cultivation is credited per elapsed day, so one long retreat equals several short ones.
+## Closed-door cultivation for a chosen number of days. Reminders and lifespan warnings can end it early,
+## and so does reaching a bottleneck. Cultivation is credited per elapsed day with the day's efficiency
+## (see cultivation.gd), so one long retreat equals several short ones.
 func cultivate(days: int) -> String:
 	var reason := blocked()
 	if not reason.is_empty():
@@ -349,17 +337,26 @@ func cultivate(days: int) -> String:
 		return "此地无法闭关，请回青云山静室。"
 	if days < 1 or days > MAX_SPAN_DAYS:
 		return "闭关天数不合常理。"
-	var passed := advance_days(days, true)
+	if at_bottleneck():
+		return "修为卡在瓶颈，闭关难有寸进。需外出历练（斗法、切磋、委托、奇遇），或服一枚破障丹。"
+	var tired := Cultivation.fatigue(self)
+	var plan := Cultivation.plan_retreat(self, days, tired)
+	var passed := advance_days(int(plan.days), true)
 	if not ended.is_empty():
 		return conclude("", passed)
-	var gained := _gain_cultivation(int(passed.elapsed))
+	var done := Cultivation.plan_retreat(self, int(passed.elapsed), tired)
+	player.cultivation_carry = int(done.carry)
+	player.fatigue = int(done.fatigue)
+	player.fatigue_day = int(world.day)
 	player.qi = player.max_qi
-	var text := log_event("cultivate", {"days": passed.elapsed, "xp": gained})
-	var milestones := settle_stage()
+	var text := log_event("cultivate", {"days": passed.elapsed, "xp": int(done.xp)})
+	var milestones := gain_xp(int(done.xp))
 	if not milestones.is_empty():
 		text += " " + " ".join(milestones)
 	if passed.interrupted:
 		text = "闭关第 %d 日，外事惊动，你提前出关。%s" % [passed.elapsed, text]
+	elif int(passed.elapsed) < days:
+		text = "闭关第 %d 日，修为触及瓶颈，再难寸进，你出关寻求机缘。%s" % [passed.elapsed, text]
 	return conclude(text, passed)
 
 ## Stays where the player is. Interruptible like a retreat, but without cultivation.
@@ -380,13 +377,6 @@ func wait(days: int) -> String:
 func rest_days() -> int:
 	var missing := float(int(player.max_hp) - int(player.hp)) / float(player.max_hp)
 	return maxi(1, int(ceil(missing * float(content.rules.rest_full_days))))
-
-func _gain_cultivation(days: int) -> int:
-	var total := int(player.cultivation_carry) + days * cultivation_rate()
-	var gained := total / Calendar.DAYS_PER_MONTH
-	player.cultivation_carry = total % Calendar.DAYS_PER_MONTH
-	player.xp += gained
-	return gained
 
 func choose_event(choice_id: String) -> String:
 	if pending_event.is_empty():
@@ -411,6 +401,40 @@ func snapshot() -> Dictionary:
 ## Replaces this session with saved data after migrating and validating it; see save_restore.gd.
 func restore(data: Variant) -> bool:
 	return SaveRestore.restore(self, data)
+
+# --- Cultivation progress (cultivation.gd) ----------------------------------------------------
+
+func settle_stage() -> Array[String]:
+	return Cultivation.settle_stage(self)
+
+func gain_xp(amount: int) -> Array[String]:
+	return Cultivation.gain_xp(self, amount)
+
+func gain_insight(source: String) -> Array[String]:
+	return Cultivation.gain_insight(self, source)
+
+func breach() -> Array[String]:
+	return Cultivation.breach(self)
+
+func at_bottleneck() -> bool:
+	return Cultivation.at_bottleneck(self)
+
+func xp_limit() -> int:
+	return Cultivation.xp_limit(self)
+
+func insight_needed() -> int:
+	return Cultivation.insight_needed(self)
+
+func retreat_fatigue() -> int:
+	return Cultivation.fatigue(self)
+
+## Percent of the usual xp the next retreat day would yield.
+func retreat_efficiency() -> int:
+	return Cultivation.efficiency(self, retreat_fatigue())
+
+## What a retreat of `days` would bring if nothing interrupts it: {"days", "xp", "carry", "fatigue"}.
+func retreat_preview(days: int) -> Dictionary:
+	return Cultivation.plan_retreat(self, days, retreat_fatigue())
 
 # --- Inventory (inventory.gd) ---------------------------------------------------------------
 

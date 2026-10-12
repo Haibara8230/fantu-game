@@ -1,6 +1,6 @@
 extends RefCounted
 ## Upgrades saved sessions one version at a time. Output still goes through Session validation.
-const CURRENT_VERSION := 10
+const CURRENT_VERSION := 11
 const DAYS_PER_MONTH := 30
 const DAYS_PER_YEAR := 360
 # Version 1 had no ages; every journey began at sixteen on day 0.
@@ -33,6 +33,8 @@ static func migrate(data: Dictionary) -> Dictionary:
 		result = _v8_to_v9(result)
 	if not result.is_empty() and int(result.version) == 9:
 		result = _v9_to_v10(result)
+	if not result.is_empty() and int(result.version) == 10:
+		result = _v10_to_v11(result)
 	return result
 
 static func _v1_to_v2(data: Dictionary) -> Dictionary:
@@ -208,4 +210,22 @@ static func _v9_to_v10(data: Dictionary) -> Dictionary:
 	if str(battle.get("npc", "")).begins_with("g:") and str(battle.npc).count(":") == 1:
 		data["battle"] = {}
 	data["version"] = 10
+	return data
+
+## Version 11 adds retreat fatigue, insight and bottlenecks. The cultivation remainder becomes a hundred
+## times finer; the saved stage is dropped so restore derives it from xp as before (it becomes the
+## authority from now on, since xp may wait at a bottleneck).
+static func _v10_to_v11(data: Dictionary) -> Dictionary:
+	var player: Variant = data.get("player")
+	var world: Variant = data.get("world")
+	if not player is Dictionary or not world is Dictionary:
+		return {}
+	var carry: Variant = player.get("cultivation_carry")
+	if carry is int or carry is float:
+		player["cultivation_carry"] = carry * 100
+	player["fatigue"] = 0
+	player["fatigue_day"] = world.get("day", 0)
+	player["insight"] = 0
+	player.erase("stage")
+	data["version"] = 11
 	return data

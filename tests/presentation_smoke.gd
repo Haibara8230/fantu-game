@@ -114,8 +114,29 @@ func _run() -> void:
 	# Legal progression so boss presentation also exercises the real game's gate.
 	_step("progressing to foundation")
 	main.run(func() -> String: return main.session.travel("sect"))
-	while main.session.player.xp < 2000:
-		main.run(func() -> String: return main.session.cultivate(360))
+	# Retreat while the mind is fresh; otherwise gather, which eases the mind, and buy a 破障丹 for a
+	# bottleneck (as in core_smoke), so the serpent is met before it breaks out.
+	var game = main.session
+	var rounds := 0
+	while game.player.xp < 2000 and rounds < 100:
+		rounds += 1
+		if game.at_bottleneck() and game.item_count("pozhang_pill") > 0:
+			main.run(func() -> String: return game.use_item("pozhang_pill"))
+		elif not game.at_bottleneck() and game.retreat_efficiency() >= 100:
+			main.run(func() -> String: return game.cultivate(90))
+		else:
+			main.run(func() -> String: return game.travel("wild"))
+			for i: int in 3:
+				main.run(func() -> String: return game.act("gather"))
+			main.run(func() -> String: return game.travel("market"))
+			if not game.pending_event.is_empty():
+				main.choose("decline")
+			main.run(func() -> String: return game.act("sell"))
+			if game.at_bottleneck():
+				main.run(func() -> String: return game.buy("pozhang_pill"))
+			main.run(func() -> String: return game.travel("sect"))
+			if not game.pending_event.is_empty():
+				main.choose("decline")
 	main.run(func() -> String: return main.session.act("rest"))
 	main.run(func() -> String: return main.session.travel("wild"))
 	while int(main.session.herb_count()) * 4 + int(main.session.player.stones) < 120:

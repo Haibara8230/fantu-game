@@ -45,6 +45,12 @@ func _foundation(game: Session) -> void:
 	game.refresh_realm_stats()
 	game.player.hp = game.player.max_hp
 
+## Test setup only: 炼气圆满 has no sub-stage bottleneck ahead, so retreats run their whole span.
+func _without_bottleneck(game: Session) -> void:
+	game.player.stage = 3
+	game.player.xp = 1500
+	game.refresh_realm_stats()
+
 func _state(game: Session, event_id: String) -> String:
 	return str(game.world.events.get(event_id, {}).get("state", ""))
 
@@ -80,8 +86,10 @@ func _invitation_path_with_interrupt() -> void:
 	check(not game.player.items.has("auction_invitation"), "invitation handed over at the door")
 	var refused := game.choose_event("ganoderma")
 	check(refused == "条件不足，无法如此选择。" and not game.pending_event.is_empty(), "unaffordable lot cannot be chosen")
+	var insight := int(game.player.insight)
 	game.choose_event("pill")
 	check(game.pending_event.is_empty() and int(game.item_count("foundation_pill")) == 1 and int(game.player.stones) == 5, "lot bought")
+	check(int(game.player.insight) == insight + 15, "an encounter lived through is insight")
 	check(_state(game, "special_auction") == "completed", "auction completed")
 	game.wait(1)
 	check(game.pending_event.is_empty(), "completed event does not repeat")
@@ -115,6 +123,7 @@ func _missed_event() -> void:
 	game.travel("market")
 	check(game.pending_event.is_empty(), "missed event cannot be entered later")
 	var unaware := _game(5)
+	_without_bottleneck(unaware)
 	unaware.cultivate(3600)
 	check(_state(unaware, "special_auction") == "expired" and not unaware.journal_lines().any(func(line: String) -> bool: return line.contains("落幕")), "unknown events expire silently")
 
@@ -133,6 +142,7 @@ func _periodic_and_cross_year() -> void:
 	game.choose_event("stroll")
 	check(int(game.world.events.night_market.count) == 2, "occurrences counted")
 	var crossing := _game(7)
+	_without_bottleneck(crossing)
 	_jump(crossing, 9, 11, 1)
 	crossing.cultivate(360)
 	check(int(crossing.world.day) == Calendar.to_day(10, 11, 1), "retreat crosses the year boundary")
@@ -140,6 +150,7 @@ func _periodic_and_cross_year() -> void:
 
 func _lifespan() -> void:
 	var game := _game(8)
+	_without_bottleneck(game)
 	var day := int(game.world.day)
 	game.player.birth_day = day + 6 * 360 - 120 * 360
 	check(game.lifespan_end_day() == day + 6 * 360, "lifespan end computed from realm")
@@ -186,6 +197,9 @@ func _equivalence() -> void:
 	# let the world run for ten years at a place without choice events.
 	var once := _game(11)
 	var pieces := _game(11)
+	# Without a bottleneck ahead the six years also run the whole fatigue curve down to its floor.
+	for game: Session in [once, pieces]:
+		_without_bottleneck(game)
 	once.cultivate(2160)
 	for i: int in range(72):
 		pieces.cultivate(30)

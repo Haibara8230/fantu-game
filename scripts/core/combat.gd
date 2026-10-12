@@ -191,24 +191,26 @@ static func _spar_over(s, won: bool) -> String:
 	var xp: int = int(s.battle.foe.xp) if won else int(s.battle.foe.xp) / 2
 	s.battle.clear()
 	s.player.hp = maxi(int(s.player.hp), 1)
-	s.player.xp += xp
 	s.Events.apply(s, [{"relation": [npc, 5 if won else 2]}])
 	var message: String = s.log_event("spar_win" if won else "spar_lose", {"npc": npc, "xp": xp})
-	var milestones: Array[String] = s.settle_stage()
-	if not milestones.is_empty():
-		message += " " + " ".join(milestones)
+	message = _with_milestones(message, s.gain_insight("spar"))
+	message = _with_milestones(message, s.gain_xp(xp))
 	return s.conclude(message, s.advance_days(s.content.action_days("road_recovery")))
 
+static func _with_milestones(message: String, milestones: Array[String]) -> String:
+	return message if milestones.is_empty() else message + " " + " ".join(milestones)
+
 ## Tournament rounds: a win leads straight into the next round with some health back; the third
-## win takes the prize. A loss ends the run without any penalty.
+## win takes the prize. A loss ends the run without any penalty. Every round counts as a spar's insight.
 static func _tournament_over(s, won: bool) -> String:
 	var round: int = int(s.battle.get("round", 1))
 	var npc: String = s.battle.get("npc", "")
 	s.battle.clear()
 	if not won:
 		s.player.hp = maxi(int(s.player.hp), 1)
-		return s.conclude(s.log_event("tournament_out", {"round": round, "npc": npc}), s.advance_days(s.content.action_days("road_recovery")))
-	var message: String = s.log_event("tournament_round", {"round": round, "npc": npc})
+		var out: String = s.log_event("tournament_out", {"round": round, "npc": npc})
+		return s.conclude(_with_milestones(out, s.gain_insight("spar")), s.advance_days(s.content.action_days("road_recovery")))
+	var message: String = _with_milestones(s.log_event("tournament_round", {"round": round, "npc": npc}), s.gain_insight("spar"))
 	if round < 3:
 		s.player.hp = mini(int(s.player.max_hp), int(s.player.hp) + int(s.player.max_hp) * 3 / 10)
 		s.player.qi = mini(int(s.player.max_qi), int(s.player.qi) + int(s.player.max_qi) * 3 / 10)
@@ -218,11 +220,8 @@ static func _tournament_over(s, won: bool) -> String:
 	var prize: String = "j:" + s.Arsenal.generate_technique(s.content, s.world_rng, 2, {"slot": "art"})
 	s.add_item(prize, 1)
 	s.player.stones += 100
-	s.player.xp += 150
 	message += " " + s.log_event("tournament_champion", {"stones": 100, "xp": 150, "item": prize}, true)
-	var milestones: Array[String] = s.settle_stage()
-	if not milestones.is_empty():
-		message += " " + " ".join(milestones)
+	message = _with_milestones(message, s.gain_xp(150))
 	return s.conclude(message, s.advance_days(s.content.action_days("road_recovery")))
 
 static func _count_down(status: Dictionary, key: String) -> void:
@@ -248,7 +247,6 @@ static func _win(s) -> String:
 	var npc: String = s.battle.get("npc", "")
 	s.record_kill(enemy_id)
 	s.player.stones += int(enemy.reward_stones)
-	s.player.xp += int(enemy.reward_xp)
 	s.add_item("huichun_grass", int(enemy.reward_herbs))
 	s.battle.clear()
 	var message: String = s.log_event("battle_victory", {"enemy": enemy_id, "stones": int(enemy.reward_stones), "xp": int(enemy.reward_xp), "herbs": int(enemy.reward_herbs)})
@@ -262,8 +260,7 @@ static func _win(s) -> String:
 		var loot: String = "j:" + s.Arsenal.generate_technique(s.content, s.world_rng, tier) if s.world_rng.randf() < 0.5 else s.Arsenal.generate_equipment(s.content, s.world_rng, tier)
 		s.add_item(loot, 1)
 		message += " " + s.log_event("loot", {"loot": loot + ":1"})
-	var milestones: Array[String] = s.settle_stage()
-	if not milestones.is_empty():
-		message += " " + " ".join(milestones)
+	message = _with_milestones(message, s.gain_insight("battle_win"))
+	message = _with_milestones(message, s.gain_xp(int(enemy.reward_xp)))
 	s.npc_depart(npc)
 	return s.conclude(message, s.advance_days(days))

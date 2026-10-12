@@ -149,6 +149,12 @@ static func use_block(s, item_id: String) -> String:
 	var ready := int(s.player.cooldowns.get("use:" + item_id, 0))
 	if int(s.world.day) < ready:
 		return "丹毒未消，%s后再服。" % Calendar.duration_text(ready - int(s.world.day))
+	# Pills that would be wasted by the bottleneck are refused rather than swallowed.
+	for effect: Dictionary in s.content.item(item_id).use:
+		if effect.has("breach") and not s.at_bottleneck():
+			return "修为未至瓶颈，服之无益。"
+		if effect.has("xp") and s.at_bottleneck():
+			return "修为卡在瓶颈，药力难以化入，先冲开瓶颈再服。"
 	return ""
 
 static func use_item(s, item_id: String) -> String:

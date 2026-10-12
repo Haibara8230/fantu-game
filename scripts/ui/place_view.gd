@@ -99,10 +99,19 @@ static func _spot_action(ui, grid: GridContainer, action: String) -> void:
 		return
 	match action:
 		"cultivate":
+			var stuck: bool = session.at_bottleneck()
 			for days: Variant in rules.cultivate_options:
 				var span := int(days)
-				var gain: int = span * session.cultivation_rate() / Calendar.DAYS_PER_MONTH
-				_timed(ui, grid, "闭关  ·  " + Calendar.duration_text(span), func() -> String: return session.cultivate(span), "修为约 +%d，恢复全部灵力；约定或寿元告急时会提前出关" % gain)
+				var preview: Dictionary = session.retreat_preview(span)
+				var tooltip := "修为约 +%d，恢复全部灵力；约定或寿元告急时会提前出关" % int(preview.xp)
+				if stuck:
+					tooltip = "修为卡在瓶颈，闭关难进；需外出历练或服破障丹"
+				elif int(preview.days) < span:
+					tooltip = "约第 %d 日修为触及瓶颈而出关，修为约 +%d" % [int(preview.days), int(preview.xp)]
+				if session.retreat_efficiency() < 100:
+					tooltip += "\n连日闭关心境渐倦，收益降至 %d%%；外出做些别的事可以平复" % session.retreat_efficiency()
+				var retreat := _timed(ui, grid, "闭关  ·  " + Calendar.duration_text(span), func() -> String: return session.cultivate(span), tooltip)
+				retreat.disabled = stuck
 		"rest":
 			_action(ui, grid, "静室休整  ·  " + Calendar.duration_text(session.rest_days()), "rest", "恢复全部气血与灵力；伤得越重，需要的日子越长")
 		"breakthrough":
@@ -159,10 +168,11 @@ static func _spot_action(ui, grid: GridContainer, action: String) -> void:
 				grid.add_child(study)
 
 ## A button that runs a session action and shows its text.
-static func _timed(ui, parent: GridContainer, title: String, callback: Callable, tooltip: String) -> void:
+static func _timed(ui, parent: GridContainer, title: String, callback: Callable, tooltip: String) -> Button:
 	var entry: Button = ui.button(title, func() -> void: ui.run(callback), tooltip)
 	entry.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	parent.add_child(entry)
+	return entry
 
 static func _action(ui, parent: GridContainer, title: String, action: String, tooltip: String) -> void:
 	var entry: Button = ui.button(title, func() -> void: ui.run(func() -> String: return ui.session.act(action)), tooltip)

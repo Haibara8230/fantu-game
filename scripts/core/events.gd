@@ -95,10 +95,16 @@ static func apply(s, effects: Array) -> void:
 		var key: String = effect.keys()[0]
 		var value: Variant = effect[key]
 		match key:
-			"stones", "xp":
-				s.player[key] = maxi(0, int(s.player[key]) + int(value))
-				if key == "xp":
-					s.settle_stage()
+			"stones":
+				s.player.stones = maxi(0, int(s.player.stones) + int(value))
+			"xp":
+				# Gains stop at a bottleneck like cultivation does; losses never undo a stage.
+				if int(value) >= 0:
+					s.gain_xp(int(value))
+				else:
+					s.player.xp = maxi(0, int(s.player.xp) + int(value))
+			"breach":
+				s.breach()
 			"herbs":
 				if int(value) >= 0:
 					s.add_item("huichun_grass", int(value))
@@ -307,8 +313,10 @@ static func choose(s, choice_id: String) -> String:
 		apply(s, choice.get("effects", []))
 		s.pending_event = {}
 		var text: String = s.log_event("event", {"event": event_id, "part": "choice", "choice": choice_id}, bool(definition.get("major", false)))
+		# Living through an encounter, whatever the choice, is insight toward the next bottleneck.
+		var milestones: Array[String] = s.gain_insight("event")
 		var follow := check_location(s)
-		return " ".join([text] + follow)
+		return " ".join([text] + milestones + follow)
 	return "没有这个选项。"
 
 ## Danger left after the player's realm: each realm above the first takes one level off.

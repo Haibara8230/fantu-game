@@ -70,6 +70,13 @@ func _run() -> void:
 	var sidebar := _texts(main.stats, "Label")
 	check(sidebar.contains("年岁 16") and sidebar.contains("寿元 120") and sidebar.contains("寿元尽于历元 105 年"), "age and lifespan shown")
 	check(_button("闭关  ·  1 个月") != null and _button("闭关  ·  1 年") != null and _button("停留  ·  1 日") != null, "retreat lengths and waiting offered")
+	check(sidebar.contains("心境 · 平和 · 闭关收益 100%") and sidebar.contains("历练  0 / 100") and not _button("闭关  ·  1 年").disabled, "a fresh mind and no insight yet")
+	check(_button("闭关  ·  1 年").tooltip_text.contains("触及瓶颈"), "a year's retreat warns that it will stop at the bottleneck")
+	main.session.player.xp = 500
+	main.render()
+	check(_texts(main.stats, "Label").contains("瓶颈") and _button("闭关  ·  1 个月").disabled and _button("闭关  ·  1 个月").tooltip_text.contains("破障丹"), "a bottleneck shows in the sidebar and closes the retreat")
+	main.session.player.xp = 0
+	main.render()
 	main._save_manual()
 	main.run(func() -> String: return main.session.travel("wild"))
 	await _capture("wild")

@@ -4,7 +4,8 @@ extends RefCounted
 const Calendar = preload("res://scripts/core/calendar.gd")
 const Chronicle = preload("res://scripts/core/chronicle.gd")
 const SaveMigration = preload("res://scripts/core/save_migration.gd")
-const PLAYER_COUNTS := ["realm", "xp", "hp", "qi", "stones", "cultivation_carry"]
+const Cultivation = preload("res://scripts/core/cultivation.gd")
+const PLAYER_COUNTS := ["realm", "xp", "hp", "qi", "stones", "cultivation_carry", "fatigue", "fatigue_day", "insight"]
 const LIMIT := 1000000000.0
 
 static func restore(s, data: Variant) -> bool:
@@ -40,7 +41,9 @@ static func restore(s, data: Variant) -> bool:
 	for key: String in PLAYER_COUNTS:
 		if not _whole_nonnegative(saved_player.get(key)):
 			return false
-	if int(saved_player.cultivation_carry) >= Calendar.DAYS_PER_MONTH:
+	if int(saved_player.cultivation_carry) >= Cultivation.CARRY_UNIT:
+		return false
+	if int(saved_player.fatigue_day) > day or int(saved_player.fatigue) > Cultivation.fatigue_cap(s) or int(saved_player.insight) > Cultivation.insight_needed(s):
 		return false
 	var birth: Variant = saved_player.get("birth_day")
 	if not _whole_signed(birth) or int(birth) > day:
@@ -68,7 +71,16 @@ static func restore(s, data: Variant) -> bool:
 	if int(saved_player.realm) >= content.realms.size():
 		return false
 	# The sub-stage always follows from xp; stat caps follow from the stage.
+	# Older saves follow from xp; since version 11 the stage is kept, because xp may wait at a bottleneck
+	# (never above the next threshold).
 	var saved_stage: int = content.stage_index(int(saved_player.realm), int(saved_player.xp))
+	if saved_player.has("stage"):
+		var stages: Array = content.realm(int(saved_player.realm)).stages
+		if not _whole_nonnegative(saved_player.stage) or int(saved_player.stage) >= stages.size():
+			return false
+		saved_stage = int(saved_player.stage)
+		if saved_stage + 1 < stages.size() and int(saved_player.xp) > int(stages[saved_stage + 1].xp):
+			return false
 	var loadout := _valid_loadout(content, saved_player)
 	if loadout.is_empty():
 		return false

@@ -1,0 +1,275 @@
+{
+	"battle": {},
+	"chronicle": [
+		{
+			"args": {},
+			"day": 0,
+			"id": "start",
+			"major": true
+		},
+		{
+			"args": {
+				"days": 251,
+				"xp": 903
+			},
+			"day": 251,
+			"id": "cultivate",
+			"major": false
+		},
+		{
+			"args": {
+				"realm": 0,
+				"stage": 1
+			},
+			"day": 251,
+			"id": "stage_up",
+			"major": true
+		}
+	],
+	"ended": {},
+	"pending_event": {},
+	"player": {
+		"arts": [
+			"sword",
+			"fire",
+			"wood"
+		],
+		"birth_day": -5760,
+		"cooldowns": {},
+		"cultivation_carry": 18,
+		"equipment": {
+			"accessory": "",
+			"robe": "",
+			"weapon": ""
+		},
+		"hp": 100,
+		"items": {},
+		"journey": {},
+		"learned": [
+			"sword",
+			"fire",
+			"wood"
+		],
+		"location": "sect",
+		"max_hp": 100,
+		"max_qi": 34,
+		"methods": [],
+		"name": "周遥",
+		"qi": 34,
+		"quests": [],
+		"realm": 0,
+		"roots": [
+			"fire"
+		],
+		"sect": "wanderer",
+		"stage": 1,
+		"stones": 30,
+		"warned_for": -1,
+		"xp": 903
+	},
+	"rng": {
+		"combat": "-4803384559363967811",
+		"world": "7599666529052649235"
+	},
+	"version": 10,
+	"world": {
+		"day": 251,
+		"events": {},
+		"flags": {},
+		"people": {
+			"g:106:0": {
+				"absent_until": -1,
+				"last": {},
+				"met": true,
+				"relation": 0,
+				"talks": 0
+			},
+			"g:1093:0": {
+				"absent_until": -1,
+				"last": {},
+				"met": true,
+				"relation": 0,
+				"talks": 0
+			},
+			"g:1130:0": {
+				"absent_until": -1,
+				"last": {},
+				"met": true,
+				"relation": 0,
+				"talks": 0
+			},
+			"g:1141:0": {
+				"absent_until": -1,
+				"last": {},
+				"met": true,
+				"relation": 0,
+				"talks": 0
+			},
+			"g:180:0": {
+				"absent_until": -1,
+				"last": {},
+				"met": true,
+				"relation": 0,
+				"talks": 0
+			},
+			"g:232:0": {
+				"absent_until": -1,
+				"last": {},
+				"met": true,
+				"relation": 0,
+				"talks": 0
+			},
+			"g:233:0": {
+				"absent_until": -1,
+				"last": {},
+				"met": true,
+				"relation": 0,
+				"talks": 0
+			},
+			"g:268:0": {
+				"absent_until": -1,
+				"last": {},
+				"met": true,
+				"relation": 0,
+				"talks": 0
+			},
+			"g:270:0": {
+				"absent_until": -1,
+				"last": {},
+				"met": true,
+				"relation": 0,
+				"talks": 0
+			},
+			"g:292:0": {
+				"absent_until": -1,
+				"last": {},
+				"met": true,
+				"relation": 0,
+				"talks": 0
+			},
+			"g:353:0": {
+				"absent_until": -1,
+				"last": {},
+				"met": true,
+				"relation": 0,
+				"talks": 0
+			},
+			"g:384:0": {
+				"absent_until": -1,
+				"last": {},
+				"met": true,
+				"relation": 0,
+				"talks": 0
+			},
+			"g:436:0": {
+				"absent_until": -1,
+				"last": {},
+				"met": true,
+				"relation": 0,
+				"talks": 0
+			},
+			"g:458:0": {
+				"absent_until": -1,
+				"last": {},
+				"met": true,
+				"relation": 0,
+				"talks": 0
+			},
+			"g:461:0": {
+				"absent_until": -1,
+				"last": {},
+				"met": true,
+				"relation": 0,
+				"talks": 0
+			},
+			"g:556:0": {
+				"absent_until": -1,
+				"last": {},
+				"met": true,
+				"relation": 0,
+				"talks": 0
+			},
+			"g:6:0": {
+				"absent_until": -1,
+				"last": {},
+				"met": true,
+				"relation": 0,
+				"talks": 0
+			},
+			"g:711:0": {
+				"absent_until": -1,
+				"last": {},
+				"met": true,
+				"relation": 0,
+				"talks": 0
+			},
+			"g:736:0": {
+				"absent_until": -1,
+				"last": {},
+				"met": true,
+				"relation": 0,
+				"talks": 0
+			},
+			"g:758:0": {
+				"absent_until": -1,
+				"last": {},
+				"met": true,
+				"relation": 0,
+				"talks": 0
+			},
+			"g:794:0": {
+				"absent_until": -1,
+				"last": {},
+				"met": true,
+				"relation": 0,
+				"talks": 0
+			},
+			"g:810:0": {
+				"absent_until": -1,
+				"last": {},
+				"met": true,
+				"relation": 0,
+				"talks": 0
+			},
+			"g:816:0": {
+				"absent_until": -1,
+				"last": {},
+				"met": true,
+				"relation": 0,
+				"talks": 0
+			},
+			"g:856:0": {
+				"absent_until": -1,
+				"last": {},
+				"met": true,
+				"relation": 0,
+				"talks": 0
+			},
+			"g:881:0": {
+				"absent_until": -1,
+				"last": {},
+				"met": true,
+				"relation": 0,
+				"talks": 0
+			},
+			"g:911:0": {
+				"absent_until": -1,
+				"last": {},
+				"met": true,
+				"relation": 0,
+				"talks": 0
+			},
+			"g:924:0": {
+				"absent_until": -1,
+				"last": {},
+				"met": true,
+				"relation": 0,
+				"talks": 0
+			}
+		},
+		"quests_taken": {},
+		"rumors": {},
+		"seed": 31415,
+		"stock_sold": {}
+	}
+}

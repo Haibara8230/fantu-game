@@ -52,6 +52,13 @@
     "use": [{"xp": 100}],
     "use_cooldown_days": 30
   },
+  "pozhang_pill": {
+    "name": "破障丹",
+    "category": "pill",
+    "price": 20,
+    "description": "修为卡在瓶颈时服下，可冲开关隘、升入下一小阶段。未遇瓶颈时服之无益。",
+    "use": [{"breach": true}]
+  },
   "auction_invitation": {
     "name": "云溪请柬",
     "category": "quest",

@@ -179,6 +179,17 @@ func _validate() -> String:
 			return "灵根等级配置无效。"
 	if not _whole(rules.get("rest_full_days")) or int(rules.rest_full_days) < 1:
 		return "静养天数无效。"
+	var retreat: Variant = rules.get("retreat")
+	if not retreat is Dictionary or not _whole(retreat.get("fresh_days")) or not _whole(retreat.get("decline_days")) or int(retreat.decline_days) < 1 or not _whole(retreat.get("recovery_per_day")) or int(retreat.recovery_per_day) < 1:
+		return "闭关心境配置无效。"
+	if not _whole(retreat.get("floor_percent")) or int(retreat.floor_percent) < 1 or int(retreat.floor_percent) > 100:
+		return "闭关效率下限必须在 1 到 100 之间。"
+	var bottleneck: Variant = rules.get("bottleneck")
+	if not bottleneck is Dictionary or not _whole(bottleneck.get("insight_needed")) or int(bottleneck.insight_needed) < 1 or not bottleneck.get("insight") is Dictionary:
+		return "瓶颈配置无效。"
+	for source: String in ["battle_win", "spar", "commission", "event"]:
+		if not _whole(bottleneck.insight.get(source)):
+			return "瓶颈历练配置缺少：" + source
 	if not _whole(rules.get("inn_price")):
 		return "客栈价格无效。"
 	var search: Variant = rules.get("ruin_search")
@@ -580,11 +591,11 @@ func _validate_effects(effects: Variant) -> String:
 			"hp", "qi":
 				ok = (value is int or value is float) and float(value) == floor(float(value))
 			"leave":
-				ok = value == true
+				ok = value is bool and value
 			"clear_flag":
 				ok = value in world_flags
-			"spar", "tournament":
-				ok = value == true
+			"spar", "tournament", "breach":
+				ok = value is bool and value
 		if not ok:
 			return "效果无效：%s" % key
 	return ""

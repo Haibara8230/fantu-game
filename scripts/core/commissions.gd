@@ -95,9 +95,9 @@ static func deliver(s, key: String) -> String:
 			s.remove_item(quest.item, int(quest.count))
 		s.player.quests.erase(quest)
 		s.player.stones += int(quest.reward.stones)
-		s.player.xp += int(quest.reward.xp)
 		var done: String = s.log_event("quest_done", {"quest_title": text(s, quest).title, "stones": int(quest.reward.stones), "xp": int(quest.reward.xp)})
-		var milestones: Array[String] = s.settle_stage()
+		var milestones: Array[String] = s.gain_insight("commission")
+		milestones.append_array(s.gain_xp(int(quest.reward.xp)))
 		if not milestones.is_empty():
 			done += " " + " ".join(milestones)
 		return s.conclude(done)
