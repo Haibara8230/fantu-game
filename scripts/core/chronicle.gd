@@ -75,10 +75,11 @@ func format(entry: Dictionary, content) -> String:
 	return template.format(values)
 
 ## "id:count,id:count" as "回春草×2、赤炎花"; unknown ids keep their id so old records still read.
+## Generated ids contain colons themselves ("j:t:…", "e:…"), so the count is after the last colon.
 static func loot_text(code: String, content) -> String:
 	var parts: Array[String] = []
 	for piece: String in code.split(",", false):
-		var pair := piece.split(":")
+		var pair := piece.rsplit(":", true, 1)
 		var item: Dictionary = content.item(pair[0])
 		var name: String = item.name if not item.is_empty() else pair[0]
 		var count := int(pair[1]) if pair.size() > 1 else 1

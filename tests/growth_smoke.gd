@@ -167,6 +167,10 @@ func _items() -> void:
 	game.remove_herbs(2)
 	check(game.item_count("chiyan_flower") == 1 and game.herb_count() == 1, "generic herb costs take the cheapest herbs first")
 	check(Session.Chronicle.loot_text("huichun_grass:2,chiyan_flower:1", game.content) == "回春草×2、赤炎花", "loot reads naturally")
+	var slip := "j:t:affinity:water:1::20"
+	var bell := "e:bell:1:metal::6"
+	check(not game.content.item(slip).is_empty() and not game.content.item(bell).is_empty(), "generated loot ids resolve")
+	check(Session.Chronicle.loot_text(game.loot_code({slip: 2, bell: 1}), game.content) == "%s×2、%s" % [game.content.item(slip).name, game.content.item(bell).name], "generated loot keeps its name and count")
 	var old := Session.new()
 	check(old.restore(JSON.parse_string(FileAccess.get_file_as_string("res://tests/fixtures/v6_herbs_pills.json"))), "v6 save migrates")
 	check(old.item_count("huichun_grass") >= 9 and old.item_count("foundation_pill") == 2 and old.item_count("auction_invitation") == 1 and not old.player.has("herbs"), "herbs and pills become items")
