@@ -1,5 +1,8 @@
 extends SceneTree
 const SaveStore = preload("res://scripts/core/save_store.gd")
+const Session = preload("res://scripts/core/session.gd")
+const Goals = preload("res://scripts/ui/goals.gd")
+const Calendar = preload("res://scripts/core/calendar.gd")
 var main
 var captures := 0
 var checks := 0
@@ -27,6 +30,50 @@ func _capture(filename: String) -> void:
 
 func _texts(node: Node, type: String) -> String:
 	return "\n".join(node.find_children("*", type, true, false).map(func(control: Control) -> String: return control.text))
+
+## When each current goal applies, on a session of its own (goals.gd reads the state, never changes it).
+func _goals() -> void:
+	check(Goals.goals().all(func(goal: Dictionary) -> bool: return Goals.known(goal.id) and goal.title is String and goal.text is String), "every goal in the data has a known situation, a title and a text")
+	var game := Session.new()
+	game.encounters_enabled = false
+	game.new_game("目标", 7, ["metal", "wood", "fire"])
+	var ids := func() -> Array: return Goals.current(game).map(func(goal: Dictionary) -> String: return goal.id)
+	var filled := func() -> bool: return Goals.current(game).all(func(goal: Dictionary) -> bool: return not goal.text.contains("{"))
+	check(ids.call() == ["serpent", "foundation_xp"] and filled.call(), "a new life aims at the serpent and at breaking through")
+	game.player.xp = 500
+	check(ids.call() == ["bottleneck", "serpent"], "a bottleneck comes first and hides the plain xp goal")
+	game.player.xp = 2000
+	game.player.stage = 3
+	check("foundation_pill" in ids.call() and Goals.current(game)[ids.call().find("foundation_pill")].text.contains("120 灵石"), "enough xp: the pill is next, with its price")
+	game.set_item_count("foundation_pill", 1)
+	check("foundation_breach" in ids.call(), "with the pill: back to the chamber")
+	# Breaking through starts the new realm's xp from nothing.
+	game.player.realm = 1
+	game.player.stage = 0
+	game.player.xp = 0
+	game.set_item_count("foundation_pill", 0)
+	game.refresh_realm_stats()
+	check(not ids.call().any(func(id: String) -> bool: return id.begins_with("foundation")) and "cultivate" in ids.call(), "after foundation the next sub-stage is the goal")
+	game.world.flags.serpent_rampage = true
+	check(not "serpent" in ids.call() and "sealed" in ids.call() and filled.call(), "once the valley is sealed, the goal says when it opens")
+	game.world.flags.serpent_rampage = false
+	game.world.flags.serpent_slain = true
+	game.world.flags.azhi_promised = true
+	check("azhi_token" in ids.call() and Goals.current(game)[ids.call().find("azhi_token")].text.contains("说书先生"), "a promise is a goal, with a hint where to start")
+	game.set_item_count("azhi_token", 1)
+	check(ids.call()[0] == "azhi_return", "carrying the token: take it back")
+	game.set_item_count("azhi_token", 0)
+	game.world.flags.azhi_mourned = true
+	game.set_item_count("auction_invitation", 1)
+	check("auction" in ids.call() and filled.call(), "an invitation points at the auction")
+	game.world.day = Calendar.to_day(5, 5, 1)
+	check(not "auction" in ids.call(), "and is forgotten once the auction has passed")
+	game.world.day = Calendar.to_day(10, 1, 1)
+	var soon: Array[Dictionary] = Goals.current(game)
+	check("tournament" in ids.call() and soon[ids.call().find("tournament")].text.contains("历元 10 年 6 月初一至十五"), "the tournament is mentioned within a year of it")
+	game.world.day = Calendar.to_day(10, 6, 16)
+	check(not "tournament" in ids.call(), "and not again until the next one draws near")
+	check(Goals.current(game).size() <= Goals.SHOWN, "at most a few goals at once")
 
 func _button(text_part: String) -> Button:
 	for button: Button in main.center.find_children("*", "Button", true, false):
@@ -102,6 +149,11 @@ func _run() -> void:
 	check(sidebar.contains("年岁 16") and sidebar.contains("寿元 120") and sidebar.contains("寿元尽于历元 105 年"), "age and lifespan shown")
 	check(_button("闭关  ·  1 个月") != null and _button("闭关  ·  1 年") != null and _button("停留  ·  1 日") != null, "retreat lengths and waiting offered")
 	check(sidebar.contains("心境 · 平和 · 闭关收益 100%") and sidebar.contains("历练  0 / 100") and not _button("闭关  ·  1 年").disabled, "a fresh mind and no insight yet")
+	check(sidebar.contains("当 前 目 标") and sidebar.contains("除去妖蟒") and sidebar.contains("历元 6 年 3 月初一") and sidebar.contains("还有 5 年 2 个月") and sidebar.contains("修为 0 / 2000"), "the sidebar shows what to aim for: the serpent's deadline and breaking through")
+	main.Settings.set_goals(main, false)
+	check(not _texts(main.stats, "Label").contains("当 前 目 标"), "current goals can be switched off")
+	main.Settings.set_goals(main, true)
+	_goals()
 	check(_button("闭关  ·  1 年").tooltip_text.contains("触及瓶颈"), "a year's retreat warns that it will stop at the bottleneck")
 	main.session.player.xp = 500
 	main.render()

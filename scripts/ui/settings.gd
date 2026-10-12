@@ -1,6 +1,6 @@
 extends RefCounted
 ## The settings dialog and the preferences it keeps besides the volumes: window mode and size, how
-## fast story text types itself out, the key bindings and auto-save. They live in the player's
+## fast story text types itself out, the key bindings, auto-save and the sidebar's current goals. They live in the player's
 ## settings file next to the volumes (audio_director.gd keeps the "audio" section), never in saves.
 const DEFAULT_PATH := "user://settings.cfg"
 const WINDOW_SIZES: Array[Vector2i] = [Vector2i(1000, 640), Vector2i(1280, 800), Vector2i(1440, 900), Vector2i(1600, 1000), Vector2i(1920, 1200)]
@@ -21,6 +21,7 @@ static func load_state(ui) -> void:
 	ui.window_size = DEFAULT_SIZE
 	ui.text_speed = DEFAULT_TEXT_SPEED
 	ui.autosave_enabled = true
+	ui.goals_enabled = true
 	ui.keys = DEFAULT_KEYS.duplicate()
 	var config := ConfigFile.new()
 	if config.load(ui.settings_path) != OK:
@@ -36,6 +37,8 @@ static func load_state(ui) -> void:
 	# Only an explicit false switches auto-save off.
 	var autosave: Variant = config.get_value("saves", "autosave", true)
 	ui.autosave_enabled = not (autosave is bool and not autosave)
+	var goals: Variant = config.get_value("play", "goals", true)
+	ui.goals_enabled = not (goals is bool and not goals)
 	var saved: Variant = config.get_value("controls", "keys", {})
 	if saved is Dictionary:
 		var keys: Dictionary = DEFAULT_KEYS.duplicate()
@@ -58,6 +61,7 @@ static func save_state(ui) -> void:
 	config.set_value("display", "window_size", ui.window_size)
 	config.set_value("text", "speed", ui.text_speed)
 	config.set_value("saves", "autosave", ui.autosave_enabled)
+	config.set_value("play", "goals", ui.goals_enabled)
 	config.set_value("controls", "keys", ui.keys.duplicate())
 	config.save(ui.settings_path)
 
@@ -109,6 +113,12 @@ static func characters_per_second(ui) -> int:
 static func set_autosave(ui, on: bool) -> void:
 	ui.autosave_enabled = on
 	save_state(ui)
+
+static func set_goals(ui, on: bool) -> void:
+	ui.goals_enabled = on
+	save_state(ui)
+	if ui.started:
+		ui.render()
 
 # --- Keys --------------------------------------------------------------------------------------------
 
@@ -247,6 +257,11 @@ static func build(ui) -> void:
 	play.add_child(autosave)
 	controls.autosave = autosave
 	play.add_child(ui.paragraph("关闭后只在手动保存时存档，离开游戏前请先保存。「继续旅程」读取较新的那份存档。"))
+	var goals := CheckBox.new()
+	goals.text = "侧栏显示当前目标"
+	goals.toggled.connect(func(on: bool) -> void: set_goals(ui, on))
+	play.add_child(goals)
+	controls.goals = goals
 	var guide_row := HBoxContainer.new()
 	guide_row.add_theme_constant_override("separation", 12)
 	var guide := CheckBox.new()
@@ -278,6 +293,7 @@ static func sync(ui) -> void:
 	sizes.disabled = ui.fullscreen
 	controls.speeds.select(TEXT_SPEEDS.keys().find(ui.text_speed))
 	controls.autosave.set_pressed_no_signal(ui.autosave_enabled)
+	controls.goals.set_pressed_no_signal(ui.goals_enabled)
 	ui.guide_toggle.set_pressed_no_signal(ui.guide_enabled)
 	for action: String in ACTIONS:
 		var key_button: Button = controls.keys[action]

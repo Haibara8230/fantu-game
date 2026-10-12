@@ -1,8 +1,9 @@
 extends RefCounted
-## The left column: the character and their meters, commissions, acquaintances, appointments and the
-## journey. Built into the main interface's `stats` container.
+## The left column: the character and their meters, current goals, commissions, acquaintances,
+## appointments and the journey. Built into the main interface's `stats` container.
 const Calendar = preload("res://scripts/core/calendar.gd")
 const PeopleView = preload("res://scripts/ui/people_view.gd")
+const Goals = preload("res://scripts/ui/goals.gd")
 const SIDEBAR_ACQUAINTANCES := 8
 
 static func render(ui) -> void:
@@ -20,6 +21,7 @@ static func render(ui) -> void:
 	ui.meter(stats, "修为", p.xp, maxi(1, maxi(int(p.xp), _xp_goal(session))), ui.GOLD)
 	_render_progress(ui)
 	stats.add_child(ui.label("灵石  %d    灵草  %d    筑基丹  %d" % [p.stones, session.herb_count(), session.item_count("foundation_pill")], 15))
+	_render_goals(ui)
 	_render_quests(ui)
 	_render_acquaintances(ui)
 	_render_upcoming(ui)
@@ -57,6 +59,21 @@ static func _render_progress(ui) -> void:
 		stats.add_child(ui.label("历练  %d / %d" % [int(session.player.insight), session.insight_needed()], 14, ui.MUTED))
 	if session.at_bottleneck():
 		stats.add_child(ui.paragraph("瓶颈 · 闭关难进，需外出历练或服破障丹", Color("#e39a82")))
+
+## A few hints at what to aim for now (goals.gd), unless switched off in the settings.
+static func _render_goals(ui) -> void:
+	if not ui.goals_enabled:
+		return
+	var current: Array[Dictionary] = Goals.current(ui.session)
+	if current.is_empty():
+		return
+	var stats: VBoxContainer = ui.stats
+	stats.add_child(ui.label("当 前 目 标", 15, ui.GOLD))
+	for goal: Dictionary in current:
+		stats.add_child(ui.label(goal.title, 15))
+		var hint: Label = ui.label(goal.text, 14, ui.MUTED)
+		hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		stats.add_child(hint)
 
 ## Accepted commissions with their progress and deadline.
 static func _render_quests(ui) -> void:

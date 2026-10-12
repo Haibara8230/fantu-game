@@ -85,6 +85,8 @@ var fullscreen := false
 var window_size := Settings.DEFAULT_SIZE
 var text_speed := Settings.DEFAULT_TEXT_SPEED
 var autosave_enabled := true
+# Whether the sidebar shows the current goals (goals.gd).
+var goals_enabled := true
 var keys: Dictionary = Settings.DEFAULT_KEYS.duplicate()
 # The action waiting for a new key in the settings dialog ("" when none).
 var binding_action := ""

@@ -40,6 +40,8 @@ Godot 4 / GDScript / Windows 单机。同一个修仙世界持续运转，玩家
 
 「修行手记」旁的「编年史」按年翻阅一生的记载，可按大事、修炼、斗法、人物等分类筛选；相识之人的资料卡下方记着初识的日子与地点、往来与近事。
 
+侧栏「当前目标」给出眼下可以努力的方向（最多三条）：冲开瓶颈、筑基的下一步、妖蟒出谷前的时限、临近的拍卖与小比、答应过别人的事。只是提示，不是任务，可在「设置 · 游戏」里关闭。
+
 初次游玩时，中间面板顶部会在相应时机给出一条新手指引（闭关、人物、赶路、斗法、交易、心境、瓶颈等），按「知道了」后不再出现；可在「设置」里关闭或重新显示全部。
 
 ## 存档与操作
@@ -82,6 +84,7 @@ Godot 4 / GDScript / Windows 单机。同一个修仙世界持续运转，玩家
 - `scripts/ui/map_view.gd`、`bag_view.gd`、`arts_view.gd`、`battle_view.gd`、`event_view.gd`：舆图、行囊、功法、斗法、事件与结局视图。
 - `scripts/ui/welcome_screen.gd`：标题界面（道号、灵根、开始或继续旅程）。
 - `scripts/ui/guide.gd`、`data/guide.json`：新手指引（何时出现与提示文字）。
+- `scripts/ui/goals.gd`、`data/goals.json`：侧栏的当前目标（何时出现、文字与其中的数字）。
 - `scripts/ui/settings.gd`：设置对话框与其保存的偏好（窗口、文字速度、按键、自动存档）。
 - `scripts/ui/landscape.gd`：地点与场景横幅；有正式美术时显示美术，否则显示按地貌绘制的占位山水。
 - `scripts/ui/world_map.gd`：区域舆图；`scripts/ui/art_library.gd`：美术路径约定。
