@@ -192,7 +192,7 @@ func _run() -> void:
 	check(main.current_screen() == "panel" and not main.hud_left.visible and main.tab_row.visible, "人物 opens the character panel over the world")
 	var status := _texts(main.center, "Label")
 	check(status.contains("年岁 16") and status.contains("寿元 120") and status.contains("寿元尽于历元 105 年"), "age and lifespan shown")
-	check(status.contains("心境 · 平和 · 闭关收益 100%") and status.contains("历练  0 / 100"), "a fresh mind and no insight yet")
+	check(status.contains("心境  0 / 0 · 闭关收益 100% · 单次闭关至多 3 个月") and status.contains("心神 · 平和 · 闭关收益 100%") and status.contains("历练  0 / 100"), "a fresh mind and no insight yet")
 	main.hud_icons.status.pressed.emit()
 	check(main.view == "place" and main.hud_left.visible, "the same button closes the panel")
 	check(main.goal_label.visible and main.goal_label.text == "目标 · 除去妖蟒", "the HUD names the first goal")
@@ -212,9 +212,13 @@ func _run() -> void:
 	_button("闭关修炼").pressed.emit()
 	var scroll := _texts(main.center, "Label")
 	check(main.current_screen() == "retreat" and scroll.contains("每月修为") and scroll.contains("灵根 ·") and scroll.contains("近 期 大 事") and scroll.contains("除去妖蟒 · 还有"), "闭关修炼 opens the retreat scroll: the rate, its sources and the deadlines")
+	check(scroll.contains("此番至多 3 个月") and scroll.contains("心境 · 安定  0 / 0"), "the scroll names the longest retreat allowed and the mind")
 	var length: HSlider = main.center.find_children("*", "HSlider", true, false)[0]
-	length.value = 12
-	check(_texts(main.center, "Label").contains("1 年") and _texts(main.center, "Label").contains("触及瓶颈"), "a year's retreat previews stopping at the bottleneck")
+	check(int(length.max_value) == 9, "炼气初期 retreats run in ten-day steps up to ninety days")
+	main.session.player.xp = 400
+	length.value = 1
+	length.value = 9
+	check(_texts(main.center, "Label").contains("3 个月") and _texts(main.center, "Label").contains("触及瓶颈"), "a long retreat previews stopping at the bottleneck")
 	main.close_overlay()
 	main.session.player.xp = 500
 	main.set_view("retreat")
@@ -225,7 +229,7 @@ func _run() -> void:
 	main.session.player.xp = 0
 	main.set_view("retreat")
 	length = main.center.find_children("*", "HSlider", true, false)[0]
-	length.value = 1
+	length.value = 3
 	var retreat_from := int(main.session.world.day)
 	_button("开始闭关").pressed.emit()
 	await process_frame

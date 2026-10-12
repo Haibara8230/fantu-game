@@ -10,6 +10,11 @@ func check(condition: bool, message: String) -> void:
 		failures += 1
 		printerr("FAIL: " + message)
 
+## Answers whatever stops the journey with its last choice (declining, strolling on).
+func _settle(game) -> void:
+	while not game.pending_event.is_empty():
+		game.choose_event(str(game.pending_definition().choices.back().id))
+
 func _initialize() -> void:
 	# A script error aborts this function before quit(); the watchdog turns that hang into a failure.
 	create_timer(240.0).timeout.connect(func() -> void: printerr("TIMEOUT: test did not finish (likely a script error)"); quit(1))
@@ -42,30 +47,34 @@ func _initialize() -> void:
 	game.travel("sect")
 	game.act("breakthrough")
 	check(game.player.realm == 0, "breakthrough needs the last sub-stage")
-	# Mixed legal play: retreat while the mind is fresh; otherwise gather in the valley, which eases the
-	# mind, sell the herbs and buy a 破障丹 when a bottleneck holds. Fast enough to meet the serpent.
+	# Mixed legal play: retreat while the mind is fresh; otherwise spar with fellow disciples (which
+	# tempers the mind), gather in the valley, sell the herbs and buy a 破障丹 when a bottleneck holds.
+	# Fast enough to meet the serpent.
 	var trips := 0
-	while game.player.xp < 2000 and trips < 100:
+	while game.player.xp < 2000 and trips < 300:
 		trips += 1
 		if game.at_bottleneck() and game.item_count("pozhang_pill") > 0:
 			game.use_item("pozhang_pill")
-		elif not game.at_bottleneck() and game.retreat_efficiency() >= 100:
+		elif not game.at_bottleneck() and game.retreat_efficiency() >= 100 and game.mind_percent() >= 100:
 			game.cultivate(90)
 		else:
+			for bout: int in 2:
+				game.start_battle("disciple")
+				while not game.battle.is_empty():
+					game.use_skill("sword")
+			game.act("rest")
 			game.travel("wild")
 			for i: int in 3:
 				game.act("gather")
 			game.travel("market")
-			if not game.pending_event.is_empty():
-				game.choose_event("decline")
+			_settle(game)
 			for herb: String in game.content.herbs_by_value():
 				if game.item_count(herb) > 0:
 					game.sell(herb, game.item_count(herb))
 			if game.at_bottleneck():
 				game.buy("pozhang_pill")
 			game.travel("sect")
-			if not game.pending_event.is_empty():
-				game.choose_event("decline")
+			_settle(game)
 	check(not game.has_flag("serpent_rampage") and game.item_count("foundation_pill") == 1, "mixed play reaches 炼气圆满 before the serpent breaks out")
 	check(game.player.stage == 3 and game.player.max_hp == 120 and game.realm_name() == "炼气圆满", "sub-stages reached by cultivation raise the caps")
 	check(game.chronicle.entries.any(func(entry: Dictionary) -> bool: return entry.id == "stage_up" and int(entry.args.stage) == 1 and entry.major), "each sub-stage is a recorded milestone")

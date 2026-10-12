@@ -144,8 +144,12 @@ static func _spot_action(ui, grid: GridContainer, action: String) -> void:
 			var tooltip := "选择闭关的时日，看看能得多少修为"
 			if session.at_bottleneck():
 				tooltip = "修为卡在瓶颈，闭关难进；需外出历练或服破障丹"
+			elif session.at_xp_cap():
+				tooltip = session.cap_text()
+			elif session.mind_percent() < 100:
+				tooltip = "心境不及此境所需，闭关收益减半；外出历练可磨砺心境"
 			elif session.retreat_efficiency() < 100:
-				tooltip = "连日闭关心境渐倦，收益降至 %d%%；外出做些别的事可以平复" % session.retreat_efficiency()
+				tooltip = "连日闭关心神渐倦，收益降至 %d%%；外出做些别的事可以平复" % session.retreat_efficiency()
 			_open(ui, grid, "闭关修炼", func() -> void: ui.set_view("retreat"), tooltip)
 		"rest":
 			_action(ui, grid, "静室休整  ·  " + Calendar.duration_text(session.rest_days()), "rest", "恢复全部气血与灵力；伤得越重，需要的日子越长")

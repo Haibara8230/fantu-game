@@ -1,6 +1,7 @@
 extends RefCounted
 ## 属性: the character page of the panel — realm and meters, age and lifespan, spirit roots, the mind
-## after retreats and insight toward the next bottleneck, what is carried and the sect.
+## (心境) against the stage's need, the weariness after retreats (心神) and insight toward the next
+## bottleneck, what is carried and the sect.
 const Calendar = preload("res://scripts/core/calendar.gd")
 
 static func render(ui) -> void:
@@ -46,7 +47,9 @@ static func _render_progress(ui, parent: VBoxContainer) -> void:
 	var session = ui.session
 	var efficiency: int = session.retreat_efficiency()
 	var mood := "平和" if efficiency >= 100 else ("浮躁" if efficiency >= 75 else "倦怠")
-	parent.add_child(ui.label("心境 · %s · 闭关收益 %d%%" % [mood, efficiency], 15, ui.MUTED if efficiency >= 100 else ui.INK))
+	var mind_percent: int = session.mind_percent()
+	parent.add_child(ui.label("心境  %d / %d · 闭关收益 %d%% · 单次闭关至多 %s" % [int(session.player.mind), session.mind_needed(), mind_percent, Calendar.duration_text(session.retreat_cap())], 15, ui.MUTED if mind_percent >= 100 else Color("#e3c08a")))
+	parent.add_child(ui.label("心神 · %s · 闭关收益 %d%%" % [mood, efficiency], 15, ui.MUTED if efficiency >= 100 else ui.INK))
 	if session.xp_limit() >= 0:
 		parent.add_child(ui.label("历练  %d / %d" % [int(session.player.insight), session.insight_needed()], 15, ui.MUTED))
 	if session.at_bottleneck():

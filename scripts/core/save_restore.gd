@@ -43,7 +43,11 @@ static func restore(s, data: Variant) -> bool:
 			return false
 	if int(saved_player.cultivation_carry) >= Cultivation.CARRY_UNIT:
 		return false
-	if int(saved_player.fatigue_day) > day or int(saved_player.fatigue) > Cultivation.fatigue_cap(s) or int(saved_player.insight) > Cultivation.insight_needed(s):
+	if int(saved_player.fatigue_day) > day or int(saved_player.insight) > Cultivation.insight_needed(s):
+		return false
+	# The mind (心境): optional, since saves before it lack it.
+	var mind: Variant = saved_player.get("mind", -1)
+	if not _whole_signed(mind) or int(mind) < -1:
 		return false
 	var birth: Variant = saved_player.get("birth_day")
 	if not _whole_signed(birth) or int(birth) > day:
@@ -173,6 +177,8 @@ static func restore(s, data: Variant) -> bool:
 		player[key] = int(player[key])
 	player.birth_day = int(birth)
 	player.stage = saved_stage
+	# Journeys from before the mind start with what their stage asks, so nothing they had slows down.
+	player.mind = int(mind) if int(mind) >= 0 else int(content.stage(int(saved_player.realm), saved_stage).get("mind", 0))
 	player.roots = roots.duplicate()
 	for key: String in loadout:
 		player[key] = loadout[key]
@@ -185,6 +191,8 @@ static func restore(s, data: Variant) -> bool:
 		player.cooldowns[action_id] = int(player.cooldowns[action_id])
 	s.player = player
 	s.refresh_realm_stats()
+	# The fatigue limit depends on the realm, so it is applied once the player is in place.
+	player.fatigue = mini(int(player.fatigue), Cultivation.fatigue_cap(s))
 	var battle: Dictionary = saved_battle.duplicate(true)
 	if not battle.is_empty():
 		if not battle.has("status"):

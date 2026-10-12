@@ -6,7 +6,12 @@ extends RefCounted
 ## and several back-to-back short ones tire the same.
 ## Each sub-stage threshold is a bottleneck: xp stops there until enough insight (player.insight, from
 ## duels, spars, commissions and events) or a 破障丹 breaks it. Breaking one enters the next stage and
-## clears the insight. The realm breakthrough keeps its own requirements.
+## clears the insight. The realm breakthrough keeps its own requirements, and xp stops at it (or at the
+## realm's xp_cap when no breakthrough is open yet), so no retreat runs on with nothing to gain.
+## The same experience also builds the mind (player.mind, 心境), which never resets. Each sub-stage asks
+## for some: short of it a retreat yields half and may last half as long; well above it, a fifth more.
+## A single retreat lasts at most the stage's retreat_days, so seclusion alternates with going out; the
+## limit grows a great deal with the realm.
 const Calendar = preload("res://scripts/core/calendar.gd")
 # player.cultivation_carry counts hundredths of a retreat day's xp-thirtieths, so partial efficiency
 # carries over exactly.
@@ -22,14 +27,51 @@ static func fatigue(s) -> int:
 ## Tiredness beyond which retreat days yield no less.
 static func fatigue_cap(s) -> int:
 	var retreat: Dictionary = s.content.rules.retreat
-	return int(retreat.fresh_days) + int(retreat.decline_days) * (100 - int(retreat.floor_percent)) / 100
+	return fresh_days(s) + int(retreat.decline_days) * (100 - int(retreat.floor_percent)) / 100
+
+## Days of retreat in a row that yield fully; higher realms keep a fresh mind for longer.
+static func fresh_days(s) -> int:
+	return int(s.content.realm(int(s.player.realm)).get("fresh_days", s.content.rules.retreat.fresh_days))
 
 ## Percent of the usual xp a retreat day yields after `tired` days of retreat in a row.
 static func efficiency(s, tired: int) -> int:
 	var retreat: Dictionary = s.content.rules.retreat
-	if tired <= int(retreat.fresh_days):
+	if tired <= fresh_days(s):
 		return 100
-	return maxi(int(retreat.floor_percent), 100 - (tired - int(retreat.fresh_days)) * 100 / int(retreat.decline_days))
+	return maxi(int(retreat.floor_percent), 100 - (tired - fresh_days(s)) * 100 / int(retreat.decline_days))
+
+## The mind the current sub-stage asks for.
+static func mind_needed(s) -> int:
+	return int(s.stage_stats().get("mind", 0))
+
+## Percent of the usual xp the mind allows: short of the stage's need, enough, or well above it.
+static func mind_percent(s) -> int:
+	var rules: Dictionary = s.content.rules.mind
+	var mind := int(s.player.get("mind", 0))
+	if mind < mind_needed(s):
+		return int(rules.short_percent)
+	if mind >= mind_needed(s) + int(rules.ample_margin):
+		return int(rules.ample_percent)
+	return 100
+
+## The longest single retreat now: the stage's own limit, halved while the mind falls short.
+static func retreat_cap(s) -> int:
+	var days := int(s.stage_stats().get("retreat_days", 3600))
+	if int(s.player.get("mind", 0)) < mind_needed(s):
+		days = days * int(s.content.rules.mind.short_percent) / 100
+	return maxi(1, days)
+
+## The most xp this realm holds: the breakthrough's requirement, or the realm's cap; -1 when unbounded.
+static func xp_cap(s) -> int:
+	var realm: Dictionary = s.content.realm(int(s.player.realm))
+	if realm.has("breakthrough"):
+		return int(realm.breakthrough.xp)
+	return int(realm.get("xp_cap", -1))
+
+## Whether xp has reached the most this realm holds.
+static func at_cap(s) -> bool:
+	var cap := xp_cap(s)
+	return cap >= 0 and int(s.player.xp) >= cap
 
 ## The xp at which the next sub-stage waits, or -1 in the last stage (the realm breakthrough).
 static func xp_limit(s) -> int:
@@ -48,7 +90,7 @@ static func insight_needed(s) -> int:
 ## {"days", "xp", "carry", "fatigue"}. Stops on the day xp reaches a bottleneck the current insight
 ## cannot break, since further days would yield nothing.
 static func plan_retreat(s, days: int, tired: int) -> Dictionary:
-	var rate: int = s.cultivation_rate()
+	var rate: int = s.cultivation_rate() * mind_percent(s) / 100
 	var cap := fatigue_cap(s)
 	var carry := int(s.player.cultivation_carry)
 	var start := int(s.player.xp)
@@ -66,13 +108,14 @@ static func plan_retreat(s, days: int, tired: int) -> Dictionary:
 			break
 	return {"days": elapsed, "xp": xp - start, "carry": carry, "fatigue": tired}
 
-## Where a retreat must stop: the next threshold, or the one after if the insight already suffices.
+## Where a retreat must stop: the next threshold, or the one after if the insight already suffices;
+## past the last threshold, the most the realm holds.
 static func _retreat_stop(s) -> int:
 	var stages: Array = s.content.realm(int(s.player.realm)).stages
 	var next := int(s.player.stage) + 1
 	if int(s.player.insight) >= insight_needed(s):
 		next += 1
-	return int(stages[next].xp) if next < stages.size() else -1
+	return int(stages[next].xp) if next < stages.size() else xp_cap(s)
 
 ## Adds xp up to the next bottleneck; enough insight breaks it on the way. Xp the bottleneck holds back
 ## is recorded, so a reward's stated xp never reads as gained when it was not. Returns the texts.
@@ -81,6 +124,8 @@ static func gain_xp(s, amount: int) -> Array[String]:
 	var left := amount
 	while left > 0:
 		var limit := xp_limit(s)
+		if limit < 0:
+			limit = xp_cap(s)
 		var take := left if limit < 0 else mini(left, maxi(0, limit - int(s.player.xp)))
 		s.player.xp = int(s.player.xp) + take
 		left -= take
@@ -106,11 +151,16 @@ static func settle_stage(s) -> Array[String]:
 		texts.append(_advance(s))
 	return texts
 
-## Experience from outside the retreat; at a bottleneck it may break through at once.
+## Experience from outside the retreat: insight toward the bottleneck (at one it may break through at
+## once) and mind.
 static func gain_insight(s, source: String) -> Array[String]:
 	var bottleneck: Dictionary = s.content.rules.bottleneck
 	s.player.insight = mini(insight_needed(s), int(s.player.insight) + int(bottleneck.insight[source]))
+	gain_mind(s, int(s.content.rules.mind.gain.get(source, 0)))
 	return settle_stage(s)
+
+static func gain_mind(s, amount: int) -> void:
+	s.player.mind = maxi(0, int(s.player.get("mind", 0)) + amount)
 
 ## A 破障丹: enters the next sub-stage when xp waits at its bottleneck.
 static func breach(s) -> Array[String]:

@@ -86,6 +86,8 @@ static func met(s, condition: Dictionary) -> bool:
 			return bool(s.world.people.get(value, {}).get("met", false))
 		"relation_at_least":
 			return int(s.world.people.get(value[0], {}).get("relation", 0)) >= int(value[1])
+		"mind_at_least":
+			return int(s.player.get("mind", 0)) >= int(value)
 		"event_state":
 			return str(s.world.events.get(value[0], {}).get("state", "")) == value[1]
 	return false
@@ -105,6 +107,8 @@ static func apply(s, effects: Array) -> void:
 					s.player.xp = maxi(0, int(s.player.xp) + int(value))
 			"breach":
 				s.breach()
+			"mind":
+				s.gain_mind(int(value))
 			"herbs":
 				if int(value) >= 0:
 					s.add_item("huichun_grass", int(value))

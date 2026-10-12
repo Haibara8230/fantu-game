@@ -35,6 +35,8 @@ var pending_event: Dictionary = {}
 var ended: Dictionary = {}
 # Road encounters can be switched off by tests that exercise other systems along fixed paths.
 var encounters_enabled := true
+# The single-retreat limit can be switched off by tests that run long spans of time through a retreat.
+var retreat_limits := true
 # The person whose interaction is being applied, for effects such as "leave".
 var acting_npc := ""
 # Population caches kept by people.gd, rebuilt from the world seed and never saved: who can be found
@@ -73,7 +75,7 @@ func new_game(character_name: String = "无名", seed_value: int = -1, roots: Ar
 	player = {
 		"name": chosen_name, "birth_day": -int(content.rules.starting_age) * Calendar.DAYS_PER_YEAR,
 		"realm": 0, "stage": 0, "xp": 0, "hp": 0, "qi": 0, "cultivation_carry": 0, "warned_for": -1, "roots": roots.duplicate(),
-		"fatigue": 0, "fatigue_day": 0, "insight": 0,
+		"fatigue": 0, "fatigue_day": 0, "insight": 0, "mind": 0,
 		"stones": int(content.rules.starting_stones), "items": {},
 		"journey": {}, "cooldowns": {},
 		"location": "sect", "sect": "wanderer",
@@ -339,6 +341,11 @@ func cultivate(days: int) -> String:
 		return "闭关天数不合常理。"
 	if at_bottleneck():
 		return "修为卡在瓶颈，闭关难有寸进。需外出历练（斗法、切磋、委托、奇遇），或服一枚破障丹。"
+	if at_xp_cap():
+		return cap_text()
+	# A retreat longer than the mind allows ends at the limit.
+	if retreat_limits:
+		days = mini(days, retreat_cap())
 	var tired := Cultivation.fatigue(self)
 	var plan := Cultivation.plan_retreat(self, days, tired)
 	var passed := advance_days(int(plan.days), true)
@@ -355,6 +362,8 @@ func cultivate(days: int) -> String:
 		text += " " + " ".join(milestones)
 	if passed.interrupted:
 		text = "闭关第 %d 日，外事惊动，你提前出关。%s" % [passed.elapsed, text]
+	elif int(passed.elapsed) < days and at_xp_cap():
+		text = "闭关第 %d 日，修为已臻此境之极。%s" % [passed.elapsed, text]
 	elif int(passed.elapsed) < days:
 		text = "闭关第 %d 日，修为触及瓶颈，再难寸进，你出关寻求机缘。%s" % [passed.elapsed, text]
 	return conclude(text, passed)
@@ -427,6 +436,33 @@ func insight_needed() -> int:
 
 func retreat_fatigue() -> int:
 	return Cultivation.fatigue(self)
+
+## The longest single retreat now, in days (see cultivation.gd).
+func retreat_cap() -> int:
+	return Cultivation.retreat_cap(self)
+
+func mind_needed() -> int:
+	return Cultivation.mind_needed(self)
+
+## Percent of the usual retreat xp the mind allows.
+func mind_percent() -> int:
+	return Cultivation.mind_percent(self)
+
+func gain_mind(amount: int) -> void:
+	Cultivation.gain_mind(self, amount)
+
+## The most xp this realm holds, or -1.
+func xp_cap() -> int:
+	return Cultivation.xp_cap(self)
+
+func at_xp_cap() -> bool:
+	return Cultivation.at_cap(self)
+
+## Why a retreat cannot add to xp held at the realm's most.
+func cap_text() -> String:
+	if next_breakthrough().is_empty():
+		return "修为已臻%s之极，后续境界尚未开放，闭关再难寸进。" % realm_name()
+	return "修为已臻%s之极，闭关再难寸进；备齐所需，便可突破。" % realm_name()
 
 ## Percent of the usual xp the next retreat day would yield.
 func retreat_efficiency() -> int:

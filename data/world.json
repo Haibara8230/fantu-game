@@ -355,6 +355,7 @@
     "cultivate_xp": 60,
     "retreat": {"fresh_days": 180, "decline_days": 720, "floor_percent": 50, "recovery_per_day": 2},
     "bottleneck": {"insight_needed": 100, "insight": {"battle_win": 20, "spar": 10, "commission": 25, "event": 15}},
+    "mind": {"gain": {"battle_win": 2, "spar": 1, "commission": 4, "event": 2}, "short_percent": 50, "ample_margin": 10, "ample_percent": 120},
     "rest_full_days": 12,
     "spirit_roots": {
       "elements": ["metal", "wood", "water", "fire", "earth"],
@@ -383,11 +384,13 @@
       "id": "qi_refining",
       "name": "炼气",
       "lifespan_years": 120,
+      "retreat_step_days": 10,
+      "fresh_days": 180,
       "stages": [
-        {"name": "初期", "xp": 0, "max_hp": 90, "max_qi": 30, "attack_bonus": 0},
-        {"name": "中期", "xp": 500, "max_hp": 100, "max_qi": 34, "attack_bonus": 2},
-        {"name": "后期", "xp": 1000, "max_hp": 110, "max_qi": 38, "attack_bonus": 4},
-        {"name": "圆满", "xp": 1500, "max_hp": 120, "max_qi": 42, "attack_bonus": 6}
+        {"name": "初期", "xp": 0, "max_hp": 90, "max_qi": 30, "attack_bonus": 0, "mind": 0, "retreat_days": 90},
+        {"name": "中期", "xp": 500, "max_hp": 100, "max_qi": 34, "attack_bonus": 2, "mind": 6, "retreat_days": 120},
+        {"name": "后期", "xp": 1000, "max_hp": 110, "max_qi": 38, "attack_bonus": 4, "mind": 14, "retreat_days": 150},
+        {"name": "圆满", "xp": 1500, "max_hp": 120, "max_qi": 42, "attack_bonus": 6, "mind": 24, "retreat_days": 180}
       ],
       "breakthrough": {"xp": 2000, "pills": 1}
     },
@@ -396,12 +399,15 @@
       "name": "筑基",
       "breakthrough_text": "丹田中翻涌的灵气渐渐平息，由气凝实为液，余下的灵力沉入经脉与血肉。你只觉周身舒畅，一股从未有过的力量正在凝聚。",
       "lifespan_years": 220,
+      "retreat_step_days": 30,
+      "fresh_days": 540,
       "stages": [
-        {"name": "初期", "xp": 0, "max_hp": 140, "max_qi": 50, "attack_bonus": 8},
-        {"name": "中期", "xp": 1500, "max_hp": 155, "max_qi": 55, "attack_bonus": 10},
-        {"name": "后期", "xp": 3000, "max_hp": 170, "max_qi": 60, "attack_bonus": 12},
-        {"name": "圆满", "xp": 4500, "max_hp": 185, "max_qi": 65, "attack_bonus": 14}
-      ]
+        {"name": "初期", "xp": 0, "max_hp": 140, "max_qi": 50, "attack_bonus": 8, "mind": 36, "retreat_days": 360},
+        {"name": "中期", "xp": 1500, "max_hp": 155, "max_qi": 55, "attack_bonus": 10, "mind": 50, "retreat_days": 540},
+        {"name": "后期", "xp": 3000, "max_hp": 170, "max_qi": 60, "attack_bonus": 12, "mind": 66, "retreat_days": 720},
+        {"name": "圆满", "xp": 4500, "max_hp": 185, "max_qi": 65, "attack_bonus": 14, "mind": 84, "retreat_days": 900}
+      ],
+      "xp_cap": 6000
     }
   ],
   "routes": [

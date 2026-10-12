@@ -33,6 +33,8 @@ func _initialize() -> void:
 func _game(seed_value: int) -> Session:
 	var game := Session.new()
 	game.encounters_enabled = false
+	# These scenarios run the scheduler through long retreats; the retreat limits have their own tests.
+	game.retreat_limits = false
 	game.new_game("事件", seed_value)
 	return game
 
@@ -42,13 +44,17 @@ func _jump(game: Session, year: int, month: int, day: int) -> void:
 
 func _foundation(game: Session) -> void:
 	game.player.realm = 1
+	game.player.mind = game.mind_needed()
 	game.refresh_realm_stats()
 	game.player.hp = game.player.max_hp
 
-## Test setup only: 炼气圆满 has no sub-stage bottleneck ahead, so retreats run their whole span.
+## Test setup only: 炼气圆满 has no sub-stage bottleneck ahead, with the mind it asks for, and the
+## realm's xp cap is lifted, so retreats run their whole span.
 func _without_bottleneck(game: Session) -> void:
 	game.player.stage = 3
 	game.player.xp = 1500
+	game.player.mind = 24
+	game.content.realms[0].breakthrough = {"xp": 1000000, "pills": 1}
 	game.refresh_realm_stats()
 
 func _state(game: Session, event_id: String) -> String:

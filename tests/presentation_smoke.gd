@@ -122,36 +122,41 @@ func _run() -> void:
 	# Legal progression so boss presentation also exercises the real game's gate.
 	_step("progressing to foundation")
 	main.run(func() -> String: return main.session.travel("sect"))
-	# Retreat while the mind is fresh; otherwise gather, which eases the mind, and buy a 破障丹 for a
-	# bottleneck (as in core_smoke), so the serpent is met before it breaks out.
+	# Retreat while the mind is fresh; otherwise spar (which tempers the mind), gather, which eases it,
+	# and buy a 破障丹 for a bottleneck (as in core_smoke), so the serpent is met before it breaks out.
 	var game = main.session
 	var rounds := 0
-	while game.player.xp < 2000 and rounds < 100:
+	while game.player.xp < 2000 and rounds < 300:
 		rounds += 1
 		if game.at_bottleneck() and game.item_count("pozhang_pill") > 0:
 			main.run(func() -> String: return game.use_item("pozhang_pill"))
-		elif not game.at_bottleneck() and game.retreat_efficiency() >= 100:
+		elif not game.at_bottleneck() and game.retreat_efficiency() >= 100 and game.mind_percent() >= 100:
 			main.run(func() -> String: return game.cultivate(90))
 		else:
+			for bout: int in 2:
+				main.run(func() -> String: return game.start_battle("disciple"))
+				while not game.battle.is_empty():
+					main.run(func() -> String: return game.use_skill("sword"))
+			main.run(func() -> String: return game.act("rest"))
 			main.run(func() -> String: return game.travel("wild"))
 			for i: int in 3:
 				main.run(func() -> String: return game.act("gather"))
 			main.run(func() -> String: return game.travel("market"))
-			if not game.pending_event.is_empty():
-				main.choose("decline")
+			while not game.pending_event.is_empty():
+				main.choose(str(game.pending_definition().choices.back().id))
 			main.run(func() -> String: return game.act("sell"))
 			if game.at_bottleneck():
 				main.run(func() -> String: return game.buy("pozhang_pill"))
 			main.run(func() -> String: return game.travel("sect"))
-			if not game.pending_event.is_empty():
-				main.choose("decline")
+			while not game.pending_event.is_empty():
+				main.choose(str(game.pending_definition().choices.back().id))
 	main.run(func() -> String: return main.session.act("rest"))
 	main.run(func() -> String: return main.session.travel("wild"))
 	while int(main.session.herb_count()) * 4 + int(main.session.player.stones) < 120:
 		main.run(func() -> String: return main.session.act("gather"))
 	main.run(func() -> String: return main.session.travel("market"))
-	if not main.session.pending_event.is_empty():
-		main.choose("decline")
+	while not main.session.pending_event.is_empty():
+		main.choose(str(main.session.pending_definition().choices.back().id))
 	main.run(func() -> String: return main.session.act("sell"))
 	main.run(func() -> String: return main.session.buy("foundation_pill"))
 	main.run(func() -> String: return main.session.travel("sect"))

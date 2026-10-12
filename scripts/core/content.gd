@@ -127,8 +127,8 @@ func _validate() -> String:
 		for stage: Variant in realm.stages:
 			if not stage is Dictionary or not stage.get("name") is String:
 				return "小阶段配置错误：%s" % realm.get("id", index)
-			for key: String in ["xp", "max_hp", "max_qi", "attack_bonus"]:
-				if not _whole(stage.get(key)) or (key in ["max_hp", "max_qi"] and int(stage[key]) < 1):
+			for key: String in ["xp", "max_hp", "max_qi", "attack_bonus", "mind", "retreat_days"]:
+				if not _whole(stage.get(key)) or (key in ["max_hp", "max_qi", "retreat_days"] and int(stage[key]) < 1):
 					return "小阶段数值错误：%s.%s.%s" % [realm.get("id", index), stage.name, key]
 			if int(stage.xp) <= previous_xp:
 				return "小阶段修为门槛必须递增：%s" % realm.get("id", index)
@@ -140,6 +140,11 @@ func _validate() -> String:
 			return "突破条件错误：%s" % realm.get("id", index)
 		if breakthrough != null and int(breakthrough.xp) < int(realm.stages.back().xp):
 			return "突破所需修为不能低于最后一个小阶段：%s" % realm.get("id", index)
+		if realm.has("xp_cap") and (not _whole(realm.xp_cap) or int(realm.xp_cap) <= int(realm.stages.back().xp)):
+			return "境界修为上限须高于最后一个小阶段：%s" % realm.get("id", index)
+		for key: String in ["retreat_step_days", "fresh_days"]:
+			if not _whole(realm.get(key)) or int(realm[key]) < 1:
+				return "境界闭关配置错误：%s.%s" % [realm.get("id", index), key]
 	for route: Variant in routes:
 		if not route is Dictionary or not route.get("between") is Array or route.between.size() != 2:
 			return "路线配置错误。"
@@ -189,6 +194,12 @@ func _validate() -> String:
 		return "闭关心境配置无效。"
 	if not _whole(retreat.get("floor_percent")) or int(retreat.floor_percent) < 1 or int(retreat.floor_percent) > 100:
 		return "闭关效率下限必须在 1 到 100 之间。"
+	var mind: Variant = rules.get("mind")
+	if not mind is Dictionary or not mind.get("gain") is Dictionary:
+		return "心境配置无效。"
+	for key: String in ["short_percent", "ample_margin", "ample_percent"]:
+		if not _whole(mind.get(key)) or (key != "ample_margin" and int(mind[key]) < 1):
+			return "心境配置缺少：" + key
 	var bottleneck: Variant = rules.get("bottleneck")
 	if not bottleneck is Dictionary or not _whole(bottleneck.get("insight_needed")) or int(bottleneck.insight_needed) < 1 or not bottleneck.get("insight") is Dictionary:
 		return "瓶颈配置无效。"
@@ -557,7 +568,7 @@ func _validate_condition(condition: Variant) -> String:
 			return "" if value in world_flags else "未知世界标记：%s" % value
 		"item_at_least":
 			return "" if value is Array and value.size() == 2 and items.has(value[0]) and _whole(value[1]) else "物品条件无效"
-		"stones_at_least", "herbs_at_least":
+		"stones_at_least", "herbs_at_least", "mind_at_least":
 			return "" if _whole(value) else "%s 数值无效" % key
 		"met":
 			return "" if people.has(value) else "未知人物：%s" % value
@@ -579,7 +590,7 @@ func _validate_effects(effects: Variant) -> String:
 		var value: Variant = effect[key]
 		var ok := false
 		match key:
-			"stones", "herbs", "pills", "xp":
+			"stones", "herbs", "pills", "xp", "mind":
 				ok = (value is int or value is float) and float(value) == floor(float(value))
 			"item":
 				ok = value is Array and value.size() == 2 and items.has(value[0]) and (value[1] is int or value[1] is float)

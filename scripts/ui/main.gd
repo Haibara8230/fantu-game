@@ -62,7 +62,7 @@ var scene_layer: Control
 # the breakthrough just achieved, the open person's details, the people drawer, the filters of the
 # 神通 / 功法 and 行囊 pages, and what is laid out on the trading table.
 var battle_record_open := false
-var retreat_months := 3
+var retreat_days := 90
 var retreat_playback: Dictionary = {}
 var retreat_labels: Dictionary = {}
 var ceremony: Dictionary = {}
