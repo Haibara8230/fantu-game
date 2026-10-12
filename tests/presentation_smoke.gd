@@ -63,6 +63,10 @@ func _run() -> void:
 	root.add_child(main)
 	# The new-player guide has its own checks in ui_smoke; its tips would only shift this layout.
 	main.guide_enabled = false
+	# Default settings (keys, auto-save), whatever the player's own settings file says.
+	main.settings_path = path + "/settings.cfg"
+	main.Settings.load_state(main)
+	main.refresh_key_labels()
 	_step("main scene added")
 	main.session.encounters_enabled = false
 	main.name_input.text = "青禾"

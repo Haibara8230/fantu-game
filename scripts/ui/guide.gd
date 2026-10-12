@@ -5,6 +5,7 @@ extends RefCounted
 ## the player's own guide file, not in saves, so a new journey does not repeat them.
 const TIPS_PATH := "res://data/guide.json"
 const DEFAULT_PATH := "user://guide.cfg"
+const Settings = preload("res://scripts/ui/settings.gd")
 # The tips whose situation applies() knows; every tip in the data must be one of them.
 const TIP_IDS := ["retreat", "people", "map", "battle", "event", "gather", "trade", "commissions", "fatigue", "bottleneck", "arts"]
 static var _tips: Array = []
@@ -67,7 +68,8 @@ static func render(ui, where: String) -> void:
 	words.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	row.add_child(words)
 	words.add_child(ui.label("指引 · " + str(tip.title), 16, ui.GOLD))
-	words.add_child(ui.paragraph(str(tip.text), ui.INK))
+	# Tips that name keys say {save}, {load}, {skills} or {guard}, filled in with the current bindings.
+	words.add_child(ui.paragraph(str(tip.text).format(Settings.key_hints(ui)), ui.INK))
 	var tip_id: String = tip.id
 	var done: Button = ui.button("知道了", func() -> void: ui.dismiss_tip(tip_id), "不再显示这条指引")
 	done.size_flags_vertical = Control.SIZE_SHRINK_CENTER
@@ -80,7 +82,8 @@ static func load_state(ui) -> void:
 	ui.guide_enabled = true
 	if config.load(ui.guide_path) != OK:
 		return
-	ui.guide_enabled = config.get_value("guide", "enabled", true) == true
+	var enabled: Variant = config.get_value("guide", "enabled", true)
+	ui.guide_enabled = not (enabled is bool and not enabled)
 	var seen: Variant = config.get_value("guide", "seen", [])
 	if seen is Array:
 		for tip_id: Variant in seen:

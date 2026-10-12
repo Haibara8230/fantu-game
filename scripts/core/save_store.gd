@@ -33,6 +33,14 @@ func _candidates() -> Array[Dictionary]:
 func has_save() -> bool:
 	return not _candidates().is_empty()
 
+## When the newest valid save was written (seconds since the epoch), or -1 without one.
+func saved_at() -> int:
+	var candidates := _candidates()
+	if candidates.is_empty():
+		return -1
+	# save_game writes generation n to slot n % 2.
+	return int(FileAccess.get_modified_time(directory.path_join("journey_%d.json" % (int(candidates[0].generation) % 2))))
+
 func save_game(session) -> bool:
 	last_error = ""
 	if session.player.is_empty():

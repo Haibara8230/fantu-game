@@ -18,6 +18,7 @@ const BattleView = preload("res://scripts/ui/battle_view.gd")
 const EventView = preload("res://scripts/ui/event_view.gd")
 const WelcomeScreen = preload("res://scripts/ui/welcome_screen.gd")
 const Guide = preload("res://scripts/ui/guide.gd")
+const Settings = preload("res://scripts/ui/settings.gd")
 const GOLD := Color("#d5b777")
 const INK := Color("#e3e8dc")
 const MUTED := Color("#97aaa4")
@@ -45,11 +46,14 @@ var map_target := ""
 var world_map
 var audio
 var settings_dialog: AcceptDialog
+# The settings dialog's controls, by name (settings.gd).
+var settings_controls := {}
 var view_buttons: Dictionary = {}
 var journey_button: Button
 var journal_text: RichTextLabel
 var status_label: Label
 var clock_label: Label
+var save_button: Button
 var load_button: Button
 var welcome_layer: ColorRect
 var name_input: LineEdit
@@ -71,13 +75,26 @@ var guide_path := Guide.DEFAULT_PATH
 var guide_enabled := true
 var guide_seen := {}
 var guide_toggle: CheckBox
+# Preferences kept in the player's settings file (settings.gd); tests point settings_path elsewhere.
+var settings_path := Settings.DEFAULT_PATH
+var fullscreen := false
+var window_size := Settings.DEFAULT_SIZE
+var text_speed := Settings.DEFAULT_TEXT_SPEED
+var autosave_enabled := true
+var keys: Dictionary = Settings.DEFAULT_KEYS.duplicate()
+# The action waiting for a new key in the settings dialog ("" when none).
+var binding_action := ""
+# Texts that have typed themselves out in the current scene, by key.
+var _typed := {}
 
 func _ready() -> void:
 	get_window().min_size = Vector2i(1000, 640)
 	_build_theme()
 	audio = AudioDirector.new()
 	add_child(audio)
+	Settings.load_state(self)
 	_build_layout()
+	Settings.apply_window(self, true)
 	Guide.load_state(self)
 	if not session.content.error_message.is_empty():
 		notice(session.content.error_message)
@@ -187,6 +204,18 @@ func picture(path: String, height: float) -> TextureRect:
 	image.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
 	return image
 
+## Lets story text type itself out at the chosen text speed, once per `key` in a scene, starting after
+## `delay` seconds; returns when it will have finished.
+func type_out(node: Label, key: String, delay: float = 0.0) -> float:
+	var speed := Settings.characters_per_second(self)
+	if speed <= 0 or _typed.has(key):
+		return delay
+	_typed[key] = true
+	var seconds := node.text.length() / float(speed)
+	node.visible_ratio = 0.0
+	create_tween().bind_node(node).tween_property(node, "visible_ratio", 1.0, seconds).set_delay(delay)
+	return delay + seconds
+
 ## How long an action takes, as text.
 func duration(action: String) -> String:
 	return Calendar.duration_text(session.content.action_days(action))
@@ -222,8 +251,9 @@ func _build_layout() -> void:
 	header.add_child(view_buttons.bag)
 	view_buttons.arts = button("功法", func() -> void: set_view("arts"))
 	header.add_child(view_buttons.arts)
-	header.add_child(button("保存 F5", _save_manual))
-	load_button = button("读取 F9", _load_manual)
+	save_button = button("", _save_manual)
+	header.add_child(save_button)
+	load_button = button("", _load_manual)
 	header.add_child(load_button)
 	header.add_child(button("新旅程", _ask_new_game))
 	header.add_child(button("设置", _open_settings))
@@ -263,7 +293,7 @@ func _build_layout() -> void:
 	journal_text.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	journal_text.add_theme_font_size_override("normal_font_size", 15)
 	log_box.add_child(journal_text)
-	status_label = label("鼠标选择行动 · F5 保存 · F9 读取 · 斗法中按 1 / 2 / 3 施法，空格守御", 14, MUTED)
+	status_label = label("鼠标选择行动 · {save} 保存 · {load} 读取 · 斗法中按 {skills} 施法，{guard}守御".format(Settings.key_hints(self)), 14, MUTED)
 	status_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	page.add_child(status_label)
 	new_game_dialog = ConfirmationDialog.new()
@@ -273,7 +303,8 @@ func _build_layout() -> void:
 	new_game_dialog.cancel_button_text = "返回"
 	new_game_dialog.confirmed.connect(_show_welcome)
 	add_child(new_game_dialog)
-	_build_settings()
+	Settings.build(self)
+	refresh_key_labels()
 
 ## Rebuilds the sidebar and the centre panel from the session. An ending, a story moment, a pending
 ## event or a duel takes the centre panel over; otherwise the chosen view is shown. A new scene fades in.
@@ -293,6 +324,11 @@ func render() -> void:
 	view_buttons.bag.disabled = view == "bag"
 	view_buttons.arts.disabled = view == "arts"
 	clear(center)
+	var scene := "%s|%s|%s|%s|%s|%s" % [view, session.player.location, session.pending_event.get("id", ""), story.get("event", ""), session.battle.is_empty(), selected_npc]
+	var new_scene := scene != _scene_key
+	if new_scene:
+		_scene_key = scene
+		_typed = {}
 	Guide.render(self, _guide_place())
 	if not session.ended.is_empty():
 		EventView.render_ending(self)
@@ -312,9 +348,7 @@ func render() -> void:
 		PeopleView.render_list(self)
 	else:
 		PlaceView.render(self)
-	var scene := "%s|%s|%s|%s|%s|%s" % [view, session.player.location, session.pending_event.get("id", ""), story.get("event", ""), session.battle.is_empty(), selected_npc]
-	if scene != _scene_key:
-		_scene_key = scene
+	if new_scene:
 		center.modulate.a = 0.0
 		create_tween().tween_property(center, "modulate:a", 1.0, 0.25)
 	_update_audio()
@@ -412,41 +446,15 @@ func _update_audio() -> void:
 		audio.play_music(session.player.location)
 	audio.play_ambience(session.player.location)
 
-func _build_settings() -> void:
-	settings_dialog = AcceptDialog.new()
-	settings_dialog.title = "设置"
-	settings_dialog.ok_button_text = "完成"
-	var rows := VBoxContainer.new()
-	rows.add_theme_constant_override("separation", 10)
-	settings_dialog.add_child(rows)
-	for entry: Array in [["Master", "总音量"], ["Music", "配乐"], ["SFX", "音效"], ["Ambience", "环境声"]]:
-		var bus_name: String = entry[0]
-		var row := HBoxContainer.new()
-		row.add_child(label(entry[1], 16))
-		var slider := HSlider.new()
-		slider.name = bus_name
-		slider.min_value = 0.0
-		slider.max_value = 1.0
-		slider.step = 0.05
-		slider.custom_minimum_size.x = 260
-		slider.value_changed.connect(func(value: float) -> void: audio.set_volume(bus_name, value))
-		row.add_child(slider)
-		rows.add_child(row)
-	var guide_row := HBoxContainer.new()
-	guide_row.add_theme_constant_override("separation", 12)
-	guide_toggle = CheckBox.new()
-	guide_toggle.text = "显示新手指引"
-	guide_toggle.toggled.connect(set_guide_enabled)
-	guide_row.add_child(guide_toggle)
-	guide_row.add_child(button("重新显示全部指引", reset_guide))
-	rows.add_child(guide_row)
-	add_child(settings_dialog)
-
 func _open_settings() -> void:
-	for slider: HSlider in settings_dialog.find_children("*", "HSlider", true, false):
-		slider.set_value_no_signal(float(audio.volumes.get(slider.name, 0.0)))
-	guide_toggle.set_pressed_no_signal(guide_enabled)
-	settings_dialog.popup_centered(Vector2i(460, 300))
+	Settings.open(self)
+
+## Puts the bound keys into the labels that name them.
+func refresh_key_labels() -> void:
+	save_button.text = "保存 " + Settings.key_name(self, "save")
+	load_button.text = "读取 " + Settings.key_name(self, "load")
+	if started and not presenting:
+		render()
 
 # --- Actions -----------------------------------------------------------------------------------------
 
@@ -515,12 +523,12 @@ func _stage_story(mark: int) -> void:
 		if entry.id == "event" and args.get("part", "") == "chronicle" and not staged:
 			var definition: Dictionary = session.content.events.get(str(args.event), {})
 			if not ArtLibrary.event_art(str(args.event)).is_empty() and not definition.has("choices"):
-				story = {"event": str(args.event), "title": str(definition.get("title", "")), "text": session.chronicle.format(entry, session.content)}
+				story = {"event": str(args.event), "title": str(definition.get("title", "")), "text": session.chronicle.format(entry, session.content), "mark": mark}
 				staged = true
 		elif entry.id in ["talk", "gift", "npc"] and not selected_npc.is_empty() and str(args.get("npc", "")) == selected_npc:
 			lines.append(session.chronicle.format(entry, session.content))
 	if not lines.is_empty():
-		dialogue = {"npc": selected_npc, "lines": lines}
+		dialogue = {"npc": selected_npc, "lines": lines, "mark": mark}
 	if staged or not lines.is_empty():
 		render()
 
@@ -549,8 +557,10 @@ func notice(message: String) -> void:
 func _on_changed() -> void:
 	if not presenting:
 		render()
-	if started:
+	if started and autosave_enabled:
 		autosave_error = "" if auto_store.save_game(session) else auto_store.last_error
+	else:
+		autosave_error = ""
 
 # --- Saving, loading and new journeys ------------------------------------------------------------
 
@@ -559,7 +569,7 @@ func _save_manual() -> void:
 		return
 	if manual_store.save_game(session):
 		load_button.disabled = false
-		notice("手动存档已保存。可以按 F9 回到这个时刻。")
+		notice("手动存档已保存。可以按 %s 回到这个时刻。" % Settings.key_name(self, "load"))
 	else:
 		notice(manual_store.last_error)
 
@@ -576,6 +586,7 @@ func _load_manual() -> void:
 func _ask_new_game() -> void:
 	if presenting:
 		return
+	new_game_dialog.dialog_text = "新旅程会替换自动存档。手动存档将保留，直到你再次手动保存。" if autosave_enabled else "自动存档已关闭：新旅程只在你手动保存后才会留下存档，手动存档在此之前保留。"
 	new_game_dialog.popup_centered(Vector2i(520, 180))
 
 func _show_welcome() -> void:
@@ -604,7 +615,11 @@ func continue_saved() -> void:
 	started = false
 	story = {}
 	dialogue = {}
-	if auto_store.load_game(session) or manual_store.load_game(session):
+	# The newer of the two saves: with auto-save switched off, the manual save can be the later one.
+	var stores: Array = [auto_store, manual_store]
+	if manual_store.saved_at() > auto_store.saved_at():
+		stores.reverse()
+	if stores[0].load_game(session) or stores[1].load_game(session):
 		started = true
 		close_welcome()
 		render()
@@ -615,19 +630,21 @@ func continue_saved() -> void:
 func _unhandled_key_input(event: InputEvent) -> void:
 	if not event is InputEventKey or not event.pressed or event.echo:
 		return
-	if presenting or is_instance_valid(welcome_layer) or new_game_dialog.visible:
+	if presenting or is_instance_valid(welcome_layer) or new_game_dialog.visible or settings_dialog.visible:
 		return
-	match event.keycode:
-		KEY_F5:
+	var action := Settings.action_for_key(self, event.keycode)
+	match action:
+		"save":
 			_save_manual()
-		KEY_F9:
+		"load":
 			_load_manual()
-		KEY_1, KEY_2, KEY_3, KEY_4:
+		"skill_1", "skill_2", "skill_3", "skill_4":
 			if not session.battle.is_empty():
 				var ids := session.active_skills()
-				if event.keycode - KEY_1 < ids.size():
-					skill(ids[event.keycode - KEY_1])
-		KEY_SPACE:
+				var index := int(action.right(1)) - 1
+				if index < ids.size():
+					skill(ids[index])
+		"guard":
 			if not session.battle.is_empty():
 				battle_action("guard")
 		_:
@@ -645,4 +662,4 @@ func reset_preview(sect_id: String = "qingyun", opponent_id: String = "qingyun")
 	session.choose_sect(sect_id)
 	session.player.hp = maxi(1, int(session.player.max_hp) - 20)
 	session.start_battle("disciple", opponent_id)
-	notice("门派试演 · 1 / 2 / 3 施法，空格护体；切换传承会重置试演，正常旅程不受影响。")
+	notice("门派试演 · {skills} 施法，{guard}护体；切换传承会重置试演，正常旅程不受影响。".format(Settings.key_hints(self)))

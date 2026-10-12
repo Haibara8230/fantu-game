@@ -80,8 +80,10 @@ func load_settings() -> void:
 	for bus_name: String in volumes:
 		_apply(bus_name)
 
+## Writes the "audio" section, keeping the other settings in the file (settings.gd).
 func save_settings() -> void:
 	var config := ConfigFile.new()
+	config.load(settings_path)
 	for bus_name: String in volumes:
 		config.set_value("audio", bus_name, volumes[bus_name])
 	config.save(settings_path)

@@ -49,6 +49,9 @@ func _run() -> void:
 	main.audio.settings_path = test_path + "/settings.cfg"
 	main.guide_path = test_path + "/guide.cfg"
 	main.Guide.load_state(main)
+	main.settings_path = test_path + "/settings.cfg"
+	main.Settings.load_state(main)
+	main.refresh_key_labels()
 	await _capture("welcome")
 	main.name_input.text = "青禾"
 	# Sensed roots are random; an ordinary three-element root keeps the cultivation numbers below fixed.
@@ -112,7 +115,7 @@ func _run() -> void:
 	check(main.audio.music_key == "wild" and main.audio.ambience_key == "wild", "music and ambience follow the location")
 	main.set_guide_enabled(true)
 	main.run(func() -> String: return main.session.start_battle("wolf"))
-	check(_texts(main.center, "Label").contains("指引 · 斗法"), "the first duel explains the controls")
+	check(_texts(main.center, "Label").contains("指引 · 斗法") and _texts(main.center, "Label").contains("按 1 / 2 / 3 / 4 或点按钮") and _button("[1] ") != null, "the first duel explains the controls with the bound keys")
 	main.set_guide_enabled(false)
 	await main.skill("fire")
 	await _capture("battle")
@@ -196,6 +199,15 @@ func _run() -> void:
 		main.session.advance_days(rampage_day - int(main.session.world.day))
 		return "")
 	check(main.story.get("event", "") == "serpent_rampage" and _has_art("serpent_rampage") and _texts(main.center, "Label").contains("妖蟒之乱"), "the serpent breaking out is staged with its illustration")
+	var typing := func() -> bool: return main.center.find_children("*", "Label", true, false).any(func(text: Label) -> bool: return text.visible_ratio < 1.0)
+	check(typing.call(), "the story text types itself out")
+	main.render()
+	check(not typing.call(), "and is not typed again when the same scene is redrawn")
+	main.Settings.set_text_speed(main, "instant")
+	main._typed = {}
+	main.render()
+	check(not typing.call(), "instant text speed shows it at once")
+	main.Settings.set_text_speed(main, "fast")
 	_button("继续").pressed.emit()
 	check(main.story.is_empty() and _texts(main.center, "Label").contains("青石镇"), "继续 returns to the place")
 	# Audio settings persist outside the save files.
@@ -204,6 +216,62 @@ func _run() -> void:
 	music_slider.value = 0.3
 	main.settings_dialog.hide()
 	check(is_equal_approx(float(main.audio.volumes.Music), 0.3) and FileAccess.file_exists(test_path + "/settings.cfg"), "volume change applied and saved")
+	var tabs: TabContainer = main.settings_dialog.find_children("*", "TabContainer", true, false)[0]
+	check(tabs.get_tab_count() == 4 and tabs.get_tab_title(2) == "按键" and main.settings_controls.speeds.selected == 1, "the settings dialog has sound, screen, key and game pages")
+	# The other preferences share the settings file with the volumes.
+	main.Settings.set_text_speed(main, "slow")
+	main.audio.set_volume("SFX", 0.5)
+	var config := ConfigFile.new()
+	config.load(test_path + "/settings.cfg")
+	check(is_equal_approx(float(config.get_value("audio", "Music", 0.0)), 0.3) and config.get_value("text", "speed", "") == "slow", "volumes and the other settings keep each other in the settings file")
+	main.Settings.begin_binding(main, "save")
+	var key := InputEventKey.new()
+	key.keycode = KEY_F6
+	key.pressed = true
+	main.settings_dialog.window_input.emit(key)
+	check(main.keys.save == KEY_F6 and main.binding_action.is_empty() and main.save_button.text == "保存 F6", "a key is rebound by pressing it in the dialog")
+	main.Settings.bind_key(main, "guard", KEY_1)
+	check(main.keys.guard == KEY_1 and main.keys.skill_1 == KEY_SPACE, "taking another action's key swaps the two")
+	check(not main.Settings.bind_key(main, "load", KEY_ESCAPE), "the dialog's own keys cannot be bound")
+	main.Settings.begin_binding(main, "load")
+	var escape := InputEventKey.new()
+	escape.keycode = KEY_ESCAPE
+	escape.pressed = true
+	main.settings_dialog.window_input.emit(escape)
+	check(main.keys.load == KEY_F9 and main.binding_action.is_empty(), "Esc cancels a binding")
+	main.Settings.load_state(main)
+	check(main.keys.save == KEY_F6 and main.keys.guard == KEY_1 and main.text_speed == "slow", "settings are read back from the file")
+	var press := InputEventKey.new()
+	press.keycode = KEY_F6
+	press.pressed = true
+	main._unhandled_key_input(press)
+	check(main.status_label.text.begins_with("手动存档已保存"), "the rebound key saves")
+	main.Settings.reset_keys(main)
+	check(main.keys == main.Settings.DEFAULT_KEYS and main.save_button.text == "保存 F5", "default keys restored")
+	config.load(test_path + "/settings.cfg")
+	config.set_value("controls", "keys", {"save": KEY_F2, "load": KEY_F2})
+	config.set_value("display", "fullscreen", 1)
+	config.set_value("saves", "autosave", "no")
+	config.save(test_path + "/settings.cfg")
+	main.Settings.load_state(main)
+	check(main.keys == main.Settings.DEFAULT_KEYS and not main.fullscreen and main.autosave_enabled, "malformed settings fall back to the defaults")
+	# With auto-save off only manual saves are written, and 继续旅程 reads the newer save.
+	main.Settings.set_autosave(main, false)
+	var generation: int = main.auto_store.generation
+	_button("停留  ·  1 日").pressed.emit()
+	check(main.auto_store.generation == generation and main.autosave_error.is_empty(), "with auto-save off, actions leave the auto save alone")
+	main._ask_new_game()
+	check(main.new_game_dialog.dialog_text.contains("自动存档已关闭"), "a new journey warns that nothing is saved automatically")
+	main.new_game_dialog.hide()
+	# Saves are told apart by their file times, which count whole seconds.
+	await create_timer(1.1).timeout
+	main._save_manual()
+	var saved_day: int = int(main.session.world.day)
+	main._show_welcome()
+	main.continue_saved()
+	check(main.started and int(main.session.world.day) == saved_day and main.manual_store.saved_at() > main.auto_store.saved_at(), "continue reads the newer manual save")
+	main.Settings.set_autosave(main, true)
+	main.Settings.set_text_speed(main, "fast")
 	# The end of a life.
 	main.run(func() -> String: return main.session.travel("sect"))
 	main.session.player.birth_day = int(main.session.world.day) + 30 - 120 * 360

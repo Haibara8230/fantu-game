@@ -42,9 +42,10 @@ Godot 4 / GDScript / Windows 单机。同一个修仙世界持续运转，玩家
 
 ## 存档与操作
 
-- 游戏开始后，每次有效行动自动保存，标题界面的“继续旅程”读取自动存档。
+- 游戏开始后，每次有效行动自动保存；标题界面的“继续旅程”读取自动存档与手动存档中较新的一份。自动存档可在「设置 · 游戏」里关闭，关闭后只在手动保存时存档。
 - F5 / “保存”：手动存档。F9 / “读取”：读取手动存档，不会被普通自动存档覆盖。
-- 斗法中 1 / 2 / 3 施展神通，空格守御；全部操作也有鼠标按钮。
+- 斗法中 1 / 2 / 3 / 4 施展神通，空格守御；全部操作也有鼠标按钮。以上是默认按键，可在「设置 · 按键」里改。
+- 「设置」还可以调音量、全屏或窗口大小、剧情文字的逐字速度。这些设置存在 `user://settings.cfg`，不进存档。
 - 存档在 Godot 的 `user://saves`（Windows 通常位于 `%APPDATA%/Godot/app_userdata/凡途 · 修仙纪事/saves`）。
 - 自动与手动分别保留两代；最新一代损坏时尝试读取前一代。战斗状态和随机数状态都包含在存档中。
 - 格式含版本号，目前版本 11。旧版本存档读取时先逐版本迁移（`scripts/core/save_migration.gd`），再校验；`tests/fixtures/` 保存各旧版本的真实样例。
@@ -78,6 +79,7 @@ Godot 4 / GDScript / Windows 单机。同一个修仙世界持续运转，玩家
 - `scripts/ui/map_view.gd`、`bag_view.gd`、`arts_view.gd`、`battle_view.gd`、`event_view.gd`：舆图、行囊、功法、斗法、事件与结局视图。
 - `scripts/ui/welcome_screen.gd`：标题界面（道号、灵根、开始或继续旅程）。
 - `scripts/ui/guide.gd`、`data/guide.json`：新手指引（何时出现与提示文字）。
+- `scripts/ui/settings.gd`：设置对话框与其保存的偏好（窗口、文字速度、按键、自动存档）。
 - `scripts/ui/landscape.gd`：地点与场景横幅；有正式美术时显示美术，否则显示按地貌绘制的占位山水。
 - `scripts/ui/world_map.gd`：区域舆图；`scripts/ui/art_library.gd`：美术路径约定。
 - `scripts/presentation/audio_director.gd`、`data/audio.json`：配乐、环境声与音效。

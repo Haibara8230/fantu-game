@@ -3,6 +3,7 @@ extends RefCounted
 ## its major milestones.
 const Calendar = preload("res://scripts/core/calendar.gd")
 const ArtLibrary = preload("res://scripts/ui/art_library.gd")
+const Settings = preload("res://scripts/ui/settings.gd")
 
 static func render_event(ui) -> void:
 	var session = ui.session
@@ -16,7 +17,9 @@ static func render_event(ui) -> void:
 	center.add_child(title_row)
 	title_row.add_child(ui.label(definition.title, 30, ui.GOLD))
 	title_row.add_child(ui.label(session.content.locations[session.player.location].name, 16, ui.MUTED))
-	center.add_child(ui.paragraph(definition.text, ui.INK))
+	var text: Label = ui.paragraph(definition.text, ui.INK)
+	center.add_child(text)
+	ui.type_out(text, "event|%d" % session.pending_event.hash())
 	var choices := VBoxContainer.new()
 	choices.add_theme_constant_override("separation", 10)
 	center.add_child(choices)
@@ -34,7 +37,9 @@ static func render_story(ui) -> void:
 	if art != null:
 		center.add_child(art)
 	center.add_child(ui.label(str(story.title), 30, ui.GOLD))
-	center.add_child(ui.paragraph(str(story.text), ui.INK))
+	var text: Label = ui.paragraph(str(story.text), ui.INK)
+	center.add_child(text)
+	ui.type_out(text, "story|%d" % int(story.get("mark", 0)))
 	center.add_child(ui.button("继续", ui.close_story))
 
 static func render_ending(ui) -> void:
@@ -46,4 +51,4 @@ static func render_ending(ui) -> void:
 	for entry: Dictionary in session.chronicle.entries:
 		if entry.major:
 			center.add_child(ui.paragraph("【%s】%s" % [Calendar.short_text(int(entry.day)), session.chronicle.format(entry, session.content)]))
-	center.add_child(ui.paragraph("可按 F9 读取手动存档，或开启新旅程。", ui.GOLD))
+	center.add_child(ui.paragraph("可按 %s 读取手动存档，或开启新旅程。" % Settings.key_name(ui, "load"), ui.GOLD))

@@ -2,6 +2,7 @@ extends RefCounted
 ## Duel view: the stage, the active arts with their costs and cooldowns, guard and retreat.
 const BattleStage = preload("res://scripts/presentation/battle_stage.gd")
 const PlaceView = preload("res://scripts/ui/place_view.gd")
+const Settings = preload("res://scripts/ui/settings.gd")
 
 static func render(ui) -> void:
 	var session = ui.session
@@ -31,12 +32,12 @@ static func render(ui) -> void:
 		var skill: Dictionary = session.content.technique(skill_id)
 		var remaining := int(b.cooldowns.get(skill_id, 0))
 		var suffix := "\n冷却 %d" % remaining if remaining > 0 else "\n%d 灵力" % int(skill.qi_cost)
-		var cast: Button = ui.button("[%d] %s%s" % [index, skill.name, suffix], func() -> void: ui.skill(skill_id), "%s · %s\n%s%s" % [skill.tier_name, session.content.technique_data.elements[skill.element].name, skill.description, _realm_bonus_text(session)])
+		var cast: Button = ui.button("[%s] %s%s" % [Settings.key_name(ui, "skill_%d" % index), skill.name, suffix], func() -> void: ui.skill(skill_id), "%s · %s\n%s%s" % [skill.tier_name, session.content.technique_data.elements[skill.element].name, skill.description, _realm_bonus_text(session)])
 		cast.disabled = remaining > 0 or int(session.player.qi) < int(skill.qi_cost)
 		cast.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		grid.add_child(cast)
 		index += 1
-	grid.add_child(ui.button("守御\n空格", func() -> void: ui.battle_action("guard"), "恢复 6 灵力，受到伤害减半"))
+	grid.add_child(ui.button("守御\n" + Settings.key_name(ui, "guard"), func() -> void: ui.battle_action("guard"), "恢复 6 灵力，受到伤害减半"))
 	grid.add_child(ui.button("撤离\n耗时 " + ui.duration("flee"), func() -> void: ui.battle_action("flee"), "保留资源，耗时 " + ui.duration("flee")))
 	center.add_child(ui.paragraph("落败可休整后继续 · 最多损失 10 灵石", ui.MUTED))
 

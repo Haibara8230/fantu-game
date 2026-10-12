@@ -162,8 +162,11 @@ static func _dialogue_box(ui, person_id: String, person: Dictionary) -> Control:
 	row.add_child(words)
 	words.add_child(ui.label(person.name, 17, ui.GOLD))
 	var speaker: String = person.name + "："
-	for line: String in ui.dialogue.lines:
-		words.add_child(ui.paragraph(line.trim_prefix(speaker), ui.INK))
+	var delay := 0.0
+	for index: int in range(ui.dialogue.lines.size()):
+		var line: Label = ui.paragraph(str(ui.dialogue.lines[index]).trim_prefix(speaker), ui.INK)
+		words.add_child(line)
+		delay = ui.type_out(line, "dialogue|%d|%d" % [int(ui.dialogue.get("mark", 0)), index], delay)
 	return box
 
 static func _portrait(ui, person_id: String, person: Dictionary, size: Vector2 = Vector2(120, 150)) -> Control:
