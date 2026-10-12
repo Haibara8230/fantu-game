@@ -1,14 +1,21 @@
 extends Control
-## The desktop interface: layout, view switching, input, saving and loading, and battle presentation.
-## Each view is built by its own script from this node's state, using the widget helpers and handlers
-## here: sidebar.gd, place_view.gd, people_view.gd, map_view.gd, bag_view.gd, arts_view.gd,
-## battle_view.gd, event_view.gd, chronicle_view.gd and welcome_screen.gd.
+## The desktop interface, built as screens after Mi Chang Sheng: the world (a place or the map) with
+## the HUD's few always-visible things, full screens that take everything over (an event, a story
+## moment, a duel, the end of a life), the character panel and the 任务 scroll. This node picks the
+## screen, arranges the window for it, switches views and handles input, saving and loading and the
+## duel's presentation. Each view is built by its own script from this node's state, using the widget
+## helpers and handlers here: hud.gd, place_view.gd, people_view.gd, map_view.gd, bag_view.gd,
+## arts_view.gd, status_view.gd, tasks_view.gd, system_view.gd, battle_view.gd, event_view.gd,
+## chronicle_view.gd and welcome_screen.gd.
 const Session = preload("res://scripts/core/session.gd")
 const SaveStore = preload("res://scripts/core/save_store.gd")
 const Calendar = preload("res://scripts/core/calendar.gd")
 const AudioDirector = preload("res://scripts/presentation/audio_director.gd")
 const ArtLibrary = preload("res://scripts/ui/art_library.gd")
-const Sidebar = preload("res://scripts/ui/sidebar.gd")
+const Hud = preload("res://scripts/ui/hud.gd")
+const StatusView = preload("res://scripts/ui/status_view.gd")
+const TasksView = preload("res://scripts/ui/tasks_view.gd")
+const SystemView = preload("res://scripts/ui/system_view.gd")
 const PlaceView = preload("res://scripts/ui/place_view.gd")
 const PeopleView = preload("res://scripts/ui/people_view.gd")
 const MapView = preload("res://scripts/ui/map_view.gd")
@@ -23,14 +30,34 @@ const Settings = preload("res://scripts/ui/settings.gd")
 const GOLD := Color("#d5b777")
 const INK := Color("#e3e8dc")
 const MUTED := Color("#97aaa4")
+# The tabs of the character panel and of the 任务 scroll: the view each shows, and its name.
+const PANEL_TABS := [["status", "属性"], ["arts", "功法"], ["bag", "行囊"], ["people", "相识"], ["chronicle", "编年史"], ["system", "系统"]]
+const SCROLL_TABS := [["goals", "当前目标"], ["quests", "委托"], ["upcoming", "约定"]]
 var session = Session.new()
 var manual_store = SaveStore.new("user://saves/manual")
 var auto_store = SaveStore.new("user://saves/auto")
 var started := false
 var autosave_error := ""
-var stats: VBoxContainer
+# The content of the current screen; every view builds into it.
 var center: VBoxContainer
 var view := "place"
+# The world view ("place" or "map") that closing a panel returns to.
+var world_view := "place"
+# The screen's parts: the backdrop picture and its shade, the window holding `center` with the tab row
+# above it (for the panel and the scroll).
+var backdrop: TextureRect
+var shade: ColorRect
+var window: PanelContainer
+var tab_row: HBoxContainer
+# The HUD (hud.gd).
+var hud_left: PanelContainer
+var hud_right: PanelContainer
+var hud_status: VBoxContainer
+var hud_icons: Dictionary = {}
+var place_label: Label
+var goal_label: Label
+var journey_box: HBoxContainer
+var notice_tween: Tween
 var selected_spot := ""
 # The person whose profile is open in the centre panel ("" when none).
 var selected_npc := ""
@@ -52,7 +79,6 @@ var audio
 var settings_dialog: AcceptDialog
 # The settings dialog's controls, by name (settings.gd).
 var settings_controls := {}
-var view_buttons: Dictionary = {}
 var journey_button: Button
 var journal_text: RichTextLabel
 var status_label: Label
@@ -85,7 +111,7 @@ var fullscreen := false
 var window_size := Settings.DEFAULT_SIZE
 var text_speed := Settings.DEFAULT_TEXT_SPEED
 var autosave_enabled := true
-# Whether the sidebar shows the current goals (goals.gd).
+# Whether the HUD shows the first current goal (goals.gd).
 var goals_enabled := true
 var keys: Dictionary = Settings.DEFAULT_KEYS.duplicate()
 # The action waiting for a new key in the settings dialog ("" when none).
@@ -229,86 +255,35 @@ func duration(action: String) -> String:
 # --- Layout and rendering ----------------------------------------------------------------------
 
 func _build_layout() -> void:
-	var margin := MarginContainer.new()
-	margin.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	margin.add_theme_constant_override("margin_left", 24)
-	margin.add_theme_constant_override("margin_right", 24)
-	margin.add_theme_constant_override("margin_top", 20)
-	margin.add_theme_constant_override("margin_bottom", 16)
-	add_child(margin)
-	var page := VBoxContainer.new()
-	page.add_theme_constant_override("separation", 14)
-	margin.add_child(page)
-	var header := HBoxContainer.new()
-	header.add_theme_constant_override("separation", 12)
-	page.add_child(header)
-	header.add_child(label("凡 途", 32, GOLD))
-	header.add_child(label("修仙纪事", 16, MUTED))
-	var spacer := Control.new()
-	spacer.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	header.add_child(spacer)
-	clock_label = label("", 16, GOLD)
-	header.add_child(clock_label)
-	view_buttons.place = button("此地", func() -> void: set_view("place"))
-	header.add_child(view_buttons.place)
-	view_buttons.map = button("舆图", func() -> void: set_view("map"))
-	header.add_child(view_buttons.map)
-	view_buttons.bag = button("行囊", func() -> void: set_view("bag"))
-	header.add_child(view_buttons.bag)
-	view_buttons.arts = button("功法", func() -> void: set_view("arts"))
-	header.add_child(view_buttons.arts)
-	save_button = button("", _save_manual)
-	header.add_child(save_button)
-	load_button = button("", _load_manual)
-	header.add_child(load_button)
-	header.add_child(button("新旅程", _ask_new_game))
-	header.add_child(button("设置", _open_settings))
-	var body := HBoxContainer.new()
-	body.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	body.add_theme_constant_override("separation", 16)
-	page.add_child(body)
-	var sidebar := panel()
-	sidebar.custom_minimum_size.x = 258
-	body.add_child(sidebar)
-	stats = VBoxContainer.new()
-	stats.add_theme_constant_override("separation", 8)
-	var sidebar_scroll := ScrollContainer.new()
-	sidebar_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
-	sidebar.add_child(sidebar_scroll)
-	stats.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	sidebar_scroll.add_child(stats)
-	var main_panel := panel()
-	main_panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	body.add_child(main_panel)
+	backdrop = TextureRect.new()
+	backdrop.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	backdrop.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	backdrop.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
+	backdrop.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(backdrop)
+	shade = ColorRect.new()
+	shade.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	shade.color = Color(0.02, 0.05, 0.06, 0.4)
+	shade.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(shade)
+	window = PanelContainer.new()
+	window.add_theme_stylebox_override("panel", style(Color(0.06, 0.12, 0.14, 0.93), Color("#41615e"), 18))
+	add_child(window)
+	var body := VBoxContainer.new()
+	body.add_theme_constant_override("separation", 12)
+	window.add_child(body)
+	tab_row = HBoxContainer.new()
+	tab_row.add_theme_constant_override("separation", 8)
+	body.add_child(tab_row)
 	var scroll := ScrollContainer.new()
 	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
-	main_panel.add_child(scroll)
+	scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	body.add_child(scroll)
 	center = VBoxContainer.new()
 	center.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	center.add_theme_constant_override("separation", 10)
 	scroll.add_child(center)
-	var log_panel := panel()
-	log_panel.custom_minimum_size.y = 140
-	page.add_child(log_panel)
-	var log_box := VBoxContainer.new()
-	log_panel.add_child(log_box)
-	var log_title := HBoxContainer.new()
-	log_title.add_theme_constant_override("separation", 12)
-	log_box.add_child(log_title)
-	log_title.add_child(label("修 行 手 记", 16, GOLD))
-	var full_record: Button = button("编年史", func() -> void: set_view("chronicle"), "按类别翻阅一生的记载")
-	full_record.custom_minimum_size.y = 26
-	full_record.add_theme_font_size_override("font_size", 14)
-	log_title.add_child(full_record)
-	journal_text = RichTextLabel.new()
-	journal_text.bbcode_enabled = false
-	journal_text.scroll_following = true
-	journal_text.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	journal_text.add_theme_font_size_override("normal_font_size", 15)
-	log_box.add_child(journal_text)
-	status_label = label("鼠标选择行动 · {save} 保存 · {load} 读取 · 斗法中按 {skills} 施法，{guard}守御".format(Settings.key_hints(self)), 14, MUTED)
-	status_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	page.add_child(status_label)
+	Hud.build(self)
 	new_game_dialog = ConfirmationDialog.new()
 	new_game_dialog.title = "开启新旅程"
 	new_game_dialog.dialog_text = "新旅程会替换自动存档。手动存档将保留，直到你再次手动保存。"
@@ -317,25 +292,86 @@ func _build_layout() -> void:
 	new_game_dialog.confirmed.connect(_show_welcome)
 	add_child(new_game_dialog)
 	Settings.build(self)
-	refresh_key_labels()
+	notice("鼠标选择行动 · {save} 保存 · {load} 读取 · 斗法中按 {skills} 施法，{guard}守御".format(Settings.key_hints(self)))
 
-## Rebuilds the sidebar and the centre panel from the session. An ending, a story moment, a pending
-## event or a duel takes the centre panel over; otherwise the chosen view is shown. A new scene fades in.
+## Which screen the state calls for: "full" while an ending, a story moment, an event or a duel holds
+## the player; "panel" or "scroll" for their tabs; otherwise the world, "place" or "map".
+func current_screen() -> String:
+	if not session.ended.is_empty() or not story.is_empty() or not session.pending_event.is_empty() or not session.battle.is_empty():
+		return "full"
+	var group := _tab_group(view)
+	if not group.is_empty():
+		return group
+	return "map" if view == "map" else "place"
+
+## "panel" or "scroll" for a view on one of their tabs, else "".
+func _tab_group(view_id: String) -> String:
+	for pair: Array in PANEL_TABS:
+		if pair[0] == view_id:
+			return "panel"
+	for pair: Array in SCROLL_TABS:
+		if pair[0] == view_id:
+			return "scroll"
+	return ""
+
+## Sets out the screen: the backdrop, the window's place, the HUD and the tab row.
+func _arrange(screen: String) -> void:
+	var world := screen in ["place", "map"]
+	Hud.set_shown(self, world)
+	match screen:
+		"place", "map":
+			# The world's picture fills the screen; the window keeps clear of the HUD's corners.
+			var path := ArtLibrary.map_path() if screen == "map" else ArtLibrary.location_path(str(session.player.location))
+			backdrop.texture = ArtLibrary.texture(path)
+			backdrop.visible = true
+			shade.color.a = 0.35
+			_place_window(0.34, 0.985, 124.0, -60.0)
+		"full":
+			backdrop.visible = false
+			shade.color.a = 0.0
+			_place_window(0.0, 1.0, 14.0, -60.0, 14.0)
+		_:
+			# The panel and the scroll lie over the world, which darkens behind them.
+			shade.color.a = 0.72
+			_place_window(0.0, 1.0, 22.0, -60.0, 40.0)
+	tab_row.visible = screen in ["panel", "scroll"]
+	clear(tab_row)
+	if tab_row.visible:
+		for pair: Array in (PANEL_TABS if screen == "panel" else SCROLL_TABS):
+			var view_id: String = pair[0]
+			var tab: Button = button(pair[1], func() -> void: set_view(view_id))
+			tab.disabled = view_id == view
+			tab_row.add_child(tab)
+		var spacer := Control.new()
+		spacer.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		tab_row.add_child(spacer)
+		tab_row.add_child(button("关闭 Esc", close_overlay, "回到" + ("舆图" if world_view == "map" else "此地")))
+
+func _place_window(left: float, right: float, top: float, bottom: float, side: float = 0.0) -> void:
+	window.anchor_left = left
+	window.anchor_right = right
+	window.anchor_top = 0.0
+	window.anchor_bottom = 1.0
+	window.offset_left = side
+	window.offset_right = -side
+	window.offset_top = top
+	window.offset_bottom = bottom
+
+## Rebuilds the screen from the session: the HUD, then the view the screen shows. An ending, a story
+## moment, a pending event or a duel takes the whole screen; otherwise the chosen view is shown. A new
+## scene fades in.
 func render() -> void:
 	if session.player.is_empty():
 		return
-	clock_label.text = session.time_name()
 	if session.player.location != shown_location:
 		shown_location = session.player.location
 		selected_npc = ""
 		dialogue = {}
 		show_everyone_here = false
-	Sidebar.render(self)
-	load_button.disabled = not manual_store.has_save()
-	view_buttons.place.disabled = view == "place"
-	view_buttons.map.disabled = view == "map" or not settled()
-	view_buttons.bag.disabled = view == "bag"
-	view_buttons.arts.disabled = view == "arts"
+	if view in ["place", "map"]:
+		world_view = view
+	_arrange(current_screen())
+	Hud.render(self)
 	clear(center)
 	var scene := "%s|%s|%s|%s|%s|%s" % [view, session.player.location, session.pending_event.get("id", ""), story.get("event", ""), session.battle.is_empty(), selected_npc]
 	var new_scene := scene != _scene_key
@@ -351,23 +387,34 @@ func render() -> void:
 		EventView.render_event(self)
 	elif not session.battle.is_empty():
 		BattleView.render(self)
-	elif view == "map":
-		MapView.render(self)
-	elif view == "bag":
-		BagView.render(self)
-	elif view == "arts":
-		ArtsView.render(self)
-	elif view == "people":
-		PeopleView.render_list(self)
-	elif view == "chronicle":
-		ChronicleView.render(self)
 	else:
-		PlaceView.render(self)
+		match view:
+			"map":
+				MapView.render(self)
+			"bag":
+				BagView.render(self)
+			"arts":
+				ArtsView.render(self)
+			"people":
+				PeopleView.render_list(self)
+			"chronicle":
+				ChronicleView.render(self)
+			"status":
+				StatusView.render(self)
+			"goals":
+				TasksView.render_goals(self)
+			"quests":
+				TasksView.render_quests(self)
+			"upcoming":
+				TasksView.render_upcoming(self)
+			"system":
+				SystemView.render(self)
+			_:
+				PlaceView.render(self)
 	if new_scene:
 		center.modulate.a = 0.0
 		create_tween().tween_property(center, "modulate:a", 1.0, 0.25)
 	_update_audio()
-	journal_text.text = "\n".join(session.journal_lines())
 
 ## Which part of the screen the centre panel shows, for the guide's tips ("" when no tip fits).
 func _guide_place() -> String:
@@ -421,6 +468,19 @@ func set_chronicle_page(page: int) -> void:
 	chronicle_page = clampi(page, 0, ChronicleView.page_count(self) - 1)
 	audio.cue("page")
 	render()
+
+## A HUD button: opens its view, or closes it when it is already open (the map goes back to the place).
+func toggle_view(view_id: String) -> void:
+	if view != view_id:
+		set_view(view_id)
+	elif view_id == "map":
+		set_view("place")
+	else:
+		close_overlay()
+
+## Closes the panel or the scroll, back to the place or the map it was opened from.
+func close_overlay() -> void:
+	set_view(world_view)
 
 func select_spot(spot_id: String) -> void:
 	selected_spot = spot_id
@@ -479,8 +539,10 @@ func _open_settings() -> void:
 
 ## Puts the bound keys into the labels that name them.
 func refresh_key_labels() -> void:
-	save_button.text = "保存 " + Settings.key_name(self, "save")
-	load_button.text = "读取 " + Settings.key_name(self, "load")
+	if is_instance_valid(save_button):
+		save_button.text = "保存 " + Settings.key_name(self, "save")
+	if is_instance_valid(load_button):
+		load_button.text = "读取 " + Settings.key_name(self, "load")
 	if started and not presenting:
 		render()
 
@@ -580,7 +642,7 @@ func _cue_changes(before: Dictionary) -> void:
 		audio.cue("choice")
 
 func notice(message: String) -> void:
-	status_label.text = message
+	Hud.notice(self, message)
 
 func _on_changed() -> void:
 	if not presenting:
@@ -596,7 +658,8 @@ func _save_manual() -> void:
 	if not started or presenting:
 		return
 	if manual_store.save_game(session):
-		load_button.disabled = false
+		if is_instance_valid(load_button):
+			load_button.disabled = false
 		notice("手动存档已保存。可以按 %s 回到这个时刻。" % Settings.key_name(self, "load"))
 	else:
 		notice(manual_store.last_error)
@@ -659,6 +722,10 @@ func _unhandled_key_input(event: InputEvent) -> void:
 	if not event is InputEventKey or not event.pressed or event.echo:
 		return
 	if presenting or is_instance_valid(welcome_layer) or new_game_dialog.visible or settings_dialog.visible:
+		return
+	if event.keycode == KEY_ESCAPE and not _tab_group(view).is_empty():
+		close_overlay()
+		get_viewport().set_input_as_handled()
 		return
 	var action := Settings.action_for_key(self, event.keycode)
 	match action:

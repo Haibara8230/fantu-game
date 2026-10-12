@@ -1,7 +1,8 @@
 extends RefCounted
 ## The settings dialog and the preferences it keeps besides the volumes: window mode and size, how
-## fast story text types itself out, the key bindings, auto-save and the sidebar's current goals. They live in the player's
-## settings file next to the volumes (audio_director.gd keeps the "audio" section), never in saves.
+## fast story text types itself out, the key bindings, auto-save and the current goal at the top
+## right. They live in the player's settings file next to the volumes (audio_director.gd keeps the
+## "audio" section), never in saves.
 const DEFAULT_PATH := "user://settings.cfg"
 const WINDOW_SIZES: Array[Vector2i] = [Vector2i(1000, 640), Vector2i(1280, 800), Vector2i(1440, 900), Vector2i(1600, 1000), Vector2i(1920, 1200)]
 const DEFAULT_SIZE := Vector2i(1280, 800)
@@ -258,7 +259,7 @@ static func build(ui) -> void:
 	controls.autosave = autosave
 	play.add_child(ui.paragraph("关闭后只在手动保存时存档，离开游戏前请先保存。「继续旅程」读取较新的那份存档。"))
 	var goals := CheckBox.new()
-	goals.text = "侧栏显示当前目标"
+	goals.text = "右上角显示当前目标"
 	goals.toggled.connect(func(on: bool) -> void: set_goals(ui, on))
 	play.add_child(goals)
 	controls.goals = goals
