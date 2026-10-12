@@ -68,7 +68,12 @@ Godot 4 / GDScript / Windows 单机。同一个修仙世界持续运转，玩家
 - `scripts/core/chronicle.gd`：结构化编年史。
 - `scripts/core/save_migration.gd`：存档版本迁移。
 - `scripts/core/save_store.gd`：本地存档与备份恢复。
-- `scripts/ui/main.gd`：桌面界面与输入。
+- `scripts/ui/main.gd`：桌面界面的布局、视图切换、输入、存读档与斗法演出，并提供各视图共用的控件与操作入口。
+- `scripts/ui/sidebar.gd`：左侧人物栏（状态、委托、相识、约定、行程）。
+- `scripts/ui/place_view.gd`：所在地点与场景、场景行动、门派传承选择。
+- `scripts/ui/people_view.gd`：此地人物、相识列表、人物资料卡与立绘。
+- `scripts/ui/map_view.gd`、`bag_view.gd`、`arts_view.gd`、`battle_view.gd`、`event_view.gd`：舆图、行囊、功法、斗法、事件与结局视图。
+- `scripts/ui/welcome_screen.gd`：标题界面（道号、灵根、开始或继续旅程）。
 - `scripts/ui/landscape.gd`：地点与场景横幅；有正式美术时显示美术，否则显示按地貌绘制的占位山水。
 - `scripts/ui/world_map.gd`：区域舆图；`scripts/ui/art_library.gd`：美术路径约定。
 - `scripts/presentation/audio_director.gd`、`data/audio.json`：配乐、环境声与音效。

@@ -72,12 +72,12 @@ func _run() -> void:
 	root.add_child(main)
 	main.session.encounters_enabled = false
 	main.name_input.text = "青禾"
-	main._begin()
+	main.begin()
 	main.preview_mode = true
 	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path("res://builds/previews"))
 	for sect_id: String in ["qingyun", "chixiao", "changqing", "canglan", "xuanyue"]:
 		for slot: int in range(3):
-			main._reset_preview(sect_id, sect_id)
+			main.reset_preview(sect_id, sect_id)
 			main.session.combat_rng.seed = 73
 			var id: String = main.session.active_skills()[slot]
 			print("CHECKING: " + sect_id + " / " + id)
@@ -101,7 +101,7 @@ func _run() -> void:
 					_capture(screenshot_prefix + "_" + kind, 0.12 if kind in ["release", "heal", "guard"] else 0.065)
 			)
 			var old_qi: int = main.session.player.qi
-			await main._skill(id)
+			await main.skill(id)
 			check(main.session.player.qi == old_qi - int(definition.qi_cost), "qi cost " + id)
 			check(int(main.session.battle.cooldowns.get(id, 0)) == int(definition.cooldown), "cooldown " + id)
 			if definition.kind == "attack":
@@ -116,7 +116,7 @@ func _run() -> void:
 			for button: Button in buttons:
 				check(button.get_global_rect().end.y <= main.get_global_rect().end.y, "preview button visible " + id)
 			await process_frame
-	main._reset_preview("qingyun", "xuanyue")
+	main.reset_preview("qingyun", "xuanyue")
 	await _capture("sect_selector")
 	# Restore to a smaller window and ensure selectors/skill controls remain usable.
 	root.size = Vector2i(1000, 640)
