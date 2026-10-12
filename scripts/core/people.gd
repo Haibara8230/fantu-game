@@ -257,6 +257,34 @@ static func npc_depart(s, person_id: String) -> void:
 	var days := int(person(s, person_id).get("leave_days", LONG_ABSENCE_DAYS))
 	Events.person(s, person_id).absent_until = int(s.world.day) + days
 
+## What an ordinary acquaintance needs this period, or {}: {"item", "count", "stones", "period"}. Now
+## and then (rules.requests) someone the player knows is short of an herb or a pill; helping out earns
+## favor, a little silver and some mind. Drawn from the world seed, the person and the period, so
+## nothing needs saving but the day it was answered.
+static func request_of(s, person_id: String) -> Dictionary:
+	if not is_generated(s, person_id) or not bool(s.world.people.get(person_id, {}).get("met", false)):
+		return {}
+	if str(person(s, person_id).get("attitude", "")) == "hostile":
+		return {}
+	var rules: Dictionary = s.content.rules.requests
+	var period := int(s.world.day) / int(rules.period_days)
+	var rng := RandomNumberGenerator.new()
+	rng.seed = hash([int(s.world.get("seed", 0)), "request", person_id, period])
+	if rng.randf() >= float(rules.chance):
+		return {}
+	var item_id: String = rules.items[rng.randi_range(0, rules.items.size() - 1)]
+	var count := rng.randi_range(int(rules.count[0]), int(rules.count[1]))
+	var stones := int(round(float(s.content.item(item_id).price) * count * float(rules.reward_scale)))
+	return {"item": item_id, "count": count, "stones": stones, "period": period}
+
+## Whether an acquaintance's request is waiting for an answer.
+static func request_open(s, person_id: String) -> bool:
+	var request := request_of(s, person_id)
+	if request.is_empty():
+		return false
+	var answered := int(s.world.people.get(person_id, {}).get("last", {}).get("help", -1))
+	return answered < 0 or answered / int(s.content.rules.requests.period_days) != int(request.period)
+
 ## Everything the player could do with a person here: {"id", "label", "available", "reason"}.
 static func npc_options(s, person_id: String) -> Array[Dictionary]:
 	var options: Array[Dictionary] = []
@@ -265,6 +293,9 @@ static func npc_options(s, person_id: String) -> Array[Dictionary]:
 		options.append({"id": "talk", "label": "交谈", "cooldown_days": TALK_COOLDOWN_DAYS})
 	if someone.attitude != "hostile" and int(someone.get("gift_favor", 0)) > 0:
 		options.append({"id": "gift", "label": "赠一株灵草（好感 +%d）" % int(someone.gift_favor), "conditions": [{"herbs_at_least": 1}], "cooldown_days": TALK_COOLDOWN_DAYS})
+	if request_open(s, person_id):
+		var request := request_of(s, person_id)
+		options.append({"id": "help", "label": "相助：送上%s×%d（好感 +%d，酬谢 %d 灵石）" % [s.content.item(request.item).name, int(request.count), int(s.content.rules.requests.favor), int(request.stones)], "conditions": [{"item_at_least": [request.item, int(request.count)]}]})
 	for interaction: Dictionary in someone.get("interactions", []):
 		options.append(interaction)
 	var result: Array[Dictionary] = []
@@ -312,6 +343,14 @@ static func interact(s, person_id: String, option_id: String) -> String:
 		"gift":
 			Events.apply(s, [{"herbs": -1}, {"relation": [person_id, int(someone.gift_favor)]}])
 			text = s.log_event("gift", {"npc": person_id, "favor": int(someone.gift_favor)})
+		"help":
+			var request := request_of(s, person_id)
+			var rules: Dictionary = s.content.rules.requests
+			s.remove_item(request.item, int(request.count))
+			s.player.stones += int(request.stones)
+			Events.apply(s, [{"relation": [person_id, int(rules.favor)]}, {"mind": int(rules.mind)}])
+			s.record_deed("help")
+			text = s.log_event("help", {"npc": person_id, "loot": "%s:%d" % [request.item, int(request.count)], "favor": int(rules.favor), "stones": int(request.stones)})
 		_:
 			for interaction: Dictionary in someone.interactions:
 				if interaction.id == option_id:

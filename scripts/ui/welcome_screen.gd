@@ -43,6 +43,13 @@ static func build(ui) -> void:
 		ui.welcome_roots = session.roll_roots(sense_rng)
 		_show_roots(ui), "再测一次灵根"))
 	_show_roots(ui)
+	# The introduction is played the first time; once finished, a new journey may skip it.
+	ui.skip_intro = null
+	if ui.intro_finished_once:
+		var skip := CheckBox.new()
+		skip.text = "跳过入门指引（执事堂、传功堂直接开放）"
+		box.add_child(skip)
+		ui.skip_intro = skip
 	var begin_button: Button = ui.button("踏入仙途", ui.begin)
 	box.add_child(begin_button)
 	var continue_button: Button = ui.button("继续旅程", ui.continue_saved)

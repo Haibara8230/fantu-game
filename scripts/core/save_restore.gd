@@ -101,6 +101,12 @@ static func restore(s, data: Variant) -> bool:
 		if not key is String:
 			return false
 		taken[key] = true
+	var storylines: Variant = _valid_storylines(content, saved_world.get("storylines", {}), day)
+	var letters: Variant = _valid_letters(content, saved_world.get("letters", []), day)
+	var deeds: Variant = _valid_counts(saved_player.get("deeds", {}))
+	var taught: Variant = saved_player.get("taught", [])
+	if storylines == null or letters == null or deeds == null or not taught is Array or taught.any(func(tip: Variant) -> bool: return not tip is String):
+		return false
 	var caps: Dictionary = content.stage(int(saved_player.realm), saved_stage)
 	var extra: Dictionary = s.bonuses(loadout)
 	if int(saved_player.hp) <= 0 or int(saved_player.hp) > int(caps.max_hp) + int(extra.max_hp) or int(saved_player.qi) > int(caps.max_qi) + int(extra.max_qi):
@@ -170,7 +176,7 @@ static func restore(s, data: Variant) -> bool:
 		if key is String:
 			sold[key] = true
 	var seed_value: Variant = saved_world.get("seed", 0)
-	s.world = {"day": day, "flags": saved_world.flags.duplicate(), "events": events, "people": people, "seed": int(seed_value) if _whole_nonnegative(seed_value) else 0, "stock_sold": sold, "rumors": rumors, "quests_taken": taken}
+	s.world = {"day": day, "flags": saved_world.flags.duplicate(), "events": events, "people": people, "seed": int(seed_value) if _whole_nonnegative(seed_value) else 0, "stock_sold": sold, "rumors": rumors, "quests_taken": taken, "storylines": storylines, "letters": letters}
 	s.populate()
 	var player: Dictionary = saved_player.duplicate(true)
 	for key: String in PLAYER_COUNTS:
@@ -178,11 +184,13 @@ static func restore(s, data: Variant) -> bool:
 	player.birth_day = int(birth)
 	player.stage = saved_stage
 	# Journeys from before the mind start with what their stage asks, so nothing they had slows down.
-	player.mind = int(mind) if int(mind) >= 0 else int(content.stage(int(saved_player.realm), saved_stage).get("mind", 0))
+	player["mind"] = int(mind) if int(mind) >= 0 else int(content.stage(int(saved_player.realm), saved_stage).get("mind", 0))
 	player.roots = roots.duplicate()
 	for key: String in loadout:
 		player[key] = loadout[key]
 	player.quests = quests
+	player["deeds"] = deeds
+	player["taught"] = taught.duplicate()
 	player.warned_for = int(warned)
 	for item_id: String in player.items:
 		player.items[item_id] = int(player.items[item_id])
@@ -250,6 +258,68 @@ static func _valid_people(content, data: Dictionary, day: int) -> Variant:
 		var mourned: Variant = person.get("mourned", false)
 		if mourned is bool and mourned:
 			result[person_id].mourned = true
+		# Whether 传音符 were exchanged: optional, saves before version 12 lack it.
+		var sound: Variant = person.get("sound", false)
+		if not sound is bool:
+			return null
+		if sound:
+			result[person_id]["sound"] = true
+	return result
+
+## Normalized storyline progress, or null when malformed. Progress of storylines no longer in the
+## content is dropped.
+static func _valid_storylines(content, data: Variant, day: int) -> Variant:
+	if not data is Dictionary:
+		return null
+	var result := {}
+	for story_id: Variant in data:
+		var saved: Variant = data[story_id]
+		if not story_id is String or not saved is Dictionary or not str(saved.get("state", "")) in ["active", "done", "closed"]:
+			return null
+		if not _whole_nonnegative(saved.get("step")) or not _whole_nonnegative(saved.get("since")) or int(saved.since) > day or not saved.get("begun") is bool:
+			return null
+		var base: Variant = _valid_counts(saved.get("base", {}))
+		if base == null:
+			return null
+		if not content.storylines.has(story_id):
+			continue
+		var steps := int(content.storylines[story_id].steps.size())
+		if int(saved.step) > steps or (saved.state == "active" and int(saved.step) >= steps):
+			return null
+		result[story_id] = {"state": saved.state, "step": int(saved.step), "since": int(saved.since), "begun": saved.begun, "base": base}
+	return result
+
+## Normalized 传音, or null when malformed. Letters about storylines no longer in the content are dropped.
+static func _valid_letters(content, data: Variant, day: int) -> Variant:
+	if not data is Array:
+		return null
+	var result: Array = []
+	for letter: Variant in data:
+		if not letter is Dictionary or not letter.get("npc") is String or not _whole_nonnegative(letter.get("day")) or int(letter.day) > day or not letter.get("read") is bool:
+			return null
+		if not content.people.has(letter.npc):
+			continue
+		if letter.has("story"):
+			if not letter.story is String or not letter.get("step") is String:
+				return null
+			if not content.storylines.has(letter.story):
+				continue
+			result.append({"npc": letter.npc, "day": int(letter.day), "read": letter.read, "story": letter.story, "step": letter.step})
+		elif letter.get("kind") is String:
+			result.append({"npc": letter.npc, "day": int(letter.day), "read": letter.read, "kind": letter.kind})
+		else:
+			return null
+	return result
+
+## A dictionary of names to whole non-negative counts (deeds), normalized, or null.
+static func _valid_counts(data: Variant) -> Variant:
+	if not data is Dictionary:
+		return null
+	var result := {}
+	for key: Variant in data:
+		if not key is String or not _whole_nonnegative(data[key]):
+			return null
+		result[key] = int(data[key])
 	return result
 
 static func _whole_nonnegative(value: Variant) -> bool:

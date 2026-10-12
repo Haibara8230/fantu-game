@@ -70,5 +70,18 @@
     "category": "quest",
     "price": 0,
     "description": "药篓上挂的竹牌，刻着“阿芷”二字，背面是一行采药人的记号。"
+  },
+  "polin_powder": {
+    "name": "破鳞散",
+    "category": "pill",
+    "price": 30,
+    "use": [{"flag": "serpent_weakened"}],
+    "description": "沈墨以凝露草、赤炎花熬成的药散。服下后药力沉在丹田，与赤鳞妖蟒斗法时可破其鳞甲（妖蟒气血减三成）。"
+  },
+  "peddler_pack": {
+    "name": "货郎的货担",
+    "category": "quest",
+    "price": 0,
+    "description": "从蒙面劫修手里夺回的货担，丹瓶一个没少，该还给钱货郎。"
   }
 }

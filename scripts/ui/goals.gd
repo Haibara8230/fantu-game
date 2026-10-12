@@ -21,14 +21,39 @@ static func goals() -> Array:
 static func known(goal_id: String) -> bool:
 	return goal_id in GOAL_IDS
 
-## The goals that apply now, most important first, at most SHOWN: {"id", "title", "text"}.
+## The goals that apply now, most important first, at most SHOWN: {"id", "title", "text"}. The guided
+## start's step comes before everything; other storylines' steps after the goals of data/goals.json.
 static func current(session) -> Array[Dictionary]:
 	var result: Array[Dictionary] = []
+	var told := story_goals(session)
+	for goal: Dictionary in told:
+		if goal.guide:
+			result.append(goal)
 	for goal: Dictionary in goals():
 		if result.size() >= SHOWN:
 			break
 		if applies(session, goal.id):
 			result.append({"id": goal.id, "title": str(goal.title), "text": str(goal.text).format(values(session, goal.id))})
+	for goal: Dictionary in told:
+		if result.size() >= SHOWN:
+			break
+		if not goal.guide:
+			result.append(goal)
+	return result
+
+## The steps of active storylines that ask something of the player now: {"id", "title", "text", "guide"}.
+## Steps still waiting (for days to pass or for the player to reach a stage) ask nothing yet.
+static func story_goals(session) -> Array[Dictionary]:
+	var result: Array[Dictionary] = []
+	for story_id: String in session.content.storylines:
+		var definition: Dictionary = session.content.storylines[story_id]
+		var step: Dictionary = session.story_step(story_id)
+		if step.is_empty() or not step.has("goal") or not session.story_at(story_id, str(step.id)):
+			continue
+		var text := str(step.goal)
+		if step.has("place") and str(step.place) != str(session.player.location):
+			text += "（%s）" % session.content.locations[step.place].name
+		result.append({"id": "story:" + story_id, "title": str(definition.title), "text": text, "guide": bool(definition.get("guide", false))})
 	return result
 
 static func applies(session, goal_id: String) -> bool:

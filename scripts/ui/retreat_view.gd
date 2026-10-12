@@ -36,10 +36,14 @@ static func render_retreat(ui) -> void:
 	if session.at_xp_cap():
 		right.add_child(ui.paragraph(session.cap_text(), Color("#e39a82")))
 		return
+	var held: String = session.guide_block("cultivate")
+	if not held.is_empty():
+		right.add_child(ui.paragraph(held, Color("#e3c08a")))
+		return
 	if mind_percent < 100:
 		right.add_child(ui.paragraph("心境不及此境所需：闭关收益减半，单次闭关也只能维持一半时日。斗法、委托、奇遇与人事都能磨砺心境。", Color("#e3c08a")))
 	var step := step_days(session)
-	var cap: int = session.retreat_cap()
+	var cap: int = session.retreat_most()
 	var most := maxi(1, cap / step)
 	right.add_child(ui.label("选择闭关时间 · 此番至多 %s" % Calendar.duration_text(most * step), 16, ui.GOLD))
 	var slider := HSlider.new()

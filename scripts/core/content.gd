@@ -25,14 +25,20 @@ var population_data: Dictionary = {}
 # Resolves people not in the handwritten table (the generated population), set by the session.
 var person_lookup: Callable
 var commission_data: Dictionary = {}
+# The guided start and the stories of key people (storylines.gd).
+var storylines: Dictionary = {}
 var error_message: String = ""
 const DANGER_LEVELS := 4
 const FAVOR_MAX := 200
 const FAVOR_STAGES := [[0, "初识"], [40, "相熟"], [80, "友好"], [140, "信赖"], [200, "亲密"]]
 const ATTITUDES := {"friendly": "友善", "neutral": "中立", "hostile": "敌意"}
-const BUILT_IN_INTERACTIONS := ["talk", "gift"]
+const BUILT_IN_INTERACTIONS := ["talk", "gift", "help"]
 const PLAIN_ACTIONS := ["cultivate", "rest", "breakthrough", "study", "teach", "sell", "shop", "gather", "inn_rest", "search_ruin", "inquire", "commissions"]
 const ITEM_CATEGORIES := {"herb": "灵草", "pill": "丹药", "manual": "玉简", "equipment": "法宝", "material": "材料", "quest": "信物"}
+# Milestones friends send word of, and the deeds the session counts besides victories ("win:<enemy>").
+const CONGRATS := ["breakthrough", "serpent", "champion"]
+const DEEDS := ["retreat_days", "duel", "trade", "gather", "commission", "help", "tournament_champion"]
+const STORY_STATES := ["none", "active", "done", "closed"]
 const Arsenal = preload("res://scripts/core/arsenal.gd")
 
 func load_data() -> bool:
@@ -67,7 +73,7 @@ func load_data() -> bool:
 		error_message = "物品配置格式错误。"
 		return false
 	items = item_data
-	for pair: Array in [["techniques", "res://data/techniques.json"], ["equipment", "res://data/equipment.json"], ["vfx_tiers", "res://data/vfx_tiers.json"], ["vfx", "res://data/vfx.json"], ["population", "res://data/population.json"], ["commissions", "res://data/commissions.json"]]:
+	for pair: Array in [["techniques", "res://data/techniques.json"], ["equipment", "res://data/equipment.json"], ["vfx_tiers", "res://data/vfx_tiers.json"], ["vfx", "res://data/vfx.json"], ["population", "res://data/population.json"], ["commissions", "res://data/commissions.json"], ["storylines", "res://data/storylines.json"]]:
 		var loaded: Variant = _read_json(pair[1])
 		if not loaded is Dictionary:
 			error_message = "配置格式错误：" + pair[1]
@@ -87,6 +93,8 @@ func load_data() -> bool:
 				population_data = loaded
 			"commissions":
 				commission_data = loaded
+			"storylines":
+				storylines = loaded
 	map = parsed.map
 	locations = parsed.locations
 	skills = parsed.skills
@@ -172,6 +180,12 @@ func _validate() -> String:
 			var drops: Variant = enemy.drops
 			if not drops is Dictionary or not (drops.get("chance") is float or drops.get("chance") is int) or not drops.get("tiers") is Array or drops.tiers.size() != 2:
 				return "敌人掉落配置错误：" + enemy_id
+		if enemy.has("weakened_by"):
+			var weakened: Variant = enemy.weakened_by
+			if not weakened is Dictionary or not weakened.get("flag") in world_flags or not _whole(weakened.get("hp_percent")) or int(weakened.hp_percent) < 1 or int(weakened.hp_percent) > 100:
+				return "敌人的弱点配置错误：" + enemy_id
+		if enemy.has("congrats") and not enemy.congrats in CONGRATS:
+			return "敌人引用了未知贺信：" + enemy_id
 	var chance: Variant = rules.get("encounter_chance")
 	if not chance is Array or chance.size() != DANGER_LEVELS:
 		return "遭遇几率需要按危险度给出 %d 档。" % DANGER_LEVELS
@@ -208,6 +222,21 @@ func _validate() -> String:
 			return "瓶颈历练配置缺少：" + source
 	if not _whole(rules.get("inn_price")):
 		return "客栈价格无效。"
+	if not rules.get("letters") is Dictionary or not _whole(rules.letters.get("kept")) or int(rules.letters.kept) < 1:
+		return "传音配置无效。"
+	var requests: Variant = rules.get("requests")
+	if not requests is Dictionary or not _whole(requests.get("period_days")) or int(requests.period_days) < 1 or not (requests.get("chance") is float or requests.get("chance") is int) or not requests.get("items") is Array or requests.items.is_empty():
+		return "求助配置无效。"
+	for item_id: Variant in requests.items:
+		if not items.has(item_id):
+			return "求助引用了未知物品：%s" % item_id
+	if not requests.get("count") is Array or requests.count.size() != 2 or not _whole(requests.count[0]) or int(requests.count[0]) < 1 or int(requests.count[0]) > int(requests.count[1]):
+		return "求助数量无效。"
+	for key: String in ["favor", "mind"]:
+		if not _whole(requests.get(key)):
+			return "求助配置缺少：" + key
+	if not (requests.get("reward_scale") is float or requests.get("reward_scale") is int):
+		return "求助报酬无效。"
 	var search: Variant = rules.get("ruin_search")
 	if not search is Dictionary or not search.get("stones") is Array or not search.get("herbs") is Array or not (search.get("pill_chance") is float or search.get("pill_chance") is int):
 		return "洞府搜寻配置无效。"
@@ -240,7 +269,74 @@ func _validate() -> String:
 		problem = _validate_person(people[person_id])
 		if not problem.is_empty():
 			return "人物 %s：%s" % [person_id, problem]
+	problem = _validate_storylines()
+	if not problem.is_empty():
+		return problem
 	return _validate_reveals()
+
+# --- Storyline static checks ----------------------------------------------------------------------
+
+func _validate_storylines() -> String:
+	var guides := 0
+	for story_id: String in storylines:
+		var story: Variant = storylines[story_id]
+		if not story is Dictionary or not story.get("title") is String or not people.has(story.get("giver", "")):
+			return "剧情 %s：缺少标题或交代之人" % story_id
+		if bool(story.get("guide", false)):
+			guides += 1
+		for key: String in ["begin_if", "close_if"]:
+			var problem := _validate_conditions(story.get(key, []))
+			if not problem.is_empty():
+				return "剧情 %s：%s" % [story_id, problem]
+		if story.has("closed") and not story.closed is String:
+			return "剧情 %s：结束语必须是文字" % story_id
+		if not story.get("steps") is Array or story.steps.is_empty():
+			return "剧情 %s：没有步骤" % story_id
+		var ids := {}
+		for step: Variant in story.steps:
+			if not step is Dictionary or not step.get("id") is String or ids.has(step.id):
+				return "剧情 %s：步骤缺少唯一 ID" % story_id
+			ids[step.id] = true
+			var problem := _validate_step(step)
+			if not problem.is_empty():
+				return "剧情 %s.%s：%s" % [story_id, step.id, problem]
+	return "" if guides <= 1 else "只能有一段入门指引剧情"
+
+func _validate_step(step: Dictionary) -> String:
+	for key: String in ["goal", "say", "after", "closed"]:
+		if step.has(key) and (not step[key] is String or step[key].is_empty()):
+			return "%s 必须是文字" % key
+	for key: String in ["letter", "auto", "major"]:
+		if step.has(key) and not step[key] is bool:
+			return "%s 必须是真假值" % key
+	if bool(step.get("letter", false)) and not step.has("say"):
+		return "传音的步骤需要 say"
+	if step.has("place") and not locations.has(step.place):
+		return "未知地点"
+	if step.has("speaker") and not people.has(step.speaker):
+		return "未知人物"
+	for key: String in ["wait_days", "retreat_days"]:
+		if step.has(key) and (not _whole(step[key]) or int(step[key]) < 1):
+			return "%s 无效" % key
+	if step.has("wait_days") and (step.has("done") or step.has("deeds")):
+		return "等候的步骤不能另有完成条件"
+	if step.has("deeds"):
+		if not step.deeds is Dictionary or step.deeds.is_empty():
+			return "deeds 必须是非空对象"
+		for deed: String in step.deeds:
+			if not _known_deed(deed) or not _whole(step.deeds[deed]) or int(step.deeds[deed]) < 1:
+				return "未知或无效的事迹：%s" % deed
+	for key: String in ["done", "requires", "close_if", "skip_if"]:
+		var problem := _validate_conditions(step.get(key, []))
+		if not problem.is_empty():
+			return problem
+	return _validate_effects(step.get("effects", []))
+
+## Deeds the session counts (storylines.gd): plain ones, and a victory over a known enemy.
+func _known_deed(deed: String) -> bool:
+	if deed.begins_with("win:"):
+		return enemies.has(deed.trim_prefix("win:"))
+	return deed in DEEDS
 
 # --- Map static checks --------------------------------------------------------
 
@@ -338,6 +434,8 @@ func _validate_reveals() -> String:
 		if enemy.has("world_flag"):
 			settable[enemy.world_flag] = true
 	var sources: Array = events.values() + people.values()
+	for story: Dictionary in storylines.values():
+		sources.append_array(story.steps)
 	for definition: Dictionary in sources:
 		var effects: Array = definition.get("effects", []).duplicate()
 		for choice: Dictionary in definition.get("choices", []) + definition.get("interactions", []):
@@ -578,6 +676,22 @@ func _validate_condition(condition: Variant) -> String:
 			if not value is Array or value.size() != 2 or not events.has(value[0]) or not value[1] in ["completed", "expired"]:
 				return "事件状态条件无效"
 			return ""
+		"stage_at_least":
+			if not value is Array or value.size() != 2 or not _whole(value[0]) or int(value[0]) >= realms.size() or not _whole(value[1]) or int(value[1]) >= realm(int(value[0])).stages.size():
+				return "小阶段条件无效"
+			return ""
+		"sect":
+			return "" if sects.has(value) else "未知门派：%s" % value
+		"talked":
+			return "" if people.has(value) else "未知人物：%s" % value
+		"deed_at_least":
+			return "" if value is Array and value.size() == 2 and value[0] is String and _known_deed(value[0]) and _whole(value[1]) else "事迹条件无效"
+		"story_at":
+			if not value is Array or value.size() != 2 or not storylines.has(value[0]) or not storylines[value[0]].steps.any(func(step: Dictionary) -> bool: return step.id == value[1]):
+				return "剧情步骤条件无效"
+			return ""
+		"story_state":
+			return "" if value is Array and value.size() == 2 and storylines.has(value[0]) and value[1] in STORY_STATES else "剧情状态条件无效"
 	return "未知条件：%s" % key
 
 func _validate_effects(effects: Variant) -> String:
@@ -612,6 +726,12 @@ func _validate_effects(effects: Variant) -> String:
 				ok = value in world_flags
 			"spar", "tournament", "breach":
 				ok = value is bool and value
+			"start_story", "story_advance":
+				ok = storylines.has(value)
+			"sound":
+				ok = people.has(value)
+			"manual":
+				ok = _whole(value) and int(value) >= 1 and int(value) <= technique_data.tiers.size()
 		if not ok:
 			return "效果无效：%s" % key
 	return ""
@@ -696,9 +816,15 @@ func _validate_person(person: Variant) -> String:
 	var problem := _validate_conditions(person.get("present_if", []))
 	if not problem.is_empty():
 		return problem
-	for key: String in ["talk_favor", "gift_favor", "leave_days"]:
+	for key: String in ["talk_favor", "gift_favor", "leave_days", "sound_at"]:
 		if person.has(key) and not _whole(person[key]):
 			return "数值无效：" + key
+	if person.has("congrats"):
+		if not person.congrats is Dictionary:
+			return "贺信必须是对象"
+		for kind: Variant in person.congrats:
+			if not kind in CONGRATS or not person.congrats[kind] is String:
+				return "贺信无效：%s" % kind
 	if person.has("talk") and (not person.talk is Array or person.talk.any(func(line: Variant) -> bool: return not line is String)):
 		return "对话必须是文字列表"
 	var ids := {}

@@ -268,10 +268,10 @@ static func build(ui) -> void:
 	var guide_row := HBoxContainer.new()
 	guide_row.add_theme_constant_override("separation", 12)
 	var guide := CheckBox.new()
-	guide.text = "显示新手指引"
+	guide.text = "显示功能教学"
 	guide.toggled.connect(ui.set_guide_enabled)
 	guide_row.add_child(guide)
-	guide_row.add_child(ui.button("重新显示全部指引", ui.reset_guide))
+	guide_row.add_child(ui.button("重新显示本段旅程的教学", ui.reset_guide))
 	play.add_child(guide_row)
 	ui.guide_toggle = guide
 

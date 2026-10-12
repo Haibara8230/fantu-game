@@ -74,6 +74,8 @@ func _run() -> void:
 	# A fixed world and an ordinary three-element root keep the long progression below repeatable;
 	# sensed roots are random, and a weak one would reach the serpent too late.
 	main.session.new_game("青禾", 42, ["metal", "wood", "fire"])
+	# The guided start's opening words belong to the journey just replaced.
+	main.close_story()
 	main.run(func() -> String: return main.session.start_battle("disciple"))
 	_step("disciple duel started")
 	await _capture("art_duel_idle")

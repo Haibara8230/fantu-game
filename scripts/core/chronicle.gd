@@ -49,6 +49,10 @@ func format(entry: Dictionary, content) -> String:
 			template = _event_text(entry.args, content)
 		"talk", "npc":
 			template = _person_text(entry.id, entry.args, content)
+		"story":
+			template = story_text(entry.args, content)
+		"letter":
+			template = "{npc_name}传音：" + letter_text(entry.args, content)
 		_:
 			template = str(content.chronicle.get(entry.id, "（失传的记载）"))
 	var values: Dictionary = entry.args.duplicate()
@@ -103,6 +107,29 @@ static func _person_text(kind: String, args: Dictionary, content) -> String:
 		if interaction.id == args.get("interaction", ""):
 			return interaction.chronicle
 	return "（失传的记载）"
+
+## Storyline records point into data/storylines.json: a step's opening or closing words, or the words
+## when the storyline was overtaken ("closed", the step's own or the storyline's).
+static func story_text(args: Dictionary, content) -> String:
+	var story: Variant = content.storylines.get(args.get("story", ""))
+	if not story is Dictionary:
+		return "（失传的记载）"
+	var part := str(args.get("part", "say"))
+	for step: Dictionary in story.steps:
+		if step.id == args.get("step", ""):
+			if step.has(part):
+				return str(step[part])
+			break
+	if part == "closed" and story.has("closed"):
+		return str(story.closed)
+	return "（失传的记载）"
+
+## A 传音: a storyline step's words, or a friend's word on a milestone.
+static func letter_text(args: Dictionary, content) -> String:
+	if args.has("story"):
+		return story_text({"story": args.story, "step": args.get("step", ""), "part": "say"}, content)
+	var person: Dictionary = content.person_named(str(args.get("npc", "")))
+	return str(person.get("congrats", {}).get(str(args.get("kind", "")), "（失传的记载）"))
 
 ## Event records point into data/events.json: the event's own text, a choice, a reminder or an expiry.
 static func _event_text(args: Dictionary, content) -> String:

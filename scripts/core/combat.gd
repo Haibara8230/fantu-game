@@ -22,7 +22,12 @@ static func begin_battle(s, enemy_id: String, context: String = "", opponent_sec
 		opponent_sect = str(enemy.get("sect", s.player.get("sect", "wanderer")))
 		if opponent_sect == "wanderer":
 			opponent_sect = "qingyun"
-	s.battle = {"enemy_id": enemy_id, "hp": int(enemy.hp), "turn": 1, "cooldowns": {}, "opponent_sect": opponent_sect, "status": {}, "place": _battle_place(s)}
+	var hp := int(enemy.hp)
+	# A foe whose weakness the player has prepared (the serpent after 破鳞散) starts the duel hurt.
+	var weakened: Dictionary = enemy.get("weakened_by", {})
+	if not weakened.is_empty() and s.has_flag(weakened.flag):
+		hp = maxi(1, hp * int(weakened.hp_percent) / 100)
+	s.battle = {"enemy_id": enemy_id, "hp": hp, "turn": 1, "cooldowns": {}, "opponent_sect": opponent_sect, "status": {}, "place": _battle_place(s)}
 	if not context.is_empty():
 		s.battle.context = context
 	return s.log_event("battle_start", {"enemy": enemy_id})
@@ -176,6 +181,7 @@ static func _enemy_turn(s, guarding: bool) -> String:
 		if s.battle.get("context", "") == "tournament":
 			return _tournament_over(s, false)
 		s.battle.clear()
+		s.record_deed("duel")
 		var lost := mini(int(s.player.stones), 10)
 		s.player.stones -= lost
 		s.player.location = "sect"
@@ -194,6 +200,7 @@ static func _spar_over(s, won: bool) -> String:
 	var npc: String = s.battle.npc
 	var xp: int = int(s.battle.foe.xp) if won else int(s.battle.foe.xp) / 2
 	s.battle.clear()
+	s.record_deed("duel")
 	s.player.hp = maxi(int(s.player.hp), 1)
 	s.Events.apply(s, [{"relation": [npc, 5 if won else 2]}])
 	var message: String = s.log_event("spar_win" if won else "spar_lose", {"npc": npc, "xp": xp})
@@ -210,6 +217,7 @@ static func _tournament_over(s, won: bool) -> String:
 	var round: int = int(s.battle.get("round", 1))
 	var npc: String = s.battle.get("npc", "")
 	s.battle.clear()
+	s.record_deed("duel")
 	if not won:
 		s.player.hp = maxi(int(s.player.hp), 1)
 		var out: String = s.log_event("tournament_out", {"round": round, "npc": npc})
@@ -225,7 +233,9 @@ static func _tournament_over(s, won: bool) -> String:
 	s.add_item(prize, 1)
 	s.player.stones += 100
 	message += " " + s.log_event("tournament_champion", {"stones": 100, "xp": 150, "item": prize}, true)
+	s.record_deed("tournament_champion")
 	message = _with_milestones(message, s.gain_xp(150))
+	message = _with_milestones(message, s.congratulate("champion"))
 	return s.conclude(message, s.advance_days(s.content.action_days("road_recovery")))
 
 static func _count_down(status: Dictionary, key: String) -> void:
@@ -250,6 +260,8 @@ static func _win(s) -> String:
 	var days := _recovery_days(s, "battle_victory")
 	var npc: String = s.battle.get("npc", "")
 	s.record_kill(enemy_id)
+	s.record_deed("duel")
+	s.record_deed("win:" + enemy_id)
 	s.player.stones += int(enemy.reward_stones)
 	s.add_item("huichun_grass", int(enemy.reward_herbs))
 	s.battle.clear()
@@ -259,6 +271,8 @@ static func _win(s) -> String:
 	if not flag.is_empty() and not s.has_flag(flag):
 		s.world.flags[flag] = true
 		message += " " + s.log_event(enemy.flag_event, {}, true)
+		if enemy.has("congrats"):
+			message = _with_milestones(message, s.congratulate(str(enemy.congrats)))
 	if enemy.has("drops") and s.world_rng.randf() < float(enemy.drops.chance):
 		var tier: int = s.world_rng.randi_range(int(enemy.drops.tiers[0]), int(enemy.drops.tiers[1]))
 		var loot: String = "j:" + s.Arsenal.generate_technique(s.content, s.world_rng, tier) if s.world_rng.randf() < 0.5 else s.Arsenal.generate_equipment(s.content, s.world_rng, tier)

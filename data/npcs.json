@@ -18,6 +18,8 @@
       "“坊市里的消息，十句有三句真，就看你会不会听。”",
       "“道友若缺灵石，药铺随时收草。”"
     ],
+    "sound_at": 40,
+    "congrats": {"breakthrough": "筑基了？好，好！往后药铺的好货，先给你留着。", "serpent": "妖蟒一死，落霞谷的药又能收了。这一单，我替药农们谢你。"},
     "interactions": [
       {
         "id": "request",
@@ -33,6 +35,21 @@
         "conditions": [{"flag": "heard_auction_rumor"}, {"relation_at_least": ["shen_mo", 40]}],
         "cooldown_days": 360,
         "chronicle": "沈墨压低声音：“那场拍卖我有一席。你若信得过我，届时随我入场便是。”"
+      },
+      {
+        "id": "ask_redscale",
+        "label": "问起赤鳞果的来历",
+        "conditions": [{"talked": "azhi"}, {"relation_at_least": ["shen_mo", 15]}, {"story_state": ["shen_redscale", "none"]}, {"not": {"flag": "serpent_slain"}}],
+        "effects": [{"start_story": "shen_redscale"}],
+        "once": true,
+        "chronicle": "沈墨放下算盘：“赤鳞果？那东西长在妖蟒窝边，妖蟒吃了它，鳞甲硬得像铁。阿芷她爹就是贪那几颗果子……你若真想对付那孽畜，凑齐三株凝露草、两株赤炎花来，我替你熬一剂破鳞散。”"
+      },
+      {
+        "id": "brew",
+        "label": "请沈墨熬制破鳞散（三株凝露草、两株赤炎花）",
+        "conditions": [{"story_at": ["shen_redscale", "brew"]}, {"item_at_least": ["ninglu_grass", 3]}, {"item_at_least": ["chiyan_flower", 2]}],
+        "effects": [{"item": ["ninglu_grass", -3]}, {"item": ["chiyan_flower", -2]}, {"story_advance": "shen_redscale"}],
+        "chronicle": "你把药材交给沈墨。"
       }
     ]
   },
@@ -54,7 +71,25 @@
       "“前些年有位剑修，一剑劈开了河面的冰，老汉到现在都记得。”",
       "“白鹭飞得低，明日就有雨。”"
     ],
-    "interactions": []
+    "sound_at": 40,
+    "congrats": {"breakthrough": "老汉就说你是块料子！哪天得闲，来渡口喝碗粗茶。"},
+    "interactions": [
+      {
+        "id": "ask_sword",
+        "label": "问起那位劈冰的剑修",
+        "conditions": [{"relation_at_least": ["boatman", 10]}, {"story_state": ["boatman_sword", "none"]}],
+        "effects": [{"start_story": "boatman_sword"}],
+        "once": true,
+        "chronicle": "老艄公眯起眼：“那年冬天河面冻得结实，一位剑修踏冰而过，随手一剑，冰面裂开三丈。后来我撑船经过那里，总觉得河底有东西发冷……你要是哪天筑了基、神识够用，替老汉下去瞧瞧。”"
+      },
+      {
+        "id": "dive",
+        "label": "请老艄公撑船，以神识探查河底",
+        "conditions": [{"story_at": ["boatman_sword", "dive"]}, {"realm_at_least": 1}],
+        "effects": [{"story_advance": "boatman_sword"}],
+        "chronicle": "老艄公把船撑到河心，你闭目放出神识，探向河底。"
+      }
+    ]
   },
   "storyteller": {
     "name": "何三更",
@@ -73,6 +108,8 @@
       "“客官，今日讲的是落霞谷的古修洞府——且听下回分解。”",
       "“青云剑宗的外门小比，十年一回，热闹得很。”"
     ],
+    "sound_at": 40,
+    "congrats": {"serpent": "客官，《斩赤鳞》这回书老夫已经写好了，就等你来听！", "champion": "小比头名的段子，老夫明日就开讲。"},
     "interactions": [
       {
         "id": "story",
@@ -106,11 +143,12 @@
       "“小本买卖，童叟无欺。”",
       "“白鹭渡往东的路上常有劫修，道友小心。”"
     ],
+    "congrats": {"breakthrough": "恩公筑基了！筑基丹往后用不上啦，小老儿给你留些回气丹。"},
     "interactions": [
       {
         "id": "buy_pill",
         "label": "买一枚筑基丹（70 灵石）",
-        "conditions": [{"stones_at_least": 70}],
+        "conditions": [{"not": {"flag": "peddler_friend"}}, {"stones_at_least": 70}],
         "effects": [{"stones": -70}, {"item": ["foundation_pill", 1]}],
         "chronicle": "你从行脚药贩手中买下一枚筑基丹。"
       },
@@ -120,6 +158,28 @@
         "conditions": [{"item_at_least": ["chiyan_flower", 3]}],
         "effects": [{"item": ["chiyan_flower", -3]}, {"stones": 36}],
         "chronicle": "你把三株赤炎花卖给行脚药贩，得灵石三十六。"
+      },
+      {
+        "id": "buy_pill_friend",
+        "label": "买一枚筑基丹（熟客价 55 灵石）",
+        "conditions": [{"flag": "peddler_friend"}, {"stones_at_least": 55}],
+        "effects": [{"stones": -55}, {"item": ["foundation_pill", 1]}],
+        "chronicle": "钱货郎按熟客价卖给你一枚筑基丹。"
+      },
+      {
+        "id": "ask_trouble",
+        "label": "问他为何愁眉不展",
+        "conditions": [{"relation_at_least": ["peddler", 6]}, {"story_state": ["peddler_robbed", "none"]}],
+        "effects": [{"start_story": "peddler_robbed"}],
+        "once": true,
+        "chronicle": "钱货郎叹气：“前些日子叫一个蒙面劫修截了道，半副货担的丹药全没了。那人常在松风岭、落霞谷和白鹭渡一带晃悠……道友若能把货担夺回来，小老儿必有重谢。”"
+      },
+      {
+        "id": "return_pack",
+        "label": "把货担还给他",
+        "conditions": [{"story_at": ["peddler_robbed", "return"]}, {"item_at_least": ["peddler_pack", 1]}],
+        "effects": [{"story_advance": "peddler_robbed"}],
+        "chronicle": "你把夺回的货担还给钱货郎。"
       }
     ]
   },
@@ -141,6 +201,7 @@
     "talk": [
       "“……不碍事。只是被妖狼抓了一下。”"
     ],
+    "congrats": {"breakthrough": "听说你筑基了。当年松林里那两株回春草，我记一辈子。"},
     "interactions": [
       {
         "id": "heal",
@@ -199,6 +260,13 @@
         "label": "踏入石门，与他斗法",
         "effects": [{"battle": "ruin_rogue"}],
         "chronicle": "你踏入石门，与占据洞府的散修斗法。"
+      },
+      {
+        "id": "persuade",
+        "label": "转告柳寒舟的话",
+        "conditions": [{"story_at": ["liu_squatter", "persuade"]}],
+        "effects": [{"story_advance": "liu_squatter"}, {"flag": "ruin_cleared"}, {"leave": true}],
+        "chronicle": "你把柳寒舟的话一字不差地转告石寒。"
       }
     ]
   },
@@ -222,6 +290,8 @@
       "“我爹说，采药的人进山，要给山神留一株。”",
       "“沈掌柜人好，可他从来不收我爹采的赤鳞果——说那东西长在妖蟒窝边上。”"
     ],
+    "sound_at": 40,
+    "congrats": {"breakthrough": "你筑基啦？我在松林里给山神多留了一株草，替你谢过了。", "serpent": "我爹的仇，你替我报了。泉边那块木牌，我会常去看。"},
     "interactions": [
       {
         "id": "aid",
@@ -238,6 +308,97 @@
         "effects": [{"take_item": "azhi_token"}, {"flag": "azhi_mourned"}, {"relation": ["azhi", 40]}, {"item": ["ningqi_pill", 2]}],
         "once": true,
         "chronicle": "你把刻着“阿芷”的竹牌和那半本手记交给她。她攥着竹牌沉默良久，只说了一句“我就知道”，又把父亲留下的两枚凝气丹塞进你手里。"
+      },
+      {
+        "id": "buy_herbs",
+        "label": "向阿芷买三株回春草（10 灵石）",
+        "conditions": [{"flag": "azhi_mourned"}, {"stones_at_least": 10}],
+        "effects": [{"stones": -10}, {"item": ["huichun_grass", 3]}, {"relation": ["azhi", 1]}],
+        "cooldown_days": 30,
+        "chronicle": "阿芷挑了三株上好的回春草给你，只收十灵石：“熟人价。”"
+      }
+    ]
+  },
+  "xu_qinghe": {
+    "name": "许清和",
+    "title": "外门执事弟子",
+    "attitude": "friendly",
+    "gender": "male",
+    "realm_text": "炼气后期",
+    "affiliation": "青云剑宗外门",
+    "age": 23,
+    "personality": "热心周到",
+    "description": "外门执事堂的弟子，新入门的同门大多由他领着认路。说话爽快，记性极好，谁欠药堂几株草都记得清清楚楚。",
+    "home": "sect",
+    "spot": "office",
+    "talk_favor": 2,
+    "gift_favor": 3,
+    "congrats": {"breakthrough": "恭喜筑基！外门这一批里，你是头一个。往后该换我向你讨教了。", "serpent": "妖蟒伏诛的消息传回山门，执事堂上上下下都在说你。", "champion": "小比头名！我就知道你行，那卷功法可要好好参悟。"},
+    "talk": [
+      "“修为卡在门槛上别硬闷着，出去斗几场、接几件委托，历练够了自然冲得开。”",
+      "“心境这东西，闭关是闭不出来的。见的人多了、经的事多了，心自然就定了。”",
+      "“炼气时闭关三五个月就得出来透透气；等筑了基，一闭一两年也是常事。”",
+      "“执事堂的委托有期限，接了就别拖。”",
+      "“外门小比十年一回，头名能得一卷好功法。”"
+    ],
+    "interactions": [
+      {
+        "id": "hand_herbs",
+        "label": "交上三株灵草",
+        "conditions": [{"story_at": ["intro", "return"]}, {"herbs_at_least": 3}],
+        "effects": [{"herbs": -3}, {"story_advance": "intro"}],
+        "chronicle": "你把三株灵草交给许清和。"
+      },
+      {
+        "id": "report",
+        "label": "回禀坊市一行",
+        "conditions": [{"story_at": ["intro", "report"]}],
+        "effects": [{"story_advance": "intro"}],
+        "chronicle": "你向许清和说起坊市的见闻。"
+      },
+      {
+        "id": "hand_dew",
+        "label": "交上三株凝露草",
+        "conditions": [{"story_at": ["errands", "dew"]}, {"item_at_least": ["ninglu_grass", 3]}],
+        "effects": [{"item": ["ninglu_grass", -3]}, {"story_advance": "errands"}],
+        "chronicle": "你把三株凝露草交给许清和。"
+      },
+      {
+        "id": "wolf_report",
+        "label": "回禀斩狼之事",
+        "conditions": [{"story_at": ["errands", "wolf_report"]}],
+        "effects": [{"story_advance": "errands"}],
+        "chronicle": "你把狼牙交给许清和。"
+      }
+    ]
+  },
+  "gu_changgeng": {
+    "name": "顾长庚",
+    "title": "传功长老",
+    "attitude": "friendly",
+    "gender": "male",
+    "realm_text": "筑基圆满",
+    "affiliation": "青云剑宗",
+    "age": 168,
+    "personality": "严厉寡言",
+    "description": "掌管传功堂的长老，五套传承的玉简都经过他的手。话不多，看人却准。",
+    "home": "sect",
+    "spot": "hall",
+    "talk_favor": 2,
+    "gift_favor": 2,
+    "congrats": {"breakthrough": "筑基了？不错。别骄傲，往后的路更长。"},
+    "talk": [
+      "“修行如登山，一步一步来，没有捷径。”",
+      "“传承选了就用心练。换来换去，哪一门都不精。”",
+      "“筑基之后神识敏锐，许多从前看不见的东西，就看得见了。”"
+    ],
+    "interactions": [
+      {
+        "id": "ask_foundation",
+        "label": "请教筑基之道",
+        "conditions": [{"story_at": ["lineage", "foundation"]}],
+        "effects": [{"story_advance": "lineage"}],
+        "chronicle": "你向顾长庚请教筑基之道。"
       }
     ]
   }

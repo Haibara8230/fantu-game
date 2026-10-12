@@ -187,7 +187,7 @@
     "location": "town",
     "priority": 12,
     "conditions": [{"flag": "helped_wanderer"}],
-    "effects": [{"stones": 30}],
+    "effects": [{"stones": 30}, {"sound": "wounded"}],
     "chronicle": "那名曾在林间受伤的散修在青石镇寻到你，奉上三十灵石作谢。"
   },
   "ferry_boatman": {
@@ -313,5 +313,41 @@
     "conditions": [{"flag": "azhi_mourned"}, {"flag": "serpent_slain"}],
     "effects": [{"relation": ["azhi", 10]}, {"item": ["huichun_grass", 3]}],
     "chronicle": "妖蟒既除，阿芷独自进了一趟深谷灵泉，在泉边给父亲立了块木牌。回来时她分给你三株泉边采的回春草，说那里的草长得最好。"
+  },
+  "tale_ruin": {
+    "title": "说书 · 洞府易主",
+    "trigger": "location",
+    "location": "town",
+    "priority": 7,
+    "conditions": [{"met": "storyteller"}, {"flag": "ruin_cleared"}],
+    "effects": [{"relation": ["storyteller", 5]}, {"mind": 2}],
+    "chronicle": "听雨茶馆里，何三更把古修洞府易主的事编成了新段子，讲到紧要处朝你挤挤眼。茶客们听得入神，你也从旁人嘴里重新看了一遍自己。"
+  },
+  "tale_serpent": {
+    "title": "说书 · 斩赤鳞",
+    "trigger": "location",
+    "location": "town",
+    "priority": 7,
+    "conditions": [{"met": "storyteller"}, {"deed_at_least": ["win:serpent", 1]}],
+    "effects": [{"relation": ["storyteller", 8]}, {"mind": 3}],
+    "chronicle": "何三更新开了一回书，叫《斩赤鳞》。说到妖蟒伏诛，满堂喝彩，有人认出你来，非要请你喝茶。"
+  },
+  "tale_foundation": {
+    "title": "说书 · 青云新秀",
+    "trigger": "location",
+    "location": "town",
+    "priority": 7,
+    "conditions": [{"met": "storyteller"}, {"realm_at_least": 1}],
+    "effects": [{"relation": ["storyteller", 5]}, {"mind": 2}],
+    "chronicle": "何三更说起青云山外门又出了一位筑基修士，醒木一拍：“此人便坐在诸位当中！”茶客们纷纷回头。"
+  },
+  "tale_champion": {
+    "title": "说书 · 小比夺魁",
+    "trigger": "location",
+    "location": "town",
+    "priority": 7,
+    "conditions": [{"met": "storyteller"}, {"deed_at_least": ["tournament_champion", 1]}],
+    "effects": [{"relation": ["storyteller", 5]}, {"mind": 2}],
+    "chronicle": "何三更把外门小比连胜三轮的事讲得一波三折，你在台下听着，倒像在听别人的故事。"
   }
 }

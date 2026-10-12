@@ -75,6 +75,35 @@ func _goals() -> void:
 	check(not "tournament" in ids.call(), "and not again until the next one draws near")
 	check(Goals.current(game).size() <= Goals.SHOWN, "at most a few goals at once")
 
+## The guided start as a first-time player meets it: the mentor's words open it, the HUD's goal follows
+## the step, the map holds the player to the step's place, the first retreat lasts the month asked for,
+## and a 传音 later shows in the scroll and on the HUD.
+func _guided() -> void:
+	main.intro_finished_once = false
+	main._show_welcome()
+	check(main.skip_intro == null, "no skipping before the introduction was finished once")
+	main.name_input.text = "新人"
+	main.welcome_roots = ["metal", "wood", "fire"]
+	main.begin()
+	check(main.current_screen() == "full" and main.story.title == "初入山门" and _texts(main.center, "Label").contains("许清和"), "a guided journey opens with the mentor's words")
+	main.close_story()
+	check(main.goal_label.text == "目标 · 初入山门" and main.goal_label.tooltip_text.contains("闭关修炼一个月"), "the HUD's goal is the step at hand")
+	main.set_view("retreat")
+	var length: HSlider = main.center.find_children("*", "HSlider", true, false)[0]
+	check(int(length.max_value) == 3 and _texts(main.center, "Label").contains("此番至多 1 个月"), "the first retreat is the month the mentor asked for")
+	main.set_view("map")
+	main.select_map_target("ridge")
+	check(_button("启程前往松风岭").disabled and _texts(main.center, "Label").contains("许清和嘱咐过"), "the map says why the road is closed for now")
+	main.set_view("place")
+	main.session.world.letters.append({"npc": "xu_qinghe", "day": int(main.session.world.day), "read": false, "story": "errands", "step": "dew"})
+	main.render()
+	check(main.hud_icons.goals.text == "任务 · 传音 1", "an unread 传音 shows on the HUD")
+	main.set_view("letters")
+	check(_texts(main.center, "Label").contains("新 · 许清和") and _texts(main.center, "Label").contains("凝露草") and main.session.unread_letters() == 0, "the inbox shows it as new and reads it")
+	main.set_view("stories")
+	check(_texts(main.center, "Label").contains("初入山门 · 许清和") and _texts(main.center, "Label").contains("闭关修炼一个月"), "剧情 lists the storyline with its step")
+	main.close_overlay()
+
 ## Waits out a journey played on the map: whether the traveller's mark showed, and how many dates passed.
 func _watch_walk() -> Dictionary:
 	var marked := false
@@ -125,28 +154,44 @@ func _run() -> void:
 	main.name_input.text = "青禾"
 	# Sensed roots are random; an ordinary three-element root keeps the cultivation numbers below fixed.
 	main.welcome_roots = ["metal", "wood", "fire"]
+	check(main.skip_intro == null, "a first-time player cannot skip the introduction")
+	# Someone who has finished it once may skip it; the rest of this test plays such a journey, the
+	# guided start has its own checks at the end.
+	main.intro_finished_once = true
+	main.close_welcome()
+	main._show_welcome()
+	main.name_input.text = "青禾"
+	main.welcome_roots = ["metal", "wood", "fire"]
+	check(main.skip_intro != null, "once finished, a new journey may skip it")
+	main.skip_intro.button_pressed = true
 	main.begin()
+	check(main.session.story_state("intro") == "done" and main.session.has_flag("intro_done") and main.session.story_state("lineage") == "active", "skipping counts the introduction as done and lets the sect's storylines follow")
+	check(main.current_screen() == "full" and _texts(main.center, "Label").contains("顾长庚长老"), "the next storyline's words are told in a screen of their own")
+	main.close_story()
 	await _capture("sect")
-	# The new-player guide: one tip at a time where it applies; dismissed tips stay dismissed.
+	# Teaching cards: one at a time where it applies, some with pages; dismissed cards stay dismissed in
+	# this journey.
 	var tips: Array = main.Guide.tips()
-	check(not tips.is_empty() and tips.all(func(tip: Dictionary) -> bool: return main.Guide.known(tip.id) and tip.title is String and tip.text is String and not tip.where.is_empty()), "every tip in the data has a known situation, a title and a text")
-	check(_texts(main.center, "Label").contains("指引 · 闭关修炼") and _button("知道了") != null, "a new player first sees the retreat tip")
+	check(not tips.is_empty() and tips.all(func(tip: Dictionary) -> bool: return main.Guide.known(tip.id) and tip.title is String and tip.pages is Array and not tip.pages.is_empty() and not tip.where.is_empty()), "every card in the data has a known situation, a title and pages")
+	check(_texts(main.center, "Label").contains("教学 · 闭关修炼  1 / 2") and _button("下一页") != null and _button("知道了") == null, "a new journey first sees the retreat card, page one of two")
+	_button("下一页").pressed.emit()
+	check(_texts(main.center, "Label").contains("一次闭关有上限") and _button("上一页") != null and _button("知道了") != null, "the last page explains the limits and can be dismissed")
 	_button("知道了").pressed.emit()
-	check(main.guide_seen.has("retreat") and _texts(main.center, "Label").contains("指引 · 此地人物"), "dismissing it brings the next tip that applies here")
+	check("retreat" in main.session.player.taught and _texts(main.center, "Label").contains("教学 · 此地人物"), "dismissing it brings the next card that applies here")
 	var dismissed := 0
-	while _button("知道了") != null and dismissed < 10:
+	while (_button("知道了") != null or _button("下一页") != null) and dismissed < 20:
 		dismissed += 1
-		_button("知道了").pressed.emit()
-	check(not _texts(main.center, "Label").contains("指引 ·") and not main.guide_seen.has("map") and not main.guide_seen.has("battle"), "tips for situations not met yet wait their turn")
-	main.guide_seen = {}
-	main.Guide.load_state(main)
-	check(main.guide_seen.has("retreat") and main.guide_seen.has("people"), "dismissed tips are remembered in the guide file")
+		(_button("知道了") if _button("知道了") != null else _button("下一页")).pressed.emit()
+	var taught: Array = main.session.player.taught
+	check(not _texts(main.center, "Label").contains("教学 ·") and not "map" in taught and not "battle" in taught and "lineage" in taught and "stories" in taught, "cards for situations not met yet wait their turn")
+	var copy = main.Session.new()
+	check(copy.restore(JSON.parse_string(JSON.stringify(main.session.snapshot()))) and "people" in copy.player.taught, "dismissed cards are kept with the journey")
 	main.set_guide_enabled(false)
-	main.guide_seen.erase("retreat")
+	main.session.player.taught.erase("retreat")
 	main.render()
-	check(not _texts(main.center, "Label").contains("指引 ·"), "the guide can be switched off")
+	check(not _texts(main.center, "Label").contains("教学 ·"), "the cards can be switched off")
 	main.reset_guide()
-	check(main.guide_enabled and main.guide_seen.is_empty() and _texts(main.center, "Label").contains("指引 · 闭关修炼"), "and every tip can be shown again")
+	check(main.guide_enabled and main.session.player.taught.is_empty() and _texts(main.center, "Label").contains("教学 · 闭关修炼"), "and every card of the journey can be shown again")
 	main.set_guide_enabled(false)
 	# A place is a scene: its name on top, its spots as paper tags, the people in a drawer at the left.
 	check(main.scene_layer.visible and _tag("静室") != null and _tag("演武坪") != null and _tag("传功堂") != null, "the sect's spots hang on its scene as paper tags")
@@ -247,7 +292,7 @@ func _run() -> void:
 	check(main.audio.music_key == "wild" and main.audio.ambience_key == "wild", "music and ambience follow the location")
 	main.set_guide_enabled(true)
 	main.run(func() -> String: return main.session.start_battle("wolf"))
-	check(_texts(main.center, "Label").contains("指引 · 斗法") and _texts(main.center, "Label").contains("按 1 / 2 / 3 / 4 或点按钮") and _button("[1] ") != null, "the first duel explains the controls with the bound keys")
+	check(_texts(main.center, "Label").contains("教学 · 斗法  1 / 2") and _texts(main.center, "Label").contains("按 1 / 2 / 3 / 4 或点按钮") and _button("[1] ") != null, "the first duel explains the controls with the bound keys")
 	main.set_guide_enabled(false)
 	check(main.current_screen() == "full" and not main.hud_left.visible and main.window.get_global_rect().size.is_equal_approx(main.get_global_rect().size) and _texts(main.center, "Label").contains("斗 法  ·  第 1 回合") and _button("守御") != null and _button("撤离") != null, "the duel takes the whole screen, with its dock along the bottom")
 	_button("记录").pressed.emit()
@@ -309,7 +354,7 @@ func _run() -> void:
 	main.set_view("chronicle")
 	var record := _texts(main.center, "Label")
 	check(record.contains("编 年 史  ·  %d 条" % main.session.chronicle.entries.size()) and record.contains("历元 1 年") and record.contains("你拜入青云山"), "the chronicle view lists the whole record under years")
-	var kinds: Array = main.session.content.chronicle.keys() + ["event", "talk", "npc"]
+	var kinds: Array = main.session.content.chronicle.keys() + ["event", "talk", "npc", "story", "letter"]
 	check(kinds.all(func(kind: String) -> bool: return main.ChronicleView.groups().any(func(group: Dictionary) -> bool: return kind in group.get("entries", []) )), "every kind of entry has a filter")
 	_button("大事").pressed.emit()
 	var majors: Array = main.ChronicleView.shown(main)
@@ -495,6 +540,7 @@ func _run() -> void:
 	main._ask_new_game()
 	await process_frame
 	main.new_game_dialog.hide()
+	_guided()
 	print("UI: %d checks, %d failures; %d captures" % [checks, failures, captures])
 	main.queue_free()
 	# Give the audio server a moment to release stopped playbacks before quitting.

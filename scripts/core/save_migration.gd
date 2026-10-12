@@ -1,6 +1,8 @@
 extends RefCounted
 ## Upgrades saved sessions one version at a time. Output still goes through Session validation.
-const CURRENT_VERSION := 11
+const CURRENT_VERSION := 12
+# The teaching cards (data/guide.json) that existed before version 12; older journeys had seen them.
+const V11_TIPS := ["retreat", "people", "map", "battle", "event", "gather", "trade", "commissions", "fatigue", "bottleneck", "arts"]
 const DAYS_PER_MONTH := 30
 const DAYS_PER_YEAR := 360
 # Version 1 had no ages; every journey began at sixteen on day 0.
@@ -35,7 +37,26 @@ static func migrate(data: Dictionary) -> Dictionary:
 		result = _v9_to_v10(result)
 	if not result.is_empty() and int(result.version) == 10:
 		result = _v10_to_v11(result)
+	if not result.is_empty() and int(result.version) == 11:
+		result = _v11_to_v12(result)
 	return result
+
+## Version 12 adds the storylines (the guided start and key people's stories), 传音, deeds and the
+## teaching cards seen in the journey. Older journeys are long past the introduction: it counts as done,
+## which opens the sect's halls and lets the sect's own storylines begin; the cards they knew stay
+## dismissed. Their mind is filled in on restore, from the stage.
+static func _v11_to_v12(data: Dictionary) -> Dictionary:
+	var player: Variant = data.get("player")
+	var world: Variant = data.get("world")
+	if not player is Dictionary or not world is Dictionary or not world.get("flags") is Dictionary:
+		return {}
+	world.flags["intro_done"] = true
+	world["storylines"] = {"intro": {"state": "done", "step": 0, "since": world.get("day", 0), "begun": false, "base": {}}}
+	world["letters"] = []
+	player["deeds"] = {}
+	player["taught"] = V11_TIPS.duplicate()
+	data["version"] = 12
+	return data
 
 static func _v1_to_v2(data: Dictionary) -> Dictionary:
 	var player: Variant = data.get("player")

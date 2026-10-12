@@ -88,6 +88,18 @@ static func met(s, condition: Dictionary) -> bool:
 			return int(s.world.people.get(value[0], {}).get("relation", 0)) >= int(value[1])
 		"mind_at_least":
 			return int(s.player.get("mind", 0)) >= int(value)
+		"stage_at_least":
+			return int(s.player.realm) > int(value[0]) or (int(s.player.realm) == int(value[0]) and int(s.player.stage) >= int(value[1]))
+		"sect":
+			return str(s.player.get("sect", "")) == value
+		"talked":
+			return int(s.world.people.get(value, {}).get("talks", 0)) > 0
+		"deed_at_least":
+			return s.deed_count(value[0]) >= int(value[1])
+		"story_at":
+			return s.story_at(value[0], value[1])
+		"story_state":
+			return s.story_state(value[0]) == ("" if value[1] == "none" else value[1])
 		"event_state":
 			return str(s.world.events.get(value[0], {}).get("state", "")) == value[1]
 	return false
@@ -109,6 +121,14 @@ static func apply(s, effects: Array) -> void:
 				s.breach()
 			"mind":
 				s.gain_mind(int(value))
+			"start_story":
+				s.start_story(value)
+			"story_advance":
+				s.story_advance(value)
+			"sound":
+				s.exchange_sound(value)
+			"manual":
+				s.add_item("j:" + s.Arsenal.generate_technique(s.content, s.world_rng, int(value)), 1)
 			"herbs":
 				if int(value) >= 0:
 					s.add_item("huichun_grass", int(value))
@@ -142,6 +162,10 @@ static func apply(s, effects: Array) -> void:
 				s.mark_met(value[0])
 				var person := _person(s, value[0])
 				person.relation = clampi(int(person.relation) + int(value[1]), -s.content.FAVOR_MAX, s.content.FAVOR_MAX)
+				# Key people leave a 传音符 once the bond is close enough.
+				var someone: Dictionary = s.content.people.get(value[0], {})
+				if someone.has("sound_at") and int(person.relation) >= int(someone.sound_at):
+					s.exchange_sound(value[0])
 			"leave":
 				s.npc_depart(s.acting_npc)
 			"battle":
@@ -203,8 +227,14 @@ static func next_due(s, from_day: int) -> Dictionary:
 	var obituary: Dictionary = s.next_obituary(from_day)
 	if not obituary.is_empty():
 		best = _earlier(best, {"day": int(obituary.day), "kind": "obituary", "event": obituary.id})
+	var story: Dictionary = s.story_due(from_day)
+	if not story.is_empty():
+		best = _earlier(best, {"day": int(story.day), "kind": "story", "event": story.story})
 	for event_id: String in _sorted_ids(s):
 		var definition: Dictionary = s.content.events[event_id]
+		# Only dated events and fixed windows (reminders, expiries) are ever due.
+		if definition.trigger != "date" and not definition.has("window"):
+			continue
 		var progress := progress_of(s, event_id)
 		var window := window_at(definition, from_day)
 		if window.is_empty() or not open_for(s, event_id, window, from_day):
@@ -240,6 +270,8 @@ static func fire(s, due: Dictionary) -> Dictionary:
 			s.obituaries_changed()
 			var life: Dictionary = s.life_by_id(due.event)
 			return {"interrupt": false, "message": s.log_event("obituary", {"npc": due.event, "age": (int(life.death) - int(life.birth)) / 360})}
+		"story":
+			return s.story_fire(due.event)
 		"lifespan_end":
 			s.ended = {"kind": "lifespan", "day": day}
 			return {"interrupt": true, "message": s.log_event("lifespan_end", {"location": s.player.location, "age": s.age()}, true)}

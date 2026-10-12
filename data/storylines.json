@@ -1,0 +1,229 @@
+{
+  "intro": {
+    "title": "初入山门",
+    "giver": "xu_qinghe",
+    "guide": true,
+    "steps": [
+      {
+        "id": "retreat",
+        "goal": "到静室闭关修炼一个月。",
+        "place": "sect",
+        "retreat_days": 30,
+        "say": "外门执事弟子许清和领你进了青云山：“我姓许，往后外门的杂事找我便是。修行先修根基——静室就在这里，你先闭关一个月，感受灵气入体。出关后我再与你细说。”",
+        "deeds": {"retreat_days": 30},
+        "after": "你出关时，许清和已在门外候着：“一个月得了几十点修为，不多，却是你自己的。记住：一次闭关有上限，心境跟不上，收益还要减半——光闷在静室里是修不成的。去演武坪找同门切磋一场吧，输赢不要紧。”"
+      },
+      {
+        "id": "spar",
+        "goal": "到演武坪与同门切磋一场，胜负不论。",
+        "place": "sect",
+        "deeds": {"duel": 1},
+        "after": "许清和拍拍你的肩：“斗法能攒历练、磨心境。往后修为卡在瓶颈，就出去多走动走动。”"
+      },
+      {
+        "id": "herbs",
+        "goal": "去松风岭采集三株灵草，再与采药的阿芷说说话。",
+        "place": "ridge",
+        "say": "许清和：“药堂缺灵草。你去松风岭采三株回来——点左上角的「舆图」，在图上选松风岭，便会沿路启程。岭上有位采药的姑娘叫阿芷，认得的草比谁都多，不妨与她聊聊。”",
+        "done": [{"herbs_at_least": 3}, {"talked": "azhi"}]
+      },
+      {
+        "id": "return",
+        "goal": "回青云山，把三株灵草交给许清和。",
+        "place": "sect",
+        "say": "灵草采够了，阿芷也认识了。该回青云山向许清和交差。",
+        "after": "许清和收下灵草，数出三十灵石给你：“药堂给的。灵草在云溪坊市的药铺能换钱，丹药也在那里买。去坊市走一趟，认认门路。”",
+        "effects": [{"stones": 30}, {"item": ["huiqi_pill", 2]}]
+      },
+      {
+        "id": "market",
+        "goal": "去云溪坊市，在药铺或丹铺做一笔买卖。",
+        "place": "market",
+        "deeds": {"trade": 1},
+        "after": "你在坊市里转了一圈，记下了药铺与丹铺的门路。药铺掌柜沈墨说，往后有灵草只管拿来。"
+      },
+      {
+        "id": "report",
+        "goal": "回青云山，向许清和回禀。",
+        "place": "sect",
+        "say": "坊市的门路记下了，回青云山向许清和回禀吧。",
+        "after": "许清和点点头：“入门的事就这些了。执事堂的委托、传功堂的传承、茶馆渡口的消息，往后都由你自己拿主意。这道传音符你收着，有事我会传音给你。”",
+        "effects": [{"flag": "intro_done"}, {"sound": "xu_qinghe"}, {"item": ["pozhang_pill", 1]}, {"mind": 3}],
+        "major": true
+      }
+    ]
+  },
+  "errands": {
+    "title": "师门差事",
+    "giver": "xu_qinghe",
+    "begin_if": [{"story_state": ["intro", "done"]}],
+    "close_if": [{"realm_at_least": 1}],
+    "closed": "你已筑基，外门的差事不再派到你头上。",
+    "steps": [
+      {"id": "wait_dew", "wait_days": 90},
+      {
+        "id": "dew",
+        "letter": true,
+        "goal": "采三株凝露草（松风岭出产），交给青云山的许清和。",
+        "place": "sect",
+        "say": "药堂又缺凝露草了。你若得空，采三株送到执事堂，药堂有赏。",
+        "after": "许清和收下凝露草，塞给你一枚破障丹：“药堂的谢礼。修为卡住时服下，比闷头闭关管用。”",
+        "effects": [{"item": ["pozhang_pill", 1]}, {"relation": ["xu_qinghe", 10]}, {"mind": 2}]
+      },
+      {"id": "wait_wolf", "wait_days": 180},
+      {
+        "id": "wolf",
+        "letter": true,
+        "goal": "到落霞谷谷口斩一头妖狼。",
+        "place": "wild",
+        "say": "落霞谷谷口的妖狼伤了两个采药的外门弟子。你若有余力，去谷口斩一头，替他们出这口气。",
+        "deeds": {"win:wolf": 1},
+        "after": "妖狼伏诛，你割下狼牙作凭证。"
+      },
+      {
+        "id": "wolf_report",
+        "goal": "回青云山，向许清和回禀斩狼之事。",
+        "place": "sect",
+        "after": "许清和接过狼牙，喜道：“好！这是执事堂的赏，那两个师弟也托我谢你。”",
+        "effects": [{"stones": 60}, {"relation": ["xu_qinghe", 10]}, {"mind": 3}]
+      },
+      {"id": "wait_advice", "wait_days": 360},
+      {
+        "id": "advice",
+        "letter": true,
+        "auto": true,
+        "say": "外门里都在议论下一回小比。平日多去演武坪切磋，报名时别错过了——头名能得一卷好功法。",
+        "effects": [{"mind": 1}]
+      }
+    ]
+  },
+  "lineage": {
+    "title": "传功之问",
+    "giver": "gu_changgeng",
+    "begin_if": [{"story_state": ["intro", "done"]}],
+    "steps": [
+      {
+        "id": "visit",
+        "goal": "到青云山传功堂，拜见传功长老顾长庚。",
+        "place": "sect",
+        "speaker": "xu_qinghe",
+        "say": "许清和又叮嘱一句：传功堂的顾长庚长老管着宗门传承，入门弟子都该去拜见。",
+        "done": [{"talked": "gu_changgeng"}],
+        "after": "顾长庚抚须道：“宗门五套传承，各有所长。散修那三门神通够你防身，却走不远。选定一门，在传功堂研习便是——选了也能再换。”"
+      },
+      {
+        "id": "choose",
+        "goal": "在传功堂研习一门宗门传承。",
+        "place": "sect",
+        "done": [{"not": {"sect": "wanderer"}}],
+        "after": "顾长庚看了你演练的几式，点头道：“有模有样。往后修到圆满，记得来见我。”他留给你一道传音符。",
+        "effects": [{"mind": 3}, {"sound": "gu_changgeng"}]
+      },
+      {
+        "id": "foundation",
+        "letter": true,
+        "requires": [{"stage_at_least": [0, 3]}],
+        "skip_if": [{"realm_at_least": 1}],
+        "goal": "到传功堂，向顾长庚请教筑基之道。",
+        "place": "sect",
+        "say": "听说你已修至炼气圆满。筑基一关，不只是修为与丹药——来传功堂，老夫有几句话交代。",
+        "after": "顾长庚：“筑基丹不只丹铺有卖，云溪夜市、坊间拍卖、行脚的药贩都可能遇上。心境跟不上，闭不了长关，筑基之后更是如此。这枚凝气丹你拿去。”",
+        "effects": [{"item": ["ningqi_pill", 1]}, {"mind": 4}]
+      },
+      {
+        "id": "ruin",
+        "letter": true,
+        "requires": [{"realm_at_least": 1}],
+        "skip_if": [{"flag": "found_ruin"}],
+        "goal": "筑基后神识敏锐，去落霞谷深处寻访古修洞府。",
+        "place": "wild",
+        "say": "恭喜筑基。外门的规矩管不到你了。落霞谷深处传说有座古修洞府，以你如今的神识，该去看看了。",
+        "done": [{"flag": "found_ruin"}],
+        "effects": [{"mind": 3}]
+      }
+    ]
+  },
+  "shen_redscale": {
+    "title": "赤鳞果",
+    "giver": "shen_mo",
+    "steps": [
+      {
+        "id": "brew",
+        "goal": "凑齐三株凝露草、两株赤炎花，交给云溪药铺的沈墨。",
+        "place": "market",
+        "close_if": [{"flag": "serpent_slain"}],
+        "closed": "妖蟒已除，沈墨的破鳞散用不上了。他笑说这样最好。",
+        "after": "沈墨把药材投进药碾：“凝露草性寒，赤炎花引药入血，熬成破鳞散。斗妖蟒前服下，它那身鳞甲便硬不起来。”他把一包药散递给你。",
+        "effects": [{"item": ["polin_powder", 1]}]
+      },
+      {
+        "id": "slay",
+        "goal": "服下破鳞散，筑基后往落霞谷深谷灵泉斩除妖蟒。",
+        "place": "wild",
+        "deeds": {"win:serpent": 1},
+        "close_if": [{"all": [{"flag": "serpent_slain"}, {"not": {"deed_at_least": ["win:serpent", 1]}}]}],
+        "closed": "宗门长老出手斩了妖蟒，沈墨把那包没用上的破鳞散收回药柜，说留着也好。",
+        "after": "沈墨听说妖蟒伏诛，关了半日铺子，请你喝了一壶好酒：“阿芷她爹那笔账，算是清了。”",
+        "effects": [{"stones": 80}, {"relation": ["shen_mo", 20]}, {"mind": 3}]
+      }
+    ]
+  },
+  "boatman_sword": {
+    "title": "冰河剑痕",
+    "giver": "boatman",
+    "steps": [
+      {
+        "id": "dive",
+        "goal": "筑基之后，到白鹭渡请老艄公撑船，以神识探查河底的剑痕。",
+        "place": "ferry",
+        "after": "河底的青石上留着一道剑痕，残存的剑意凛冽如冰。你以神识拓下那一缕剑意，化作一枚玉简。老艄公撑着篙嘿嘿直笑：“我就说那一剑不寻常。”",
+        "effects": [{"manual": 3}, {"mind": 5}, {"relation": ["boatman", 10]}],
+        "major": true
+      }
+    ]
+  },
+  "peddler_robbed": {
+    "title": "货郎遇劫",
+    "giver": "peddler",
+    "steps": [
+      {
+        "id": "hunt",
+        "goal": "找到蒙面劫修（常在松风岭、落霞谷与白鹭渡出没），夺回钱货郎的货担。",
+        "deeds": {"win:rogue": 1},
+        "after": "劫修败走，丢下一副货担，里头的丹瓶一个没少。",
+        "effects": [{"item": ["peddler_pack", 1]}]
+      },
+      {
+        "id": "return",
+        "goal": "把货担还给行脚药贩钱货郎。",
+        "after": "钱货郎抱着货担直搓手：“恩公！往后从我这儿拿筑基丹，只收五十五灵石。”他留给你一道传音符。",
+        "effects": [{"take_item": "peddler_pack"}, {"flag": "peddler_friend"}, {"relation": ["peddler", 20]}, {"sound": "peddler"}, {"mind": 3}]
+      }
+    ]
+  },
+  "liu_squatter": {
+    "title": "寒舟之约",
+    "giver": "wounded",
+    "begin_if": [{"flag": "helped_wanderer"}, {"flag": "found_ruin"}, {"not": {"flag": "ruin_cleared"}}],
+    "steps": [
+      {
+        "id": "persuade",
+        "letter": true,
+        "goal": "到古修洞府，把柳寒舟的话转告石寒——或者干脆与他斗法。",
+        "place": "ruin",
+        "say": "听说你寻到了落霞谷深处的洞府。占着那里的石寒，原是我的师兄。他走岔了路，却不是恶人……若能劝他离开，莫伤他性命。你只说“寒舟还记得松风岭的那壶酒”，他便明白。",
+        "close_if": [{"flag": "ruin_cleared"}],
+        "closed": "柳寒舟传音来，只说了一句：“师兄的事，我听说了。不怪你。”",
+        "after": "石寒沉默良久，收剑入鞘：“告诉寒舟，那壶酒我还欠着。”他背起行囊，头也不回地出了洞府。"
+      },
+      {"id": "wait_thanks", "wait_days": 30},
+      {
+        "id": "thanks",
+        "letter": true,
+        "auto": true,
+        "say": "师兄传了信来，说要去北边重新开始。这份情我记下了——托人捎去五十灵石与一枚凝气丹，聊表心意。",
+        "effects": [{"stones": 50}, {"item": ["ningqi_pill", 1]}, {"relation": ["wounded", 20]}, {"mind": 4}]
+      }
+    ]
+  }
+}

@@ -120,6 +120,7 @@ static func sell(s, item_id: String, count: int = 1) -> String:
 	if count < 1 or not remove_item(s, item_id, count):
 		return "行囊里没有那么多。"
 	s.player.stones += price * count
+	s.record_deed("trade")
 	return s.conclude(s.log_event("sell_item", {"item": item_id, "count": count, "revenue": price * count}))
 
 static func buy(s, item_id: String) -> String:
@@ -132,6 +133,7 @@ static func buy(s, item_id: String) -> String:
 				return "灵石不足：%s需要 %d 灵石。" % [s.content.item(item_id).name, int(good.price)]
 			s.player.stones -= int(good.price)
 			add_item(s, item_id, 1)
+			s.record_deed("trade")
 			if good.has("key"):
 				s.world.stock_sold[good.key] = true
 			return s.conclude(s.log_event("buy_item", {"item": item_id, "price": int(good.price)}))

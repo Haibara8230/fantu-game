@@ -135,6 +135,8 @@ static func render(ui) -> void:
 	ui.hud_icons.map.text = "此地" if on_map else "舆图"
 	ui.hud_icons.map.disabled = not on_map and not ui.settled()
 	ui.clock_label.text = session.time_name()
+	var unread: int = session.unread_letters()
+	ui.hud_icons.goals.text = "任务" if unread == 0 else "任务 · 传音 %d" % unread
 	ui.place_label.text = session.content.locations[p.location].name
 	var goals: Array[Dictionary] = []
 	if ui.goals_enabled:

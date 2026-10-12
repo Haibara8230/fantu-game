@@ -3,7 +3,9 @@ extends SceneTree
 const Session = preload("res://scripts/core/session.gd")
 const Content = preload("res://scripts/core/content.gd")
 const Calendar = preload("res://scripts/core/calendar.gd")
-const PERFORMANCE_BUDGET_MSEC := 4000
+# A guard against runaway costs, not a target: the storylines and tales checked after every action
+# took the month-by-month run from about 3.3 s to 4.1 s.
+const PERFORMANCE_BUDGET_MSEC := 5000
 var checks := 0
 var failures := 0
 

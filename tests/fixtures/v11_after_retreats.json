@@ -1,0 +1,916 @@
+{
+  "battle": {},
+  "chronicle": [
+    {
+      "args": {},
+      "day": 0,
+      "id": "start",
+      "major": true
+    },
+    {
+      "args": {
+        "days": 90,
+        "xp": 252
+      },
+      "day": 90,
+      "id": "cultivate",
+      "major": false
+    },
+    {
+      "args": {
+        "days": 4,
+        "location": "ridge"
+      },
+      "day": 94,
+      "id": "travel",
+      "major": false
+    },
+    {
+      "args": {
+        "days": 5,
+        "location": "ridge",
+        "loot": "huichun_grass:1,ninglu_grass:1"
+      },
+      "day": 99,
+      "id": "gather_items",
+      "major": false
+    },
+    {
+      "args": {
+        "line": 0,
+        "npc": "azhi"
+      },
+      "day": 99,
+      "id": "talk",
+      "major": false
+    },
+    {
+      "args": {
+        "days": 4,
+        "location": "sect"
+      },
+      "day": 103,
+      "id": "travel",
+      "major": false
+    },
+    {
+      "args": {
+        "enemy": "disciple"
+      },
+      "day": 103,
+      "id": "battle_start",
+      "major": false
+    },
+    {
+      "args": {
+        "amount": 13,
+        "skill": "sword"
+      },
+      "day": 103,
+      "id": "skill_attack",
+      "major": false
+    },
+    {
+      "args": {
+        "amount": 10,
+        "enemy": "disciple"
+      },
+      "day": 103,
+      "id": "enemy_attack",
+      "major": false
+    },
+    {
+      "args": {
+        "amount": 14,
+        "skill": "sword"
+      },
+      "day": 103,
+      "id": "skill_attack",
+      "major": false
+    },
+    {
+      "args": {
+        "amount": 7,
+        "enemy": "disciple"
+      },
+      "day": 103,
+      "id": "enemy_attack",
+      "major": false
+    },
+    {
+      "args": {
+        "amount": 13,
+        "skill": "sword"
+      },
+      "day": 103,
+      "id": "skill_attack",
+      "major": false
+    },
+    {
+      "args": {
+        "amount": 6,
+        "enemy": "disciple"
+      },
+      "day": 103,
+      "id": "enemy_attack",
+      "major": false
+    },
+    {
+      "args": {
+        "amount": 12,
+        "skill": "sword"
+      },
+      "day": 103,
+      "id": "skill_attack",
+      "major": false
+    },
+    {
+      "args": {
+        "enemy": "disciple",
+        "herbs": 0,
+        "stones": 12,
+        "xp": 20
+      },
+      "day": 103,
+      "id": "battle_victory",
+      "major": false
+    }
+  ],
+  "ended": {},
+  "pending_event": {},
+  "player": {
+    "arts": [
+      "sword",
+      "fire",
+      "wood"
+    ],
+    "birth_day": -5760,
+    "cooldowns": {},
+    "cultivation_carry": 0,
+    "equipment": {
+      "accessory": "",
+      "robe": "",
+      "weapon": ""
+    },
+    "fatigue": 90,
+    "fatigue_day": 90,
+    "hp": 67,
+    "insight": 20,
+    "items": {
+      "huichun_grass": 1,
+      "ninglu_grass": 1
+    },
+    "journey": {},
+    "learned": [
+      "sword",
+      "fire",
+      "wood"
+    ],
+    "location": "sect",
+    "max_hp": 90,
+    "max_qi": 30,
+    "methods": [],
+    "name": "旧档",
+    "qi": 30,
+    "quests": [],
+    "realm": 0,
+    "roots": [
+      "water",
+      "earth"
+    ],
+    "sect": "wanderer",
+    "stage": 0,
+    "stones": 42,
+    "warned_for": -1,
+    "xp": 272
+  },
+  "rng": {
+    "combat": "-1741556050495447404",
+    "world": "-8781339697624406808"
+  },
+  "version": 11,
+  "world": {
+    "day": 106,
+    "events": {},
+    "flags": {},
+    "people": {
+      "azhi": {
+        "absent_until": -1,
+        "last": {
+          "talk": 99
+        },
+        "met": true,
+        "met_day": 94,
+        "met_place": "ridge",
+        "relation": 43,
+        "talks": 1
+      },
+      "g:1026:0": {
+        "absent_until": -1,
+        "last": {},
+        "met": true,
+        "met_day": 99,
+        "met_place": "ridge",
+        "relation": 0,
+        "talks": 0
+      },
+      "g:1035:0": {
+        "absent_until": -1,
+        "last": {},
+        "met": true,
+        "met_day": 0,
+        "met_place": "sect",
+        "relation": 0,
+        "talks": 0
+      },
+      "g:1055:0": {
+        "absent_until": -1,
+        "last": {},
+        "met": true,
+        "met_day": 0,
+        "met_place": "sect",
+        "relation": 0,
+        "talks": 0
+      },
+      "g:1082:0": {
+        "absent_until": -1,
+        "last": {},
+        "met": true,
+        "met_day": 94,
+        "met_place": "ridge",
+        "relation": 0,
+        "talks": 0
+      },
+      "g:1093:0": {
+        "absent_until": -1,
+        "last": {},
+        "met": true,
+        "met_day": 0,
+        "met_place": "sect",
+        "relation": 0,
+        "talks": 0
+      },
+      "g:1094:0": {
+        "absent_until": -1,
+        "last": {},
+        "met": true,
+        "met_day": 0,
+        "met_place": "sect",
+        "relation": 0,
+        "talks": 0
+      },
+      "g:1096:0": {
+        "absent_until": -1,
+        "last": {},
+        "met": true,
+        "met_day": 0,
+        "met_place": "sect",
+        "relation": 0,
+        "talks": 0
+      },
+      "g:1105:0": {
+        "absent_until": -1,
+        "last": {},
+        "met": true,
+        "met_day": 94,
+        "met_place": "ridge",
+        "relation": 0,
+        "talks": 0
+      },
+      "g:1120:0": {
+        "absent_until": -1,
+        "last": {},
+        "met": true,
+        "met_day": 0,
+        "met_place": "sect",
+        "relation": 0,
+        "talks": 0
+      },
+      "g:1148:0": {
+        "absent_until": -1,
+        "last": {},
+        "met": true,
+        "met_day": 94,
+        "met_place": "ridge",
+        "relation": 0,
+        "talks": 0
+      },
+      "g:1149:0": {
+        "absent_until": -1,
+        "last": {},
+        "met": true,
+        "met_day": 0,
+        "met_place": "sect",
+        "relation": 0,
+        "talks": 0
+      },
+      "g:1177:0": {
+        "absent_until": -1,
+        "last": {},
+        "met": true,
+        "met_day": 0,
+        "met_place": "sect",
+        "relation": 0,
+        "talks": 0
+      },
+      "g:148:0": {
+        "absent_until": -1,
+        "last": {},
+        "met": true,
+        "met_day": 0,
+        "met_place": "sect",
+        "relation": 0,
+        "talks": 0
+      },
+      "g:149:0": {
+        "absent_until": -1,
+        "last": {},
+        "met": true,
+        "met_day": 94,
+        "met_place": "ridge",
+        "relation": 0,
+        "talks": 0
+      },
+      "g:152:0": {
+        "absent_until": -1,
+        "last": {},
+        "met": true,
+        "met_day": 0,
+        "met_place": "sect",
+        "relation": 0,
+        "talks": 0
+      },
+      "g:156:0": {
+        "absent_until": -1,
+        "last": {},
+        "met": true,
+        "met_day": 94,
+        "met_place": "ridge",
+        "relation": 0,
+        "talks": 0
+      },
+      "g:168:0": {
+        "absent_until": -1,
+        "last": {},
+        "met": true,
+        "met_day": 0,
+        "met_place": "sect",
+        "relation": 0,
+        "talks": 0
+      },
+      "g:195:0": {
+        "absent_until": -1,
+        "last": {},
+        "met": true,
+        "met_day": 0,
+        "met_place": "sect",
+        "relation": 0,
+        "talks": 0
+      },
+      "g:196:0": {
+        "absent_until": -1,
+        "last": {},
+        "met": true,
+        "met_day": 99,
+        "met_place": "ridge",
+        "relation": 0,
+        "talks": 0
+      },
+      "g:19:0": {
+        "absent_until": -1,
+        "last": {},
+        "met": true,
+        "met_day": 94,
+        "met_place": "ridge",
+        "relation": 0,
+        "talks": 0
+      },
+      "g:208:0": {
+        "absent_until": -1,
+        "last": {},
+        "met": true,
+        "met_day": 0,
+        "met_place": "sect",
+        "relation": 0,
+        "talks": 0
+      },
+      "g:20:0": {
+        "absent_until": -1,
+        "last": {},
+        "met": true,
+        "met_day": 0,
+        "met_place": "sect",
+        "relation": 0,
+        "talks": 0
+      },
+      "g:221:0": {
+        "absent_until": -1,
+        "last": {},
+        "met": true,
+        "met_day": 0,
+        "met_place": "sect",
+        "relation": 0,
+        "talks": 0
+      },
+      "g:238:0": {
+        "absent_until": -1,
+        "last": {},
+        "met": true,
+        "met_day": 99,
+        "met_place": "ridge",
+        "relation": 0,
+        "talks": 0
+      },
+      "g:265:0": {
+        "absent_until": -1,
+        "last": {},
+        "met": true,
+        "met_day": 0,
+        "met_place": "sect",
+        "relation": 0,
+        "talks": 0
+      },
+      "g:269:0": {
+        "absent_until": -1,
+        "last": {},
+        "met": true,
+        "met_day": 94,
+        "met_place": "ridge",
+        "relation": 0,
+        "talks": 0
+      },
+      "g:274:0": {
+        "absent_until": -1,
+        "last": {},
+        "met": true,
+        "met_day": 0,
+        "met_place": "sect",
+        "relation": 0,
+        "talks": 0
+      },
+      "g:300:0": {
+        "absent_until": -1,
+        "last": {},
+        "met": true,
+        "met_day": 0,
+        "met_place": "sect",
+        "relation": 0,
+        "talks": 0
+      },
+      "g:362:0": {
+        "absent_until": -1,
+        "last": {},
+        "met": true,
+        "met_day": 0,
+        "met_place": "sect",
+        "relation": 0,
+        "talks": 0
+      },
+      "g:385:0": {
+        "absent_until": -1,
+        "last": {},
+        "met": true,
+        "met_day": 94,
+        "met_place": "ridge",
+        "relation": 0,
+        "talks": 0
+      },
+      "g:391:0": {
+        "absent_until": -1,
+        "last": {},
+        "met": true,
+        "met_day": 99,
+        "met_place": "ridge",
+        "relation": 0,
+        "talks": 0
+      },
+      "g:396:0": {
+        "absent_until": -1,
+        "last": {},
+        "met": true,
+        "met_day": 99,
+        "met_place": "ridge",
+        "relation": 0,
+        "talks": 0
+      },
+      "g:407:0": {
+        "absent_until": -1,
+        "last": {},
+        "met": true,
+        "met_day": 0,
+        "met_place": "sect",
+        "relation": 0,
+        "talks": 0
+      },
+      "g:416:0": {
+        "absent_until": -1,
+        "last": {},
+        "met": true,
+        "met_day": 0,
+        "met_place": "sect",
+        "relation": 0,
+        "talks": 0
+      },
+      "g:421:0": {
+        "absent_until": -1,
+        "last": {},
+        "met": true,
+        "met_day": 0,
+        "met_place": "sect",
+        "relation": 0,
+        "talks": 0
+      },
+      "g:428:0": {
+        "absent_until": -1,
+        "last": {},
+        "met": true,
+        "met_day": 94,
+        "met_place": "ridge",
+        "relation": 0,
+        "talks": 0
+      },
+      "g:445:0": {
+        "absent_until": -1,
+        "last": {},
+        "met": true,
+        "met_day": 0,
+        "met_place": "sect",
+        "relation": 0,
+        "talks": 0
+      },
+      "g:534:0": {
+        "absent_until": -1,
+        "last": {},
+        "met": true,
+        "met_day": 99,
+        "met_place": "ridge",
+        "relation": 0,
+        "talks": 0
+      },
+      "g:537:0": {
+        "absent_until": -1,
+        "last": {},
+        "met": true,
+        "met_day": 0,
+        "met_place": "sect",
+        "relation": 0,
+        "talks": 0
+      },
+      "g:567:0": {
+        "absent_until": -1,
+        "last": {},
+        "met": true,
+        "met_day": 94,
+        "met_place": "ridge",
+        "relation": 0,
+        "talks": 0
+      },
+      "g:600:0": {
+        "absent_until": -1,
+        "last": {},
+        "met": true,
+        "met_day": 94,
+        "met_place": "ridge",
+        "relation": 0,
+        "talks": 0
+      },
+      "g:603:0": {
+        "absent_until": -1,
+        "last": {},
+        "met": true,
+        "met_day": 94,
+        "met_place": "ridge",
+        "relation": 0,
+        "talks": 0
+      },
+      "g:610:0": {
+        "absent_until": -1,
+        "last": {},
+        "met": true,
+        "met_day": 94,
+        "met_place": "ridge",
+        "relation": 0,
+        "talks": 0
+      },
+      "g:617:0": {
+        "absent_until": -1,
+        "last": {},
+        "met": true,
+        "met_day": 99,
+        "met_place": "ridge",
+        "relation": 0,
+        "talks": 0
+      },
+      "g:623:0": {
+        "absent_until": -1,
+        "last": {},
+        "met": true,
+        "met_day": 99,
+        "met_place": "ridge",
+        "relation": 0,
+        "talks": 0
+      },
+      "g:626:0": {
+        "absent_until": -1,
+        "last": {},
+        "met": true,
+        "met_day": 0,
+        "met_place": "sect",
+        "relation": 0,
+        "talks": 0
+      },
+      "g:633:0": {
+        "absent_until": -1,
+        "last": {},
+        "met": true,
+        "met_day": 94,
+        "met_place": "ridge",
+        "relation": 0,
+        "talks": 0
+      },
+      "g:641:0": {
+        "absent_until": -1,
+        "last": {},
+        "met": true,
+        "met_day": 99,
+        "met_place": "ridge",
+        "relation": 0,
+        "talks": 0
+      },
+      "g:642:0": {
+        "absent_until": -1,
+        "last": {},
+        "met": true,
+        "met_day": 0,
+        "met_place": "sect",
+        "relation": 0,
+        "talks": 0
+      },
+      "g:657:0": {
+        "absent_until": -1,
+        "last": {},
+        "met": true,
+        "met_day": 99,
+        "met_place": "ridge",
+        "relation": 0,
+        "talks": 0
+      },
+      "g:661:0": {
+        "absent_until": -1,
+        "last": {},
+        "met": true,
+        "met_day": 0,
+        "met_place": "sect",
+        "relation": 0,
+        "talks": 0
+      },
+      "g:670:0": {
+        "absent_until": -1,
+        "last": {},
+        "met": true,
+        "met_day": 94,
+        "met_place": "ridge",
+        "relation": 0,
+        "talks": 0
+      },
+      "g:685:0": {
+        "absent_until": -1,
+        "last": {},
+        "met": true,
+        "met_day": 0,
+        "met_place": "sect",
+        "relation": 0,
+        "talks": 0
+      },
+      "g:704:0": {
+        "absent_until": -1,
+        "last": {},
+        "met": true,
+        "met_day": 94,
+        "met_place": "ridge",
+        "relation": 0,
+        "talks": 0
+      },
+      "g:71:0": {
+        "absent_until": -1,
+        "last": {},
+        "met": true,
+        "met_day": 0,
+        "met_place": "sect",
+        "relation": 0,
+        "talks": 0
+      },
+      "g:727:0": {
+        "absent_until": -1,
+        "last": {},
+        "met": true,
+        "met_day": 0,
+        "met_place": "sect",
+        "relation": 0,
+        "talks": 0
+      },
+      "g:749:0": {
+        "absent_until": -1,
+        "last": {},
+        "met": true,
+        "met_day": 0,
+        "met_place": "sect",
+        "relation": 0,
+        "talks": 0
+      },
+      "g:762:0": {
+        "absent_until": -1,
+        "last": {},
+        "met": true,
+        "met_day": 0,
+        "met_place": "sect",
+        "relation": 0,
+        "talks": 0
+      },
+      "g:774:0": {
+        "absent_until": -1,
+        "last": {},
+        "met": true,
+        "met_day": 0,
+        "met_place": "sect",
+        "relation": 0,
+        "talks": 0
+      },
+      "g:783:0": {
+        "absent_until": -1,
+        "last": {},
+        "met": true,
+        "met_day": 0,
+        "met_place": "sect",
+        "relation": 0,
+        "talks": 0
+      },
+      "g:784:0": {
+        "absent_until": -1,
+        "last": {},
+        "met": true,
+        "met_day": 0,
+        "met_place": "sect",
+        "relation": 0,
+        "talks": 0
+      },
+      "g:787:0": {
+        "absent_until": -1,
+        "last": {},
+        "met": true,
+        "met_day": 0,
+        "met_place": "sect",
+        "relation": 0,
+        "talks": 0
+      },
+      "g:795:0": {
+        "absent_until": -1,
+        "last": {},
+        "met": true,
+        "met_day": 0,
+        "met_place": "sect",
+        "relation": 0,
+        "talks": 0
+      },
+      "g:799:0": {
+        "absent_until": -1,
+        "last": {},
+        "met": true,
+        "met_day": 0,
+        "met_place": "sect",
+        "relation": 0,
+        "talks": 0
+      },
+      "g:828:0": {
+        "absent_until": -1,
+        "last": {},
+        "met": true,
+        "met_day": 0,
+        "met_place": "sect",
+        "relation": 0,
+        "talks": 0
+      },
+      "g:854:0": {
+        "absent_until": -1,
+        "last": {},
+        "met": true,
+        "met_day": 0,
+        "met_place": "sect",
+        "relation": 0,
+        "talks": 0
+      },
+      "g:860:0": {
+        "absent_until": -1,
+        "last": {},
+        "met": true,
+        "met_day": 99,
+        "met_place": "ridge",
+        "relation": 0,
+        "talks": 0
+      },
+      "g:883:0": {
+        "absent_until": -1,
+        "last": {},
+        "met": true,
+        "met_day": 0,
+        "met_place": "sect",
+        "relation": 0,
+        "talks": 0
+      },
+      "g:887:0": {
+        "absent_until": -1,
+        "last": {},
+        "met": true,
+        "met_day": 0,
+        "met_place": "sect",
+        "relation": 0,
+        "talks": 0
+      },
+      "g:892:0": {
+        "absent_until": -1,
+        "last": {},
+        "met": true,
+        "met_day": 0,
+        "met_place": "sect",
+        "relation": 0,
+        "talks": 0
+      },
+      "g:920:0": {
+        "absent_until": -1,
+        "last": {},
+        "met": true,
+        "met_day": 94,
+        "met_place": "ridge",
+        "relation": 0,
+        "talks": 0
+      },
+      "g:936:0": {
+        "absent_until": -1,
+        "last": {},
+        "met": true,
+        "met_day": 0,
+        "met_place": "sect",
+        "relation": 0,
+        "talks": 0
+      },
+      "g:946:0": {
+        "absent_until": -1,
+        "last": {},
+        "met": true,
+        "met_day": 0,
+        "met_place": "sect",
+        "relation": 0,
+        "talks": 0
+      },
+      "g:952:0": {
+        "absent_until": -1,
+        "last": {},
+        "met": true,
+        "met_day": 0,
+        "met_place": "sect",
+        "relation": 0,
+        "talks": 0
+      },
+      "g:965:0": {
+        "absent_until": -1,
+        "last": {},
+        "met": true,
+        "met_day": 0,
+        "met_place": "sect",
+        "relation": 0,
+        "talks": 0
+      },
+      "g:977:0": {
+        "absent_until": -1,
+        "last": {},
+        "met": true,
+        "met_day": 99,
+        "met_place": "ridge",
+        "relation": 0,
+        "talks": 0
+      },
+      "g:991:0": {
+        "absent_until": -1,
+        "last": {},
+        "met": true,
+        "met_day": 0,
+        "met_place": "sect",
+        "relation": 0,
+        "talks": 0
+      },
+      "wounded": {
+        "absent_until": -1,
+        "last": {},
+        "met": true,
+        "met_day": 94,
+        "met_place": "ridge",
+        "relation": 0,
+        "talks": 0
+      }
+    },
+    "quests_taken": {},
+    "rumors": {},
+    "seed": 77,
+    "stock_sold": {}
+  }
+}

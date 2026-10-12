@@ -160,7 +160,7 @@ static func gain_insight(s, source: String) -> Array[String]:
 	return settle_stage(s)
 
 static func gain_mind(s, amount: int) -> void:
-	s.player.mind = maxi(0, int(s.player.get("mind", 0)) + amount)
+	s.player["mind"] = maxi(0, int(s.player.get("mind", 0)) + amount)
 
 ## A 破障丹: enters the next sub-stage when xp waits at its bottleneck.
 static func breach(s) -> Array[String]:

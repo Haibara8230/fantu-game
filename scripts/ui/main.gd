@@ -36,7 +36,7 @@ const INK := Color("#e3e8dc")
 const MUTED := Color("#97aaa4")
 # The scrolls laid over the world and their tabs: the view each tab shows, and its name.
 const PANEL_TABS := [["status", "属性"], ["arts", "神通"], ["methods", "功法"], ["bag", "行囊"], ["people", "相识"], ["chronicle", "编年史"], ["system", "系统"]]
-const SCROLL_TABS := [["goals", "当前目标"], ["quests", "委托"], ["upcoming", "约定"]]
+const SCROLL_TABS := [["goals", "当前目标"], ["stories", "剧情"], ["quests", "委托"], ["letters", "传音"], ["upcoming", "约定"]]
 const RETREAT_TABS := [["retreat", "修炼"], ["breakthrough", "突破"]]
 const TAB_GROUPS := {"panel": PANEL_TABS, "scroll": SCROLL_TABS, "retreat": RETREAT_TABS, "trade": [["trade", "交易"]]}
 var session = Session.new()
@@ -121,12 +121,18 @@ var story: Dictionary = {}
 var dialogue: Dictionary = {}
 # What the centre panel last showed, so that a new scene fades in.
 var _scene_key := ""
-# The new-player guide (guide.gd): whether tips are shown and which were dismissed, kept in the
-# player's guide file at guide_path (tests point it elsewhere).
+# The teaching cards (guide.gd): whether cards are shown and whether this player has finished the
+# introduction once, kept in the player's guide file at guide_path (tests point it elsewhere); the
+# cards dismissed are the journey's own (player.taught). tip_page is the page of the card on screen.
 var guide_path := Guide.DEFAULT_PATH
 var guide_enabled := true
-var guide_seen := {}
+var intro_finished_once := false
+var tip_page: Dictionary = {}
 var guide_toggle: CheckBox
+# The welcome screen's choice to skip the introduction (shown once it has been finished before).
+var skip_intro: CheckBox
+# How many 传音 were unread when the inbox was opened, to mark them as new there.
+var letters_fresh := 0
 # Preferences kept in the player's settings file (settings.gd); tests point settings_path elsewhere.
 var settings_path := Settings.DEFAULT_PATH
 var fullscreen := false
@@ -494,6 +500,10 @@ func render() -> void:
 				TasksView.render_quests(self)
 			"upcoming":
 				TasksView.render_upcoming(self)
+			"stories":
+				TasksView.render_stories(self)
+			"letters":
+				TasksView.render_letters(self)
 			"system":
 				SystemView.render(self)
 			_:
@@ -515,9 +525,16 @@ func _guide_place() -> String:
 		return ""
 	return view
 
+## Dismisses a teaching card for this journey; the journey is saved with it.
 func dismiss_tip(tip_id: String) -> void:
-	guide_seen[tip_id] = true
-	Guide.save_state(self)
+	tip_page = {}
+	session.mark_taught(tip_id)
+	session.changed.emit()
+
+## Turns the card on screen a page forward or back.
+func turn_tip(step: int) -> void:
+	tip_page.page = int(tip_page.get("page", 0)) + step
+	audio.cue("page")
 	render()
 
 func set_guide_enabled(enabled: bool) -> void:
@@ -525,9 +542,11 @@ func set_guide_enabled(enabled: bool) -> void:
 	Guide.save_state(self)
 	render()
 
-## Shows every tip again, from the first.
+## Shows every card of this journey again, from the first.
 func reset_guide() -> void:
-	guide_seen = {}
+	tip_page = {}
+	if not session.player.is_empty():
+		session.player.taught.clear()
 	guide_enabled = true
 	guide_toggle.set_pressed_no_signal(true)
 	Guide.save_state(self)
@@ -541,6 +560,10 @@ func set_view(next_view: String) -> void:
 	view = next_view
 	if next_view == "chronicle":
 		chronicle_page = 0
+	# Opening the inbox reads the 传音; the ones that were new keep their mark while it stays open.
+	if next_view == "letters":
+		letters_fresh = session.unread_letters()
+		session.mark_letters_read()
 	if next_view == "map" and map_target.is_empty():
 		map_target = str(session.player.journey.get("to", ""))
 	render()
@@ -838,13 +861,16 @@ func run(callback: Callable) -> void:
 	notice(message + (" 自动存档失败：" + autosave_error if not autosave_error.is_empty() else ""))
 
 ## Picks out of an action's new chronicle entries what the centre panel should stage: an illustrated
-## moment that needed no choice (the serpent breaking out), or the words just exchanged with the open
-## person. Only presentation; the session knows nothing of it.
+## moment that needed no choice (the serpent breaking out), a storyline's words or a 传音 (told in a
+## screen of their own until 继续), or the words just exchanged with the open person. Only
+## presentation; the session knows nothing of it.
 func _stage_story(mark: int) -> void:
 	var count := mini(int(session.chronicle.added) - mark, session.chronicle.entries.size())
 	if count <= 0:
 		return
 	var lines: Array[String] = []
+	var told: Array[String] = []
+	var told_title := ""
 	var staged := false
 	for entry: Dictionary in session.chronicle.entries.slice(-count):
 		var args: Dictionary = entry.args
@@ -853,10 +879,20 @@ func _stage_story(mark: int) -> void:
 			if not ArtLibrary.event_art(str(args.event)).is_empty() and not definition.has("choices"):
 				story = {"event": str(args.event), "title": str(definition.get("title", "")), "text": session.chronicle.format(entry, session.content), "mark": mark}
 				staged = true
-		elif entry.id in ["talk", "gift", "npc"] and not selected_npc.is_empty() and str(args.get("npc", "")) == selected_npc:
+		elif entry.id in ["story", "letter"]:
+			if told_title.is_empty():
+				told_title = "传音" if entry.id == "letter" and not args.has("story") else str(session.content.storylines.get(str(args.get("story", "")), {}).get("title", "传音"))
+			told.append(session.chronicle.format(entry, session.content))
+		elif entry.id in ["talk", "gift", "npc", "help"] and not selected_npc.is_empty() and str(args.get("npc", "")) == selected_npc:
 			lines.append(session.chronicle.format(entry, session.content))
 	if not lines.is_empty():
 		dialogue = {"npc": selected_npc, "lines": lines, "mark": mark}
+	if not told.is_empty():
+		if staged:
+			story.text = str(story.text) + "\n\n" + "\n\n".join(told)
+		else:
+			story = {"event": "", "title": told_title, "text": "\n\n".join(told), "mark": mark}
+			staged = true
 	if staged or not lines.is_empty():
 		render()
 
@@ -883,6 +919,10 @@ func notice(message: String) -> void:
 	Hud.notice(self, message)
 
 func _on_changed() -> void:
+	# Finishing the introduction once (or playing a journey from before it) lets later journeys skip it.
+	if started and not intro_finished_once and session.story_state("intro") == "done":
+		intro_finished_once = true
+		Guide.save_state(self)
 	if not presenting:
 		render()
 	if started and autosave_enabled:
@@ -936,8 +976,12 @@ func begin() -> void:
 	started = true
 	story = {}
 	dialogue = {}
-	session.new_game(character_name, -1, welcome_roots)
-	notice("先在青云山修炼，再去落霞谷采草。灵草可在坊市换灵石、购买筑基丹。")
+	tip_page = {}
+	var skipped := is_instance_valid(skip_intro) and skip_intro.button_pressed
+	var mark: int = session.chronicle.added
+	session.new_game(character_name, -1, welcome_roots, "skipped" if skipped else "guided")
+	_stage_story(mark)
+	notice("入门已略过：执事堂、传功堂都已开放，右上角的「任务」写着眼下可做的事。" if skipped else "跟着许清和走一遍入门：右上角的「目标」写着眼下该做的事。")
 
 func continue_saved() -> void:
 	# Suppress auto-save while deciding which existing save to restore.

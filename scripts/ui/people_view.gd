@@ -98,7 +98,8 @@ static func render_drawer(ui, layer: Control) -> void:
 			shown += 1
 		var person: Dictionary = session.person(person_id)
 		var hostile: bool = person.attitude == "hostile"
-		var chip: Button = ui.button(("⚔ " if hostile else "") + person.name + " · " + person.title, func() -> void: ui.open_person(person_id), "%s · 好感 %s" % [person.realm_text, session.content.favor_stage(session.favor(person_id))])
+		var mark := "⚔ " if hostile else ("❗ " if beckons(ui, person_id) else "")
+		var chip: Button = ui.button(mark + person.name + " · " + person.title, func() -> void: ui.open_person(person_id), "%s · 好感 %s" % [person.realm_text, session.content.favor_stage(session.favor(person_id))])
 		chip.alignment = HORIZONTAL_ALIGNMENT_LEFT
 		chip.custom_minimum_size.y = 36
 		chip.add_theme_font_size_override("font_size", 14)
@@ -111,6 +112,36 @@ static func render_drawer(ui, layer: Control) -> void:
 		list.add_child(ui.button("更多 · %d 人" % hidden, func() -> void:
 			ui.show_everyone_here = true
 			ui.render(), "显示此地的所有人"))
+
+## Whether the person has something for the player now: a step of a story, the start of one, or a
+## request for help (marked ❗ in the drawer).
+static func beckons(ui, person_id: String) -> bool:
+	for option: Dictionary in ui.session.npc_options(person_id):
+		if option.available and is_errand(ui, person_id, str(option.id)):
+			return true
+	return false
+
+## Whether an option is part of a story or a request rather than everyday dealings.
+static func is_errand(ui, person_id: String, option_id: String) -> bool:
+	if option_id == "help":
+		return true
+	if option_id == "talk":
+		# A word with them is what a story's step asks for (a visit, an introduction).
+		var session = ui.session
+		if int(session.world.people.get(person_id, {}).get("talks", 0)) > 0:
+			return false
+		for story_id: String in session.content.storylines:
+			var step: Dictionary = session.story_step(story_id)
+			if not step.is_empty() and session.story_at(story_id, str(step.id)) and step.get("done", []).has({"talked": person_id}):
+				return true
+		return false
+	for interaction: Dictionary in ui.session.person(person_id).get("interactions", []):
+		if interaction.id == option_id:
+			var keys: Array = []
+			for entry: Dictionary in interaction.get("conditions", []) + interaction.get("effects", []):
+				keys.append_array(entry.keys())
+			return keys.any(func(key: String) -> bool: return key in ["story_at", "start_story", "story_advance"])
+	return false
 
 ## Facing a person, after Mi Chang Sheng: their portrait large in the middle with their name, what can be
 ## done with them in two columns either side, what was just said below; 查看 opens who they are, their
@@ -169,6 +200,8 @@ static func render_person(ui, person_id: String) -> void:
 			choice.disabled = not option.available
 			if option_id == "fight":
 				choice.add_theme_stylebox_override("normal", ui.style(Color("#5a2b26"), Color("#c9785f"), 10))
+			elif option.available and is_errand(ui, person_id, option_id):
+				choice.add_theme_stylebox_override("normal", ui.style(Color("#3a3524"), ui.GOLD, 10))
 			options.append(choice)
 	var half := (options.size() + 1) / 2
 	for index: int in options.size():
@@ -259,6 +292,8 @@ static func _option_name(person: Dictionary, option_id: String) -> String:
 			return "交谈"
 		"gift":
 			return "赠礼"
+		"help":
+			return "相助"
 	for interaction: Dictionary in person.get("interactions", []):
 		if interaction.id == option_id:
 			return str(interaction.label)

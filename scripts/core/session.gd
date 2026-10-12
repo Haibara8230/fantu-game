@@ -16,6 +16,7 @@ const Rumors = preload("res://scripts/core/rumors.gd")
 const People = preload("res://scripts/core/people.gd")
 const Journey = preload("res://scripts/core/journey.gd")
 const Cultivation = preload("res://scripts/core/cultivation.gd")
+const Storylines = preload("res://scripts/core/storylines.gd")
 const SaveRestore = preload("res://scripts/core/save_restore.gd")
 const SaveMigration = preload("res://scripts/core/save_migration.gd")
 const SAVE_VERSION := SaveMigration.CURRENT_VERSION
@@ -39,6 +40,8 @@ var encounters_enabled := true
 var retreat_limits := true
 # The person whose interaction is being applied, for effects such as "leave".
 var acting_npc := ""
+# 传音 sent since this session began; a storyline wait that sends one ends a retreat. Not saved.
+var letters_sent := 0
 # Population caches kept by people.gd, rebuilt from the world seed and never saved: who can be found
 # where today and the people indexes it comes from; seats of built regions, their lives, and per-day
 # views and per-realm loadouts.
@@ -61,7 +64,10 @@ func _init() -> void:
 	world_rng.randomize()
 
 ## `roots` are the spirit-root elements chosen at creation; when empty they are sensed (rolled) here.
-func new_game(character_name: String = "无名", seed_value: int = -1, roots: Array = []) -> void:
+## `start` is how the journey begins: "guided" plays the introduction (data/storylines.json) and holds
+## the player to it; "skipped" counts it as done and lets the sect's storylines follow; "plain" opens
+## the sect without any storyline (the systems' own tests).
+func new_game(character_name: String = "无名", seed_value: int = -1, roots: Array = [], start: String = "plain") -> void:
 	if seed_value >= 0:
 		combat_rng.seed = seed_value
 		world_rng.seed = hash(str(seed_value) + ":world")
@@ -70,7 +76,7 @@ func new_game(character_name: String = "无名", seed_value: int = -1, roots: Ar
 	var chosen_name := character_name.strip_edges().left(16)
 	if chosen_name.is_empty():
 		chosen_name = "无名"
-	world = {"day": 0, "flags": {}, "events": {}, "people": {}, "seed": seed_value if seed_value >= 0 else absi(int(world_rng.randi())), "stock_sold": {}, "rumors": {}, "quests_taken": {}}
+	world = {"day": 0, "flags": {}, "events": {}, "people": {}, "seed": seed_value if seed_value >= 0 else absi(int(world_rng.randi())), "stock_sold": {}, "rumors": {}, "quests_taken": {}, "storylines": {}, "letters": []}
 	populate()
 	player = {
 		"name": chosen_name, "birth_day": -int(content.rules.starting_age) * Calendar.DAYS_PER_YEAR,
@@ -79,7 +85,8 @@ func new_game(character_name: String = "无名", seed_value: int = -1, roots: Ar
 		"stones": int(content.rules.starting_stones), "items": {},
 		"journey": {}, "cooldowns": {},
 		"location": "sect", "sect": "wanderer",
-		"learned": [], "arts": [], "methods": [], "equipment": {"weapon": "", "robe": "", "accessory": ""}, "quests": []
+		"learned": [], "arts": [], "methods": [], "equipment": {"weapon": "", "robe": "", "accessory": ""}, "quests": [],
+		"deeds": {}, "taught": []
 	}
 	for skill_id: String in content.sects.wanderer.skills:
 		player.learned.append(skill_id)
@@ -93,6 +100,15 @@ func new_game(character_name: String = "无名", seed_value: int = -1, roots: Ar
 	combat_events.clear()
 	chronicle.clear()
 	log_event("start", {}, true)
+	match start:
+		"guided":
+			Storylines.start(self, "intro")
+		"skipped":
+			world.flags["intro_done"] = true
+			Storylines.mark_done(self, "intro")
+			Storylines.update(self)
+		_:
+			world.flags["intro_done"] = true
 	Events.check_location(self)
 	changed.emit()
 
@@ -131,6 +147,7 @@ func conclude(text: String, passed: Dictionary = {}) -> String:
 	parts.append_array(passed.get("messages", []))
 	parts.append_array(Commissions.expire(self))
 	parts.append_array(Events.check_location(self))
+	parts.append_array(Storylines.update(self))
 	changed.emit()
 	return " ".join(parts.filter(func(part: String) -> bool: return not part.is_empty()))
 
@@ -139,8 +156,9 @@ func log_event(id: String, args: Dictionary = {}, major: bool = false) -> String
 	return chronicle.format(chronicle.add(int(world.day), id, args, major), content)
 
 func finish(message: String) -> String:
+	var told := Storylines.update(self)
 	changed.emit()
-	return message
+	return message if told.is_empty() else " ".join([message] + told)
 
 func journal_lines() -> Array[String]:
 	return chronicle.lines(content)
@@ -261,6 +279,7 @@ func act(action: String) -> String:
 			var found := Inventory.gather_picks(self, content.locations[player.location].gather)
 			for item_id: String in found:
 				add_item(item_id, int(found[item_id]))
+			record_deed("gather")
 			return conclude(log_event("gather_items", {"days": passed.elapsed, "location": player.location, "loot": loot_code(found)}), passed)
 		"inn_rest":
 			var price := int(content.rules.inn_price)
@@ -305,6 +324,7 @@ func act(action: String) -> String:
 				revenue += sell_price(item_id) * int(sold[item_id])
 				remove_item(item_id, int(sold[item_id]))
 			player.stones += revenue
+			record_deed("trade")
 			return conclude(log_event("sell_all", {"loot": loot_code(sold), "revenue": revenue}))
 		"breakthrough":
 			var need := next_breakthrough()
@@ -325,6 +345,7 @@ func act(action: String) -> String:
 			player.qi = player.max_qi
 			var texts: Array[String] = [log_event("breakthrough", {"days": passed.elapsed, "realm": int(player.realm), "stage": 0}, true)]
 			texts.append_array(settle_stage())
+			texts.append_array(Storylines.congratulate(self, "breakthrough"))
 			return conclude(" ".join(texts), passed)
 	return "未知操作。"
 
@@ -339,13 +360,15 @@ func cultivate(days: int) -> String:
 		return "此地无法闭关，请回青云山静室。"
 	if days < 1 or days > MAX_SPAN_DAYS:
 		return "闭关天数不合常理。"
+	var held := guide_block("cultivate")
+	if not held.is_empty():
+		return held
 	if at_bottleneck():
 		return "修为卡在瓶颈，闭关难有寸进。需外出历练（斗法、切磋、委托、奇遇），或服一枚破障丹。"
 	if at_xp_cap():
 		return cap_text()
-	# A retreat longer than the mind allows ends at the limit.
-	if retreat_limits:
-		days = mini(days, retreat_cap())
+	# A retreat longer than the mind (or the guided start) allows ends at the limit.
+	days = mini(days, retreat_most())
 	var tired := Cultivation.fatigue(self)
 	var plan := Cultivation.plan_retreat(self, days, tired)
 	var passed := advance_days(int(plan.days), true)
@@ -356,6 +379,7 @@ func cultivate(days: int) -> String:
 	player.fatigue = int(done.fatigue)
 	player.fatigue_day = int(world.day)
 	player.qi = player.max_qi
+	record_deed("retreat_days", int(passed.elapsed))
 	var text := log_event("cultivate", {"days": passed.elapsed, "xp": int(done.xp)})
 	var milestones := gain_xp(int(done.xp))
 	if not milestones.is_empty():
@@ -391,6 +415,9 @@ func choose_event(choice_id: String) -> String:
 	if pending_event.is_empty():
 		return "眼下没有需要抉择的事。"
 	var message: String = Events.choose(self, choice_id)
+	var told := Storylines.update(self)
+	if not told.is_empty():
+		message = " ".join([message] + told)
 	changed.emit()
 	return message
 
@@ -437,9 +464,84 @@ func insight_needed() -> int:
 func retreat_fatigue() -> int:
 	return Cultivation.fatigue(self)
 
+# --- Storylines, deeds and 传音 (storylines.gd) -------------------------------------------------
+
+func start_story(story_id: String) -> Array[String]:
+	return Storylines.start(self, story_id)
+
+func story_advance(story_id: String) -> Array[String]:
+	return Storylines.advance(self, story_id)
+
+## "", "active", "done" or "closed".
+func story_state(story_id: String) -> String:
+	return Storylines.state(self, story_id)
+
+func story_step(story_id: String) -> Dictionary:
+	return Storylines.current_step(self, story_id)
+
+func story_at(story_id: String, step_id: String) -> bool:
+	return Storylines.at_step(self, story_id, step_id)
+
+## The guided start's current step, or {} once the player is free.
+func guide_step() -> Dictionary:
+	return Storylines.guide_step(self)
+
+## Why the guided start holds the player back from an action ("travel" toward `target`, or
+## "cultivate"), or "".
+func guide_block(action: String, target: String = "") -> String:
+	var step := guide_step()
+	if step.is_empty():
+		return ""
+	var mentor: String = content.people[Storylines.giver(self, Storylines.guide_story(self))].name
+	var reason := "%s嘱咐过，先%s" % [mentor, str(step.get("goal", "把眼前的事做完。"))]
+	match action:
+		"travel":
+			return "" if str(step.get("place", "")) == target else reason
+		"cultivate":
+			return "" if step.has("retreat_days") else reason
+	return ""
+
+func record_deed(deed: String, amount: int = 1) -> void:
+	Storylines.record(self, deed, amount)
+
+func deed_count(deed: String) -> int:
+	return Storylines.deed_count(self, deed)
+
+func exchange_sound(person_id: String) -> String:
+	return Storylines.exchange_sound(self, person_id)
+
+func congratulate(kind: String) -> Array[String]:
+	return Storylines.congratulate(self, kind)
+
+func unread_letters() -> int:
+	return Storylines.unread_letters(self)
+
+## Marks every 传音 as read; looking at the inbox takes no time.
+func mark_letters_read() -> void:
+	Storylines.mark_letters_read(self)
+
+func story_due(from_day: int) -> Dictionary:
+	return Storylines.next_due(self, from_day)
+
+func story_fire(story_id: String) -> Dictionary:
+	return Storylines.fire(self, story_id)
+
+## A teaching card dismissed in this journey (the interface's guide) is not shown again.
+func mark_taught(tip_id: String) -> void:
+	if not tip_id in player.taught:
+		player.taught.append(tip_id)
+
 ## The longest single retreat now, in days (see cultivation.gd).
 func retreat_cap() -> int:
 	return Cultivation.retreat_cap(self)
+
+## The longest retreat the player may start now: the mind's limit, and the guided start's.
+func retreat_most() -> int:
+	var most := retreat_cap() if retreat_limits else MAX_SPAN_DAYS
+	var step := guide_step()
+	if step.has("retreat_days"):
+		most = mini(most, int(step.retreat_days))
+	return most
 
 func mind_needed() -> int:
 	return Cultivation.mind_needed(self)
@@ -646,6 +748,10 @@ func favor(person_id: String) -> int:
 
 func npc_depart(person_id: String) -> void:
 	People.npc_depart(self, person_id)
+
+## Whether an ordinary acquaintance is waiting for help (people.gd).
+func request_open(person_id: String) -> bool:
+	return People.request_open(self, person_id)
 
 func npc_options(person_id: String) -> Array[Dictionary]:
 	return People.npc_options(self, person_id)
