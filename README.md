@@ -38,6 +38,8 @@ Godot 4 / GDScript / Windows 单机。同一个修仙世界持续运转，玩家
 守御恢复灵力、减半本回合所受伤害。冷却在有效行动后推进。
 落败后回到青云山，最多损失 10 灵石；可休整后继续。撤退耗时 30 日。
 
+初次游玩时，中间面板顶部会在相应时机给出一条新手指引（闭关、人物、赶路、斗法、交易、心境、瓶颈等），按「知道了」后不再出现；可在「设置」里关闭或重新显示全部。
+
 ## 存档与操作
 
 - 游戏开始后，每次有效行动自动保存，标题界面的“继续旅程”读取自动存档。
@@ -75,6 +77,7 @@ Godot 4 / GDScript / Windows 单机。同一个修仙世界持续运转，玩家
 - `scripts/ui/people_view.gd`：此地人物、相识列表、人物资料卡与立绘。
 - `scripts/ui/map_view.gd`、`bag_view.gd`、`arts_view.gd`、`battle_view.gd`、`event_view.gd`：舆图、行囊、功法、斗法、事件与结局视图。
 - `scripts/ui/welcome_screen.gd`：标题界面（道号、灵根、开始或继续旅程）。
+- `scripts/ui/guide.gd`、`data/guide.json`：新手指引（何时出现与提示文字）。
 - `scripts/ui/landscape.gd`：地点与场景横幅；有正式美术时显示美术，否则显示按地貌绘制的占位山水。
 - `scripts/ui/world_map.gd`：区域舆图；`scripts/ui/art_library.gd`：美术路径约定。
 - `scripts/presentation/audio_director.gd`、`data/audio.json`：配乐、环境声与音效。

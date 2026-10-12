@@ -61,6 +61,8 @@ func _run() -> void:
 	main.manual_store = SaveStore.new(path + "/manual")
 	main.auto_store = SaveStore.new(path + "/auto")
 	root.add_child(main)
+	# The new-player guide has its own checks in ui_smoke; its tips would only shift this layout.
+	main.guide_enabled = false
 	_step("main scene added")
 	main.session.encounters_enabled = false
 	main.name_input.text = "青禾"

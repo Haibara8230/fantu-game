@@ -47,12 +47,35 @@ func _run() -> void:
 	root.add_child(main)
 	main.session.encounters_enabled = false
 	main.audio.settings_path = test_path + "/settings.cfg"
+	main.guide_path = test_path + "/guide.cfg"
+	main.Guide.load_state(main)
 	await _capture("welcome")
 	main.name_input.text = "青禾"
 	# Sensed roots are random; an ordinary three-element root keeps the cultivation numbers below fixed.
 	main.welcome_roots = ["metal", "wood", "fire"]
 	main.begin()
 	await _capture("sect")
+	# The new-player guide: one tip at a time where it applies; dismissed tips stay dismissed.
+	var tips: Array = main.Guide.tips()
+	check(not tips.is_empty() and tips.all(func(tip: Dictionary) -> bool: return main.Guide.known(tip.id) and tip.title is String and tip.text is String and not tip.where.is_empty()), "every tip in the data has a known situation, a title and a text")
+	check(_texts(main.center, "Label").contains("指引 · 闭关修炼") and _button("知道了") != null, "a new player first sees the retreat tip")
+	_button("知道了").pressed.emit()
+	check(main.guide_seen.has("retreat") and _texts(main.center, "Label").contains("指引 · 此地人物"), "dismissing it brings the next tip that applies here")
+	var dismissed := 0
+	while _button("知道了") != null and dismissed < 10:
+		dismissed += 1
+		_button("知道了").pressed.emit()
+	check(not _texts(main.center, "Label").contains("指引 ·") and not main.guide_seen.has("map") and not main.guide_seen.has("battle"), "tips for situations not met yet wait their turn")
+	main.guide_seen = {}
+	main.Guide.load_state(main)
+	check(main.guide_seen.has("retreat") and main.guide_seen.has("people"), "dismissed tips are remembered in the guide file")
+	main.set_guide_enabled(false)
+	main.guide_seen.erase("retreat")
+	main.render()
+	check(not _texts(main.center, "Label").contains("指引 ·"), "the guide can be switched off")
+	main.reset_guide()
+	check(main.guide_enabled and main.guide_seen.is_empty() and _texts(main.center, "Label").contains("指引 · 闭关修炼"), "and every tip can be shown again")
+	main.set_guide_enabled(false)
 	check(_button("静室") != null and _button("演武坪") != null and _button("传功堂") != null, "sect scenes offered as tabs")
 	_button("传功堂").pressed.emit()
 	check(_texts(main.center, "Label").contains("研习传承") and _button("闭关  ·  1 个月") == null, "scene switch shows only that scene's actions")
@@ -87,7 +110,10 @@ func _run() -> void:
 	await _capture("wild")
 	check(main.clock_label.text == "历元 1 年 1 月初八", "travel advances the calendar by route days")
 	check(main.audio.music_key == "wild" and main.audio.ambience_key == "wild", "music and ambience follow the location")
+	main.set_guide_enabled(true)
 	main.run(func() -> String: return main.session.start_battle("wolf"))
+	check(_texts(main.center, "Label").contains("指引 · 斗法"), "the first duel explains the controls")
+	main.set_guide_enabled(false)
 	await main.skill("fire")
 	await _capture("battle")
 	root.size = Vector2i(1000, 640)

@@ -17,6 +17,7 @@ const ArtsView = preload("res://scripts/ui/arts_view.gd")
 const BattleView = preload("res://scripts/ui/battle_view.gd")
 const EventView = preload("res://scripts/ui/event_view.gd")
 const WelcomeScreen = preload("res://scripts/ui/welcome_screen.gd")
+const Guide = preload("res://scripts/ui/guide.gd")
 const GOLD := Color("#d5b777")
 const INK := Color("#e3e8dc")
 const MUTED := Color("#97aaa4")
@@ -64,6 +65,12 @@ var story: Dictionary = {}
 var dialogue: Dictionary = {}
 # What the centre panel last showed, so that a new scene fades in.
 var _scene_key := ""
+# The new-player guide (guide.gd): whether tips are shown and which were dismissed, kept in the
+# player's guide file at guide_path (tests point it elsewhere).
+var guide_path := Guide.DEFAULT_PATH
+var guide_enabled := true
+var guide_seen := {}
+var guide_toggle: CheckBox
 
 func _ready() -> void:
 	get_window().min_size = Vector2i(1000, 640)
@@ -71,6 +78,7 @@ func _ready() -> void:
 	audio = AudioDirector.new()
 	add_child(audio)
 	_build_layout()
+	Guide.load_state(self)
 	if not session.content.error_message.is_empty():
 		notice(session.content.error_message)
 		return
@@ -81,6 +89,7 @@ func _ready() -> void:
 	if preview_mode:
 		manual_store = SaveStore.new("user://art_preview/manual")
 		auto_store = SaveStore.new("user://art_preview/auto")
+		guide_enabled = false
 		started = true
 		reset_preview()
 	else:
@@ -284,6 +293,7 @@ func render() -> void:
 	view_buttons.bag.disabled = view == "bag"
 	view_buttons.arts.disabled = view == "arts"
 	clear(center)
+	Guide.render(self, _guide_place())
 	if not session.ended.is_empty():
 		EventView.render_ending(self)
 	elif not story.is_empty():
@@ -309,6 +319,36 @@ func render() -> void:
 		create_tween().tween_property(center, "modulate:a", 1.0, 0.25)
 	_update_audio()
 	journal_text.text = "\n".join(session.journal_lines())
+
+## Which part of the screen the centre panel shows, for the guide's tips ("" when no tip fits).
+func _guide_place() -> String:
+	if not started or not session.ended.is_empty() or not story.is_empty():
+		return ""
+	if not session.pending_event.is_empty():
+		return "event"
+	if not session.battle.is_empty():
+		return "battle"
+	if view == "place" and not selected_npc.is_empty():
+		return ""
+	return view
+
+func dismiss_tip(tip_id: String) -> void:
+	guide_seen[tip_id] = true
+	Guide.save_state(self)
+	render()
+
+func set_guide_enabled(enabled: bool) -> void:
+	guide_enabled = enabled
+	Guide.save_state(self)
+	render()
+
+## Shows every tip again, from the first.
+func reset_guide() -> void:
+	guide_seen = {}
+	guide_enabled = true
+	guide_toggle.set_pressed_no_signal(true)
+	Guide.save_state(self)
+	render()
 
 # --- Navigation ------------------------------------------------------------------------------------
 
@@ -392,12 +432,21 @@ func _build_settings() -> void:
 		slider.value_changed.connect(func(value: float) -> void: audio.set_volume(bus_name, value))
 		row.add_child(slider)
 		rows.add_child(row)
+	var guide_row := HBoxContainer.new()
+	guide_row.add_theme_constant_override("separation", 12)
+	guide_toggle = CheckBox.new()
+	guide_toggle.text = "显示新手指引"
+	guide_toggle.toggled.connect(set_guide_enabled)
+	guide_row.add_child(guide_toggle)
+	guide_row.add_child(button("重新显示全部指引", reset_guide))
+	rows.add_child(guide_row)
 	add_child(settings_dialog)
 
 func _open_settings() -> void:
 	for slider: HSlider in settings_dialog.find_children("*", "HSlider", true, false):
 		slider.set_value_no_signal(float(audio.volumes.get(slider.name, 0.0)))
-	settings_dialog.popup_centered(Vector2i(420, 240))
+	guide_toggle.set_pressed_no_signal(guide_enabled)
+	settings_dialog.popup_centered(Vector2i(460, 300))
 
 # --- Actions -----------------------------------------------------------------------------------------
 
