@@ -1,6 +1,18 @@
 {
   "background": "res://assets/art/bamboo_arena_v1.png",
   "place_background": "res://assets/art/battle/%s.png",
+  "event_art": {
+    "special_auction": "res://assets/art/events/yunxi_auction.png",
+    "night_market": "res://assets/art/events/yunxi_night_market.png",
+    "tournament_entry": "res://assets/art/events/outer_tournament.png",
+    "sect_tournament": "res://assets/art/events/outer_tournament.png",
+    "serpent_rampage": "res://assets/art/events/serpent_rampage.png"
+  },
+  "person_art": {
+    "storyteller": "res://assets/art/events/teahouse_story.png",
+    "wounded": "res://assets/art/events/wounded_in_pines.png",
+    "rogue": "res://assets/art/events/rogue_ambush.png"
+  },
   "actors": {
     "hero": {
       "texture": "res://assets/art/cultivator_atlas_v2.png",

@@ -28,6 +28,7 @@
   "ruin_cleared": "占据古修洞府的散修败走，石室从此归于寂静。",
   "gift": "你赠给{npc_name}一株灵草，好感 +{favor}。",
   "stage_up": "修为精进，你已至{realm_name}。",
+  "xp_held": "修为卡在瓶颈，其中 {xp} 点未能化入。",
   "gather_items": "在{location_name}采得{loot_text}。",
   "sell_all": "售出{loot_text}，得灵石 {revenue}。",
   "sell_item": "售出{item_name}×{count}，得灵石 {revenue}。",

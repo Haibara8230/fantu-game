@@ -84,6 +84,12 @@ static func render_person(ui, person_id: String) -> void:
 	var person: Dictionary = session.person(person_id)
 	var progress: Dictionary = session.world.people.get(person_id, {})
 	var favor: int = session.favor(person_id)
+	var where: String = session.npc_location(person_id)
+	# Some people are met in a scene of their own (the storyteller on his stage, the rogue on the road).
+	if where == session.player.location:
+		var scene: TextureRect = ui.picture(ArtLibrary.person_art(person_id), 260)
+		if scene != null:
+			center.add_child(scene)
 	var card := HBoxContainer.new()
 	card.add_theme_constant_override("separation", 18)
 	center.add_child(card)
@@ -105,6 +111,8 @@ static func render_person(ui, person_id: String) -> void:
 	else:
 		info.add_child(ui.label("初次相见", 15, ui.MUTED))
 	center.add_child(ui.paragraph(person.description, ui.INK))
+	if str(ui.dialogue.get("npc", "")) == person_id:
+		center.add_child(_dialogue_box(ui, person_id, person))
 	if person.has("loadout"):
 		var arts: Array[String] = []
 		for art_id: String in person.loadout.arts:
@@ -118,7 +126,6 @@ static func render_person(ui, person_id: String) -> void:
 			if not str(person.loadout.equipment[slot]).is_empty():
 				gear.append(session.content.equipment(person.loadout.equipment[slot]).name)
 		center.add_child(ui.paragraph("神通 · %s\n心法 · %s%s" % ["、".join(arts), "、".join(methods), "\n法宝 · " + "、".join(gear) if not gear.is_empty() else ""]))
-	var where: String = session.npc_location(person_id)
 	if where != session.player.location:
 		var place: String = session.content.locations[where].name if not where.is_empty() else "下落不明"
 		center.add_child(ui.paragraph("此人现在 · " + place + "。须到当地才能与其交往。", ui.MUTED))
@@ -142,22 +149,39 @@ static func render_person(ui, person_id: String) -> void:
 		options.add_child(locate)
 	options.add_child(ui.button("返回", ui.close_person))
 
-static func _portrait(ui, person_id: String, person: Dictionary) -> Control:
+## What was just said: the person's face and name beside their words.
+static func _dialogue_box(ui, person_id: String, person: Dictionary) -> Control:
+	var box := PanelContainer.new()
+	box.add_theme_stylebox_override("panel", ui.style(Color("#18302f"), ui.GOLD, 12))
+	var row := HBoxContainer.new()
+	row.add_theme_constant_override("separation", 14)
+	box.add_child(row)
+	row.add_child(_portrait(ui, person_id, person, Vector2(64, 80)))
+	var words := VBoxContainer.new()
+	words.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	row.add_child(words)
+	words.add_child(ui.label(person.name, 17, ui.GOLD))
+	var speaker: String = person.name + "："
+	for line: String in ui.dialogue.lines:
+		words.add_child(ui.paragraph(line.trim_prefix(speaker), ui.INK))
+	return box
+
+static func _portrait(ui, person_id: String, person: Dictionary, size: Vector2 = Vector2(120, 150)) -> Control:
 	var texture: Texture2D = ArtLibrary.local_texture(_local_portrait(ui, person_id))
 	if texture == null:
 		texture = ArtLibrary.texture(ArtLibrary.portrait_path(person_id))
 	if texture != null:
 		var image := TextureRect.new()
 		image.texture = texture
-		image.custom_minimum_size = Vector2(120, 150)
+		image.custom_minimum_size = size
 		image.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 		image.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
 		return image
 	# Placeholder: an ink seal with the person's first character until portrait art exists.
 	var seal := PanelContainer.new()
-	seal.custom_minimum_size = Vector2(120, 150)
+	seal.custom_minimum_size = size
 	seal.add_theme_stylebox_override("panel", ui.style(Color("#1b3236"), Color("#e39a82") if person.attitude == "hostile" else ui.GOLD, 0))
-	var initial: Label = ui.label(str(person.name).left(1), 56, ui.GOLD)
+	var initial: Label = ui.label(str(person.name).left(1), int(round(size.y * 56.0 / 150.0)), ui.GOLD)
 	initial.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	initial.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	seal.add_child(initial)

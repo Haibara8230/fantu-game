@@ -21,8 +21,25 @@ static func texture(path: String) -> Texture2D:
 static func portrait_path(person_id: String) -> String:
 	return ROOT + "portraits/%s.png" % person_id
 
-# --- Local portrait pack (assets/local, never committed) -----------------------------
-# Private images for personal play. The folder carries a .gdignore, so Godot does not import it;
+# Story illustrations are named for their scene, not their event, so data/art.json maps them.
+static var _art_config := {}
+
+static func _config() -> Dictionary:
+	if _art_config.is_empty():
+		var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string("res://data/art.json"))
+		_art_config = parsed if parsed is Dictionary else {"event_art": {}, "person_art": {}}
+	return _art_config
+
+## The illustration of an event's key moment, or "" when it has none.
+static func event_art(event_id: String) -> String:
+	return str(_config().get("event_art", {}).get(event_id, ""))
+
+## The illustration of the scene a person is met in (the storyteller on his stage), or "".
+static func person_art(person_id: String) -> String:
+	return str(_config().get("person_art", {}).get(person_id, ""))
+
+# --- Local portrait pack (assets/local, committed with the project) -------------------
+# Portrait images read straight from disk. The folder carries a .gdignore, so Godot does not import it;
 # images are read straight from disk. Layout:
 #   portraits/<person id>.png          replaces that person's portrait (":" written as "_", e.g. g_3.png)
 #   portraits/pool/<gender>_<age>/*    pool for generated people; age is young, middle or old

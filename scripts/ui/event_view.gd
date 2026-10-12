@@ -1,11 +1,16 @@
 extends RefCounted
-## A pending event with its choices, and the end of a life with its major milestones.
+## A pending event with its choices, a story moment with its illustration, and the end of a life with
+## its major milestones.
 const Calendar = preload("res://scripts/core/calendar.gd")
+const ArtLibrary = preload("res://scripts/ui/art_library.gd")
 
 static func render_event(ui) -> void:
 	var session = ui.session
 	var center: VBoxContainer = ui.center
 	var definition: Dictionary = session.pending_definition()
+	var art: TextureRect = ui.picture(ArtLibrary.event_art(str(session.pending_event.id)), 280)
+	if art != null:
+		center.add_child(art)
 	var title_row := HBoxContainer.new()
 	title_row.add_theme_constant_override("separation", 20)
 	center.add_child(title_row)
@@ -20,6 +25,17 @@ static func render_event(ui) -> void:
 		var option: Button = ui.button(choice.label, func() -> void: ui.choose(choice_id), "" if session.choice_available(choice) else "条件不足")
 		option.disabled = not session.choice_available(choice)
 		choices.add_child(option)
+
+## A moment that needed no choice but deserves a look (the serpent breaking out), until 继续.
+static func render_story(ui) -> void:
+	var center: VBoxContainer = ui.center
+	var story: Dictionary = ui.story
+	var art: TextureRect = ui.picture(ArtLibrary.event_art(str(story.event)), 340)
+	if art != null:
+		center.add_child(art)
+	center.add_child(ui.label(str(story.title), 30, ui.GOLD))
+	center.add_child(ui.paragraph(str(story.text), ui.INK))
+	center.add_child(ui.button("继续", ui.close_story))
 
 static func render_ending(ui) -> void:
 	var session = ui.session

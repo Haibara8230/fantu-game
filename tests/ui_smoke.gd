@@ -34,6 +34,9 @@ func _button(text_part: String) -> Button:
 			return button
 	return null
 
+func _has_art(file_name: String) -> bool:
+	return main.center.find_children("*", "TextureRect", true, false).any(func(image: TextureRect) -> bool: return image.texture != null and image.texture.resource_path.ends_with(file_name + ".png"))
+
 func _run() -> void:
 	root.size = Vector2i(1280, 800)
 	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path("res://builds/previews"))
@@ -46,6 +49,8 @@ func _run() -> void:
 	main.audio.settings_path = test_path + "/settings.cfg"
 	await _capture("welcome")
 	main.name_input.text = "青禾"
+	# Sensed roots are random; an ordinary three-element root keeps the cultivation numbers below fixed.
+	main.welcome_roots = ["metal", "wood", "fire"]
 	main.begin()
 	await _capture("sect")
 	check(_button("静室") != null and _button("演武坪") != null and _button("传功堂") != null, "sect scenes offered as tabs")
@@ -114,6 +119,12 @@ func _run() -> void:
 	_button("代他收五株回春草").pressed.emit()
 	await process_frame
 	check(main.session.favor("shen_mo") == 10 and _button("代他收五株回春草").disabled, "interaction applied; the repeat waits for its cooldown")
+	check(_texts(main.center, "Label").contains("你交给沈墨五株回春草"), "what just happened shows in a dialogue box on the card")
+	_button("交谈").pressed.emit()
+	await process_frame
+	var said := _texts(main.center, "Label")
+	var first_line: String = main.session.content.people.shen_mo.talk[0]
+	check(said.contains(first_line) and not said.contains("沈墨：" + first_line), "a talk line is shown under the speaker's name, once")
 	_button("返回").pressed.emit()
 	check(main.selected_npc.is_empty() and _button("闭关") == null, "back to the market scenes")
 	# The street shop and the 行囊.
@@ -137,6 +148,30 @@ func _run() -> void:
 	await process_frame
 	check(main.session.player.location == "ridge" and main.view == "place", "departing from the map walks the route")
 	check(main.audio.last_cue == "arrive" and main.audio.music_key == "ridge", "arrival cue and local music")
+	# Story moments: a person met in a scene of their own, a choice event and a moment without a choice.
+	var art: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://data/art.json"))
+	check(art.event_art.keys().all(func(id: String) -> bool: return main.session.content.events.has(id)) and art.person_art.keys().all(func(id: String) -> bool: return main.session.content.people.has(id)), "story art points at real events and people")
+	check((art.event_art.values() + art.person_art.values()).all(func(path: String) -> bool: return ResourceLoader.exists(path)), "and every story illustration exists")
+	main.run(func() -> String: return main.session.travel("town"))
+	check(main.center.modulate.a < 1.0, "a new place fades in")
+	await create_timer(0.4).timeout
+	check(is_equal_approx(main.center.modulate.a, 1.0), "and settles fully visible")
+	if "storyteller" in main.session.present_npcs():
+		main.open_person("storyteller")
+		check(_has_art("teahouse_story"), "the storyteller is met on his stage")
+		main.close_person()
+	main.session.pending_event = {"id": "night_market", "day": int(main.session.world.day)}
+	main.render()
+	check(_has_art("yunxi_night_market") and _button("随意逛逛") != null, "an event opens on its illustration above the choices")
+	main.session.pending_event = {}
+	main.render()
+	var rampage_day: int = main.Calendar.to_day(6, 3, 1)
+	main.run(func() -> String:
+		main.session.advance_days(rampage_day - int(main.session.world.day))
+		return "")
+	check(main.story.get("event", "") == "serpent_rampage" and _has_art("serpent_rampage") and _texts(main.center, "Label").contains("妖蟒之乱"), "the serpent breaking out is staged with its illustration")
+	_button("继续").pressed.emit()
+	check(main.story.is_empty() and _texts(main.center, "Label").contains("青石镇"), "继续 returns to the place")
 	# Audio settings persist outside the save files.
 	main._open_settings()
 	var music_slider: HSlider = main.settings_dialog.find_child("Music", true, false)

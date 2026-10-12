@@ -65,7 +65,9 @@ func _run() -> void:
 	main.session.encounters_enabled = false
 	main.name_input.text = "青禾"
 	main.begin()
-	main.session.combat_rng.seed = 42
+	# A fixed world and an ordinary three-element root keep the long progression below repeatable;
+	# sensed roots are random, and a weak one would reach the serpent too late.
+	main.session.new_game("青禾", 42, ["metal", "wood", "fire"])
 	main.run(func() -> String: return main.session.start_battle("disciple"))
 	_step("disciple duel started")
 	await _capture("art_duel_idle")

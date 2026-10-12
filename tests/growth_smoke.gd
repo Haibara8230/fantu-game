@@ -71,6 +71,7 @@ func _stages() -> void:
 	check(game.player.stage == 0 and game.player.xp == 500 and game.at_bottleneck() and game.realm_name() == "炼气初期", "500 xp waits at the bottleneck before 炼气中期")
 	Session.Events.apply(game, [{"xp": 50}])
 	check(game.player.xp == 500, "xp does not pile up behind a bottleneck")
+	check(game.journal_lines().back().contains("其中 50 点未能化入"), "and the chronicle says what was held back")
 	check(game.cultivate(30).contains("瓶颈") and game.world.day == 0, "a retreat at a bottleneck is refused without passing time")
 	game.set_item_count("pozhang_pill", 1)
 	game.use_item("pozhang_pill")
@@ -220,6 +221,7 @@ func _items() -> void:
 	game.player.xp = 400
 	game.use_item("lingzhi")
 	check(int(game.player.xp) == 500 and game.player.stage == 0 and game.at_bottleneck(), "a hundred-year lingzhi fills cultivation only up to the bottleneck")
+	check(game.journal_lines().any(func(line: String) -> bool: return line.contains("其中 200 点未能化入")), "the rest of the lingzhi is recorded as held back")
 	game.set_item_count("lingzhi", 1)
 	check(game.use_block("lingzhi").contains("瓶颈") and game.item_count("lingzhi") == 1, "pills that give xp wait until the bottleneck is broken")
 	game.player.stones = 40

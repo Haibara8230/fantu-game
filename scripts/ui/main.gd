@@ -34,7 +34,7 @@ var selected_npc := ""
 var shown_location := ""
 var show_everyone_here := false
 var welcome_roots: Array = []
-# Local, never-committed portrait pack (see ArtLibrary); tests point this elsewhere.
+# The local portrait pack (see ArtLibrary); tests point this elsewhere.
 var portrait_root := ArtLibrary.LOCAL_PORTRAITS
 # Pool portraits assigned to generated people, kept by people_view.gd for the current world and pool.
 var _pool_assignments := {}
@@ -58,6 +58,12 @@ var presenting := false
 var locked_buttons: Array[Dictionary] = []
 var preview_mode := false
 var preview_opponent := "qingyun"
+# A story moment staged in the centre panel until dismissed: {"event", "title", "text"}.
+var story: Dictionary = {}
+# The words just exchanged with the open person: {"npc", "lines"}.
+var dialogue: Dictionary = {}
+# What the centre panel last showed, so that a new scene fades in.
+var _scene_key := ""
 
 func _ready() -> void:
 	get_window().min_size = Vector2i(1000, 640)
@@ -159,6 +165,19 @@ func meter(parent: VBoxContainer, title: String, value: float, maximum: float, c
 	bar.add_theme_stylebox_override("fill", style(color, color, 0))
 	parent.add_child(bar)
 
+## An illustration across the panel at `height`, cropped to fit; null while the art is missing.
+func picture(path: String, height: float) -> TextureRect:
+	var texture := ArtLibrary.texture(path)
+	if texture == null:
+		return null
+	var image := TextureRect.new()
+	image.texture = texture
+	image.custom_minimum_size.y = height
+	image.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	image.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	image.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
+	return image
+
 ## How long an action takes, as text.
 func duration(action: String) -> String:
 	return Calendar.duration_text(session.content.action_days(action))
@@ -247,8 +266,8 @@ func _build_layout() -> void:
 	add_child(new_game_dialog)
 	_build_settings()
 
-## Rebuilds the sidebar and the centre panel from the session. An ending, a pending event or a duel
-## takes the centre panel over; otherwise the chosen view is shown.
+## Rebuilds the sidebar and the centre panel from the session. An ending, a story moment, a pending
+## event or a duel takes the centre panel over; otherwise the chosen view is shown. A new scene fades in.
 func render() -> void:
 	if session.player.is_empty():
 		return
@@ -256,6 +275,7 @@ func render() -> void:
 	if session.player.location != shown_location:
 		shown_location = session.player.location
 		selected_npc = ""
+		dialogue = {}
 		show_everyone_here = false
 	Sidebar.render(self)
 	load_button.disabled = not manual_store.has_save()
@@ -266,6 +286,8 @@ func render() -> void:
 	clear(center)
 	if not session.ended.is_empty():
 		EventView.render_ending(self)
+	elif not story.is_empty():
+		EventView.render_story(self)
 	elif not session.pending_event.is_empty():
 		EventView.render_event(self)
 	elif not session.battle.is_empty():
@@ -280,6 +302,11 @@ func render() -> void:
 		PeopleView.render_list(self)
 	else:
 		PlaceView.render(self)
+	var scene := "%s|%s|%s|%s|%s|%s" % [view, session.player.location, session.pending_event.get("id", ""), story.get("event", ""), session.battle.is_empty(), selected_npc]
+	if scene != _scene_key:
+		_scene_key = scene
+		center.modulate.a = 0.0
+		create_tween().tween_property(center, "modulate:a", 1.0, 0.25)
 	_update_audio()
 	journal_text.text = "\n".join(session.journal_lines())
 
@@ -301,6 +328,8 @@ func select_spot(spot_id: String) -> void:
 func open_person(person_id: String) -> void:
 	if presenting:
 		return
+	if person_id != str(dialogue.get("npc", "")):
+		dialogue = {}
 	selected_npc = person_id
 	view = "place"
 	audio.cue("page")
@@ -308,6 +337,12 @@ func open_person(person_id: String) -> void:
 
 func close_person() -> void:
 	selected_npc = ""
+	dialogue = {}
+	render()
+
+func close_story() -> void:
+	story = {}
+	audio.cue("page")
 	render()
 
 func select_map_target(location_id: String) -> void:
@@ -411,9 +446,34 @@ func run(callback: Callable) -> void:
 	if presenting:
 		return
 	var before := _cue_state()
+	var mark: int = session.chronicle.added
 	var message: String = callback.call()
+	_stage_story(mark)
 	_cue_changes(before)
 	notice(message + (" 自动存档失败：" + autosave_error if not autosave_error.is_empty() else ""))
+
+## Picks out of an action's new chronicle entries what the centre panel should stage: an illustrated
+## moment that needed no choice (the serpent breaking out), or the words just exchanged with the open
+## person. Only presentation; the session knows nothing of it.
+func _stage_story(mark: int) -> void:
+	var count := mini(int(session.chronicle.added) - mark, session.chronicle.entries.size())
+	if count <= 0:
+		return
+	var lines: Array[String] = []
+	var staged := false
+	for entry: Dictionary in session.chronicle.entries.slice(-count):
+		var args: Dictionary = entry.args
+		if entry.id == "event" and args.get("part", "") == "chronicle" and not staged:
+			var definition: Dictionary = session.content.events.get(str(args.event), {})
+			if not ArtLibrary.event_art(str(args.event)).is_empty() and not definition.has("choices"):
+				story = {"event": str(args.event), "title": str(definition.get("title", "")), "text": session.chronicle.format(entry, session.content)}
+				staged = true
+		elif entry.id in ["talk", "gift", "npc"] and not selected_npc.is_empty() and str(args.get("npc", "")) == selected_npc:
+			lines.append(session.chronicle.format(entry, session.content))
+	if not lines.is_empty():
+		dialogue = {"npc": selected_npc, "lines": lines}
+	if staged or not lines.is_empty():
+		render()
 
 ## A small snapshot of what the player would hear change.
 func _cue_state() -> Dictionary:
@@ -457,6 +517,8 @@ func _save_manual() -> void:
 func _load_manual() -> void:
 	if not started or presenting:
 		return
+	story = {}
+	dialogue = {}
 	if manual_store.load_game(session):
 		notice("已读取手动存档。")
 	else:
@@ -483,12 +545,16 @@ func begin() -> void:
 	var character_name := name_input.text
 	close_welcome()
 	started = true
+	story = {}
+	dialogue = {}
 	session.new_game(character_name, -1, welcome_roots)
 	notice("先在青云山修炼，再去落霞谷采草。灵草可在坊市换灵石、购买筑基丹。")
 
 func continue_saved() -> void:
 	# Suppress auto-save while deciding which existing save to restore.
 	started = false
+	story = {}
+	dialogue = {}
 	if auto_store.load_game(session) or manual_store.load_game(session):
 		started = true
 		close_welcome()
@@ -524,6 +590,8 @@ func reset_preview(sect_id: String = "qingyun", opponent_id: String = "qingyun")
 	if presenting:
 		return
 	preview_opponent = opponent_id
+	story = {}
+	dialogue = {}
 	session.new_game("青禾")
 	session.choose_sect(sect_id)
 	session.player.hp = maxi(1, int(session.player.max_hp) - 20)

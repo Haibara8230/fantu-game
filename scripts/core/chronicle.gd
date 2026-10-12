@@ -6,6 +6,9 @@ const RECENT_LIMIT := 100
 const MAJOR_LIMIT := 5000
 const NAMED_ARGS := {"location": "locations", "enemy": "enemies", "sect": "sects"}
 var entries: Array[Dictionary] = []
+# How many entries were ever added, trimmed or not; the interface compares it before and after an
+# action to find that action's entries (the newest ones). Not saved.
+var added := 0
 
 func clear() -> void:
 	entries.clear()
@@ -13,6 +16,7 @@ func clear() -> void:
 func add(day: int, id: String, args: Dictionary = {}, major: bool = false) -> Dictionary:
 	var entry := {"day": day, "id": id, "args": args.duplicate(true), "major": major}
 	entries.append(entry)
+	added += 1
 	_trim()
 	return entry
 

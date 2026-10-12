@@ -74,7 +74,8 @@ static func _retreat_stop(s) -> int:
 		next += 1
 	return int(stages[next].xp) if next < stages.size() else -1
 
-## Adds xp up to the next bottleneck; enough insight breaks it on the way. Returns the milestone texts.
+## Adds xp up to the next bottleneck; enough insight breaks it on the way. Xp the bottleneck holds back
+## is recorded, so a reward's stated xp never reads as gained when it was not. Returns the texts.
 static func gain_xp(s, amount: int) -> Array[String]:
 	var texts: Array[String] = []
 	var left := amount
@@ -87,6 +88,8 @@ static func gain_xp(s, amount: int) -> Array[String]:
 		texts.append_array(promoted)
 		if promoted.is_empty():
 			break
+	if left > 0:
+		texts.append(s.log_event("xp_held", {"xp": left}))
 	return texts
 
 ## Enters every sub-stage that is reached and unlocked by insight; xp waiting at a bottleneck is held at
