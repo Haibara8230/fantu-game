@@ -2,3 +2,8 @@
 .tools/
 builds/
 *.tmp
+# Reference screenshots of other games stay local; only the folder's notes are kept.
+PNG/**/*.png
+PNG/**/*.jpg
+PNG/**/*.jpeg
+PNG/**/*.webp
