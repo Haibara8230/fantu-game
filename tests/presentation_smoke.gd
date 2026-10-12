@@ -9,8 +9,13 @@ var captured_cues: Dictionary = {}
 var cue_sequence: Array[String] = []
 
 func _initialize() -> void:
+	_step("script started")
 	create_timer(40).timeout.connect(func() -> void: printerr("Presentation test timeout"); quit(1))
 	call_deferred("_run")
+
+## Progress line, so a hung run's log shows the last stage it reached (see docs/BACKLOG.md).
+func _step(stage: String) -> void:
+	print("PRESENTATION step %d ms: %s" % [Time.get_ticks_msec(), stage])
 
 func check(condition: bool, message: String) -> void:
 	checks += 1
@@ -45,18 +50,24 @@ func _wait_action() -> void:
 	await process_frame
 
 func _run() -> void:
+	_step("run started")
 	root.size = Vector2i(1280, 800)
 	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path("res://builds/previews"))
-	main = load("res://scenes/main.tscn").instantiate()
+	var scene: PackedScene = load("res://scenes/main.tscn")
+	_step("main scene loaded")
+	main = scene.instantiate()
+	_step("main scene instantiated")
 	var path := "res://.godot/presentation_saves_%d" % Time.get_ticks_usec()
 	main.manual_store = SaveStore.new(path + "/manual")
 	main.auto_store = SaveStore.new(path + "/auto")
 	root.add_child(main)
+	_step("main scene added")
 	main.session.encounters_enabled = false
 	main.name_input.text = "青禾"
 	main._begin()
 	main.session.combat_rng.seed = 42
 	main._run(func() -> String: return main.session.start_battle("disciple"))
+	_step("disciple duel started")
 	await _capture("art_duel_idle")
 	check(main.battle_stage.hero.sprite.texture.get_width() == 1536, "hero atlas loaded")
 	check(main.battle_stage.enemy.sprite.flip_h, "rival faces player")
@@ -73,6 +84,7 @@ func _run() -> void:
 	main.battle_stage.art.actors.rogue.preferred = "res://assets/art/actors/missing_rogue.png"
 	check(main.battle_stage._enemy_art("rogue", {}).texture == "res://assets/art/rival_atlas_v2.png", "a named foe without its own sprite uses the shared one")
 	main.battle_stage.art.actors.rogue.preferred = rogue_preferred
+	_step("sword timeline")
 	_watch_stage("art_sword")
 	main._skill("sword")
 	check(main.presenting, "input lock starts before animation")
@@ -88,6 +100,7 @@ func _run() -> void:
 	main._run(func() -> String: return main.session.act("rest"))
 	main._run(func() -> String: return main.session.travel("wild"))
 	main._run(func() -> String: return main.session.start_battle("wolf"))
+	_step("wolf duel: fire, heal, guard")
 	_watch_stage("art_fire")
 	await main._skill("fire")
 	check(cue_sequence.count("impact") == 2, "fire and counterattack produce impact cues")
@@ -99,6 +112,7 @@ func _run() -> void:
 	check(cue_sequence[0] == "guard", "guard has its own visual event")
 	await main._battle_action("flee")
 	# Legal progression so boss presentation also exercises the real game's gate.
+	_step("progressing to foundation")
 	main._run(func() -> String: return main.session.travel("sect"))
 	while main.session.player.xp < 2000:
 		main._run(func() -> String: return main.session.cultivate(360))
@@ -115,6 +129,7 @@ func _run() -> void:
 	main._run(func() -> String: return main.session.act("breakthrough"))
 	main._run(func() -> String: return main.session.travel("wild"))
 	main._run(func() -> String: return main.session.start_battle("serpent"))
+	_step("serpent duel started")
 	await _capture("art_boss_idle")
 	check(main.battle_stage.enemy.sprite.region_rect.position.y == 472, "serpent uses its own calibrated atlas region")
 	_watch_stage("art_boss")
@@ -123,6 +138,7 @@ func _run() -> void:
 	await main._battle_action("guard")
 	main._load_manual()
 	check(not main.presenting and main.session.battle.enemy_id == "serpent", "load restores idle stage and active boss")
+	_step("checking skill controls")
 	await process_frame
 	var buttons: Array[Node] = main.center.find_children("*", "Button", true, false)
 	check(not buttons.is_empty(), "skill controls available")
