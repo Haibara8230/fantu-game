@@ -1,7 +1,11 @@
 extends Control
 ## Node map of the region. Routes, nodes and labels are drawn in code on top of either the painted
-## background (when the art file exists) or a code-drawn ink placeholder.
+## background (when the art file exists) or a code-drawn ink placeholder. A journey is played back by
+## walk(): the traveller's mark moves leg by leg along the route.
 signal location_selected(location_id: String)
+# Time to walk one leg on screen: per day of the road, within bounds.
+const SECONDS_PER_DAY := 0.09
+const LEG_SECONDS := Vector2(0.35, 1.2)
 const ArtLibrary = preload("res://scripts/ui/art_library.gd")
 const INK := Color("#e3e8dc")
 const GOLD := Color("#d5b777")
@@ -18,6 +22,8 @@ var preview_path: Array[String] = []
 var people_at: Dictionary = {}
 var background: Texture2D
 var font := SystemFont.new()
+# The traveller's mark while a journey is played back (null when standing at `current`).
+var traveller: Variant = null
 
 func _ready() -> void:
 	font.font_names = PackedStringArray(["Microsoft YaHei", "Noto Sans CJK SC", "SimHei"])
@@ -60,6 +66,29 @@ func location_at(point: Vector2) -> String:
 			return location_id
 	return ""
 
+## Seconds the leg of `days` days takes on screen.
+static func leg_seconds(days: int) -> float:
+	return clampf(days * SECONDS_PER_DAY, LEG_SECONDS.x, LEG_SECONDS.y)
+
+## Plays a journey back: from `start`, the mark walks to each leg's `to` in turn ({"to", "days"});
+## `on_leg` is called with each leg's index and progress (0–1) so the date can move with it.
+func walk(start: String, legs: Array[Dictionary], on_leg: Callable) -> void:
+	var from := start
+	for index: int in legs.size():
+		var to: String = legs[index].to
+		var a := node_position(from)
+		var b := node_position(to)
+		var tween := create_tween()
+		tween.tween_method(func(progress: float) -> void:
+			traveller = a.lerp(b, progress)
+			on_leg.call(index, progress)
+			queue_redraw(), 0.0, 1.0, leg_seconds(int(legs[index].days)))
+		await tween.finished
+		current = to
+		from = to
+	traveller = null
+	queue_redraw()
+
 func _gui_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
 		var hit := location_at(event.position)
@@ -77,7 +106,19 @@ func _draw() -> void:
 		_draw_placeholder(rect)
 	_draw_routes()
 	_draw_nodes()
-	draw_string(font, rect.position + Vector2(16, 30), str(content.map.name), HORIZONTAL_ALIGNMENT_LEFT, -1, 20, GOLD)
+	if traveller is Vector2:
+		_draw_traveller(traveller)
+	# The region's name at the top centre, clear of the HUD's corners.
+	var title := str(content.map.name)
+	var width := font.get_string_size(title, HORIZONTAL_ALIGNMENT_LEFT, -1, 20).x
+	draw_string(font, Vector2(rect.position.x + (rect.size.x - width) * 0.5, rect.position.y + 30), title, HORIZONTAL_ALIGNMENT_LEFT, -1, 20, GOLD)
+
+## The traveller on the road: a small gold seal with a dark rim.
+func _draw_traveller(point: Vector2) -> void:
+	draw_circle(point + Vector2(0, 3), 11.0, Color(0, 0, 0, 0.35))
+	draw_circle(point, 10.0, GOLD)
+	draw_arc(point, 10.0, 0, TAU, 24, Color("#1b3236"), 2.5, true)
+	draw_circle(point, 3.5, Color("#1b3236"))
 
 func _draw_placeholder(rect: Rect2) -> void:
 	draw_rect(rect, Color("#13282d"))

@@ -75,6 +75,18 @@ func _goals() -> void:
 	check(not "tournament" in ids.call(), "and not again until the next one draws near")
 	check(Goals.current(game).size() <= Goals.SHOWN, "at most a few goals at once")
 
+## Waits out a journey played on the map: whether the traveller's mark showed, and how many dates passed.
+func _watch_walk() -> Dictionary:
+	var marked := false
+	var dates := {}
+	while main.presenting:
+		if main.world_map.traveller is Vector2:
+			marked = true
+		dates[main.clock_label.text] = true
+		await process_frame
+	await process_frame
+	return {"marked": marked, "dates": dates.size()}
+
 func _button(text_part: String) -> Button:
 	for button: Button in main.center.find_children("*", "Button", true, false):
 		if button.text.contains(text_part):
@@ -275,10 +287,23 @@ func _run() -> void:
 	main.world_map.location_selected.emit("ridge")
 	var route_text := _texts(main.center, "Label")
 	check(route_text.contains("云溪坊市 → 白鹭渡 → 青石镇 → 松风岭") and route_text.contains("共 8 日"), "shortest route previewed with days")
+	check(main.current_screen() == "map" and main.world_map.visible and main.window.get_global_rect().end.y < 460, "the map fills the screen, the route in a small window")
 	_button("启程前往松风岭").pressed.emit()
 	await process_frame
-	check(main.session.player.location == "ridge" and main.view == "place", "departing from the map walks the route")
+	check(main.presenting and main.world_map.visible and main.session.player.location == "ridge", "the rules walk the route at once; the map plays it back")
+	var walk := await _watch_walk()
+	check(walk.marked and walk.dates > 2, "the traveller's mark walks the legs while the date moves")
+	check(main.session.player.location == "ridge" and main.view == "place" and main.world_map.traveller == null and not main.world_map.visible, "arriving enters the place")
 	check(main.audio.last_cue == "arrive" and main.audio.music_key == "ridge", "arrival cue and local music")
+	# A journey cut short (by an encounter or an event) is continued from the HUD, walked on the map.
+	main.session.player.journey = {"to": "ferry"}
+	main.render()
+	check(main.journey_button != null and not main.journey_button.disabled, "an unfinished journey offers 继续赶路")
+	main.journey_button.pressed.emit()
+	await process_frame
+	check(main.current_screen() == "map", "continuing goes back to the map")
+	walk = await _watch_walk()
+	check(walk.marked and main.session.player.location == "ferry" and main.view == "place" and main.session.player.journey.is_empty(), "and walks the rest of the way")
 	# Story moments: a person met in a scene of their own, a choice event and a moment without a choice.
 	var art: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://data/art.json"))
 	check(art.event_art.keys().all(func(id: String) -> bool: return main.session.content.events.has(id)) and art.person_art.keys().all(func(id: String) -> bool: return main.session.content.people.has(id)), "story art points at real events and people")

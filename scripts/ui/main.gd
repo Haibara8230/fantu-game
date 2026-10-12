@@ -16,6 +16,7 @@ const Hud = preload("res://scripts/ui/hud.gd")
 const StatusView = preload("res://scripts/ui/status_view.gd")
 const TasksView = preload("res://scripts/ui/tasks_view.gd")
 const SystemView = preload("res://scripts/ui/system_view.gd")
+const WorldMap = preload("res://scripts/ui/world_map.gd")
 const PlaceView = preload("res://scripts/ui/place_view.gd")
 const PeopleView = preload("res://scripts/ui/people_view.gd")
 const MapView = preload("res://scripts/ui/map_view.gd")
@@ -266,6 +267,12 @@ func _build_layout() -> void:
 	shade.color = Color(0.02, 0.05, 0.06, 0.4)
 	shade.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(shade)
+	# The region's map fills the screen on the map screen, under the HUD and the route window.
+	world_map = WorldMap.new()
+	world_map.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	world_map.visible = false
+	world_map.location_selected.connect(select_map_target)
+	add_child(world_map)
 	window = PanelContainer.new()
 	window.add_theme_stylebox_override("panel", style(Color(0.06, 0.12, 0.14, 0.93), Color("#41615e"), 18))
 	add_child(window)
@@ -318,14 +325,21 @@ func _tab_group(view_id: String) -> String:
 func _arrange(screen: String) -> void:
 	var world := screen in ["place", "map"]
 	Hud.set_shown(self, world)
+	world_map.visible = screen == "map"
 	match screen:
-		"place", "map":
-			# The world's picture fills the screen; the window keeps clear of the HUD's corners.
-			var path := ArtLibrary.map_path() if screen == "map" else ArtLibrary.location_path(str(session.player.location))
-			backdrop.texture = ArtLibrary.texture(path)
+		"place":
+			# The place's picture fills the screen; the window keeps clear of the HUD's corners.
+			backdrop.texture = ArtLibrary.texture(ArtLibrary.location_path(str(session.player.location)))
 			backdrop.visible = true
 			shade.color.a = 0.35
 			_place_window(0.34, 0.985, 124.0, -60.0)
+		"map":
+			# The map is the screen; the route window sits under the top-right corner, where the region
+			# has no places.
+			backdrop.visible = false
+			shade.color.a = 0.0
+			_place_window(0.68, 0.985, 124.0, 404.0)
+			window.anchor_bottom = 0.0
 		"full":
 			backdrop.visible = false
 			shade.color.a = 0.0
@@ -513,9 +527,49 @@ func select_map_target(location_id: String) -> void:
 	render()
 
 func depart(location_id: String) -> void:
+	await _travel(func() -> String: return session.travel(location_id))
+
+## Resumes a journey cut short on the road, walking the rest on the map.
+func continue_journey() -> void:
+	await _travel(session.continue_journey)
+
+## A journey: the rules walk it at once; the map then plays it back leg by leg with the date moving,
+## input locked meanwhile. Arriving enters the place; an encounter or an event on the way takes the
+## screen, and afterwards the map is back with the journey to continue.
+func _travel(action: Callable) -> void:
+	if presenting or not settled():
+		return
+	view = "map"
+	render()
+	var before := _cue_state()
+	var mark: int = session.chronicle.added
+	var start: String = session.player.location
+	var day := int(session.world.day)
+	presenting = true
+	_lock_buttons(self)
 	audio.cue("depart")
-	view = "place"
-	run(func() -> String: return session.travel(location_id))
+	var message: String = action.call()
+	# The legs walked, in order, from the chronicle's travel entries the journey added.
+	var legs: Array[Dictionary] = []
+	var count := mini(int(session.chronicle.added) - mark, session.chronicle.entries.size())
+	var walked: Array[Dictionary] = []
+	if count > 0:
+		walked = session.chronicle.entries.slice(-count)
+	for entry: Dictionary in walked:
+		if entry.id == "travel":
+			legs.append({"to": str(entry.args.location), "from_day": day, "day": int(entry.day), "days": int(entry.day) - day})
+			day = int(entry.day)
+	if not legs.is_empty():
+		await world_map.walk(start, legs, func(index: int, progress: float) -> void:
+			clock_label.text = Calendar.date_text(int(lerpf(int(legs[index].from_day), int(legs[index].day), progress))))
+	presenting = false
+	_unlock_buttons()
+	if session.player.journey.is_empty() and settled() and session.player.location != start:
+		view = "place"
+	_stage_story(mark)
+	_cue_changes(before)
+	render()
+	notice(message + (" 自动存档失败：" + autosave_error if not autosave_error.is_empty() else ""))
 
 ## True when nothing (a duel, an event or the end of a life) holds the player in place.
 func settled() -> bool:
@@ -574,12 +628,15 @@ func battle_action(action: String) -> void:
 		if event.get("type") == "end" and event.get("result") in ["win", "lose"]:
 			audio.cue("victory" if event.result == "win" else "defeat")
 	presenting = false
+	_unlock_buttons()
+	render()
+	notice(message + (" 自动存档失败：" + autosave_error if not autosave_error.is_empty() else ""))
+
+func _unlock_buttons() -> void:
 	for entry: Dictionary in locked_buttons:
 		if is_instance_valid(entry.button):
 			entry.button.disabled = entry.disabled
 	locked_buttons.clear()
-	render()
-	notice(message + (" 自动存档失败：" + autosave_error if not autosave_error.is_empty() else ""))
 
 func _lock_buttons(node: Node) -> void:
 	for child: Node in node.get_children():

@@ -148,7 +148,7 @@ static func render(ui) -> void:
 	if not p.journey.is_empty():
 		var remaining: int = session.content.path_days(session.path_to(p.journey.to))
 		ui.journey_box.add_child(ui.label("行程未竟 · %s · 约 %d 日" % [session.content.locations[p.journey.to].name, remaining], 14))
-		var go_on: Button = ui.button("继续赶路", func() -> void: ui.run(session.continue_journey), "沿原定路线继续前进")
+		var go_on: Button = ui.button("继续赶路", ui.continue_journey, "沿原定路线继续前进")
 		go_on.custom_minimum_size.y = 30
 		go_on.disabled = not ui.settled()
 		ui.journey_box.add_child(go_on)
