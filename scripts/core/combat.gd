@@ -1,6 +1,63 @@
 extends RefCounted
 ## Turn-based duel rules. Operates on a Session; only the combat random stream is used here.
 
+static func start_battle(s, enemy_id: String, opponent_sect: String = "") -> String:
+	if not s.blocked().is_empty() or not s.content.enemies.has(enemy_id):
+		return "当前无法开始斗法。"
+	var enemy: Dictionary = s.content.enemies[enemy_id]
+	if not s.available_here("battle:" + enemy_id):
+		return "此地没有这个对手。"
+	if not opponent_sect.is_empty() and not s.content.sects.has(opponent_sect):
+		return "未知对手传承。"
+	if int(s.player.realm) < int(enemy.min_realm):
+		return "%s气息凶险，需达到%s。" % [enemy.name, s.content.realm_title(int(enemy.min_realm), 0)]
+	if enemy.has("world_flag") and s.has_flag(enemy.world_flag):
+		return "%s已经伏诛，此地重归安宁。" % enemy.name
+	return s.finish(begin_battle(s, enemy_id, "", opponent_sect))
+
+## Starts a duel without location checks; used by spots and by event effects (context "event").
+static func begin_battle(s, enemy_id: String, context: String = "", opponent_sect: String = "") -> String:
+	var enemy: Dictionary = s.content.enemies[enemy_id]
+	if opponent_sect.is_empty():
+		opponent_sect = str(enemy.get("sect", s.player.get("sect", "wanderer")))
+		if opponent_sect == "wanderer":
+			opponent_sect = "qingyun"
+	s.battle = {"enemy_id": enemy_id, "hp": int(enemy.hp), "turn": 1, "cooldowns": {}, "opponent_sect": opponent_sect, "status": {}, "place": _battle_place(s)}
+	if not context.is_empty():
+		s.battle.context = context
+	return s.log_event("battle_start", {"enemy": enemy_id})
+
+## A friendly bout with a generated person: their stage's health and their best art, nothing at stake.
+static func begin_spar(s, person_id: String) -> void:
+	var someone: Dictionary = s.person(person_id)
+	var foe: Dictionary = s.Population.foe(s.content, person_id, someone)
+	var lineage: String = str(someone.get("sect", "qingyun"))
+	s.battle = {"enemy_id": "cultivator", "hp": int(foe.hp), "turn": 1, "cooldowns": {}, "opponent_sect": "qingyun" if lineage == "wanderer" else lineage, "status": {}, "context": "spar", "npc": person_id, "foe": foe, "place": _battle_place(s)}
+	s.log_event("spar_start", {"npc": person_id})
+
+## A tournament round against the sect's outer disciples present, weakest first.
+static func begin_tournament(s, round: int) -> void:
+	var disciples: Array = s.present_npcs().filter(func(person_id: String) -> bool: return s.is_generated(person_id) and s.person(person_id).kind == "disciple")
+	disciples.sort_custom(func(a: String, b: String) -> bool:
+		var ra := int(s.person(a).realm) * 10 + int(s.person(a).stage)
+		var rb := int(s.person(b).realm) * 10 + int(s.person(b).stage)
+		return ra < rb or (ra == rb and a < b))
+	if disciples.is_empty():
+		begin_battle(s, "disciple", "event")
+		s.battle.context = "tournament"
+		s.battle.round = round
+		return
+	var opponent: String = disciples[clampi(round - 1 + disciples.size() / 3 * (round - 1), 0, disciples.size() - 1)]
+	begin_spar(s, opponent)
+	s.battle.context = "tournament"
+	s.battle.round = round
+
+## Where a duel is fought, for its backdrop: "road" while a road encounter is open, otherwise here.
+static func _battle_place(s) -> String:
+	if not s.pending_event.is_empty() and str(s.content.events[s.pending_event.id].get("trigger", "")) == "route":
+		return "road"
+	return str(s.player.location)
+
 static func use_skill(s, skill_id: String) -> String:
 	s.combat_events.clear()
 	var t: Dictionary = s.content.technique(skill_id)

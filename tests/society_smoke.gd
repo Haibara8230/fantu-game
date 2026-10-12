@@ -86,7 +86,7 @@ func _lives() -> void:
 	var game := _game(77)
 	var risers: Array = []
 	for seat: int in game._local_seats:
-		for life: Dictionary in game._seat_lives(seat, 200 * 360):
+		for life: Dictionary in game.seat_lives(seat, 200 * 360):
 			if int(life.generation) > 0 and int(life.foundation_age) > 0:
 				risers.append(life)
 	check(risers.size() > 10, "newcomers with talent break through later in life (%d)" % risers.size())

@@ -55,8 +55,15 @@ Godot 4 / GDScript / Windows 单机。同一个修仙世界持续运转，玩家
 - `data/events.json`：地点、日期与条件触发的事件。
 - `scripts/core/events.gd`：事件引擎与到期调度。
 - `scripts/core/content.gd`：内容加载与配置校验。
-- `scripts/core/session.gd`：游戏状态、统一时间推进、修炼、交易、突破，与界面无关。
-- `scripts/core/combat.gd`：斗法规则。
+- `scripts/core/session.gd`：游戏状态、统一时间推进、修炼、采集、突破与存档快照，与界面无关；各系统的规则在下列模块中，界面和测试仍通过 `session.gd` 的同名方法调用。
+- `scripts/core/inventory.gd`：行囊物品、买卖、坊市轮换货品与服用。
+- `scripts/core/loadout.gd`：功法、法宝、门派传承及其加成。
+- `scripts/core/commissions.gd`：委托告示、接取、交付与过期。
+- `scripts/core/rumors.gd`：打听消息。
+- `scripts/core/people.gd`：人物（手写与生成人口）、行踪、相识、讣闻与交互。
+- `scripts/core/journey.gd`：赶路。
+- `scripts/core/save_restore.gd`：读档时的校验与恢复。
+- `scripts/core/combat.gd`：斗法规则，以及斗法、切磋与小比的开场。
 - `scripts/core/calendar.gd`：历法与日期文字。
 - `scripts/core/chronicle.gd`：结构化编年史。
 - `scripts/core/save_migration.gd`：存档版本迁移。

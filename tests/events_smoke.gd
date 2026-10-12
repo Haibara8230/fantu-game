@@ -42,7 +42,7 @@ func _jump(game: Session, year: int, month: int, day: int) -> void:
 
 func _foundation(game: Session) -> void:
 	game.player.realm = 1
-	game._refresh_realm_stats()
+	game.refresh_realm_stats()
 	game.player.hp = game.player.max_hp
 
 func _state(game: Session, event_id: String) -> String:

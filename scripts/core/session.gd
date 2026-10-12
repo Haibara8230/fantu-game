@@ -1,5 +1,7 @@
 extends RefCounted
 ## Gameplay state and rules. No UI or filesystem dependency.
+## The state, time and the core actions live here; each system's rules live in its own module, which
+## operates on this Session. The forwarders below keep one public interface for the interface and tests.
 const Content = preload("res://scripts/core/content.gd")
 const Calendar = preload("res://scripts/core/calendar.gd")
 const Chronicle = preload("res://scripts/core/chronicle.gd")
@@ -7,15 +9,17 @@ const Combat = preload("res://scripts/core/combat.gd")
 const Events = preload("res://scripts/core/events.gd")
 const Arsenal = preload("res://scripts/core/arsenal.gd")
 const Population = preload("res://scripts/core/population.gd")
+const Inventory = preload("res://scripts/core/inventory.gd")
+const Loadout = preload("res://scripts/core/loadout.gd")
+const Commissions = preload("res://scripts/core/commissions.gd")
+const Rumors = preload("res://scripts/core/rumors.gd")
+const People = preload("res://scripts/core/people.gd")
+const Journey = preload("res://scripts/core/journey.gd")
+const SaveRestore = preload("res://scripts/core/save_restore.gd")
 const SaveMigration = preload("res://scripts/core/save_migration.gd")
 const SAVE_VERSION := SaveMigration.CURRENT_VERSION
-const PLAYER_COUNTS := ["realm", "xp", "hp", "qi", "stones", "cultivation_carry"]
-const LIMIT := 1000000000.0
 const MAX_SPAN_DAYS := 3600
 const MAX_DUE_PER_SPAN := 100000
-const TALK_COOLDOWN_DAYS := 30
-# How long someone stays away after leaving, when their data gives no time.
-const LONG_ABSENCE_DAYS := 3600
 signal changed
 var content = Content.new()
 # Separate streams: world-side draws (gathering, later simulation) never shift duel results.
@@ -32,11 +36,11 @@ var ended: Dictionary = {}
 var encounters_enabled := true
 # The person whose interaction is being applied, for effects such as "leave".
 var acting_npc := ""
-# Who can be found where today, and the cached people indexes it comes from.
+# Population caches kept by people.gd, rebuilt from the world seed and never saved: who can be found
+# where today and the people indexes it comes from; seats of built regions, their lives, and per-day
+# views and per-realm loadouts.
 var _people_at := {}
 var _index_cache: Array[Dictionary] = []
-const SHORT_STAY_DAYS := 700
-# Generated population: seats of built regions, their lives, and per-day views and per-realm loadouts.
 var _local_seats: Array[int] = []
 var _lives := {}
 var _views := {}
@@ -76,7 +80,7 @@ func new_game(character_name: String = "无名", seed_value: int = -1, roots: Ar
 	for skill_id: String in content.sects.wanderer.skills:
 		player.learned.append(skill_id)
 		player.arts.append(skill_id)
-	_refresh_realm_stats()
+	refresh_realm_stats()
 	player.hp = player.max_hp
 	player.qi = player.max_qi
 	battle.clear()
@@ -121,7 +125,7 @@ func advance_days(days: int, interruptible: bool = false) -> Dictionary:
 func conclude(text: String, passed: Dictionary = {}) -> String:
 	var parts: Array[String] = [text]
 	parts.append_array(passed.get("messages", []))
-	parts.append_array(_expire_quests())
+	parts.append_array(Commissions.expire(self))
 	parts.append_array(Events.check_location(self))
 	changed.emit()
 	return " ".join(parts.filter(func(part: String) -> bool: return not part.is_empty()))
@@ -216,13 +220,14 @@ func settle_stage() -> Array[String]:
 		var old_hp := int(player.max_hp)
 		var old_qi := int(player.max_qi)
 		player.stage = int(player.stage) + 1
-		_refresh_realm_stats()
+		refresh_realm_stats()
 		player.hp = int(player.hp) + int(player.max_hp) - old_hp
 		player.qi = int(player.qi) + int(player.max_qi) - old_qi
 		texts.append(log_event("stage_up", {"realm": int(player.realm), "stage": int(player.stage)}, true))
 	return texts
 
-func _refresh_realm_stats() -> void:
+## Sets the stat caps from the stage and the loadout, keeping current hp and qi within them.
+func refresh_realm_stats() -> void:
 	var current: Dictionary = stage_stats()
 	var extra := bonuses()
 	player.max_hp = int(current.max_hp) + int(extra.max_hp)
@@ -232,7 +237,7 @@ func _refresh_realm_stats() -> void:
 		player.qi = mini(int(player.qi), int(player.max_qi))
 
 ## Why the player cannot act right now, or an empty String.
-func _blocked() -> String:
+func blocked() -> String:
 	if player.is_empty():
 		return "请先创建角色。"
 	if not ended.is_empty():
@@ -244,9 +249,9 @@ func _blocked() -> String:
 	return ""
 
 func act(action: String) -> String:
-	var blocked := _blocked()
-	if not blocked.is_empty():
-		return blocked
+	var reason := blocked()
+	if not reason.is_empty():
+		return reason
 	var days := content.action_days(action)
 	if action in content.PLAIN_ACTIONS and not available_here(action):
 		return "此地无法如此行事。"
@@ -264,7 +269,7 @@ func act(action: String) -> String:
 			var passed := advance_days(days)
 			if not ended.is_empty():
 				return conclude("", passed)
-			var found := _gather_picks(content.locations[player.location].gather)
+			var found := Inventory.gather_picks(self, content.locations[player.location].gather)
 			for item_id: String in found:
 				add_item(item_id, int(found[item_id]))
 			return conclude(log_event("gather_items", {"days": passed.elapsed, "location": player.location, "loot": loot_code(found)}), passed)
@@ -326,7 +331,7 @@ func act(action: String) -> String:
 				return conclude("", passed)
 			player.realm += 1
 			player.stage = 0
-			_refresh_realm_stats()
+			refresh_realm_stats()
 			player.hp = player.max_hp
 			player.qi = player.max_qi
 			var texts: Array[String] = [log_event("breakthrough", {"days": passed.elapsed, "realm": int(player.realm), "stage": 0}, true)]
@@ -337,9 +342,9 @@ func act(action: String) -> String:
 ## Closed-door cultivation for a chosen number of days. Reminders and lifespan warnings can end it early;
 ## cultivation is credited per elapsed day, so one long retreat equals several short ones.
 func cultivate(days: int) -> String:
-	var blocked := _blocked()
-	if not blocked.is_empty():
-		return blocked
+	var reason := blocked()
+	if not reason.is_empty():
+		return reason
 	if not available_here("cultivate"):
 		return "此地无法闭关，请回青云山静室。"
 	if days < 1 or days > MAX_SPAN_DAYS:
@@ -359,9 +364,9 @@ func cultivate(days: int) -> String:
 
 ## Stays where the player is. Interruptible like a retreat, but without cultivation.
 func wait(days: int) -> String:
-	var blocked := _blocked()
-	if not blocked.is_empty():
-		return blocked
+	var reason := blocked()
+	if not reason.is_empty():
+		return reason
 	if days < 1 or days > MAX_SPAN_DAYS:
 		return "停留天数不合常理。"
 	var start := int(world.day)
@@ -383,839 +388,6 @@ func _gain_cultivation(days: int) -> int:
 	player.xp += gained
 	return gained
 
-# --- Inventory -----------------------------------------------------------------------
-# Everything the player carries is an item stack in player.items (id -> count). Content may still
-# speak of "herbs" in general (any herb, cheapest paid first) and "pills" (筑基丹).
-
-func item_count(item_id: String) -> int:
-	return int(player.get("items", {}).get(item_id, 0))
-
-func herb_count() -> int:
-	var total := 0
-	for item_id: String in content.herbs_by_value():
-		total += item_count(item_id)
-	return total
-
-func add_item(item_id: String, count: int) -> void:
-	if count <= 0:
-		return
-	player.items[item_id] = item_count(item_id) + count
-
-## Removes up to `count`; returns false (and removes nothing) when there are not enough.
-func remove_item(item_id: String, count: int) -> bool:
-	if count <= 0:
-		return true
-	if item_count(item_id) < count:
-		return false
-	var left := item_count(item_id) - count
-	if left == 0:
-		player.items.erase(item_id)
-	else:
-		player.items[item_id] = left
-	return true
-
-## Pays a generic herb cost, cheapest herbs first.
-func remove_herbs(count: int) -> bool:
-	if herb_count() < count:
-		return false
-	for item_id: String in content.herbs_by_value():
-		var taken := mini(count, item_count(item_id))
-		remove_item(item_id, taken)
-		count -= taken
-	return true
-
-## Sets a stack directly (tests and tools).
-func set_item_count(item_id: String, count: int) -> void:
-	player.items.erase(item_id)
-	add_item(item_id, count)
-
-## What this place pays for one of the item, or 0 when it does not buy it here.
-func sell_price(item_id: String) -> int:
-	if not available_here("sell") or content.item(item_id).is_empty():
-		return 0
-	var item: Dictionary = content.item(item_id)
-	return int(item.price) if item.category in content.locations[player.location].get("buys", []) else 0
-
-## Fixed goods plus this period's rotating stock (manuals, equipment).
-func shop_goods() -> Array:
-	if not available_here("shop"):
-		return []
-	var goods: Array = content.locations[player.location].get("shop", []).duplicate()
-	goods.append_array(rotating_stock(player.location))
-	return goods
-
-## Compact loot record for the chronicle: "id:count,id:count".
-func loot_code(found: Dictionary) -> String:
-	var parts: Array[String] = []
-	for item_id: String in found:
-		parts.append("%s:%d" % [item_id, int(found[item_id])])
-	return ",".join(parts)
-
-func _gather_picks(gather: Dictionary) -> Dictionary:
-	var found := {}
-	var total := 0
-	for entry: Dictionary in gather.table:
-		total += int(entry.weight)
-	for pick: int in world_rng.randi_range(int(gather.picks[0]), int(gather.picks[1])):
-		var roll := world_rng.randi_range(1, total)
-		for entry: Dictionary in gather.table:
-			roll -= int(entry.weight)
-			if roll <= 0:
-				found[entry.item] = int(found.get(entry.item, 0)) + 1
-				break
-	return found
-
-func sell(item_id: String, count: int = 1) -> String:
-	var blocked := _blocked()
-	if not blocked.is_empty():
-		return blocked
-	var price := sell_price(item_id)
-	if price <= 0:
-		return "这里不收这件东西。"
-	if count < 1 or not remove_item(item_id, count):
-		return "行囊里没有那么多。"
-	player.stones += price * count
-	return conclude(log_event("sell_item", {"item": item_id, "count": count, "revenue": price * count}))
-
-func buy(item_id: String) -> String:
-	var blocked := _blocked()
-	if not blocked.is_empty():
-		return blocked
-	for good: Dictionary in shop_goods():
-		if good.item == item_id:
-			if int(player.stones) < int(good.price):
-				return "灵石不足：%s需要 %d 灵石。" % [content.item(item_id).name, int(good.price)]
-			player.stones -= int(good.price)
-			add_item(item_id, 1)
-			if good.has("key"):
-				world.stock_sold[good.key] = true
-			return conclude(log_event("buy_item", {"item": item_id, "price": int(good.price)}))
-	return "这里买不到这件东西。"
-
-## Why an item cannot be used right now, or "".
-func use_block(item_id: String) -> String:
-	var blocked := _blocked()
-	if not blocked.is_empty():
-		return blocked
-	if not content.item(item_id).has("use"):
-		return "此物不能直接服用。"
-	if item_count(item_id) < 1:
-		return "行囊里没有此物。"
-	var ready := int(player.cooldowns.get("use:" + item_id, 0))
-	if int(world.day) < ready:
-		return "丹毒未消，%s后再服。" % Calendar.duration_text(ready - int(world.day))
-	return ""
-
-func use_item(item_id: String) -> String:
-	var reason := use_block(item_id)
-	if not reason.is_empty():
-		return reason
-	var item: Dictionary = content.item(item_id)
-	remove_item(item_id, 1)
-	if item.has("use_cooldown_days"):
-		player.cooldowns["use:" + item_id] = int(world.day) + int(item.use_cooldown_days)
-	var text := log_event("use_item", {"item": item_id})
-	Events.apply(self, item.use)
-	return conclude(text)
-
-# --- Techniques and equipment ------------------------------------------------------------
-# player.learned lists every technique known; player.arts (up to rules.art_slots) are usable in duels
-# and player.methods (up to rules.method_slots) are passive 心法. player.equipment holds one item id
-# per slot; equipped items leave the 行囊 and return to it when taken off.
-
-## Totals from 心法 and equipment: attack, max_hp, max_qi, defense, cultivation, element_damage {element|"*": x}.
-func bonuses(holder: Dictionary = {}) -> Dictionary:
-	if holder.is_empty():
-		holder = player
-	var total := {"attack": 0, "max_hp": 0, "max_qi": 0, "defense": 0.0, "cultivation": 0.0, "element_damage": {}}
-	var sources: Array[Dictionary] = []
-	for technique_id: Variant in holder.get("methods", []):
-		var method: Dictionary = content.technique(str(technique_id))
-		if not method.is_empty():
-			sources.append({"stats": method.passive, "element": method.element})
-	for slot: String in holder.get("equipment", {}):
-		var gear: Dictionary = content.equipment(str(holder.equipment[slot]))
-		if not gear.is_empty():
-			sources.append({"stats": gear.stats, "element": "*" if gear.element == "none" else gear.element})
-	for source: Dictionary in sources:
-		for key: String in source.stats:
-			if key == "element_damage":
-				total.element_damage[source.element] = float(total.element_damage.get(source.element, 0.0)) + float(source.stats[key])
-			elif key in ["defense", "cultivation"]:
-				total[key] = float(total[key]) + float(source.stats[key])
-			else:
-				total[key] = int(total[key]) + int(source.stats[key])
-	return total
-
-func attack_bonus() -> int:
-	return int(stage_stats().attack_bonus) + int(bonuses().attack)
-
-## Share of incoming damage avoided by equipment, capped at half.
-func defense() -> float:
-	return minf(0.5, float(bonuses().defense))
-
-## Damage multiplier for a technique: element bonuses, plus a little extra when it matches a spirit root.
-func element_multiplier(t: Dictionary) -> float:
-	var damage: Dictionary = bonuses().element_damage
-	var multiplier := 1.0 + float(damage.get(t.element, 0.0)) + float(damage.get("*", 0.0))
-	if t.element in player.get("roots", []):
-		multiplier += float(content.technique_data.root_bonus)
-	return multiplier
-
-## Why the player cannot learn this technique now, or "".
-func learn_block(technique_id: String) -> String:
-	var t: Dictionary = content.technique(technique_id)
-	if t.is_empty():
-		return "此法无从参悟。"
-	if technique_id in player.learned:
-		return "你已习得此法。"
-	if int(player.realm) < int(t.min_realm):
-		return "%s之法，需达到%s方可参悟。" % [t.tier_name, content.realm_title(int(t.min_realm), 0)]
-	return _blocked()
-
-## Studies a technique for its tier's days; the new technique goes into a free slot if there is one.
-func _study(technique_id: String) -> Dictionary:
-	var t: Dictionary = content.technique(technique_id)
-	var passed := advance_days(int(t.study_days))
-	if not ended.is_empty():
-		return passed
-	player.learned.append(technique_id)
-	var slots: Array = player.arts if t.slot == "art" else player.methods
-	if slots.size() < int(content.rules.art_slots if t.slot == "art" else content.rules.method_slots):
-		slots.append(technique_id)
-	_refresh_realm_stats()
-	passed.text = log_event("learn", {"technique": technique_id, "days": passed.elapsed}, int(t.tier) >= 3)
-	return passed
-
-## Studies the technique written in a jade slip from the 行囊.
-func study_manual(item_id: String) -> String:
-	var manual: Dictionary = content.item(item_id)
-	if manual.get("category", "") != "manual" or item_count(item_id) < 1:
-		return "行囊里没有这枚玉简。"
-	var reason := learn_block(manual.teaches)
-	if not reason.is_empty():
-		return reason
-	remove_item(item_id, 1)
-	var passed := _study(manual.teaches)
-	return conclude(str(passed.get("text", "")), passed)
-
-## Techniques taught by the scene here (the sect's 传功堂).
-func teachings() -> Array[String]:
-	var result: Array[String] = []
-	if not available_here("teach"):
-		return result
-	for spot: Dictionary in content.locations[player.location].spots:
-		for technique_id: String in spot.get("teach", []):
-			result.append(technique_id)
-	return result
-
-func learn_here(technique_id: String) -> String:
-	if not technique_id in teachings():
-		return "这里不传授此法。"
-	var reason := learn_block(technique_id)
-	if not reason.is_empty():
-		return reason
-	var passed := _study(technique_id)
-	return conclude(str(passed.get("text", "")), passed)
-
-## Puts a learned technique into its slots, replacing `replace` when the slots are full.
-func equip_technique(technique_id: String, replace: String = "") -> String:
-	var t: Dictionary = content.technique(technique_id)
-	if not technique_id in player.learned or t.is_empty():
-		return "尚未习得此法。"
-	if not battle.is_empty():
-		return "斗法中无法更换功法。"
-	var slots: Array = player.arts if t.slot == "art" else player.methods
-	var limit := int(content.rules.art_slots if t.slot == "art" else content.rules.method_slots)
-	if technique_id in slots:
-		return "此法已在运转。"
-	if slots.size() >= limit:
-		if not replace in slots:
-			return "栏位已满，请先选择要替换的功法。"
-		slots.erase(replace)
-	slots.append(technique_id)
-	_refresh_realm_stats()
-	return finish("改为运转%s。" % t.name)
-
-func unequip_technique(technique_id: String) -> String:
-	if not battle.is_empty():
-		return "斗法中无法更换功法。"
-	var t: Dictionary = content.technique(technique_id)
-	var slots: Array = player.arts if t.get("slot", "art") == "art" else player.methods
-	if not technique_id in slots:
-		return "此法并未运转。"
-	if t.get("slot", "art") == "art" and slots.size() <= 1:
-		return "至少保留一门神通。"
-	slots.erase(technique_id)
-	_refresh_realm_stats()
-	return finish("停下了%s。" % t.name)
-
-func equip_item(item_id: String) -> String:
-	var gear: Dictionary = content.equipment(item_id)
-	if gear.is_empty() or item_count(item_id) < 1:
-		return "行囊里没有这件法宝。"
-	if not battle.is_empty():
-		return "斗法中无法更换法宝。"
-	var worn := str(player.equipment.get(gear.slot, ""))
-	remove_item(item_id, 1)
-	if not worn.is_empty():
-		add_item(worn, 1)
-	player.equipment[gear.slot] = item_id
-	_refresh_realm_stats()
-	return finish("换上了%s。" % gear.name)
-
-func unequip_slot(slot: String) -> String:
-	var worn := str(player.equipment.get(slot, ""))
-	if worn.is_empty():
-		return "此处没有佩戴法宝。"
-	if not battle.is_empty():
-		return "斗法中无法更换法宝。"
-	player.equipment[slot] = ""
-	add_item(worn, 1)
-	_refresh_realm_stats()
-	return finish("取下了%s。" % content.equipment(worn).name)
-
-## A place's stock that changes every restock period: deterministic per world, place and period.
-## Returns [{"item", "price", "key"}]; sold goods are left out until the next restock.
-func rotating_stock(location_id: String) -> Array[Dictionary]:
-	var goods: Array[Dictionary] = []
-	var location: Dictionary = content.locations[location_id]
-	if not location.has("stock"):
-		return goods
-	var period := int(world.day) / int(location.stock.restock_days)
-	var rng := RandomNumberGenerator.new()
-	rng.seed = hash([int(world.get("seed", 0)), location_id, period])
-	var index := 0
-	for line: Dictionary in location.stock.lines:
-		for count: int in int(line.count):
-			var tier := rng.randi_range(int(line.tiers[0]), int(line.tiers[1]))
-			var item_id := ""
-			if line.kind == "manual":
-				item_id = "j:" + Arsenal.generate_technique(content, rng, tier, {"slot": line.slot} if line.has("slot") else {})
-			else:
-				item_id = Arsenal.generate_equipment(content, rng, tier)
-			var key := "%s:%d:%d" % [location_id, period, index]
-			index += 1
-			if not world.stock_sold.has(key):
-				goods.append({"item": item_id, "price": int(content.item(item_id).price) * 2, "key": key})
-	return goods
-
-# --- Commissions -----------------------------------------------------------------------
-# Boards post a few offers per period (deterministic per world, board and period). Accepted ones live
-# in player.quests with a deadline; world.quests_taken keeps an offer from being posted twice.
-
-func board_here() -> String:
-	if not available_here("commissions"):
-		return ""
-	for board: String in content.commission_data.boards:
-		if content.commission_data.boards[board].location == player.location:
-			return board
-	return ""
-
-func commission_offers(board: String) -> Array[Dictionary]:
-	var offers: Array[Dictionary] = []
-	var data: Dictionary = content.commission_data
-	var period := int(world.day) / int(data.period_days)
-	var rng := RandomNumberGenerator.new()
-	rng.seed = hash([int(world.get("seed", 0)), "commission", board, period])
-	var kinds: Array = data.templates.keys().filter(func(kind: String) -> bool: return board in data.templates[kind].boards)
-	kinds.sort()
-	var total := 0
-	for kind: String in kinds:
-		total += int(data.templates[kind].weight)
-	for index: int in int(data.offers):
-		var roll := rng.randi_range(1, total)
-		var kind: String = kinds[0]
-		for candidate: String in kinds:
-			roll -= int(data.templates[candidate].weight)
-			if roll <= 0:
-				kind = candidate
-				break
-		var template: Dictionary = data.templates[kind]
-		var offer := {"key": "%s:%d:%d" % [board, period, index], "kind": kind, "board": board, "count": rng.randi_range(int(template.count[0]), int(template.count[1])), "days": int(template.days)}
-		if template.has("items"):
-			offer.item = template.items[rng.randi_range(0, template.items.size() - 1)]
-			offer.reward = {"stones": int(round(float(content.item(offer.item).price) * float(offer.count) * float(template.reward_scale))), "xp": 0}
-		else:
-			offer.enemy = template.enemies[rng.randi_range(0, template.enemies.size() - 1)]
-			offer.reward = {"stones": int(template.reward_stones) * int(offer.count), "xp": int(template.reward_xp) * int(offer.count)}
-		if not world.quests_taken.has(offer.key):
-			offers.append(offer)
-	return offers
-
-## Title and description of an offer or an accepted commission.
-func commission_text(quest: Dictionary) -> Dictionary:
-	var template: Dictionary = content.commission_data.templates[quest.kind]
-	var values := {"count": quest.count, "days": quest.days, "board_name": content.commission_data.boards[quest.board].name}
-	if quest.has("item"):
-		values.item_name = content.item(quest.item).name
-	if quest.has("enemy"):
-		values.enemy_name = content.enemies[quest.enemy].name
-	return {"title": str(template.title).format(values), "text": str(template.text).format(values)}
-
-func accept_commission(key: String) -> String:
-	var blocked := _blocked()
-	if not blocked.is_empty():
-		return blocked
-	var board := board_here()
-	if board.is_empty():
-		return "此地没有委托告示。"
-	if player.quests.size() >= int(content.commission_data.max_active):
-		return "手头的委托已经够多了。"
-	for offer: Dictionary in commission_offers(board):
-		if offer.key == key:
-			var quest := offer.duplicate(true)
-			quest.deadline = int(world.day) + int(offer.days)
-			quest.progress = 0
-			player.quests.append(quest)
-			world.quests_taken[key] = true
-			return conclude(log_event("quest_accept", {"quest_title": commission_text(quest).title}))
-	return "这张委托已经不在了。"
-
-## Why a commission cannot be handed in here and now, or "".
-func delivery_block(quest: Dictionary) -> String:
-	var blocked := _blocked()
-	if not blocked.is_empty():
-		return blocked
-	if board_here() != quest.board:
-		return "须回%s交付。" % content.commission_data.boards[quest.board].name
-	if quest.has("item") and item_count(quest.item) < int(quest.count):
-		return "%s还不够 %d。" % [content.item(quest.item).name, int(quest.count)]
-	if quest.has("enemy") and int(quest.progress) < int(quest.count):
-		return "还差 %d 头。" % (int(quest.count) - int(quest.progress))
-	return ""
-
-func deliver_commission(key: String) -> String:
-	for quest: Dictionary in player.quests:
-		if quest.key != key:
-			continue
-		var reason := delivery_block(quest)
-		if not reason.is_empty():
-			return reason
-		if quest.has("item"):
-			remove_item(quest.item, int(quest.count))
-		player.quests.erase(quest)
-		player.stones += int(quest.reward.stones)
-		player.xp += int(quest.reward.xp)
-		var text := log_event("quest_done", {"quest_title": commission_text(quest).title, "stones": int(quest.reward.stones), "xp": int(quest.reward.xp)})
-		var milestones := settle_stage()
-		if not milestones.is_empty():
-			text += " " + " ".join(milestones)
-		return conclude(text)
-	return "没有这件委托。"
-
-## Counts a defeated enemy toward hunting commissions.
-func record_kill(enemy_id: String) -> void:
-	for quest: Dictionary in player.get("quests", []):
-		if quest.get("enemy", "") == enemy_id and int(quest.progress) < int(quest.count):
-			quest.progress = int(quest.progress) + 1
-
-func _expire_quests() -> Array[String]:
-	var texts: Array[String] = []
-	for quest: Dictionary in player.get("quests", []).duplicate():
-		if int(world.day) > int(quest.deadline):
-			player.quests.erase(quest)
-			texts.append(log_event("quest_expired", {"quest_title": commission_text(quest).title}))
-	return texts
-
-# --- Rumors ----------------------------------------------------------------------------
-# Inquiring at a teahouse, dock or street costs a day and a little money and yields one piece of news
-# drawn from the actual state of the world. world.rumors remembers when each was heard, so the same
-# news is not repeated for a while.
-
-## Everything worth hearing right now: [{"key", "id", "args"}], sorted by key.
-func rumor_candidates() -> Array[Dictionary]:
-	var found: Array[Dictionary] = []
-	var day := int(world.day)
-	var auction_from := Calendar.to_day(4, 1, 1)
-	var auction_to := Calendar.to_day(5, 4, 30)
-	if day >= auction_from and day <= auction_to and not has_flag("heard_auction_rumor"):
-		found.append({"key": "auction", "id": "rumor_auction", "args": {}})
-	if not has_flag("found_ruin"):
-		found.append({"key": "ruin", "id": "rumor_ruin", "args": {}})
-	if has_flag("serpent_rampage"):
-		found.append({"key": "sealed", "id": "rumor_sealed", "args": {}})
-	elif not has_flag("serpent_slain") and day < Calendar.to_day(6, 3, 1):
-		found.append({"key": "serpent", "id": "rumor_serpent", "args": {}})
-	var tournament: Dictionary = Events.next_window(content.events.sect_tournament, day)
-	if not tournament.is_empty() and int(tournament.from) - day <= 2 * Calendar.DAYS_PER_YEAR:
-		found.append({"key": "tournament:%d" % int(tournament.occurrence), "id": "rumor_tournament", "args": {}})
-	for good: Dictionary in rotating_stock("market"):
-		if str(good.item).begins_with("j:"):
-			found.append({"key": "stock:" + str(good.key), "id": "rumor_stock", "args": {"item": good.item}})
-	for board: String in content.commission_data.boards:
-		if not commission_offers(board).is_empty():
-			found.append({"key": "commission:%s:%d" % [board, day / int(content.commission_data.period_days)], "id": "rumor_commission", "args": {"board": board}})
-	for person_id: String in living_people():
-		var where := npc_location(person_id)
-		if where.is_empty() or bool(world.people.get(person_id, {}).get("met", false)):
-			continue
-		found.append({"key": "person:%s:%s" % [person_id, where], "id": "rumor_person", "args": {"npc": person_id, "title": person(person_id).title, "location": where}})
-	var recent := int(content.rules.inquire.repeat_after_days)
-	found = found.filter(func(rumor: Dictionary) -> bool: return day - int(world.rumors.get(rumor.key, -recent)) >= recent)
-	found.sort_custom(func(a: Dictionary, b: Dictionary) -> bool: return a.key < b.key)
-	return found
-
-func inquire() -> String:
-	var blocked := _blocked()
-	if not blocked.is_empty():
-		return blocked
-	if not available_here("inquire"):
-		return "此地无处打听消息。"
-	var price := int(content.rules.inquire.price)
-	if int(player.stones) < price:
-		return "囊中羞涩，连一壶茶钱也拿不出。"
-	player.stones -= price
-	var passed := advance_days(int(content.rules.inquire.days))
-	if not ended.is_empty():
-		return conclude("", passed)
-	var candidates := rumor_candidates()
-	if candidates.is_empty():
-		return conclude(log_event("rumor_none"), passed)
-	var rumor: Dictionary = candidates[world_rng.randi_range(0, candidates.size() - 1)]
-	world.rumors[rumor.key] = int(world.day)
-	if rumor.key == "auction":
-		world.flags.heard_auction_rumor = true
-	return conclude(log_event(rumor.id, rumor.args), passed)
-
-# --- People ------------------------------------------------------------------------
-# Handwritten people live in content.people. Generated people are lives "g:<seat>:<generation>" computed
-# by Population from the world seed; only seats of built regions are tracked here. A person's view (age,
-# realm, loadout) is derived for the current day. Residents stay home, wanderers follow a schedule; the
-# player only sees who is where they stop, and anyone seen becomes an acquaintance whose whereabouts can
-# be looked up. Nothing about people stops a journey.
-
-## Resets the population caches for this world; chronicle names of generated people resolve via person().
-func populate() -> void:
-	_local_seats = Population.local_seats(content, int(world.get("seed", 0)))
-	_lives = {}
-	_life_ids = {}
-	_views = {}
-	_loadouts = {}
-	_people_at = {}
-	_index_cache = []
-	obituaries_changed()
-	content.person_lookup = person
-
-func is_generated(person_id: String) -> bool:
-	if not person_id.begins_with("g:"):
-		return false
-	if _life_ids.has(person_id):
-		return true
-	var parts := person_id.split(":")
-	return parts.size() == 3 and parts[0] == "g" and parts[1].is_valid_int() and parts[2].is_valid_int() and int(parts[1]) >= 0 and int(parts[2]) >= 0 and int(parts[1]) < int(content.population_data.world_total)
-
-func is_person(person_id: String) -> bool:
-	return content.people.has(person_id) or is_generated(person_id)
-
-## A seat's lives, extended until one is still alive after `day` or until `generation` exists.
-func _seat_lives(seat: int, day: int = -1, generation: int = -1) -> Array:
-	if not _lives.has(seat):
-		_lives[seat] = [Population.next_life(content, int(world.seed), seat, {})]
-	var lives: Array = _lives[seat]
-	while (day >= 0 and int(lives.back().death) <= day) or (generation >= 0 and lives.size() <= generation):
-		lives.append(Population.next_life(content, int(world.seed), seat, lives.back()))
-	return lives
-
-func life_by_id(person_id: String) -> Dictionary:
-	if _life_ids.has(person_id):
-		return _life_ids[person_id]
-	if not is_generated(person_id):
-		return {}
-	var parts := person_id.split(":")
-	var life: Dictionary = _seat_lives(int(parts[1]), -1, int(parts[2]))[int(parts[2])]
-	_life_ids[person_id] = life
-	return life
-
-## The life holding a seat on `day`, or {} between lives.
-func life_at(seat: int, day: int) -> Dictionary:
-	for life: Dictionary in _seat_lives(seat, day):
-		if int(life.appear) <= day and day < int(life.death):
-			return life
-	return {}
-
-## A person's profile today: handwritten as written, generated as derived for the current day.
-func person(person_id: String) -> Dictionary:
-	if content.people.has(person_id):
-		return content.people[person_id]
-	if not is_generated(person_id):
-		return {}
-	var day := int(world.day)
-	var cached: Dictionary = _views.get(person_id, {})
-	if int(cached.get("day", -1)) == day:
-		return cached.view
-	var life := life_by_id(person_id)
-	var now: Dictionary = Population.standing(content, life, day)
-	var key := "%s:%d" % [person_id, int(now.realm)]
-	if not _loadouts.has(key):
-		_loadouts[key] = Population.loadout_for(content, int(world.seed), life, int(now.realm), int(now.stage))
-	var view: Dictionary = Population.view(content, int(world.seed), life, day, _loadouts[key])
-	_views[person_id] = {"day": day, "view": view}
-	return view
-
-## Where a person is on a day (today by default), or "" when absent, dead, away or somewhere undiscovered.
-func npc_location(person_id: String, on_day: int = -1) -> String:
-	var day := int(world.day) if on_day < 0 else on_day
-	if int(world.people.get(person_id, {}).get("absent_until", -1)) > day:
-		return ""
-	if is_generated(person_id):
-		var place := Population.location_on(life_by_id(person_id), day)
-		return place if not place.is_empty() and location_visible(place) else ""
-	var someone: Dictionary = content.people[person_id]
-	if someone.has("window"):
-		var from: Array = someone.window.from
-		var to: Array = someone.window.to
-		if day < Calendar.to_day(from[0], from[1], from[2]) or day > Calendar.to_day(to[0], to[1], to[2]):
-			return ""
-	if not Events.all_met(self, someone.get("present_if", [])):
-		return ""
-	var location: String = content.person_base_location(person_id, day)
-	return location if location_visible(location) else ""
-
-## Who can be where today; see _people_on.
-func _refresh_people_index() -> void:
-	_people_at = _people_on(int(world.day))
-
-## Who can be where on a day: handwritten people by home and schedule, generated people by the life
-## holding each seat. Each index stays valid until a life in the region ends or begins; the two most
-## recent are kept.
-func _people_on(day: int) -> Dictionary:
-	for cached: Dictionary in _index_cache:
-		if day >= int(cached.from) and day < int(cached.until):
-			return cached.map
-	var built := _build_people_index(day)
-	_index_cache.push_front(built)
-	if _index_cache.size() > 2:
-		_index_cache.pop_back()
-	return built.map
-
-func _build_people_index(day: int) -> Dictionary:
-	var map := {}
-	var until := 2147483647
-	for person_id: String in content.people:
-		var someone: Dictionary = content.people[person_id]
-		for place: String in ([someone.home] if someone.has("home") else someone.schedule.map(func(stop: Dictionary) -> String: return stop.location)):
-			_index_add(map, place, person_id)
-	for seat: int in _local_seats:
-		var lives := _seat_lives(seat, day)
-		var current := life_at(seat, day)
-		if current.is_empty():
-			until = mini(until, int(lives.back().appear))
-			continue
-		until = mini(until, int(current.death))
-		for place: String in ([current.home] if current.has("home") else current.schedule.map(func(stop: Dictionary) -> String: return stop.location)):
-			if place != "away":
-				_index_add(map, place, current.id)
-	return {"from": day, "until": until, "map": map}
-
-func _index_add(map: Dictionary, place: String, person_id: String) -> void:
-	if not map.has(place):
-		map[place] = []
-	if not person_id in map[place]:
-		map[place].append(person_id)
-
-func present_npcs() -> Array[String]:
-	_refresh_people_index()
-	var result: Array[String] = []
-	for person_id: String in _people_at.get(player.location, []):
-		if npc_location(person_id) == player.location:
-			result.append(person_id)
-	return result
-
-## Everyone alive in the built regions today (handwritten and generated).
-func living_people() -> Array[String]:
-	var result: Array[String] = []
-	for person_id: String in content.people:
-		result.append(person_id)
-	for seat: int in _local_seats:
-		var life := life_at(seat, int(world.day))
-		if not life.is_empty():
-			result.append(life.id)
-	return result
-
-## Staying somewhere for a span means meeting everyone who passes through during it, so one long stay
-## meets the same people as many short ones.
-func meet_during(first_day: int, last_day: int) -> void:
-	var here: String = player.location
-	for person_id: String in content.people:
-		var someone: Dictionary = content.people[person_id]
-		var places: Array = [someone.home] if someone.has("home") else someone.schedule.map(func(stop: Dictionary) -> String: return stop.location)
-		if not here in places or bool(world.people.get(person_id, {}).get("met", false)):
-			continue
-		for day: int in range(first_day, last_day + 1):
-			if npc_location(person_id, day) == here:
-				mark_met(person_id)
-				break
-	# Lives last at least two years, so a short stay only needs the people indexed at its start and end;
-	# a long stay checks every seat.
-	var lives: Array = []
-	if last_day - first_day < SHORT_STAY_DAYS:
-		var ids := {}
-		var start_map := _people_on(first_day)
-		var end_map := _people_on(last_day)
-		for map: Dictionary in ([start_map] if start_map == end_map else [start_map, end_map]):
-			for person_id: String in map.get(here, []):
-				if is_generated(person_id) and not bool(world.people.get(person_id, {}).get("met", false)):
-					ids[person_id] = true
-		for person_id: String in ids:
-			if not bool(world.people.get(person_id, {}).get("met", false)):
-				lives.append(life_by_id(person_id))
-	else:
-		for seat: int in _local_seats:
-			lives.append_array(_seat_lives(seat, last_day))
-	for life: Dictionary in lives:
-		if int(life.death) <= first_day or int(life.appear) > last_day or bool(world.people.get(life.id, {}).get("met", false)):
-			continue
-		if Population.present_during(life, here, first_day, last_day):
-			mark_met(life.id)
-	_met_through = {"location": here, "day": last_day}
-
-func known_npcs() -> Array[String]:
-	var result: Array[String] = []
-	for person_id: String in world.people:
-		if is_person(person_id) and bool(world.people[person_id].get("met", false)):
-			result.append(person_id)
-	return result
-
-func meet_present() -> void:
-	# Right after a stay, everyone generated who was here through today is already met.
-	var covered: bool = _met_through.get("location", "") == player.location and int(_met_through.get("day", -1)) == int(world.day)
-	for person_id: String in present_npcs():
-		if not (covered and is_generated(person_id)):
-			mark_met(person_id)
-
-## Marks someone as met. Meeting a generated person who has already died (heard of during a long stay)
-## records them without an obituary; meeting a living one may schedule one later.
-func mark_met(person_id: String) -> void:
-	var progress := Events.person(self, person_id)
-	if bool(progress.met):
-		return
-	progress.met = true
-	if is_generated(person_id) and int(life_by_id(person_id).death) <= int(world.day):
-		progress.mourned = true
-	obituaries_changed()
-
-func obituaries_changed() -> void:
-	_obituary_cache = {"dirty": true}
-
-## The next death among generated acquaintances not yet mourned: {"day", "id"}, or {}. Cached until
-## someone is newly met or mourned.
-func next_obituary(from_day: int) -> Dictionary:
-	if not bool(_obituary_cache.get("dirty", true)):
-		var cached: Dictionary = _obituary_cache.result
-		return {} if cached.is_empty() else {"day": maxi(from_day, int(cached.day)), "id": cached.id}
-	var best := {}
-	for person_id: String in world.people:
-		var progress: Dictionary = world.people[person_id]
-		if not is_generated(person_id) or not bool(progress.get("met", false)) or bool(progress.get("mourned", false)):
-			continue
-		var due := int(life_by_id(person_id).death)
-		if best.is_empty() or due < int(best.day) or (due == int(best.day) and person_id < str(best.id)):
-			best = {"day": due, "id": person_id}
-	_obituary_cache = {"dirty": false, "result": best}
-	return {} if best.is_empty() else {"day": maxi(from_day, int(best.day)), "id": best.id}
-
-## A tournament round against the sect's outer disciples present, weakest first.
-func begin_tournament(round: int) -> void:
-	var disciples: Array = present_npcs().filter(func(person_id: String) -> bool: return is_generated(person_id) and person(person_id).kind == "disciple")
-	disciples.sort_custom(func(a: String, b: String) -> bool:
-		var ra := int(person(a).realm) * 10 + int(person(a).stage)
-		var rb := int(person(b).realm) * 10 + int(person(b).stage)
-		return ra < rb or (ra == rb and a < b))
-	if disciples.is_empty():
-		begin_battle("disciple", "event")
-		battle.context = "tournament"
-		battle.round = round
-		return
-	var opponent: String = disciples[clampi(round - 1 + disciples.size() / 3 * (round - 1), 0, disciples.size() - 1)]
-	begin_spar(opponent)
-	battle.context = "tournament"
-	battle.round = round
-
-## A friendly bout with a generated person: their stage's health and their best art, nothing at stake.
-func begin_spar(person_id: String) -> void:
-	var someone: Dictionary = person(person_id)
-	var foe: Dictionary = Population.foe(content, person_id, someone)
-	var lineage: String = str(someone.get("sect", "qingyun"))
-	battle = {"enemy_id": "cultivator", "hp": int(foe.hp), "turn": 1, "cooldowns": {}, "opponent_sect": "qingyun" if lineage == "wanderer" else lineage, "status": {}, "context": "spar", "npc": person_id, "foe": foe, "place": _battle_place()}
-	log_event("spar_start", {"npc": person_id})
-
-func favor(person_id: String) -> int:
-	return int(world.people.get(person_id, {}).get("relation", 0))
-
-## The person goes away for their leave time (paid off, defeated, healed and moving on).
-func npc_depart(person_id: String) -> void:
-	if person_id.is_empty():
-		return
-	var days := int(person(person_id).get("leave_days", LONG_ABSENCE_DAYS))
-	Events.person(self, person_id).absent_until = int(world.day) + days
-
-## Everything the player could do with a person here: {"id", "label", "available", "reason"}.
-func npc_options(person_id: String) -> Array[Dictionary]:
-	var options: Array[Dictionary] = []
-	var someone: Dictionary = person(person_id)
-	if someone.attitude != "hostile" and not someone.get("talk", []).is_empty():
-		options.append({"id": "talk", "label": "交谈", "cooldown_days": TALK_COOLDOWN_DAYS})
-	if someone.attitude != "hostile" and int(someone.get("gift_favor", 0)) > 0:
-		options.append({"id": "gift", "label": "赠一株灵草（好感 +%d）" % int(someone.gift_favor), "conditions": [{"herbs_at_least": 1}], "cooldown_days": TALK_COOLDOWN_DAYS})
-	for interaction: Dictionary in someone.get("interactions", []):
-		options.append(interaction)
-	var result: Array[Dictionary] = []
-	var here: bool = npc_location(person_id) == str(player.get("location", ""))
-	var last: Dictionary = world.people.get(person_id, {}).get("last", {})
-	var blocked := _blocked()
-	for option: Dictionary in options:
-		# Interactions repeat unless marked "once"; "cooldown_days" spaces repeats out.
-		var reason := ""
-		if not blocked.is_empty():
-			reason = blocked
-		elif not here:
-			reason = "此人不在这里。"
-		elif bool(option.get("once", false)) and last.has(option.id):
-			reason = "此事已了。"
-		elif last.has(option.id) and int(world.day) < int(last[option.id]) + int(option.get("cooldown_days", 0)):
-			reason = "%s后再来。" % Calendar.duration_text(int(last[option.id]) + int(option.cooldown_days) - int(world.day))
-		elif not Events.all_met(self, option.get("conditions", [])):
-			reason = "条件不足。"
-		result.append({"id": option.id, "label": option.label, "available": reason.is_empty(), "reason": reason})
-	return result
-
-func interact(person_id: String, option_id: String) -> String:
-	if not is_person(person_id) or person(person_id).is_empty():
-		return "未知人物。"
-	var chosen: Dictionary = {}
-	for option: Dictionary in npc_options(person_id):
-		if option.id == option_id:
-			chosen = option
-	if chosen.is_empty():
-		return "没有这个选项。"
-	if not chosen.available:
-		return chosen.reason
-	var someone: Dictionary = person(person_id)
-	mark_met(person_id)
-	var progress := Events.person(self, person_id)
-	progress.last[option_id] = int(world.day)
-	var text := ""
-	match option_id:
-		"talk":
-			var lines: Array = someone.talk
-			text = log_event("talk", {"npc": person_id, "line": int(progress.talks) % lines.size()})
-			progress.talks = int(progress.talks) + 1
-			Events.apply(self, [{"relation": [person_id, int(someone.get("talk_favor", 0))]}])
-		"gift":
-			Events.apply(self, [{"herbs": -1}, {"relation": [person_id, int(someone.gift_favor)]}])
-			text = log_event("gift", {"npc": person_id, "favor": int(someone.gift_favor)})
-		_:
-			for interaction: Dictionary in someone.interactions:
-				if interaction.id == option_id:
-					acting_npc = person_id
-					Events.apply(self, interaction.get("effects", []))
-					acting_npc = ""
-					if not battle.is_empty():
-						battle.npc = person_id
-			text = log_event("npc", {"npc": person_id, "interaction": option_id})
-	return conclude(text)
-
 func choose_event(choice_id: String) -> String:
 	if pending_event.is_empty():
 		return "眼下没有需要抉择的事。"
@@ -1229,122 +401,222 @@ func available_here(action: String) -> bool:
 func location_visible(location_id: String) -> bool:
 	return content.location_visible(location_id, world.flags)
 
-func path_to(location_id: String) -> Array[String]:
-	return content.find_path(player.location, location_id, world.flags)
+func snapshot() -> Dictionary:
+	return {
+		"version": SAVE_VERSION, "world": world.duplicate(true), "player": player.duplicate(true),
+		"battle": battle.duplicate(true), "pending_event": pending_event.duplicate(true), "ended": ended.duplicate(true),
+		"chronicle": chronicle.to_save(), "rng": {"combat": str(combat_rng.state), "world": str(world_rng.state)}
+	}
 
-## Sets out for a destination along the shortest known path and walks it leg by leg.
-func travel(location_id: String) -> String:
-	var blocked := _blocked()
-	if not blocked.is_empty():
-		return "斗法中无法离开。" if not battle.is_empty() else blocked
-	if not content.locations.has(location_id) or not location_visible(location_id):
-		return "未知地点。"
-	if player.location != location_id and content.location_sealed(location_id, world.flags):
-		return "%s已被封锁，暂时无法进入。" % content.locations[location_id].name
-	if player.location == location_id:
-		return "你已在此处。"
-	if path_to(location_id).is_empty():
-		return "两地之间没有可走的路。"
-	player.journey = {"to": location_id}
-	return _walk()
+## Replaces this session with saved data after migrating and validating it; see save_restore.gd.
+func restore(data: Variant) -> bool:
+	return SaveRestore.restore(self, data)
 
-## Resumes a journey interrupted by an encounter or an event on the way.
-func continue_journey() -> String:
-	var blocked := _blocked()
-	if not blocked.is_empty():
-		return blocked
-	if player.journey.is_empty():
-		return "眼下没有未竟的行程。"
-	return _walk()
+# --- Inventory (inventory.gd) ---------------------------------------------------------------
 
-## Each leg: time passes on the road, the player arrives at the next node, the road may bring an
-## encounter, then the node's own events fire. Anything that needs the player stops the journey there.
-func _walk() -> String:
-	var parts: Array[String] = []
-	while not player.journey.is_empty():
-		var path := path_to(player.journey.to)
-		if path.size() < 2:
-			player.journey = {}
-			parts.append("前路已断，行程作罢。")
-			break
-		var next: String = path[1]
-		var route: Dictionary = content.route_between(player.location, next)
-		var passed := advance_days(int(route.days))
-		parts.append_array(passed.messages)
-		if not ended.is_empty():
-			player.journey = {}
-			break
-		player.location = next
-		if next == player.journey.to:
-			player.journey = {}
-		parts.append(log_event("travel", {"days": passed.elapsed, "location": next}))
-		if encounters_enabled:
-			parts.append(Events.roll_encounter(self, route))
-		if pending_event.is_empty():
-			parts.append_array(Events.check_location(self, not player.journey.is_empty()))
-		if not pending_event.is_empty() or not battle.is_empty():
-			break
-	changed.emit()
-	return " ".join(parts.filter(func(part: String) -> bool: return not part.is_empty()))
+func item_count(item_id: String) -> int:
+	return Inventory.item_count(self, item_id)
+
+func herb_count() -> int:
+	return Inventory.herb_count(self)
+
+func add_item(item_id: String, count: int) -> void:
+	Inventory.add_item(self, item_id, count)
+
+func remove_item(item_id: String, count: int) -> bool:
+	return Inventory.remove_item(self, item_id, count)
+
+func remove_herbs(count: int) -> bool:
+	return Inventory.remove_herbs(self, count)
+
+func set_item_count(item_id: String, count: int) -> void:
+	Inventory.set_item_count(self, item_id, count)
+
+func sell_price(item_id: String) -> int:
+	return Inventory.sell_price(self, item_id)
+
+func shop_goods() -> Array:
+	return Inventory.shop_goods(self)
+
+func rotating_stock(location_id: String) -> Array[Dictionary]:
+	return Inventory.rotating_stock(self, location_id)
+
+func loot_code(found: Dictionary) -> String:
+	return Inventory.loot_code(found)
+
+func sell(item_id: String, count: int = 1) -> String:
+	return Inventory.sell(self, item_id, count)
+
+func buy(item_id: String) -> String:
+	return Inventory.buy(self, item_id)
+
+func use_block(item_id: String) -> String:
+	return Inventory.use_block(self, item_id)
+
+func use_item(item_id: String) -> String:
+	return Inventory.use_item(self, item_id)
+
+# --- Techniques, equipment and lineage (loadout.gd) -------------------------------------------
+
+func bonuses(holder: Dictionary = {}) -> Dictionary:
+	return Loadout.bonuses(self, holder)
+
+func attack_bonus() -> int:
+	return Loadout.attack_bonus(self)
+
+func defense() -> float:
+	return Loadout.defense(self)
+
+func element_multiplier(t: Dictionary) -> float:
+	return Loadout.element_multiplier(self, t)
 
 func active_skills() -> Array[String]:
-	var result: Array[String] = []
-	for id: Variant in player.get("arts", []):
-		result.append(str(id))
-	return result
+	return Loadout.active_skills(self)
+
+func learn_block(technique_id: String) -> String:
+	return Loadout.learn_block(self, technique_id)
+
+func study_manual(item_id: String) -> String:
+	return Loadout.study_manual(self, item_id)
+
+func teachings() -> Array[String]:
+	return Loadout.teachings(self)
+
+func learn_here(technique_id: String) -> String:
+	return Loadout.learn_here(self, technique_id)
+
+func equip_technique(technique_id: String, replace: String = "") -> String:
+	return Loadout.equip_technique(self, technique_id, replace)
+
+func unequip_technique(technique_id: String) -> String:
+	return Loadout.unequip_technique(self, technique_id)
+
+func equip_item(item_id: String) -> String:
+	return Loadout.equip_item(self, item_id)
+
+func unequip_slot(slot: String) -> String:
+	return Loadout.unequip_slot(self, slot)
 
 func choose_sect(sect_id: String) -> String:
-	if player.is_empty() or not content.sects.has(sect_id):
-		return "未知门派。"
-	if not battle.is_empty():
-		return "斗法中无法更换传承。"
-	var blocked := _blocked()
-	if not blocked.is_empty():
-		return blocked
-	if not available_here("study"):
-		return "请回青云山传功堂研习门派传承。"
-	if player.get("sect", "wanderer") == sect_id:
-		return "你已在研习此传承。"
-	# Taking up a lineage teaches its three arts and puts them in the art slots.
-	player.sect = sect_id
-	player.arts = []
-	for skill_id: String in content.sects[sect_id].skills:
-		if not skill_id in player.learned:
-			player.learned.append(skill_id)
-		player.arts.append(skill_id)
-	return finish(log_event("choose_sect", {"sect": sect_id}, true))
+	return Loadout.choose_sect(self, sect_id)
+
+# --- Commissions (commissions.gd) ---------------------------------------------------------------
+
+func board_here() -> String:
+	return Commissions.board_here(self)
+
+func commission_offers(board: String) -> Array[Dictionary]:
+	return Commissions.offers(self, board)
+
+func commission_text(quest: Dictionary) -> Dictionary:
+	return Commissions.text(self, quest)
+
+func accept_commission(key: String) -> String:
+	return Commissions.accept(self, key)
+
+func delivery_block(quest: Dictionary) -> String:
+	return Commissions.delivery_block(self, quest)
+
+func deliver_commission(key: String) -> String:
+	return Commissions.deliver(self, key)
+
+func record_kill(enemy_id: String) -> void:
+	Commissions.record_kill(self, enemy_id)
+
+# --- Rumors (rumors.gd) -----------------------------------------------------------------------
+
+func rumor_candidates() -> Array[Dictionary]:
+	return Rumors.candidates(self)
+
+func inquire() -> String:
+	return Rumors.inquire(self)
+
+# --- People (people.gd) -------------------------------------------------------------------------
+
+func populate() -> void:
+	People.populate(self)
+
+func is_generated(person_id: String) -> bool:
+	return People.is_generated(self, person_id)
+
+func is_person(person_id: String) -> bool:
+	return People.is_person(self, person_id)
+
+func seat_lives(seat: int, day: int = -1, generation: int = -1) -> Array:
+	return People.seat_lives(self, seat, day, generation)
+
+func life_by_id(person_id: String) -> Dictionary:
+	return People.life_by_id(self, person_id)
+
+func life_at(seat: int, day: int) -> Dictionary:
+	return People.life_at(self, seat, day)
+
+func person(person_id: String) -> Dictionary:
+	return People.person(self, person_id)
+
+func npc_location(person_id: String, on_day: int = -1) -> String:
+	return People.npc_location(self, person_id, on_day)
+
+func present_npcs() -> Array[String]:
+	return People.present_npcs(self)
+
+func living_people() -> Array[String]:
+	return People.living_people(self)
+
+func meet_during(first_day: int, last_day: int) -> void:
+	People.meet_during(self, first_day, last_day)
+
+func known_npcs() -> Array[String]:
+	return People.known_npcs(self)
+
+func meet_present() -> void:
+	People.meet_present(self)
+
+func mark_met(person_id: String) -> void:
+	People.mark_met(self, person_id)
+
+func obituaries_changed() -> void:
+	People.obituaries_changed(self)
+
+func next_obituary(from_day: int) -> Dictionary:
+	return People.next_obituary(self, from_day)
+
+func favor(person_id: String) -> int:
+	return People.favor(self, person_id)
+
+func npc_depart(person_id: String) -> void:
+	People.npc_depart(self, person_id)
+
+func npc_options(person_id: String) -> Array[Dictionary]:
+	return People.npc_options(self, person_id)
+
+func interact(person_id: String, option_id: String) -> String:
+	return People.interact(self, person_id, option_id)
+
+# --- Travel (journey.gd) ------------------------------------------------------------------------
+
+func path_to(location_id: String) -> Array[String]:
+	return Journey.path_to(self, location_id)
+
+func travel(location_id: String) -> String:
+	return Journey.travel(self, location_id)
+
+func continue_journey() -> String:
+	return Journey.continue_journey(self)
+
+# --- Duels (combat.gd) --------------------------------------------------------------------------
 
 func start_battle(enemy_id: String, opponent_sect: String = "") -> String:
-	if not _blocked().is_empty() or not content.enemies.has(enemy_id):
-		return "当前无法开始斗法。"
-	var enemy: Dictionary = content.enemies[enemy_id]
-	if not available_here("battle:" + enemy_id):
-		return "此地没有这个对手。"
-	if not opponent_sect.is_empty() and not content.sects.has(opponent_sect):
-		return "未知对手传承。"
-	if int(player.realm) < int(enemy.min_realm):
-		return "%s气息凶险，需达到%s。" % [enemy.name, content.realm_title(int(enemy.min_realm), 0)]
-	if enemy.has("world_flag") and has_flag(enemy.world_flag):
-		return "%s已经伏诛，此地重归安宁。" % enemy.name
-	return finish(begin_battle(enemy_id, "", opponent_sect))
+	return Combat.start_battle(self, enemy_id, opponent_sect)
 
-## Starts a duel without location checks; used by spots and by event effects (context "event").
 func begin_battle(enemy_id: String, context: String = "", opponent_sect: String = "") -> String:
-	var enemy: Dictionary = content.enemies[enemy_id]
-	if opponent_sect.is_empty():
-		opponent_sect = str(enemy.get("sect", player.get("sect", "wanderer")))
-		if opponent_sect == "wanderer":
-			opponent_sect = "qingyun"
-	battle = {"enemy_id": enemy_id, "hp": int(enemy.hp), "turn": 1, "cooldowns": {}, "opponent_sect": opponent_sect, "status": {}, "place": _battle_place()}
-	if not context.is_empty():
-		battle.context = context
-	return log_event("battle_start", {"enemy": enemy_id})
+	return Combat.begin_battle(self, enemy_id, context, opponent_sect)
 
-## Where a duel is fought, for its backdrop: "road" while a road encounter is open, otherwise here.
-func _battle_place() -> String:
-	if not pending_event.is_empty() and str(content.events[pending_event.id].get("trigger", "")) == "route":
-		return "road"
-	return str(player.location)
+func begin_spar(person_id: String) -> void:
+	Combat.begin_spar(self, person_id)
+
+func begin_tournament(round: int) -> void:
+	Combat.begin_tournament(self, round)
 
 func use_skill(skill_id: String) -> String:
 	return Combat.use_skill(self, skill_id)
@@ -1354,291 +626,3 @@ func defend() -> String:
 
 func flee() -> String:
 	return Combat.flee(self)
-
-func snapshot() -> Dictionary:
-	return {
-		"version": SAVE_VERSION, "world": world.duplicate(true), "player": player.duplicate(true),
-		"battle": battle.duplicate(true), "pending_event": pending_event.duplicate(true), "ended": ended.duplicate(true),
-		"chronicle": chronicle.to_save(), "rng": {"combat": str(combat_rng.state), "world": str(world_rng.state)}
-	}
-
-func restore(data: Variant) -> bool:
-	# Upgrade older versions first, then validate everything before changing the current session.
-	if not data is Dictionary:
-		return false
-	var saved: Dictionary = SaveMigration.migrate(data)
-	if saved.is_empty() or int(saved.version) != SAVE_VERSION:
-		return false
-	var saved_world: Variant = saved.get("world")
-	var saved_player: Variant = saved.get("player")
-	var saved_battle: Variant = saved.get("battle")
-	var saved_pending: Variant = saved.get("pending_event")
-	var saved_ended: Variant = saved.get("ended")
-	var saved_rng: Variant = saved.get("rng")
-	for part: Variant in [saved_world, saved_player, saved_battle, saved_pending, saved_ended, saved_rng]:
-		if not part is Dictionary:
-			return false
-	if not _whole_nonnegative(saved_world.get("day")) or not saved_world.get("flags") is Dictionary:
-		return false
-	if not saved_world.get("events") is Dictionary or not saved_world.get("people") is Dictionary:
-		return false
-	var day := int(saved_world.day)
-	for flag: Variant in saved_world.flags:
-		if not flag is String or not saved_world.flags[flag] is bool:
-			return false
-	var events: Variant = _valid_event_progress(saved_world.events)
-	var people: Variant = _valid_people(saved_world.people)
-	if events == null or people == null:
-		return false
-	if not saved_player.get("name") is String or not saved_player.get("location") is String or not content.locations.has(saved_player.location):
-		return false
-	for key: String in PLAYER_COUNTS:
-		if not _whole_nonnegative(saved_player.get(key)):
-			return false
-	if int(saved_player.cultivation_carry) >= Calendar.DAYS_PER_MONTH:
-		return false
-	var birth: Variant = saved_player.get("birth_day")
-	if not _whole_signed(birth) or int(birth) > day:
-		return false
-	var warned: Variant = saved_player.get("warned_for")
-	if not _whole_signed(warned) or int(warned) < -1:
-		return false
-	var items: Variant = saved_player.get("items")
-	if not items is Dictionary:
-		return false
-	var journey: Variant = saved_player.get("journey")
-	if not journey is Dictionary or (not journey.is_empty() and (not journey.get("to") is String or not content.location_visible(journey.to, saved_world.flags))):
-		return false
-	var cooldowns: Variant = saved_player.get("cooldowns")
-	if not cooldowns is Dictionary:
-		return false
-	for action_id: Variant in cooldowns:
-		if not action_id is String or not _whole_nonnegative(cooldowns[action_id]):
-			return false
-	if not content.location_visible(saved_player.location, saved_world.flags):
-		return false
-	for item_id: Variant in items:
-		if not item_id is String or not _whole_nonnegative(items[item_id]) or int(items[item_id]) < 1:
-			return false
-	if int(saved_player.realm) >= content.realms.size():
-		return false
-	# The sub-stage always follows from xp; stat caps follow from the stage.
-	var saved_stage: int = content.stage_index(int(saved_player.realm), int(saved_player.xp))
-	var loadout := _valid_loadout(saved_player)
-	if loadout.is_empty():
-		return false
-	var quests: Variant = _valid_quests(saved_player.get("quests"))
-	if quests == null:
-		return false
-	var rumors := {}
-	for key: Variant in saved_world.get("rumors", {}):
-		if not key is String or not _whole_nonnegative(saved_world.rumors[key]):
-			return false
-		rumors[key] = int(saved_world.rumors[key])
-	var taken := {}
-	for key: Variant in saved_world.get("quests_taken", {}):
-		if not key is String:
-			return false
-		taken[key] = true
-	var caps: Dictionary = content.stage(int(saved_player.realm), saved_stage)
-	var extra := bonuses(loadout)
-	if int(saved_player.hp) <= 0 or int(saved_player.hp) > int(caps.max_hp) + int(extra.max_hp) or int(saved_player.qi) > int(caps.max_qi) + int(extra.max_qi):
-		return false
-	var roots: Variant = saved_player.get("roots")
-	if not roots is Array or roots.is_empty() or roots.size() > content.rules.spirit_roots.elements.size():
-		return false
-	for element: Variant in roots:
-		if not element in content.rules.spirit_roots.elements or roots.count(element) != 1:
-			return false
-	var saved_sect: Variant = saved_player.get("sect")
-	if not saved_sect is String or not content.sects.has(saved_sect):
-		return false
-	if not saved_battle.is_empty():
-		if not saved_battle.get("enemy_id") is String or not content.enemies.has(saved_battle.enemy_id):
-			return false
-		var foe: Variant = saved_battle.get("foe", {})
-		if not foe is Dictionary or (not foe.is_empty() and (not _whole_nonnegative(foe.get("hp")) or not _whole_nonnegative(foe.get("damage_min")) or not _whole_nonnegative(foe.get("damage_max")) or not foe.get("name") is String)):
-			return false
-		# Saves before duel looks lack the foe's sect and gender; the stage then uses the shared sprite.
-		if foe.has("sect") and (not foe.sect is String or not content.sects.has(foe.sect)):
-			return false
-		if foe.has("gender") and not foe.gender in ["male", "female"]:
-			return false
-		# Saves before duel backdrops lack the place; the stage then uses the shared background.
-		var place: Variant = saved_battle.get("place", "road")
-		if not place is String or (place != "road" and not content.locations.has(place)):
-			return false
-		var hp_cap: int = int(foe.hp) if not foe.is_empty() else int(content.enemies[saved_battle.enemy_id].hp)
-		if not _whole_nonnegative(saved_battle.get("hp")) or int(saved_battle.hp) <= 0 or int(saved_battle.hp) > hp_cap:
-			return false
-		if not _whole_nonnegative(saved_battle.get("turn")) or int(saved_battle.turn) < 1 or not saved_battle.get("cooldowns") is Dictionary:
-			return false
-		for skill_id: Variant in saved_battle.cooldowns:
-			if not skill_id is String or content.technique(skill_id).is_empty() or not _whole_nonnegative(saved_battle.cooldowns[skill_id]):
-				return false
-		if saved_battle.has("context") and not saved_battle.context in ["event", "spar", "tournament"]:
-			return false
-		var status: Variant = saved_battle.get("status", {})
-		if not status is Dictionary:
-			return false
-		for key: Variant in status:
-			if not key in ["burn", "weaken"] or not status[key] is Array or status[key].size() != 2:
-				return false
-		if saved_battle.has("npc") and (not saved_battle.npc is String or not is_person(saved_battle.npc)):
-			return false
-		var opponent: Variant = saved_battle.get("opponent_sect")
-		if not opponent is String or not content.sects.has(opponent):
-			return false
-	if not saved_pending.is_empty():
-		var pending_id: Variant = saved_pending.get("id")
-		if not pending_id is String or not content.events.has(pending_id) or not content.events[pending_id].has("choices"):
-			return false
-		if not _whole_nonnegative(saved_pending.get("day")) or int(saved_pending.day) != day or not saved_battle.is_empty():
-			return false
-	if not saved_ended.is_empty():
-		if saved_ended.get("kind") != "lifespan" or not _whole_nonnegative(saved_ended.get("day")) or int(saved_ended.day) > day:
-			return false
-	for stream: String in ["combat", "world"]:
-		if not saved_rng.get(stream) is String or not saved_rng[stream].is_valid_int():
-			return false
-	var saved_chronicle: Variant = Chronicle.parse(saved.get("chronicle"), day)
-	if saved_chronicle == null:
-		return false
-	var sold := {}
-	for key: Variant in saved_world.get("stock_sold", {}):
-		if key is String:
-			sold[key] = true
-	var seed_value: Variant = saved_world.get("seed", 0)
-	world = {"day": day, "flags": saved_world.flags.duplicate(), "events": events, "people": people, "seed": int(seed_value) if _whole_nonnegative(seed_value) else 0, "stock_sold": sold, "rumors": rumors, "quests_taken": taken}
-	populate()
-	player = saved_player.duplicate(true)
-	for key: String in PLAYER_COUNTS:
-		player[key] = int(player[key])
-	player.birth_day = int(birth)
-	player.stage = saved_stage
-	player.roots = roots.duplicate()
-	for key: String in loadout:
-		player[key] = loadout[key]
-	player.quests = quests
-	player.warned_for = int(warned)
-	for item_id: String in player.items:
-		player.items[item_id] = int(player.items[item_id])
-	player.journey = {} if journey.is_empty() else {"to": journey.to}
-	for action_id: String in player.cooldowns:
-		player.cooldowns[action_id] = int(player.cooldowns[action_id])
-	_refresh_realm_stats()
-	battle = saved_battle.duplicate(true)
-	if not battle.is_empty():
-		if not battle.has("status"):
-			battle.status = {}
-		battle.hp = int(battle.hp)
-		battle.turn = int(battle.turn)
-		for skill_id: String in battle.cooldowns:
-			battle.cooldowns[skill_id] = int(battle.cooldowns[skill_id])
-	pending_event = {} if saved_pending.is_empty() else {"id": saved_pending.id, "day": int(saved_pending.day)}
-	ended = {} if saved_ended.is_empty() else {"kind": saved_ended.kind, "day": int(saved_ended.day)}
-	chronicle.entries = saved_chronicle
-	combat_rng.state = int(saved_rng.combat)
-	world_rng.state = int(saved_rng.world)
-	combat_events.clear()
-	changed.emit()
-	return true
-
-## Normalized copy of saved event progress, or null. Progress for events no longer in content is kept.
-func _valid_event_progress(data: Dictionary) -> Variant:
-	var result := {}
-	for event_id: Variant in data:
-		var progress: Variant = data[event_id]
-		if not event_id is String or not progress is Dictionary or not str(progress.get("state", "")) in ["", "completed", "expired"]:
-			return null
-		var normalized := {"state": str(progress.get("state", ""))}
-		for key: String in ["count", "last_day", "last_occurrence", "reminded"]:
-			if not _whole_signed(progress.get(key)) or int(progress[key]) < -1:
-				return null
-			normalized[key] = int(progress[key])
-		result[event_id] = normalized
-	return result
-
-func _valid_people(data: Dictionary) -> Variant:
-	var result := {}
-	for person_id: Variant in data:
-		var person: Variant = data[person_id]
-		if not person_id is String or not person is Dictionary or not person.get("met") is bool or not _whole_signed(person.get("relation")):
-			return null
-		if absi(int(person.relation)) > content.FAVOR_MAX or not person.get("last") is Dictionary:
-			return null
-		if not _whole_signed(person.get("absent_until")) or int(person.absent_until) < -1 or not _whole_nonnegative(person.get("talks")):
-			return null
-		var last := {}
-		for option_id: Variant in person.last:
-			if not option_id is String or not _whole_nonnegative(person.last[option_id]):
-				return null
-			last[option_id] = int(person.last[option_id])
-		result[person_id] = {"met": person.met, "relation": int(person.relation), "last": last, "absent_until": int(person.absent_until), "talks": int(person.talks)}
-		if person.get("mourned", false) == true:
-			result[person_id].mourned = true
-	return result
-
-func _whole_nonnegative(value: Variant) -> bool:
-	return _whole_signed(value) and float(value) >= 0.0
-
-func _whole_signed(value: Variant) -> bool:
-	if not (value is int or value is float):
-		return false
-	return is_finite(float(value)) and float(value) == floor(float(value)) and absf(float(value)) <= LIMIT
-
-## The saved techniques and equipment, keeping only what the content still knows. {} when malformed.
-## Unknown ids are dropped instead of rejecting the save, so retired content cannot lock a journey.
-func _valid_loadout(saved_player: Dictionary) -> Dictionary:
-	for key: String in ["learned", "arts", "methods"]:
-		if not saved_player.get(key) is Array:
-			return {}
-	if not saved_player.get("equipment") is Dictionary:
-		return {}
-	var learned: Array = []
-	for technique_id: Variant in saved_player.learned:
-		if technique_id is String and not content.technique(technique_id).is_empty() and not technique_id in learned:
-			learned.append(technique_id)
-	var arts: Array = []
-	var methods: Array = []
-	for pair: Array in [["arts", arts, "art", int(content.rules.art_slots)], ["methods", methods, "method", int(content.rules.method_slots)]]:
-		for technique_id: Variant in saved_player[pair[0]]:
-			if technique_id in learned and content.technique(technique_id).slot == pair[2] and not technique_id in pair[1] and pair[1].size() < pair[3]:
-				pair[1].append(technique_id)
-	if arts.is_empty():
-		# Older journeys knew exactly their lineage's three arts.
-		var lineage: String = saved_player.get("sect", "wanderer") if content.sects.has(saved_player.get("sect", "")) else "wanderer"
-		for skill_id: String in content.sects[lineage].skills:
-			if not skill_id in learned:
-				learned.append(skill_id)
-			arts.append(skill_id)
-	var equipment := {}
-	for slot: String in content.equipment_data.slots:
-		var worn: Variant = saved_player.equipment.get(slot, "")
-		var gear: Dictionary = content.equipment(str(worn)) if worn is String else {}
-		equipment[slot] = worn if not gear.is_empty() and gear.slot == slot else ""
-	return {"learned": learned, "arts": arts, "methods": methods, "equipment": equipment}
-
-## Normalized accepted commissions, or null when malformed. Quests of retired kinds are dropped.
-func _valid_quests(data: Variant) -> Variant:
-	if not data is Array:
-		return null
-	var result: Array = []
-	for quest: Variant in data:
-		if not quest is Dictionary or not quest.get("key") is String or not quest.get("reward") is Dictionary:
-			return null
-		for key: String in ["count", "days", "deadline", "progress"]:
-			if not _whole_nonnegative(quest.get(key)):
-				return null
-		if not content.commission_data.templates.has(quest.get("kind", "")) or not content.commission_data.boards.has(quest.get("board", "")):
-			continue
-		if quest.has("item") and content.item(str(quest.item)).is_empty():
-			continue
-		if quest.has("enemy") and not content.enemies.has(quest.enemy):
-			continue
-		var normalized: Dictionary = quest.duplicate(true)
-		for key: String in ["count", "days", "deadline", "progress"]:
-			normalized[key] = int(normalized[key])
-		normalized.reward = {"stones": int(quest.reward.get("stones", 0)), "xp": int(quest.reward.get("xp", 0))}
-		result.append(normalized)
-	return result

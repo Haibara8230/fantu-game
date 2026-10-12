@@ -178,7 +178,7 @@ func _ruin() -> void:
 	check(not game.act("search_ruin").contains("后再来"), "searchable again after the cooldown")
 	var trail := _game(10)
 	trail.player.realm = 1
-	trail._refresh_realm_stats()
+	trail.refresh_realm_stats()
 	trail.travel("wild")
 	check(trail.has_flag("found_ruin"), "a foundation cultivator finds the trail without the storyteller")
 
