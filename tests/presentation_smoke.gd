@@ -60,12 +60,19 @@ func _run() -> void:
 	await _capture("art_duel_idle")
 	check(main.battle_stage.hero.sprite.texture.get_width() == 1536, "hero atlas loaded")
 	check(main.battle_stage.enemy.sprite.flip_h, "rival faces player")
-	check(main.battle_stage.background.resource_path == "res://assets/art/bamboo_arena_v1.png", "a place without its own backdrop uses the shared one")
+	check(main.battle_stage.background.resource_path == "res://assets/art/battle/%s.png" % main.session.snapshot().battle.place, "the battle place selects its generated backdrop")
 	check(main.battle_stage.art_path(["res://assets/art/battle/none.png", "res://assets/art/beasts_atlas_v1.png", "res://assets/art/bamboo_arena_v1.png"]) == "res://assets/art/beasts_atlas_v1.png", "the first existing art wins")
 	check(main.battle_stage.art_path(["res://assets/art/battle/none.png", "res://assets/art/bamboo_arena_v1.png"]) == "res://assets/art/bamboo_arena_v1.png", "missing art falls back")
 	var looks: Dictionary = main.battle_stage._enemy_art("cultivator", {"foe": {"sect": "chixiao", "gender": "male"}})
-	check(looks.texture == "res://assets/art/rival_atlas_v2.png" and looks.columns == 3, "a missing look keeps the shared sprite grid")
+	check(looks.texture == "res://assets/art/actors/cultivator_chixiao_male.png" and looks.columns == 3 and looks.rows == 2, "sect and gender select the generated six-pose atlas")
+	var missing_look: Dictionary = main.battle_stage._enemy_art("cultivator", {"foe": {"sect": "missing", "gender": "male"}})
+	check(missing_look.texture == "res://assets/art/rival_atlas_v2.png" and missing_look.columns == 3, "a missing look keeps the shared sprite grid")
+	check(main.battle_stage._enemy_art("rogue", {}).texture == "res://assets/art/actors/rogue.png", "a named foe selects its generated sprite")
+	check(main.battle_stage._enemy_art("ruin_rogue", {}).texture == "res://assets/art/actors/ruin_rogue.png", "the ruin rogue selects its generated sprite")
+	var rogue_preferred: String = main.battle_stage.art.actors.rogue.preferred
+	main.battle_stage.art.actors.rogue.preferred = "res://assets/art/actors/missing_rogue.png"
 	check(main.battle_stage._enemy_art("rogue", {}).texture == "res://assets/art/rival_atlas_v2.png", "a named foe without its own sprite uses the shared one")
+	main.battle_stage.art.actors.rogue.preferred = rogue_preferred
 	_watch_stage("art_sword")
 	main._skill("sword")
 	check(main.presenting, "input lock starts before animation")

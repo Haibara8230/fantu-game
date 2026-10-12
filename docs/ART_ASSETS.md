@@ -393,3 +393,2567 @@ Absolute negatives: NO roads, paths, streets or route lines; NO text, letters, c
 
 - check.cmd passed: CORE 25 / WORLD 42 / EVENTS 66 / REGION 126 / UI 26 / PRESENTATION 17 / SECTS 237; 539 checks, 0 failures. All launches used --headless, with no visible windows and no script/resource errors in output.
 - After syncing origin/main at c1c7979, check.cmd passed again: CORE 28 / WORLD 42 / EVENTS 66 / REGION 126 / GROWTH 54 / ARSENAL 77 / UI 30 / PRESENTATION 17 / SECTS 237; 677 checks, 0 failures. All launches used --headless; no script/resource errors in output.
+
+## 2026-10-09 M4 与路人头像池生成记录
+
+需求：`docs/ART_BRIEF_M4.md` 的 29 张，以及用户选择的 180 张头像（六组各 30 张）。
+
+生成方式：Codex 原生 imagegen，逐张生成。以觅长生官方游戏截图中的人物线稿、平涂、简洁阴影作为画风参考，人物为本项目原创普通修士。没有复制具体游戏角色。
+
+参考页：[觅长生官方 Steam 页面](https://store.steampowered.com/app/1189490/)。斗法场地同时参考本仓库 `bamboo_arena_v1.png` 的构图；命名角色参考对应现有立绘以保持身份。
+
+尺寸处理：使用用户已授权的裁切、缩放；六姿势图集裁切每个完整动作、等比缩放后放入 512x512 单格，脚底统一约 y=471，保留生成图片原有 alpha。未以脚本重绘人物或去背。
+
+当前记录：209 张；分组计数：female_middle=30, female_old=30, female_young=30, m4=29, male_middle=30, male_old=30, male_young=30。
+
+接入说明：头像池由现有 `ArtLibrary.pool_index()` 从磁盘自动读取；性别、年龄段和身份优先匹配。现有分配使用确定性哈希，不保证不同路人绝不重复，头像池变动或人物进入新的年龄段时也可能改变结果。本批不修改分配代码或存档。
+
+已同步远程提交 84e9a53：现有斗法界面会按地点选择本批背景，并按门派和性别选择修士图集；命名劫修图集路径也已接入。事件插图界面仍在 BACKLOG 中。本次增加图片、导入配置和资源登记，并更新展示测试以覆盖新资源；未修改游戏代码或数据。
+
+### 2026-10-12 最终验证
+
+- 209 张 PNG 均可解码，尺寸、色彩模式及分组数量符合要求；14 张人物图集保留透明通道，六个动作格均非空，无跨格内容。
+- 同步远程 main（4b0fdeb）后，Godot 后台导入成功；资源运行检查 250 项、0 失败。
+- 后台游戏测试共 762 项，1 失败：EVENTS 的 500 年模拟合计 4123 ms，超过 4000 ms 预算。新增图片前同项也超限，保留原预算并如实记录；其余测试均通过。
+- 展示测试已改为验证新背景、门派/性别图集及命名劫修图集，同时保留缺图回退覆盖；25 项、0 失败。
+- 所有自动启动均使用 --headless；输出无脚本或资源错误，未打开可见游戏或编辑器窗口。视觉检查和运行日志保存在忽略目录 builds/previews/m4_art_batch/。
+
+### 文件、尺寸与生成提示词
+
+每张图实际使用的提示词由下表的 P 编号按顺序以一个换行连接组成。重复风格段落只登记一次，主体描述、道具覆盖和布局修正均保留。空段落也按编号保留。
+
+| 文件 | 尺寸 | 色彩模式 | 提示词段落顺序 |
+|---|---|---|---|
+| `assets/art/actors/cultivator_canglan_female.png` | 1536x1024 | RGBA | P001, P002, P003, P004, P005, P006 |
+| `assets/art/actors/cultivator_canglan_male.png` | 1536x1024 | RGBA | P001, P002, P007, P004, P005, P006 |
+| `assets/art/actors/cultivator_changqing_female.png` | 1536x1024 | RGBA | P001, P002, P008, P004, P005, P006 |
+| `assets/art/actors/cultivator_changqing_male.png` | 1536x1024 | RGBA | P001, P002, P009, P004, P005, P006 |
+| `assets/art/actors/cultivator_chixiao_female.png` | 1536x1024 | RGBA | P001, P002, P010, P004, P005, P006 |
+| `assets/art/actors/cultivator_chixiao_male.png` | 1536x1024 | RGBA | P001, P002, P011, P004, P005, P006 |
+| `assets/art/actors/cultivator_qingyun_female.png` | 1536x1024 | RGBA | P001, P002, P012, P004, P005, P006 |
+| `assets/art/actors/cultivator_qingyun_male.png` | 1536x1024 | RGBA | P001, P002, P013, P004, P005, P006 |
+| `assets/art/actors/cultivator_wanderer_female.png` | 1536x1024 | RGBA | P001, P002, P014, P004, P005, P006 |
+| `assets/art/actors/cultivator_wanderer_male.png` | 1536x1024 | RGBA | P001, P002, P015, P004, P005, P006 |
+| `assets/art/actors/cultivator_xuanyue_female.png` | 1536x1024 | RGBA | P001, P002, P016, P004, P005, P006 |
+| `assets/art/actors/cultivator_xuanyue_male.png` | 1536x1024 | RGBA | P001, P002, P017, P004, P005, P006 |
+| `assets/art/actors/rogue.png` | 1536x1024 | RGBA | P001, P018, P019, P004, P005, P020, P021, P022, P023, P024 |
+| `assets/art/actors/ruin_rogue.png` | 1536x1024 | RGBA | P001, P018, P025, P004, P005, P020, P021, P022, P023, P024 |
+| `assets/art/battle/ferry.png` | 1792x768 | RGB | P026, P027, P028, P029, P005, P030 |
+| `assets/art/battle/market.png` | 1792x768 | RGB | P026, P027, P031, P029, P005, P030 |
+| `assets/art/battle/ridge.png` | 1792x768 | RGB | P026, P027, P032, P029, P005, P030 |
+| `assets/art/battle/road.png` | 1792x768 | RGB | P026, P027, P033, P029, P005, P030 |
+| `assets/art/battle/ruin.png` | 1792x768 | RGB | P026, P027, P034, P029, P005, P030 |
+| `assets/art/battle/sect.png` | 1792x768 | RGB | P026, P027, P035, P029, P005, P030 |
+| `assets/art/battle/town.png` | 1792x768 | RGB | P026, P027, P036, P029, P005, P030 |
+| `assets/art/battle/wild.png` | 1792x768 | RGB | P026, P027, P037, P029, P005, P030 |
+| `assets/art/events/outer_tournament.png` | 1600x900 | RGB | P038, P039, P040, P041, P005, P042 |
+| `assets/art/events/rogue_ambush.png` | 1600x900 | RGB | P038, P043, P044, P041, P005, P042 |
+| `assets/art/events/serpent_rampage.png` | 1600x900 | RGB | P038, P043, P045, P041, P005, P042 |
+| `assets/art/events/teahouse_story.png` | 1600x900 | RGB | P038, P043, P046, P041, P005, P042 |
+| `assets/art/events/wounded_in_pines.png` | 1600x900 | RGB | P038, P043, P047, P041, P005, P042 |
+| `assets/art/events/yunxi_auction.png` | 1600x900 | RGB | P038, P039, P048, P041, P005, P042 |
+| `assets/art/events/yunxi_night_market.png` | 1600x900 | RGB | P038, P039, P049, P041, P005, P042 |
+| `assets/local/portraits/pool/female_middle/disciple_female_middle_01.png` | 512x640 | RGB | P050, P051, P052, P005, P053, P054, P055 |
+| `assets/local/portraits/pool/female_middle/disciple_female_middle_02.png` | 512x640 | RGB | P050, P051, P056, P005, P053, P057, P055 |
+| `assets/local/portraits/pool/female_middle/disciple_female_middle_03.png` | 512x640 | RGB | P050, P051, P058, P005, P053, P059, P055 |
+| `assets/local/portraits/pool/female_middle/disciple_female_middle_04.png` | 512x640 | RGB | P050, P051, P060, P005, P053, P061, P055 |
+| `assets/local/portraits/pool/female_middle/disciple_female_middle_05.png` | 512x640 | RGB | P050, P051, P062, P005, P053, P063, P055 |
+| `assets/local/portraits/pool/female_middle/disciple_female_middle_06.png` | 512x640 | RGB | P050, P051, P064, P005, P053, P065, P055 |
+| `assets/local/portraits/pool/female_middle/disciple_female_middle_07.png` | 512x640 | RGB | P050, P051, P066, P005, P053, P067, P055 |
+| `assets/local/portraits/pool/female_middle/disciple_female_middle_08.png` | 512x640 | RGB | P050, P051, P068, P005, P053, P069, P055 |
+| `assets/local/portraits/pool/female_middle/disciple_female_middle_09.png` | 512x640 | RGB | P050, P051, P070, P005, P053, P071, P055 |
+| `assets/local/portraits/pool/female_middle/gatherer_female_middle_01.png` | 512x640 | RGB | P050, P051, P072, P005, P053, P063, P073, P055 |
+| `assets/local/portraits/pool/female_middle/gatherer_female_middle_02.png` | 512x640 | RGB | P050, P051, P074, P005, P053, P065, P075, P055 |
+| `assets/local/portraits/pool/female_middle/gatherer_female_middle_03.png` | 512x640 | RGB | P050, P051, P076, P005, P053, P067, P077, P055 |
+| `assets/local/portraits/pool/female_middle/gatherer_female_middle_04.png` | 512x640 | RGB | P050, P051, P078, P005, P053, P069, P079, P055 |
+| `assets/local/portraits/pool/female_middle/trader_female_middle_01.png` | 512x640 | RGB | P050, P051, P080, P005, P053, P071, P081, P055 |
+| `assets/local/portraits/pool/female_middle/trader_female_middle_02.png` | 512x640 | RGB | P050, P051, P082, P005, P053, P083, P084, P055 |
+| `assets/local/portraits/pool/female_middle/trader_female_middle_03.png` | 512x640 | RGB | P050, P051, P085, P005, P053, P054, P086, P055 |
+| `assets/local/portraits/pool/female_middle/trader_female_middle_04.png` | 512x640 | RGB | P050, P051, P087, P005, P053, P057, P088, P055 |
+| `assets/local/portraits/pool/female_middle/trader_female_middle_05.png` | 512x640 | RGB | P050, P051, P089, P005, P053, P059, P081, P055 |
+| `assets/local/portraits/pool/female_middle/trader_female_middle_06.png` | 512x640 | RGB | P050, P051, P090, P005, P053, P061, P084, P055 |
+| `assets/local/portraits/pool/female_middle/visitor_female_middle_01.png` | 512x640 | RGB | P050, P051, P091, P005, P053, P071, P055 |
+| `assets/local/portraits/pool/female_middle/visitor_female_middle_02.png` | 512x640 | RGB | P050, P051, P092, P005, P053, P083, P055 |
+| `assets/local/portraits/pool/female_middle/wanderer_female_middle_01.png` | 512x640 | RGB | P050, P051, P093, P005, P053, P083, P094, P055 |
+| `assets/local/portraits/pool/female_middle/wanderer_female_middle_02.png` | 512x640 | RGB | P050, P051, P095, P005, P053, P054, P096, P055 |
+| `assets/local/portraits/pool/female_middle/wanderer_female_middle_03.png` | 512x640 | RGB | P050, P051, P097, P005, P053, P057, P098, P055 |
+| `assets/local/portraits/pool/female_middle/wanderer_female_middle_04.png` | 512x640 | RGB | P050, P051, P099, P005, P053, P059, P100, P055 |
+| `assets/local/portraits/pool/female_middle/wanderer_female_middle_05.png` | 512x640 | RGB | P050, P051, P101, P005, P053, P061, P094, P055 |
+| `assets/local/portraits/pool/female_middle/wanderer_female_middle_06.png` | 512x640 | RGB | P050, P051, P102, P005, P053, P063, P096, P055 |
+| `assets/local/portraits/pool/female_middle/wanderer_female_middle_07.png` | 512x640 | RGB | P050, P051, P103, P005, P053, P065, P098, P055 |
+| `assets/local/portraits/pool/female_middle/wanderer_female_middle_08.png` | 512x640 | RGB | P050, P051, P104, P005, P053, P067, P100, P055 |
+| `assets/local/portraits/pool/female_middle/wanderer_female_middle_09.png` | 512x640 | RGB | P050, P051, P105, P005, P053, P069, P094, P055 |
+| `assets/local/portraits/pool/female_old/disciple_female_old_01.png` | 512x640 | RGB | P050, P051, P106, P005, P053, P059, P055 |
+| `assets/local/portraits/pool/female_old/disciple_female_old_02.png` | 512x640 | RGB | P050, P051, P107, P005, P053, P061, P055 |
+| `assets/local/portraits/pool/female_old/disciple_female_old_03.png` | 512x640 | RGB | P050, P051, P108, P005, P053, P063 |
+| `assets/local/portraits/pool/female_old/disciple_female_old_04.png` | 512x640 | RGB | P050, P051, P109, P005, P053, P065, P055 |
+| `assets/local/portraits/pool/female_old/disciple_female_old_05.png` | 512x640 | RGB | P050, P051, P110, P005, P053, P067, P055 |
+| `assets/local/portraits/pool/female_old/disciple_female_old_06.png` | 512x640 | RGB | P050, P051, P111, P005, P053, P069, P055 |
+| `assets/local/portraits/pool/female_old/disciple_female_old_07.png` | 512x640 | RGB | P050, P051, P112, P005, P053, P071, P055 |
+| `assets/local/portraits/pool/female_old/gatherer_female_old_01.png` | 512x640 | RGB | P050, P051, P113, P005, P053, P065, P073, P055 |
+| `assets/local/portraits/pool/female_old/gatherer_female_old_02.png` | 512x640 | RGB | P050, P051, P114, P005, P053, P067, P075, P055 |
+| `assets/local/portraits/pool/female_old/gatherer_female_old_03.png` | 512x640 | RGB | P050, P051, P115, P005, P053, P069, P077, P055 |
+| `assets/local/portraits/pool/female_old/gatherer_female_old_04.png` | 512x640 | RGB | P050, P051, P116, P005, P053, P071, P079, P055 |
+| `assets/local/portraits/pool/female_old/gatherer_female_old_05.png` | 512x640 | RGB | P050, P051, P117, P005, P053, P083, P073, P055 |
+| `assets/local/portraits/pool/female_old/trader_female_old_01.png` | 512x640 | RGB | P050, P051, P118, P005, P053, P083, P081, P055 |
+| `assets/local/portraits/pool/female_old/trader_female_old_02.png` | 512x640 | RGB | P050, P051, P119, P005, P053, P054, P084, P055 |
+| `assets/local/portraits/pool/female_old/trader_female_old_03.png` | 512x640 | RGB | P050, P051, P120, P005, P053, P057, P086, P055 |
+| `assets/local/portraits/pool/female_old/trader_female_old_04.png` | 512x640 | RGB | P050, P051, P121, P005, P053, P059, P088, P055 |
+| `assets/local/portraits/pool/female_old/trader_female_old_05.png` | 512x640 | RGB | P050, P051, P122, P005, P053, P061, P081, P055 |
+| `assets/local/portraits/pool/female_old/trader_female_old_06.png` | 512x640 | RGB | P050, P051, P123, P005, P053, P063, P084, P055 |
+| `assets/local/portraits/pool/female_old/visitor_female_old_01.png` | 512x640 | RGB | P050, P051, P124, P005, P053, P054, P055 |
+| `assets/local/portraits/pool/female_old/visitor_female_old_02.png` | 512x640 | RGB | P050, P051, P125, P005, P053, P057, P055 |
+| `assets/local/portraits/pool/female_old/wanderer_female_old_01.png` | 512x640 | RGB | P050, P051, P126, P005, P053, P083, P094, P055 |
+| `assets/local/portraits/pool/female_old/wanderer_female_old_02.png` | 512x640 | RGB | P050, P051, P127, P005, P053, P054, P096, P055 |
+| `assets/local/portraits/pool/female_old/wanderer_female_old_03.png` | 512x640 | RGB | P050, P051, P128, P005, P053, P057, P098, P055 |
+| `assets/local/portraits/pool/female_old/wanderer_female_old_04.png` | 512x640 | RGB | P050, P051, P129, P005, P053, P059, P100, P055 |
+| `assets/local/portraits/pool/female_old/wanderer_female_old_05.png` | 512x640 | RGB | P050, P051, P130, P005, P053, P061, P094, P055 |
+| `assets/local/portraits/pool/female_old/wanderer_female_old_06.png` | 512x640 | RGB | P050, P051, P131, P005, P053, P063, P096, P055 |
+| `assets/local/portraits/pool/female_old/wanderer_female_old_07.png` | 512x640 | RGB | P050, P051, P132, P005, P053, P065, P098, P055 |
+| `assets/local/portraits/pool/female_old/wanderer_female_old_08.png` | 512x640 | RGB | P050, P051, P133, P005, P053, P067, P100, P055 |
+| `assets/local/portraits/pool/female_old/wanderer_female_old_09.png` | 512x640 | RGB | P050, P051, P134, P005, P053, P069, P094, P055 |
+| `assets/local/portraits/pool/female_old/wanderer_female_old_10.png` | 512x640 | RGB | P050, P051, P135, P005, P053, P071, P096, P055 |
+| `assets/local/portraits/pool/female_young/disciple_female_young_01.png` | 512x640 | RGB | P050, P051, P136, P005, P053, P054, P055 |
+| `assets/local/portraits/pool/female_young/disciple_female_young_02.png` | 512x640 | RGB | P050, P051, P137, P005, P053, P057, P055 |
+| `assets/local/portraits/pool/female_young/disciple_female_young_03.png` | 512x640 | RGB | P050, P051, P138, P005, P053, P059, P055 |
+| `assets/local/portraits/pool/female_young/disciple_female_young_04.png` | 512x640 | RGB | P050, P051, P139, P005, P053, P061, P055 |
+| `assets/local/portraits/pool/female_young/disciple_female_young_05.png` | 512x640 | RGB | P050, P051, P140, P005, P053, P063, P055 |
+| `assets/local/portraits/pool/female_young/disciple_female_young_06.png` | 512x640 | RGB | P050, P051, P141, P005, P053, P065, P055 |
+| `assets/local/portraits/pool/female_young/disciple_female_young_07.png` | 512x640 | RGB | P050, P051, P142, P005, P053, P067, P055 |
+| `assets/local/portraits/pool/female_young/disciple_female_young_08.png` | 512x640 | RGB | P050, P051, P143, P005, P053, P069, P055 |
+| `assets/local/portraits/pool/female_young/disciple_female_young_09.png` | 512x640 | RGB | P050, P051, P144, P005, P053, P071, P055 |
+| `assets/local/portraits/pool/female_young/disciple_female_young_10.png` | 512x640 | RGB | P050, P051, P145, P005, P053, P083, P055 |
+| `assets/local/portraits/pool/female_young/disciple_female_young_11.png` | 512x640 | RGB | P050, P051, P146, P005, P053, P054, P055 |
+| `assets/local/portraits/pool/female_young/disciple_female_young_12.png` | 512x640 | RGB | P050, P051, P147, P005, P053, P057, P055 |
+| `assets/local/portraits/pool/female_young/disciple_female_young_13.png` | 512x640 | RGB | P050, P051, P148, P005, P053, P059, P055 |
+| `assets/local/portraits/pool/female_young/disciple_female_young_14.png` | 512x640 | RGB | P050, P051, P149, P005, P053, P061, P055 |
+| `assets/local/portraits/pool/female_young/gatherer_female_young_01.png` | 512x640 | RGB | P050, P051, P150, P005, P053, P063, P073, P055 |
+| `assets/local/portraits/pool/female_young/gatherer_female_young_02.png` | 512x640 | RGB | P050, P051, P151, P005, P053, P065, P075, P055 |
+| `assets/local/portraits/pool/female_young/gatherer_female_young_03.png` | 512x640 | RGB | P050, P051, P152, P005, P053, P067, P077, P055 |
+| `assets/local/portraits/pool/female_young/gatherer_female_young_04.png` | 512x640 | RGB | P050, P051, P153, P005, P053, P069, P079, P055 |
+| `assets/local/portraits/pool/female_young/trader_female_young_01.png` | 512x640 | RGB | P050, P051, P154, P005, P053, P057, P081, P055 |
+| `assets/local/portraits/pool/female_young/trader_female_young_02.png` | 512x640 | RGB | P050, P051, P155, P005, P053, P059, P084, P055 |
+| `assets/local/portraits/pool/female_young/trader_female_young_03.png` | 512x640 | RGB | P050, P051, P156, P005, P053, P061, P086, P055 |
+| `assets/local/portraits/pool/female_young/visitor_female_young_01.png` | 512x640 | RGB | P050, P051, P157, P005, P053, P071, P055 |
+| `assets/local/portraits/pool/female_young/visitor_female_young_02.png` | 512x640 | RGB | P050, P051, P158, P005, P053, P083, P055 |
+| `assets/local/portraits/pool/female_young/wanderer_female_young_01.png` | 512x640 | RGB | P050, P051, P159, P005, P053, P063, P094, P055 |
+| `assets/local/portraits/pool/female_young/wanderer_female_young_02.png` | 512x640 | RGB | P050, P051, P160, P005, P053, P065, P096, P055 |
+| `assets/local/portraits/pool/female_young/wanderer_female_young_03.png` | 512x640 | RGB | P050, P051, P161, P005, P053, P067, P098, P055 |
+| `assets/local/portraits/pool/female_young/wanderer_female_young_04.png` | 512x640 | RGB | P050, P051, P162, P005, P053, P069, P100, P055 |
+| `assets/local/portraits/pool/female_young/wanderer_female_young_05.png` | 512x640 | RGB | P050, P051, P163, P005, P053, P071, P094, P055 |
+| `assets/local/portraits/pool/female_young/wanderer_female_young_06.png` | 512x640 | RGB | P050, P051, P164, P005, P053, P083, P096, P055 |
+| `assets/local/portraits/pool/female_young/wanderer_female_young_07.png` | 512x640 | RGB | P050, P051, P165, P005, P053, P054, P098, P055 |
+| `assets/local/portraits/pool/male_middle/disciple_male_middle_01.png` | 512x640 | RGB | P050, P051, P166, P005, P053, P069 |
+| `assets/local/portraits/pool/male_middle/disciple_male_middle_02.png` | 512x640 | RGB | P050, P051, P167, P005, P053, P071 |
+| `assets/local/portraits/pool/male_middle/disciple_male_middle_03.png` | 512x640 | RGB | P050, P051, P168, P005, P053, P083 |
+| `assets/local/portraits/pool/male_middle/disciple_male_middle_04.png` | 512x640 | RGB | P050, P051, P169, P005, P053, P054 |
+| `assets/local/portraits/pool/male_middle/disciple_male_middle_05.png` | 512x640 | RGB | P050, P051, P170, P005, P053, P057 |
+| `assets/local/portraits/pool/male_middle/disciple_male_middle_06.png` | 512x640 | RGB | P050, P051, P171, P005, P053, P059 |
+| `assets/local/portraits/pool/male_middle/disciple_male_middle_07.png` | 512x640 | RGB | P050, P051, P172, P005, P053, P061 |
+| `assets/local/portraits/pool/male_middle/disciple_male_middle_08.png` | 512x640 | RGB | P050, P051, P173, P005, P053, P063 |
+| `assets/local/portraits/pool/male_middle/disciple_male_middle_09.png` | 512x640 | RGB | P050, P051, P174, P005, P053, P065 |
+| `assets/local/portraits/pool/male_middle/gatherer_male_middle_01.png` | 512x640 | RGB | P050, P051, P175, P005, P053, P057, P073, P055 |
+| `assets/local/portraits/pool/male_middle/gatherer_male_middle_02.png` | 512x640 | RGB | P050, P051, P176, P005, P053, P059, P075, P055 |
+| `assets/local/portraits/pool/male_middle/gatherer_male_middle_03.png` | 512x640 | RGB | P050, P051, P177, P005, P053, P061, P077, P055 |
+| `assets/local/portraits/pool/male_middle/gatherer_male_middle_04.png` | 512x640 | RGB | P050, P051, P178, P005, P053, P063, P079, P055 |
+| `assets/local/portraits/pool/male_middle/trader_male_middle_01.png` | 512x640 | RGB | P050, P051, P179, P005, P053, P065, P081 |
+| `assets/local/portraits/pool/male_middle/trader_male_middle_02.png` | 512x640 | RGB | P050, P051, P180, P005, P053, P067, P084, P055 |
+| `assets/local/portraits/pool/male_middle/trader_male_middle_03.png` | 512x640 | RGB | P050, P051, P181, P005, P053, P069, P086, P055 |
+| `assets/local/portraits/pool/male_middle/trader_male_middle_04.png` | 512x640 | RGB | P050, P051, P182, P005, P053, P071, P088, P055 |
+| `assets/local/portraits/pool/male_middle/trader_male_middle_05.png` | 512x640 | RGB | P050, P051, P183, P005, P053, P083, P081, P055 |
+| `assets/local/portraits/pool/male_middle/trader_male_middle_06.png` | 512x640 | RGB | P050, P051, P184, P005, P053, P054, P084, P055 |
+| `assets/local/portraits/pool/male_middle/visitor_male_middle_01.png` | 512x640 | RGB | P050, P051, P185, P005, P053, P065, P055 |
+| `assets/local/portraits/pool/male_middle/visitor_male_middle_02.png` | 512x640 | RGB | P050, P051, P186, P005, P053, P067, P055 |
+| `assets/local/portraits/pool/male_middle/wanderer_male_middle_01.png` | 512x640 | RGB | P050, P051, P187, P005, P053, P067, P094 |
+| `assets/local/portraits/pool/male_middle/wanderer_male_middle_02.png` | 512x640 | RGB | P050, P051, P188, P005, P053, P069, P096 |
+| `assets/local/portraits/pool/male_middle/wanderer_male_middle_03.png` | 512x640 | RGB | P050, P051, P189, P005, P053, P071, P098 |
+| `assets/local/portraits/pool/male_middle/wanderer_male_middle_04.png` | 512x640 | RGB | P050, P051, P190, P005, P053, P083, P100 |
+| `assets/local/portraits/pool/male_middle/wanderer_male_middle_05.png` | 512x640 | RGB | P050, P051, P191, P005, P053, P054, P094 |
+| `assets/local/portraits/pool/male_middle/wanderer_male_middle_06.png` | 512x640 | RGB | P050, P051, P192, P005, P053, P057, P096 |
+| `assets/local/portraits/pool/male_middle/wanderer_male_middle_07.png` | 512x640 | RGB | P050, P051, P193, P005, P053, P059, P098 |
+| `assets/local/portraits/pool/male_middle/wanderer_male_middle_08.png` | 512x640 | RGB | P050, P051, P194, P005, P053, P061, P100 |
+| `assets/local/portraits/pool/male_middle/wanderer_male_middle_09.png` | 512x640 | RGB | P050, P051, P195, P005, P053, P063, P094 |
+| `assets/local/portraits/pool/male_old/disciple_male_old_01.png` | 512x640 | RGB | P050, P051, P196, P005, P053, P083, P055 |
+| `assets/local/portraits/pool/male_old/disciple_male_old_02.png` | 512x640 | RGB | P050, P051, P197, P005, P053, P054, P055 |
+| `assets/local/portraits/pool/male_old/disciple_male_old_03.png` | 512x640 | RGB | P050, P051, P198, P005, P053, P057, P055 |
+| `assets/local/portraits/pool/male_old/disciple_male_old_04.png` | 512x640 | RGB | P050, P051, P199, P005, P053, P059, P055 |
+| `assets/local/portraits/pool/male_old/disciple_male_old_05.png` | 512x640 | RGB | P050, P051, P200, P005, P053, P061, P055 |
+| `assets/local/portraits/pool/male_old/disciple_male_old_06.png` | 512x640 | RGB | P050, P051, P201, P005, P053, P063, P055 |
+| `assets/local/portraits/pool/male_old/disciple_male_old_07.png` | 512x640 | RGB | P050, P051, P202, P005, P053, P065, P055 |
+| `assets/local/portraits/pool/male_old/gatherer_male_old_01.png` | 512x640 | RGB | P050, P051, P203, P005, P053, P059, P073, P055 |
+| `assets/local/portraits/pool/male_old/gatherer_male_old_02.png` | 512x640 | RGB | P050, P051, P204, P005, P053, P061, P075, P055 |
+| `assets/local/portraits/pool/male_old/gatherer_male_old_03.png` | 512x640 | RGB | P050, P051, P205, P005, P053, P063, P077, P055 |
+| `assets/local/portraits/pool/male_old/gatherer_male_old_04.png` | 512x640 | RGB | P050, P051, P206, P005, P053, P065, P079, P055 |
+| `assets/local/portraits/pool/male_old/gatherer_male_old_05.png` | 512x640 | RGB | P050, P051, P207, P005, P053, P067, P073, P055 |
+| `assets/local/portraits/pool/male_old/trader_male_old_01.png` | 512x640 | RGB | P050, P051, P208, P005, P053, P067, P081, P055 |
+| `assets/local/portraits/pool/male_old/trader_male_old_02.png` | 512x640 | RGB | P050, P051, P209, P005, P053, P069, P084, P055 |
+| `assets/local/portraits/pool/male_old/trader_male_old_03.png` | 512x640 | RGB | P050, P051, P210, P005, P053, P071, P086, P055 |
+| `assets/local/portraits/pool/male_old/trader_male_old_04.png` | 512x640 | RGB | P050, P051, P211, P005, P053, P083, P088, P055 |
+| `assets/local/portraits/pool/male_old/trader_male_old_05.png` | 512x640 | RGB | P050, P051, P212, P005, P053, P054, P081, P055 |
+| `assets/local/portraits/pool/male_old/trader_male_old_06.png` | 512x640 | RGB | P050, P051, P213, P005, P053, P057, P084, P055 |
+| `assets/local/portraits/pool/male_old/visitor_male_old_01.png` | 512x640 | RGB | P050, P051, P214, P005, P053, P069, P055 |
+| `assets/local/portraits/pool/male_old/visitor_male_old_02.png` | 512x640 | RGB | P050, P051, P215, P005, P053, P071, P055 |
+| `assets/local/portraits/pool/male_old/wanderer_male_old_01.png` | 512x640 | RGB | P050, P051, P216, P005, P053, P067, P094, P055 |
+| `assets/local/portraits/pool/male_old/wanderer_male_old_02.png` | 512x640 | RGB | P050, P051, P217, P005, P053, P069, P096, P055 |
+| `assets/local/portraits/pool/male_old/wanderer_male_old_03.png` | 512x640 | RGB | P050, P051, P218, P005, P053, P071, P098, P055 |
+| `assets/local/portraits/pool/male_old/wanderer_male_old_04.png` | 512x640 | RGB | P050, P051, P219, P005, P053, P083, P100, P055 |
+| `assets/local/portraits/pool/male_old/wanderer_male_old_05.png` | 512x640 | RGB | P050, P051, P220, P005, P053, P054, P094, P055 |
+| `assets/local/portraits/pool/male_old/wanderer_male_old_06.png` | 512x640 | RGB | P050, P051, P221, P005, P053, P057, P096, P055 |
+| `assets/local/portraits/pool/male_old/wanderer_male_old_07.png` | 512x640 | RGB | P050, P051, P222, P005, P053, P059, P098, P055 |
+| `assets/local/portraits/pool/male_old/wanderer_male_old_08.png` | 512x640 | RGB | P050, P051, P223, P005, P053, P061, P100, P055 |
+| `assets/local/portraits/pool/male_old/wanderer_male_old_09.png` | 512x640 | RGB | P050, P051, P224, P005, P053, P063, P094, P055 |
+| `assets/local/portraits/pool/male_old/wanderer_male_old_10.png` | 512x640 | RGB | P050, P051, P225, P005, P053, P065, P096, P055 |
+| `assets/local/portraits/pool/male_young/disciple_male_young_01.png` | 512x640 | RGB | P050, P226, P227, P005, P053, P228 |
+| `assets/local/portraits/pool/male_young/disciple_male_young_02.png` | 512x640 | RGB | P050, P229, P230, P005, P053 |
+| `assets/local/portraits/pool/male_young/disciple_male_young_03.png` | 512x640 | RGB | P050, P229, P231, P005, P053 |
+| `assets/local/portraits/pool/male_young/disciple_male_young_04.png` | 512x640 | RGB | P050, P051, P232, P005, P053, P054 |
+| `assets/local/portraits/pool/male_young/disciple_male_young_05.png` | 512x640 | RGB | P050, P051, P233, P005, P053, P057 |
+| `assets/local/portraits/pool/male_young/disciple_male_young_06.png` | 512x640 | RGB | P050, P051, P234, P005, P053, P059 |
+| `assets/local/portraits/pool/male_young/disciple_male_young_07.png` | 512x640 | RGB | P050, P051, P235, P005, P053, P061 |
+| `assets/local/portraits/pool/male_young/disciple_male_young_08.png` | 512x640 | RGB | P050, P051, P236, P005, P053, P063 |
+| `assets/local/portraits/pool/male_young/disciple_male_young_09.png` | 512x640 | RGB | P050, P051, P237, P005, P053, P065 |
+| `assets/local/portraits/pool/male_young/disciple_male_young_10.png` | 512x640 | RGB | P050, P051, P238, P005, P053, P067 |
+| `assets/local/portraits/pool/male_young/disciple_male_young_11.png` | 512x640 | RGB | P050, P051, P239, P005, P053, P069 |
+| `assets/local/portraits/pool/male_young/disciple_male_young_12.png` | 512x640 | RGB | P050, P051, P240, P005, P053, P071 |
+| `assets/local/portraits/pool/male_young/disciple_male_young_13.png` | 512x640 | RGB | P050, P051, P241, P005, P053, P083 |
+| `assets/local/portraits/pool/male_young/disciple_male_young_14.png` | 512x640 | RGB | P050, P051, P242, P005, P053, P054 |
+| `assets/local/portraits/pool/male_young/gatherer_male_young_01.png` | 512x640 | RGB | P050, P051, P243, P005, P053, P057, P073 |
+| `assets/local/portraits/pool/male_young/gatherer_male_young_02.png` | 512x640 | RGB | P050, P051, P244, P005, P053, P059, P075 |
+| `assets/local/portraits/pool/male_young/gatherer_male_young_03.png` | 512x640 | RGB | P050, P051, P245, P005, P053, P061, P077 |
+| `assets/local/portraits/pool/male_young/gatherer_male_young_04.png` | 512x640 | RGB | P050, P051, P246, P005, P053, P063, P079 |
+| `assets/local/portraits/pool/male_young/trader_male_young_01.png` | 512x640 | RGB | P050, P051, P247, P005, P053, P071 |
+| `assets/local/portraits/pool/male_young/trader_male_young_02.png` | 512x640 | RGB | P050, P051, P248, P005, P053, P083, P084 |
+| `assets/local/portraits/pool/male_young/trader_male_young_03.png` | 512x640 | RGB | P050, P051, P249, P005, P053, P054, P086 |
+| `assets/local/portraits/pool/male_young/visitor_male_young_01.png` | 512x640 | RGB | P050, P051, P250, P005, P053, P065 |
+| `assets/local/portraits/pool/male_young/visitor_male_young_02.png` | 512x640 | RGB | P050, P051, P251, P005, P053, P067 |
+| `assets/local/portraits/pool/male_young/wanderer_male_young_01.png` | 512x640 | RGB | P050, P051, P252, P005, P053, P057 |
+| `assets/local/portraits/pool/male_young/wanderer_male_young_02.png` | 512x640 | RGB | P050, P051, P253, P005, P053, P059 |
+| `assets/local/portraits/pool/male_young/wanderer_male_young_03.png` | 512x640 | RGB | P050, P051, P254, P005, P053, P061 |
+| `assets/local/portraits/pool/male_young/wanderer_male_young_04.png` | 512x640 | RGB | P050, P051, P255, P005, P053, P063 |
+| `assets/local/portraits/pool/male_young/wanderer_male_young_05.png` | 512x640 | RGB | P050, P051, P256, P005, P053, P065 |
+| `assets/local/portraits/pool/male_young/wanderer_male_young_06.png` | 512x640 | RGB | P050, P051, P257, P005, P053, P067 |
+| `assets/local/portraits/pool/male_young/wanderer_male_young_07.png` | 512x640 | RGB | P050, P051, P258, P005, P053, P069 |
+
+### 提示词原文段落
+
+<details>
+<summary>P001</summary>
+
+```text
+Use case: stylized-concept. ONE six-pose sprite atlas for 凡途, a Chinese cultivation game.
+```
+
+</details>
+
+<details>
+<summary>P002</summary>
+
+```text
+References: image 1 is official ART STYLE only (auction-list NPC portraits, ignore UI); image 2 is simplified LINEWORK/SHADING only, never copy its character; invent a distinct ordinary original person.
+```
+
+</details>
+
+<details>
+<summary>P003</summary>
+
+```text
+Character: calm adult woman aged 35, soft rectangular face, dark hair neatly rolled with plain silver-grey pin. Canglan water cultivator, matte slate-blue and ivory robe, subtle abstract wave hem, plain slender muted ice-blue jian sword, pushing-palm gestures. Ordinary practical modest adult, distinct face and hairstyle from all named characters; same identity in all cells.
+```
+
+</details>
+
+<details>
+<summary>P004</summary>
+
+```text
+STRICT 3 columns x 2 rows, SIX EQUAL 512x512 cells on EXACT 1536x1024 RGBA canvas. All six complete figures FACE TO IMAGE RIGHT (nose and torso pointing right), one per cell. Keep the full hair, body, all hands and weapon entirely inside the cell with at least 35px transparent margins. Same 6.5-head proportions and figure scale in every cell, feet approximately at 92% cell height. Cell centres x=256,768,1280; top feet y=471 and bottom feet y=983. Pose order TOP LEFT idle relaxed ready stance; TOP MIDDLE prepare gathering power with weight back; TOP RIGHT attack striking forwards to the RIGHT. BOTTOM LEFT cast with hand seal/two fingers; BOTTOM MIDDLE hit recoiling backwards toward LEFT while still facing RIGHT; BOTTOM RIGHT guard defensive stance. Same face, hairstyle and costume in all six poses. True TRANSPARENT background, no backdrop, no checkerboard painting, no floor, no shadow, no particles or light effects, no gridlines and no labels. Crisp silhouettes readable at 220px.
+```
+
+</details>
+
+<details>
+<summary>P005</summary>
+
+```text
+Target the ACTUAL 2D NPC art of Mi Chang Sheng / 觅长生 shown in the official gameplay screenshot, especially the auction portraits, and the newer simplified portrait candidate: fine restrained brown-grey contours, broad opaque flat colors, small calm stylized adult eyes, simple face marks, grouped matte hair shapes, VERY FEW economical robe folds, one subdued shadow tone. Modest ordinary game NPC illustration, not polished modern concept art. Muted jade, slate blue, ivory, grey, brown, restrained warm accents. Keep faces and anatomy natural, not idealized idol clones. No photorealism, semi-realistic rendering, 3D, glossy CGI, cinematic lighting, brocade shine, heavy grain, Western comic-book anatomy, anime moe, chibi or pixel art. No text, lettering, calligraphy, signatures, watermark, labels, UI, frames or logos. Everyone is an adult and modestly dressed.
+```
+
+</details>
+
+<details>
+<summary>P006</summary>
+
+```text
+EXTRA IMPORTANT LAYOUT: draw EACH figure MUCH SMALLER than a full cell, within a 390x390 pixel envelope. Leave at least 50px clear transparent margin on every side, including swords, staff and all flying robe edges. Distinct wide transparent gaps separate ALL six sprites, no overlaps.
+```
+
+</details>
+
+<details>
+<summary>P007</summary>
+
+```text
+Character: calm slender adult man aged 38, straight shoulder-length half-up hair. Canglan water cultivator, matte slate-blue and ivory robe, subtle abstract wave hem, plain slender muted ice-blue jian sword, pushing-palm gestures. Ordinary practical modest adult, distinct face and hairstyle from all named characters; same identity in all cells.
+```
+
+</details>
+
+<details>
+<summary>P008</summary>
+
+```text
+Character: gentle adult woman aged 43, round cheeks, long hair in low bun with wooden pin. Changqing wood cultivator, moss-green layered robe, subtly leaf-shaped hem, vine cord belt, short plain wooden staff and finger seals. Ordinary practical modest adult, distinct face and hairstyle from all named characters; same identity in all cells.
+```
+
+</details>
+
+<details>
+<summary>P009</summary>
+
+```text
+Character: gentle narrow-faced adult man aged 45, simple long braid and plain cloth band. Changqing wood cultivator, moss-green layered robe, subtly leaf-shaped hem, vine cord belt, short plain wooden staff and finger seals. Ordinary practical modest adult, distinct face and hairstyle from all named characters; same identity in all cells.
+```
+
+</details>
+
+<details>
+<summary>P010</summary>
+
+```text
+Character: ordinary adult woman aged 31, half-up hair with simple red cord, rounded face. Chixiao cultivator, matte dark crimson modest robe with muted ember-orange trim and wide sleeves, hand seals and palm strikes, NO weapons or flames/effects. Ordinary practical modest adult, distinct face and hairstyle from all named characters; same identity in all cells.
+```
+
+</details>
+
+<details>
+<summary>P011</summary>
+
+```text
+Character: ordinary adult man aged 33, short tied hair with red cord, straight brows. Chixiao cultivator, matte dark crimson modest robe with muted ember-orange trim and wide sleeves, hand seals and palm strikes, NO weapons or flames/effects. Ordinary practical modest adult, distinct face and hairstyle from all named characters; same identity in all cells.
+```
+
+</details>
+
+<details>
+<summary>P012</summary>
+
+```text
+Character: ordinary adult woman aged 29 with a single high braid loop and small wooden hairpin, blue-grey sash. Qingyun outer disciple, plainer than the player or named female rival, plain ivory outer robe, pale jade trim, simple neat cloth topknot, straight jian sword. Ordinary practical modest adult, distinct face and hairstyle from all named characters; same identity in all cells.
+```
+
+</details>
+
+<details>
+<summary>P013</summary>
+
+```text
+Character: ordinary square-faced adult man aged 26 with cropped side hair and a small topknot, plain blue-grey sash. Qingyun outer disciple, plainer than the player or named female rival, plain ivory outer robe, pale jade trim, simple neat cloth topknot, straight jian sword. Ordinary practical modest adult, distinct face and hairstyle from all named characters; same identity in all cells.
+```
+
+</details>
+
+<details>
+<summary>P014</summary>
+
+```text
+Character: weathered slim adult woman aged 37, tied low braid under a plain cloth head wrap. Unaligned wanderer, worn patched grey-green travelling robe, straw-coloured sash, small cloth bundle tied on back, plain sword. Ordinary practical modest adult, distinct face and hairstyle from all named characters; same identity in all cells.
+```
+
+</details>
+
+<details>
+<summary>P015</summary>
+
+```text
+Character: weathered broad-nosed adult man aged 42, wrapped short hair, sparse moustache. Unaligned wanderer, worn patched grey-green travelling robe, straw-coloured sash, small cloth bundle tied on back, plain sword. Ordinary practical modest adult, distinct face and hairstyle from all named characters; same identity in all cells.
+```
+
+</details>
+
+<details>
+<summary>P016</summary>
+
+```text
+Character: sturdy ordinary adult woman aged 46, broad face and thick eyebrows, compact low bun. Xuanyue earth cultivator, heavy earth-brown robe with subdued ochre trim, broad modest clothing, grounded stance, NO WEAPON, heavy palm strike and stamping prepare. Ordinary practical modest adult, distinct face and hairstyle from all named characters; same identity in all cells.
+```
+
+</details>
+
+<details>
+<summary>P017</summary>
+
+```text
+Character: stocky ordinary adult man aged 48, broad round jaw, short hair with cloth cap, sparse beard. Xuanyue earth cultivator, heavy earth-brown robe with subdued ochre trim, broad modest clothing, grounded stance, NO WEAPON, heavy palm strike and stamping prepare. Ordinary practical modest adult, distinct face and hairstyle from all named characters; same identity in all cells.
+```
+
+</details>
+
+<details>
+<summary>P018</summary>
+
+```text
+References: image 1 is official ART STYLE only (auction-list NPC portraits, ignore UI); image 2 is simplified LINEWORK/SHADING only, never copy its character; image 3 is this named CHARACTER IDENTITY/COSTUME, simplify shading to match style.
+```
+
+</details>
+
+<details>
+<summary>P019</summary>
+
+```text
+Character: Male masked road rogue aged 35, Chixiao outcast. Match the named portrait: narrow cold eyes, black tied-back hair with red cord, cloth mask covering lower face, charcoal robe with muted red trim. Carry a plain straight jian sword; sword lowered idle, drawn back prepare, thrust right attack, left hand makes a spell seal in cast (only a very small flame in that palm is allowed), sword-bearing arm recoils left hit, defensive sword raised guard.
+```
+
+</details>
+
+<details>
+<summary>P020</summary>
+
+```text
+
+```
+
+</details>
+
+<details>
+<summary>P021</summary>
+
+```text
+LAYOUT REPAIR PROMPT:
+```
+
+</details>
+
+<details>
+<summary>P022</summary>
+
+```text
+Use case: precise-object-edit. Repair only the SPRITE SHEET LAYOUT of the attached six-pose transparent atlas. Preserve this character's identity, costume, pose meanings, right-facing orientation, hand-drawn flat-color rendering and true alpha.
+```
+
+</details>
+
+<details>
+<summary>P023</summary>
+
+```text
+OUTPUT EXACTLY 1536x1024 RGBA, strict 3 columns x 2 rows of 512x512 cells. SIX separate complete figures.
+```
+
+</details>
+
+<details>
+<summary>P024</summary>
+
+```text
+CRITICAL: SHRINK EVERY WHOLE FIGURE INCLUDING WEAPON BY ABOUT 22 PERCENT compared with the current sheet and reposition it WITHIN ITS OWN CELL. Maximum complete figure-and-weapon bounding box roughly 400px wide and 400px tall. Leave WIDE CLEAR TRANSPARENT SPACE between every neighbouring figure; nothing crosses x512, x1024 or y512. No figure touches any outside border. Top figures feet y471; bottom figures feet y983. Entire hair and sword must be well inside the cell with at least 40px clear margins. Top three centres x256,768,1280; bottom same. The current sword/cloak edges cross grid boundaries: correct that by making the sprites smaller, not by clipping any body or sword. Keep ALL six poses and the full anatomy. Do NOT draw gridlines or backgrounds. No text or effects. Maintain true transparent alpha.
+```
+
+</details>
+
+<details>
+<summary>P025</summary>
+
+```text
+Character: Shi Han, male cave squatter aged 49, Xuanyue outcast. Match the named portrait: rough brown Taoist robe, tied brown-black hair with plain straw cord, small dark moustache/goatee, stony suspicious eyes, broad grounded body. NO WEAPON; bare-hand palm attack to right, heavy stable stamping prepare, hand-seal cast without added stones or effects, recoil left hit, forearm guard.
+```
+
+</details>
+
+<details>
+<summary>P026</summary>
+
+```text
+Use case: stylized-concept. ONE 2D Chinese cultivation side-view duel background, 1792x768 PNG (7:3).
+```
+
+</details>
+
+<details>
+<summary>P027</summary>
+
+```text
+Reference 1 COMPOSITION ONLY: bamboo duel ground; reference 2 OFFICIAL simplified BACKGROUND STYLE only, ignore characters and UI.
+```
+
+</details>
+
+<details>
+<summary>P028</summary>
+
+```text
+Subject: Broad flat sandy riverbank and reed-fringed shallows; reeds ONLY at extreme edges; small wooden pier far right; wide calm river and slate-blue distant mountains behind.
+```
+
+</details>
+
+<details>
+<summary>P029</summary>
+
+```text
+Camera slightly above ground, no extreme perspective. Broad FLAT UNOBSTRUCTED walkable ground across the entire lower part, floor line near 80% image height. Character overlays will stand at x28% and x74%, reaching high into the picture; keep the WHOLE two character zones and centre calm, low contrast, spacious and empty. Scenery only on extreme edges or small/distant background. No bright glow behind the fighters. No text or signs. NO characters, people, animals, monsters, weapons, magic effects, particles, silhouettes or UI.
+```
+
+</details>
+
+<details>
+<summary>P030</summary>
+
+```text
+Environment should use broad simplified painted shapes and restrained washes, not dense realistic foliage textures.
+```
+
+</details>
+
+<details>
+<summary>P031</summary>
+
+```text
+Subject: An open unobstructed stone-paved square outside a market at dusk; closed small Chinese stalls and hanging plain lanterns ONLY at extreme edges; low riverside roofs behind.
+```
+
+</details>
+
+<details>
+<summary>P032</summary>
+
+```text
+Subject: A broad needle-covered forest clearing on a ridge; ancient Chinese pines ONLY framing both outer edges; softly layered ridge lines behind. No buildings.
+```
+
+</details>
+
+<details>
+<summary>P033</summary>
+
+```text
+Subject: A broad flat mountain roadside clearing at a gentle bend; scattered rocks and shrubs only at outer edges; low hills and distant pines behind; neutral daylight, no buildings.
+```
+
+</details>
+
+<details>
+<summary>P034</summary>
+
+```text
+Subject: A broad walkable low stone ledge at the foot of a vine-covered cliff; an old simple stone door only HALF visible at the FAR RIGHT edge; subdued slightly dim stone-green light, calm empty middle.
+```
+
+</details>
+
+<details>
+<summary>P035</summary>
+
+```text
+Subject: A broad pale stone mountain training plaza; LOW railings; sect halls and sea of clouds in the distance, far main peak. Any empty training racks only at extreme outer edges; no weapons in racks.
+```
+
+</details>
+
+<details>
+<summary>P036</summary>
+
+```text
+Subject: Broad packed-earth lane at the edge of a small mortal Chinese town; grey-tiled walls and a willow ONLY at extreme edges; low hills and a few distant roofs behind.
+```
+
+</details>
+
+<details>
+<summary>P037</summary>
+
+```text
+Subject: A broad flat rocky deep valley floor with low mist; a faint jade spring FAR in the background and OFF the two character zones; a few shed crimson serpent scales near edge rocks; subdued rose-gold sunset light HIGH on distant cliffs; uneasy wilderness, no buildings.
+```
+
+</details>
+
+<details>
+<summary>P038</summary>
+
+```text
+Use case: illustration-story. ONE original story event illustration for 凡途, 1600x900 PNG (16:9).
+```
+
+</details>
+
+<details>
+<summary>P039</summary>
+
+```text
+First two reference images are STRICT 2D CHARACTER DRAWING STYLE only, ignore UI and the candidate's identity.
+```
+
+</details>
+
+<details>
+<summary>P040</summary>
+
+```text
+Scene: Qingyun mountain training plaza with plain BLANK sect banners at edges; rows of modest adult outer disciples in plain ivory/slate uniforms watching; two ordinary adult disciples face each other in the centre in sparring stance with simple straight swords; elders seated on a raised distant platform.
+```
+
+</details>
+
+<details>
+<summary>P041</summary>
+
+```text
+Composition: focal action in central 80% width and upper three quarters; bottom QUARTER is quieter low-detail scenery for future text overlay, no text painted. Adults modestly dressed. Keep faces and simple silhouettes clearly readable.
+```
+
+</details>
+
+<details>
+<summary>P042</summary>
+
+```text
+Landscape and rooms use simplified flat shapes and restrained washes. No cinematic spectacle or realistic skin. No readable signs, banners, jade slips or labels.
+```
+
+</details>
+
+<details>
+<summary>P043</summary>
+
+```text
+First two reference images are STRICT 2D CHARACTER DRAWING STYLE only, ignore UI and the candidate's identity. Additional reference is named character/creature IDENTITY only; keep that face, hair, costume and defining traits while simplifying rendering.
+```
+
+</details>
+
+<details>
+<summary>P044</summary>
+
+```text
+Scene: The masked adult male road rogue matching the identity portrait: black tied hair with red cord, lower-face cloth mask, cold eyes, charcoal robe with muted red trim. Standing in the middle of a mountain road, drawn plain straight jian sword, a small orange flame in other palm; viewed from the traveller position.
+```
+
+</details>
+
+<details>
+<summary>P045</summary>
+
+```text
+Scene: A crimson Chinese horned serpent matching the creature reference: red scales, short horns, amber eyes, pale belly, dark red crest, ONE continuous connected coiled body. Coiled across the mouth of Luoxia Valley blocking the passage among broken rocks; head raised, mist and sunset behind; tiny fleeing adult figures for scale. Not a Western dragon.
+```
+
+</details>
+
+<details>
+<summary>P046</summary>
+
+```text
+Scene: He Sangeng, the aged male storyteller matching the identity portrait: tied greying hair, small moustache and goatee, grey-blue plain robe, raised eyebrow and sly smile. He pauses on a small wooden stage raising a folding fan; plain wooden gavel on the table; adult tea drinkers lean forward; rain beyond the window.
+```
+
+</details>
+
+<details>
+<summary>P047</summary>
+
+```text
+Scene: Liu Hanzhou, the pale young adult male swordsman matching the identity portrait: long tied black hair with pale cloth cord, plain slate/ivory robe, restrained blood stain on collar, tired proud expression. Sitting against an old pine beside a forest path, plain sword across his knees, simple dappled light; no gore.
+```
+
+</details>
+
+<details>
+<summary>P048</summary>
+
+```text
+Scene: A small red-lacquered Chinese hall lit by many modest lamps; adult guests in veiled wide-brim bamboo hats seated in rows; a central stand displays a hundred-year lingzhi mushroom on a tray beside a few pills in an open box. Anonymous modest guests, no text.
+```
+
+</details>
+
+<details>
+<summary>P049</summary>
+
+```text
+Scene: Long Chinese market street at night with rows of warm plain lanterns; ordinary wandering adult cultivators display pills and herbs on cloths, small adult figures; busy but calm; signboards entirely blank.
+```
+
+</details>
+
+<details>
+<summary>P050</summary>
+
+```text
+Use case: stylized-concept. ONE original half-body NPC portrait for a 2D Chinese cultivation game, PNG 512x640 (4:5). One person, not a sheet or collage.
+```
+
+</details>
+
+<details>
+<summary>P051</summary>
+
+```text
+References: official screenshot NPC portraits are the ONLY ART STYLE reference. Do NOT copy any particular reference character. Create the distinct person described here.
+```
+
+</details>
+
+<details>
+<summary>P052</summary>
+
+```text
+Subject: An ordinary original Chinese woman, about 35 years old. oval face with high forehead, slightly drooping eyelids, arched brows; single thick braid over one shoulder; quietly curious; average build. Clearly mature ADULT, a few modest age lines and some grey at temples; composed lived-in face. No facial hair. A small subtle facial beauty mark. Qingyun outer disciple: simple matching pale-ivory sect uniform, slate-blue collar and cuffs, blue sash, very faint abstract cloud hem, plain hair cord or wooden pin, simple straight sword hilt partly visible at the hip/back. No fancy embroidery.
+```
+
+</details>
+
+<details>
+<summary>P053</summary>
+
+```text
+Half-body bust, THREE-QUARTER VIEW FACING IMAGE RIGHT, both shoulders and complete head/hair inside with safe margin; face in upper third. Understated original face readable at 120x150. VERY SIMPLE FLAT SKIN, fine contours, at most one light shadow, sparse grouped matte hair strokes, a few broad robe color areas and VERY FEW fold lines. Less detailed than hero concept art. Keep this person's face shape, age, hair and expression distinct from previously made NPCs. Prop small and held low, never hides face. Plain uniform softly muted grey-jade background, no scenery or halo. No dramatic shadow, no text or markings on props, no frame.
+```
+
+</details>
+
+<details>
+<summary>P054</summary>
+
+```text
+PRIORITY UNIQUE IDENTITY: A SOFT OVAL FACE with unusually high forehead, drooping narrow eyelids and fine curved brows; very understated smile lines. Render these distinguishing face proportions visibly, even if plain or unattractive. Do not default to the same handsome narrow-nosed topknot face. Follow the specified hairstyle precisely; do not add a high bun when a crop, cap, wrap, loose hair or low braid is specified. Skin is pale/muted earthy with subtle differences, no glossy facial modelling. This is a new individual, not an edit of any previous portrait.
+```
+
+</details>
+
+<details>
+<summary>P055</summary>
+
+```text
+FINAL IDENTITY CHECK: This is a common villager/cultivator, not a universally attractive hero. The exact face width, jaw outline, nose width and hairstyle specified above MUST determine the drawing. Round or stocky faces must really have noticeably plump cheeks/short wide noses; square faces must have a broad jaw. Avoid giving every person the same long slender face or identical thin goatee. Keep the entire head and BOTH SHOULDERS safely framed. Pure flat soft grey-jade background, no texture speckle.
+```
+
+</details>
+
+<details>
+<summary>P056</summary>
+
+```text
+Subject: An ordinary original Chinese woman, about 42 years old. short sturdy face, low brows, small hooded eyes, broad mouth; two modest braids tied behind; thoughtful and solemn; average build. Clearly mature ADULT, a few modest age lines and some grey at temples; composed lived-in face. No facial hair. No distinctive scars, eyepatch or decorative jewellery. Qingyun outer disciple: simple matching pale-ivory sect uniform, slate-blue collar and cuffs, blue sash, very faint abstract cloud hem, plain hair cord or wooden pin, simple straight sword hilt partly visible at the hip/back. No fancy embroidery.
+```
+
+</details>
+
+<details>
+<summary>P057</summary>
+
+```text
+PRIORITY UNIQUE IDENTITY: A short STOCKY FACE with broad chin, sturdy neck, thick uneven low brows, hooded small eyes and round broad nose. Render these distinguishing face proportions visibly, even if plain or unattractive. Do not default to the same handsome narrow-nosed topknot face. Follow the specified hairstyle precisely; do not add a high bun when a crop, cap, wrap, loose hair or low braid is specified. Skin is pale/muted earthy with subtle differences, no glossy facial modelling. This is a new individual, not an edit of any previous portrait.
+```
+
+</details>
+
+<details>
+<summary>P058</summary>
+
+```text
+Subject: An ordinary original Chinese woman, about 49 years old. narrow triangular adult face, upturned eye corners, fine brows, thin lips; side-part hair in a low knot; quietly curious; average build. Clearly mature ADULT, a few modest age lines and some grey at temples; composed lived-in face. No facial hair. No distinctive scars, eyepatch or decorative jewellery. Qingyun outer disciple: simple matching pale-ivory sect uniform, slate-blue collar and cuffs, blue sash, very faint abstract cloud hem, plain hair cord or wooden pin, simple straight sword hilt partly visible at the hip/back. No fancy embroidery.
+```
+
+</details>
+
+<details>
+<summary>P059</summary>
+
+```text
+PRIORITY UNIQUE IDENTITY: A distinctly NARROW TRIANGULAR ADULT FACE, pointed chin, fine upward brows, small thin lips, long angular ear shapes. Render these distinguishing face proportions visibly, even if plain or unattractive. Do not default to the same handsome narrow-nosed topknot face. Follow the specified hairstyle precisely; do not add a high bun when a crop, cap, wrap, loose hair or low braid is specified. Skin is pale/muted earthy with subtle differences, no glossy facial modelling. This is a new individual, not an edit of any previous portrait.
+```
+
+</details>
+
+<details>
+<summary>P060</summary>
+
+```text
+Subject: An ordinary original Chinese woman, about 36 years old. soft rectangular face, long eyebrows, narrow nose, full lips; low compact bun; thoughtful and solemn; average build. Clearly mature ADULT, a few modest age lines and some grey at temples; composed lived-in face. No facial hair. No distinctive scars, eyepatch or decorative jewellery. Qingyun outer disciple: simple matching pale-ivory sect uniform, slate-blue collar and cuffs, blue sash, very faint abstract cloud hem, plain hair cord or wooden pin, simple straight sword hilt partly visible at the hip/back. No fancy embroidery.
+```
+
+</details>
+
+<details>
+<summary>P061</summary>
+
+```text
+PRIORITY UNIQUE IDENTITY: A RECTANGULAR FACE with BROAD FLAT NOSE, close-set calm eyes, visibly larger ears and full lips; ordinary unglamorous face. Render these distinguishing face proportions visibly, even if plain or unattractive. Do not default to the same handsome narrow-nosed topknot face. Follow the specified hairstyle precisely; do not add a high bun when a crop, cap, wrap, loose hair or low braid is specified. Skin is pale/muted earthy with subtle differences, no glossy facial modelling. This is a new individual, not an edit of any previous portrait.
+```
+
+</details>
+
+<details>
+<summary>P062</summary>
+
+```text
+Subject: An ordinary original Chinese woman, about 43 years old. round full cheeks, relaxed narrow eyes, short uneven brows, small dimple; neatly rolled hair with a wooden pin; quietly curious; average build. Clearly mature ADULT, a few modest age lines and some grey at temples; composed lived-in face. No facial hair. No distinctive scars, eyepatch or decorative jewellery. Qingyun outer disciple: simple matching pale-ivory sect uniform, slate-blue collar and cuffs, blue sash, very faint abstract cloud hem, plain hair cord or wooden pin, simple straight sword hilt partly visible at the hip/back. No fancy embroidery.
+```
+
+</details>
+
+<details>
+<summary>P063</summary>
+
+```text
+PRIORITY UNIQUE IDENTITY: A FULL ROUNDED FACE with plump cheeks, small upturned nose, short uneven brows, modest cheek dimple, tiny relaxed eyes. Render these distinguishing face proportions visibly, even if plain or unattractive. Do not default to the same handsome narrow-nosed topknot face. Follow the specified hairstyle precisely; do not add a high bun when a crop, cap, wrap, loose hair or low braid is specified. Skin is pale/muted earthy with subtle differences, no glossy facial modelling. This is a new individual, not an edit of any previous portrait.
+```
+
+</details>
+
+<details>
+<summary>P064</summary>
+
+```text
+Subject: An ordinary original Chinese woman, about 50 years old. long face with a firm chin, lowered eye corners, broad soft nose; short jaw-length hair tucked behind ears; thoughtful and solemn; average build. Clearly mature ADULT, a few modest age lines and some grey at temples; composed lived-in face. No facial hair. No distinctive scars, eyepatch or decorative jewellery. Qingyun outer disciple: simple matching pale-ivory sect uniform, slate-blue collar and cuffs, blue sash, very faint abstract cloud hem, plain hair cord or wooden pin, simple straight sword hilt partly visible at the hip/back. No fancy embroidery.
+```
+
+</details>
+
+<details>
+<summary>P065</summary>
+
+```text
+PRIORITY UNIQUE IDENTITY: A distinctly LONG FACE with firm cleft chin, drooping eye corners, long low brows and broad soft nose. Render these distinguishing face proportions visibly, even if plain or unattractive. Do not default to the same handsome narrow-nosed topknot face. Follow the specified hairstyle precisely; do not add a high bun when a crop, cap, wrap, loose hair or low braid is specified. Skin is pale/muted earthy with subtle differences, no glossy facial modelling. This is a new individual, not an edit of any previous portrait.
+```
+
+</details>
+
+<details>
+<summary>P066</summary>
+
+```text
+Subject: An ordinary original Chinese woman, about 37 years old. diamond face with softly defined cheekbones, shallow eyelids, thin mouth; long hair in a simple ponytail; quietly curious; average build. Clearly mature ADULT, a few modest age lines and some grey at temples; composed lived-in face. No facial hair. No distinctive scars, eyepatch or decorative jewellery. Qingyun outer disciple: simple matching pale-ivory sect uniform, slate-blue collar and cuffs, blue sash, very faint abstract cloud hem, plain hair cord or wooden pin, simple straight sword hilt partly visible at the hip/back. No fancy embroidery.
+```
+
+</details>
+
+<details>
+<summary>P067</summary>
+
+```text
+PRIORITY UNIQUE IDENTITY: A DIAMOND FACE with high softly drawn cheekbones, small protruding ears, shallow narrow eyelids and a thin straight mouth. Render these distinguishing face proportions visibly, even if plain or unattractive. Do not default to the same handsome narrow-nosed topknot face. Follow the specified hairstyle precisely; do not add a high bun when a crop, cap, wrap, loose hair or low braid is specified. Skin is pale/muted earthy with subtle differences, no glossy facial modelling. This is a new individual, not an edit of any previous portrait.
+```
+
+</details>
+
+<details>
+<summary>P068</summary>
+
+```text
+Subject: An ordinary original Chinese woman, about 44 years old. broad rounded face, small narrow eyes, gently curved brows, short broad nose; half-up shoulder-length hair; thoughtful and solemn; average build. Clearly mature ADULT, a few modest age lines and some grey at temples; composed lived-in face. No facial hair. No distinctive scars, eyepatch or decorative jewellery. Qingyun outer disciple: simple matching pale-ivory sect uniform, slate-blue collar and cuffs, blue sash, very faint abstract cloud hem, plain hair cord or wooden pin, simple straight sword hilt partly visible at the hip/back. No fancy embroidery.
+```
+
+</details>
+
+<details>
+<summary>P069</summary>
+
+```text
+PRIORITY UNIQUE IDENTITY: A distinctly BROAD ROUND FACE with full cheeks, nearly circular jaw, short wide nose, broad neck and small wide-set eyes; do not narrow the jaw. Render these distinguishing face proportions visibly, even if plain or unattractive. Do not default to the same handsome narrow-nosed topknot face. Follow the specified hairstyle precisely; do not add a high bun when a crop, cap, wrap, loose hair or low braid is specified. Skin is pale/muted earthy with subtle differences, no glossy facial modelling. This is a new individual, not an edit of any previous portrait.
+```
+
+</details>
+
+<details>
+<summary>P070</summary>
+
+```text
+Subject: An ordinary original Chinese woman, about 51 years old. long slender face, close-set almond eyes, straight fine brows, small straight nose; small high bun with a simple cloth cord; quietly curious; average build. Clearly mature ADULT, a few modest age lines and some grey at temples; composed lived-in face. No facial hair. No distinctive scars, eyepatch or decorative jewellery. Qingyun outer disciple: simple matching pale-ivory sect uniform, slate-blue collar and cuffs, blue sash, very faint abstract cloud hem, plain hair cord or wooden pin, simple straight sword hilt partly visible at the hip/back. No fancy embroidery.
+```
+
+</details>
+
+<details>
+<summary>P071</summary>
+
+```text
+PRIORITY UNIQUE IDENTITY: A distinctly LONG THIN FACE, high narrow forehead, long simple straight nose, thin mouth, slim neck and close-set tired eyes. Render these distinguishing face proportions visibly, even if plain or unattractive. Do not default to the same handsome narrow-nosed topknot face. Follow the specified hairstyle precisely; do not add a high bun when a crop, cap, wrap, loose hair or low braid is specified. Skin is pale/muted earthy with subtle differences, no glossy facial modelling. This is a new individual, not an edit of any previous portrait.
+```
+
+</details>
+
+<details>
+<summary>P072</summary>
+
+```text
+Subject: An ordinary original Chinese woman, about 43 years old. round full cheeks, relaxed narrow eyes, short uneven brows, small dimple; neatly rolled hair with a wooden pin; quietly curious; average build. Clearly mature ADULT, a few modest age lines and some grey at temples; composed lived-in face. No facial hair. No distinctive scars, eyepatch or decorative jewellery. ordinary herb gatherer: practical modest short robe over trousers, sleeves tied back, rope belt, weathered sun-touched skin. one small plain herb hoe held low.
+```
+
+</details>
+
+<details>
+<summary>P073</summary>
+
+```text
+Specific prop for this individual: a modest herb basket with simple leaves. Follow this prop choice if the earlier role description mentions another. Keep it secondary to the face.
+```
+
+</details>
+
+<details>
+<summary>P074</summary>
+
+```text
+Subject: An ordinary original Chinese woman, about 50 years old. long face with a firm chin, lowered eye corners, broad soft nose; short jaw-length hair tucked behind ears; thoughtful and solemn; average build. Clearly mature ADULT, a few modest age lines and some grey at temples; composed lived-in face. No facial hair. No distinctive scars, eyepatch or decorative jewellery. ordinary herb gatherer: practical modest short robe over trousers, sleeves tied back, rope belt, weathered sun-touched skin. a rope-tied herb basket partly visible.
+```
+
+</details>
+
+<details>
+<summary>P075</summary>
+
+```text
+Specific prop for this individual: one small practical herb hoe held low. Follow this prop choice if the earlier role description mentions another. Keep it secondary to the face.
+```
+
+</details>
+
+<details>
+<summary>P076</summary>
+
+```text
+Subject: An ordinary original Chinese woman, about 37 years old. diamond face with softly defined cheekbones, shallow eyelids, thin mouth; long hair in a simple ponytail; quietly curious; average build. Clearly mature ADULT, a few modest age lines and some grey at temples; composed lived-in face. No facial hair. A small subtle facial beauty mark. ordinary herb gatherer: practical modest short robe over trousers, sleeves tied back, rope belt, weathered sun-touched skin. one small plain herb hoe held low.
+```
+
+</details>
+
+<details>
+<summary>P077</summary>
+
+```text
+Specific prop for this individual: a small rope-tied bundle of herbs. Follow this prop choice if the earlier role description mentions another. Keep it secondary to the face.
+```
+
+</details>
+
+<details>
+<summary>P078</summary>
+
+```text
+Subject: An ordinary original Chinese woman, about 44 years old. broad rounded face, small narrow eyes, gently curved brows, short broad nose; half-up shoulder-length hair; thoughtful and solemn; average build. Clearly mature ADULT, a few modest age lines and some grey at temples; composed lived-in face. No facial hair. No distinctive scars, eyepatch or decorative jewellery. ordinary herb gatherer: practical modest short robe over trousers, sleeves tied back, rope belt, weathered sun-touched skin. a rope-tied herb basket partly visible.
+```
+
+</details>
+
+<details>
+<summary>P079</summary>
+
+```text
+Specific prop for this individual: a partly visible basket with dried roots. Follow this prop choice if the earlier role description mentions another. Keep it secondary to the face.
+```
+
+</details>
+
+<details>
+<summary>P080</summary>
+
+```text
+Subject: An ordinary original Chinese woman, about 41 years old. long slender face, close-set almond eyes, straight fine brows, small straight nose; small high bun with a simple cloth cord; thoughtful and solemn; average build. Clearly mature ADULT, a few modest age lines and some grey at temples; composed lived-in face. No facial hair. No distinctive scars, eyepatch or decorative jewellery. ordinary market cultivator: tidy modest robe in deep green, muted plum or brown, slightly nicer simple trim. modest waist pouches and a plain jade token.
+```
+
+</details>
+
+<details>
+<summary>P081</summary>
+
+```text
+Specific prop for this individual: one small unlabelled ledger held low. Follow this prop choice if the earlier role description mentions another. Keep it secondary to the face.
+```
+
+</details>
+
+<details>
+<summary>P082</summary>
+
+```text
+Subject: An ordinary original Chinese woman, about 48 years old. soft square face, wide-set calm eyes, thick flat brows, small round nose; wrapped hair under a plain travel cloth; quietly curious; average build. Clearly mature ADULT, a few modest age lines and some grey at temples; composed lived-in face. No facial hair. No distinctive scars, eyepatch or decorative jewellery. ordinary market cultivator: tidy modest robe in deep green, muted plum or brown, slightly nicer simple trim. a simple wooden abacus held low.
+```
+
+</details>
+
+<details>
+<summary>P083</summary>
+
+```text
+PRIORITY UNIQUE IDENTITY: A distinctly SQUAT SQUARE FACE with a wide jaw, broad mouth, short forehead, thick straight eyebrows and a blunt small nose. Render these distinguishing face proportions visibly, even if plain or unattractive. Do not default to the same handsome narrow-nosed topknot face. Follow the specified hairstyle precisely; do not add a high bun when a crop, cap, wrap, loose hair or low braid is specified. Skin is pale/muted earthy with subtle differences, no glossy facial modelling. This is a new individual, not an edit of any previous portrait.
+```
+
+</details>
+
+<details>
+<summary>P084</summary>
+
+```text
+Specific prop for this individual: one simple wooden abacus held low. Follow this prop choice if the earlier role description mentions another. Keep it secondary to the face.
+```
+
+</details>
+
+<details>
+<summary>P085</summary>
+
+```text
+Subject: An ordinary original Chinese woman, about 35 years old. oval face with high forehead, slightly drooping eyelids, arched brows; single thick braid over one shoulder; thoughtful and solemn; average build. Clearly mature ADULT, a few modest age lines and some grey at temples; composed lived-in face. No facial hair. No distinctive scars, eyepatch or decorative jewellery. ordinary market cultivator: tidy modest robe in deep green, muted plum or brown, slightly nicer simple trim. modest waist pouches and a plain jade token.
+```
+
+</details>
+
+<details>
+<summary>P086</summary>
+
+```text
+Specific prop for this individual: one plain folded fan. Follow this prop choice if the earlier role description mentions another. Keep it secondary to the face.
+```
+
+</details>
+
+<details>
+<summary>P087</summary>
+
+```text
+Subject: An ordinary original Chinese woman, about 42 years old. short sturdy face, low brows, small hooded eyes, broad mouth; two modest braids tied behind; quietly curious; average build. Clearly mature ADULT, a few modest age lines and some grey at temples; composed lived-in face. No facial hair. No distinctive scars, eyepatch or decorative jewellery. ordinary market cultivator: tidy modest robe in deep green, muted plum or brown, slightly nicer simple trim. a simple wooden abacus held low.
+```
+
+</details>
+
+<details>
+<summary>P088</summary>
+
+```text
+Specific prop for this individual: simple waist pouches with a small jade token. Follow this prop choice if the earlier role description mentions another. Keep it secondary to the face.
+```
+
+</details>
+
+<details>
+<summary>P089</summary>
+
+```text
+Subject: An ordinary original Chinese woman, about 49 years old. narrow triangular adult face, upturned eye corners, fine brows, thin lips; side-part hair in a low knot; thoughtful and solemn; average build. Clearly mature ADULT, a few modest age lines and some grey at temples; composed lived-in face. No facial hair. No distinctive scars, eyepatch or decorative jewellery. ordinary market cultivator: tidy modest robe in deep green, muted plum or brown, slightly nicer simple trim. modest waist pouches and a plain jade token.
+```
+
+</details>
+
+<details>
+<summary>P090</summary>
+
+```text
+Subject: An ordinary original Chinese woman, about 36 years old. soft rectangular face, long eyebrows, narrow nose, full lips; low compact bun; quietly curious; average build. Clearly mature ADULT, a few modest age lines and some grey at temples; composed lived-in face. No facial hair. No distinctive scars, eyepatch or decorative jewellery. ordinary market cultivator: tidy modest robe in deep green, muted plum or brown, slightly nicer simple trim. a simple wooden abacus held low.
+```
+
+</details>
+
+<details>
+<summary>P091</summary>
+
+```text
+Subject: An ordinary original Chinese woman, about 51 years old. long slender face, close-set almond eyes, straight fine brows, small straight nose; small high bun with a simple cloth cord; shy and cautious; average build. Clearly mature ADULT, a few modest age lines and some grey at temples; composed lived-in face. No facial hair. No distinctive scars, eyepatch or decorative jewellery. ordinary Chixiao travelling cultivator: matte muted crimson and charcoal robe, tiny abstract flame-shaped trim, plain red hair cord, confident practical bearing, no magic effects.
+```
+
+</details>
+
+<details>
+<summary>P092</summary>
+
+```text
+Subject: An ordinary original Chinese woman, about 38 years old. soft square face, wide-set calm eyes, thick flat brows, small round nose; wrapped hair under a plain travel cloth; stern but approachable; average build. Clearly mature ADULT, a few modest age lines and some grey at temples; composed lived-in face. No facial hair. No distinctive scars, eyepatch or decorative jewellery. ordinary Chixiao travelling cultivator: matte muted crimson and charcoal robe, tiny abstract flame-shaped trim, plain red hair cord, confident practical bearing, no magic effects.
+```
+
+</details>
+
+<details>
+<summary>P093</summary>
+
+```text
+Subject: An ordinary original Chinese woman, about 38 years old. soft square face, wide-set calm eyes, thick flat brows, small round nose; wrapped hair under a plain travel cloth; proud but ordinary; average build. Clearly mature ADULT, a few modest age lines and some grey at temples; composed lived-in face. No facial hair. No distinctive scars, eyepatch or decorative jewellery. ordinary unaligned wandering cultivator: worn patched travelling robe in grey, brown or ink green, straw-coloured sash. a small wrapped travel bundle.
+```
+
+</details>
+
+<details>
+<summary>P094</summary>
+
+```text
+Specific prop for this individual: one small plain gourd tied at waist. Follow this prop choice if the earlier role description mentions another. Keep it secondary to the face.
+```
+
+</details>
+
+<details>
+<summary>P095</summary>
+
+```text
+Subject: An ordinary original Chinese woman, about 45 years old. oval face with high forehead, slightly drooping eyelids, arched brows; single thick braid over one shoulder; tired and watchful; average build. Clearly mature ADULT, a few modest age lines and some grey at temples; composed lived-in face. No facial hair. No distinctive scars, eyepatch or decorative jewellery. ordinary unaligned wandering cultivator: worn patched travelling robe in grey, brown or ink green, straw-coloured sash. small plain gourd at the waist.
+```
+
+</details>
+
+<details>
+<summary>P096</summary>
+
+```text
+Specific prop for this individual: a plain wooden walking staff held low. Follow this prop choice if the earlier role description mentions another. Keep it secondary to the face.
+```
+
+</details>
+
+<details>
+<summary>P097</summary>
+
+```text
+Subject: An ordinary original Chinese woman, about 52 years old. short sturdy face, low brows, small hooded eyes, broad mouth; two modest braids tied behind; proud but ordinary; average build. Clearly mature ADULT, a few modest age lines and some grey at temples; composed lived-in face. No facial hair. No distinctive scars, eyepatch or decorative jewellery. ordinary unaligned wandering cultivator: worn patched travelling robe in grey, brown or ink green, straw-coloured sash. a small wrapped travel bundle.
+```
+
+</details>
+
+<details>
+<summary>P098</summary>
+
+```text
+Specific prop for this individual: one simple rope-tied travel bundle over shoulder. Follow this prop choice if the earlier role description mentions another. Keep it secondary to the face.
+```
+
+</details>
+
+<details>
+<summary>P099</summary>
+
+```text
+Subject: An ordinary original Chinese woman, about 39 years old. narrow triangular adult face, upturned eye corners, fine brows, thin lips; side-part hair in a low knot; tired and watchful; average build. Clearly mature ADULT, a few modest age lines and some grey at temples; composed lived-in face. No facial hair. No distinctive scars, eyepatch or decorative jewellery. ordinary unaligned wandering cultivator: worn patched travelling robe in grey, brown or ink green, straw-coloured sash. small plain gourd at the waist.
+```
+
+</details>
+
+<details>
+<summary>P100</summary>
+
+```text
+Specific prop for this individual: a plain sheathed sword at hip. Follow this prop choice if the earlier role description mentions another. Keep it secondary to the face.
+```
+
+</details>
+
+<details>
+<summary>P101</summary>
+
+```text
+Subject: An ordinary original Chinese woman, about 46 years old. soft rectangular face, long eyebrows, narrow nose, full lips; low compact bun; proud but ordinary; average build. Clearly mature ADULT, a few modest age lines and some grey at temples; composed lived-in face. No facial hair. A small subtle facial beauty mark. ordinary unaligned wandering cultivator: worn patched travelling robe in grey, brown or ink green, straw-coloured sash. a small wrapped travel bundle.
+```
+
+</details>
+
+<details>
+<summary>P102</summary>
+
+```text
+Subject: An ordinary original Chinese woman, about 53 years old. round full cheeks, relaxed narrow eyes, short uneven brows, small dimple; neatly rolled hair with a wooden pin; tired and watchful; average build. Clearly mature ADULT, a few modest age lines and some grey at temples; composed lived-in face. No facial hair. No distinctive scars, eyepatch or decorative jewellery. ordinary unaligned wandering cultivator: worn patched travelling robe in grey, brown or ink green, straw-coloured sash. small plain gourd at the waist.
+```
+
+</details>
+
+<details>
+<summary>P103</summary>
+
+```text
+Subject: An ordinary original Chinese woman, about 40 years old. long face with a firm chin, lowered eye corners, broad soft nose; short jaw-length hair tucked behind ears; proud but ordinary; average build. Clearly mature ADULT, a few modest age lines and some grey at temples; composed lived-in face. No facial hair. No distinctive scars, eyepatch or decorative jewellery. ordinary unaligned wandering cultivator: worn patched travelling robe in grey, brown or ink green, straw-coloured sash. a small wrapped travel bundle.
+```
+
+</details>
+
+<details>
+<summary>P104</summary>
+
+```text
+Subject: An ordinary original Chinese woman, about 47 years old. diamond face with softly defined cheekbones, shallow eyelids, thin mouth; long hair in a simple ponytail; tired and watchful; average build. Clearly mature ADULT, a few modest age lines and some grey at temples; composed lived-in face. No facial hair. No distinctive scars, eyepatch or decorative jewellery. ordinary unaligned wandering cultivator: worn patched travelling robe in grey, brown or ink green, straw-coloured sash. small plain gourd at the waist.
+```
+
+</details>
+
+<details>
+<summary>P105</summary>
+
+```text
+Subject: An ordinary original Chinese woman, about 54 years old. broad rounded face, small narrow eyes, gently curved brows, short broad nose; half-up shoulder-length hair; proud but ordinary; average build. Clearly mature ADULT, a few modest age lines and some grey at temples; composed lived-in face. No facial hair. A small healed eyebrow scar. ordinary unaligned wandering cultivator: worn patched travelling robe in grey, brown or ink green, straw-coloured sash. a small wrapped travel bundle.
+```
+
+</details>
+
+<details>
+<summary>P106</summary>
+
+```text
+Subject: An ordinary original Chinese woman, about 55 years old. narrow triangular adult face, upturned eye corners, fine brows, thin lips; neatly rolled hair with a wooden pin; quietly curious; average build. Clearly ELDERLY adult, grey or white matte hair, visibly aged brows and understated wrinkles at eyes and mouth; do NOT make this person look young. Avoid realistic skin texture. No facial hair. A small subtle facial beauty mark. Qingyun outer disciple: simple matching pale-ivory sect uniform, slate-blue collar and cuffs, blue sash, very faint abstract cloud hem, plain hair cord or wooden pin, simple straight sword hilt partly visible at the hip/back. No fancy embroidery.
+```
+
+</details>
+
+<details>
+<summary>P107</summary>
+
+```text
+Subject: An ordinary original Chinese woman, about 64 years old. soft rectangular face, long eyebrows, narrow nose, full lips; short jaw-length hair tucked behind ears; thoughtful and solemn; sturdy build. Clearly ELDERLY adult, grey or white matte hair, visibly aged brows and understated wrinkles at eyes and mouth; do NOT make this person look young. Avoid realistic skin texture. No facial hair. No distinctive scars, eyepatch or decorative jewellery. Qingyun outer disciple: simple matching pale-ivory sect uniform, slate-blue collar and cuffs, blue sash, very faint abstract cloud hem, plain hair cord or wooden pin, simple straight sword hilt partly visible at the hip/back. No fancy embroidery.
+```
+
+</details>
+
+<details>
+<summary>P108</summary>
+
+```text
+Subject: An ordinary original Chinese woman, about 73 years old. round full cheeks, relaxed narrow eyes, short uneven brows, small dimple; long hair in a simple ponytail; quietly curious; average build. Clearly ELDERLY adult, grey or white matte hair, visibly aged brows and understated wrinkles at eyes and mouth; do NOT make this person look young. Avoid realistic skin texture. No facial hair. No distinctive scars, eyepatch or decorative jewellery. Qingyun outer disciple: simple matching pale-ivory sect uniform, slate-blue collar and cuffs, blue sash, very faint abstract cloud hem, plain hair cord or wooden pin, simple straight sword hilt partly visible at the hip/back. No fancy embroidery.
+```
+
+</details>
+
+<details>
+<summary>P109</summary>
+
+```text
+Subject: An ordinary original Chinese woman, about 82 years old. long face with a firm chin, lowered eye corners, broad soft nose; half-up shoulder-length hair; thoughtful and solemn; sturdy build. Clearly ELDERLY adult, grey or white matte hair, visibly aged brows and understated wrinkles at eyes and mouth; do NOT make this person look young. Avoid realistic skin texture. No facial hair. No distinctive scars, eyepatch or decorative jewellery. Qingyun outer disciple: simple matching pale-ivory sect uniform, slate-blue collar and cuffs, blue sash, very faint abstract cloud hem, plain hair cord or wooden pin, simple straight sword hilt partly visible at the hip/back. No fancy embroidery.
+```
+
+</details>
+
+<details>
+<summary>P110</summary>
+
+```text
+Subject: An ordinary original Chinese woman, about 55 years old. diamond face with softly defined cheekbones, shallow eyelids, thin mouth; small high bun with a simple cloth cord; quietly curious; average build. Clearly ELDERLY adult, grey or white matte hair, visibly aged brows and understated wrinkles at eyes and mouth; do NOT make this person look young. Avoid realistic skin texture. No facial hair. No distinctive scars, eyepatch or decorative jewellery. Qingyun outer disciple: simple matching pale-ivory sect uniform, slate-blue collar and cuffs, blue sash, very faint abstract cloud hem, plain hair cord or wooden pin, simple straight sword hilt partly visible at the hip/back. No fancy embroidery.
+```
+
+</details>
+
+<details>
+<summary>P111</summary>
+
+```text
+Subject: An ordinary original Chinese woman, about 64 years old. broad rounded face, small narrow eyes, gently curved brows, short broad nose; wrapped hair under a plain travel cloth; thoughtful and solemn; sturdy build. Clearly ELDERLY adult, grey or white matte hair, visibly aged brows and understated wrinkles at eyes and mouth; do NOT make this person look young. Avoid realistic skin texture. No facial hair. No distinctive scars, eyepatch or decorative jewellery. Qingyun outer disciple: simple matching pale-ivory sect uniform, slate-blue collar and cuffs, blue sash, very faint abstract cloud hem, plain hair cord or wooden pin, simple straight sword hilt partly visible at the hip/back. No fancy embroidery.
+```
+
+</details>
+
+<details>
+<summary>P112</summary>
+
+```text
+Subject: An ordinary original Chinese woman, about 73 years old. long slender face, close-set almond eyes, straight fine brows, small straight nose; single thick braid over one shoulder; quietly curious; average build. Clearly ELDERLY adult, grey or white matte hair, visibly aged brows and understated wrinkles at eyes and mouth; do NOT make this person look young. Avoid realistic skin texture. No facial hair. No distinctive scars, eyepatch or decorative jewellery. Qingyun outer disciple: simple matching pale-ivory sect uniform, slate-blue collar and cuffs, blue sash, very faint abstract cloud hem, plain hair cord or wooden pin, simple straight sword hilt partly visible at the hip/back. No fancy embroidery.
+```
+
+</details>
+
+<details>
+<summary>P113</summary>
+
+```text
+Subject: An ordinary original Chinese woman, about 82 years old. long face with a firm chin, lowered eye corners, broad soft nose; half-up shoulder-length hair; friendly half-smile; sturdy build. Clearly ELDERLY adult, grey or white matte hair, visibly aged brows and understated wrinkles at eyes and mouth; do NOT make this person look young. Avoid realistic skin texture. No facial hair. No distinctive scars, eyepatch or decorative jewellery. ordinary herb gatherer: practical modest short robe over trousers, sleeves tied back, rope belt, weathered sun-touched skin. a modest herb basket with simple leaves.
+```
+
+</details>
+
+<details>
+<summary>P114</summary>
+
+```text
+Subject: An ordinary original Chinese woman, about 55 years old. diamond face with softly defined cheekbones, shallow eyelids, thin mouth; small high bun with a simple cloth cord; reserved faint smile; average build. Clearly ELDERLY adult, grey or white matte hair, visibly aged brows and understated wrinkles at eyes and mouth; do NOT make this person look young. Avoid realistic skin texture. No facial hair. No distinctive scars, eyepatch or decorative jewellery. ordinary herb gatherer: practical modest short robe over trousers, sleeves tied back, rope belt, weathered sun-touched skin. a small bundle of dried herbs.
+```
+
+</details>
+
+<details>
+<summary>P115</summary>
+
+```text
+Subject: An ordinary original Chinese woman, about 64 years old. broad rounded face, small narrow eyes, gently curved brows, short broad nose; wrapped hair under a plain travel cloth; friendly half-smile; sturdy build. Clearly ELDERLY adult, grey or white matte hair, visibly aged brows and understated wrinkles at eyes and mouth; do NOT make this person look young. Avoid realistic skin texture. No facial hair. No distinctive scars, eyepatch or decorative jewellery. ordinary herb gatherer: practical modest short robe over trousers, sleeves tied back, rope belt, weathered sun-touched skin. a modest herb basket with simple leaves.
+```
+
+</details>
+
+<details>
+<summary>P116</summary>
+
+```text
+Subject: An ordinary original Chinese woman, about 73 years old. long slender face, close-set almond eyes, straight fine brows, small straight nose; single thick braid over one shoulder; reserved faint smile; average build. Clearly ELDERLY adult, grey or white matte hair, visibly aged brows and understated wrinkles at eyes and mouth; do NOT make this person look young. Avoid realistic skin texture. No facial hair. A small subtle facial beauty mark. ordinary herb gatherer: practical modest short robe over trousers, sleeves tied back, rope belt, weathered sun-touched skin. a small bundle of dried herbs.
+```
+
+</details>
+
+<details>
+<summary>P117</summary>
+
+```text
+Subject: An ordinary original Chinese woman, about 82 years old. soft square face, wide-set calm eyes, thick flat brows, small round nose; two modest braids tied behind; friendly half-smile; sturdy build. Clearly ELDERLY adult, grey or white matte hair, visibly aged brows and understated wrinkles at eyes and mouth; do NOT make this person look young. Avoid realistic skin texture. No facial hair. No distinctive scars, eyepatch or decorative jewellery. ordinary herb gatherer: practical modest short robe over trousers, sleeves tied back, rope belt, weathered sun-touched skin. a modest herb basket with simple leaves.
+```
+
+</details>
+
+<details>
+<summary>P118</summary>
+
+```text
+Subject: An ordinary original Chinese woman, about 64 years old. soft square face, wide-set calm eyes, thick flat brows, small round nose; two modest braids tied behind; reserved faint smile; sturdy build. Clearly ELDERLY adult, grey or white matte hair, visibly aged brows and understated wrinkles at eyes and mouth; do NOT make this person look young. Avoid realistic skin texture. No facial hair. A small healed eyebrow scar. ordinary market cultivator: tidy modest robe in deep green, muted plum or brown, slightly nicer simple trim. a plain folded fan.
+```
+
+</details>
+
+<details>
+<summary>P119</summary>
+
+```text
+Subject: An ordinary original Chinese woman, about 73 years old. oval face with high forehead, slightly drooping eyelids, arched brows; side-part hair in a low knot; friendly half-smile; average build. Clearly ELDERLY adult, grey or white matte hair, visibly aged brows and understated wrinkles at eyes and mouth; do NOT make this person look young. Avoid realistic skin texture. No facial hair. No distinctive scars, eyepatch or decorative jewellery. ordinary market cultivator: tidy modest robe in deep green, muted plum or brown, slightly nicer simple trim. one small unlabelled ledger held low.
+```
+
+</details>
+
+<details>
+<summary>P120</summary>
+
+```text
+Subject: An ordinary original Chinese woman, about 82 years old. short sturdy face, low brows, small hooded eyes, broad mouth; low compact bun; reserved faint smile; sturdy build. Clearly ELDERLY adult, grey or white matte hair, visibly aged brows and understated wrinkles at eyes and mouth; do NOT make this person look young. Avoid realistic skin texture. No facial hair. No distinctive scars, eyepatch or decorative jewellery. ordinary market cultivator: tidy modest robe in deep green, muted plum or brown, slightly nicer simple trim. a plain folded fan.
+```
+
+</details>
+
+<details>
+<summary>P121</summary>
+
+```text
+Subject: An ordinary original Chinese woman, about 55 years old. narrow triangular adult face, upturned eye corners, fine brows, thin lips; neatly rolled hair with a wooden pin; friendly half-smile; average build. Clearly ELDERLY adult, grey or white matte hair, visibly aged brows and understated wrinkles at eyes and mouth; do NOT make this person look young. Avoid realistic skin texture. No facial hair. No distinctive scars, eyepatch or decorative jewellery. ordinary market cultivator: tidy modest robe in deep green, muted plum or brown, slightly nicer simple trim. one small unlabelled ledger held low.
+```
+
+</details>
+
+<details>
+<summary>P122</summary>
+
+```text
+Subject: An ordinary original Chinese woman, about 64 years old. soft rectangular face, long eyebrows, narrow nose, full lips; short jaw-length hair tucked behind ears; reserved faint smile; sturdy build. Clearly ELDERLY adult, grey or white matte hair, visibly aged brows and understated wrinkles at eyes and mouth; do NOT make this person look young. Avoid realistic skin texture. No facial hair. No distinctive scars, eyepatch or decorative jewellery. ordinary market cultivator: tidy modest robe in deep green, muted plum or brown, slightly nicer simple trim. a plain folded fan.
+```
+
+</details>
+
+<details>
+<summary>P123</summary>
+
+```text
+Subject: An ordinary original Chinese woman, about 73 years old. round full cheeks, relaxed narrow eyes, short uneven brows, small dimple; long hair in a simple ponytail; friendly half-smile; average build. Clearly ELDERLY adult, grey or white matte hair, visibly aged brows and understated wrinkles at eyes and mouth; do NOT make this person look young. Avoid realistic skin texture. No facial hair. No distinctive scars, eyepatch or decorative jewellery. ordinary market cultivator: tidy modest robe in deep green, muted plum or brown, slightly nicer simple trim. one small unlabelled ledger held low.
+```
+
+</details>
+
+<details>
+<summary>P124</summary>
+
+```text
+Subject: An ordinary original Chinese woman, about 55 years old. oval face with high forehead, slightly drooping eyelids, arched brows; side-part hair in a low knot; shy and cautious; average build. Clearly ELDERLY adult, grey or white matte hair, visibly aged brows and understated wrinkles at eyes and mouth; do NOT make this person look young. Avoid realistic skin texture. No facial hair. No distinctive scars, eyepatch or decorative jewellery. ordinary Chixiao travelling cultivator: matte muted crimson and charcoal robe, tiny abstract flame-shaped trim, plain red hair cord, confident practical bearing, no magic effects.
+```
+
+</details>
+
+<details>
+<summary>P125</summary>
+
+```text
+Subject: An ordinary original Chinese woman, about 64 years old. short sturdy face, low brows, small hooded eyes, broad mouth; low compact bun; stern but approachable; sturdy build. Clearly ELDERLY adult, grey or white matte hair, visibly aged brows and understated wrinkles at eyes and mouth; do NOT make this person look young. Avoid realistic skin texture. No facial hair. No distinctive scars, eyepatch or decorative jewellery. ordinary Chixiao travelling cultivator: matte muted crimson and charcoal robe, tiny abstract flame-shaped trim, plain red hair cord, confident practical bearing, no magic effects.
+```
+
+</details>
+
+<details>
+<summary>P126</summary>
+
+```text
+Subject: An ordinary original Chinese woman, about 82 years old. soft square face, wide-set calm eyes, thick flat brows, small round nose; two modest braids tied behind; earnest and attentive; sturdy build. Clearly ELDERLY adult, grey or white matte hair, visibly aged brows and understated wrinkles at eyes and mouth; do NOT make this person look young. Avoid realistic skin texture. No facial hair. No distinctive scars, eyepatch or decorative jewellery. ordinary unaligned wandering cultivator: worn patched travelling robe in grey, brown or ink green, straw-coloured sash. small plain gourd at the waist.
+```
+
+</details>
+
+<details>
+<summary>P127</summary>
+
+```text
+Subject: An ordinary original Chinese woman, about 55 years old. oval face with high forehead, slightly drooping eyelids, arched brows; side-part hair in a low knot; mildly suspicious; average build. Clearly ELDERLY adult, grey or white matte hair, visibly aged brows and understated wrinkles at eyes and mouth; do NOT make this person look young. Avoid realistic skin texture. No facial hair. No distinctive scars, eyepatch or decorative jewellery. ordinary unaligned wandering cultivator: worn patched travelling robe in grey, brown or ink green, straw-coloured sash. a small wrapped travel bundle.
+```
+
+</details>
+
+<details>
+<summary>P128</summary>
+
+```text
+Subject: An ordinary original Chinese woman, about 64 years old. short sturdy face, low brows, small hooded eyes, broad mouth; low compact bun; earnest and attentive; sturdy build. Clearly ELDERLY adult, grey or white matte hair, visibly aged brows and understated wrinkles at eyes and mouth; do NOT make this person look young. Avoid realistic skin texture. No facial hair. No distinctive scars, eyepatch or decorative jewellery. ordinary unaligned wandering cultivator: worn patched travelling robe in grey, brown or ink green, straw-coloured sash. small plain gourd at the waist.
+```
+
+</details>
+
+<details>
+<summary>P129</summary>
+
+```text
+Subject: An ordinary original Chinese woman, about 73 years old. narrow triangular adult face, upturned eye corners, fine brows, thin lips; neatly rolled hair with a wooden pin; mildly suspicious; average build. Clearly ELDERLY adult, grey or white matte hair, visibly aged brows and understated wrinkles at eyes and mouth; do NOT make this person look young. Avoid realistic skin texture. No facial hair. No distinctive scars, eyepatch or decorative jewellery. ordinary unaligned wandering cultivator: worn patched travelling robe in grey, brown or ink green, straw-coloured sash. a small wrapped travel bundle.
+```
+
+</details>
+
+<details>
+<summary>P130</summary>
+
+```text
+Subject: An ordinary original Chinese woman, about 82 years old. soft rectangular face, long eyebrows, narrow nose, full lips; short jaw-length hair tucked behind ears; earnest and attentive; sturdy build. Clearly ELDERLY adult, grey or white matte hair, visibly aged brows and understated wrinkles at eyes and mouth; do NOT make this person look young. Avoid realistic skin texture. No facial hair. No distinctive scars, eyepatch or decorative jewellery. ordinary unaligned wandering cultivator: worn patched travelling robe in grey, brown or ink green, straw-coloured sash. small plain gourd at the waist.
+```
+
+</details>
+
+<details>
+<summary>P131</summary>
+
+```text
+Subject: An ordinary original Chinese woman, about 55 years old. round full cheeks, relaxed narrow eyes, short uneven brows, small dimple; long hair in a simple ponytail; mildly suspicious; average build. Clearly ELDERLY adult, grey or white matte hair, visibly aged brows and understated wrinkles at eyes and mouth; do NOT make this person look young. Avoid realistic skin texture. No facial hair. No distinctive scars, eyepatch or decorative jewellery. ordinary unaligned wandering cultivator: worn patched travelling robe in grey, brown or ink green, straw-coloured sash. a small wrapped travel bundle.
+```
+
+</details>
+
+<details>
+<summary>P132</summary>
+
+```text
+Subject: An ordinary original Chinese woman, about 64 years old. long face with a firm chin, lowered eye corners, broad soft nose; half-up shoulder-length hair; earnest and attentive; sturdy build. Clearly ELDERLY adult, grey or white matte hair, visibly aged brows and understated wrinkles at eyes and mouth; do NOT make this person look young. Avoid realistic skin texture. No facial hair. A small subtle facial beauty mark. ordinary unaligned wandering cultivator: worn patched travelling robe in grey, brown or ink green, straw-coloured sash. small plain gourd at the waist.
+```
+
+</details>
+
+<details>
+<summary>P133</summary>
+
+```text
+Subject: An ordinary original Chinese woman, about 73 years old. diamond face with softly defined cheekbones, shallow eyelids, thin mouth; small high bun with a simple cloth cord; mildly suspicious; average build. Clearly ELDERLY adult, grey or white matte hair, visibly aged brows and understated wrinkles at eyes and mouth; do NOT make this person look young. Avoid realistic skin texture. No facial hair. No distinctive scars, eyepatch or decorative jewellery. ordinary unaligned wandering cultivator: worn patched travelling robe in grey, brown or ink green, straw-coloured sash. a small wrapped travel bundle.
+```
+
+</details>
+
+<details>
+<summary>P134</summary>
+
+```text
+Subject: An ordinary original Chinese woman, about 82 years old. broad rounded face, small narrow eyes, gently curved brows, short broad nose; wrapped hair under a plain travel cloth; earnest and attentive; sturdy build. Clearly ELDERLY adult, grey or white matte hair, visibly aged brows and understated wrinkles at eyes and mouth; do NOT make this person look young. Avoid realistic skin texture. No facial hair. No distinctive scars, eyepatch or decorative jewellery. ordinary unaligned wandering cultivator: worn patched travelling robe in grey, brown or ink green, straw-coloured sash. small plain gourd at the waist.
+```
+
+</details>
+
+<details>
+<summary>P135</summary>
+
+```text
+Subject: An ordinary original Chinese woman, about 55 years old. long slender face, close-set almond eyes, straight fine brows, small straight nose; single thick braid over one shoulder; mildly suspicious; average build. Clearly ELDERLY adult, grey or white matte hair, visibly aged brows and understated wrinkles at eyes and mouth; do NOT make this person look young. Avoid realistic skin texture. No facial hair. No distinctive scars, eyepatch or decorative jewellery. ordinary unaligned wandering cultivator: worn patched travelling robe in grey, brown or ink green, straw-coloured sash. a small wrapped travel bundle.
+```
+
+</details>
+
+<details>
+<summary>P136</summary>
+
+```text
+Subject: An ordinary original Chinese woman, about 18 years old. oval face with high forehead, slightly drooping eyelids, arched brows; low compact bun; quietly curious; modestly heavy build. Clearly young ADULT, smooth face, dark matte hair; not childlike or glamorous. No facial hair. A small subtle facial beauty mark. Qingyun outer disciple: simple matching pale-ivory sect uniform, slate-blue collar and cuffs, blue sash, very faint abstract cloud hem, plain hair cord or wooden pin, simple straight sword hilt partly visible at the hip/back. No fancy embroidery.
+```
+
+</details>
+
+<details>
+<summary>P137</summary>
+
+```text
+Subject: An ordinary original Chinese woman, about 23 years old. short sturdy face, low brows, small hooded eyes, broad mouth; neatly rolled hair with a wooden pin; thoughtful and solemn; slim build. Clearly young ADULT, smooth face, dark matte hair; not childlike or glamorous. No facial hair. No distinctive scars, eyepatch or decorative jewellery. Qingyun outer disciple: simple matching pale-ivory sect uniform, slate-blue collar and cuffs, blue sash, very faint abstract cloud hem, plain hair cord or wooden pin, simple straight sword hilt partly visible at the hip/back. No fancy embroidery.
+```
+
+</details>
+
+<details>
+<summary>P138</summary>
+
+```text
+Subject: An ordinary original Chinese woman, about 28 years old. narrow triangular adult face, upturned eye corners, fine brows, thin lips; short jaw-length hair tucked behind ears; quietly curious; modestly heavy build. Clearly young ADULT, smooth face, dark matte hair; not childlike or glamorous. No facial hair. No distinctive scars, eyepatch or decorative jewellery. Qingyun outer disciple: simple matching pale-ivory sect uniform, slate-blue collar and cuffs, blue sash, very faint abstract cloud hem, plain hair cord or wooden pin, simple straight sword hilt partly visible at the hip/back. No fancy embroidery.
+```
+
+</details>
+
+<details>
+<summary>P139</summary>
+
+```text
+Subject: An ordinary original Chinese woman, about 33 years old. soft rectangular face, long eyebrows, narrow nose, full lips; long hair in a simple ponytail; thoughtful and solemn; slim build. Clearly young ADULT, smooth face, dark matte hair; not childlike or glamorous. No facial hair. No distinctive scars, eyepatch or decorative jewellery. Qingyun outer disciple: simple matching pale-ivory sect uniform, slate-blue collar and cuffs, blue sash, very faint abstract cloud hem, plain hair cord or wooden pin, simple straight sword hilt partly visible at the hip/back. No fancy embroidery.
+```
+
+</details>
+
+<details>
+<summary>P140</summary>
+
+```text
+Subject: An ordinary original Chinese woman, about 21 years old. round full cheeks, relaxed narrow eyes, short uneven brows, small dimple; half-up shoulder-length hair; quietly curious; sturdy build. Clearly young ADULT, smooth face, dark matte hair; not childlike or glamorous. No facial hair. No distinctive scars, eyepatch or decorative jewellery. Qingyun outer disciple: simple matching pale-ivory sect uniform, slate-blue collar and cuffs, blue sash, very faint abstract cloud hem, plain hair cord or wooden pin, simple straight sword hilt partly visible at the hip/back. No fancy embroidery.
+```
+
+</details>
+
+<details>
+<summary>P141</summary>
+
+```text
+Subject: An ordinary original Chinese woman, about 26 years old. long face with a firm chin, lowered eye corners, broad soft nose; small high bun with a simple cloth cord; thoughtful and solemn; average build. Clearly young ADULT, smooth face, dark matte hair; not childlike or glamorous. No facial hair. No distinctive scars, eyepatch or decorative jewellery. Qingyun outer disciple: simple matching pale-ivory sect uniform, slate-blue collar and cuffs, blue sash, very faint abstract cloud hem, plain hair cord or wooden pin, simple straight sword hilt partly visible at the hip/back. No fancy embroidery.
+```
+
+</details>
+
+<details>
+<summary>P142</summary>
+
+```text
+Subject: An ordinary original Chinese woman, about 31 years old. diamond face with softly defined cheekbones, shallow eyelids, thin mouth; wrapped hair under a plain travel cloth; quietly curious; sturdy build. Clearly young ADULT, smooth face, dark matte hair; not childlike or glamorous. No facial hair. No distinctive scars, eyepatch or decorative jewellery. Qingyun outer disciple: simple matching pale-ivory sect uniform, slate-blue collar and cuffs, blue sash, very faint abstract cloud hem, plain hair cord or wooden pin, simple straight sword hilt partly visible at the hip/back. No fancy embroidery.
+```
+
+</details>
+
+<details>
+<summary>P143</summary>
+
+```text
+Subject: An ordinary original Chinese woman, about 19 years old. broad rounded face, small narrow eyes, gently curved brows, short broad nose; single thick braid over one shoulder; thoughtful and solemn; modestly heavy build. Clearly young ADULT, smooth face, dark matte hair; not childlike or glamorous. No facial hair. No distinctive scars, eyepatch or decorative jewellery. Qingyun outer disciple: simple matching pale-ivory sect uniform, slate-blue collar and cuffs, blue sash, very faint abstract cloud hem, plain hair cord or wooden pin, simple straight sword hilt partly visible at the hip/back. No fancy embroidery.
+```
+
+</details>
+
+<details>
+<summary>P144</summary>
+
+```text
+Subject: An ordinary original Chinese woman, about 24 years old. long slender face, close-set almond eyes, straight fine brows, small straight nose; two modest braids tied behind; quietly curious; slim build. Clearly young ADULT, smooth face, dark matte hair; not childlike or glamorous. No facial hair. No distinctive scars, eyepatch or decorative jewellery. Qingyun outer disciple: simple matching pale-ivory sect uniform, slate-blue collar and cuffs, blue sash, very faint abstract cloud hem, plain hair cord or wooden pin, simple straight sword hilt partly visible at the hip/back. No fancy embroidery.
+```
+
+</details>
+
+<details>
+<summary>P145</summary>
+
+```text
+Subject: An ordinary original Chinese woman, about 29 years old. soft square face, wide-set calm eyes, thick flat brows, small round nose; side-part hair in a low knot; thoughtful and solemn; modestly heavy build. Clearly young ADULT, smooth face, dark matte hair; not childlike or glamorous. No facial hair. No distinctive scars, eyepatch or decorative jewellery. Qingyun outer disciple: simple matching pale-ivory sect uniform, slate-blue collar and cuffs, blue sash, very faint abstract cloud hem, plain hair cord or wooden pin, simple straight sword hilt partly visible at the hip/back. No fancy embroidery.
+```
+
+</details>
+
+<details>
+<summary>P146</summary>
+
+```text
+Subject: An ordinary original Chinese woman, about 34 years old. oval face with high forehead, slightly drooping eyelids, arched brows; low compact bun; quietly curious; slim build. Clearly young ADULT, smooth face, dark matte hair; not childlike or glamorous. No facial hair. No distinctive scars, eyepatch or decorative jewellery. Qingyun outer disciple: simple matching pale-ivory sect uniform, slate-blue collar and cuffs, blue sash, very faint abstract cloud hem, plain hair cord or wooden pin, simple straight sword hilt partly visible at the hip/back. No fancy embroidery.
+```
+
+</details>
+
+<details>
+<summary>P147</summary>
+
+```text
+Subject: An ordinary original Chinese woman, about 22 years old. short sturdy face, low brows, small hooded eyes, broad mouth; neatly rolled hair with a wooden pin; thoughtful and solemn; sturdy build. Clearly young ADULT, smooth face, dark matte hair; not childlike or glamorous. No facial hair. No distinctive scars, eyepatch or decorative jewellery. Qingyun outer disciple: simple matching pale-ivory sect uniform, slate-blue collar and cuffs, blue sash, very faint abstract cloud hem, plain hair cord or wooden pin, simple straight sword hilt partly visible at the hip/back. No fancy embroidery.
+```
+
+</details>
+
+<details>
+<summary>P148</summary>
+
+```text
+Subject: An ordinary original Chinese woman, about 27 years old. narrow triangular adult face, upturned eye corners, fine brows, thin lips; short jaw-length hair tucked behind ears; quietly curious; average build. Clearly young ADULT, smooth face, dark matte hair; not childlike or glamorous. No facial hair. No distinctive scars, eyepatch or decorative jewellery. Qingyun outer disciple: simple matching pale-ivory sect uniform, slate-blue collar and cuffs, blue sash, very faint abstract cloud hem, plain hair cord or wooden pin, simple straight sword hilt partly visible at the hip/back. No fancy embroidery.
+```
+
+</details>
+
+<details>
+<summary>P149</summary>
+
+```text
+Subject: An ordinary original Chinese woman, about 32 years old. soft rectangular face, long eyebrows, narrow nose, full lips; long hair in a simple ponytail; thoughtful and solemn; sturdy build. Clearly young ADULT, smooth face, dark matte hair; not childlike or glamorous. No facial hair. A small subtle facial beauty mark. Qingyun outer disciple: simple matching pale-ivory sect uniform, slate-blue collar and cuffs, blue sash, very faint abstract cloud hem, plain hair cord or wooden pin, simple straight sword hilt partly visible at the hip/back. No fancy embroidery.
+```
+
+</details>
+
+<details>
+<summary>P150</summary>
+
+```text
+Subject: An ordinary original Chinese woman, about 19 years old. round full cheeks, relaxed narrow eyes, short uneven brows, small dimple; half-up shoulder-length hair; quietly curious; average build. Clearly young ADULT, smooth face, dark matte hair; not childlike or glamorous. No facial hair. No distinctive scars, eyepatch or decorative jewellery. ordinary herb gatherer: practical modest short robe over trousers, sleeves tied back, rope belt, weathered sun-touched skin. one small plain herb hoe held low.
+```
+
+</details>
+
+<details>
+<summary>P151</summary>
+
+```text
+Subject: An ordinary original Chinese woman, about 24 years old. long face with a firm chin, lowered eye corners, broad soft nose; small high bun with a simple cloth cord; thoughtful and solemn; sturdy build. Clearly young ADULT, smooth face, dark matte hair; not childlike or glamorous. No facial hair. No distinctive scars, eyepatch or decorative jewellery. ordinary herb gatherer: practical modest short robe over trousers, sleeves tied back, rope belt, weathered sun-touched skin. a rope-tied herb basket partly visible.
+```
+
+</details>
+
+<details>
+<summary>P152</summary>
+
+```text
+Subject: An ordinary original Chinese woman, about 29 years old. diamond face with softly defined cheekbones, shallow eyelids, thin mouth; wrapped hair under a plain travel cloth; quietly curious; average build. Clearly young ADULT, smooth face, dark matte hair; not childlike or glamorous. No facial hair. A small subtle facial beauty mark. ordinary herb gatherer: practical modest short robe over trousers, sleeves tied back, rope belt, weathered sun-touched skin. one small plain herb hoe held low.
+```
+
+</details>
+
+<details>
+<summary>P153</summary>
+
+```text
+Subject: An ordinary original Chinese woman, about 34 years old. broad rounded face, small narrow eyes, gently curved brows, short broad nose; single thick braid over one shoulder; thoughtful and solemn; sturdy build. Clearly young ADULT, smooth face, dark matte hair; not childlike or glamorous. No facial hair. No distinctive scars, eyepatch or decorative jewellery. ordinary herb gatherer: practical modest short robe over trousers, sleeves tied back, rope belt, weathered sun-touched skin. a rope-tied herb basket partly visible.
+```
+
+</details>
+
+<details>
+<summary>P154</summary>
+
+```text
+Subject: An ordinary original Chinese woman, about 21 years old. short sturdy face, low brows, small hooded eyes, broad mouth; neatly rolled hair with a wooden pin; proud but ordinary; modestly heavy build. Clearly young ADULT, smooth face, dark matte hair; not childlike or glamorous. No facial hair. No distinctive scars, eyepatch or decorative jewellery. ordinary market cultivator: tidy modest robe in deep green, muted plum or brown, slightly nicer simple trim. a plain folded fan.
+```
+
+</details>
+
+<details>
+<summary>P155</summary>
+
+```text
+Subject: An ordinary original Chinese woman, about 26 years old. narrow triangular adult face, upturned eye corners, fine brows, thin lips; short jaw-length hair tucked behind ears; tired and watchful; slim build. Clearly young ADULT, smooth face, dark matte hair; not childlike or glamorous. No facial hair. No distinctive scars, eyepatch or decorative jewellery. ordinary market cultivator: tidy modest robe in deep green, muted plum or brown, slightly nicer simple trim. one small unlabelled ledger held low.
+```
+
+</details>
+
+<details>
+<summary>P156</summary>
+
+```text
+Subject: An ordinary original Chinese woman, about 31 years old. soft rectangular face, long eyebrows, narrow nose, full lips; long hair in a simple ponytail; proud but ordinary; modestly heavy build. Clearly young ADULT, smooth face, dark matte hair; not childlike or glamorous. No facial hair. No distinctive scars, eyepatch or decorative jewellery. ordinary market cultivator: tidy modest robe in deep green, muted plum or brown, slightly nicer simple trim. a plain folded fan.
+```
+
+</details>
+
+<details>
+<summary>P157</summary>
+
+```text
+Subject: An ordinary original Chinese woman, about 22 years old. long slender face, close-set almond eyes, straight fine brows, small straight nose; two modest braids tied behind; shy and cautious; modestly heavy build. Clearly young ADULT, smooth face, dark matte hair; not childlike or glamorous. No facial hair. No distinctive scars, eyepatch or decorative jewellery. ordinary Chixiao travelling cultivator: matte muted crimson and charcoal robe, tiny abstract flame-shaped trim, plain red hair cord, confident practical bearing, no magic effects.
+```
+
+</details>
+
+<details>
+<summary>P158</summary>
+
+```text
+Subject: An ordinary original Chinese woman, about 27 years old. soft square face, wide-set calm eyes, thick flat brows, small round nose; side-part hair in a low knot; stern but approachable; slim build. Clearly young ADULT, smooth face, dark matte hair; not childlike or glamorous. No facial hair. No distinctive scars, eyepatch or decorative jewellery. ordinary Chixiao travelling cultivator: matte muted crimson and charcoal robe, tiny abstract flame-shaped trim, plain red hair cord, confident practical bearing, no magic effects.
+```
+
+</details>
+
+<details>
+<summary>P159</summary>
+
+```text
+Subject: An ordinary original Chinese woman, about 20 years old. round full cheeks, relaxed narrow eyes, short uneven brows, small dimple; half-up shoulder-length hair; amused knowing expression; modestly heavy build. Clearly young ADULT, smooth face, dark matte hair; not childlike or glamorous. No facial hair. No distinctive scars, eyepatch or decorative jewellery. ordinary unaligned wandering cultivator: worn patched travelling robe in grey, brown or ink green, straw-coloured sash. plain sheathed sword.
+```
+
+</details>
+
+<details>
+<summary>P160</summary>
+
+```text
+Subject: An ordinary original Chinese woman, about 25 years old. long face with a firm chin, lowered eye corners, broad soft nose; small high bun with a simple cloth cord; calm and composed; slim build. Clearly young ADULT, smooth face, dark matte hair; not childlike or glamorous. No facial hair. No distinctive scars, eyepatch or decorative jewellery. ordinary unaligned wandering cultivator: worn patched travelling robe in grey, brown or ink green, straw-coloured sash. plain walking staff held low.
+```
+
+</details>
+
+<details>
+<summary>P161</summary>
+
+```text
+Subject: An ordinary original Chinese woman, about 30 years old. diamond face with softly defined cheekbones, shallow eyelids, thin mouth; wrapped hair under a plain travel cloth; amused knowing expression; modestly heavy build. Clearly young ADULT, smooth face, dark matte hair; not childlike or glamorous. No facial hair. No distinctive scars, eyepatch or decorative jewellery. ordinary unaligned wandering cultivator: worn patched travelling robe in grey, brown or ink green, straw-coloured sash. plain sheathed sword.
+```
+
+</details>
+
+<details>
+<summary>P162</summary>
+
+```text
+Subject: An ordinary original Chinese woman, about 18 years old. broad rounded face, small narrow eyes, gently curved brows, short broad nose; single thick braid over one shoulder; calm and composed; average build. Clearly young ADULT, smooth face, dark matte hair; not childlike or glamorous. No facial hair. A small healed eyebrow scar. ordinary unaligned wandering cultivator: worn patched travelling robe in grey, brown or ink green, straw-coloured sash. plain walking staff held low.
+```
+
+</details>
+
+<details>
+<summary>P163</summary>
+
+```text
+Subject: An ordinary original Chinese woman, about 23 years old. long slender face, close-set almond eyes, straight fine brows, small straight nose; two modest braids tied behind; amused knowing expression; sturdy build. Clearly young ADULT, smooth face, dark matte hair; not childlike or glamorous. No facial hair. No distinctive scars, eyepatch or decorative jewellery. ordinary unaligned wandering cultivator: worn patched travelling robe in grey, brown or ink green, straw-coloured sash. plain sheathed sword.
+```
+
+</details>
+
+<details>
+<summary>P164</summary>
+
+```text
+Subject: An ordinary original Chinese woman, about 28 years old. soft square face, wide-set calm eyes, thick flat brows, small round nose; side-part hair in a low knot; calm and composed; average build. Clearly young ADULT, smooth face, dark matte hair; not childlike or glamorous. No facial hair. No distinctive scars, eyepatch or decorative jewellery. ordinary unaligned wandering cultivator: worn patched travelling robe in grey, brown or ink green, straw-coloured sash. plain walking staff held low.
+```
+
+</details>
+
+<details>
+<summary>P165</summary>
+
+```text
+Subject: An ordinary original Chinese woman, about 33 years old. oval face with high forehead, slightly drooping eyelids, arched brows; low compact bun; amused knowing expression; sturdy build. Clearly young ADULT, smooth face, dark matte hair; not childlike or glamorous. No facial hair. No distinctive scars, eyepatch or decorative jewellery. ordinary unaligned wandering cultivator: worn patched travelling robe in grey, brown or ink green, straw-coloured sash. plain sheathed sword.
+```
+
+</details>
+
+<details>
+<summary>P166</summary>
+
+```text
+Subject: An ordinary original Chinese man, about 35 years old. broad rounded face, small narrow eyes, gently curved brows, short broad nose; low tied bun with side part; quietly curious; average build. Clearly mature ADULT, a few modest age lines and some grey at temples; composed lived-in face. small neat moustache A small subtle facial beauty mark. Qingyun outer disciple: simple matching pale-ivory sect uniform, slate-blue collar and cuffs, blue sash, very faint abstract cloud hem, plain hair cord or wooden pin, simple straight sword hilt partly visible at the hip/back. No fancy embroidery.
+```
+
+</details>
+
+<details>
+<summary>P167</summary>
+
+```text
+Subject: An ordinary original Chinese man, about 42 years old. long slender face, close-set almond eyes, straight fine brows, small straight nose; simple single braid; thoughtful and solemn; average build. Clearly mature ADULT, a few modest age lines and some grey at temples; composed lived-in face. short squared beard No distinctive scars, eyepatch or decorative jewellery. Qingyun outer disciple: simple matching pale-ivory sect uniform, slate-blue collar and cuffs, blue sash, very faint abstract cloud hem, plain hair cord or wooden pin, simple straight sword hilt partly visible at the hip/back. No fancy embroidery.
+```
+
+</details>
+
+<details>
+<summary>P168</summary>
+
+```text
+Subject: An ordinary original Chinese man, about 49 years old. soft square face, wide-set calm eyes, thick flat brows, small round nose; pulled-back hair with high forehead; quietly curious; average build. Clearly mature ADULT, a few modest age lines and some grey at temples; composed lived-in face. clean shaven No distinctive scars, eyepatch or decorative jewellery. Qingyun outer disciple: simple matching pale-ivory sect uniform, slate-blue collar and cuffs, blue sash, very faint abstract cloud hem, plain hair cord or wooden pin, simple straight sword hilt partly visible at the hip/back. No fancy embroidery.
+```
+
+</details>
+
+<details>
+<summary>P169</summary>
+
+```text
+Subject: An ordinary original Chinese man, about 36 years old. oval face with high forehead, slightly drooping eyelids, arched brows; compact high topknot; thoughtful and solemn; average build. Clearly mature ADULT, a few modest age lines and some grey at temples; composed lived-in face. short sparse goatee No distinctive scars, eyepatch or decorative jewellery. Qingyun outer disciple: simple matching pale-ivory sect uniform, slate-blue collar and cuffs, blue sash, very faint abstract cloud hem, plain hair cord or wooden pin, simple straight sword hilt partly visible at the hip/back. No fancy embroidery.
+```
+
+</details>
+
+<details>
+<summary>P170</summary>
+
+```text
+Subject: An ordinary original Chinese man, about 43 years old. short sturdy face, low brows, small hooded eyes, broad mouth; shoulder-length half-up hair; quietly curious; average build. Clearly mature ADULT, a few modest age lines and some grey at temples; composed lived-in face. wispy moustache and thin goatee No distinctive scars, eyepatch or decorative jewellery. Qingyun outer disciple: simple matching pale-ivory sect uniform, slate-blue collar and cuffs, blue sash, very faint abstract cloud hem, plain hair cord or wooden pin, simple straight sword hilt partly visible at the hip/back. No fancy embroidery.
+```
+
+</details>
+
+<details>
+<summary>P171</summary>
+
+```text
+Subject: An ordinary original Chinese man, about 50 years old. narrow triangular adult face, upturned eye corners, fine brows, thin lips; small bun and clean side locks; thoughtful and solemn; average build. Clearly mature ADULT, a few modest age lines and some grey at temples; composed lived-in face. small neat moustache No distinctive scars, eyepatch or decorative jewellery. Qingyun outer disciple: simple matching pale-ivory sect uniform, slate-blue collar and cuffs, blue sash, very faint abstract cloud hem, plain hair cord or wooden pin, simple straight sword hilt partly visible at the hip/back. No fancy embroidery.
+```
+
+</details>
+
+<details>
+<summary>P172</summary>
+
+```text
+Subject: An ordinary original Chinese man, about 37 years old. soft rectangular face, long eyebrows, narrow nose, full lips; loose neck-length hair tied with a cord; quietly curious; average build. Clearly mature ADULT, a few modest age lines and some grey at temples; composed lived-in face. short squared beard No distinctive scars, eyepatch or decorative jewellery. Qingyun outer disciple: simple matching pale-ivory sect uniform, slate-blue collar and cuffs, blue sash, very faint abstract cloud hem, plain hair cord or wooden pin, simple straight sword hilt partly visible at the hip/back. No fancy embroidery.
+```
+
+</details>
+
+<details>
+<summary>P173</summary>
+
+```text
+Subject: An ordinary original Chinese man, about 44 years old. round full cheeks, relaxed narrow eyes, short uneven brows, small dimple; short cropped hair under a plain cloth band; thoughtful and solemn; average build. Clearly mature ADULT, a few modest age lines and some grey at temples; composed lived-in face. clean shaven No distinctive scars, eyepatch or decorative jewellery. Qingyun outer disciple: simple matching pale-ivory sect uniform, slate-blue collar and cuffs, blue sash, very faint abstract cloud hem, plain hair cord or wooden pin, simple straight sword hilt partly visible at the hip/back. No fancy embroidery.
+```
+
+</details>
+
+<details>
+<summary>P174</summary>
+
+```text
+Subject: An ordinary original Chinese man, about 51 years old. long face with a firm chin, lowered eye corners, broad soft nose; wrapped hair under a plain travel cloth; quietly curious; average build. Clearly mature ADULT, a few modest age lines and some grey at temples; composed lived-in face. short sparse goatee No distinctive scars, eyepatch or decorative jewellery. Qingyun outer disciple: simple matching pale-ivory sect uniform, slate-blue collar and cuffs, blue sash, very faint abstract cloud hem, plain hair cord or wooden pin, simple straight sword hilt partly visible at the hip/back. No fancy embroidery.
+```
+
+</details>
+
+<details>
+<summary>P175</summary>
+
+```text
+Subject: An ordinary original Chinese man, about 43 years old. short sturdy face, low brows, small hooded eyes, broad mouth; shoulder-length half-up hair; quietly curious; average build. Clearly mature ADULT, a few modest age lines and some grey at temples; composed lived-in face. clean shaven No distinctive scars, eyepatch or decorative jewellery. ordinary herb gatherer: practical modest short robe over trousers, sleeves tied back, rope belt, weathered sun-touched skin. one small plain herb hoe held low.
+```
+
+</details>
+
+<details>
+<summary>P176</summary>
+
+```text
+Subject: An ordinary original Chinese man, about 50 years old. narrow triangular adult face, upturned eye corners, fine brows, thin lips; small bun and clean side locks; thoughtful and solemn; average build. Clearly mature ADULT, a few modest age lines and some grey at temples; composed lived-in face. short sparse goatee No distinctive scars, eyepatch or decorative jewellery. ordinary herb gatherer: practical modest short robe over trousers, sleeves tied back, rope belt, weathered sun-touched skin. a rope-tied herb basket partly visible.
+```
+
+</details>
+
+<details>
+<summary>P177</summary>
+
+```text
+Subject: An ordinary original Chinese man, about 37 years old. soft rectangular face, long eyebrows, narrow nose, full lips; loose neck-length hair tied with a cord; quietly curious; average build. Clearly mature ADULT, a few modest age lines and some grey at temples; composed lived-in face. wispy moustache and thin goatee A small subtle facial beauty mark. ordinary herb gatherer: practical modest short robe over trousers, sleeves tied back, rope belt, weathered sun-touched skin. one small plain herb hoe held low.
+```
+
+</details>
+
+<details>
+<summary>P178</summary>
+
+```text
+Subject: An ordinary original Chinese man, about 44 years old. round full cheeks, relaxed narrow eyes, short uneven brows, small dimple; short cropped hair under a plain cloth band; thoughtful and solemn; average build. Clearly mature ADULT, a few modest age lines and some grey at temples; composed lived-in face. small neat moustache No distinctive scars, eyepatch or decorative jewellery. ordinary herb gatherer: practical modest short robe over trousers, sleeves tied back, rope belt, weathered sun-touched skin. a rope-tied herb basket partly visible.
+```
+
+</details>
+
+<details>
+<summary>P179</summary>
+
+```text
+Subject: An ordinary original Chinese man, about 41 years old. long face with a firm chin, lowered eye corners, broad soft nose; wrapped hair under a plain travel cloth; thoughtful and solemn; average build. Clearly mature ADULT, a few modest age lines and some grey at temples; composed lived-in face. wispy moustache and thin goatee No distinctive scars, eyepatch or decorative jewellery. ordinary market cultivator: tidy modest robe in deep green, muted plum or brown, slightly nicer simple trim. modest waist pouches and a plain jade token.
+```
+
+</details>
+
+<details>
+<summary>P180</summary>
+
+```text
+Subject: An ordinary original Chinese man, about 48 years old. diamond face with softly defined cheekbones, shallow eyelids, thin mouth; short hair under a soft cloth cap; quietly curious; average build. Clearly mature ADULT, a few modest age lines and some grey at temples; composed lived-in face. small neat moustache No distinctive scars, eyepatch or decorative jewellery. ordinary market cultivator: tidy modest robe in deep green, muted plum or brown, slightly nicer simple trim. a simple wooden abacus held low.
+```
+
+</details>
+
+<details>
+<summary>P181</summary>
+
+```text
+Subject: An ordinary original Chinese man, about 35 years old. broad rounded face, small narrow eyes, gently curved brows, short broad nose; low tied bun with side part; thoughtful and solemn; average build. Clearly mature ADULT, a few modest age lines and some grey at temples; composed lived-in face. short squared beard No distinctive scars, eyepatch or decorative jewellery. ordinary market cultivator: tidy modest robe in deep green, muted plum or brown, slightly nicer simple trim. modest waist pouches and a plain jade token.
+```
+
+</details>
+
+<details>
+<summary>P182</summary>
+
+```text
+Subject: An ordinary original Chinese man, about 42 years old. long slender face, close-set almond eyes, straight fine brows, small straight nose; simple single braid; quietly curious; average build. Clearly mature ADULT, a few modest age lines and some grey at temples; composed lived-in face. clean shaven No distinctive scars, eyepatch or decorative jewellery. ordinary market cultivator: tidy modest robe in deep green, muted plum or brown, slightly nicer simple trim. a simple wooden abacus held low.
+```
+
+</details>
+
+<details>
+<summary>P183</summary>
+
+```text
+Subject: An ordinary original Chinese man, about 49 years old. soft square face, wide-set calm eyes, thick flat brows, small round nose; pulled-back hair with high forehead; thoughtful and solemn; average build. Clearly mature ADULT, a few modest age lines and some grey at temples; composed lived-in face. short sparse goatee No distinctive scars, eyepatch or decorative jewellery. ordinary market cultivator: tidy modest robe in deep green, muted plum or brown, slightly nicer simple trim. modest waist pouches and a plain jade token.
+```
+
+</details>
+
+<details>
+<summary>P184</summary>
+
+```text
+Subject: An ordinary original Chinese man, about 36 years old. oval face with high forehead, slightly drooping eyelids, arched brows; compact high topknot; quietly curious; average build. Clearly mature ADULT, a few modest age lines and some grey at temples; composed lived-in face. wispy moustache and thin goatee No distinctive scars, eyepatch or decorative jewellery. ordinary market cultivator: tidy modest robe in deep green, muted plum or brown, slightly nicer simple trim. a simple wooden abacus held low.
+```
+
+</details>
+
+<details>
+<summary>P185</summary>
+
+```text
+Subject: An ordinary original Chinese man, about 51 years old. long face with a firm chin, lowered eye corners, broad soft nose; wrapped hair under a plain travel cloth; shy and cautious; average build. Clearly mature ADULT, a few modest age lines and some grey at temples; composed lived-in face. wispy moustache and thin goatee No distinctive scars, eyepatch or decorative jewellery. ordinary Chixiao travelling cultivator: matte muted crimson and charcoal robe, tiny abstract flame-shaped trim, plain red hair cord, confident practical bearing, no magic effects.
+```
+
+</details>
+
+<details>
+<summary>P186</summary>
+
+```text
+Subject: An ordinary original Chinese man, about 38 years old. diamond face with softly defined cheekbones, shallow eyelids, thin mouth; short hair under a soft cloth cap; stern but approachable; average build. Clearly mature ADULT, a few modest age lines and some grey at temples; composed lived-in face. small neat moustache No distinctive scars, eyepatch or decorative jewellery. ordinary Chixiao travelling cultivator: matte muted crimson and charcoal robe, tiny abstract flame-shaped trim, plain red hair cord, confident practical bearing, no magic effects.
+```
+
+</details>
+
+<details>
+<summary>P187</summary>
+
+```text
+Subject: An ordinary original Chinese man, about 38 years old. diamond face with softly defined cheekbones, shallow eyelids, thin mouth; short hair under a soft cloth cap; proud but ordinary; average build. Clearly mature ADULT, a few modest age lines and some grey at temples; composed lived-in face. clean shaven No distinctive scars, eyepatch or decorative jewellery. ordinary unaligned wandering cultivator: worn patched travelling robe in grey, brown or ink green, straw-coloured sash. a small wrapped travel bundle.
+```
+
+</details>
+
+<details>
+<summary>P188</summary>
+
+```text
+Subject: An ordinary original Chinese man, about 45 years old. broad rounded face, small narrow eyes, gently curved brows, short broad nose; low tied bun with side part; tired and watchful; average build. Clearly mature ADULT, a few modest age lines and some grey at temples; composed lived-in face. short sparse goatee No distinctive scars, eyepatch or decorative jewellery. ordinary unaligned wandering cultivator: worn patched travelling robe in grey, brown or ink green, straw-coloured sash. small plain gourd at the waist.
+```
+
+</details>
+
+<details>
+<summary>P189</summary>
+
+```text
+Subject: An ordinary original Chinese man, about 52 years old. long slender face, close-set almond eyes, straight fine brows, small straight nose; simple single braid; proud but ordinary; average build. Clearly mature ADULT, a few modest age lines and some grey at temples; composed lived-in face. wispy moustache and thin goatee No distinctive scars, eyepatch or decorative jewellery. ordinary unaligned wandering cultivator: worn patched travelling robe in grey, brown or ink green, straw-coloured sash. a small wrapped travel bundle.
+```
+
+</details>
+
+<details>
+<summary>P190</summary>
+
+```text
+Subject: An ordinary original Chinese man, about 39 years old. soft square face, wide-set calm eyes, thick flat brows, small round nose; pulled-back hair with high forehead; tired and watchful; average build. Clearly mature ADULT, a few modest age lines and some grey at temples; composed lived-in face. small neat moustache No distinctive scars, eyepatch or decorative jewellery. ordinary unaligned wandering cultivator: worn patched travelling robe in grey, brown or ink green, straw-coloured sash. small plain gourd at the waist.
+```
+
+</details>
+
+<details>
+<summary>P191</summary>
+
+```text
+Subject: An ordinary original Chinese man, about 46 years old. oval face with high forehead, slightly drooping eyelids, arched brows; compact high topknot; proud but ordinary; average build. Clearly mature ADULT, a few modest age lines and some grey at temples; composed lived-in face. short squared beard A small subtle facial beauty mark. ordinary unaligned wandering cultivator: worn patched travelling robe in grey, brown or ink green, straw-coloured sash. a small wrapped travel bundle.
+```
+
+</details>
+
+<details>
+<summary>P192</summary>
+
+```text
+Subject: An ordinary original Chinese man, about 53 years old. short sturdy face, low brows, small hooded eyes, broad mouth; shoulder-length half-up hair; tired and watchful; average build. Clearly mature ADULT, a few modest age lines and some grey at temples; composed lived-in face. clean shaven No distinctive scars, eyepatch or decorative jewellery. ordinary unaligned wandering cultivator: worn patched travelling robe in grey, brown or ink green, straw-coloured sash. small plain gourd at the waist.
+```
+
+</details>
+
+<details>
+<summary>P193</summary>
+
+```text
+Subject: An ordinary original Chinese man, about 40 years old. narrow triangular adult face, upturned eye corners, fine brows, thin lips; small bun and clean side locks; proud but ordinary; average build. Clearly mature ADULT, a few modest age lines and some grey at temples; composed lived-in face. short sparse goatee No distinctive scars, eyepatch or decorative jewellery. ordinary unaligned wandering cultivator: worn patched travelling robe in grey, brown or ink green, straw-coloured sash. a small wrapped travel bundle.
+```
+
+</details>
+
+<details>
+<summary>P194</summary>
+
+```text
+Subject: An ordinary original Chinese man, about 47 years old. soft rectangular face, long eyebrows, narrow nose, full lips; loose neck-length hair tied with a cord; tired and watchful; average build. Clearly mature ADULT, a few modest age lines and some grey at temples; composed lived-in face. wispy moustache and thin goatee No distinctive scars, eyepatch or decorative jewellery. ordinary unaligned wandering cultivator: worn patched travelling robe in grey, brown or ink green, straw-coloured sash. small plain gourd at the waist.
+```
+
+</details>
+
+<details>
+<summary>P195</summary>
+
+```text
+Subject: An ordinary original Chinese man, about 54 years old. round full cheeks, relaxed narrow eyes, short uneven brows, small dimple; short cropped hair under a plain cloth band; proud but ordinary; average build. Clearly mature ADULT, a few modest age lines and some grey at temples; composed lived-in face. small neat moustache A small healed eyebrow scar. ordinary unaligned wandering cultivator: worn patched travelling robe in grey, brown or ink green, straw-coloured sash. a small wrapped travel bundle.
+```
+
+</details>
+
+<details>
+<summary>P196</summary>
+
+```text
+Subject: An ordinary original Chinese man, about 55 years old. soft square face, wide-set calm eyes, thick flat brows, small round nose; shoulder-length half-up hair; quietly curious; average build. Clearly ELDERLY adult, grey or white matte hair, visibly aged brows and understated wrinkles at eyes and mouth; do NOT make this person look young. Avoid realistic skin texture. small neat moustache A small subtle facial beauty mark. Qingyun outer disciple: simple matching pale-ivory sect uniform, slate-blue collar and cuffs, blue sash, very faint abstract cloud hem, plain hair cord or wooden pin, simple straight sword hilt partly visible at the hip/back. No fancy embroidery.
+```
+
+</details>
+
+<details>
+<summary>P197</summary>
+
+```text
+Subject: An ordinary original Chinese man, about 64 years old. oval face with high forehead, slightly drooping eyelids, arched brows; small bun and clean side locks; thoughtful and solemn; sturdy build. Clearly ELDERLY adult, grey or white matte hair, visibly aged brows and understated wrinkles at eyes and mouth; do NOT make this person look young. Avoid realistic skin texture. short squared beard No distinctive scars, eyepatch or decorative jewellery. Qingyun outer disciple: simple matching pale-ivory sect uniform, slate-blue collar and cuffs, blue sash, very faint abstract cloud hem, plain hair cord or wooden pin, simple straight sword hilt partly visible at the hip/back. No fancy embroidery.
+```
+
+</details>
+
+<details>
+<summary>P198</summary>
+
+```text
+Subject: An ordinary original Chinese man, about 73 years old. short sturdy face, low brows, small hooded eyes, broad mouth; loose neck-length hair tied with a cord; quietly curious; average build. Clearly ELDERLY adult, grey or white matte hair, visibly aged brows and understated wrinkles at eyes and mouth; do NOT make this person look young. Avoid realistic skin texture. clean shaven No distinctive scars, eyepatch or decorative jewellery. Qingyun outer disciple: simple matching pale-ivory sect uniform, slate-blue collar and cuffs, blue sash, very faint abstract cloud hem, plain hair cord or wooden pin, simple straight sword hilt partly visible at the hip/back. No fancy embroidery.
+```
+
+</details>
+
+<details>
+<summary>P199</summary>
+
+```text
+Subject: An ordinary original Chinese man, about 82 years old. narrow triangular adult face, upturned eye corners, fine brows, thin lips; short cropped hair under a plain cloth band; thoughtful and solemn; sturdy build. Clearly ELDERLY adult, grey or white matte hair, visibly aged brows and understated wrinkles at eyes and mouth; do NOT make this person look young. Avoid realistic skin texture. short sparse goatee No distinctive scars, eyepatch or decorative jewellery. Qingyun outer disciple: simple matching pale-ivory sect uniform, slate-blue collar and cuffs, blue sash, very faint abstract cloud hem, plain hair cord or wooden pin, simple straight sword hilt partly visible at the hip/back. No fancy embroidery.
+```
+
+</details>
+
+<details>
+<summary>P200</summary>
+
+```text
+Subject: An ordinary original Chinese man, about 55 years old. soft rectangular face, long eyebrows, narrow nose, full lips; wrapped hair under a plain travel cloth; quietly curious; average build. Clearly ELDERLY adult, grey or white matte hair, visibly aged brows and understated wrinkles at eyes and mouth; do NOT make this person look young. Avoid realistic skin texture. wispy moustache and thin goatee No distinctive scars, eyepatch or decorative jewellery. Qingyun outer disciple: simple matching pale-ivory sect uniform, slate-blue collar and cuffs, blue sash, very faint abstract cloud hem, plain hair cord or wooden pin, simple straight sword hilt partly visible at the hip/back. No fancy embroidery.
+```
+
+</details>
+
+<details>
+<summary>P201</summary>
+
+```text
+Subject: An ordinary original Chinese man, about 64 years old. round full cheeks, relaxed narrow eyes, short uneven brows, small dimple; short hair under a soft cloth cap; thoughtful and solemn; sturdy build. Clearly ELDERLY adult, grey or white matte hair, visibly aged brows and understated wrinkles at eyes and mouth; do NOT make this person look young. Avoid realistic skin texture. small neat moustache No distinctive scars, eyepatch or decorative jewellery. Qingyun outer disciple: simple matching pale-ivory sect uniform, slate-blue collar and cuffs, blue sash, very faint abstract cloud hem, plain hair cord or wooden pin, simple straight sword hilt partly visible at the hip/back. No fancy embroidery.
+```
+
+</details>
+
+<details>
+<summary>P202</summary>
+
+```text
+Subject: An ordinary original Chinese man, about 73 years old. long face with a firm chin, lowered eye corners, broad soft nose; low tied bun with side part; quietly curious; average build. Clearly ELDERLY adult, grey or white matte hair, visibly aged brows and understated wrinkles at eyes and mouth; do NOT make this person look young. Avoid realistic skin texture. short squared beard No distinctive scars, eyepatch or decorative jewellery. Qingyun outer disciple: simple matching pale-ivory sect uniform, slate-blue collar and cuffs, blue sash, very faint abstract cloud hem, plain hair cord or wooden pin, simple straight sword hilt partly visible at the hip/back. No fancy embroidery.
+```
+
+</details>
+
+<details>
+<summary>P203</summary>
+
+```text
+Subject: An ordinary original Chinese man, about 82 years old. narrow triangular adult face, upturned eye corners, fine brows, thin lips; short cropped hair under a plain cloth band; friendly half-smile; sturdy build. Clearly ELDERLY adult, grey or white matte hair, visibly aged brows and understated wrinkles at eyes and mouth; do NOT make this person look young. Avoid realistic skin texture. wispy moustache and thin goatee No distinctive scars, eyepatch or decorative jewellery. ordinary herb gatherer: practical modest short robe over trousers, sleeves tied back, rope belt, weathered sun-touched skin. a modest herb basket with simple leaves.
+```
+
+</details>
+
+<details>
+<summary>P204</summary>
+
+```text
+Subject: An ordinary original Chinese man, about 55 years old. soft rectangular face, long eyebrows, narrow nose, full lips; wrapped hair under a plain travel cloth; reserved faint smile; average build. Clearly ELDERLY adult, grey or white matte hair, visibly aged brows and understated wrinkles at eyes and mouth; do NOT make this person look young. Avoid realistic skin texture. small neat moustache No distinctive scars, eyepatch or decorative jewellery. ordinary herb gatherer: practical modest short robe over trousers, sleeves tied back, rope belt, weathered sun-touched skin. a small bundle of dried herbs.
+```
+
+</details>
+
+<details>
+<summary>P205</summary>
+
+```text
+Subject: An ordinary original Chinese man, about 64 years old. round full cheeks, relaxed narrow eyes, short uneven brows, small dimple; short hair under a soft cloth cap; friendly half-smile; sturdy build. Clearly ELDERLY adult, grey or white matte hair, visibly aged brows and understated wrinkles at eyes and mouth; do NOT make this person look young. Avoid realistic skin texture. short squared beard No distinctive scars, eyepatch or decorative jewellery. ordinary herb gatherer: practical modest short robe over trousers, sleeves tied back, rope belt, weathered sun-touched skin. a modest herb basket with simple leaves.
+```
+
+</details>
+
+<details>
+<summary>P206</summary>
+
+```text
+Subject: An ordinary original Chinese man, about 73 years old. long face with a firm chin, lowered eye corners, broad soft nose; low tied bun with side part; reserved faint smile; average build. Clearly ELDERLY adult, grey or white matte hair, visibly aged brows and understated wrinkles at eyes and mouth; do NOT make this person look young. Avoid realistic skin texture. clean shaven A small subtle facial beauty mark. ordinary herb gatherer: practical modest short robe over trousers, sleeves tied back, rope belt, weathered sun-touched skin. a small bundle of dried herbs.
+```
+
+</details>
+
+<details>
+<summary>P207</summary>
+
+```text
+Subject: An ordinary original Chinese man, about 82 years old. diamond face with softly defined cheekbones, shallow eyelids, thin mouth; simple single braid; friendly half-smile; sturdy build. Clearly ELDERLY adult, grey or white matte hair, visibly aged brows and understated wrinkles at eyes and mouth; do NOT make this person look young. Avoid realistic skin texture. short sparse goatee No distinctive scars, eyepatch or decorative jewellery. ordinary herb gatherer: practical modest short robe over trousers, sleeves tied back, rope belt, weathered sun-touched skin. a modest herb basket with simple leaves.
+```
+
+</details>
+
+<details>
+<summary>P208</summary>
+
+```text
+Subject: An ordinary original Chinese man, about 64 years old. diamond face with softly defined cheekbones, shallow eyelids, thin mouth; simple single braid; reserved faint smile; sturdy build. Clearly ELDERLY adult, grey or white matte hair, visibly aged brows and understated wrinkles at eyes and mouth; do NOT make this person look young. Avoid realistic skin texture. short squared beard A small healed eyebrow scar. ordinary market cultivator: tidy modest robe in deep green, muted plum or brown, slightly nicer simple trim. a plain folded fan.
+```
+
+</details>
+
+<details>
+<summary>P209</summary>
+
+```text
+Subject: An ordinary original Chinese man, about 73 years old. broad rounded face, small narrow eyes, gently curved brows, short broad nose; pulled-back hair with high forehead; friendly half-smile; average build. Clearly ELDERLY adult, grey or white matte hair, visibly aged brows and understated wrinkles at eyes and mouth; do NOT make this person look young. Avoid realistic skin texture. clean shaven No distinctive scars, eyepatch or decorative jewellery. ordinary market cultivator: tidy modest robe in deep green, muted plum or brown, slightly nicer simple trim. one small unlabelled ledger held low.
+```
+
+</details>
+
+<details>
+<summary>P210</summary>
+
+```text
+Subject: An ordinary original Chinese man, about 82 years old. long slender face, close-set almond eyes, straight fine brows, small straight nose; compact high topknot; reserved faint smile; sturdy build. Clearly ELDERLY adult, grey or white matte hair, visibly aged brows and understated wrinkles at eyes and mouth; do NOT make this person look young. Avoid realistic skin texture. short sparse goatee No distinctive scars, eyepatch or decorative jewellery. ordinary market cultivator: tidy modest robe in deep green, muted plum or brown, slightly nicer simple trim. a plain folded fan.
+```
+
+</details>
+
+<details>
+<summary>P211</summary>
+
+```text
+Subject: An ordinary original Chinese man, about 55 years old. soft square face, wide-set calm eyes, thick flat brows, small round nose; shoulder-length half-up hair; friendly half-smile; average build. Clearly ELDERLY adult, grey or white matte hair, visibly aged brows and understated wrinkles at eyes and mouth; do NOT make this person look young. Avoid realistic skin texture. wispy moustache and thin goatee No distinctive scars, eyepatch or decorative jewellery. ordinary market cultivator: tidy modest robe in deep green, muted plum or brown, slightly nicer simple trim. one small unlabelled ledger held low.
+```
+
+</details>
+
+<details>
+<summary>P212</summary>
+
+```text
+Subject: An ordinary original Chinese man, about 64 years old. oval face with high forehead, slightly drooping eyelids, arched brows; small bun and clean side locks; reserved faint smile; sturdy build. Clearly ELDERLY adult, grey or white matte hair, visibly aged brows and understated wrinkles at eyes and mouth; do NOT make this person look young. Avoid realistic skin texture. small neat moustache No distinctive scars, eyepatch or decorative jewellery. ordinary market cultivator: tidy modest robe in deep green, muted plum or brown, slightly nicer simple trim. a plain folded fan.
+```
+
+</details>
+
+<details>
+<summary>P213</summary>
+
+```text
+Subject: An ordinary original Chinese man, about 73 years old. short sturdy face, low brows, small hooded eyes, broad mouth; loose neck-length hair tied with a cord; friendly half-smile; average build. Clearly ELDERLY adult, grey or white matte hair, visibly aged brows and understated wrinkles at eyes and mouth; do NOT make this person look young. Avoid realistic skin texture. short squared beard No distinctive scars, eyepatch or decorative jewellery. ordinary market cultivator: tidy modest robe in deep green, muted plum or brown, slightly nicer simple trim. one small unlabelled ledger held low.
+```
+
+</details>
+
+<details>
+<summary>P214</summary>
+
+```text
+Subject: An ordinary original Chinese man, about 55 years old. broad rounded face, small narrow eyes, gently curved brows, short broad nose; pulled-back hair with high forehead; shy and cautious; average build. Clearly ELDERLY adult, grey or white matte hair, visibly aged brows and understated wrinkles at eyes and mouth; do NOT make this person look young. Avoid realistic skin texture. wispy moustache and thin goatee No distinctive scars, eyepatch or decorative jewellery. ordinary Chixiao travelling cultivator: matte muted crimson and charcoal robe, tiny abstract flame-shaped trim, plain red hair cord, confident practical bearing, no magic effects.
+```
+
+</details>
+
+<details>
+<summary>P215</summary>
+
+```text
+Subject: An ordinary original Chinese man, about 64 years old. long slender face, close-set almond eyes, straight fine brows, small straight nose; compact high topknot; stern but approachable; sturdy build. Clearly ELDERLY adult, grey or white matte hair, visibly aged brows and understated wrinkles at eyes and mouth; do NOT make this person look young. Avoid realistic skin texture. small neat moustache No distinctive scars, eyepatch or decorative jewellery. ordinary Chixiao travelling cultivator: matte muted crimson and charcoal robe, tiny abstract flame-shaped trim, plain red hair cord, confident practical bearing, no magic effects.
+```
+
+</details>
+
+<details>
+<summary>P216</summary>
+
+```text
+Subject: An ordinary original Chinese man, about 82 years old. diamond face with softly defined cheekbones, shallow eyelids, thin mouth; simple single braid; earnest and attentive; sturdy build. Clearly ELDERLY adult, grey or white matte hair, visibly aged brows and understated wrinkles at eyes and mouth; do NOT make this person look young. Avoid realistic skin texture. short squared beard No distinctive scars, eyepatch or decorative jewellery. ordinary unaligned wandering cultivator: worn patched travelling robe in grey, brown or ink green, straw-coloured sash. small plain gourd at the waist.
+```
+
+</details>
+
+<details>
+<summary>P217</summary>
+
+```text
+Subject: An ordinary original Chinese man, about 55 years old. broad rounded face, small narrow eyes, gently curved brows, short broad nose; pulled-back hair with high forehead; mildly suspicious; average build. Clearly ELDERLY adult, grey or white matte hair, visibly aged brows and understated wrinkles at eyes and mouth; do NOT make this person look young. Avoid realistic skin texture. clean shaven No distinctive scars, eyepatch or decorative jewellery. ordinary unaligned wandering cultivator: worn patched travelling robe in grey, brown or ink green, straw-coloured sash. a small wrapped travel bundle.
+```
+
+</details>
+
+<details>
+<summary>P218</summary>
+
+```text
+Subject: An ordinary original Chinese man, about 64 years old. long slender face, close-set almond eyes, straight fine brows, small straight nose; compact high topknot; earnest and attentive; sturdy build. Clearly ELDERLY adult, grey or white matte hair, visibly aged brows and understated wrinkles at eyes and mouth; do NOT make this person look young. Avoid realistic skin texture. short sparse goatee No distinctive scars, eyepatch or decorative jewellery. ordinary unaligned wandering cultivator: worn patched travelling robe in grey, brown or ink green, straw-coloured sash. small plain gourd at the waist.
+```
+
+</details>
+
+<details>
+<summary>P219</summary>
+
+```text
+Subject: An ordinary original Chinese man, about 73 years old. soft square face, wide-set calm eyes, thick flat brows, small round nose; shoulder-length half-up hair; mildly suspicious; average build. Clearly ELDERLY adult, grey or white matte hair, visibly aged brows and understated wrinkles at eyes and mouth; do NOT make this person look young. Avoid realistic skin texture. wispy moustache and thin goatee No distinctive scars, eyepatch or decorative jewellery. ordinary unaligned wandering cultivator: worn patched travelling robe in grey, brown or ink green, straw-coloured sash. a small wrapped travel bundle.
+```
+
+</details>
+
+<details>
+<summary>P220</summary>
+
+```text
+Subject: An ordinary original Chinese man, about 82 years old. oval face with high forehead, slightly drooping eyelids, arched brows; small bun and clean side locks; earnest and attentive; sturdy build. Clearly ELDERLY adult, grey or white matte hair, visibly aged brows and understated wrinkles at eyes and mouth; do NOT make this person look young. Avoid realistic skin texture. small neat moustache No distinctive scars, eyepatch or decorative jewellery. ordinary unaligned wandering cultivator: worn patched travelling robe in grey, brown or ink green, straw-coloured sash. small plain gourd at the waist.
+```
+
+</details>
+
+<details>
+<summary>P221</summary>
+
+```text
+Subject: An ordinary original Chinese man, about 55 years old. short sturdy face, low brows, small hooded eyes, broad mouth; loose neck-length hair tied with a cord; mildly suspicious; average build. Clearly ELDERLY adult, grey or white matte hair, visibly aged brows and understated wrinkles at eyes and mouth; do NOT make this person look young. Avoid realistic skin texture. short squared beard No distinctive scars, eyepatch or decorative jewellery. ordinary unaligned wandering cultivator: worn patched travelling robe in grey, brown or ink green, straw-coloured sash. a small wrapped travel bundle.
+```
+
+</details>
+
+<details>
+<summary>P222</summary>
+
+```text
+Subject: An ordinary original Chinese man, about 64 years old. narrow triangular adult face, upturned eye corners, fine brows, thin lips; short cropped hair under a plain cloth band; earnest and attentive; sturdy build. Clearly ELDERLY adult, grey or white matte hair, visibly aged brows and understated wrinkles at eyes and mouth; do NOT make this person look young. Avoid realistic skin texture. clean shaven A small subtle facial beauty mark. ordinary unaligned wandering cultivator: worn patched travelling robe in grey, brown or ink green, straw-coloured sash. small plain gourd at the waist.
+```
+
+</details>
+
+<details>
+<summary>P223</summary>
+
+```text
+Subject: An ordinary original Chinese man, about 73 years old. soft rectangular face, long eyebrows, narrow nose, full lips; wrapped hair under a plain travel cloth; mildly suspicious; average build. Clearly ELDERLY adult, grey or white matte hair, visibly aged brows and understated wrinkles at eyes and mouth; do NOT make this person look young. Avoid realistic skin texture. short sparse goatee No distinctive scars, eyepatch or decorative jewellery. ordinary unaligned wandering cultivator: worn patched travelling robe in grey, brown or ink green, straw-coloured sash. a small wrapped travel bundle.
+```
+
+</details>
+
+<details>
+<summary>P224</summary>
+
+```text
+Subject: An ordinary original Chinese man, about 82 years old. round full cheeks, relaxed narrow eyes, short uneven brows, small dimple; short hair under a soft cloth cap; earnest and attentive; sturdy build. Clearly ELDERLY adult, grey or white matte hair, visibly aged brows and understated wrinkles at eyes and mouth; do NOT make this person look young. Avoid realistic skin texture. wispy moustache and thin goatee No distinctive scars, eyepatch or decorative jewellery. ordinary unaligned wandering cultivator: worn patched travelling robe in grey, brown or ink green, straw-coloured sash. small plain gourd at the waist.
+```
+
+</details>
+
+<details>
+<summary>P225</summary>
+
+```text
+Subject: An ordinary original Chinese man, about 55 years old. long face with a firm chin, lowered eye corners, broad soft nose; low tied bun with side part; mildly suspicious; average build. Clearly ELDERLY adult, grey or white matte hair, visibly aged brows and understated wrinkles at eyes and mouth; do NOT make this person look young. Avoid realistic skin texture. small neat moustache No distinctive scars, eyepatch or decorative jewellery. ordinary unaligned wandering cultivator: worn patched travelling robe in grey, brown or ink green, straw-coloured sash. a small wrapped travel bundle.
+```
+
+</details>
+
+<details>
+<summary>P226</summary>
+
+```text
+References: official screenshot NPC portraits are the ONLY STYLE REFERENCE, never copy a particular character. Create the distinct person described here.
+```
+
+</details>
+
+<details>
+<summary>P227</summary>
+
+```text
+Subject: An ordinary original Chinese man, about 18 years old. broad rounded face, small narrow eyes, gently curved brows, short broad nose; compact high topknot; quietly curious; modestly heavy build. Clearly young ADULT, smooth face, dark matte hair; not childlike or glamorous. clean shaven A small subtle facial beauty mark. Qingyun outer disciple: simple matching pale-ivory sect uniform, slate-blue collar and cuffs, blue sash, very faint abstract cloud hem, plain hair cord or wooden pin, simple straight sword hilt partly visible at the hip/back. No fancy embroidery.
+```
+
+</details>
+
+<details>
+<summary>P228</summary>
+
+```text
+CRITICAL DISTINCT IDENTITY OVERRIDE: a visibly HEAVY/PLUMP ordinary adult male novice aged 24, thick neck, very full rounded cheeks, broad almost circular jaw with a slight double chin, small narrow widely spaced eyes, blunt BROAD FLAT nose, short broad mouth, clean shaven, two faint freckles. Small LOW compact hair knot with closely cropped sides, plain wooden pin, NOT a tall high bun. Grown adult anatomy, no chibi or childish eyes. Keep the pale ivory/slate-blue Qingyun outer-disciple uniform and a plain sword hilt. This must be visibly a different person from narrow-faced handsome cultivator portraits.
+```
+
+</details>
+
+<details>
+<summary>P229</summary>
+
+```text
+References: official screenshot NPC portraits are the PRIMARY STYLE REFERENCE; newer plain portrait is LINEWORK/SHADING reference only. DO NOT COPY its face, hair, age, costume or abacus. Create the distinct person described here.
+```
+
+</details>
+
+<details>
+<summary>P230</summary>
+
+```text
+Subject: An ordinary original Chinese man, about 23 years old. long slender face, close-set almond eyes, straight fine brows, small straight nose; shoulder-length half-up hair; thoughtful and solemn; slim build. Clearly young ADULT, smooth face, dark matte hair; not childlike or glamorous. clean shaven No distinctive scars, eyepatch or decorative jewellery. Qingyun outer disciple: simple matching pale-ivory sect uniform, slate-blue collar and cuffs, blue sash, very faint abstract cloud hem, plain hair cord or wooden pin, simple straight sword hilt partly visible at the hip/back. No fancy embroidery.
+```
+
+</details>
+
+<details>
+<summary>P231</summary>
+
+```text
+Subject: An ordinary original Chinese man, about 28 years old. soft square face, wide-set calm eyes, thick flat brows, small round nose; small bun and clean side locks; quietly curious; modestly heavy build. Clearly young ADULT, smooth face, dark matte hair; not childlike or glamorous. clean shaven No distinctive scars, eyepatch or decorative jewellery. Qingyun outer disciple: simple matching pale-ivory sect uniform, slate-blue collar and cuffs, blue sash, very faint abstract cloud hem, plain hair cord or wooden pin, simple straight sword hilt partly visible at the hip/back. No fancy embroidery.
+```
+
+</details>
+
+<details>
+<summary>P232</summary>
+
+```text
+Subject: An ordinary original Chinese man, about 33 years old. oval face with high forehead, slightly drooping eyelids, arched brows; loose neck-length hair tied with a cord; thoughtful and solemn; slim build. Clearly young ADULT, smooth face, dark matte hair; not childlike or glamorous. clean shaven No distinctive scars, eyepatch or decorative jewellery. Qingyun outer disciple: simple matching pale-ivory sect uniform, slate-blue collar and cuffs, blue sash, very faint abstract cloud hem, plain hair cord or wooden pin, simple straight sword hilt partly visible at the hip/back. No fancy embroidery.
+```
+
+</details>
+
+<details>
+<summary>P233</summary>
+
+```text
+Subject: An ordinary original Chinese man, about 21 years old. short sturdy face, low brows, small hooded eyes, broad mouth; short cropped hair under a plain cloth band; quietly curious; sturdy build. Clearly young ADULT, smooth face, dark matte hair; not childlike or glamorous. a sparse short moustache No distinctive scars, eyepatch or decorative jewellery. Qingyun outer disciple: simple matching pale-ivory sect uniform, slate-blue collar and cuffs, blue sash, very faint abstract cloud hem, plain hair cord or wooden pin, simple straight sword hilt partly visible at the hip/back. No fancy embroidery.
+```
+
+</details>
+
+<details>
+<summary>P234</summary>
+
+```text
+Subject: An ordinary original Chinese man, about 26 years old. narrow triangular adult face, upturned eye corners, fine brows, thin lips; wrapped hair under a plain travel cloth; thoughtful and solemn; average build. Clearly young ADULT, smooth face, dark matte hair; not childlike or glamorous. clean shaven No distinctive scars, eyepatch or decorative jewellery. Qingyun outer disciple: simple matching pale-ivory sect uniform, slate-blue collar and cuffs, blue sash, very faint abstract cloud hem, plain hair cord or wooden pin, simple straight sword hilt partly visible at the hip/back. No fancy embroidery.
+```
+
+</details>
+
+<details>
+<summary>P235</summary>
+
+```text
+Subject: An ordinary original Chinese man, about 31 years old. soft rectangular face, long eyebrows, narrow nose, full lips; short hair under a soft cloth cap; quietly curious; sturdy build. Clearly young ADULT, smooth face, dark matte hair; not childlike or glamorous. clean shaven No distinctive scars, eyepatch or decorative jewellery. Qingyun outer disciple: simple matching pale-ivory sect uniform, slate-blue collar and cuffs, blue sash, very faint abstract cloud hem, plain hair cord or wooden pin, simple straight sword hilt partly visible at the hip/back. No fancy embroidery.
+```
+
+</details>
+
+<details>
+<summary>P236</summary>
+
+```text
+Subject: An ordinary original Chinese man, about 19 years old. round full cheeks, relaxed narrow eyes, short uneven brows, small dimple; low tied bun with side part; thoughtful and solemn; modestly heavy build. Clearly young ADULT, smooth face, dark matte hair; not childlike or glamorous. clean shaven No distinctive scars, eyepatch or decorative jewellery. Qingyun outer disciple: simple matching pale-ivory sect uniform, slate-blue collar and cuffs, blue sash, very faint abstract cloud hem, plain hair cord or wooden pin, simple straight sword hilt partly visible at the hip/back. No fancy embroidery.
+```
+
+</details>
+
+<details>
+<summary>P237</summary>
+
+```text
+Subject: An ordinary original Chinese man, about 24 years old. long face with a firm chin, lowered eye corners, broad soft nose; simple single braid; quietly curious; slim build. Clearly young ADULT, smooth face, dark matte hair; not childlike or glamorous. clean shaven No distinctive scars, eyepatch or decorative jewellery. Qingyun outer disciple: simple matching pale-ivory sect uniform, slate-blue collar and cuffs, blue sash, very faint abstract cloud hem, plain hair cord or wooden pin, simple straight sword hilt partly visible at the hip/back. No fancy embroidery.
+```
+
+</details>
+
+<details>
+<summary>P238</summary>
+
+```text
+Subject: An ordinary original Chinese man, about 29 years old. diamond face with softly defined cheekbones, shallow eyelids, thin mouth; pulled-back hair with high forehead; thoughtful and solemn; modestly heavy build. Clearly young ADULT, smooth face, dark matte hair; not childlike or glamorous. clean shaven No distinctive scars, eyepatch or decorative jewellery. Qingyun outer disciple: simple matching pale-ivory sect uniform, slate-blue collar and cuffs, blue sash, very faint abstract cloud hem, plain hair cord or wooden pin, simple straight sword hilt partly visible at the hip/back. No fancy embroidery.
+```
+
+</details>
+
+<details>
+<summary>P239</summary>
+
+```text
+Subject: An ordinary original Chinese man, about 34 years old. broad rounded face, small narrow eyes, gently curved brows, short broad nose; compact high topknot; quietly curious; slim build. Clearly young ADULT, smooth face, dark matte hair; not childlike or glamorous. a sparse short moustache No distinctive scars, eyepatch or decorative jewellery. Qingyun outer disciple: simple matching pale-ivory sect uniform, slate-blue collar and cuffs, blue sash, very faint abstract cloud hem, plain hair cord or wooden pin, simple straight sword hilt partly visible at the hip/back. No fancy embroidery.
+```
+
+</details>
+
+<details>
+<summary>P240</summary>
+
+```text
+Subject: An ordinary original Chinese man, about 22 years old. long slender face, close-set almond eyes, straight fine brows, small straight nose; shoulder-length half-up hair; thoughtful and solemn; sturdy build. Clearly young ADULT, smooth face, dark matte hair; not childlike or glamorous. clean shaven No distinctive scars, eyepatch or decorative jewellery. Qingyun outer disciple: simple matching pale-ivory sect uniform, slate-blue collar and cuffs, blue sash, very faint abstract cloud hem, plain hair cord or wooden pin, simple straight sword hilt partly visible at the hip/back. No fancy embroidery.
+```
+
+</details>
+
+<details>
+<summary>P241</summary>
+
+```text
+Subject: An ordinary original Chinese man, about 27 years old. soft square face, wide-set calm eyes, thick flat brows, small round nose; small bun and clean side locks; quietly curious; average build. Clearly young ADULT, smooth face, dark matte hair; not childlike or glamorous. clean shaven No distinctive scars, eyepatch or decorative jewellery. Qingyun outer disciple: simple matching pale-ivory sect uniform, slate-blue collar and cuffs, blue sash, very faint abstract cloud hem, plain hair cord or wooden pin, simple straight sword hilt partly visible at the hip/back. No fancy embroidery.
+```
+
+</details>
+
+<details>
+<summary>P242</summary>
+
+```text
+Subject: An ordinary original Chinese man, about 32 years old. oval face with high forehead, slightly drooping eyelids, arched brows; loose neck-length hair tied with a cord; thoughtful and solemn; sturdy build. Clearly young ADULT, smooth face, dark matte hair; not childlike or glamorous. clean shaven A small subtle facial beauty mark. Qingyun outer disciple: simple matching pale-ivory sect uniform, slate-blue collar and cuffs, blue sash, very faint abstract cloud hem, plain hair cord or wooden pin, simple straight sword hilt partly visible at the hip/back. No fancy embroidery.
+```
+
+</details>
+
+<details>
+<summary>P243</summary>
+
+```text
+Subject: An ordinary original Chinese man, about 19 years old. short sturdy face, low brows, small hooded eyes, broad mouth; short cropped hair under a plain cloth band; quietly curious; average build. Clearly young ADULT, smooth face, dark matte hair; not childlike or glamorous. clean shaven No distinctive scars, eyepatch or decorative jewellery. ordinary herb gatherer: practical modest short robe over trousers, sleeves tied back, rope belt, weathered sun-touched skin. one small plain herb hoe held low.
+```
+
+</details>
+
+<details>
+<summary>P244</summary>
+
+```text
+Subject: An ordinary original Chinese man, about 24 years old. narrow triangular adult face, upturned eye corners, fine brows, thin lips; wrapped hair under a plain travel cloth; thoughtful and solemn; sturdy build. Clearly young ADULT, smooth face, dark matte hair; not childlike or glamorous. clean shaven No distinctive scars, eyepatch or decorative jewellery. ordinary herb gatherer: practical modest short robe over trousers, sleeves tied back, rope belt, weathered sun-touched skin. a rope-tied herb basket partly visible.
+```
+
+</details>
+
+<details>
+<summary>P245</summary>
+
+```text
+Subject: An ordinary original Chinese man, about 29 years old. soft rectangular face, long eyebrows, narrow nose, full lips; short hair under a soft cloth cap; quietly curious; average build. Clearly young ADULT, smooth face, dark matte hair; not childlike or glamorous. clean shaven A small subtle facial beauty mark. ordinary herb gatherer: practical modest short robe over trousers, sleeves tied back, rope belt, weathered sun-touched skin. one small plain herb hoe held low.
+```
+
+</details>
+
+<details>
+<summary>P246</summary>
+
+```text
+Subject: An ordinary original Chinese man, about 34 years old. round full cheeks, relaxed narrow eyes, short uneven brows, small dimple; low tied bun with side part; thoughtful and solemn; sturdy build. Clearly young ADULT, smooth face, dark matte hair; not childlike or glamorous. clean shaven No distinctive scars, eyepatch or decorative jewellery. ordinary herb gatherer: practical modest short robe over trousers, sleeves tied back, rope belt, weathered sun-touched skin. a rope-tied herb basket partly visible.
+```
+
+</details>
+
+<details>
+<summary>P247</summary>
+
+```text
+Subject: An ordinary original Chinese man, about 21 years old. long slender face, close-set almond eyes, straight fine brows, small straight nose; shoulder-length half-up hair; proud but ordinary; modestly heavy build. Clearly young ADULT, smooth face, dark matte hair; not childlike or glamorous. clean shaven No distinctive scars, eyepatch or decorative jewellery. ordinary market cultivator: tidy modest robe in deep green, muted plum or brown, slightly nicer simple trim. a plain folded fan.
+```
+
+</details>
+
+<details>
+<summary>P248</summary>
+
+```text
+Subject: An ordinary original Chinese man, about 26 years old. soft square face, wide-set calm eyes, thick flat brows, small round nose; small bun and clean side locks; tired and watchful; slim build. Clearly young ADULT, smooth face, dark matte hair; not childlike or glamorous. a sparse short moustache No distinctive scars, eyepatch or decorative jewellery. ordinary market cultivator: tidy modest robe in deep green, muted plum or brown, slightly nicer simple trim. one small unlabelled ledger held low.
+```
+
+</details>
+
+<details>
+<summary>P249</summary>
+
+```text
+Subject: An ordinary original Chinese man, about 31 years old. oval face with high forehead, slightly drooping eyelids, arched brows; loose neck-length hair tied with a cord; proud but ordinary; modestly heavy build. Clearly young ADULT, smooth face, dark matte hair; not childlike or glamorous. clean shaven No distinctive scars, eyepatch or decorative jewellery. ordinary market cultivator: tidy modest robe in deep green, muted plum or brown, slightly nicer simple trim. a plain folded fan.
+```
+
+</details>
+
+<details>
+<summary>P250</summary>
+
+```text
+Subject: An ordinary original Chinese man, about 22 years old. long face with a firm chin, lowered eye corners, broad soft nose; simple single braid; shy and cautious; modestly heavy build. Clearly young ADULT, smooth face, dark matte hair; not childlike or glamorous. a sparse short moustache No distinctive scars, eyepatch or decorative jewellery. ordinary Chixiao travelling cultivator: matte muted crimson and charcoal robe, tiny abstract flame-shaped trim, plain red hair cord, confident practical bearing, no magic effects.
+```
+
+</details>
+
+<details>
+<summary>P251</summary>
+
+```text
+Subject: An ordinary original Chinese man, about 27 years old. diamond face with softly defined cheekbones, shallow eyelids, thin mouth; pulled-back hair with high forehead; stern but approachable; slim build. Clearly young ADULT, smooth face, dark matte hair; not childlike or glamorous. clean shaven No distinctive scars, eyepatch or decorative jewellery. ordinary Chixiao travelling cultivator: matte muted crimson and charcoal robe, tiny abstract flame-shaped trim, plain red hair cord, confident practical bearing, no magic effects.
+```
+
+</details>
+
+<details>
+<summary>P252</summary>
+
+```text
+Subject: An ordinary original Chinese man, about 20 years old. short sturdy face, low brows, small hooded eyes, broad mouth; short cropped hair under a plain cloth band; amused knowing expression; modestly heavy build. Clearly young ADULT, smooth face, dark matte hair; not childlike or glamorous. clean shaven No distinctive scars, eyepatch or decorative jewellery. ordinary unaligned wandering cultivator: worn patched travelling robe in grey, brown or ink green, straw-coloured sash. plain sheathed sword.
+```
+
+</details>
+
+<details>
+<summary>P253</summary>
+
+```text
+Subject: An ordinary original Chinese man, about 25 years old. narrow triangular adult face, upturned eye corners, fine brows, thin lips; wrapped hair under a plain travel cloth; calm and composed; slim build. Clearly young ADULT, smooth face, dark matte hair; not childlike or glamorous. clean shaven No distinctive scars, eyepatch or decorative jewellery. ordinary unaligned wandering cultivator: worn patched travelling robe in grey, brown or ink green, straw-coloured sash. plain walking staff held low.
+```
+
+</details>
+
+<details>
+<summary>P254</summary>
+
+```text
+Subject: An ordinary original Chinese man, about 30 years old. soft rectangular face, long eyebrows, narrow nose, full lips; short hair under a soft cloth cap; amused knowing expression; modestly heavy build. Clearly young ADULT, smooth face, dark matte hair; not childlike or glamorous. a sparse short moustache No distinctive scars, eyepatch or decorative jewellery. ordinary unaligned wandering cultivator: worn patched travelling robe in grey, brown or ink green, straw-coloured sash. plain sheathed sword.
+```
+
+</details>
+
+<details>
+<summary>P255</summary>
+
+```text
+Subject: An ordinary original Chinese man, about 18 years old. round full cheeks, relaxed narrow eyes, short uneven brows, small dimple; low tied bun with side part; calm and composed; average build. Clearly young ADULT, smooth face, dark matte hair; not childlike or glamorous. clean shaven A small healed eyebrow scar. ordinary unaligned wandering cultivator: worn patched travelling robe in grey, brown or ink green, straw-coloured sash. plain walking staff held low.
+```
+
+</details>
+
+<details>
+<summary>P256</summary>
+
+```text
+Subject: An ordinary original Chinese man, about 23 years old. long face with a firm chin, lowered eye corners, broad soft nose; simple single braid; amused knowing expression; sturdy build. Clearly young ADULT, smooth face, dark matte hair; not childlike or glamorous. clean shaven No distinctive scars, eyepatch or decorative jewellery. ordinary unaligned wandering cultivator: worn patched travelling robe in grey, brown or ink green, straw-coloured sash. plain sheathed sword.
+```
+
+</details>
+
+<details>
+<summary>P257</summary>
+
+```text
+Subject: An ordinary original Chinese man, about 28 years old. diamond face with softly defined cheekbones, shallow eyelids, thin mouth; pulled-back hair with high forehead; calm and composed; average build. Clearly young ADULT, smooth face, dark matte hair; not childlike or glamorous. clean shaven No distinctive scars, eyepatch or decorative jewellery. ordinary unaligned wandering cultivator: worn patched travelling robe in grey, brown or ink green, straw-coloured sash. plain walking staff held low.
+```
+
+</details>
+
+<details>
+<summary>P258</summary>
+
+```text
+Subject: An ordinary original Chinese man, about 33 years old. broad rounded face, small narrow eyes, gently curved brows, short broad nose; compact high topknot; amused knowing expression; sturdy build. Clearly young ADULT, smooth face, dark matte hair; not childlike or glamorous. clean shaven No distinctive scars, eyepatch or decorative jewellery. ordinary unaligned wandering cultivator: worn patched travelling robe in grey, brown or ink green, straw-coloured sash. plain sheathed sword.
+```
+
+</details>
