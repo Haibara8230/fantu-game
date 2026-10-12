@@ -1,0 +1,258 @@
+[
+  {
+    "file": "人物交互_城市场景_旧版.jpg",
+    "image_url": "https://img1.gamersky.com/thirdparty_steam/2021/05/02/small_202105020352061386.jpg",
+    "source": "https://ku.gamersky.com/2019/mcs/",
+    "bytes": 241531,
+    "status": "downloaded",
+    "dimensions": [
+      1280,
+      720
+    ],
+    "category": "人物交互 / 多人场景",
+    "observation": "城市场景完整画面，左侧列出 4 位人物，中央立绘两侧排列交互按钮；来源为旧图，仅参考结构。",
+    "retrieved_on": "2026-10-12",
+    "sha256": "2987420f68558880cee9f2c9cb309472d09ab31a2113ad2867687df303c3ff71",
+    "visually_reviewed": true
+  },
+  {
+    "file": "人物交互_地图人物菜单.jpg",
+    "image_url": "https://media.9game.cn/gamebase/ieu-gdc-pre-process/images/20230209/13/29/4a125a6753ef313c8cfbe3a92cf1bd64.jpg",
+    "source": "https://www.9game.cn/mizhangsheng/7544415.html",
+    "bytes": 1124433,
+    "status": "downloaded",
+    "dimensions": [
+      1080,
+      608
+    ],
+    "category": "人物交互",
+    "observation": "地图上的人物菜单；原图带九游水印。",
+    "retrieved_on": "2026-10-12",
+    "sha256": "861a3394f49453793d5815c86c71852a9aba5be61d4bad28f9d6850b391ff184",
+    "visually_reviewed": true
+  },
+  {
+    "file": "商店_草药交易.png",
+    "image_url": "https://patchwiki.biligame.com/images/mcs/f/f5/hasxavj2wyoce6gwai8y91zeasekkpw.png",
+    "source": "https://wiki.biligame.com/mcs/【星河招生办】《星河水剑经》新编·长生久视之道",
+    "bytes": 2747375,
+    "status": "downloaded",
+    "dimensions": [
+      2520,
+      1680
+    ],
+    "category": "商店买卖",
+    "observation": "草药交易：左右两侧背包，中间出售/收购格，下方净额与确认；顶部和底部原图有黑边。",
+    "retrieved_on": "2026-10-12",
+    "sha256": "17bd6f1e5edeb469d3110cccb644f923ad3b36251300bbe4ef63d30f4cd6c173",
+    "visually_reviewed": true
+  },
+  {
+    "file": "商店_交易待确认.png",
+    "image_url": "https://s2.loli.net/2025/10/31/FDWjyGuPRN91LCo.png",
+    "source": "https://yuier.com/posts/011-michangsheng-lianqikaiju",
+    "bytes": 1565496,
+    "status": "downloaded",
+    "dimensions": [
+      2560,
+      1440
+    ],
+    "category": "商店买卖",
+    "observation": "材料待购状态：中间收购栏已有物品，底部显示扣款；与下一张是同一篇攻略的不同交易状态。",
+    "retrieved_on": "2026-10-12",
+    "sha256": "b8bb1b94026570c3082646d532ef4fc9764ea187524e6ab71d1dd15bdc93dfad",
+    "visually_reviewed": true
+  },
+  {
+    "file": "商店_法宝交易.png",
+    "image_url": "https://s2.loli.net/2025/10/31/tqckBXiuJ4Cx6gE.png",
+    "source": "https://yuier.com/posts/011-michangsheng-lianqikaiju",
+    "bytes": 2210558,
+    "status": "downloaded",
+    "dimensions": [
+      2560,
+      1440
+    ],
+    "category": "商店买卖",
+    "observation": "法宝交易：中间出售与收购栏都有物品，底部显示净收入；并非上一张交易的连续下一步。",
+    "retrieved_on": "2026-10-12",
+    "sha256": "811a7ce2f793655ca710ad3fae75017b249159258e3709339b2d5b81ee468803",
+    "visually_reviewed": true
+  },
+  {
+    "file": "神通_配置页_B站视频封面.jpg",
+    "image_url": "https://i1.hdslb.com/bfs/archive/a7d186d2a7a36c71f1aa82c74d779e09f3ef3727.jpg",
+    "source": "https://www.bilibili.com/video/BV1m54y1K7bD/",
+    "bytes": 199369,
+    "status": "downloaded",
+    "dimensions": [
+      1728,
+      1080
+    ],
+    "category": "神通",
+    "observation": "B站原视频封面，画面是完整神通配置页：左侧快捷键槽，右侧图标库、筛选与分页；这是封面，未读取视频帧。",
+    "retrieved_on": "2026-10-12",
+    "sha256": "c486be0cdb6afb45f5c30c6c05453d07690350e6b9492cac12e36c9062a5278b",
+    "visually_reviewed": true
+  },
+  {
+    "file": "功法_配置页.png",
+    "image_url": "https://img1.wywyx.com/uploads/allimg/201225/0U9525939-5.png",
+    "source": "https://www.wywyx.com/newgames/202012/226155.html",
+    "bytes": 1433471,
+    "status": "downloaded",
+    "dimensions": [
+      1909,
+      1069
+    ],
+    "category": "功法",
+    "observation": "完整功法页：顶部总面板标签，左侧主修/辅修等配置，右侧功法网格、属性分类与分页。",
+    "retrieved_on": "2026-10-12",
+    "sha256": "4adf105bbe3b1365a08f99cbb7466795ad34a2f2804b4f90dd5471414fe920da",
+    "visually_reviewed": true
+  },
+  {
+    "file": "功法_配置页_补充.jpg",
+    "image_url": "https://media.9game.cn/gamebase/ieu-gdc-pre-process/images/20250821/3/3/ebd10a06cd425ad967cde5d882f2e638.jpg",
+    "source": "https://www.9game.cn/mizhangsheng/11331196.html",
+    "bytes": 543265,
+    "status": "downloaded",
+    "dimensions": [
+      889,
+      400
+    ],
+    "category": "功法 / 补充",
+    "observation": "与前一张布局相同的低分辨率裁切图，带水印；优先使用前一张。",
+    "retrieved_on": "2026-10-12",
+    "sha256": "dc55153614d8a7ef47c6606971bda9587e11c2945b6a6ee89b42c2efeca94948",
+    "visually_reviewed": true
+  },
+  {
+    "file": "闭关_01_进入洞府.jpg",
+    "image_url": "https://exp-picture.cdn.bcebos.com/52fae62064fb960b6d1d49d68fa355e982ae6c97.jpg",
+    "source": "https://jingyan.baidu.com/article/154b463179c8c869cb8f414c.html",
+    "status": "downloaded",
+    "bytes": 1268082,
+    "dimensions": [
+      1807,
+      1063
+    ],
+    "category": "闭关 / 流程 1",
+    "observation": "洞府入口：地图上的选择菜单；带教程箭头、水印，顶部状态被源作者模糊。",
+    "retrieved_on": "2026-10-12",
+    "sha256": "93fe9e3a113a8d0ac244f5a6209f83c5b08a8a1ea74cfa8c090ae967469b85ad",
+    "visually_reviewed": true
+  },
+  {
+    "file": "闭关_02_洞府功能入口.jpg",
+    "image_url": "https://exp-picture.cdn.bcebos.com/92174dbbf82064fbcd377d968e6104a354e96f97.jpg",
+    "source": "https://jingyan.baidu.com/article/154b463179c8c869cb8f414c.html",
+    "status": "downloaded",
+    "bytes": 1064860,
+    "dimensions": [
+      1810,
+      1060
+    ],
+    "category": "闭关 / 流程 2",
+    "observation": "洞府画面右下竖排功能按钮，闭关入口与突破、离开相邻；带教程标注。",
+    "retrieved_on": "2026-10-12",
+    "sha256": "a849e1bbd7ccfbaa0763c14ea6f9a95cbe950e8c84ebe23029f625942b88c2cd",
+    "visually_reviewed": true
+  },
+  {
+    "file": "闭关_03_时长选择面板.jpg",
+    "image_url": "https://exp-picture.cdn.bcebos.com/4e168d5653bbf8203ec7dabcba21056105a36e97.jpg",
+    "source": "https://jingyan.baidu.com/article/154b463179c8c869cb8f414c.html",
+    "status": "downloaded",
+    "bytes": 821920,
+    "dimensions": [
+      1830,
+      1051
+    ],
+    "category": "闭关 / 流程 3",
+    "observation": "闭关面板：左列功能分类、近期事件；右侧修炼速度与来源、时长滑条、年月数、开始按钮，右上关闭。图中没有直接展示本作所需的心境/瓶颈预览。",
+    "retrieved_on": "2026-10-12",
+    "sha256": "68c0d6966c21b090a49af31f2a9143c4c980fbcc79da6baf66298a8eda4b38fd",
+    "visually_reviewed": true
+  },
+  {
+    "file": "多人场景_01_收起的人物抽屉.jpg",
+    "image_url": "https://exp-picture.cdn.bcebos.com/65390a23beb9763ea930e7616ad06de89b61b049.jpg",
+    "source": "https://jingyan.baidu.com/article/59a015e3577578b6948865d2.html",
+    "status": "downloaded",
+    "bytes": 879489,
+    "dimensions": [
+      1280,
+      720
+    ],
+    "category": "多人场景 / 流程 1",
+    "observation": "附近的人抽屉收起，仅在左边缘显示竖标签与展开箭头。",
+    "retrieved_on": "2026-10-12",
+    "sha256": "74358d99c3fea73f07b83d4a7fcefac6d0c2f378f129dfded79d9138cadd0b70",
+    "visually_reviewed": true
+  },
+  {
+    "file": "多人场景_02_展开的人物列表.jpg",
+    "image_url": "https://exp-picture.cdn.bcebos.com/64a62a0f64781423384b2a89aac2bbd6e0d0b249.jpg",
+    "source": "https://jingyan.baidu.com/article/59a015e3577578b6948865d2.html",
+    "status": "downloaded",
+    "bytes": 857154,
+    "dimensions": [
+      1280,
+      720
+    ],
+    "category": "多人场景 / 流程 2",
+    "observation": "抽屉展开：左侧人物小卡列表，游戏背景仍可见；本例只有一位人物。",
+    "retrieved_on": "2026-10-12",
+    "sha256": "611b77a84bbf50352a84c8e569ae8f09ed1657acd87968fe4239cf6a7015c633",
+    "visually_reviewed": true
+  },
+  {
+    "file": "人物交互_03_赠礼入口.jpg",
+    "image_url": "https://exp-picture.cdn.bcebos.com/354e7a781423beb9f1cc7d7530d6e1d06ce8b349.jpg",
+    "source": "https://jingyan.baidu.com/article/59a015e3577578b6948865d2.html",
+    "status": "downloaded",
+    "bytes": 880759,
+    "dimensions": [
+      1280,
+      720
+    ],
+    "category": "人物交互 / 流程 3",
+    "observation": "点击人物后中央出现立绘和两侧选项，箭头指向赠礼。",
+    "retrieved_on": "2026-10-12",
+    "sha256": "e6eeb039e8db56ce35dd6786cfe942df02624674e2d42b5acc7ea2eb6d085d3e",
+    "visually_reviewed": true
+  },
+  {
+    "file": "人物交互_04_赠礼物品选择.jpg",
+    "image_url": "https://exp-picture.cdn.bcebos.com/bff8683e21c2bbd66b22315f116186254093ae49.jpg",
+    "source": "https://jingyan.baidu.com/article/59a015e3577578b6948865d2.html",
+    "status": "downloaded",
+    "bytes": 638261,
+    "dimensions": [
+      1280,
+      720
+    ],
+    "category": "人物交互 / 流程 4",
+    "observation": "赠礼选择：左侧背包，右侧选中物品、提示信息与数量，底部返回/确定；带教程标注。",
+    "retrieved_on": "2026-10-12",
+    "sha256": "c6dbc39c6bcca68a299291ae27529a8a93dbec2bbabe43193cb11c0ccb090a26",
+    "visually_reviewed": true
+  },
+  {
+    "file": "人物交互_05_对话选项.jpg",
+    "image_url": "https://www.vgover.com/vg/cover/20220906/47c195fdddb263a543340afc30f6c0a9.jpg",
+    "source": "https://www.vgover.com/topic/85841",
+    "status": "downloaded",
+    "bytes": 84796,
+    "dimensions": [
+      952,
+      592
+    ],
+    "category": "人物交互 / 对话",
+    "observation": "底部立绘、姓名与台词，上方竖排对话选项；截图下边缘裁切，不能据此判断关闭控件。",
+    "retrieved_on": "2026-10-12",
+    "sha256": "d4ef645f0204cc1970bba36c533bc56c75f97a7b85436b4551f86ba2d1838652",
+    "visually_reviewed": true
+  }
+]
