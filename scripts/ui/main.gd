@@ -120,7 +120,7 @@ var binding_action := ""
 var _typed := {}
 
 func _ready() -> void:
-	get_window().min_size = Vector2i(1000, 640)
+	get_window().min_size = Settings.WINDOW_SIZES[0]
 	_build_theme()
 	audio = AudioDirector.new()
 	add_child(audio)

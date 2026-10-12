@@ -85,7 +85,7 @@ func _has_art(file_name: String) -> bool:
 	return main.center.find_children("*", "TextureRect", true, false).any(func(image: TextureRect) -> bool: return image.texture != null and image.texture.resource_path.ends_with(file_name + ".png"))
 
 func _run() -> void:
-	root.size = Vector2i(1280, 800)
+	root.size = Vector2i(1920, 1080)
 	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path("res://builds/previews"))
 	main = load("res://scenes/main.tscn").instantiate()
 	var test_path := "res://.godot/ui_saves_%d" % Time.get_ticks_usec()
@@ -190,10 +190,17 @@ func _run() -> void:
 	main.set_guide_enabled(false)
 	await main.skill("fire")
 	await _capture("battle")
-	root.size = Vector2i(1000, 640)
+	root.size = Vector2i(1280, 720)
 	await _capture("battle_small")
 	check(main.status_label.get_global_rect().end.y <= main.get_global_rect().end.y + 1, "status line inside the small window")
-	root.size = Vector2i(1280, 800)
+	# 16:9 only: a 1280×720 window, 1080p and 2K all lay out the same 1280×720 canvas, scaled.
+	var canvases: Array[Vector2] = []
+	for screen: Vector2i in [Vector2i(1280, 720), Vector2i(1920, 1080), Vector2i(2560, 1440)]:
+		root.size = screen
+		await process_frame
+		canvases.append(main.get_global_rect().size)
+	check(canvases.all(func(canvas: Vector2) -> bool: return canvas.is_equal_approx(Vector2(1280, 720))), "the window, 1080p and 2K share one 1280×720 layout")
+	root.size = Vector2i(1920, 1080)
 	main._show_welcome()
 	main.continue_saved()
 	check(main.started and main.session.battle.get("enemy_id", "") == "wolf", "continue restores the battle")

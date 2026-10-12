@@ -51,7 +51,7 @@ func _wait_action() -> void:
 
 func _run() -> void:
 	_step("run started")
-	root.size = Vector2i(1280, 800)
+	root.size = Vector2i(1920, 1080)
 	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path("res://builds/previews"))
 	var scene: PackedScene = load("res://scenes/main.tscn")
 	_step("main scene loaded")

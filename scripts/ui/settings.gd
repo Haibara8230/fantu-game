@@ -4,8 +4,10 @@ extends RefCounted
 ## right. They live in the player's settings file next to the volumes (audio_director.gd keeps the
 ## "audio" section), never in saves.
 const DEFAULT_PATH := "user://settings.cfg"
-const WINDOW_SIZES: Array[Vector2i] = [Vector2i(1000, 640), Vector2i(1280, 800), Vector2i(1440, 900), Vector2i(1600, 1000), Vector2i(1920, 1200)]
-const DEFAULT_SIZE := Vector2i(1280, 800)
+# 16:9 only: the screens the game is made for are 1080p and 2K, played full screen or in a smaller
+# window. The canvas is 1280×720 and scales by 1.25, 1.5 or 2 (project.godot, stretch "canvas_items").
+const WINDOW_SIZES: Array[Vector2i] = [Vector2i(1280, 720), Vector2i(1600, 900), Vector2i(1920, 1080), Vector2i(2560, 1440)]
+const DEFAULT_SIZE := Vector2i(1600, 900)
 # Characters per second when story text types itself out; 0 shows it at once.
 const TEXT_SPEEDS := {"instant": 0, "fast": 60, "normal": 30, "slow": 15}
 const TEXT_SPEED_NAMES := {"instant": "即时", "fast": "快", "normal": "中", "slow": "慢"}

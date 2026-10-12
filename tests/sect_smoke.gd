@@ -65,7 +65,7 @@ func _run() -> void:
 	var path := "res://.godot/sect_test_%d" % Time.get_ticks_usec()
 	var store = Store.new(path)
 	check(store.save_game(legacy) and store.load_game(loaded), "school battle save loads")
-	root.size = Vector2i(1280, 800)
+	root.size = Vector2i(1920, 1080)
 	main = load("res://scenes/main.tscn").instantiate()
 	main.manual_store = Store.new(path + "/manual")
 	main.auto_store = Store.new(path + "/auto")
@@ -125,7 +125,7 @@ func _run() -> void:
 	main.reset_preview("qingyun", "xuanyue")
 	await _capture("sect_selector")
 	# Restore to a smaller window and ensure selectors/skill controls remain usable.
-	root.size = Vector2i(1000, 640)
+	root.size = Vector2i(1280, 720)
 	await _capture("sect_selector_small")
 	await process_frame
 	for button: Button in main.center.find_children("*", "Button", true, false):
