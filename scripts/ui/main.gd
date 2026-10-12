@@ -1,12 +1,13 @@
 extends Control
-## The desktop interface, built as screens after Mi Chang Sheng: the world (a place or the map) with
-## the HUD's few always-visible things, full screens that take everything over (an event, a story
-## moment, a duel, the end of a life), the character panel and the 任务 scroll. This node picks the
-## screen, arranges the window for it, switches views and handles input, saving and loading and the
-## duel's presentation. Each view is built by its own script from this node's state, using the widget
-## helpers and handlers here: hud.gd, place_view.gd, people_view.gd, map_view.gd, bag_view.gd,
-## arts_view.gd, status_view.gd, tasks_view.gd, system_view.gd, battle_view.gd, event_view.gd,
-## chronicle_view.gd and welcome_screen.gd.
+## The desktop interface, built as screens after Mi Chang Sheng: the world (a place drawn as a scene,
+## or the map) with the HUD's few always-visible things; full screens that take everything over (an
+## event, a story moment, a duel, a breakthrough, the end of a life); and scrolls laid over the world —
+## the character panel, the 任务 scroll, the retreat scroll and the trading table. This node picks the
+## screen, arranges it, switches views and handles input, saving and loading, and the playback of
+## duels, journeys and retreats. Each view is built by its own script from this node's state, using the
+## widget helpers and handlers here: hud.gd, place_view.gd, people_view.gd, map_view.gd, bag_view.gd,
+## arts_view.gd, status_view.gd, tasks_view.gd, system_view.gd, retreat_view.gd, trade_view.gd,
+## battle_view.gd, event_view.gd, chronicle_view.gd and welcome_screen.gd.
 const Session = preload("res://scripts/core/session.gd")
 const SaveStore = preload("res://scripts/core/save_store.gd")
 const Calendar = preload("res://scripts/core/calendar.gd")
@@ -17,6 +18,8 @@ const StatusView = preload("res://scripts/ui/status_view.gd")
 const TasksView = preload("res://scripts/ui/tasks_view.gd")
 const SystemView = preload("res://scripts/ui/system_view.gd")
 const WorldMap = preload("res://scripts/ui/world_map.gd")
+const RetreatView = preload("res://scripts/ui/retreat_view.gd")
+const TradeView = preload("res://scripts/ui/trade_view.gd")
 const PlaceView = preload("res://scripts/ui/place_view.gd")
 const PeopleView = preload("res://scripts/ui/people_view.gd")
 const MapView = preload("res://scripts/ui/map_view.gd")
@@ -31,9 +34,11 @@ const Settings = preload("res://scripts/ui/settings.gd")
 const GOLD := Color("#d5b777")
 const INK := Color("#e3e8dc")
 const MUTED := Color("#97aaa4")
-# The tabs of the character panel and of the 任务 scroll: the view each shows, and its name.
-const PANEL_TABS := [["status", "属性"], ["arts", "功法"], ["bag", "行囊"], ["people", "相识"], ["chronicle", "编年史"], ["system", "系统"]]
+# The scrolls laid over the world and their tabs: the view each tab shows, and its name.
+const PANEL_TABS := [["status", "属性"], ["arts", "神通"], ["methods", "功法"], ["bag", "行囊"], ["people", "相识"], ["chronicle", "编年史"], ["system", "系统"]]
 const SCROLL_TABS := [["goals", "当前目标"], ["quests", "委托"], ["upcoming", "约定"]]
+const RETREAT_TABS := [["retreat", "修炼"], ["breakthrough", "突破"]]
+const TAB_GROUPS := {"panel": PANEL_TABS, "scroll": SCROLL_TABS, "retreat": RETREAT_TABS, "trade": [["trade", "交易"]]}
 var session = Session.new()
 var manual_store = SaveStore.new("user://saves/manual")
 var auto_store = SaveStore.new("user://saves/auto")
@@ -50,6 +55,22 @@ var backdrop: TextureRect
 var shade: ColorRect
 var window: PanelContainer
 var tab_row: HBoxContainer
+var window_style: StyleBoxFlat
+# A place's scene (place_view.gd): its title, the spots as paper tags and the people drawer.
+var scene_layer: Control
+# The state of the screens: the duel's record shown, the retreat's chosen length and its playback,
+# the breakthrough just achieved, the open person's details, the people drawer, the filters of the
+# 神通 / 功法 and 行囊 pages, and what is laid out on the trading table.
+var battle_record_open := false
+var retreat_months := 3
+var retreat_playback: Dictionary = {}
+var retreat_labels: Dictionary = {}
+var ceremony: Dictionary = {}
+var profile_open := false
+var drawer_open := true
+var arts_filter := "all"
+var bag_filter := "all"
+var trade: Dictionary = {"sell": {}, "buy": []}
 # The HUD (hud.gd).
 var hud_left: PanelContainer
 var hud_right: PanelContainer
@@ -273,8 +294,13 @@ func _build_layout() -> void:
 	world_map.visible = false
 	world_map.location_selected.connect(select_map_target)
 	add_child(world_map)
+	scene_layer = Control.new()
+	scene_layer.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	scene_layer.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(scene_layer)
 	window = PanelContainer.new()
-	window.add_theme_stylebox_override("panel", style(Color(0.06, 0.12, 0.14, 0.93), Color("#41615e"), 18))
+	window_style = style(Color(0.06, 0.12, 0.14, 0.93), Color("#41615e"), 18)
+	window.add_theme_stylebox_override("panel", window_style)
 	add_child(window)
 	var body := VBoxContainer.new()
 	body.add_theme_constant_override("separation", 12)
@@ -301,24 +327,23 @@ func _build_layout() -> void:
 	Settings.build(self)
 	notice("鼠标选择行动 · {save} 保存 · {load} 读取 · 斗法中按 {skills} 施法，{guard}守御".format(Settings.key_hints(self)))
 
-## Which screen the state calls for: "full" while an ending, a story moment, an event or a duel holds
-## the player; "panel" or "scroll" for their tabs; otherwise the world, "place" or "map".
+## Which screen the state calls for: "full" while an ending, a breakthrough, a story moment, an event
+## or a duel holds the player; the scroll a view belongs to ("panel", "scroll", "retreat", "trade");
+## otherwise the world, "place" or "map".
 func current_screen() -> String:
-	if not session.ended.is_empty() or not story.is_empty() or not session.pending_event.is_empty() or not session.battle.is_empty():
+	if not session.ended.is_empty() or not ceremony.is_empty() or not story.is_empty() or not session.pending_event.is_empty() or not session.battle.is_empty():
 		return "full"
 	var group := _tab_group(view)
 	if not group.is_empty():
 		return group
 	return "map" if view == "map" else "place"
 
-## "panel" or "scroll" for a view on one of their tabs, else "".
+## The scroll whose tabs hold a view, else "".
 func _tab_group(view_id: String) -> String:
-	for pair: Array in PANEL_TABS:
-		if pair[0] == view_id:
-			return "panel"
-	for pair: Array in SCROLL_TABS:
-		if pair[0] == view_id:
-			return "scroll"
+	for group: String in TAB_GROUPS:
+		for pair: Array in TAB_GROUPS[group]:
+			if pair[0] == view_id:
+				return group
 	return ""
 
 ## Sets out the screen: the backdrop, the window's place, the HUD and the tab row.
@@ -326,13 +351,18 @@ func _arrange(screen: String) -> void:
 	var world := screen in ["place", "map"]
 	Hud.set_shown(self, world)
 	world_map.visible = screen == "map"
+	scene_layer.visible = screen == "place"
+	var dueling: bool = screen == "full" and not session.battle.is_empty() and ceremony.is_empty() and story.is_empty() and session.pending_event.is_empty() and session.ended.is_empty()
+	window.add_theme_stylebox_override("panel", StyleBoxEmpty.new() if dueling else window_style)
+	Hud.place_notice(self, dueling)
 	match screen:
 		"place":
-			# The place's picture fills the screen; the window keeps clear of the HUD's corners.
+			# The place's picture fills the screen as its scene; the window on the right holds the spot
+			# or the person the player turned to.
 			backdrop.texture = ArtLibrary.texture(ArtLibrary.location_path(str(session.player.location)))
 			backdrop.visible = true
-			shade.color.a = 0.35
-			_place_window(0.34, 0.985, 124.0, -60.0)
+			shade.color.a = 0.25
+			_place_window(0.40, 0.985, 124.0, -60.0)
 		"map":
 			# The map is the screen; the route window sits under the top-right corner, where the region
 			# has no places.
@@ -343,15 +373,33 @@ func _arrange(screen: String) -> void:
 		"full":
 			backdrop.visible = false
 			shade.color.a = 0.0
-			_place_window(0.0, 1.0, 14.0, -60.0, 14.0)
+			var art := _telling_art()
+			if dueling:
+				# The duel's stage is the screen; its dock runs along the bottom.
+				_place_window(0.0, 1.0, 0.0, 0.0)
+			elif not art.is_empty():
+				# An event or a story moment with its illustration: the picture is the screen and the
+				# words and choices sit in a box along the bottom, like a picture book.
+				backdrop.texture = ArtLibrary.texture(art)
+				backdrop.visible = true
+				shade.color.a = 0.12
+				_place_window(0.06, 0.94, 0.0, -20.0)
+				window.anchor_top = 1.0
+				window.offset_top = -300.0
+			else:
+				_place_window(0.0, 1.0, 14.0, -60.0, 14.0)
+		"retreat", "trade":
+			# Smaller scrolls over the place, which darkens behind them.
+			shade.color.a = 0.6
+			_place_window(0.0, 1.0, 40.0, -64.0, 96.0)
 		_:
-			# The panel and the scroll lie over the world, which darkens behind them.
+			# The panel and the task scroll lie over the world, which darkens behind them.
 			shade.color.a = 0.72
 			_place_window(0.0, 1.0, 22.0, -60.0, 40.0)
-	tab_row.visible = screen in ["panel", "scroll"]
+	tab_row.visible = TAB_GROUPS.has(screen)
 	clear(tab_row)
 	if tab_row.visible:
-		for pair: Array in (PANEL_TABS if screen == "panel" else SCROLL_TABS):
+		for pair: Array in TAB_GROUPS[screen]:
 			var view_id: String = pair[0]
 			var tab: Button = button(pair[1], func() -> void: set_view(view_id))
 			tab.disabled = view_id == view
@@ -360,6 +408,16 @@ func _arrange(screen: String) -> void:
 		spacer.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		tab_row.add_child(spacer)
 		tab_row.add_child(button("关闭 Esc", close_overlay, "回到" + ("舆图" if world_view == "map" else "此地")))
+
+## The illustration of the event or story moment on screen, or "".
+func _telling_art() -> String:
+	if not session.ended.is_empty() or not ceremony.is_empty():
+		return ""
+	if not story.is_empty():
+		return ArtLibrary.event_art(str(story.event))
+	if not session.pending_event.is_empty():
+		return ArtLibrary.event_art(str(session.pending_event.id))
+	return ""
 
 func _place_window(left: float, right: float, top: float, bottom: float, side: float = 0.0) -> void:
 	window.anchor_left = left
@@ -384,9 +442,14 @@ func render() -> void:
 		show_everyone_here = false
 	if view in ["place", "map"]:
 		world_view = view
-	_arrange(current_screen())
+	var screen := current_screen()
+	_arrange(screen)
 	Hud.render(self)
+	clear(scene_layer)
+	if screen == "place":
+		PlaceView.render_scene(self, scene_layer)
 	clear(center)
+	center.alignment = BoxContainer.ALIGNMENT_BEGIN
 	var scene := "%s|%s|%s|%s|%s|%s" % [view, session.player.location, session.pending_event.get("id", ""), story.get("event", ""), session.battle.is_empty(), selected_npc]
 	var new_scene := scene != _scene_key
 	if new_scene:
@@ -395,6 +458,8 @@ func render() -> void:
 	Guide.render(self, _guide_place())
 	if not session.ended.is_empty():
 		EventView.render_ending(self)
+	elif not ceremony.is_empty():
+		EventView.render_ceremony(self)
 	elif not story.is_empty():
 		EventView.render_story(self)
 	elif not session.pending_event.is_empty():
@@ -408,7 +473,15 @@ func render() -> void:
 			"bag":
 				BagView.render(self)
 			"arts":
-				ArtsView.render(self)
+				ArtsView.render_arts(self)
+			"methods":
+				ArtsView.render_methods(self)
+			"retreat":
+				RetreatView.render_retreat(self)
+			"breakthrough":
+				RetreatView.render_breakthrough(self)
+			"trade":
+				TradeView.render(self)
 			"people":
 				PeopleView.render_list(self)
 			"chronicle":
@@ -494,7 +567,113 @@ func toggle_view(view_id: String) -> void:
 
 ## Closes the panel or the scroll, back to the place or the map it was opened from.
 func close_overlay() -> void:
+	if view == "trade":
+		trade = {"sell": {}, "buy": []}
 	set_view(world_view)
+
+## The open person's details and their record (查看).
+func toggle_profile() -> void:
+	profile_open = not profile_open
+	render()
+
+## The people drawer at the left edge of a place's scene.
+func toggle_drawer() -> void:
+	drawer_open = not drawer_open
+	render()
+
+func toggle_battle_record() -> void:
+	battle_record_open = not battle_record_open
+	render()
+
+func set_arts_filter(element: String) -> void:
+	arts_filter = element
+	render()
+
+func set_bag_filter(category: String) -> void:
+	bag_filter = category
+	render()
+
+# --- The trading table (trade_view.gd): goods are laid out, and only 确定 trades them. --------------
+
+func open_trade() -> void:
+	trade = {"sell": {}, "buy": []}
+	set_view("trade")
+
+## Lays one more of an item on the table to sell, or takes one back (`count` -1).
+func stage_sale(item_id: String, count: int = 1) -> void:
+	var laid := int(trade.sell.get(item_id, 0)) + count
+	if laid <= 0:
+		trade.sell.erase(item_id)
+	else:
+		trade.sell[item_id] = mini(laid, session.item_count(item_id))
+	render()
+
+## Lays a good on the table to buy (a good of the rotating stock only once), or takes it back.
+func stage_purchase(item_id: String, add: bool = true) -> void:
+	if add:
+		trade.buy.append(item_id)
+	else:
+		trade.buy.erase(item_id)
+	render()
+
+## Sells and buys what is on the table, in that order, as the shop's own actions.
+func confirm_trade() -> void:
+	var sales: Dictionary = trade.sell.duplicate()
+	var purchases: Array = trade.buy.duplicate()
+	trade = {"sell": {}, "buy": []}
+	run(func() -> String:
+		var messages: Array[String] = []
+		for item_id: String in sales:
+			messages.append(session.sell(item_id, int(sales[item_id])))
+		for item_id: String in purchases:
+			messages.append(session.buy(item_id))
+		return " ".join(messages))
+
+# --- Retreat and breakthrough (retreat_view.gd) ----------------------------------------------------
+
+## A retreat of `days`: the rules run it at once; the scroll then plays the days and the xp going by,
+## input locked meanwhile. An event that cuts it short takes the screen afterwards.
+func start_retreat(days: int) -> void:
+	if presenting or not settled():
+		return
+	var before := _cue_state()
+	var mark: int = session.chronicle.added
+	var from_day := int(session.world.day)
+	var from_xp := int(session.player.xp)
+	presenting = true
+	var message: String = session.cultivate(days)
+	retreat_playback = {"from_day": from_day, "to_day": int(session.world.day), "from_xp": from_xp, "to_xp": int(session.player.xp)}
+	render()
+	_lock_buttons(self)
+	var seconds := clampf((int(session.world.day) - from_day) * 0.004, 0.6, 2.0)
+	var playback := create_tween()
+	playback.tween_method(func(progress: float) -> void:
+		if retreat_labels.has("date") and is_instance_valid(retreat_labels.date):
+			retreat_labels.date.text = Calendar.date_text(int(lerpf(from_day, int(retreat_playback.to_day), progress)))
+			retreat_labels.xp.text = "修为  %d" % int(lerpf(from_xp, int(retreat_playback.to_xp), progress)), 0.0, 1.0, seconds)
+	await playback.finished
+	retreat_playback = {}
+	presenting = false
+	_unlock_buttons()
+	_stage_story(mark)
+	_cue_changes(before)
+	render()
+	notice(message + (" 自动存档失败：" + autosave_error if not autosave_error.is_empty() else ""))
+
+## Breaking through: the rules decide; a realm reached is shown in its own screen until 确定.
+func start_breakthrough() -> void:
+	if presenting or not settled():
+		return
+	var realm := int(session.player.realm)
+	var before := {"max_hp": int(session.player.max_hp), "max_qi": int(session.player.max_qi), "lifespan": session.lifespan()}
+	run(func() -> String: return session.act("breakthrough"))
+	if int(session.player.realm) > realm and session.ended.is_empty():
+		ceremony = {"realm": int(session.player.realm), "before": before}
+		render()
+
+func close_ceremony() -> void:
+	ceremony = {}
+	set_view("place")
 
 func select_spot(spot_id: String) -> void:
 	selected_spot = spot_id
@@ -506,6 +685,8 @@ func open_person(person_id: String) -> void:
 		return
 	if person_id != str(dialogue.get("npc", "")):
 		dialogue = {}
+	if person_id != selected_npc:
+		profile_open = false
 	selected_npc = person_id
 	view = "place"
 	audio.cue("page")

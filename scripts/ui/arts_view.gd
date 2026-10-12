@@ -1,66 +1,93 @@
 extends RefCounted
-## 功法: arts and 心法 in their slots, everything learned, worn equipment and the resulting stats.
+## The panel's 神通 and 功法 pages, after Mi Chang Sheng: what is in use on the left (the active arts
+## with their keys, the 心法 in their slots), everything learned on the right, filtered by element.
+## A learned art is put into use, or taken out, by pressing it.
+const Settings = preload("res://scripts/ui/settings.gd")
 
-static func render(ui) -> void:
+static func render_arts(ui) -> void:
 	var session = ui.session
-	var center: VBoxContainer = ui.center
-	center.add_child(ui.label("功 法", 26, ui.GOLD))
 	var extra: Dictionary = session.bonuses()
 	var elements: Array[String] = []
 	for element: String in extra.element_damage:
 		var element_name: String = "全属性" if element == "*" else session.content.technique_data.elements[element].name
 		elements.append("%s +%d%%" % [element_name, int(round(float(extra.element_damage[element]) * 100.0))])
-	center.add_child(ui.paragraph("攻击加成 +%d · 受伤 -%d%% · 修炼 ×%.2f%s" % [session.attack_bonus(), int(round(session.defense() * 100.0)), session.cultivation_speed(), " · " + "，".join(elements) if not elements.is_empty() else ""], ui.INK))
-	var rules: Dictionary = session.content.rules
-	for group: Array in [["art", "主动神通", session.player.arts, int(rules.art_slots)], ["method", "心法", session.player.methods, int(rules.method_slots)]]:
-		center.add_child(ui.label("%s  %d / %d" % [group[1], group[2].size(), group[3]], 17, ui.GOLD))
-		for technique_id: String in group[2]:
-			_technique_row(ui, technique_id, true)
-	var idle: Array = session.player.learned.filter(func(technique_id: String) -> bool: return not technique_id in session.player.arts and not technique_id in session.player.methods)
-	if not idle.is_empty():
-		center.add_child(ui.label("已习得", 17, ui.GOLD))
-		for technique_id: String in idle:
-			_technique_row(ui, technique_id, false)
-	center.add_child(ui.label("法 宝", 17, ui.GOLD))
-	for slot: String in session.content.equipment_data.slots:
-		var worn: String = str(session.player.equipment.get(slot, ""))
-		var row := HBoxContainer.new()
-		row.add_theme_constant_override("separation", 10)
-		center.add_child(row)
-		var slot_label: Label = ui.label(session.content.equipment_data.slots[slot], 16, ui.MUTED)
-		slot_label.custom_minimum_size.x = 60
-		row.add_child(slot_label)
-		if worn.is_empty():
-			row.add_child(ui.label("未佩戴", 15, ui.MUTED))
-			continue
-		var gear: Dictionary = session.content.equipment(worn)
-		var text: Label = ui.paragraph("%s · %s" % [gear.name, gear.description], ui.INK)
-		text.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		row.add_child(text)
-		var taken := slot
-		row.add_child(ui.button("取下", func() -> void: ui.run(func() -> String: return session.unequip_slot(taken))))
-	center.add_child(ui.button("返回", func() -> void: ui.set_view("place")))
+	ui.center.add_child(ui.paragraph("攻击加成 +%d · 受伤 -%d%%%s" % [session.attack_bonus(), int(round(session.defense() * 100.0)), " · " + "，".join(elements) if not elements.is_empty() else ""], ui.INK))
+	_page(ui, "art", "主动神通", session.player.arts, int(session.content.rules.art_slots), true)
 
-static func _technique_row(ui, technique_id: String, active: bool) -> void:
+static func render_methods(ui) -> void:
 	var session = ui.session
-	var center: VBoxContainer = ui.center
-	var t: Dictionary = session.content.technique(technique_id)
-	var row := HBoxContainer.new()
-	row.add_theme_constant_override("separation", 10)
-	center.add_child(row)
-	var title: Label = ui.label("%s\n%s · %s" % [t.name, t.tier_name, session.content.technique_data.elements[t.element].name], 15, ui.GOLD if int(t.tier) >= 3 else ui.INK)
-	title.custom_minimum_size.x = 120
-	row.add_child(title)
-	var text: Label = ui.paragraph(t.description)
-	text.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	row.add_child(text)
-	var chosen := technique_id
-	if active:
-		row.add_child(ui.button("停下", func() -> void: ui.run(func() -> String: return session.unequip_technique(chosen))))
-		return
-	var slots: Array = session.player.arts if t.slot == "art" else session.player.methods
-	var limit := int(session.content.rules.art_slots if t.slot == "art" else session.content.rules.method_slots)
-	var full := slots.size() >= limit
-	var equip: Button = ui.button("运转", func() -> void: ui.run(func() -> String: return session.equip_technique(chosen)), "栏位已满，先停下一门" if full else "放入栏位")
-	equip.disabled = full or not session.battle.is_empty()
-	row.add_child(equip)
+	ui.center.add_child(ui.paragraph("心法常驻运转：修炼速度 ×%.2f。" % session.cultivation_speed(), ui.INK))
+	_page(ui, "method", "心法", session.player.methods, int(session.content.rules.method_slots), false)
+
+## Slots on the left, the learned arts of this kind on the right.
+static func _page(ui, slot_kind: String, title: String, in_use: Array, limit: int, keyed: bool) -> void:
+	var session = ui.session
+	var columns := HBoxContainer.new()
+	columns.add_theme_constant_override("separation", 24)
+	ui.center.add_child(columns)
+	var slots := VBoxContainer.new()
+	slots.custom_minimum_size.x = 330
+	slots.add_theme_constant_override("separation", 8)
+	columns.add_child(slots)
+	slots.add_child(ui.label("%s  %d / %d" % [title, in_use.size(), limit], 18, ui.GOLD))
+	for index: int in limit:
+		var row := HBoxContainer.new()
+		row.add_theme_constant_override("separation", 8)
+		slots.add_child(row)
+		var key: Label = ui.label(("[%s]" % Settings.key_name(ui, "skill_%d" % (index + 1))) if keyed else "%d" % (index + 1), 15, ui.MUTED)
+		key.custom_minimum_size.x = 48
+		row.add_child(key)
+		if index >= in_use.size():
+			row.add_child(ui.label("空", 15, ui.MUTED))
+			continue
+		var technique_id: String = in_use[index]
+		var t: Dictionary = session.content.technique(technique_id)
+		var name: Label = ui.label("%s · %s" % [t.name, t.tier_name], 15, ui.GOLD if int(t.tier) >= 3 else ui.INK)
+		name.tooltip_text = t.description
+		name.mouse_filter = Control.MOUSE_FILTER_PASS
+		name.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		row.add_child(name)
+		var stop: Button = ui.button("停下", func() -> void: ui.run(func() -> String: return session.unequip_technique(technique_id)), "移出栏位")
+		stop.disabled = not session.battle.is_empty()
+		row.add_child(stop)
+	var library := VBoxContainer.new()
+	library.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	library.add_theme_constant_override("separation", 8)
+	columns.add_child(library)
+	var filters := HBoxContainer.new()
+	filters.add_theme_constant_override("separation", 6)
+	library.add_child(filters)
+	var choices: Array = [["all", "全部"]]
+	for element: String in session.content.technique_data.elements:
+		choices.append([element, session.content.technique_data.elements[element].name])
+	for pair: Array in choices:
+		var element_id: String = pair[0]
+		var tab: Button = ui.button(pair[1], func() -> void: ui.set_arts_filter(element_id))
+		tab.disabled = ui.arts_filter == element_id
+		tab.custom_minimum_size = Vector2(48, 34)
+		filters.add_child(tab)
+	var grid := GridContainer.new()
+	grid.columns = 2
+	grid.add_theme_constant_override("h_separation", 8)
+	grid.add_theme_constant_override("v_separation", 8)
+	library.add_child(grid)
+	var full := in_use.size() >= limit
+	var shown := 0
+	for technique_id: String in session.player.learned:
+		var t: Dictionary = session.content.technique(technique_id)
+		if t.slot != slot_kind or (ui.arts_filter != "all" and t.element != ui.arts_filter):
+			continue
+		shown += 1
+		var active: bool = technique_id in in_use
+		var card: Button = ui.button("%s%s\n%s · %s" % [t.name, "（运转中）" if active else "", t.tier_name, session.content.technique_data.elements[t.element].name], func() -> void:
+			if active:
+				ui.run(func() -> String: return session.unequip_technique(technique_id))
+			else:
+				ui.run(func() -> String: return session.equip_technique(technique_id)), t.description + ("\n点击停下" if active else ("\n栏位已满，先停下一门" if full else "\n点击运转")))
+		card.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		card.custom_minimum_size.y = 56
+		card.alignment = HORIZONTAL_ALIGNMENT_LEFT
+		card.disabled = (not active and full) or not session.battle.is_empty()
+		grid.add_child(card)
+	if shown == 0:
+		library.add_child(ui.paragraph("没有此类已学的功法。"))

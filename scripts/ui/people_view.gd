@@ -1,6 +1,6 @@
 extends RefCounted
-## People in the interface: who is here, the 相识 list, a person's profile card with what has passed
-## between you (人物志), and their portrait.
+## People in the interface: the drawer of who is here, the 相识 list, facing a person (their portrait,
+## what can be done with them, their details and what has passed between you — 人物志), portraits.
 const Calendar = preload("res://scripts/core/calendar.gd")
 const ArtLibrary = preload("res://scripts/ui/art_library.gd")
 const PEOPLE_SHOWN_HERE := 12
@@ -48,18 +48,47 @@ static func render_list(ui) -> void:
 		grid.add_child(entry)
 	center.add_child(ui.button("返回", func() -> void: ui.set_view("place")))
 
-## People here: handwritten first, then the first few others, with the rest behind 「更多」.
-static func render_here(ui) -> void:
+## People here, in a drawer at the left edge of the scene: handwritten first, then the first few others
+## with the rest behind 「更多」. Closed, only its tab shows.
+static func render_drawer(ui, layer: Control) -> void:
 	var session = ui.session
-	var center: VBoxContainer = ui.center
 	var here: Array[String] = session.present_npcs()
 	if here.is_empty():
 		return
-	var flow := HFlowContainer.new()
-	flow.add_theme_constant_override("h_separation", 8)
-	flow.add_theme_constant_override("v_separation", 6)
-	center.add_child(flow)
-	flow.add_child(ui.label("此地人物 · %d" % here.size(), 15, ui.GOLD))
+	if not ui.drawer_open:
+		var tab: Button = ui.button("此\n地\n人\n物\n%d\n▶" % here.size(), ui.toggle_drawer, "展开此地人物")
+		tab.anchor_top = 0.52
+		tab.anchor_bottom = 0.52
+		tab.offset_left = 0.0
+		tab.add_theme_font_size_override("font_size", 15)
+		layer.add_child(tab)
+		return
+	var drawer := PanelContainer.new()
+	drawer.add_theme_stylebox_override("panel", ui.style(Color(0.04, 0.09, 0.1, 0.88), Color("#41615e"), 10))
+	drawer.anchor_top = 0.52
+	drawer.anchor_bottom = 1.0
+	drawer.offset_right = 300.0
+	drawer.offset_bottom = -60.0
+	layer.add_child(drawer)
+	var column := VBoxContainer.new()
+	column.add_theme_constant_override("separation", 6)
+	drawer.add_child(column)
+	var header := HBoxContainer.new()
+	column.add_child(header)
+	var title: Label = ui.label("此地人物 · %d" % here.size(), 16, ui.GOLD)
+	title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	header.add_child(title)
+	var fold: Button = ui.button("◀", ui.toggle_drawer, "收起")
+	fold.custom_minimum_size = Vector2(36, 30)
+	header.add_child(fold)
+	var scroll := ScrollContainer.new()
+	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	column.add_child(scroll)
+	var list := VBoxContainer.new()
+	list.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	list.add_theme_constant_override("separation", 4)
+	scroll.add_child(list)
 	var shown := 0
 	for person_id: String in here:
 		var generated: bool = session.is_generated(person_id)
@@ -69,18 +98,23 @@ static func render_here(ui) -> void:
 			shown += 1
 		var person: Dictionary = session.person(person_id)
 		var hostile: bool = person.attitude == "hostile"
-		var chip: Button = ui.button(("⚔ " if hostile else "") + person.name + " · " + person.title, func() -> void: ui.open_person(person_id), "查看资料与交互")
+		var chip: Button = ui.button(("⚔ " if hostile else "") + person.name + " · " + person.title, func() -> void: ui.open_person(person_id), "%s · 好感 %s" % [person.realm_text, session.content.favor_stage(session.favor(person_id))])
+		chip.alignment = HORIZONTAL_ALIGNMENT_LEFT
+		chip.custom_minimum_size.y = 36
+		chip.add_theme_font_size_override("font_size", 14)
 		if hostile:
 			chip.add_theme_color_override("font_color", Color("#e39a82"))
 		chip.disabled = person_id == ui.selected_npc
-		flow.add_child(chip)
+		list.add_child(chip)
 	var hidden: int = here.filter(func(person_id: String) -> bool: return session.is_generated(person_id)).size() - shown
 	if hidden > 0:
-		flow.add_child(ui.button("更多 · %d 人" % hidden, func() -> void:
+		list.add_child(ui.button("更多 · %d 人" % hidden, func() -> void:
 			ui.show_everyone_here = true
 			ui.render(), "显示此地的所有人"))
 
-## Profile card: who they are, how they feel about you, and what you can do with them here.
+## Facing a person, after Mi Chang Sheng: their portrait large in the middle with their name, what can be
+## done with them in two columns either side, what was just said below; 查看 opens who they are, their
+## arts and what has passed between you.
 static func render_person(ui, person_id: String) -> void:
 	var session = ui.session
 	var center: VBoxContainer = ui.center
@@ -88,34 +122,79 @@ static func render_person(ui, person_id: String) -> void:
 	var progress: Dictionary = session.world.people.get(person_id, {})
 	var favor: int = session.favor(person_id)
 	var where: String = session.npc_location(person_id)
+	var here: bool = where == session.player.location
 	# Some people are met in a scene of their own (the storyteller on his stage, the rogue on the road).
-	if where == session.player.location:
-		var scene: TextureRect = ui.picture(ArtLibrary.person_art(person_id), 260)
+	if here:
+		var scene: TextureRect = ui.picture(ArtLibrary.person_art(person_id), 200)
 		if scene != null:
 			center.add_child(scene)
-	var card := HBoxContainer.new()
-	card.add_theme_constant_override("separation", 18)
-	center.add_child(card)
-	card.add_child(_portrait(ui, person_id, person))
-	var info := VBoxContainer.new()
-	info.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	card.add_child(info)
-	info.add_child(ui.label("%s  ·  %s" % [person.name, person.title], 24, ui.GOLD))
-	var attitude_color: Color = Color("#e39a82") if person.attitude == "hostile" else ui.INK
-	info.add_child(ui.label("态度  %s" % session.content.ATTITUDES[person.attitude], 15, attitude_color))
+	var stage := HBoxContainer.new()
+	stage.alignment = BoxContainer.ALIGNMENT_CENTER
+	stage.add_theme_constant_override("separation", 14)
+	center.add_child(stage)
+	var left := VBoxContainer.new()
+	left.add_theme_constant_override("separation", 8)
+	left.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	left.alignment = BoxContainer.ALIGNMENT_CENTER
+	stage.add_child(left)
+	var middle := VBoxContainer.new()
+	middle.add_theme_constant_override("separation", 4)
+	stage.add_child(middle)
+	var frame := PanelContainer.new()
+	frame.add_theme_stylebox_override("panel", ui.style(Color("#152a30"), Color("#e39a82") if person.attitude == "hostile" else ui.GOLD, 4))
+	frame.add_child(_portrait(ui, person_id, person, Vector2(176, 220)))
+	middle.add_child(frame)
+	var name_label: Label = ui.label(person.name, 22, ui.GOLD)
+	name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	middle.add_child(name_label)
+	var who: Label = ui.label("%s · %s\n%s · %s" % [person.title, person.realm_text, person.personality, session.content.ATTITUDES[person.attitude]], 14, ui.MUTED)
+	who.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	middle.add_child(who)
+	if bool(progress.get("met", false)):
+		var bond: Label = ui.label("好感 · %s  %d" % [session.content.favor_stage(favor), favor], 15)
+		bond.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		middle.add_child(bond)
+	else:
+		middle.add_child(ui.label("初次相见", 15, ui.MUTED))
+	var right := VBoxContainer.new()
+	right.add_theme_constant_override("separation", 8)
+	right.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	right.alignment = BoxContainer.ALIGNMENT_CENTER
+	stage.add_child(right)
+	var options: Array[Button] = []
+	if here:
+		for option: Dictionary in session.npc_options(person_id):
+			var option_id: String = option.id
+			var choice: Button = ui.button(option.label, func() -> void: ui.run(func() -> String: return session.interact(person_id, option_id)), option.reason)
+			choice.disabled = not option.available
+			if option_id == "fight":
+				choice.add_theme_stylebox_override("normal", ui.style(Color("#5a2b26"), Color("#c9785f"), 10))
+			options.append(choice)
+	var half := (options.size() + 1) / 2
+	for index: int in options.size():
+		(left if index < half else right).add_child(options[index])
+	right.add_child(ui.button("收起" if ui.profile_open else "查看", ui.toggle_profile, "此人的来历、功法与往来"))
+	if not here and not where.is_empty():
+		right.add_child(ui.button("在舆图上查看", func() -> void:
+			ui.map_target = where
+			ui.selected_npc = ""
+			ui.set_view("map")))
+	right.add_child(ui.button("离开", ui.close_person))
+	if not here:
+		var place: String = session.content.locations[where].name if not where.is_empty() else "下落不明"
+		center.add_child(ui.paragraph("此人现在 · " + place + "。须到当地才能与其交往。", ui.MUTED))
+	if str(ui.dialogue.get("npc", "")) == person_id:
+		center.add_child(_dialogue_box(ui, person_id, person))
+	if not ui.profile_open:
+		return
+	center.add_child(HSeparator.new())
 	var grid := GridContainer.new()
 	grid.columns = 2
 	grid.add_theme_constant_override("h_separation", 24)
-	info.add_child(grid)
+	center.add_child(grid)
 	for pair: Array in [["境界", person.realm_text], ["出身", person.affiliation], ["年岁", "%d" % (int(person.age) + Calendar.year(int(session.world.day)) - 1)], ["性情", person.personality]]:
 		grid.add_child(ui.label("%s  %s" % [pair[0], pair[1]], 15))
-	if bool(progress.get("met", false)):
-		ui.meter(info, "好感 · " + session.content.favor_stage(favor), maxi(favor, 0), session.content.FAVOR_MAX, ui.GOLD)
-	else:
-		info.add_child(ui.label("初次相见", 15, ui.MUTED))
 	center.add_child(ui.paragraph(person.description, ui.INK))
-	if str(ui.dialogue.get("npc", "")) == person_id:
-		center.add_child(_dialogue_box(ui, person_id, person))
 	if person.has("loadout"):
 		var arts: Array[String] = []
 		for art_id: String in person.loadout.arts:
@@ -129,28 +208,6 @@ static func render_person(ui, person_id: String) -> void:
 			if not str(person.loadout.equipment[slot]).is_empty():
 				gear.append(session.content.equipment(person.loadout.equipment[slot]).name)
 		center.add_child(ui.paragraph("神通 · %s\n心法 · %s%s" % ["、".join(arts), "、".join(methods), "\n法宝 · " + "、".join(gear) if not gear.is_empty() else ""]))
-	if where != session.player.location:
-		var place: String = session.content.locations[where].name if not where.is_empty() else "下落不明"
-		center.add_child(ui.paragraph("此人现在 · " + place + "。须到当地才能与其交往。", ui.MUTED))
-	var options := GridContainer.new()
-	options.columns = 2
-	options.add_theme_constant_override("h_separation", 12)
-	options.add_theme_constant_override("v_separation", 10)
-	center.add_child(options)
-	if where == session.player.location:
-		for option: Dictionary in session.npc_options(person_id):
-			var option_id: String = option.id
-			var choice: Button = ui.button(option.label, func() -> void: ui.run(func() -> String: return session.interact(person_id, option_id)), option.reason)
-			choice.disabled = not option.available
-			choice.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-			options.add_child(choice)
-	elif not where.is_empty():
-		var locate: Button = ui.button("在舆图上查看", func() -> void:
-			ui.map_target = where
-			ui.selected_npc = ""
-			ui.set_view("map"))
-		options.add_child(locate)
-	options.add_child(ui.button("返回", ui.close_person))
 	_record(ui, person_id, person)
 
 ## 人物志: when and where you met, what has passed between you, the person's life as far as it is

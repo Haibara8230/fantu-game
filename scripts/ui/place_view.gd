@@ -1,74 +1,116 @@
 extends RefCounted
-## The place the player is at: its scenes as tabs, each with a banner and its actions, the people here
-## and, at the sect's hall, the lineage choice.
+## The place the player is at, drawn as a scene after Mi Chang Sheng: the place's picture fills the
+## screen with its name at the top, its spots hang on it as paper tags and the people here wait in a
+## drawer at the left edge (render_scene). The window on the right holds the spot the player turned
+## to — its picture, text and actions — or the person they are facing.
 const Calendar = preload("res://scripts/core/calendar.gd")
 const Landscape = preload("res://scripts/ui/landscape.gd")
 const PeopleView = preload("res://scripts/ui/people_view.gd")
+const PAPER := Color("#e9dfc4")
+const INK_DARK := Color("#2c261c")
 
+## The scene over the place's picture: its name, the spots as tags, the people drawer and the way out.
+static func render_scene(ui, layer: Control) -> void:
+	var session = ui.session
+	var location: Dictionary = session.content.locations[session.player.location]
+	var title := PanelContainer.new()
+	title.add_theme_stylebox_override("panel", ui.style(Color(0.04, 0.09, 0.1, 0.78), Color("#5d7a6f"), 10))
+	title.anchor_left = 0.5
+	title.anchor_right = 0.5
+	title.offset_left = -170.0
+	title.offset_right = 170.0
+	title.offset_top = 16.0
+	title.grow_horizontal = Control.GROW_DIRECTION_BOTH
+	layer.add_child(title)
+	var names := VBoxContainer.new()
+	names.add_theme_constant_override("separation", 0)
+	title.add_child(names)
+	var name_label: Label = ui.label(location.name, 28, ui.GOLD)
+	name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	names.add_child(name_label)
+	var subtitle: Label = ui.label(location.subtitle, 14, ui.MUTED)
+	subtitle.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	names.add_child(subtitle)
+	var spots := _open_spots(session, session.player.location)
+	for index: int in spots.size():
+		var spot: Dictionary = spots[index]
+		var spot_id: String = spot.id
+		var tag := Button.new()
+		tag.text = "\n".join(str(spot.name).split(""))
+		tag.tooltip_text = spot.name
+		tag.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+		var chosen: bool = spot_id == ui.selected_spot and ui.selected_npc.is_empty()
+		var paper: StyleBoxFlat = ui.style(PAPER if not chosen else Color("#f6e7b8"), ui.GOLD if chosen else Color("#6b5536"), 8)
+		for state: String in ["normal", "hover", "pressed", "focus"]:
+			tag.add_theme_stylebox_override(state, paper)
+		tag.add_theme_color_override("font_color", INK_DARK)
+		tag.add_theme_color_override("font_hover_color", Color("#000000"))
+		tag.add_theme_color_override("font_pressed_color", INK_DARK)
+		tag.add_theme_font_size_override("font_size", 19)
+		tag.anchor_left = 0.05 + (index % 4) * 0.08
+		tag.anchor_right = tag.anchor_left
+		tag.anchor_top = 0.32 + (index % 2) * 0.04 + (index / 4) * 0.2
+		tag.anchor_bottom = tag.anchor_top
+		tag.pressed.connect(func() -> void: ui.audio.cue("click"))
+		tag.pressed.connect(func() -> void:
+			ui.selected_npc = ""
+			ui.select_spot(spot_id))
+		layer.add_child(tag)
+	PeopleView.render_drawer(ui, layer)
+	var leave: Button = ui.button("离开 · 舆图", func() -> void: ui.set_view("map"), "到舆图上选择去处")
+	leave.anchor_left = 0.27
+	leave.anchor_right = 0.27
+	leave.anchor_top = 1.0
+	leave.anchor_bottom = 1.0
+	leave.offset_top = -112.0
+	leave.disabled = not ui.settled()
+	layer.add_child(leave)
+
+## The window: the person the player faces, or the spot they turned to with its actions.
 static func render(ui) -> void:
 	var session = ui.session
 	var center: VBoxContainer = ui.center
 	if ui.preview_mode:
 		sect_choices(ui, center, true)
-	var location_id: String = session.player.location
-	var location: Dictionary = session.content.locations[location_id]
-	var title_row := HBoxContainer.new()
-	title_row.add_theme_constant_override("separation", 20)
-	center.add_child(title_row)
-	title_row.add_child(ui.label(location.name, 30, ui.GOLD))
-	title_row.add_child(ui.label(location.subtitle, 16, ui.MUTED))
-	center.add_child(ui.paragraph(location.description))
-	center.add_child(ui.paragraph(_objective(session), ui.GOLD))
-	PeopleView.render_here(ui)
 	if not ui.selected_npc.is_empty():
 		PeopleView.render_person(ui, ui.selected_npc)
 		return
-	# Second-level scenes: each spot has its own banner, text and actions; moving between them is free.
+	var location_id: String = session.player.location
+	var location: Dictionary = session.content.locations[location_id]
 	var spots := _open_spots(session, location_id)
 	if not spots.any(func(spot: Dictionary) -> bool: return spot.id == ui.selected_spot):
 		ui.selected_spot = spots[0].id
-	var tabs := HBoxContainer.new()
-	tabs.add_theme_constant_override("separation", 8)
-	center.add_child(tabs)
-	var spot: Dictionary = {}
-	for candidate: Dictionary in spots:
-		var spot_id: String = candidate.id
-		var tab: Button = ui.button(candidate.name, func() -> void: ui.select_spot(spot_id))
-		tab.disabled = spot_id == ui.selected_spot
-		tabs.add_child(tab)
-		if spot_id == ui.selected_spot:
-			spot = candidate
+	var spot: Dictionary = spots.filter(func(candidate: Dictionary) -> bool: return candidate.id == ui.selected_spot)[0]
+	var title_row := HBoxContainer.new()
+	title_row.add_theme_constant_override("separation", 14)
+	center.add_child(title_row)
+	title_row.add_child(ui.label(spot.name, 26, ui.GOLD))
+	title_row.add_child(ui.label(location.name, 15, ui.MUTED))
 	var landscape = Landscape.new()
 	landscape.location_id = location_id
 	landscape.terrain = location.terrain
 	landscape.spot_id = spot.id
-	landscape.custom_minimum_size.y = 190
+	landscape.custom_minimum_size.y = 170
 	center.add_child(landscape)
-	center.add_child(ui.paragraph(spot.description, ui.INK))
+	center.add_child(ui.paragraph(spot.description if not str(spot.description).is_empty() else location.description, ui.INK))
 	var grid := GridContainer.new()
 	grid.columns = 2
 	grid.add_theme_constant_override("h_separation", 12)
 	grid.add_theme_constant_override("v_separation", 10)
 	center.add_child(grid)
+	var trading := false
 	for action: String in spot.actions:
+		if action in ["shop", "sell"]:
+			if not trading:
+				trading = true
+				_open(ui, grid, "交易  ·  不耗时日", ui.open_trade, "买卖在一张台面上摆好，确定后才成交")
+			continue
 		_spot_action(ui, grid, action)
 	for days: Variant in session.content.rules.wait_options:
 		var span := int(days)
 		_timed(ui, grid, "停留  ·  " + Calendar.duration_text(span), func() -> String: return session.wait(span), "原地停留，等候时机；约定临近时会提醒")
 	if "study" in spot.actions and not ui.preview_mode:
 		sect_choices(ui, center, false)
-	var names: Array[String] = []
-	for id: String in session.active_skills():
-		names.append(session.content.skills[id].name)
-	center.add_child(ui.paragraph("已习神通 · " + " / ".join(names) + "。悬停神通按钮可查看效果。"))
-
-static func _objective(session) -> String:
-	if session.has_flag("serpent_slain"):
-		return "落霞谷灵泉已复。世事仍在流转，你可以继续修炼与游历。"
-	var need: Dictionary = session.next_breakthrough()
-	if need.is_empty():
-		return "当前目标 · 休整后前往落霞谷，平定赤鳞妖蟒。"
-	return "当前目标 · 修至%s，积攒 %d 修为与 %d 枚筑基丹，在青云山突破。" % [session.content.realm_title(int(session.player.realm), session.content.realm(int(session.player.realm)).stages.size() - 1), int(need.xp), int(need.pills)]
 
 static func _breakthrough_tooltip(session) -> String:
 	var need: Dictionary = session.next_breakthrough()
@@ -99,34 +141,16 @@ static func _spot_action(ui, grid: GridContainer, action: String) -> void:
 		return
 	match action:
 		"cultivate":
-			var stuck: bool = session.at_bottleneck()
-			for days: Variant in rules.cultivate_options:
-				var span := int(days)
-				var preview: Dictionary = session.retreat_preview(span)
-				var tooltip := "修为约 +%d，恢复全部灵力；约定或寿元告急时会提前出关" % int(preview.xp)
-				if stuck:
-					tooltip = "修为卡在瓶颈，闭关难进；需外出历练或服破障丹"
-				elif int(preview.days) < span:
-					tooltip = "约第 %d 日修为触及瓶颈而出关，修为约 +%d" % [int(preview.days), int(preview.xp)]
-				if session.retreat_efficiency() < 100:
-					tooltip += "\n连日闭关心境渐倦，收益降至 %d%%；外出做些别的事可以平复" % session.retreat_efficiency()
-				var retreat := _timed(ui, grid, "闭关  ·  " + Calendar.duration_text(span), func() -> String: return session.cultivate(span), tooltip)
-				retreat.disabled = stuck
+			var tooltip := "选择闭关的时日，看看能得多少修为"
+			if session.at_bottleneck():
+				tooltip = "修为卡在瓶颈，闭关难进；需外出历练或服破障丹"
+			elif session.retreat_efficiency() < 100:
+				tooltip = "连日闭关心境渐倦，收益降至 %d%%；外出做些别的事可以平复" % session.retreat_efficiency()
+			_open(ui, grid, "闭关修炼", func() -> void: ui.set_view("retreat"), tooltip)
 		"rest":
 			_action(ui, grid, "静室休整  ·  " + Calendar.duration_text(session.rest_days()), "rest", "恢复全部气血与灵力；伤得越重，需要的日子越长")
 		"breakthrough":
-			_action(ui, grid, "突破境界  ·  " + ui.duration("breakthrough"), "breakthrough", _breakthrough_tooltip(session))
-		"sell":
-			_action(ui, grid, "全部出售", "sell", "把这里收购的东西全部卖掉，不耗时日")
-			for item_id: String in session.player.items.keys():
-				var price: int = session.sell_price(item_id)
-				if price > 0:
-					var sold := item_id
-					_timed(ui, grid, "出售%s（%d）· 每件 %d" % [session.content.item(item_id).name, session.item_count(item_id), price], func() -> String: return session.sell(sold, 1), session.content.item(item_id).description)
-		"shop":
-			for good: Dictionary in session.shop_goods():
-				var bought: String = good.item
-				_timed(ui, grid, "购买%s  ·  %d 灵石" % [session.content.item(bought).name, int(good.price)], func() -> String: return session.buy(bought), session.content.item(bought).description)
+			_open(ui, grid, "突破境界", func() -> void: ui.set_view("breakthrough"), _breakthrough_tooltip(session))
 		"gather":
 			var gather: Dictionary = session.content.locations[session.player.location].gather
 			var kinds: Array[String] = []
@@ -166,6 +190,12 @@ static func _spot_action(ui, grid: GridContainer, action: String) -> void:
 				study.disabled = not reason.is_empty()
 				study.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 				grid.add_child(study)
+
+## A button that opens a scroll of its own (the retreat, the trading table).
+static func _open(ui, parent: GridContainer, title: String, callback: Callable, tooltip: String) -> void:
+	var entry: Button = ui.button(title, callback, tooltip)
+	entry.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	parent.add_child(entry)
 
 ## A button that runs a session action and shows its text.
 static func _timed(ui, parent: GridContainer, title: String, callback: Callable, tooltip: String) -> Button:

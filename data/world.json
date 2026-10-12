@@ -394,6 +394,7 @@
     {
       "id": "foundation",
       "name": "筑基",
+      "breakthrough_text": "丹田中翻涌的灵气渐渐平息，由气凝实为液，余下的灵力沉入经脉与血肉。你只觉周身舒畅，一股从未有过的力量正在凝聚。",
       "lifespan_years": 220,
       "stages": [
         {"name": "初期", "xp": 0, "max_hp": 140, "max_qi": 50, "attack_bonus": 8},

@@ -6,7 +6,7 @@ extends RefCounted
 const Goals = preload("res://scripts/ui/goals.gd")
 const StatusView = preload("res://scripts/ui/status_view.gd")
 # The top-left buttons: the view each one opens, and its name.
-const ICONS := [["status", "人物"], ["bag", "行囊"], ["arts", "功法"], ["map", "舆图"], ["chronicle", "编年史"]]
+const ICONS := [["status", "人物"], ["bag", "行囊"], ["arts", "神通"], ["map", "舆图"], ["chronicle", "编年史"]]
 const LOG_LINES := 2
 const NOTICE_SECONDS := 6.0
 
@@ -166,6 +166,16 @@ static func _bar(ui, title: String, value: int, maximum: int, color: Color) -> v
 	bar.add_theme_stylebox_override("background", ui.style(Color("#1d3539"), Color("#1d3539"), 0))
 	bar.add_theme_stylebox_override("fill", ui.style(color, color, 0))
 	ui.hud_status.add_child(bar)
+
+## Puts the notice along the bottom, or near the top during a duel, whose dock owns the bottom.
+static func place_notice(ui, top: bool) -> void:
+	var label: Label = ui.status_label
+	label.anchor_left = 0.25 if top else 0.34
+	label.anchor_right = 0.75 if top else 0.985
+	label.anchor_top = 0.0 if top else 1.0
+	label.anchor_bottom = 0.0 if top else 1.0
+	label.offset_top = 104.0 if top else -50.0
+	label.offset_bottom = 146.0 if top else -8.0
 
 ## Shows what just happened, then lets it fade.
 static func notice(ui, message: String) -> void:

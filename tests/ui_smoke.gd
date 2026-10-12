@@ -87,14 +87,24 @@ func _watch_walk() -> Dictionary:
 	await process_frame
 	return {"marked": marked, "dates": dates.size()}
 
+## A button in the window, or on the place's scene (the people drawer, the way out).
 func _button(text_part: String) -> Button:
-	for button: Button in main.center.find_children("*", "Button", true, false):
+	for button: Button in main.center.find_children("*", "Button", true, false) + main.scene_layer.find_children("*", "Button", true, false):
 		if button.text.contains(text_part):
 			return button
 	return null
 
+## A spot's paper tag on the place's scene (its text runs top to bottom; the tooltip names it).
+func _tag(spot_name: String) -> Button:
+	for button: Button in main.scene_layer.find_children("*", "Button", true, false):
+		if button.tooltip_text == spot_name:
+			return button
+	return null
+
+## Whether an illustration shows: filling the screen behind an event or story, or in the window.
 func _has_art(file_name: String) -> bool:
-	return main.center.find_children("*", "TextureRect", true, false).any(func(image: TextureRect) -> bool: return image.texture != null and image.texture.resource_path.ends_with(file_name + ".png"))
+	var images: Array = main.center.find_children("*", "TextureRect", true, false) + [main.backdrop]
+	return images.any(func(image: TextureRect) -> bool: return image.visible and image.texture != null and image.texture.resource_path.ends_with(file_name + ".png"))
 
 func _run() -> void:
 	root.size = Vector2i(1920, 1080)
@@ -138,22 +148,38 @@ func _run() -> void:
 	main.reset_guide()
 	check(main.guide_enabled and main.guide_seen.is_empty() and _texts(main.center, "Label").contains("指引 · 闭关修炼"), "and every tip can be shown again")
 	main.set_guide_enabled(false)
-	check(_button("静室") != null and _button("演武坪") != null and _button("传功堂") != null, "sect scenes offered as tabs")
-	_button("传功堂").pressed.emit()
-	check(_texts(main.center, "Label").contains("研习传承") and _button("闭关  ·  1 个月") == null, "scene switch shows only that scene's actions")
+	# A place is a scene: its name on top, its spots as paper tags, the people in a drawer at the left.
+	check(main.scene_layer.visible and _tag("静室") != null and _tag("演武坪") != null and _tag("传功堂") != null, "the sect's spots hang on its scene as paper tags")
+	await process_frame
+	var tags: Array = main.scene_layer.find_children("*", "Button", true, false).filter(func(button: Button) -> bool: return not button.tooltip_text.is_empty() and button.text.contains("
+"))
+	check(tags.all(func(tag: Button) -> bool: return tag.get_global_rect().position.y >= main.hud_left.get_global_rect().end.y and tag.get_global_rect().end.x <= main.window.get_global_rect().position.x), "the tags keep clear of the HUD and the window")
+	check(_texts(main.scene_layer, "Label").contains("青云山") and _texts(main.scene_layer, "Label").contains("此地人物"), "the scene shows the place's name and the people drawer")
+	_tag("传功堂").pressed.emit()
+	check(_texts(main.center, "Label").contains("研习传承") and _button("闭关修炼") == null, "a tag opens its spot, with only that spot's actions")
 	check(_button("参悟吐纳法") != null or _button("参悟") != null, "the hall offers techniques to study")
-	_button("执事堂").pressed.emit()
+	_tag("执事堂").pressed.emit()
 	check(_button("接下：") != null, "the 执事堂 board lists commissions")
+	main.toggle_drawer()
+	check(not _texts(main.scene_layer, "Label").contains("此地人物 ·") and _button("▶") != null, "the drawer folds to its tab")
+	main.toggle_drawer()
 	var disciple: String = main.session.present_npcs().filter(func(person_id: String) -> bool: return person_id.begins_with("g:"))[0]
 	main.open_person(disciple)
-	check(_texts(main.center, "Label").contains("神通 ·") and _button("切磋") != null, "a generated disciple shows a loadout and can spar")
+	check(_texts(main.center, "Label").contains(main.session.person(disciple).name) and _button("切磋") != null and _button("离开") != null and not _texts(main.center, "Label").contains("神通 ·"), "facing a disciple: their portrait and name, what can be done, details kept back")
+	_button("查看").pressed.emit()
+	check(_texts(main.center, "Label").contains("神通 ·") and _button("收起") != null, "查看 shows their arts")
 	main.close_person()
 	main.set_view("arts")
 	await _capture("arts")
-	var arts_text := _texts(main.center, "Label")
-	check(arts_text.contains("主动神通  3 / 4") and arts_text.contains("心法  0 / 2") and arts_text.contains("御剑诀"), "the 功法 view shows slots and arts")
+	var arts_text := _texts(main.center, "Label") + _texts(main.center, "Button")
+	check(arts_text.contains("主动神通  3 / 4") and arts_text.contains("[1]") and arts_text.contains("御剑诀"), "the 神通 page: slots with their keys, the arts learned")
+	main.set_view("methods")
+	check(_texts(main.center, "Label").contains("心法  0 / 2"), "the 功法 page: the 心法 slots")
+	main.set_arts_filter("fire")
+	check(not (_texts(main.center, "Button")).contains("吐纳"), "the learned arts filter by element")
+	main.set_arts_filter("all")
 	main.set_view("place")
-	_button("静室").pressed.emit()
+	_tag("静室").pressed.emit()
 	check(main.status_label.get_global_rect().end.y <= main.get_global_rect().end.y + 1, "status line inside the window")
 	# The world screen: only the HUD's corners stay on screen besides the window.
 	check(main.current_screen() == "place" and main.hud_left.visible and main.hud_right.visible and main.window.get_global_rect().position.x >= main.hud_left.get_global_rect().end.x, "the world screen keeps the window clear of the HUD")
@@ -161,7 +187,7 @@ func _run() -> void:
 	check(main.journal_text.text == "\n".join(main.session.journal_lines().slice(-2)) and main.journal_text.text.contains("【1年1月初一】"), "the latest records show at the corner")
 	var hud := _texts(main.hud_status, "Label")
 	check(hud.contains("青禾") and hud.contains("气血") and hud.contains("修为  0 / 500"), "the HUD shows who you are and how you stand")
-	check(_button("闭关  ·  1 个月") != null and _button("闭关  ·  1 年") != null and _button("停留  ·  1 日") != null and not _button("闭关  ·  1 年").disabled, "retreat lengths and waiting offered")
+	check(_button("闭关修炼") != null and _button("突破境界") != null and _button("停留  ·  1 日") != null, "the chamber offers retreat, breakthrough and waiting")
 	main.hud_icons.status.pressed.emit()
 	check(main.current_screen() == "panel" and not main.hud_left.visible and main.tab_row.visible, "人物 opens the character panel over the world")
 	var status := _texts(main.center, "Label")
@@ -182,24 +208,47 @@ func _run() -> void:
 	check(not main.goal_label.visible, "the HUD's goal can be switched off")
 	main.Settings.set_goals(main, true)
 	_goals()
-	check(_button("闭关  ·  1 年").tooltip_text.contains("触及瓶颈"), "a year's retreat warns that it will stop at the bottleneck")
+	# The retreat scroll: the monthly rate and where it comes from, the deadlines, a length to pick.
+	_button("闭关修炼").pressed.emit()
+	var scroll := _texts(main.center, "Label")
+	check(main.current_screen() == "retreat" and scroll.contains("每月修为") and scroll.contains("灵根 ·") and scroll.contains("近 期 大 事") and scroll.contains("除去妖蟒 · 还有"), "闭关修炼 opens the retreat scroll: the rate, its sources and the deadlines")
+	var length: HSlider = main.center.find_children("*", "HSlider", true, false)[0]
+	length.value = 12
+	check(_texts(main.center, "Label").contains("1 年") and _texts(main.center, "Label").contains("触及瓶颈"), "a year's retreat previews stopping at the bottleneck")
+	main.close_overlay()
 	main.session.player.xp = 500
-	main.render()
-	check(_button("闭关  ·  1 个月").disabled and _button("闭关  ·  1 个月").tooltip_text.contains("破障丹"), "a bottleneck closes the retreat")
+	main.set_view("retreat")
+	check(_texts(main.center, "Label").contains("修为卡在瓶颈") and _button("开始闭关") == null, "a bottleneck closes the retreat")
 	main.set_view("status")
 	check(_texts(main.center, "Label").contains("瓶颈"), "and shows on the character page")
+	main.close_overlay()
+	main.session.player.xp = 0
+	main.set_view("retreat")
+	length = main.center.find_children("*", "HSlider", true, false)[0]
+	length.value = 1
+	var retreat_from := int(main.session.world.day)
+	_button("开始闭关").pressed.emit()
+	await process_frame
+	check(main.presenting and _texts(main.center, "Label").contains("闭 关 中") and int(main.session.world.day) == retreat_from + 30, "the rules run the retreat at once; the scroll plays it back")
+	while main.presenting:
+		await process_frame
+	check(main.session.player.xp > 0 and not _texts(main.center, "Label").contains("闭 关 中") and _texts(main.center, "Label").contains("每月修为"), "and comes back to the scroll")
 	main.close_overlay()
 	main.session.player.xp = 0
 	main.render()
 	main._save_manual()
 	main.run(func() -> String: return main.session.travel("wild"))
 	await _capture("wild")
-	check(main.clock_label.text == "历元 1 年 1 月初八", "travel advances the calendar by route days")
+	check(main.clock_label.text == main.Calendar.date_text(retreat_from + 30 + 7), "travel advances the calendar by route days")
 	check(main.audio.music_key == "wild" and main.audio.ambience_key == "wild", "music and ambience follow the location")
 	main.set_guide_enabled(true)
 	main.run(func() -> String: return main.session.start_battle("wolf"))
 	check(_texts(main.center, "Label").contains("指引 · 斗法") and _texts(main.center, "Label").contains("按 1 / 2 / 3 / 4 或点按钮") and _button("[1] ") != null, "the first duel explains the controls with the bound keys")
 	main.set_guide_enabled(false)
+	check(main.current_screen() == "full" and not main.hud_left.visible and main.window.get_global_rect().size.is_equal_approx(main.get_global_rect().size) and _texts(main.center, "Label").contains("斗 法  ·  第 1 回合") and _button("守御") != null and _button("撤离") != null, "the duel takes the whole screen, with its dock along the bottom")
+	_button("记录").pressed.emit()
+	check(main.battle_record_open and _texts(main.center, "Label").contains("展开斗法"), "记录 shows the duel's latest entries")
+	main.toggle_battle_record()
 	await main.skill("fire")
 	await _capture("battle")
 	root.size = Vector2i(1280, 720)
@@ -243,14 +292,15 @@ func _run() -> void:
 	check(_texts(main.center, "Label").contains("你交给沈墨五株回春草"), "what just happened shows in a dialogue box on the card")
 	_button("交谈").pressed.emit()
 	await process_frame
+	_button("查看").pressed.emit()
 	var said := _texts(main.center, "Label")
 	var first_line: String = main.session.content.people.shen_mo.talk[0]
 	check(said.contains(first_line) and not said.contains("沈墨：" + first_line), "a talk line is shown under the speaker's name, once")
 	var met: Dictionary = main.session.world.people.shen_mo
 	check(said.contains("往 来") and said.contains("初识 · " + main.Calendar.date_text(int(met.met_day)) + " · 云溪坊市") and said.contains("交谈 1 次") and said.contains("上回代他收五株回春草"), "the card records when and where you met and what passed between you")
 	check(said.contains("近 来") and said.contains("你交给沈墨五株回春草"), "and the latest chronicle entries about them, apart from what was just said")
-	_button("返回").pressed.emit()
-	check(main.selected_npc.is_empty() and _button("闭关") == null, "back to the market scenes")
+	_button("离开").pressed.emit()
+	check(main.selected_npc.is_empty() and _button("闭关修炼") == null, "back to the market scenes")
 	# 编年史: the whole record by kind, newest first, a page at a time.
 	main.set_view("chronicle")
 	var record := _texts(main.center, "Label")
@@ -270,14 +320,26 @@ func _run() -> void:
 		check(_button("较早").disabled, "a short record fits on one page")
 	_button("返回").pressed.emit()
 	check(main.view == "place", "back from the chronicle")
-	# The street shop and the 行囊.
+	# The trading table: goods are laid out, and only 确定 trades them.
 	main.select_spot("street")
-	check(_button("购买筑基丹  ·  120 灵石") != null and _button("购买回气丹") != null, "the street shop lists its goods")
+	_button("交易").pressed.emit()
+	check(main.current_screen() == "trade" and _button("筑基丹 · 120 灵石") != null and _button("回气丹 ·") != null, "交易 lays out the shop's goods")
 	main.session.player.stones = 40
-	_button("购买疗伤丹").pressed.emit()
+	main.session.set_item_count("huichun_grass", 2)
+	_button("疗伤丹 ·").pressed.emit()
+	_button("回春草 ×2 · 售").pressed.emit()
+	var table := _texts(main.center, "Label")
+	check(main.trade.buy == ["liaoshang_pill"] and int(main.trade.sell.get("huichun_grass", 0)) == 1 and main.session.item_count("liaoshang_pill") == 0, "goods are laid on the table, nothing traded yet")
+	check(table.contains("灵石  %+d" % (main.session.sell_price("huichun_grass") - 20)), "with what it comes to")
+	_button("确定").pressed.emit()
+	check(main.session.item_count("liaoshang_pill") == 1 and main.session.item_count("huichun_grass") == 1 and main.trade.buy.is_empty(), "确定 sells and buys what is on the table")
+	main.close_overlay()
 	main.set_view("bag")
 	await _capture("bag")
 	check(_texts(main.center, "Label").contains("疗伤丹 ×1") and _button("服用") != null, "the 行囊 lists items with a use button")
+	main.set_bag_filter("pill")
+	check(not _texts(main.center, "Label").contains("回春草"), "and filters them by kind")
+	main.set_bag_filter("all")
 	main.set_view("place")
 	# The region map: hidden places stay hidden; picking a node previews the route; departing travels it.
 	main.set_view("map")
@@ -318,7 +380,7 @@ func _run() -> void:
 		main.close_person()
 	main.session.pending_event = {"id": "night_market", "day": int(main.session.world.day)}
 	main.render()
-	check(_has_art("yunxi_night_market") and _button("随意逛逛") != null, "an event opens on its illustration above the choices")
+	check(_has_art("yunxi_night_market") and _button("随意逛逛") != null and main.window.get_global_rect().position.y > 360, "an event fills the screen with its illustration, its words and choices in a box along the bottom")
 	main.session.pending_event = {}
 	main.render()
 	var rampage_day: int = main.Calendar.to_day(6, 3, 1)
@@ -406,9 +468,20 @@ func _run() -> void:
 	check(main.started and int(main.session.world.day) == saved_day and main.manual_store.saved_at() > main.auto_store.saved_at(), "continue reads the newer manual save")
 	main.Settings.set_autosave(main, true)
 	main.Settings.set_text_speed(main, "fast")
-	# The end of a life.
+	# Breaking through: the rules decide, and a realm reached has its own screen until 确定.
 	main.run(func() -> String: return main.session.travel("sect"))
-	main.session.player.birth_day = int(main.session.world.day) + 30 - 120 * 360
+	main.session.player.stage = 3
+	main.session.player.xp = 2000
+	main.session.set_item_count("foundation_pill", 1)
+	main.session.refresh_realm_stats()
+	main.set_view("breakthrough")
+	check(_texts(main.center, "Label").contains("✓  修为  2000 / 2000") and not _button("开始突破").disabled, "the 突破 tab lists what breaking through needs")
+	_button("开始突破").pressed.emit()
+	check(main.current_screen() == "full" and _texts(main.center, "Label").contains("筑基") and _texts(main.center, "Label").contains("寿元 120 → 220 年"), "a realm reached is shown on its own screen")
+	_button("确定").pressed.emit()
+	check(main.ceremony.is_empty() and main.view == "place" and main.session.player.realm == 1, "确定 returns to the place")
+	# The end of a life.
+	main.session.player.birth_day = int(main.session.world.day) + 30 - main.session.lifespan() * 360
 	main.run(func() -> String: return main.session.cultivate(360))
 	main.run(func() -> String: return main.session.cultivate(360))
 	await _capture("ending")
