@@ -20,6 +20,7 @@ const Storylines = preload("res://scripts/core/storylines.gd")
 const Talents = preload("res://scripts/core/talents.gd")
 const Breakthrough = preload("res://scripts/core/breakthrough.gd")
 const Fortune = preload("res://scripts/core/fortune.gd")
+const Sect = preload("res://scripts/core/sect.gd")
 const SaveRestore = preload("res://scripts/core/save_restore.gd")
 const SaveMigration = preload("res://scripts/core/save_migration.gd")
 const SAVE_VERSION := SaveMigration.CURRENT_VERSION
@@ -99,6 +100,7 @@ func new_game(character_name: String = "无名", seed_value: int = -1, roots: Ar
 		"deeds": {}, "taught": [],
 		"talents": born.get("talents", []).duplicate(), "flaws": born.get("flaws", []).duplicate(),
 		"foundation_grade": 1, "injury_until": 0, "lessons": 0, "boons": {},
+		"rank": 0, "contribution": 0, "merit": 0, "stipend_day": 0, "exchanged": {}, "donated": {},
 	}
 	player.stones = maxi(0, int(player.stones) + talent_modifier("stones"))
 	for skill_id: String in content.sects.wanderer.skills:
@@ -217,7 +219,7 @@ func root_title() -> String:
 
 func cultivation_speed() -> float:
 	var grade := Breakthrough.grade_of(self)
-	return float(content.root_grade(player.get("roots", [])).speed) * (1.0 + float(bonuses().cultivation)) * (1.0 + float(grade.get("speed", 0)) / 100.0)
+	return float(content.root_grade(player.get("roots", [])).speed) * (1.0 + float(bonuses().cultivation)) * (1.0 + float(grade.get("speed", 0)) / 100.0) * (1.0 + float(Sect.retreat_bonus(self)) / 100.0)
 
 ## Xp gained per 30 days of closed-door cultivation with these roots.
 func cultivation_rate() -> int:
@@ -488,6 +490,44 @@ func insight_needed() -> int:
 
 func retreat_fatigue() -> int:
 	return Cultivation.fatigue(self)
+
+# --- The sect (sect.gd) -----------------------------------------------------------------------
+
+## The rank held: {"id", "name", "merit", "stage", "stipend", "retreat", ...}.
+func sect_rank() -> Dictionary:
+	return Sect.rank(self)
+
+func next_sect_rank() -> Dictionary:
+	return Sect.next_rank(self)
+
+func promotion_block() -> String:
+	return Sect.promotion_block(self)
+
+func promote() -> String:
+	return Sect.promote(self)
+
+## {"periods", "stones"}.
+func stipend_due() -> Dictionary:
+	return Sect.stipend_due(self)
+
+func collect_stipend() -> String:
+	return Sect.collect_stipend(self)
+
+## [{"key", "item", "price", "left", "block"}].
+func sect_goods() -> Array[Dictionary]:
+	return Sect.goods(self)
+
+func sect_exchange(key: String) -> String:
+	return Sect.exchange(self, key)
+
+func donation_left() -> int:
+	return Sect.donation_left(self)
+
+func donation_value(item_id: String, count: int) -> int:
+	return Sect.donation_value(self, item_id, count)
+
+func donate(item_id: String, count: int) -> String:
+	return Sect.donate(self, item_id, count)
 
 # --- Breakthrough (breakthrough.gd) -------------------------------------------------------------
 

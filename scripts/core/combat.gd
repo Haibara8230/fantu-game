@@ -225,6 +225,7 @@ static func _tournament_over(s, won: bool) -> String:
 		var out: String = s.log_event("tournament_out", {"round": round, "npc": npc})
 		return s.conclude(_with_milestones(out, s.gain_insight("spar")), s.advance_days(s.content.action_days("road_recovery")))
 	var message: String = _with_milestones(s.log_event("tournament_round", {"round": round, "npc": npc}), s.gain_insight("spar"))
+	message += " " + s.Sect.gain(s, int(s.content.sect_data.awards.get("tournament_round", 0)), "小比胜了一轮")
 	if round < 3:
 		s.player.hp = mini(int(s.player.max_hp), int(s.player.hp) + int(s.player.max_hp) * 3 / 10)
 		s.player.qi = mini(int(s.player.max_qi), int(s.player.qi) + int(s.player.max_qi) * 3 / 10)
@@ -236,6 +237,7 @@ static func _tournament_over(s, won: bool) -> String:
 	s.player.stones += 100
 	message += " " + s.log_event("tournament_champion", {"stones": 100, "xp": 150, "item": prize}, true)
 	s.record_deed("tournament_champion")
+	message += " " + s.Sect.gain(s, int(s.content.sect_data.awards.get("tournament_champion", 0)), "外门小比夺魁")
 	message = _with_milestones(message, s.gain_xp(150))
 	message = _with_milestones(message, s.congratulate("champion"))
 	return s.conclude(message, s.advance_days(s.content.action_days("road_recovery")))
@@ -275,6 +277,8 @@ static func _win(s) -> String:
 		message += " " + s.log_event(enemy.flag_event, {}, true)
 		if enemy.has("congrats"):
 			message = _with_milestones(message, s.congratulate(str(enemy.congrats)))
+		if enemy.has("contribution"):
+			message += " " + s.Sect.gain(s, int(enemy.contribution), "为宗门除去%s" % enemy.name)
 	if enemy.has("drops") and s.world_rng.randf() < float(enemy.drops.chance):
 		var tier: int = s.world_rng.randi_range(int(enemy.drops.tiers[0]), int(enemy.drops.tiers[1]))
 		var loot: String = "j:" + s.Arsenal.generate_technique(s.content, s.world_rng, tier) if s.world_rng.randf() < 0.5 else s.Arsenal.generate_equipment(s.content, s.world_rng, tier)

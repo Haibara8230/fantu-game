@@ -1,0 +1,646 @@
+{
+	"battle": {},
+	"chronicle": [
+		{
+			"args": {},
+			"day": 0,
+			"id": "start",
+			"major": true
+		},
+		{
+			"args": {
+				"part": "say",
+				"step": "visit",
+				"story": "lineage"
+			},
+			"day": 0,
+			"id": "story",
+			"major": false
+		},
+		{
+			"args": {
+				"quest_title": "收购赤炎花"
+			},
+			"day": 0,
+			"id": "quest_accept",
+			"major": false
+		},
+		{
+			"args": {
+				"quest_title": "收购赤炎花",
+				"stones": 113,
+				"xp": 0
+			},
+			"day": 0,
+			"id": "quest_done",
+			"major": false
+		},
+		{
+			"args": {
+				"quest_title": "收购赤炎花"
+			},
+			"day": 0,
+			"id": "quest_accept",
+			"major": false
+		},
+		{
+			"args": {
+				"quest_title": "收购赤炎花",
+				"stones": 68,
+				"xp": 0
+			},
+			"day": 0,
+			"id": "quest_done",
+			"major": false
+		},
+		{
+			"args": {
+				"days": 60,
+				"xp": 168
+			},
+			"day": 60,
+			"id": "cultivate",
+			"major": false
+		}
+	],
+	"ended": {},
+	"pending_event": {},
+	"player": {
+		"arts": [
+			"sword",
+			"fire",
+			"wood"
+		],
+		"birth_day": -5760,
+		"boons": {},
+		"cooldowns": {},
+		"cultivation_carry": 0,
+		"deeds": {
+			"commission": 2,
+			"retreat_days": 60
+		},
+		"equipment": {
+			"accessory": "",
+			"robe": "",
+			"weapon": ""
+		},
+		"fatigue": 60,
+		"fatigue_day": 60,
+		"flaws": [],
+		"foundation_grade": 1,
+		"hp": 90,
+		"injury_until": 0,
+		"insight": 50,
+		"items": {},
+		"journey": {},
+		"learned": [
+			"sword",
+			"fire",
+			"wood"
+		],
+		"lessons": 0,
+		"location": "sect",
+		"max_hp": 90,
+		"max_qi": 30,
+		"methods": [],
+		"mind": 8,
+		"name": "旧宗",
+		"qi": 30,
+		"quests": [],
+		"realm": 0,
+		"roots": [
+			"metal",
+			"water"
+		],
+		"sect": "wanderer",
+		"stage": 0,
+		"stones": 211,
+		"talents": [],
+		"taught": [],
+		"warned_for": -1,
+		"xp": 168
+	},
+	"rng": {
+		"combat": "-8594789321833472161",
+		"world": "-2881328434788436427"
+	},
+	"version": 13,
+	"world": {
+		"day": 60,
+		"events": {},
+		"flags": {
+			"intro_done": true
+		},
+		"letters": [],
+		"people": {
+			"g:1042:0": {
+				"absent_until": -1,
+				"last": {},
+				"met": true,
+				"met_day": 0,
+				"met_place": "sect",
+				"relation": 0,
+				"talks": 0
+			},
+			"g:1044:0": {
+				"absent_until": -1,
+				"last": {},
+				"met": true,
+				"met_day": 0,
+				"met_place": "sect",
+				"relation": 0,
+				"talks": 0
+			},
+			"g:1072:0": {
+				"absent_until": -1,
+				"last": {},
+				"met": true,
+				"met_day": 0,
+				"met_place": "sect",
+				"relation": 0,
+				"talks": 0
+			},
+			"g:1091:0": {
+				"absent_until": -1,
+				"last": {},
+				"met": true,
+				"met_day": 0,
+				"met_place": "sect",
+				"relation": 0,
+				"talks": 0
+			},
+			"g:1106:0": {
+				"absent_until": -1,
+				"last": {},
+				"met": true,
+				"met_day": 0,
+				"met_place": "sect",
+				"relation": 0,
+				"talks": 0
+			},
+			"g:1114:0": {
+				"absent_until": -1,
+				"last": {},
+				"met": true,
+				"met_day": 0,
+				"met_place": "sect",
+				"relation": 0,
+				"talks": 0
+			},
+			"g:1120:0": {
+				"absent_until": -1,
+				"last": {},
+				"met": true,
+				"met_day": 0,
+				"met_place": "sect",
+				"relation": 0,
+				"talks": 0
+			},
+			"g:1147:0": {
+				"absent_until": -1,
+				"last": {},
+				"met": true,
+				"met_day": 0,
+				"met_place": "sect",
+				"relation": 0,
+				"talks": 0
+			},
+			"g:139:0": {
+				"absent_until": -1,
+				"last": {},
+				"met": true,
+				"met_day": 0,
+				"met_place": "sect",
+				"relation": 0,
+				"talks": 0
+			},
+			"g:1:0": {
+				"absent_until": -1,
+				"last": {},
+				"met": true,
+				"met_day": 0,
+				"met_place": "sect",
+				"relation": 0,
+				"talks": 0
+			},
+			"g:201:0": {
+				"absent_until": -1,
+				"last": {},
+				"met": true,
+				"met_day": 0,
+				"met_place": "sect",
+				"relation": 0,
+				"talks": 0
+			},
+			"g:215:0": {
+				"absent_until": -1,
+				"last": {},
+				"met": true,
+				"met_day": 0,
+				"met_place": "sect",
+				"relation": 0,
+				"talks": 0
+			},
+			"g:221:0": {
+				"absent_until": -1,
+				"last": {},
+				"met": true,
+				"met_day": 0,
+				"met_place": "sect",
+				"relation": 0,
+				"talks": 0
+			},
+			"g:246:0": {
+				"absent_until": -1,
+				"last": {},
+				"met": true,
+				"met_day": 0,
+				"met_place": "sect",
+				"relation": 0,
+				"talks": 0
+			},
+			"g:272:0": {
+				"absent_until": -1,
+				"last": {},
+				"met": true,
+				"met_day": 0,
+				"met_place": "sect",
+				"relation": 0,
+				"talks": 0
+			},
+			"g:273:0": {
+				"absent_until": -1,
+				"last": {},
+				"met": true,
+				"met_day": 0,
+				"met_place": "sect",
+				"relation": 0,
+				"talks": 0
+			},
+			"g:276:0": {
+				"absent_until": -1,
+				"last": {},
+				"met": true,
+				"met_day": 0,
+				"met_place": "sect",
+				"relation": 0,
+				"talks": 0
+			},
+			"g:381:0": {
+				"absent_until": -1,
+				"last": {},
+				"met": true,
+				"met_day": 0,
+				"met_place": "sect",
+				"relation": 0,
+				"talks": 0
+			},
+			"g:442:0": {
+				"absent_until": -1,
+				"last": {},
+				"met": true,
+				"met_day": 0,
+				"met_place": "sect",
+				"relation": 0,
+				"talks": 0
+			},
+			"g:44:0": {
+				"absent_until": -1,
+				"last": {},
+				"met": true,
+				"met_day": 0,
+				"met_place": "sect",
+				"relation": 0,
+				"talks": 0
+			},
+			"g:454:0": {
+				"absent_until": -1,
+				"last": {},
+				"met": true,
+				"met_day": 0,
+				"met_place": "sect",
+				"relation": 0,
+				"talks": 0
+			},
+			"g:472:0": {
+				"absent_until": -1,
+				"last": {},
+				"met": true,
+				"met_day": 0,
+				"met_place": "sect",
+				"relation": 0,
+				"talks": 0
+			},
+			"g:481:0": {
+				"absent_until": -1,
+				"last": {},
+				"met": true,
+				"met_day": 0,
+				"met_place": "sect",
+				"relation": 0,
+				"talks": 0
+			},
+			"g:508:0": {
+				"absent_until": -1,
+				"last": {},
+				"met": true,
+				"met_day": 0,
+				"met_place": "sect",
+				"relation": 0,
+				"talks": 0
+			},
+			"g:527:0": {
+				"absent_until": -1,
+				"last": {},
+				"met": true,
+				"met_day": 0,
+				"met_place": "sect",
+				"relation": 0,
+				"talks": 0
+			},
+			"g:561:0": {
+				"absent_until": -1,
+				"last": {},
+				"met": true,
+				"met_day": 0,
+				"met_place": "sect",
+				"relation": 0,
+				"talks": 0
+			},
+			"g:563:0": {
+				"absent_until": -1,
+				"last": {},
+				"met": true,
+				"met_day": 0,
+				"met_place": "sect",
+				"relation": 0,
+				"talks": 0
+			},
+			"g:590:0": {
+				"absent_until": -1,
+				"last": {},
+				"met": true,
+				"met_day": 0,
+				"met_place": "sect",
+				"relation": 0,
+				"talks": 0
+			},
+			"g:594:0": {
+				"absent_until": -1,
+				"last": {},
+				"met": true,
+				"met_day": 0,
+				"met_place": "sect",
+				"relation": 0,
+				"talks": 0
+			},
+			"g:615:0": {
+				"absent_until": -1,
+				"last": {},
+				"met": true,
+				"met_day": 0,
+				"met_place": "sect",
+				"relation": 0,
+				"talks": 0
+			},
+			"g:616:0": {
+				"absent_until": -1,
+				"last": {},
+				"met": true,
+				"met_day": 0,
+				"met_place": "sect",
+				"relation": 0,
+				"talks": 0
+			},
+			"g:626:0": {
+				"absent_until": -1,
+				"last": {},
+				"met": true,
+				"met_day": 0,
+				"met_place": "sect",
+				"relation": 0,
+				"talks": 0
+			},
+			"g:630:0": {
+				"absent_until": -1,
+				"last": {},
+				"met": true,
+				"met_day": 0,
+				"met_place": "sect",
+				"relation": 0,
+				"talks": 0
+			},
+			"g:666:0": {
+				"absent_until": -1,
+				"last": {},
+				"met": true,
+				"met_day": 0,
+				"met_place": "sect",
+				"relation": 0,
+				"talks": 0
+			},
+			"g:672:0": {
+				"absent_until": -1,
+				"last": {},
+				"met": true,
+				"met_day": 0,
+				"met_place": "sect",
+				"relation": 0,
+				"talks": 0
+			},
+			"g:676:0": {
+				"absent_until": -1,
+				"last": {},
+				"met": true,
+				"met_day": 0,
+				"met_place": "sect",
+				"relation": 0,
+				"talks": 0
+			},
+			"g:684:0": {
+				"absent_until": -1,
+				"last": {},
+				"met": true,
+				"met_day": 0,
+				"met_place": "sect",
+				"relation": 0,
+				"talks": 0
+			},
+			"g:706:0": {
+				"absent_until": -1,
+				"last": {},
+				"met": true,
+				"met_day": 0,
+				"met_place": "sect",
+				"relation": 0,
+				"talks": 0
+			},
+			"g:714:0": {
+				"absent_until": -1,
+				"last": {},
+				"met": true,
+				"met_day": 0,
+				"met_place": "sect",
+				"relation": 0,
+				"talks": 0
+			},
+			"g:723:0": {
+				"absent_until": -1,
+				"last": {},
+				"met": true,
+				"met_day": 0,
+				"met_place": "sect",
+				"relation": 0,
+				"talks": 0
+			},
+			"g:72:0": {
+				"absent_until": -1,
+				"last": {},
+				"met": true,
+				"met_day": 0,
+				"met_place": "sect",
+				"relation": 0,
+				"talks": 0
+			},
+			"g:733:0": {
+				"absent_until": -1,
+				"last": {},
+				"met": true,
+				"met_day": 0,
+				"met_place": "sect",
+				"relation": 0,
+				"talks": 0
+			},
+			"g:767:0": {
+				"absent_until": -1,
+				"last": {},
+				"met": true,
+				"met_day": 0,
+				"met_place": "sect",
+				"relation": 0,
+				"talks": 0
+			},
+			"g:812:0": {
+				"absent_until": -1,
+				"last": {},
+				"met": true,
+				"met_day": 0,
+				"met_place": "sect",
+				"relation": 0,
+				"talks": 0
+			},
+			"g:876:0": {
+				"absent_until": -1,
+				"last": {},
+				"met": true,
+				"met_day": 0,
+				"met_place": "sect",
+				"relation": 0,
+				"talks": 0
+			},
+			"g:898:0": {
+				"absent_until": -1,
+				"last": {},
+				"met": true,
+				"met_day": 0,
+				"met_place": "sect",
+				"relation": 0,
+				"talks": 0
+			},
+			"g:89:0": {
+				"absent_until": -1,
+				"last": {},
+				"met": true,
+				"met_day": 0,
+				"met_place": "sect",
+				"relation": 0,
+				"talks": 0
+			},
+			"g:902:0": {
+				"absent_until": -1,
+				"last": {},
+				"met": true,
+				"met_day": 0,
+				"met_place": "sect",
+				"relation": 0,
+				"talks": 0
+			},
+			"g:903:0": {
+				"absent_until": -1,
+				"last": {},
+				"met": true,
+				"met_day": 0,
+				"met_place": "sect",
+				"relation": 0,
+				"talks": 0
+			},
+			"g:957:0": {
+				"absent_until": -1,
+				"last": {},
+				"met": true,
+				"met_day": 0,
+				"met_place": "sect",
+				"relation": 0,
+				"talks": 0
+			},
+			"g:999:0": {
+				"absent_until": -1,
+				"last": {},
+				"met": true,
+				"met_day": 0,
+				"met_place": "sect",
+				"relation": 0,
+				"talks": 0
+			},
+			"gu_changgeng": {
+				"absent_until": -1,
+				"last": {},
+				"met": true,
+				"met_day": 0,
+				"met_place": "sect",
+				"relation": 0,
+				"talks": 0
+			},
+			"xu_qinghe": {
+				"absent_until": -1,
+				"last": {},
+				"met": true,
+				"met_day": 0,
+				"met_place": "sect",
+				"relation": 0,
+				"talks": 0
+			}
+		},
+		"quests_taken": {
+			"sect:0:0": true,
+			"sect:0:2": true
+		},
+		"rumors": {},
+		"seed": 1313,
+		"stock_sold": {},
+		"storylines": {
+			"errands": {
+				"base": {},
+				"begun": true,
+				"since": 0,
+				"state": "active",
+				"step": 0
+			},
+			"intro": {
+				"base": {},
+				"begun": false,
+				"since": 0,
+				"state": "done",
+				"step": 6
+			},
+			"lineage": {
+				"base": {},
+				"begun": true,
+				"since": 0,
+				"state": "active",
+				"step": 0
+			}
+		},
+		"talent_lives": true
+	}
+}

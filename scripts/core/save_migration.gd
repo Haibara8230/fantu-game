@@ -1,6 +1,8 @@
 extends RefCounted
 ## Upgrades saved sessions one version at a time. Output still goes through Session validation.
-const CURRENT_VERSION := 13
+const CURRENT_VERSION := 14
+# Contribution counted for each commission delivered before version 14.
+const V13_MERIT_PER_COMMISSION := 15
 # The teaching cards (data/guide.json) that existed before version 12; older journeys had seen them.
 const V11_TIPS := ["retreat", "people", "map", "battle", "event", "gather", "trade", "commissions", "fatigue", "bottleneck", "arts"]
 const DAYS_PER_MONTH := 30
@@ -41,7 +43,29 @@ static func migrate(data: Dictionary) -> Dictionary:
 		result = _v11_to_v12(result)
 	if not result.is_empty() and int(result.version) == 12:
 		result = _v12_to_v13(result)
+	if not result.is_empty() and int(result.version) == 13:
+		result = _v13_to_v14(result)
 	return result
+
+## Version 14 adds the player's standing in the sect. Older journeys start as outer disciples with the
+## contribution their delivered commissions would have earned, so those far along can be promoted at
+## once; the stipend starts from the day of loading.
+static func _v13_to_v14(data: Dictionary) -> Dictionary:
+	var player: Variant = data.get("player")
+	var world: Variant = data.get("world")
+	if not player is Dictionary or not world is Dictionary:
+		return {}
+	var deeds: Variant = player.get("deeds", {})
+	var delivered: Variant = deeds.get("commission", 0) if deeds is Dictionary else 0
+	var merit := int(delivered) * V13_MERIT_PER_COMMISSION if (delivered is int or delivered is float) and float(delivered) >= 0.0 else 0
+	player["rank"] = 0
+	player["contribution"] = merit
+	player["merit"] = merit
+	player["stipend_day"] = world.get("day", 0)
+	player["exchanged"] = {}
+	player["donated"] = {}
+	data["version"] = 14
+	return data
 
 ## Version 13 adds talents. The generated people of an older world keep the lives they had (their talents
 ## only show); the player's own talents awaken on restore, drawn from the world seed (save_restore.gd).

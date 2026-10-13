@@ -53,6 +53,7 @@ static func _walk(s) -> String:
 			s.player.journey = {}
 			break
 		s.player.location = next
+		s.Commissions.record_visit(s, next)
 		if next == s.player.journey.to:
 			s.player.journey = {}
 		parts.append(s.log_event("travel", {"days": passed.elapsed, "location": next}))

@@ -106,6 +106,8 @@ static func met(s, condition: Dictionary) -> bool:
 			return str(s.world.events.get(value[0], {}).get("state", "")) == value[1]
 		"talent":
 			return s.has_talent(value)
+		"rank_at_least":
+			return int(s.player.get("rank", 0)) >= s.Sect.rank_index(s, value)
 	return false
 
 static func apply(s, effects: Array) -> void:
@@ -125,6 +127,8 @@ static func apply(s, effects: Array) -> void:
 				s.breach()
 			"mind":
 				s.gain_mind(int(value))
+			"contribution":
+				s.Sect.gain(s, int(value))
 			"start_story":
 				s.start_story(value)
 			"story_advance":

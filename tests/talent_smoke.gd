@@ -233,10 +233,10 @@ func _saves() -> void:
 	data.world.talent_lives = "yes"
 	check(not copy.restore(data), "a malformed world flag for talents rejected")
 	var v12 := Session.new()
-	check(v12.restore(JSON.parse_string(FileAccess.get_file_as_string("res://tests/fixtures/v12_sect_ridge.json"))) and v12.snapshot().version == 13 and v12.player.has("talents") and not bool(v12.world.talent_lives), "a version 12 save migrates and awakens its talents")
+	check(v12.restore(JSON.parse_string(FileAccess.get_file_as_string("res://tests/fixtures/v12_sect_ridge.json"))) and v12.snapshot().version == Session.SAVE_VERSION and v12.player.has("talents") and not bool(v12.world.talent_lives), "a version 12 save migrates and awakens its talents")
 	var fixture: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://tests/fixtures/v11_after_retreats.json"))
 	var old := Session.new()
-	check(old.restore(fixture.duplicate(true)) and old.snapshot().version == 13, "an older journey migrates to version 13")
+	check(old.restore(fixture.duplicate(true)) and old.snapshot().version == Session.SAVE_VERSION, "an older journey migrates to the current version")
 	check(old.player.has("talents") and not bool(old.world.talent_lives), "its talents awaken; its people keep the lives they had")
 	check(old.journal_lines().back().contains("生来便有"), "and the awakening is written down")
 	var twice := Session.new()

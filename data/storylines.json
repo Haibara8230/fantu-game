@@ -68,7 +68,7 @@
         "place": "sect",
         "say": "药堂又缺凝露草了。你若得空，采三株送到执事堂，药堂有赏。",
         "after": "许清和收下凝露草，塞给你一枚破障丹：“药堂的谢礼。修为卡住时服下，比闷头闭关管用。”",
-        "effects": [{"item": ["pozhang_pill", 1]}, {"relation": ["xu_qinghe", 10]}, {"mind": 2}]
+        "effects": [{"item": ["pozhang_pill", 1]}, {"relation": ["xu_qinghe", 10]}, {"mind": 2}, {"contribution": 15}]
       },
       {"id": "wait_wolf", "wait_days": 180},
       {
@@ -85,7 +85,7 @@
         "goal": "回青云山，向许清和回禀斩狼之事。",
         "place": "sect",
         "after": "许清和接过狼牙，喜道：“好！这是执事堂的赏，那两个师弟也托我谢你。”",
-        "effects": [{"stones": 60}, {"relation": ["xu_qinghe", 10]}, {"mind": 3}]
+        "effects": [{"stones": 60}, {"relation": ["xu_qinghe", 10]}, {"mind": 3}, {"contribution": 20}]
       },
       {"id": "wait_advice", "wait_days": 360},
       {
@@ -93,7 +93,7 @@
         "letter": true,
         "auto": true,
         "say": "外门里都在议论下一回小比。平日多去演武坪切磋，报名时别错过了——头名能得一卷好功法。",
-        "effects": [{"mind": 1}]
+        "effects": [{"mind": 1}, {"contribution": 10}]
       }
     ]
   },
@@ -229,7 +229,7 @@
   "inner_court": {
     "title": "内门之路",
     "giver": "gu_changgeng",
-    "begin_if": [{"realm_at_least": 1}],
+    "begin_if": [{"rank_at_least": "inner"}],
     "steps": [
       {"id": "wait_patrol", "wait_days": 360},
       {
@@ -239,7 +239,7 @@
         "say": "筑基弟子按例轮流巡山。北边山道近来又有劫修出没，这一趟轮到你了。",
         "deeds": {"win:rogue": 1},
         "after": "劫修伏法，山道又清静了一阵。宗门记下你一功，赏灵石一百五十。",
-        "effects": [{"stones": 150}, {"mind": 4}, {"relation": ["gu_changgeng", 10]}]
+        "effects": [{"stones": 150}, {"mind": 4}, {"relation": ["gu_changgeng", 10]}, {"contribution": 40}]
       },
       {"id": "wait_tide", "wait_days": 720},
       {
@@ -250,7 +250,7 @@
         "say": "落霞谷灵泉每隔几年灵潮涌动，筑基修士在泉边吐纳一回，胜过闭关半年。这一回的灵潮就在眼下，莫要错过。",
         "done": [{"at_location": "wild"}],
         "after": "灵泉上白雾翻涌，你盘坐泉边吐纳了一整夜，周身经脉被灵潮冲刷得通透。",
-        "effects": [{"xp": 360}, {"mind": 3}]
+        "effects": [{"xp": 360}, {"mind": 3}, {"contribution": 40}]
       },
       {"id": "wait_trial", "wait_days": 1080},
       {
@@ -261,7 +261,7 @@
         "say": "内门考校将开。筑基弟子都要在演武坪过一过手，老夫亲自看。",
         "deeds": {"duel": 1},
         "after": "顾长庚看完你的斗法，只说了两个字：“尚可。”转身却让人送来一枚玉简——是他年轻时用过的功法。",
-        "effects": [{"manual": 3}, {"mind": 5}],
+        "effects": [{"manual": 3}, {"mind": 5}, {"contribution": 60}],
         "major": true
       }
     ]

@@ -28,6 +28,7 @@ var commission_data: Dictionary = {}
 # The guided start and the stories of key people (storylines.gd).
 var storylines: Dictionary = {}
 var talent_data: Dictionary = {}
+var sect_data: Dictionary = {}
 # Born-with talent ids by tier, built on first use (talents.gd).
 var talent_pools: Dictionary = {}
 var error_message: String = ""
@@ -36,10 +37,10 @@ const FAVOR_MAX := 200
 const FAVOR_STAGES := [[0, "初识"], [40, "相熟"], [80, "友好"], [140, "信赖"], [200, "亲密"]]
 const ATTITUDES := {"friendly": "友善", "neutral": "中立", "hostile": "敌意"}
 const BUILT_IN_INTERACTIONS := ["talk", "gift", "help"]
-const PLAIN_ACTIONS := ["cultivate", "rest", "breakthrough", "study", "teach", "sell", "shop", "gather", "inn_rest", "search_ruin", "inquire", "commissions"]
+const PLAIN_ACTIONS := ["cultivate", "rest", "breakthrough", "study", "teach", "sell", "shop", "gather", "inn_rest", "search_ruin", "inquire", "commissions", "sect"]
 const ITEM_CATEGORIES := {"herb": "灵草", "pill": "丹药", "treasure": "天材地宝", "manual": "玉简", "equipment": "法宝", "material": "材料", "quest": "信物"}
 # Milestones friends send word of, and the deeds the session counts besides victories ("win:<enemy>").
-const CONGRATS := ["breakthrough", "serpent", "champion"]
+const CONGRATS := ["breakthrough", "serpent", "champion", "promotion"]
 const DEEDS := ["retreat_days", "duel", "trade", "gather", "commission", "help", "tournament_champion"]
 const STORY_STATES := ["none", "active", "done", "closed"]
 const Arsenal = preload("res://scripts/core/arsenal.gd")
@@ -77,7 +78,7 @@ func load_data() -> bool:
 		error_message = "物品配置格式错误。"
 		return false
 	items = item_data
-	for pair: Array in [["techniques", "res://data/techniques.json"], ["equipment", "res://data/equipment.json"], ["vfx_tiers", "res://data/vfx_tiers.json"], ["vfx", "res://data/vfx.json"], ["population", "res://data/population.json"], ["commissions", "res://data/commissions.json"], ["storylines", "res://data/storylines.json"], ["talents", "res://data/talents.json"]]:
+	for pair: Array in [["techniques", "res://data/techniques.json"], ["equipment", "res://data/equipment.json"], ["vfx_tiers", "res://data/vfx_tiers.json"], ["vfx", "res://data/vfx.json"], ["population", "res://data/population.json"], ["commissions", "res://data/commissions.json"], ["storylines", "res://data/storylines.json"], ["talents", "res://data/talents.json"], ["sect", "res://data/sect.json"]]:
 		var loaded: Variant = _read_json(pair[1])
 		if not loaded is Dictionary:
 			error_message = "配置格式错误：" + pair[1]
@@ -102,6 +103,8 @@ func load_data() -> bool:
 			"talents":
 				talent_data = loaded
 				talent_pools = {}
+			"sect":
+				sect_data = loaded
 	map = parsed.map
 	locations = parsed.locations
 	skills = parsed.skills
@@ -196,6 +199,8 @@ func _validate() -> String:
 				return "敌人的弱点配置错误：" + enemy_id
 		if enemy.has("congrats") and not enemy.congrats in CONGRATS:
 			return "敌人引用了未知贺信：" + enemy_id
+		if enemy.has("contribution") and (not _whole(enemy.contribution) or not enemy.has("world_flag")):
+			return "敌人的宗门贡献无效：" + enemy_id
 	var chance: Variant = rules.get("encounter_chance")
 	if not chance is Array or chance.size() != DANGER_LEVELS:
 		return "遭遇几率需要按危险度给出 %d 档。" % DANGER_LEVELS
@@ -285,6 +290,8 @@ func _validate() -> String:
 		if not problem.is_empty():
 			return "人物 %s：%s" % [person_id, problem]
 	problem = _validate_talents()
+	if problem.is_empty():
+		problem = _validate_sect()
 	if not problem.is_empty():
 		return problem
 	problem = _validate_storylines()
@@ -366,6 +373,55 @@ func _validate_fortune() -> String:
 	for key: String in ["before_realm", "mind", "injury_days"]:
 		if not _whole(fortune.remnant.get(key)):
 			return "残魂配置缺少：" + key
+	return ""
+
+# --- Sect static checks ---------------------------------------------------------------------------
+
+func _validate_sect() -> String:
+	var data := sect_data
+	if not commission_data.get("boards", {}).has(data.get("board", "")):
+		return "宗门告示配置无效。"
+	if not data.get("ranks") is Array or data.ranks.is_empty():
+		return "宗门身份配置无效。"
+	var previous := -1
+	for rank: Variant in data.ranks:
+		if not rank is Dictionary or not rank.get("id") is String or not rank.get("name") is String or not _whole(rank.get("merit")) or int(rank.merit) < previous:
+			return "宗门身份配置无效。"
+		previous = int(rank.merit)
+		if not rank.get("stage") is Array or rank.stage.size() != 2 or not _whole(rank.stage[0]) or int(rank.stage[0]) >= realms.size() or not _whole(rank.stage[1]):
+			return "宗门身份的修为要求无效：%s" % rank.id
+		for key: String in ["stipend", "retreat"]:
+			if not _whole(rank.get(key)):
+				return "宗门身份缺少：%s.%s" % [rank.id, key]
+		if rank.has("host") and (not people.has(rank.host) or not rank.get("words") is String):
+			return "宗门身份的主持人无效：%s" % rank.id
+	var stipend: Variant = data.get("stipend")
+	if not stipend is Dictionary or not _whole(stipend.get("period_days")) or int(stipend.period_days) < 1 or not _whole(stipend.get("most_periods")):
+		return "月俸配置无效。"
+	var donation: Variant = data.get("donation")
+	if not donation is Dictionary or not (donation.get("rate") is float or donation.get("rate") is int) or not _whole(donation.get("most")) or not _whole(donation.get("period_days")) or int(donation.period_days) < 1 or not donation.get("categories") is Array:
+		return "捐献配置无效。"
+	for category: Variant in donation.categories:
+		if not ITEM_CATEGORIES.has(category):
+			return "捐献品类未知：%s" % category
+	if not data.get("awards") is Dictionary:
+		return "宗门奖赏配置无效。"
+	var ids := {}
+	for good: Variant in data.get("exchange", []):
+		if not good is Dictionary or not good.get("id") is String or ids.has(good.id) or str(good.id).contains(":"):
+			return "宗门兑换缺少唯一 ID。"
+		ids[good.id] = true
+		if good.has("item") == good.has("manual"):
+			return "宗门兑换须是物品或玉简之一：%s" % good.id
+		if good.has("item") and not items.has(good.item):
+			return "宗门兑换引用了未知物品：%s" % good.id
+		if good.has("manual") and (not _whole(good.manual) or int(good.manual) < 1 or int(good.manual) > technique_data.tiers.size()):
+			return "宗门兑换的玉简品阶无效：%s" % good.id
+		for key: String in ["price", "limit", "per_days"]:
+			if not _whole(good.get(key)) or int(good[key]) < 1:
+				return "宗门兑换缺少：%s.%s" % [good.id, key]
+		if good.has("rank") and not data.ranks.any(func(rank: Dictionary) -> bool: return rank.id == good.rank):
+			return "宗门兑换引用了未知身份：%s" % good.id
 	return ""
 
 # --- Talent static checks -------------------------------------------------------------------------
@@ -872,6 +928,8 @@ func _validate_condition(condition: Variant) -> String:
 			return "" if value is Array and value.size() == 2 and storylines.has(value[0]) and value[1] in STORY_STATES else "剧情状态条件无效"
 		"talent":
 			return "" if is_talent(value) else "未知天赋：%s" % value
+		"rank_at_least":
+			return "" if sect_data.get("ranks", []).any(func(rank: Dictionary) -> bool: return rank.id == value) else "未知宗门身份：%s" % value
 	return "未知条件：%s" % key
 
 func _validate_effects(effects: Variant) -> String:
@@ -884,7 +942,7 @@ func _validate_effects(effects: Variant) -> String:
 		var value: Variant = effect[key]
 		var ok := false
 		match key:
-			"stones", "herbs", "pills", "xp", "mind":
+			"stones", "herbs", "pills", "xp", "mind", "contribution":
 				ok = (value is int or value is float) and float(value) == floor(float(value))
 			"item":
 				ok = value is Array and value.size() == 2 and items.has(value[0]) and (value[1] is int or value[1] is float)

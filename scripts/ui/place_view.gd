@@ -175,7 +175,8 @@ static func _spot_action(ui, grid: GridContainer, action: String) -> void:
 			for offer: Dictionary in session.commission_offers(board):
 				var shown: Dictionary = session.commission_text(offer)
 				var key: String = offer.key
-				_timed(ui, grid, "接下：%s（灵石 %d%s）" % [shown.title, int(offer.reward.stones), "、修为 %d" % int(offer.reward.xp) if int(offer.reward.xp) > 0 else ""], func() -> String: return session.accept_commission(key), shown.text)
+				var merit := int(offer.reward.get("contribution", 0))
+				_timed(ui, grid, "接下：%s（灵石 %d%s%s）" % [shown.title, int(offer.reward.stones), "、修为 %d" % int(offer.reward.xp) if int(offer.reward.xp) > 0 else "", "、贡献 %d" % merit if merit > 0 else ""], func() -> String: return session.accept_commission(key), shown.text)
 			for quest: Dictionary in session.player.quests:
 				if quest.board != board:
 					continue
@@ -185,6 +186,9 @@ static func _spot_action(ui, grid: GridContainer, action: String) -> void:
 				deliver.disabled = not reason.is_empty()
 				deliver.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 				grid.add_child(deliver)
+		"sect":
+			var rank: Dictionary = session.sect_rank()
+			_open(ui, grid, "宗门事务", func() -> void: ui.set_view("sect"), "%s · 贡献 %d：领月俸、申请晋升、兑换与捐献" % [rank.name, int(session.player.get("contribution", 0))])
 		"teach":
 			for technique_id: String in session.teachings():
 				var taught: Dictionary = session.content.technique(technique_id)

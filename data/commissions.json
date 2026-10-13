@@ -14,6 +14,7 @@
       "count": [3, 6],
       "days": 60,
       "reward_scale": 2.5,
+      "contribution": 3,
       "title": "收购{item_name}",
       "text": "需要 {count} 株{item_name}，{days} 日内交到{board_name}。"
     },
@@ -25,8 +26,21 @@
       "days": 60,
       "reward_stones": 30,
       "reward_xp": 25,
+      "contribution": 10,
       "title": "清剿{enemy_name}",
       "text": "落霞谷谷口的{enemy_name}伤了采药人，{days} 日内斩杀 {count} 头。"
+    },
+    "patrol": {
+      "weight": 2,
+      "boards": ["sect"],
+      "places": ["ridge", "wild", "ferry", "town", "market"],
+      "count": [1, 1],
+      "days": 45,
+      "reward_stones": 10,
+      "reward_xp": 20,
+      "contribution": 25,
+      "title": "巡视{place_name}",
+      "text": "宗门差事：到{place_name}走一趟，看看有无异状，{days} 日内回{board_name}复命。"
     },
     "pills": {
       "weight": 1,

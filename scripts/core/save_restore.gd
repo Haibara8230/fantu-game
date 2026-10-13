@@ -109,7 +109,8 @@ static func restore(s, data: Variant) -> bool:
 	if storylines == null or letters == null or deeds == null or not taught is Array or taught.any(func(tip: Variant) -> bool: return not tip is String):
 		return false
 	var progress: Variant = _valid_breakthrough(content, saved_player, saved_pending)
-	if progress == null:
+	var standing: Variant = _valid_standing(content, saved_player, day)
+	if progress == null or standing == null:
 		return false
 	# Talents: optional, since saves before them lack them; then they awaken from the world seed.
 	var born: Variant = _valid_talents(content, saved_player)
@@ -215,6 +216,8 @@ static func restore(s, data: Variant) -> bool:
 	player["flaws"] = born.flaws.duplicate()
 	for key: String in progress:
 		player[key] = progress[key]
+	for key: String in standing:
+		player[key] = standing[key]
 	if not progress.has("attempt"):
 		player.erase("attempt")
 	# Health and qi stay within the caps; talents that awaken may lower them.
@@ -283,6 +286,33 @@ static func _valid_breakthrough(content, saved_player: Dictionary, saved_pending
 		if not attempt is Dictionary or not _whole_nonnegative(attempt.get("odds")) or int(attempt.odds) > 100 or not attempt.get("certain") is bool or not _whole_nonnegative(attempt.get("steps")) or not _whole_nonnegative(attempt.get("xp")) or not attempt.get("guard") is String:
 			return null
 		result["attempt"] = {"odds": int(attempt.odds), "certain": attempt.certain, "steps": int(attempt.steps), "xp": int(attempt.xp), "guard": attempt.guard}
+	return result
+
+## The player's standing in the sect, normalized (optional fields default to an outer disciple with
+## nothing yet), or null when malformed.
+static func _valid_standing(content, saved_player: Dictionary, day: int) -> Variant:
+	var result := {}
+	var rank: Variant = saved_player.get("rank", 0)
+	if not _whole_nonnegative(rank) or int(rank) >= content.sect_data.ranks.size():
+		return null
+	result["rank"] = int(rank)
+	for key: String in ["contribution", "merit"]:
+		var value: Variant = saved_player.get(key, 0)
+		if not _whole_nonnegative(value):
+			return null
+		result[key] = int(value)
+	var stipend_day: Variant = saved_player.get("stipend_day", day)
+	if not _whole_signed(stipend_day) or int(stipend_day) > day:
+		return null
+	result["stipend_day"] = int(stipend_day)
+	var exchanged: Variant = _valid_counts(saved_player.get("exchanged", {}))
+	if exchanged == null:
+		return null
+	result["exchanged"] = exchanged
+	var donated: Variant = saved_player.get("donated", {})
+	if not donated is Dictionary or (not donated.is_empty() and (not _whole_nonnegative(donated.get("period")) or not _whole_nonnegative(donated.get("amount")))):
+		return null
+	result["donated"] = {} if donated.is_empty() else {"period": int(donated.period), "amount": int(donated.amount)}
 	return result
 
 ## The saved talents and flaws ({"talents", "flaws"}), {} when the save has none yet, or null when they
@@ -463,9 +493,12 @@ static func _valid_quests(content, data: Variant) -> Variant:
 			continue
 		if quest.has("enemy") and not content.enemies.has(quest.enemy):
 			continue
+		if quest.has("place") and not content.locations.has(quest.place):
+			continue
 		var normalized: Dictionary = quest.duplicate(true)
 		for key: String in ["count", "days", "deadline", "progress"]:
 			normalized[key] = int(normalized[key])
-		normalized.reward = {"stones": int(quest.reward.get("stones", 0)), "xp": int(quest.reward.get("xp", 0))}
+		# Commissions from before contribution pay none.
+		normalized.reward = {"stones": int(quest.reward.get("stones", 0)), "xp": int(quest.reward.get("xp", 0)), "contribution": int(quest.reward.get("contribution", 0))}
 		result.append(normalized)
 	return result

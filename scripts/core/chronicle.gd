@@ -85,6 +85,11 @@ func format(entry: Dictionary, content) -> String:
 		var grades: Array = content.rules.get("breakthrough", {}).get("grades", [])
 		var grade := int(values.grade)
 		values["grade_name"] = str(grades[grade].name) if grade >= 0 and grade < grades.size() else str(values.grade)
+	if values.has("rank"):
+		var ranks: Array = content.sect_data.get("ranks", [])
+		var rank := int(values.rank)
+		values["rank_name"] = str(ranks[rank].name) if rank >= 0 and rank < ranks.size() else str(values.rank)
+		values["rank_words"] = str(ranks[rank].get("words", "")) if rank >= 0 and rank < ranks.size() else ""
 	if values.has("boon"):
 		for boon: Dictionary in content.rules.get("breakthrough", {}).get("boons", []):
 			if boon.id == values.boon:

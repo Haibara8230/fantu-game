@@ -289,7 +289,10 @@ func _foundation_pace() -> void:
 	game.refresh_realm_stats()
 	game.player.hp = game.player.max_hp
 	game.wait(1)
-	check(game.story_state("inner_court") == "active" and game.wait_options().map(func(days: Variant) -> int: return int(days)) == [1, 10, 30, 90], "foundation opens the inner court's storyline and longer stays")
+	check(game.story_state("inner_court") == "" and game.wait_options().map(func(days: Variant) -> int: return int(days)) == [1, 10, 30, 90], "foundation opens longer stays; the inner court waits for promotion")
+	game.player.merit = 400
+	check(game.promote().contains("外门精英") and game.promote().contains("内门弟子"), "enough merit after foundation earns two promotions at the hall")
+	check(game.story_state("inner_court") == "active", "and entering the inner court opens its storyline")
 	var letters: Array[int] = []
 	var start := int(game.world.day)
 	game.wait(400)

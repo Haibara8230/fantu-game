@@ -200,7 +200,10 @@ func _commissions() -> void:
 	check(offers.size() == 3 and offers == game.commission_offers("sect"), "the board posts three offers, fixed for the period")
 	var gather_offer: Dictionary = {}
 	var hunt_offer: Dictionary = {}
-	for period: int in range(12):
+	# A period that posts both gathering and hunting work (the sect's patrols come up among it too).
+	for period: int in range(40):
+		gather_offer = {}
+		hunt_offer = {}
 		for offer: Dictionary in game.commission_offers("sect"):
 			if offer.kind == "gather" and gather_offer.is_empty():
 				gather_offer = offer

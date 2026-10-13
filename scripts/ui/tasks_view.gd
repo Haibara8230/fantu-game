@@ -28,6 +28,8 @@ static func render_quests(ui) -> void:
 			progress = " %d/%d" % [int(quest.progress), int(quest.count)]
 		elif quest.has("item"):
 			progress = " %d/%d" % [mini(session.item_count(quest.item), int(quest.count)), int(quest.count)]
+		elif quest.has("place"):
+			progress = " · 已巡视" if int(quest.progress) > 0 else " · 未去"
 		center.add_child(ui.label(session.commission_text(quest).title + progress, 18, ui.GOLD))
 		center.add_child(ui.paragraph("限 %s · 交付于%s" % [Calendar.short_text(int(quest.deadline)), session.content.commission_data.boards[quest.board].name], ui.INK))
 

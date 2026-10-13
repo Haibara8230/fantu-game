@@ -533,6 +533,15 @@ func _run() -> void:
 	check(main.started and int(main.session.world.day) == saved_day and main.manual_store.saved_at() > main.auto_store.saved_at(), "continue reads the newer manual save")
 	main.Settings.set_autosave(main, true)
 	main.Settings.set_text_speed(main, "fast")
+	# The sect's page: standing, promotion, stipend, exchange and donations, handled at the 执事堂.
+	main.run(func() -> String: return main.session.travel("sect"))
+	main.set_view("sect")
+	var sect_text := _texts(main.center, "Label")
+	check(sect_text.contains("青云剑宗 · 外门弟子") and sect_text.contains("晋升外门精英") and sect_text.contains("宗门兑换") and _button("申请晋升") != null and _button("申请晋升").disabled and _button("回气丹 · 8 贡献") != null, "the 宗门 page shows the standing, the next rank and the exchange")
+	main.session.player.contribution = 20
+	main.render()
+	_button("回气丹 · 8 贡献").pressed.emit()
+	check(main.session.item_count("huiqi_pill") >= 1 and int(main.session.player.contribution) == 12, "and exchanges there")
 	# Breaking through: the rules decide, and a realm reached has its own screen until 确定.
 	main.run(func() -> String: return main.session.travel("sect"))
 	main.session.player.stage = 3

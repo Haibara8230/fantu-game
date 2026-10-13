@@ -9,7 +9,7 @@ const TIPS_PATH := "res://data/guide.json"
 const DEFAULT_PATH := "user://guide.cfg"
 const Settings = preload("res://scripts/ui/settings.gd")
 # The cards whose situation applies() knows; every card in the data must be one of them.
-const TIP_IDS := ["intro", "retreat", "people", "map", "battle", "event", "gather", "trade", "commissions", "lineage", "mind", "fatigue", "bottleneck", "stories", "letters", "breakthrough", "fortune", "talents", "arts"]
+const TIP_IDS := ["intro", "retreat", "people", "map", "battle", "event", "gather", "trade", "commissions", "lineage", "mind", "fatigue", "bottleneck", "stories", "letters", "breakthrough", "sect", "fortune", "talents", "arts"]
 static var _tips: Array = []
 
 static func tips() -> Array:
@@ -55,6 +55,8 @@ static func applies(ui, tip_id: String) -> bool:
 			return not session.world.get("letters", []).is_empty()
 		"talents":
 			return true
+		"sect":
+			return session.available_here("sect") or ui.view == "sect"
 		"fortune":
 			return not session.player.get("boons", {}).is_empty()
 		"breakthrough":

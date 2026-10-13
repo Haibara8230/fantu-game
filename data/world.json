@@ -13,7 +13,7 @@
       "map": [0.24, 0.24],
       "spots": [
         {"id": "chamber", "name": "静室", "description": "外门弟子的静修之所，灵气清润，可闭关、休整与突破。", "actions": ["cultivate", "rest", "breakthrough"]},
-        {"id": "office", "name": "执事堂", "description": "执事们在这里张贴宗门的委托，按时完成可得酬劳。", "actions": ["commissions"], "requires_flag": "intro_done"},
+        {"id": "office", "name": "执事堂", "description": "执事们在这里张贴宗门的委托，按时完成可得酬劳与贡献；月俸、晋升、兑换与捐献也在这里办理。", "actions": ["commissions", "sect"], "requires_flag": "intro_done"},
         {"id": "arena", "name": "演武坪", "description": "青石铺就的演武坪，同门常在此切磋。", "actions": ["battle:disciple"]},
         {"id": "hall", "name": "传功堂", "description": "堂中供着各派传承玉简，可择一研习；执事也传授几门入门功法，参悟需要时日。", "actions": ["study", "teach"], "requires_flag": "intro_done", "teach": ["t:breath:wood:1::0", "t:body:earth:1::5", "t:focus:water:1::10", "t:bolt:metal:1::15"]}
       ]
@@ -307,6 +307,7 @@
       "locations": ["wild"],
       "min_realm": 1,
       "drops": {"chance": 1.0, "tiers": [2, 3]},
+      "contribution": 100,
       "world_flag": "serpent_slain",
       "flag_event": "serpent_slain"
     },

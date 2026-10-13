@@ -15,6 +15,7 @@ const AudioDirector = preload("res://scripts/presentation/audio_director.gd")
 const ArtLibrary = preload("res://scripts/ui/art_library.gd")
 const Hud = preload("res://scripts/ui/hud.gd")
 const StatusView = preload("res://scripts/ui/status_view.gd")
+const SectView = preload("res://scripts/ui/sect_view.gd")
 const TasksView = preload("res://scripts/ui/tasks_view.gd")
 const SystemView = preload("res://scripts/ui/system_view.gd")
 const WorldMap = preload("res://scripts/ui/world_map.gd")
@@ -35,7 +36,7 @@ const GOLD := Color("#d5b777")
 const INK := Color("#e3e8dc")
 const MUTED := Color("#97aaa4")
 # The scrolls laid over the world and their tabs: the view each tab shows, and its name.
-const PANEL_TABS := [["status", "属性"], ["arts", "神通"], ["methods", "功法"], ["bag", "行囊"], ["people", "相识"], ["chronicle", "编年史"], ["system", "系统"]]
+const PANEL_TABS := [["status", "属性"], ["sect", "宗门"], ["arts", "神通"], ["methods", "功法"], ["bag", "行囊"], ["people", "相识"], ["chronicle", "编年史"], ["system", "系统"]]
 const SCROLL_TABS := [["goals", "当前目标"], ["stories", "剧情"], ["quests", "委托"], ["letters", "传音"], ["upcoming", "约定"]]
 const RETREAT_TABS := [["retreat", "修炼"], ["breakthrough", "突破"]]
 const TAB_GROUPS := {"panel": PANEL_TABS, "scroll": SCROLL_TABS, "retreat": RETREAT_TABS, "trade": [["trade", "交易"]]}
@@ -499,6 +500,8 @@ func render() -> void:
 				ChronicleView.render(self)
 			"status":
 				StatusView.render(self)
+			"sect":
+				SectView.render(self)
 			"goals":
 				TasksView.render_goals(self)
 			"quests":

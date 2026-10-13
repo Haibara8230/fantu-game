@@ -6,5 +6,5 @@
   {"id": "stories", "name": "剧情与传音", "entries": ["story", "letter", "sound"]},
   {"id": "travel", "name": "行旅", "entries": ["travel", "gather", "gather_at", "gather_items", "search_ruin", "loot"]},
   {"id": "trade", "name": "交易与委托", "entries": ["sell", "buy_pill", "sell_all", "sell_item", "buy_item", "quest_accept", "quest_done", "quest_expired"]},
-  {"id": "events", "name": "奇遇与传闻", "entries": ["event", "rumor_auction", "rumor_person", "rumor_ruin", "rumor_serpent", "rumor_sealed", "rumor_stock", "rumor_tournament", "rumor_commission", "rumor_none", "boon_brink", "boon_breach", "boon_ready", "boon_treasure", "remnant_blessed", "remnant_seized"]}
+  {"id": "events", "name": "奇遇与传闻", "entries": ["event", "rumor_auction", "rumor_person", "rumor_ruin", "rumor_serpent", "rumor_sealed", "rumor_stock", "rumor_tournament", "rumor_commission", "rumor_none", "contribution", "rank_up", "stipend", "exchange", "donate", "boon_brink", "boon_breach", "boon_ready", "boon_treasure", "remnant_blessed", "remnant_seized"]}
 ]
