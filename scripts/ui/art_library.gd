@@ -30,6 +30,23 @@ static func _config() -> Dictionary:
 		_art_config = parsed if parsed is Dictionary else {"event_art": {}, "person_art": {}}
 	return _art_config
 
+## One frame of a duel actor's atlas (data/art.json `actors`): {"texture", "region", "faces_right"}, or {}
+## when the art is missing. The map's traveller is drawn with the hero's.
+static func actor_frame(actor_id: String, frame: String) -> Dictionary:
+	var definition: Dictionary = _config().get("actors", {}).get(actor_id, {})
+	var sheet := texture(str(definition.get("texture", "")))
+	if sheet == null:
+		return {}
+	var columns := int(definition.get("columns", 1))
+	var rows := int(definition.get("rows", 1))
+	var index := int(definition.get("frames", {}).get(frame, 0))
+	var cell := Vector2(sheet.get_width() / float(columns), sheet.get_height() / float(rows))
+	var region := Rect2(Vector2(index % columns, index / columns) * cell, cell)
+	if definition.has("frame_regions") and index < definition.frame_regions.size():
+		var r: Array = definition.frame_regions[index]
+		region = Rect2(float(r[0]), float(r[1]), float(r[2]), float(r[3]))
+	return {"texture": sheet, "region": region, "faces_right": bool(definition.get("faces_right", true))}
+
 ## The illustration of an event's key moment, or "" when it has none.
 static func event_art(event_id: String) -> String:
 	return str(_config().get("event_art", {}).get(event_id, ""))

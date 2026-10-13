@@ -1,7 +1,8 @@
 extends Control
 ## Node map of the region. Routes, nodes and labels are drawn in code on top of either the painted
-## background (when the art file exists) or a code-drawn ink placeholder. A journey is played back by
-## walk(): the traveller's mark moves leg by leg along the route.
+## background (when the art file exists) or a code-drawn ink placeholder. The player stands as a small
+## figure (the hero's duel art) at the place they are; a journey is played back by walk(): the figure
+## walks leg by leg along the route, stepping and turning toward where it goes, after 觅长生.
 signal location_selected(location_id: String)
 # Time to walk one leg on screen: per day of the road, within bounds.
 const SECONDS_PER_DAY := 0.09
@@ -22,14 +23,20 @@ var preview_path: Array[String] = []
 var people_at: Dictionary = {}
 var background: Texture2D
 var font := SystemFont.new()
-# The traveller's mark while a journey is played back (null when standing at `current`).
+# The traveller's point while a journey is played back (null when standing at `current`).
 var traveller: Variant = null
+# The figure: the hero's idle frame ({} without the art, then a seal is drawn), which way it faces
+# (1 right, -1 left) and how far its steps have gone.
+var figure: Dictionary = {}
+var facing := 1.0
+var stride := 0.0
 
 func _ready() -> void:
 	font.font_names = PackedStringArray(["Microsoft YaHei", "Noto Sans CJK SC", "SimHei"])
 	mouse_filter = Control.MOUSE_FILTER_STOP
 	resized.connect(queue_redraw)
 	background = ArtLibrary.texture(ArtLibrary.map_path())
+	figure = ArtLibrary.actor_frame("hero", "idle")
 
 func configure(source_content, world_flags: Dictionary, here: String, target: String, path: Array[String], journey: String, known_people: Dictionary = {}) -> void:
 	people_at = known_people
@@ -78,15 +85,20 @@ func walk(start: String, legs: Array[Dictionary], on_leg: Callable) -> void:
 		var to: String = legs[index].to
 		var a := node_position(from)
 		var b := node_position(to)
+		if absf(b.x - a.x) > 1.0:
+			facing = 1.0 if b.x > a.x else -1.0
+		var steps := float(maxi(2, int(legs[index].days) * 2))
 		var tween := create_tween()
 		tween.tween_method(func(progress: float) -> void:
 			traveller = a.lerp(b, progress)
+			stride = progress * steps
 			on_leg.call(index, progress)
 			queue_redraw(), 0.0, 1.0, leg_seconds(int(legs[index].days)))
 		await tween.finished
 		current = to
 		from = to
 	traveller = null
+	stride = 0.0
 	queue_redraw()
 
 func _gui_input(event: InputEvent) -> void:
@@ -107,14 +119,30 @@ func _draw() -> void:
 	_draw_routes()
 	_draw_nodes()
 	if traveller is Vector2:
-		_draw_traveller(traveller)
+		_draw_traveller(traveller, true)
+	elif not current.is_empty() and content.locations.has(current):
+		_draw_traveller(node_position(current) + Vector2(NODE_RADIUS * 1.6, 0), false)
 	# The region's name at the top centre, clear of the HUD's corners.
 	var title := str(content.map.name)
 	var width := font.get_string_size(title, HORIZONTAL_ALIGNMENT_LEFT, -1, 20).x
 	draw_string(font, Vector2(rect.position.x + (rect.size.x - width) * 0.5, rect.position.y + 30), title, HORIZONTAL_ALIGNMENT_LEFT, -1, 20, GOLD)
 
-## The traveller on the road: a small gold seal with a dark rim.
-func _draw_traveller(point: Vector2) -> void:
+## The player at `point` (their feet): the hero's figure with a shadow, bobbing with each step while
+## `walking`; a small gold seal when the art is missing.
+func _draw_traveller(point: Vector2, walking: bool) -> void:
+	if not figure.is_empty():
+		var height := clampf(map_rect().size.y * 0.1, 44.0, 96.0)
+		var region: Rect2 = figure.region
+		var width := height * region.size.x / region.size.y
+		var lift := absf(sin(stride * PI)) * height * 0.06 if walking else 0.0
+		var sway := sin(stride * PI) * 0.06 if walking else 0.0
+		draw_set_transform(point, 0.0, Vector2(1.0, 0.35))
+		draw_circle(Vector2.ZERO, width * 0.32, Color(0, 0, 0, 0.3))
+		var flip := facing * (1.0 if figure.faces_right else -1.0)
+		draw_set_transform(point + Vector2(0, -lift), sway * facing, Vector2(flip, 1.0))
+		draw_texture_rect_region(figure.texture, Rect2(-width * 0.5, -height, width, height), region)
+		draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
+		return
 	draw_circle(point + Vector2(0, 3), 11.0, Color(0, 0, 0, 0.35))
 	draw_circle(point, 10.0, GOLD)
 	draw_arc(point, 10.0, 0, TAU, 24, Color("#1b3236"), 2.5, true)

@@ -418,7 +418,8 @@ func _run() -> void:
 	await process_frame
 	check(main.presenting and main.world_map.visible and main.session.player.location == "ridge", "the rules walk the route at once; the map plays it back")
 	var walk := await _watch_walk()
-	check(walk.marked and walk.dates > 2, "the traveller's mark walks the legs while the date moves")
+	check(walk.marked and walk.dates > 2, "the traveller walks the legs while the date moves")
+	check(main.world_map.figure.get("texture") is Texture2D and main.world_map.figure.region.size.x > 0.0, "the traveller is the hero's figure, not a mark")
 	check(main.session.player.location == "ridge" and main.view == "place" and main.world_map.traveller == null and not main.world_map.visible, "arriving enters the place")
 	check(main.audio.last_cue == "arrive" and main.audio.music_key == "ridge", "arrival cue and local music")
 	# A journey cut short (by an encounter or an event) is continued from the HUD, walked on the map.
