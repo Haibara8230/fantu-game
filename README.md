@@ -1,6 +1,6 @@
 # 凡途 · 修仙纪事
 
-Godot 4 / GDScript / Windows 单机。同一个修仙世界持续运转，玩家在几百年的岁月里修炼、探索与交际。当前是 M0 重整后的原型，尚非完整成品；方向与里程碑见 `docs/ROADMAP.md`，规则基线见 `docs/DESIGN_BASELINE.md`。
+Godot 4 / GDScript / Windows 单机。同一个修仙世界持续运转，玩家在几百年的岁月里修炼、探索与交际。当前是 M0 重整后的原型，尚非完整成品；方向与里程碑见 `docs/ROADMAP.md`，规则基线见 `docs/DESIGN_BASELINE.md`；按玩家视角介绍现有内容的完整说明见 `docs/GAME_INTRO.md`。
 
 ## 开始游玩
 
