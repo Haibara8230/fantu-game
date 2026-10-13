@@ -3033,3 +3033,13 @@ Subject: An ordinary original Chinese man, about 33 years old. broad rounded fac
 文件与完整提示词见 `PORTRAIT_SUPPLEMENT_20261013.json`。清单的 `appearance: high` 与 `bearing`（heroic / graceful / ethereal / scholarly）只记录美术分类，当前分配仍按性别、年龄段与身份；待后续颜值属性接入时再使用这些标签。
 
 本批验证：三张导入资源成功；两张装饰图具有真实透明通道；六张人物 PNG 可读取且内容哈希互不重复。`check.cmd` 的 15 组后台检查全部通过，所有引擎启动均使用 `--headless`，未启动可见游戏或编辑器。检查时修正了 `ui_smoke` 的配置隔离顺序：在 `_ready` 生成欢迎页前设置临时 guide/settings 路径，避免本机引导完成状态影响首次引导断言。
+
+
+## 2026-10-13：年轻修士第二批 10 张
+
+继续使用内置 imagegen 扩充高颜值年轻角色，男女各 5 张，每个性别覆盖 disciple、wanderer、trader、gatherer、visitor 五种身份。原图 1122×1402，约 4:5，素色背景与二维手绘半身构图，直接复制入既有图池，未进行像素后处理。强化宽脸、圆脸、长脸、暖肤色、束发、侧辫、低发髻等差异，并保留朴素衣着与日常身份。
+
+完整路径、提示词、尺寸、SHA-256 与高颜值/气质标签见 `PORTRAIT_SUPPLEMENT_20261013_02.json`。年轻男女各由 33 张增为 38 张；总图池由 186 张增为 196 张。现有普通外貌与前批图像继续保留；分类记录供后续颜值属性选择立绘时使用。
+
+
+第二批验证：十张 PNG 均可读取，尺寸一致且内容哈希互不重复；年轻男女图池各 38 张。check.cmd 的 15 组检查全部通过，已扫描导入与测试日志，无脚本错误。所有 Godot 启动均为 --headless，没有启动可见窗口。
