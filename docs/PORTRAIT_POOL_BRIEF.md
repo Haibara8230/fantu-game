@@ -137,3 +137,6 @@ To see them in the game, run `play.cmd`, stop somewhere with people around, and 
 
 
 第二批继续补充男女各 5 张，五种身份各一对，年轻组各 38 张，总图池 196 张。通过脸型、肤色、发髻、束发、辫发与身份衣着区分高颜值角色。完整提示词与分类清单见 `PORTRAIT_SUPPLEMENT_20261013_02.json`。
+
+
+第三批新增 50 张（男女各 25 张，五种身份每种各男女 5 张），年轻组各 63 张，总图池 246 张。清单 `PORTRAIT_SUPPLEMENT_20261013_03.json` 包含完整提示词、脸型、发型、建议外观年龄、气质和高颜值标签；这些字段仍是美术元数据，后续颜值属性需显式接入分配。文件名采用 `<role>_<gender>_young_high_b03_<number>.png`，继续兼容现有身份前缀与图池目录。
