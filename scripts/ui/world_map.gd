@@ -48,10 +48,11 @@ func configure(source_content, world_flags: Dictionary, here: String, target: St
 	journey_to = journey
 	queue_redraw()
 
-## The drawing area keeps the configured aspect ratio inside the control.
+## The drawing area keeps the configured aspect ratio and covers the control (a wider screen crops a
+## little off the top and bottom instead of leaving bars at the sides).
 func map_rect() -> Rect2:
 	var aspect := float(content.map.aspect) if content != null else 1.6
-	var width := minf(size.x, size.y * aspect)
+	var width := maxf(size.x, size.y * aspect)
 	var height := width / aspect
 	return Rect2((size - Vector2(width, height)) * 0.5, Vector2(width, height))
 

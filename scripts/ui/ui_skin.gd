@@ -19,8 +19,10 @@ static func scroll_style(padding: float = 18.0, opacity: float = 1.0) -> StyleBo
 		# Compress the ornamental frame as a whole; it must not impose image-sized minimums.
 		painted.set_texture_margin_all(0)
 		box = painted
-	box.content_margin_left = padding
-	box.content_margin_right = padding
-	box.content_margin_top = padding
-	box.content_margin_bottom = padding
+	# The painted frame's border and corner ornaments need more room than the flat fallback.
+	var frame := 0.0 if texture == null else 20.0
+	box.content_margin_left = padding + frame
+	box.content_margin_right = padding + frame
+	box.content_margin_top = padding + frame
+	box.content_margin_bottom = padding + frame * 0.6
 	return box

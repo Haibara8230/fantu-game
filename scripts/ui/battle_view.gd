@@ -18,7 +18,9 @@ static func render(ui) -> void:
 		enemy.hp = b.foe.hp
 	var battle_stage = BattleStage.new()
 	ui.battle_stage = battle_stage
-	battle_stage.custom_minimum_size.y = 245 if ui.preview_mode else 300
+	# The stage fills the screen above the dock (and the record when it is open).
+	var room: float = ui.get_viewport_rect().size.y - 132.0 - (170.0 if ui.battle_record_open else 0.0)
+	battle_stage.custom_minimum_size.y = 245 if ui.preview_mode else maxf(300.0, room)
 	battle_stage.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	battle_stage.configure(session.snapshot(), enemy)
 	center.add_child(battle_stage)

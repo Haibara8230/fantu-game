@@ -1,8 +1,9 @@
 extends RefCounted
 ## The place the player is at, drawn as a scene after Mi Chang Sheng: the place's picture fills the
-## screen with its name at the top, its spots hang on it as paper tags and the people here wait in a
-## drawer at the left edge (render_scene). The window on the right holds the spot the player turned
-## to — its picture, text and actions — or the person they are facing.
+## screen with its name at the top, its spots hang on their buildings as paper tags and the people here
+## wait in a drawer at the left edge (render_scene). Nothing covers the scene until the player turns to
+## a spot or a person; then a scroll opens in the middle with its picture, text and actions, and closes
+## again with 关闭 or Esc.
 const Calendar = preload("res://scripts/core/calendar.gd")
 const Landscape = preload("res://scripts/ui/landscape.gd")
 const PeopleView = preload("res://scripts/ui/people_view.gd")
@@ -47,9 +48,11 @@ static func render_scene(ui, layer: Control) -> void:
 		tag.add_theme_color_override("font_hover_color", Color("#000000"))
 		tag.add_theme_color_override("font_pressed_color", INK_DARK)
 		tag.add_theme_font_size_override("font_size", 19)
-		tag.anchor_left = 0.05 + (index % 4) * 0.08
+		# Each tag hangs on its own building (`tag` in the data); spots without one line up mid-screen.
+		var at: Array = spot.get("tag", [0.3 + index * 0.09, 0.45])
+		tag.anchor_left = float(at[0])
 		tag.anchor_right = tag.anchor_left
-		tag.anchor_top = 0.32 + (index % 2) * 0.04 + (index / 4) * 0.2
+		tag.anchor_top = float(at[1])
 		tag.anchor_bottom = tag.anchor_top
 		tag.pressed.connect(func() -> void: ui.audio.cue("click"))
 		tag.pressed.connect(func() -> void:
@@ -57,12 +60,12 @@ static func render_scene(ui, layer: Control) -> void:
 			ui.select_spot(spot_id))
 		layer.add_child(tag)
 	PeopleView.render_drawer(ui, layer)
+	# The way out sits under the place's name, clear of the people and the records at the bottom.
 	var leave: Button = ui.button("离开 · 舆图", func() -> void: ui.set_view("map"), "到舆图上选择去处")
-	leave.anchor_left = 0.27
-	leave.anchor_right = 0.27
-	leave.anchor_top = 1.0
-	leave.anchor_bottom = 1.0
-	leave.offset_top = -112.0
+	leave.anchor_left = 0.5
+	leave.anchor_right = 0.5
+	leave.offset_top = 100.0
+	leave.grow_horizontal = Control.GROW_DIRECTION_BOTH
 	leave.disabled = not ui.settled()
 	layer.add_child(leave)
 
@@ -79,13 +82,17 @@ static func render(ui) -> void:
 	var location: Dictionary = session.content.locations[location_id]
 	var spots := _open_spots(session, location_id)
 	if not spots.any(func(spot: Dictionary) -> bool: return spot.id == ui.selected_spot):
-		ui.selected_spot = spots[0].id
+		ui.selected_spot = ""
+		return
 	var spot: Dictionary = spots.filter(func(candidate: Dictionary) -> bool: return candidate.id == ui.selected_spot)[0]
 	var title_row := HBoxContainer.new()
 	title_row.add_theme_constant_override("separation", 14)
 	center.add_child(title_row)
 	title_row.add_child(ui.label(spot.name, 26, ui.GOLD))
-	title_row.add_child(ui.label(location.name, 15, ui.MUTED))
+	var where: Label = ui.label(location.name, 15, ui.MUTED)
+	where.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	title_row.add_child(where)
+	title_row.add_child(ui.button("关闭 Esc", ui.close_spot, "回到%s" % location.name))
 	var landscape = Landscape.new()
 	landscape.location_id = location_id
 	landscape.terrain = location.terrain

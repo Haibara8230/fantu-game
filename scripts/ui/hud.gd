@@ -18,7 +18,8 @@ static func build(ui) -> void:
 	var fill := Color(0.04, 0.09, 0.1, 0.86)
 	var left := PanelContainer.new()
 	left.add_theme_stylebox_override("panel", ui.style(fill, Color("#41615e"), 10))
-	left.position = Vector2(14, 12)
+	left.offset_left = 14.0
+	left.offset_top = 12.0
 	ui.add_child(left)
 	ui.hud_left = left
 	var column := VBoxContainer.new()
@@ -80,7 +81,9 @@ static func build(ui) -> void:
 	record.scroll_active = false
 	record.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	record.add_theme_font_size_override("normal_font_size", 13)
-	record.add_theme_color_override("default_color", Color(ui.INK, 0.8))
+	record.add_theme_color_override("default_color", Color(ui.INK, 0.85))
+	# A dark wash keeps the records readable over a busy scene.
+	record.add_theme_stylebox_override("normal", ui.style(Color(0.03, 0.07, 0.08, 0.72), Color(0, 0, 0, 0), 6))
 	# The latest records grow upward to fit, instead of being cut off at two short lines.
 	record.fit_content = true
 	record.grow_vertical = Control.GROW_DIRECTION_BEGIN
@@ -112,10 +115,20 @@ static func build(ui) -> void:
 	ui.add_child(notice)
 	ui.status_label = notice
 
-## Shows the HUD for the world screens and hides it on the others.
-static func set_shown(ui, shown: bool) -> void:
+## Shows the HUD for the world screens and hides it on the others. On the map the player's panel moves
+## to the bottom-left corner, which the region's map leaves empty, and the latest records give way
+## (they are kept under 任务 · 消息).
+static func set_shown(ui, shown: bool, on_map: bool = false) -> void:
 	for part: Control in [ui.hud_left, ui.hud_right, ui.journal_text]:
 		part.visible = shown
+	ui.journal_text.visible = shown and not on_map
+	var left: Control = ui.hud_left
+	left.anchor_top = 1.0 if on_map else 0.0
+	left.anchor_bottom = left.anchor_top
+	left.offset_left = 14.0
+	left.offset_top = -12.0 if on_map else 12.0
+	left.offset_bottom = left.offset_top
+	left.grow_vertical = Control.GROW_DIRECTION_BEGIN if on_map else Control.GROW_DIRECTION_END
 
 static func render(ui) -> void:
 	var session = ui.session

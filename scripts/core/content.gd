@@ -744,6 +744,8 @@ func _validate_map() -> String:
 			ids[spot.id] = true
 			if spot.has("requires_flag") and not spot.requires_flag in world_flags:
 				return "场景引用了未知标记：%s.%s" % [location_id, spot.id]
+			if spot.has("tag") and (not spot.tag is Array or spot.tag.size() != 2 or spot.tag.any(func(value: Variant) -> bool: return not (value is float or value is int) or float(value) < 0.0 or float(value) > 0.95)):
+				return "场景纸条位置无效：%s.%s" % [location_id, spot.id]
 			if spot.has("requires_rank") and rank_index(str(spot.requires_rank)) < 0:
 				return "场景引用了未知宗门身份：%s.%s" % [location_id, spot.id]
 			for taught: Variant in spot.get("teach", []):

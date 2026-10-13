@@ -69,7 +69,8 @@ static func render_drawer(ui, layer: Control) -> void:
 	drawer.anchor_top = 0.52
 	drawer.anchor_bottom = 1.0
 	drawer.offset_right = 300.0
-	drawer.offset_bottom = -60.0
+	# Room below for the latest records.
+	drawer.offset_bottom = -130.0
 	layer.add_child(drawer)
 	var column := VBoxContainer.new()
 	column.add_theme_constant_override("separation", 6)

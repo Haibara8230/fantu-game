@@ -18,6 +18,7 @@ const Hud = preload("res://scripts/ui/hud.gd")
 const StatusView = preload("res://scripts/ui/status_view.gd")
 const SectView = preload("res://scripts/ui/sect_view.gd")
 const AlchemyView = preload("res://scripts/ui/alchemy_view.gd")
+const Rite = preload("res://scripts/presentation/rite.gd")
 const TasksView = preload("res://scripts/ui/tasks_view.gd")
 const SystemView = preload("res://scripts/ui/system_view.gd")
 const WorldMap = preload("res://scripts/ui/world_map.gd")
@@ -364,8 +365,9 @@ func _tab_group(view_id: String) -> String:
 
 ## Sets out the screen: the backdrop, the window's place, the HUD and the tab row.
 func _arrange(screen: String) -> void:
+	window.visible = true
 	var world := screen in ["place", "map"]
-	Hud.set_shown(self, world)
+	Hud.set_shown(self, world, screen == "map")
 	world_map.visible = screen == "map"
 	scene_layer.visible = screen == "place"
 	var dueling: bool = screen == "full" and not session.battle.is_empty() and ceremony.is_empty() and story.is_empty() and session.pending_event.is_empty() and session.ended.is_empty()
@@ -377,8 +379,13 @@ func _arrange(screen: String) -> void:
 			# or the person the player turned to.
 			backdrop.texture = ArtLibrary.texture(ArtLibrary.fullscreen_location_path(str(session.player.location)))
 			backdrop.visible = true
-			shade.color.a = 0.25
-			_place_window(0.40, 0.985, 124.0, -60.0)
+			# The scene stays whole; a spot or a person opens as a scroll in the middle over a dimmed scene.
+			if place_popup_open():
+				shade.color.a = 0.45
+				_place_window(0.26, 0.975, 110.0, -70.0)
+			else:
+				shade.color.a = 0.1
+				window.visible = false
 		"map":
 			# The map is the screen; the route window sits under the top-right corner, where the region
 			# has no places.
@@ -454,6 +461,7 @@ func render() -> void:
 	if session.player.location != shown_location:
 		shown_location = session.player.location
 		selected_npc = ""
+		selected_spot = ""
 		dialogue = {}
 		show_everyone_here = false
 	if view in ["place", "map"]:
@@ -471,7 +479,20 @@ func render() -> void:
 	if new_scene:
 		_scene_key = scene
 		_typed = {}
-	Guide.render(self, _guide_place())
+	if screen == "place" and not place_popup_open():
+		# With no scroll open the card floats low in the middle, clear of the tags and the place's name.
+		var holder := VBoxContainer.new()
+		holder.anchor_left = 0.3
+		holder.anchor_right = 0.74
+		holder.anchor_top = 1.0
+		holder.anchor_bottom = 1.0
+		holder.offset_top = -96.0
+		holder.offset_bottom = -96.0
+		holder.grow_vertical = Control.GROW_DIRECTION_BEGIN
+		scene_layer.add_child(holder)
+		Guide.render(self, _guide_place(), holder)
+	else:
+		Guide.render(self, _guide_place())
 	if not session.ended.is_empty():
 		EventView.render_ending(self)
 	elif not ceremony.is_empty():
@@ -667,7 +688,15 @@ func set_alchemy(key: String, value: String) -> void:
 ## Lights the furnace; afterwards the 药引 and the talisman are chosen afresh from what is left.
 func brew_now() -> void:
 	var plan := alchemy_plan.duplicate()
+	var mark: int = session.chronicle.added
 	run(func() -> String: return session.brew(plan))
+	var count := mini(int(session.chronicle.added) - mark, session.chronicle.entries.size())
+	for entry: Dictionary in session.chronicle.entries.slice(-count) if count > 0 else []:
+		if str(entry.id).begins_with("alchemy_"):
+			var result := str(entry.id).trim_prefix("alchemy_")
+			var pill_name := str(session.content.item(str(session.content.alchemy_data.recipes[str(plan.recipe)].pill)).name)
+			await _rite(func(rite) -> void: await rite.play_brew(result, pill_name))
+			break
 	if not session.known_recipes().has(str(plan.get("recipe", ""))):
 		return
 	alchemy_plan = session.alchemy_plan(str(plan.recipe))
@@ -728,13 +757,11 @@ func start_retreat(days: int) -> void:
 	retreat_playback = {"from_day": from_day, "to_day": int(session.world.day), "from_xp": from_xp, "to_xp": int(session.player.xp)}
 	render()
 	_lock_buttons(self)
-	var seconds := clampf((int(session.world.day) - from_day) * 0.004, 0.6, 2.0)
-	var playback := create_tween()
-	playback.tween_method(func(progress: float) -> void:
-		if retreat_labels.has("date") and is_instance_valid(retreat_labels.date):
-			retreat_labels.date.text = Calendar.date_text(int(lerpf(from_day, int(retreat_playback.to_day), progress)))
-			retreat_labels.xp.text = "修为  %d" % int(lerpf(from_xp, int(retreat_playback.to_xp), progress)), 0.0, 1.0, seconds)
-	await playback.finished
+	# The figure meditates over the whole screen while the days and the xp go by.
+	var to_day := int(session.world.day)
+	var to_xp := int(session.player.xp)
+	var goal: int = StatusView.xp_goal(session)
+	await _rite(func(rite) -> void: await rite.play_retreat(from_day, to_day, from_xp, to_xp, goal))
 	retreat_playback = {}
 	presenting = false
 	_unlock_buttons()
@@ -753,7 +780,41 @@ func start_breakthrough() -> void:
 	var mark: int = session.chronicle.added
 	var before := _breakthrough_before()
 	run(func() -> String: return session.breakthrough(plan))
+	await _breakthrough_rite(mark)
 	_breakthrough_outcome(mark, before)
+
+## Plays the breakthrough among the entries added since `mark`: the gathering, then the realm reached,
+## the failure, or 心魔 rising.
+func _breakthrough_rite(mark: int) -> void:
+	var count := mini(int(session.chronicle.added) - mark, session.chronicle.entries.size())
+	for entry: Dictionary in session.chronicle.entries.slice(-count) if count > 0 else []:
+		match str(entry.id):
+			"breakthrough":
+				var grade: Dictionary = session.foundation_grade()
+				var realm_name: String = str(session.content.realm(int(session.player.realm)).name)
+				var grade_name: String = "根基 · " + str(grade.name) if not grade.is_empty() else ""
+				await _rite(func(rite) -> void: await rite.play_breakthrough("success", realm_name, grade_name))
+				return
+			"breakthrough_failed":
+				await _rite(func(rite) -> void: await rite.play_breakthrough("failure"))
+				return
+			"heart_demon":
+				await _rite(func(rite) -> void: await rite.play_breakthrough("demon"))
+				return
+
+## A staged moment over the whole screen (presentation/rite.gd), input locked meanwhile.
+func _rite(play: Callable) -> void:
+	var was_presenting := presenting
+	presenting = true
+	if not was_presenting:
+		_lock_buttons(self)
+	var rite = Rite.new()
+	add_child(rite)
+	await play.call(rite)
+	rite.queue_free()
+	presenting = was_presenting
+	if not was_presenting:
+		_unlock_buttons()
 
 func _breakthrough_before() -> Dictionary:
 	return {"max_hp": int(session.player.max_hp), "max_qi": int(session.player.max_qi), "lifespan": session.lifespan()}
@@ -780,6 +841,23 @@ func close_ceremony() -> void:
 
 func select_spot(spot_id: String) -> void:
 	selected_spot = spot_id
+	audio.cue("page")
+	render()
+
+## Whether a spot or a person is open over the place's scene.
+func place_popup_open() -> bool:
+	if view != "place":
+		return false
+	if not selected_npc.is_empty():
+		return true
+	var rank := int(session.player.get("rank", 0))
+	return session.content.locations[session.player.location].spots.any(func(spot: Dictionary) -> bool: return spot.id == selected_spot and session.content.spot_open(spot, session.world.flags, rank))
+
+## Closes the spot or the person open over the scene.
+func close_spot() -> void:
+	selected_spot = ""
+	selected_npc = ""
+	dialogue = {}
 	audio.cue("page")
 	render()
 
@@ -890,6 +968,7 @@ func choose(choice_id: String) -> void:
 	var mark: int = session.chronicle.added
 	var before := _breakthrough_before()
 	run(func() -> String: return session.choose_event(choice_id))
+	await _breakthrough_rite(mark)
 	_breakthrough_outcome(mark, before)
 
 func skill(skill_id: String) -> void:
@@ -1092,6 +1171,10 @@ func _unhandled_key_input(event: InputEvent) -> void:
 		return
 	if event.keycode == KEY_ESCAPE and not _tab_group(view).is_empty():
 		close_overlay()
+		get_viewport().set_input_as_handled()
+		return
+	if event.keycode == KEY_ESCAPE and current_screen() == "place" and place_popup_open():
+		close_spot()
 		get_viewport().set_input_as_handled()
 		return
 	var action := Settings.action_for_key(self, event.keycode)

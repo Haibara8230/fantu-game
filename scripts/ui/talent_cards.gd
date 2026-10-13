@@ -9,7 +9,7 @@ const WORDS := {
 	"defense": ["减伤", "%"], "damage_metal": ["金系神通", "%"], "damage_wood": ["木系神通", "%"], "damage_water": ["水系神通", "%"],
 	"damage_fire": ["火系神通", "%"], "damage_earth": ["土系神通", "%"], "damage_all": ["神通威力", "%"], "lifespan": ["寿元", "年"],
 	"retreat_days": ["单次闭关上限", "%"], "fresh_days": ["闭关不倦", "%"], "insight": ["历练感悟", "%"], "mind_gain": ["心境增长", "%"],
-	"mind_need": ["境界所需心境", "%"], "breakthrough": ["突破成功率", "点"], "pill": ["丹药药效", "%"], "pill_cooldown": ["丹毒期", "%"],
+	"mind_need": ["境界所需心境", "%"], "breakthrough": ["突破成功率", "点"], "pill": ["丹药药效", "%"], "pill_cooldown": ["丹毒积累", "%"], "alchemy": ["炼丹成功率", "%"],
 	"grade": ["筑基品质提升几率", "%"], "demon": ["抵御心魔", "%"], "boon": ["机缘几率", "%"], "study": ["参悟耗时", "%"],
 	"gather": ["采集收获", "%"], "sell": ["卖价", "%"], "buy": ["买价", "%"], "favor": ["好感增长", "%"], "travel": ["行路耗时", "%"],
 	"encounter": ["途中遇险", "%"], "rest": ["养伤耗时", "%"], "stones": ["初始灵石", ""],

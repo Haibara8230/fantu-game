@@ -83,8 +83,9 @@ static func current(ui, where: String) -> Dictionary:
 			return tip
 	return {}
 
-## The card with its pages and 知道了, when one is due.
-static func render(ui, where: String) -> void:
+## The card with its pages and 知道了, when one is due; into the window, or into `parent` when the
+## window is closed (a place's scene with no spot open).
+static func render(ui, where: String, parent: Control = null) -> void:
 	var tip := current(ui, where)
 	if tip.is_empty():
 		return
@@ -117,7 +118,7 @@ static func render(ui, where: String) -> void:
 		buttons.add_child(ui.button("下一页", func() -> void: ui.turn_tip(1)))
 	else:
 		buttons.add_child(ui.button("知道了", func() -> void: ui.dismiss_tip(tip_id), "这段旅程里不再显示这张教学"))
-	ui.center.add_child(box)
+	(parent if parent != null else ui.center).add_child(box)
 
 static func load_state(ui) -> void:
 	var config := ConfigFile.new()

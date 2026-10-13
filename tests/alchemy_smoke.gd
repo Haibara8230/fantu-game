@@ -261,6 +261,8 @@ func _broken(change: Callable) -> String:
 	return content._validate()
 
 func _static_checks() -> void:
+	var cards = load("res://scripts/ui/talent_cards.gd")
+	check(Session.Talents.MODIFIERS.all(func(key: String) -> bool: return cards.WORDS.has(key)) and cards.effects_text({"alchemy": 30}) == "炼丹成功率 +30%", "every talent modifier has words on the talent cards")
 	check(_broken(func(c) -> void: c.alchemy_data.recipes.liaoshang.main = {"moonstone": 2}).contains("主药"), "unknown main herbs reported")
 	check(_broken(func(c) -> void: c.items.huichun_grass.erase("nature")).contains("药性"), "every herb has a nature")
 	check(_broken(func(c) -> void: c.alchemy_data.recipes.huiqi.fine = "liaoshang_pill_fine").contains("丹药"), "a recipe's fine pill belongs to its pill")

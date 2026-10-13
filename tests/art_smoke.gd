@@ -82,7 +82,7 @@ func _run() -> void:
 		main.session.player.location = location_id
 		main.render()
 		check(main.backdrop.texture.resource_path == ArtLibrary.fullscreen_location_path(location_id), location_id + " full-screen art reaches the place view")
-	check(main.window_style is StyleBoxTexture and main.window_style.get_minimum_size().y <= 42, "painted frame does not impose image-sized minimums")
+	check(main.window_style is StyleBoxTexture and main.window_style.get_minimum_size().y <= 80, "painted frame does not impose image-sized minimums, only room for its border")
 	main.queue_free()
 	await process_frame
 	print("ART: %d checks, %d failures" % [checks, failures])

@@ -28,6 +28,11 @@ func _capture(filename: String) -> void:
 		image.save_png("res://builds/previews/" + filename + ".png")
 		captures += 1
 
+## Texts in the window and on the place's scene together (a card floats on the scene when no spot is open).
+func _screen(type: String) -> String:
+	return _texts(main.center, type) + "
+" + _texts(main.scene_layer, type)
+
 func _texts(node: Node, type: String) -> String:
 	return "\n".join(node.find_children("*", type, true, false).map(func(control: Control) -> String: return control.text))
 
@@ -193,35 +198,36 @@ func _run() -> void:
 	# this journey.
 	var tips: Array = main.Guide.tips()
 	check(not tips.is_empty() and tips.all(func(tip: Dictionary) -> bool: return main.Guide.known(tip.id) and tip.title is String and tip.pages is Array and not tip.pages.is_empty() and not tip.where.is_empty()), "every card in the data has a known situation, a title and pages")
-	check(_texts(main.center, "Label").contains("教学 · 闭关修炼  1 / 2") and _button("下一页") != null and _button("知道了") == null, "a new journey first sees the retreat card, page one of two")
+	check(_screen("Label").contains("教学 · 闭关修炼  1 / 2") and _button("下一页") != null and _button("知道了") == null, "a new journey first sees the retreat card, page one of two")
 	_button("下一页").pressed.emit()
-	check(_texts(main.center, "Label").contains("一次闭关有上限") and _button("上一页") != null and _button("知道了") != null, "the last page explains the limits and can be dismissed")
+	check(_screen("Label").contains("一次闭关有上限") and _button("上一页") != null and _button("知道了") != null, "the last page explains the limits and can be dismissed")
 	_button("知道了").pressed.emit()
-	check("retreat" in main.session.player.taught and _texts(main.center, "Label").contains("教学 · 此地人物"), "dismissing it brings the next card that applies here")
+	check("retreat" in main.session.player.taught and _screen("Label").contains("教学 · 此地人物"), "dismissing it brings the next card that applies here")
 	var dismissed := 0
 	while (_button("知道了") != null or _button("下一页") != null) and dismissed < 20:
 		dismissed += 1
 		(_button("知道了") if _button("知道了") != null else _button("下一页")).pressed.emit()
 	var taught: Array = main.session.player.taught
-	check(not _texts(main.center, "Label").contains("教学 ·") and not "map" in taught and not "battle" in taught and "lineage" in taught and "stories" in taught, "cards for situations not met yet wait their turn")
+	check(not _screen("Label").contains("教学 ·") and not "map" in taught and not "battle" in taught and "lineage" in taught and "stories" in taught, "cards for situations not met yet wait their turn")
 	var copy = main.Session.new()
 	check(copy.restore(JSON.parse_string(JSON.stringify(main.session.snapshot()))) and "people" in copy.player.taught, "dismissed cards are kept with the journey")
 	main.set_guide_enabled(false)
 	main.session.player.taught.erase("retreat")
 	main.render()
-	check(not _texts(main.center, "Label").contains("教学 ·"), "the cards can be switched off")
+	check(not _screen("Label").contains("教学 ·"), "the cards can be switched off")
 	main.reset_guide()
-	check(main.guide_enabled and main.session.player.taught.is_empty() and _texts(main.center, "Label").contains("教学 · 闭关修炼"), "and every card of the journey can be shown again")
+	check(main.guide_enabled and main.session.player.taught.is_empty() and _screen("Label").contains("教学 · 闭关修炼"), "and every card of the journey can be shown again")
 	main.set_guide_enabled(false)
 	# A place is a scene: its name on top, its spots as paper tags, the people in a drawer at the left.
 	check(main.scene_layer.visible and _tag("静室") != null and _tag("演武坪") != null and _tag("传功堂") != null, "the sect's spots hang on its scene as paper tags")
 	await process_frame
 	var tags: Array = main.scene_layer.find_children("*", "Button", true, false).filter(func(button: Button) -> bool: return not button.tooltip_text.is_empty() and button.text.contains("
 "))
-	check(tags.all(func(tag: Button) -> bool: return tag.get_global_rect().position.y >= main.hud_left.get_global_rect().end.y and tag.get_global_rect().end.x <= main.window.get_global_rect().position.x), "the tags keep clear of the HUD and the window")
+	check(tags.all(func(tag: Button) -> bool: return not tag.get_global_rect().intersects(main.hud_left.get_global_rect()) and not tag.get_global_rect().intersects(main.hud_right.get_global_rect()) and main.get_global_rect().encloses(tag.get_global_rect())), "the tags keep clear of the HUD and stay on screen")
+	check(not main.window.visible and not main.place_popup_open(), "with no spot open nothing covers the scene")
 	check(_texts(main.scene_layer, "Label").contains("青云山") and _texts(main.scene_layer, "Label").contains("此地人物"), "the scene shows the place's name and the people drawer")
 	_tag("传功堂").pressed.emit()
-	check(_texts(main.center, "Label").contains("本门传承") and _button("闭关修炼") == null, "a tag opens its spot, with only that spot's actions")
+	check(_screen("Label").contains("本门传承") and _button("闭关修炼") == null, "a tag opens its spot, with only that spot's actions")
 	check(_button("参悟吐纳法") != null or _button("参悟") != null, "the hall offers techniques to study")
 	_tag("执事堂").pressed.emit()
 	check(_button("接下：") != null, "the 执事堂 board lists commissions")
@@ -230,16 +236,16 @@ func _run() -> void:
 	main.toggle_drawer()
 	var disciple: String = main.session.present_npcs().filter(func(person_id: String) -> bool: return person_id.begins_with("g:"))[0]
 	main.open_person(disciple)
-	check(_texts(main.center, "Label").contains(main.session.person(disciple).name) and _button("切磋") != null and _button("离开") != null and not _texts(main.center, "Label").contains("神通 ·"), "facing a disciple: their portrait and name, what can be done, details kept back")
+	check(_screen("Label").contains(main.session.person(disciple).name) and _button("切磋") != null and _button("离开") != null and not _screen("Label").contains("神通 ·"), "facing a disciple: their portrait and name, what can be done, details kept back")
 	_button("查看").pressed.emit()
-	check(_texts(main.center, "Label").contains("神通 ·") and _button("收起") != null, "查看 shows their arts")
+	check(_screen("Label").contains("神通 ·") and _button("收起") != null, "查看 shows their arts")
 	main.close_person()
 	main.set_view("arts")
 	await _capture("arts")
-	var arts_text := _texts(main.center, "Label") + _texts(main.center, "Button")
+	var arts_text := _screen("Label") + _texts(main.center, "Button")
 	check(arts_text.contains("主动神通  3 / 4") and arts_text.contains("[1]") and arts_text.contains("御剑诀"), "the 神通 page: slots with their keys, the arts learned")
 	main.set_view("methods")
-	check(_texts(main.center, "Label").contains("心法  0 / 2"), "the 功法 page: the 心法 slots")
+	check(_screen("Label").contains("心法  0 / 2"), "the 功法 page: the 心法 slots")
 	main.set_arts_filter("fire")
 	check(not (_texts(main.center, "Button")).contains("吐纳"), "the learned arts filter by element")
 	main.set_arts_filter("all")
@@ -255,14 +261,15 @@ func _run() -> void:
 	check(_button("闭关修炼") != null and _button("突破境界") != null and _button("停留  ·  1 日") != null, "the chamber offers retreat, breakthrough and waiting")
 	main.hud_icons.status.pressed.emit()
 	check(main.current_screen() == "panel" and not main.hud_left.visible and main.tab_row.visible, "人物 opens the character panel over the world")
-	var status := _texts(main.center, "Label")
-	check(status.contains("年岁 16") and status.contains("寿元 120") and status.contains("寿元尽于历元 105 年"), "age and lifespan shown")
-	check(status.contains("心境  0 / 0 · 闭关收益 100% · 单次闭关至多 3 个月") and status.contains("心神 · 平和 · 闭关收益 100%") and status.contains("历练  0 / 100"), "a fresh mind and no insight yet")
+	var status := _screen("Label")
+	check(status.contains("16 岁 · 寿元 120 · 尽于历元 105 年"), "age and lifespan shown")
+	check(status.contains("0 / 0 · 闭关收益 100%") and status.contains("平和 · 闭关收益 100%") and status.contains("3 个月") and status.contains("历练") and status.contains("0 / 100"), "a fresh mind and no insight yet")
+	check(status.contains("攻击加成") and status.contains("减伤") and status.contains("丹毒") and status.contains("资质") and status.contains("兵刃") and main.center.find_children("*", "TextureRect", true, false).size() > 0, "the character page shows the figure, the attributes in groups and the loadout")
 	main.hud_icons.status.pressed.emit()
 	check(main.view == "place" and main.hud_left.visible, "the same button closes the panel")
 	check(main.goal_label.visible and main.goal_label.text == "目标 · 除去妖蟒", "the HUD names the first goal")
 	main.hud_icons.goals.pressed.emit()
-	var goals_text := _texts(main.center, "Label")
+	var goals_text := _screen("Label")
 	check(main.current_screen() == "scroll" and goals_text.contains("除去妖蟒") and goals_text.contains("历元 6 年 3 月初一") and goals_text.contains("还有 5 年 2 个月") and goals_text.contains("修为 0 / 2000"), "任务 opens the scroll: the serpent's deadline and breaking through")
 	var close_key := InputEventKey.new()
 	close_key.keycode = KEY_ESCAPE
@@ -275,7 +282,7 @@ func _run() -> void:
 	_goals()
 	# The retreat scroll: the monthly rate and where it comes from, the deadlines, a length to pick.
 	_button("闭关修炼").pressed.emit()
-	var scroll := _texts(main.center, "Label")
+	var scroll := _screen("Label")
 	check(main.current_screen() == "retreat" and scroll.contains("每月修为") and scroll.contains("灵根 ·") and scroll.contains("近 期 大 事") and scroll.contains("除去妖蟒 · 还有"), "闭关修炼 opens the retreat scroll: the rate, its sources and the deadlines")
 	check(scroll.contains("此番至多 3 个月") and scroll.contains("心境 · 安定  0 / 0"), "the scroll names the longest retreat allowed and the mind")
 	var length: HSlider = main.center.find_children("*", "HSlider", true, false)[0]
@@ -283,13 +290,13 @@ func _run() -> void:
 	main.session.player.xp = 400
 	length.value = 1
 	length.value = 9
-	check(_texts(main.center, "Label").contains("3 个月") and _texts(main.center, "Label").contains("触及瓶颈"), "a long retreat previews stopping at the bottleneck")
+	check(_screen("Label").contains("3 个月") and _screen("Label").contains("触及瓶颈"), "a long retreat previews stopping at the bottleneck")
 	main.close_overlay()
 	main.session.player.xp = 500
 	main.set_view("retreat")
-	check(_texts(main.center, "Label").contains("修为卡在瓶颈") and _button("开始闭关") == null, "a bottleneck closes the retreat")
+	check(_screen("Label").contains("修为卡在瓶颈") and _button("开始闭关") == null, "a bottleneck closes the retreat")
 	main.set_view("status")
-	check(_texts(main.center, "Label").contains("瓶颈"), "and shows on the character page")
+	check(_screen("Label").contains("瓶颈"), "and shows on the character page")
 	main.close_overlay()
 	main.session.player.xp = 0
 	main.set_view("retreat")
@@ -298,10 +305,11 @@ func _run() -> void:
 	var retreat_from := int(main.session.world.day)
 	_button("开始闭关").pressed.emit()
 	await process_frame
-	check(main.presenting and _texts(main.center, "Label").contains("闭 关 中") and int(main.session.world.day) == retreat_from + 30, "the rules run the retreat at once; the scroll plays it back")
+	# The rite that plays the retreat back is skipped in headless runs.
+	check(int(main.session.world.day) == retreat_from + 30 and main.Rite.skipped(), "the rules run the retreat at once; its rite is only presentation")
 	while main.presenting:
 		await process_frame
-	check(main.session.player.xp > 0 and not _texts(main.center, "Label").contains("闭 关 中") and _texts(main.center, "Label").contains("每月修为"), "and comes back to the scroll")
+	check(main.session.player.xp > 0 and not _screen("Label").contains("闭 关 中") and _screen("Label").contains("每月修为"), "and comes back to the scroll")
 	main.close_overlay()
 	main.session.player.xp = 0
 	main.render()
@@ -312,7 +320,7 @@ func _run() -> void:
 	check(main.audio.music_key == "wild" and main.audio.ambience_key == "wild", "music and ambience follow the location")
 	main.set_guide_enabled(true)
 	main.run(func() -> String: return main.session.start_battle("wolf"))
-	check(_texts(main.center, "Label").contains("教学 · 斗法  1 / 2") and _texts(main.center, "Label").contains("按 1 / 2 / 3 / 4 或点按钮") and _button("[1] ") != null, "the first duel explains the controls with the bound keys")
+	check(_screen("Label").contains("教学 · 斗法  1 / 2") and _screen("Label").contains("按 1 / 2 / 3 / 4 或点按钮") and _button("[1] ") != null, "the first duel explains the controls with the bound keys")
 	main.set_guide_enabled(false)
 	check(main.current_screen() == "full" and not main.hud_left.visible and main.window.get_global_rect().size.is_equal_approx(main.get_global_rect().size) and _texts(main.center, "Label").contains("斗 法  ·  第 1 回合") and _button("守御") != null and _button("撤离") != null, "the duel takes the whole screen, with its dock along the bottom")
 	_button("记录").pressed.emit()
@@ -468,7 +476,7 @@ func _run() -> void:
 	check(not typing.call(), "instant text speed shows it at once")
 	main.Settings.set_text_speed(main, "fast")
 	_button("继续").pressed.emit()
-	check(main.story.is_empty() and _texts(main.center, "Label").contains("青石镇"), "继续 returns to the place")
+	check(main.story.is_empty() and main.current_screen() == "place" and _texts(main.scene_layer, "Label").contains("青石镇"), "继续 returns to the place")
 	# The panel's 系统 tab: saving, loading, a new journey and the settings.
 	main.set_view("system")
 	check(main.save_button.text == "保存 F5" and _button("新旅程") != null and _button("设置") != null, "the 系统 tab holds saving, loading, a new journey and the settings")
@@ -524,6 +532,7 @@ func _run() -> void:
 	# With auto-save off only manual saves are written, and 继续旅程 reads the newer save.
 	main.Settings.set_autosave(main, false)
 	var generation: int = main.auto_store.generation
+	main.select_spot(str(main.session.content.locations[main.session.player.location].spots[0].id))
 	_button("停留  ·  1 日").pressed.emit()
 	check(main.auto_store.generation == generation and main.autosave_error.is_empty(), "with auto-save off, actions leave the auto save alone")
 	main._ask_new_game()

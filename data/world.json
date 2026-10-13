@@ -12,11 +12,11 @@
       "terrain": "mountain",
       "map": [0.24, 0.24],
       "spots": [
-        {"id": "chamber", "name": "静室", "description": "外门弟子的静修之所，灵气清润，可闭关、休整与突破；角落里有一口公用丹炉，也可开炉炼丹。", "actions": ["cultivate", "rest", "breakthrough", "alchemy"]},
-        {"id": "office", "name": "执事堂", "description": "执事们在这里张贴宗门的委托，按时完成可得酬劳与贡献；月俸、晋升、兑换与捐献也在这里办理。", "actions": ["commissions", "sect"], "requires_flag": "intro_done"},
-        {"id": "abode", "name": "洞府", "description": "内门弟子各有一处洞府，石门后是静修的石室，门外辟出一方灵田，引了山泉浇灌。", "actions": ["field"], "requires_rank": "inner"},
-        {"id": "arena", "name": "演武坪", "description": "青石铺就的演武坪，同门常在此切磋。十年一度的外门小比也在这里报名、比斗。", "actions": ["battle:disciple", "tournament"]},
-        {"id": "hall", "name": "传功堂", "description": "堂中供着本门青云剑诀的传承玉简，弟子可在此研习；执事也传授几门入门功法，参悟需要时日。他派神通不在此传授。", "actions": ["study", "teach"], "requires_flag": "intro_done", "teach": ["t:breath:wood:1::0", "t:body:earth:1::5", "t:focus:water:1::10", "t:bolt:metal:1::15"]}
+        {"id": "chamber", "tag": [0.32, 0.29], "name": "静室", "description": "外门弟子的静修之所，灵气清润，可闭关、休整与突破；角落里有一口公用丹炉，也可开炉炼丹。", "actions": ["cultivate", "rest", "breakthrough", "alchemy"]},
+        {"id": "office", "tag": [0.53, 0.35], "name": "执事堂", "description": "执事们在这里张贴宗门的委托，按时完成可得酬劳与贡献；月俸、晋升、兑换与捐献也在这里办理。", "actions": ["commissions", "sect"], "requires_flag": "intro_done"},
+        {"id": "abode", "tag": [0.3, 0.12], "name": "洞府", "description": "内门弟子各有一处洞府，石门后是静修的石室，门外辟出一方灵田，引了山泉浇灌。", "actions": ["field"], "requires_rank": "inner"},
+        {"id": "arena", "tag": [0.42, 0.5], "name": "演武坪", "description": "青石铺就的演武坪，同门常在此切磋。十年一度的外门小比也在这里报名、比斗。", "actions": ["battle:disciple", "tournament"]},
+        {"id": "hall", "tag": [0.25, 0.42], "name": "传功堂", "description": "堂中供着本门青云剑诀的传承玉简，弟子可在此研习；执事也传授几门入门功法，参悟需要时日。他派神通不在此传授。", "actions": ["study", "teach"], "requires_flag": "intro_done", "teach": ["t:breath:wood:1::0", "t:body:earth:1::5", "t:focus:water:1::10", "t:bolt:metal:1::15"]}
       ]
     },
     "town": {
@@ -26,8 +26,8 @@
       "terrain": "town",
       "map": [0.4, 0.42],
       "spots": [
-        {"id": "inn", "name": "青石客栈", "description": "掌柜识得修士，备有净室与药膳。花几块灵石便能好好歇上一日。", "actions": ["inn_rest"]},
-        {"id": "teahouse", "name": "听雨茶馆", "description": "说书先生醒木一拍，南来北往的消息都汇在这里。", "actions": ["inquire"]}
+        {"id": "inn", "tag": [0.11, 0.4], "name": "青石客栈", "description": "掌柜识得修士，备有净室与药膳。花几块灵石便能好好歇上一日。", "actions": ["inn_rest"]},
+        {"id": "teahouse", "tag": [0.35, 0.44], "name": "听雨茶馆", "description": "说书先生醒木一拍，南来北往的消息都汇在这里。", "actions": ["inquire"]}
       ]
     },
     "ferry": {
@@ -37,7 +37,7 @@
       "terrain": "ferry",
       "map": [0.6, 0.5],
       "spots": [
-        {"id": "dock", "name": "渡口", "description": "老艄公撑着竹篙，等客满便开船。等船的人最爱闲聊。", "actions": ["inquire"]}
+        {"id": "dock", "tag": [0.33, 0.47], "name": "渡口", "description": "老艄公撑着竹篙，等客满便开船。等船的人最爱闲聊。", "actions": ["inquire"]}
       ]
     },
     "market": {
@@ -67,8 +67,8 @@
         ]
       },
       "spots": [
-        {"id": "street", "name": "长街", "description": "丹铺、器铺与散修地摊挤满长街。丹铺明码标价。", "actions": ["shop", "inquire", "commissions"]},
-        {"id": "pharmacy", "name": "云溪药铺", "description": "沈墨的药铺，收购各色灵草，出价公道。后堂有一口药炉，熟客可付些灵石借用，沈墨还会在旁提点。", "actions": ["sell", "alchemy"]}
+        {"id": "street", "tag": [0.46, 0.5], "name": "长街", "description": "丹铺、器铺与散修地摊挤满长街。丹铺明码标价。", "actions": ["shop", "inquire", "commissions"]},
+        {"id": "pharmacy", "tag": [0.27, 0.38], "name": "云溪药铺", "description": "沈墨的药铺，收购各色灵草，出价公道。后堂有一口药炉，熟客可付些灵石借用，沈墨还会在旁提点。", "actions": ["sell", "alchemy"]}
       ]
     },
     "ridge": {
@@ -79,7 +79,7 @@
       "map": [0.2, 0.6],
       "gather": {"picks": [1, 2], "table": [{"item": "huichun_grass", "weight": 50}, {"item": "ninglu_grass", "weight": 50}]},
       "spots": [
-        {"id": "pines", "name": "松林", "description": "古松参天，林下偶见灵草。", "actions": ["gather"]}
+        {"id": "pines", "tag": [0.42, 0.52], "name": "松林", "description": "古松参天，林下偶见灵草。", "actions": ["gather"]}
       ]
     },
     "wild": {
@@ -91,10 +91,10 @@
       "map": [0.44, 0.8],
       "gather": {"picks": [1, 3], "table": [{"item": "huichun_grass", "weight": 60}, {"item": "chiyan_flower", "weight": 35}, {"item": "lingzhi", "weight": 2}]},
       "spots": [
-        {"id": "entrance", "name": "谷口", "description": "乱石嶙峋，常有妖狼出没。", "actions": ["battle:wolf"]},
-        {"id": "slope", "name": "灵草坡", "description": "向阳的缓坡上灵草丛生。", "actions": ["gather"]},
-        {"id": "spring", "name": "深谷灵泉", "description": "谷底的灵泉被赤鳞妖蟒盘踞。", "actions": ["battle:serpent"]},
-        {"id": "eye", "name": "灵眼", "description": "山壁裂隙后藏着一眼灵泉，天地灵气在此汇聚成漩。在这里闭关突破，把握更大。", "actions": ["breakthrough"], "requires_flag": "spirit_eye_found"}
+        {"id": "entrance", "tag": [0.3, 0.6], "name": "谷口", "description": "乱石嶙峋，常有妖狼出没。", "actions": ["battle:wolf"]},
+        {"id": "slope", "tag": [0.54, 0.56], "name": "灵草坡", "description": "向阳的缓坡上灵草丛生。", "actions": ["gather"]},
+        {"id": "spring", "tag": [0.37, 0.36], "name": "深谷灵泉", "description": "谷底的灵泉被赤鳞妖蟒盘踞。", "actions": ["battle:serpent"]},
+        {"id": "eye", "tag": [0.12, 0.36], "name": "灵眼", "description": "山壁裂隙后藏着一眼灵泉，天地灵气在此汇聚成漩。在这里闭关突破，把握更大。", "actions": ["breakthrough"], "requires_flag": "spirit_eye_found"}
       ]
     },
     "ruin": {
@@ -105,7 +105,7 @@
       "map": [0.24, 0.88],
       "hidden_until": "found_ruin",
       "spots": [
-        {"id": "stone_room", "name": "洞府石室", "description": "石室中散落着前人遗物，仔细翻找或许还有收获。", "actions": ["search_ruin"], "requires_flag": "ruin_cleared"}
+        {"id": "stone_room", "tag": [0.27, 0.32], "name": "洞府石室", "description": "石室中散落着前人遗物，仔细翻找或许还有收获。", "actions": ["search_ruin"], "requires_flag": "ruin_cleared"}
       ]
     }
   },
