@@ -121,7 +121,7 @@ static func _breakthrough_tooltip(session) -> String:
 static func _open_spots(session, location_id: String) -> Array[Dictionary]:
 	var result: Array[Dictionary] = []
 	for spot: Dictionary in session.content.locations[location_id].spots:
-		if not spot.has("requires_flag") or session.has_flag(spot.requires_flag):
+		if session.content.spot_open(spot, session.world.flags, int(session.player.get("rank", 0))):
 			result.append(spot)
 	if result.is_empty():
 		result.append({"id": "", "name": "此地", "description": "", "actions": []})
@@ -186,6 +186,11 @@ static func _spot_action(ui, grid: GridContainer, action: String) -> void:
 				deliver.disabled = not reason.is_empty()
 				deliver.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 				grid.add_child(deliver)
+		"alchemy":
+			var known: int = session.known_recipes().size()
+			_open(ui, grid, "开炉炼丹", ui.open_alchemy, "已会 %d 张丹方：按丹方投入主药与药引，择火候开炉" % known if known > 0 else "还不会丹方；坊市丹铺与宗门执事堂可得")
+		"field":
+			_open(ui, grid, "照料灵田", func() -> void: ui.set_view("field"), "种下灵草，到了日子便可收获")
 		"sect":
 			var rank: Dictionary = session.sect_rank()
 			_open(ui, grid, "宗门事务", func() -> void: ui.set_view("sect"), "%s · 贡献 %d：领月俸、申请晋升、兑换与捐献" % [rank.name, int(session.player.get("contribution", 0))])

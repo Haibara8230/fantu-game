@@ -103,7 +103,7 @@ static func interact(s, person_id: String, option_id: String) -> String:
 			var invite := invite_of(s, person_id, "help")
 			var kind: Dictionary = rules.visits.kinds.help
 			var stones := int(round(float(s.content.item(invite.item).price) * int(invite.count) * float(kind.reward_scale)))
-			s.remove_item(str(invite.item), int(invite.count))
+			s.Inventory.remove_family(s, str(invite.item), int(invite.count))
 			s.player.stones = int(s.player.stones) + stones
 			Events.apply(s, [{"relation": [person_id, int(kind.favor)]}, {"mind": 2}])
 			s.record_deed("help")

@@ -85,5 +85,13 @@
   "boon_ready": "这番{boon_name}的感悟留在心头，下次突破把握更大，根基也会更稳。",
   "boon_treasure": "你在{location_name}意外得了一样天材地宝：{item_name}！",
   "remnant_blessed": "残魂化作清光没入你的眉心，前辈的感悟在经脉中缓缓流转。下一次突破，必成无疑。",
-  "remnant_seized": "灌顶刚开始，残魂便露出狰狞面目——它要夺舍！你拼死守住识海，将它磨灭，自己也重伤难起，需将养 {days} 日，识海里留下了暗伤。"
+  "remnant_seized": "灌顶刚开始，残魂便露出狰狞面目——它要夺舍！你拼死守住识海，将它磨灭，自己也重伤难起，需将养 {days} 日，识海里留下了暗伤。",
+  "read_recipe": "研读{item_name}，把主药、药引与火候一一记下。",
+  "alchemy_done": "开炉 {duration}，炼成{loot_text}。",
+  "alchemy_fine": "开炉 {duration}，启炉时异香满室，炼成{loot_text}！",
+  "alchemy_fail": "开炉 {duration}，火候失当，一炉{item_name}化作了药渣。",
+  "alchemy_burst": "开炉 {duration}，武火过猛，丹炉轰然炸开，一炉{item_name}尽毁，你被炉火灼伤，气血 -{amount}。",
+  "field_plant": "在洞府灵田种下一株{item_name}，约 {duration} 后可收。",
+  "field_harvest": "灵田收获{loot_text}。",
+  "field_upgrade": "灵田重新翻整、引来灵泉，如今已是{field}。"
 }

@@ -1,9 +1,11 @@
 extends RefCounted
 ## Breaking through to the next realm (筑基), after the web novels: it may fail. Operates on a Session.
-## The odds start from the 资质 and add what was prepared: 筑基丹 (each worth less than the one before),
+## The odds start from the 资质 and add what was prepared: 筑基丹 (each worth less than the one before;
+## 上品筑基丹 are taken first and add a little more),
 ## a 天材地宝 in their place, a mind beyond what the stage asks, a 心法 suited to the roots, someone to
 ## stand guard (护法), the 灵眼 to break through at, fortune met on the way (机缘: 顿悟, 生死之间), the
-## lessons of earlier failures, and talents. They are shown before the attempt (`odds`).
+## lessons of earlier failures, and talents; 丹毒 still in the body takes a little off. They are shown
+## before the attempt (`odds`).
 ## A mind short of the next realm's need, unguarded, may meet 心魔 first: a choice, slain or evaded.
 ## Success enters the realm with a 品质 (grade) from how far the roll fell under the odds, raised by
 ## fortune; 无瑕 only by fortune. Failure costs the pills, some xp and months of injury, never the life,
@@ -13,6 +15,7 @@ extends RefCounted
 ## player.injury_until the day the injury heals; player.lessons the failures learned from; player.boons
 ## the fortune met in this life ({id: "ready" | "spent"}).
 const Talents = preload("res://scripts/core/talents.gd")
+const Alchemy = preload("res://scripts/core/alchemy.gd")
 const DEMON_EVENT := "heart_demon"
 
 static func rules(s) -> Dictionary:
@@ -29,7 +32,7 @@ static func treasures(s) -> Array[String]:
 
 ## The plan a plain 突破 uses: one 筑基丹 if there is one, else the first treasure.
 static func default_plan(s) -> Dictionary:
-	if s.item_count("foundation_pill") > 0:
+	if s.pill_count("foundation_pill") > 0:
 		return {"pills": 1, "treasure": "", "guard": ""}
 	var owned := treasures(s)
 	return {"pills": 0, "treasure": owned[0] if not owned.is_empty() else "", "guard": ""}
@@ -83,7 +86,7 @@ static func block(s, plan: Dictionary) -> String:
 		return "突破需修至%s，并有 %d 修为。" % [s.content.realm_title(int(s.player.realm), last_stage), int(need.xp)]
 	var pills := int(plan.get("pills", 0))
 	var treasure := str(plan.get("treasure", ""))
-	if pills < 0 or pills > rules(s).pill_bonus.size() or s.item_count("foundation_pill") < pills:
+	if pills < 0 or pills > rules(s).pill_bonus.size() or s.pill_count("foundation_pill") < pills:
 		return "行囊里没有那么多筑基丹。"
 	if not treasure.is_empty() and (not s.content.item(treasure).has("breakthrough") or s.item_count(treasure) < 1):
 		return "行囊里没有此物。"
@@ -108,8 +111,11 @@ static func odds(s, plan: Dictionary) -> Dictionary:
 	var pill_points := 0
 	for index: int in mini(pills, r.pill_bonus.size()):
 		pill_points += int(r.pill_bonus[index])
+	# 上品筑基丹 go in first.
+	var fine := mini(pills, s.item_count(s.content.fine_pill("foundation_pill")))
+	pill_points += fine * int(s.content.alchemy_data.foundation_fine_bonus)
 	if pills > 0:
-		parts.append(["筑基丹 ×%d" % pills, Talents.scaled(pill_points, s.talent_modifier("pill"))])
+		parts.append(["筑基丹 ×%d%s" % [pills, "（上品 %d）" % fine if fine > 0 else ""], Talents.scaled(pill_points, s.talent_modifier("pill"))])
 	var steps: Array = []
 	var treasure := str(plan.get("treasure", ""))
 	if not treasure.is_empty():
@@ -137,6 +143,9 @@ static func odds(s, plan: Dictionary) -> Dictionary:
 	var lessons := int(s.player.get("lessons", 0))
 	if lessons > 0:
 		parts.append(["前车之鉴", lessons * int(r.lesson.bonus)])
+	var toxin := Alchemy.toxin_penalty(s)
+	if toxin > 0:
+		parts.append(["丹毒未清", -toxin])
 	var total := 0
 	for part: Array in parts:
 		total += int(part[1])
@@ -182,7 +191,7 @@ static func attempt(s, plan: Dictionary) -> String:
 		return reason
 	var need: Dictionary = s.next_breakthrough()
 	var chances := odds(s, plan)
-	s.remove_item("foundation_pill", int(plan.get("pills", 0)))
+	s.Inventory.remove_family(s, "foundation_pill", int(plan.get("pills", 0)), true)
 	if not str(plan.get("treasure", "")).is_empty():
 		s.remove_item(str(plan.treasure), 1)
 	s.player.xp = int(s.player.xp) - int(need.xp)

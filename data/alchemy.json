@@ -1,0 +1,33 @@
+{
+  "natures": {"neutral": "平", "cold": "寒", "hot": "热"},
+  "recipes": {
+    "liaoshang": {"pill": "liaoshang_pill", "fine": "liaoshang_pill_fine", "main": {"huichun_grass": 3}, "days": 3, "success": 70, "yield": [2, 3]},
+    "huiqi": {"pill": "huiqi_pill", "fine": "huiqi_pill_fine", "main": {"ninglu_grass": 2, "huichun_grass": 1}, "days": 3, "success": 70, "yield": [2, 3]},
+    "ningqi": {"pill": "ningqi_pill", "fine": "ningqi_pill_fine", "main": {"huichun_grass": 4, "chiyan_flower": 1}, "days": 5, "success": 55, "yield": [1, 2]},
+    "pozhang": {"pill": "pozhang_pill", "fine": "pozhang_pill_fine", "main": {"ninglu_grass": 2, "chiyan_flower": 2}, "days": 5, "success": 50, "yield": [1, 1]},
+    "foundation": {"pill": "foundation_pill", "fine": "foundation_pill_fine", "main": {"lingzhi": 1, "huichun_grass": 3, "ninglu_grass": 1, "chiyan_flower": 1}, "days": 7, "success": 40, "yield": [1, 1]}
+  },
+  "places": {
+    "sect": {"name": "静室的公用丹炉", "success": 0, "fee": 0},
+    "market": {"name": "借沈墨的药炉", "success": 10, "fee": 10, "needs_met": "shen_mo", "help": "沈墨提点"}
+  },
+  "fires": {
+    "gentle": {"name": "文火", "success": 0, "fine": 0, "text": "火势平稳，不易失手"},
+    "fierce": {"name": "武火", "success": -10, "fine": 15, "burst": true, "text": "更易出上品，失手则炸炉，伤及自身"}
+  },
+  "success_range": [5, 95],
+  "fine_base": 10,
+  "fine_most": 80,
+  "practice": {"success_step": 3, "success_most": 15, "fine_step": 2, "fine_most": 10},
+  "burst_hp_percent": 15,
+  "foundation_fine_bonus": 8,
+  "toxin": {"limit": 100, "decay_per_day": 2, "breakthrough_step": 10},
+  "field": {
+    "rank": "inner",
+    "grades": [
+      {"name": "下品灵田", "plots": 2, "growth": 100, "bonus": 0},
+      {"name": "中品灵田", "plots": 3, "growth": 80, "bonus": 1, "cost": {"stones": 300, "contribution": 100}, "stage": [1, 1]},
+      {"name": "上品灵田", "plots": 4, "growth": 60, "bonus": 2, "cost": {"stones": 800, "contribution": 250}, "stage": [1, 2]}
+    ]
+  }
+}

@@ -17,6 +17,7 @@ const UiSkin = preload("res://scripts/ui/ui_skin.gd")
 const Hud = preload("res://scripts/ui/hud.gd")
 const StatusView = preload("res://scripts/ui/status_view.gd")
 const SectView = preload("res://scripts/ui/sect_view.gd")
+const AlchemyView = preload("res://scripts/ui/alchemy_view.gd")
 const TasksView = preload("res://scripts/ui/tasks_view.gd")
 const SystemView = preload("res://scripts/ui/system_view.gd")
 const WorldMap = preload("res://scripts/ui/world_map.gd")
@@ -40,7 +41,7 @@ const MUTED := Color("#97aaa4")
 const PANEL_TABS := [["status", "属性"], ["sect", "宗门"], ["arts", "神通"], ["methods", "功法"], ["bag", "行囊"], ["people", "相识"], ["chronicle", "编年史"], ["system", "系统"]]
 const SCROLL_TABS := [["goals", "当前目标"], ["stories", "剧情"], ["quests", "委托"], ["letters", "传音"], ["upcoming", "约定"]]
 const RETREAT_TABS := [["retreat", "修炼"], ["breakthrough", "突破"]]
-const TAB_GROUPS := {"panel": PANEL_TABS, "scroll": SCROLL_TABS, "retreat": RETREAT_TABS, "trade": [["trade", "交易"]]}
+const TAB_GROUPS := {"panel": PANEL_TABS, "scroll": SCROLL_TABS, "retreat": RETREAT_TABS, "trade": [["trade", "交易"]], "alchemy": [["alchemy", "炼丹"]], "field": [["field", "灵田"]]}
 var session = Session.new()
 var manual_store = SaveStore.new("user://saves/manual")
 var auto_store = SaveStore.new("user://saves/auto")
@@ -75,6 +76,8 @@ var drawer_open := true
 var arts_filter := "all"
 var bag_filter := "all"
 var trade: Dictionary = {"sell": {}, "buy": []}
+# The brew being set out on the alchemy page: {"recipe", "guide", "fire", "aid"}.
+var alchemy_plan: Dictionary = {}
 # The HUD (hud.gd).
 var hud_left: PanelContainer
 var hud_right: PanelContainer
@@ -401,7 +404,7 @@ func _arrange(screen: String) -> void:
 				window.offset_top = -300.0
 			else:
 				_place_window(0.0, 1.0, 14.0, -60.0, 14.0)
-		"retreat", "trade":
+		"retreat", "trade", "alchemy", "field":
 			# Smaller scrolls over the place, which darkens behind them.
 			shade.color.a = 0.6
 			_place_window(0.0, 1.0, 40.0, -64.0, 96.0)
@@ -503,6 +506,10 @@ func render() -> void:
 				StatusView.render(self)
 			"sect":
 				SectView.render(self)
+			"alchemy":
+				AlchemyView.render(self)
+			"field":
+				AlchemyView.render_field(self)
 			"goals":
 				TasksView.render_goals(self)
 			"quests":
@@ -623,6 +630,35 @@ func set_arts_filter(element: String) -> void:
 
 func set_bag_filter(category: String) -> void:
 	bag_filter = category
+	render()
+
+# --- The alchemy page (alchemy_view.gd) -------------------------------------------------------------
+
+func open_alchemy() -> void:
+	alchemy_plan = {}
+	set_view("alchemy")
+
+func choose_recipe(recipe_id: String) -> void:
+	var fire := str(alchemy_plan.get("fire", "gentle"))
+	alchemy_plan = session.alchemy_plan(recipe_id)
+	alchemy_plan.fire = fire
+	render()
+
+## Changes one part of the brew being set out: "guide", "fire" or "aid".
+func set_alchemy(key: String, value: String) -> void:
+	alchemy_plan[key] = value
+	render()
+
+## Lights the furnace; afterwards the 药引 and the talisman are chosen afresh from what is left.
+func brew_now() -> void:
+	var plan := alchemy_plan.duplicate()
+	run(func() -> String: return session.brew(plan))
+	if not session.known_recipes().has(str(plan.get("recipe", ""))):
+		return
+	alchemy_plan = session.alchemy_plan(str(plan.recipe))
+	alchemy_plan.fire = str(plan.fire)
+	if not str(plan.get("aid", "")).is_empty() and session.item_count(str(plan.aid)) > 0:
+		alchemy_plan.aid = str(plan.aid)
 	render()
 
 # --- The trading table (trade_view.gd): goods are laid out, and only 确定 trades them. --------------

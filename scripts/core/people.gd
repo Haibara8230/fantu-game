@@ -382,7 +382,7 @@ static func interact(s, person_id: String, option_id: String) -> String:
 		"help":
 			var request := request_of(s, person_id)
 			var rules: Dictionary = s.content.rules.requests
-			s.remove_item(request.item, int(request.count))
+			s.Inventory.remove_family(s, request.item, int(request.count))
 			s.player.stones += int(request.stones)
 			Events.apply(s, [{"relation": [person_id, int(rules.favor)]}, {"mind": int(rules.mind)}])
 			s.record_deed("help")

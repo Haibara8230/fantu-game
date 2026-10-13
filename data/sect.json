@@ -16,6 +16,11 @@
     {"id": "pozhang", "item": "pozhang_pill", "price": 30, "limit": 2, "per_days": 360},
     {"id": "ningqi", "item": "ningqi_pill", "price": 35, "limit": 2, "per_days": 360},
     {"id": "foundation", "item": "foundation_pill", "price": 150, "limit": 1, "per_days": 720, "rank": "elite"},
+    {"id": "recipe_ningqi", "item": "recipe_ningqi", "price": 40, "limit": 1, "per_days": 360},
+    {"id": "recipe_pozhang", "item": "recipe_pozhang", "price": 40, "limit": 1, "per_days": 360},
+    {"id": "recipe_foundation", "item": "recipe_foundation", "price": 120, "limit": 1, "per_days": 360, "rank": "elite"},
+    {"id": "furnace_purple", "item": "furnace_purple", "price": 150, "limit": 1, "per_days": 360, "rank": "elite"},
+    {"id": "furnace_xuantie", "item": "furnace_xuantie", "price": 400, "limit": 1, "per_days": 720, "rank": "inner"},
     {"id": "yellow", "manual": 2, "count": 2, "price": 50, "limit": 1, "per_days": 90},
     {"id": "mystic", "manual": 3, "count": 1, "price": 180, "limit": 1, "per_days": 180, "rank": "inner"}
   ]

@@ -3,26 +3,33 @@
     "name": "回春草",
     "category": "herb",
     "price": 4,
-    "description": "最常见的灵草，药性温和，炼制疗伤丹的主材。"
+    "description": "最常见的灵草，药性温和，炼制疗伤丹的主材。",
+    "nature": "neutral",
+    "grow": {"days": 30, "yield": 3}
   },
   "chiyan_flower": {
     "name": "赤炎花",
     "category": "herb",
     "price": 9,
-    "description": "只生在落霞谷向阳坡上的火性灵花，花瓣摸上去微微发烫。"
+    "description": "只生在落霞谷向阳坡上的火性灵花，花瓣摸上去微微发烫。",
+    "nature": "hot",
+    "grow": {"days": 60, "yield": 3}
   },
   "ninglu_grass": {
     "name": "凝露草",
     "category": "herb",
     "price": 7,
-    "description": "松风岭林下阴处的灵草，叶尖常挂露珠，性凉。"
+    "description": "松风岭林下阴处的灵草，叶尖常挂露珠，性凉。",
+    "nature": "cold",
+    "grow": {"days": 45, "yield": 3}
   },
   "lingzhi": {
     "name": "百年灵芝",
     "category": "herb",
     "price": 60,
     "description": "百年方成的灵芝，罕见。炼化可得 300 修为。",
-    "use": [{"xp": 300}]
+    "use": [{"xp": 300}],
+    "nature": "neutral"
   },
   "foundation_pill": {
     "name": "筑基丹",
@@ -48,9 +55,9 @@
     "name": "凝气丹",
     "category": "pill",
     "price": 30,
-    "description": "服下增加 100 修为。丹毒积累，每 30 日只宜服一枚。",
+    "description": "服下增加 100 修为。丹毒积累，连服须隔些时日。",
     "use": [{"xp": 100}],
-    "use_cooldown_days": 30
+    "toxin": 60
   },
   "pozhang_pill": {
     "name": "破障丹",
@@ -58,6 +65,46 @@
     "price": 20,
     "description": "修为卡在瓶颈时服下，可冲开关隘、升入下一小阶段。未遇瓶颈时服之无益。",
     "use": [{"breach": true}]
+  },
+  "liaoshang_pill_fine": {
+    "name": "上品疗伤丹",
+    "category": "pill",
+    "price": 20,
+    "fine_of": "liaoshang_pill",
+    "description": "丹纹圆润的上品疗伤丹，服下恢复 70 点气血。",
+    "use": [{"hp": 70}]
+  },
+  "huiqi_pill_fine": {
+    "name": "上品回气丹",
+    "category": "pill",
+    "price": 14,
+    "fine_of": "huiqi_pill",
+    "description": "丹香清冽的上品回气丹，服下恢复 35 点灵力。",
+    "use": [{"qi": 35}]
+  },
+  "ningqi_pill_fine": {
+    "name": "上品凝气丹",
+    "category": "pill",
+    "price": 60,
+    "fine_of": "ningqi_pill",
+    "toxin": 45,
+    "description": "药力凝练的上品凝气丹，服下增加 160 修为，丹毒也轻些。",
+    "use": [{"xp": 160}]
+  },
+  "pozhang_pill_fine": {
+    "name": "上品破障丹",
+    "category": "pill",
+    "price": 40,
+    "fine_of": "pozhang_pill",
+    "description": "上品破障丹，冲开瓶颈之余，还让心境更为通透。未遇瓶颈时服之无益。",
+    "use": [{"breach": true}, {"mind": 2}]
+  },
+  "foundation_pill_fine": {
+    "name": "上品筑基丹",
+    "category": "pill",
+    "price": 120,
+    "fine_of": "foundation_pill",
+    "description": "丹纹九转的上品筑基丹，突破筑基时药力更足。"
   },
   "auction_invitation": {
     "name": "云溪请柬",
@@ -97,5 +144,68 @@
     "price": 360,
     "description": "根须九曲的老参，生在灵气汇聚的深谷。突破时服下可代替筑基丹，并让根基更为扎实。",
     "breakthrough": {"bonus": 35, "grade": 1}
+  },
+  "recipe_liaoshang": {
+    "name": "疗伤丹丹方",
+    "category": "recipe",
+    "price": 15,
+    "description": "以回春草为主药的疗伤丹方子，寒热平和，最适合初学炼丹。",
+    "use": [{"recipe": "liaoshang"}]
+  },
+  "recipe_huiqi": {
+    "name": "回气丹丹方",
+    "category": "recipe",
+    "price": 15,
+    "description": "以凝露草为主药的回气丹方子。主药偏寒，须以热性药引调和。",
+    "use": [{"recipe": "huiqi"}]
+  },
+  "recipe_ningqi": {
+    "name": "凝气丹丹方",
+    "category": "recipe",
+    "price": 40,
+    "description": "增长修为的凝气丹方子。赤炎花入药，药性偏热，须以寒性药引调和。",
+    "use": [{"recipe": "ningqi"}]
+  },
+  "recipe_pozhang": {
+    "name": "破障丹丹方",
+    "category": "recipe",
+    "price": 30,
+    "description": "冲关破障的方子，凝露草与赤炎花寒热相济。",
+    "use": [{"recipe": "pozhang"}]
+  },
+  "recipe_foundation": {
+    "name": "筑基丹丹方",
+    "category": "recipe",
+    "price": 100,
+    "description": "筑基丹的方子，以百年灵芝为主药，辅以三味灵草。成丹极难，却是自家筑基的底气。",
+    "use": [{"recipe": "foundation"}]
+  },
+  "furnace_bronze": {
+    "name": "青铜丹炉",
+    "category": "tool",
+    "price": 80,
+    "furnace": {"success": 8, "fine": 5, "yield": 0},
+    "description": "坊市常见的青铜丹炉，炉壁厚实，火候好掌握些。炼丹成功率 +8%，出上品 +5%。"
+  },
+  "furnace_purple": {
+    "name": "紫铜丹炉",
+    "category": "tool",
+    "price": 150,
+    "furnace": {"success": 12, "fine": 10, "yield": 1},
+    "description": "宗门炼丹房淘换下来的紫铜丹炉，炉膛宽大。成功率 +12%，出上品 +10%，每炉多成一枚。"
+  },
+  "furnace_xuantie": {
+    "name": "玄铁丹炉",
+    "category": "tool",
+    "price": 400,
+    "furnace": {"success": 18, "fine": 18, "yield": 1},
+    "description": "玄铁铸就、刻有聚火阵纹的丹炉，内门长老才舍得用。成功率 +18%，出上品 +18%，每炉多成一枚。"
+  },
+  "kongho_fu": {
+    "name": "控火符",
+    "category": "tool",
+    "price": 10,
+    "aid": {"success": 15, "safe": true},
+    "description": "贴在炉口，可稳住炉火。炼丹时用一张：成功率 +15%，武火失手也不会炸炉。"
   }
 }

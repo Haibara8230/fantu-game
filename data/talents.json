@@ -2738,7 +2738,8 @@
    "mods": {
     "pill": 300,
     "pill_cooldown": -250,
-    "gather": 150
+    "gather": 150,
+    "alchemy": 30
    }
   },
   "shouyou": {

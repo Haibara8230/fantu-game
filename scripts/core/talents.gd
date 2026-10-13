@@ -14,7 +14,8 @@ extends RefCounted
 ## max_hp/max_qi (of the stage's), attack (flat), defense, damage_<element> and damage_all, lifespan
 ## (years), retreat_days (the longest retreat), fresh_days (retreat days before weariness), insight,
 ## mind_gain, mind_need (the mind a stage asks), breakthrough (points of the odds), pill (a pill's effect),
-## pill_cooldown, grade (chance of a better foundation), demon (chance to keep 心魔 away), boon (chance of
+## pill_cooldown (the 丹毒 a pill leaves), alchemy (points of a brew's success; half as much for a fine
+## pill), grade (chance of a better foundation), demon (chance to keep 心魔 away), boon (chance of
 ## fortune), study (days to study), gather (finds), sell, buy (prices), favor (favor gained), travel
 ## (days on the road), encounter (chance of trouble on the road), rest (days to recover), stones (flat,
 ## at the start).
@@ -22,7 +23,7 @@ const MODIFIERS := [
 	"cultivation", "max_hp", "max_qi", "attack", "defense",
 	"damage_metal", "damage_wood", "damage_water", "damage_fire", "damage_earth", "damage_all",
 	"lifespan", "retreat_days", "fresh_days", "insight", "mind_gain", "mind_need",
-	"breakthrough", "pill", "pill_cooldown", "grade", "demon", "boon",
+	"breakthrough", "pill", "pill_cooldown", "alchemy", "grade", "demon", "boon",
 	"study", "gather", "sell", "buy", "favor", "travel", "encounter", "rest", "stones",
 ]
 

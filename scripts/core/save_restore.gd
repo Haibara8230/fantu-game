@@ -110,7 +110,8 @@ static func restore(s, data: Variant) -> bool:
 		return false
 	var progress: Variant = _valid_breakthrough(content, saved_player, saved_pending)
 	var standing: Variant = _valid_standing(content, saved_player, day)
-	if progress == null or standing == null:
+	var alchemy: Variant = _valid_alchemy(content, saved_player, day)
+	if progress == null or standing == null or alchemy == null:
 		return false
 	# Talents: optional, since saves before them lack them; then they awaken from the world seed.
 	var born: Variant = _valid_talents(content, saved_player)
@@ -221,6 +222,8 @@ static func restore(s, data: Variant) -> bool:
 		player[key] = progress[key]
 	for key: String in standing:
 		player[key] = standing[key]
+	for key: String in alchemy:
+		player[key] = alchemy[key]
 	if not progress.has("attempt"):
 		player.erase("attempt")
 	# Health and qi stay within the caps; talents that awaken may lower them.
@@ -358,6 +361,49 @@ static func _valid_standing(content, saved_player: Dictionary, day: int) -> Vari
 	if not donated is Dictionary or (not donated.is_empty() and (not _whole_nonnegative(donated.get("period")) or not _whole_nonnegative(donated.get("amount")))):
 		return null
 	result["donated"] = {} if donated.is_empty() else {"period": int(donated.period), "amount": int(donated.amount)}
+	return result
+
+## Recipes known, brews made, 丹毒 and the 灵田, normalized (optional: journeys before them know no
+## recipe and have no field yet), or null when malformed. Recipes no longer in the content are dropped;
+## a plot whose herb no longer grows is cleared.
+static func _valid_alchemy(content, saved_player: Dictionary, day: int) -> Variant:
+	var result := {}
+	var recipes: Variant = saved_player.get("recipes", [])
+	if not recipes is Array:
+		return null
+	var known: Array = []
+	for recipe_id: Variant in recipes:
+		if not recipe_id is String:
+			return null
+		if content.alchemy_data.recipes.has(recipe_id) and not recipe_id in known:
+			known.append(recipe_id)
+	result["recipes"] = known
+	var practice: Variant = _valid_counts(saved_player.get("practice", {}))
+	if practice == null:
+		return null
+	result["practice"] = practice
+	var toxin: Variant = saved_player.get("toxin", 0)
+	var toxin_day: Variant = saved_player.get("toxin_day", day)
+	if not _whole_nonnegative(toxin) or int(toxin) > int(content.alchemy_data.toxin.limit) or not _whole_nonnegative(toxin_day) or int(toxin_day) > day:
+		return null
+	result["toxin"] = int(toxin)
+	result["toxin_day"] = int(toxin_day)
+	var field: Variant = saved_player.get("field", {"grade": 0, "plots": []})
+	if not field is Dictionary or not _whole_nonnegative(field.get("grade")) or int(field.grade) >= content.alchemy_data.field.grades.size() or not field.get("plots") is Array:
+		return null
+	if field.plots.size() > int(content.alchemy_data.field.grades[int(field.grade)].plots):
+		return null
+	var plots: Array = []
+	for plot: Variant in field.plots:
+		if not plot is Dictionary:
+			return null
+		if plot.is_empty():
+			plots.append({})
+			continue
+		if not plot.get("herb") is String or not _whole_nonnegative(plot.get("day")) or int(plot.day) > day:
+			return null
+		plots.append({"herb": plot.herb, "day": int(plot.day)} if content.item(plot.herb).has("grow") else {})
+	result["field"] = {"grade": int(field.grade), "plots": plots}
 	return result
 
 ## The saved talents and flaws ({"talents", "flaws"}), {} when the save has none yet, or null when they

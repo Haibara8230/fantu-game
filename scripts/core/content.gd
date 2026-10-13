@@ -30,6 +30,8 @@ var storylines: Dictionary = {}
 var talent_data: Dictionary = {}
 var sect_data: Dictionary = {}
 var bonds_data: Dictionary = {}
+# Recipes, furnaces, 丹毒 and the 灵田 (alchemy.gd).
+var alchemy_data: Dictionary = {}
 # Born-with talent ids by tier, built on first use (talents.gd).
 var talent_pools: Dictionary = {}
 var error_message: String = ""
@@ -38,8 +40,8 @@ const FAVOR_MAX := 200
 const FAVOR_STAGES := [[0, "初识"], [40, "相熟"], [80, "友好"], [140, "信赖"], [200, "亲密"]]
 const ATTITUDES := {"friendly": "友善", "neutral": "中立", "hostile": "敌意"}
 const BUILT_IN_INTERACTIONS := ["talk", "gift", "help", "consult", "teach", "invite_spar", "invite_help"]
-const PLAIN_ACTIONS := ["cultivate", "rest", "breakthrough", "study", "teach", "sell", "shop", "gather", "inn_rest", "search_ruin", "inquire", "commissions", "sect"]
-const ITEM_CATEGORIES := {"herb": "灵草", "pill": "丹药", "treasure": "天材地宝", "manual": "玉简", "equipment": "法宝", "material": "材料", "quest": "信物"}
+const PLAIN_ACTIONS := ["cultivate", "rest", "breakthrough", "study", "teach", "sell", "shop", "gather", "inn_rest", "search_ruin", "inquire", "commissions", "sect", "alchemy", "field"]
+const ITEM_CATEGORIES := {"herb": "灵草", "pill": "丹药", "treasure": "天材地宝", "manual": "玉简", "equipment": "法宝", "material": "材料", "recipe": "丹方", "tool": "器具", "quest": "信物"}
 # Milestones friends send word of, and the deeds the session counts besides victories ("win:<enemy>").
 const CONGRATS := ["breakthrough", "serpent", "champion", "promotion"]
 const DEEDS := ["retreat_days", "duel", "trade", "gather", "commission", "help", "tournament_champion"]
@@ -79,7 +81,7 @@ func load_data() -> bool:
 		error_message = "物品配置格式错误。"
 		return false
 	items = item_data
-	for pair: Array in [["techniques", "res://data/techniques.json"], ["equipment", "res://data/equipment.json"], ["vfx_tiers", "res://data/vfx_tiers.json"], ["vfx", "res://data/vfx.json"], ["population", "res://data/population.json"], ["commissions", "res://data/commissions.json"], ["storylines", "res://data/storylines.json"], ["talents", "res://data/talents.json"], ["sect", "res://data/sect.json"], ["bonds", "res://data/bonds.json"]]:
+	for pair: Array in [["techniques", "res://data/techniques.json"], ["equipment", "res://data/equipment.json"], ["vfx_tiers", "res://data/vfx_tiers.json"], ["vfx", "res://data/vfx.json"], ["population", "res://data/population.json"], ["commissions", "res://data/commissions.json"], ["storylines", "res://data/storylines.json"], ["talents", "res://data/talents.json"], ["sect", "res://data/sect.json"], ["bonds", "res://data/bonds.json"], ["alchemy", "res://data/alchemy.json"]]:
 		var loaded: Variant = _read_json(pair[1])
 		if not loaded is Dictionary:
 			error_message = "配置格式错误：" + pair[1]
@@ -108,6 +110,8 @@ func load_data() -> bool:
 				sect_data = loaded
 			"bonds":
 				bonds_data = loaded
+			"alchemy":
+				alchemy_data = loaded
 	map = parsed.map
 	locations = parsed.locations
 	skills = parsed.skills
@@ -294,6 +298,8 @@ func _validate() -> String:
 			return "人物 %s：%s" % [person_id, problem]
 	problem = _validate_talents()
 	if problem.is_empty():
+		problem = _validate_alchemy()
+	if problem.is_empty():
 		problem = _validate_sect()
 	if problem.is_empty():
 		problem = _validate_bonds()
@@ -427,6 +433,84 @@ func _validate_sect() -> String:
 				return "宗门兑换缺少：%s.%s" % [good.id, key]
 		if good.has("rank") and not data.ranks.any(func(rank: Dictionary) -> bool: return rank.id == good.rank):
 			return "宗门兑换引用了未知身份：%s" % good.id
+	return ""
+
+# --- Alchemy static checks ------------------------------------------------------------------------
+
+func _validate_alchemy() -> String:
+	var data := alchemy_data
+	var natures: Variant = data.get("natures")
+	if not natures is Dictionary or not natures.has("neutral") or not natures.has("cold") or not natures.has("hot"):
+		return "药性配置无效。"
+	for item_id: String in items:
+		var item: Dictionary = items[item_id]
+		if item.category == "herb" and not natures.has(item.get("nature", "")):
+			return "灵草缺少药性：%s" % item_id
+		if item.has("grow") and (item.category != "herb" or not item.grow is Dictionary or not _whole(item.grow.get("days")) or int(item.grow.days) < 1 or not _whole(item.grow.get("yield")) or int(item.grow.yield) < 1):
+			return "灵草的生长配置无效：%s" % item_id
+		if item.has("fine_of") and (item.category != "pill" or not items.has(item.fine_of) or items[item.fine_of].category != "pill" or items[item.fine_of].has("fine_of")):
+			return "上品丹药无效：%s" % item_id
+		if item.has("furnace"):
+			var furnace: Variant = item.furnace
+			if item.category != "tool" or not furnace is Dictionary or not _whole(furnace.get("success")) or not _whole(furnace.get("fine")) or not _whole(furnace.get("yield")):
+				return "丹炉配置无效：%s" % item_id
+		if item.has("aid") and (item.category != "tool" or not item.aid is Dictionary or not _whole(item.aid.get("success")) or not item.aid.get("safe", false) is bool):
+			return "炼丹辅具配置无效：%s" % item_id
+		if item.category == "recipe" and not item.get("use", []).any(func(effect: Dictionary) -> bool: return effect.has("recipe")):
+			return "丹方须能研读：%s" % item_id
+	var recipes: Variant = data.get("recipes")
+	if not recipes is Dictionary or recipes.is_empty():
+		return "丹方配置无效。"
+	for recipe_id: String in recipes:
+		var recipe: Variant = recipes[recipe_id]
+		if not recipe is Dictionary or not items.get(recipe.get("pill", ""), {}).get("category", "") == "pill" or str(items.get(recipe.get("fine", ""), {}).get("fine_of", "")) != str(recipe.pill):
+			return "丹方的丹药无效：%s" % recipe_id
+		if not recipe.get("main") is Dictionary or recipe.main.is_empty():
+			return "丹方缺少主药：%s" % recipe_id
+		for herb_id: Variant in recipe.main:
+			if items.get(herb_id, {}).get("category", "") != "herb" or not _whole(recipe.main[herb_id]) or int(recipe.main[herb_id]) < 1:
+				return "丹方的主药无效：%s" % recipe_id
+		if not _whole(recipe.get("days")) or int(recipe.days) < 1 or not _whole(recipe.get("success")):
+			return "丹方的时日或成功率无效：%s" % recipe_id
+		if not recipe.get("yield") is Array or recipe.yield.size() != 2 or not _whole(recipe.yield[0]) or int(recipe.yield[0]) < 1 or not _whole(recipe.yield[1]) or int(recipe.yield[1]) < int(recipe.yield[0]):
+			return "丹方的成丹数无效：%s" % recipe_id
+	var places: Variant = data.get("places")
+	if not places is Dictionary:
+		return "炼丹地点配置无效。"
+	for location_id: String in places:
+		var here: Variant = places[location_id]
+		if not locations.has(location_id) or not here is Dictionary or not here.get("name") is String or not _whole(here.get("success")) or not _whole(here.get("fee")):
+			return "炼丹地点无效：%s" % location_id
+		if here.has("needs_met") and not people.has(here.needs_met):
+			return "炼丹地点引用了未知人物：%s" % location_id
+	var fires: Variant = data.get("fires")
+	if not fires is Dictionary or not fires.has("gentle"):
+		return "火候配置无效。"
+	for fire_id: String in fires:
+		var fire: Variant = fires[fire_id]
+		if not fire is Dictionary or not fire.get("name") is String or not _signed(fire.get("success")) or not _whole(fire.get("fine")):
+			return "火候配置无效：%s" % fire_id
+	for key: String in ["fine_base", "fine_most", "burst_hp_percent", "foundation_fine_bonus"]:
+		if not _whole(data.get(key)):
+			return "炼丹配置缺少：%s" % key
+	var bounds: Variant = data.get("success_range")
+	if not bounds is Array or bounds.size() != 2 or not _whole(bounds[0]) or not _whole(bounds[1]) or int(bounds[0]) > int(bounds[1]):
+		return "炼丹成功率范围无效。"
+	var practice: Variant = data.get("practice")
+	if not practice is Dictionary or ["success_step", "success_most", "fine_step", "fine_most"].any(func(key: String) -> bool: return not _whole(practice.get(key))):
+		return "炼丹熟练配置无效。"
+	var toxin: Variant = data.get("toxin")
+	if not toxin is Dictionary or ["limit", "decay_per_day", "breakthrough_step"].any(func(key: String) -> bool: return not _whole(toxin.get(key)) or int(toxin[key]) < 1):
+		return "丹毒配置无效。"
+	var field: Variant = data.get("field")
+	if not field is Dictionary or rank_index(str(field.get("rank", ""))) < 0 or not field.get("grades") is Array or field.grades.is_empty():
+		return "灵田配置无效。"
+	for index: int in field.grades.size():
+		var grade: Variant = field.grades[index]
+		if not grade is Dictionary or not grade.get("name") is String or not _whole(grade.get("plots")) or int(grade.plots) < 1 or not _whole(grade.get("growth")) or int(grade.growth) < 1 or not _whole(grade.get("bonus")):
+			return "灵田品级无效：%d" % index
+		if index > 0 and (not grade.get("cost") is Dictionary or not _whole(grade.cost.get("stones")) or not _whole(grade.cost.get("contribution")) or not grade.get("stage") is Array or grade.stage.size() != 2 or not _whole(grade.stage[0]) or int(grade.stage[0]) >= realms.size() or not _whole(grade.stage[1])):
+			return "灵田扩建配置无效：%d" % index
 	return ""
 
 # --- Bonds static checks --------------------------------------------------------------------------
@@ -657,6 +741,8 @@ func _validate_map() -> String:
 			ids[spot.id] = true
 			if spot.has("requires_flag") and not spot.requires_flag in world_flags:
 				return "场景引用了未知标记：%s.%s" % [location_id, spot.id]
+			if spot.has("requires_rank") and rank_index(str(spot.requires_rank)) < 0:
+				return "场景引用了未知宗门身份：%s.%s" % [location_id, spot.id]
 			for taught: Variant in spot.get("teach", []):
 				if not taught is String or technique(taught).is_empty():
 					return "场景传授了无效的功法：%s" % taught
@@ -676,6 +762,8 @@ func _validate_map() -> String:
 					return "开店的地点没有货品：" + location_id
 				if action == "sell" and location.get("buys", []).is_empty():
 					return "收购的地点没有收购品类：" + location_id
+				if action == "alchemy" and not alchemy_data.get("places", {}).has(location_id):
+					return "可炼丹的地点缺少丹炉配置：" + location_id
 	# Every location must be reachable once everything is revealed; unhidden ones without any reveal.
 	var everything := {}
 	var seals := {}
@@ -784,15 +872,29 @@ func path_days(path: Array[String]) -> int:
 		total += int(route_between(path[index - 1], path[index]).days)
 	return total
 
-## Actions offered by the spots at a location; gated spots appear once their flag is set.
-func spot_actions(location_id: String, flags: Dictionary) -> Array[String]:
+## Actions offered by the spots at a location; gated spots appear once their flag is set and, for those
+## kept for a sect rank, to whoever holds it (`rank`, the index of the player's).
+func spot_actions(location_id: String, flags: Dictionary, rank: int = 0) -> Array[String]:
 	var result: Array[String] = []
 	for spot: Dictionary in locations.get(location_id, {}).get("spots", []):
-		if spot.has("requires_flag") and not bool(flags.get(spot.requires_flag, false)):
+		if not spot_open(spot, flags, rank):
 			continue
 		for action: String in spot.actions:
 			result.append(action)
 	return result
+
+func spot_open(spot: Dictionary, flags: Dictionary, rank: int) -> bool:
+	if spot.has("requires_flag") and not bool(flags.get(spot.requires_flag, false)):
+		return false
+	return not spot.has("requires_rank") or rank >= rank_index(str(spot.requires_rank))
+
+## A sect rank's index by id, or -1.
+func rank_index(rank_id: String) -> int:
+	var ranks: Array = sect_data.get("ranks", [])
+	for index: int in ranks.size():
+		if ranks[index].id == rank_id:
+			return index
+	return -1
 
 # --- Event static checks -----------------------------------------------------
 
@@ -969,6 +1071,8 @@ func _validate_condition(condition: Variant) -> String:
 			return "" if is_talent(value) else "未知天赋：%s" % value
 		"rank_at_least":
 			return "" if sect_data.get("ranks", []).any(func(rank: Dictionary) -> bool: return rank.id == value) else "未知宗门身份：%s" % value
+		"recipe":
+			return "" if alchemy_data.get("recipes", {}).has(value) else "未知丹方：%s" % value
 	return "未知条件：%s" % key
 
 func _validate_effects(effects: Variant) -> String:
@@ -1015,6 +1119,8 @@ func _validate_effects(effects: Variant) -> String:
 				ok = value in ["slay", "evade"]
 			"fortune":
 				ok = value in ["epiphany", "remnant"]
+			"recipe":
+				ok = alchemy_data.get("recipes", {}).has(value)
 		if not ok:
 			return "效果无效：%s" % key
 	return ""
@@ -1197,11 +1303,18 @@ func _validate_item(item: Variant) -> String:
 		return "品类未知"
 	if not _whole(item.get("price")):
 		return "价格无效"
-	if item.has("use_cooldown_days") and not _whole(item.use_cooldown_days):
-		return "服用间隔无效"
+	if item.has("toxin") and (not _whole(item.toxin) or int(item.toxin) < 1):
+		return "丹毒无效"
 	if item.has("breakthrough") and (not item.breakthrough is Dictionary or not _whole(item.breakthrough.get("bonus")) or not _whole(item.breakthrough.get("grade", 0))):
 		return "突破之用无效"
 	return _validate_effects(item.get("use", []))
+
+## The fine (上品) pill made beside a pill, or "".
+func fine_pill(pill_id: String) -> String:
+	for item_id: String in items:
+		if str(items[item_id].get("fine_of", "")) == pill_id:
+			return item_id
+	return ""
 
 ## Herb ids from cheapest to dearest (then by id), the order generic herb costs are paid in.
 func herbs_by_value() -> Array[String]:

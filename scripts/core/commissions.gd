@@ -86,7 +86,7 @@ static func delivery_block(s, quest: Dictionary) -> String:
 		return blocked
 	if board_here(s) != quest.board:
 		return "须回%s交付。" % s.content.commission_data.boards[quest.board].name
-	if quest.has("item") and s.item_count(quest.item) < int(quest.count):
+	if quest.has("item") and s.pill_count(quest.item) < int(quest.count):
 		return "%s还不够 %d。" % [s.content.item(quest.item).name, int(quest.count)]
 	if quest.has("enemy") and int(quest.progress) < int(quest.count):
 		return "还差 %d 头。" % (int(quest.count) - int(quest.progress))
@@ -102,7 +102,7 @@ static func deliver(s, key: String) -> String:
 		if not reason.is_empty():
 			return reason
 		if quest.has("item"):
-			s.remove_item(quest.item, int(quest.count))
+			s.Inventory.remove_family(s, quest.item, int(quest.count))
 		s.player.quests.erase(quest)
 		s.player.stones += int(quest.reward.stones)
 		s.record_deed("commission")

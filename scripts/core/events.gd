@@ -77,7 +77,8 @@ static func met(s, condition: Dictionary) -> bool:
 		"flag":
 			return s.has_flag(value)
 		"item_at_least":
-			return int(s.player.items.get(value[0], 0)) >= int(value[1])
+			# A fine pill counts as the pill it is made beside.
+			return s.pill_count(value[0]) >= int(value[1])
 		"stones_at_least":
 			return int(s.player.stones) >= int(value)
 		"herbs_at_least":
@@ -108,6 +109,8 @@ static func met(s, condition: Dictionary) -> bool:
 			return s.has_talent(value)
 		"rank_at_least":
 			return int(s.player.get("rank", 0)) >= s.Sect.rank_index(s, value)
+		"recipe":
+			return s.Alchemy.knows(s, value)
 	return false
 
 static func apply(s, effects: Array) -> void:
@@ -143,6 +146,8 @@ static func apply(s, effects: Array) -> void:
 				s.face_demon(value)
 			"fortune":
 				s.Fortune.bestow(s, value)
+			"recipe":
+				s.Alchemy.learn(s, value)
 			"herbs":
 				if int(value) >= 0:
 					s.add_item("huichun_grass", int(value))

@@ -79,7 +79,7 @@ static func applies(session, goal_id: String) -> bool:
 			if int(player.realm) != 0 or breakthrough.is_empty():
 				return false
 			var ready_xp := int(player.xp) >= int(breakthrough.xp)
-			var ready_pill: bool = session.item_count("foundation_pill") >= int(breakthrough.get("pills", 1)) or not session.breakthrough_treasures().is_empty() or str(player.get("boons", {}).get("remnant", "")) == "ready"
+			var ready_pill: bool = session.pill_count("foundation_pill") >= int(breakthrough.get("pills", 1)) or not session.breakthrough_treasures().is_empty() or str(player.get("boons", {}).get("remnant", "")) == "ready"
 			match goal_id:
 				"foundation_breach":
 					return ready_xp and ready_pill

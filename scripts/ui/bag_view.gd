@@ -78,7 +78,7 @@ static func _item_row(ui, parent: VBoxContainer, item_id: String) -> void:
 	row.add_child(text)
 	if item.has("use"):
 		var reason: String = session.use_block(item_id)
-		var use_button: Button = ui.button("服用", func() -> void: ui.run(func() -> String: return session.use_item(item_id)), reason)
+		var use_button: Button = ui.button("研读" if item.get("category", "") == "recipe" else "服用", func() -> void: ui.run(func() -> String: return session.use_item(item_id)), reason)
 		use_button.disabled = not reason.is_empty()
 		row.add_child(use_button)
 	if item.get("category", "") == "manual":

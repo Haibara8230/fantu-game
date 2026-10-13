@@ -109,7 +109,7 @@ static func plan_of(ui) -> Dictionary:
 	var plan: Dictionary = ui.breakthrough_plan
 	if plan.is_empty():
 		plan = session.breakthrough_plan()
-	var most := mini(session.item_count("foundation_pill"), session.content.rules.breakthrough.pill_bonus.size())
+	var most := mini(session.pill_count("foundation_pill"), session.content.rules.breakthrough.pill_bonus.size())
 	plan.pills = clampi(int(plan.get("pills", 0)), 0, most)
 	if not str(plan.get("treasure", "")) in session.breakthrough_treasures():
 		plan.treasure = ""
@@ -124,11 +124,11 @@ static func _plan_controls(ui, parent: VBoxContainer, plan: Dictionary) -> void:
 	var pills := HBoxContainer.new()
 	pills.add_theme_constant_override("separation", 10)
 	parent.add_child(pills)
-	var most := mini(session.item_count("foundation_pill"), session.content.rules.breakthrough.pill_bonus.size())
+	var most := mini(session.pill_count("foundation_pill"), session.content.rules.breakthrough.pill_bonus.size())
 	var fewer: Button = ui.button("－", func() -> void: ui.breakthrough_plan.pills = int(plan.pills) - 1; ui.render(), "少服一枚")
 	fewer.disabled = int(plan.pills) <= 0
 	pills.add_child(fewer)
-	pills.add_child(ui.label("服筑基丹 %d 枚（行囊 %d，至多 %d）" % [int(plan.pills), session.item_count("foundation_pill"), session.content.rules.breakthrough.pill_bonus.size()], 17))
+	pills.add_child(ui.label("服筑基丹 %d 枚（行囊 %d，至多 %d）" % [int(plan.pills), session.pill_count("foundation_pill"), session.content.rules.breakthrough.pill_bonus.size()], 17))
 	var more: Button = ui.button("＋", func() -> void: ui.breakthrough_plan.pills = int(plan.pills) + 1; ui.render(), "多服一枚，一枚比一枚见效少")
 	more.disabled = int(plan.pills) >= most
 	pills.add_child(more)

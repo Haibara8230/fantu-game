@@ -12,8 +12,9 @@
       "terrain": "mountain",
       "map": [0.24, 0.24],
       "spots": [
-        {"id": "chamber", "name": "静室", "description": "外门弟子的静修之所，灵气清润，可闭关、休整与突破。", "actions": ["cultivate", "rest", "breakthrough"]},
+        {"id": "chamber", "name": "静室", "description": "外门弟子的静修之所，灵气清润，可闭关、休整与突破；角落里有一口公用丹炉，也可开炉炼丹。", "actions": ["cultivate", "rest", "breakthrough", "alchemy"]},
         {"id": "office", "name": "执事堂", "description": "执事们在这里张贴宗门的委托，按时完成可得酬劳与贡献；月俸、晋升、兑换与捐献也在这里办理。", "actions": ["commissions", "sect"], "requires_flag": "intro_done"},
+        {"id": "abode", "name": "洞府", "description": "内门弟子各有一处洞府，石门后是静修的石室，门外辟出一方灵田，引了山泉浇灌。", "actions": ["field"], "requires_rank": "inner"},
         {"id": "arena", "name": "演武坪", "description": "青石铺就的演武坪，同门常在此切磋。", "actions": ["battle:disciple"]},
         {"id": "hall", "name": "传功堂", "description": "堂中供着各派传承玉简，可择一研习；执事也传授几门入门功法，参悟需要时日。", "actions": ["study", "teach"], "requires_flag": "intro_done", "teach": ["t:breath:wood:1::0", "t:body:earth:1::5", "t:focus:water:1::10", "t:bolt:metal:1::15"]}
       ]
@@ -50,7 +51,11 @@
         {"item": "huiqi_pill", "price": 15},
         {"item": "liaoshang_pill", "price": 20},
         {"item": "ningqi_pill", "price": 60},
-        {"item": "pozhang_pill", "price": 40}
+        {"item": "pozhang_pill", "price": 40},
+        {"item": "recipe_liaoshang", "price": 30},
+        {"item": "recipe_huiqi", "price": 30},
+        {"item": "furnace_bronze", "price": 160},
+        {"item": "kongho_fu", "price": 20}
       ],
       "buys": ["herb", "pill", "manual", "equipment", "treasure"],
       "stock": {
@@ -63,7 +68,7 @@
       },
       "spots": [
         {"id": "street", "name": "长街", "description": "丹铺、器铺与散修地摊挤满长街。丹铺明码标价。", "actions": ["shop", "inquire", "commissions"]},
-        {"id": "pharmacy", "name": "云溪药铺", "description": "沈墨的药铺，收购各色灵草，出价公道。", "actions": ["sell"]}
+        {"id": "pharmacy", "name": "云溪药铺", "description": "沈墨的药铺，收购各色灵草，出价公道。后堂有一口药炉，熟客可付些灵石借用，沈墨还会在旁提点。", "actions": ["sell", "alchemy"]}
       ]
     },
     "ridge": {

@@ -547,6 +547,42 @@ func _run() -> void:
 	main.render()
 	_button("回气丹 · 8 贡献").pressed.emit()
 	check(main.session.item_count("huiqi_pill") >= 1 and int(main.session.player.contribution) == 12, "and exchanges there")
+	# Alchemy at the 静室: the page sets out a brew and its odds before the furnace is lit.
+	main.set_view("place")
+	main.select_spot("chamber")
+	check(_button("开炉炼丹") != null, "the 静室 offers alchemy")
+	_button("开炉炼丹").pressed.emit()
+	check(main.view == "alchemy" and _texts(main.center, "Label").contains("还不会任何丹方"), "without a recipe the page says where to find one")
+	main.session.set_item_count("recipe_liaoshang", 1)
+	main.set_view("bag")
+	check(_button("研读") != null, "a 丹方 in the 行囊 is read, not swallowed")
+	_button("研读").pressed.emit()
+	main.session.set_item_count("huichun_grass", 4)
+	main.open_alchemy()
+	var brew_text := _texts(main.center, "Label")
+	check(brew_text.contains("主药") and brew_text.contains("回春草（平）×3") and brew_text.contains("成丹把握 70%") and brew_text.contains("成丹 2–3 枚"), "the page shows the herbs and the odds")
+	_button("不用药引").pressed.emit()
+	check(_texts(main.center, "Label").contains("成丹 1–2 枚") and _texts(main.center, "Label").contains("上品 0%"), "leaving out the 药引 costs a pill and any fine one")
+	_button("回春草（平）").pressed.emit()
+	main.session.fortune = {"alchemy": 0.0, "alchemy_fine": 0.99}
+	_button("开炉").pressed.emit()
+	check(main.view == "alchemy" and main.session.item_count("liaoshang_pill") >= 2 and main.session.item_count("huichun_grass") == 0, "lighting the furnace brews and stays on the page")
+	await _capture("alchemy")
+	main.session.fortune = {}
+	# The 灵田 at the 洞府, once an inner disciple.
+	main.session.player.rank = main.session.Sect.rank_index(main.session, "inner")
+	main.session.set_item_count("huichun_grass", 1)
+	main.set_view("place")
+	main.select_spot("abode")
+	check(_button("照料灵田") != null, "an inner disciple's 洞府 has a field")
+	_button("照料灵田").pressed.emit()
+	check(main.view == "field" and _texts(main.center, "Label").contains("洞府灵田 · 下品灵田") and _button("种回春草") != null, "the field page shows the plots and what can be planted")
+	_button("种回春草").pressed.emit()
+	check(_texts(main.center, "Label").contains("回春草 · 还需"), "a planted herb shows when it ripens")
+	await _capture("field")
+	main.session.player.rank = 0
+	main.session.player.field = {"grade": 0, "plots": []}
+	main.set_view("place")
 	# Breaking through: the rules decide, and a realm reached has its own screen until 确定.
 	main.run(func() -> String: return main.session.travel("sect"))
 	main.session.player.stage = 3

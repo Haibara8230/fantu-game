@@ -1,6 +1,11 @@
 extends RefCounted
 ## Upgrades saved sessions one version at a time. Output still goes through Session validation.
-const CURRENT_VERSION := 14
+const CURRENT_VERSION := 15
+# Before version 15 the 凝气丹 asked thirty days between pills (player.cooldowns["use:<item>"]); since
+# then 丹毒 decides: a pill adds 60 to a limit of 100 and it fades by 2 a day.
+const V14_TOXIN_LIMIT := 100
+const V14_TOXIN_PILL := 60
+const V14_TOXIN_DECAY := 2
 # Contribution counted for each commission delivered before version 14.
 const V13_MERIT_PER_COMMISSION := 15
 # The teaching cards (data/guide.json) that existed before version 12; older journeys had seen them.
@@ -45,7 +50,34 @@ static func migrate(data: Dictionary) -> Dictionary:
 		result = _v12_to_v13(result)
 	if not result.is_empty() and int(result.version) == 13:
 		result = _v13_to_v14(result)
+	if not result.is_empty() and int(result.version) == 14:
+		result = _v14_to_v15(result)
 	return result
+
+## Version 15 adds alchemy, 丹毒 and the 灵田. A pill's waiting days become the 丹毒 that keeps the next
+## pill waiting as long; journeys know no recipe yet and have an empty field.
+static func _v14_to_v15(data: Dictionary) -> Dictionary:
+	var player: Variant = data.get("player")
+	var world: Variant = data.get("world")
+	if not player is Dictionary or not world is Dictionary or not player.get("cooldowns") is Dictionary:
+		return {}
+	var day: Variant = world.get("day", 0)
+	var toxin := 0
+	for key: Variant in player.cooldowns.keys():
+		if not str(key).begins_with("use:"):
+			continue
+		var ready: Variant = player.cooldowns[key]
+		player.cooldowns.erase(key)
+		if (ready is int or ready is float) and (day is int or day is float) and float(ready) > float(day):
+			var waiting := int(float(ready) - float(day))
+			toxin = maxi(toxin, mini(V14_TOXIN_LIMIT, V14_TOXIN_LIMIT - V14_TOXIN_PILL + V14_TOXIN_DECAY * waiting))
+	player["recipes"] = []
+	player["practice"] = {}
+	player["toxin"] = toxin
+	player["toxin_day"] = day
+	player["field"] = {"grade": 0, "plots": []}
+	data["version"] = 15
+	return data
 
 ## Version 14 adds the player's standing in the sect. Older journeys start as outer disciples with the
 ## contribution their delivered commissions would have earned, so those far along can be promoted at

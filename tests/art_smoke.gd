@@ -5,6 +5,9 @@ const PeopleView = preload("res://scripts/ui/people_view.gd")
 const SaveStore = preload("res://scripts/core/save_store.gd")
 var checks := 0
 var failures := 0
+# Spots whose picture is still to be drawn (docs/BACKLOG.md, 尚缺的素材); their window falls back to the
+# location's picture until then.
+const PENDING_SPOTS := ["sect/abode"]
 
 func _initialize() -> void:
 	create_timer(60.0).timeout.connect(func() -> void: printerr("ART test timed out"); quit(1))
@@ -26,7 +29,11 @@ func _run() -> void:
 		if fullscreen != null:
 			check(absf(float(fullscreen.get_width()) / fullscreen.get_height() - 16.0 / 9.0) < 0.02, location_id + " is 16:9")
 		for spot: Dictionary in content.locations[location_id].spots:
-			check(ArtLibrary.texture(ArtLibrary.scene_path(location_id, spot.id)) != null, location_id + "/" + str(spot.id) + " has dedicated art")
+			var drawn: bool = ArtLibrary.texture(ArtLibrary.scene_path(location_id, spot.id)) != null
+			if location_id + "/" + str(spot.id) in PENDING_SPOTS:
+				check(not drawn and ArtLibrary.texture(ArtLibrary.location_path(location_id)) != null, location_id + "/" + str(spot.id) + " falls back to the location's picture until its own is drawn")
+			else:
+				check(drawn, location_id + "/" + str(spot.id) + " has dedicated art")
 	for event_id: String in art.event_art:
 		check(events.has(event_id) and ArtLibrary.texture(ArtLibrary.event_art(event_id)) != null, event_id + " points to a loadable illustration")
 	var main = load("res://scenes/main.tscn").instantiate()

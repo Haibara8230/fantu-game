@@ -117,12 +117,21 @@ static func goods(s) -> Array[Dictionary]:
 			var block := ""
 			if good.has("rank") and int(s.player.get("rank", 0)) < rank_index(s, str(good.rank)):
 				block = "须为%s。" % ranks(s)[rank_index(s, str(good.rank))].name
+			elif s.Alchemy.knows(s, str(_recipe_taught(s, item_id))):
+				block = "你已通晓此丹方。"
 			elif left <= 0:
 				block = "此期已换完，%d 日后再来。" % ((period + 1) * int(good.per_days) - int(s.world.day))
 			elif int(s.player.get("contribution", 0)) < int(good.price):
 				block = "贡献不足。"
 			result.append({"key": key, "item": item_id, "price": int(good.price), "left": maxi(0, left), "block": block})
 	return result
+
+## The recipe a 丹方 item teaches, or "".
+static func _recipe_taught(s, item_id: String) -> String:
+	for effect: Dictionary in s.content.item(item_id).get("use", []):
+		if effect.has("recipe"):
+			return str(effect.recipe)
+	return ""
 
 static func exchange(s, key: String) -> String:
 	var reason: String = s.blocked()

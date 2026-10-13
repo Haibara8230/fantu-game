@@ -41,7 +41,7 @@ static func render(ui) -> void:
 	talents.add_child(ui.label("先天天赋（鼠标停留可看效果）", 15, ui.MUTED))
 	center.add_child(TalentCards.row(ui, session.content, session.talents_of()))
 	center.add_child(HSeparator.new())
-	center.add_child(ui.label("灵石  %d    灵草  %d    筑基丹  %d" % [p.stones, session.herb_count(), session.item_count("foundation_pill")], 16))
+	center.add_child(ui.label("灵石  %d    灵草  %d    筑基丹  %d" % [p.stones, session.herb_count(), session.pill_count("foundation_pill")], 16))
 
 ## The next xp milestone: the next sub-stage, or the breakthrough once at the last stage.
 static func xp_goal(session) -> int:
@@ -60,6 +60,10 @@ static func _render_progress(ui, parent: VBoxContainer) -> void:
 	parent.add_child(ui.label("心神 · %s · 闭关收益 %d%%" % [mood, efficiency], 15, ui.MUTED if efficiency >= 100 else ui.INK))
 	if session.xp_limit() >= 0:
 		parent.add_child(ui.label("历练  %d / %d" % [int(session.player.insight), session.insight_needed()], 15, ui.MUTED))
+	var toxin: int = session.toxin()
+	if toxin > 0:
+		var rule: Dictionary = session.content.alchemy_data.toxin
+		parent.add_child(ui.label("丹毒  %d / %d · 每日消退 %d · 突破把握 -%d" % [toxin, int(rule.limit), int(rule.decay_per_day), toxin / int(rule.breakthrough_step)], 15, ui.MUTED if toxin * 2 < int(rule.limit) else Color("#e3c08a")))
 	var grade: Dictionary = session.foundation_grade()
 	if not grade.is_empty():
 		parent.add_child(ui.label("根基 · %s" % grade.name, 15, ui.INK))

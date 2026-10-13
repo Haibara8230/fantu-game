@@ -2,10 +2,10 @@ extends RefCounted
 ## The player's items: stacks, buying and selling, shop stock and using items. Operates on a Session.
 ## Everything the player carries is an item stack in player.items (id -> count). Content may still
 ## speak of "herbs" in general (any herb, cheapest paid first) and "pills" (筑基丹).
-const Calendar = preload("res://scripts/core/calendar.gd")
 const Events = preload("res://scripts/core/events.gd")
 const Arsenal = preload("res://scripts/core/arsenal.gd")
 const Talents = preload("res://scripts/core/talents.gd")
+const Alchemy = preload("res://scripts/core/alchemy.gd")
 
 static func item_count(s, item_id: String) -> int:
 	return int(s.player.get("items", {}).get(item_id, 0))
@@ -32,6 +32,34 @@ static func remove_item(s, item_id: String, count: int) -> bool:
 		s.player.items.erase(item_id)
 	else:
 		s.player.items[item_id] = left
+	return true
+
+## An item and its fine (上品) kind, which count as it wherever it is asked for: [id] or [id, fine id].
+static func family(s, item_id: String) -> Array[String]:
+	var ids: Array[String] = [item_id]
+	var fine: String = s.content.fine_pill(item_id)
+	if not fine.is_empty():
+		ids.append(fine)
+	return ids
+
+static func family_count(s, item_id: String) -> int:
+	var total := 0
+	for id: String in family(s, item_id):
+		total += item_count(s, id)
+	return total
+
+## Removes `count` of an item and its fine kind, the plain ones first (or the fine ones first); false
+## (and nothing removed) when there are not enough.
+static func remove_family(s, item_id: String, count: int, fine_first: bool = false) -> bool:
+	if family_count(s, item_id) < count:
+		return false
+	var ids := family(s, item_id)
+	if fine_first:
+		ids.reverse()
+	for id: String in ids:
+		var taken := mini(count, item_count(s, id))
+		remove_item(s, id, taken)
+		count -= taken
 	return true
 
 ## Pays a generic herb cost, cheapest herbs first.
@@ -134,6 +162,8 @@ static func buy(s, item_id: String) -> String:
 	var blocked: String = s.blocked()
 	if not blocked.is_empty():
 		return blocked
+	if _teaches_known(s, s.content.item(item_id)):
+		return "你已通晓此丹方。"
 	for good: Dictionary in shop_goods(s):
 		if good.item == item_id:
 			if int(s.player.stones) < int(good.price):
@@ -155,9 +185,11 @@ static func use_block(s, item_id: String) -> String:
 		return "此物不能直接服用。"
 	if item_count(s, item_id) < 1:
 		return "行囊里没有此物。"
-	var ready := int(s.player.cooldowns.get("use:" + item_id, 0))
-	if int(s.world.day) < ready:
-		return "丹毒未消，%s后再服。" % Calendar.duration_text(ready - int(s.world.day))
+	if _teaches_known(s, s.content.item(item_id)):
+		return "你已通晓此丹方。"
+	var toxic := Alchemy.toxin_block(s, s.content.item(item_id))
+	if not toxic.is_empty():
+		return toxic
 	# Pills that would be wasted by the bottleneck are refused rather than swallowed.
 	for effect: Dictionary in s.content.item(item_id).use:
 		if effect.has("breach") and not s.at_bottleneck():
@@ -172,11 +204,17 @@ static func use_item(s, item_id: String) -> String:
 		return reason
 	var item: Dictionary = s.content.item(item_id)
 	remove_item(s, item_id, 1)
-	if item.has("use_cooldown_days"):
-		s.player.cooldowns["use:" + item_id] = int(s.world.day) + Talents.scaled(int(item.use_cooldown_days), s.talent_modifier("pill_cooldown"), 1)
-	var text: String = s.log_event("use_item", {"item": item_id})
+	Alchemy.add_toxin(s, item)
+	var text: String = s.log_event("read_recipe" if item.category == "recipe" else "use_item", {"item": item_id})
 	Events.apply(s, pill_effects(s, item))
 	return s.conclude(text)
+
+## Whether an item is a 丹方 the player already knows.
+static func _teaches_known(s, item: Dictionary) -> bool:
+	for effect: Dictionary in item.get("use", []):
+		if effect.has("recipe") and Alchemy.knows(s, str(effect.recipe)):
+			return true
+	return false
 
 ## An item's effects when used: a pill's xp, health and qi follow the talents for pills.
 static func pill_effects(s, item: Dictionary) -> Array:

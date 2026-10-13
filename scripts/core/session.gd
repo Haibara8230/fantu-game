@@ -22,6 +22,7 @@ const Breakthrough = preload("res://scripts/core/breakthrough.gd")
 const Fortune = preload("res://scripts/core/fortune.gd")
 const Sect = preload("res://scripts/core/sect.gd")
 const Bonds = preload("res://scripts/core/bonds.gd")
+const Alchemy = preload("res://scripts/core/alchemy.gd")
 const SaveRestore = preload("res://scripts/core/save_restore.gd")
 const SaveMigration = preload("res://scripts/core/save_migration.gd")
 const SAVE_VERSION := SaveMigration.CURRENT_VERSION
@@ -104,6 +105,7 @@ func new_game(character_name: String = "无名", seed_value: int = -1, roots: Ar
 		"talents": born.get("talents", []).duplicate(), "flaws": born.get("flaws", []).duplicate(),
 		"foundation_grade": 1, "injury_until": 0, "lessons": 0, "boons": {},
 		"rank": 0, "contribution": 0, "merit": 0, "stipend_day": 0, "exchanged": {}, "donated": {},
+		"recipes": [], "practice": {}, "toxin": 0, "toxin_day": 0, "field": {"grade": 0, "plots": []},
 	}
 	player.stones = maxi(0, int(player.stones) + talent_modifier("stones"))
 	for skill_id: String in content.sects.wanderer.skills:
@@ -460,7 +462,7 @@ func choose_event(choice_id: String) -> String:
 	return message
 
 func available_here(action: String) -> bool:
-	return action in content.spot_actions(player.location, world.flags)
+	return action in content.spot_actions(player.location, world.flags, int(player.get("rank", 0)))
 
 func location_visible(location_id: String) -> bool:
 	return content.location_visible(location_id, world.flags)
@@ -539,6 +541,40 @@ func donation_value(item_id: String, count: int) -> int:
 
 func donate(item_id: String, count: int) -> String:
 	return Sect.donate(self, item_id, count)
+
+# --- Alchemy and the field (alchemy.gd) --------------------------------------------------------
+
+func known_recipes() -> Array[String]:
+	return Alchemy.known(self)
+
+func alchemy_plan(recipe_id: String) -> Dictionary:
+	return Alchemy.default_plan(self, recipe_id)
+
+func alchemy_block(plan: Dictionary) -> String:
+	return Alchemy.block(self, plan)
+
+## {"success", "fine", "yield", "balanced", "days", "fee", "furnace", "parts", "burst"}.
+func alchemy_odds(plan: Dictionary) -> Dictionary:
+	return Alchemy.odds(self, plan)
+
+func brew(plan: Dictionary) -> String:
+	return Alchemy.brew(self, plan)
+
+## The 丹毒 left today.
+func toxin() -> int:
+	return Alchemy.toxin(self)
+
+func field_plots() -> Array:
+	return Alchemy.plots(self)
+
+func plant(index: int, herb_id: String) -> String:
+	return Alchemy.plant(self, index, herb_id)
+
+func harvest(index: int) -> String:
+	return Alchemy.harvest(self, index)
+
+func upgrade_field() -> String:
+	return Alchemy.upgrade(self)
 
 # --- Bonds (bonds.gd) -------------------------------------------------------------------------
 
@@ -772,6 +808,10 @@ func item_count(item_id: String) -> int:
 
 func herb_count() -> int:
 	return Inventory.herb_count(self)
+
+## A pill and its fine kind together (筑基丹 and 上品筑基丹).
+func pill_count(item_id: String) -> int:
+	return Inventory.family_count(self, item_id)
 
 func add_item(item_id: String, count: int) -> void:
 	Inventory.add_item(self, item_id, count)
