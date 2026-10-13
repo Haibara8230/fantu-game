@@ -88,7 +88,8 @@
       "spots": [
         {"id": "entrance", "name": "谷口", "description": "乱石嶙峋，常有妖狼出没。", "actions": ["battle:wolf"]},
         {"id": "slope", "name": "灵草坡", "description": "向阳的缓坡上灵草丛生。", "actions": ["gather"]},
-        {"id": "spring", "name": "深谷灵泉", "description": "谷底的灵泉被赤鳞妖蟒盘踞。", "actions": ["battle:serpent"]}
+        {"id": "spring", "name": "深谷灵泉", "description": "谷底的灵泉被赤鳞妖蟒盘踞。", "actions": ["battle:serpent"]},
+        {"id": "eye", "name": "灵眼", "description": "山壁裂隙后藏着一眼灵泉，天地灵气在此汇聚成漩。在这里闭关突破，把握更大。", "actions": ["breakthrough"], "requires_flag": "spirit_eye_found"}
       ]
     },
     "ruin": {
@@ -357,12 +358,20 @@
     "cultivate_xp": 60,
     "retreat": {"fresh_days": 180, "decline_days": 720, "floor_percent": 50, "recovery_per_day": 2},
     "bottleneck": {"insight_needed": 100, "insight": {"battle_win": 20, "spar": 10, "commission": 25, "event": 15}},
+    "fortune": {
+      "epiphany": {"chance": 0.02, "per_days": 10, "days": 10, "places": ["ferry", "ridge", "sect"], "event": "epiphany", "talent": "dunwu_yuyun", "talent_chance": 0.1},
+      "brink": {"chance": 0.05, "hp_percent": 15, "talent": "shengsi_lilian", "talent_chance": 0.1},
+      "shiru": {"chance": 0.01, "item": "qiannian_shiru"},
+      "lingshen": {"chance": 0.005, "item": "jiuqu_lingshen", "location": "wild"},
+      "spirit_eye": {"chance": 0.02, "location": "wild", "flag": "spirit_eye_found", "event": "spirit_eye"},
+      "remnant": {"chance": 0.01, "before_realm": 1, "event": "remnant_soul", "mind": 30, "talent": "qianbei_yize", "flaw": "canhun_raoshen", "injury_days": 360}
+    },
     "breakthrough": {
       "base": [25, 35, 45, 55, 65],
       "pill_bonus": [25, 15, 10],
       "mind_step": 2, "mind_most": 10,
       "method_root": 5, "method_tier": {"2": 3, "3": 6, "4": 9},
-      "guard": {"favor": 140, "bonus": 5, "mentor": "gu_changgeng", "mentor_bonus": 10, "mentor_story": "lineage"},
+      "guard": {"favor": 140, "bonus": 5, "mentor": "gu_changgeng", "mentor_bonus": 10, "mentor_story": "lineage", "mentor_step": "foundation"},
       "eye": {"location": "wild", "flag": "spirit_eye_found", "bonus": 10},
       "boons": [{"id": "epiphany", "name": "顿悟", "bonus": 15, "grade": 1}, {"id": "brink", "name": "生死之间", "bonus": 10}],
       "lesson": {"bonus": 5, "most": 3},

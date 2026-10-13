@@ -19,6 +19,7 @@ const Cultivation = preload("res://scripts/core/cultivation.gd")
 const Storylines = preload("res://scripts/core/storylines.gd")
 const Talents = preload("res://scripts/core/talents.gd")
 const Breakthrough = preload("res://scripts/core/breakthrough.gd")
+const Fortune = preload("res://scripts/core/fortune.gd")
 const SaveRestore = preload("res://scripts/core/save_restore.gd")
 const SaveMigration = preload("res://scripts/core/save_migration.gd")
 const SAVE_VERSION := SaveMigration.CURRENT_VERSION
@@ -307,7 +308,9 @@ func act(action: String) -> String:
 			for item_id: String in found:
 				add_item(item_id, int(found[item_id]))
 			record_deed("gather")
-			return conclude(log_event("gather_items", {"days": passed.elapsed, "location": player.location, "loot": loot_code(found)}), passed)
+			var gathered := [log_event("gather_items", {"days": passed.elapsed, "location": player.location, "loot": loot_code(found)})]
+			gathered.append_array(Fortune.after_gather(self))
+			return conclude(" ".join(gathered), passed)
 		"inn_rest":
 			var price := int(content.rules.inn_price)
 			if int(player.stones) < price:
@@ -337,7 +340,9 @@ func act(action: String) -> String:
 			add_item("huichun_grass", int(found.herbs))
 			add_item("foundation_pill", int(found.pills))
 			player.cooldowns[action] = int(world.day) + int(content.rules.action_cooldowns.get(action, 0))
-			return conclude(log_event("search_ruin", found), passed)
+			var searched := [log_event("search_ruin", found)]
+			searched.append_array(Fortune.after_search(self))
+			return conclude(" ".join(searched), passed)
 		"sell":
 			# Sell every item this place buys, in one go.
 			var sold := {}
@@ -414,7 +419,9 @@ func wait(days: int) -> String:
 	if not ended.is_empty():
 		return conclude("", passed)
 	meet_during(start + 1, int(world.day))
-	return conclude(log_event("wait", {"days": passed.elapsed, "location": player.location}), passed)
+	var text := log_event("wait", {"days": passed.elapsed, "location": player.location})
+	Fortune.after_wait(self, int(passed.elapsed))
+	return conclude(text, passed)
 
 ## The stays offered at a place: longer ones open with the realm, when a season is a short while.
 func wait_options() -> Array:

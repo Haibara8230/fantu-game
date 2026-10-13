@@ -137,6 +137,8 @@ static func apply(s, effects: Array) -> void:
 				s.gain_talent(value)
 			"demon":
 				s.face_demon(value)
+			"fortune":
+				s.Fortune.bestow(s, value)
 			"herbs":
 				if int(value) >= 0:
 					s.add_item("huichun_grass", int(value))

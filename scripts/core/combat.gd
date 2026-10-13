@@ -206,6 +206,8 @@ static func _spar_over(s, won: bool) -> String:
 	var message: String = s.log_event("spar_win" if won else "spar_lose", {"npc": npc, "xp": xp})
 	message = _with_milestones(message, s.gain_insight("spar"))
 	message = _with_milestones(message, s.gain_xp(xp))
+	if won:
+		message = _with_milestones(message, s.Fortune.after_win(s, int(s.person(npc).get("realm", 0))))
 	return s.conclude(message, s.advance_days(s.content.action_days("road_recovery")))
 
 static func _with_milestones(message: String, milestones: Array[String]) -> String:
@@ -280,5 +282,7 @@ static func _win(s) -> String:
 		message += " " + s.log_event("loot", {"loot": loot + ":1"})
 	message = _with_milestones(message, s.gain_insight("battle_win"))
 	message = _with_milestones(message, s.gain_xp(int(enemy.reward_xp)))
+	# Won with almost nothing left against a foe of one's own realm or above: perhaps 生死之间.
+	message = _with_milestones(message, s.Fortune.after_win(s, int(enemy.min_realm)))
 	s.npc_depart(npc)
 	return s.conclude(message, s.advance_days(days))

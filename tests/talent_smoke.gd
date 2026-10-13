@@ -27,6 +27,8 @@ func _initialize() -> void:
 	_breakthrough()
 	_grades_and_demons()
 	_breakthrough_saves()
+	_fortune()
+	_talent_stories()
 	print("TALENTS: %d checks, %d failures" % [checks, failures])
 	quit(0 if failures == 0 else 1)
 
@@ -299,9 +301,11 @@ func _breakthrough() -> void:
 	# Guards.
 	var guarded := _ripe()
 	check(guarded.breakthrough_guards().is_empty(), "nobody to stand guard at first")
-	guarded.world.storylines["lineage"] = {"state": "done", "step": 4, "since": 0, "begun": false, "base": {}}
+	guarded.world.storylines["lineage"] = {"state": "active", "step": 2, "since": 0, "begun": true, "base": {}}
+	check(guarded.breakthrough_guards().is_empty(), "the mentor not before his teaching on foundation")
+	guarded.world.storylines["lineage"] = {"state": "active", "step": 3, "since": 0, "begun": false, "base": {}}
 	Session.Events.apply(guarded, [{"relation": ["boatman", 140]}])
-	check(guarded.breakthrough_guards() == ["gu_changgeng", "boatman"], "the mentor once his teaching is done, and anyone trusted")
+	check(guarded.breakthrough_guards() == ["gu_changgeng", "boatman"], "the mentor once he has taught foundation, and anyone trusted")
 	check(_part(guarded, {"pills": 1, "treasure": "", "guard": "gu_changgeng"}, "护法") == 10 and _part(guarded, {"pills": 1, "treasure": "", "guard": "boatman"}, "护法") == 5, "the mentor guards better than a friend")
 	check(not guarded.breakthrough_odds({"pills": 1, "treasure": "", "guard": "boatman"}).demon, "a guard keeps 心魔 away")
 	guarded.player.mind = 36
@@ -397,3 +401,142 @@ func _breakthrough_saves() -> void:
 		var data: Dictionary = game.snapshot()
 		data.player[broken[0]] = broken[1]
 		check(not copy.restore(data), "malformed %s rejected" % broken[0])
+
+## A character at the old cave's stone room, cleared and free to search.
+func _at_ruin(game: Session) -> void:
+	game.world.flags["found_ruin"] = true
+	game.world.flags["ruin_cleared"] = true
+	game.player.location = "ruin"
+
+func _fortune() -> void:
+	# 顿悟: staying at a stirring place while held at the realm's most.
+	var still := _ripe()
+	still.player.location = "ferry"
+	still.fortune = {"epiphany": 0.99}
+	still.wait(10)
+	check(still.pending_event.is_empty(), "fortune is rare: most stays bring nothing")
+	var moved := _ripe()
+	moved.player.location = "ferry"
+	moved.fortune = {"epiphany": 0.0, "epiphany:talent": 0.99}
+	moved.wait(10)
+	check(moved.pending_event.get("id", "") == "epiphany", "顿悟 may come while staying at the ferry at the realm's most")
+	var day := int(moved.world.day)
+	moved.choose_event("enter")
+	check(int(moved.world.day) == day + 10 and moved.player.boons.get("epiphany", "") == "ready", "sitting through it takes ten days and stays for the breakthrough")
+	var plan := moved.breakthrough_plan()
+	check(_part(moved, plan, "顿悟") == 15 and moved.breakthrough_odds(plan).steps.has("顿悟"), "making it surer and the foundation better")
+	moved.player.location = "sect"
+	moved.fortune = {"demon": 0.99, "breakthrough": 0.45}
+	moved.act("breakthrough")
+	check(moved.foundation_grade().get("name", "") == "无瑕" and moved.player.boons.epiphany == "spent", "spent at the breakthrough, lifting a 上品 foundation to 无瑕")
+	moved.player.location = "ferry"
+	moved.fortune = {"epiphany": 0.0}
+	moved.player.stage = 0
+	moved.player.xp = 1500
+	moved.wait(10)
+	check(moved.pending_event.is_empty(), "and never comes twice in a life")
+	var blocked := _game()
+	blocked.player.xp = 500
+	blocked.player.location = "ridge"
+	blocked.fortune = {"epiphany": 0.0, "epiphany:talent": 0.0}
+	blocked.wait(10)
+	blocked.choose_event("enter")
+	check(blocked.player.stage == 1 and blocked.has_talent("dunwu_yuyun"), "at a sub-stage's bottleneck it breaks through at once, and may leave a talent")
+	var idle := _game()
+	idle.player.location = "ferry"
+	idle.fortune = {"epiphany": 0.0}
+	idle.wait(10)
+	check(idle.pending_event.is_empty(), "nothing comes to one who is not held anywhere")
+	var market := _ripe()
+	market.player.location = "market"
+	market.fortune = {"epiphany": 0.0}
+	market.wait(10)
+	check(market.pending_event.is_empty(), "nor at a bustling market")
+	var short := _ripe()
+	short.player.location = "ferry"
+	short.fortune = {"epiphany": 0.15}
+	short.wait(1)
+	check(short.pending_event.is_empty() and Session.Fortune.chance(short, "epiphany") == 0.02, "a short stay is a smaller chance")
+	# 生死之间.
+	var brink := _ripe()
+	brink.fortune = {"brink": 0.0, "brink:talent": 0.99}
+	brink.player.hp = 10
+	check(not Session.Fortune.after_win(brink, 0).is_empty() and brink.player.boons.get("brink", "") == "ready", "winning with almost nothing left may bring 生死之间")
+	var healthy := _ripe()
+	healthy.fortune = {"brink": 0.0}
+	check(Session.Fortune.after_win(healthy, 0).is_empty(), "not with health to spare")
+	var lofty := _ripe()
+	lofty.player.realm = 1
+	lofty.player.stage = 0
+	lofty.player.xp = 1500
+	lofty.player.hp = 10
+	lofty.fortune = {"brink": 0.0}
+	check(Session.Fortune.after_win(lofty, 0).is_empty(), "nor against a weaker foe")
+	# Treasures, the 灵眼, the remnant soul.
+	var digger := _game()
+	_at_ruin(digger)
+	digger.fortune = {"shiru": 0.0, "remnant": 0.99}
+	digger.act("search_ruin")
+	check(digger.item_count("qiannian_shiru") == 1 and digger.journal_lines().any(func(line: String) -> bool: return line.contains("千年石乳")), "a 千年石乳 in the stone room, once in a life")
+	digger.player.cooldowns.clear()
+	digger.act("search_ruin")
+	check(digger.item_count("qiannian_shiru") == 1, "only once")
+	var gatherer := _ripe()
+	gatherer.player.location = "wild"
+	gatherer.fortune = {"lingshen": 0.0, "spirit_eye": 0.0}
+	gatherer.act("gather")
+	check(gatherer.item_count("jiuqu_lingshen") == 1 and gatherer.has_flag("spirit_eye_found"), "a 九曲灵参 and the 灵眼 on the valley's slope")
+	check(gatherer.available_here("breakthrough") and _part(gatherer, gatherer.breakthrough_plan(), "灵眼") == 10, "one may break through at the 灵眼, surer")
+	gatherer.player.location = "market"
+	gatherer.act("sell")
+	check(gatherer.item_count("jiuqu_lingshen") == 1 and gatherer.sell_price("jiuqu_lingshen") == 360, "a treasure is never swept up in selling everything, though it would fetch much")
+	var blessed := _ripe({}, 0)
+	_at_ruin(blessed)
+	blessed.player.mind = 30
+	blessed.fortune = {"shiru": 0.99, "remnant": 0.0}
+	blessed.act("search_ruin")
+	check(blessed.pending_event.get("id", "") == "remnant_soul", "a remnant soul may offer its blessing before foundation")
+	blessed.choose_event("accept")
+	check(blessed.player.boons.get("remnant", "") == "ready" and blessed.has_talent("qianbei_yize"), "accepted with mind enough, it blesses and leaves a talent")
+	var seized := _ripe()
+	_at_ruin(seized)
+	seized.player.mind = 20
+	seized.fortune = {"shiru": 0.99, "remnant": 0.0}
+	seized.act("search_ruin")
+	seized.choose_event("accept")
+	check(seized.player.boons.get("remnant", "") == "spent" and seized.has_talent("canhun_raoshen") and seized.injured() and int(seized.player.injury_until) - int(seized.world.day) == 360, "without, it tries to take the body: a long wound and a flaw")
+	var wary := _ripe()
+	_at_ruin(wary)
+	wary.fortune = {"shiru": 0.99, "remnant": 0.0}
+	wary.act("search_ruin")
+	var slips: int = wary.player.items.keys().filter(func(id: String) -> bool: return id.begins_with("j:")).size()
+	wary.choose_event("refuse")
+	check(wary.player.items.keys().filter(func(id: String) -> bool: return id.begins_with("j:")).size() == slips + 1, "refused, it leaves a jade slip")
+	# Talents for fortune.
+	var favored := _game(_born(["qiyun_zhizi"]))
+	check(is_equal_approx(Session.Fortune.chance(favored, "epiphany"), 0.12), "a talent for fortune makes it likelier")
+	var copy := Session.new()
+	check(copy.restore(JSON.parse_string(JSON.stringify(blessed.snapshot()))) and copy.player.boons == blessed.player.boons, "fortune met survives a save")
+
+func _talent_stories() -> void:
+	var content = Session.new().content
+	for id: String in content.talent_data.talents:
+		var tier := str(content.talent_data.talents[id].tier)
+		if tier == "orange":
+			check(content.events.has("talent_" + id), "the orange talent %s has an event of its own" % id)
+		elif tier == "red":
+			check(content.storylines.values().any(func(story: Dictionary) -> bool: return story.get("begin_if", []).has({"talent": id})), "the red talent %s has a storyline of its own" % id)
+	var alchemist := _game(_born(["danqi"]))
+	alchemist.travel("market")
+	check(alchemist.item_count("foundation_pill") == 1 and alchemist.journal_lines().any(func(line: String) -> bool: return line.contains("几十年也出不了")), "丹道奇才 is noticed at the pharmacy")
+	var plain := _game()
+	plain.travel("market")
+	check(plain.item_count("foundation_pill") == 0, "nobody else is")
+	var reborn := Session.new()
+	reborn.new_game("转世", 31, ["metal", "wood", "fire"], "skipped", _born(["xianren_zhuanshi"]))
+	check(reborn.story_state("talent_xianren") == "active", "仙人转世 begins a storyline of its own")
+	reborn.player.stage = 3
+	reborn.player.xp = 1500
+	reborn.player.mind = 24
+	reborn.cultivate(10)
+	check(reborn.has_flag("spirit_eye_found") and reborn.journal_lines().any(func(line: String) -> bool: return line.contains("灵眼")), "and its memories tell where the 灵眼 is")

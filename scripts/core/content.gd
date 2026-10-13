@@ -248,6 +248,8 @@ func _validate() -> String:
 	if not (requests.get("reward_scale") is float or requests.get("reward_scale") is int):
 		return "求助报酬无效。"
 	var broken := _validate_breakthrough()
+	if broken.is_empty():
+		broken = _validate_fortune()
 	if not broken.is_empty():
 		return broken
 	var search: Variant = rules.get("ruin_search")
@@ -309,7 +311,7 @@ func _validate_breakthrough() -> String:
 	if not r.get("method_tier") is Dictionary:
 		return "心法品阶加成无效。"
 	var guard: Variant = r.get("guard")
-	if not guard is Dictionary or not people.has(guard.get("mentor", "")) or not storylines.has(guard.get("mentor_story", "")) or not _whole(guard.get("favor")) or not _whole(guard.get("bonus")) or not _whole(guard.get("mentor_bonus")):
+	if not guard is Dictionary or not people.has(guard.get("mentor", "")) or not storylines.has(guard.get("mentor_story", "")) or not storylines[guard.mentor_story].steps.any(func(step: Dictionary) -> bool: return step.id == guard.get("mentor_step", "")) or not _whole(guard.get("favor")) or not _whole(guard.get("bonus")) or not _whole(guard.get("mentor_bonus")):
 		return "护法配置无效。"
 	var eye: Variant = r.get("eye")
 	if not eye is Dictionary or not locations.has(eye.get("location", "")) or not eye.get("flag") in world_flags or not _whole(eye.get("bonus")):
@@ -337,6 +339,33 @@ func _validate_breakthrough() -> String:
 	for grade: Variant in r.grades:
 		if not grade is Dictionary or not grade.get("name") is String or not _signed(grade.get("stats")) or not _signed(grade.get("speed")) or (grade.has("margin") and not _whole(grade.margin)):
 			return "筑基品质配置无效。"
+	return ""
+
+func _validate_fortune() -> String:
+	var fortune: Variant = rules.get("fortune")
+	if not fortune is Dictionary:
+		return "机缘配置无效。"
+	for id: String in ["epiphany", "brink", "shiru", "lingshen", "spirit_eye", "remnant"]:
+		var rule: Variant = fortune.get(id)
+		if not rule is Dictionary or not (rule.get("chance") is float or rule.get("chance") is int) or float(rule.chance) < 0.0 or float(rule.chance) > 1.0:
+			return "机缘配置无效：" + id
+		if rule.has("event") and (not events.has(rule.event) or events[rule.event].get("trigger") != "manual"):
+			return "机缘引用了未知事件：" + id
+		if rule.has("item") and not items.get(rule.item, {}).has("breakthrough"):
+			return "机缘的天材地宝无效：" + id
+		if rule.has("location") and not locations.has(rule.location):
+			return "机缘引用了未知地点：" + id
+		for key: String in ["talent", "flaw"]:
+			if rule.has(key) and not is_talent(rule[key]):
+				return "机缘引用了未知天赋：" + id
+	var epiphany: Dictionary = fortune.epiphany
+	if not epiphany.get("places") is Array or epiphany.places.any(func(place: Variant) -> bool: return not locations.has(place)) or not _whole(epiphany.get("per_days")) or int(epiphany.per_days) < 1 or not _whole(epiphany.get("days")):
+		return "顿悟配置无效。"
+	if not _whole(fortune.brink.get("hp_percent")) or not fortune.spirit_eye.get("flag") in world_flags:
+		return "生死之间或灵眼配置无效。"
+	for key: String in ["before_realm", "mind", "injury_days"]:
+		if not _whole(fortune.remnant.get(key)):
+			return "残魂配置缺少：" + key
 	return ""
 
 # --- Talent static checks -------------------------------------------------------------------------
@@ -405,7 +434,9 @@ func boon_ids() -> Array:
 	var ids: Array = ["remnant"]
 	for boon: Dictionary in rules.get("breakthrough", {}).get("boons", []):
 		ids.append(boon.id)
-	ids.append_array(rules.get("fortune", {}).keys())
+	for id: String in rules.get("fortune", {}):
+		if not id in ids:
+			ids.append(id)
 	return ids
 
 ## A talent or flaw id defined in data/talents.json.
@@ -688,9 +719,9 @@ func _validate_event(event_id: String, definition: Variant) -> String:
 		if definition.has("choices") or definition.has("repeat"):
 			return "日期事件不能带选项或冷却"
 	elif trigger == "manual":
-		# Raised by the rules themselves (心魔 at a breakthrough), never by place or date.
-		if not definition.has("choices") or definition.has("location") or definition.has("window") or definition.has("periodic"):
-			return "规则触发的事件须有抉择，且不带地点或时间"
+		# Raised by the rules themselves (心魔 at a breakthrough, fortune), never by place or date.
+		if definition.has("location") or definition.has("window") or definition.has("periodic") or definition.has("repeat"):
+			return "规则触发的事件不带地点或时间"
 	elif trigger == "route":
 		if not definition.get("routes") is Array or definition.routes.is_empty():
 			return "途中事件需要路线"
@@ -885,6 +916,8 @@ func _validate_effects(effects: Variant) -> String:
 				ok = is_talent(value)
 			"demon":
 				ok = value in ["slay", "evade"]
+			"fortune":
+				ok = value in ["epiphany", "remnant"]
 		if not ok:
 			return "效果无效：%s" % key
 	return ""

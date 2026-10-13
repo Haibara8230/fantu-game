@@ -34,11 +34,12 @@ static func default_plan(s) -> Dictionary:
 	var owned := treasures(s)
 	return {"pills": 0, "treasure": owned[0] if not owned.is_empty() else "", "guard": ""}
 
-## Who can stand guard: the mentor once his lineage storyline is done, and anyone trusted (信赖).
+## Who can stand guard: the mentor once he has given his teaching on foundation (his storyline past that
+## step), and anyone trusted (信赖).
 static func guards(s) -> Array[String]:
 	var found: Array[String] = []
 	var guard: Dictionary = rules(s).guard
-	if s.story_state(str(guard.mentor_story)) == "done" and s.is_person(str(guard.mentor)):
+	if _mentor_ready(s, guard) and s.is_person(str(guard.mentor)):
 		found.append(str(guard.mentor))
 	for person_id: String in s.known_npcs():
 		if person_id in found or s.favor(person_id) < int(guard.favor):
@@ -47,6 +48,20 @@ static func guards(s) -> Array[String]:
 			continue
 		found.append(person_id)
 	return found
+
+static func _mentor_ready(s, guard: Dictionary) -> bool:
+	var story := str(guard.mentor_story)
+	match s.story_state(story):
+		"done":
+			return true
+		"active":
+			var steps: Array = s.content.storylines[story].steps
+			var index := -1
+			for i: int in steps.size():
+				if steps[i].id == guard.mentor_step:
+					index = i
+			return int(s.world.storylines[story].step) > index
+	return false
 
 static func _ready_boon(s, id: String) -> bool:
 	return str(s.player.get("boons", {}).get(id, "")) == "ready"

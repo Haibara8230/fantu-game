@@ -64,5 +64,11 @@
   "heart_demon": "突破关头，心魔丛生。",
   "demon_slain": "你斩尽心魔，道心更坚，心境 +{mind}。",
   "demon_lingers": "心魔未能斩尽，萦绕不去，此番突破的把握少了 {points} 分。",
-  "demon_evaded": "你避开心魔，守住了灵台，此番突破的把握少了 {points} 分。"
+  "demon_evaded": "你避开心魔，守住了灵台，此番突破的把握少了 {points} 分。",
+  "boon_brink": "生死一线之间，你忽有所悟。",
+  "boon_breach": "灵光一现，困你许久的瓶颈应声而破。",
+  "boon_ready": "这番{boon_name}的感悟留在心头，下次突破把握更大，根基也会更稳。",
+  "boon_treasure": "你在{location_name}意外得了一样天材地宝：{item_name}！",
+  "remnant_blessed": "残魂化作清光没入你的眉心，前辈的感悟在经脉中缓缓流转。下一次突破，必成无疑。",
+  "remnant_seized": "灌顶刚开始，残魂便露出狰狞面目——它要夺舍！你拼死守住识海，将它磨灭，自己也重伤难起，需将养 {days} 日，识海里留下了暗伤。"
 }
