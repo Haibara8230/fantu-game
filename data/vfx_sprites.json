@@ -1,0 +1,131 @@
+{
+  "_note": "Textured layers over the vector effects (scripts/presentation/sprite_fx.gd). release: at the caster as an art leaves the hand; trail: behind a projectile in flight; impact: where it lands; heavy: added on a heavy hit; charge, heal, guard, dust: the rest. Textures are Kenney's Particle Pack (CC0), 256 px; scale 0.1 is about 26 px.",
+  "release": {
+    "sword": [
+      {"type": "pop", "tex": "trace_06", "life": 0.16, "scale": [0.5, 1.1], "stretch": 0.35, "rotation": 90, "lighten": 0.3},
+      {"type": "burst", "tex": "star_06", "count": 4, "life": [0.12, 0.22], "speed": [120, 260], "spread": 25, "along": true, "scale": [0.08, 0.14], "lighten": 0.5}
+    ],
+    "sword_rain": [
+      {"type": "pop", "tex": "twirl_01", "life": 0.22, "scale": [0.3, 0.75], "rotation": "dir", "turn": 2.5, "lighten": 0.2},
+      {"type": "burst", "tex": "star_06", "count": 6, "life": [0.15, 0.3], "speed": [80, 220], "scale": [0.06, 0.12], "lighten": 0.5}
+    ],
+    "sword_arc": [
+      {"type": "pop", "tex": "slash_03", "life": 0.2, "scale": [0.4, 1.0], "rotation": "dir", "lighten": 0.4},
+      {"type": "burst", "tex": "spark_05", "count": 5, "life": [0.12, 0.25], "speed": [200, 420], "spread": 40, "along": true, "scale": [0.12, 0.2], "lighten": 0.5}
+    ],
+    "flame_bolt": [
+      {"type": "pop", "tex": "muzzle_02", "life": 0.18, "scale": [0.25, 0.6], "rotation": "dir", "color": "#ff9a3c"},
+      {"type": "burst", "tex": "flame_05", "count": 6, "life": [0.2, 0.35], "speed": [60, 180], "spread": 40, "along": true, "gravity": -160, "scale": [0.08, 0.16], "color": "#ffb24d"}
+    ],
+    "fire": [
+      {"type": "pop", "tex": "muzzle_04", "life": 0.2, "scale": [0.3, 0.7], "rotation": "dir", "color": "#ff8a30"},
+      {"type": "burst", "tex": "fire_01", "count": 5, "life": [0.25, 0.4], "speed": [40, 140], "gravity": -200, "scale": [0.12, 0.22], "color": "#ff7a2a", "alpha": 0.8}
+    ],
+    "fire_burst": [
+      {"type": "pop", "tex": "magic_05", "life": 0.3, "scale": [0.2, 0.7], "color": "#ffb24d"},
+      {"type": "burst", "tex": "flame_06", "count": 10, "life": [0.25, 0.45], "speed": [80, 200], "gravity": -260, "scale": [0.08, 0.16], "color": "#ff9a3c"}
+    ],
+    "vine": [
+      {"type": "burst", "tex": "star_01", "count": 8, "life": [0.2, 0.4], "speed": [40, 140], "scale": [0.06, 0.12], "lighten": 0.3}
+    ],
+    "leaf_blade": [
+      {"type": "pop", "tex": "twirl_02", "life": 0.25, "scale": [0.3, 0.7], "rotation": "random", "turn": 3.0},
+      {"type": "burst", "tex": "star_01", "count": 8, "life": [0.2, 0.4], "speed": [80, 200], "scale": [0.05, 0.1], "lighten": 0.3}
+    ],
+    "water": [
+      {"type": "pop", "tex": "circle_02", "life": 0.25, "scale": [0.15, 0.5], "stretch": 0.5, "rotation": "dir", "lighten": 0.3},
+      {"type": "burst", "tex": "circle_05", "count": 8, "life": [0.2, 0.35], "speed": [100, 240], "spread": 35, "along": true, "gravity": 300, "scale": [0.04, 0.08], "lighten": 0.4}
+    ],
+    "ice_lance": [
+      {"type": "pop", "tex": "star_08", "life": 0.2, "scale": [0.2, 0.55], "lighten": 0.5},
+      {"type": "burst", "tex": "star_06", "count": 6, "life": [0.15, 0.3], "speed": [60, 160], "scale": [0.05, 0.1], "lighten": 0.6}
+    ],
+    "earth": [
+      {"type": "burst", "tex": "dirt_01", "count": 4, "life": [0.25, 0.4], "speed": [60, 160], "spread": 60, "gravity": 500, "scale": [0.12, 0.2], "blend": "mix", "color": "#8a6f4c", "alpha": 0.9}
+    ],
+    "rock_spire": [
+      {"type": "pop", "tex": "circle_03", "life": 0.3, "scale": [0.3, 0.9], "stretch": 2.6, "color": "#c9ad84", "alpha": 0.7},
+      {"type": "burst", "tex": "dirt_02", "count": 6, "life": [0.3, 0.5], "speed": [80, 200], "gravity": 600, "scale": [0.12, 0.22], "blend": "mix", "color": "#8a6f4c", "alpha": 0.9}
+    ],
+    "enemy": [
+      {"type": "burst", "tex": "smoke_02", "count": 4, "life": [0.25, 0.4], "speed": [40, 120], "spread": 60, "scale": [0.18, 0.3], "blend": "mix", "color": "#9b8a73", "alpha": 0.5}
+    ]
+  },
+  "trail": {
+    "sword": [{"tex": "trace_06", "count": 18, "life": [0.12, 0.22], "speed": [5, 30], "scale": [0.12, 0.2], "along": true, "lighten": 0.3, "alpha": 0.8}],
+    "sword_rain": [{"tex": "trace_06", "count": 14, "life": [0.1, 0.2], "speed": [5, 25], "scale": [0.1, 0.16], "along": true, "lighten": 0.3, "alpha": 0.7}],
+    "sword_arc": [{"tex": "spark_05", "count": 16, "life": [0.12, 0.25], "speed": [10, 50], "scale": [0.08, 0.14], "lighten": 0.4}],
+    "flame_bolt": [
+      {"tex": "flame_05", "count": 30, "life": [0.15, 0.3], "speed": [20, 80], "spread": 40, "gravity": -120, "scale": [0.06, 0.12], "color": "#ffb24d"},
+      {"tex": "smoke_07", "count": 10, "life": [0.3, 0.5], "speed": [10, 40], "gravity": -60, "scale": [0.12, 0.2], "blend": "mix", "color": "#4a3a33", "alpha": 0.35}
+    ],
+    "fire": [{"tex": "fire_01", "count": 24, "life": [0.2, 0.35], "speed": [10, 60], "gravity": -150, "scale": [0.1, 0.18], "color": "#ff8a30", "alpha": 0.8}],
+    "leaf_blade": [{"tex": "star_01", "count": 16, "life": [0.15, 0.3], "speed": [20, 70], "scale": [0.04, 0.08], "lighten": 0.4}],
+    "vine": [{"tex": "star_01", "count": 12, "life": [0.2, 0.35], "speed": [10, 40], "scale": [0.04, 0.08], "lighten": 0.3}],
+    "water": [{"tex": "circle_05", "count": 24, "life": [0.15, 0.3], "speed": [20, 80], "gravity": 200, "scale": [0.03, 0.07], "lighten": 0.4}],
+    "ice_lance": [{"tex": "star_06", "count": 18, "life": [0.15, 0.3], "speed": [10, 50], "scale": [0.04, 0.08], "lighten": 0.6}],
+    "enemy": []
+  },
+  "impact": {
+    "sword_hit": [
+      {"type": "pop", "tex": ["slash_02", "slash_04"], "life": 0.16, "scale": [0.5, 1.15], "rotation": "random", "lighten": 0.5},
+      {"type": "pop", "tex": "star_08", "life": 0.12, "scale": [0.3, 0.75], "lighten": 0.6},
+      {"type": "burst", "tex": "spark_05", "count": 10, "life": [0.12, 0.28], "speed": [260, 620], "spread": 70, "along": true, "damping": 600, "scale": [0.08, 0.16], "lighten": 0.5}
+    ],
+    "ember_hit": [
+      {"type": "pop", "tex": "flare_01", "life": 0.16, "scale": [0.4, 1.0], "color": "#ffd18a"},
+      {"type": "burst", "tex": "flame_05", "count": 12, "life": [0.2, 0.4], "speed": [140, 360], "gravity": -200, "damping": 300, "scale": [0.06, 0.12], "color": "#ffb24d"}
+    ],
+    "fire_explosion": [
+      {"type": "pop", "tex": "light_01", "life": 0.24, "scale": [0.4, 1.4], "color": "#ffd18a"},
+      {"type": "pop", "tex": "scorch_02", "life": 0.3, "scale": [0.5, 1.1], "rotation": "random", "color": "#ff7a2a"},
+      {"type": "burst", "tex": "fire_01", "count": 14, "life": [0.3, 0.55], "speed": [120, 380], "gravity": -220, "damping": 250, "scale": [0.12, 0.26], "color": "#ff8a30", "alpha": 0.85},
+      {"type": "burst", "tex": "smoke_10", "count": 6, "life": [0.5, 0.9], "speed": [30, 120], "gravity": -80, "scale": [0.2, 0.35], "blend": "mix", "color": "#3b302b", "alpha": 0.45}
+    ],
+    "root_hit": [
+      {"type": "pop", "tex": "twirl_02", "life": 0.22, "scale": [0.3, 0.8], "rotation": "random", "turn": 2.0},
+      {"type": "burst", "tex": "star_01", "count": 12, "life": [0.2, 0.45], "speed": [120, 300], "damping": 200, "scale": [0.05, 0.1], "lighten": 0.3}
+    ],
+    "water_hit": [
+      {"type": "pop", "tex": "circle_02", "life": 0.25, "scale": [0.2, 0.9], "lighten": 0.4},
+      {"type": "burst", "tex": "circle_05", "count": 16, "life": [0.25, 0.45], "speed": [160, 380], "gravity": 700, "scale": [0.03, 0.07], "lighten": 0.5}
+    ],
+    "ice_shatter": [
+      {"type": "pop", "tex": "star_09", "life": 0.16, "scale": [0.3, 0.9], "lighten": 0.6},
+      {"type": "burst", "tex": "star_06", "count": 14, "life": [0.2, 0.45], "speed": [200, 480], "gravity": 400, "damping": 150, "scale": [0.04, 0.1], "lighten": 0.6},
+      {"type": "pop", "tex": "circle_01", "life": 0.25, "scale": [0.2, 0.8], "lighten": 0.5, "alpha": 0.7}
+    ],
+    "stone_hit": [
+      {"type": "pop", "tex": "flare_01", "life": 0.14, "scale": [0.3, 0.8], "color": "#f1ddb6"},
+      {"type": "burst", "tex": ["dirt_01", "dirt_02"], "count": 10, "life": [0.3, 0.55], "speed": [180, 420], "gravity": 900, "scale": [0.08, 0.16], "blend": "mix", "color": "#8a6f4c"},
+      {"type": "burst", "tex": "smoke_02", "count": 5, "life": [0.4, 0.7], "speed": [30, 110], "scale": [0.2, 0.32], "blend": "mix", "color": "#b8a07c", "alpha": 0.45}
+    ],
+    "claw": [
+      {"type": "pop", "tex": "scratch_01", "life": 0.2, "scale": [0.5, 1.0], "rotation": "random", "color": "#ffe0b5"},
+      {"type": "burst", "tex": "spark_05", "count": 8, "life": [0.12, 0.25], "speed": [200, 450], "damping": 500, "scale": [0.08, 0.14], "color": "#ffd9b0"}
+    ],
+    "impact": [
+      {"type": "pop", "tex": "star_09", "life": 0.14, "scale": [0.3, 0.8], "lighten": 0.5},
+      {"type": "burst", "tex": "spark_05", "count": 8, "life": [0.12, 0.25], "speed": [200, 450], "damping": 500, "scale": [0.08, 0.14], "lighten": 0.5}
+    ]
+  },
+  "heavy": [
+    {"type": "pop", "tex": "circle_03", "life": 0.3, "scale": [0.3, 1.6], "lighten": 0.5, "alpha": 0.9},
+    {"type": "pop", "tex": "light_01", "life": 0.2, "scale": [0.6, 1.6], "lighten": 0.6, "alpha": 0.8},
+    {"type": "burst", "tex": "star_06", "count": 10, "life": [0.25, 0.5], "speed": [300, 700], "damping": 400, "scale": [0.06, 0.12], "lighten": 0.7}
+  ],
+  "charge": [
+    {"type": "pop", "tex": "magic_05", "life": 0.5, "scale": [0.1, 0.5], "turn": 1.5, "lighten": 0.3, "alpha": 0.8}
+  ],
+  "heal": [
+    {"type": "pop", "tex": "light_01", "life": 0.6, "scale": [0.3, 1.0], "lighten": 0.3, "alpha": 0.6},
+    {"type": "burst", "tex": "star_01", "count": 16, "life": [0.5, 0.9], "speed": [40, 120], "gravity": -220, "scale": [0.05, 0.1], "lighten": 0.4}
+  ],
+  "guard": [
+    {"type": "pop", "tex": "circle_01", "life": 0.45, "scale": [0.4, 1.1], "lighten": 0.3, "alpha": 0.8},
+    {"type": "pop", "tex": "magic_03", "life": 0.5, "scale": [0.3, 0.7], "turn": 1.0, "lighten": 0.4, "alpha": 0.7}
+  ],
+  "dust": [
+    {"type": "burst", "tex": "smoke_02", "count": 6, "life": [0.35, 0.6], "speed": [60, 160], "spread": 70, "gravity": -30, "scale": [0.16, 0.28], "blend": "mix", "color": "#b8a07c", "alpha": 0.4}
+  ]
+}

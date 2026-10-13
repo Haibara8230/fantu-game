@@ -49,6 +49,9 @@
 
 ## 音效 `assets/audio/sfx/`
 
+**现状（2026-10-13）**：音效已换成 CC0 素材（见下方第三方素材记录），按 `data/audio.json` 的 `sfx` 表挂接。每个挂点列出几个文件，播放时随机取一个（不连着重复同一个），音高在 0.92–1.08 之间随机（可按挂点另设 `pitch`、`volume`）。斗法的出招与命中按元素区分：`release_sword / fire / water / ice / wood / earth / beast`、`impact_` 同上，重击另叠 `impact_heavy`；剑类蓄势用 `prepare_sword`（拔剑声）。下表是原先的规格，作为将来换成定制音效时的方向，文件名不再使用。
+
+
 | 文件 | 挂点 | 方向 |
 |---|---|---|
 | `ui_click.ogg` | 按钮点击 | 轻木质点击 |
@@ -70,4 +73,15 @@
 | `life_ends.ogg` | 此生终结 | 长钟声 |
 
 ## 第三方素材记录
-（暂无）
+
+全部为 CC0（公有领域，可商用，不必署名；下列署名出于礼貌）：
+
+| 素材 | 作者与来源 | 位置 |
+|---|---|---|
+| Impact Sounds（选 45 个：金属、拳击、软物、玻璃、木、矿石、钢板、钟、草地脚步） | Kenney，https://kenney.nl/assets/impact-sounds | `assets/audio/sfx/kenney_impact/` |
+| RPG Audio（选 13 个：拔刀、刀刃、衣袂、翻书、劈砍） | Kenney，https://kenney.nl/assets/rpg-audio | `assets/audio/sfx/kenney_rpg/` |
+| Interface Sounds（选 14 个：点击、选择、打开、确认、钟声） | Kenney，https://kenney.nl/assets/interface-sounds | `assets/audio/sfx/kenney_ui/` |
+| 80 CC0 RPG SFX（选 23 个：刀刃、法术、火系法术、石块、宝石、妖兽吼叫、木） | rubberduck，https://opengameart.org/content/80-cc0-rpg-sfx | `assets/audio/sfx/rubberduck/` |
+| Particle Pack（选 37 张，缩到 256 px：火花、星光、剑痕、光迹、烟尘、碎土、法阵、火焰、光圈） | Kenney，https://kenney.nl/assets/particle-pack | `assets/art/vfx/` |
+
+各 Kenney 素材包的许可文件随素材放在对应目录（`License.txt`）。

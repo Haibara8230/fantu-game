@@ -1,8 +1,24 @@
 extends Control
 ## Plays a completed, authoritative turn as sequential readable animation events.
+## Hit feel (after the common "game feel" practice): a freeze on each hit (hit-stop), screen shake from
+## a decaying trauma with a kick along the blow, an impact frame and a push of the camera on heavy hits,
+## the target squashed and knocked back, afterimages behind fast moves, damage numbers that pop (larger
+## on a heavy hit), and a health bar that leaves a pale chip behind before it catches up. Textured
+## particles (sprite_fx.gd) are layered over the vector effects; sounds vary by element and weight.
 const Actor = preload("res://scripts/presentation/actor.gd")
 const Effect = preload("res://scripts/presentation/effect.gd")
+const SpriteFx = preload("res://scripts/presentation/sprite_fx.gd")
+# The most the screen moves at full trauma, in pixels, and how fast trauma fades per second.
+const SHAKE_PIXELS := 18.0
+const TRAUMA_DECAY := 1.8
+# Hit-stop bounds in seconds, and the share of a target's health that makes a hit heavy.
+const HIT_STOP := Vector2(0.04, 0.18)
+const HEAVY_SHARE := 0.15
+# Sounds by the visual of an art: which element's release and impact it plays.
+const SOUND_ELEMENTS := {"sword": "sword", "sword_rain": "sword", "sword_arc": "sword", "flame_bolt": "fire", "fire": "fire", "fire_burst": "fire", "vine": "wood", "leaf_blade": "wood", "water": "water", "ice_lance": "ice", "earth": "earth", "rock_spire": "earth", "enemy": "beast"}
 signal cue(kind: String)
+## What to play on the sound bus: the cue, or a cue of its element and weight ("impact_fire").
+signal sound(kind: String)
 signal hit_resolved(enemy_target: bool, amount: int, hp_after: int)
 var art: Dictionary = {}
 var skills: Dictionary = {}
@@ -29,7 +45,17 @@ var hero_max_hp: int
 var enemy_hp: int
 var enemy_max_hp: int
 var phase := 0.0
-var shake := 0.0
+# Screen shake: trauma (0–1, the shake grows with its square) and a kick along the last blow.
+var trauma := 0.0
+var kick := Vector2.ZERO
+# Health shown as a pale chip behind each bar, catching up with the health after a moment.
+var hero_chip := 0.0
+var enemy_chip := 0.0
+var chip_hold := 0.0
+# The impact frame of a heavy hit: where it landed and until when (real milliseconds) it shows.
+var impact_point := Vector2.ZERO
+var impact_until := 0
+var overlay := Node2D.new()
 var busy := false
 var motion_enabled := true
 var last_cue := ""
@@ -63,6 +89,8 @@ func configure(snapshot: Dictionary, enemy_definition: Dictionary) -> void:
 	hero_max_hp = int(snapshot.player.max_hp)
 	enemy_hp = int(snapshot.battle.hp)
 	enemy_max_hp = int(enemy_definition.hp)
+	hero_chip = hero_hp
+	enemy_chip = enemy_hp
 	effect_font.font_names = PackedStringArray(["Microsoft YaHei", "Noto Sans CJK SC", "SimHei"])
 	clip_contents = true
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -74,6 +102,9 @@ func configure(snapshot: Dictionary, enemy_definition: Dictionary) -> void:
 	enemy_art = _enemy_art(enemy_id, snapshot.battle)
 	enemy.configure(enemy_art, false)
 	world.add_child(enemy)
+	overlay.z_index = 20
+	overlay.draw.connect(_draw_overlay)
+	add_child(overlay)
 	resized.connect(_layout)
 	_layout()
 
@@ -109,12 +140,51 @@ func _layout() -> void:
 
 func _process(delta: float) -> void:
 	phase += delta
-	shake = maxf(0.0, shake - delta * 22.0)
-	var offset := Vector2(sin(phase * 80) * shake, cos(phase * 67) * shake * 0.4) if motion_enabled else Vector2.ZERO
+	trauma = maxf(0.0, trauma - delta * TRAUMA_DECAY)
+	kick = kick.lerp(Vector2.ZERO, minf(1.0, delta * 14.0))
+	var amount := trauma * trauma * SHAKE_PIXELS
+	var offset := Vector2(sin(phase * 83.0) + sin(phase * 37.0) * 0.5, cos(phase * 71.0) * 0.6 + sin(phase * 29.0) * 0.3) * amount + kick if motion_enabled else Vector2.ZERO
 	world.scale = Vector2.ONE * (1.0 + zoom)
 	world.position = offset - zoom_focus * zoom
 	flash_alpha = maxf(0.0, flash_alpha - delta * 2.4)
+	chip_hold = maxf(0.0, chip_hold - delta)
+	if chip_hold <= 0.0:
+		hero_chip = move_toward(hero_chip, hero_hp, delta * hero_max_hp * 0.9)
+		enemy_chip = move_toward(enemy_chip, enemy_hp, delta * enemy_max_hp * 0.9)
 	queue_redraw()
+	overlay.queue_redraw()
+
+## Shake from a blow: trauma added (it adds up to 1), with a kick along `direction`.
+func add_trauma(amount: float, direction: Vector2 = Vector2.ZERO) -> void:
+	if not motion_enabled:
+		return
+	trauma = minf(1.0, trauma + amount)
+	kick += direction * amount * 22.0
+
+## Freezes the duel for `seconds` of real time (hit-stop): everything, tweens and effects included,
+## all but stops, then resumes.
+func _freeze(seconds: float) -> void:
+	if seconds <= 0.0 or not is_inside_tree():
+		return
+	Engine.time_scale = 0.02
+	await get_tree().create_timer(seconds, true, false, true).timeout
+	Engine.time_scale = 1.0
+
+func _exit_tree() -> void:
+	Engine.time_scale = 1.0
+
+## The impact frame over everything: the screen darkened for an instant, and lines bursting from where
+## a heavy blow landed.
+func _draw_overlay() -> void:
+	if Time.get_ticks_msec() >= impact_until:
+		return
+	overlay.draw_rect(Rect2(Vector2.ZERO, size), Color(0.02, 0.02, 0.03, 0.55))
+	var center := world.position + impact_point * world.scale
+	for i: int in range(26):
+		var axis := Vector2.from_angle(TAU * i / 26.0 + i * 0.37)
+		var near := 40.0 + float(i % 4) * 22.0
+		overlay.draw_line(center + axis * near, center + axis * (near + 160.0 + float(i % 3) * 90.0), Color(1, 1, 1, 0.85), 2.0 + float(i % 3), true)
+	overlay.draw_circle(center, 26.0, Color(1, 1, 1, 0.9))
 
 func _draw() -> void:
 	if background == null:
@@ -137,8 +207,8 @@ func _draw() -> void:
 		draw_circle(Vector2.ZERO, width, Color(0.1, 0.18, 0.14, 0.22))
 	draw_set_transform(Vector2.ZERO)
 	draw_rect(Rect2(0, 0, size.x, 54), Color(0.05, 0.12, 0.12, 0.8))
-	_draw_health(Vector2(16, 9), size.x * 0.36, hero_name, hero_hp, hero_max_hp, Color("#90c49d"))
-	_draw_health(Vector2(size.x * 0.64 - 16, 9), size.x * 0.36, enemy_name, enemy_hp, enemy_max_hp, Color("#d59075"))
+	_draw_health(Vector2(16, 9), size.x * 0.36, hero_name, hero_hp, hero_max_hp, Color("#90c49d"), hero_chip)
+	_draw_health(Vector2(size.x * 0.64 - 16, 9), size.x * 0.36, enemy_name, enemy_hp, enemy_max_hp, Color("#d59075"), enemy_chip)
 	if not banner.is_empty():
 		var text_size := effect_font.get_string_size(banner, HORIZONTAL_ALIGNMENT_LEFT, -1, 18)
 		draw_rect(Rect2(size.x * 0.5 - text_size.x * 0.5 - 14, 62, text_size.x + 28, 32), Color(0.05, 0.12, 0.12, 0.72))
@@ -151,15 +221,20 @@ func _draw() -> void:
 	if flash_alpha > 0:
 		draw_rect(Rect2(Vector2.ZERO, size), Color(1, 0.89, 0.65, flash_alpha))
 
-func _draw_health(origin: Vector2, width: float, title: String, hp: int, maximum: int, color: Color) -> void:
+func _draw_health(origin: Vector2, width: float, title: String, hp: int, maximum: int, color: Color, chip: float = -1.0) -> void:
 	draw_string(effect_font, origin + Vector2(0, 15), "%s   %d / %d" % [title, hp, maximum], HORIZONTAL_ALIGNMENT_LEFT, -1, 15, Color("#f3eddd"))
 	draw_rect(Rect2(origin + Vector2(0, 23), Vector2(width, 6)), Color("#243f3c"))
+	if chip > hp:
+		draw_rect(Rect2(origin + Vector2(0, 23), Vector2(width * clampf(chip / maximum, 0.0, 1.0), 6)), Color("#f6e6c4"))
 	draw_rect(Rect2(origin + Vector2(0, 23), Vector2(width * maxf(0, float(hp) / maximum), 6)), color)
 
-func _emit_cue(kind: String) -> void:
+## A beat of the duel: `kind` for the duel's own watchers, and a sound — `voice` when it has its own
+## (an element's release or impact), else the beat's.
+func _emit_cue(kind: String, voice: String = "") -> void:
 	last_cue = kind
 	cue_count += 1
 	cue.emit(kind)
+	sound.emit(kind if voice.is_empty() else voice)
 
 func _effect(kind: String, from: Vector2, to: Vector2, duration: float, color: Color, variation: int = 0, tier: int = 1) -> void:
 	var effect = Effect.new()
@@ -189,21 +264,26 @@ func _stage_mood(color: Color, tint: float, backdrop: float, seconds: float) -> 
 	mood.tween_property(self, "tint_alpha", tint, seconds)
 	mood.tween_property(self, "backdrop_alpha", backdrop, seconds)
 
-func _number(actor, amount: int, healing: bool = false) -> void:
+## A number over an actor that pops in large and settles: a heavy hit's is bigger, golden and shaken.
+func _number(actor, amount: int, healing: bool = false, heavy: bool = false) -> void:
 	var label := Label.new()
-	label.text = ("+" if healing else "−") + str(amount)
+	label.text = ("+" if healing else "−") + str(amount) + ("！" if heavy else "")
 	label.add_theme_font_override("font", effect_font)
-	label.add_theme_font_size_override("font_size", 28)
-	label.add_theme_color_override("font_color", Color("#8ff0a6") if healing else Color("#fff0cc"))
+	label.add_theme_font_size_override("font_size", 40 if heavy else 30)
+	label.add_theme_color_override("font_color", Color("#8ff0a6") if healing else (Color("#ffd35c") if heavy else Color("#fff0cc")))
 	label.add_theme_color_override("font_outline_color", Color("#322b28"))
-	label.add_theme_constant_override("outline_size", 5)
-	label.position = actor.chest() + Vector2(-12, -12)
+	label.add_theme_constant_override("outline_size", 7 if heavy else 5)
+	label.position = actor.chest() + Vector2(-16 + randf_range(-14.0, 14.0), -20)
 	label.z_index = 8
 	label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	label.pivot_offset = Vector2(24, 20)
+	label.scale = Vector2.ONE * (2.0 if heavy else 1.6)
 	world.add_child(label)
+	var settle := create_tween()
+	settle.tween_property(label, "scale", Vector2.ONE, 0.18).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
 	var tween := create_tween().set_parallel(true)
-	tween.tween_property(label, "position:y", label.position.y - 65, 0.85).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
-	tween.tween_property(label, "modulate:a", 0.0, 0.85).set_delay(0.15)
+	tween.tween_property(label, "position:y", label.position.y - 70, 0.9).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+	tween.tween_property(label, "modulate:a", 0.0, 0.5).set_delay(0.45)
 	tween.chain().tween_callback(label.queue_free)
 
 func _pause(seconds: float) -> void:
@@ -224,6 +304,8 @@ func play(events: Array[Dictionary]) -> void:
 				banner = str(event.get("name", skill.name))
 				hero.set_pose("cast")
 				_effect(healing_profile.kind, hero.chest(), hero.chest() + Vector2(0, 35), 0.85, Color(healing_profile.color), 0, int(event.get("tier", 1)))
+				SpriteFx.play(world, hero.chest(), SpriteFx.recipes().get("heal", []), Color(healing_profile.color))
+				hero.squash(Vector2(0.96, 1.05), 0.4)
 				_emit_cue("heal")
 				await _pause(0.3)
 				hero_hp = int(event.hp_after)
@@ -236,6 +318,8 @@ func play(events: Array[Dictionary]) -> void:
 				banner = str(event.get("name", guard_skill.get("name", "凝神守御")))
 				hero.set_pose("guard")
 				_effect(sect.guard_vfx, hero.chest(), hero.chest(), 1.6, Color(sect.color), 0, int(event.get("tier", 1)))
+				SpriteFx.play(world, hero.chest(), SpriteFx.recipes().get("guard", []), Color(sect.color))
+				hero.squash(Vector2(1.06, 0.95), 0.3)
 				if event.has("hp_after"):
 					hero_hp = int(event.hp_after)
 					_number(hero, int(event.amount), true)
@@ -244,6 +328,7 @@ func play(events: Array[Dictionary]) -> void:
 			"end":
 				banner = {"win": "斗法获胜", "lose": "斗法落败", "flee": "收势撤离"}.get(event.result, "")
 				if event.result == "win":
+					SpriteFx.play(world, enemy.chest(), SpriteFx.recipes().get("dust", []), Color.WHITE, Vector2.UP, 1.4)
 					var tween := create_tween()
 					tween.tween_property(enemy, "modulate:a", 0.0, 0.4)
 				elif event.result == "lose":
@@ -282,6 +367,9 @@ func _attack(event: Dictionary) -> void:
 	attacking.set_pose(profile.prepare_pose)
 	if not str(profile.charge).is_empty():
 		_effect(profile.charge, attacking.chest(), attacking.chest(), prepare_time + 0.15, color)
+	if prepare_time >= 0.25:
+		SpriteFx.play(world, attacking.chest(), SpriteFx.recipes().get("charge", []), color, Vector2.RIGHT * push_direction, 0.8 + prepare_time)
+	attacking.squash(Vector2(0.94, 1.06), prepare_time + 0.1)
 	if charge > 0:
 		_layer("gather", attacking.chest(), prepare_time, color, {"count": int(layers.get("swarm", 10))})
 	if int(layers.get("rune", 0)) > 0:
@@ -296,9 +384,20 @@ func _attack(event: Dictionary) -> void:
 	prepare.tween_property(attacking, "position:x", origin.x - push_direction * (10 if visual_id.begins_with("sword") else 3), prepare_time).set_trans(Tween.TRANS_QUAD)
 	var stance_offset: float = 4.0 if visual_id in ["earth", "rock_spire"] else (-4.0 if visual_id in ["water", "ice_lance"] else 0.0)
 	prepare.tween_property(attacking, "position:y", origin.y + stance_offset, prepare_time)
-	_emit_cue("prepare")
+	_emit_cue("prepare", "prepare_sword" if visual_id.begins_with("sword") else "prepare")
 	await prepare.finished
 	attacking.set_pose(profile.release_pose)
+	var aim: Vector2 = (target.chest() - attacking.chest()).normalized()
+	# The release: a stretch toward the target, a flash at the hand, afterimages behind a fast move.
+	attacking.squash(Vector2(1.12, 0.92), 0.2)
+	SpriteFx.play(world, attacking.chest() + aim * attacking.visual_height * 0.2, SpriteFx.recipe("release", visual_id), color, aim)
+	if melee or visual_id.begins_with("sword"):
+		for ghost: int in range(3):
+			get_tree().create_timer(0.03 * ghost).timeout.connect(func() -> void:
+				if is_instance_valid(attacking):
+					attacking.afterimage(world, color))
+	if melee:
+		SpriteFx.play(world, attacking.position, SpriteFx.recipes().get("dust", []), Color.WHITE, Vector2.RIGHT * push_direction)
 	var release := create_tween().set_parallel(true)
 	var attack_x: float = target.position.x - push_direction * (target.visual_height * 0.25 + attacking.visual_height * 0.45) if melee else origin.x + push_direction * (18 if visual_id.begins_with("sword") else 5)
 	release.tween_property(attacking, "position:x", attack_x, 0.12).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
@@ -309,22 +408,26 @@ func _attack(event: Dictionary) -> void:
 	# Effects begin before the cue, so frame capture and UI see the actual release.
 	if not melee:
 		_effect(profile.kind, attacking.chest(), target.chest(), travel_time + (0.3 if profile.delivery == "ground" else 0.0), color, 0, tier)
+		if profile.delivery != "ground":
+			SpriteFx.trail(world, attacking.chest(), target.chest(), travel_time, SpriteFx.recipe("trail", visual_id), color, float(layers.get("scale", 1.0)))
 	# The highest tier's own sound layer, under the release.
 	if float(layers.get("surge", 0.0)) > 0:
 		_emit_cue("surge")
-	_emit_cue("release")
+	_emit_cue("release", "release_" + str(SOUND_ELEMENTS.get(visual_id, "beast")))
 	var before_hp: int = enemy_hp if event.actor == "player" else hero_hp
 	var total: int = int(event.amount)
 	for hit_index: int in range(hit_count):
 		if hit_index > 0:
 			attacking.set_pose(profile.release_pose)
 			_effect(profile.kind, attacking.chest(), target.chest(), travel_time, color, hit_index, tier)
-			_emit_cue("release")
+			if not melee and profile.delivery != "ground":
+				SpriteFx.trail(world, attacking.chest(), target.chest(), travel_time, SpriteFx.recipe("trail", visual_id), color, float(layers.get("scale", 1.0)))
+			_emit_cue("release", "release_" + str(SOUND_ELEMENTS.get(visual_id, "beast")))
 		await _pause(travel_time)
 		var portion: int = total / hit_count + (1 if hit_index < total % hit_count else 0)
 		before_hp = maxi(0, before_hp - portion)
 		var displayed_hp: int = int(event.hp_after) if hit_index == hit_count - 1 else before_hp
-		await _hit(target, target_home, event.actor == "player", portion, displayed_hp, push_direction, profile, color, layers, str(event.get("element", "")))
+		await _hit(target, target_home, event.actor == "player", portion, displayed_hp, push_direction, profile, color, layers, str(event.get("element", "")), visual_id, tier)
 		if hit_index < hit_count - 1:
 			await _pause(0.08)
 	if zoom > 0 or tint_alpha > 0 or backdrop_alpha > 0:
@@ -342,32 +445,56 @@ func _attack(event: Dictionary) -> void:
 	target.flash(0)
 	await _pause(0.08)
 
-func _hit(target, home: Vector2, enemy_target: bool, amount: int, hp_after: int, direction: float, profile: Dictionary, color: Color, layers: Dictionary = {}, element: String = "") -> void:
+func _hit(target, home: Vector2, enemy_target: bool, amount: int, hp_after: int, direction: float, profile: Dictionary, color: Color, layers: Dictionary = {}, element: String = "", visual_id: String = "", tier: int = 1) -> void:
 	if recoil_handle != null and recoil_handle.is_running():
 		recoil_handle.kill()
 	if flash_handle != null and flash_handle.is_running():
 		flash_handle.kill()
+	var maximum: int = enemy_max_hp if enemy_target else hero_max_hp
+	# A heavy blow: a large share of the target's health, a high tier, or a weighty art.
+	var heavy: bool = float(amount) >= float(maximum) * HEAVY_SHARE or tier >= 4 or float(profile.hit_stop) >= 0.08
 	target.position = home
 	target.set_pose("hit")
-	target.flash(0.8, color.lightened(0.65))
+	target.flash(1.0, color.lightened(0.75))
+	target.squash(Vector2(1.18, 0.84) if heavy else Vector2(1.1, 0.9), 0.26)
+	chip_hold = 0.35
 	if enemy_target:
 		enemy_hp = hp_after
 	else:
 		hero_hp = hp_after
-	_number(target, amount)
+	_number(target, amount, false, heavy)
 	hit_resolved.emit(enemy_target, amount, hp_after)
 	_effect(profile.impact, target.chest(), target.chest(), 0.48, color)
+	var blow := Vector2(direction, -0.15).normalized()
+	var size := float(layers.get("scale", 1.0)) * (1.25 if heavy else 1.0)
+	SpriteFx.play(world, target.chest(), SpriteFx.recipe("impact", str(profile.impact)), color, blow, size)
+	if heavy:
+		SpriteFx.play(world, target.chest(), SpriteFx.recipes().get("heavy", []), color, blow, size)
+		if motion_enabled:
+			impact_point = target.chest()
+			impact_until = Time.get_ticks_msec() + 70
 	if float(layers.get("residue", 0.0)) > 0:
 		_layer("residue", target.chest(), float(layers.residue), color, {"element": element})
 	if float(layers.get("bloom", 0.0)) > 0:
 		_layer("bloom", target.chest(), 0.6, color, {"strength": float(layers.bloom)})
-	shake = float(profile.shake) * float(layers.get("shake", 1.0)) if motion_enabled else 0
-	flash_alpha = (0.055 if profile.impact == "fire_explosion" else 0.0) + float(layers.get("flash", 0.0)) if motion_enabled else 0
-	_emit_cue("impact")
-	await _pause(float(profile.hit_stop) * (1.0 + float(layers.get("slow", 0.0)) * 2.0))
+	add_trauma(clampf(float(profile.shake) * float(layers.get("shake", 1.0)) * 0.09, 0.15, 0.6) + (0.25 if heavy else 0.0), blow)
+	flash_alpha = (0.055 if profile.impact == "fire_explosion" else 0.0) + float(layers.get("flash", 0.0)) + (0.06 if heavy else 0.0) if motion_enabled else 0.0
+	if heavy and motion_enabled and zoom < 0.02:
+		zoom_focus = target.chest()
+		var punch := create_tween()
+		punch.tween_property(self, "zoom", 0.035, 0.05)
+		punch.tween_property(self, "zoom", 0.0, 0.22).set_trans(Tween.TRANS_SINE)
+	_emit_cue("impact", "impact_" + str(SOUND_ELEMENTS.get(visual_id, "beast")))
+	if heavy:
+		sound.emit("impact_heavy")
+	var stop := clampf(float(profile.hit_stop) * (1.0 + float(layers.get("slow", 0.0)) * 2.0) + (0.05 if heavy else 0.0), HIT_STOP.x, HIT_STOP.y)
+	await _freeze(stop)
 	recoil_handle = create_tween()
-	recoil_handle.tween_property(target, "position:x", home.x + direction * float(profile.recoil), 0.06)
-	recoil_handle.tween_property(target, "position:x", home.x, 0.18).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+	var knock := float(profile.recoil) * (1.6 if heavy else 1.0)
+	recoil_handle.tween_property(target, "position:x", home.x + direction * knock, 0.07).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+	recoil_handle.tween_property(target, "position:x", home.x, 0.22).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	if heavy:
+		SpriteFx.play(world, target.position, SpriteFx.recipes().get("dust", []), Color.WHITE, Vector2(direction, 0), 0.9)
 	flash_handle = create_tween()
-	flash_handle.tween_method(func(value: float) -> void: target.flash(value, color.lightened(0.65)), 0.8, 0.0, 0.23)
+	flash_handle.tween_method(func(value: float) -> void: target.flash(value, color.lightened(0.75)), 1.0, 0.0, 0.2)
 	await _pause(0.1)

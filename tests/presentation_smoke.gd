@@ -193,6 +193,19 @@ func _run() -> void:
 			staged.backdrop = stage.backdrop_alpha
 		elif kind == "impact" and not staged.has("zoom"):
 			staged.zoom = stage.zoom)
+	var sounds: Array[String] = []
+	stage.sound.connect(func(kind: String) -> void: sounds.append(kind))
+	var textured := {"particles": 0, "sprites": 0}
+	stage.world.child_entered_tree.connect(func(node: Node) -> void:
+		if node is CPUParticles2D:
+			textured.particles += 1
+		elif node is Sprite2D and node.material is CanvasItemMaterial:
+			textured.sprites += 1)
+	var trauma_seen := {"most": 0.0, "frame": false}
+	stage.cue.connect(func(kind: String) -> void:
+		if kind == "impact":
+			trauma_seen.most = maxf(float(trauma_seen.most), stage.trauma)
+			trauma_seen.frame = trauma_seen.frame or stage.impact_until > Time.get_ticks_msec())
 	_watch_stage("art_tier5")
 	var strike := {"type": "attack", "actor": "player", "style": "sword_rain", "name": "焚天剑雨", "vfx": "sword_rain", "tier": 5, "element": "fire", "legacy": "qingyun", "hits": 1, "amount": 1, "hp_after": int(main.session.battle.hp)}
 	var strikes: Array[Dictionary] = [strike]
@@ -202,6 +215,11 @@ func _run() -> void:
 	check(float(staged.get("zoom", 0.0)) > 0.0 and cue_sequence.find("surge") >= 0 and cue_sequence.find("surge") < cue_sequence.find("release"), "the camera pushes in and the highest tier adds its sound layer")
 	await create_timer(0.4).timeout
 	check(stage.closeup.is_empty() and stage.zoom < 0.01 and stage.tint_alpha < 0.01 and stage.backdrop_alpha < 0.01, "the staging clears after the strike")
+	check(sounds.has("prepare_sword") and sounds.has("release_sword") and sounds.has("impact_sword") and sounds.has("impact_heavy"), "a sword art sounds of steel, and a heavy blow lands with weight: %s" % [sounds])
+	check(int(textured.particles) >= 3 and int(textured.sprites) >= 3, "textured sparks, flashes and trails over the drawn effect: %s" % [textured])
+	check(float(trauma_seen.most) > 0.3 and bool(trauma_seen.frame), "a heavy blow shakes the screen and shows an impact frame")
+	check(is_equal_approx(Engine.time_scale, 1.0), "the hit-stop ends and the duel runs at its own speed again")
+	check(stage.enemy_chip >= float(stage.enemy_hp), "the health bar keeps a pale chip of what was lost")
 	layer_kinds.clear()
 	cue_sequence.clear()
 	var plain := strike.duplicate()

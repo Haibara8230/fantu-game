@@ -7,6 +7,9 @@ var base_scale: float = 1.0
 var phase: float = 0.0
 var facing: float = 1.0
 var idle_enabled := true
+# A squash or stretch on top of the breathing idle: x and y factors easing back to 1.
+var squash_scale := Vector2.ONE
+var _squash_tween: Tween
 
 func configure(art: Dictionary, faces_right: bool) -> void:
 	definition = art
@@ -49,7 +52,40 @@ func flash(strength: float, color: Color = Color.WHITE) -> void:
 func chest() -> Vector2:
 	return position + Vector2(0, -visual_height * 0.57)
 
+## Squashes (or stretches) the sprite to `factors` at once and springs back over `seconds`: a hit lands
+## with a squash, a lunge with a stretch.
+func squash(factors: Vector2, seconds: float = 0.22) -> void:
+	if _squash_tween != null and _squash_tween.is_running():
+		_squash_tween.kill()
+	squash_scale = factors
+	_squash_tween = create_tween()
+	_squash_tween.tween_property(self, "squash_scale", Vector2.ONE, seconds).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+
+## A fading copy of the current pose left where the actor stands (afterimages of a fast move).
+func afterimage(parent: Node, color: Color, seconds: float = 0.28) -> void:
+	var ghost := Sprite2D.new()
+	ghost.texture = sprite.texture
+	ghost.hframes = sprite.hframes
+	ghost.vframes = sprite.vframes
+	ghost.frame = sprite.frame
+	ghost.region_enabled = sprite.region_enabled
+	ghost.region_rect = sprite.region_rect
+	ghost.offset = sprite.offset
+	ghost.flip_h = sprite.flip_h
+	ghost.scale = sprite.scale
+	ghost.position = position + sprite.position
+	ghost.modulate = Color(color, 0.45)
+	var additive := CanvasItemMaterial.new()
+	additive.blend_mode = CanvasItemMaterial.BLEND_MODE_ADD
+	ghost.material = additive
+	ghost.z_index = -1
+	parent.add_child(ghost)
+	var tween := ghost.create_tween()
+	tween.tween_property(ghost, "modulate:a", 0.0, seconds)
+	tween.tween_callback(ghost.queue_free)
+
 func _process(delta: float) -> void:
 	phase += delta
-	if idle_enabled:
-		sprite.scale = Vector2(base_scale * (1.0 + sin(phase * 1.8) * 0.004), base_scale * (1.0 + sin(phase * 1.8) * 0.006))
+	var breathing := Vector2(1.0 + sin(phase * 1.8) * 0.004, 1.0 + sin(phase * 1.8) * 0.006) if idle_enabled else Vector2.ONE
+	sprite.scale = base_scale * breathing * squash_scale
+	sprite.position.y = -visual_height * 0.5 * squash_scale.y

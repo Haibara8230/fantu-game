@@ -331,6 +331,9 @@ func _audio() -> void:
 		check(stream != null and stream.data.size() > 0, "placeholder for missing cue: " + cue)
 	for cue: String in ["prepare", "release", "impact", "heal", "guard", "victory", "defeat", "arrive", "event", "click"]:
 		check(director.library.sfx.has(cue), "cue mapped: " + cue)
+	for cue: String in director.library.sfx:
+		check(director.has_file("sfx", cue), "the cue has its sound files: " + cue)
+	check(director.cue_streams("impact_sword").size() >= 4 and director.library.sfx.has("release_fire") and director.library.sfx.has("impact_heavy"), "the duel's sounds vary by element and weight")
 	var content := Content.new()
 	content.load_data()
 	for location_id: String in content.locations:
@@ -346,7 +349,7 @@ func _audio() -> void:
 	check(is_equal_approx(reloaded.volumes.SFX, 0.4) and is_equal_approx(reloaded.volumes.Music, 1.0), "volumes persist in settings")
 	director.cue("impact")
 	director.play_music("sect")
-	check(director.last_cue == "impact" and director.music_key == "sect", "cues and music requests tracked without audio files")
+	check(director.last_cue == "impact" and director.music_key == "sect", "cues and music requests tracked")
 	director.queue_free()
 	reloaded.queue_free()
 	await create_timer(0.2).timeout

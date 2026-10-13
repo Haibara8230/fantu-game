@@ -1,12 +1,15 @@
 extends Node
-## Music, ambience and sound cues on separate buses with saved volumes. Any file listed in
-## data/audio.json that is not in the project yet is replaced by a short synthesized placeholder
+## Music, ambience and sound cues on separate buses with saved volumes. A cue lists several files
+## (data/audio.json): each time one is picked at random and its pitch varied a little, so repeated hits
+## never sound the same. Any file not in the project yet is replaced by a short synthesized placeholder
 ## (cues) or silence (music, ambience), so the system works before final audio arrives.
 const SETTINGS_PATH := "user://settings.cfg"
 const BUSES := ["Music", "SFX", "Ambience"]
 const DEFAULT_VOLUMES := {"Master": 0.8, "Music": 0.7, "SFX": 0.8, "Ambience": 0.6}
 const FADE_SECONDS := 1.2
-const SFX_VOICES := 6
+const SFX_VOICES := 10
+# A cue's pitch varies within this range unless data/audio.json gives its own.
+const PITCH_RANGE := [0.92, 1.08]
 const MIX_RATE := 22050
 var library: Dictionary = {}
 var volumes: Dictionary = DEFAULT_VOLUMES.duplicate()
@@ -19,6 +22,10 @@ var _active_music := 0
 var _ambience: AudioStreamPlayer
 var _voices: Array[AudioStreamPlayer] = []
 var _placeholders: Dictionary = {}
+# Streams loaded per cue, and the last file each cue played (to avoid repeating it at once).
+var _cue_streams: Dictionary = {}
+var _cue_last: Dictionary = {}
+var _rng := RandomNumberGenerator.new()
 # Headless runs (tests) track requests but start no playback: there is no one to hear it, and the
 # dummy driver never releases stopped playbacks.
 var silent := DisplayServer.get_name() == "headless"
@@ -117,12 +124,21 @@ func play_ambience(key: String) -> void:
 		if not silent:
 			_ambience.play()
 
-## Plays a one-shot cue on a free voice (or the oldest one).
+## Plays a one-shot cue on a free voice (or the oldest one): one of its files, not the one it played
+## last, at a slightly varied pitch.
 func cue(name: String) -> void:
 	if not library.sfx.has(name):
 		return
 	last_cue = name
-	var stream := _file_stream(library.sfx[name])
+	var entry := _entry(name)
+	var streams := cue_streams(name)
+	var stream: AudioStream = null
+	if not streams.is_empty():
+		var index := _rng.randi_range(0, streams.size() - 1)
+		if streams.size() > 1 and index == int(_cue_last.get(name, -1)):
+			index = (index + 1) % streams.size()
+		_cue_last[name] = index
+		stream = streams[index]
 	if stream == null:
 		stream = placeholder(name)
 	var voice := _voices[0]
@@ -130,9 +146,30 @@ func cue(name: String) -> void:
 		if not candidate.playing:
 			voice = candidate
 			break
+	var pitch: Array = entry.get("pitch", PITCH_RANGE)
 	voice.stream = stream
+	voice.pitch_scale = _rng.randf_range(float(pitch[0]), float(pitch[1]))
+	voice.volume_db = float(entry.get("volume", 0.0))
 	if not silent:
 		voice.play()
+
+## A cue's entry as {"files", "pitch"?, "volume"?}; a plain path is one file.
+func _entry(name: String) -> Dictionary:
+	var entry: Variant = library.sfx.get(name, {})
+	if entry is String:
+		return {"files": [entry]}
+	return entry if entry is Dictionary else {}
+
+## The streams a cue can play (the files present in the project), loaded once.
+func cue_streams(name: String) -> Array:
+	if not _cue_streams.has(name):
+		var streams: Array = []
+		for path: Variant in _entry(name).get("files", []):
+			var stream := _file_stream(str(path))
+			if stream != null:
+				streams.append(stream)
+		_cue_streams[name] = streams
+	return _cue_streams[name]
 
 func _file_stream(path: String) -> AudioStream:
 	if path.is_empty() or not ResourceLoader.exists(path):
@@ -150,6 +187,8 @@ func _looping(stream: AudioStream) -> AudioStream:
 	return stream
 
 func has_file(kind: String, key: String) -> bool:
+	if kind == "sfx":
+		return not cue_streams(key).is_empty()
 	return _file_stream(library.get(kind, {}).get(key, "")) != null
 
 # --- Placeholder synthesis ---------------------------------------------------------

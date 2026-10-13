@@ -22,7 +22,7 @@ static func render(ui) -> void:
 	battle_stage.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	battle_stage.configure(session.snapshot(), enemy)
 	center.add_child(battle_stage)
-	battle_stage.cue.connect(ui.audio.cue)
+	battle_stage.sound.connect(ui.audio.cue)
 	if ui.battle_record_open:
 		var record := PanelContainer.new()
 		record.add_theme_stylebox_override("panel", ui.style(Color(0.03, 0.07, 0.08, 0.86), Color("#41615e"), 10))
