@@ -233,11 +233,16 @@ static func known_npcs(s) -> Array[String]:
 	return result
 
 static func meet_present(s) -> void:
-	# Right after a stay, everyone generated who was here through today is already met.
+	# Right after a stay, everyone generated who was here through today is already met: only the
+	# handwritten people are left to look for (much cheaper than everyone's whereabouts).
 	var covered: bool = s._met_through.get("location", "") == s.player.location and int(s._met_through.get("day", -1)) == int(s.world.day)
+	if covered:
+		for person_id: String in s.content.people:
+			if npc_location(s, person_id) == s.player.location:
+				mark_met(s, person_id)
+		return
 	for person_id: String in present_npcs(s):
-		if not (covered and is_generated(s, person_id)):
-			mark_met(s, person_id)
+		mark_met(s, person_id)
 
 ## Marks someone as met, here on `day` (today by default; a long stay passes the day within it).
 ## Meeting a generated person who has already died (heard of during a long stay) records them without
