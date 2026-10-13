@@ -3,6 +3,7 @@ extends RefCounted
 ## what can be done with them, their details and what has passed between you — 人物志), portraits.
 const Calendar = preload("res://scripts/core/calendar.gd")
 const ArtLibrary = preload("res://scripts/ui/art_library.gd")
+const TalentCards = preload("res://scripts/ui/talent_cards.gd")
 const PEOPLE_SHOWN_HERE := 12
 # How many of the latest chronicle entries about a person their profile shows.
 const RECORD_ENTRIES := 6
@@ -228,6 +229,7 @@ static func render_person(ui, person_id: String) -> void:
 	for pair: Array in [["境界", person.realm_text], ["出身", person.affiliation], ["年岁", "%d" % (int(person.age) + Calendar.year(int(session.world.day)) - 1)], ["性情", person.personality]]:
 		grid.add_child(ui.label("%s  %s" % [pair[0], pair[1]], 15))
 	center.add_child(ui.paragraph(person.description, ui.INK))
+	_talents(ui, person_id)
 	if person.has("loadout"):
 		var arts: Array[String] = []
 		for art_id: String in person.loadout.arts:
@@ -242,6 +244,20 @@ static func render_person(ui, person_id: String) -> void:
 				gear.append(session.content.equipment(person.loadout.equipment[slot]).name)
 		center.add_child(ui.paragraph("神通 · %s\n心法 · %s%s" % ["、".join(arts), "、".join(methods), "\n法宝 · " + "、".join(gear) if not gear.is_empty() else ""]))
 	_record(ui, person_id, person)
+
+## Someone's talents and 资质 once the player can see through them (acquainted, or above them), else a
+## word that they cannot.
+static func _talents(ui, person_id: String) -> void:
+	var session = ui.session
+	var born: Dictionary = session.talents_of(person_id)
+	if not session.talents_visible(person_id):
+		ui.center.add_child(ui.label("天赋 · 看不透（相熟之后，或修为高过此人，方能看出）", 15, ui.MUTED))
+		return
+	var row := HBoxContainer.new()
+	row.add_theme_constant_override("separation", 12)
+	ui.center.add_child(row)
+	row.add_child(TalentCards.aptitude_label(ui, session.person_aptitude(person_id)))
+	ui.center.add_child(TalentCards.row(ui, session.content, born))
 
 ## 人物志: when and where you met, what has passed between you, the person's life as far as it is
 ## known, and the latest chronicle entries about them.

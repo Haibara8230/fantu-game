@@ -17,6 +17,7 @@ const People = preload("res://scripts/core/people.gd")
 const Journey = preload("res://scripts/core/journey.gd")
 const Cultivation = preload("res://scripts/core/cultivation.gd")
 const Storylines = preload("res://scripts/core/storylines.gd")
+const Talents = preload("res://scripts/core/talents.gd")
 const SaveRestore = preload("res://scripts/core/save_restore.gd")
 const SaveMigration = preload("res://scripts/core/save_migration.gd")
 const SAVE_VERSION := SaveMigration.CURRENT_VERSION
@@ -67,7 +68,9 @@ func _init() -> void:
 ## `start` is how the journey begins: "guided" plays the introduction (data/storylines.json) and holds
 ## the player to it; "skipped" counts it as done and lets the sect's storylines follow; "plain" opens
 ## the sect without any storyline (the systems' own tests).
-func new_game(character_name: String = "无名", seed_value: int = -1, roots: Array = [], start: String = "plain") -> void:
+## `born` holds the talents sensed at creation ({"talents", "flaws"}, see roll_talents); without it the
+## player has none, which keeps the systems' own tests to the plain rules.
+func new_game(character_name: String = "无名", seed_value: int = -1, roots: Array = [], start: String = "plain", born: Dictionary = {}) -> void:
 	if seed_value >= 0:
 		combat_rng.seed = seed_value
 		world_rng.seed = hash(str(seed_value) + ":world")
@@ -76,7 +79,9 @@ func new_game(character_name: String = "无名", seed_value: int = -1, roots: Ar
 	var chosen_name := character_name.strip_edges().left(16)
 	if chosen_name.is_empty():
 		chosen_name = "无名"
-	world = {"day": 0, "flags": {}, "events": {}, "people": {}, "seed": seed_value if seed_value >= 0 else absi(int(world_rng.randi())), "stock_sold": {}, "rumors": {}, "quests_taken": {}, "storylines": {}, "letters": []}
+	# talent_lives: the generated population's talents shape their lives (journeys begun before talents
+	# keep the lives they had).
+	world = {"day": 0, "flags": {}, "events": {}, "people": {}, "seed": seed_value if seed_value >= 0 else absi(int(world_rng.randi())), "stock_sold": {}, "rumors": {}, "quests_taken": {}, "storylines": {}, "letters": [], "talent_lives": true}
 	populate()
 	player = {
 		"name": chosen_name, "birth_day": -int(content.rules.starting_age) * Calendar.DAYS_PER_YEAR,
@@ -86,8 +91,10 @@ func new_game(character_name: String = "无名", seed_value: int = -1, roots: Ar
 		"journey": {}, "cooldowns": {},
 		"location": "sect", "sect": "wanderer",
 		"learned": [], "arts": [], "methods": [], "equipment": {"weapon": "", "robe": "", "accessory": ""}, "quests": [],
-		"deeds": {}, "taught": []
+		"deeds": {}, "taught": [],
+		"talents": born.get("talents", []).duplicate(), "flaws": born.get("flaws", []).duplicate(),
 	}
+	player.stones = maxi(0, int(player.stones) + talent_modifier("stones"))
 	for skill_id: String in content.sects.wanderer.skills:
 		player.learned.append(skill_id)
 		player.arts.append(skill_id)
@@ -195,6 +202,10 @@ func roll_roots(rng: RandomNumberGenerator) -> Array:
 			ordered.append(element)
 	return ordered
 
+## Talents for a new character, from the protagonist's birth table.
+func roll_talents(rng: RandomNumberGenerator) -> Dictionary:
+	return Talents.roll(content, rng, str(content.talent_data.player.table))
+
 func root_title() -> String:
 	return content.root_title(player.get("roots", []))
 
@@ -212,7 +223,7 @@ func age() -> int:
 	return Calendar.age_years(int(player.birth_day), int(world.day))
 
 func lifespan() -> int:
-	return int(content.realm(int(player.realm)).lifespan_years)
+	return maxi(int(content.rules.starting_age) + 10, int(content.realm(int(player.realm)).lifespan_years) + talent_modifier("lifespan"))
 
 func lifespan_end_day() -> int:
 	return int(player.birth_day) + lifespan() * Calendar.DAYS_PER_YEAR
@@ -235,13 +246,22 @@ func next_breakthrough() -> Dictionary:
 
 ## Sets the stat caps from the stage and the loadout, keeping current hp and qi within them.
 func refresh_realm_stats() -> void:
-	var current: Dictionary = stage_stats()
-	var extra := bonuses()
-	player.max_hp = int(current.max_hp) + int(extra.max_hp)
-	player.max_qi = int(current.max_qi) + int(extra.max_qi)
+	var caps := stat_caps(player)
+	player.max_hp = int(caps.max_hp)
+	player.max_qi = int(caps.max_qi)
 	if player.has("hp"):
 		player.hp = mini(int(player.hp), int(player.max_hp))
 		player.qi = mini(int(player.qi), int(player.max_qi))
+
+## Health and qi caps for a player-shaped Dictionary (realm, stage, loadout, talents): the stage's, plus
+## the loadout's, raised by the talents' percentages.
+func stat_caps(holder: Dictionary) -> Dictionary:
+	var current: Dictionary = content.stage(int(holder.get("realm", 0)), int(holder.get("stage", 0)))
+	var extra := bonuses(holder)
+	return {
+		"max_hp": maxi(1, (int(current.max_hp) + int(extra.max_hp)) * (100 + int(extra.max_hp_percent)) / 100),
+		"max_qi": maxi(1, (int(current.max_qi) + int(extra.max_qi)) * (100 + int(extra.max_qi_percent)) / 100),
+	}
 
 ## Why the player cannot act right now, or an empty String.
 func blocked() -> String:
@@ -414,7 +434,7 @@ func wait_options() -> Array:
 ## Days of quiet rest needed to recover fully: proportional to the missing health, at least one.
 func rest_days() -> int:
 	var missing := float(int(player.max_hp) - int(player.hp)) / float(player.max_hp)
-	return maxi(1, int(ceil(missing * float(content.rules.rest_full_days))))
+	return maxi(1, int(ceil(missing * float(content.rules.rest_full_days) * float(100 + talent_modifier("rest")) / 100.0)))
 
 func choose_event(choice_id: String) -> String:
 	if pending_event.is_empty():
@@ -468,6 +488,63 @@ func insight_needed() -> int:
 
 func retreat_fatigue() -> int:
 	return Cultivation.fatigue(self)
+
+# --- Talents and aptitude (talents.gd) ---------------------------------------------------------
+
+## The player's modifier from talents and flaws (talents.gd).
+func talent_modifier(key: String) -> int:
+	return Talents.modifier(self, key)
+
+func has_talent(id: String) -> bool:
+	return id in player.get("talents", []) or id in player.get("flaws", [])
+
+## Gives a talent (or a flaw) fortune bestows; nothing when it is owned or clashes with one that is.
+## Returns the chronicle text, or "".
+func gain_talent(id: String) -> String:
+	if not Talents.fits(content, Talents.owned(self), id):
+		return ""
+	var list: Array = player.flaws if Talents.is_flaw(content, id) else player.talents
+	list.append(id)
+	refresh_realm_stats()
+	return log_event("talent_gained", {"talent": id}, true)
+
+## The player's 资质: {"index", "name", "color"}.
+func aptitude() -> Dictionary:
+	return Talents.player_aptitude(self)
+
+## Someone's talents and flaws: {"talents", "flaws"}; the player's for "".
+func talents_of(person_id: String = "") -> Dictionary:
+	if person_id.is_empty():
+		return {"talents": player.get("talents", []), "flaws": player.get("flaws", [])}
+	return People.talents_of(self, person_id)
+
+## Someone's 资质, judged from their pace of cultivation and their talents.
+func person_aptitude(person_id: String) -> Dictionary:
+	return People.aptitude_of(self, person_id)
+
+## Whether the player can see through someone's talents: once acquainted (相熟), or when standing above
+## a generated person in cultivation (handwritten people only show theirs to those they know).
+func talents_visible(person_id: String) -> bool:
+	if favor(person_id) >= int(content.FAVOR_STAGES[1][0]):
+		return true
+	var someone := person(person_id)
+	if not someone.get("generated", false):
+		return false
+	return int(player.realm) * 10 + int(player.stage) > int(someone.realm) * 10 + int(someone.stage)
+
+## Days to study a technique, after talents.
+func study_days(technique: Dictionary) -> int:
+	return Talents.scaled(int(technique.study_days), talent_modifier("study"), 1)
+
+## Days on the road along a path, after talents.
+func path_days(path: Array[String]) -> int:
+	var total := 0
+	for index: int in range(1, path.size()):
+		total += route_days(content.route_between(path[index - 1], path[index]))
+	return total
+
+func route_days(route: Dictionary) -> int:
+	return Talents.scaled(int(route.days), talent_modifier("travel"), 1)
 
 # --- Storylines, deeds and 传音 (storylines.gd) -------------------------------------------------
 

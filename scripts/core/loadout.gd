@@ -3,12 +3,15 @@ extends RefCounted
 ## player.learned lists every technique known; player.arts (up to rules.art_slots) are usable in duels
 ## and player.methods (up to rules.method_slots) are passive 心法. player.equipment holds one item id
 ## per slot; equipped items leave the 行囊 and return to it when taken off.
+const Talents = preload("res://scripts/core/talents.gd")
 
-## Totals from 心法 and equipment: attack, max_hp, max_qi, defense, cultivation, element_damage {element|"*": x}.
+## Totals from 心法, equipment and talents: attack, max_hp, max_qi, defense, cultivation, element_damage
+## {element|"*": x}, and the talents' max_hp_percent and max_qi_percent of the stage's caps.
 static func bonuses(s, holder: Dictionary = {}) -> Dictionary:
 	if holder.is_empty():
 		holder = s.player
-	var total := {"attack": 0, "max_hp": 0, "max_qi": 0, "defense": 0.0, "cultivation": 0.0, "element_damage": {}}
+	var total := {"attack": 0, "max_hp": 0, "max_qi": 0, "defense": 0.0, "cultivation": 0.0, "element_damage": {}, "max_hp_percent": 0, "max_qi_percent": 0}
+	_add_talents(s, total, holder.get("talents", []) + holder.get("flaws", []))
 	var sources: Array[Dictionary] = []
 	for technique_id: Variant in holder.get("methods", []):
 		var method: Dictionary = s.content.technique(str(technique_id))
@@ -28,10 +31,24 @@ static func bonuses(s, holder: Dictionary = {}) -> Dictionary:
 				total[key] = int(total[key]) + int(source.stats[key])
 	return total
 
+## Talents' share of the totals: percentages become fractions; health and qi stay percentages of the
+## stage's caps (refresh_realm_stats).
+static func _add_talents(s, total: Dictionary, ids: Array) -> void:
+	var mods: Dictionary = Talents.sum(s.content, ids)
+	total.attack = int(total.attack) + int(mods.get("attack", 0))
+	total.defense = float(total.defense) + float(mods.get("defense", 0)) / 100.0
+	total.cultivation = float(total.cultivation) + float(mods.get("cultivation", 0)) / 100.0
+	total.max_hp_percent = int(mods.get("max_hp", 0))
+	total.max_qi_percent = int(mods.get("max_qi", 0))
+	for key: String in mods:
+		if key.begins_with("damage_"):
+			var element := "*" if key == "damage_all" else key.trim_prefix("damage_")
+			total.element_damage[element] = float(total.element_damage.get(element, 0.0)) + float(mods[key]) / 100.0
+
 static func attack_bonus(s) -> int:
 	return int(s.stage_stats().attack_bonus) + int(bonuses(s).attack)
 
-## Share of incoming damage avoided by equipment, capped at half.
+## Share of incoming damage avoided by equipment and talents, capped at half.
 static func defense(s) -> float:
 	return minf(0.5, float(bonuses(s).defense))
 
@@ -63,7 +80,7 @@ static func learn_block(s, technique_id: String) -> String:
 ## Studies a technique for its tier's days; the new technique goes into a free slot if there is one.
 static func _study(s, technique_id: String) -> Dictionary:
 	var t: Dictionary = s.content.technique(technique_id)
-	var passed: Dictionary = s.advance_days(int(t.study_days))
+	var passed: Dictionary = s.advance_days(s.study_days(t))
 	if not s.ended.is_empty():
 		return passed
 	s.player.learned.append(technique_id)

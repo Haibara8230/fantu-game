@@ -1,8 +1,9 @@
 extends RefCounted
 ## 属性: the character page of the panel — realm and meters, age and lifespan, spirit roots, the mind
 ## (心境) against the stage's need, the weariness after retreats (心神) and insight toward the next
-## bottleneck, what is carried and the sect.
+## bottleneck, aptitude and talents, what is carried and the sect.
 const Calendar = preload("res://scripts/core/calendar.gd")
+const TalentCards = preload("res://scripts/ui/talent_cards.gd")
 
 static func render(ui) -> void:
 	var session = ui.session
@@ -32,6 +33,13 @@ static func render(ui) -> void:
 	right.add_child(ui.label("寿元尽于历元 %d 年" % Calendar.year(session.lifespan_end_day()), 15, ui.MUTED))
 	right.add_child(ui.label("灵根 · %s · 修炼 ×%.2f" % [session.root_title(), session.cultivation_speed()], 15))
 	_render_progress(ui, right)
+	center.add_child(HSeparator.new())
+	var talents := HBoxContainer.new()
+	talents.add_theme_constant_override("separation", 12)
+	center.add_child(talents)
+	talents.add_child(TalentCards.aptitude_label(ui, session.aptitude()))
+	talents.add_child(ui.label("先天天赋（鼠标停留可看效果）", 15, ui.MUTED))
+	center.add_child(TalentCards.row(ui, session.content, session.talents_of()))
 	center.add_child(HSeparator.new())
 	center.add_child(ui.label("灵石  %d    灵草  %d    筑基丹  %d" % [p.stones, session.herb_count(), session.item_count("foundation_pill")], 16))
 

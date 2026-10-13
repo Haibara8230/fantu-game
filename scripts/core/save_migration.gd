@@ -1,6 +1,6 @@
 extends RefCounted
 ## Upgrades saved sessions one version at a time. Output still goes through Session validation.
-const CURRENT_VERSION := 12
+const CURRENT_VERSION := 13
 # The teaching cards (data/guide.json) that existed before version 12; older journeys had seen them.
 const V11_TIPS := ["retreat", "people", "map", "battle", "event", "gather", "trade", "commissions", "fatigue", "bottleneck", "arts"]
 const DAYS_PER_MONTH := 30
@@ -39,7 +39,19 @@ static func migrate(data: Dictionary) -> Dictionary:
 		result = _v10_to_v11(result)
 	if not result.is_empty() and int(result.version) == 11:
 		result = _v11_to_v12(result)
+	if not result.is_empty() and int(result.version) == 12:
+		result = _v12_to_v13(result)
 	return result
+
+## Version 13 adds talents. The generated people of an older world keep the lives they had (their talents
+## only show); the player's own talents awaken on restore, drawn from the world seed (save_restore.gd).
+static func _v12_to_v13(data: Dictionary) -> Dictionary:
+	var world: Variant = data.get("world")
+	if not world is Dictionary:
+		return {}
+	world["talent_lives"] = false
+	data["version"] = 13
+	return data
 
 ## Version 12 adds the storylines (the guided start and key people's stories), 传音, deeds and the
 ## teaching cards seen in the journey. Older journeys are long past the introduction: it counts as done,

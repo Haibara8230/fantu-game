@@ -185,8 +185,9 @@ func _rumors() -> void:
 	check(game.journal_lines().back().length() > 4 and not game.journal_lines().back().contains("{"), "the rumor reads as a sentence")
 	_jump(game, 4, 2, 1)
 	check(game.rumor_candidates().any(func(rumor: Dictionary) -> bool: return rumor.key == "auction"), "in the auction year people talk about it")
-	game.player.stones = 200
-	for i: int in range(30):
+	# News is drawn at random among everything worth hearing; enough asking hears of the auction.
+	game.player.stones = 2000
+	for i: int in range(400):
 		if game.has_flag("heard_auction_rumor"):
 			break
 		game.inquire()

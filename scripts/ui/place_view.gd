@@ -190,7 +190,7 @@ static func _spot_action(ui, grid: GridContainer, action: String) -> void:
 				var taught: Dictionary = session.content.technique(technique_id)
 				var reason: String = session.learn_block(technique_id)
 				var learned_id := technique_id
-				var study: Button = ui.button("参悟%s  ·  %s · %d 日" % [taught.name, taught.tier_name, int(taught.study_days)], func() -> void: ui.run(func() -> String: return session.learn_here(learned_id)), reason if not reason.is_empty() else taught.description)
+				var study: Button = ui.button("参悟%s  ·  %s · %d 日" % [taught.name, taught.tier_name, session.study_days(taught)], func() -> void: ui.run(func() -> String: return session.learn_here(learned_id)), reason if not reason.is_empty() else taught.description)
 				study.disabled = not reason.is_empty()
 				study.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 				grid.add_child(study)

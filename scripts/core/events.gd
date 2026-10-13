@@ -104,6 +104,8 @@ static func met(s, condition: Dictionary) -> bool:
 			return s.story_state(value[0]) == ("" if value[1] == "none" else value[1])
 		"event_state":
 			return str(s.world.events.get(value[0], {}).get("state", "")) == value[1]
+		"talent":
+			return s.has_talent(value)
 	return false
 
 static func apply(s, effects: Array) -> void:
@@ -131,6 +133,8 @@ static func apply(s, effects: Array) -> void:
 				s.exchange_sound(value)
 			"manual":
 				s.add_item("j:" + s.Arsenal.generate_technique(s.content, s.world_rng, int(value)), 1)
+			"talent":
+				s.gain_talent(value)
 			"herbs":
 				if int(value) >= 0:
 					s.add_item("huichun_grass", int(value))
@@ -163,7 +167,11 @@ static func apply(s, effects: Array) -> void:
 			"relation":
 				s.mark_met(value[0])
 				var person := _person(s, value[0])
-				person.relation = clampi(int(person.relation) + int(value[1]), -s.content.FAVOR_MAX, s.content.FAVOR_MAX)
+				# Talents for getting along change what is gained, never what is lost.
+				var delta := int(value[1])
+				if delta > 0:
+					delta = s.Talents.scaled(delta, s.talent_modifier("favor"), 1)
+				person.relation = clampi(int(person.relation) + delta, -s.content.FAVOR_MAX, s.content.FAVOR_MAX)
 				# Key people leave a 传音符 once the bond is close enough.
 				var someone: Dictionary = s.content.people.get(value[0], {})
 				if someone.has("sound_at") and int(person.relation) >= int(someone.sound_at):
@@ -362,7 +370,7 @@ static func effective_danger(s, route: Dictionary) -> int:
 	return maxi(0, int(route.danger) - int(s.player.realm))
 
 static func encounter_chance(s, route: Dictionary) -> float:
-	return float(s.content.rules.encounter_chance[effective_danger(s, route)])
+	return s.Talents.chance(float(s.content.rules.encounter_chance[effective_danger(s, route)]), s.talent_modifier("encounter"))
 
 ## Rolls for something on the road just travelled. Uses only the world random stream.
 ## Returns the chronicle text of a plain encounter, or "" (a choice encounter becomes pending).

@@ -1,6 +1,8 @@
 extends RefCounted
-## The title screen over the interface: name, spirit roots (sensed again on request), a new journey or
-## continuing a saved one.
+## The title screen over the interface: name, spirit roots and talents (sensed again a few times), a new
+## journey or continuing a saved one.
+const Talents = preload("res://scripts/core/talents.gd")
+const TalentCards = preload("res://scripts/ui/talent_cards.gd")
 
 static func build(ui) -> void:
 	var session = ui.session
@@ -28,21 +30,23 @@ static func build(ui) -> void:
 	name_input.custom_minimum_size.y = 46
 	name_input.text_submitted.connect(func(_value: String) -> void: ui.begin())
 	box.add_child(name_input)
-	# Spirit roots are sensed at random; the player may sense again until satisfied.
+	# Spirit roots and talents are sensed at random; the player may sense again a few times.
 	var sense_rng := RandomNumberGenerator.new()
 	sense_rng.randomize()
-	ui.welcome_roots = session.roll_roots(sense_rng)
-	var roots_row := HBoxContainer.new()
-	roots_row.add_theme_constant_override("separation", 12)
-	box.add_child(roots_row)
-	var roots_label: Label = ui.label("", 18, ui.GOLD)
-	ui.roots_label = roots_label
-	roots_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	roots_row.add_child(roots_label)
-	roots_row.add_child(ui.button("重新感应", func() -> void:
+	ui.welcome_senses = int(session.content.talent_data.player.senses)
+	var sensed := VBoxContainer.new()
+	sensed.add_theme_constant_override("separation", 8)
+	box.add_child(sensed)
+	var sense := func() -> void:
 		ui.welcome_roots = session.roll_roots(sense_rng)
-		_show_roots(ui), "再测一次灵根"))
-	_show_roots(ui)
+		ui.welcome_born = session.roll_talents(sense_rng)
+		_show_sensed(ui, sensed)
+	ui.welcome_resense = func() -> void:
+		if ui.welcome_senses <= 0:
+			return
+		ui.welcome_senses -= 1
+		sense.call()
+	sense.call()
 	# The introduction is played the first time; once finished, a new journey may skip it.
 	ui.skip_intro = null
 	if ui.intro_finished_once:
@@ -60,6 +64,22 @@ static func build(ui) -> void:
 	box.add_child(ui.paragraph("开发版 · Windows 单机 · 本地存档\n二维手绘角色 · 施法演出 · 命中与受击反馈"))
 	name_input.grab_focus()
 
-static func _show_roots(ui) -> void:
-	var grade: Dictionary = ui.session.content.root_grade(ui.welcome_roots)
-	ui.roots_label.text = "灵根 · %s（修炼 ×%.2f）" % [ui.session.content.root_title(ui.welcome_roots), float(grade.speed)]
+## The roots, the talents and the aptitude just sensed, with the button to sense again while any are left.
+static func _show_sensed(ui, sensed: VBoxContainer) -> void:
+	var session = ui.session
+	ui.clear(sensed)
+	var grade: Dictionary = session.content.root_grade(ui.welcome_roots)
+	var roots_row := HBoxContainer.new()
+	roots_row.add_theme_constant_override("separation", 12)
+	sensed.add_child(roots_row)
+	var roots_label: Label = ui.label("灵根 · %s（修炼 ×%.2f）" % [session.content.root_title(ui.welcome_roots), float(grade.speed)], 18, ui.GOLD)
+	roots_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	roots_row.add_child(roots_label)
+	var holder := {"roots": ui.welcome_roots, "talents": ui.welcome_born.talents, "flaws": ui.welcome_born.flaws}
+	var score := Talents.score(session.content, Talents.root_score(session.content, ui.welcome_roots), holder.talents + holder.flaws)
+	roots_row.add_child(TalentCards.aptitude_label(ui, Talents.aptitude(session.content, score)))
+	sensed.add_child(ui.label("先天天赋（鼠标停留可看效果）", 15, ui.MUTED))
+	sensed.add_child(TalentCards.row(ui, session.content, ui.welcome_born))
+	var again: Button = ui.button("重新感应（余 %d 次）" % ui.welcome_senses, ui.welcome_resense, "再测一次灵根与天赋")
+	again.disabled = ui.welcome_senses <= 0
+	sensed.add_child(again)

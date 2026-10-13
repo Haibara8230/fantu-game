@@ -47,7 +47,7 @@ static func _walk(s) -> String:
 			break
 		var next: String = path[1]
 		var route: Dictionary = s.content.route_between(s.player.location, next)
-		var passed: Dictionary = s.advance_days(int(route.days))
+		var passed: Dictionary = s.advance_days(s.route_days(route))
 		parts.append_array(passed.messages)
 		if not s.ended.is_empty():
 			s.player.journey = {}

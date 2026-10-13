@@ -78,6 +78,10 @@ func format(entry: Dictionary, content) -> String:
 		values["item_name"] = named.name if not named.is_empty() else str(values.item)
 	if values.has("loot"):
 		values["loot_text"] = loot_text(str(values.loot), content)
+	if values.has("talent"):
+		values["talent_name"] = str(content.Talents.definition(content, str(values.talent)).get("name", values.talent))
+	if values.has("talents"):
+		values["talents_text"] = content.Talents.names(content, str(values.talents).split(",", false))
 	if values.has("days"):
 		values["duration"] = Calendar.duration_text(int(values.days))
 	return template.format(values)

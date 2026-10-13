@@ -86,12 +86,15 @@ var selected_npc := ""
 var shown_location := ""
 var show_everyone_here := false
 var welcome_roots: Array = []
+# The talents sensed with them ({"talents", "flaws"}), the senses left, and the action to sense again.
+var welcome_born: Dictionary = {"talents": [], "flaws": []}
+var welcome_senses := 0
+var welcome_resense: Callable
 # The local portrait pack (see ArtLibrary); tests point this elsewhere.
 var portrait_root := ArtLibrary.LOCAL_PORTRAITS
 # Pool portraits assigned to generated people, kept by people_view.gd for the current world and pool.
 var _pool_assignments := {}
 var _pool_key := ""
-var roots_label: Label
 var map_target := ""
 # The 编年史 view's filter (a group in data/chronicle_groups.json, or "all") and page (0 = newest).
 var chronicle_filter := "all"
@@ -979,7 +982,7 @@ func begin() -> void:
 	tip_page = {}
 	var skipped := is_instance_valid(skip_intro) and skip_intro.button_pressed
 	var mark: int = session.chronicle.added
-	session.new_game(character_name, -1, welcome_roots, "skipped" if skipped else "guided")
+	session.new_game(character_name, -1, welcome_roots, "skipped" if skipped else "guided", welcome_born)
 	_stage_story(mark)
 	notice("入门已略过：执事堂、传功堂都已开放，右上角的「任务」写着眼下可做的事。" if skipped else "跟着许清和走一遍入门：右上角的「目标」写着眼下该做的事。")
 

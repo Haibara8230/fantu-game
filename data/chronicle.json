@@ -56,5 +56,7 @@
   "tournament_out": "小比第 {round} 轮，你败给了{npc_name}，止步于此。",
   "obituary": "传来消息：{npc_name}已经故去，享年 {age} 岁。",
   "sound": "你与{npc_name}互留了传音符，往后可以传音往来。",
-  "help": "你送给{npc_name}{loot_text}，解了对方的燃眉之急。好感 +{favor}，得灵石 {stones}。"
+  "help": "你送给{npc_name}{loot_text}，解了对方的燃眉之急。好感 +{favor}，得灵石 {stones}。",
+  "talent_gained": "你身上多了一样天赋：「{talent_name}」。",
+  "talents_awaken": "你体内似有什么苏醒了。静坐内视，才知自己生来便有：{talents_text}。"
 }

@@ -5,6 +5,7 @@ extends RefCounted
 const Calendar = preload("res://scripts/core/calendar.gd")
 const Events = preload("res://scripts/core/events.gd")
 const Arsenal = preload("res://scripts/core/arsenal.gd")
+const Talents = preload("res://scripts/core/talents.gd")
 
 static func item_count(s, item_id: String) -> int:
 	return int(s.player.get("items", {}).get(item_id, 0))
@@ -53,14 +54,19 @@ static func sell_price(s, item_id: String) -> int:
 	if not s.available_here("sell") or s.content.item(item_id).is_empty():
 		return 0
 	var item: Dictionary = s.content.item(item_id)
-	return int(item.price) if item.category in s.content.locations[s.player.location].get("buys", []) else 0
+	if not item.category in s.content.locations[s.player.location].get("buys", []):
+		return 0
+	return Talents.scaled(int(item.price), s.talent_modifier("sell"), 1)
 
-## Fixed goods plus this period's rotating stock (manuals, equipment).
+## Fixed goods plus this period's rotating stock (manuals, equipment), at the prices the player pays.
 static func shop_goods(s) -> Array:
 	if not s.available_here("shop"):
 		return []
-	var goods: Array = s.content.locations[s.player.location].get("shop", []).duplicate()
+	var goods: Array = s.content.locations[s.player.location].get("shop", []).duplicate(true)
 	goods.append_array(rotating_stock(s, s.player.location))
+	var percent: int = s.talent_modifier("buy")
+	for good: Dictionary in goods:
+		good.price = Talents.scaled(int(good.price), percent, 1)
 	return goods
 
 ## A place's stock that changes every restock period: deterministic per world, place and period.
@@ -101,7 +107,8 @@ static func gather_picks(s, gather: Dictionary) -> Dictionary:
 	var total := 0
 	for entry: Dictionary in gather.table:
 		total += int(entry.weight)
-	for pick: int in s.world_rng.randi_range(int(gather.picks[0]), int(gather.picks[1])):
+	var picks: int = s.world_rng.randi_range(int(gather.picks[0]), int(gather.picks[1]))
+	for pick: int in Talents.scaled(picks, s.talent_modifier("gather"), 1):
 		var roll: int = s.world_rng.randi_range(1, total)
 		for entry: Dictionary in gather.table:
 			roll -= int(entry.weight)
@@ -166,7 +173,21 @@ static func use_item(s, item_id: String) -> String:
 	var item: Dictionary = s.content.item(item_id)
 	remove_item(s, item_id, 1)
 	if item.has("use_cooldown_days"):
-		s.player.cooldowns["use:" + item_id] = int(s.world.day) + int(item.use_cooldown_days)
+		s.player.cooldowns["use:" + item_id] = int(s.world.day) + Talents.scaled(int(item.use_cooldown_days), s.talent_modifier("pill_cooldown"), 1)
 	var text: String = s.log_event("use_item", {"item": item_id})
-	Events.apply(s, item.use)
+	Events.apply(s, pill_effects(s, item))
 	return s.conclude(text)
+
+## An item's effects when used: a pill's xp, health and qi follow the talents for pills.
+static func pill_effects(s, item: Dictionary) -> Array:
+	if item.category != "pill":
+		return item.use
+	var percent: int = s.talent_modifier("pill")
+	var effects: Array = []
+	for effect: Dictionary in item.use:
+		var key: String = effect.keys()[0]
+		if key in ["xp", "hp", "qi"] and int(effect[key]) > 0:
+			effects.append({key: Talents.scaled(int(effect[key]), percent, 1)})
+		else:
+			effects.append(effect)
+	return effects

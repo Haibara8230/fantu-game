@@ -1,0 +1,3342 @@
+{
+ "tiers": [
+  {
+   "id": "white",
+   "name": "寻常",
+   "color": "#d6d0c2",
+   "score": 1
+  },
+  {
+   "id": "green",
+   "name": "不凡",
+   "color": "#86bf7f",
+   "score": 3
+  },
+  {
+   "id": "blue",
+   "name": "出众",
+   "color": "#6fa6db",
+   "score": 6
+  },
+  {
+   "id": "purple",
+   "name": "稀世",
+   "color": "#b083d8",
+   "score": 10
+  },
+  {
+   "id": "orange",
+   "name": "绝世",
+   "color": "#e59d52",
+   "score": 15
+  },
+  {
+   "id": "red",
+   "name": "天命",
+   "color": "#e0574e",
+   "score": 22
+  }
+ ],
+ "flaw": {
+  "id": "flaw",
+  "name": "缺陷",
+  "color": "#8f8a80",
+  "score": -2
+ },
+ "tables": {
+  "qingyun": {
+   "counts": [
+    [
+     0,
+     50
+    ],
+    [
+     1,
+     35
+    ],
+    [
+     2,
+     12
+    ],
+    [
+     3,
+     3
+    ]
+   ],
+   "weights": {
+    "white": 920,
+    "green": 75,
+    "blue": 5
+   },
+   "flaw_chance": 0.2
+  },
+  "player": {
+   "counts": [
+    [
+     0,
+     30
+    ],
+    [
+     1,
+     40
+    ],
+    [
+     2,
+     22
+    ],
+    [
+     3,
+     8
+    ]
+   ],
+   "weights": {
+    "white": 860,
+    "green": 100,
+    "blue": 30,
+    "purple": 6,
+    "orange": 1,
+    "red": 0.2
+   },
+   "flaw_chance": 0.2
+  },
+  "default": {
+   "counts": [
+    [
+     0,
+     45
+    ],
+    [
+     1,
+     35
+    ],
+    [
+     2,
+     15
+    ],
+    [
+     3,
+     5
+    ]
+   ],
+   "weights": {
+    "white": 800,
+    "green": 150,
+    "blue": 45,
+    "purple": 5,
+    "orange": 0.3
+   },
+   "flaw_chance": 0.2
+  }
+ },
+ "player": {
+  "table": "player",
+  "senses": 5
+ },
+ "root_scores": {
+  "1": 12,
+  "2": 8,
+  "3": 5,
+  "4": 3,
+  "5": 1
+ },
+ "speed_scores": [
+  [
+   0,
+   1
+  ],
+  [
+   450,
+   3
+  ],
+  [
+   650,
+   5
+  ],
+  [
+   850,
+   8
+  ],
+  [
+   1050,
+   12
+  ]
+ ],
+ "aptitude": [
+  {
+   "name": "下等",
+   "score": -100,
+   "color": "#a9a294"
+  },
+  {
+   "name": "中等",
+   "score": 4,
+   "color": "#d6d0c2"
+  },
+  {
+   "name": "上等",
+   "score": 8,
+   "color": "#6fa6db"
+  },
+  {
+   "name": "绝佳",
+   "score": 12,
+   "color": "#b083d8"
+  },
+  {
+   "name": "天纵",
+   "score": 16,
+   "color": "#e59d52"
+  }
+ ],
+ "talents": {
+  "affinity_metal": {
+   "name": "金灵亲和",
+   "tier": "green",
+   "description": "与金行灵气格外投缘，金系神通更见威力。",
+   "mods": {
+    "damage_metal": 15,
+    "cultivation": 4
+   },
+   "group": "affinity_metal"
+  },
+  "body_metal": {
+   "name": "锐金之体",
+   "tier": "blue",
+   "description": "生来锐金之气充盈周身，金系神通得心应手。",
+   "mods": {
+    "damage_metal": 40,
+    "cultivation": 10
+   },
+   "group": "affinity_metal"
+  },
+  "vein_metal": {
+   "name": "庚金道脉",
+   "tier": "purple",
+   "description": "经脉天成庚金之象，金行之道几乎与生俱来。",
+   "mods": {
+    "damage_metal": 105,
+    "cultivation": 24,
+    "max_qi": 15
+   },
+   "group": "affinity_metal"
+  },
+  "affinity_wood": {
+   "name": "木灵亲和",
+   "tier": "green",
+   "description": "与木行灵气格外投缘，木系神通更见威力。",
+   "mods": {
+    "damage_wood": 15,
+    "cultivation": 4
+   },
+   "group": "affinity_wood"
+  },
+  "body_wood": {
+   "name": "青木之体",
+   "tier": "blue",
+   "description": "生来青木之气充盈周身，木系神通得心应手。",
+   "mods": {
+    "damage_wood": 40,
+    "cultivation": 10
+   },
+   "group": "affinity_wood"
+  },
+  "vein_wood": {
+   "name": "乙木道脉",
+   "tier": "purple",
+   "description": "经脉天成乙木之象，木行之道几乎与生俱来。",
+   "mods": {
+    "damage_wood": 105,
+    "cultivation": 24,
+    "max_qi": 15
+   },
+   "group": "affinity_wood"
+  },
+  "affinity_water": {
+   "name": "水灵亲和",
+   "tier": "green",
+   "description": "与水行灵气格外投缘，水系神通更见威力。",
+   "mods": {
+    "damage_water": 15,
+    "cultivation": 4
+   },
+   "group": "affinity_water"
+  },
+  "body_water": {
+   "name": "玄水之体",
+   "tier": "blue",
+   "description": "生来玄水之气充盈周身，水系神通得心应手。",
+   "mods": {
+    "damage_water": 40,
+    "cultivation": 10
+   },
+   "group": "affinity_water"
+  },
+  "vein_water": {
+   "name": "癸水道脉",
+   "tier": "purple",
+   "description": "经脉天成癸水之象，水行之道几乎与生俱来。",
+   "mods": {
+    "damage_water": 105,
+    "cultivation": 24,
+    "max_qi": 15
+   },
+   "group": "affinity_water"
+  },
+  "affinity_fire": {
+   "name": "火灵亲和",
+   "tier": "green",
+   "description": "与火行灵气格外投缘，火系神通更见威力。",
+   "mods": {
+    "damage_fire": 15,
+    "cultivation": 4
+   },
+   "group": "affinity_fire"
+  },
+  "body_fire": {
+   "name": "离火之体",
+   "tier": "blue",
+   "description": "生来离火之气充盈周身，火系神通得心应手。",
+   "mods": {
+    "damage_fire": 40,
+    "cultivation": 10
+   },
+   "group": "affinity_fire"
+  },
+  "vein_fire": {
+   "name": "丙火道脉",
+   "tier": "purple",
+   "description": "经脉天成丙火之象，火行之道几乎与生俱来。",
+   "mods": {
+    "damage_fire": 105,
+    "cultivation": 24,
+    "max_qi": 15
+   },
+   "group": "affinity_fire"
+  },
+  "affinity_earth": {
+   "name": "土灵亲和",
+   "tier": "green",
+   "description": "与土行灵气格外投缘，土系神通更见威力。",
+   "mods": {
+    "damage_earth": 15,
+    "cultivation": 4
+   },
+   "group": "affinity_earth"
+  },
+  "body_earth": {
+   "name": "厚土之体",
+   "tier": "blue",
+   "description": "生来厚土之气充盈周身，土系神通得心应手。",
+   "mods": {
+    "damage_earth": 40,
+    "cultivation": 10
+   },
+   "group": "affinity_earth"
+  },
+  "vein_earth": {
+   "name": "戊土道脉",
+   "tier": "purple",
+   "description": "经脉天成戊土之象，土行之道几乎与生俱来。",
+   "mods": {
+    "damage_earth": 105,
+    "cultivation": 24,
+    "max_qi": 15
+   },
+   "group": "affinity_earth"
+  },
+  "tijian": {
+   "name": "体健",
+   "tier": "white",
+   "description": "自小少病少灾，比同龄人结实些。",
+   "mods": {
+    "max_hp": 5
+   },
+   "group": "body"
+  },
+  "tiegu": {
+   "name": "铁骨",
+   "tier": "green",
+   "description": "骨骼坚硬，挨得住打。",
+   "mods": {
+    "max_hp": 15
+   },
+   "group": "body"
+  },
+  "tongpi": {
+   "name": "铜皮铁骨",
+   "tier": "blue",
+   "description": "皮肉坚韧如革，寻常刀剑难伤。",
+   "mods": {
+    "max_hp": 36,
+    "defense": 6
+   },
+   "group": "body"
+  },
+  "jingang": {
+   "name": "金刚不坏",
+   "tier": "purple",
+   "description": "肉身强横近乎法宝，修士中罕见。",
+   "mods": {
+    "max_hp": 90,
+    "defense": 18
+   },
+   "group": "body"
+  },
+  "qichang": {
+   "name": "气长",
+   "tier": "white",
+   "description": "一口气比旁人绵长。",
+   "mods": {
+    "max_qi": 5
+   },
+   "group": "sea"
+  },
+  "qihai": {
+   "name": "气海宽阔",
+   "tier": "green",
+   "description": "丹田宽广，能容更多灵力。",
+   "mods": {
+    "max_qi": 15
+   },
+   "group": "sea"
+  },
+  "zhoutian": {
+   "name": "气贯周天",
+   "tier": "blue",
+   "description": "灵力运转圆融，周天不滞。",
+   "mods": {
+    "max_qi": 36
+   },
+   "group": "sea"
+  },
+  "ruyuan": {
+   "name": "气海如渊",
+   "tier": "purple",
+   "description": "丹田深不见底，灵力生生不息。",
+   "mods": {
+    "max_qi": 90,
+    "cultivation": 15
+   },
+   "group": "sea"
+  },
+  "qinmian": {
+   "name": "勤勉",
+   "tier": "white",
+   "description": "天不亮就起来打坐。",
+   "mods": {
+    "cultivation": 5
+   },
+   "group": "pace"
+  },
+  "zhuanzhu": {
+   "name": "专注",
+   "tier": "green",
+   "description": "入定极快，杂念难侵。",
+   "mods": {
+    "cultivation": 15
+   },
+   "group": "pace"
+  },
+  "yixin": {
+   "name": "一心向道",
+   "tier": "blue",
+   "description": "心无旁骛，修行进境一日千里。",
+   "mods": {
+    "cultivation": 36
+   },
+   "group": "pace"
+  },
+  "qicai": {
+   "name": "修行奇才",
+   "tier": "purple",
+   "description": "旁人苦修十年的关隘，你三年便过。",
+   "mods": {
+    "cultivation": 84
+   },
+   "group": "pace"
+  },
+  "shaobing": {
+   "name": "少病",
+   "tier": "white",
+   "description": "从小到大没生过几场病。",
+   "mods": {
+    "lifespan": 3
+   },
+   "group": "life"
+  },
+  "changshou": {
+   "name": "长寿相",
+   "tier": "green",
+   "description": "眉长耳厚，相士都说是长寿之相。",
+   "mods": {
+    "lifespan": 12
+   },
+   "group": "life"
+  },
+  "guixi": {
+   "name": "龟息",
+   "tier": "blue",
+   "description": "气息悠长，心跳比常人慢上一半。",
+   "mods": {
+    "lifespan": 30
+   },
+   "group": "life"
+  },
+  "songhe": {
+   "name": "松鹤延年",
+   "tier": "purple",
+   "description": "命里带着松鹤之寿，寿元远胜同辈。",
+   "mods": {
+    "lifespan": 75
+   },
+   "group": "life"
+  },
+  "jiling": {
+   "name": "机灵",
+   "tier": "white",
+   "description": "脑子转得快，一点就通。",
+   "mods": {
+    "insight": 10
+   },
+   "group": "wit"
+  },
+  "congming": {
+   "name": "聪慧",
+   "tier": "green",
+   "description": "一场历练，能比旁人多悟出几分。",
+   "mods": {
+    "insight": 30
+   },
+   "group": "wit"
+  },
+  "wuxing": {
+   "name": "过人悟性",
+   "tier": "blue",
+   "description": "悟性远超同辈，参悟功法也快。",
+   "mods": {
+    "insight": 70,
+    "study": -20
+   },
+   "group": "wit"
+  },
+  "tongda": {
+   "name": "悟性通达",
+   "tier": "purple",
+   "description": "闻一知十，万般道理一触即通。",
+   "mods": {
+    "insight": 150,
+    "study": -75
+   },
+   "group": "wit"
+  },
+  "xinkuan": {
+   "name": "心宽",
+   "tier": "white",
+   "description": "什么事都不往心里去。",
+   "mods": {
+    "mind_gain": 20
+   },
+   "group": "heart"
+  },
+  "jingxin": {
+   "name": "静心",
+   "tier": "green",
+   "description": "心绪安宁，历练所得更易沉淀为心境。",
+   "mods": {
+    "mind_gain": 52
+   },
+   "group": "heart"
+  },
+  "chengming": {
+   "name": "道心澄明",
+   "tier": "blue",
+   "description": "心中一片澄明，境界的门槛也低了几分。",
+   "mods": {
+    "mind_gain": 100,
+    "mind_need": -20
+   },
+   "group": "heart"
+  },
+  "jianding": {
+   "name": "道心坚定",
+   "tier": "purple",
+   "description": "道心如铁，心魔无从生起。",
+   "mods": {
+    "mind_gain": 150,
+    "mind_need": -60,
+    "demon": 300
+   },
+   "group": "heart"
+  },
+  "jixing": {
+   "name": "记性好",
+   "tier": "white",
+   "description": "背书比旁人快。",
+   "mods": {
+    "study": -10
+   },
+   "group": "memory"
+  },
+  "bowen": {
+   "name": "博闻强记",
+   "tier": "green",
+   "description": "读过的典籍过目难忘。",
+   "mods": {
+    "study": -30
+   },
+   "group": "memory"
+  },
+  "guomu": {
+   "name": "过目不忘",
+   "tier": "blue",
+   "description": "玉简扫过一遍，便能记住七八成。",
+   "mods": {
+    "study": -70
+   },
+   "group": "memory"
+  },
+  "shicao": {
+   "name": "识草",
+   "tier": "white",
+   "description": "认得不少草药。",
+   "mods": {
+    "gather": 10
+   },
+   "group": "herb"
+  },
+  "zhiyin": {
+   "name": "草木知音",
+   "tier": "green",
+   "description": "草木灵物仿佛会主动现身。",
+   "mods": {
+    "gather": 30
+   },
+   "group": "herb"
+  },
+  "lingzhi_gan": {
+   "name": "灵植感应",
+   "tier": "blue",
+   "description": "隔着半座山都能感到灵草的气息。",
+   "mods": {
+    "gather": 70
+   },
+   "group": "herb"
+  },
+  "jiangjia": {
+   "name": "会讲价",
+   "tier": "white",
+   "description": "买东西总能磨下几文。",
+   "mods": {
+    "buy": -5
+   },
+   "group": "trade"
+  },
+  "jingming": {
+   "name": "精明",
+   "tier": "green",
+   "description": "买卖之间从不吃亏。",
+   "mods": {
+    "buy": -12,
+    "sell": 12
+   },
+   "group": "trade"
+  },
+  "shangdao": {
+   "name": "商道天成",
+   "tier": "blue",
+   "description": "天生的买卖人，坊市掌柜都要让三分。",
+   "mods": {
+    "buy": -24,
+    "sell": 30
+   },
+   "group": "trade"
+  },
+  "nengyan": {
+   "name": "能言",
+   "tier": "white",
+   "description": "说话中听。",
+   "mods": {
+    "favor": 10
+   },
+   "group": "charm"
+  },
+  "qinhe": {
+   "name": "亲和",
+   "tier": "green",
+   "description": "让人一见便觉亲近。",
+   "mods": {
+    "favor": 30
+   },
+   "group": "charm"
+  },
+  "renjian": {
+   "name": "人见人喜",
+   "tier": "blue",
+   "description": "走到哪里都有人愿意结交。",
+   "mods": {
+    "favor": 70
+   },
+   "group": "charm"
+  },
+  "guiren": {
+   "name": "天生贵人缘",
+   "tier": "purple",
+   "description": "一生总有贵人相助，机缘也随之而来。",
+   "mods": {
+    "favor": 150,
+    "boon": 60
+   },
+   "group": "charm"
+  },
+  "jianbu": {
+   "name": "健步",
+   "tier": "white",
+   "description": "走山路不觉得累。",
+   "mods": {
+    "travel": -5
+   },
+   "group": "road"
+  },
+  "jiaoli": {
+   "name": "脚力过人",
+   "tier": "green",
+   "description": "一日能走旁人两日的路。",
+   "mods": {
+    "travel": -15
+   },
+   "group": "road"
+  },
+  "shenxing": {
+   "name": "神行",
+   "tier": "blue",
+   "description": "步履如飞，路上也少有麻烦。",
+   "mods": {
+    "travel": -36,
+    "encounter": -20
+   },
+   "group": "road"
+  },
+  "jinshen": {
+   "name": "谨慎",
+   "tier": "white",
+   "description": "行路前总要打听清楚。",
+   "mods": {
+    "encounter": -10
+   },
+   "group": "omen"
+  },
+  "quji": {
+   "name": "趋吉避凶",
+   "tier": "green",
+   "description": "总能绕开凶险之地。",
+   "mods": {
+    "encounter": -30
+   },
+   "group": "omen"
+  },
+  "lingjue": {
+   "name": "灵觉敏锐",
+   "tier": "blue",
+   "description": "危机临身之前，心头先有所感。",
+   "mods": {
+    "encounter": -60,
+    "boon": 20
+   },
+   "group": "omen"
+  },
+  "shouwen": {
+   "name": "手稳",
+   "tier": "white",
+   "description": "出手又稳又准。",
+   "mods": {
+    "attack": 1
+   },
+   "group": "might"
+  },
+  "shenli": {
+   "name": "天生神力",
+   "tier": "green",
+   "description": "力气大得出奇。",
+   "mods": {
+    "attack": 3
+   },
+   "group": "might"
+  },
+  "zhanyi": {
+   "name": "战意如虹",
+   "tier": "blue",
+   "description": "越战越勇，神通威力更盛。",
+   "mods": {
+    "attack": 6,
+    "damage_all": 10
+   },
+   "group": "might"
+  },
+  "shafa": {
+   "name": "杀伐果断",
+   "tier": "purple",
+   "description": "出手从不留情，斗法中锋芒毕露。",
+   "mods": {
+    "attack": 12,
+    "damage_all": 30
+   },
+   "group": "might"
+  },
+  "chenzhuo": {
+   "name": "沉着",
+   "tier": "white",
+   "description": "临阵不乱。",
+   "mods": {
+    "defense": 2
+   },
+   "group": "guard"
+  },
+  "panshi": {
+   "name": "稳如磐石",
+   "tier": "green",
+   "description": "守得住，扛得下。",
+   "mods": {
+    "defense": 6
+   },
+   "group": "guard"
+  },
+  "budong": {
+   "name": "不动如山",
+   "tier": "blue",
+   "description": "任凭对手攻势如潮，自岿然不动。",
+   "mods": {
+    "defense": 14,
+    "max_hp": 10
+   },
+   "group": "guard"
+  },
+  "touyao": {
+   "name": "药性相投",
+   "tier": "white",
+   "description": "丹药入腹，化开得快些。",
+   "mods": {
+    "pill": 10
+   },
+   "group": "pill"
+  },
+  "naiyao": {
+   "name": "耐药",
+   "tier": "green",
+   "description": "丹毒散得比旁人快。",
+   "mods": {
+    "pill_cooldown": -30
+   },
+   "group": "pill"
+  },
+  "yaoti": {
+   "name": "药体",
+   "tier": "blue",
+   "description": "身子与药力相合，服丹事半功倍。",
+   "mods": {
+    "pill": 50,
+    "pill_cooldown": -40
+   },
+   "group": "pill"
+  },
+  "danti": {
+   "name": "丹体",
+   "tier": "purple",
+   "description": "天生丹体，药力十成化入，丹毒也难留存。",
+   "mods": {
+    "pill": 150,
+    "pill_cooldown": -150
+   },
+   "group": "pill"
+  },
+  "jimo": {
+   "name": "耐得寂寞",
+   "tier": "white",
+   "description": "一个人待得住。",
+   "mods": {
+    "retreat_days": 10
+   },
+   "group": "seclusion"
+  },
+  "zuowang": {
+   "name": "坐忘",
+   "tier": "green",
+   "description": "一坐便忘了时日。",
+   "mods": {
+    "retreat_days": 30,
+    "fresh_days": 15
+   },
+   "group": "seclusion"
+  },
+  "kuzuo": {
+   "name": "枯坐如石",
+   "tier": "blue",
+   "description": "闭关数月如一日，心神不疲。",
+   "mods": {
+    "retreat_days": 70,
+    "fresh_days": 50
+   },
+   "group": "seclusion"
+  },
+  "pishi": {
+   "name": "皮实",
+   "tier": "white",
+   "description": "受了伤好得快。",
+   "mods": {
+    "rest": -10
+   },
+   "group": "recover"
+  },
+  "yuhe": {
+   "name": "愈合迅速",
+   "tier": "green",
+   "description": "伤口几日便能收口。",
+   "mods": {
+    "rest": -38
+   },
+   "group": "recover"
+  },
+  "shengsheng": {
+   "name": "生生不息",
+   "tier": "blue",
+   "description": "气血自生，伤势恢复极快。",
+   "mods": {
+    "rest": -80,
+    "max_hp": 10
+   },
+   "group": "recover"
+  },
+  "fuyuan": {
+   "name": "小有福缘",
+   "tier": "white",
+   "description": "偶尔能捡到些好处。",
+   "mods": {
+    "boon": 10
+   },
+   "group": "luck"
+  },
+  "shenhou": {
+   "name": "福缘深厚",
+   "tier": "green",
+   "description": "命里带福，机缘比旁人多。",
+   "mods": {
+    "boon": 38
+   },
+   "group": "luck"
+  },
+  "fuxing": {
+   "name": "福星高照",
+   "tier": "blue",
+   "description": "走到哪里都像有福星照着。",
+   "mods": {
+    "boon": 80
+   },
+   "group": "luck"
+  },
+  "hongyun": {
+   "name": "鸿运当头",
+   "tier": "purple",
+   "description": "鸿运加身，连筑基也更易圆满。",
+   "mods": {
+    "boon": 180,
+    "grade": 30
+   },
+   "group": "luck"
+  },
+  "gengu": {
+   "name": "根骨尚可",
+   "tier": "white",
+   "description": "根骨不差，破境时稳当些。",
+   "mods": {
+    "breakthrough": 2
+   },
+   "group": "bone"
+  },
+  "shangjia": {
+   "name": "根骨上佳",
+   "tier": "green",
+   "description": "一副修行的好根骨。",
+   "mods": {
+    "breakthrough": 6
+   },
+   "group": "bone"
+  },
+  "zhuji_zi": {
+   "name": "筑基之资",
+   "tier": "blue",
+   "description": "天生就是筑基的料子。",
+   "mods": {
+    "breakthrough": 12,
+    "grade": 20
+   },
+   "group": "bone"
+  },
+  "xiangu": {
+   "name": "仙骨",
+   "tier": "purple",
+   "description": "骨中隐有仙气，破境如水到渠成。",
+   "mods": {
+    "breakthrough": 30,
+    "grade": 60
+   },
+   "group": "bone"
+  },
+  "jixu": {
+   "name": "薄有积蓄",
+   "tier": "white",
+   "description": "离家时带了些灵石。",
+   "mods": {
+    "stones": 20
+   },
+   "group": "wealth"
+  },
+  "xiaokang": {
+   "name": "小康之家",
+   "tier": "green",
+   "description": "家境殷实，盘缠充足。",
+   "mods": {
+    "stones": 75
+   },
+   "group": "wealth"
+  },
+  "fujia": {
+   "name": "富家子弟",
+   "tier": "blue",
+   "description": "出身富户，一出手便是上百灵石。",
+   "mods": {
+    "stones": 240,
+    "buy": -10
+   },
+   "group": "wealth"
+  },
+  "nongjia": {
+   "name": "农家子弟",
+   "tier": "white",
+   "description": "田间长大，吃得苦，认得庄稼也认得草。",
+   "mods": {
+    "max_hp": 3,
+    "gather": 5
+   },
+   "group": "origin"
+  },
+  "liehu": {
+   "name": "猎户之子",
+   "tier": "white",
+   "description": "跟着父亲进过山，懂得避开野兽。",
+   "mods": {
+    "attack": 1,
+    "encounter": -5
+   },
+   "group": "origin"
+  },
+  "yujia": {
+   "name": "渔家儿女",
+   "tier": "white",
+   "description": "在水边长大，水性好，脚程也快。",
+   "mods": {
+    "travel": -3,
+    "damage_water": 5
+   },
+   "group": "origin"
+  },
+  "shuxiang": {
+   "name": "书香门第",
+   "tier": "white",
+   "description": "自幼读书，悟起道理来快些。",
+   "mods": {
+    "insight": 8,
+    "study": -5
+   },
+   "group": "origin"
+  },
+  "yaopu": {
+   "name": "药铺学徒",
+   "tier": "white",
+   "description": "在药铺抓过几年药。",
+   "mods": {
+    "gather": 8,
+    "pill": 5
+   },
+   "group": "origin"
+  },
+  "tiejiang": {
+   "name": "铁匠之后",
+   "tier": "white",
+   "description": "抡过大锤，与金铁有缘。",
+   "mods": {
+    "max_hp": 3,
+    "damage_metal": 5
+   },
+   "group": "origin"
+  },
+  "biaoju": {
+   "name": "镖局出身",
+   "tier": "white",
+   "description": "走过镖，懂得防身与赶路。",
+   "mods": {
+    "defense": 2,
+    "travel": -3
+   },
+   "group": "origin"
+  },
+  "luopo": {
+   "name": "落魄世家",
+   "tier": "white",
+   "description": "家道中落，还剩些体己，人情却已淡了。",
+   "mods": {
+    "stones": 30,
+    "favor": -5
+   },
+   "group": "origin"
+  },
+  "guer": {
+   "name": "寒门孤儿",
+   "tier": "white",
+   "description": "无依无靠，心性却磨得坚韧。",
+   "mods": {
+    "mind_gain": 15,
+    "stones": -10
+   },
+   "group": "origin"
+  },
+  "simiao": {
+   "name": "寺庙长大",
+   "tier": "white",
+   "description": "听惯了晨钟暮鼓，心魔不易近身。",
+   "mods": {
+    "mind_gain": 10,
+    "demon": 10
+   },
+   "group": "origin"
+  },
+  "daoguan": {
+   "name": "道观杂役",
+   "tier": "white",
+   "description": "在道观扫过几年地，耳濡目染。",
+   "mods": {
+    "cultivation": 3,
+    "mind_need": -3
+   },
+   "group": "origin"
+  },
+  "huolang": {
+   "name": "货郎之后",
+   "tier": "white",
+   "description": "跟着父亲走街串巷，懂些买卖。",
+   "mods": {
+    "sell": 5,
+    "buy": -3
+   },
+   "group": "origin"
+  },
+  "qiaofu": {
+   "name": "樵夫之子",
+   "tier": "white",
+   "description": "砍了十几年柴，与草木亲近。",
+   "mods": {
+    "damage_wood": 5,
+    "max_hp": 2
+   },
+   "group": "origin"
+  },
+  "yaogong": {
+   "name": "窑工之子",
+   "tier": "white",
+   "description": "守过窑火，不怕烫也不怕累。",
+   "mods": {
+    "damage_fire": 5,
+    "rest": -5
+   },
+   "group": "origin"
+  },
+  "caishi": {
+   "name": "石匠之后",
+   "tier": "white",
+   "description": "凿石为生的人家，脚下稳当。",
+   "mods": {
+    "damage_earth": 5,
+    "defense": 1
+   },
+   "group": "origin"
+  },
+  "shanye": {
+   "name": "山野散人",
+   "tier": "white",
+   "description": "在山野里长大，知道哪里有危险。",
+   "mods": {
+    "encounter": -8,
+    "gather": 3
+   },
+   "group": "origin"
+  },
+  "xiban": {
+   "name": "戏班出身",
+   "tier": "white",
+   "description": "唱念做打样样会，讨人喜欢，心却定不下来。",
+   "mods": {
+    "favor": 10,
+    "mind_gain": -5
+   },
+   "group": "origin"
+  },
+  "zhangfang": {
+   "name": "账房之子",
+   "tier": "white",
+   "description": "打得一手好算盘。",
+   "mods": {
+    "sell": 3,
+    "buy": -3,
+    "study": -3
+   },
+   "group": "origin"
+  },
+  "langzhong": {
+   "name": "郎中之后",
+   "tier": "white",
+   "description": "懂些医理，伤好得快。",
+   "mods": {
+    "rest": -10,
+    "pill": 3
+   },
+   "group": "origin"
+  },
+  "buqing": {
+   "name": "捕快之后",
+   "tier": "white",
+   "description": "父亲是县衙捕快，手上有些功夫。",
+   "mods": {
+    "attack": 1,
+    "favor": 3
+   },
+   "group": "origin"
+  },
+  "letian": {
+   "name": "乐天",
+   "tier": "white",
+   "description": "天塌下来也笑得出来。",
+   "mods": {
+    "mind_gain": 10
+   },
+   "group": "temper"
+  },
+  "jianren": {
+   "name": "坚韧",
+   "tier": "white",
+   "description": "咬着牙也要撑下去。",
+   "mods": {
+    "max_hp": 3,
+    "fresh_days": 5
+   },
+   "group": "temper"
+  },
+  "haojing": {
+   "name": "好静",
+   "tier": "white",
+   "description": "喜欢一个人待着，不爱出门。",
+   "mods": {
+    "retreat_days": 5,
+    "travel": 3
+   },
+   "group": "temper"
+  },
+  "haodong": {
+   "name": "好动",
+   "tier": "white",
+   "description": "闲不住，坐久了浑身难受。",
+   "mods": {
+    "travel": -5,
+    "retreat_days": -5
+   },
+   "group": "temper"
+  },
+  "juejiang": {
+   "name": "倔强",
+   "tier": "white",
+   "description": "认准的事九头牛也拉不回，心魔也拉不回。",
+   "mods": {
+    "demon": 10,
+    "favor": -3
+   },
+   "group": "temper"
+  },
+  "huoda": {
+   "name": "豁达",
+   "tier": "white",
+   "description": "看得开，境界上的坎也就低些。",
+   "mods": {
+    "mind_need": -3
+   },
+   "group": "temper"
+  },
+  "xixin": {
+   "name": "细心",
+   "tier": "white",
+   "description": "旁人看漏的东西，你总能看到。",
+   "mods": {
+    "gather": 5,
+    "insight": 3
+   },
+   "group": "temper"
+  },
+  "danda": {
+   "name": "胆大",
+   "tier": "white",
+   "description": "什么地方都敢闯，麻烦也就多些。",
+   "mods": {
+    "attack": 1,
+    "encounter": 5
+   },
+   "group": "temper"
+  },
+  "wenzhong": {
+   "name": "稳重",
+   "tier": "white",
+   "description": "做事不慌不忙。",
+   "mods": {
+    "defense": 2
+   },
+   "group": "temper"
+  },
+  "qianxun": {
+   "name": "谦逊",
+   "tier": "white",
+   "description": "待人客气，人缘不坏。",
+   "mods": {
+    "favor": 8
+   },
+   "group": "temper"
+  },
+  "jimin": {
+   "name": "机敏",
+   "tier": "white",
+   "description": "眼观六路，耳听八方。",
+   "mods": {
+    "encounter": -5,
+    "insight": 3
+   },
+   "group": "temper"
+  },
+  "chenmo": {
+   "name": "沉默寡言",
+   "tier": "white",
+   "description": "话少，心思都用在了修行上。",
+   "mods": {
+    "favor": -5,
+    "mind_gain": 10
+   },
+   "group": "temper"
+  },
+  "haoqi": {
+   "name": "好奇",
+   "tier": "white",
+   "description": "什么都想看一看，机缘与麻烦一并找上门。",
+   "mods": {
+    "boon": 5,
+    "encounter": 5
+   },
+   "group": "temper"
+  },
+  "qinkuai": {
+   "name": "勤快",
+   "tier": "white",
+   "description": "手脚勤快，闲不下来。",
+   "mods": {
+    "cultivation": 2,
+    "gather": 3
+   },
+   "group": "temper"
+  },
+  "suihe": {
+   "name": "随和",
+   "tier": "white",
+   "description": "跟谁都处得来。",
+   "mods": {
+    "favor": 5,
+    "mind_gain": 5
+   },
+   "group": "temper"
+  },
+  "zaoqi": {
+   "name": "早起",
+   "tier": "white",
+   "description": "鸡鸣即起，打坐的时辰比旁人多。",
+   "mods": {
+    "cultivation": 2
+   }
+  },
+  "yemao": {
+   "name": "夜猫子",
+   "tier": "white",
+   "description": "夜深人静时最能想通事情。",
+   "mods": {
+    "insight": 5
+   }
+  },
+  "naihan": {
+   "name": "耐寒",
+   "tier": "white",
+   "description": "冬天也只穿单衣。",
+   "mods": {
+    "max_hp": 2,
+    "damage_water": 3
+   }
+  },
+  "naire": {
+   "name": "耐热",
+   "tier": "white",
+   "description": "三伏天也不怎么出汗。",
+   "mods": {
+    "max_hp": 2,
+    "damage_fire": 3
+   }
+  },
+  "shanyong": {
+   "name": "善泳",
+   "tier": "white",
+   "description": "渡河从不等船。",
+   "mods": {
+    "travel": -3
+   }
+  },
+  "jilu": {
+   "name": "记路",
+   "tier": "white",
+   "description": "走过一遍的路，不会再走错。",
+   "mods": {
+    "travel": -4
+   }
+  },
+  "sangmen": {
+   "name": "嗓门大",
+   "tier": "white",
+   "description": "一嗓子能吓退野狗。",
+   "mods": {
+    "favor": 3,
+    "encounter": -3
+   }
+  },
+  "haojiu": {
+   "name": "好酒",
+   "tier": "white",
+   "description": "酒桌上交朋友，酒醒了心却静不下。",
+   "mods": {
+    "favor": 5,
+    "mind_need": 3
+   }
+  },
+  "aijing": {
+   "name": "爱干净",
+   "tier": "white",
+   "description": "伤口收拾得仔细，好得也快。",
+   "mods": {
+    "rest": -5
+   }
+  },
+  "weikou": {
+   "name": "胃口好",
+   "tier": "white",
+   "description": "一顿能吃三碗饭。",
+   "mods": {
+    "max_hp": 4
+   }
+  },
+  "shouqiao": {
+   "name": "手巧",
+   "tier": "white",
+   "description": "做什么都上手快。",
+   "mods": {
+    "study": -5
+   }
+  },
+  "yanjian": {
+   "name": "眼尖",
+   "tier": "white",
+   "description": "草丛里一株灵草也逃不过你的眼睛。",
+   "mods": {
+    "gather": 6
+   }
+  },
+  "ercong": {
+   "name": "耳聪",
+   "tier": "white",
+   "description": "老远就能听到动静。",
+   "mods": {
+    "encounter": -6
+   }
+  },
+  "biling": {
+   "name": "鼻灵",
+   "tier": "white",
+   "description": "闻得出药材的成色。",
+   "mods": {
+    "gather": 4,
+    "pill": 3
+   }
+  },
+  "sheqiao": {
+   "name": "舌巧",
+   "tier": "white",
+   "description": "砍价是一把好手。",
+   "mods": {
+    "buy": -4
+   }
+  },
+  "tuichang": {
+   "name": "腿长",
+   "tier": "white",
+   "description": "一步顶旁人一步半。",
+   "mods": {
+    "travel": -4
+   }
+  },
+  "jiankuan": {
+   "name": "肩宽",
+   "tier": "white",
+   "description": "生得魁梧。",
+   "mods": {
+    "max_hp": 3,
+    "defense": 1
+   }
+  },
+  "yaoma": {
+   "name": "腰马合一",
+   "tier": "white",
+   "description": "下盘扎实，出手有力。",
+   "mods": {
+    "attack": 1
+   }
+  },
+  "xinsuan": {
+   "name": "心算如飞",
+   "tier": "white",
+   "description": "账目一过眼就算清。",
+   "mods": {
+    "sell": 4
+   }
+  },
+  "guoer": {
+   "name": "过耳不忘",
+   "tier": "white",
+   "description": "听过的话记得清清楚楚。",
+   "mods": {
+    "insight": 5
+   }
+  },
+  "shuichen": {
+   "name": "睡得沉",
+   "tier": "white",
+   "description": "一觉醒来，伤也好了大半。",
+   "mods": {
+    "rest": -8
+   }
+  },
+  "shaoshi": {
+   "name": "少食",
+   "tier": "white",
+   "description": "吃得少，闭关时也不觉饥饿。",
+   "mods": {
+    "fresh_days": 5
+   }
+  },
+  "naitong": {
+   "name": "耐痛",
+   "tier": "white",
+   "description": "疼也不吭一声。",
+   "mods": {
+    "max_hp": 2,
+    "demon": 5
+   }
+  },
+  "yuegan": {
+   "name": "天生乐感",
+   "tier": "white",
+   "description": "听琴能入定。",
+   "mods": {
+    "mind_gain": 8
+   }
+  },
+  "haozi": {
+   "name": "字写得好",
+   "tier": "white",
+   "description": "一手好字，人见人夸。",
+   "mods": {
+    "favor": 4,
+    "study": -2
+   }
+  },
+  "bupagui": {
+   "name": "不怕鬼",
+   "tier": "white",
+   "description": "夜里走坟地也面不改色。",
+   "mods": {
+    "demon": 12
+   }
+  },
+  "xingxiang": {
+   "name": "认得星象",
+   "tier": "white",
+   "description": "看星星能看出些门道。",
+   "mods": {
+    "boon": 5
+   }
+  },
+  "tianse": {
+   "name": "会看天色",
+   "tier": "white",
+   "description": "知道什么时候该赶路，什么时候该歇脚。",
+   "mods": {
+    "encounter": -5,
+    "travel": -2
+   }
+  },
+  "lubiao": {
+   "name": "会认路标",
+   "tier": "white",
+   "description": "山路上的记号一看就懂。",
+   "mods": {
+    "travel": -3,
+    "encounter": -2
+   }
+  },
+  "haolian": {
+   "name": "生得一张好脸",
+   "tier": "white",
+   "description": "长得周正，旁人愿意多说几句。",
+   "mods": {
+    "favor": 8
+   }
+  },
+  "chiku": {
+   "name": "吃苦耐劳",
+   "tier": "white",
+   "description": "再枯燥的功课也耐得住。",
+   "mods": {
+    "fresh_days": 8
+   }
+  },
+  "quanjiao": {
+   "name": "粗通拳脚",
+   "tier": "white",
+   "description": "小时候学过几招。",
+   "mods": {
+    "attack": 1,
+    "defense": 1
+   }
+  },
+  "yili": {
+   "name": "粗通医理",
+   "tier": "white",
+   "description": "会包扎，也懂些药性。",
+   "mods": {
+    "rest": -6,
+    "pill": 3
+   }
+  },
+  "suanxue": {
+   "name": "粗通算学",
+   "tier": "white",
+   "description": "账算得清，书也读得进。",
+   "mods": {
+    "buy": -2,
+    "sell": 2,
+    "study": -2
+   }
+  },
+  "zhengqi": {
+   "name": "一身正气",
+   "tier": "white",
+   "description": "心正则邪不侵。",
+   "mods": {
+    "demon": 8,
+    "favor": 3
+   }
+  },
+  "jiangmen": {
+   "name": "将门之后",
+   "tier": "green",
+   "description": "祖上出过将军，家传几手搏杀之术。",
+   "mods": {
+    "attack": 3,
+    "defense": 4
+   },
+   "group": "origin"
+  },
+  "yidao": {
+   "name": "医道世家",
+   "tier": "green",
+   "description": "世代行医，伤病难不倒你。",
+   "mods": {
+    "rest": -30,
+    "pill": 15
+   },
+   "group": "origin"
+  },
+  "danshi": {
+   "name": "丹师之后",
+   "tier": "green",
+   "description": "祖上是炼丹师，你天生懂药性。",
+   "mods": {
+    "pill": 22,
+    "pill_cooldown": -15
+   },
+   "group": "origin"
+  },
+  "shanggu": {
+   "name": "商贾世家",
+   "tier": "green",
+   "description": "家里做大买卖，出门带足了盘缠。",
+   "mods": {
+    "stones": 90,
+    "sell": 12
+   },
+   "group": "origin"
+  },
+  "shuyuan": {
+   "name": "书院学子",
+   "tier": "green",
+   "description": "在书院读过几年，典籍烂熟于心。",
+   "mods": {
+    "insight": 22,
+    "study": -15
+   },
+   "group": "origin"
+  },
+  "lieyao": {
+   "name": "猎妖人之后",
+   "tier": "green",
+   "description": "家族世代与妖兽搏杀。",
+   "mods": {
+    "damage_all": 8,
+    "attack": 2
+   },
+   "group": "origin"
+  },
+  "chuanjia": {
+   "name": "渡口船家",
+   "tier": "green",
+   "description": "在白鹭渡撑过船，水路熟得很。",
+   "mods": {
+    "travel": -15,
+    "damage_water": 12
+   },
+   "group": "origin"
+  },
+  "yinshi": {
+   "name": "隐士门下",
+   "tier": "green",
+   "description": "幼时随一位隐士读过几年道经。",
+   "mods": {
+    "cultivation": 9,
+    "mind_gain": 15
+   },
+   "group": "origin"
+  },
+  "yigu": {
+   "name": "宗门遗孤",
+   "tier": "green",
+   "description": "父母都是修士，同门照拂有加。",
+   "mods": {
+    "cultivation": 8,
+    "favor": 15
+   },
+   "group": "origin"
+  },
+  "caiyao": {
+   "name": "采药世家",
+   "tier": "green",
+   "description": "祖祖辈辈在山里采药。",
+   "mods": {
+    "gather": 30
+   },
+   "group": "origin"
+  },
+  "zhishui": {
+   "name": "心如止水",
+   "tier": "green",
+   "description": "心静如一泓秋水。",
+   "mods": {
+    "mind_gain": 38,
+    "demon": 22
+   },
+   "group": "temper"
+  },
+  "bunao": {
+   "name": "百折不挠",
+   "tier": "green",
+   "description": "跌倒多少次都能爬起来。",
+   "mods": {
+    "max_hp": 9,
+    "mind_gain": 22
+   },
+   "group": "temper"
+  },
+  "chongru": {
+   "name": "宠辱不惊",
+   "tier": "green",
+   "description": "得失不挂于心，境界门槛便低了些。",
+   "mods": {
+    "mind_need": -12
+   },
+   "group": "temper"
+  },
+  "haoxue": {
+   "name": "好学不倦",
+   "tier": "green",
+   "description": "手不释卷。",
+   "mods": {
+    "insight": 18,
+    "study": -12
+   },
+   "group": "temper"
+  },
+  "xiadan": {
+   "name": "侠肝义胆",
+   "tier": "green",
+   "description": "路见不平，拔刀相助。",
+   "mods": {
+    "favor": 22,
+    "attack": 2
+   },
+   "group": "temper"
+  },
+  "xianyun": {
+   "name": "闲云野鹤",
+   "tier": "green",
+   "description": "来去自如，耐得住清净也走得了远路。",
+   "mods": {
+    "retreat_days": 15,
+    "travel": -8,
+    "encounter": -8
+   },
+   "group": "temper"
+  },
+  "leili": {
+   "name": "雷厉风行",
+   "tier": "green",
+   "description": "说走就走，说打就打。",
+   "mods": {
+    "travel": -12,
+    "attack": 2
+   },
+   "group": "temper"
+  },
+  "yinren": {
+   "name": "隐忍",
+   "tier": "green",
+   "description": "能忍常人所不能忍。",
+   "mods": {
+    "fresh_days": 22,
+    "demon": 15
+   },
+   "group": "temper"
+  },
+  "yeshi": {
+   "name": "夜视",
+   "tier": "green",
+   "description": "夜里看得和白天一样清楚。",
+   "mods": {
+    "encounter": -15
+   }
+  },
+  "lingmu": {
+   "name": "灵目",
+   "tier": "green",
+   "description": "能看见灵气流转。",
+   "mods": {
+    "gather": 15,
+    "boon": 8
+   }
+  },
+  "linger": {
+   "name": "灵耳",
+   "tier": "green",
+   "description": "听得见灵气的低吟。",
+   "mods": {
+    "insight": 15,
+    "encounter": -8
+   }
+  },
+  "guixishu": {
+   "name": "龟息之术",
+   "tier": "green",
+   "description": "天生会龟息，闭关可以更久。",
+   "mods": {
+    "retreat_days": 22
+   }
+  },
+  "tuna": {
+   "name": "吐纳天成",
+   "tier": "green",
+   "description": "呼吸之间便在吐纳灵气。",
+   "mods": {
+    "cultivation": 9
+   }
+  },
+  "jingu": {
+   "name": "筋骨强健",
+   "tier": "green",
+   "description": "筋骨强健，伤好得快。",
+   "mods": {
+    "max_hp": 12,
+    "rest": -15
+   }
+  },
+  "qixue": {
+   "name": "气血旺盛",
+   "tier": "green",
+   "description": "气血充盈，面色红润。",
+   "mods": {
+    "max_hp": 9,
+    "max_qi": 6
+   }
+  },
+  "jiangan": {
+   "name": "剑感",
+   "tier": "green",
+   "description": "握剑时仿佛剑在说话。",
+   "mods": {
+    "damage_metal": 9,
+    "attack": 2
+   }
+  },
+  "quanyi": {
+   "name": "拳意",
+   "tier": "green",
+   "description": "一拳打出，自带一股意气。",
+   "mods": {
+    "attack": 3
+   }
+  },
+  "shenqing": {
+   "name": "身轻如燕",
+   "tier": "green",
+   "description": "身法轻灵。",
+   "mods": {
+    "travel": -12,
+    "defense": 3
+   }
+  },
+  "wenxiang": {
+   "name": "闻香识药",
+   "tier": "green",
+   "description": "闻一闻就知道药材几年份。",
+   "mods": {
+    "gather": 15,
+    "pill": 12
+   }
+  },
+  "yinyangyan": {
+   "name": "阴阳眼",
+   "tier": "green",
+   "description": "看得见旁人看不见的东西，心魔也瞒不过你。",
+   "mods": {
+    "demon": 30,
+    "boon": 8
+   }
+  },
+  "shouqin": {
+   "name": "与兽亲",
+   "tier": "green",
+   "description": "野兽见了你也不凶。",
+   "mods": {
+    "encounter": -22
+   }
+  },
+  "shuixing": {
+   "name": "水性极佳",
+   "tier": "green",
+   "description": "水下能闭气一炷香。",
+   "mods": {
+    "travel": -9,
+    "damage_water": 9
+   }
+  },
+  "huohou": {
+   "name": "火候老道",
+   "tier": "green",
+   "description": "生火煎药，火候拿捏得极准。",
+   "mods": {
+    "pill": 15,
+    "damage_fire": 8
+   }
+  },
+  "naidu": {
+   "name": "耐毒",
+   "tier": "green",
+   "description": "寻常毒物奈何不了你。",
+   "mods": {
+    "pill_cooldown": -22,
+    "max_hp": 4
+   }
+  },
+  "xinxi": {
+   "name": "心细如发",
+   "tier": "green",
+   "description": "一草一木都看得仔细。",
+   "mods": {
+    "insight": 12,
+    "gather": 12
+   }
+  },
+  "qiaoshe": {
+   "name": "巧舌如簧",
+   "tier": "green",
+   "description": "三言两语就能说动人。",
+   "mods": {
+    "favor": 18,
+    "buy": -8
+   }
+  },
+  "huiyan": {
+   "name": "慧眼识珠",
+   "tier": "green",
+   "description": "一眼看出好东西。",
+   "mods": {
+    "buy": -9,
+    "sell": 9,
+    "boon": 8
+   }
+  },
+  "taojia": {
+   "name": "讨价还价",
+   "tier": "green",
+   "description": "坊市里的掌柜都怕你。",
+   "mods": {
+    "buy": -12
+   }
+  },
+  "suhui": {
+   "name": "宿慧",
+   "tier": "green",
+   "description": "有些道理，像是早就知道。",
+   "mods": {
+    "insight": 15,
+    "cultivation": 4
+   }
+  },
+  "zaohui": {
+   "name": "早慧",
+   "tier": "green",
+   "description": "三岁识字，五岁诵经。",
+   "mods": {
+    "study": -12,
+    "insight": 12
+   }
+  },
+  "guayu": {
+   "name": "清心寡欲",
+   "tier": "green",
+   "description": "无欲则刚，丹毒也少。",
+   "mods": {
+    "mind_gain": 22,
+    "pill_cooldown": -15
+   }
+  },
+  "chenhun": {
+   "name": "晨昏定省",
+   "tier": "green",
+   "description": "早晚两课从不间断。",
+   "mods": {
+    "cultivation": 6,
+    "mind_gain": 12
+   }
+  },
+  "kuxiu": {
+   "name": "苦修",
+   "tier": "green",
+   "description": "以苦为乐。",
+   "mods": {
+    "fresh_days": 22,
+    "cultivation": 4
+   }
+  },
+  "yexiu": {
+   "name": "夜修",
+   "tier": "green",
+   "description": "夜里修炼格外专注。",
+   "mods": {
+    "retreat_days": 12,
+    "cultivation": 4
+   }
+  },
+  "shouye": {
+   "name": "擅长守夜",
+   "tier": "green",
+   "description": "野外过夜从不出事。",
+   "mods": {
+    "encounter": -12,
+    "rest": -12
+   }
+  },
+  "shanzhong": {
+   "name": "山中长大",
+   "tier": "green",
+   "description": "山里的路和草都熟。",
+   "mods": {
+    "gather": 12,
+    "travel": -8
+   }
+  },
+  "jianghu": {
+   "name": "江湖老手",
+   "tier": "green",
+   "description": "走南闯北，见多识广。",
+   "mods": {
+    "encounter": -15,
+    "sell": 8
+   }
+  },
+  "teng": {
+   "name": "招人疼",
+   "tier": "green",
+   "description": "长辈们都喜欢你。",
+   "mods": {
+    "favor": 22
+   }
+  },
+  "guiren_xiang": {
+   "name": "贵人相助",
+   "tier": "green",
+   "description": "关键时候总有人拉一把。",
+   "mods": {
+    "favor": 15,
+    "boon": 15
+   }
+  },
+  "xiaofuxing": {
+   "name": "小福星",
+   "tier": "green",
+   "description": "从小运气就好。",
+   "mods": {
+    "boon": 22
+   }
+  },
+  "jianxin": {
+   "name": "剑心",
+   "tier": "blue",
+   "description": "心中自有一柄剑。",
+   "mods": {
+    "damage_metal": 30,
+    "attack": 4
+   }
+  },
+  "daoyi": {
+   "name": "刀意天成",
+   "tier": "blue",
+   "description": "出手便有刀意。",
+   "mods": {
+    "attack": 6,
+    "damage_all": 10
+   }
+  },
+  "qianghun": {
+   "name": "枪魂",
+   "tier": "blue",
+   "description": "攻守兼备，如臂使枪。",
+   "mods": {
+    "attack": 6,
+    "defense": 6
+   }
+  },
+  "tianling": {
+   "name": "天生灵觉",
+   "tier": "blue",
+   "description": "天生能感知吉凶。",
+   "mods": {
+    "boon": 40,
+    "encounter": -30
+   }
+  },
+  "lingqiao": {
+   "name": "灵窍早开",
+   "tier": "blue",
+   "description": "灵窍早开，修行与悟道都快人一步。",
+   "mods": {
+    "cultivation": 24,
+    "insight": 20
+   }
+  },
+  "tongmai": {
+   "name": "通脉",
+   "tier": "blue",
+   "description": "生来经脉通畅。",
+   "mods": {
+    "max_qi": 30,
+    "cultivation": 12
+   }
+  },
+  "danxin": {
+   "name": "天生丹心",
+   "tier": "blue",
+   "description": "与丹药草木天然相契。",
+   "mods": {
+    "pill": 40,
+    "gather": 30
+   }
+  },
+  "caomu": {
+   "name": "草木心",
+   "tier": "blue",
+   "description": "草木之灵与你相通。",
+   "mods": {
+    "damage_wood": 30,
+    "gather": 40
+   }
+  },
+  "yanxin": {
+   "name": "炎心",
+   "tier": "blue",
+   "description": "心火炽烈。",
+   "mods": {
+    "damage_fire": 36,
+    "max_hp": 10
+   }
+  },
+  "bingpo": {
+   "name": "冰魄",
+   "tier": "blue",
+   "description": "体内藏着一缕寒意。",
+   "mods": {
+    "damage_water": 36,
+    "defense": 6
+   }
+  },
+  "panshixin": {
+   "name": "磐石心",
+   "tier": "blue",
+   "description": "心如磐石，守势难破。",
+   "mods": {
+    "damage_earth": 30,
+    "defense": 10
+   }
+  },
+  "jingangyi": {
+   "name": "金刚意",
+   "tier": "blue",
+   "description": "意志坚如金铁。",
+   "mods": {
+    "damage_metal": 24,
+    "max_hp": 16
+   }
+  },
+  "xinmo_buqin": {
+   "name": "心魔不侵",
+   "tier": "blue",
+   "description": "心魔近你不得。",
+   "mods": {
+    "demon": 120,
+    "mind_gain": 30
+   }
+  },
+  "jingji": {
+   "name": "静极生慧",
+   "tier": "blue",
+   "description": "静到极处，智慧自生。",
+   "mods": {
+    "insight": 50,
+    "retreat_days": 30
+   }
+  },
+  "yinian": {
+   "name": "一念坐忘",
+   "tier": "blue",
+   "description": "一念入定，百日不倦。",
+   "mods": {
+    "fresh_days": 60
+   }
+  },
+  "biguan": {
+   "name": "闭关圣手",
+   "tier": "blue",
+   "description": "闭关是你最擅长的事。",
+   "mods": {
+    "retreat_days": 50,
+    "fresh_days": 30
+   }
+  },
+  "xuelong": {
+   "name": "气血如龙",
+   "tier": "blue",
+   "description": "气血奔涌如龙。",
+   "mods": {
+    "max_hp": 30,
+    "rest": -40
+   }
+  },
+  "xingzhe": {
+   "name": "行者",
+   "tier": "blue",
+   "description": "天生的远行人。",
+   "mods": {
+    "travel": -30,
+    "encounter": -20
+   }
+  },
+  "youxia": {
+   "name": "游侠",
+   "tier": "blue",
+   "description": "仗剑天涯，到处有朋友。",
+   "mods": {
+    "attack": 4,
+    "travel": -20,
+    "favor": 20
+   }
+  },
+  "rechang": {
+   "name": "古道热肠",
+   "tier": "blue",
+   "description": "热心肠，人缘极好，心境也随之开阔。",
+   "mods": {
+    "favor": 50,
+    "mind_gain": 20
+   }
+  },
+  "lingxiu": {
+   "name": "天生领袖",
+   "tier": "blue",
+   "description": "众人愿意听你的。",
+   "mods": {
+    "favor": 40,
+    "attack": 2,
+    "mind_need": -10
+   }
+  },
+  "shangcai": {
+   "name": "商才",
+   "tier": "blue",
+   "description": "天生会做买卖。",
+   "mods": {
+    "sell": 30,
+    "buy": -20
+   }
+  },
+  "xunbao": {
+   "name": "寻宝鼠",
+   "tier": "blue",
+   "description": "宝贝像是会自己找上你。",
+   "mods": {
+    "gather": 50,
+    "boon": 20
+   }
+  },
+  "jiyuan": {
+   "name": "机缘不浅",
+   "tier": "blue",
+   "description": "命中多有奇遇。",
+   "mods": {
+    "boon": 40,
+    "grade": 10
+   }
+  },
+  "genji": {
+   "name": "根基扎实",
+   "tier": "blue",
+   "description": "根基打得比谁都牢。",
+   "mods": {
+    "breakthrough": 8,
+    "max_hp": 10
+   }
+  },
+  "wudao": {
+   "name": "悟道之心",
+   "tier": "blue",
+   "description": "一心求道，境界的门槛也低了。",
+   "mods": {
+    "insight": 40,
+    "mind_need": -16
+   }
+  },
+  "yaowang": {
+   "name": "药王之徒",
+   "tier": "blue",
+   "description": "幼时跟过一位游方药王。",
+   "mods": {
+    "pill": 40,
+    "rest": -30
+   },
+   "group": "origin"
+  },
+  "jianzhong": {
+   "name": "剑冢遗孤",
+   "tier": "blue",
+   "description": "在剑冢边长大，耳边尽是剑鸣。",
+   "mods": {
+    "damage_metal": 30,
+    "attack": 4
+   },
+   "group": "origin"
+  },
+  "mingmen": {
+   "name": "名门之后",
+   "tier": "blue",
+   "description": "名门出身，资源不缺。",
+   "mods": {
+    "cultivation": 16,
+    "stones": 160
+   },
+   "group": "origin"
+  },
+  "qianchao": {
+   "name": "前朝遗脉",
+   "tier": "blue",
+   "description": "身上流着前朝修真世家的血。",
+   "mods": {
+    "max_qi": 20,
+    "lifespan": 16
+   },
+   "group": "origin"
+  },
+  "jiusi": {
+   "name": "九死一生",
+   "tier": "blue",
+   "description": "幼时大难不死，从此百无禁忌。",
+   "mods": {
+    "max_hp": 20,
+    "demon": 40,
+    "lifespan": -3
+   }
+  },
+  "heshou": {
+   "name": "鹤寿",
+   "tier": "blue",
+   "description": "身轻体健，寿元绵长。",
+   "mods": {
+    "lifespan": 24,
+    "rest": -20
+   }
+  },
+  "buqu": {
+   "name": "不屈",
+   "tier": "blue",
+   "description": "宁折不弯。",
+   "mods": {
+    "max_hp": 20,
+    "mind_gain": 30
+   }
+  },
+  "yedu": {
+   "name": "夜读万卷",
+   "tier": "blue",
+   "description": "读书破万卷。",
+   "mods": {
+    "study": -50,
+    "insight": 20
+   }
+  },
+  "lingxi": {
+   "name": "灵犀",
+   "tier": "blue",
+   "description": "与人心意相通，悟性也高。",
+   "mods": {
+    "favor": 30,
+    "insight": 30
+   }
+  },
+  "jiantai": {
+   "name": "先天剑胎",
+   "tier": "purple",
+   "description": "生来便是一柄未开锋的剑。",
+   "mods": {
+    "damage_metal": 90,
+    "attack": 12
+   }
+  },
+  "taiyin": {
+   "name": "太阴之体",
+   "tier": "purple",
+   "description": "月华之体，灵力清冽。",
+   "mods": {
+    "damage_water": 75,
+    "max_qi": 45,
+    "mind_gain": 45
+   }
+  },
+  "taiyang": {
+   "name": "太阳之体",
+   "tier": "purple",
+   "description": "体内如有一轮烈日。",
+   "mods": {
+    "damage_fire": 75,
+    "max_hp": 45,
+    "attack": 6
+   }
+  },
+  "qingdi": {
+   "name": "青帝木体",
+   "tier": "purple",
+   "description": "草木之精所钟，生机绵长。",
+   "mods": {
+    "damage_wood": 75,
+    "rest": -90,
+    "lifespan": 30
+   }
+  },
+  "kunyuan": {
+   "name": "坤元土体",
+   "tier": "purple",
+   "description": "厚德载物，坚不可摧。",
+   "mods": {
+    "damage_earth": 75,
+    "defense": 30,
+    "max_hp": 30
+   }
+  },
+  "lingyan_mu": {
+   "name": "灵眼",
+   "tier": "purple",
+   "description": "双目能看透灵物所在。",
+   "mods": {
+    "gather": 120,
+    "boon": 75,
+    "encounter": -60
+   }
+  },
+  "daozhong": {
+   "name": "天生道种",
+   "tier": "purple",
+   "description": "道种天成，修行与破境都快人一步。",
+   "mods": {
+    "cultivation": 60,
+    "breakthrough": 15
+   }
+  },
+  "lingtai": {
+   "name": "灵台清明",
+   "tier": "purple",
+   "description": "灵台一片清明，万念不侵。",
+   "mods": {
+    "insight": 120,
+    "mind_need": -45,
+    "demon": 90
+   }
+  },
+  "baidu": {
+   "name": "百毒不侵",
+   "tier": "purple",
+   "description": "什么毒都毒不倒你。",
+   "mods": {
+    "pill_cooldown": -150,
+    "max_hp": 30
+   }
+  },
+  "shenmu": {
+   "name": "天生神目",
+   "tier": "purple",
+   "description": "目光如炬，洞察秋毫。",
+   "mods": {
+    "boon": 90,
+    "encounter": -75,
+    "gather": 45
+   }
+  },
+  "luyao": {
+   "name": "戮妖",
+   "tier": "purple",
+   "description": "天生克制妖邪。",
+   "mods": {
+    "damage_all": 45,
+    "attack": 9
+   }
+  },
+  "jinshenti": {
+   "name": "金身",
+   "tier": "purple",
+   "description": "肉身如金。",
+   "mods": {
+    "max_hp": 75,
+    "defense": 24
+   }
+  },
+  "baoguang": {
+   "name": "宝光护体",
+   "tier": "purple",
+   "description": "周身隐有宝光，邪祟难近。",
+   "mods": {
+    "defense": 30,
+    "demon": 90
+   }
+  },
+  "zaohua": {
+   "name": "夺天地造化",
+   "tier": "purple",
+   "description": "吞吐天地灵气，药力也化得更尽。",
+   "mods": {
+    "cultivation": 45,
+    "pill": 60
+   }
+  },
+  "rusi": {
+   "name": "静修如死",
+   "tier": "purple",
+   "description": "闭关之时，气息全无，宛如枯木。",
+   "mods": {
+    "retreat_days": 150,
+    "fresh_days": 120
+   }
+  },
+  "changsheng": {
+   "name": "长生种",
+   "tier": "purple",
+   "description": "体内似有一粒长生之种。",
+   "mods": {
+    "lifespan": 90,
+    "rest": -60
+   }
+  },
+  "fuxiang": {
+   "name": "天生福相",
+   "tier": "purple",
+   "description": "满面福相，贵人与机缘接踵而至。",
+   "mods": {
+    "boon": 120,
+    "favor": 60
+   }
+  },
+  "guizhou": {
+   "name": "天生贵胄",
+   "tier": "purple",
+   "description": "出身显赫，一掷千金。",
+   "mods": {
+    "stones": 600,
+    "favor": 60,
+    "buy": -30
+   },
+   "group": "origin"
+  },
+  "jianxian": {
+   "name": "剑仙后人",
+   "tier": "purple",
+   "description": "祖上出过剑仙。",
+   "mods": {
+    "damage_metal": 60,
+    "cultivation": 30
+   },
+   "group": "origin"
+  },
+  "dansheng": {
+   "name": "丹圣后人",
+   "tier": "purple",
+   "description": "祖上是一代丹圣。",
+   "mods": {
+    "pill": 120,
+    "pill_cooldown": -90
+   },
+   "group": "origin"
+  },
+  "dichuan": {
+   "name": "道门嫡传之资",
+   "tier": "purple",
+   "description": "生来便是道门要找的嫡传。",
+   "mods": {
+    "cultivation": 45,
+    "insight": 60
+   }
+  },
+  "liuli": {
+   "name": "心若琉璃",
+   "tier": "purple",
+   "description": "心如琉璃，纤尘不染。",
+   "mods": {
+    "mind_gain": 120,
+    "demon": 150,
+    "mind_need": -30
+   }
+  },
+  "longxiang": {
+   "name": "龙象之力",
+   "tier": "purple",
+   "description": "力如龙象。",
+   "mods": {
+    "attack": 15,
+    "max_hp": 45
+   }
+  },
+  "fengxiong": {
+   "name": "逢凶化吉",
+   "tier": "purple",
+   "description": "再大的凶险，到你身上也会化开。",
+   "mods": {
+    "encounter": -90,
+    "boon": 75,
+    "demon": 60
+   }
+  },
+  "xiantian_daoti": {
+   "name": "先天道体",
+   "tier": "orange",
+   "description": "先天道体，万中无一，周身毛孔都在吞吐灵气。",
+   "mods": {
+    "cultivation": 150,
+    "breakthrough": 50,
+    "max_hp": 50,
+    "max_qi": 50
+   }
+  },
+  "qiyun_zhizi": {
+   "name": "气运之子",
+   "tier": "orange",
+   "description": "天地气运钟于一身。",
+   "mods": {
+    "boon": 500,
+    "encounter": -100,
+    "grade": 50
+   }
+  },
+  "jiangu": {
+   "name": "剑骨",
+   "tier": "orange",
+   "description": "一身剑骨，古剑见了也要共鸣。",
+   "mods": {
+    "damage_metal": 175,
+    "attack": 25,
+    "damage_all": 25
+   }
+  },
+  "hunyuan": {
+   "name": "混元灵体",
+   "tier": "orange",
+   "description": "五行混元，灵力浑厚。",
+   "mods": {
+    "cultivation": 100,
+    "damage_all": 60,
+    "max_qi": 75
+   }
+  },
+  "linglong": {
+   "name": "九窍玲珑心",
+   "tier": "orange",
+   "description": "心有九窍，一点即透。",
+   "mods": {
+    "insight": 300,
+    "study": -200,
+    "mind_need": -100
+   }
+  },
+  "bumie": {
+   "name": "不灭之躯",
+   "tier": "orange",
+   "description": "伤得再重，也能活过来。",
+   "mods": {
+    "max_hp": 200,
+    "rest": -250,
+    "defense": 40
+   }
+  },
+  "wanfa": {
+   "name": "万法亲和",
+   "tier": "orange",
+   "description": "万般法门，学之即会。",
+   "mods": {
+    "damage_all": 75,
+    "study": -150,
+    "cultivation": 50
+   }
+  },
+  "danqi": {
+   "name": "丹道奇才",
+   "tier": "orange",
+   "description": "天生的炼丹奇才，嗅一嗅便知药性。",
+   "mods": {
+    "pill": 300,
+    "pill_cooldown": -250,
+    "gather": 150
+   }
+  },
+  "shouyou": {
+   "name": "灵兽之友",
+   "tier": "orange",
+   "description": "灵兽都愿意亲近你。",
+   "mods": {
+    "encounter": -250,
+    "favor": 100,
+    "boon": 100
+   }
+  },
+  "tianyan": {
+   "name": "天眼",
+   "tier": "orange",
+   "description": "天眼开阖，看破虚妄。",
+   "mods": {
+    "boon": 300,
+    "gather": 200,
+    "encounter": -150
+   }
+  },
+  "shouxing": {
+   "name": "寿星临凡",
+   "tier": "orange",
+   "description": "寿星下凡，寿元绵长。",
+   "mods": {
+    "lifespan": 300,
+    "rest": -150,
+    "mind_gain": 100
+   }
+  },
+  "zhanti": {
+   "name": "天生战体",
+   "tier": "orange",
+   "description": "为斗法而生。",
+   "mods": {
+    "attack": 30,
+    "max_hp": 125,
+    "damage_all": 50
+   }
+  },
+  "tongming": {
+   "name": "道心通明",
+   "tier": "orange",
+   "description": "道心通明，心魔不生，境界自开。",
+   "mods": {
+    "mind_gain": 300,
+    "demon": 500,
+    "mind_need": -125
+   }
+  },
+  "lingqiao_tian": {
+   "name": "天生灵窍",
+   "tier": "orange",
+   "description": "灵窍天开，闭关不倦。",
+   "mods": {
+    "cultivation": 175,
+    "fresh_days": 150
+   }
+  },
+  "daqiyun": {
+   "name": "大气运",
+   "tier": "orange",
+   "description": "气运如虹，福泽绵长。",
+   "mods": {
+    "boon": 400,
+    "grade": 100,
+    "favor": 75
+   }
+  },
+  "yinyang": {
+   "name": "阴阳同体",
+   "tier": "orange",
+   "description": "水火同居一身而不相害。",
+   "mods": {
+    "damage_water": 100,
+    "damage_fire": 100,
+    "max_qi": 100
+   }
+  },
+  "huigen": {
+   "name": "天生慧根",
+   "tier": "orange",
+   "description": "慧根深种。",
+   "mods": {
+    "insight": 250,
+    "cultivation": 75,
+    "breakthrough": 25
+   }
+  },
+  "bulao": {
+   "name": "不老泉体",
+   "tier": "orange",
+   "description": "体内如有一眼不老泉。",
+   "mods": {
+    "lifespan": 200,
+    "max_qi": 100,
+    "rest": -150
+   }
+  },
+  "jiandan": {
+   "name": "剑胆琴心",
+   "tier": "orange",
+   "description": "剑胆琴心，刚柔并济。",
+   "mods": {
+    "damage_metal": 100,
+    "mind_gain": 200,
+    "favor": 100
+   }
+  },
+  "fuze": {
+   "name": "福泽深厚",
+   "tier": "orange",
+   "description": "祖荫深厚，福泽及身。",
+   "mods": {
+    "boon": 250,
+    "stones": 1000,
+    "buy": -75,
+    "favor": 100
+   }
+  },
+  "xianren_zhuanshi": {
+   "name": "仙人转世",
+   "tier": "red",
+   "description": "前世曾是仙人，今生残忆犹存。",
+   "mods": {
+    "cultivation": 400,
+    "breakthrough": 120,
+    "grade": 320,
+    "insight": 320,
+    "lifespan": 240
+   }
+  },
+  "tianming": {
+   "name": "天命之人",
+   "tier": "red",
+   "description": "天命所归，福缘与劫数都冲着你来。",
+   "mods": {
+    "boon": 1200,
+    "grade": 240,
+    "breakthrough": 80,
+    "demon": 400,
+    "favor": 240
+   }
+  },
+  "hundun": {
+   "name": "混沌灵体",
+   "tier": "red",
+   "description": "混沌初开之体，五行皆通。",
+   "mods": {
+    "cultivation": 360,
+    "damage_all": 200,
+    "max_qi": 240,
+    "max_hp": 160
+   }
+  },
+  "xiantian_jianti": {
+   "name": "先天剑体",
+   "tier": "red",
+   "description": "先天剑体，万剑朝宗。",
+   "mods": {
+    "damage_metal": 480,
+    "attack": 80,
+    "damage_all": 120
+   }
+  },
+  "wangqing": {
+   "name": "太上忘情",
+   "tier": "red",
+   "description": "太上忘情，心如古井，人情却也淡了。",
+   "mods": {
+    "mind_gain": 800,
+    "mind_need": -320,
+    "demon": 800,
+    "favor": -20,
+    "cultivation": 200
+   }
+  },
+  "wangu": {
+   "name": "万古长青",
+   "tier": "red",
+   "description": "生机无穷，寿与山齐。",
+   "mods": {
+    "lifespan": 960,
+    "rest": -480,
+    "max_hp": 240
+   }
+  },
+  "daogu": {
+   "name": "天生道骨",
+   "tier": "red",
+   "description": "道骨天成，破境如饮水。",
+   "mods": {
+    "breakthrough": 160,
+    "grade": 400,
+    "cultivation": 240
+   }
+  },
+  "ziqi": {
+   "name": "紫气东来",
+   "tier": "red",
+   "description": "紫气东来，财运与机缘并至。",
+   "mods": {
+    "boon": 800,
+    "cultivation": 240,
+    "stones": 2400,
+    "favor": 160
+   }
+  },
+  "tiandu": {
+   "name": "天妒英才",
+   "tier": "red",
+   "description": "天资绝世，却为天所妒，寿元短促。",
+   "mods": {
+    "cultivation": 640,
+    "insight": 480,
+    "lifespan": -40,
+    "breakthrough": 80
+   }
+  },
+  "sushi": {
+   "name": "宿世灵童",
+   "tier": "red",
+   "description": "带着宿世的灵慧而来。",
+   "mods": {
+    "insight": 640,
+    "study": -480,
+    "mind_need": -240,
+    "cultivation": 160
+   }
+  },
+  "qianbei_yize": {
+   "name": "前辈遗泽",
+   "tier": "blue",
+   "description": "古修残魂灌顶，前辈的修为感悟留在了你的经脉里。",
+   "mods": {
+    "cultivation": 24,
+    "insight": 40,
+    "breakthrough": 10
+   },
+   "gained": true
+  },
+  "dunwu_yuyun": {
+   "name": "顿悟余韵",
+   "tier": "green",
+   "description": "一场顿悟之后，心中常有灵光。",
+   "mods": {
+    "insight": 38,
+    "mind_gain": 22
+   },
+   "gained": true
+  },
+  "shengsi_lilian": {
+   "name": "生死历练",
+   "tier": "green",
+   "description": "从生死边缘走回来，便再没有什么能吓住你。",
+   "mods": {
+    "max_hp": 15,
+    "attack": 3,
+    "demon": 30
+   },
+   "gained": true
+  }
+ },
+ "flaws": {
+  "tiruo": {
+   "name": "体弱多病",
+   "description": "自小体弱，三天两头生病。",
+   "mods": {
+    "max_hp": -15,
+    "rest": 20
+   },
+   "group": "body"
+  },
+  "fuzao": {
+   "name": "心浮气躁",
+   "description": "静不下心来。",
+   "mods": {
+    "mind_gain": -30
+   },
+   "group": "heart"
+  },
+  "duanming": {
+   "name": "短命相",
+   "description": "相士摇头不语。",
+   "mods": {
+    "lifespan": -20
+   },
+   "group": "life"
+  },
+  "zhaozai": {
+   "name": "招灾",
+   "description": "走到哪里，麻烦跟到哪里。",
+   "mods": {
+    "encounter": 25
+   },
+   "group": "omen"
+  },
+  "wuyin": {
+   "name": "五音不全",
+   "description": "唱起歌来连野狗都会跑。",
+   "mods": {}
+  },
+  "yudun": {
+   "name": "愚钝",
+   "description": "悟性差些，学东西也慢。",
+   "mods": {
+    "insight": -20,
+    "study": 15
+   },
+   "group": "wit"
+  },
+  "qiduan": {
+   "name": "气短",
+   "description": "丹田狭小，灵力不足。",
+   "mods": {
+    "max_qi": -10
+   },
+   "group": "sea"
+  },
+  "lansan": {
+   "name": "懒散",
+   "description": "能躺着绝不坐着。",
+   "mods": {
+    "cultivation": -8
+   },
+   "group": "pace"
+  },
+  "luchi": {
+   "name": "路痴",
+   "description": "出门总走错路。",
+   "mods": {
+    "travel": 15
+   },
+   "group": "road"
+  },
+  "zuiben": {
+   "name": "嘴笨",
+   "description": "不会说话，常得罪人。",
+   "mods": {
+    "favor": -15
+   },
+   "group": "charm"
+  },
+  "shouben": {
+   "name": "手笨",
+   "description": "做什么都慢半拍。",
+   "mods": {
+    "study": 15,
+    "gather": -10
+   }
+  },
+  "meiyun": {
+   "name": "霉运",
+   "description": "喝凉水都塞牙。",
+   "mods": {
+    "boon": -30
+   },
+   "group": "luck"
+  },
+  "yaoshi": {
+   "name": "药石不进",
+   "description": "丹药入腹，十成药力只化三成。",
+   "mods": {
+    "pill": -30
+   },
+   "group": "pill"
+  },
+  "zuobuzhu": {
+   "name": "坐不住",
+   "description": "闭关三天就想出门。",
+   "mods": {
+    "retreat_days": -20,
+    "fresh_days": -15
+   },
+   "group": "seclusion"
+  },
+  "nanyu": {
+   "name": "伤口难愈",
+   "description": "一点小伤也要养许久。",
+   "mods": {
+    "rest": 30
+   },
+   "group": "recover"
+  },
+  "danxiao": {
+   "name": "胆小",
+   "description": "临阵手软，心魔也容易趁虚而入。",
+   "mods": {
+    "attack": -1,
+    "demon": -10
+   }
+  },
+  "pingping": {
+   "name": "根骨平平",
+   "description": "根骨平常，破境难些。",
+   "mods": {
+    "breakthrough": -5
+   },
+   "group": "bone"
+  },
+  "xinmo_yisheng": {
+   "name": "心魔易生",
+   "description": "心底藏着太多执念。",
+   "mods": {
+    "demon": -40,
+    "mind_need": 10
+   }
+  },
+  "baijia": {
+   "name": "败家",
+   "description": "有多少花多少。",
+   "mods": {
+    "stones": -20,
+    "buy": 10
+   },
+   "group": "wealth"
+  },
+  "yuanjia": {
+   "name": "冤家路窄",
+   "description": "仇家总能找上门。",
+   "mods": {
+    "encounter": 15,
+    "favor": -5
+   }
+  },
+  "yunxue": {
+   "name": "晕血",
+   "description": "见了血就头晕。",
+   "mods": {
+    "attack": -1,
+    "damage_all": -5
+   }
+  },
+  "weihan": {
+   "name": "畏寒",
+   "description": "一到冬天就手脚冰凉。",
+   "mods": {
+    "damage_water": -10,
+    "max_hp": -3
+   },
+   "group": "affinity_water"
+  },
+  "weihuo": {
+   "name": "畏火",
+   "description": "见了火就心慌。",
+   "mods": {
+    "damage_fire": -10
+   },
+   "group": "affinity_fire"
+  },
+  "jinqi": {
+   "name": "金气不调",
+   "description": "体内金气紊乱。",
+   "mods": {
+    "damage_metal": -10
+   },
+   "group": "affinity_metal"
+  },
+  "muqi": {
+   "name": "木气郁结",
+   "description": "木气郁结不畅。",
+   "mods": {
+    "damage_wood": -10
+   },
+   "group": "affinity_wood"
+  },
+  "tuqi": {
+   "name": "土气沉滞",
+   "description": "土气沉滞难化。",
+   "mods": {
+    "damage_earth": -10
+   },
+   "group": "affinity_earth"
+  },
+  "shimian": {
+   "name": "失眠",
+   "description": "夜夜难眠。",
+   "mods": {
+    "rest": 15,
+    "fresh_days": -10
+   }
+  },
+  "tanzui": {
+   "name": "贪嘴",
+   "description": "嘴馋，钱都花在吃上，身子倒是壮实。",
+   "mods": {
+    "stones": -10,
+    "max_hp": 3
+   }
+  },
+  "shishui": {
+   "name": "嗜睡",
+   "description": "一睡就是大半天。",
+   "mods": {
+    "retreat_days": 10,
+    "travel": 5,
+    "cultivation": -3
+   }
+  },
+  "duoyi": {
+   "name": "多疑",
+   "description": "谁都信不过，倒也少上当。",
+   "mods": {
+    "favor": -10,
+    "encounter": -10
+   }
+  },
+  "haogao": {
+   "name": "好高骛远",
+   "description": "心比天高，境界却跟不上。",
+   "mods": {
+    "insight": -10,
+    "cultivation": 3,
+    "mind_need": 10
+   }
+  },
+  "xuhan": {
+   "name": "体质虚寒",
+   "description": "体质虚寒，药力难化。",
+   "mods": {
+    "max_hp": -8,
+    "pill": -10
+   }
+  },
+  "jiushang": {
+   "name": "旧伤缠身",
+   "description": "幼时一场重伤落下病根。",
+   "mods": {
+    "max_hp": -10,
+    "defense": -2
+   }
+  },
+  "yuse": {
+   "name": "经脉淤塞",
+   "description": "经脉有几处淤塞。",
+   "mods": {
+    "max_qi": -8,
+    "cultivation": -5
+   }
+  },
+  "xinruan": {
+   "name": "心软",
+   "description": "下不了狠手，人缘倒好。",
+   "mods": {
+    "favor": 10,
+    "attack": -1,
+    "demon": -10
+   }
+  },
+  "guxing": {
+   "name": "孤星",
+   "description": "天煞孤星，人都避着你，福缘却不浅。",
+   "mods": {
+    "favor": -20,
+    "boon": 10
+   }
+  },
+  "kouwu": {
+   "name": "口无遮拦",
+   "description": "说话不过脑子。",
+   "mods": {
+    "favor": -10
+   }
+  },
+  "jigong": {
+   "name": "急功近利",
+   "description": "求快不求稳。",
+   "mods": {
+    "breakthrough": -3,
+    "cultivation": 3
+   }
+  },
+  "yigenjin": {
+   "name": "一根筋",
+   "description": "认死理，学新东西慢，心魔也钻不进去。",
+   "mods": {
+    "study": 10,
+    "demon": 10
+   }
+  },
+  "yixiang": {
+   "name": "异香招兽",
+   "description": "身上有股异香，草木与妖兽都循香而来。",
+   "mods": {
+    "encounter": 20,
+    "gather": 5
+   }
+  },
+  "canhun_raoshen": {
+   "name": "残魂扰神",
+   "description": "那缕残魂没能夺舍，却在你识海里留下了伤。",
+   "mods": {
+    "mind_gain": -30,
+    "demon": -30
+   },
+   "gained": true
+  }
+ }
+}

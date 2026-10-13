@@ -27,6 +27,9 @@ var person_lookup: Callable
 var commission_data: Dictionary = {}
 # The guided start and the stories of key people (storylines.gd).
 var storylines: Dictionary = {}
+var talent_data: Dictionary = {}
+# Born-with talent ids by tier, built on first use (talents.gd).
+var talent_pools: Dictionary = {}
 var error_message: String = ""
 const DANGER_LEVELS := 4
 const FAVOR_MAX := 200
@@ -40,6 +43,7 @@ const CONGRATS := ["breakthrough", "serpent", "champion"]
 const DEEDS := ["retreat_days", "duel", "trade", "gather", "commission", "help", "tournament_champion"]
 const STORY_STATES := ["none", "active", "done", "closed"]
 const Arsenal = preload("res://scripts/core/arsenal.gd")
+const Talents = preload("res://scripts/core/talents.gd")
 
 func load_data() -> bool:
 	var parsed: Variant = _read_json("res://data/world.json")
@@ -73,7 +77,7 @@ func load_data() -> bool:
 		error_message = "物品配置格式错误。"
 		return false
 	items = item_data
-	for pair: Array in [["techniques", "res://data/techniques.json"], ["equipment", "res://data/equipment.json"], ["vfx_tiers", "res://data/vfx_tiers.json"], ["vfx", "res://data/vfx.json"], ["population", "res://data/population.json"], ["commissions", "res://data/commissions.json"], ["storylines", "res://data/storylines.json"]]:
+	for pair: Array in [["techniques", "res://data/techniques.json"], ["equipment", "res://data/equipment.json"], ["vfx_tiers", "res://data/vfx_tiers.json"], ["vfx", "res://data/vfx.json"], ["population", "res://data/population.json"], ["commissions", "res://data/commissions.json"], ["storylines", "res://data/storylines.json"], ["talents", "res://data/talents.json"]]:
 		var loaded: Variant = _read_json(pair[1])
 		if not loaded is Dictionary:
 			error_message = "配置格式错误：" + pair[1]
@@ -95,6 +99,9 @@ func load_data() -> bool:
 				commission_data = loaded
 			"storylines":
 				storylines = loaded
+			"talents":
+				talent_data = loaded
+				talent_pools = {}
 	map = parsed.map
 	locations = parsed.locations
 	skills = parsed.skills
@@ -272,10 +279,80 @@ func _validate() -> String:
 		problem = _validate_person(people[person_id])
 		if not problem.is_empty():
 			return "人物 %s：%s" % [person_id, problem]
+	problem = _validate_talents()
+	if not problem.is_empty():
+		return problem
 	problem = _validate_storylines()
 	if not problem.is_empty():
 		return problem
 	return _validate_reveals()
+
+# --- Talent static checks -------------------------------------------------------------------------
+
+func _validate_talents() -> String:
+	var data := talent_data
+	if not data.get("tiers") is Array or data.tiers.is_empty() or not data.get("talents") is Dictionary or not data.get("flaws") is Dictionary:
+		return "天赋配置无效。"
+	var tiers := {}
+	for tier: Variant in data.tiers + [data.get("flaw")]:
+		if not tier is Dictionary or not tier.get("id") is String or not tier.get("name") is String or not tier.get("color") is String or not _signed(tier.get("score")):
+			return "天赋等级配置无效。"
+		tiers[tier.id] = true
+	if not data.get("tables") is Dictionary or not data.tables.has("default") or not data.get("player") is Dictionary or not data.tables.has(data.player.get("table", "")):
+		return "天赋出生表配置无效。"
+	if not _whole(data.player.get("senses")) or int(data.player.senses) < 1:
+		return "感应次数无效。"
+	for table_id: String in data.tables:
+		var table: Variant = data.tables[table_id]
+		if not table is Dictionary or not table.get("counts") is Array or table.counts.is_empty() or not table.get("weights") is Dictionary or table.weights.is_empty() or not (table.get("flaw_chance") is float or table.get("flaw_chance") is int):
+			return "天赋出生表无效：%s" % table_id
+		for entry: Variant in table.counts:
+			if not entry is Array or entry.size() != 2 or not _whole(entry[0]) or not (entry[1] is float or entry[1] is int) or float(entry[1]) <= 0.0:
+				return "天赋数量权重无效：%s" % table_id
+		for tier_id: Variant in table.weights:
+			if not tiers.has(tier_id) or tier_id == "flaw" or not (table.weights[tier_id] is float or table.weights[tier_id] is int) or float(table.weights[tier_id]) <= 0.0:
+				return "天赋等级权重无效：%s.%s" % [table_id, tier_id]
+	var chances: Variant = population_data.get("life", {}).get("foundation_by_aptitude")
+	if not chances is Array or chances.size() != data.get("aptitude", []).size():
+		return "人物筑基几率须按资质等级给出。"
+	if not data.get("root_scores") is Dictionary or not data.get("speed_scores") is Array or not data.get("aptitude") is Array or data.aptitude.is_empty():
+		return "资质配置无效。"
+	var previous := -1000
+	for grade: Variant in data.aptitude:
+		if not grade is Dictionary or not grade.get("name") is String or not grade.get("color") is String or not _signed(grade.get("score")) or int(grade.score) <= previous:
+			return "资质等级配置无效。"
+		previous = int(grade.score)
+	var names := {}
+	for table: String in ["talents", "flaws"]:
+		for id: String in data[table]:
+			var talent: Variant = data[table][id]
+			if not talent is Dictionary or not talent.get("name") is String or not talent.get("description") is String or names.has(talent.name):
+				return "天赋缺少名称、描述或重名：%s" % id
+			names[talent.name] = true
+			if table == "talents" and (not tiers.has(talent.get("tier", "")) or talent.tier == "flaw"):
+				return "天赋等级未知：%s" % id
+			if table == "talents" and data.flaws.has(id):
+				return "天赋与缺陷同名：%s" % id
+			if not talent.get("mods") is Dictionary:
+				return "天赋缺少修正：%s" % id
+			for key: Variant in talent.mods:
+				if not key in Talents.MODIFIERS or not _signed(talent.mods[key]):
+					return "天赋修正无效：%s.%s" % [id, key]
+			if talent.has("group") and not talent.group is String:
+				return "天赋分组无效：%s" % id
+			if talent.has("gained") and not talent.gained is bool:
+				return "天赋来源无效：%s" % id
+	for tier: Dictionary in data.tiers:
+		if not data.talents.values().any(func(talent: Dictionary) -> bool: return talent.tier == tier.id and not bool(talent.get("gained", false))):
+			return "天赋等级没有可抽取的天赋：%s" % tier.id
+	return ""
+
+## A talent or flaw id defined in data/talents.json.
+func is_talent(id: Variant) -> bool:
+	return id is String and (talent_data.get("talents", {}).has(id) or talent_data.get("flaws", {}).has(id))
+
+func _signed(value: Variant) -> bool:
+	return (value is int or value is float) and is_finite(float(value)) and float(value) == floor(float(value))
 
 # --- Storyline static checks ----------------------------------------------------------------------
 
@@ -697,6 +774,8 @@ func _validate_condition(condition: Variant) -> String:
 			return ""
 		"story_state":
 			return "" if value is Array and value.size() == 2 and storylines.has(value[0]) and value[1] in STORY_STATES else "剧情状态条件无效"
+		"talent":
+			return "" if is_talent(value) else "未知天赋：%s" % value
 	return "未知条件：%s" % key
 
 func _validate_effects(effects: Variant) -> String:
@@ -737,6 +816,8 @@ func _validate_effects(effects: Variant) -> String:
 				ok = people.has(value)
 			"manual":
 				ok = _whole(value) and int(value) >= 1 and int(value) <= technique_data.tiers.size()
+			"talent":
+				ok = is_talent(value)
 		if not ok:
 			return "效果无效：%s" % key
 	return ""
@@ -830,6 +911,8 @@ func _validate_person(person: Variant) -> String:
 		for kind: Variant in person.congrats:
 			if not kind in CONGRATS or not person.congrats[kind] is String:
 				return "贺信无效：%s" % kind
+	if person.has("talents") and (not person.talents is Array or person.talents.any(func(id: Variant) -> bool: return not is_talent(id))):
+		return "天赋无效"
 	if person.has("talk") and (not person.talk is Array or person.talk.any(func(line: Variant) -> bool: return not line is String)):
 		return "对话必须是文字列表"
 	var ids := {}

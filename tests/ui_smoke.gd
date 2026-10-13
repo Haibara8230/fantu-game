@@ -82,8 +82,14 @@ func _guided() -> void:
 	main.intro_finished_once = false
 	main._show_welcome()
 	check(main.skip_intro == null, "no skipping before the introduction was finished once")
+	var sensed := _texts(main.welcome_layer, "Label")
+	check(sensed.contains("灵根 · ") and sensed.contains("资质 · ") and sensed.contains("先天天赋") and _welcome_button("重新感应（余 5 次）") != null, "the welcome senses roots, talents and aptitude")
+	for i: int in 5:
+		_welcome_button("重新感应（余 %d 次）" % (5 - i)).pressed.emit()
+	check(_welcome_button("重新感应（余 0 次）") != null and _welcome_button("重新感应（余 0 次）").disabled, "and may sense again only five times")
 	main.name_input.text = "新人"
 	main.welcome_roots = ["metal", "wood", "fire"]
+	main.welcome_born = {"talents": [], "flaws": []}
 	main.begin()
 	check(main.current_screen() == "full" and main.story.title == "初入山门" and _texts(main.center, "Label").contains("许清和"), "a guided journey opens with the mentor's words")
 	main.close_story()
@@ -123,6 +129,12 @@ func _button(text_part: String) -> Button:
 			return button
 	return null
 
+func _welcome_button(text_part: String) -> Button:
+	for button: Button in main.welcome_layer.find_children("*", "Button", true, false):
+		if button.text.contains(text_part):
+			return button
+	return null
+
 ## A spot's paper tag on the place's scene (its text runs top to bottom; the tooltip names it).
 func _tag(spot_name: String) -> Button:
 	for button: Button in main.scene_layer.find_children("*", "Button", true, false):
@@ -152,8 +164,10 @@ func _run() -> void:
 	main.refresh_key_labels()
 	await _capture("welcome")
 	main.name_input.text = "青禾"
-	# Sensed roots are random; an ordinary three-element root keeps the cultivation numbers below fixed.
+	# Sensed roots and talents are random; an ordinary three-element root and no talents keep the
+	# numbers below fixed.
 	main.welcome_roots = ["metal", "wood", "fire"]
+	main.welcome_born = {"talents": [], "flaws": []}
 	check(main.skip_intro == null, "a first-time player cannot skip the introduction")
 	# Someone who has finished it once may skip it; the rest of this test plays such a journey, the
 	# guided start has its own checks at the end.
@@ -162,6 +176,7 @@ func _run() -> void:
 	main._show_welcome()
 	main.name_input.text = "青禾"
 	main.welcome_roots = ["metal", "wood", "fire"]
+	main.welcome_born = {"talents": [], "flaws": []}
 	check(main.skip_intro != null, "once finished, a new journey may skip it")
 	main.skip_intro.button_pressed = true
 	main.begin()

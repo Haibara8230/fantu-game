@@ -37,7 +37,7 @@ static func render(ui) -> void:
 		if index > 0:
 			worst = maxi(worst, int(session.content.route_between(path[index - 1], path[index]).danger))
 	var danger_names := ["太平", "略有风险", "颇为凶险", "九死一生"]
-	center.add_child(ui.paragraph("路线 · %s\n共 %d 日 · 沿途%s" % [" → ".join(names), session.content.path_days(path), danger_names[worst]], ui.INK))
+	center.add_child(ui.paragraph("路线 · %s\n共 %d 日 · 沿途%s" % [" → ".join(names), session.path_days(path), danger_names[worst]], ui.INK))
 	# On the guided start only the step's place is open; the mentor's words say so.
 	var held: String = session.guide_block("travel", map_target)
 	var go: Button = ui.button("启程前往" + target.name, func() -> void: ui.depart(ui.map_target), held)

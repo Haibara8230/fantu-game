@@ -5,6 +5,7 @@
     "start_age": [16, 20],
     "speed": [300, 1200],
     "foundation_chance": 0.35,
+    "foundation_by_aptitude": [0.1, 0.25, 0.4, 0.55, 0.7],
     "accident_chance": 0.15,
     "lifespan_share": [0.75, 1.0],
     "successor_gap_days": [30, 720]

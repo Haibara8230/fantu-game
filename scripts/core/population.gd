@@ -5,7 +5,11 @@ extends RefCounted
 ## A life is "g:<seat>:<generation>". Everything is a pure function of the world seed, the seat and the
 ## generation, so nothing about these people is saved except what happens between them and the player.
 ## Only seats belonging to a built region (currently 青云山周边) ever place people on the map.
+## Each life is born with talents (talents.gd), drawn on a stream of their own. In worlds begun with
+## talents (`shaped`) they shape the life: its pace, its chance of foundation and its years; worlds begun
+## before keep the lives they had, and the talents only show.
 const Arsenal = preload("res://scripts/core/arsenal.gd")
+const Talents = preload("res://scripts/core/talents.gd")
 const ATTACK_ARCHETYPES := ["bolt", "barrage", "burst"]
 const DAYS_PER_YEAR := 360
 
@@ -28,10 +32,12 @@ static func local_seats(content, world_seed: int) -> Array[int]:
 	return seats
 
 ## The life after `previous` in a seat (or the first one when `previous` is empty).
-static func next_life(content, world_seed: int, seat: int, previous: Dictionary) -> Dictionary:
+static func next_life(content, world_seed: int, seat: int, previous: Dictionary, shaped: bool = false) -> Dictionary:
 	var data: Dictionary = content.population_data
 	var life_rules: Dictionary = data.life
 	var generation := 0 if previous.is_empty() else int(previous.generation) + 1
+	var born := Talents.of_life(content, world_seed, seat, generation, region_of(content, world_seed, seat))
+	var mods := Talents.sum(content, born.talents + born.flaws)
 	var rng := RandomNumberGenerator.new()
 	rng.seed = hash([world_seed, "life", seat, generation])
 	var kind_id: String = _weighted(rng, data.kinds)
@@ -39,12 +45,19 @@ static func next_life(content, world_seed: int, seat: int, previous: Dictionary)
 	var personalities: Array = data.personalities.keys()
 	personalities.sort()
 	var speed := rng.randi_range(int(life_rules.speed[0]), int(life_rules.speed[1]))
+	var foundation_chance := float(life_rules.foundation_chance)
+	if shaped:
+		var grade := Talents.aptitude(content, Talents.score(content, Talents.speed_score(content, speed), born.talents + born.flaws))
+		speed = Talents.scaled(speed, int(mods.get("cultivation", 0)), 1)
+		foundation_chance = float(life_rules.foundation_by_aptitude[int(grade.index)]) + float(mods.get("breakthrough", 0)) / 100.0
 	var breakthrough_xp := int(content.realm(0).breakthrough.xp)
 	var foundation_age := -1
-	if content.realms.size() > 1 and rng.randf() < float(life_rules.foundation_chance):
+	if content.realms.size() > 1 and rng.randf() < foundation_chance:
 		foundation_age = int(life_rules.start_age[0]) + int(ceil(float(breakthrough_xp) / float(speed)))
 	var max_realm := 1 if foundation_age > 0 else 0
 	var lifespan := int(content.realm(max_realm).lifespan_years)
+	if shaped:
+		lifespan = maxi(int(life_rules.start_age[1]) + 10, lifespan + int(mods.get("lifespan", 0)))
 	var death_age := int(round(float(lifespan) * rng.randf_range(float(life_rules.lifespan_share[0]), float(life_rules.lifespan_share[1]))))
 	if rng.randf() < float(life_rules.accident_chance):
 		death_age = rng.randi_range(int(life_rules.start_age[1]) + 2, death_age)
@@ -65,6 +78,7 @@ static func next_life(content, world_seed: int, seat: int, previous: Dictionary)
 		"kind": kind_id, "gender": "female" if rng.randf() < 0.5 else "male", "name": _name(rng, data),
 		"personality": personalities[rng.randi_range(0, personalities.size() - 1)],
 		"speed": speed, "foundation_age": foundation_age, "birth": birth, "appear": appear,
+		"talents": born.talents, "flaws": born.flaws,
 		"death": birth + death_age * DAYS_PER_YEAR + rng.randi_range(0, DAYS_PER_YEAR - 1),
 	}
 	if kind.has("home"):
@@ -103,6 +117,7 @@ static func view(content, world_seed: int, life: Dictionary, day: int, loadout: 
 		"affiliation": content.sects[kind.affiliation].name, "sect": kind.affiliation, "age": int(now.age),
 		"personality": life.personality, "generated": true, "realm": int(now.realm), "stage": int(now.stage),
 		"gender": life.gender, "kind": life.kind, "birth": life.birth, "appear": life.appear, "death": life.death,
+		"talents": life.talents, "flaws": life.flaws, "speed": int(life.speed),
 		"description": "一名%s的%s，修为%s，惯用%s。" % [life.personality, kind.title, realm_text, content.technique(loadout.arts[0]).name],
 		"talk_favor": 2, "gift_favor": 3, "talk": data.personalities[life.personality].duplicate(), "loadout": loadout,
 		"interactions": [{"id": "spar", "label": "切磋（点到为止）", "effects": [{"spar": true}], "cooldown_days": 30, "chronicle": "你与{npc_name}切磋了一场。"}],
@@ -197,18 +212,21 @@ static func _weighted(rng: RandomNumberGenerator, table: Dictionary) -> String:
 			return key
 	return keys[0]
 
-## Duel stats for sparring with a person: their stage's health and their strongest attack.
+## Duel stats for sparring with a person: their stage's health and their strongest attack, as their
+## talents raise them.
 static func foe(content, person_id: String, person: Dictionary) -> Dictionary:
 	var caps: Dictionary = content.stage(int(person.realm), int(person.stage))
+	var mods := Talents.sum(content, person.get("talents", []) + person.get("flaws", []))
 	var best: Dictionary = {}
 	for art_id: String in person.loadout.arts:
 		var art: Dictionary = content.technique(art_id)
 		if art.get("kind", "") == "attack" and (best.is_empty() or int(art.damage_max) > int(best.damage_max)):
 			best = art
-	var bonus := int(caps.attack_bonus)
+	var bonus := int(caps.attack_bonus) + int(mods.get("attack", 0))
+	var power := maxf(0.1, 0.8 * (1.0 + float(int(mods.get("damage_all", 0)) + int(mods.get("damage_" + str(best.element), 0))) / 100.0))
 	return {
-		"name": person.name, "hp": int(caps.max_hp), "damage_min": int(round(float(best.damage_min) * 0.8)) + bonus,
-		"damage_max": int(round(float(best.damage_max) * 0.8)) + bonus, "art": best.id, "art_name": best.name,
+		"name": person.name, "hp": Talents.scaled(int(caps.max_hp), int(mods.get("max_hp", 0)), 1), "damage_min": maxi(1, int(round(float(best.damage_min) * power)) + bonus),
+		"damage_max": maxi(1, int(round(float(best.damage_max) * power)) + bonus), "art": best.id, "art_name": best.name,
 		"vfx": best.vfx, "tier": int(best.tier), "xp": 10 * (int(person.stage) + 1) + 30 * int(person.realm), "npc": person_id,
 		"sect": person.sect, "gender": person.gender,
 	}

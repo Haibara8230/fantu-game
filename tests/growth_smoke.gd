@@ -201,12 +201,21 @@ func _pacing() -> void:
 	check(int(game.world.day) == day + 5, "gathering takes five days")
 	check(int(game.content.locations.market.shop[0].price) == 120 and int(game.content.items.huichun_grass.price) == 4, "prices follow the slower economy")
 
+## Takes away the talents an old journey awakened with, so the migrated numbers can be checked as saved.
+func _untalented(game) -> void:
+	game.player.talents = []
+	game.player.flaws = []
+	game.refresh_realm_stats()
+
 func _saves() -> void:
 	var qi := Session.new()
 	check(qi.restore(JSON.parse_string(FileAccess.get_file_as_string("res://tests/fixtures/v5_qi_market.json"))), "v5 save migrates")
+	_untalented(qi)
 	check(qi.player.roots == ["metal", "wood", "fire"] and qi.player.stage == 0 and qi.cultivation_rate() == 60, "old journeys keep an ordinary three-element root")
 	var base := Session.new()
-	check(base.restore(JSON.parse_string(FileAccess.get_file_as_string("res://tests/fixtures/v5_foundation_ridge.json"))) and base.realm_name() == "筑基初期" and base.player.max_hp == 140, "v5 foundation save keeps its realm")
+	check(base.restore(JSON.parse_string(FileAccess.get_file_as_string("res://tests/fixtures/v5_foundation_ridge.json"))) and base.realm_name() == "筑基初期", "v5 foundation save keeps its realm")
+	_untalented(base)
+	check(base.player.max_hp == 140, "its stats follow the realm")
 	var game := _game(["water", "earth"])
 	Session.Events.apply(game, [{"xp": 1000}])
 	game.gain_insight("event")
@@ -224,6 +233,7 @@ func _saves() -> void:
 	check(copy.restore(stageless) and copy.player.stage == 1, "a save without a stage takes it from xp")
 	var v10 := Session.new()
 	check(v10.restore(JSON.parse_string(FileAccess.get_file_as_string("res://tests/fixtures/v10_heavenly_midstage.json"))), "v10 save migrates")
+	_untalented(v10)
 	check(v10.player.stage == 1 and v10.player.xp == 903 and v10.player.cultivation_carry == 1800 and v10.player.insight == 0 and v10.retreat_fatigue() == 0, "v10 keeps its stage and its finer remainder, with a fresh mind and no insight")
 	v10.cultivate(1)
 	check(v10.player.xp == 907 and v10.player.cultivation_carry == 600, "the migrated remainder carries into the next retreat day")

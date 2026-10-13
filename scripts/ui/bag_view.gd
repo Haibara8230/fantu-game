@@ -83,7 +83,7 @@ static func _item_row(ui, parent: VBoxContainer, item_id: String) -> void:
 		row.add_child(use_button)
 	if item.get("category", "") == "manual":
 		var block: String = session.learn_block(item.teaches)
-		var study: Button = ui.button("参悟 · %d 日" % int(session.content.technique(item.teaches).study_days), func() -> void: ui.run(func() -> String: return session.study_manual(item_id)), block)
+		var study: Button = ui.button("参悟 · %d 日" % session.study_days(session.content.technique(item.teaches)), func() -> void: ui.run(func() -> String: return session.study_manual(item_id)), block)
 		study.disabled = not block.is_empty()
 		row.add_child(study)
 	if item.get("category", "") == "equipment":

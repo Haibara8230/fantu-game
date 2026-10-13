@@ -12,7 +12,9 @@ extends RefCounted
 ## for some: short of it a retreat yields half and may last half as long; well above it, a fifth more.
 ## A single retreat lasts at most the stage's retreat_days, so seclusion alternates with going out; the
 ## limit grows a great deal with the realm.
+## Talents change every one of these limits through their modifiers (talents.gd).
 const Calendar = preload("res://scripts/core/calendar.gd")
+const Talents = preload("res://scripts/core/talents.gd")
 # player.cultivation_carry counts hundredths of a retreat day's xp-thirtieths, so partial efficiency
 # carries over exactly.
 const CARRY_SCALE := 100
@@ -31,7 +33,8 @@ static func fatigue_cap(s) -> int:
 
 ## Days of retreat in a row that yield fully; higher realms keep a fresh mind for longer.
 static func fresh_days(s) -> int:
-	return int(s.content.realm(int(s.player.realm)).get("fresh_days", s.content.rules.retreat.fresh_days))
+	var days := int(s.content.realm(int(s.player.realm)).get("fresh_days", s.content.rules.retreat.fresh_days))
+	return Talents.scaled(days, s.talent_modifier("fresh_days"), 1)
 
 ## Percent of the usual xp a retreat day yields after `tired` days of retreat in a row.
 static func efficiency(s, tired: int) -> int:
@@ -42,7 +45,7 @@ static func efficiency(s, tired: int) -> int:
 
 ## The mind the current sub-stage asks for.
 static func mind_needed(s) -> int:
-	return int(s.stage_stats().get("mind", 0))
+	return Talents.scaled(int(s.stage_stats().get("mind", 0)), s.talent_modifier("mind_need"))
 
 ## Percent of the usual xp the mind allows: short of the stage's need, enough, or well above it.
 static func mind_percent(s) -> int:
@@ -56,7 +59,7 @@ static func mind_percent(s) -> int:
 
 ## The longest single retreat now: the stage's own limit, halved while the mind falls short.
 static func retreat_cap(s) -> int:
-	var days := int(s.stage_stats().get("retreat_days", 3600))
+	var days := Talents.scaled(int(s.stage_stats().get("retreat_days", 3600)), s.talent_modifier("retreat_days"), 1)
 	if int(s.player.get("mind", 0)) < mind_needed(s):
 		days = days * int(s.content.rules.mind.short_percent) / 100
 	return maxi(1, days)
@@ -155,11 +158,15 @@ static func settle_stage(s) -> Array[String]:
 ## once) and mind.
 static func gain_insight(s, source: String) -> Array[String]:
 	var bottleneck: Dictionary = s.content.rules.bottleneck
-	s.player.insight = mini(insight_needed(s), int(s.player.insight) + int(bottleneck.insight[source]))
+	var gained := Talents.scaled(int(bottleneck.insight[source]), s.talent_modifier("insight"))
+	s.player.insight = mini(insight_needed(s), int(s.player.insight) + gained)
 	gain_mind(s, int(s.content.rules.mind.gain.get(source, 0)))
 	return settle_stage(s)
 
+## Talents change how much a gain brings, never a loss.
 static func gain_mind(s, amount: int) -> void:
+	if amount > 0:
+		amount = Talents.scaled(amount, s.talent_modifier("mind_gain"))
 	s.player["mind"] = maxi(0, int(s.player.get("mind", 0)) + amount)
 
 ## A 破障丹: enters the next sub-stage when xp waits at its bottleneck.

@@ -60,17 +60,25 @@ func _unified_time() -> void:
 	game.act("sell")
 	check(game.world.day == day, "trading takes no time")
 
+## Takes away the talents an old journey awakened with, so the migrated numbers can be checked as saved.
+func _untalented(game) -> void:
+	game.player.talents = []
+	game.player.flaws = []
+	game.refresh_realm_stats()
+
 func _migration() -> void:
 	var fresh = Session.new()
 	check(fresh.restore(_fixture("v1_fresh.json")), "v1 fresh save migrates")
 	check(fresh.snapshot().version == Session.SAVE_VERSION and fresh.world.day == 0 and fresh.age() == 16, "migrated time and age")
-	check(fresh.chronicle.entries.size() == 1 and fresh.chronicle.entries[0].major, "v1 journal becomes chronicle with major marker")
+	check(fresh.chronicle.entries.size() == 2 and fresh.chronicle.entries[0].major, "v1 journal becomes chronicle with major marker")
+	check(fresh.chronicle.entries[1].id == "talents_awaken" and fresh.player.has("talents") and fresh.journal_lines().back().contains("生来便有"), "an old journey's talents awaken from its seed")
 	var copy = Session.new()
 	check(copy.restore(JSON.parse_string(JSON.stringify(fresh.snapshot()))) and copy.snapshot() == fresh.snapshot(), "migrated save round-trips as the current version")
 
 	var done = Session.new()
 	var completed: Dictionary = _fixture("v1_completed.json")
 	check(done.restore(completed), "v1 save after the serpent migrates")
+	_untalented(done)
 	check(done.has_flag("serpent_slain") and done.player.realm == 1 and done.player.max_hp == 140, "completion becomes a world flag; stats derive from realm")
 	check(done.world.day == int(completed.player.month) * 30, "months convert to days")
 	var dated := false

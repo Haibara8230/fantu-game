@@ -8,6 +8,7 @@ extends RefCounted
 const Calendar = preload("res://scripts/core/calendar.gd")
 const Events = preload("res://scripts/core/events.gd")
 const Population = preload("res://scripts/core/population.gd")
+const Talents = preload("res://scripts/core/talents.gd")
 const TALK_COOLDOWN_DAYS := 30
 # How long someone stays away after leaving, when their data gives no time.
 const LONG_ABSENCE_DAYS := 3600
@@ -39,11 +40,34 @@ static func is_person(s, person_id: String) -> bool:
 ## A seat's lives, extended until one is still alive after `day` or until `generation` exists.
 static func seat_lives(s, seat: int, day: int = -1, generation: int = -1) -> Array:
 	if not s._lives.has(seat):
-		s._lives[seat] = [Population.next_life(s.content, int(s.world.seed), seat, {})]
+		s._lives[seat] = [Population.next_life(s.content, int(s.world.seed), seat, {}, _shaped(s))]
 	var lives: Array = s._lives[seat]
 	while (day >= 0 and int(lives.back().death) <= day) or (generation >= 0 and lives.size() <= generation):
-		lives.append(Population.next_life(s.content, int(s.world.seed), seat, lives.back()))
+		lives.append(Population.next_life(s.content, int(s.world.seed), seat, lives.back(), _shaped(s)))
 	return lives
+
+## Whether talents shape the generated lives in this world (worlds begun with talents).
+static func _shaped(s) -> bool:
+	return bool(s.world.get("talent_lives", false))
+
+## Someone's talents and flaws: generated people's from their life, handwritten people's as written
+## (one list in the data, split here).
+static func talents_of(s, person_id: String) -> Dictionary:
+	var someone := person(s, person_id)
+	if someone.get("generated", false):
+		return {"talents": someone.get("talents", []), "flaws": someone.get("flaws", [])}
+	var result := {"talents": [], "flaws": []}
+	for id: String in someone.get("talents", []):
+		result["flaws" if Talents.is_flaw(s.content, id) else "talents"].append(id)
+	return result
+
+## Someone's 资质: generated people's pace stands in for their roots; handwritten people may name theirs
+## (`roots`, a count of spirit roots), else three.
+static func aptitude_of(s, person_id: String) -> Dictionary:
+	var someone := person(s, person_id)
+	var owned := talents_of(s, person_id)
+	var base := Talents.speed_score(s.content, int(someone.speed)) if someone.get("generated", false) else int(s.content.talent_data.root_scores.get(str(someone.get("roots", 3)), 5))
+	return Talents.aptitude(s.content, Talents.score(s.content, base, owned.talents + owned.flaws))
 
 static func life_by_id(s, person_id: String) -> Dictionary:
 	if s._life_ids.has(person_id):

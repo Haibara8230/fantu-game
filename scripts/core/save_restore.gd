@@ -5,6 +5,7 @@ const Calendar = preload("res://scripts/core/calendar.gd")
 const Chronicle = preload("res://scripts/core/chronicle.gd")
 const SaveMigration = preload("res://scripts/core/save_migration.gd")
 const Cultivation = preload("res://scripts/core/cultivation.gd")
+const Talents = preload("res://scripts/core/talents.gd")
 const PLAYER_COUNTS := ["realm", "xp", "hp", "qi", "stones", "cultivation_carry", "fatigue", "fatigue_day", "insight"]
 const LIMIT := 1000000000.0
 
@@ -107,10 +108,23 @@ static func restore(s, data: Variant) -> bool:
 	var taught: Variant = saved_player.get("taught", [])
 	if storylines == null or letters == null or deeds == null or not taught is Array or taught.any(func(tip: Variant) -> bool: return not tip is String):
 		return false
-	var caps: Dictionary = content.stage(int(saved_player.realm), saved_stage)
-	var extra: Dictionary = s.bonuses(loadout)
-	if int(saved_player.hp) <= 0 or int(saved_player.hp) > int(caps.max_hp) + int(extra.max_hp) or int(saved_player.qi) > int(caps.max_qi) + int(extra.max_qi):
+	# Talents: optional, since saves before them lack them; then they awaken from the world seed.
+	var born: Variant = _valid_talents(content, saved_player)
+	if born == null:
 		return false
+	var awakened: bool = born.is_empty()
+	if awakened:
+		var rng := RandomNumberGenerator.new()
+		rng.seed = hash([int(saved_world.get("seed", 0)), "awaken"])
+		born = Talents.roll(content, rng, str(content.talent_data.player.table))
+	# Health and qi within the caps the save was made with (before any talents awakened).
+	var holder: Dictionary = loadout.duplicate()
+	holder.merge({"realm": int(saved_player.realm), "stage": saved_stage, "talents": [] if awakened else born.talents, "flaws": [] if awakened else born.flaws}, true)
+	var saved_caps: Dictionary = s.stat_caps(holder)
+	if int(saved_player.hp) <= 0 or int(saved_player.hp) > int(saved_caps.max_hp) or int(saved_player.qi) > int(saved_caps.max_qi):
+		return false
+	holder.merge({"talents": born.talents, "flaws": born.flaws}, true)
+	var caps: Dictionary = s.stat_caps(holder)
 	var roots: Variant = saved_player.get("roots")
 	if not roots is Array or roots.is_empty() or roots.size() > content.rules.spirit_roots.elements.size():
 		return false
@@ -176,7 +190,10 @@ static func restore(s, data: Variant) -> bool:
 		if key is String:
 			sold[key] = true
 	var seed_value: Variant = saved_world.get("seed", 0)
-	s.world = {"day": day, "flags": saved_world.flags.duplicate(), "events": events, "people": people, "seed": int(seed_value) if _whole_nonnegative(seed_value) else 0, "stock_sold": sold, "rumors": rumors, "quests_taken": taken, "storylines": storylines, "letters": letters}
+	var shaped: Variant = saved_world.get("talent_lives", false)
+	if not shaped is bool:
+		return false
+	s.world = {"day": day, "flags": saved_world.flags.duplicate(), "events": events, "people": people, "seed": int(seed_value) if _whole_nonnegative(seed_value) else 0, "stock_sold": sold, "rumors": rumors, "quests_taken": taken, "storylines": storylines, "letters": letters, "talent_lives": shaped}
 	s.populate()
 	var player: Dictionary = saved_player.duplicate(true)
 	for key: String in PLAYER_COUNTS:
@@ -191,6 +208,11 @@ static func restore(s, data: Variant) -> bool:
 	player.quests = quests
 	player["deeds"] = deeds
 	player["taught"] = taught.duplicate()
+	player["talents"] = born.talents.duplicate()
+	player["flaws"] = born.flaws.duplicate()
+	# Health and qi stay within the caps; talents that awaken may lower them.
+	player.hp = mini(int(player.hp), int(caps.max_hp))
+	player.qi = mini(int(player.qi), int(caps.max_qi))
 	player.warned_for = int(warned)
 	for item_id: String in player.items:
 		player.items[item_id] = int(player.items[item_id])
@@ -216,8 +238,28 @@ static func restore(s, data: Variant) -> bool:
 	s.combat_rng.state = int(saved_rng.combat)
 	s.world_rng.state = int(saved_rng.world)
 	s.combat_events.clear()
+	if awakened:
+		s.log_event("talents_awaken", {"talents": ",".join(born.talents + born.flaws)}, true)
 	s.changed.emit()
 	return true
+
+## The saved talents and flaws ({"talents", "flaws"}), {} when the save has none yet, or null when they
+## are malformed: unknown ids, a flaw among the talents or the other way round, or the same one twice.
+static func _valid_talents(content, saved_player: Dictionary) -> Variant:
+	if not saved_player.has("talents"):
+		return {}
+	var result := {}
+	for key: String in ["talents", "flaws"]:
+		var list: Variant = saved_player.get(key, [])
+		if not list is Array:
+			return null
+		var kept: Array = []
+		for id: Variant in list:
+			if not content.is_talent(id) or Talents.is_flaw(content, id) != (key == "flaws") or id in kept:
+				return null
+			kept.append(id)
+		result[key] = kept
+	return result
 
 ## Normalized copy of saved event progress, or null. Progress for events no longer in content is kept.
 static func _valid_event_progress(data: Dictionary) -> Variant:
