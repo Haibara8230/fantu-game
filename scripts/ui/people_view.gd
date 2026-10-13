@@ -124,7 +124,7 @@ static func beckons(ui, person_id: String) -> bool:
 
 ## Whether an option is part of a story or a request rather than everyday dealings.
 static func is_errand(ui, person_id: String, option_id: String) -> bool:
-	if option_id == "help":
+	if option_id in ["help", "invite_spar", "invite_help"]:
 		return true
 	if option_id == "talk":
 		# A word with them is what a story's step asks for (a visit, an introduction).
@@ -308,8 +308,14 @@ static func _option_name(person: Dictionary, option_id: String) -> String:
 			return "交谈"
 		"gift":
 			return "赠礼"
-		"help":
+		"help", "invite_help":
 			return "相助"
+		"consult":
+			return "请教"
+		"teach":
+			return "求传功法"
+		"invite_spar":
+			return "赴约切磋"
 	for interaction: Dictionary in person.get("interactions", []):
 		if interaction.id == option_id:
 			return str(interaction.label)

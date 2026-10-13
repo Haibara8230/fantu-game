@@ -197,7 +197,10 @@ static func restore(s, data: Variant) -> bool:
 	var shaped: Variant = saved_world.get("talent_lives", false)
 	if not shaped is bool:
 		return false
-	s.world = {"day": day, "flags": saved_world.flags.duplicate(), "events": events, "people": people, "seed": int(seed_value) if _whole_nonnegative(seed_value) else 0, "stock_sold": sold, "rumors": rumors, "quests_taken": taken, "storylines": storylines, "letters": letters, "talent_lives": shaped}
+	var bonds: Variant = _valid_bonds(s, content, saved_world, day)
+	if bonds == null:
+		return false
+	s.world = {"day": day, "flags": saved_world.flags.duplicate(), "events": events, "people": people, "seed": int(seed_value) if _whole_nonnegative(seed_value) else 0, "stock_sold": sold, "rumors": rumors, "quests_taken": taken, "storylines": storylines, "letters": letters, "talent_lives": shaped, "invites": bonds.invites, "loans": bonds.loans, "visit_period": bonds.visit_period}
 	s.populate()
 	var player: Dictionary = saved_player.duplicate(true)
 	for key: String in PLAYER_COUNTS:
@@ -287,6 +290,48 @@ static func _valid_breakthrough(content, saved_player: Dictionary, saved_pending
 			return null
 		result["attempt"] = {"odds": int(attempt.odds), "certain": attempt.certain, "steps": int(attempt.steps), "xp": int(attempt.xp), "guard": attempt.guard}
 	return result
+
+## Friends' open appointments and requests, silver lent, and the last period letters were written in
+## (optional: saves before them have none, and letters start from the period of loading). Invites
+## from people no longer known are dropped; anything malformed is null.
+static func _valid_bonds(s, content, saved_world: Dictionary, day: int) -> Variant:
+	var kinds: Dictionary = content.bonds_data.visits.kinds
+	var invites: Array = []
+	var saved_invites: Variant = saved_world.get("invites", [])
+	if not saved_invites is Array:
+		return null
+	for invite: Variant in saved_invites:
+		if not invite is Dictionary or not invite.get("id") is String or not invite.get("npc") is String or not kinds.has(invite.get("kind", "")) or not _whole_nonnegative(invite.get("made")) or int(invite.made) > day:
+			return null
+		if invite.has("deadline") and not _whole_nonnegative(invite.deadline):
+			return null
+		if invite.has("item") and content.item(str(invite.item)).is_empty():
+			return null
+		if invite.has("place") and not content.locations.has(str(invite.place)):
+			return null
+		for key: String in ["count", "amount"]:
+			if invite.has(key) and not _whole_nonnegative(invite[key]):
+				return null
+		if not s.is_person(invite.npc):
+			continue
+		var kept: Dictionary = invite.duplicate()
+		for key: String in ["made", "deadline", "count", "amount"]:
+			if kept.has(key):
+				kept[key] = int(kept[key])
+		invites.append(kept)
+	var loans: Array = []
+	var saved_loans: Variant = saved_world.get("loans", [])
+	if not saved_loans is Array:
+		return null
+	for loan: Variant in saved_loans:
+		if not loan is Dictionary or not loan.get("npc") is String or not _whole_nonnegative(loan.get("amount")) or not _whole_nonnegative(loan.get("repay")) or not _whole_nonnegative(loan.get("due")):
+			return null
+		if s.is_person(loan.npc):
+			loans.append({"npc": loan.npc, "amount": int(loan.amount), "repay": int(loan.repay), "due": int(loan.due)})
+	var period: Variant = saved_world.get("visit_period", day / int(content.bonds_data.visits.period_days))
+	if not _whole_nonnegative(period):
+		return null
+	return {"invites": invites, "loans": loans, "visit_period": int(period)}
 
 ## The player's standing in the sect, normalized (optional fields default to an outer disciple with
 ## nothing yet), or null when malformed.

@@ -21,6 +21,7 @@ const Talents = preload("res://scripts/core/talents.gd")
 const Breakthrough = preload("res://scripts/core/breakthrough.gd")
 const Fortune = preload("res://scripts/core/fortune.gd")
 const Sect = preload("res://scripts/core/sect.gd")
+const Bonds = preload("res://scripts/core/bonds.gd")
 const SaveRestore = preload("res://scripts/core/save_restore.gd")
 const SaveMigration = preload("res://scripts/core/save_migration.gd")
 const SAVE_VERSION := SaveMigration.CURRENT_VERSION
@@ -61,6 +62,8 @@ var _loadouts := {}
 var _life_ids := {}
 var _met_through := {}
 var _obituary_cache := {"dirty": true}
+# How many generated people hold a 传音符 with the player (-1 until counted again), kept by bonds.gd.
+var _writers := -1
 var chronicle = Chronicle.new()
 # Ephemeral presentation events; not part of the save format.
 var combat_events: Array[Dictionary] = []
@@ -87,7 +90,7 @@ func new_game(character_name: String = "无名", seed_value: int = -1, roots: Ar
 		chosen_name = "无名"
 	# talent_lives: the generated population's talents shape their lives (journeys begun before talents
 	# keep the lives they had).
-	world = {"day": 0, "flags": {}, "events": {}, "people": {}, "seed": seed_value if seed_value >= 0 else absi(int(world_rng.randi())), "stock_sold": {}, "rumors": {}, "quests_taken": {}, "storylines": {}, "letters": [], "talent_lives": true}
+	world = {"day": 0, "flags": {}, "events": {}, "people": {}, "seed": seed_value if seed_value >= 0 else absi(int(world_rng.randi())), "stock_sold": {}, "rumors": {}, "quests_taken": {}, "storylines": {}, "letters": [], "talent_lives": true, "invites": [], "loans": [], "visit_period": 0}
 	populate()
 	player = {
 		"name": chosen_name, "birth_day": -int(content.rules.starting_age) * Calendar.DAYS_PER_YEAR,
@@ -161,6 +164,7 @@ func conclude(text: String, passed: Dictionary = {}) -> String:
 	var parts: Array[String] = [text]
 	parts.append_array(passed.get("messages", []))
 	parts.append_array(Commissions.expire(self))
+	parts.append_array(Bonds.expire(self))
 	parts.append_array(Events.check_location(self))
 	parts.append_array(Storylines.update(self))
 	changed.emit()
@@ -307,10 +311,17 @@ func act(action: String) -> String:
 			if not ended.is_empty():
 				return conclude("", passed)
 			var found := Inventory.gather_picks(self, content.locations[player.location].gather)
+			# A friend who asked to gather here together doubles the finds.
+			var outing := Bonds.outing_here(self)
+			if not outing.is_empty():
+				for item_id: String in found:
+					found[item_id] = int(found[item_id]) * 2
 			for item_id: String in found:
 				add_item(item_id, int(found[item_id]))
 			record_deed("gather")
 			var gathered := [log_event("gather_items", {"days": passed.elapsed, "location": player.location, "loot": loot_code(found)})]
+			if not outing.is_empty():
+				gathered.append(Bonds.finish_outing(self, outing))
 			gathered.append_array(Fortune.after_gather(self))
 			return conclude(" ".join(gathered), passed)
 		"inn_rest":
@@ -528,6 +539,22 @@ func donation_value(item_id: String, count: int) -> int:
 
 func donate(item_id: String, count: int) -> String:
 	return Sect.donate(self, item_id, count)
+
+# --- Bonds (bonds.gd) -------------------------------------------------------------------------
+
+## Appointments and requests friends have sent by 传音 that wait for an answer.
+func open_invites() -> Array:
+	return world.get("invites", [])
+
+func answer_loan(invite_id: String, lend: bool) -> String:
+	return Bonds.answer_loan(self, invite_id, lend)
+
+## Close friends who can be called into the duel now.
+func duel_allies() -> Array[String]:
+	return Bonds.allies(self)
+
+func call_aid(person_id: String) -> String:
+	return Combat.call_aid(self, person_id)
 
 # --- Breakthrough (breakthrough.gd) -------------------------------------------------------------
 

@@ -68,6 +68,13 @@ static func render(ui) -> void:
 	flee.custom_minimum_size = Vector2(110, 29)
 	flee.add_theme_font_size_override("font_size", 14)
 	side.add_child(flee)
+	var allies: Array[String] = session.duel_allies()
+	if not allies.is_empty():
+		var friend: String = allies[0]
+		var call: Button = ui.button("传音求援", func() -> void: ui.battle_action("aid:" + friend), "以传音符请%s出手一击（每场一次，算作你的回合）" % session.person(friend).name)
+		call.custom_minimum_size = Vector2(110, 29)
+		call.add_theme_font_size_override("font_size", 14)
+		side.add_child(call)
 	var record_toggle: Button = ui.button("收起记录" if ui.battle_record_open else "记录", ui.toggle_battle_record, "这场斗法的最近几条记载")
 	record_toggle.custom_minimum_size = Vector2(110, 29)
 	record_toggle.add_theme_font_size_override("font_size", 14)

@@ -116,6 +116,21 @@ static func _event(fields: Dictionary, look: Dictionary) -> Dictionary:
 	event.merge(fields, true)
 	return event
 
+## 传音求援: a close friend answers the 传音 and strikes once; it takes the player's turn, once a duel.
+static func call_aid(s, person_id: String) -> String:
+	s.combat_events.clear()
+	if not person_id in s.Bonds.allies(s):
+		return "此刻无人可以求援。"
+	_tick_cooldowns(s)
+	s.battle.aid_used = true
+	var damage: int = s.Bonds._strength(s, person_id)
+	s.battle.hp = maxi(0, int(s.battle.hp) - damage)
+	s.combat_events.append({"type": "attack", "actor": "player", "style": "aid", "name": s.person(person_id).name, "vfx": "sword_rain", "tier": 3, "hits": 1, "amount": damage, "hp_after": int(s.battle.hp)})
+	s.log_event("aid", {"npc": person_id, "amount": damage})
+	if int(s.battle.hp) <= 0:
+		return _win(s)
+	return _enemy_turn(s, false)
+
 static func defend(s) -> String:
 	s.combat_events.clear()
 	if s.battle.is_empty():
@@ -199,6 +214,7 @@ static func _enemy_turn(s, guarding: bool) -> String:
 static func _spar_over(s, won: bool) -> String:
 	var npc: String = s.battle.npc
 	var xp: int = int(s.battle.foe.xp) if won else int(s.battle.foe.xp) / 2
+	var invite: String = str(s.battle.get("invite", ""))
 	s.battle.clear()
 	s.record_deed("duel")
 	s.player.hp = maxi(int(s.player.hp), 1)
@@ -208,6 +224,8 @@ static func _spar_over(s, won: bool) -> String:
 	message = _with_milestones(message, s.gain_xp(xp))
 	if won:
 		message = _with_milestones(message, s.Fortune.after_win(s, int(s.person(npc).get("realm", 0))))
+	if not invite.is_empty():
+		message = _with_milestones(message, s.Bonds.spar_kept(s, invite, npc, won))
 	return s.conclude(message, s.advance_days(s.content.action_days("road_recovery")))
 
 static func _with_milestones(message: String, milestones: Array[String]) -> String:

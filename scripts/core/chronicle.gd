@@ -149,7 +149,19 @@ static func letter_text(args: Dictionary, content) -> String:
 	if args.has("story"):
 		return story_text({"story": args.story, "step": args.get("step", ""), "part": "say"}, content)
 	var person: Dictionary = content.person_named(str(args.get("npc", "")))
-	return str(person.get("congrats", {}).get(str(args.get("kind", "")), "（失传的记载）"))
+	var kind := str(args.get("kind", ""))
+	# Letters friends write on their own, in the words of their temper (data/bonds.json).
+	if kind.begins_with("bond:"):
+		var words: Variant = content.bonds_data.get("letters", {}).get(kind.trim_prefix("bond:"), {}).get(str(person.get("personality", "")))
+		if not words is String:
+			return "（失传的记载）"
+		var values: Dictionary = args.duplicate()
+		if values.has("item"):
+			values["item_name"] = str(content.item(str(values.item)).get("name", values.item))
+		if values.has("place"):
+			values["place_name"] = str(content.locations.get(str(values.place), {}).get("name", values.place))
+		return words.format(values)
+	return str(person.get("congrats", {}).get(kind, "（失传的记载）"))
 
 ## Event records point into data/events.json: the event's own text, a choice, a reminder or an expiry.
 static func _event_text(args: Dictionary, content) -> String:

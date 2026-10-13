@@ -180,9 +180,9 @@ static func apply(s, effects: Array) -> void:
 				if delta > 0:
 					delta = s.Talents.scaled(delta, s.talent_modifier("favor"), 1)
 				person.relation = clampi(int(person.relation) + delta, -s.content.FAVOR_MAX, s.content.FAVOR_MAX)
-				# Key people leave a 传音符 once the bond is close enough.
-				var someone: Dictionary = s.content.people.get(value[0], {})
-				if someone.has("sound_at") and int(person.relation) >= int(someone.sound_at):
+				# A 传音符 is exchanged once the bond is close enough (bonds.gd).
+				var sound_at: int = s.Bonds.sound_at(s, value[0])
+				if sound_at >= 0 and int(person.relation) >= sound_at:
 					s.exchange_sound(value[0])
 			"leave":
 				s.npc_depart(s.acting_npc)
@@ -245,9 +245,12 @@ static func next_due(s, from_day: int) -> Dictionary:
 	var obituary: Dictionary = s.next_obituary(from_day)
 	if not obituary.is_empty():
 		best = _earlier(best, {"day": int(obituary.day), "kind": "obituary", "event": obituary.id})
-	var story: Dictionary = s.story_due(from_day)
-	if not story.is_empty():
-		best = _earlier(best, {"day": int(story.day), "kind": "story", "event": story.story})
+		var story: Dictionary = s.story_due(from_day)
+		if not story.is_empty():
+			best = _earlier(best, {"day": int(story.day), "kind": "story", "event": story.story})
+	var bond: Dictionary = s.Bonds.next_due(s, from_day)
+	if not bond.is_empty():
+		best = _earlier(best, {"day": int(bond.day), "kind": str(bond.kind), "event": ""})
 	for event_id: String in _sorted_ids(s):
 		var definition: Dictionary = s.content.events[event_id]
 		# Only dated events and fixed windows (reminders, expiries) are ever due.
@@ -290,6 +293,10 @@ static func fire(s, due: Dictionary) -> Dictionary:
 			return {"interrupt": false, "message": s.log_event("obituary", {"npc": due.event, "age": (int(life.death) - int(life.birth)) / 360})}
 		"story":
 			return s.story_fire(due.event)
+		"visits":
+			return {"interrupt": false, "message": " ".join(s.Bonds.write_letters(s))}
+		"loan":
+			return {"interrupt": false, "message": " ".join(s.Bonds.settle_loans(s))}
 		"lifespan_end":
 			s.ended = {"kind": "lifespan", "day": day}
 			return {"interrupt": true, "message": s.log_event("lifespan_end", {"location": s.player.location, "age": s.age()}, true)}

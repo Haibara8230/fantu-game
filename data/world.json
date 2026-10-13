@@ -358,7 +358,7 @@
     "starting_stones": 30,
     "cultivate_xp": 60,
     "retreat": {"fresh_days": 180, "decline_days": 720, "floor_percent": 50, "recovery_per_day": 2},
-    "bottleneck": {"insight_needed": 100, "insight": {"battle_win": 20, "spar": 10, "commission": 25, "event": 15}},
+    "bottleneck": {"insight_needed": 100, "insight": {"battle_win": 20, "spar": 10, "commission": 25, "event": 15, "consult": 15}},
     "fortune": {
       "epiphany": {"chance": 0.02, "per_days": 10, "days": 10, "places": ["ferry", "ridge", "sect"], "event": "epiphany", "talent": "dunwu_yuyun", "talent_chance": 0.1},
       "brink": {"chance": 0.05, "hp_percent": 15, "talent": "shengsi_lilian", "talent_chance": 0.1},
@@ -386,7 +386,7 @@
         {"id": "flawless", "name": "无瑕", "stats": 25, "speed": 25}
       ]
     },
-    "mind": {"gain": {"battle_win": 2, "spar": 1, "commission": 4, "event": 2}, "short_percent": 50, "ample_margin": 10, "ample_percent": 120},
+    "mind": {"gain": {"battle_win": 2, "spar": 1, "commission": 4, "event": 2, "consult": 3}, "short_percent": 50, "ample_margin": 10, "ample_percent": 120},
     "rest_full_days": 12,
     "spirit_roots": {
       "elements": ["metal", "wood", "water", "fire", "earth"],

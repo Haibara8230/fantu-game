@@ -218,6 +218,7 @@ static func congratulate(s, kind: String) -> Array[String]:
 		var person: Dictionary = s.content.people[person_id]
 		if bool(s.world.people.get(person_id, {}).get("sound", false)) and person.get("congrats", {}).has(kind):
 			texts.append(send_letter(s, person_id, {"kind": kind}))
+	texts.append_array(s.Bonds.congratulate(s))
 	return texts
 
 ## Exchanges 传音符 with a person; returns the text, or "" when already exchanged.
@@ -226,6 +227,7 @@ static func exchange_sound(s, person_id: String) -> String:
 	if bool(record_of.get("sound", false)):
 		return ""
 	record_of["sound"] = true
+	s._writers = -1
 	return s.log_event("sound", {"npc": person_id})
 
 static func unread_letters(s) -> int:

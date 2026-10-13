@@ -9,6 +9,7 @@ const Calendar = preload("res://scripts/core/calendar.gd")
 const Events = preload("res://scripts/core/events.gd")
 const Population = preload("res://scripts/core/population.gd")
 const Talents = preload("res://scripts/core/talents.gd")
+const Bonds = preload("res://scripts/core/bonds.gd")
 const TALK_COOLDOWN_DAYS := 30
 # How long someone stays away after leaving, when their data gives no time.
 const LONG_ABSENCE_DAYS := 3600
@@ -23,6 +24,7 @@ static func populate(s) -> void:
 	s._loadouts = {}
 	s._people_at = {}
 	s._index_cache.clear()
+	s._writers = -1
 	obituaries_changed(s)
 	s.content.person_lookup = s.person
 
@@ -320,6 +322,7 @@ static func npc_options(s, person_id: String) -> Array[Dictionary]:
 	if request_open(s, person_id):
 		var request := request_of(s, person_id)
 		options.append({"id": "help", "label": "相助：送上%s×%d（好感 +%d，酬谢 %d 灵石）" % [s.content.item(request.item).name, int(request.count), int(s.content.rules.requests.favor), int(request.stones)], "conditions": [{"item_at_least": [request.item, int(request.count)]}]})
+	options.append_array(Bonds.options(s, person_id))
 	for interaction: Dictionary in someone.get("interactions", []):
 		options.append(interaction)
 	var result: Array[Dictionary] = []
@@ -339,6 +342,8 @@ static func npc_options(s, person_id: String) -> Array[Dictionary]:
 			reason = "%s后再来。" % Calendar.duration_text(int(last[option.id]) + int(option.cooldown_days) - int(s.world.day))
 		elif not Events.all_met(s, option.get("conditions", [])):
 			reason = "条件不足。"
+		else:
+			reason = Bonds.option_block(s, person_id, str(option.id))
 		result.append({"id": option.id, "label": option.label, "available": reason.is_empty(), "reason": reason})
 	return result
 
@@ -357,6 +362,8 @@ static func interact(s, person_id: String, option_id: String) -> String:
 	mark_met(s, person_id)
 	var progress := Events.person(s, person_id)
 	progress.last[option_id] = int(s.world.day)
+	if option_id in ["consult", "teach", "invite_spar", "invite_help"]:
+		return Bonds.interact(s, person_id, option_id)
 	var text := ""
 	match option_id:
 		"talk":

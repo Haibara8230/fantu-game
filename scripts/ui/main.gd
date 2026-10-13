@@ -852,6 +852,8 @@ func battle_action(action: String) -> void:
 	var message: String
 	if action == "guard":
 		message = session.defend()
+	elif action.begins_with("aid:"):
+		message = session.call_aid(action.trim_prefix("aid:"))
 	elif action == "flee":
 		message = session.flee()
 	else:

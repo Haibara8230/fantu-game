@@ -71,17 +71,56 @@ static func render_stories(ui) -> void:
 static func render_letters(ui) -> void:
 	var session = ui.session
 	var center: VBoxContainer = ui.center
+	_render_invites(ui)
 	var letters: Array = session.world.get("letters", [])
 	if letters.is_empty():
-		center.add_child(ui.paragraph("还没有收到传音。与人交情深了会互留传音符，师长与故人有事也会传音过来。"))
+		center.add_child(ui.paragraph("还没有收到传音。与人交情深了（相熟）会互留传音符，往后对方有事、有约、有喜，都会传音过来。"))
 		return
 	var fresh: int = ui.letters_fresh
 	for index: int in range(letters.size() - 1, -1, -1):
 		var letter: Dictionary = letters[index]
-		var person: Dictionary = session.content.people.get(letter.npc, {})
+		var person: Dictionary = session.person(str(letter.npc))
 		var mark := "新 · " if index >= letters.size() - fresh else ""
 		center.add_child(ui.label("%s%s · %s" % [mark, person.get("name", letter.npc), Calendar.short_text(int(letter.day))], 16, ui.GOLD))
 		center.add_child(ui.paragraph(Chronicle.letter_text(letter, session.content), ui.INK))
+
+## Friends' appointments and requests that wait for an answer: where to find them and by when; silver
+## asked for can be lent or refused from here.
+static func _render_invites(ui) -> void:
+	var session = ui.session
+	var center: VBoxContainer = ui.center
+	var invites: Array = session.open_invites()
+	if invites.is_empty():
+		return
+	center.add_child(ui.label("待 回 复", 18, ui.GOLD))
+	for invite: Dictionary in invites:
+		var person: Dictionary = session.person(str(invite.npc))
+		var where: String = session.npc_location(str(invite.npc))
+		var place: String = session.content.locations[where].name if not where.is_empty() else "行踪不明"
+		var until := "，限 %s" % Calendar.short_text(int(invite.deadline)) if invite.has("deadline") else ""
+		var line := ""
+		match str(invite.kind):
+			"spar":
+				line = "%s约你切磋（此刻在%s%s）" % [person.name, place, until]
+			"help":
+				line = "%s求%s×%d（此刻在%s%s）" % [person.name, session.content.item(invite.item).name, int(invite.count), place, until]
+			"outing":
+				line = "%s约你同去%s采药%s" % [person.name, session.content.locations[invite.place].name, until]
+			"loan":
+				line = "%s想借 %d 灵石，半年后还一倍半%s" % [person.name, int(invite.amount), until]
+		var row := HBoxContainer.new()
+		row.add_theme_constant_override("separation", 10)
+		center.add_child(row)
+		var text: Label = ui.label(line, 16, ui.INK)
+		text.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		row.add_child(text)
+		if invite.kind == "loan":
+			var invite_id: String = invite.id
+			var lend: Button = ui.button("借给他", func() -> void: ui.run(func() -> String: return session.answer_loan(invite_id, true)), "若他半年内故去，这笔钱便收不回来")
+			lend.disabled = int(session.player.stones) < int(invite.amount)
+			row.add_child(lend)
+			row.add_child(ui.button("婉拒", func() -> void: ui.run(func() -> String: return session.answer_loan(invite_id, false)), "好感略减"))
+	center.add_child(HSeparator.new())
 
 ## When this life runs out, and the appointments coming up.
 static func render_upcoming(ui) -> void:

@@ -23,6 +23,11 @@ func _initialize() -> void:
 	_exchange()
 	_donations()
 	_saves()
+	_favor_opens()
+	_letters()
+	_appointments()
+	_loans()
+	_aid()
 	print("BONDS: %d checks, %d failures" % [checks, failures])
 	quit(0 if failures == 0 else 1)
 
@@ -162,3 +167,143 @@ func _saves() -> void:
 	var old := Session.new()
 	check(old.restore(JSON.parse_string(FileAccess.get_file_as_string("res://tests/fixtures/v13_commissions.json"))) and old.snapshot().version == Session.SAVE_VERSION, "a version 13 save migrates")
 	check(old.sect_rank().name == "外门弟子" and int(old.player.merit) == 30 and int(old.player.contribution) == 30 and int(old.player.stipend_day) == int(old.world.day), "its delivered commissions count as contribution; the stipend starts now")
+
+## A generated person met and present here.
+func _someone(game: Session) -> String:
+	for person_id: String in game.present_npcs():
+		if game.is_generated(person_id) and game.person(person_id).attitude != "hostile":
+			game.mark_met(person_id)
+			return person_id
+	return ""
+
+func _favor_opens() -> void:
+	var game := _game()
+	var friend := _someone(game)
+	check(not friend.is_empty(), "someone to befriend at the sect")
+	var ids := func() -> Array: return game.npc_options(friend).map(func(option: Dictionary) -> String: return option.id)
+	check(not "consult" in ids.call() and not "teach" in ids.call(), "a stranger offers nothing more")
+	Session.Events.apply(game, [{"relation": [friend, 40]}])
+	check(bool(game.world.people[friend].get("sound", false)), "an acquaintance (相熟) exchanges a 传音符")
+	Session.Events.apply(game, [{"relation": [friend, 40]}])
+	check("consult" in ids.call(), "a friend (友好) of one's standing can be consulted")
+	var day := int(game.world.day)
+	var mind := int(game.player.mind)
+	var text := game.interact(friend, "consult")
+	check(int(game.world.day) == day + 3 and int(game.player.insight) == 15 and int(game.player.mind) == mind + 3 and text.contains("请教"), "consulting takes three days for insight and mind")
+	check(not game.npc_options(friend).filter(func(option: Dictionary) -> bool: return option.id == "consult")[0].available, "and waits a while before the next time")
+	Session.Events.apply(game, [{"relation": [friend, 60]}])
+	var teach: Array = game.npc_options(friend).filter(func(option: Dictionary) -> bool: return option.id == "teach")
+	check(not teach.is_empty(), "a trusted friend (信赖) can be asked to teach an art")
+	if teach[0].available:
+		var slips: int = game.player.items.keys().filter(func(id: String) -> bool: return id.begins_with("j:")).size()
+		game.interact(friend, "teach")
+		check(game.player.items.keys().filter(func(id: String) -> bool: return id.begins_with("j:")).size() == slips + 1 and game.journal_lines().back().contains("传给了你"), "who writes one of theirs into a jade slip")
+		check(not game.npc_options(friend).filter(func(option: Dictionary) -> bool: return option.id == "teach")[0].available, "once in a life")
+	else:
+		check(str(teach[0].reason).contains("没有能传"), "unless nothing of theirs suits the player")
+
+## A session where every friend writes each period, with one friend holding a 传音符.
+func _writer() -> Array:
+	var game := _game()
+	game.content.bonds_data.visits.chance = 1.0
+	var friend := _someone(game)
+	Session.Events.apply(game, [{"relation": [friend, 50]}])
+	return [game, friend]
+
+func _letters() -> void:
+	var pair := _writer()
+	var game: Session = pair[0]
+	var friend: String = pair[1]
+	var before := int(game.world.letters.size())
+	var result := game.cultivate(90)
+	check(not result.contains("提前出关") and int(game.world.day) == 90, "a friend's letter never ends a retreat")
+	check(game.world.letters.size() > before and game.world.letters.back().npc == friend and str(game.world.letters.back().kind).begins_with("bond:"), "friends write on their own")
+	var words: String = Session.Chronicle.letter_text(game.world.letters.back(), game.content)
+	check(not words.contains("{") and not words.contains("失传"), "in their own words: " + words)
+	var gifts := _writer()
+	var giver: Session = gifts[0]
+	var kinds := {}
+	for period: int in 12:
+		giver.advance_days(60)
+		for letter: Dictionary in giver.world.letters:
+			kinds[str(letter.kind)] = true
+		giver.world.invites.clear()
+	check(kinds.size() >= 3, "and about different things: %s" % str(kinds.keys()))
+	var told := game.congratulate("breakthrough")
+	check(told.any(func(line: String) -> bool: return line.contains(game.person(friend).name)), "friends among the people send congratulations too")
+
+func _appointments() -> void:
+	var game := _game()
+	var friend := _someone(game)
+	Session.Events.apply(game, [{"relation": [friend, 50]}])
+	game.world.invites.append({"id": "spar:0:" + friend, "npc": friend, "kind": "spar", "made": 0, "deadline": 30})
+	check("invite_spar" in game.npc_options(friend).map(func(option: Dictionary) -> String: return option.id), "an appointment to spar shows where they are")
+	var favor := game.favor(friend)
+	game.interact(friend, "invite_spar")
+	check(not game.battle.is_empty() and game.battle.get("invite", "") == "spar:0:" + friend, "keeping it starts the spar")
+	game.battle.hp = 1
+	game.use_skill("sword")
+	check(game.battle.is_empty() and game.favor(friend) >= favor + 15 and game.open_invites().is_empty(), "a kept appointment is worth more than a plain spar")
+	game.world.invites.append({"id": "spar:1:" + friend, "npc": friend, "kind": "spar", "made": int(game.world.day), "deadline": int(game.world.day) + 30})
+	favor = game.favor(friend)
+	game.wait(10)
+	game.wait(30)
+	check(game.favor(friend) == favor - 5 and game.journal_lines().any(func(line: String) -> bool: return line.contains("没有赴")), "one not kept is remembered")
+	game.world.invites.append({"id": "help:0:" + friend, "npc": friend, "kind": "help", "made": int(game.world.day), "deadline": int(game.world.day) + 60, "item": "huichun_grass", "count": 2})
+	game.set_item_count("huichun_grass", 2)
+	var stones := int(game.player.stones)
+	game.interact(friend, "invite_help")
+	check(game.item_count("huichun_grass") == 0 and int(game.player.stones) == stones + 12 and game.open_invites().is_empty(), "help asked by 传音 is paid for")
+	game.world.invites.append({"id": "outing:0:" + friend, "npc": friend, "kind": "outing", "made": int(game.world.day), "deadline": int(game.world.day) + 30, "place": "ridge"})
+	game.travel("ridge")
+	game.fortune = {"lingshen": 0.99, "spirit_eye": 0.99}
+	var herbs := game.herb_count()
+	game.act("gather")
+	check(game.herb_count() - herbs >= 2 and (game.herb_count() - herbs) % 2 == 0 and game.open_invites().is_empty() and game.journal_lines().back().contains("收获翻倍"), "gathering together brings twice the herbs")
+
+func _loans() -> void:
+	var game := _game()
+	var friend := _someone(game)
+	Session.Events.apply(game, [{"relation": [friend, 50]}])
+	game.player.stones = 100
+	game.world.invites.append({"id": "loan:0:" + friend, "npc": friend, "kind": "loan", "made": 0, "deadline": 30, "amount": 40})
+	game.answer_loan("loan:0:" + friend, true)
+	check(int(game.player.stones) == 60 and game.world.loans.size() == 1 and int(game.world.loans[0].repay) == 60, "silver lent, half again to come back")
+	var copy := Session.new()
+	check(copy.restore(JSON.parse_string(JSON.stringify(game.snapshot()))) and copy.world.loans == game.world.loans, "a loan survives a save")
+	var life: Dictionary = game.life_by_id(friend)
+	if int(life.death) > 181:
+		game.cultivate(90)
+		game.cultivate(90)
+		game.wait(1)
+		check(int(game.player.stones) >= 120 and game.world.loans.is_empty() and game.world.letters.back().kind == "bond:repaid", "repaid in half a year, with a letter")
+	game.world.invites.append({"id": "loan:1:" + friend, "npc": friend, "kind": "loan", "made": int(game.world.day), "deadline": int(game.world.day) + 30, "amount": 20})
+	var favor := game.favor(friend)
+	game.answer_loan("loan:1:" + friend, false)
+	check(game.favor(friend) == favor - 3 and game.open_invites().filter(func(invite: Dictionary) -> bool: return invite.id == "loan:1:" + friend).is_empty(), "refusing costs a little favor")
+	# A borrower who dies before the day takes the silver along.
+	var dying := ""
+	for seat: int in game._local_seats:
+		var someone: Dictionary = game.life_at(seat, int(game.world.day))
+		if not someone.is_empty() and int(someone.death) > int(game.world.day) and int(someone.death) < int(game.world.day) + 150:
+			dying = someone.id
+			break
+	if not dying.is_empty():
+		game.world.loans.append({"npc": dying, "amount": 30, "repay": 45, "due": int(game.world.day) + 180})
+		var stones := int(game.player.stones)
+		game.advance_days(181)
+		check(int(game.player.stones) == stones and game.journal_lines().any(func(line: String) -> bool: return line.contains("收不回来")), "a borrower who dies first never repays")
+
+func _aid() -> void:
+	var game := _game()
+	var friend := _someone(game)
+	Session.Events.apply(game, [{"relation": [friend, 200]}])
+	game.travel("wild")
+	game.start_battle("wolf")
+	check(game.duel_allies() == [friend], "a close friend (亲密) can be called into a duel")
+	var hp := int(game.battle.hp)
+	game.call_aid(friend)
+	check(game.battle.is_empty() or (int(game.battle.hp) < hp and bool(game.battle.aid_used)), "their strike lands")
+	if not game.battle.is_empty():
+		check(game.duel_allies().is_empty() and game.call_aid(friend).contains("无人"), "once a duel")
+	check(game.journal_lines().any(func(line: String) -> bool: return line.contains("应声而至")), "and is written down")

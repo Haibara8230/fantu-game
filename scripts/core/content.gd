@@ -29,6 +29,7 @@ var commission_data: Dictionary = {}
 var storylines: Dictionary = {}
 var talent_data: Dictionary = {}
 var sect_data: Dictionary = {}
+var bonds_data: Dictionary = {}
 # Born-with talent ids by tier, built on first use (talents.gd).
 var talent_pools: Dictionary = {}
 var error_message: String = ""
@@ -36,7 +37,7 @@ const DANGER_LEVELS := 4
 const FAVOR_MAX := 200
 const FAVOR_STAGES := [[0, "初识"], [40, "相熟"], [80, "友好"], [140, "信赖"], [200, "亲密"]]
 const ATTITUDES := {"friendly": "友善", "neutral": "中立", "hostile": "敌意"}
-const BUILT_IN_INTERACTIONS := ["talk", "gift", "help"]
+const BUILT_IN_INTERACTIONS := ["talk", "gift", "help", "consult", "teach", "invite_spar", "invite_help"]
 const PLAIN_ACTIONS := ["cultivate", "rest", "breakthrough", "study", "teach", "sell", "shop", "gather", "inn_rest", "search_ruin", "inquire", "commissions", "sect"]
 const ITEM_CATEGORIES := {"herb": "灵草", "pill": "丹药", "treasure": "天材地宝", "manual": "玉简", "equipment": "法宝", "material": "材料", "quest": "信物"}
 # Milestones friends send word of, and the deeds the session counts besides victories ("win:<enemy>").
@@ -78,7 +79,7 @@ func load_data() -> bool:
 		error_message = "物品配置格式错误。"
 		return false
 	items = item_data
-	for pair: Array in [["techniques", "res://data/techniques.json"], ["equipment", "res://data/equipment.json"], ["vfx_tiers", "res://data/vfx_tiers.json"], ["vfx", "res://data/vfx.json"], ["population", "res://data/population.json"], ["commissions", "res://data/commissions.json"], ["storylines", "res://data/storylines.json"], ["talents", "res://data/talents.json"], ["sect", "res://data/sect.json"]]:
+	for pair: Array in [["techniques", "res://data/techniques.json"], ["equipment", "res://data/equipment.json"], ["vfx_tiers", "res://data/vfx_tiers.json"], ["vfx", "res://data/vfx.json"], ["population", "res://data/population.json"], ["commissions", "res://data/commissions.json"], ["storylines", "res://data/storylines.json"], ["talents", "res://data/talents.json"], ["sect", "res://data/sect.json"], ["bonds", "res://data/bonds.json"]]:
 		var loaded: Variant = _read_json(pair[1])
 		if not loaded is Dictionary:
 			error_message = "配置格式错误：" + pair[1]
@@ -105,6 +106,8 @@ func load_data() -> bool:
 				talent_pools = {}
 			"sect":
 				sect_data = loaded
+			"bonds":
+				bonds_data = loaded
 	map = parsed.map
 	locations = parsed.locations
 	skills = parsed.skills
@@ -292,6 +295,8 @@ func _validate() -> String:
 	problem = _validate_talents()
 	if problem.is_empty():
 		problem = _validate_sect()
+	if problem.is_empty():
+		problem = _validate_bonds()
 	if not problem.is_empty():
 		return problem
 	problem = _validate_storylines()
@@ -422,6 +427,40 @@ func _validate_sect() -> String:
 				return "宗门兑换缺少：%s.%s" % [good.id, key]
 		if good.has("rank") and not data.ranks.any(func(rank: Dictionary) -> bool: return rank.id == good.rank):
 			return "宗门兑换引用了未知身份：%s" % good.id
+	return ""
+
+# --- Bonds static checks --------------------------------------------------------------------------
+
+func _validate_bonds() -> String:
+	var data := bonds_data
+	for key: String in ["sound_at", "most_letters"]:
+		if not _whole(data.get(key)):
+			return "人情配置缺少：" + key
+	for key: String in ["consult", "teach", "aid"]:
+		if not data.get(key) is Dictionary or not _whole(data[key].get("favor")):
+			return "人情配置缺少：" + key
+	if not _whole(data.consult.get("days")) or not _whole(data.consult.get("cooldown_days")) or not (data.aid.get("power") is float or data.aid.get("power") is int):
+		return "请教或求援配置无效。"
+	if not rules.bottleneck.insight.has("consult"):
+		return "请教缺少历练数值。"
+	var visits: Variant = data.get("visits")
+	if not visits is Dictionary or not _whole(visits.get("period_days")) or int(visits.period_days) < 1 or not (visits.get("chance") is float or visits.get("chance") is int) or not _whole(visits.get("most_open")) or not visits.get("kinds") is Dictionary:
+		return "人物往来配置无效。"
+	for kind_id: String in ["spar", "help", "outing", "loan", "gift"]:
+		var kind: Variant = visits.kinds.get(kind_id)
+		if not kind is Dictionary or not _whole(kind.get("weight")) or int(kind.weight) < 1:
+			return "人物往来缺少：" + kind_id
+		for item_id: Variant in kind.get("items", []):
+			if not items.has(item_id):
+				return "人物往来引用了未知物品：%s" % item_id
+		for place: Variant in kind.get("places", []):
+			if not locations.has(place):
+				return "人物往来引用了未知地点：%s" % place
+	var personalities: Array = population_data.personalities.keys()
+	for kind_id: String in ["spar", "help", "outing", "loan", "gift", "congrats", "repaid"]:
+		var letters: Variant = data.get("letters", {}).get(kind_id)
+		if not letters is Dictionary or personalities.any(func(personality: String) -> bool: return not letters.get(personality) is String):
+			return "人物传音缺少：%s" % kind_id
 	return ""
 
 # --- Talent static checks -------------------------------------------------------------------------
@@ -1069,6 +1108,8 @@ func _validate_person(person: Variant) -> String:
 		for kind: Variant in person.congrats:
 			if not kind in CONGRATS or not person.congrats[kind] is String:
 				return "贺信无效：%s" % kind
+	if person.has("standing") and (not person.standing is Array or person.standing.size() != 2 or not _whole(person.standing[0]) or int(person.standing[0]) >= realms.size() or not _whole(person.standing[1])):
+		return "修为无效"
 	if person.has("talents") and (not person.talents is Array or person.talents.any(func(id: Variant) -> bool: return not is_talent(id))):
 		return "天赋无效"
 	if person.has("talk") and (not person.talk is Array or person.talk.any(func(line: Variant) -> bool: return not line is String)):
