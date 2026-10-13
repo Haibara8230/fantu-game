@@ -1,0 +1,556 @@
+[
+  {
+    "id": "wild_eye",
+    "kind": "scene",
+    "target": "assets/art/scenes/wild_eye.png",
+    "source": "C:\\Users\\asxlwsl\\.codex\\generated_images\\01a13337-91e3-7180-8425-92153b60a4b2\\exec-85e9e08c-46a7-4d5b-947c-a993c26db4e9.png",
+    "prompt": "Use case: stylized-concept. Create one production game background for 凡途, a Chinese cultivation RPG. Subject: the spirit eye 灵眼 hidden behind a crack in Luoxia Valley's mountain wall: luminous jade spring rippling in a small rocky sanctuary, soft spirals of pale turquoise spiritual mist, moss, hanging roots, one dry stone meditation platform, distant opening showing peach sunset. Wide landscape 16:9, 2560x1440 if possible. Unmistakably 2D hand-drawn game illustration, clear dark ink outlines, flat muted jade / warm stone / dusty teal color areas, restrained two-tone shadows, simplified painterly shapes. Quiet legible composition, important spring on left-center, space for overlay on right and bottom. No people, text, labels, UI, watermark, realistic rendering, 3D or cinematic lighting.",
+    "size": [
+      1672,
+      941
+    ],
+    "mode": "RGB",
+    "sha256": "6f0c3c126da76304a8d40f722e36809cace0dd26d69ebae85975807a75052795",
+    "generator": "built-in image_gen"
+  },
+  {
+    "target": "assets/art/events/heart_demon.png",
+    "kind": "event",
+    "id": "heart_demon",
+    "subject": "心魔: 丹田灵气翻涌之际，往日的执念一齐涌上心头：落败的屈辱、未了的心愿、对寿元将尽的恐惧……幻象化作人形，挡在你与筑基之间。心境不足，便是心魔趁虚而入之时。 ",
+    "prompt": "Use case: illustration-story. Production art for 凡途, an original Chinese cultivation 2D RPG. Style: CLEAR dark hand-drawn ink outlines, flat opaque color areas, restrained two-tone cel shading, simplified shapes and expressive illustrated faces, matching Chinese 2D cultivation game art. Muted jade, dusty teal, warm ivory, restrained gold. No photorealism, realistic skin/textile, 3D, cinematic rendering, text, labels, UI, watermark.\nSingle narrative key-moment illustration, wide landscape 16:9. Show the specific story below, never a generic talent emblem. Main action upper two thirds; lower third quiet for dialogue overlay. The player when needed is a young adult Chinese cultivator wearing simple ivory and muted jade long robe, dark tied hair. Faces stylized, clothing modest, magic restrained.\nSubject and story (Chinese text is content to illustrate, never write it onto the image): 心魔: 丹田灵气翻涌之际，往日的执念一齐涌上心头：落败的屈辱、未了的心愿、对寿元将尽的恐惧……幻象化作人形，挡在你与筑基之间。心境不足，便是心魔趁虚而入之时。 ",
+    "source": "C:\\Users\\asxlwsl\\.codex\\generated_images\\01a13337-91e3-7180-8425-92153b60a4b2\\exec-e3c3b259-378a-4a2e-be66-ebdc595fd487.png",
+    "size": [
+      1672,
+      941
+    ],
+    "mode": "RGB",
+    "sha256": "f77664d85ec2396dd8e31ec0e8d39255e0922476111730e4ecc9515dba96127b",
+    "generator": "built-in image_gen"
+  },
+  {
+    "target": "assets/art/events/epiphany.png",
+    "kind": "event",
+    "id": "epiphany",
+    "subject": "顿悟: 潮声、松涛、漫天星斗……不知是哪一样触动了你。困了你许久的关隘忽然变得透亮，仿佛只隔着一层窗纸。这样的灵光，一生未必有第二回。 ",
+    "prompt": "Use case: illustration-story. Production art for 凡途, an original Chinese cultivation 2D RPG. Style: CLEAR dark hand-drawn ink outlines, flat opaque color areas, restrained two-tone cel shading, simplified shapes and expressive illustrated faces, matching Chinese 2D cultivation game art. Muted jade, dusty teal, warm ivory, restrained gold. No photorealism, realistic skin/textile, 3D, cinematic rendering, text, labels, UI, watermark.\nSingle narrative key-moment illustration, wide landscape 16:9. Show the specific story below, never a generic talent emblem. Main action upper two thirds; lower third quiet for dialogue overlay. The player when needed is a young adult Chinese cultivator wearing simple ivory and muted jade long robe, dark tied hair. Faces stylized, clothing modest, magic restrained.\nSubject and story (Chinese text is content to illustrate, never write it onto the image): 顿悟: 潮声、松涛、漫天星斗……不知是哪一样触动了你。困了你许久的关隘忽然变得透亮，仿佛只隔着一层窗纸。这样的灵光，一生未必有第二回。 ",
+    "source": "C:\\Users\\asxlwsl\\.codex\\generated_images\\01a13337-91e3-7180-8425-92153b60a4b2\\exec-2ec77bea-2b16-4e9c-b945-8ed944fa29c4.png",
+    "size": [
+      1672,
+      941
+    ],
+    "mode": "RGB",
+    "sha256": "90457353a5ddd93fd6fdd19ba4330dda82bdc4a490049d5643b0a942017c7070",
+    "generator": "built-in image_gen"
+  },
+  {
+    "target": "assets/art/events/spirit_eye.png",
+    "kind": "event",
+    "id": "spirit_eye",
+    "subject": "灵眼:  采药时你拨开一丛藤蔓，山壁裂隙后竟藏着一眼灵泉，天地灵气在此汇聚成漩——是传说中的灵眼。在这里闭关突破，把握会大上几分。",
+    "prompt": "Use case: illustration-story. Production art for 凡途, an original Chinese cultivation 2D RPG. Style: CLEAR dark hand-drawn ink outlines, flat opaque color areas, restrained two-tone cel shading, simplified shapes and expressive illustrated faces, matching Chinese 2D cultivation game art. Muted jade, dusty teal, warm ivory, restrained gold. No photorealism, realistic skin/textile, 3D, cinematic rendering, text, labels, UI, watermark.\nSingle narrative key-moment illustration, wide landscape 16:9. Show the specific story below, never a generic talent emblem. Main action upper two thirds; lower third quiet for dialogue overlay. The player when needed is a young adult Chinese cultivator wearing simple ivory and muted jade long robe, dark tied hair. Faces stylized, clothing modest, magic restrained.\nSubject and story (Chinese text is content to illustrate, never write it onto the image): 灵眼:  采药时你拨开一丛藤蔓，山壁裂隙后竟藏着一眼灵泉，天地灵气在此汇聚成漩——是传说中的灵眼。在这里闭关突破，把握会大上几分。",
+    "source": "C:\\Users\\asxlwsl\\.codex\\generated_images\\01a13337-91e3-7180-8425-92153b60a4b2\\exec-11c0cd6d-dfef-44e1-936f-c9832cf75769.png",
+    "size": [
+      1672,
+      941
+    ],
+    "mode": "RGB",
+    "sha256": "be844382d7ac4d0fcb7c92becd59c47ee4d806da0da0e4cc9e9abd554215d027",
+    "generator": "built-in image_gen"
+  },
+  {
+    "target": "assets/art/events/talent_hunyuan.png",
+    "kind": "event",
+    "id": "talent_hunyuan",
+    "subject": "混元灵体:  五行灵气在你丹田里自成循环，生生不息。你只是静坐了一日，修为便涨了一截。",
+    "prompt": "Use case: illustration-story. Production art for 凡途, an original Chinese cultivation 2D RPG. Style: CLEAR dark hand-drawn ink outlines, flat opaque color areas, restrained two-tone cel shading, simplified shapes and expressive illustrated faces, matching Chinese 2D cultivation game art. Muted jade, dusty teal, warm ivory, restrained gold. No photorealism, realistic skin/textile, 3D, cinematic rendering, text, labels, UI, watermark.\nSingle narrative key-moment illustration, wide landscape 16:9. Show the specific story below, never a generic talent emblem. Main action upper two thirds; lower third quiet for dialogue overlay. The player when needed is a young adult Chinese cultivator wearing simple ivory and muted jade long robe, dark tied hair. Faces stylized, clothing modest, magic restrained.\nSubject and story (Chinese text is content to illustrate, never write it onto the image): 混元灵体:  五行灵气在你丹田里自成循环，生生不息。你只是静坐了一日，修为便涨了一截。",
+    "source": "C:\\Users\\asxlwsl\\.codex\\generated_images\\01a13337-91e3-7180-8425-92153b60a4b2\\exec-4f67f551-bf6c-4f6e-a3a2-c1dac7deff1f.png",
+    "size": [
+      1672,
+      941
+    ],
+    "mode": "RGB",
+    "sha256": "9b3fd725e53b5d7fc48aa44c1235ef8150e9ca0445a0ca58883a394e8091ed98",
+    "generator": "built-in image_gen"
+  },
+  {
+    "target": "assets/art/events/remnant_soul.png",
+    "kind": "event",
+    "id": "remnant_soul",
+    "subject": "残魂: 石室深处的石壁上，一缕残魂缓缓凝成人形：“小友根骨尚可。老夫苟存至今，愿将一身感悟灌入你的经脉，助你筑基——只是灌顶之时，你须守得住心神。”它的眼神里，似乎还藏着别的东西。 ",
+    "prompt": "Use case: illustration-story. Production art for 凡途, an original Chinese cultivation 2D RPG. Style: CLEAR dark hand-drawn ink outlines, flat opaque color areas, restrained two-tone cel shading, simplified shapes and expressive illustrated faces, matching Chinese 2D cultivation game art. Muted jade, dusty teal, warm ivory, restrained gold. No photorealism, realistic skin/textile, 3D, cinematic rendering, text, labels, UI, watermark.\nSingle narrative key-moment illustration, wide landscape 16:9. Show the specific story below, never a generic talent emblem. Main action upper two thirds; lower third quiet for dialogue overlay. The player when needed is a young adult Chinese cultivator wearing simple ivory and muted jade long robe, dark tied hair. Faces stylized, clothing modest, magic restrained.\nSubject and story (Chinese text is content to illustrate, never write it onto the image): 残魂: 石室深处的石壁上，一缕残魂缓缓凝成人形：“小友根骨尚可。老夫苟存至今，愿将一身感悟灌入你的经脉，助你筑基——只是灌顶之时，你须守得住心神。”它的眼神里，似乎还藏着别的东西。 ",
+    "source": "C:\\Users\\asxlwsl\\.codex\\generated_images\\01a13337-91e3-7180-8425-92153b60a4b2\\exec-13d96725-9502-4c95-bb2a-42aa651df380.png",
+    "size": [
+      1672,
+      941
+    ],
+    "mode": "RGB",
+    "sha256": "d13668056b3c429503d147e335849c837a4279b97cac16173ebf21803682604f",
+    "generator": "built-in image_gen"
+  },
+  {
+    "target": "assets/art/events/talent_xiantian_daoti.png",
+    "kind": "event",
+    "id": "talent_xiantian_daoti",
+    "subject": "先天道体:  静室中，你周身毛孔竟自行吞吐灵气，一夜之间修为大进。同门路过，只当是哪位长老在此闭关。",
+    "prompt": "Use case: illustration-story. Production art for 凡途, an original Chinese cultivation 2D RPG. Style: CLEAR dark hand-drawn ink outlines, flat opaque color areas, restrained two-tone cel shading, simplified shapes and expressive illustrated faces, matching Chinese 2D cultivation game art. Muted jade, dusty teal, warm ivory, restrained gold. No photorealism, realistic skin/textile, 3D, cinematic rendering, text, labels, UI, watermark.\nSingle narrative key-moment illustration, wide landscape 16:9. Show the specific story below, never a generic talent emblem. Main action upper two thirds; lower third quiet for dialogue overlay. The player when needed is a young adult Chinese cultivator wearing simple ivory and muted jade long robe, dark tied hair. Faces stylized, clothing modest, magic restrained.\nSubject and story (Chinese text is content to illustrate, never write it onto the image): 先天道体:  静室中，你周身毛孔竟自行吞吐灵气，一夜之间修为大进。同门路过，只当是哪位长老在此闭关。",
+    "source": "C:\\Users\\asxlwsl\\.codex\\generated_images\\01a13337-91e3-7180-8425-92153b60a4b2\\exec-2e461f0c-60af-41db-a60a-048bf774a96a.png",
+    "size": [
+      1672,
+      941
+    ],
+    "mode": "RGB",
+    "sha256": "ecc0e4c751db11d9b8a049776f5a607be36dceddd8da6d8f30c5a45a56383c6f",
+    "generator": "built-in image_gen"
+  },
+  {
+    "target": "assets/art/events/talent_linglong.png",
+    "kind": "event",
+    "id": "talent_linglong",
+    "subject": "九窍玲珑心:  何三更讲了一段古修士的故事，满堂只当听个热闹，你却从中悟出几分道理。散场后他拉住你，送你一枚旧玉简：“这东西在我这儿是废物，在你手里不是。”",
+    "prompt": "Use case: illustration-story. Production art for 凡途, an original Chinese cultivation 2D RPG. Style: CLEAR dark hand-drawn ink outlines, flat opaque color areas, restrained two-tone cel shading, simplified shapes and expressive illustrated faces, matching Chinese 2D cultivation game art. Muted jade, dusty teal, warm ivory, restrained gold. No photorealism, realistic skin/textile, 3D, cinematic rendering, text, labels, UI, watermark.\nSingle narrative key-moment illustration, wide landscape 16:9. Show the specific story below, never a generic talent emblem. Main action upper two thirds; lower third quiet for dialogue overlay. The player when needed is a young adult Chinese cultivator wearing simple ivory and muted jade long robe, dark tied hair. Faces stylized, clothing modest, magic restrained.\nSubject and story (Chinese text is content to illustrate, never write it onto the image): 九窍玲珑心:  何三更讲了一段古修士的故事，满堂只当听个热闹，你却从中悟出几分道理。散场后他拉住你，送你一枚旧玉简：“这东西在我这儿是废物，在你手里不是。”",
+    "source": "C:\\Users\\asxlwsl\\.codex\\generated_images\\01a13337-91e3-7180-8425-92153b60a4b2\\exec-1af66421-e4b1-4f9a-a948-83270f771d7d.png",
+    "size": [
+      1672,
+      941
+    ],
+    "mode": "RGB",
+    "sha256": "9f32e8d8137443eb3ef89ad98fbd9dd9b36b8b9b36cbe479ab950aaf3ff5cbab",
+    "generator": "built-in image_gen"
+  },
+  {
+    "target": "assets/art/events/talent_wanfa.png",
+    "kind": "event",
+    "id": "talent_wanfa",
+    "subject": "万法亲和:  传功堂的执事见你看一遍便会，惊得说不出话，私下又多传了你一门功法。",
+    "prompt": "Use case: illustration-story. Production art for 凡途, an original Chinese cultivation 2D RPG. Style: CLEAR dark hand-drawn ink outlines, flat opaque color areas, restrained two-tone cel shading, simplified shapes and expressive illustrated faces, matching Chinese 2D cultivation game art. Muted jade, dusty teal, warm ivory, restrained gold. No photorealism, realistic skin/textile, 3D, cinematic rendering, text, labels, UI, watermark.\nSingle narrative key-moment illustration, wide landscape 16:9. Show the specific story below, never a generic talent emblem. Main action upper two thirds; lower third quiet for dialogue overlay. The player when needed is a young adult Chinese cultivator wearing simple ivory and muted jade long robe, dark tied hair. Faces stylized, clothing modest, magic restrained.\nSubject and story (Chinese text is content to illustrate, never write it onto the image): 万法亲和:  传功堂的执事见你看一遍便会，惊得说不出话，私下又多传了你一门功法。",
+    "source": "C:\\Users\\asxlwsl\\.codex\\generated_images\\01a13337-91e3-7180-8425-92153b60a4b2\\exec-4c415054-d416-45fd-b2b4-d110eac722c4.png",
+    "size": [
+      1672,
+      941
+    ],
+    "mode": "RGB",
+    "sha256": "ff4dd8bc9840a3d421a710efaf053e1f4b998444be80f66c0a399c8528d81c3f",
+    "generator": "built-in image_gen"
+  },
+  {
+    "target": "assets/art/events/talent_qiyun_zhizi.png",
+    "kind": "event",
+    "id": "talent_qiyun_zhizi",
+    "subject": "气运之子:  青石镇街角，一个醉汉把布包往你怀里一塞便跑没了影。打开一看，是两枚破障丹和几十块灵石。",
+    "prompt": "Use case: illustration-story. Production art for 凡途, an original Chinese cultivation 2D RPG. Style: CLEAR dark hand-drawn ink outlines, flat opaque color areas, restrained two-tone cel shading, simplified shapes and expressive illustrated faces, matching Chinese 2D cultivation game art. Muted jade, dusty teal, warm ivory, restrained gold. No photorealism, realistic skin/textile, 3D, cinematic rendering, text, labels, UI, watermark.\nSingle narrative key-moment illustration, wide landscape 16:9. Show the specific story below, never a generic talent emblem. Main action upper two thirds; lower third quiet for dialogue overlay. The player when needed is a young adult Chinese cultivator wearing simple ivory and muted jade long robe, dark tied hair. Faces stylized, clothing modest, magic restrained.\nSubject and story (Chinese text is content to illustrate, never write it onto the image): 气运之子:  青石镇街角，一个醉汉把布包往你怀里一塞便跑没了影。打开一看，是两枚破障丹和几十块灵石。",
+    "source": "C:\\Users\\asxlwsl\\.codex\\generated_images\\01a13337-91e3-7180-8425-92153b60a4b2\\exec-5c5ce76a-0c9c-43d2-bc61-2bd765faf633.png",
+    "size": [
+      1672,
+      941
+    ],
+    "mode": "RGB",
+    "sha256": "aa13b56a4ca99fa6ea84d9adc539d70b7ce7d3bff2616663abe214895dc3485e",
+    "generator": "built-in image_gen"
+  },
+  {
+    "target": "assets/art/events/talent_bumie.png",
+    "kind": "event",
+    "id": "talent_bumie",
+    "subject": "不灭之躯:  你在谷中失足坠下山崖，爬起来竟毫发无伤。崖底石缝里还生着几株疗伤的灵草，你顺手炼成了两枚疗伤丹。",
+    "prompt": "Use case: illustration-story. Production art for 凡途, an original Chinese cultivation 2D RPG. Style: CLEAR dark hand-drawn ink outlines, flat opaque color areas, restrained two-tone cel shading, simplified shapes and expressive illustrated faces, matching Chinese 2D cultivation game art. Muted jade, dusty teal, warm ivory, restrained gold. No photorealism, realistic skin/textile, 3D, cinematic rendering, text, labels, UI, watermark.\nSingle narrative key-moment illustration, wide landscape 16:9. Show the specific story below, never a generic talent emblem. Main action upper two thirds; lower third quiet for dialogue overlay. The player when needed is a young adult Chinese cultivator wearing simple ivory and muted jade long robe, dark tied hair. Faces stylized, clothing modest, magic restrained.\nSubject and story (Chinese text is content to illustrate, never write it onto the image): 不灭之躯:  你在谷中失足坠下山崖，爬起来竟毫发无伤。崖底石缝里还生着几株疗伤的灵草，你顺手炼成了两枚疗伤丹。",
+    "source": "C:\\Users\\asxlwsl\\.codex\\generated_images\\01a13337-91e3-7180-8425-92153b60a4b2\\exec-0fba01d6-4c4c-459d-b54e-35be8a72eafd.png",
+    "size": [
+      1672,
+      941
+    ],
+    "mode": "RGB",
+    "sha256": "9ec7e1a641cc337509049195c6d77ae90d7b3dcc3b741ac4e447b60751e5e6a5",
+    "generator": "built-in image_gen"
+  },
+  {
+    "target": "assets/art/events/talent_danqi.png",
+    "kind": "event",
+    "id": "talent_danqi",
+    "subject": "丹道奇才:  沈墨随手递来一把药渣考你，你闭眼一嗅，把方子背得一味不差。他愣了半晌，从柜底取出一枚筑基丹：“送你。这一行，几十年也出不了一个你这样的。”",
+    "prompt": "Use case: illustration-story. Production art for 凡途, an original Chinese cultivation 2D RPG. Style: CLEAR dark hand-drawn ink outlines, flat opaque color areas, restrained two-tone cel shading, simplified shapes and expressive illustrated faces, matching Chinese 2D cultivation game art. Muted jade, dusty teal, warm ivory, restrained gold. No photorealism, realistic skin/textile, 3D, cinematic rendering, text, labels, UI, watermark.\nSingle narrative key-moment illustration, wide landscape 16:9. Show the specific story below, never a generic talent emblem. Main action upper two thirds; lower third quiet for dialogue overlay. The player when needed is a young adult Chinese cultivator wearing simple ivory and muted jade long robe, dark tied hair. Faces stylized, clothing modest, magic restrained.\nSubject and story (Chinese text is content to illustrate, never write it onto the image): 丹道奇才:  沈墨随手递来一把药渣考你，你闭眼一嗅，把方子背得一味不差。他愣了半晌，从柜底取出一枚筑基丹：“送你。这一行，几十年也出不了一个你这样的。”",
+    "source": "C:\\Users\\asxlwsl\\.codex\\generated_images\\01a13337-91e3-7180-8425-92153b60a4b2\\exec-b3cb2243-61b0-4718-9aa4-39e69d0fc89b.png",
+    "size": [
+      1672,
+      941
+    ],
+    "mode": "RGB",
+    "sha256": "91aaa410bf20604c0cbcb72c4e15bdc86710248485d5998916c36281c2346699",
+    "generator": "built-in image_gen"
+  },
+  {
+    "target": "assets/art/events/talent_jiangu.png",
+    "kind": "event",
+    "id": "talent_jiangu",
+    "subject": "剑骨:  石室角落一柄锈剑忽然铮然长鸣，像是认出了你的骨头。剑身裂开，露出藏在里面的一枚玉简。",
+    "prompt": "Use case: illustration-story. Production art for 凡途, an original Chinese cultivation 2D RPG. Style: CLEAR dark hand-drawn ink outlines, flat opaque color areas, restrained two-tone cel shading, simplified shapes and expressive illustrated faces, matching Chinese 2D cultivation game art. Muted jade, dusty teal, warm ivory, restrained gold. No photorealism, realistic skin/textile, 3D, cinematic rendering, text, labels, UI, watermark.\nSingle narrative key-moment illustration, wide landscape 16:9. Show the specific story below, never a generic talent emblem. Main action upper two thirds; lower third quiet for dialogue overlay. The player when needed is a young adult Chinese cultivator wearing simple ivory and muted jade long robe, dark tied hair. Faces stylized, clothing modest, magic restrained.\nSubject and story (Chinese text is content to illustrate, never write it onto the image): 剑骨:  石室角落一柄锈剑忽然铮然长鸣，像是认出了你的骨头。剑身裂开，露出藏在里面的一枚玉简。",
+    "source": "C:\\Users\\asxlwsl\\.codex\\generated_images\\01a13337-91e3-7180-8425-92153b60a4b2\\exec-56351480-76c3-49c0-a22a-caa1b526f0cf.png",
+    "size": [
+      1672,
+      941
+    ],
+    "mode": "RGB",
+    "sha256": "59f7ecbdf430a5a4f397a641d34ae8720873b998ef01656b6ae8a119c559ac78",
+    "generator": "built-in image_gen"
+  },
+  {
+    "target": "assets/art/events/talent_shouyou.png",
+    "kind": "event",
+    "id": "talent_shouyou",
+    "subject": "灵兽之友:  一只白狐在松林里朝你点点头，一路引你到崖下，那里长着一株年份不浅的灵芝。",
+    "prompt": "Use case: illustration-story. Production art for 凡途, an original Chinese cultivation 2D RPG. Style: CLEAR dark hand-drawn ink outlines, flat opaque color areas, restrained two-tone cel shading, simplified shapes and expressive illustrated faces, matching Chinese 2D cultivation game art. Muted jade, dusty teal, warm ivory, restrained gold. No photorealism, realistic skin/textile, 3D, cinematic rendering, text, labels, UI, watermark.\nSingle narrative key-moment illustration, wide landscape 16:9. Show the specific story below, never a generic talent emblem. Main action upper two thirds; lower third quiet for dialogue overlay. The player when needed is a young adult Chinese cultivator wearing simple ivory and muted jade long robe, dark tied hair. Faces stylized, clothing modest, magic restrained.\nSubject and story (Chinese text is content to illustrate, never write it onto the image): 灵兽之友:  一只白狐在松林里朝你点点头，一路引你到崖下，那里长着一株年份不浅的灵芝。",
+    "source": "C:\\Users\\asxlwsl\\.codex\\generated_images\\01a13337-91e3-7180-8425-92153b60a4b2\\exec-46f644df-df25-4c0c-ab49-d7952f942420.png",
+    "size": [
+      1672,
+      941
+    ],
+    "mode": "RGB",
+    "sha256": "3c2033c68bfa9c37c85c9859a6903f8052d88edc49fe40c57aeb798694721986",
+    "generator": "built-in image_gen"
+  },
+  {
+    "target": "assets/art/events/talent_lingqiao_tian.png",
+    "kind": "event",
+    "id": "talent_lingqiao_tian",
+    "subject": "天生灵窍:  你周身灵窍自行开阖，一次吐纳，抵得上旁人数日苦修。",
+    "prompt": "Use case: illustration-story. Production art for 凡途, an original Chinese cultivation 2D RPG. Style: CLEAR dark hand-drawn ink outlines, flat opaque color areas, restrained two-tone cel shading, simplified shapes and expressive illustrated faces, matching Chinese 2D cultivation game art. Muted jade, dusty teal, warm ivory, restrained gold. No photorealism, realistic skin/textile, 3D, cinematic rendering, text, labels, UI, watermark.\nSingle narrative key-moment illustration, wide landscape 16:9. Show the specific story below, never a generic talent emblem. Main action upper two thirds; lower third quiet for dialogue overlay. The player when needed is a young adult Chinese cultivator wearing simple ivory and muted jade long robe, dark tied hair. Faces stylized, clothing modest, magic restrained.\nSubject and story (Chinese text is content to illustrate, never write it onto the image): 天生灵窍:  你周身灵窍自行开阖，一次吐纳，抵得上旁人数日苦修。",
+    "source": "C:\\Users\\asxlwsl\\.codex\\generated_images\\01a13337-91e3-7180-8425-92153b60a4b2\\exec-b6f22ace-0bef-4ce4-a9d8-f3b061b84186.png",
+    "size": [
+      1672,
+      941
+    ],
+    "mode": "RGB",
+    "sha256": "8cefdb9e6ddef0f4fd16915494c7bbb687956eb7dd7675c433278417338b6cf3",
+    "generator": "built-in image_gen"
+  },
+  {
+    "target": "assets/art/events/talent_daqiyun.png",
+    "kind": "event",
+    "id": "talent_daqiyun",
+    "subject": "大气运:  老艄公一网下去捞起一只沉箱，打开全是旧时的灵石。他非要分你一半：“这是沾了你的光。”",
+    "prompt": "Use case: illustration-story. Production art for 凡途, an original Chinese cultivation 2D RPG. Style: CLEAR dark hand-drawn ink outlines, flat opaque color areas, restrained two-tone cel shading, simplified shapes and expressive illustrated faces, matching Chinese 2D cultivation game art. Muted jade, dusty teal, warm ivory, restrained gold. No photorealism, realistic skin/textile, 3D, cinematic rendering, text, labels, UI, watermark.\nSingle narrative key-moment illustration, wide landscape 16:9. Show the specific story below, never a generic talent emblem. Main action upper two thirds; lower third quiet for dialogue overlay. The player when needed is a young adult Chinese cultivator wearing simple ivory and muted jade long robe, dark tied hair. Faces stylized, clothing modest, magic restrained.\nSubject and story (Chinese text is content to illustrate, never write it onto the image): 大气运:  老艄公一网下去捞起一只沉箱，打开全是旧时的灵石。他非要分你一半：“这是沾了你的光。”",
+    "source": "C:\\Users\\asxlwsl\\.codex\\generated_images\\01a13337-91e3-7180-8425-92153b60a4b2\\exec-8bb43fea-ca9b-42a1-abc8-97b5a7cf1a4a.png",
+    "size": [
+      1672,
+      941
+    ],
+    "mode": "RGB",
+    "sha256": "fa9eb2b2f065ef979a84285551d8ddd59645cb3feae02d83ce4c668b9d020f7b",
+    "generator": "built-in image_gen"
+  },
+  {
+    "target": "assets/art/events/talent_tianyan.png",
+    "kind": "event",
+    "id": "talent_tianyan",
+    "subject": "天眼:  谷中的雾气在你眼里不过是一层薄纱。你一眼看破前人布下的幻阵，阵心埋着一坛灵石。",
+    "prompt": "Use case: illustration-story. Production art for 凡途, an original Chinese cultivation 2D RPG. Style: CLEAR dark hand-drawn ink outlines, flat opaque color areas, restrained two-tone cel shading, simplified shapes and expressive illustrated faces, matching Chinese 2D cultivation game art. Muted jade, dusty teal, warm ivory, restrained gold. No photorealism, realistic skin/textile, 3D, cinematic rendering, text, labels, UI, watermark.\nSingle narrative key-moment illustration, wide landscape 16:9. Show the specific story below, never a generic talent emblem. Main action upper two thirds; lower third quiet for dialogue overlay. The player when needed is a young adult Chinese cultivator wearing simple ivory and muted jade long robe, dark tied hair. Faces stylized, clothing modest, magic restrained.\nSubject and story (Chinese text is content to illustrate, never write it onto the image): 天眼:  谷中的雾气在你眼里不过是一层薄纱。你一眼看破前人布下的幻阵，阵心埋着一坛灵石。",
+    "source": "C:\\Users\\asxlwsl\\.codex\\generated_images\\01a13337-91e3-7180-8425-92153b60a4b2\\exec-36c7b015-6dc6-46ff-82c6-e0cd2b3d0b4c.png",
+    "size": [
+      1672,
+      941
+    ],
+    "mode": "RGB",
+    "sha256": "8f904166abdef796d0855716a9ceffd1145c0cae63a191719a5baed89b464573",
+    "generator": "built-in image_gen"
+  },
+  {
+    "target": "assets/art/events/talent_shouxing.png",
+    "kind": "event",
+    "id": "talent_shouxing",
+    "subject": "寿星临凡:  街边的老道拉住你端详半晌，连声说“好一副寿星骨相”，硬塞给你一枚凝气丹，说是结个善缘。",
+    "prompt": "Use case: illustration-story. Production art for 凡途, an original Chinese cultivation 2D RPG. Style: CLEAR dark hand-drawn ink outlines, flat opaque color areas, restrained two-tone cel shading, simplified shapes and expressive illustrated faces, matching Chinese 2D cultivation game art. Muted jade, dusty teal, warm ivory, restrained gold. No photorealism, realistic skin/textile, 3D, cinematic rendering, text, labels, UI, watermark.\nSingle narrative key-moment illustration, wide landscape 16:9. Show the specific story below, never a generic talent emblem. Main action upper two thirds; lower third quiet for dialogue overlay. The player when needed is a young adult Chinese cultivator wearing simple ivory and muted jade long robe, dark tied hair. Faces stylized, clothing modest, magic restrained.\nSubject and story (Chinese text is content to illustrate, never write it onto the image): 寿星临凡:  街边的老道拉住你端详半晌，连声说“好一副寿星骨相”，硬塞给你一枚凝气丹，说是结个善缘。",
+    "source": "C:\\Users\\asxlwsl\\.codex\\generated_images\\01a13337-91e3-7180-8425-92153b60a4b2\\exec-6a9f9a28-d52e-432d-a93a-f8296e2bd7d0.png",
+    "size": [
+      1672,
+      941
+    ],
+    "mode": "RGB",
+    "sha256": "5301d5acdbee8ea8da63eef08a82cad87c15f36ad898be62b63ba1cec7f1ba44",
+    "generator": "built-in image_gen"
+  },
+  {
+    "target": "assets/art/events/talent_yinyang.png",
+    "kind": "event",
+    "id": "talent_yinyang",
+    "subject": "阴阳同体:  渡口的江水一半结冰、一半翻滚，你在岸边看了半日，体内水火二气竟随之流转。回过神来，袖中多了一枚不知谁遗落的玉简。",
+    "prompt": "Use case: illustration-story. Production art for 凡途, an original Chinese cultivation 2D RPG. Style: CLEAR dark hand-drawn ink outlines, flat opaque color areas, restrained two-tone cel shading, simplified shapes and expressive illustrated faces, matching Chinese 2D cultivation game art. Muted jade, dusty teal, warm ivory, restrained gold. No photorealism, realistic skin/textile, 3D, cinematic rendering, text, labels, UI, watermark.\nSingle narrative key-moment illustration, wide landscape 16:9. Show the specific story below, never a generic talent emblem. Main action upper two thirds; lower third quiet for dialogue overlay. The player when needed is a young adult Chinese cultivator wearing simple ivory and muted jade long robe, dark tied hair. Faces stylized, clothing modest, magic restrained.\nSubject and story (Chinese text is content to illustrate, never write it onto the image): 阴阳同体:  渡口的江水一半结冰、一半翻滚，你在岸边看了半日，体内水火二气竟随之流转。回过神来，袖中多了一枚不知谁遗落的玉简。",
+    "source": "C:\\Users\\asxlwsl\\.codex\\generated_images\\01a13337-91e3-7180-8425-92153b60a4b2\\exec-33c8e188-a7e1-4c50-8fd5-4975b7a07982.png",
+    "size": [
+      1672,
+      941
+    ],
+    "mode": "RGB",
+    "sha256": "902b762b0e2d9ba6b3aed555a451a02981f552773aa5419eda2d3beb1f9a68df",
+    "generator": "built-in image_gen"
+  },
+  {
+    "target": "assets/art/events/talent_huigen.png",
+    "kind": "event",
+    "id": "talent_huigen",
+    "subject": "天生慧根:  顾长庚考校新弟子，你答得头头是道，连他都捋着胡子笑了，随手赠你一枚玉简。",
+    "prompt": "Use case: illustration-story. Production art for 凡途, an original Chinese cultivation 2D RPG. Style: CLEAR dark hand-drawn ink outlines, flat opaque color areas, restrained two-tone cel shading, simplified shapes and expressive illustrated faces, matching Chinese 2D cultivation game art. Muted jade, dusty teal, warm ivory, restrained gold. No photorealism, realistic skin/textile, 3D, cinematic rendering, text, labels, UI, watermark.\nSingle narrative key-moment illustration, wide landscape 16:9. Show the specific story below, never a generic talent emblem. Main action upper two thirds; lower third quiet for dialogue overlay. The player when needed is a young adult Chinese cultivator wearing simple ivory and muted jade long robe, dark tied hair. Faces stylized, clothing modest, magic restrained.\nSubject and story (Chinese text is content to illustrate, never write it onto the image): 天生慧根:  顾长庚考校新弟子，你答得头头是道，连他都捋着胡子笑了，随手赠你一枚玉简。",
+    "source": "C:\\Users\\asxlwsl\\.codex\\generated_images\\01a13337-91e3-7180-8425-92153b60a4b2\\exec-3905b6e6-6457-4cb4-b449-1e64541d7a94.png",
+    "size": [
+      1672,
+      941
+    ],
+    "mode": "RGB",
+    "sha256": "69c193636bdc1bfe7a6e6573f4e805b743e745831d4014bfe0a95abfd443d6f7",
+    "generator": "built-in image_gen"
+  },
+  {
+    "target": "assets/art/locations/sect_fullscreen.png",
+    "kind": "location",
+    "id": "location_sect",
+    "subject": "青云山: 青云剑宗外门所在。云雾绕着峰腰，钟声每日三响。",
+    "prompt": "Use case: illustration-story. Production art for 凡途, an original Chinese cultivation 2D RPG. Style: CLEAR dark hand-drawn ink outlines, flat opaque color areas, restrained two-tone cel shading, simplified shapes and expressive illustrated faces, matching Chinese 2D cultivation game art. Muted jade, dusty teal, warm ivory, restrained gold. No photorealism, realistic skin/textile, 3D, cinematic rendering, text, labels, UI, watermark.\nWide landscape 16:9 full-screen environment with generous sky/interior height, foreground and readable architectural or landscape focal points. NO characters. Left-center landmarks; quiet right side for menu overlay. No banner framing.\nSubject and story (Chinese text is content to illustrate, never write it onto the image): 青云山: 青云剑宗外门所在。云雾绕着峰腰，钟声每日三响。",
+    "source": "C:\\Users\\asxlwsl\\.codex\\generated_images\\01a13337-91e3-7180-8425-92153b60a4b2\\exec-91eac04f-ca20-439a-b726-bccaba79800d.png",
+    "size": [
+      1672,
+      941
+    ],
+    "mode": "RGB",
+    "sha256": "6200fd6696f03cf012c3231285cb24ffd552e30f529e369e00915c889fe6d641",
+    "generator": "built-in image_gen"
+  },
+  {
+    "target": "assets/art/events/talent_zhanti.png",
+    "kind": "event",
+    "id": "talent_zhanti",
+    "subject": "天生战体:  演武坪上你一时兴起，连挑三名师兄，满场喝彩。越打越觉得浑身的血都热了起来。",
+    "prompt": "Use case: illustration-story. Production art for 凡途, an original Chinese cultivation 2D RPG. Style: CLEAR dark hand-drawn ink outlines, flat opaque color areas, restrained two-tone cel shading, simplified shapes and expressive illustrated faces, matching Chinese 2D cultivation game art. Muted jade, dusty teal, warm ivory, restrained gold. No photorealism, realistic skin/textile, 3D, cinematic rendering, text, labels, UI, watermark.\nSingle narrative key-moment illustration, wide landscape 16:9. Show the specific story below, never a generic talent emblem. Main action upper two thirds; lower third quiet for dialogue overlay. The player when needed is a young adult Chinese cultivator wearing simple ivory and muted jade long robe, dark tied hair. Faces stylized, clothing modest, magic restrained.\nSubject and story (Chinese text is content to illustrate, never write it onto the image): 天生战体:  演武坪上你一时兴起，连挑三名师兄，满场喝彩。越打越觉得浑身的血都热了起来。",
+    "source": "C:\\Users\\asxlwsl\\.codex\\generated_images\\01a13337-91e3-7180-8425-92153b60a4b2\\exec-d6faaee0-865f-4db5-8d0b-81b6c33b9c03.png",
+    "size": [
+      1672,
+      941
+    ],
+    "mode": "RGB",
+    "sha256": "5bda11e8824242186a5a844209ec4145b3aface3742b5cbf4643c76a612c4dbd",
+    "generator": "built-in image_gen"
+  },
+  {
+    "target": "assets/art/locations/town_fullscreen.png",
+    "kind": "location",
+    "id": "location_town",
+    "subject": "青石镇: 青云山脚下的凡人小镇。往来修士常在此歇脚，也在茶馆里打听消息。",
+    "prompt": "Use case: illustration-story. Production art for 凡途, an original Chinese cultivation 2D RPG. Style: CLEAR dark hand-drawn ink outlines, flat opaque color areas, restrained two-tone cel shading, simplified shapes and expressive illustrated faces, matching Chinese 2D cultivation game art. Muted jade, dusty teal, warm ivory, restrained gold. No photorealism, realistic skin/textile, 3D, cinematic rendering, text, labels, UI, watermark.\nWide landscape 16:9 full-screen environment with generous sky/interior height, foreground and readable architectural or landscape focal points. NO characters. Left-center landmarks; quiet right side for menu overlay. No banner framing.\nSubject and story (Chinese text is content to illustrate, never write it onto the image): 青石镇: 青云山脚下的凡人小镇。往来修士常在此歇脚，也在茶馆里打听消息。",
+    "source": "C:\\Users\\asxlwsl\\.codex\\generated_images\\01a13337-91e3-7180-8425-92153b60a4b2\\exec-36df6b3f-849d-482e-bb2c-9d56cc77c81a.png",
+    "size": [
+      1672,
+      941
+    ],
+    "mode": "RGB",
+    "sha256": "143dc60b19941155f78f6ce4d9214ea7f1d8dfb5405089f70de58447ccf41dea",
+    "generator": "built-in image_gen"
+  },
+  {
+    "target": "assets/art/events/talent_bulao.png",
+    "kind": "event",
+    "id": "talent_bulao",
+    "subject": "不老泉体:  深谷里一眼清泉，你掬水喝了一口，只觉周身轻灵，像是年轻了好几岁。",
+    "prompt": "Use case: illustration-story. Production art for 凡途, an original Chinese cultivation 2D RPG. Style: CLEAR dark hand-drawn ink outlines, flat opaque color areas, restrained two-tone cel shading, simplified shapes and expressive illustrated faces, matching Chinese 2D cultivation game art. Muted jade, dusty teal, warm ivory, restrained gold. No photorealism, realistic skin/textile, 3D, cinematic rendering, text, labels, UI, watermark.\nSingle narrative key-moment illustration, wide landscape 16:9. Show the specific story below, never a generic talent emblem. Main action upper two thirds; lower third quiet for dialogue overlay. The player when needed is a young adult Chinese cultivator wearing simple ivory and muted jade long robe, dark tied hair. Faces stylized, clothing modest, magic restrained.\nSubject and story (Chinese text is content to illustrate, never write it onto the image): 不老泉体:  深谷里一眼清泉，你掬水喝了一口，只觉周身轻灵，像是年轻了好几岁。",
+    "source": "C:\\Users\\asxlwsl\\.codex\\generated_images\\01a13337-91e3-7180-8425-92153b60a4b2\\exec-81c832f5-01d8-4048-8d57-dce89cd3fab3.png",
+    "size": [
+      1672,
+      941
+    ],
+    "mode": "RGB",
+    "sha256": "d2193236ee0aad71711b3d212c97fd581f672e67d4a67c2ced8d5689784fddb5",
+    "generator": "built-in image_gen"
+  },
+  {
+    "target": "assets/art/locations/ferry_fullscreen.png",
+    "kind": "location",
+    "id": "location_ferry",
+    "subject": "白鹭渡: 云溪上游的渡口，渡船往返于青石镇与坊市之间，白鹭常在浅滩起落。",
+    "prompt": "Use case: illustration-story. Production art for 凡途, an original Chinese cultivation 2D RPG. Style: CLEAR dark hand-drawn ink outlines, flat opaque color areas, restrained two-tone cel shading, simplified shapes and expressive illustrated faces, matching Chinese 2D cultivation game art. Muted jade, dusty teal, warm ivory, restrained gold. No photorealism, realistic skin/textile, 3D, cinematic rendering, text, labels, UI, watermark.\nWide landscape 16:9 full-screen environment with generous sky/interior height, foreground and readable architectural or landscape focal points. NO characters. Left-center landmarks; quiet right side for menu overlay. No banner framing.\nSubject and story (Chinese text is content to illustrate, never write it onto the image): 白鹭渡: 云溪上游的渡口，渡船往返于青石镇与坊市之间，白鹭常在浅滩起落。",
+    "source": "C:\\Users\\asxlwsl\\.codex\\generated_images\\01a13337-91e3-7180-8425-92153b60a4b2\\exec-57610b2c-5261-4d5d-b3ce-6d8a62a3c693.png",
+    "size": [
+      1672,
+      941
+    ],
+    "mode": "RGB",
+    "sha256": "3abd6ebd733ba2d8db4b3b976db2dd6011101e281a0468acbecedfd62fa19ed9",
+    "generator": "built-in image_gen"
+  },
+  {
+    "target": "assets/art/events/talent_tongming.png",
+    "kind": "event",
+    "id": "talent_tongming",
+    "subject": "道心通明:  静坐时，你心中忽然一片通明，仿佛远远看见了自己要走的那条路。",
+    "prompt": "Use case: illustration-story. Production art for 凡途, an original Chinese cultivation 2D RPG. Style: CLEAR dark hand-drawn ink outlines, flat opaque color areas, restrained two-tone cel shading, simplified shapes and expressive illustrated faces, matching Chinese 2D cultivation game art. Muted jade, dusty teal, warm ivory, restrained gold. No photorealism, realistic skin/textile, 3D, cinematic rendering, text, labels, UI, watermark.\nSingle narrative key-moment illustration, wide landscape 16:9. Show the specific story below, never a generic talent emblem. Main action upper two thirds; lower third quiet for dialogue overlay. The player when needed is a young adult Chinese cultivator wearing simple ivory and muted jade long robe, dark tied hair. Faces stylized, clothing modest, magic restrained.\nSubject and story (Chinese text is content to illustrate, never write it onto the image): 道心通明:  静坐时，你心中忽然一片通明，仿佛远远看见了自己要走的那条路。",
+    "source": "C:\\Users\\asxlwsl\\.codex\\generated_images\\01a13337-91e3-7180-8425-92153b60a4b2\\exec-a5d3fbb4-72c5-45c9-a424-30a9c864d238.png",
+    "size": [
+      1672,
+      941
+    ],
+    "mode": "RGB",
+    "sha256": "3f4f2b4cc99fa4b78930cf4dd150bbf7a0ac4b579d623ec064ccbb7ac10d34d1",
+    "generator": "built-in image_gen"
+  },
+  {
+    "target": "assets/art/locations/wild_fullscreen.png",
+    "kind": "location",
+    "id": "location_wild",
+    "subject": "落霞谷: 谷中灵草繁盛，也有妖兽出没。深处的赤鳞妖蟒守着一处灵泉，筑基后方可挑战。",
+    "prompt": "Use case: illustration-story. Production art for 凡途, an original Chinese cultivation 2D RPG. Style: CLEAR dark hand-drawn ink outlines, flat opaque color areas, restrained two-tone cel shading, simplified shapes and expressive illustrated faces, matching Chinese 2D cultivation game art. Muted jade, dusty teal, warm ivory, restrained gold. No photorealism, realistic skin/textile, 3D, cinematic rendering, text, labels, UI, watermark.\nWide landscape 16:9 full-screen environment with generous sky/interior height, foreground and readable architectural or landscape focal points. NO characters. Left-center landmarks; quiet right side for menu overlay. No banner framing.\nSubject and story (Chinese text is content to illustrate, never write it onto the image): 落霞谷: 谷中灵草繁盛，也有妖兽出没。深处的赤鳞妖蟒守着一处灵泉，筑基后方可挑战。",
+    "source": "C:\\Users\\asxlwsl\\.codex\\generated_images\\01a13337-91e3-7180-8425-92153b60a4b2\\exec-e22d7af9-34fb-41f5-808a-a613b43765f0.png",
+    "size": [
+      1672,
+      941
+    ],
+    "mode": "RGB",
+    "sha256": "645e84b0374b8752ce29aa295218482cdb37e0308214a7a20e3499eae017d656",
+    "generator": "built-in image_gen"
+  },
+  {
+    "target": "assets/art/events/talent_jiandan.png",
+    "kind": "event",
+    "id": "talent_jiandan",
+    "subject": "剑胆琴心:  茶馆里你随手抚琴一曲，琴声里隐隐藏着剑意。何三更听罢一拍醒木：“这一曲，我要编进书里！”",
+    "prompt": "Use case: illustration-story. Production art for 凡途, an original Chinese cultivation 2D RPG. Style: CLEAR dark hand-drawn ink outlines, flat opaque color areas, restrained two-tone cel shading, simplified shapes and expressive illustrated faces, matching Chinese 2D cultivation game art. Muted jade, dusty teal, warm ivory, restrained gold. No photorealism, realistic skin/textile, 3D, cinematic rendering, text, labels, UI, watermark.\nSingle narrative key-moment illustration, wide landscape 16:9. Show the specific story below, never a generic talent emblem. Main action upper two thirds; lower third quiet for dialogue overlay. The player when needed is a young adult Chinese cultivator wearing simple ivory and muted jade long robe, dark tied hair. Faces stylized, clothing modest, magic restrained.\nSubject and story (Chinese text is content to illustrate, never write it onto the image): 剑胆琴心:  茶馆里你随手抚琴一曲，琴声里隐隐藏着剑意。何三更听罢一拍醒木：“这一曲，我要编进书里！”",
+    "source": "C:\\Users\\asxlwsl\\.codex\\generated_images\\01a13337-91e3-7180-8425-92153b60a4b2\\exec-641ae840-3ff1-4927-ba38-c2c86b1c63f1.png",
+    "size": [
+      1672,
+      941
+    ],
+    "mode": "RGB",
+    "sha256": "74c2e8231894dc9c3569e781f8adc2dec2fdadde43e7618f7d3b9d9ddc7de171",
+    "generator": "built-in image_gen"
+  },
+  {
+    "target": "assets/art/locations/market_fullscreen.png",
+    "kind": "location",
+    "id": "location_market",
+    "subject": "云溪坊市: 药香浮过长街。散修在这里买卖丹药与灵材，消息也传得最快。",
+    "prompt": "Use case: illustration-story. Production art for 凡途, an original Chinese cultivation 2D RPG. Style: CLEAR dark hand-drawn ink outlines, flat opaque color areas, restrained two-tone cel shading, simplified shapes and expressive illustrated faces, matching Chinese 2D cultivation game art. Muted jade, dusty teal, warm ivory, restrained gold. No photorealism, realistic skin/textile, 3D, cinematic rendering, text, labels, UI, watermark.\nWide landscape 16:9 full-screen environment with generous sky/interior height, foreground and readable architectural or landscape focal points. NO characters. Left-center landmarks; quiet right side for menu overlay. No banner framing.\nSubject and story (Chinese text is content to illustrate, never write it onto the image): 云溪坊市: 药香浮过长街。散修在这里买卖丹药与灵材，消息也传得最快。",
+    "source": "C:\\Users\\asxlwsl\\.codex\\generated_images\\01a13337-91e3-7180-8425-92153b60a4b2\\exec-62a2ffa2-fedf-4c9a-95be-eb5c0b0c0526.png",
+    "size": [
+      1672,
+      941
+    ],
+    "mode": "RGB",
+    "sha256": "7c861a3a3a70403723354dbec9021fa69e3b4c88770ab9f8eea8d7b373d2948f",
+    "generator": "built-in image_gen"
+  },
+  {
+    "target": "assets/art/locations/ruin_fullscreen.png",
+    "kind": "location",
+    "id": "location_ruin",
+    "subject": "古修洞府: 落霞谷深处的古修洞府，石门半掩，似乎有人先一步占据了这里。",
+    "prompt": "Use case: illustration-story. Production art for 凡途, an original Chinese cultivation 2D RPG. Style: CLEAR dark hand-drawn ink outlines, flat opaque color areas, restrained two-tone cel shading, simplified shapes and expressive illustrated faces, matching Chinese 2D cultivation game art. Muted jade, dusty teal, warm ivory, restrained gold. No photorealism, realistic skin/textile, 3D, cinematic rendering, text, labels, UI, watermark.\nWide landscape 16:9 full-screen environment with generous sky/interior height, foreground and readable architectural or landscape focal points. NO characters. Left-center landmarks; quiet right side for menu overlay. No banner framing.\nSubject and story (Chinese text is content to illustrate, never write it onto the image): 古修洞府: 落霞谷深处的古修洞府，石门半掩，似乎有人先一步占据了这里。",
+    "source": "C:\\Users\\asxlwsl\\.codex\\generated_images\\01a13337-91e3-7180-8425-92153b60a4b2\\exec-95a24521-e7f0-497b-a0ff-e4908927f97d.png",
+    "size": [
+      1672,
+      941
+    ],
+    "mode": "RGB",
+    "sha256": "3e980c1a54484df9943c8a4cf03ae1dbe729c5bbd22989d317462f4f696c4f69",
+    "generator": "built-in image_gen"
+  },
+  {
+    "target": "assets/art/locations/ridge_fullscreen.png",
+    "kind": "location",
+    "id": "location_ridge",
+    "subject": "松风岭: 青云山与落霞谷之间的山岭，松林里偶尔也生着灵草。",
+    "prompt": "Use case: illustration-story. Production art for 凡途, an original Chinese cultivation 2D RPG. Style: CLEAR dark hand-drawn ink outlines, flat opaque color areas, restrained two-tone cel shading, simplified shapes and expressive illustrated faces, matching Chinese 2D cultivation game art. Muted jade, dusty teal, warm ivory, restrained gold. No photorealism, realistic skin/textile, 3D, cinematic rendering, text, labels, UI, watermark.\nWide landscape 16:9 full-screen environment with generous sky/interior height, foreground and readable architectural or landscape focal points. NO characters. Left-center landmarks; quiet right side for menu overlay. No banner framing.\nSubject and story (Chinese text is content to illustrate, never write it onto the image): 松风岭: 青云山与落霞谷之间的山岭，松林里偶尔也生着灵草。",
+    "source": "C:\\Users\\asxlwsl\\.codex\\generated_images\\01a13337-91e3-7180-8425-92153b60a4b2\\exec-36bb676b-8a44-4b46-8154-bf63e11b400b.png",
+    "size": [
+      1672,
+      941
+    ],
+    "mode": "RGB",
+    "sha256": "ac2672f4108cd63adffed471dd0123977b80aaf2037965b396ed5d6c57060ae9",
+    "generator": "built-in image_gen"
+  },
+  {
+    "target": "assets/art/portraits/gu_changgeng_unique.png",
+    "kind": "portrait",
+    "id": "portrait_gu_changgeng",
+    "subject": "顾长庚, 传功长老, age 168: 掌管传功堂的长老，五套传承的玉简都经过他的手。话不多，看人却准。",
+    "prompt": "Use case: illustration-story. Production art for 凡途, an original Chinese cultivation 2D RPG. Style: CLEAR dark hand-drawn ink outlines, flat opaque color areas, restrained two-tone cel shading, simplified shapes and expressive illustrated faces, matching Chinese 2D cultivation game art. Muted jade, dusty teal, warm ivory, restrained gold. No photorealism, realistic skin/textile, 3D, cinematic rendering, text, labels, UI, watermark.\nSingle distinct character half-body portrait, 4:5 vertical canvas. Face turned slightly RIGHT, hands and signature prop visible, upper body fills frame, simple muted teal background. Age-appropriate face. For Azhi: young woman in modest pale green practical robe, loose braid, bamboo herb basket and small fresh herb sprig, quietly warm expression. For Xu Qinghe: ONLY if subject is Xu, young man in ivory and jade sect robe, dark tied hair, friendly confident gaze, a blank small ledger and jade token. For Gu Changgeng: ONLY if subject is Gu, wise elderly man with silver hair and short white beard, austere indigo and ivory robe, jade slips in one hand, calm perceptive eyes. Use ONLY traits matching the named character.\nSubject and story (Chinese text is content to illustrate, never write it onto the image): 顾长庚, 传功长老, age 168: 掌管传功堂的长老，五套传承的玉简都经过他的手。话不多，看人却准。",
+    "source": "C:\\Users\\asxlwsl\\.codex\\generated_images\\01a13337-91e3-7180-8425-92153b60a4b2\\exec-78c9f182-365c-43fa-b5cc-14d2702fe07d.png",
+    "size": [
+      1122,
+      1402
+    ],
+    "mode": "RGB",
+    "sha256": "373e9c3fd0e631709fbd9b9a6ee12d949057ddae69cbfa9890679e6fc73bd682",
+    "generator": "built-in image_gen"
+  },
+  {
+    "target": "assets/art/events/talent_fuze.png",
+    "kind": "event",
+    "id": "talent_fuze",
+    "subject": "福泽深厚:  坊市里一位老掌柜认出你身上祖传的信物，说是欠了你家祖上一份人情，执意赠你一袋灵石。",
+    "prompt": "Use case: illustration-story. Production art for 凡途, an original Chinese cultivation 2D RPG. Style: CLEAR dark hand-drawn ink outlines, flat opaque color areas, restrained two-tone cel shading, simplified shapes and expressive illustrated faces, matching Chinese 2D cultivation game art. Muted jade, dusty teal, warm ivory, restrained gold. No photorealism, realistic skin/textile, 3D, cinematic rendering, text, labels, UI, watermark.\nSingle narrative key-moment illustration, wide landscape 16:9. Show the specific story below, never a generic talent emblem. Main action upper two thirds; lower third quiet for dialogue overlay. The player when needed is a young adult Chinese cultivator wearing simple ivory and muted jade long robe, dark tied hair. Faces stylized, clothing modest, magic restrained.\nSubject and story (Chinese text is content to illustrate, never write it onto the image): 福泽深厚:  坊市里一位老掌柜认出你身上祖传的信物，说是欠了你家祖上一份人情，执意赠你一袋灵石。",
+    "source": "C:\\Users\\asxlwsl\\.codex\\generated_images\\01a13337-91e3-7180-8425-92153b60a4b2\\exec-dd07ca98-85ad-407c-8f2a-342a664d9d37.png",
+    "size": [
+      1672,
+      941
+    ],
+    "mode": "RGB",
+    "sha256": "3943696bce246693992746c508295c8751894f1c795da9b3c0577aea86fc9ebe",
+    "generator": "built-in image_gen"
+  },
+  {
+    "target": "assets/art/ui/scroll_panel.png",
+    "kind": "ui",
+    "id": "ui_scroll",
+    "subject": "One rectangular jade-teal scroll panel with thin antique gold ink border, subtle hand-drawn paper fibers, small Chinese cloud and bamboo ornaments confined to corners, extremely quiet dark teal center for cream text, border occupies outer 8 percent, flat 2D, no writing, no pictograms",
+    "prompt": "Use case: illustration-story. Production art for 凡途, an original Chinese cultivation 2D RPG. Style: CLEAR dark hand-drawn ink outlines, flat opaque color areas, restrained two-tone cel shading, simplified shapes and expressive illustrated faces, matching Chinese 2D cultivation game art. Muted jade, dusty teal, warm ivory, restrained gold. No photorealism, realistic skin/textile, 3D, cinematic rendering, text, labels, UI, watermark.\nOne single rectangular panel asset, landscape 16:9, full frame panel; scalable nine-slice borders, corner ornament within outer 8%, center must remain extremely quiet dark teal and uniform for cream game text. No scene, no objects, no characters. Flat clear outlined jade and antique gold decoration.\nSubject and story (Chinese text is content to illustrate, never write it onto the image): One rectangular jade-teal scroll panel with thin antique gold ink border, subtle hand-drawn paper fibers, small Chinese cloud and bamboo ornaments confined to corners, extremely quiet dark teal center for cream text, border occupies outer 8 percent, flat 2D, no writing, no pictograms",
+    "source": "C:\\Users\\asxlwsl\\.codex\\generated_images\\01a13337-91e3-7180-8425-92153b60a4b2\\exec-b0a4d595-0ad3-42d4-99a6-d13c69a2833f.png",
+    "size": [
+      1672,
+      941
+    ],
+    "mode": "RGB",
+    "sha256": "115c6f3dbc4fc00bf1423b7e1a661b864174872ba827bc4de053f7d99464c820",
+    "generator": "built-in image_gen"
+  },
+  {
+    "target": "assets/art/portraits/azhi_unique.png",
+    "kind": "portrait",
+    "id": "portrait_azhi",
+    "subject": "阿芷, 松风岭采药人, age 19: 背着竹药篓在松林里穿行的姑娘，认得的灵草比坊市药铺还全。说起落霞谷时，笑容会淡下去。",
+    "prompt": "Use case: illustration-story. Production art for 凡途, an original Chinese cultivation 2D RPG. Style: CLEAR dark hand-drawn ink outlines, flat opaque color areas, restrained two-tone cel shading, simplified shapes and expressive illustrated faces, matching Chinese 2D cultivation game art. Muted jade, dusty teal, warm ivory, restrained gold. No photorealism, realistic skin/textile, 3D, cinematic rendering, text, labels, UI, watermark.\nSingle distinct character half-body portrait, 4:5 vertical canvas. Face turned slightly RIGHT, hands and signature prop visible, upper body fills frame, simple muted teal background. Age-appropriate face. For Azhi: young woman in modest pale green practical robe, loose braid, bamboo herb basket and small fresh herb sprig, quietly warm expression. For Xu Qinghe: ONLY if subject is Xu, young man in ivory and jade sect robe, dark tied hair, friendly confident gaze, a blank small ledger and jade token. For Gu Changgeng: ONLY if subject is Gu, wise elderly man with silver hair and short white beard, austere indigo and ivory robe, jade slips in one hand, calm perceptive eyes. Use ONLY traits matching the named character.\nSubject and story (Chinese text is content to illustrate, never write it onto the image): 阿芷, 松风岭采药人, age 19: 背着竹药篓在松林里穿行的姑娘，认得的灵草比坊市药铺还全。说起落霞谷时，笑容会淡下去。",
+    "source": "C:\\Users\\asxlwsl\\.codex\\generated_images\\01a13337-91e3-7180-8425-92153b60a4b2\\exec-6b0a553b-608e-41d8-a0a6-87d0f35bff64.png",
+    "size": [
+      1122,
+      1402
+    ],
+    "mode": "RGB",
+    "sha256": "06ce356a5aa2403bcf10d535d98cfaf3e1db98f1d8411c7148259b1015c423bf",
+    "generator": "built-in image_gen"
+  },
+  {
+    "target": "assets/art/scenes/sect_office.png",
+    "kind": "scene",
+    "id": "sect_office",
+    "subject": "Qingyun Sect service hall 执事堂, wooden mission notice boards with blank papers, bamboo desks, orderly jade-blue roofed Chinese hall, mountain courtyard beyond, no legible writing",
+    "prompt": "Use case: illustration-story. Production art for 凡途, an original Chinese cultivation 2D RPG. Style: CLEAR dark hand-drawn ink outlines, flat opaque color areas, restrained two-tone cel shading, simplified shapes and expressive illustrated faces, matching Chinese 2D cultivation game art. Muted jade, dusty teal, warm ivory, restrained gold. No photorealism, realistic skin/textile, 3D, cinematic rendering, text, labels, UI, watermark.\nWide landscape 16:9 full-screen environment with generous sky/interior height, foreground and readable architectural or landscape focal points. NO characters. Left-center landmarks; quiet right side for menu overlay. No banner framing.\nSubject and story (Chinese text is content to illustrate, never write it onto the image): Qingyun Sect service hall 执事堂, wooden mission notice boards with blank papers, bamboo desks, orderly jade-blue roofed Chinese hall, mountain courtyard beyond, no legible writing",
+    "source": "C:\\Users\\asxlwsl\\.codex\\generated_images\\01a13337-91e3-7180-8425-92153b60a4b2\\exec-86c0d3e1-3266-42c8-b746-e3a4289d0836.png",
+    "size": [
+      1672,
+      941
+    ],
+    "mode": "RGB",
+    "sha256": "e8e559697729c38b3445dc7782e6f3bf7868ae89b0be02f645561298a79daca4",
+    "generator": "built-in image_gen"
+  },
+  {
+    "target": "assets/art/portraits/xu_qinghe_unique.png",
+    "kind": "portrait",
+    "id": "portrait_xu_qinghe",
+    "subject": "许清和, 外门执事弟子, age 23: 外门执事堂的弟子，新入门的同门大多由他领着认路。说话爽快，记性极好，谁欠药堂几株草都记得清清楚楚。",
+    "prompt": "Use case: illustration-story. Production art for 凡途, an original Chinese cultivation 2D RPG. Style: CLEAR dark hand-drawn ink outlines, flat opaque color areas, restrained two-tone cel shading, simplified shapes and expressive illustrated faces, matching Chinese 2D cultivation game art. Muted jade, dusty teal, warm ivory, restrained gold. No photorealism, realistic skin/textile, 3D, cinematic rendering, text, labels, UI, watermark.\nSingle distinct character half-body portrait, 4:5 vertical canvas. Face turned slightly RIGHT, hands and signature prop visible, upper body fills frame, simple muted teal background. Age-appropriate face. For Azhi: young woman in modest pale green practical robe, loose braid, bamboo herb basket and small fresh herb sprig, quietly warm expression. For Xu Qinghe: ONLY if subject is Xu, young man in ivory and jade sect robe, dark tied hair, friendly confident gaze, a blank small ledger and jade token. For Gu Changgeng: ONLY if subject is Gu, wise elderly man with silver hair and short white beard, austere indigo and ivory robe, jade slips in one hand, calm perceptive eyes. Use ONLY traits matching the named character.\nSubject and story (Chinese text is content to illustrate, never write it onto the image): 许清和, 外门执事弟子, age 23: 外门执事堂的弟子，新入门的同门大多由他领着认路。说话爽快，记性极好，谁欠药堂几株草都记得清清楚楚。",
+    "source": "C:\\Users\\asxlwsl\\.codex\\generated_images\\01a13337-91e3-7180-8425-92153b60a4b2\\exec-4bcd1722-7b06-4c80-bcd1-7b88cfc8f6f9.png",
+    "size": [
+      1122,
+      1402
+    ],
+    "mode": "RGB",
+    "sha256": "50bd41fa745f7d2873afaf7ef3ee8708779d0179663cb94e810101c50d9e87f1",
+    "generator": "built-in image_gen"
+  }
+]

@@ -14,7 +14,7 @@ if "%errorlevel%"=="124" (
   echo Resource import timed out
   exit /b 1
 )
-for %%T in (core_smoke world_smoke events_smoke region_smoke growth_smoke arsenal_smoke society_smoke story_smoke talent_smoke ui_smoke presentation_smoke sect_smoke) do (
+for %%T in (core_smoke world_smoke events_smoke region_smoke growth_smoke arsenal_smoke society_smoke story_smoke talent_smoke art_smoke ui_smoke presentation_smoke sect_smoke) do (
   call :run %%T || exit /b 1
 )
 exit /b 0

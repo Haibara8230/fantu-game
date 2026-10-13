@@ -13,6 +13,7 @@ const SaveStore = preload("res://scripts/core/save_store.gd")
 const Calendar = preload("res://scripts/core/calendar.gd")
 const AudioDirector = preload("res://scripts/presentation/audio_director.gd")
 const ArtLibrary = preload("res://scripts/ui/art_library.gd")
+const UiSkin = preload("res://scripts/ui/ui_skin.gd")
 const Hud = preload("res://scripts/ui/hud.gd")
 const StatusView = preload("res://scripts/ui/status_view.gd")
 const TasksView = preload("res://scripts/ui/tasks_view.gd")
@@ -55,7 +56,7 @@ var backdrop: TextureRect
 var shade: ColorRect
 var window: PanelContainer
 var tab_row: HBoxContainer
-var window_style: StyleBoxFlat
+var window_style: StyleBox
 # A place's scene (place_view.gd): its title, the spots as paper tags and the people drawer.
 var scene_layer: Control
 # The state of the screens: the duel's record shown, the retreat's chosen length and its playback,
@@ -237,7 +238,7 @@ func button(text_value: String, callback: Callable, tooltip: String = "") -> But
 
 func panel() -> PanelContainer:
 	var result := PanelContainer.new()
-	result.add_theme_stylebox_override("panel", style(Color("#112329"), Color("#304749"), 18))
+	result.add_theme_stylebox_override("panel", UiSkin.scroll_style(18))
 	return result
 
 func clear(container: Node) -> void:
@@ -310,7 +311,7 @@ func _build_layout() -> void:
 	scene_layer.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(scene_layer)
 	window = PanelContainer.new()
-	window_style = style(Color(0.06, 0.12, 0.14, 0.93), Color("#41615e"), 18)
+	window_style = UiSkin.scroll_style(18, 0.96)
 	window.add_theme_stylebox_override("panel", window_style)
 	add_child(window)
 	var body := VBoxContainer.new()
@@ -370,7 +371,7 @@ func _arrange(screen: String) -> void:
 		"place":
 			# The place's picture fills the screen as its scene; the window on the right holds the spot
 			# or the person the player turned to.
-			backdrop.texture = ArtLibrary.texture(ArtLibrary.location_path(str(session.player.location)))
+			backdrop.texture = ArtLibrary.texture(ArtLibrary.fullscreen_location_path(str(session.player.location)))
 			backdrop.visible = true
 			shade.color.a = 0.25
 			_place_window(0.40, 0.985, 124.0, -60.0)
