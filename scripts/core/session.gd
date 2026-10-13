@@ -1012,6 +1012,12 @@ func begin_battle(enemy_id: String, context: String = "", opponent_sect: String 
 func begin_spar(person_id: String) -> void:
 	Combat.begin_spar(self, person_id)
 
+func tournament_block() -> String:
+	return Combat.tournament_block(self)
+
+func enter_tournament() -> String:
+	return Combat.enter_tournament(self)
+
 func begin_tournament(round: int) -> void:
 	Combat.begin_tournament(self, round)
 

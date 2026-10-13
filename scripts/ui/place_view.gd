@@ -186,6 +186,10 @@ static func _spot_action(ui, grid: GridContainer, action: String) -> void:
 				deliver.disabled = not reason.is_empty()
 				deliver.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 				grid.add_child(deliver)
+		"tournament":
+			var reason: String = session.tournament_block()
+			var enter: Button = _timed(ui, grid, "报名外门小比", session.enter_tournament, reason if not reason.is_empty() else "三轮斗法，点到为止；头名可得功法玉简")
+			enter.disabled = not reason.is_empty()
 		"alchemy":
 			var known: int = session.known_recipes().size()
 			_open(ui, grid, "开炉炼丹", ui.open_alchemy, "已会 %d 张丹方：按丹方投入主药与药引，择火候开炉" % known if known > 0 else "还不会丹方；坊市丹铺与宗门执事堂可得")
@@ -200,6 +204,7 @@ static func _spot_action(ui, grid: GridContainer, action: String) -> void:
 				var reason: String = session.learn_block(technique_id)
 				var learned_id := technique_id
 				var study: Button = ui.button("参悟%s  ·  %s · %d 日" % [taught.name, taught.tier_name, session.study_days(taught)], func() -> void: ui.run(func() -> String: return session.learn_here(learned_id)), reason if not reason.is_empty() else taught.description)
+				ui.tint(study, ui.grade_color(taught))
 				study.disabled = not reason.is_empty()
 				study.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 				grid.add_child(study)
@@ -228,37 +233,51 @@ static func _enemy_action(ui, parent: GridContainer, title: String, enemy_id: St
 	parent.add_child(entry)
 	return entry
 
-## The lineage choice: at the sect's hall it studies a lineage; in the sect preview it picks both
-## sides and resets the duel.
+## The lineage: at the sect's hall the home lineage can be studied; in the sect preview both sides
+## are picked freely and the duel resets.
 static func sect_choices(ui, parent: VBoxContainer, is_preview: bool) -> void:
 	var session = ui.session
+	if not is_preview:
+		_home_lineage(ui, parent)
+		return
 	var row := HBoxContainer.new()
 	row.add_theme_constant_override("separation", 10)
 	parent.add_child(row)
-	row.add_child(ui.label("我方传承" if is_preview else "研习传承", 15, ui.GOLD))
+	row.add_child(ui.label("我方传承", 15, ui.GOLD))
 	var ids: Array[String] = ["wanderer", "qingyun", "chixiao", "changqing", "canglan", "xuanyue"]
 	var select := OptionButton.new()
 	select.custom_minimum_size = Vector2(145, 34)
 	for id: String in ids:
 		select.add_item(session.content.sects[id].name)
 	select.select(ids.find(str(session.player.get("sect", "wanderer"))))
-	select.item_selected.connect(func(index: int) -> void:
-		if is_preview:
-			ui.reset_preview(ids[index], ui.preview_opponent)
-		else:
-			ui.run(func() -> String: return session.choose_sect(ids[index]))
-	)
+	select.item_selected.connect(func(index: int) -> void: ui.reset_preview(ids[index], ui.preview_opponent))
 	row.add_child(select)
-	if is_preview:
-		row.add_child(ui.label("对手", 15, ui.MUTED))
-		var opponent := OptionButton.new()
-		opponent.custom_minimum_size = Vector2(145, 34)
-		var foe_ids: Array[String] = ["qingyun", "chixiao", "changqing", "canglan", "xuanyue"]
-		for id: String in foe_ids:
-			opponent.add_item(session.content.sects[id].name)
-		opponent.select(foe_ids.find(ui.preview_opponent))
-		opponent.item_selected.connect(func(index: int) -> void: ui.reset_preview(str(session.player.sect), foe_ids[index]))
-		row.add_child(opponent)
-		row.add_child(ui.button("重置试演", func() -> void: ui.reset_preview(str(session.player.sect), ui.preview_opponent)))
+	row.add_child(ui.label("对手", 15, ui.MUTED))
+	var opponent := OptionButton.new()
+	opponent.custom_minimum_size = Vector2(145, 34)
+	var foe_ids: Array[String] = ["qingyun", "chixiao", "changqing", "canglan", "xuanyue"]
+	for id: String in foe_ids:
+		opponent.add_item(session.content.sects[id].name)
+	opponent.select(foe_ids.find(ui.preview_opponent))
+	opponent.item_selected.connect(func(index: int) -> void: ui.reset_preview(str(session.player.sect), foe_ids[index]))
+	row.add_child(opponent)
+	row.add_child(ui.button("重置试演", func() -> void: ui.reset_preview(str(session.player.sect), ui.preview_opponent)))
+
+## The hall's home lineage: what it teaches, and studying it.
+static func _home_lineage(ui, parent: VBoxContainer) -> void:
+	var session = ui.session
+	var home: String = session.Loadout.home_lineage(session)
+	var sect: Dictionary = session.content.sects[home]
+	var arts: Array[String] = []
+	for skill_id: String in sect.skills:
+		arts.append(str(session.content.technique(skill_id).name))
+	var row := HBoxContainer.new()
+	row.add_theme_constant_override("separation", 12)
+	parent.add_child(row)
+	row.add_child(ui.label("本门传承 · %s" % sect.name, 17, ui.GOLD))
+	if str(session.player.get("sect", "wanderer")) == home:
+		row.add_child(ui.label("已研习：%s" % "、".join(arts), 15, ui.INK))
 	else:
-		parent.add_child(ui.paragraph(session.content.sects[session.player.get("sect", "wanderer")].description))
+		var days := int(session.content.rules.lineage.study_days)
+		row.add_child(ui.button("研习本门传承 · %d 日" % days, func() -> void: ui.run(func() -> String: return session.choose_sect(home)), "换上%s三门神通" % "、".join(arts)))
+	parent.add_child(ui.paragraph(str(sect.description)))

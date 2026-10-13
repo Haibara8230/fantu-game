@@ -40,7 +40,7 @@ const FAVOR_MAX := 200
 const FAVOR_STAGES := [[0, "初识"], [40, "相熟"], [80, "友好"], [140, "信赖"], [200, "亲密"]]
 const ATTITUDES := {"friendly": "友善", "neutral": "中立", "hostile": "敌意"}
 const BUILT_IN_INTERACTIONS := ["talk", "gift", "help", "consult", "teach", "invite_spar", "invite_help"]
-const PLAIN_ACTIONS := ["cultivate", "rest", "breakthrough", "study", "teach", "sell", "shop", "gather", "inn_rest", "search_ruin", "inquire", "commissions", "sect", "alchemy", "field"]
+const PLAIN_ACTIONS := ["cultivate", "rest", "breakthrough", "study", "teach", "sell", "shop", "gather", "inn_rest", "search_ruin", "inquire", "commissions", "sect", "alchemy", "field", "tournament"]
 const ITEM_CATEGORIES := {"herb": "灵草", "pill": "丹药", "treasure": "天材地宝", "manual": "玉简", "equipment": "法宝", "material": "材料", "recipe": "丹方", "tool": "器具", "quest": "信物"}
 # Milestones friends send word of, and the deeds the session counts besides victories ("win:<enemy>").
 const CONGRATS := ["breakthrough", "serpent", "champion", "promotion"]
@@ -242,6 +242,9 @@ func _validate() -> String:
 	for source: String in ["battle_win", "spar", "commission", "event"]:
 		if not _whole(bottleneck.insight.get(source)):
 			return "瓶颈历练配置缺少：" + source
+	var lineage: Variant = rules.get("lineage")
+	if not lineage is Dictionary or not sects.has(lineage.get("home", "")) or not _whole(lineage.get("study_days")):
+		return "本门传承配置无效。"
 	if not _whole(rules.get("inn_price")):
 		return "客栈价格无效。"
 	if not rules.get("letters") is Dictionary or not _whole(rules.letters.get("kept")) or int(rules.letters.kept) < 1:
@@ -1303,11 +1306,26 @@ func _validate_item(item: Variant) -> String:
 		return "品类未知"
 	if not _whole(item.get("price")):
 		return "价格无效"
+	if item.has("rarity") and (not _whole(item.rarity) or int(item.rarity) >= talent_data.tiers.size()):
+		return "品级无效"
 	if item.has("toxin") and (not _whole(item.toxin) or int(item.toxin) < 1):
 		return "丹毒无效"
 	if item.has("breakthrough") and (not item.breakthrough is Dictionary or not _whole(item.breakthrough.get("bonus")) or not _whole(item.breakthrough.get("grade", 0))):
 		return "突破之用无效"
 	return _validate_effects(item.get("use", []))
+
+## 品级, 0–5 for 白、绿、蓝、紫、橙、红 (the talents' colors): catalogue items name theirs (`rarity`);
+## techniques, manuals and equipment follow their tier (凡品 white up to 天阶 orange).
+func rarity_of(entry: Dictionary) -> int:
+	var top: int = talent_data.tiers.size() - 1
+	if entry.has("rarity"):
+		return clampi(int(entry.rarity), 0, top)
+	if entry.has("tier"):
+		return clampi(int(entry.tier) - 1, 0, top)
+	return 0
+
+func rarity_color(rarity: int) -> Color:
+	return Color(str(talent_data.tiers[clampi(rarity, 0, talent_data.tiers.size() - 1)].color))
 
 ## The fine (上品) pill made beside a pill, or "".
 func fine_pill(pill_id: String) -> String:

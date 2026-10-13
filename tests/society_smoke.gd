@@ -271,6 +271,22 @@ func _tournament() -> void:
 	out.player.hp = 1
 	out.defend()
 	check(out.battle.is_empty() and out.player.location == "sect" and int(out.player.stones) == 30 and out.journal_lines().any(func(line: String) -> bool: return line.contains("止步")), "losing a round ends the run without penalty")
+	check(out.tournament_block().contains("报过名"), "one entry a tournament")
+	# Entering at the arena: a retreat through the sign-up no longer misses it, and the 约定 lists it.
+	var arena := _game()
+	_jump(arena, 10, 4, 20)
+	check(arena.tournament_block().contains("开始报名") and arena.upcoming().any(func(entry: Dictionary) -> bool: return entry.event == "tournament_entry"), "the arena tells when sign-up opens, and the 约定 lists it")
+	arena.retreat_limits = false
+	arena.cultivate(30)
+	check(arena.journal_lines().any(func(line: String) -> bool: return line.contains("执事堂贴出告示")), "a notice a month ahead is kept in the record")
+	arena.cultivate(15)
+	check(arena.pending_event.get("id", "") == "tournament_entry", "back from a retreat inside the sign-up, it is offered at once")
+	var later := _game()
+	_jump(later, 10, 6, 3)
+	check(later.tournament_block().is_empty(), "the arena takes the entry while sign-up is open")
+	arena = later
+	arena.enter_tournament()
+	check(arena.battle.get("context", "") == "tournament" and int(arena.battle.round) == 1 and int(arena.world.events.tournament_entry.last_occurrence) == 0, "entering at the arena begins round one and counts as this tournament's entry")
 
 func _portraits() -> void:
 	var ArtLibrary = load("res://scripts/ui/art_library.gd")

@@ -15,8 +15,8 @@
         {"id": "chamber", "name": "静室", "description": "外门弟子的静修之所，灵气清润，可闭关、休整与突破；角落里有一口公用丹炉，也可开炉炼丹。", "actions": ["cultivate", "rest", "breakthrough", "alchemy"]},
         {"id": "office", "name": "执事堂", "description": "执事们在这里张贴宗门的委托，按时完成可得酬劳与贡献；月俸、晋升、兑换与捐献也在这里办理。", "actions": ["commissions", "sect"], "requires_flag": "intro_done"},
         {"id": "abode", "name": "洞府", "description": "内门弟子各有一处洞府，石门后是静修的石室，门外辟出一方灵田，引了山泉浇灌。", "actions": ["field"], "requires_rank": "inner"},
-        {"id": "arena", "name": "演武坪", "description": "青石铺就的演武坪，同门常在此切磋。", "actions": ["battle:disciple"]},
-        {"id": "hall", "name": "传功堂", "description": "堂中供着各派传承玉简，可择一研习；执事也传授几门入门功法，参悟需要时日。", "actions": ["study", "teach"], "requires_flag": "intro_done", "teach": ["t:breath:wood:1::0", "t:body:earth:1::5", "t:focus:water:1::10", "t:bolt:metal:1::15"]}
+        {"id": "arena", "name": "演武坪", "description": "青石铺就的演武坪，同门常在此切磋。十年一度的外门小比也在这里报名、比斗。", "actions": ["battle:disciple", "tournament"]},
+        {"id": "hall", "name": "传功堂", "description": "堂中供着本门青云剑诀的传承玉简，弟子可在此研习；执事也传授几门入门功法，参悟需要时日。他派神通不在此传授。", "actions": ["study", "teach"], "requires_flag": "intro_done", "teach": ["t:breath:wood:1::0", "t:body:earth:1::5", "t:focus:water:1::10", "t:bolt:metal:1::15"]}
       ]
     },
     "town": {
@@ -410,6 +410,7 @@
     "cultivate_options": [30, 90, 360],
     "wait_options": [1, 10],
     "inn_price": 5,
+    "lineage": {"home": "qingyun", "study_days": 30},
     "letters": {"kept": 60},
     "requests": {"period_days": 180, "chance": 0.25, "items": ["huichun_grass", "ninglu_grass", "chiyan_flower", "huiqi_pill", "liaoshang_pill"], "count": [1, 3], "favor": 12, "mind": 2, "reward_scale": 1.5},
     "inquire": {"days": 1, "price": 2, "repeat_after_days": 90},

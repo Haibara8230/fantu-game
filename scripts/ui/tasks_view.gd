@@ -1,10 +1,30 @@
 extends RefCounted
 ## 任务卷轴: what there is to aim for and to keep — current goals (goals.gd), the storylines under way,
-## accepted commissions with their progress and deadline, the 传音 received, and the appointments
-## coming up.
+## accepted commissions with their progress and deadline, the 传音 received, the appointments coming up,
+## and the messages received lately.
 const Calendar = preload("res://scripts/core/calendar.gd")
 const Goals = preload("res://scripts/ui/goals.gd")
 const Chronicle = preload("res://scripts/core/chronicle.gd")
+
+# Turn-by-turn duel records stay in the 编年史; 消息 keeps what happened.
+const QUIET := ["skill_attack", "skill_heal", "skill_guard", "defend", "enemy_attack", "battle_start", "spar_start"]
+const MESSAGE_COUNT := 80
+
+## 消息: what has reached the player lately, newest first under its date — notices, 传音, world news,
+## outcomes — so nothing that passed during a retreat or a stay is lost once its notice fades.
+static func render_messages(ui) -> void:
+	var session = ui.session
+	var center: VBoxContainer = ui.center
+	var entries: Array = session.chronicle.entries.filter(func(entry: Dictionary) -> bool: return not str(entry.id) in QUIET)
+	entries = entries.slice(-MESSAGE_COUNT)
+	entries.reverse()
+	center.add_child(ui.label("近来消息 · 最近 %d 条，更早的在「编年史」" % entries.size(), 15, ui.MUTED))
+	var shown_day := -1
+	for entry: Dictionary in entries:
+		if int(entry.day) != shown_day:
+			shown_day = int(entry.day)
+			center.add_child(ui.label(Calendar.date_text(shown_day), 16, ui.GOLD))
+		center.add_child(ui.paragraph(session.chronicle.format(entry, session.content), ui.GOLD if bool(entry.major) else ui.INK))
 
 static func render_goals(ui) -> void:
 	var center: VBoxContainer = ui.center

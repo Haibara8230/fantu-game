@@ -9,6 +9,8 @@
   "breakthrough": "闭关 {duration}，丹田化海，你已踏入{realm_name}。",
   "travel": "跋涉 {duration}，抵达{location_name}。",
   "choose_sect": "开始研习{sect_name}传承，神通已更换。",
+  "tournament_enter": "你在演武坪报名参加了外门小比。",
+  "study_lineage": "在传功堂研习{sect_name}传承 {duration}，神通已更换。",
   "battle_start": "与{enemy_name}展开斗法。",
   "skill_attack": "施展{skill_name}，造成 {amount} 点伤害。",
   "skill_heal": "施展{skill_name}，恢复 {amount} 气血。",

@@ -40,6 +40,7 @@ static func render(ui) -> void:
 		var key: String = good.key
 		var reason: String = "须到执事堂兑换。" if not at_hall else str(good.block)
 		var take: Button = ui.button("%s · %d 贡献（本期余 %d）" % [item.get("name", good.item), int(good.price), int(good.left)], func() -> void: ui.run(func() -> String: return session.sect_exchange(key)), reason if not reason.is_empty() else str(item.get("description", "")))
+		ui.tint(take, ui.grade_color(item))
 		take.disabled = not reason.is_empty()
 		take.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		grid.add_child(take)

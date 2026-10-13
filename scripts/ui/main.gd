@@ -39,7 +39,7 @@ const INK := Color("#e3e8dc")
 const MUTED := Color("#97aaa4")
 # The scrolls laid over the world and their tabs: the view each tab shows, and its name.
 const PANEL_TABS := [["status", "属性"], ["sect", "宗门"], ["arts", "神通"], ["methods", "功法"], ["bag", "行囊"], ["people", "相识"], ["chronicle", "编年史"], ["system", "系统"]]
-const SCROLL_TABS := [["goals", "当前目标"], ["stories", "剧情"], ["quests", "委托"], ["letters", "传音"], ["upcoming", "约定"]]
+const SCROLL_TABS := [["goals", "当前目标"], ["stories", "剧情"], ["quests", "委托"], ["letters", "传音"], ["upcoming", "约定"], ["messages", "消息"]]
 const RETREAT_TABS := [["retreat", "修炼"], ["breakthrough", "突破"]]
 const TAB_GROUPS := {"panel": PANEL_TABS, "scroll": SCROLL_TABS, "retreat": RETREAT_TABS, "trade": [["trade", "交易"]], "alchemy": [["alchemy", "炼丹"]], "field": [["field", "灵田"]]}
 var session = Session.new()
@@ -520,6 +520,8 @@ func render() -> void:
 				TasksView.render_stories(self)
 			"letters":
 				TasksView.render_letters(self)
+			"messages":
+				TasksView.render_messages(self)
 			"system":
 				SystemView.render(self)
 			_:
@@ -631,6 +633,19 @@ func set_arts_filter(element: String) -> void:
 func set_bag_filter(category: String) -> void:
 	bag_filter = category
 	render()
+
+# --- 品级 colors ------------------------------------------------------------------------------------
+
+## The color of an item's or a technique's 品级 (白、绿、蓝、紫、橙、红).
+func grade_color(entry: Dictionary) -> Color:
+	return session.content.rarity_color(session.content.rarity_of(entry))
+
+## Colors a button's text the same in every state.
+func tint(target: Button, color: Color) -> Button:
+	for state: String in ["font_color", "font_hover_color", "font_focus_color", "font_pressed_color", "font_hover_pressed_color"]:
+		target.add_theme_color_override(state, color)
+	target.add_theme_color_override("font_disabled_color", Color(color, 0.5))
+	return target
 
 # --- The alchemy page (alchemy_view.gd) -------------------------------------------------------------
 
@@ -1106,7 +1121,7 @@ func reset_preview(sect_id: String = "qingyun", opponent_id: String = "qingyun")
 	story = {}
 	dialogue = {}
 	session.new_game("青禾")
-	session.choose_sect(sect_id)
+	session.Loadout.take_lineage(session, sect_id)
 	session.player.hp = maxi(1, int(session.player.max_hp) - 20)
 	session.start_battle("disciple", opponent_id)
 	notice("门派试演 · {skills} 施法，{guard}护体；切换传承会重置试演，正常旅程不受影响。".format(Settings.key_hints(self)))

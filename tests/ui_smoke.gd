@@ -221,7 +221,7 @@ func _run() -> void:
 	check(tags.all(func(tag: Button) -> bool: return tag.get_global_rect().position.y >= main.hud_left.get_global_rect().end.y and tag.get_global_rect().end.x <= main.window.get_global_rect().position.x), "the tags keep clear of the HUD and the window")
 	check(_texts(main.scene_layer, "Label").contains("青云山") and _texts(main.scene_layer, "Label").contains("此地人物"), "the scene shows the place's name and the people drawer")
 	_tag("传功堂").pressed.emit()
-	check(_texts(main.center, "Label").contains("研习传承") and _button("闭关修炼") == null, "a tag opens its spot, with only that spot's actions")
+	check(_texts(main.center, "Label").contains("本门传承") and _button("闭关修炼") == null, "a tag opens its spot, with only that spot's actions")
 	check(_button("参悟吐纳法") != null or _button("参悟") != null, "the hall offers techniques to study")
 	_tag("执事堂").pressed.emit()
 	check(_button("接下：") != null, "the 执事堂 board lists commissions")
@@ -582,6 +582,11 @@ func _run() -> void:
 	await _capture("field")
 	main.session.player.rank = 0
 	main.session.player.field = {"grade": 0, "plots": []}
+	main.set_view("place")
+	# 消息 keeps what was said lately; 品级 colors follow 白绿蓝紫橙红.
+	main.set_view("messages")
+	check(_texts(main.center, "Label").contains("近来消息") and _texts(main.center, "Label").contains("灵田"), "the 消息 tab keeps the latest records")
+	check(main.session.content.rarity_of(main.session.content.item("foundation_pill")) == 2 and main.grade_color(main.session.content.item("qiannian_shiru")) == Color("#e59d52") and main.session.content.rarity_of(main.session.content.technique("t:bolt:metal:1::15")) == 0, "items and techniques are graded by color")
 	main.set_view("place")
 	# Breaking through: the rules decide, and a realm reached has its own screen until 确定.
 	main.run(func() -> String: return main.session.travel("sect"))

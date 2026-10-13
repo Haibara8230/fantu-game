@@ -191,11 +191,25 @@ static func choose_sect(s, sect_id: String) -> String:
 		return "请回青云山传功堂研习门派传承。"
 	if s.player.get("sect", "wanderer") == sect_id:
 		return "你已在研习此传承。"
-	# Taking up a lineage teaches its three arts and puts them in the art slots.
+	if sect_id != home_lineage(s):
+		return "传功堂只传本门传承；他派神通须得其玉简，或请人传授。"
+	# Studying the lineage takes its days, like any technique.
+	var passed: Dictionary = s.advance_days(int(s.content.rules.lineage.study_days))
+	if not s.ended.is_empty():
+		return s.conclude("", passed)
+	take_lineage(s, sect_id)
+	return s.conclude(s.log_event("study_lineage", {"sect": sect_id, "days": passed.elapsed}, true), passed)
+
+## The lineage the sect's 传功堂 teaches.
+static func home_lineage(s) -> String:
+	return str(s.content.rules.lineage.home)
+
+## Takes up a lineage at once: teaches its three arts and puts them in the art slots. The 传功堂 goes
+## through choose_sect; the sect preview and tests use this directly.
+static func take_lineage(s, sect_id: String) -> void:
 	s.player.sect = sect_id
 	s.player.arts = []
 	for skill_id: String in s.content.sects[sect_id].skills:
 		if not skill_id in s.player.learned:
 			s.player.learned.append(skill_id)
 		s.player.arts.append(skill_id)
-	return s.finish(s.log_event("choose_sect", {"sect": sect_id}, true))

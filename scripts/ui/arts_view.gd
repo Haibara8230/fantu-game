@@ -42,7 +42,7 @@ static func _page(ui, slot_kind: String, title: String, in_use: Array, limit: in
 			continue
 		var technique_id: String = in_use[index]
 		var t: Dictionary = session.content.technique(technique_id)
-		var name: Label = ui.label("%s · %s" % [t.name, t.tier_name], 15, ui.GOLD if int(t.tier) >= 3 else ui.INK)
+		var name: Label = ui.label("%s · %s" % [t.name, t.tier_name], 15, ui.grade_color(t))
 		name.tooltip_text = t.description
 		name.mouse_filter = Control.MOUSE_FILTER_PASS
 		name.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -84,6 +84,7 @@ static func _page(ui, slot_kind: String, title: String, in_use: Array, limit: in
 				ui.run(func() -> String: return session.unequip_technique(technique_id))
 			else:
 				ui.run(func() -> String: return session.equip_technique(technique_id)), t.description + ("\n点击停下" if active else ("\n栏位已满，先停下一门" if full else "\n点击运转")))
+		ui.tint(card, ui.grade_color(t))
 		card.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		card.custom_minimum_size.y = 56
 		card.alignment = HORIZONTAL_ALIGNMENT_LEFT

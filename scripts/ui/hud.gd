@@ -9,6 +9,10 @@ const StatusView = preload("res://scripts/ui/status_view.gd")
 const ICONS := [["status", "人物"], ["bag", "行囊"], ["arts", "神通"], ["map", "舆图"], ["chronicle", "编年史"]]
 const LOG_LINES := 2
 const NOTICE_SECONDS := 6.0
+# The notice grows to fit what it says, up to this many lines; the whole of it is kept under 消息.
+const NOTICE_LINES := 6
+const NOTICE_HEIGHT := 42.0
+const RECORD_HEIGHT := 44.0
 
 static func build(ui) -> void:
 	var fill := Color(0.04, 0.09, 0.1, 0.86)
@@ -60,7 +64,7 @@ static func build(ui) -> void:
 	where.add_child(ui.clock_label)
 	ui.place_label = ui.label("", 15)
 	where.add_child(ui.place_label)
-	var tasks: Button = ui.button("任务", func() -> void: ui.toggle_view("goals"), "当前目标、委托与约定")
+	var tasks: Button = ui.button("任务", func() -> void: ui.toggle_view("goals"), "当前目标、剧情、委托、传音、约定与近来消息")
 	tasks.custom_minimum_size = Vector2(64, 40)
 	row.add_child(tasks)
 	ui.hud_icons["goals"] = tasks
@@ -77,11 +81,14 @@ static func build(ui) -> void:
 	record.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	record.add_theme_font_size_override("normal_font_size", 13)
 	record.add_theme_color_override("default_color", Color(ui.INK, 0.8))
+	# The latest records grow upward to fit, instead of being cut off at two short lines.
+	record.fit_content = true
+	record.grow_vertical = Control.GROW_DIRECTION_BEGIN
 	record.anchor_top = 1.0
 	record.anchor_bottom = 1.0
 	record.anchor_right = 0.32
 	record.offset_left = 16.0
-	record.offset_top = -52.0
+	record.offset_top = -8.0 - RECORD_HEIGHT
 	record.offset_bottom = -8.0
 	ui.add_child(record)
 	ui.journal_text = record
@@ -99,6 +106,8 @@ static func build(ui) -> void:
 	notice.offset_top = -50.0
 	notice.offset_bottom = -8.0
 	notice.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	notice.max_lines_visible = NOTICE_LINES
+	notice.grow_vertical = Control.GROW_DIRECTION_BEGIN
 	notice.z_index = 10
 	ui.add_child(notice)
 	ui.status_label = notice
@@ -155,6 +164,7 @@ static func render(ui) -> void:
 		go_on.disabled = not ui.settled()
 		ui.journey_box.add_child(go_on)
 		ui.journey_button = go_on
+	ui.journal_text.offset_top = ui.journal_text.offset_bottom - RECORD_HEIGHT
 	ui.journal_text.text = "\n".join(session.journal_lines().slice(-LOG_LINES))
 
 ## A thin meter with its numbers on one line.
@@ -176,12 +186,19 @@ static func place_notice(ui, top: bool) -> void:
 	label.anchor_right = 0.75 if top else 0.985
 	label.anchor_top = 0.0 if top else 1.0
 	label.anchor_bottom = 0.0 if top else 1.0
-	label.offset_top = 104.0 if top else -50.0
-	label.offset_bottom = 146.0 if top else -8.0
+	label.offset_top = 104.0 if top else -8.0 - NOTICE_HEIGHT
+	label.offset_bottom = 104.0 + NOTICE_HEIGHT if top else -8.0
+	# A longer notice grows away from the edge it sits on.
+	label.grow_vertical = Control.GROW_DIRECTION_END if top else Control.GROW_DIRECTION_BEGIN
 
 ## Shows what just happened, then lets it fade.
 static func notice(ui, message: String) -> void:
 	var label: Label = ui.status_label
+	# Back to one line's height before the new text, which grows it again as far as it needs.
+	if label.grow_vertical == Control.GROW_DIRECTION_BEGIN:
+		label.offset_top = label.offset_bottom - NOTICE_HEIGHT
+	else:
+		label.offset_bottom = label.offset_top + NOTICE_HEIGHT
 	label.text = message
 	label.visible = not message.is_empty()
 	label.modulate.a = 1.0

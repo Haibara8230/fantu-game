@@ -124,7 +124,14 @@
     "trigger": "date",
     "priority": 5,
     "periodic": {"start_year": 10, "every_years": 10, "month": 6, "from_day": 1, "to_day": 1},
-    "chronicle": "青云剑宗外门小比如期举行，胜者得入内门观经。"
+    "chronicle": "青云剑宗外门小比今日开始报名，至六月十五日为止，到青云山演武坪即可报名。"
+  },
+  "tournament_notice": {
+    "title": "小比告示",
+    "trigger": "date",
+    "priority": 5,
+    "periodic": {"start_year": 10, "every_years": 10, "month": 5, "from_day": 1, "to_day": 1},
+    "chronicle": "青云山执事堂贴出告示：外门小比将于六月一日至十五日在演武坪报名，三轮斗法，点到为止，头名可得宗门赏赐的功法玉简。"
   },
   "road_wolf": {
     "title": "山道妖狼",
@@ -266,6 +273,7 @@
     "trigger": "location",
     "location": "sect",
     "priority": 25,
+    "listed": true,
     "periodic": {"start_year": 10, "every_years": 10, "month": 6, "from_day": 1, "to_day": 15},
     "text": "演武坪上旌旗招展，十年一度的外门小比开始报名。三轮斗法，点到为止，头名可得宗门赏赐的功法玉简。",
     "choices": [

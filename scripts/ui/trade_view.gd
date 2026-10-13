@@ -23,6 +23,7 @@ static func render(ui) -> void:
 		sellable += 1
 		var item: Dictionary = session.content.item(item_id)
 		var offer: Button = ui.button("%s ×%d · 售 %d" % [item.name, left, price], func() -> void: ui.stage_sale(item_id), item.description)
+		ui.tint(offer, ui.grade_color(item))
 		offer.disabled = left <= 0
 		offer.alignment = HORIZONTAL_ALIGNMENT_LEFT
 		mine.add_child(offer)
@@ -41,6 +42,7 @@ static func render(ui) -> void:
 		var item: Dictionary = session.content.item(bought)
 		var once := good.has("key")
 		var pick: Button = ui.button("%s · %d 灵石" % [item.name, int(good.price)], func() -> void: ui.stage_purchase(bought), item.description)
+		ui.tint(pick, ui.grade_color(item))
 		pick.disabled = once and bought in ui.trade.buy
 		pick.alignment = HORIZONTAL_ALIGNMENT_LEFT
 		shop.add_child(pick)

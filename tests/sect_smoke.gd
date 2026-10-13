@@ -48,7 +48,7 @@ func _run() -> void:
 	bad.player.sect = "missing"
 	check(not migrated.restore(bad), "unknown saved sect rejected")
 	legacy.flee()
-	legacy.choose_sect("canglan")
+	legacy.Loadout.take_lineage(legacy, "canglan")
 	legacy.start_battle("disciple", "chixiao")
 	var before: Dictionary = legacy.snapshot()
 	legacy.choose_sect("qingyun")

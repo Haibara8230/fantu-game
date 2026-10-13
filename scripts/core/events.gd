@@ -224,6 +224,10 @@ static func open_for(s, event_id: String, window: Dictionary, day: int) -> bool:
 		return int(progress.last_day) < 0 or day >= int(progress.last_day) + int(definition.repeat.cooldown_days)
 	return not str(progress.state) in STATES
 
+## Counts the event as handled in this window without its own choices (外门小比 entered at the arena).
+static func mark_fired(s, event_id: String, window: Dictionary, day: int) -> void:
+	_mark_fired(s, event_id, window, day)
+
 static func _mark_fired(s, event_id: String, window: Dictionary, day: int) -> void:
 	var definition: Dictionary = s.content.events[event_id]
 	var progress := _progress(s, event_id)
@@ -443,5 +447,17 @@ static func upcoming(s) -> Array[Dictionary]:
 		if int(fixed.to) < day or not all_met(s, definition.remind.get("conditions", [])):
 			continue
 		result.append({"event": event_id, "from": int(fixed.from), "to": int(fixed.to), "title": definition.title, "location": definition.location})
+	# Recurring occasions the player should plan for (外门小比): the open window not yet taken part in,
+	# or the next one within a year.
+	for event_id: String in s.content.events:
+		var definition: Dictionary = s.content.events[event_id]
+		if not bool(definition.get("listed", false)) or not definition.has("periodic"):
+			continue
+		var window := window_at(definition, day)
+		if window.is_empty() or not open_for(s, event_id, window, day):
+			window = next_window(definition, day + 1)
+		if window.is_empty() or int(window.from) - day > Calendar.DAYS_PER_YEAR:
+			continue
+		result.append({"event": event_id, "from": int(window.from), "to": int(window.to), "title": definition.title, "location": definition.location})
 	result.sort_custom(func(a: Dictionary, b: Dictionary) -> bool: return a.from < b.from)
 	return result

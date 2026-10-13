@@ -3,6 +3,7 @@
     "name": "回春草",
     "category": "herb",
     "price": 4,
+    "rarity": 0,
     "description": "最常见的灵草，药性温和，炼制疗伤丹的主材。",
     "nature": "neutral",
     "grow": {"days": 30, "yield": 3}
@@ -11,6 +12,7 @@
     "name": "赤炎花",
     "category": "herb",
     "price": 9,
+    "rarity": 1,
     "description": "只生在落霞谷向阳坡上的火性灵花，花瓣摸上去微微发烫。",
     "nature": "hot",
     "grow": {"days": 60, "yield": 3}
@@ -19,6 +21,7 @@
     "name": "凝露草",
     "category": "herb",
     "price": 7,
+    "rarity": 0,
     "description": "松风岭林下阴处的灵草，叶尖常挂露珠，性凉。",
     "nature": "cold",
     "grow": {"days": 45, "yield": 3}
@@ -27,6 +30,7 @@
     "name": "百年灵芝",
     "category": "herb",
     "price": 60,
+    "rarity": 3,
     "description": "百年方成的灵芝，罕见。炼化可得 300 修为。",
     "use": [{"xp": 300}],
     "nature": "neutral"
@@ -35,12 +39,14 @@
     "name": "筑基丹",
     "category": "pill",
     "price": 60,
+    "rarity": 2,
     "description": "突破筑基所需的丹药。"
   },
   "huiqi_pill": {
     "name": "回气丹",
     "category": "pill",
     "price": 7,
+    "rarity": 0,
     "description": "服下恢复 20 点灵力。",
     "use": [{"qi": 20}]
   },
@@ -48,6 +54,7 @@
     "name": "疗伤丹",
     "category": "pill",
     "price": 10,
+    "rarity": 0,
     "description": "服下恢复 40 点气血。",
     "use": [{"hp": 40}]
   },
@@ -55,6 +62,7 @@
     "name": "凝气丹",
     "category": "pill",
     "price": 30,
+    "rarity": 1,
     "description": "服下增加 100 修为。丹毒积累，连服须隔些时日。",
     "use": [{"xp": 100}],
     "toxin": 60
@@ -63,6 +71,7 @@
     "name": "破障丹",
     "category": "pill",
     "price": 20,
+    "rarity": 1,
     "description": "修为卡在瓶颈时服下，可冲开关隘、升入下一小阶段。未遇瓶颈时服之无益。",
     "use": [{"breach": true}]
   },
@@ -70,6 +79,7 @@
     "name": "上品疗伤丹",
     "category": "pill",
     "price": 20,
+    "rarity": 1,
     "fine_of": "liaoshang_pill",
     "description": "丹纹圆润的上品疗伤丹，服下恢复 70 点气血。",
     "use": [{"hp": 70}]
@@ -78,6 +88,7 @@
     "name": "上品回气丹",
     "category": "pill",
     "price": 14,
+    "rarity": 1,
     "fine_of": "huiqi_pill",
     "description": "丹香清冽的上品回气丹，服下恢复 35 点灵力。",
     "use": [{"qi": 35}]
@@ -86,6 +97,7 @@
     "name": "上品凝气丹",
     "category": "pill",
     "price": 60,
+    "rarity": 2,
     "fine_of": "ningqi_pill",
     "toxin": 45,
     "description": "药力凝练的上品凝气丹，服下增加 160 修为，丹毒也轻些。",
@@ -95,6 +107,7 @@
     "name": "上品破障丹",
     "category": "pill",
     "price": 40,
+    "rarity": 2,
     "fine_of": "pozhang_pill",
     "description": "上品破障丹，冲开瓶颈之余，还让心境更为通透。未遇瓶颈时服之无益。",
     "use": [{"breach": true}, {"mind": 2}]
@@ -103,6 +116,7 @@
     "name": "上品筑基丹",
     "category": "pill",
     "price": 120,
+    "rarity": 3,
     "fine_of": "foundation_pill",
     "description": "丹纹九转的上品筑基丹，突破筑基时药力更足。"
   },
@@ -110,18 +124,21 @@
     "name": "云溪请柬",
     "category": "quest",
     "price": 0,
+    "rarity": 2,
     "description": "烫金请柬，凭此可入云溪坊市历元五年春的特殊拍卖。"
   },
   "azhi_token": {
     "name": "刻字竹牌",
     "category": "quest",
     "price": 0,
+    "rarity": 0,
     "description": "药篓上挂的竹牌，刻着“阿芷”二字，背面是一行采药人的记号。"
   },
   "polin_powder": {
     "name": "破鳞散",
     "category": "pill",
     "price": 30,
+    "rarity": 2,
     "use": [{"flag": "serpent_weakened"}],
     "description": "沈墨以凝露草、赤炎花熬成的药散。服下后药力沉在丹田，与赤鳞妖蟒斗法时可破其鳞甲（妖蟒气血减三成）。"
   },
@@ -129,12 +146,14 @@
     "name": "货郎的货担",
     "category": "quest",
     "price": 0,
+    "rarity": 0,
     "description": "从蒙面劫修手里夺回的货担，丹瓶一个没少，该还给钱货郎。"
   },
   "qiannian_shiru": {
     "name": "千年石乳",
     "category": "treasure",
     "price": 300,
+    "rarity": 4,
     "description": "古洞石钟乳千年才凝一滴，灵气精纯。突破时服下可代替筑基丹，并让根基更为扎实。",
     "breakthrough": {"bonus": 35, "grade": 1}
   },
@@ -142,6 +161,7 @@
     "name": "九曲灵参",
     "category": "treasure",
     "price": 360,
+    "rarity": 4,
     "description": "根须九曲的老参，生在灵气汇聚的深谷。突破时服下可代替筑基丹，并让根基更为扎实。",
     "breakthrough": {"bonus": 35, "grade": 1}
   },
@@ -149,6 +169,7 @@
     "name": "疗伤丹丹方",
     "category": "recipe",
     "price": 15,
+    "rarity": 0,
     "description": "以回春草为主药的疗伤丹方子，寒热平和，最适合初学炼丹。",
     "use": [{"recipe": "liaoshang"}]
   },
@@ -156,6 +177,7 @@
     "name": "回气丹丹方",
     "category": "recipe",
     "price": 15,
+    "rarity": 0,
     "description": "以凝露草为主药的回气丹方子。主药偏寒，须以热性药引调和。",
     "use": [{"recipe": "huiqi"}]
   },
@@ -163,6 +185,7 @@
     "name": "凝气丹丹方",
     "category": "recipe",
     "price": 40,
+    "rarity": 1,
     "description": "增长修为的凝气丹方子。赤炎花入药，药性偏热，须以寒性药引调和。",
     "use": [{"recipe": "ningqi"}]
   },
@@ -170,6 +193,7 @@
     "name": "破障丹丹方",
     "category": "recipe",
     "price": 30,
+    "rarity": 1,
     "description": "冲关破障的方子，凝露草与赤炎花寒热相济。",
     "use": [{"recipe": "pozhang"}]
   },
@@ -177,6 +201,7 @@
     "name": "筑基丹丹方",
     "category": "recipe",
     "price": 100,
+    "rarity": 3,
     "description": "筑基丹的方子，以百年灵芝为主药，辅以三味灵草。成丹极难，却是自家筑基的底气。",
     "use": [{"recipe": "foundation"}]
   },
@@ -184,6 +209,7 @@
     "name": "青铜丹炉",
     "category": "tool",
     "price": 80,
+    "rarity": 1,
     "furnace": {"success": 8, "fine": 5, "yield": 0},
     "description": "坊市常见的青铜丹炉，炉壁厚实，火候好掌握些。炼丹成功率 +8%，出上品 +5%。"
   },
@@ -191,6 +217,7 @@
     "name": "紫铜丹炉",
     "category": "tool",
     "price": 150,
+    "rarity": 2,
     "furnace": {"success": 12, "fine": 10, "yield": 1},
     "description": "宗门炼丹房淘换下来的紫铜丹炉，炉膛宽大。成功率 +12%，出上品 +10%，每炉多成一枚。"
   },
@@ -198,6 +225,7 @@
     "name": "玄铁丹炉",
     "category": "tool",
     "price": 400,
+    "rarity": 3,
     "furnace": {"success": 18, "fine": 18, "yield": 1},
     "description": "玄铁铸就、刻有聚火阵纹的丹炉，内门长老才舍得用。成功率 +18%，出上品 +18%，每炉多成一枚。"
   },
@@ -205,6 +233,7 @@
     "name": "控火符",
     "category": "tool",
     "price": 10,
+    "rarity": 0,
     "aid": {"success": 15, "safe": true},
     "description": "贴在炉口，可稳住炉火。炼丹时用一张：成功率 +15%，武火失手也不会炸炉。"
   }

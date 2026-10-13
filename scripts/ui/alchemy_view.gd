@@ -32,6 +32,7 @@ static func render(ui) -> void:
 		var chosen := recipe_id
 		var pill: Dictionary = session.content.item(str(session.content.alchemy_data.recipes[recipe_id].pill))
 		var tab: Button = ui.button(pill.name, func() -> void: ui.choose_recipe(chosen), str(pill.description))
+		ui.tint(tab, ui.grade_color(pill))
 		tab.disabled = recipe_id == str(plan.recipe)
 		tab.custom_minimum_size = Vector2(96, 36)
 		recipes.add_child(tab)

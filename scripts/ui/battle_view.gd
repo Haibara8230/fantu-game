@@ -53,6 +53,7 @@ static func render(ui) -> void:
 		var remaining := int(b.cooldowns.get(skill_id, 0))
 		var suffix := "\n冷却 %d" % remaining if remaining > 0 else "\n%d 灵力" % int(skill.qi_cost)
 		var cast: Button = ui.button("[%s] %s%s" % [Settings.key_name(ui, "skill_%d" % index), skill.name, suffix], func() -> void: ui.skill(skill_id), "%s · %s\n%s%s" % [skill.tier_name, session.content.technique_data.elements[skill.element].name, skill.description, _realm_bonus_text(session)])
+		ui.tint(cast, ui.grade_color(skill))
 		cast.disabled = remaining > 0 or int(session.player.qi) < int(skill.qi_cost)
 		cast.custom_minimum_size = Vector2(132, 62)
 		cast.size_flags_horizontal = Control.SIZE_EXPAND_FILL

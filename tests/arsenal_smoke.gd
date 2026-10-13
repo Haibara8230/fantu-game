@@ -142,8 +142,12 @@ func _learning() -> void:
 	for art: String in game.active_skills().duplicate():
 		game.unequip_technique(art)
 	check(game.active_skills().size() == 1, "at least one art always stays")
-	game.choose_sect("chixiao")
-	check(game.active_skills() == ["flame_bolt", "fire", "fire_burst"] and "fire_burst" in game.player.learned, "taking up a lineage teaches and slots its arts")
+	var learned: int = game.player.learned.size()
+	check(game.choose_sect("chixiao").contains("只传本门") and game.player.learned.size() == learned and str(game.player.sect) == "wanderer", "the hall teaches no other sect's lineage")
+	var study_from := int(game.world.day)
+	game.choose_sect("qingyun")
+	check(game.active_skills() == ["sword", "sword_rain", "sword_arc"] and "sword_arc" in game.player.learned and int(game.world.day) == study_from + 30, "studying the home lineage takes a month, then teaches and slots its arts")
+	check(game.choose_sect("qingyun").contains("已在研习"), "and is studied once")
 
 func _bonuses() -> void:
 	var game := _game()

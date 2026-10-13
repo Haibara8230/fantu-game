@@ -24,7 +24,7 @@ static func render(ui) -> void:
 			row.add_child(ui.label("未佩戴", 15, ui.MUTED))
 			continue
 		var gear: Dictionary = session.content.equipment(item_id)
-		var name: Label = ui.label(gear.name, 15, ui.INK)
+		var name: Label = ui.label(gear.name, 15, ui.grade_color(gear))
 		name.tooltip_text = gear.description
 		name.mouse_filter = Control.MOUSE_FILTER_PASS
 		name.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -70,7 +70,7 @@ static func _item_row(ui, parent: VBoxContainer, item_id: String) -> void:
 	var row := HBoxContainer.new()
 	row.add_theme_constant_override("separation", 8)
 	parent.add_child(row)
-	var name_label: Label = ui.label("%s ×%d" % [item.name, session.item_count(item_id)], 16)
+	var name_label: Label = ui.label("%s ×%d" % [item.name, session.item_count(item_id)], 16, ui.grade_color(item))
 	name_label.custom_minimum_size.x = 150
 	row.add_child(name_label)
 	var text: Label = ui.paragraph(item.description)

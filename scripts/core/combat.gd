@@ -40,6 +40,32 @@ static func begin_spar(s, person_id: String) -> void:
 	s.battle = {"enemy_id": "cultivator", "hp": int(foe.hp), "turn": 1, "cooldowns": {}, "opponent_sect": "qingyun" if lineage == "wanderer" else lineage, "status": {}, "context": "spar", "npc": person_id, "foe": foe, "place": _battle_place(s)}
 	s.log_event("spar_start", {"npc": person_id})
 
+## Why the player cannot enter the 外门小比 at the arena now, or "".
+static func tournament_block(s) -> String:
+	var reason: String = s.blocked()
+	if not reason.is_empty():
+		return reason
+	if not s.available_here("tournament"):
+		return "须到青云山演武坪报名。"
+	var definition: Dictionary = s.content.events.tournament_entry
+	var window: Dictionary = s.Events.window_at(definition, int(s.world.day))
+	if window.is_empty():
+		return "外门小比于%s开始报名。" % s.Calendar.date_text(int(s.Events.next_window(definition, int(s.world.day)).from))
+	if not s.Events.open_for(s, "tournament_entry", window, int(s.world.day)):
+		return "这一届外门小比已经报过名或观过战了。"
+	return ""
+
+## Enters the 外门小比 at the arena: the first round begins at once.
+static func enter_tournament(s) -> String:
+	var reason := tournament_block(s)
+	if not reason.is_empty():
+		return reason
+	var definition: Dictionary = s.content.events.tournament_entry
+	s.Events.mark_fired(s, "tournament_entry", s.Events.window_at(definition, int(s.world.day)), int(s.world.day))
+	var text: String = s.log_event("tournament_enter")
+	begin_tournament(s, 1)
+	return s.finish(text)
+
 ## A tournament round against the sect's outer disciples present, weakest first.
 static func begin_tournament(s, round: int) -> void:
 	var disciples: Array = s.present_npcs().filter(func(person_id: String) -> bool: return s.is_generated(person_id) and s.person(person_id).kind == "disciple")
