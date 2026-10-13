@@ -129,3 +129,5 @@ Godot 4 / GDScript / Windows 单机。同一个修仙世界持续运转，玩家
 发布独立 Windows 程序时需要同版本导出模板与 Windows 导出预设。当前启动器运行项目源码，便于持续开发。
 
 Godot 为 MIT 开源引擎；正式发布时附上 [Godot 许可与第三方声明](https://godotengine.org/license/)。
+
+2026-10-13 美术补充：24 张新增事件插图、七处地点的独立 16:9 整屏背景、执事堂与灵眼场景、阿芷/许清和/顾长庚专属立绘及云竹卷轴面板已接入。原有地点/场景横幅仍用于小窗口；`check.cmd` 加入 `art_smoke` 验证配图显示与资源覆盖。完整提示词在 `docs/ART_BATCH_20261013.json`。

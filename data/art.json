@@ -6,7 +6,31 @@
     "night_market": "res://assets/art/events/yunxi_night_market.png",
     "tournament_entry": "res://assets/art/events/outer_tournament.png",
     "sect_tournament": "res://assets/art/events/outer_tournament.png",
-    "serpent_rampage": "res://assets/art/events/serpent_rampage.png"
+    "serpent_rampage": "res://assets/art/events/serpent_rampage.png",
+    "heart_demon": "res://assets/art/events/heart_demon.png",
+    "epiphany": "res://assets/art/events/epiphany.png",
+    "spirit_eye": "res://assets/art/events/spirit_eye.png",
+    "remnant_soul": "res://assets/art/events/remnant_soul.png",
+    "talent_xiantian_daoti": "res://assets/art/events/talent_xiantian_daoti.png",
+    "talent_qiyun_zhizi": "res://assets/art/events/talent_qiyun_zhizi.png",
+    "talent_jiangu": "res://assets/art/events/talent_jiangu.png",
+    "talent_hunyuan": "res://assets/art/events/talent_hunyuan.png",
+    "talent_linglong": "res://assets/art/events/talent_linglong.png",
+    "talent_bumie": "res://assets/art/events/talent_bumie.png",
+    "talent_wanfa": "res://assets/art/events/talent_wanfa.png",
+    "talent_danqi": "res://assets/art/events/talent_danqi.png",
+    "talent_shouyou": "res://assets/art/events/talent_shouyou.png",
+    "talent_tianyan": "res://assets/art/events/talent_tianyan.png",
+    "talent_shouxing": "res://assets/art/events/talent_shouxing.png",
+    "talent_zhanti": "res://assets/art/events/talent_zhanti.png",
+    "talent_tongming": "res://assets/art/events/talent_tongming.png",
+    "talent_lingqiao_tian": "res://assets/art/events/talent_lingqiao_tian.png",
+    "talent_daqiyun": "res://assets/art/events/talent_daqiyun.png",
+    "talent_yinyang": "res://assets/art/events/talent_yinyang.png",
+    "talent_huigen": "res://assets/art/events/talent_huigen.png",
+    "talent_bulao": "res://assets/art/events/talent_bulao.png",
+    "talent_jiandan": "res://assets/art/events/talent_jiandan.png",
+    "talent_fuze": "res://assets/art/events/talent_fuze.png"
   },
   "person_art": {
     "storyteller": "res://assets/art/events/teahouse_story.png",
@@ -174,5 +198,14 @@
         ]
       ]
     }
+  },
+  "portrait_art": {
+    "azhi": "res://assets/art/portraits/azhi_unique.png",
+    "xu_qinghe": "res://assets/art/portraits/xu_qinghe_unique.png",
+    "gu_changgeng": "res://assets/art/portraits/gu_changgeng_unique.png"
+  },
+  "portrait_placeholders": {
+    "xu_qinghe": "dc4ca1bf4d60db3cbd157e408079d37325e3421e22da1edcfa07917c63657551",
+    "gu_changgeng": "b4b4f259d18e3cbca45844a7bd73b9ba10e8ae9502ab4fdb8a4a54d0a462eac7"
   }
 }

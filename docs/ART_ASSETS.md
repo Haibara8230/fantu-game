@@ -2958,3 +2958,58 @@ Subject: An ordinary original Chinese man, about 33 years old. broad rounded fac
 ```
 
 </details>
+
+
+## 2026-10-13：补齐当前内容与整屏美术
+
+使用内置 image_gen 制作 37 张独立原创素材；未使用 CLI/API fallback，也没有用其他工具裁切、改色或重绘。各图完整提示词、原始文件、实际尺寸与 SHA-256 记录在 `ART_BATCH_20261013.json`。图像保留原始输出尺寸，横图约为 16:9，立绘为 4:5；不把原始输出标为 2560×1440。
+
+24 个新增事件在 `data/art.json/event_art` 登记；无选择的大事同样经 `_stage_story` 显示。七张 `_fullscreen.png` 由整屏地点界面选用，原横幅仍用于场景小窗口。执事堂与灵眼按场景路径接入。三位核心人物的 `_unique.png` 由 `portrait_art` 选用；仅识别并跳过已知旧图池副本（SHA-256 在 `portrait_placeholders`），用户自定义立绘仍优先，旧副本保留作缺图回退。云竹面板由 `ui_skin.gd` 用于主窗口和资料/对话面板，按钮与场景纸条继续使用现有主题。没有更改玩法、存档字段或保存位置。
+
+所有生成结果逐张检查了题材、手绘线稿、构图与无界面/水印；后台检查只使用 --headless，未开启可见游戏或编辑器。界面实机视觉验收仍须用户运行预览。
+
+| 文件 | 实际尺寸 | 用途 |
+|---|---|---|
+| `assets/art/scenes/wild_eye.png` | 1672×941 | scene |
+| `assets/art/events/heart_demon.png` | 1672×941 | event |
+| `assets/art/events/epiphany.png` | 1672×941 | event |
+| `assets/art/events/spirit_eye.png` | 1672×941 | event |
+| `assets/art/events/talent_hunyuan.png` | 1672×941 | event |
+| `assets/art/events/remnant_soul.png` | 1672×941 | event |
+| `assets/art/events/talent_xiantian_daoti.png` | 1672×941 | event |
+| `assets/art/events/talent_linglong.png` | 1672×941 | event |
+| `assets/art/events/talent_wanfa.png` | 1672×941 | event |
+| `assets/art/events/talent_qiyun_zhizi.png` | 1672×941 | event |
+| `assets/art/events/talent_bumie.png` | 1672×941 | event |
+| `assets/art/events/talent_danqi.png` | 1672×941 | event |
+| `assets/art/events/talent_jiangu.png` | 1672×941 | event |
+| `assets/art/events/talent_shouyou.png` | 1672×941 | event |
+| `assets/art/events/talent_lingqiao_tian.png` | 1672×941 | event |
+| `assets/art/events/talent_daqiyun.png` | 1672×941 | event |
+| `assets/art/events/talent_tianyan.png` | 1672×941 | event |
+| `assets/art/events/talent_shouxing.png` | 1672×941 | event |
+| `assets/art/events/talent_yinyang.png` | 1672×941 | event |
+| `assets/art/events/talent_huigen.png` | 1672×941 | event |
+| `assets/art/locations/sect_fullscreen.png` | 1672×941 | location |
+| `assets/art/events/talent_zhanti.png` | 1672×941 | event |
+| `assets/art/locations/town_fullscreen.png` | 1672×941 | location |
+| `assets/art/events/talent_bulao.png` | 1672×941 | event |
+| `assets/art/locations/ferry_fullscreen.png` | 1672×941 | location |
+| `assets/art/events/talent_tongming.png` | 1672×941 | event |
+| `assets/art/locations/wild_fullscreen.png` | 1672×941 | location |
+| `assets/art/events/talent_jiandan.png` | 1672×941 | event |
+| `assets/art/locations/market_fullscreen.png` | 1672×941 | location |
+| `assets/art/locations/ruin_fullscreen.png` | 1672×941 | location |
+| `assets/art/locations/ridge_fullscreen.png` | 1672×941 | location |
+| `assets/art/portraits/gu_changgeng_unique.png` | 1122×1402 | portrait |
+| `assets/art/events/talent_fuze.png` | 1672×941 | event |
+| `assets/art/ui/scroll_panel.png` | 1672×941 | ui |
+| `assets/art/portraits/azhi_unique.png` | 1122×1402 | portrait |
+| `assets/art/scenes/sect_office.png` | 1672×941 | scene |
+| `assets/art/portraits/xu_qinghe_unique.png` | 1122×1402 | portrait |
+
+### 本批后台验证
+
+- 37 张新增图片完整解码且 SHA-256 各不相同；所有图片共 283 张，场景路径无缺失。
+- `art_smoke` 157 项、`ui_smoke` 150 项、`presentation_smoke` 31 项全部通过；核心、世界、区域、成长、法宝、社会、故事、天赋与门派检查亦通过。全部使用 --headless，0 图形截图；日志在 `builds/previews/art_audit_20261013/`。
+- 完整检查 13 项中 12 项通过；`events_smoke` 的 69 项里，68 项行为检查通过，500 年模拟的性能检查未通过。首次 193+5356 ms，复测 186+5202 ms，超过 5000 ms 阈值。该测试只加载未修改的规则层，不加载美术；未降低时限或改动玩法来掩盖失败。

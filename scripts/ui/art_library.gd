@@ -9,6 +9,11 @@ static func map_path() -> String:
 static func location_path(location_id: String) -> String:
 	return ROOT + "locations/%s.png" % location_id
 
+## Full-screen compositions stay separate from spot-window banners.
+static func fullscreen_location_path(location_id: String) -> String:
+	var path := ROOT + "locations/%s_fullscreen.png" % location_id
+	return path if ResourceLoader.exists(path) else location_path(location_id)
+
 static func scene_path(location_id: String, spot_id: String) -> String:
 	return ROOT + "scenes/%s_%s.png" % [location_id, spot_id]
 
@@ -17,6 +22,14 @@ static func texture(path: String) -> Texture2D:
 	if not ResourceLoader.exists(path):
 		return null
 	return load(path) as Texture2D
+
+static func preferred_portrait_path(person_id: String) -> String:
+	return str(_config().get("portrait_art", {}).get(person_id, ""))
+
+## Only the known old pool copies yield to curated art; custom portrait files still win.
+static func placeholder_portrait(person_id: String, path: String) -> bool:
+	var digest := str(_config().get("portrait_placeholders", {}).get(person_id, ""))
+	return not digest.is_empty() and not path.is_empty() and FileAccess.get_sha256(path) == digest
 
 static func portrait_path(person_id: String) -> String:
 	return ROOT + "portraits/%s.png" % person_id

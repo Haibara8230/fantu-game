@@ -362,7 +362,13 @@ static func _dialogue_box(ui, person_id: String, person: Dictionary) -> Control:
 	return box
 
 static func _portrait(ui, person_id: String, person: Dictionary, size: Vector2 = Vector2(120, 150)) -> Control:
-	var texture: Texture2D = ArtLibrary.local_texture(_local_portrait(ui, person_id))
+	var local_path := _local_portrait(ui, person_id)
+	var texture: Texture2D = ArtLibrary.local_texture(local_path)
+	var preferred := ArtLibrary.preferred_portrait_path(person_id)
+	if not preferred.is_empty() and (texture == null or ArtLibrary.placeholder_portrait(person_id, local_path)):
+		var painted := ArtLibrary.texture(preferred)
+		if painted != null:
+			texture = painted
 	if texture == null:
 		texture = ArtLibrary.texture(ArtLibrary.portrait_path(person_id))
 	if texture != null:
