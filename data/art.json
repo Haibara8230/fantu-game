@@ -37,6 +37,10 @@
     "wounded": "res://assets/art/events/wounded_in_pines.png",
     "rogue": "res://assets/art/events/rogue_ambush.png"
   },
+  "ui_art": {
+    "alchemy": "res://assets/art/ui/alchemy_vignette.png",
+    "spirit_field": "res://assets/art/ui/spirit_field_vignette.png"
+  },
   "actors": {
     "hero": {
       "texture": "res://assets/art/cultivator_atlas_v2.png",

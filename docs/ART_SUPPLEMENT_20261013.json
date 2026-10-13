@@ -1,0 +1,32 @@
+{
+  "date": "2026-10-13",
+  "tool": "built-in imagegen",
+  "mode": "generate",
+  "source_policy": "Generated originals copied unchanged into the workspace; no raster postprocessing.",
+  "assets": [
+    {
+      "file": "assets/art/scenes/sect_abode.png",
+      "transparent": false,
+      "prompt": "Use case: stylized-concept\nAsset type: original wide 4:1 scene banner for 凡途, a 2D Chinese cultivation RPG.\nCreate ONE finished panorama, 2400x600 pixels, four times as wide as high. A private inner disciple's mountain abode at Qingyun sword sect: modest stone-and-timber dwelling nestled into the cliff on the LEFT, open wooden doorway revealing a simple meditation cushion, small sheltered tripod incense burner by the door. In the MIDDLE a quiet stone courtyard and low bamboo fence; on the RIGHT a small, clearly readable terraced medicinal herb garden with three orderly raised beds, green spirit herbs and a few restrained violet and red blossoms, fed by a narrow stone-lined spring channel. Layered slate-blue mountains and pale clouds beyond the terrace. Keep both the doorway and garden clearly visible in the central horizontal strip; calm readable silhouettes, no dominant people.\nStyle: unmistakably TWO-DIMENSIONAL drawn Chinese cultivation game illustration, cohesive with the project's jade and ivory cultivator sprites and painted Qingyun scenes. Clear dark ink contours, flat muted jade, slate blue, warm parchment and pale stone areas, simplified plant shapes, restrained two-tone shadows and light washes. Soft calm daylight. Avoid photorealism, realistic textures, 3D, glossy concept render, cinematic light, busy tiny details. No characters, text, symbols resembling writing, labels, UI, frame, watermark. Fully opaque scene.",
+      "width": 1983,
+      "height": 793,
+      "display": "Existing 4:1 spot window uses centered cover cropping of the native 2.5:1 panorama."
+    },
+    {
+      "file": "assets/art/ui/alchemy_vignette.png",
+      "transparent": true,
+      "prompt": "Use case: stylized-concept\nAsset type: transparent square decorative illustration beside the alchemy scroll title in 凡途, a 2D Chinese cultivation RPG.\nCreate ONE compact spot illustration, 1024x1024, actual transparent background. Center a complete traditional bronze Chinese alchemy tripod furnace, rounded jade-patinated body with restrained warm gold rim, two simple handles, domed closed lid and three clearly separate sturdy legs. Beside its foot a small cream ceramic dish with three vermilion pills and a modest tied bundle of broad-leaf medicinal herbs. The furnace is the dominant silhouette, all objects form one tight coherent cluster occupying about 82 percent of the square with clear safe margins. Slight three-quarter view. No flames, smoke or large magical glow; this is a calm readable illustration that will be displayed at about 80 pixels tall.\nStyle: original unmistakably 2D HAND DRAWN Chinese cultivation game art, crisp dark ink outlines, flat opaque muted jade/bronze/ivory/vermilion colors, restrained one or two cel shadow tones, economical large shapes. Match the project's illustrated cultivator style. No realistic metal textures, glossy highlights, photographic objects, 3D, soft volumetric rendering, intricate filigree, chibi faces, letters, labels, UI, border, watermark, floor, backdrop, drop shadow or checkerboard. Preserve genuinely transparent alpha outside the illustration.",
+      "width": 1254,
+      "height": 1254,
+      "display": "72x72 transparent title decoration; image size ignored by layout."
+    },
+    {
+      "file": "assets/art/ui/spirit_field_vignette.png",
+      "transparent": true,
+      "prompt": "Use case: stylized-concept\nAsset type: transparent square decorative illustration beside the spirit field scroll title in 凡途, a 2D Chinese cultivation RPG.\nCreate ONE compact spot illustration, 1024x1024, actual transparent background. A miniature cultivated medicinal herb bed seen from a gentle high three-quarter angle, a low rectangular warm stone edging filled with a little dark earth; three distinctive lush herbs grow from the same bed, broad jade-green leaves, one modest violet blossom and a sprig with two red berries. A small pale ceramic watering pitcher sits beside the bed. All pieces form one balanced tight cluster with a strong readable silhouette occupying about 82 percent of the square and generous safe margins. Calm practical herb gardening, only a couple of subtle pale jade glints on leaves. It will be displayed at about 80 pixels tall, so simplify forms.\nStyle: original unmistakably 2D HAND DRAWN Chinese cultivation game art, crisp dark ink outlines, flat opaque muted jade, warm stone, brown earth and small violet/vermilion accent color areas, restrained one or two cel shadow tones, economical large shapes. Match illustrated cultivator sprites and Qingyun scenes. No realistic botanical detail, glossy rendering, photography, 3D, chibi faces, text, labels, UI, border, watermark, environment, floor or backdrop outside the isolated raised bed, drop shadow or checkerboard. Preserve genuinely transparent alpha outside the illustration.",
+      "width": 1254,
+      "height": 1254,
+      "display": "72x72 transparent title decoration; image size ignored by layout."
+    }
+  ]
+}

@@ -68,6 +68,10 @@ static func event_art(event_id: String) -> String:
 static func person_art(person_id: String) -> String:
 	return str(_config().get("person_art", {}).get(person_id, ""))
 
+## Small painted decorations for the scrolls, kept in the art catalog.
+static func ui_art(art_id: String) -> String:
+	return str(_config().get("ui_art", {}).get(art_id, ""))
+
 # --- Local portrait pack (assets/local, committed with the project) -------------------
 # Portrait images read straight from disk. The folder carries a .gdignore, so Godot does not import it;
 # images are read straight from disk. Layout:

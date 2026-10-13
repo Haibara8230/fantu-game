@@ -127,3 +127,10 @@ To give a particular character your own image, put it directly in `assets/local/
 - [ ] No text, watermark or frame
 
 To see them in the game, run `play.cmd`, stop somewhere with people around, and open a profile.
+
+
+## 11. 高颜值与气质补充（2026-10-13）
+
+图池保留普通外貌，也应包含容貌出众与神仙气质的年轻修士。可使用英气俊朗、温润秀雅、清冷出尘等不同面孔与神态，避免只靠衣服配色区分人物。继续沿用二维手绘、清晰轮廓与克制阴影，保持成人比例，避免拟真人像。
+
+首批新增男女各 3 张（年轻组各 33 张），清单与完整提示词见 `PORTRAIT_SUPPLEMENT_20261013.json`。文件名仍以身份开头，在序号前加入 `handsome` / `beautiful` / `ethereal` 便于检索。清单的 `appearance` 和 `bearing` 是未来颜值分配的素材标签，当前图池选择逻辑尚未使用这些字段。
