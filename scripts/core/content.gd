@@ -37,7 +37,7 @@ const FAVOR_STAGES := [[0, "初识"], [40, "相熟"], [80, "友好"], [140, "信
 const ATTITUDES := {"friendly": "友善", "neutral": "中立", "hostile": "敌意"}
 const BUILT_IN_INTERACTIONS := ["talk", "gift", "help"]
 const PLAIN_ACTIONS := ["cultivate", "rest", "breakthrough", "study", "teach", "sell", "shop", "gather", "inn_rest", "search_ruin", "inquire", "commissions"]
-const ITEM_CATEGORIES := {"herb": "灵草", "pill": "丹药", "manual": "玉简", "equipment": "法宝", "material": "材料", "quest": "信物"}
+const ITEM_CATEGORIES := {"herb": "灵草", "pill": "丹药", "treasure": "天材地宝", "manual": "玉简", "equipment": "法宝", "material": "材料", "quest": "信物"}
 # Milestones friends send word of, and the deeds the session counts besides victories ("win:<enemy>").
 const CONGRATS := ["breakthrough", "serpent", "champion"]
 const DEEDS := ["retreat_days", "duel", "trade", "gather", "commission", "help", "tournament_champion"]
@@ -247,6 +247,9 @@ func _validate() -> String:
 			return "求助配置缺少：" + key
 	if not (requests.get("reward_scale") is float or requests.get("reward_scale") is int):
 		return "求助报酬无效。"
+	var broken := _validate_breakthrough()
+	if not broken.is_empty():
+		return broken
 	var search: Variant = rules.get("ruin_search")
 	if not search is Dictionary or not search.get("stones") is Array or not search.get("herbs") is Array or not (search.get("pill_chance") is float or search.get("pill_chance") is int):
 		return "洞府搜寻配置无效。"
@@ -286,6 +289,55 @@ func _validate() -> String:
 	if not problem.is_empty():
 		return problem
 	return _validate_reveals()
+
+# --- Breakthrough static checks -------------------------------------------------------------------
+
+func _validate_breakthrough() -> String:
+	var rules_of: Variant = rules.get("breakthrough")
+	if not rules_of is Dictionary:
+		return "突破配置无效。"
+	var r: Dictionary = rules_of
+	if not r.get("base") is Array or r.base.size() != talent_data.get("aptitude", []).size() or r.base.any(func(value: Variant) -> bool: return not _whole(value)):
+		return "突破底数须按资质等级给出。"
+	if not r.get("pill_bonus") is Array or r.pill_bonus.is_empty() or r.pill_bonus.any(func(value: Variant) -> bool: return not _whole(value)):
+		return "筑基丹加成无效。"
+	for key: String in ["mind_step", "mind_most", "method_root", "least", "most"]:
+		if not _whole(r.get(key)) or (key == "mind_step" and int(r[key]) < 1):
+			return "突破配置缺少：" + key
+	if int(r.least) > int(r.most) or int(r.most) > 100:
+		return "突破成功率上下限无效。"
+	if not r.get("method_tier") is Dictionary:
+		return "心法品阶加成无效。"
+	var guard: Variant = r.get("guard")
+	if not guard is Dictionary or not people.has(guard.get("mentor", "")) or not storylines.has(guard.get("mentor_story", "")) or not _whole(guard.get("favor")) or not _whole(guard.get("bonus")) or not _whole(guard.get("mentor_bonus")):
+		return "护法配置无效。"
+	var eye: Variant = r.get("eye")
+	if not eye is Dictionary or not locations.has(eye.get("location", "")) or not eye.get("flag") in world_flags or not _whole(eye.get("bonus")):
+		return "灵眼配置无效。"
+	if not r.get("boons") is Array:
+		return "突破机缘配置无效。"
+	for boon: Variant in r.boons:
+		if not boon is Dictionary or not boon.get("id") is String or not boon.get("name") is String or not _whole(boon.get("bonus")) or not _whole(boon.get("grade", 0)):
+			return "突破机缘配置无效。"
+	if not r.get("lesson") is Dictionary or not _whole(r.lesson.get("bonus")) or not _whole(r.lesson.get("most")):
+		return "前车之鉴配置无效。"
+	var failure: Variant = r.get("failure")
+	if not failure is Dictionary:
+		return "突破失败配置无效。"
+	for key: String in ["xp_percent", "injury_days", "injury_percent", "mind"]:
+		if not _whole(failure.get(key)) or (key.ends_with("percent") and int(failure[key]) > 100):
+			return "突破失败配置缺少：" + key
+	var demon: Variant = r.get("demon")
+	if not demon is Dictionary or not (demon.get("chance") is float or demon.get("chance") is int) or not _whole(demon.get("slay_mind")) or not _whole(demon.get("slay_penalty")) or not _whole(demon.get("evade_penalty")):
+		return "心魔配置无效。"
+	if not events.has("heart_demon") or events.heart_demon.get("trigger") != "manual":
+		return "缺少心魔事件。"
+	if not r.get("grades") is Array or r.grades.size() < 2:
+		return "筑基品质配置无效。"
+	for grade: Variant in r.grades:
+		if not grade is Dictionary or not grade.get("name") is String or not _signed(grade.get("stats")) or not _signed(grade.get("speed")) or (grade.has("margin") and not _whole(grade.margin)):
+			return "筑基品质配置无效。"
+	return ""
 
 # --- Talent static checks -------------------------------------------------------------------------
 
@@ -346,6 +398,15 @@ func _validate_talents() -> String:
 		if not data.talents.values().any(func(talent: Dictionary) -> bool: return talent.tier == tier.id and not bool(talent.get("gained", false))):
 			return "天赋等级没有可抽取的天赋：%s" % tier.id
 	return ""
+
+## Every kind of fortune a life can meet (player.boons): the breakthrough's own, 残魂灌顶, and those in
+## rules.fortune.
+func boon_ids() -> Array:
+	var ids: Array = ["remnant"]
+	for boon: Dictionary in rules.get("breakthrough", {}).get("boons", []):
+		ids.append(boon.id)
+	ids.append_array(rules.get("fortune", {}).keys())
+	return ids
 
 ## A talent or flaw id defined in data/talents.json.
 func is_talent(id: Variant) -> bool:
@@ -626,6 +687,10 @@ func _validate_event(event_id: String, definition: Variant) -> String:
 			return "日期事件必须有时间窗口或周期"
 		if definition.has("choices") or definition.has("repeat"):
 			return "日期事件不能带选项或冷却"
+	elif trigger == "manual":
+		# Raised by the rules themselves (心魔 at a breakthrough), never by place or date.
+		if not definition.has("choices") or definition.has("location") or definition.has("window") or definition.has("periodic"):
+			return "规则触发的事件须有抉择，且不带地点或时间"
 	elif trigger == "route":
 		if not definition.get("routes") is Array or definition.routes.is_empty():
 			return "途中事件需要路线"
@@ -818,6 +883,8 @@ func _validate_effects(effects: Variant) -> String:
 				ok = _whole(value) and int(value) >= 1 and int(value) <= technique_data.tiers.size()
 			"talent":
 				ok = is_talent(value)
+			"demon":
+				ok = value in ["slay", "evade"]
 		if not ok:
 			return "效果无效：%s" % key
 	return ""
@@ -1000,6 +1067,8 @@ func _validate_item(item: Variant) -> String:
 		return "价格无效"
 	if item.has("use_cooldown_days") and not _whole(item.use_cooldown_days):
 		return "服用间隔无效"
+	if item.has("breakthrough") and (not item.breakthrough is Dictionary or not _whole(item.breakthrough.get("bonus")) or not _whole(item.breakthrough.get("grade", 0))):
+		return "突破之用无效"
 	return _validate_effects(item.get("use", []))
 
 ## Herb ids from cheapest to dearest (then by id), the order generic herb costs are paid in.

@@ -135,6 +135,8 @@ static func apply(s, effects: Array) -> void:
 				s.add_item("j:" + s.Arsenal.generate_technique(s.content, s.world_rng, int(value)), 1)
 			"talent":
 				s.gain_talent(value)
+			"demon":
+				s.face_demon(value)
 			"herbs":
 				if int(value) >= 0:
 					s.add_item("huichun_grass", int(value))

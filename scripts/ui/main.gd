@@ -66,6 +66,8 @@ var retreat_days := 90
 var retreat_playback: Dictionary = {}
 var retreat_labels: Dictionary = {}
 var ceremony: Dictionary = {}
+# The breakthrough being prepared on the retreat scroll: {"pills", "treasure", "guard"} (retreat_view.gd).
+var breakthrough_plan: Dictionary = {}
 var profile_open := false
 var drawer_open := true
 var arts_filter := "all"
@@ -686,15 +688,35 @@ func start_retreat(days: int) -> void:
 	render()
 	notice(message + (" 自动存档失败：" + autosave_error if not autosave_error.is_empty() else ""))
 
-## Breaking through: the rules decide; a realm reached is shown in its own screen until 确定.
+## Breaking through: the rules decide; the outcome — a realm reached with its grade, or a failure — is
+## shown in its own screen until 确定. Should 心魔 come first, the event screen takes its choice and the
+## outcome follows it (choose).
 func start_breakthrough() -> void:
 	if presenting or not settled():
 		return
-	var realm := int(session.player.realm)
-	var before := {"max_hp": int(session.player.max_hp), "max_qi": int(session.player.max_qi), "lifespan": session.lifespan()}
-	run(func() -> String: return session.act("breakthrough"))
-	if int(session.player.realm) > realm and session.ended.is_empty():
-		ceremony = {"realm": int(session.player.realm), "before": before}
+	var plan: Dictionary = RetreatView.plan_of(self)
+	var mark: int = session.chronicle.added
+	var before := _breakthrough_before()
+	run(func() -> String: return session.breakthrough(plan))
+	_breakthrough_outcome(mark, before)
+
+func _breakthrough_before() -> Dictionary:
+	return {"max_hp": int(session.player.max_hp), "max_qi": int(session.player.max_qi), "lifespan": session.lifespan()}
+
+## Stages the outcome of a breakthrough among the entries added since `mark`, if there is one.
+func _breakthrough_outcome(mark: int, before: Dictionary) -> void:
+	if not session.ended.is_empty():
+		return
+	var count := mini(int(session.chronicle.added) - mark, session.chronicle.entries.size())
+	for entry: Dictionary in session.chronicle.entries.slice(-count) if count > 0 else []:
+		if entry.id == "breakthrough":
+			breakthrough_plan = {}
+			ceremony = {"realm": int(session.player.realm), "before": before, "grade": int(entry.args.get("grade", -1))}
+		elif entry.id == "breakthrough_failed":
+			breakthrough_plan = {}
+			ceremony = {"failed": true, "text": session.chronicle.format(entry, session.content)}
+	if not ceremony.is_empty():
+		story = {}
 		render()
 
 func close_ceremony() -> void:
@@ -810,7 +832,10 @@ func refresh_key_labels() -> void:
 # --- Actions -----------------------------------------------------------------------------------------
 
 func choose(choice_id: String) -> void:
+	var mark: int = session.chronicle.added
+	var before := _breakthrough_before()
 	run(func() -> String: return session.choose_event(choice_id))
+	_breakthrough_outcome(mark, before)
 
 func skill(skill_id: String) -> void:
 	await battle_action(skill_id)

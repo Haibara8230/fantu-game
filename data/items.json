@@ -83,5 +83,19 @@
     "category": "quest",
     "price": 0,
     "description": "从蒙面劫修手里夺回的货担，丹瓶一个没少，该还给钱货郎。"
+  },
+  "qiannian_shiru": {
+    "name": "千年石乳",
+    "category": "treasure",
+    "price": 300,
+    "description": "古洞石钟乳千年才凝一滴，灵气精纯。突破时服下可代替筑基丹，并让根基更为扎实。",
+    "breakthrough": {"bonus": 35, "grade": 1}
+  },
+  "jiuqu_lingshen": {
+    "name": "九曲灵参",
+    "category": "treasure",
+    "price": 360,
+    "description": "根须九曲的老参，生在灵气汇聚的深谷。突破时服下可代替筑基丹，并让根基更为扎实。",
+    "breakthrough": {"bonus": 35, "grade": 1}
   }
 }

@@ -1,8 +1,8 @@
 extends RefCounted
 ## The retreat scroll, opened where one can retreat (the chamber): 修炼 picks how long to stay in
-## seclusion and previews what it brings; 突破 shows what breaking through needs. The deadlines coming
-## up are listed beside both, so a long retreat does not miss them. The rules are the session's; this
-## only shows them and plays a retreat back.
+## seclusion and previews what it brings; 突破 lays out the attempt — the pills, a treasure, a guard —
+## and its odds part by part. The deadlines coming up are listed beside both, so a long retreat does not
+## miss them. The rules are the session's; this only shows them and plays a retreat back.
 const Calendar = preload("res://scripts/core/calendar.gd")
 const Cultivation = preload("res://scripts/core/cultivation.gd")
 const Goals = preload("res://scripts/ui/goals.gd")
@@ -81,14 +81,79 @@ static func render_breakthrough(ui) -> void:
 	right.add_child(ui.label("突破至%s" % session.content.realm(realm + 1).name, 26, ui.GOLD))
 	var ready_stage := int(session.player.stage) >= last_stage
 	var ready_xp := int(session.player.xp) >= int(need.xp)
-	var ready_pill: bool = session.item_count("foundation_pill") >= int(need.pills)
-	for line: Array in [[ready_stage, "修至%s" % session.content.realm_title(realm, last_stage)], [ready_xp, "修为  %d / %d" % [int(session.player.xp), int(need.xp)]], [ready_pill, "筑基丹  %d / %d" % [session.item_count("foundation_pill"), int(need.pills)]]]:
+	for line: Array in [[ready_stage, "修至%s" % session.content.realm_title(realm, last_stage)], [ready_xp, "修为  %d / %d" % [int(session.player.xp), int(need.xp)]]]:
 		right.add_child(ui.label(("✓  " if line[0] else "·  ") + str(line[1]), 17, ui.INK if line[0] else ui.MUTED))
-	right.add_child(ui.paragraph("服下筑基丹，闭关 %s，引灵气入丹田化液。突破后气血、灵力上限与寿元都会提升。" % ui.duration("breakthrough")))
-	var go: Button = ui.button("开始突破", ui.start_breakthrough, "" if ready_stage and ready_xp and ready_pill else "条件未齐")
+	var plan := plan_of(ui)
+	_plan_controls(ui, right, plan)
+	var chances: Dictionary = session.breakthrough_odds(plan)
+	var parts: Array[String] = []
+	for part: Array in chances.parts:
+		parts.append("%s %+d" % [part[0], int(part[1])])
+	right.add_child(ui.label("成功率  %d%%" % int(chances.total) if not chances.certain else "成功率  十成（残魂灌顶）", 22, ui.GOLD))
+	right.add_child(ui.paragraph("　".join(parts)))
+	if not chances.steps.is_empty():
+		right.add_child(ui.paragraph("根基可望更上一层：" + "、".join(chances.steps), ui.INK))
+	if bool(chances.demon):
+		right.add_child(ui.paragraph("心境 %d，筑基需 %d：心境不足，突破关头可能心魔丛生（约 %d%%）。请人护法可保无虞。" % [int(session.player.mind), session.Breakthrough.demon_mind(session), int(round(session.Breakthrough.demon_chance(session) * 100.0))], Color("#e3c08a")))
+	var failure: Dictionary = session.content.rules.breakthrough.failure
+	right.add_child(ui.paragraph("闭关 %s。若失败：所服之物药力散尽，修为跌回 %d，内伤 %d 日（其间闭关收益减半），但性命无碍，且下次把握更大。" % [ui.duration("breakthrough"), int(need.xp) * int(failure.xp_percent) / 100, int(failure.injury_days)]))
+	var block: String = session.breakthrough_block(plan)
+	var go: Button = ui.button("开始突破", ui.start_breakthrough, block if not block.is_empty() else "成败只在此一举")
 	go.custom_minimum_size.x = 200
-	go.disabled = not (ready_stage and ready_xp and ready_pill) or not ui.settled()
+	go.disabled = not block.is_empty() or not ui.settled()
 	right.add_child(go)
+
+## The plan on the scroll, kept by the interface and checked against what is in hand.
+static func plan_of(ui) -> Dictionary:
+	var session = ui.session
+	var plan: Dictionary = ui.breakthrough_plan
+	if plan.is_empty():
+		plan = session.breakthrough_plan()
+	var most := mini(session.item_count("foundation_pill"), session.content.rules.breakthrough.pill_bonus.size())
+	plan.pills = clampi(int(plan.get("pills", 0)), 0, most)
+	if not str(plan.get("treasure", "")) in session.breakthrough_treasures():
+		plan.treasure = ""
+	if not str(plan.get("guard", "")) in session.breakthrough_guards():
+		plan.guard = ""
+	ui.breakthrough_plan = plan
+	return plan
+
+## How many 筑基丹 to take, a treasure in their place, and who stands guard.
+static func _plan_controls(ui, parent: VBoxContainer, plan: Dictionary) -> void:
+	var session = ui.session
+	var pills := HBoxContainer.new()
+	pills.add_theme_constant_override("separation", 10)
+	parent.add_child(pills)
+	var most := mini(session.item_count("foundation_pill"), session.content.rules.breakthrough.pill_bonus.size())
+	var fewer: Button = ui.button("－", func() -> void: ui.breakthrough_plan.pills = int(plan.pills) - 1; ui.render(), "少服一枚")
+	fewer.disabled = int(plan.pills) <= 0
+	pills.add_child(fewer)
+	pills.add_child(ui.label("服筑基丹 %d 枚（行囊 %d，至多 %d）" % [int(plan.pills), session.item_count("foundation_pill"), session.content.rules.breakthrough.pill_bonus.size()], 17))
+	var more: Button = ui.button("＋", func() -> void: ui.breakthrough_plan.pills = int(plan.pills) + 1; ui.render(), "多服一枚，一枚比一枚见效少")
+	more.disabled = int(plan.pills) >= most
+	pills.add_child(more)
+	for item_id: String in session.breakthrough_treasures():
+		var use := CheckBox.new()
+		var item: Dictionary = session.content.item(item_id)
+		use.text = "服下%s（成功率 +%d，根基更稳）" % [item.name, int(item.breakthrough.bonus)]
+		use.button_pressed = plan.treasure == item_id
+		use.toggled.connect(func(on: bool) -> void: ui.breakthrough_plan.treasure = item_id if on else ""; ui.render())
+		parent.add_child(use)
+	var guards: Array[String] = session.breakthrough_guards()
+	if guards.is_empty():
+		parent.add_child(ui.paragraph("无人护法：交情到了信赖的人，或传功长老，可以为你护法。"))
+		return
+	var row := HBoxContainer.new()
+	row.add_theme_constant_override("separation", 10)
+	parent.add_child(row)
+	row.add_child(ui.label("护法", 17))
+	var select := OptionButton.new()
+	select.add_item("无人护法")
+	for person_id: String in guards:
+		select.add_item(session.person(person_id).name)
+	select.selected = guards.find(str(plan.guard)) + 1
+	select.item_selected.connect(func(index: int) -> void: ui.breakthrough_plan.guard = "" if index == 0 else guards[index - 1]; ui.render())
+	row.add_child(select)
 
 ## The slider's step in days: ten days in the first realm, a month from foundation on.
 static func step_days(session) -> int:

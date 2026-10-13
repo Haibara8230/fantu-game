@@ -52,7 +52,7 @@
         {"item": "ningqi_pill", "price": 60},
         {"item": "pozhang_pill", "price": 40}
       ],
-      "buys": ["herb", "pill", "manual", "equipment"],
+      "buys": ["herb", "pill", "manual", "equipment", "treasure"],
       "stock": {
         "restock_days": 30,
         "lines": [
@@ -357,6 +357,25 @@
     "cultivate_xp": 60,
     "retreat": {"fresh_days": 180, "decline_days": 720, "floor_percent": 50, "recovery_per_day": 2},
     "bottleneck": {"insight_needed": 100, "insight": {"battle_win": 20, "spar": 10, "commission": 25, "event": 15}},
+    "breakthrough": {
+      "base": [25, 35, 45, 55, 65],
+      "pill_bonus": [25, 15, 10],
+      "mind_step": 2, "mind_most": 10,
+      "method_root": 5, "method_tier": {"2": 3, "3": 6, "4": 9},
+      "guard": {"favor": 140, "bonus": 5, "mentor": "gu_changgeng", "mentor_bonus": 10, "mentor_story": "lineage"},
+      "eye": {"location": "wild", "flag": "spirit_eye_found", "bonus": 10},
+      "boons": [{"id": "epiphany", "name": "顿悟", "bonus": 15, "grade": 1}, {"id": "brink", "name": "生死之间", "bonus": 10}],
+      "lesson": {"bonus": 5, "most": 3},
+      "least": 5, "most": 95,
+      "failure": {"xp_percent": 85, "injury_days": 90, "injury_percent": 50, "mind": 4},
+      "demon": {"chance": 0.6, "slay_mind": 6, "slay_penalty": 15, "evade_penalty": 10},
+      "grades": [
+        {"id": "low", "name": "下品", "margin": 0, "stats": -5, "speed": -10},
+        {"id": "mid", "name": "中品", "margin": 10, "stats": 0, "speed": 0},
+        {"id": "high", "name": "上品", "margin": 30, "stats": 10, "speed": 10},
+        {"id": "flawless", "name": "无瑕", "stats": 25, "speed": 25}
+      ]
+    },
     "mind": {"gain": {"battle_win": 2, "spar": 1, "commission": 4, "event": 2}, "short_percent": 50, "ample_margin": 10, "ample_percent": 120},
     "rest_full_days": 12,
     "spirit_roots": {
@@ -440,7 +459,7 @@
     "search_ruin": 5,
     "road_recovery": 1
   },
-  "world_flags": ["serpent_slain", "heard_auction_rumor", "found_ruin", "ruin_cleared", "helped_wanderer", "serpent_rampage", "azhi_promised", "azhi_mourned", "intro_done", "peddler_friend", "serpent_weakened"],
+  "world_flags": ["serpent_slain", "heard_auction_rumor", "found_ruin", "ruin_cleared", "helped_wanderer", "serpent_rampage", "azhi_promised", "azhi_mourned", "intro_done", "peddler_friend", "serpent_weakened", "spirit_eye_found"],
   "sects": {
     "wanderer": {
       "name": "散修",

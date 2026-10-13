@@ -79,7 +79,7 @@ static func applies(session, goal_id: String) -> bool:
 			if int(player.realm) != 0 or breakthrough.is_empty():
 				return false
 			var ready_xp := int(player.xp) >= int(breakthrough.xp)
-			var ready_pill: bool = session.item_count("foundation_pill") >= int(breakthrough.get("pills", 1))
+			var ready_pill: bool = session.item_count("foundation_pill") >= int(breakthrough.get("pills", 1)) or not session.breakthrough_treasures().is_empty() or str(player.get("boons", {}).get("remnant", "")) == "ready"
 			match goal_id:
 				"foundation_breach":
 					return ready_xp and ready_pill
@@ -118,6 +118,8 @@ static func values(session, goal_id: String) -> Dictionary:
 			return {"date": Calendar.date_text(next), "until": _span(next - day)}
 		"foundation_pill":
 			return {"pill_price": _price(session, "foundation_pill")}
+		"foundation_breach":
+			return {"odds": int(session.breakthrough_odds(session.breakthrough_plan()).total)}
 		"foundation_xp":
 			return {"xp": int(player.xp), "breakthrough_xp": int(session.next_breakthrough().xp)}
 		"azhi_token":

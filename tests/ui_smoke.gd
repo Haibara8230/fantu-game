@@ -539,9 +539,30 @@ func _run() -> void:
 	main.session.set_item_count("foundation_pill", 1)
 	main.session.refresh_realm_stats()
 	main.set_view("breakthrough")
-	check(_texts(main.center, "Label").contains("✓  修为  2000 / 2000") and not _button("开始突破").disabled, "the 突破 tab lists what breaking through needs")
+	var plan_text := _texts(main.center, "Label")
+	check(plan_text.contains("✓  修为  2000 / 2000") and plan_text.contains("服筑基丹 1 枚") and plan_text.contains("成功率  ") and plan_text.contains("资质 · ") and not _button("开始突破").disabled, "the 突破 tab lays out the plan and its odds")
+	check(plan_text.contains("若失败") and plan_text.contains("性命无碍"), "and what failing would cost")
+	main.session.set_item_count("foundation_pill", 2)
+	main.render()
+	var odds_one: String = _texts(main.center, "Label")
+	_button("＋").pressed.emit()
+	check(_texts(main.center, "Label").contains("服筑基丹 2 枚") and _texts(main.center, "Label").contains("筑基丹 ×2 +40") and _texts(main.center, "Label") != odds_one, "a second pill raises the odds by less than the first")
+	_button("－").pressed.emit()
+	# A failed attempt: the pill is spent, xp falls back, and the outcome has its own screen.
+	main.session.fortune = {"demon": 0.99, "breakthrough": 0.99}
 	_button("开始突破").pressed.emit()
-	check(main.current_screen() == "full" and _texts(main.center, "Label").contains("筑基") and _texts(main.center, "Label").contains("寿元 120 → 220 年"), "a realm reached is shown on its own screen")
+	check(main.current_screen() == "full" and _texts(main.center, "Label").contains("冲 关 失 败") and int(main.session.player.xp) == 1700 and main.session.injured() and main.session.player.realm == 0, "a failed breakthrough is shown on its own screen")
+	_button("确定").pressed.emit()
+	# 心魔 first, then success.
+	main.session.player.xp = 2000
+	main.session.player.mind = 10
+	main.session.fortune = {"demon": 0.0, "breakthrough": 0.0}
+	main.set_view("breakthrough")
+	check(_texts(main.center, "Label").contains("前车之鉴") and _texts(main.center, "Label").contains("心魔"), "a lesson learned and the threat of 心魔 show in the odds")
+	_button("开始突破").pressed.emit()
+	check(main.current_screen() == "full" and not main.session.pending_event.is_empty() and _button("紧守灵台") != null, "心魔 comes as a choice")
+	_button("紧守灵台").pressed.emit()
+	check(main.current_screen() == "full" and _texts(main.center, "Label").contains("筑基") and _texts(main.center, "Label").contains("寿元 120 → 220 年") and _texts(main.center, "Label").contains("根基 · "), "a realm reached is shown on its own screen, with its grade")
 	_button("确定").pressed.emit()
 	check(main.ceremony.is_empty() and main.view == "place" and main.session.player.realm == 1, "确定 returns to the place")
 	# The end of a life.

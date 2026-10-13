@@ -79,6 +79,7 @@ func _initialize() -> void:
 	check(game.player.stage == 3 and game.player.max_hp == 120 and game.realm_name() == "炼气圆满", "sub-stages reached by cultivation raise the caps")
 	check(game.chronicle.entries.any(func(entry: Dictionary) -> bool: return entry.id == "stage_up" and int(entry.args.stage) == 1 and entry.major), "each sub-stage is a recorded milestone")
 	var before_breakthrough: int = game.player.xp
+	_steady(game)
 	game.act("breakthrough")
 	check(game.player.realm == 1 and game.player.stage == 0 and game.player.hp == 140 and game.item_count("foundation_pill") == 0 and game.player.xp == before_breakthrough - 2000, "breakthrough consumes resources and upgrades stats")
 	game.travel("wild")
@@ -147,3 +148,8 @@ func _initialize() -> void:
 	check(store.load_game(loaded) and loaded.world.day == old_day, "damaged newest save falls back to previous generation")
 	print("CORE: %d checks, %d failures" % [checks, failures])
 	quit(0 if failures == 0 else 1)
+
+## Fixes the breakthrough's rolls: no 心魔, and a roll twenty points under the odds (a 中品 foundation,
+## whose numbers are the plain ones).
+func _steady(game) -> void:
+	game.fortune = {"demon": 0.99, "breakthrough": maxf(0.0, float(game.breakthrough_odds(game.breakthrough_plan()).total - 20) / 100.0)}

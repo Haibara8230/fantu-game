@@ -1,7 +1,8 @@
 extends SceneTree
 ## Talents: six tiers and flaws drawn at birth, the modifiers they bring to the rules, 资质, the generated
 ## population's talents and what they shape, who can see them, and how they survive a save (older
-## journeys awaken theirs from the seed).
+## journeys awaken theirs from the seed). And the breakthrough they bear on: its odds part by part,
+## failure, the foundation's grade, 心魔, guards and treasures.
 const Session = preload("res://scripts/core/session.gd")
 const Talents = preload("res://scripts/core/talents.gd")
 const Calendar = preload("res://scripts/core/calendar.gd")
@@ -23,6 +24,9 @@ func _initialize() -> void:
 	_aptitude()
 	_people()
 	_saves()
+	_breakthrough()
+	_grades_and_demons()
+	_breakthrough_saves()
 	print("TALENTS: %d checks, %d failures" % [checks, failures])
 	quit(0 if failures == 0 else 1)
 
@@ -238,3 +242,158 @@ func _saves() -> void:
 	check(twice.player.talents == old.player.talents and twice.player.flaws == old.player.flaws, "the same journey awakens the same talents")
 	var round_trip := Session.new()
 	check(round_trip.restore(JSON.parse_string(JSON.stringify(old.snapshot()))) and round_trip.player.talents == old.player.talents and round_trip.chronicle.entries.size() == old.chronicle.entries.size(), "they awaken once, not on every load")
+
+## A character at 炼气圆满 with 2000 xp and the mind the stage asks, ready to break through.
+func _ripe(born: Dictionary = {}, pills: int = 1) -> Session:
+	var game := _game(born)
+	game.player.stage = 3
+	game.player.xp = 2000
+	game.player.mind = 24
+	game.set_item_count("foundation_pill", pills)
+	game.refresh_realm_stats()
+	return game
+
+func _odds(game: Session, plan: Dictionary = {}) -> int:
+	return int(game.breakthrough_odds(plan if not plan.is_empty() else game.breakthrough_plan()).total)
+
+func _part(game: Session, plan: Dictionary, label: String) -> int:
+	for part: Array in game.breakthrough_odds(plan).parts:
+		if str(part[0]).begins_with(label):
+			return int(part[1])
+	return 0
+
+func _breakthrough() -> void:
+	var game := _ripe({}, 4)
+	check(_odds(game) == 60 and _part(game, game.breakthrough_plan(), "资质 · 中等") == 35, "an ordinary aptitude and one pill: 60 in a hundred")
+	check(_odds(game, {"pills": 2, "treasure": "", "guard": ""}) == 75 and _odds(game, {"pills": 3, "treasure": "", "guard": ""}) == 85, "each further pill helps less")
+	check(not game.breakthrough_block({"pills": 4, "treasure": "", "guard": ""}).is_empty(), "no more than three pills at once")
+	check(not game.breakthrough_block({"pills": 0, "treasure": "", "guard": ""}).is_empty(), "nor none, without a treasure")
+	game.player.mind = 34
+	check(_part(game, game.breakthrough_plan(), "心境盈余") == 5, "a mind beyond the stage's need helps")
+	var boned := _ripe(_born(["gengu"]))
+	check(_odds(boned) == 62, "a talent for breaking through adds its points")
+	var potent := _ripe(_born(["danti"]))
+	check(_part(potent, potent.breakthrough_plan(), "筑基丹") == 63, "a talent for pills makes the pill count for more")
+	var gifted := _ripe(_born(["xianren_zhuanshi"]), 1)
+	check(_odds(gifted) == 95, "the odds never pass 95")
+	var heavenly := _game({}, ["fire"])
+	check(heavenly.aptitude().name == "绝佳" and int(heavenly.content.rules.breakthrough.base[3]) == 55, "a better aptitude starts from more")
+	# A 心法 suited to the roots.
+	var suited := _ripe()
+	var rng := RandomNumberGenerator.new()
+	rng.seed = 3
+	var method := ""
+	while method.is_empty():
+		var candidate: String = Session.Arsenal.generate_technique(suited.content, rng, 2, {"slot": "method"})
+		if suited.content.technique(candidate).element in suited.player.roots:
+			method = candidate
+	suited.player.learned.append(method)
+	suited.player.methods = [method]
+	check(_part(suited, suited.breakthrough_plan(), "心法") == 8, "a yellow-tier 心法 suited to the roots adds 5 and 3")
+	# A treasure in place of the pills.
+	var lucky := _ripe({}, 0)
+	lucky.set_item_count("qiannian_shiru", 1)
+	var plan := lucky.breakthrough_plan()
+	check(plan.treasure == "qiannian_shiru" and lucky.breakthrough_block(plan).is_empty() and _odds(lucky, plan) == 70, "a treasure stands in for the pills")
+	check(lucky.breakthrough_odds(plan).steps == ["千年石乳"], "and promises a better foundation")
+	# Guards.
+	var guarded := _ripe()
+	check(guarded.breakthrough_guards().is_empty(), "nobody to stand guard at first")
+	guarded.world.storylines["lineage"] = {"state": "done", "step": 4, "since": 0, "begun": false, "base": {}}
+	Session.Events.apply(guarded, [{"relation": ["boatman", 140]}])
+	check(guarded.breakthrough_guards() == ["gu_changgeng", "boatman"], "the mentor once his teaching is done, and anyone trusted")
+	check(_part(guarded, {"pills": 1, "treasure": "", "guard": "gu_changgeng"}, "护法") == 10 and _part(guarded, {"pills": 1, "treasure": "", "guard": "boatman"}, "护法") == 5, "the mentor guards better than a friend")
+	check(not guarded.breakthrough_odds({"pills": 1, "treasure": "", "guard": "boatman"}).demon, "a guard keeps 心魔 away")
+	guarded.player.mind = 36
+	check(not guarded.breakthrough_odds({"pills": 1, "treasure": "", "guard": ""}).demon, "and a mind ready for foundation needs none")
+	guarded.player.mind = 10
+	check(guarded.breakthrough_odds({"pills": 1, "treasure": "", "guard": ""}).demon, "a short mind unguarded invites it")
+	check(not guarded.breakthrough_block({"pills": 1, "treasure": "", "guard": "peddler"}).is_empty(), "a stranger cannot stand guard")
+	# Failure.
+	var failing := _ripe({}, 2)
+	failing.fortune = {"demon": 0.99, "breakthrough": 0.99}
+	var day := int(failing.world.day)
+	var text := failing.act("breakthrough")
+	check(failing.player.realm == 0 and int(failing.player.xp) == 1700 and failing.item_count("foundation_pill") == 1 and text.contains("冲关失败"), "a failure spends the pill and sets xp back")
+	check(int(failing.world.day) == day + 90 and failing.injured() and int(failing.player.lessons) == 1 and int(failing.player.mind) == 28 and int(failing.player.hp) > 0, "and costs months of injury, never the life, and teaches")
+	var hurt := failing.retreat_preview(30)
+	var healed_at := int(failing.player.injury_until)
+	failing.player.injury_until = 0
+	check(int(hurt.xp) * 2 == int(failing.retreat_preview(30).xp), "an injury halves what a retreat brings")
+	failing.player.injury_until = healed_at
+	failing.player.xp = 2000
+	check(_part(failing, failing.breakthrough_plan(), "前车之鉴") == 5, "the next attempt is a little surer")
+	failing.fortune = {"demon": 0.99, "breakthrough": 0.0}
+	failing.act("breakthrough")
+	check(failing.player.realm == 1 and int(failing.player.lessons) == 0 and not failing.injured(), "success clears the lessons and the injury")
+
+func _grades_and_demons() -> void:
+	# The margin under the odds decides the grade.
+	for case: Array in [[0.55, "下品", 133], [0.45, "中品", 140], [0.2, "上品", 154]]:
+		var game := _ripe()
+		game.fortune = {"demon": 0.99, "breakthrough": case[0]}
+		game.act("breakthrough")
+		check(game.foundation_grade().get("name", "") == case[1] and int(game.player.max_hp) == int(case[2]), "a roll %.2f under 60: %s, health %d" % [case[0], case[1], game.player.max_hp])
+	var fine := _ripe()
+	fine.fortune = {"demon": 0.99, "breakthrough": 0.2}
+	fine.act("breakthrough")
+	var plain := _ripe()
+	plain.fortune = {"demon": 0.99, "breakthrough": 0.45}
+	plain.act("breakthrough")
+	check(fine.cultivation_rate() == 66 and plain.cultivation_rate() == 60, "a better foundation cultivates faster")
+	var treasured := _ripe({}, 0)
+	treasured.set_item_count("jiuqu_lingshen", 1)
+	treasured.fortune = {"demon": 0.99, "breakthrough": 0.2}
+	treasured.act("breakthrough")
+	check(treasured.foundation_grade().get("name", "") == "无瑕" and treasured.item_count("jiuqu_lingshen") == 0, "a treasure lifts a 上品 foundation to 无瑕")
+	check(treasured.journal_lines().any(func(line: String) -> bool: return line.contains("根基品质：无瑕")), "the chronicle tells the grade")
+	# 心魔.
+	var haunted := _ripe()
+	haunted.player.mind = 18
+	haunted.fortune = {"demon": 0.0, "breakthrough": 0.0}
+	var day := int(haunted.world.day)
+	haunted.act("breakthrough")
+	check(haunted.pending_event.get("id", "") == "heart_demon" and haunted.player.has("attempt") and int(haunted.world.day) == day and haunted.item_count("foundation_pill") == 0, "a mind short of foundation's need meets 心魔 first")
+	var copy := Session.new()
+	check(copy.restore(JSON.parse_string(JSON.stringify(haunted.snapshot()))) and copy.pending_event.id == "heart_demon" and int(copy.player.attempt.odds) == int(haunted.player.attempt.odds), "an attempt waiting on 心魔 survives a save")
+	haunted.choose_event("evade")
+	check(haunted.player.realm == 1 and not haunted.player.has("attempt") and int(haunted.world.day) == day + 90, "evading it, the attempt goes on")
+	var bold := _ripe()
+	bold.player.mind = 18
+	bold.fortune = {"demon": 0.0, "breakthrough": 0.45, "slay": 0.0}
+	bold.act("breakthrough")
+	bold.choose_event("slay")
+	check(bold.player.realm == 1 and bold.foundation_grade().get("name", "") == "上品" and int(bold.player.mind) == 26, "slaying it lifts the grade and the mind (6, and 2 for living through it)")
+	var shaken := _ripe()
+	shaken.player.mind = 18
+	shaken.fortune = {"demon": 0.0, "breakthrough": 0.5, "slay": 0.99}
+	shaken.act("breakthrough")
+	check(int(shaken.player.attempt.odds) == 60, "before the choice the odds stand")
+	shaken.choose_event("slay")
+	check(shaken.player.realm == 0 and shaken.journal_lines().any(func(line: String) -> bool: return line.contains("未能斩尽")), "failing to slay it costs the attempt dearly")
+	var steady := _ripe(_born(["jianding"]))
+	steady.player.mind = 10
+	steady.fortune = {"demon": 0.0, "breakthrough": 0.0}
+	steady.act("breakthrough")
+	check(steady.pending_event.is_empty() and steady.player.realm == 1, "a firm 道心 keeps 心魔 away")
+	# 残魂灌顶 makes it certain, without pills, at a middling grade.
+	var blessed := _ripe({}, 0)
+	blessed.player.boons = {"remnant": "ready"}
+	blessed.player.mind = 10
+	blessed.fortune = {"demon": 0.0, "breakthrough": 0.99}
+	check(blessed.breakthrough_block(blessed.breakthrough_plan()).is_empty() and blessed.breakthrough_odds(blessed.breakthrough_plan()).certain, "a remnant's blessing needs no pill")
+	blessed.act("breakthrough")
+	check(blessed.player.realm == 1 and blessed.foundation_grade().get("name", "") == "中品" and blessed.player.boons.remnant == "spent", "and cannot fail")
+
+func _breakthrough_saves() -> void:
+	var old := Session.new()
+	check(old.restore(JSON.parse_string(FileAccess.get_file_as_string("res://tests/fixtures/v5_foundation_ridge.json"))) and old.foundation_grade().get("name", "") == "中品", "a foundation from before grades counts as 中品")
+	var game := _ripe()
+	game.fortune = {"demon": 0.99, "breakthrough": 0.99}
+	game.act("breakthrough")
+	var copy := Session.new()
+	check(copy.restore(JSON.parse_string(JSON.stringify(game.snapshot()))) and copy.injured() and int(copy.player.lessons) == 1, "an injury and a lesson survive a save")
+	for broken: Array in [["foundation_grade", 9], ["lessons", 7], ["injury_until", -1], ["boons", {"nonsense": "ready"}], ["boons", {"epiphany": "maybe"}], ["attempt", {"odds": 50, "certain": false, "steps": 0, "xp": 2000, "guard": ""}]]:
+		var data: Dictionary = game.snapshot()
+		data.player[broken[0]] = broken[1]
+		check(not copy.restore(data), "malformed %s rejected" % broken[0])

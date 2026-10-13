@@ -39,6 +39,9 @@ static func render_story(ui) -> void:
 static func render_ceremony(ui) -> void:
 	var session = ui.session
 	var center: VBoxContainer = ui.center
+	if ui.ceremony.get("failed", false):
+		_render_failure(ui)
+		return
 	var realm: Dictionary = session.content.realm(int(ui.ceremony.realm))
 	var before: Dictionary = ui.ceremony.before
 	center.alignment = BoxContainer.ALIGNMENT_CENTER
@@ -52,9 +55,31 @@ static func render_ceremony(ui) -> void:
 	var stage: Label = ui.label(session.realm_name(), 22, ui.GOLD)
 	stage.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	center.add_child(stage)
+	var grade: Dictionary = session.foundation_grade()
+	if int(ui.ceremony.get("grade", -1)) >= 0 and not grade.is_empty():
+		var named: Label = ui.label("根基 · %s" % grade.name, 26, Color("#e59d52") if int(ui.ceremony.grade) >= 3 else ui.INK)
+		named.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		center.add_child(named)
 	var gains: Label = ui.label("气血上限 %d → %d　·　灵力上限 %d → %d　·　寿元 %d → %d 年" % [int(before.max_hp), int(session.player.max_hp), int(before.max_qi), int(session.player.max_qi), int(before.lifespan), session.lifespan()], 17)
 	gains.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	center.add_child(gains)
+	var row := HBoxContainer.new()
+	row.alignment = BoxContainer.ALIGNMENT_CENTER
+	center.add_child(row)
+	var done: Button = ui.button("确定", ui.close_ceremony)
+	done.custom_minimum_size.x = 200
+	row.add_child(done)
+
+## A breakthrough that failed: what it cost, until 确定.
+static func _render_failure(ui) -> void:
+	var center: VBoxContainer = ui.center
+	center.alignment = BoxContainer.ALIGNMENT_CENTER
+	var title: Label = ui.label("冲 关 失 败", 72, Color("#c9877a"))
+	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	center.add_child(title)
+	var text: Label = ui.paragraph(str(ui.ceremony.text), ui.INK)
+	text.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	center.add_child(text)
 	var row := HBoxContainer.new()
 	row.alignment = BoxContainer.ALIGNMENT_CENTER
 	center.add_child(row)

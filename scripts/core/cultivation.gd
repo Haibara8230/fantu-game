@@ -89,11 +89,15 @@ static func at_bottleneck(s) -> bool:
 static func insight_needed(s) -> int:
 	return int(s.content.rules.bottleneck.insight_needed)
 
-## Walks up to `days` retreat days from the current xp, starting `tired`, without applying anything:
+## Walks up to `days` retreat days from the current xp, starting `tired` on `start_day` (today by default),
+## without applying anything:
 ## {"days", "xp", "carry", "fatigue"}. Stops on the day xp reaches a bottleneck the current insight
 ## cannot break, since further days would yield nothing.
-static func plan_retreat(s, days: int, tired: int) -> Dictionary:
+static func plan_retreat(s, days: int, tired: int, start_day: int = -1) -> Dictionary:
 	var rate: int = s.cultivation_rate() * mind_percent(s) / 100
+	# An injury from a failed breakthrough slows the days before it heals.
+	var injured_until := int(s.player.get("injury_until", 0))
+	var injured_rate: int = rate * int(s.content.rules.breakthrough.failure.injury_percent) / 100
 	var cap := fatigue_cap(s)
 	var carry := int(s.player.cultivation_carry)
 	var start := int(s.player.xp)
@@ -101,7 +105,8 @@ static func plan_retreat(s, days: int, tired: int) -> Dictionary:
 	var stop := _retreat_stop(s)
 	var elapsed := 0
 	while elapsed < days:
-		var total := carry + rate * efficiency(s, tired)
+		var today := injured_rate if (int(s.world.day) if start_day < 0 else start_day) + elapsed < injured_until else rate
+		var total := carry + today * efficiency(s, tired)
 		carry = total % CARRY_UNIT
 		xp += total / CARRY_UNIT
 		tired = mini(cap, tired + 1)

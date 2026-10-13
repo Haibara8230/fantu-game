@@ -58,5 +58,11 @@
   "sound": "你与{npc_name}互留了传音符，往后可以传音往来。",
   "help": "你送给{npc_name}{loot_text}，解了对方的燃眉之急。好感 +{favor}，得灵石 {stones}。",
   "talent_gained": "你身上多了一样天赋：「{talent_name}」。",
-  "talents_awaken": "你体内似有什么苏醒了。静坐内视，才知自己生来便有：{talents_text}。"
+  "talents_awaken": "你体内似有什么苏醒了。静坐内视，才知自己生来便有：{talents_text}。",
+  "breakthrough_grade": "根基品质：{grade_name}。",
+  "breakthrough_failed": "闭关 {duration}，冲关失败：药力散尽，修为跌回 {xp}，经脉受创，需将养 {injury} 日。所幸性命无碍，有了这番前车之鉴，下次把握更大。",
+  "heart_demon": "突破关头，心魔丛生。",
+  "demon_slain": "你斩尽心魔，道心更坚，心境 +{mind}。",
+  "demon_lingers": "心魔未能斩尽，萦绕不去，此番突破的把握少了 {points} 分。",
+  "demon_evaded": "你避开心魔，守住了灵台，此番突破的把握少了 {points} 分。"
 }

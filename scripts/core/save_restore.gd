@@ -108,6 +108,9 @@ static func restore(s, data: Variant) -> bool:
 	var taught: Variant = saved_player.get("taught", [])
 	if storylines == null or letters == null or deeds == null or not taught is Array or taught.any(func(tip: Variant) -> bool: return not tip is String):
 		return false
+	var progress: Variant = _valid_breakthrough(content, saved_player, saved_pending)
+	if progress == null:
+		return false
 	# Talents: optional, since saves before them lack them; then they awaken from the world seed.
 	var born: Variant = _valid_talents(content, saved_player)
 	if born == null:
@@ -119,7 +122,7 @@ static func restore(s, data: Variant) -> bool:
 		born = Talents.roll(content, rng, str(content.talent_data.player.table))
 	# Health and qi within the caps the save was made with (before any talents awakened).
 	var holder: Dictionary = loadout.duplicate()
-	holder.merge({"realm": int(saved_player.realm), "stage": saved_stage, "talents": [] if awakened else born.talents, "flaws": [] if awakened else born.flaws}, true)
+	holder.merge({"realm": int(saved_player.realm), "stage": saved_stage, "talents": [] if awakened else born.talents, "flaws": [] if awakened else born.flaws, "foundation_grade": int(progress.foundation_grade)}, true)
 	var saved_caps: Dictionary = s.stat_caps(holder)
 	if int(saved_player.hp) <= 0 or int(saved_player.hp) > int(saved_caps.max_hp) or int(saved_player.qi) > int(saved_caps.max_qi):
 		return false
@@ -210,6 +213,10 @@ static func restore(s, data: Variant) -> bool:
 	player["taught"] = taught.duplicate()
 	player["talents"] = born.talents.duplicate()
 	player["flaws"] = born.flaws.duplicate()
+	for key: String in progress:
+		player[key] = progress[key]
+	if not progress.has("attempt"):
+		player.erase("attempt")
 	# Health and qi stay within the caps; talents that awaken may lower them.
 	player.hp = mini(int(player.hp), int(caps.max_hp))
 	player.qi = mini(int(player.qi), int(caps.max_qi))
@@ -242,6 +249,41 @@ static func restore(s, data: Variant) -> bool:
 		s.log_event("talents_awaken", {"talents": ",".join(born.talents + born.flaws)}, true)
 	s.changed.emit()
 	return true
+
+## The breakthrough's saved progress, normalized: the foundation's grade (a middling one for journeys
+## founded before grades), an injury, lessons, fortune met, and an attempt waiting on 心魔 (only while
+## that choice is pending). Null when malformed.
+static func _valid_breakthrough(content, saved_player: Dictionary, saved_pending: Dictionary) -> Variant:
+	var rules: Dictionary = content.rules.breakthrough
+	var result := {}
+	var grade: Variant = saved_player.get("foundation_grade", 1)
+	if not _whole_nonnegative(grade) or int(grade) >= rules.grades.size():
+		return null
+	result["foundation_grade"] = int(grade)
+	var injury: Variant = saved_player.get("injury_until", 0)
+	var lessons: Variant = saved_player.get("lessons", 0)
+	if not _whole_nonnegative(injury) or not _whole_nonnegative(lessons) or int(lessons) > int(rules.lesson.most):
+		return null
+	result["injury_until"] = int(injury)
+	result["lessons"] = int(lessons)
+	var boons: Variant = saved_player.get("boons", {})
+	if not boons is Dictionary:
+		return null
+	var kept := {}
+	for id: Variant in boons:
+		if not id is String or not id in content.boon_ids() or not boons[id] in ["ready", "spent"]:
+			return null
+		kept[id] = str(boons[id])
+	result["boons"] = kept
+	var waiting: bool = str(saved_pending.get("id", "")) == "heart_demon"
+	var attempt: Variant = saved_player.get("attempt", null)
+	if waiting != (attempt != null):
+		return null
+	if attempt != null:
+		if not attempt is Dictionary or not _whole_nonnegative(attempt.get("odds")) or int(attempt.odds) > 100 or not attempt.get("certain") is bool or not _whole_nonnegative(attempt.get("steps")) or not _whole_nonnegative(attempt.get("xp")) or not attempt.get("guard") is String:
+			return null
+		result["attempt"] = {"odds": int(attempt.odds), "certain": attempt.certain, "steps": int(attempt.steps), "xp": int(attempt.xp), "guard": attempt.guard}
+	return result
 
 ## The saved talents and flaws ({"talents", "flaws"}), {} when the save has none yet, or null when they
 ## are malformed: unknown ids, a flaw among the talents or the other way round, or the same one twice.

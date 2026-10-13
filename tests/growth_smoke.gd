@@ -96,6 +96,7 @@ func _stages() -> void:
 	game.set_item_count("foundation_pill", 1)
 	check(game.act("breakthrough").contains("2000 修为"), "breakthrough needs the full requirement")
 	Session.Events.apply(game, [{"xp": 300}])
+	_steady(game)
 	game.act("breakthrough")
 	check(game.player.realm == 1 and game.player.stage == 0 and game.realm_name() == "筑基初期" and game.lifespan() == 220, "breakthrough from 炼气圆满 into 筑基初期")
 	var stronger := _game()
@@ -171,6 +172,7 @@ func _limits() -> void:
 	Session.Events.apply(ripe, [{"xp": 50}])
 	check(int(ripe.player.xp) == 2000 and ripe.journal_lines().back().contains("50 点未能化入"), "rewards do not pile xp above it either")
 	ripe.set_item_count("foundation_pill", 1)
+	_steady(ripe)
 	ripe.act("breakthrough")
 	check(ripe.player.realm == 1 and int(ripe.player.xp) == 0 and ripe.retreat_cap() == 180 and ripe.mind_percent() == 50, "筑基 asks more of the mind (36) and allows a year at a time once it is there")
 	ripe.player.mind = 36
@@ -331,3 +333,8 @@ func _static_checks() -> void:
 	check(_broken(func(c) -> void: c.locations.market.shop.append({"item": "moonstone", "price": 5})).contains("商店货品"), "unknown shop goods reported")
 	check(_broken(func(c) -> void: c.locations.town.spots[0].actions.append("sell")).contains("收购品类"), "a place that buys must say what it buys")
 	check(_broken(func(c) -> void: c.items.huiqi_pill.use = [{"mana": 5}]).contains("效果无效"), "unknown item effects reported")
+
+## Fixes the breakthrough's rolls: no 心魔, and a roll twenty points under the odds (a 中品 foundation,
+## whose numbers are the plain ones).
+func _steady(game) -> void:
+	game.fortune = {"demon": 0.99, "breakthrough": maxf(0.0, float(game.breakthrough_odds(game.breakthrough_plan()).total - 20) / 100.0)}

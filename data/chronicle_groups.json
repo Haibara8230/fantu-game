@@ -1,6 +1,6 @@
 [
   {"id": "major", "name": "大事", "major": true},
-  {"id": "cultivation", "name": "修炼", "entries": ["start", "legacy", "cultivate", "rest", "inn_rest", "wait", "breakthrough", "stage_up", "xp_held", "learn", "use_item", "choose_sect", "lifespan_warning", "lifespan_end", "talent_gained", "talents_awaken"]},
+  {"id": "cultivation", "name": "修炼", "entries": ["start", "legacy", "cultivate", "rest", "inn_rest", "wait", "breakthrough", "stage_up", "xp_held", "learn", "use_item", "choose_sect", "lifespan_warning", "lifespan_end", "talent_gained", "talents_awaken", "breakthrough_grade", "breakthrough_failed", "heart_demon", "demon_slain", "demon_lingers", "demon_evaded"]},
   {"id": "battle", "name": "斗法", "entries": ["battle_start", "skill_attack", "skill_heal", "skill_guard", "defend", "enemy_attack", "battle_victory", "battle_defeat", "flee", "serpent_slain", "ruin_cleared", "spar_start", "spar_win", "spar_lose", "tournament_round", "tournament_champion", "tournament_out"]},
   {"id": "people", "name": "人物", "entries": ["talk", "gift", "npc", "obituary", "spar_start", "spar_win", "spar_lose", "tournament_round", "tournament_out", "rumor_person", "sound", "help", "letter"]},
   {"id": "stories", "name": "剧情与传音", "entries": ["story", "letter", "sound"]},

@@ -18,6 +18,7 @@ const Journey = preload("res://scripts/core/journey.gd")
 const Cultivation = preload("res://scripts/core/cultivation.gd")
 const Storylines = preload("res://scripts/core/storylines.gd")
 const Talents = preload("res://scripts/core/talents.gd")
+const Breakthrough = preload("res://scripts/core/breakthrough.gd")
 const SaveRestore = preload("res://scripts/core/save_restore.gd")
 const SaveMigration = preload("res://scripts/core/save_migration.gd")
 const SAVE_VERSION := SaveMigration.CURRENT_VERSION
@@ -39,6 +40,9 @@ var ended: Dictionary = {}
 var encounters_enabled := true
 # The single-retreat limit can be switched off by tests that run long spans of time through a retreat.
 var retreat_limits := true
+# Fixed rolls in [0, 1) for chance draws by tag ("breakthrough", "demon", "slay", "grade", fortune's own),
+# for tests; otherwise they come from the world stream.
+var fortune: Dictionary = {}
 # The person whose interaction is being applied, for effects such as "leave".
 var acting_npc := ""
 # 传音 sent since this session began; a storyline wait that sends one ends a retreat. Not saved.
@@ -93,6 +97,7 @@ func new_game(character_name: String = "无名", seed_value: int = -1, roots: Ar
 		"learned": [], "arts": [], "methods": [], "equipment": {"weapon": "", "robe": "", "accessory": ""}, "quests": [],
 		"deeds": {}, "taught": [],
 		"talents": born.get("talents", []).duplicate(), "flaws": born.get("flaws", []).duplicate(),
+		"foundation_grade": 1, "injury_until": 0, "lessons": 0, "boons": {},
 	}
 	player.stones = maxi(0, int(player.stones) + talent_modifier("stones"))
 	for skill_id: String in content.sects.wanderer.skills:
@@ -210,7 +215,8 @@ func root_title() -> String:
 	return content.root_title(player.get("roots", []))
 
 func cultivation_speed() -> float:
-	return float(content.root_grade(player.get("roots", [])).speed) * (1.0 + float(bonuses().cultivation))
+	var grade := Breakthrough.grade_of(self)
+	return float(content.root_grade(player.get("roots", [])).speed) * (1.0 + float(bonuses().cultivation)) * (1.0 + float(grade.get("speed", 0)) / 100.0)
 
 ## Xp gained per 30 days of closed-door cultivation with these roots.
 func cultivation_rate() -> int:
@@ -253,14 +259,15 @@ func refresh_realm_stats() -> void:
 		player.hp = mini(int(player.hp), int(player.max_hp))
 		player.qi = mini(int(player.qi), int(player.max_qi))
 
-## Health and qi caps for a player-shaped Dictionary (realm, stage, loadout, talents): the stage's, plus
-## the loadout's, raised by the talents' percentages.
+## Health and qi caps for a player-shaped Dictionary (realm, stage, loadout, talents, foundation grade):
+## the stage's, plus the loadout's, raised by the talents' and the grade's percentages.
 func stat_caps(holder: Dictionary) -> Dictionary:
 	var current: Dictionary = content.stage(int(holder.get("realm", 0)), int(holder.get("stage", 0)))
 	var extra := bonuses(holder)
+	var grade := int(Breakthrough.grade_of(self, holder).get("stats", 0))
 	return {
-		"max_hp": maxi(1, (int(current.max_hp) + int(extra.max_hp)) * (100 + int(extra.max_hp_percent)) / 100),
-		"max_qi": maxi(1, (int(current.max_qi) + int(extra.max_qi)) * (100 + int(extra.max_qi_percent)) / 100),
+		"max_hp": maxi(1, (int(current.max_hp) + int(extra.max_hp)) * (100 + int(extra.max_hp_percent) + grade) / 100),
+		"max_qi": maxi(1, (int(current.max_qi) + int(extra.max_qi)) * (100 + int(extra.max_qi_percent) + grade) / 100),
 	}
 
 ## Why the player cannot act right now, or an empty String.
@@ -334,8 +341,9 @@ func act(action: String) -> String:
 		"sell":
 			# Sell every item this place buys, in one go.
 			var sold := {}
+			# Treasures are sold one at a time, never swept up with the rest.
 			for item_id: String in player.items.keys():
-				if sell_price(item_id) > 0:
+				if sell_price(item_id) > 0 and content.item(item_id).get("category", "") != "treasure":
 					sold[item_id] = item_count(item_id)
 			if sold.is_empty():
 				return "行囊里没有这里收购的东西。"
@@ -347,26 +355,7 @@ func act(action: String) -> String:
 			record_deed("trade")
 			return conclude(log_event("sell_all", {"loot": loot_code(sold), "revenue": revenue}))
 		"breakthrough":
-			var need := next_breakthrough()
-			if need.is_empty():
-				return "后续境界尚未开放。"
-			var last_stage: int = content.realm(int(player.realm)).stages.size() - 1
-			if int(player.stage) < last_stage or int(player.xp) < int(need.xp) or item_count("foundation_pill") < int(need.pills):
-				return "突破需修至%s，并有 %d 修为与 %d 枚筑基丹。" % [content.realm_title(int(player.realm), last_stage), int(need.xp), int(need.pills)]
-			remove_item("foundation_pill", int(need.pills))
-			player.xp -= int(need.xp)
-			var passed := advance_days(days)
-			if not ended.is_empty():
-				return conclude("", passed)
-			player.realm += 1
-			player.stage = 0
-			refresh_realm_stats()
-			player.hp = player.max_hp
-			player.qi = player.max_qi
-			var texts: Array[String] = [log_event("breakthrough", {"days": passed.elapsed, "realm": int(player.realm), "stage": 0}, true)]
-			texts.append_array(settle_stage())
-			texts.append_array(Storylines.congratulate(self, "breakthrough"))
-			return conclude(" ".join(texts), passed)
+			return Breakthrough.attempt(self, Breakthrough.default_plan(self))
 	return "未知操作。"
 
 ## Closed-door cultivation for a chosen number of days. Reminders and lifespan warnings can end it early,
@@ -391,10 +380,11 @@ func cultivate(days: int) -> String:
 	days = mini(days, retreat_most())
 	var tired := Cultivation.fatigue(self)
 	var plan := Cultivation.plan_retreat(self, days, tired)
+	var start := int(world.day)
 	var passed := advance_days(int(plan.days), true)
 	if not ended.is_empty():
 		return conclude("", passed)
-	var done := Cultivation.plan_retreat(self, int(passed.elapsed), tired)
+	var done := Cultivation.plan_retreat(self, int(passed.elapsed), tired, start)
 	player.cultivation_carry = int(done.carry)
 	player.fatigue = int(done.fatigue)
 	player.fatigue_day = int(world.day)
@@ -440,6 +430,9 @@ func choose_event(choice_id: String) -> String:
 	if pending_event.is_empty():
 		return "眼下没有需要抉择的事。"
 	var message: String = Events.choose(self, choice_id)
+	# A breakthrough that met 心魔 goes on once it is faced.
+	if pending_event.is_empty() and player.has("attempt") and ended.is_empty():
+		message = Breakthrough.resolve(self, message)
 	var told := Storylines.update(self)
 	if not told.is_empty():
 		message = " ".join([message] + told)
@@ -488,6 +481,48 @@ func insight_needed() -> int:
 
 func retreat_fatigue() -> int:
 	return Cultivation.fatigue(self)
+
+# --- Breakthrough (breakthrough.gd) -------------------------------------------------------------
+
+## Breaks through with a plan: {"pills", "treasure", "guard"}.
+func breakthrough(plan: Dictionary) -> String:
+	var reason := blocked()
+	if not reason.is_empty():
+		return reason
+	return Breakthrough.attempt(self, plan)
+
+func breakthrough_plan() -> Dictionary:
+	return Breakthrough.default_plan(self)
+
+func breakthrough_block(plan: Dictionary) -> String:
+	return Breakthrough.block(self, plan)
+
+## {"total", "parts", "certain", "steps", "demon"}.
+func breakthrough_odds(plan: Dictionary) -> Dictionary:
+	return Breakthrough.odds(self, plan)
+
+func breakthrough_guards() -> Array[String]:
+	return Breakthrough.guards(self)
+
+func breakthrough_treasures() -> Array[String]:
+	return Breakthrough.treasures(self)
+
+func face_demon(stance: String) -> String:
+	return Breakthrough.face_demon(self, stance)
+
+## The foundation's grade ({"name", "stats", "speed"}), or {} before foundation.
+func foundation_grade() -> Dictionary:
+	return Breakthrough.grade_of(self)
+
+## Whether a failed breakthrough still hurts.
+func injured() -> bool:
+	return Breakthrough.injured(self)
+
+## A chance draw in [0, 1): fixed by tests through `fortune`, else from the world stream.
+func fortune_roll(tag: String) -> float:
+	if fortune.has(tag):
+		return float(fortune[tag])
+	return world_rng.randf()
 
 # --- Talents and aptitude (talents.gd) ---------------------------------------------------------
 

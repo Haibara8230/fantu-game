@@ -349,5 +349,14 @@
     "conditions": [{"met": "storyteller"}, {"deed_at_least": ["tournament_champion", 1]}],
     "effects": [{"relation": ["storyteller", 5]}, {"mind": 2}],
     "chronicle": "何三更把外门小比连胜三轮的事讲得一波三折，你在台下听着，倒像在听别人的故事。"
+  },
+  "heart_demon": {
+    "title": "心魔",
+    "trigger": "manual",
+    "text": "丹田灵气翻涌之际，往日的执念一齐涌上心头：落败的屈辱、未了的心愿、对寿元将尽的恐惧……幻象化作人形，挡在你与筑基之间。心境不足，便是心魔趁虚而入之时。",
+    "choices": [
+      {"id": "slay", "label": "斩心魔（心境越足越有把握：斩尽则根基更稳，斩不尽则把握大减）", "effects": [{"demon": "slay"}], "chronicle": "你凝神提气，向心魔斩去。"},
+      {"id": "evade", "label": "紧守灵台，避而不战（把握略减）", "effects": [{"demon": "evade"}], "chronicle": "你紧守灵台，任心魔幻象来去，不去理会。"}
+    ]
   }
 }

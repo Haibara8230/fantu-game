@@ -60,5 +60,10 @@ static func _render_progress(ui, parent: VBoxContainer) -> void:
 	parent.add_child(ui.label("心神 · %s · 闭关收益 %d%%" % [mood, efficiency], 15, ui.MUTED if efficiency >= 100 else ui.INK))
 	if session.xp_limit() >= 0:
 		parent.add_child(ui.label("历练  %d / %d" % [int(session.player.insight), session.insight_needed()], 15, ui.MUTED))
+	var grade: Dictionary = session.foundation_grade()
+	if not grade.is_empty():
+		parent.add_child(ui.label("根基 · %s" % grade.name, 15, ui.INK))
+	if session.injured():
+		parent.add_child(ui.paragraph("冲关受创 · 尚需将养 %s，其间闭关收益减半" % Calendar.duration_text(int(session.player.injury_until) - int(session.world.day)), Color("#e39a82")))
 	if session.at_bottleneck():
 		parent.add_child(ui.paragraph("瓶颈 · 闭关难进，需外出历练或服破障丹", Color("#e39a82")))

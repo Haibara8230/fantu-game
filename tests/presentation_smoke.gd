@@ -162,6 +162,8 @@ func _run() -> void:
 	main.run(func() -> String: return main.session.act("sell"))
 	main.run(func() -> String: return main.session.buy("foundation_pill"))
 	main.run(func() -> String: return main.session.travel("sect"))
+	# The breakthrough's rolls are fixed: no 心魔, and well under the odds.
+	main.session.fortune = {"demon": 0.99, "breakthrough": 0.0}
 	main.run(func() -> String: return main.session.act("breakthrough"))
 	main.run(func() -> String: return main.session.travel("wild"))
 	main.run(func() -> String: return main.session.start_battle("serpent"))
