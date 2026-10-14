@@ -8,6 +8,7 @@
   "buy_pill": "花费 {price} 灵石，购入一枚筑基丹。",
   "breakthrough": "闭关 {duration}，丹田化海，你已踏入{realm_name}。",
   "travel": "跋涉 {duration}，抵达{location_name}。",
+  "fly": "御剑而行 {duration}，落在{location_name}。",
   "choose_sect": "开始研习{sect_name}传承，神通已更换。",
   "skill_shield": "施展{skill_name}，结成 {amount} 点护盾。",
   "guard_turn": "凝神守御，结束这一回合：对手的出手减半，下回合多抽 {amount} 颗灵气。",

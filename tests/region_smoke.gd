@@ -23,6 +23,7 @@ func _run() -> void:
 	_paths()
 	_journeys()
 	_encounters()
+	_flight()
 	_scenes()
 	_ruin()
 	_azhi()
@@ -38,6 +39,21 @@ func _game(seed_value: int, encounters := false) -> Session:
 	game.encounters_enabled = encounters
 	game.new_game("行者", seed_value)
 	return game
+
+## 御剑飞行: from 金丹 the roads take half the days, and nothing on them troubles the traveller.
+func _flight() -> void:
+	var walker := _game(71, true)
+	var flier := _game(71, true)
+	flier.player.realm = 2
+	flier.refresh_realm_stats()
+	var route: Dictionary = walker.content.route_between("sect", "town")
+	check(flier.route_days(route) == maxi(1, int(round(float(walker.route_days(route)) * 0.5))), "a 金丹 flies the road in half the days")
+	for chance: int in flier.content.rules.encounter_chance.size():
+		flier.content.rules.encounter_chance[chance] = 1.0
+	for trip: int in 4:
+		flier.travel("wild" if trip % 2 == 0 else "sect")
+	check(flier.battle.is_empty() and not str(flier.pending_event.get("id", "")).begins_with("road_") and not flier.journal_lines().any(func(line: String) -> bool: return line.contains("拦路")), "nothing on the road troubles one in flight")
+	check(flier.journal_lines().any(func(line: String) -> bool: return line.contains("御剑而行")), "and the record says so")
 
 func _texts(game: Session) -> String:
 	return "\n".join(game.journal_lines())

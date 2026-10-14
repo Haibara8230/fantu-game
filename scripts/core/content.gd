@@ -413,6 +413,9 @@ func _validate_fortune() -> String:
 		return "顿悟配置无效。"
 	if not _whole(rules.get("root_study")) or int(rules.root_study) >= 100:
 		return "灵根参悟加成配置无效。"
+	var flight: Variant = rules.get("flight")
+	if not flight is Dictionary or not _whole(flight.get("realm")) or int(flight.realm) >= realms.size() or not _whole(flight.get("days_percent")) or int(flight.days_percent) >= 100:
+		return "御剑飞行配置无效。"
 	if not _whole(fortune.brink.get("hp_percent")) or not fortune.spirit_eye.get("flag") in world_flags or not _whole(fortune.spirit_eye.get("sense_reference")) or int(fortune.spirit_eye.sense_reference) < 1:
 		return "生死之间或灵眼配置无效。"
 	for key: String in ["before_realm", "mind", "injury_days"]:

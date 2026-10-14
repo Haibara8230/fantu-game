@@ -57,6 +57,8 @@ func format(entry: Dictionary, content) -> String:
 			template = str(content.chronicle.get(entry.id, "（失传的记载）"))
 	# Breakthroughs since grades also tell the foundation's grade, or the 金丹's.
 	var forming_core: bool = entry.id == "breakthrough" and int(entry.args.get("realm", 1)) >= 2
+	if entry.id == "travel" and bool(entry.args.get("fly", false)):
+		template = str(content.chronicle.get("fly", template))
 	if entry.id == "breakthrough" and entry.args.has("grade"):
 		template += str(content.chronicle.get("breakthrough_core_grade" if forming_core else "breakthrough_grade", ""))
 	var values: Dictionary = entry.args.duplicate()

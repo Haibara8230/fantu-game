@@ -763,7 +763,14 @@ func path_days(path: Array[String]) -> int:
 	return total
 
 func route_days(route: Dictionary) -> int:
-	return Talents.scaled(int(route.days), talent_modifier("travel"), 1)
+	var percent := talent_modifier("travel")
+	if flying():
+		percent -= int(content.rules.flight.days_percent)
+	return Talents.scaled(int(route.days), percent, 1)
+
+## 御剑飞行: from 金丹 on (`rules.flight`) the roads take half the days and bring no trouble.
+func flying() -> bool:
+	return int(player.get("realm", 0)) >= int(content.rules.flight.realm)
 
 # --- Storylines, deeds and 传音 (storylines.gd) -------------------------------------------------
 

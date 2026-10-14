@@ -56,9 +56,12 @@ static func _walk(s) -> String:
 		s.Commissions.record_visit(s, next)
 		if next == s.player.journey.to:
 			s.player.journey = {}
-		parts.append(s.log_event("travel", {"days": passed.elapsed, "location": next}))
-		# Beasts leave a newcomer on the guided start alone.
-		if s.encounters_enabled and s.guide_step().is_empty():
+		var leg := {"days": passed.elapsed, "location": next}
+		if s.flying():
+			leg.fly = true
+		parts.append(s.log_event("travel", leg))
+		# Beasts leave a newcomer on the guided start alone, and nothing on the road troubles one in flight.
+		if s.encounters_enabled and s.guide_step().is_empty() and not s.flying():
 			parts.append(Events.roll_encounter(s, route))
 		if s.pending_event.is_empty():
 			parts.append_array(Events.check_location(s, not s.player.journey.is_empty()))
