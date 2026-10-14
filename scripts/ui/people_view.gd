@@ -189,6 +189,8 @@ static func render_person(ui, person_id: String) -> void:
 			tie = " · 道侣"
 		elif person_id in session.world.get("disciples", []):
 			tie = " · 弟子"
+		elif person_id in session.world.get("sworn", []):
+			tie = " · 结义"
 		var bond: Label = ui.label("好感 · %s  %d%s" % [session.content.favor_stage(favor), favor, tie], 15)
 		bond.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		middle.add_child(bond)

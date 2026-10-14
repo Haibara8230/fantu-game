@@ -199,6 +199,18 @@ func _kin() -> void:
 	check(copy.restore(JSON.parse_string(JSON.stringify(game.snapshot()))) and copy.world.companion == other, "a 道侣 survives a save")
 	game.world.day = int(life.death) + 1
 	check(game.Bonds.companion_speed(game) == 0, "and the quickening ends with their life")
+	# 结拜: 信赖 is enough, and a sworn sibling answers the call to aid.
+	var kin := _game(45)
+	var brother := _someone(kin)
+	kin.world.people[brother].relation = 140
+	kin.world.people[brother].sound = true
+	kin.interact(brother, "sworn")
+	check(brother in kin.world.sworn, "one trusted may become a sworn sibling")
+	kin.start_battle("disciple")
+	check(brother in kin.Bonds.allies(kin), "who answers a 传音 for aid before 亲密")
+	kin.flee()
+	var kept := Session.new()
+	check(kept.restore(JSON.parse_string(JSON.stringify(kin.snapshot()))) and brother in kept.world.sworn, "sworn siblings survive a save")
 	# 师徒.
 	var master := _game(44)
 	var pupil := ""

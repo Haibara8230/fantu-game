@@ -134,6 +134,9 @@ static func _life(ui, parent: VBoxContainer) -> void:
 	var companion := str(session.world.get("companion", ""))
 	if not companion.is_empty():
 		_row(ui, parent, "道侣", str(session.person(companion).get("name", "")) + ("" if session.Bonds.companion_speed(session) > 0 else " · 已故"), "同修之人在世时，修炼速度 +%d%%" % int(session.content.bonds_data.companion.speed))
+	var sworn: Array = session.world.get("sworn", [])
+	if not sworn.is_empty():
+		_row(ui, parent, "结义", "、".join(sworn.map(func(person_id: String) -> String: return str(session.person(person_id).get("name", "")))), "结义兄弟姐妹在信赖时就肯应你的传音求援")
 	var disciples: Array = session.world.get("disciples", [])
 	if not disciples.is_empty():
 		_row(ui, parent, "弟子", "、".join(disciples.map(func(person_id: String) -> String: return str(session.person(person_id).get("name", "")))), "每年可传道一次；弟子不时捎来灵石")

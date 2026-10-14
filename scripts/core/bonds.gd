@@ -7,7 +7,8 @@ extends RefCounted
 ## them into a duel by 传音 (传音求援), once a duel; and, from foundation, becoming 道侣 (world.companion:
 ## cultivation a tenth faster while they live). From 金丹 a generated person below the player's realm and
 ## 友好 may be taken as a disciple (world.disciples, at most two): 传道 once a year, and now and then
-## they send silver.
+## they send silver. Anyone 信赖 may become a sworn sibling (结拜, world.sworn, at most three), who
+## answers a 传音求援 without waiting for 亲密.
 ## Every so often (visits.period_days) each generated acquaintance holding a 传音符 may write: to spar
 ## (come within a month), to ask for help (an herb or a pill within two months), to gather together
 ## (a trip to a place within a month brings twice the herbs), to borrow silver (repaid half again in
@@ -56,6 +57,9 @@ static func options(s, person_id: String) -> Array[Dictionary]:
 	var companion: Dictionary = rules.companion
 	if favor >= int(companion.favor) and int(s.player.realm) >= int(companion.realm) and s.is_generated(person_id) and str(s.world.get("companion", "")).is_empty() and not person_id in s.world.get("disciples", []):
 		result.append({"id": "companion", "label": "结为道侣（一生一位）"})
+	var sworn: Dictionary = rules.sworn
+	if favor >= int(sworn.favor) and s.is_generated(person_id) and not person_id in s.world.get("sworn", []) and s.world.get("sworn", []).size() < int(sworn.most) and person_id != str(s.world.get("companion", "")) and not person_id in s.world.get("disciples", []):
+		result.append({"id": "sworn", "label": "义结金兰（至多 %d 人）" % int(sworn.most)})
 	var disciple: Dictionary = rules.disciple
 	if s.is_generated(person_id) and person_id in s.world.get("disciples", []):
 		result.append({"id": "instruct", "label": "传道（数日，教学相长）", "cooldown_days": int(disciple.instruct.cooldown_days)})
@@ -109,6 +113,12 @@ static func interact(s, person_id: String, option_id: String) -> String:
 			s.world["companion"] = person_id
 			Events.apply(s, [{"mind": int(rules.companion.mind)}])
 			return s.conclude(s.log_event("companion_bound", {"npc": person_id}, true))
+		"sworn":
+			if not s.world.has("sworn"):
+				s.world["sworn"] = []
+			s.world.sworn.append(person_id)
+			Events.apply(s, [{"mind": int(rules.sworn.mind)}, {"relation": [person_id, 10]}])
+			return s.conclude(s.log_event("sworn_bound", {"npc": person_id}, true))
 		"disciple":
 			if not s.world.has("disciples"):
 				s.world["disciples"] = []
@@ -338,7 +348,8 @@ static func allies(s) -> Array[String]:
 	if s.battle.is_empty() or s.battle.get("context", "") in ["spar", "tournament", "summit"] or bool(s.battle.get("aid_used", false)):
 		return found
 	for person_id: String in s.world.people:
-		if s.favor(person_id) >= int(data(s).aid.favor) and bool(s.world.people[person_id].get("sound", false)) and _alive(s, person_id) and person_id != str(s.battle.get("npc", "")) and not standing(s, person_id).is_empty():
+		var close: bool = s.favor(person_id) >= int(data(s).aid.favor) or person_id in s.world.get("sworn", [])
+		if close and bool(s.world.people[person_id].get("sound", false)) and _alive(s, person_id) and person_id != str(s.battle.get("npc", "")) and not standing(s, person_id).is_empty():
 			found.append(person_id)
 	found.sort_custom(func(a: String, b: String) -> bool: return _strength(s, a) > _strength(s, b) or (_strength(s, a) == _strength(s, b) and a < b))
 	return found

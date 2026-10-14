@@ -42,6 +42,7 @@
   "forged": "在器铺炼器 {duration}，打出{item_name}。",
   "companion_bound": "你与{npc_name}结为道侣，往后修行路上，有人同行。",
   "companion_gone": "道侣{npc_name}先你一步而去。你在静室里坐了很久。",
+  "sworn_bound": "你与{npc_name}焚香结拜，从此以兄弟姊妹相称。",
   "disciple_taken": "你收{npc_name}为徒，传下本门心法。",
   "disciple_taught": "你为弟子{npc_name}讲道 {duration}，教学相长，自己也有所得。",
   "auction_open": "{auction_name}开场，今日拍品 {amount} 件。",
