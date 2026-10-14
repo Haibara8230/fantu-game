@@ -231,7 +231,27 @@ func _lifespan() -> void:
 	check(int(game.world.day) == day + 360 and message.contains("寿元将尽"), "lifespan warning interrupts a retreat")
 	game.cultivate(3600)
 	check(not game.ended.is_empty() and int(game.world.day) == day + 6 * 360, "life ends on the exact day")
-	check(game.journal_lines().back().contains("坐化"), "ending recorded")
+	check(game.at_brink() and game.journal_lines().back().contains("大限已至"), "the end first waits on a choice")
+	var brink := Session.new()
+	check(brink.restore(JSON.parse_string(JSON.stringify(game.snapshot()))) and brink.at_brink(), "the choice survives a save")
+	# 逆天续命: years more and a long wound, or the end; once in a life.
+	var lucky := Session.new()
+	lucky.restore(JSON.parse_string(JSON.stringify(game.snapshot())))
+	lucky.fortune = {"defy_fate": 0.0}
+	var end_before: int = lucky.lifespan_end_day()
+	lucky.defy_fate()
+	check(lucky.ended.is_empty() and lucky.lifespan_end_day() == end_before + 10 * 360 and lucky.injured() and int(lucky.player.hp) == 1, "defying fate may win ten years, at the cost of a long wound")
+	for stint: int in 15:
+		if lucky.ended.is_empty():
+			lucky.wait(360)
+	check(not lucky.ended.is_empty() and not lucky.at_brink() and lucky.journal_lines().back().contains("坐化"), "the next end comes without a choice")
+	var unlucky := Session.new()
+	unlucky.restore(JSON.parse_string(JSON.stringify(game.snapshot())))
+	unlucky.fortune = {"defy_fate": 0.99}
+	unlucky.defy_fate()
+	check(not unlucky.ended.is_empty() and not unlucky.at_brink() and unlucky.journal_lines().any(func(line: String) -> bool: return line.contains("逆天续命不成")), "or it fails and the life ends")
+	game.accept_end()
+	check(not game.at_brink() and game.journal_lines().back().contains("坐化"), "sitting in peace ends it")
 	var frozen := game.snapshot()
 	check(game.cultivate(30) == "此生已尽。可读取存档，或开启新旅程。" and game.travel("market") != "" and game.snapshot() == frozen, "nothing moves after the end")
 	var copy := Session.new()
@@ -240,6 +260,18 @@ func _lifespan() -> void:
 	var old_end := extended.lifespan_end_day()
 	_foundation(extended)
 	check(extended.lifespan_end_day() == old_end + 100 * 360, "breakthrough extends the lifespan")
+	# Elixirs of long life: each kind works once in a life.
+	var elder := _game(11)
+	var before_end := elder.lifespan_end_day()
+	elder.set_item_count("yanshou_dan", 2)
+	elder.use_item("yanshou_dan")
+	check(elder.lifespan_end_day() == before_end + 5 * 360 and elder.journal_lines().any(func(line: String) -> bool: return line.contains("寿元多了 5 年")), "a 延寿丹 adds five years")
+	check(elder.use_item("yanshou_dan").contains("只见效一次") and elder.item_count("yanshou_dan") == 1, "a second of the same kind does nothing and is kept")
+	elder.set_item_count("shouyuan_guo", 1)
+	elder.use_item("shouyuan_guo")
+	check(elder.lifespan_end_day() == before_end + 17 * 360, "another kind adds its own years")
+	var kept := Session.new()
+	check(kept.restore(JSON.parse_string(JSON.stringify(elder.snapshot()))) and kept.lifespan_end_day() == elder.lifespan_end_day(), "years gained survive a save")
 
 func _pending_event_rules() -> void:
 	var game := _game(10)

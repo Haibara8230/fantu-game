@@ -669,6 +669,8 @@ func _run() -> void:
 	main.run(func() -> String: return main.session.cultivate(360))
 	main.run(func() -> String: return main.session.cultivate(360))
 	await _capture("ending")
+	check(main.session.at_brink() and _texts(main.center, "Label").contains("大 限 将 至") and _button("逆天续命") != null, "the end first offers to defy fate")
+	_button("就此坐化").pressed.emit()
 	check(not main.session.ended.is_empty() and _texts(main.center, "Label").contains("此 生 已 尽"), "ending screen shown")
 	main._load_manual()
 	check(main.session.ended.is_empty(), "loading a save returns from the ending")

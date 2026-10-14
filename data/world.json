@@ -410,6 +410,7 @@
       ]
     },
     "lifespan_warning_years": 5,
+    "longevity": {"defy_chance": 0.35, "defy_mind_step": 0.01, "defy_least": 0.1, "defy_most": 0.6, "defy_years": 10, "defy_injury_days": 360},
     "art_slots": 4,
     "method_slots": 2,
     "cultivate_options": [30, 90, 360],

@@ -41,7 +41,7 @@
         "id": "sealed", "name": "封禁石室", "links": ["armory"], "map": [0.9, 0.6], "requires_sense": 14,
         "text": "门上的禁制已经残破，门后静得出奇，连自己的心跳都听得见。",
         "fortune": "remnant",
-        "loot": [[{"manual": 3}], [{"stones": 120}, {"item": ["huiqi_pill_fine", 1]}]]
+        "loot": [[{"manual": 3}], [{"stones": 120}, {"item": ["huiqi_pill_fine", 1]}], [{"item": ["shouyuan_guo", 1]}]]
       }
     ]
   }

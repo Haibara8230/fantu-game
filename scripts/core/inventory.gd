@@ -192,6 +192,8 @@ static func use_block(s, item_id: String) -> String:
 		return toxic
 	# Pills that would be wasted by the bottleneck are refused rather than swallowed.
 	for effect: Dictionary in s.content.item(item_id).use:
+		if effect.has("longevity") and s.player.get("longevity", {}).has(str(effect.longevity[0])):
+			return "同种延寿之物一生只见效一次，此物于你已无效。"
 		if effect.has("breach") and not s.at_bottleneck():
 			return "修为未至瓶颈，服之无益。"
 		if effect.has("xp") and s.at_bottleneck():

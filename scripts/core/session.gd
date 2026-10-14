@@ -107,7 +107,7 @@ func new_game(character_name: String = "无名", seed_value: int = -1, roots: Ar
 		"learned": [], "arts": [], "methods": [], "equipment": {"weapon": "", "robe": "", "accessory": ""}, "quests": [],
 		"deeds": {}, "taught": [],
 		"talents": born.get("talents", []).duplicate(), "flaws": born.get("flaws", []).duplicate(),
-		"foundation_grade": 1, "injury_until": 0, "lessons": 0, "boons": {},
+		"foundation_grade": 1, "injury_until": 0, "lessons": 0, "boons": {}, "longevity": {},
 		"rank": 0, "contribution": 0, "merit": 0, "stipend_day": 0, "exchanged": {}, "donated": {},
 		"recipes": [], "practice": {}, "toxin": 0, "toxin_day": 0, "field": {"grade": 0, "plots": []},
 	}
@@ -242,7 +242,57 @@ func age() -> int:
 	return Calendar.age_years(int(player.birth_day), int(world.day))
 
 func lifespan() -> int:
-	return maxi(int(content.rules.starting_age) + 10, int(content.realm(int(player.realm)).lifespan_years) + talent_modifier("lifespan"))
+	var extended := 0
+	for years: Variant in player.get("longevity", {}).values():
+		extended += int(years)
+	return maxi(int(content.rules.starting_age) + 10, int(content.realm(int(player.realm)).lifespan_years) + talent_modifier("lifespan")) + extended
+
+## Years of life gained from `kind` (an elixir, a fruit, defying fate), once per kind.
+func extend_life(kind: String, years: int) -> void:
+	if not player.has("longevity"):
+		player["longevity"] = {}
+	if player.longevity.has(kind):
+		return
+	player.longevity[kind] = years
+	if content.items.has(kind):
+		log_event("longevity_gained", {"item": kind, "years": years}, true)
+
+## At the end of a life, once: the odds of defying fate (逆天续命), from the mind against what the
+## stage asks and the talents for fortune.
+func defy_chance() -> float:
+	var rule: Dictionary = content.rules.longevity
+	var base := float(rule.defy_chance) + float(int(player.get("mind", 0)) - mind_needed()) * float(rule.defy_mind_step)
+	return Talents.chance(clampf(base, float(rule.defy_least), float(rule.defy_most)), talent_modifier("boon"))
+
+## Whether the end of this life still waits on the choice.
+func at_brink() -> bool:
+	return bool(ended.get("choice", false))
+
+## 逆天续命: years more and a long wound, or the end at once.
+func defy_fate() -> String:
+	if not at_brink():
+		return "此刻无需如此。"
+	var rule: Dictionary = content.rules.longevity
+	ended.erase("choice")
+	if fortune_roll("defy_fate") < defy_chance():
+		ended = {}
+		extend_life("defied", int(rule.defy_years))
+		player.hp = 1
+		player["injury_until"] = maxi(int(player.get("injury_until", 0)), int(world.day) + int(rule.defy_injury_days))
+		return conclude(log_event("defy_success", {"years": int(rule.defy_years)}, true))
+	extend_life("defied", 0)
+	var text := log_event("defy_failed", {}, true) + " " + log_event("lifespan_end", {"location": player.location, "age": age()}, true)
+	changed.emit()
+	return text
+
+## 坐化: the life ends as it came.
+func accept_end() -> String:
+	if not at_brink():
+		return "此刻无需如此。"
+	ended.erase("choice")
+	var text := log_event("lifespan_end", {"location": player.location, "age": age()}, true)
+	changed.emit()
+	return text
 
 func lifespan_end_day() -> int:
 	return int(player.birth_day) + lifespan() * Calendar.DAYS_PER_YEAR

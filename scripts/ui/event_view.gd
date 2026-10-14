@@ -90,6 +90,21 @@ static func _render_failure(ui) -> void:
 static func render_ending(ui) -> void:
 	var session = ui.session
 	var center: VBoxContainer = ui.center
+	if session.at_brink():
+		# Once in a life the end waits: to sit in peace, or to defy fate.
+		center.add_child(ui.label("大 限 将 至", 30, ui.GOLD))
+		center.add_child(ui.paragraph("%s，%s，寿元已尽，享年 %d 岁。气机一点点散去，是就此坐化，还是强提最后一口真元，逆冲死关？" % [session.player.name, session.realm_name(), session.age()], ui.INK))
+		var row := HBoxContainer.new()
+		row.add_theme_constant_override("separation", 14)
+		center.add_child(row)
+		var years := int(session.content.rules.longevity.defy_years)
+		var defy: Button = ui.button("逆天续命 · 约 %d%% 成算" % int(round(session.defy_chance() * 100.0)), func() -> void: ui.run(session.defy_fate), "成则续命 %d 年，经脉重创须将养许久；败则此生就此终结。一生只此一次。" % years)
+		defy.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		row.add_child(defy)
+		var rest: Button = ui.button("就此坐化", func() -> void: ui.run(session.accept_end), "平静地走完这一生")
+		rest.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		row.add_child(rest)
+		return
 	center.add_child(ui.label("此 生 已 尽", 30, ui.GOLD))
 	center.add_child(ui.paragraph("%s，%s，享年 %d 岁。" % [session.player.name, session.realm_name(), session.age()], ui.INK))
 	center.add_child(ui.label("生 平", 16, ui.GOLD))

@@ -204,7 +204,7 @@ static func restore(s, data: Variant) -> bool:
 		if not _whole_nonnegative(saved_pending.get("day")) or int(saved_pending.day) != day or not saved_battle.is_empty():
 			return false
 	if not saved_ended.is_empty():
-		if saved_ended.get("kind") != "lifespan" or not _whole_nonnegative(saved_ended.get("day")) or int(saved_ended.day) > day:
+		if saved_ended.get("kind") != "lifespan" or not _whole_nonnegative(saved_ended.get("day")) or int(saved_ended.day) > day or not saved_ended.get("choice", false) is bool:
 			return false
 	for stream: String in ["combat", "world"]:
 		if not saved_rng.get(stream) is String or not saved_rng[stream].is_valid_int():
@@ -291,6 +291,8 @@ static func restore(s, data: Variant) -> bool:
 	s.auction = _normalized_auction(saved_auction)
 	s.pending_event = {} if saved_pending.is_empty() else {"id": saved_pending.id, "day": int(saved_pending.day)}
 	s.ended = {} if saved_ended.is_empty() else {"kind": saved_ended.kind, "day": int(saved_ended.day)}
+	if bool(saved_ended.get("choice", false)):
+		s.ended["choice"] = true
 	s.chronicle.entries = saved_chronicle
 	s.combat_rng.state = int(saved_rng.combat)
 	s.world_rng.state = int(saved_rng.world)
@@ -328,6 +330,16 @@ static func _valid_breakthrough(content, saved_player: Dictionary, saved_pending
 			return null
 		kept[id] = str(boons[id])
 	result["boons"] = kept
+	# Years gained by kind (延寿丹, 寿元果, defying fate); optional, since saves before them lack it.
+	var longevity: Variant = saved_player.get("longevity", {})
+	if not longevity is Dictionary:
+		return null
+	var gained := {}
+	for kind: Variant in longevity:
+		if not kind is String or not _whole_nonnegative(longevity[kind]) or int(longevity[kind]) > 1000:
+			return null
+		gained[kind] = int(longevity[kind])
+	result["longevity"] = gained
 	var waiting: bool = str(saved_pending.get("id", "")) == "heart_demon"
 	var attempt: Variant = saved_player.get("attempt", null)
 	if waiting != (attempt != null):

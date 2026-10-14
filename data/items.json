@@ -153,6 +153,22 @@
     "rarity": 0,
     "description": "从蒙面劫修手里夺回的货担，丹瓶一个没少，该还给钱货郎。"
   },
+  "yanshou_dan": {
+    "name": "延寿丹",
+    "category": "pill",
+    "price": 150,
+    "rarity": 2,
+    "description": "以百年寿木与龟息草炼成，服下可延寿五年。同种延寿之物一生只见效一次。",
+    "use": [{"longevity": ["yanshou_dan", 5]}]
+  },
+  "shouyuan_guo": {
+    "name": "寿元果",
+    "category": "treasure",
+    "price": 400,
+    "rarity": 3,
+    "description": "千年寿藤上结的果子，服下可延寿十二年。同种延寿之物一生只见效一次。",
+    "use": [{"longevity": ["shouyuan_guo", 12]}]
+  },
   "qiannian_shiru": {
     "name": "千年石乳",
     "category": "treasure",

@@ -13,7 +13,8 @@
         {"manual": 3, "start": 90, "step": 10, "value": 170},
         {"equipment": 2, "start": 50, "step": 5, "value": 90},
         {"item": "pozhang_pill", "start": 25, "step": 5, "value": 50},
-        {"item": "huiqi_pill_fine", "count": 3, "start": 20, "step": 5, "value": 45}
+        {"item": "huiqi_pill_fine", "count": 3, "start": 20, "step": 5, "value": 45},
+        {"item": "yanshou_dan", "start": 60, "step": 10, "value": 130}
       ]
     },
     "night_market": {

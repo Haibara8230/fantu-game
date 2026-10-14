@@ -150,6 +150,8 @@ static func apply(s, effects: Array) -> void:
 				s.Fortune.bestow(s, value)
 			"recipe":
 				s.Alchemy.learn(s, value)
+			"longevity":
+				s.extend_life(str(value[0]), int(value[1]))
 			"herbs":
 				if int(value) >= 0:
 					s.add_item("huichun_grass", int(value))
@@ -311,6 +313,10 @@ static func fire(s, due: Dictionary) -> Dictionary:
 		"loan":
 			return {"interrupt": false, "message": " ".join(s.Bonds.settle_loans(s))}
 		"lifespan_end":
+			# Once in a life the end waits on a choice: to sit in peace, or to defy fate.
+			if not s.player.get("longevity", {}).has("defied"):
+				s.ended = {"kind": "lifespan", "day": day, "choice": true}
+				return {"interrupt": true, "message": s.log_event("lifespan_brink", {}, true)}
 			s.ended = {"kind": "lifespan", "day": day}
 			return {"interrupt": true, "message": s.log_event("lifespan_end", {"location": s.player.location, "age": s.age()}, true)}
 		"date":
