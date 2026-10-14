@@ -166,7 +166,7 @@ static func odds(s, plan: Dictionary) -> Dictionary:
 	var practice: Dictionary = rules.practice
 	var talent: int = s.talent_modifier("alchemy")
 	var parts: Array = [["丹方", int(r.success)]]
-	for part: Array in [[str(used.name), int(used.success)], [str(place(s).get("help", "")), int(place(s).get("success", 0))], ["熟能生巧", mini(int(practice.success_most), brews * int(practice.success_step))], ["天赋", talent], [str(fire.name), int(fire.success)], [str(s.content.item(str(plan.get("aid", ""))).get("name", "")), int(aid.get("success", 0))]]:
+	for part: Array in [[str(used.name), int(used.success)], [str(place(s).get("help", "")), int(place(s).get("success", 0))], ["熟能生巧", mini(int(practice.success_most), brews * int(practice.success_step))], ["天赋", talent], [str(s.Sect.duty(s).get("name", "")), s.Sect.duty_value(s, "alchemy")], [str(fire.name), int(fire.success)], [str(s.content.item(str(plan.get("aid", ""))).get("name", "")), int(aid.get("success", 0))]]:
 		if int(part[1]) != 0 and not str(part[0]).is_empty():
 			parts.append(part)
 	var success := 0

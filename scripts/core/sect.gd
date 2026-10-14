@@ -7,6 +7,9 @@ extends RefCounted
 ## stage of cultivation; it pays a monthly stipend (collected at the 执事堂, piling up for a year at
 ## most) and makes retreats in the sect a little richer. The exchange sells pills and rotating jade
 ## slips for contribution, each good within its own limit per period; some only to a rank.
+## From the inner court a disciple may hold one duty (职司, `duties`), changed at most once a year:
+## 丹房执事 (alchemy), 巡山执事 (more contribution from commissions), 传功执事 (faster study).
+## player.duty is the duty's id ("" for none) and player.duty_day the day it was taken.
 ## player.rank is the rank's index; player.stipend_day the day the uncollected stipend began;
 ## player.exchanged counts goods taken per period ("<good>:<period>[:<slot>]"); player.donated the
 ## contribution donated in the current donation period {"period", "amount"}.
@@ -30,6 +33,41 @@ static func rank_index(s, rank_id: String) -> int:
 static func next_rank(s) -> Dictionary:
 	var index := int(s.player.get("rank", 0)) + 1
 	return ranks(s)[index] if index < ranks(s).size() else {}
+
+## The duty held, {} for none.
+static func duty(s) -> Dictionary:
+	return data(s).duties.list.get(str(s.player.get("duty", "")), {})
+
+## What the held duty adds to `key` (alchemy, contribution_percent, study), 0 without one.
+static func duty_value(s, key: String) -> int:
+	return int(duty(s).get(key, 0))
+
+## Why the duty cannot be taken now, or "".
+static func duty_block(s, duty_id: String) -> String:
+	var reason: String = s.blocked()
+	if not reason.is_empty():
+		return reason
+	var duties: Dictionary = data(s).duties
+	if not duties.list.has(duty_id):
+		return "没有这个职司。"
+	if not s.available_here("sect"):
+		return "须到青云山执事堂领受职司。"
+	if int(s.player.get("rank", 0)) < rank_index(s, str(duties.rank)):
+		return "须是%s才能领受职司。" % ranks(s)[rank_index(s, str(duties.rank))].name
+	if str(s.player.get("duty", "")) == duty_id:
+		return "你已担着此职。"
+	var since := int(s.player.get("duty_day", -1))
+	if since >= 0 and int(s.world.day) < since + int(duties.change_days):
+		return "职司一年一换，%s后可改。" % s.Calendar.duration_text(since + int(duties.change_days) - int(s.world.day))
+	return ""
+
+static func take_duty(s, duty_id: String) -> String:
+	var reason := duty_block(s, duty_id)
+	if not reason.is_empty():
+		return reason
+	s.player["duty"] = duty_id
+	s.player["duty_day"] = int(s.world.day)
+	return s.finish(s.log_event("duty_taken", {"duty": str(data(s).duties.list[duty_id].name)}))
 
 ## Adds contribution (and merit) from the sect; returns the chronicle text, or "" for nothing.
 static func gain(s, amount: int, reason: String = "") -> String:

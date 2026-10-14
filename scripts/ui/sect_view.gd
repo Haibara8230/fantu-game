@@ -28,6 +28,7 @@ static func render(ui) -> void:
 	var collect: Button = ui.button("领取月俸", func() -> void: ui.run(session.collect_stipend), "回执事堂一并领取")
 	collect.disabled = not at_hall or int(due.periods) < 1
 	row.add_child(collect)
+	_duties(ui, center)
 	center.add_child(HSeparator.new())
 	center.add_child(ui.label("宗门兑换", 18, ui.GOLD))
 	var grid := GridContainer.new()
@@ -92,3 +93,23 @@ static func _donations(ui, center: VBoxContainer, at_hall: bool) -> void:
 		grid.add_child(give)
 	if not any:
 		center.add_child(ui.paragraph("行囊里没有宗门收的灵草或材料。"))
+
+## The duties of the inner court: the one held, and the others to take (once a year).
+static func _duties(ui, center: VBoxContainer) -> void:
+	var session = ui.session
+	var duties: Dictionary = session.content.sect_data.duties
+	var held: Dictionary = session.Sect.duty(session)
+	center.add_child(HSeparator.new())
+	center.add_child(ui.label("职司 · " + (str(held.name) if not held.is_empty() else "未任"), 18, ui.GOLD))
+	var row := HBoxContainer.new()
+	row.add_theme_constant_override("separation", 10)
+	center.add_child(row)
+	for duty_id: String in duties.list:
+		var duty: Dictionary = duties.list[duty_id]
+		var reason: String = session.Sect.duty_block(session, duty_id)
+		var chosen := duty_id
+		var take: Button = ui.button(str(duty.name), func() -> void: ui.run(func() -> String: return session.take_duty(chosen)), str(duty.text) + ("\n" + reason if not reason.is_empty() else ""))
+		take.disabled = not reason.is_empty()
+		if str(session.player.get("duty", "")) == duty_id:
+			ui.tint(take, ui.GOLD)
+		row.add_child(take)

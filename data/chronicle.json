@@ -45,6 +45,7 @@
   "sworn_bound": "你与{npc_name}焚香结拜，从此以兄弟姊妹相称。",
   "disciple_taken": "你收{npc_name}为徒，传下本门心法。",
   "disciple_taught": "你为弟子{npc_name}讲道 {duration}，教学相长，自己也有所得。",
+  "duty_taken": "你在执事堂领了{duty}的差事。",
   "auction_open": "{auction_name}开场，今日拍品 {amount} 件。",
   "auction_won": "在{auction_name}以 {stones} 灵石拍得{loot_text}。",
   "auction_lost": "{auction_name}上，{loot_text}被{npc_name}以 {stones} 灵石拍走。",

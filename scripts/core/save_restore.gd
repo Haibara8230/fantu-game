@@ -509,6 +509,13 @@ static func _valid_standing(content, saved_player: Dictionary, day: int) -> Vari
 	if not donated is Dictionary or (not donated.is_empty() and (not _whole_nonnegative(donated.get("period")) or not _whole_nonnegative(donated.get("amount")))):
 		return null
 	result["donated"] = {} if donated.is_empty() else {"period": int(donated.period), "amount": int(donated.amount)}
+	# A duty (optional: journeys before duties hold none); one no longer known is dropped.
+	var held: Variant = saved_player.get("duty", "")
+	var held_day: Variant = saved_player.get("duty_day", -1)
+	if not held is String or not _whole_signed(held_day) or int(held_day) > day:
+		return null
+	result["duty"] = held if content.sect_data.duties.list.has(held) else ""
+	result["duty_day"] = int(held_day)
 	return result
 
 ## Recipes known, brews made, 丹毒 and the 灵田, normalized (optional: journeys before them know no

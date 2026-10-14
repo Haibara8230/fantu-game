@@ -332,6 +332,8 @@ func _validate() -> String:
 		problem = _validate_summit()
 	if problem.is_empty():
 		problem = _validate_forge()
+	if problem.is_empty():
+		problem = _validate_duties()
 	if not problem.is_empty():
 		return problem
 	problem = _validate_storylines()
@@ -493,6 +495,20 @@ func _valid_cost(cost: Variant, keys: Array) -> bool:
 			return false
 		total += int(cost[key])
 	return total >= 1
+
+## The duties of the inner court (sect.gd).
+func _validate_duties() -> String:
+	var duties: Variant = sect_data.get("duties")
+	if not duties is Dictionary or rank_index(str(duties.get("rank", ""))) < 0 or not _whole(duties.get("change_days")) or not duties.get("list") is Dictionary or duties.list.is_empty():
+		return "宗门职司配置无效。"
+	for duty_id: String in duties.list:
+		var duty: Variant = duties.list[duty_id]
+		if not duty is Dictionary or not duty.get("name") is String or not duty.get("text") is String:
+			return "宗门职司配置无效：" + duty_id
+		for key: String in duty:
+			if not key in ["name", "text", "alchemy", "contribution_percent", "study"] or (not key in ["name", "text"] and not _signed(duty[key])):
+				return "宗门职司的加成未知：%s.%s" % [duty_id, key]
+	return ""
 
 # --- 炼器 ----------------------------------------------------------------------------------------
 

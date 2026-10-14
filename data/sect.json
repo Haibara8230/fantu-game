@@ -12,6 +12,11 @@
       "words": "顾长庚亲手把长老的青玉冠戴到你头上，退后一步，郑重一揖：“青云山的长老。往后这座山，有你一份担子。”"}
   ],
   "stipend": {"period_days": 30, "most_periods": 12},
+  "duties": {"rank": "inner", "change_days": 360, "list": {
+    "alchemy": {"name": "丹房执事", "text": "管着宗门丹房：炼丹成功率 +10。", "alchemy": 10},
+    "patrol": {"name": "巡山执事", "text": "领着巡山与委托：交付委托所得贡献多五成。", "contribution_percent": 50},
+    "lore": {"name": "传功执事", "text": "协理传功堂：参悟功法耗时少两成。", "study": -20}
+  }},
   "donation": {"rate": 0.5, "period_days": 30, "most": 40, "categories": ["herb", "material"]},
   "awards": {"tournament_round": 10, "tournament_champion": 80},
   "exchange": [

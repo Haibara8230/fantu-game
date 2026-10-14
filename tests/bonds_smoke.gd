@@ -29,6 +29,7 @@ func _initialize() -> void:
 	_loans()
 	_aid()
 	_kin()
+	_duties()
 	print("BONDS: %d checks, %d failures" % [checks, failures])
 	quit(0 if failures == 0 else 1)
 
@@ -232,6 +233,24 @@ func _kin() -> void:
 	master.world.day = 6 * 60 * 3
 	master.Bonds.write_letters(master)
 	check(int(master.player.stones) > stones and master.world.letters.any(func(letter: Dictionary) -> bool: return str(letter.get("kind", "")) == "bond:tribute"), "now and then a disciple sends silver")
+
+## 职司: the inner court may hold one duty, changed once a year; each changes its own rule.
+func _duties() -> void:
+	var game := _game(46)
+	check(game.Sect.duty_block(game, "alchemy").contains("内门弟子"), "an outer disciple holds no duty")
+	game.player.rank = game.Sect.rank_index(game, "inner")
+	var odds: int = int(game.alchemy_odds(game.alchemy_plan("liaoshang")).success)
+	game.take_duty("alchemy")
+	check(game.player.duty == "alchemy" and game.Sect.duty_value(game, "alchemy") == 10, "the inner court takes the 丹房 duty")
+	var raised: int = int(game.alchemy_odds(game.alchemy_plan("liaoshang")).success)
+	check(raised == odds + 10 or raised >= 95, "which raises the odds of a brew (%d → %d)" % [odds, raised])
+	check(game.Sect.duty_block(game, "lore").contains("一年一换"), "a duty is held a year before it changes")
+	var days: int = game.study_days({"study_days": 10, "element": "earth"})
+	game.world.day = int(game.world.day) + 360
+	game.take_duty("lore")
+	check(game.study_days({"study_days": 10, "element": "earth"}) == days - 2, "the 传功 duty quickens study")
+	var copy := Session.new()
+	check(copy.restore(JSON.parse_string(JSON.stringify(game.snapshot()))) and copy.player.duty == "lore", "a duty survives a save")
 
 func _someone(game: Session) -> String:
 	for person_id: String in game.present_npcs():

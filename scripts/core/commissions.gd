@@ -108,7 +108,7 @@ static func deliver(s, key: String) -> String:
 		s.player.stones += int(quest.reward.stones)
 		s.record_deed("commission")
 		var done: String = s.log_event("quest_done", {"quest_title": text(s, quest).title, "stones": int(quest.reward.stones), "xp": int(quest.reward.xp)})
-		var merit := int(quest.reward.get("contribution", 0))
+		var merit: int = int(quest.reward.get("contribution", 0)) * (100 + int(s.Sect.duty_value(s, "contribution_percent"))) / 100
 		if merit > 0:
 			done += " " + s.Sect.gain(s, merit, "宗门差事办妥")
 		var milestones: Array[String] = s.gain_insight("commission")

@@ -109,7 +109,7 @@ func new_game(character_name: String = "无名", seed_value: int = -1, roots: Ar
 		"learned": [], "arts": [], "methods": [], "equipment": {"weapon": "", "robe": "", "accessory": ""}, "quests": [],
 		"deeds": {}, "taught": [],
 		"talents": born.get("talents", []).duplicate(), "flaws": born.get("flaws", []).duplicate(),
-		"foundation_grade": 1, "core_grade": 0, "injury_until": 0, "lessons": 0, "boons": {}, "longevity": {}, "forged": 0,
+		"foundation_grade": 1, "core_grade": 0, "injury_until": 0, "lessons": 0, "boons": {}, "longevity": {}, "forged": 0, "duty": "", "duty_day": -1,
 		"rank": 0, "contribution": 0, "merit": 0, "stipend_day": 0, "exchanged": {}, "donated": {},
 		"recipes": [], "practice": {}, "toxin": 0, "toxin_day": 0, "field": {"grade": 0, "plots": []},
 	}
@@ -768,7 +768,7 @@ func person_sense(person_id: String) -> int:
 ## Days to study a technique: talents for study, and an element the spirit roots share quickens it
 ## (`rules.root_study`, a percentage off).
 func study_days(technique: Dictionary) -> int:
-	var percent := talent_modifier("study")
+	var percent := talent_modifier("study") + Sect.duty_value(self, "study")
 	if str(technique.get("element", "")) in player.get("roots", []):
 		percent -= int(content.rules.root_study)
 	return Talents.scaled(int(technique.study_days), percent, 1)
@@ -1150,6 +1150,9 @@ func seeded_roll(parts: Array) -> float:
 	var rng := RandomNumberGenerator.new()
 	rng.seed = hash([int(world.get("seed", 0))] + parts)
 	return rng.randf()
+
+func take_duty(duty_id: String) -> String:
+	return Sect.take_duty(self, duty_id)
 
 ## --- 炼器 (forge.gd) ---
 
