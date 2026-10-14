@@ -7,7 +7,9 @@
     {"id": "inner", "name": "内门弟子", "merit": 400, "stage": [1, 0], "stipend": 20, "retreat": 10, "host": "gu_changgeng",
       "words": "顾长庚亲手为你系上内门的白玉腰牌：“入了内门，你便有了自己的静室，灵气比外门浓上一成。宗门的大事，往后也要算你一份。”"},
     {"id": "true", "name": "真传弟子", "merit": 1200, "stage": [2, 0], "stipend": 50, "retreat": 15, "host": "gu_changgeng",
-      "words": "顾长庚把一枚紫玉令牌按进你掌心：“结了丹，便是本门真传。宗门的典籍、丹房与灵脉，往后都向你敞开；宗门有事，你也得站在前头。”"}
+      "words": "顾长庚把一枚紫玉令牌按进你掌心：“结了丹，便是本门真传。宗门的典籍、丹房与灵脉，往后都向你敞开；宗门有事，你也得站在前头。”"},
+    {"id": "elder", "name": "长老", "merit": 3000, "stage": [3, 0], "stipend": 150, "retreat": 20, "host": "gu_changgeng",
+      "words": "顾长庚亲手把长老的青玉冠戴到你头上，退后一步，郑重一揖：“青云山的长老。往后这座山，有你一份担子。”"}
   ],
   "stipend": {"period_days": 30, "most_periods": 12},
   "donation": {"rate": 0.5, "period_days": 30, "most": 40, "categories": ["herb", "material"]},

@@ -296,7 +296,7 @@ func _static_checks() -> void:
 	check(_broken(func(c) -> void: c.alchemy_data.recipes.liaoshang.main = {"moonstone": 2}).contains("主药"), "unknown main herbs reported")
 	check(_broken(func(c) -> void: c.items.huichun_grass.erase("nature")).contains("药性"), "every herb has a nature")
 	check(_broken(func(c) -> void: c.alchemy_data.recipes.huiqi.fine = "liaoshang_pill_fine").contains("丹药"), "a recipe's fine pill belongs to its pill")
-	check(_broken(func(c) -> void: c.locations.sect.spots[2].requires_rank = "elder").contains("宗门身份"), "a spot kept for an unknown rank reported")
+	check(_broken(func(c) -> void: c.locations.sect.spots[2].requires_rank = "patriarch").contains("宗门身份"), "a spot kept for an unknown rank reported")
 	check(_broken(func(c) -> void: c.alchemy_data.places.erase("market")).contains("丹炉"), "a place with a furnace needs its numbers")
 	check(_broken(func(c) -> void: c.items.huiqi_pill.use = [{"recipe": "phoenix"}]).contains("效果无效"), "unknown recipes in effects reported")
 	check(_broken(func(c) -> void: c.alchemy_data.field.grades[1].erase("cost")).contains("灵田"), "a better field says what it costs")

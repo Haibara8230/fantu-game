@@ -101,7 +101,12 @@ func _promotion() -> void:
 	game.player.realm = 2
 	game.refresh_realm_stats()
 	game.promote()
-	check(game.sect_rank().name == "真传弟子" and game.next_sect_rank().is_empty(), "with the core formed, 真传 is the highest rank for now")
+	check(game.sect_rank().name == "真传弟子" and game.next_sect_rank().name == "长老", "with the core formed, 真传; 长老 waits for 元婴")
+	game.player.merit = 3000
+	game.player.realm = 3
+	game.refresh_realm_stats()
+	game.promote()
+	check(game.sect_rank().name == "长老" and game.next_sect_rank().is_empty(), "a 元婴 with merit enough becomes an elder, the highest rank")
 	check(game.story_state("inner_court") == "active", "and opens the inner court's storyline")
 
 func _stipend() -> void:
