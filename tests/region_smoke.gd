@@ -237,6 +237,9 @@ func _azhi() -> void:
 	var sealed := _game(15)
 	sealed.travel("ridge")
 	sealed.world.flags.serpent_rampage = true
+	# Those who would go into the sealed valley turn aside to the ridge meanwhile.
+	var wanderers: Array = sealed.living_people().filter(func(person_id: String) -> bool: return sealed.is_generated(person_id) and sealed.Population.location_on(sealed.life_by_id(person_id), int(sealed.world.day)) == "wild")
+	check(wanderers.is_empty() or wanderers.all(func(person_id: String) -> bool: return sealed.npc_location(person_id) == "ridge"), "people bound for the sealed valley turn aside to the ridge (%d)" % wanderers.size())
 	sealed.player.stones = 40
 	sealed.travel("town")
 	sealed.travel("ridge")

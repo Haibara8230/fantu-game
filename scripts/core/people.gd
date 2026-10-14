@@ -113,7 +113,7 @@ static func npc_location(s, person_id: String, on_day: int = -1) -> String:
 	if int(s.world.people.get(person_id, {}).get("absent_until", -1)) > day:
 		return ""
 	if is_generated(s, person_id):
-		var place := Population.location_on(life_by_id(s, person_id), day)
+		var place := _detoured(s, Population.location_on(life_by_id(s, person_id), day))
 		return place if not place.is_empty() and s.location_visible(place) else ""
 	var someone: Dictionary = s.content.people[person_id]
 	if someone.has("window"):
@@ -125,6 +125,13 @@ static func npc_location(s, person_id: String, on_day: int = -1) -> String:
 		return ""
 	var location: String = s.content.person_base_location(person_id, day)
 	return location if s.location_visible(location) else ""
+
+## Where someone goes instead while their place is sealed (落霞谷 during the serpent's rampage): the
+## place's `detour`, else the place itself.
+static func _detoured(s, place: String) -> String:
+	if place.is_empty() or not s.content.location_sealed(place, s.world.flags):
+		return place
+	return str(s.content.locations[place].get("detour", place))
 
 ## Who can be where today; see _people_on.
 static func _refresh_people_index(s) -> void:
@@ -160,6 +167,10 @@ static func _build_people_index(s, day: int) -> Dictionary:
 		for place: String in ([current.home] if current.has("home") else current.schedule.map(func(stop: Dictionary) -> String: return stop.location)):
 			if place != "away":
 				_index_add(map, place, current.id)
+				# They may turn aside to the detour while their place is sealed.
+				var detour := str(s.content.locations.get(place, {}).get("detour", ""))
+				if not detour.is_empty():
+					_index_add(map, detour, current.id)
 	return {"from": day, "until": until, "map": map}
 
 static func _index_add(map: Dictionary, place: String, person_id: String) -> void:

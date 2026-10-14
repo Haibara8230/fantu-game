@@ -92,6 +92,7 @@
       "description": "谷中灵草繁盛，也有妖兽出没。深处的赤鳞妖蟒守着一处灵泉，筑基后方可挑战。",
       "terrain": "valley",
       "sealed_if": "serpent_rampage",
+      "detour": "ridge",
       "map": [0.44, 0.8],
       "gather": {"picks": [1, 3], "table": [{"item": "huichun_grass", "weight": 60}, {"item": "chiyan_flower", "weight": 35}, {"item": "lingzhi", "weight": 2}]},
       "spots": [

@@ -323,6 +323,8 @@ func _validate() -> String:
 	if problem.is_empty():
 		problem = _validate_bonds()
 	if problem.is_empty():
+		problem = _valid_detours()
+	if problem.is_empty():
 		problem = _validate_caves()
 	if problem.is_empty():
 		problem = _validate_auctions()
@@ -1031,6 +1033,14 @@ func route_between(from_id: String, to_id: String) -> Dictionary:
 	return {}
 
 ## Whether a place is closed to anyone arriving (people already inside may still leave).
+## A sealed place's `detour` must be a known place (people go there meanwhile).
+func _valid_detours() -> String:
+	for location_id: String in locations:
+		var detour: Variant = locations[location_id].get("detour")
+		if detour != null and (not detour is String or not locations.has(detour) or detour == location_id or not locations[location_id].has("sealed_if")):
+			return "绕行地点无效：" + location_id
+	return ""
+
 func location_sealed(location_id: String, flags: Dictionary) -> bool:
 	var location: Dictionary = locations.get(location_id, {})
 	return location.has("sealed_if") and bool(flags.get(location.sealed_if, false))
