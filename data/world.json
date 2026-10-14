@@ -474,6 +474,7 @@
     },
     "lifespan_warning_years": 5,
     "root_study": 20,
+    "market": {"categories": ["herb"], "spread": 0.15, "drop": 0.02, "floor": 0.7, "recover_per_day": 0.2},
     "flight": {"realm": 2, "days_percent": 50},
     "longevity": {"defy_chance": 0.35, "defy_mind_step": 0.01, "defy_least": 0.1, "defy_most": 0.6, "defy_years": 10, "defy_injury_days": 360},
     "art_slots": 4,

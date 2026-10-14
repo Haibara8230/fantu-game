@@ -22,7 +22,16 @@ static func render(ui) -> void:
 			continue
 		sellable += 1
 		var item: Dictionary = session.content.item(item_id)
-		var offer: Button = ui.button("%s ×%d · 售 %d" % [item.name, left, price], func() -> void: ui.stage_sale(item_id), item.description)
+		# Herbs follow the market (inventory.gd market_factor): this month's rate against the usual.
+		var rate: float = session.Inventory.market_factor(session, item_id)
+		var trend := ""
+		if rate >= 1.05:
+			trend = " ↑"
+		elif rate <= 0.95:
+			trend = " ↓"
+		var tip := str(item.description) + ("
+本月行情：收价为常价的 %d%%（各月有涨落，同一种卖得多了会压价，过些日子回升）" % int(round(rate * 100.0)) if not is_equal_approx(rate, 1.0) else "")
+		var offer: Button = ui.button("%s ×%d · 售 %d%s" % [item.name, left, price, trend], func() -> void: ui.stage_sale(item_id), tip)
 		ui.tint(offer, ui.grade_color(item))
 		offer.disabled = left <= 0
 		offer.alignment = HORIZONTAL_ALIGNMENT_LEFT

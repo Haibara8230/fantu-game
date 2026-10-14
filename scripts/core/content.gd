@@ -419,6 +419,9 @@ func _validate_fortune() -> String:
 		return "顿悟配置无效。"
 	if not _whole(rules.get("root_study")) or int(rules.root_study) >= 100:
 		return "灵根参悟加成配置无效。"
+	var market: Variant = rules.get("market")
+	if not market is Dictionary or not market.get("categories") is Array or market.categories.any(func(category: Variant) -> bool: return not ITEM_CATEGORIES.has(category)) or ["spread", "drop", "floor", "recover_per_day"].any(func(key: String) -> bool: return not (market.get(key) is float or market.get(key) is int) or float(market[key]) < 0.0):
+		return "坊市行情配置无效。"
 	var flight: Variant = rules.get("flight")
 	if not flight is Dictionary or not _whole(flight.get("realm")) or int(flight.realm) >= realms.size() or not _whole(flight.get("days_percent")) or int(flight.days_percent) >= 100:
 		return "御剑飞行配置无效。"

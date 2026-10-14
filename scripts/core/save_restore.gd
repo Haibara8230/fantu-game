@@ -40,7 +40,8 @@ static func restore(s, data: Variant) -> bool:
 	var events: Variant = _valid_event_progress(saved_world.events)
 	var people: Variant = _valid_people(content, saved_world.people, day)
 	var caves: Variant = _valid_caves(content, saved_world.get("caves", {}))
-	if events == null or people == null or caves == null:
+	var supply: Variant = _valid_supply(content, saved_world.get("market_supply", {}), day)
+	if events == null or people == null or caves == null or supply == null:
 		return false
 	if not saved_player.get("name") is String or not saved_player.get("location") is String or not content.locations.has(saved_player.location):
 		return false
@@ -223,7 +224,7 @@ static func restore(s, data: Variant) -> bool:
 	var bonds: Variant = _valid_bonds(s, content, saved_world, day)
 	if bonds == null:
 		return false
-	s.world = {"day": day, "flags": saved_world.flags.duplicate(), "events": events, "people": people, "seed": int(seed_value) if _whole_nonnegative(seed_value) else 0, "stock_sold": sold, "rumors": rumors, "quests_taken": taken, "storylines": storylines, "letters": letters, "talent_lives": shaped, "invites": bonds.invites, "loans": bonds.loans, "visit_period": bonds.visit_period, "caves": caves}
+	s.world = {"day": day, "flags": saved_world.flags.duplicate(), "events": events, "people": people, "seed": int(seed_value) if _whole_nonnegative(seed_value) else 0, "stock_sold": sold, "rumors": rumors, "quests_taken": taken, "storylines": storylines, "letters": letters, "talent_lives": shaped, "invites": bonds.invites, "loans": bonds.loans, "visit_period": bonds.visit_period, "caves": caves, "market_supply": supply}
 	s.populate()
 	var player: Dictionary = saved_player.duplicate(true)
 	for key: String in PLAYER_COUNTS:
@@ -427,6 +428,20 @@ static func _normalized_auction(saved: Dictionary) -> Dictionary:
 	for lot: Dictionary in result.lots:
 		for key: String in ["count", "start", "step", "value"]:
 			lot[key] = int(lot[key])
+	return result
+
+## Herbs sold lately that weigh on the market's prices (optional: saves before it have none), or null
+## when malformed. Items no longer known are dropped.
+static func _valid_supply(content, saved: Variant, day: int) -> Variant:
+	if not saved is Dictionary:
+		return null
+	var result := {}
+	for item_id: Variant in saved:
+		var sold: Variant = saved[item_id]
+		if not item_id is String or not sold is Dictionary or not (sold.get("count") is float or sold.get("count") is int) or float(sold.count) < 0.0 or float(sold.count) > LIMIT or not _whole_nonnegative(sold.get("day")) or int(sold.day) > day:
+			return null
+		if not content.item(item_id).is_empty():
+			result[item_id] = {"count": snappedf(float(sold.count), 0.01), "day": int(sold.day)}
 	return result
 
 ## The old cave's rooms (optional: saves before it have none), or null when malformed. Caves and rooms

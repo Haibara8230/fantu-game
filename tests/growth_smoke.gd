@@ -272,10 +272,29 @@ func _items() -> void:
 	game.set_item_count("chiyan_flower", 2)
 	game.set_item_count("auction_invitation", 1)
 	var stones := int(game.player.stones)
+	var flower: int = game.sell_price("chiyan_flower")
 	game.sell("chiyan_flower", 1)
-	check(int(game.player.stones) == stones + 9 and game.item_count("chiyan_flower") == 1, "each herb sells at its own price")
+	check(int(game.player.stones) == stones + flower and flower >= 7 and flower <= 11 and game.item_count("chiyan_flower") == 1, "each herb sells at its own price, give or take the month (%d)" % flower)
+	var rest: int = game.sell_price("chiyan_flower") + 3 * game.sell_price("huichun_grass")
 	game.act("sell")
-	check(int(game.player.stones) == stones + 9 + 9 + 12 and game.herb_count() == 0 and game.item_count("auction_invitation") == 1, "selling everything keeps what the shop does not buy")
+	check(int(game.player.stones) == stones + flower + rest and game.herb_count() == 0 and game.item_count("auction_invitation") == 1, "selling everything keeps what the shop does not buy")
+	# 坊市行情: a glut lowers a herb's price, which recovers with time; the month moves it too.
+	var glutted: int = game.sell_price("huichun_grass")
+	game.set_item_count("huichun_grass", 20)
+	game.sell("huichun_grass", 20)
+	check(game.Inventory.glut(game, "huichun_grass") > 20.0 and game.sell_price("huichun_grass") < glutted, "selling a heap lowers the price")
+	var month_start := int(game.world.day)
+	game.wait(10)
+	game.wait(10)
+	game.wait(10)
+	check(game.Inventory.glut(game, "huichun_grass") < 20.0, "and the glut eases with the days")
+	var copy := Session.new()
+	check(copy.restore(JSON.parse_string(JSON.stringify(game.snapshot()))) and copy.sell_price("huichun_grass") == game.sell_price("huichun_grass"), "the market's memory survives a save")
+	var prices := {}
+	for month: int in 12:
+		game.world.day = month_start + 30 * (month + 2) + 3000
+		prices[game.sell_price("chiyan_flower")] = true
+	check(prices.size() > 1, "prices move from month to month")
 	game.player.stones = 30
 	check(game.buy("foundation_pill").contains("灵石不足"), "a pill costs 120 at the shop")
 	game.buy("liaoshang_pill")

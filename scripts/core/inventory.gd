@@ -84,7 +84,35 @@ static func sell_price(s, item_id: String) -> int:
 	var item: Dictionary = s.content.item(item_id)
 	if not item.category in s.content.locations[s.player.location].get("buys", []):
 		return 0
-	return Talents.scaled(int(item.price), s.talent_modifier("sell"), 1)
+	return Talents.scaled(int(round(float(item.price) * market_factor(s, item_id))), s.talent_modifier("sell"), 1)
+
+## 坊市行情 (`rules.market`): what herbs fetch moves from month to month (a spread fixed by the world
+## seed, the item and the month, so a reload changes nothing), and selling much of one herb lowers its
+## price for a while (each one sold lately takes `drop` off, down to `floor`; the glut eases by
+## `recover_per_day`). Other goods keep their price.
+static func market_factor(s, item_id: String) -> float:
+	var rule: Dictionary = s.content.rules.market
+	if not str(s.content.item(item_id).get("category", "")) in rule.categories:
+		return 1.0
+	var month := int(s.world.day) / 30
+	var roll: float = s.seeded_roll(["market", item_id, month])
+	var season := 1.0 + float(rule.spread) * (roll * 2.0 - 1.0)
+	return season * maxf(float(rule.floor), 1.0 - float(rule.drop) * glut(s, item_id))
+
+## How many of a herb still weigh on the market from recent sales.
+static func glut(s, item_id: String) -> float:
+	var sold: Dictionary = s.world.get("market_supply", {}).get(item_id, {})
+	if sold.is_empty():
+		return 0.0
+	return maxf(0.0, float(sold.count) - float(int(s.world.day) - int(sold.day)) * float(s.content.rules.market.recover_per_day))
+
+## Records herbs sold, so the next sale fetches less.
+static func flood(s, item_id: String, count: int) -> void:
+	if not str(s.content.item(item_id).get("category", "")) in s.content.rules.market.categories:
+		return
+	if not s.world.has("market_supply"):
+		s.world["market_supply"] = {}
+	s.world.market_supply[item_id] = {"count": snappedf(glut(s, item_id) + float(count), 0.01), "day": int(s.world.day)}
 
 ## Fixed goods plus this period's rotating stock (manuals, equipment), at the prices the player pays.
 static func shop_goods(s) -> Array:
@@ -155,6 +183,7 @@ static func sell(s, item_id: String, count: int = 1) -> String:
 	if count < 1 or not remove_item(s, item_id, count):
 		return "行囊里没有那么多。"
 	s.player.stones += price * count
+	flood(s, item_id, count)
 	s.record_deed("trade")
 	return s.conclude(s.log_event("sell_item", {"item": item_id, "count": count, "revenue": price * count}))
 

@@ -97,7 +97,7 @@ func new_game(character_name: String = "无名", seed_value: int = -1, roots: Ar
 		chosen_name = "无名"
 	# talent_lives: the generated population's talents shape their lives (journeys begun before talents
 	# keep the lives they had).
-	world = {"day": 0, "flags": {}, "events": {}, "people": {}, "seed": seed_value if seed_value >= 0 else absi(int(world_rng.randi())), "stock_sold": {}, "rumors": {}, "quests_taken": {}, "storylines": {}, "letters": [], "talent_lives": true, "invites": [], "loans": [], "visit_period": 0, "caves": {}}
+	world = {"day": 0, "flags": {}, "events": {}, "people": {}, "seed": seed_value if seed_value >= 0 else absi(int(world_rng.randi())), "stock_sold": {}, "rumors": {}, "quests_taken": {}, "storylines": {}, "letters": [], "talent_lives": true, "invites": [], "loans": [], "visit_period": 0, "caves": {}, "market_supply": {}}
 	populate()
 	player = {
 		"name": chosen_name, "birth_day": -int(content.rules.starting_age) * Calendar.DAYS_PER_YEAR,
@@ -427,6 +427,7 @@ func act(action: String) -> String:
 			for item_id: String in sold:
 				revenue += sell_price(item_id) * int(sold[item_id])
 				remove_item(item_id, int(sold[item_id]))
+				Inventory.flood(self, item_id, int(sold[item_id]))
 			player.stones += revenue
 			record_deed("trade")
 			return conclude(log_event("sell_all", {"loot": loot_code(sold), "revenue": revenue}))
@@ -1126,6 +1127,13 @@ func duel_pill_block(item_id: String) -> String:
 
 func take_duel_pill(item_id: String) -> String:
 	return Combat.take_pill(self, item_id)
+
+## A number in [0, 1) fixed by the world seed and `parts`, the same every time it is asked. Godot's
+## string hash barely moves when a key's last character does, so the key seeds a generator instead.
+func seeded_roll(parts: Array) -> float:
+	var rng := RandomNumberGenerator.new()
+	rng.seed = hash([int(world.get("seed", 0))] + parts)
+	return rng.randf()
 
 ## --- 炼器 (forge.gd) ---
 

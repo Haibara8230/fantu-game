@@ -202,7 +202,7 @@ static func open_hidden(s, cave_id: String, room_id: String) -> String:
 
 ## One of `options` for this world, from its seed; the same every time it is asked.
 static func _pick(s, cave_id: String, key: String, options: Array) -> Variant:
-	return options[absi(hash("%d:%s:%s" % [int(s.world.seed), cave_id, key])) % options.size()]
+	return options[mini(options.size() - 1, int(s.seeded_roll(["cave", cave_id, key]) * options.size()))]
 
 ## The things lying in a room for this world (one of its `loot` choices).
 static func loot_of(s, cave_id: String, key: String, choices: Array) -> Array:

@@ -60,7 +60,7 @@ static func _bidders(s, auction_id: String, year: int, count: int) -> Array:
 
 ## A number in [0, 1) fixed by the world seed and `key`.
 static func _roll(s, key: String) -> float:
-	return float(absi(hash("%d:%s" % [int(s.world.seed), key])) % 100000) / 100000.0
+	return s.seeded_roll(["auction", key])
 
 ## The most a bidder will pay for the current lot.
 static func ceiling(s, person_id: String, lot: Dictionary) -> int:
