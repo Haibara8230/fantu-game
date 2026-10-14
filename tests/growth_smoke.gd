@@ -410,6 +410,10 @@ func _golden_core() -> void:
 	game.fortune = {"demon": 0.99, "breakthrough": 0.0, "grade": 0.99}
 	game.act("breakthrough")
 	check(game.player.realm == 4 and game.realm_name() == "化神初期" and game.lifespan() >= 1200, "化神 is reached: twelve hundred years")
+	game.player.mind = 600
+	var sat := int(game.world.day)
+	game.cultivate(game.retreat_cap())
+	check(int(game.world.day) - sat > 3600, "a 化神 retreat may run past ten years (%d days)" % (int(game.world.day) - sat))
 	game.player.birth_day = int(game.Calendar.to_day(400, 1, 1))
 	game.travel("ferry")
 	game.world.day = game.Calendar.to_day(480, 5, 30)

@@ -459,7 +459,8 @@ func cultivate(days: int) -> String:
 		return reason
 	if not available_here("cultivate"):
 		return "此地无法闭关，请回青云山静室。"
-	if days < 1 or days > MAX_SPAN_DAYS:
+	# The longest retreat the realm allows may run past the usual span (化神 sits for over a decade).
+	if days < 1 or days > maxi(MAX_SPAN_DAYS, retreat_most()):
 		return "闭关天数不合常理。"
 	var held := guide_block("cultivate")
 	if not held.is_empty():

@@ -13,7 +13,7 @@ func _initialize() -> void:
 	var slowest := 0
 	var slowest_what := ""
 	var actions := 0
-	var marks := [50, 100, 200, 300, 400]
+	var marks := [50, 100, 200, 300, 400, 480]
 	while game.ended.is_empty() and actions < 20000:
 		actions += 1
 		var before := Time.get_ticks_msec()
@@ -28,7 +28,7 @@ func _initialize() -> void:
 			print("LONG year %d: %s, save %d KB, %d chronicle entries, %d actions, %d s so far" % [year, game.realm_name(), size / 1024, game.chronicle.entries.size(), actions, (Time.get_ticks_msec() - started) / 1000])
 			marks.pop_front()
 	var final := JSON.stringify(game.snapshot()).length()
-	print("LONG end: year %d, %s, save %d KB, %d actions in %d s; slowest action %d ms: %s" % [int(game.world.day) / 360, game.realm_name(), final / 1024, actions, (Time.get_ticks_msec() - started) / 1000, slowest, slowest_what])
+	print("LONG end (%s): year %d, %s, save %d KB, %d actions in %d s; slowest action %d ms: %s" % [str(game.ended.get("kind", "")), int(game.world.day) / 360, game.realm_name(), final / 1024, actions, (Time.get_ticks_msec() - started) / 1000, slowest, slowest_what])
 	var reload := Session.new()
 	var before_load := Time.get_ticks_msec()
 	print("LONG reload: %s in %d ms" % [str(reload.restore(JSON.parse_string(JSON.stringify(game.snapshot())))), Time.get_ticks_msec() - before_load])
@@ -51,6 +51,10 @@ func _act(game) -> String:
 	if game.at_brink():
 		game.accept_end()
 		return "end"
+	if game.has_flag("ascension_open") and game.ascend_block().is_empty():
+		game.travel("ferry")
+		game.act("ascend")
+		return "ascend"
 	if game.player.location != "sect":
 		game.travel("sect")
 		return "travel"
