@@ -22,6 +22,8 @@ signal sound(kind: String)
 signal hit_resolved(enemy_target: bool, amount: int, hp_after: int)
 var art: Dictionary = {}
 var skills: Dictionary = {}
+# The five elements (data/techniques.json), for 五行轮转's banner.
+var elements: Dictionary = {}
 var sects: Dictionary = {}
 var profiles: Dictionary = {}
 var recoil_handle: Tween
@@ -77,6 +79,7 @@ func configure(snapshot: Dictionary, enemy_definition: Dictionary) -> void:
 	background = load(art_path([str(art.place_background) % str(snapshot.battle.get("place", "")), art.background]))
 	var definitions: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://data/world.json"))
 	skills = definitions.skills
+	elements = JSON.parse_string(FileAccess.get_file_as_string("res://data/techniques.json")).elements
 	sects = definitions.sects
 	profiles = JSON.parse_string(FileAccess.get_file_as_string("res://data/vfx.json"))
 	hero_sect = snapshot.player.get("sect", "wanderer")
@@ -265,12 +268,12 @@ func _stage_mood(color: Color, tint: float, backdrop: float, seconds: float) -> 
 	mood.tween_property(self, "backdrop_alpha", backdrop, seconds)
 
 ## A number over an actor that pops in large and settles: a heavy hit's is bigger, golden and shaken.
-func _number(actor, amount: int, healing: bool = false, heavy: bool = false) -> void:
+func _number(actor, amount: int, healing: bool = false, heavy: bool = false, words: String = "") -> void:
 	var label := Label.new()
-	label.text = ("+" if healing else "−") + str(amount) + ("！" if heavy else "")
+	label.text = words if not words.is_empty() else ("+" if healing else "−") + str(amount) + ("！" if heavy else "")
 	label.add_theme_font_override("font", effect_font)
 	label.add_theme_font_size_override("font_size", 40 if heavy else 30)
-	label.add_theme_color_override("font_color", Color("#8ff0a6") if healing else (Color("#ffd35c") if heavy else Color("#fff0cc")))
+	label.add_theme_color_override("font_color", Color("#9fd8ff") if not words.is_empty() else (Color("#8ff0a6") if healing else (Color("#ffd35c") if heavy else Color("#fff0cc"))))
 	label.add_theme_color_override("font_outline_color", Color("#322b28"))
 	label.add_theme_constant_override("outline_size", 7 if heavy else 5)
 	label.position = actor.chest() + Vector2(-16 + randf_range(-14.0, 14.0), -20)
@@ -299,32 +302,45 @@ func play(events: Array[Dictionary]) -> void:
 			"attack":
 				await _attack(event)
 			"heal":
+				# Either side heals: the player's arts and pills, a generated opponent's arts.
+				var foe_side: bool = event.get("actor", "player") == "enemy"
+				var healer = enemy if foe_side else hero
 				var skill: Dictionary = skills.get(event.get("style", "wood"), skills.wood)
 				var healing_profile: Dictionary = profiles.get(str(event.get("vfx", skill.vfx)), profiles.heal)
 				banner = str(event.get("name", skill.name))
-				hero.set_pose("cast")
-				_effect(healing_profile.kind, hero.chest(), hero.chest() + Vector2(0, 35), 0.85, Color(healing_profile.color), 0, int(event.get("tier", 1)))
-				SpriteFx.play(world, hero.chest(), SpriteFx.recipes().get("heal", []), Color(healing_profile.color))
-				hero.squash(Vector2(0.96, 1.05), 0.4)
+				healer.set_pose("cast")
+				_effect(healing_profile.kind, healer.chest(), healer.chest() + Vector2(0, 35), 0.85, Color(healing_profile.color), 0, int(event.get("tier", 1)))
+				SpriteFx.play(world, healer.chest(), SpriteFx.recipes().get("heal", []), Color(healing_profile.color))
+				healer.squash(Vector2(0.96, 1.05), 0.4)
 				_emit_cue("heal")
 				await _pause(0.3)
-				hero_hp = int(event.hp_after)
-				_number(hero, int(event.amount), true)
-				await _pause(0.4)
-				hero.set_pose("idle")
-			"guard":
-				var guard_skill: Dictionary = skills.get(event.get("style", ""), {})
-				var sect: Dictionary = sects[hero_sect]
-				banner = str(event.get("name", guard_skill.get("name", "凝神守御")))
-				hero.set_pose("guard")
-				_effect(sect.guard_vfx, hero.chest(), hero.chest(), 1.6, Color(sect.color), 0, int(event.get("tier", 1)))
-				SpriteFx.play(world, hero.chest(), SpriteFx.recipes().get("guard", []), Color(sect.color))
-				hero.squash(Vector2(1.06, 0.95), 0.3)
-				if event.has("hp_after"):
+				if foe_side:
+					enemy_hp = int(event.hp_after)
+				else:
 					hero_hp = int(event.hp_after)
-					_number(hero, int(event.amount), true)
+				_number(healer, int(event.amount), true)
+				await _pause(0.4)
+				healer.set_pose("idle")
+			"guard":
+				var foe_guard: bool = event.get("actor", "player") == "enemy"
+				var guarding = enemy if foe_guard else hero
+				var guard_skill: Dictionary = skills.get(event.get("style", ""), {})
+				var sect: Dictionary = sects[enemy_sect if foe_guard else hero_sect]
+				banner = str(event.get("name", guard_skill.get("name", "凝神守御")))
+				guarding.set_pose("guard")
+				_effect(sect.guard_vfx, guarding.chest(), guarding.chest(), 1.6, Color(sect.color), 0, int(event.get("tier", 1)))
+				SpriteFx.play(world, guarding.chest(), SpriteFx.recipes().get("guard", []), Color(sect.color))
+				guarding.squash(Vector2(1.06, 0.95), 0.3)
+				if int(event.get("shield", 0)) > 0:
+					_number(guarding, int(event.shield), true, false, "护盾 %d" % int(event.shield))
 				_emit_cue("guard")
 				await _pause(0.25)
+				guarding.set_pose("idle")
+			"chain":
+				# 五行轮转: the art just cast was born of the last one, and an orb comes of it.
+				banner = "五行轮转 · %s生%s" % [elements.get(str(event.from), {}).get("name", ""), elements.get(str(event.to), {}).get("name", "")]
+				_emit_cue("chain")
+				await _pause(0.45)
 			"end":
 				banner = {"win": "斗法获胜", "lose": "斗法落败", "flee": "收势撤离"}.get(event.result, "")
 				if event.result == "win":
@@ -356,7 +372,7 @@ func _attack(event: Dictionary) -> void:
 	var hit_count: int = int(event.get("hits", skill.get("hits", 1)))
 	var art_name: String = str(event.get("name", skill.get("name", enemy_name)))
 	var lineage: String = str(event.get("legacy", ""))
-	banner = art_name + (" · 传承" if not lineage.is_empty() else "") + (" · 反击" if event.actor == "enemy" else "")
+	banner = art_name + (" · 传承" if not lineage.is_empty() else "") + (" · 反击" if event.actor == "enemy" else "") + {"克": " · 克制", "被克": " · 被克"}.get(str(event.get("counter", "")), "")
 	# From 玄阶 an art gathers before it is released; from 地阶 a rune circle opens under the caster and
 	# the stage takes the art's color; at 天阶 the duel darkens, slows and the camera pushes in.
 	var charge := float(layers.get("charge", 0.0))
@@ -427,6 +443,8 @@ func _attack(event: Dictionary) -> void:
 		var portion: int = total / hit_count + (1 if hit_index < total % hit_count else 0)
 		before_hp = maxi(0, before_hp - portion)
 		var displayed_hp: int = int(event.hp_after) if hit_index == hit_count - 1 else before_hp
+		if hit_index == 0 and int(event.get("absorbed", 0)) > 0:
+			_number(target, int(event.absorbed), false, false, "护盾 −%d" % int(event.absorbed))
 		await _hit(target, target_home, event.actor == "player", portion, displayed_hp, push_direction, profile, color, layers, str(event.get("element", "")), visual_id, tier)
 		if hit_index < hit_count - 1:
 			await _pause(0.08)
@@ -462,7 +480,9 @@ func _hit(target, home: Vector2, enemy_target: bool, amount: int, hp_after: int,
 		enemy_hp = hp_after
 	else:
 		hero_hp = hp_after
-	_number(target, amount, false, heavy)
+	# A blow the shield took whole shows only the shield's number.
+	if amount > 0:
+		_number(target, amount, false, heavy)
 	hit_resolved.emit(enemy_target, amount, hp_after)
 	_effect(profile.impact, target.chest(), target.chest(), 0.48, color)
 	var blow := Vector2(direction, -0.15).normalized()

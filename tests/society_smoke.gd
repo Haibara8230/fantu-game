@@ -139,8 +139,9 @@ func _sparring() -> void:
 		broken.call(bad.battle)
 		check(not _game().restore(bad), "a duel with a broken place or look is rejected")
 	game.use_skill("sword")
+	game.end_turn()
 	var counter: Dictionary = game.combat_events.filter(func(event: Dictionary) -> bool: return event.get("actor", "") == "enemy")[0]
-	check(counter.style == game.battle.foe.art and counter.has("vfx"), "they answer with their own art")
+	check(counter.style in game.battle.foe.arts and counter.has("vfx"), "they answer with their own arts")
 	game.battle.hp = 1
 	var xp := int(game.player.xp)
 	var insight := int(game.player.insight)
@@ -269,7 +270,10 @@ func _tournament() -> void:
 	out.wait(1)
 	out.choose_event("enter")
 	out.player.hp = 1
-	out.defend()
+	# They may gather qi or guard before they strike.
+	for turn: int in 6:
+		if not out.battle.is_empty():
+			out.defend()
 	check(out.battle.is_empty() and out.player.location == "sect" and int(out.player.stones) == 30 and out.journal_lines().any(func(line: String) -> bool: return line.contains("止步")), "losing a round ends the run without penalty")
 	check(out.tournament_block().contains("报过名"), "one entry a tournament")
 	# Entering at the arena: a retreat through the sign-up no longer misses it, and the 约定 lists it.

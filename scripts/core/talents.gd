@@ -18,14 +18,18 @@ extends RefCounted
 ## pill), grade (chance of a better foundation), demon (chance to keep 心魔 away), boon (chance of
 ## fortune), study (days to study), gather (finds), sell, buy (prices), favor (favor gained), travel
 ## (days on the road), encounter (chance of trouble on the road), rest (days to recover), stones (flat,
-## at the start).
+## at the start); in duels, flat: orb_draw (more qi orbs a turn), orb_cap (more held), orb_first (more
+## in the first hand) and orb_<element> (that element drawn more often, added to its weight).
 const MODIFIERS := [
 	"cultivation", "max_hp", "max_qi", "attack", "defense",
 	"damage_metal", "damage_wood", "damage_water", "damage_fire", "damage_earth", "damage_all",
 	"lifespan", "retreat_days", "fresh_days", "insight", "mind_gain", "mind_need",
 	"breakthrough", "pill", "pill_cooldown", "alchemy", "grade", "demon", "boon",
 	"study", "gather", "sell", "buy", "favor", "travel", "encounter", "rest", "stones",
+	"orb_draw", "orb_cap", "orb_first", "orb_metal", "orb_wood", "orb_water", "orb_fire", "orb_earth",
 ]
+## The duel modifiers (qi orbs), summed as they are wherever they come from.
+const ORB_KEYS := ["orb_draw", "orb_cap", "orb_first", "orb_metal", "orb_wood", "orb_water", "orb_fire", "orb_earth"]
 
 static func data(content) -> Dictionary:
 	return content.talent_data

@@ -438,6 +438,17 @@ func _validate_sect() -> String:
 			return "宗门兑换引用了未知身份：%s" % good.id
 	return ""
 
+## A qi-orb cost: {key: count} with known keys and whole counts, at least one orb.
+func _valid_cost(cost: Variant, keys: Array) -> bool:
+	if not cost is Dictionary or cost.is_empty():
+		return false
+	var total := 0
+	for key: Variant in cost:
+		if not key in keys or not _whole(cost[key]) or int(cost[key]) < 1:
+			return false
+		total += int(cost[key])
+	return total >= 1
+
 # --- Alchemy static checks ------------------------------------------------------------------------
 
 func _validate_alchemy() -> String:
@@ -1308,6 +1319,8 @@ func _validate_item(item: Variant) -> String:
 		return "品类未知"
 	if not _whole(item.get("price")):
 		return "价格无效"
+	if item.has("duel") and (not item.duel is Dictionary or item.duel.is_empty() or (item.duel.has("orbs") and (not _whole(item.duel.orbs) or int(item.duel.orbs) < 1)) or (item.duel.has("heal") and not item.duel.heal is bool)):
+		return "斗法中服用的配置无效"
 	if item.has("rarity") and (not _whole(item.rarity) or int(item.rarity) >= talent_data.tiers.size()):
 		return "品级无效"
 	if item.has("toxin") and (not _whole(item.toxin) or int(item.toxin) < 1):
@@ -1396,7 +1409,7 @@ func _validate_arsenal() -> String:
 		if not archetype.get("slot") in ["art", "method"] or archetype.get("nouns", []).is_empty():
 			return "功法原型配置错误：" + archetype_id
 		if archetype.slot == "art":
-			if not archetype.get("kind") in ["attack", "heal", "guard"] or not _whole(archetype.get("qi")) or not _whole(archetype.get("cooldown")):
+			if not archetype.get("kind") in ["attack", "heal", "guard"] or not _valid_cost(archetype.get("cost"), ["element", "any"]):
 				return "神通原型配置错误：" + archetype_id
 			for element: String in data.elements:
 				if not vfx_styles.has(archetype.get("vfx", {}).get(element, "")):
@@ -1413,6 +1426,21 @@ func _validate_arsenal() -> String:
 	for skill_id: String in skills:
 		if not data.elements.has(skills[skill_id].get("element", "")):
 			return "传承神通缺少属性：" + skill_id
+		if not _valid_cost(skills[skill_id].get("cost"), data.elements.keys() + ["any"]):
+			return "传承神通的灵气消耗无效：" + skill_id
+	var duel: Variant = rules.get("duel")
+	if not duel is Dictionary or ["first_extra", "root_weight", "other_weight", "qi_per_orb", "hand_least", "convert", "pills", "guard_orbs"].any(func(key: String) -> bool: return not _whole(duel.get(key))):
+		return "斗法规则配置无效。"
+	for key: String in ["draw", "foe_draw"]:
+		if not duel.get(key) is Array or duel[key].size() != realms.size() or duel[key].any(func(value: Variant) -> bool: return not _whole(value) or int(value) < 1):
+			return "斗法抽灵气数须按境界逐一给出：" + key
+	for key: String in ["generates", "overcomes"]:
+		var cycle: Variant = duel.get(key)
+		if not cycle is Dictionary or cycle.size() != data.elements.size() or cycle.keys().any(func(element: Variant) -> bool: return not data.elements.has(element) or not data.elements.has(cycle[element]) or cycle[element] == element):
+			return "五行%s配置无效。" % ("相生" if key == "generates" else "相克")
+	for enemy_id: String in enemies:
+		if not data.elements.has(enemies[enemy_id].get("element", "")):
+			return "对手缺少五行属性：" + enemy_id
 	var gear := equipment_data
 	if not gear.get("tiers") is Array or gear.tiers.size() != data.tiers.size():
 		return "装备品阶须与功法品阶一一对应。"

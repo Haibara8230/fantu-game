@@ -860,6 +860,10 @@ func attack_bonus() -> int:
 func defense() -> float:
 	return Loadout.defense(self)
 
+## A duel modifier for qi orbs (talents.gd ORB_KEYS) from talents, 心法 and 法宝.
+func orb_bonus(key: String) -> int:
+	return int(bonuses().get(key, 0))
+
 func element_multiplier(t: Dictionary) -> float:
 	return Loadout.element_multiplier(self, t)
 
@@ -1026,6 +1030,28 @@ func use_skill(skill_id: String) -> String:
 
 func defend() -> String:
 	return Combat.defend(self)
+
+## 结束回合.
+func end_turn() -> String:
+	return Combat.end_turn(self)
+
+## 相生: two orbs of an element into one of the element it gives rise to.
+func convert_qi(element: String) -> String:
+	return Combat.convert_qi(self, element)
+
+func duel_pill_block(item_id: String) -> String:
+	return Combat.pill_block(self, item_id)
+
+func take_duel_pill(item_id: String) -> String:
+	return Combat.take_pill(self, item_id)
+
+## A plain full turn: the strongest arts the orbs allow, then the end of the turn.
+func plain_turn() -> String:
+	return Combat.plain_turn(self)
+
+## Casts the art if the orbs allow, then ends the turn.
+func duel_turn(skill_id: String) -> String:
+	return Combat.duel_turn(self, skill_id)
 
 func flee() -> String:
 	return Combat.flee(self)

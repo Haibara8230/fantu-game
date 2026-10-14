@@ -342,7 +342,7 @@ func _build_layout() -> void:
 	new_game_dialog.confirmed.connect(_show_welcome)
 	add_child(new_game_dialog)
 	Settings.build(self)
-	notice("鼠标选择行动 · {save} 保存 · {load} 读取 · 斗法中按 {skills} 施法，{guard}守御".format(Settings.key_hints(self)))
+	notice("鼠标选择行动 · {save} 保存 · {load} 读取 · 斗法中按 {skills} 施法，{end_turn}结束回合，{guard}守御".format(Settings.key_hints(self)))
 
 ## Which screen the state calls for: "full" while an ending, a breakthrough, a story moment, an event
 ## or a duel holds the player; the scroll a view belongs to ("panel", "scroll", "retreat", "trade");
@@ -983,6 +983,12 @@ func battle_action(action: String) -> void:
 	var message: String
 	if action == "guard":
 		message = session.defend()
+	elif action == "end_turn":
+		message = session.end_turn()
+	elif action.begins_with("convert:"):
+		message = session.convert_qi(action.trim_prefix("convert:"))
+	elif action.begins_with("pill:"):
+		message = session.take_duel_pill(action.trim_prefix("pill:"))
 	elif action.begins_with("aid:"):
 		message = session.call_aid(action.trim_prefix("aid:"))
 	elif action == "flee":
@@ -1189,9 +1195,9 @@ func _unhandled_key_input(event: InputEvent) -> void:
 				var index := int(action.right(1)) - 1
 				if index < ids.size():
 					skill(ids[index])
-		"guard":
+		"guard", "end_turn":
 			if not session.battle.is_empty():
-				battle_action("guard")
+				battle_action(action)
 		_:
 			return
 	get_viewport().set_input_as_handled()
@@ -1207,4 +1213,4 @@ func reset_preview(sect_id: String = "qingyun", opponent_id: String = "qingyun")
 	session.Loadout.take_lineage(session, sect_id)
 	session.player.hp = maxi(1, int(session.player.max_hp) - 20)
 	session.start_battle("disciple", opponent_id)
-	notice("门派试演 · {skills} 施法，{guard}护体；切换传承会重置试演，正常旅程不受影响。".format(Settings.key_hints(self)))
+	notice("门派试演 · {skills} 施法，{end_turn}结束回合，{guard}守御；切换传承会重置试演，正常旅程不受影响。".format(Settings.key_hints(self)))

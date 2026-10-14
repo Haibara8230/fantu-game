@@ -55,13 +55,18 @@ func _run() -> void:
 	check(legacy.snapshot() == before, "sect cannot change during battle")
 	legacy.use_skill("fire_burst")
 	check(legacy.snapshot() == before, "unlearned skill rejected without consuming resources")
+	legacy.battle.orbs = ["water", "water", "metal"]
 	legacy.use_skill("ice_lance")
-	check(legacy.combat_events[0].style == "ice_lance" and legacy.combat_events[1].style == "flame_bolt", "player and enemy retain distinct elemental styles")
+	var cast: Dictionary = legacy.combat_events[0]
+	legacy.end_turn()
+	var answer: Array = legacy.combat_events.filter(func(event: Dictionary) -> bool: return event.get("actor", "") == "enemy" and event.type == "attack")
+	check(cast.style == "ice_lance" and not answer.is_empty() and answer[0].style == "flame_bolt", "player and enemy retain distinct elemental styles")
+	legacy.battle.orbs = ["water", "metal"]
 	before = legacy.snapshot()
 	legacy.use_skill("ice_lance")
-	check(legacy.snapshot() == before and legacy.combat_events.is_empty(), "cooldown prevents repeated casts")
+	check(legacy.snapshot() == before and legacy.combat_events.is_empty(), "an art the orbs do not cover is not cast")
 	var loaded = Session.new()
-	check(loaded.restore(JSON.parse_string(JSON.stringify(before))) and loaded.snapshot() == before, "sect and cooldown persist")
+	check(loaded.restore(JSON.parse_string(JSON.stringify(before))) and loaded.snapshot() == before, "sect and the duel's orbs persist")
 	var path := "res://.godot/sect_test_%d" % Time.get_ticks_usec()
 	var store = Store.new(path)
 	check(store.save_game(legacy) and store.load_game(loaded), "school battle save loads")
@@ -106,12 +111,18 @@ func _run() -> void:
 					captured[kind] = true
 					_capture(screenshot_prefix + "_" + kind, 0.12 if kind in ["release", "heal", "guard"] else 0.065)
 			)
-			var old_qi: int = main.session.player.qi
+			# Exactly the art's orbs, "any" paid in metal.
+			var hand: Array = []
+			for key: String in definition.cost:
+				for count: int in int(definition.cost[key]):
+					hand.append("metal" if key == "any" else key)
+			main.session.battle.orbs = hand
+			# 克制 can make one strong art fell the preview's opponent; it stands for the checks.
+			main.session.battle.hp = 200
 			await main.skill(id)
-			check(main.session.player.qi == old_qi - int(definition.qi_cost), "qi cost " + id)
-			check(int(main.session.battle.cooldowns.get(id, 0)) == int(definition.cooldown), "cooldown " + id)
+			check(main.session.battle.get("orbs", []).size() <= 1 and main.session.combat_events.size() > 0, "orb cost " + id)
 			if definition.kind == "attack":
-				check(cue_types.count("impact") == int(definition.get("hits", 1)) + 1, "impact count " + id)
+				check(cue_types.count("impact") == int(definition.get("hits", 1)), "impact count " + id)
 				check(hit_sum == int(main.session.combat_events[0].amount), "displayed damage sum " + id)
 				check(last_visual_hp[0] == int(main.session.battle.hp), "displayed final HP " + id)
 			else:

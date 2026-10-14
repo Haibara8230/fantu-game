@@ -18,44 +18,44 @@
   "archetypes": {
     "bolt": {
       "slot": "art", "kind": "attack", "label": "法术", "nouns": ["诀", "术", "指", "掌"],
-      "damage": [11, 15], "qi": 0, "cooldown": 0,
+      "damage": [6, 8], "cost": {"any": 1},
       "vfx": {"metal": "sword", "wood": "vine", "water": "water", "fire": "flame_bolt", "earth": "earth"}
     },
     "barrage": {
       "slot": "art", "kind": "attack", "label": "连击", "nouns": ["剑阵", "千刃", "流星", "飞雨"],
-      "damage": [24, 30], "hits": 3, "qi": 10, "cooldown": 2,
+      "damage": [24, 30], "hits": 3, "cost": {"element": 2, "any": 1},
       "vfx": {"metal": "sword_rain", "wood": "leaf_blade", "water": "ice_lance", "fire": "fire", "earth": "rock_spire"}
     },
     "burst": {
       "slot": "art", "kind": "attack", "label": "重击", "nouns": ["印", "斩", "破", "冲"],
-      "damage": [29, 35], "qi": 14, "cooldown": 3,
+      "damage": [28, 34], "cost": {"element": 3},
       "vfx": {"metal": "sword_arc", "wood": "leaf_blade", "water": "ice_lance", "fire": "fire_burst", "earth": "rock_spire"}
     },
     "mend": {
       "slot": "art", "kind": "heal", "label": "疗愈", "nouns": ["回春诀", "养元法", "生生诀", "复脉术"],
-      "heal": 25, "qi": 8, "cooldown": 3,
+      "heal": 20, "cost": {"element": 2},
       "vfx": {"metal": "heal", "wood": "heal", "water": "water_heal", "fire": "heal", "earth": "heal"}
     },
     "ward": {
       "slot": "art", "kind": "guard", "label": "护体", "nouns": ["护体", "金钟罩", "玄甲", "宝光"],
-      "heal": 12, "qi": 8, "cooldown": 3,
+      "shield": 18, "cost": {"element": 1, "any": 1},
       "vfx": {"metal": "earth_guard", "wood": "earth_guard", "water": "earth_guard", "fire": "earth_guard", "earth": "earth_guard"}
     },
     "breath": {"slot": "method", "kind": "passive", "label": "吐纳", "nouns": ["吐纳法", "养气篇", "周天诀"], "passive": {"cultivation": 0.1}},
     "body": {"slot": "method", "kind": "passive", "label": "炼体", "nouns": ["炼体诀", "铜皮功", "锻骨篇"], "passive": {"max_hp": 15}},
     "focus": {"slot": "method", "kind": "passive", "label": "凝神", "nouns": ["凝神法", "聚灵篇", "守一诀"], "passive": {"max_qi": 8}},
-    "affinity": {"slot": "method", "kind": "passive", "label": "元气", "nouns": ["心经", "真解", "归元篇"], "passive": {"element_damage": 0.12}}
+    "affinity": {"slot": "method", "kind": "passive", "label": "元气", "nouns": ["心经", "真解", "归元篇"], "passive": {"element_damage": 0.12, "orb_weight": 1}}
   },
   "affixes": {
     "pierce": {"name": "穿透", "applies": ["bolt", "barrage", "burst"], "effect": {"pierce": 0.2}, "text": "伤害额外 +20%，无视护体"},
-    "swift": {"name": "迅疾", "applies": ["barrage", "burst", "mend", "ward"], "effect": {"cooldown": -1}, "text": "冷却 -1"},
-    "thrift": {"name": "省灵", "applies": ["barrage", "burst", "mend", "ward"], "effect": {"qi_scale": 0.7}, "text": "灵力消耗 -30%"},
+    "swift": {"name": "迅疾", "applies": ["barrage", "burst", "mend", "ward"], "effect": {"draw": 1}, "text": "施展后再抽一颗灵气"},
+    "thrift": {"name": "省灵", "applies": ["barrage", "burst", "mend", "ward"], "effect": {"thrift": 1}, "text": "少耗一颗灵气"},
     "drain": {"name": "吸元", "applies": ["bolt", "barrage", "burst"], "effect": {"lifesteal": 0.15}, "text": "回复造成伤害 15% 的气血"},
     "burn": {"name": "灼烧", "applies": ["bolt", "burst"], "effect": {"burn": [4, 3]}, "text": "灼烧对手 3 回合，每回合 4 点"},
     "chill": {"name": "寒蚀", "applies": ["bolt", "barrage", "burst"], "effect": {"weaken": [0.25, 2]}, "text": "对手 2 回合内伤害 -25%"},
     "fierce": {"name": "暴烈", "applies": ["bolt", "barrage", "burst"], "effect": {"damage_scale": 1.15}, "text": "伤害 +15%"},
     "echo": {"name": "连环", "applies": ["bolt", "barrage"], "effect": {"hits": 1}, "text": "多一段命中"},
-    "renew": {"name": "回灵", "applies": ["bolt", "barrage", "burst", "mend", "ward"], "effect": {"qi_gain": 3}, "text": "施展后回复 3 灵力"},
+    "renew": {"name": "回灵", "applies": ["bolt", "barrage", "burst", "mend", "ward"], "effect": {"renew": 1}, "text": "施展后得一颗同属性灵气"},
     "deep": {"name": "深厚", "applies": ["breath", "body", "focus", "affinity"], "effect": {"passive_scale": 1.3}, "text": "被动效果 +30%"},
     "sturdy": {"name": "坚实", "applies": ["breath", "focus", "affinity"], "effect": {"max_hp": 8}, "text": "气血上限 +8"},
     "clear": {"name": "清明", "applies": ["breath", "body", "affinity"], "effect": {"max_qi": 4}, "text": "灵力上限 +4"}

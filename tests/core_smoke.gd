@@ -61,7 +61,7 @@ func _initialize() -> void:
 			for bout: int in 2:
 				game.start_battle("disciple")
 				while not game.battle.is_empty():
-					game.use_skill("sword")
+					game.plain_turn()
 			game.act("rest")
 			game.travel("wild")
 			for i: int in 3:
@@ -84,28 +84,32 @@ func _initialize() -> void:
 	check(game.player.realm == 1 and game.player.stage == 0 and game.player.hp == 140 and game.item_count("foundation_pill") == 0 and game.player.xp == before_breakthrough - 2000, "breakthrough consumes resources and upgrades stats")
 	game.travel("wild")
 	game.start_battle("serpent")
+	check(game.battle.orbs.size() == game.Combat.draw_count(game) + int(game.content.rules.duel.first_extra) and not game.battle.intent.is_empty(), "a duel opens with a hand of qi orbs and the opponent's intent")
+	var hand: Array = game.battle.orbs.duplicate()
+	game.battle.orbs = ["wood", "wood", "fire", "fire", "metal"]
+	game.use_skill("wood")
 	game.use_skill("fire")
-	check(game.battle.cooldowns.fire == 2 and game.player.qi == 40, "skill costs and cooldown")
+	check(game.battle.orbs == ["metal", "earth"] and game.battle.chain == "fire", "arts spend the orbs their costs name; 木生火 turns the cycle and brings an earth orb")
 	unchanged = game.snapshot()
 	game.use_skill("fire")
 	check(game.snapshot() == unchanged, "blocked skill has no side effects")
+	game.battle.orbs = ["water", "water", "metal"]
+	game.convert_qi("water")
+	check(game.battle.orbs == ["metal", "wood"], "two water orbs 相生 into one of wood")
+	game.battle.orbs = hand
 	var copy = Session.new()
 	check(copy.restore(JSON.parse_string(JSON.stringify(game.snapshot()))), "active battle JSON round trip")
-	game.use_skill("sword")
-	copy.use_skill("sword")
+	game.plain_turn()
+	copy.plain_turn()
 	check(game.snapshot() == copy.snapshot(), "RNG continues identically after loading")
+	var held: int = game.battle.orbs.size()
 	game.defend()
-	check(game.battle.cooldowns.fire == 0, "cooldown expires after two other turns")
+	check(game.battle.is_empty() or game.battle.orbs.size() == mini(held, game.Combat.hand_cap(game)) + game.Combat.draw_count(game) + int(game.content.rules.duel.guard_orbs), "guarding ends the turn and brings one more orb")
 	var rounds := 0
 	while not game.battle.is_empty() and rounds < 40:
 		rounds += 1
-		if game.player.hp < 65 and int(game.battle.cooldowns.get("wood", 0)) == 0 and game.player.qi >= 8:
-			game.use_skill("wood")
-		elif int(game.battle.cooldowns.get("fire", 0)) == 0 and game.player.qi >= 10:
-			game.use_skill("fire")
-		else:
-			game.use_skill("sword")
-	check(game.has_flag("serpent_slain"), "full legal progression slays the serpent")
+		game.plain_turn()
+	check(game.has_flag("serpent_slain"), "full legal progression slays the serpent (%d turns)" % rounds)
 	var after_serpent: int = game.world.day
 	var way_home: int = game.content.path_days(game.path_to("sect"))
 	game.travel("sect")

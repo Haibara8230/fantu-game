@@ -182,6 +182,10 @@ func _fight(technique_id: String) -> Session:
 	game.player.arts = [technique_id]
 	game.start_battle("disciple")
 	game.combat_rng.seed = 5
+	# Orbs enough for any one art.
+	game.battle.orbs = []
+	for element: String in game.Combat.elements(game):
+		game.battle.orbs.append_array([element, element, element])
 	return game
 
 func _effects() -> void:
@@ -189,12 +193,14 @@ func _effects() -> void:
 	burn.use_skill("t:bolt:fire:2:burn:0")
 	var first: Dictionary = burn.combat_events[0]
 	check(first.name == "赤焰诀" and first.vfx == "flame_bolt" and first.tier == 2 and first.style == "t:bolt:fire:2:burn:0", "events carry the generated art's name, effect and tier")
+	burn.end_turn()
 	check(burn.combat_events.any(func(event: Dictionary) -> bool: return event.get("style", "") == "burn"), "burning ticks before the opponent strikes")
 	check(int(burn.battle.status.burn[1]) == 2, "the burn counts down")
 	check(not first.has("legacy"), "a generated art carries no lineage")
 	var disciple := _game(["metal"])
 	disciple.choose_sect("qingyun")
 	disciple.start_battle("disciple")
+	disciple.battle.orbs = ["metal", "metal", "metal"]
 	disciple.use_skill("sword_rain")
 	check(disciple.combat_events[0].get("legacy", "") == "qingyun", "a sect's own art cast by its disciple carries the lineage's layer")
 	var wanderer := _game(["metal"])
@@ -203,6 +209,7 @@ func _effects() -> void:
 	check(not wanderer.combat_events[0].has("legacy"), "a wanderer's arts have no lineage")
 	var chill := _fight("t:bolt:water:2:chill:0")
 	chill.use_skill("t:bolt:water:2:chill:0")
+	chill.end_turn()
 	check(chill.battle.status.has("weaken") and int(chill.battle.status.weaken[1]) == 1, "a chilled opponent is weakened for the next turns")
 	var drain := _fight("t:bolt:wood:2:drain:0")
 	drain.player.hp = 30
@@ -213,17 +220,23 @@ func _effects() -> void:
 	check(int(echo.combat_events[0].hits) == 2, "an echoing art hits twice")
 	var renew := _fight("t:mend:wood:2:renew:0")
 	renew.player.hp = 20
-	renew.player.qi = 20
+	var wood_before: int = renew.battle.orbs.count("wood")
 	renew.use_skill("t:mend:wood:2:renew:0")
-	check(int(renew.player.qi) == 20 - 8 + 3 and int(renew.player.hp) > 20, "a renewing heal returns some qi")
+	check(renew.battle.orbs.count("wood") == wood_before - 2 + 1 and int(renew.player.hp) > 20, "a renewing heal brings back an orb of its element")
 	var guarded := _fight("t:ward:earth:1::0")
-	var hp_before := int(guarded.player.hp)
 	guarded.use_skill("t:ward:earth:1::0")
-	check(guarded.combat_events[0].type == "guard" and int(guarded.player.hp) <= hp_before + 12, "a ward heals and guards")
+	check(guarded.combat_events[0].type == "guard" and int(guarded.battle.shield) == int(guarded.content.technique("t:ward:earth:1::0").shield), "a ward raises a shield")
+	var hp_before := int(guarded.player.hp)
+	guarded.end_turn()
+	var soaked: int = guarded.combat_events.filter(func(event: Dictionary) -> bool: return event.get("actor", "") == "enemy").reduce(func(sum: int, event: Dictionary) -> int: return sum + int(event.get("absorbed", 0)), 0)
+	check(soaked > 0 and int(guarded.player.hp) == hp_before - guarded.combat_events.filter(func(event: Dictionary) -> bool: return event.get("actor", "") == "enemy").reduce(func(sum: int, event: Dictionary) -> int: return sum + int(event.amount), 0), "the shield takes the blows before health")
 	var plain := _fight("t:bolt:metal:1::0")
+	var bolt: Dictionary = plain.content.technique("t:bolt:metal:1::0")
 	plain.use_skill("t:bolt:metal:1::0")
 	var plain_damage: int = plain.combat_events[0].amount
-	check(plain_damage >= 11 and plain_damage <= 15, "a 凡品 bolt hits for its base damage (%d)" % plain_damage)
+	var share := int(round(float(plain.attack_bonus()) / 2.0))
+	var factor: float = plain.element_multiplier(bolt) * plain.Combat.counter_multiplier(plain, "metal")
+	check(plain_damage >= int(round((int(bolt.damage_min) + share) * factor)) and plain_damage <= int(round((int(bolt.damage_max) + share) * factor)), "a 凡品 bolt hits for its base damage (%d)" % plain_damage)
 
 func _teaching_and_stock() -> void:
 	var game := _game()
@@ -270,7 +283,7 @@ func _saves() -> void:
 	check(lineage.restore(JSON.parse_string(FileAccess.get_file_as_string("res://tests/fixtures/v7_chixiao.json"))), "v7 save migrates")
 	check(lineage.active_skills() == ["flame_bolt", "fire", "fire_burst"] and lineage.player.methods.is_empty() and int(lineage.world.seed) > 0, "an old 赤霄门 journey keeps its lineage arts")
 	var fighting := Session.new()
-	check(fighting.restore(JSON.parse_string(FileAccess.get_file_as_string("res://tests/fixtures/v7_battle.json"))) and int(fighting.battle.cooldowns.ice_lance) == 2 and fighting.battle.status.is_empty(), "a v7 duel resumes")
+	check(fighting.restore(JSON.parse_string(FileAccess.get_file_as_string("res://tests/fixtures/v7_battle.json"))) and fighting.battle.status.is_empty() and fighting.battle.orbs.size() > 0 and not fighting.battle.intent.is_empty(), "a v7 duel resumes with a fresh hand of qi orbs")
 	var game := _game()
 	game.player.learned.append("t:burst:fire:2:pierce:4")
 	game.player.arts.append("t:burst:fire:2:pierce:4")

@@ -11,6 +11,8 @@ static func bonuses(s, holder: Dictionary = {}) -> Dictionary:
 	if holder.is_empty():
 		holder = s.player
 	var total := {"attack": 0, "max_hp": 0, "max_qi": 0, "defense": 0.0, "cultivation": 0.0, "element_damage": {}, "max_hp_percent": 0, "max_qi_percent": 0}
+	for key: String in Talents.ORB_KEYS:
+		total[key] = 0
 	_add_talents(s, total, holder.get("talents", []) + holder.get("flaws", []))
 	var sources: Array[Dictionary] = []
 	for technique_id: Variant in holder.get("methods", []):
@@ -25,6 +27,10 @@ static func bonuses(s, holder: Dictionary = {}) -> Dictionary:
 		for key: String in source.stats:
 			if key == "element_damage":
 				total.element_damage[source.element] = float(total.element_damage.get(source.element, 0.0)) + float(source.stats[key])
+			elif key == "orb_weight":
+				# An element drawn more often: the 心法's or the 法宝's own element (none for plain gear).
+				if total.has("orb_" + str(source.element)):
+					total["orb_" + str(source.element)] = int(total["orb_" + str(source.element)]) + int(source.stats[key])
 			elif key in ["defense", "cultivation"]:
 				total[key] = float(total[key]) + float(source.stats[key])
 			else:
@@ -40,6 +46,8 @@ static func _add_talents(s, total: Dictionary, ids: Array) -> void:
 	total.cultivation = float(total.cultivation) + float(mods.get("cultivation", 0)) / 100.0
 	total.max_hp_percent = int(mods.get("max_hp", 0))
 	total.max_qi_percent = int(mods.get("max_qi", 0))
+	for key: String in Talents.ORB_KEYS:
+		total[key] = int(total[key]) + int(mods.get(key, 0))
 	for key: String in mods:
 		if key.begins_with("damage_"):
 			var element := "*" if key == "damage_all" else key.trim_prefix("damage_")

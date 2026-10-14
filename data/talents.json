@@ -195,7 +195,8 @@
    "description": "与金行灵气格外投缘，金系神通更见威力。",
    "mods": {
     "damage_metal": 15,
-    "cultivation": 4
+    "cultivation": 4,
+    "orb_metal": 1
    },
    "group": "affinity_metal"
   },
@@ -205,7 +206,8 @@
    "description": "生来锐金之气充盈周身，金系神通得心应手。",
    "mods": {
     "damage_metal": 40,
-    "cultivation": 10
+    "cultivation": 10,
+    "orb_metal": 2
    },
    "group": "affinity_metal"
   },
@@ -216,7 +218,9 @@
    "mods": {
     "damage_metal": 105,
     "cultivation": 24,
-    "max_qi": 15
+    "max_qi": 15,
+    "orb_metal": 3,
+    "orb_cap": 1
    },
    "group": "affinity_metal"
   },
@@ -226,7 +230,8 @@
    "description": "与木行灵气格外投缘，木系神通更见威力。",
    "mods": {
     "damage_wood": 15,
-    "cultivation": 4
+    "cultivation": 4,
+    "orb_wood": 1
    },
    "group": "affinity_wood"
   },
@@ -236,7 +241,8 @@
    "description": "生来青木之气充盈周身，木系神通得心应手。",
    "mods": {
     "damage_wood": 40,
-    "cultivation": 10
+    "cultivation": 10,
+    "orb_wood": 2
    },
    "group": "affinity_wood"
   },
@@ -247,7 +253,9 @@
    "mods": {
     "damage_wood": 105,
     "cultivation": 24,
-    "max_qi": 15
+    "max_qi": 15,
+    "orb_wood": 3,
+    "orb_cap": 1
    },
    "group": "affinity_wood"
   },
@@ -257,7 +265,8 @@
    "description": "与水行灵气格外投缘，水系神通更见威力。",
    "mods": {
     "damage_water": 15,
-    "cultivation": 4
+    "cultivation": 4,
+    "orb_water": 1
    },
    "group": "affinity_water"
   },
@@ -267,7 +276,8 @@
    "description": "生来玄水之气充盈周身，水系神通得心应手。",
    "mods": {
     "damage_water": 40,
-    "cultivation": 10
+    "cultivation": 10,
+    "orb_water": 2
    },
    "group": "affinity_water"
   },
@@ -278,7 +288,9 @@
    "mods": {
     "damage_water": 105,
     "cultivation": 24,
-    "max_qi": 15
+    "max_qi": 15,
+    "orb_water": 3,
+    "orb_cap": 1
    },
    "group": "affinity_water"
   },
@@ -288,7 +300,8 @@
    "description": "与火行灵气格外投缘，火系神通更见威力。",
    "mods": {
     "damage_fire": 15,
-    "cultivation": 4
+    "cultivation": 4,
+    "orb_fire": 1
    },
    "group": "affinity_fire"
   },
@@ -298,7 +311,8 @@
    "description": "生来离火之气充盈周身，火系神通得心应手。",
    "mods": {
     "damage_fire": 40,
-    "cultivation": 10
+    "cultivation": 10,
+    "orb_fire": 2
    },
    "group": "affinity_fire"
   },
@@ -309,7 +323,9 @@
    "mods": {
     "damage_fire": 105,
     "cultivation": 24,
-    "max_qi": 15
+    "max_qi": 15,
+    "orb_fire": 3,
+    "orb_cap": 1
    },
    "group": "affinity_fire"
   },
@@ -319,7 +335,8 @@
    "description": "与土行灵气格外投缘，土系神通更见威力。",
    "mods": {
     "damage_earth": 15,
-    "cultivation": 4
+    "cultivation": 4,
+    "orb_earth": 1
    },
    "group": "affinity_earth"
   },
@@ -329,7 +346,8 @@
    "description": "生来厚土之气充盈周身，土系神通得心应手。",
    "mods": {
     "damage_earth": 40,
-    "cultivation": 10
+    "cultivation": 10,
+    "orb_earth": 2
    },
    "group": "affinity_earth"
   },
@@ -340,7 +358,9 @@
    "mods": {
     "damage_earth": 105,
     "cultivation": 24,
-    "max_qi": 15
+    "max_qi": 15,
+    "orb_earth": 3,
+    "orb_cap": 1
    },
    "group": "affinity_earth"
   },
@@ -396,7 +416,8 @@
    "tier": "green",
    "description": "丹田宽广，能容更多灵力。",
    "mods": {
-    "max_qi": 15
+    "max_qi": 15,
+    "orb_cap": 1
    },
    "group": "sea"
   },
@@ -405,7 +426,9 @@
    "tier": "blue",
    "description": "灵力运转圆融，周天不滞。",
    "mods": {
-    "max_qi": 36
+    "max_qi": 36,
+    "orb_cap": 1,
+    "orb_first": 1
    },
    "group": "sea"
   },
@@ -415,7 +438,8 @@
    "description": "丹田深不见底，灵力生生不息。",
    "mods": {
     "max_qi": 90,
-    "cultivation": 15
+    "cultivation": 15,
+    "orb_draw": 1
    },
    "group": "sea"
   },
@@ -2161,7 +2185,8 @@
    "description": "生来经脉通畅。",
    "mods": {
     "max_qi": 30,
-    "cultivation": 12
+    "cultivation": 12,
+    "orb_first": 1
    }
   },
   "danxin": {
@@ -2437,7 +2462,8 @@
    "description": "生来便是一柄未开锋的剑。",
    "mods": {
     "damage_metal": 90,
-    "attack": 12
+    "attack": 12,
+    "orb_metal": 2
    }
   },
   "taiyin": {
@@ -2447,7 +2473,8 @@
    "mods": {
     "damage_water": 75,
     "max_qi": 45,
-    "mind_gain": 45
+    "mind_gain": 45,
+    "orb_water": 2
    }
   },
   "taiyang": {
@@ -2457,7 +2484,8 @@
    "mods": {
     "damage_fire": 75,
     "max_hp": 45,
-    "attack": 6
+    "attack": 6,
+    "orb_fire": 2
    }
   },
   "qingdi": {
@@ -2467,7 +2495,8 @@
    "mods": {
     "damage_wood": 75,
     "rest": -90,
-    "lifespan": 30
+    "lifespan": 30,
+    "orb_wood": 2
    }
   },
   "kunyuan": {
@@ -2477,7 +2506,8 @@
    "mods": {
     "damage_earth": 75,
     "defense": 30,
-    "max_hp": 30
+    "max_hp": 30,
+    "orb_earth": 2
    }
   },
   "lingyan_mu": {
@@ -2668,7 +2698,8 @@
     "cultivation": 150,
     "breakthrough": 50,
     "max_hp": 50,
-    "max_qi": 50
+    "max_qi": 50,
+    "orb_first": 2
    }
   },
   "qiyun_zhizi": {
@@ -2698,7 +2729,8 @@
    "mods": {
     "cultivation": 100,
     "damage_all": 60,
-    "max_qi": 75
+    "max_qi": 75,
+    "orb_draw": 1
    }
   },
   "linglong": {
@@ -2818,7 +2850,9 @@
    "mods": {
     "damage_water": 100,
     "damage_fire": 100,
-    "max_qi": 100
+    "max_qi": 100,
+    "orb_water": 2,
+    "orb_fire": 2
    }
   },
   "huigen": {
@@ -2894,7 +2928,9 @@
     "cultivation": 360,
     "damage_all": 200,
     "max_qi": 240,
-    "max_hp": 160
+    "max_hp": 160,
+    "orb_draw": 1,
+    "orb_cap": 2
    }
   },
   "xiantian_jianti": {

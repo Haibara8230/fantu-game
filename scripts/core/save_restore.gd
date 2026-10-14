@@ -164,12 +164,29 @@ static func restore(s, data: Variant) -> bool:
 				return false
 		if saved_battle.has("context") and not saved_battle.context in ["event", "spar", "tournament"]:
 			return false
-		var status: Variant = saved_battle.get("status", {})
-		if not status is Dictionary:
-			return false
-		for key: Variant in status:
-			if not key in ["burn", "weaken"] or not status[key] is Array or status[key].size() != 2:
+		for status_key: String in ["status", "player_status"]:
+			var status: Variant = saved_battle.get(status_key, {})
+			if not status is Dictionary:
 				return false
+			for key: Variant in status:
+				if not key in ["burn", "weaken"] or not status[key] is Array or status[key].size() != 2:
+					return false
+		# Qi orbs (optional: duels saved before them draw a fresh hand when loaded).
+		for orbs_key: String in ["orbs", "foe_orbs"]:
+			var orbs: Variant = saved_battle.get(orbs_key, [])
+			if not orbs is Array or orbs.size() > 60 or orbs.any(func(orb: Variant) -> bool: return not content.technique_data.elements.has(orb)):
+				return false
+		var chain: Variant = saved_battle.get("chain", "")
+		if not chain is String or (not chain.is_empty() and not content.technique_data.elements.has(chain)):
+			return false
+		for count_key: String in ["shield", "foe_shield", "pills"]:
+			if not _whole_nonnegative(saved_battle.get(count_key, 0)):
+				return false
+		var intent: Variant = saved_battle.get("intent", [])
+		if not intent is Array or intent.any(func(entry: Variant) -> bool: return not entry is Dictionary or not entry.get("kind") is String or not entry.get("name") is String or (entry.has("art") and content.technique(str(entry.art)).is_empty()) or ["min", "max", "amount"].any(func(key: String) -> bool: return entry.has(key) and not _whole_nonnegative(entry[key]))):
+			return false
+		if foe.has("arts") and (not foe.arts is Array or foe.arts.any(func(art: Variant) -> bool: return not art is String or content.technique(art).is_empty()) or not (foe.get("power") is float or foe.get("power") is int) or not _whole_signed(foe.get("bonus")) or not content.technique_data.elements.has(foe.get("element", ""))):
+			return false
 		if saved_battle.has("npc") and (not saved_battle.npc is String or not s.is_person(saved_battle.npc)):
 			return false
 		var opponent: Variant = saved_battle.get("opponent_sect")
@@ -240,6 +257,7 @@ static func restore(s, data: Variant) -> bool:
 	# The fatigue limit depends on the realm, so it is applied once the player is in place.
 	player.fatigue = mini(int(player.fatigue), Cultivation.fatigue_cap(s))
 	var battle: Dictionary = saved_battle.duplicate(true)
+	var fresh_hand := false
 	if not battle.is_empty():
 		if not battle.has("status"):
 			battle.status = {}
@@ -247,12 +265,32 @@ static func restore(s, data: Variant) -> bool:
 		battle.turn = int(battle.turn)
 		for skill_id: String in battle.cooldowns:
 			battle.cooldowns[skill_id] = int(battle.cooldowns[skill_id])
+		fresh_hand = not battle.has("orbs")
+		for count_key: String in ["shield", "foe_shield", "pills"]:
+			if battle.has(count_key):
+				battle[count_key] = int(battle[count_key])
+		# JSON brings every number back as a float; the whole ones are whole again.
+		for entry: Dictionary in battle.get("intent", []):
+			for key: String in ["min", "max", "amount"]:
+				if entry.has(key):
+					entry[key] = int(entry[key])
+		for status_key: String in ["status", "player_status"]:
+			var lingering: Dictionary = battle.get(status_key, {})
+			for key: String in lingering:
+				lingering[key] = [lingering[key][0] if key == "weaken" else int(lingering[key][0]), int(lingering[key][1])]
+		var foe_stats: Dictionary = battle.get("foe", {})
+		for key: String in ["hp", "damage_min", "damage_max", "tier", "xp", "bonus", "realm"]:
+			if foe_stats.has(key):
+				foe_stats[key] = int(foe_stats[key])
 	s.battle = battle
 	s.pending_event = {} if saved_pending.is_empty() else {"id": saved_pending.id, "day": int(saved_pending.day)}
 	s.ended = {} if saved_ended.is_empty() else {"kind": saved_ended.kind, "day": int(saved_ended.day)}
 	s.chronicle.entries = saved_chronicle
 	s.combat_rng.state = int(saved_rng.combat)
 	s.world_rng.state = int(saved_rng.world)
+	# A duel saved before qi orbs carries on under them: a fresh hand and the opponent's intent.
+	if fresh_hand:
+		s.Combat.open_hand(s)
 	s.combat_events.clear()
 	if awakened:
 		s.log_event("talents_awaken", {"talents": ",".join(born.talents + born.flaws)}, true)

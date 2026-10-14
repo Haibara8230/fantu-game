@@ -41,10 +41,7 @@ func _duel(game: Session, enemy_id: String) -> void:
 	var turns := 0
 	while not game.battle.is_empty() and turns < 60:
 		turns += 1
-		if game.player.hp < game.player.max_hp / 3 and int(game.battle.cooldowns.get("wood", 0)) == 0 and game.player.qi >= 8:
-			game.use_skill("wood")
-		else:
-			game.use_skill("sword")
+		game.plain_turn()
 
 func _content() -> void:
 	var game := Session.new()
@@ -227,7 +224,7 @@ func _key_people() -> void:
 	var turns := 0
 	while not road.battle.is_empty() and turns < 60:
 		turns += 1
-		road.use_skill("sword")
+		road.plain_turn()
 	check(road.item_count("peddler_pack") == 1 and road.story_at("peddler_robbed", "return"), "beating the robber wins back the pack")
 	while road.npc_location("peddler") != road.player.location:
 		road.wait(1)

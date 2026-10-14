@@ -13,9 +13,9 @@ const TEXT_SPEEDS := {"instant": 0, "fast": 60, "normal": 30, "slow": 15}
 const TEXT_SPEED_NAMES := {"instant": "即时", "fast": "快", "normal": "中", "slow": "慢"}
 const DEFAULT_TEXT_SPEED := "fast"
 # The rebindable keys, in the order the dialog lists them.
-const ACTIONS := ["save", "load", "skill_1", "skill_2", "skill_3", "skill_4", "guard"]
-const ACTION_NAMES := {"save": "保存", "load": "读取", "skill_1": "第一门神通", "skill_2": "第二门神通", "skill_3": "第三门神通", "skill_4": "第四门神通", "guard": "守御"}
-const DEFAULT_KEYS := {"save": KEY_F5, "load": KEY_F9, "skill_1": KEY_1, "skill_2": KEY_2, "skill_3": KEY_3, "skill_4": KEY_4, "guard": KEY_SPACE}
+const ACTIONS := ["save", "load", "skill_1", "skill_2", "skill_3", "skill_4", "end_turn", "guard"]
+const ACTION_NAMES := {"save": "保存", "load": "读取", "skill_1": "第一门神通", "skill_2": "第二门神通", "skill_3": "第三门神通", "skill_4": "第四门神通", "end_turn": "结束回合", "guard": "守御"}
+const DEFAULT_KEYS := {"save": KEY_F5, "load": KEY_F9, "skill_1": KEY_1, "skill_2": KEY_2, "skill_3": KEY_3, "skill_4": KEY_4, "end_turn": KEY_SPACE, "guard": KEY_G}
 # Keys the dialogs need themselves, and modifiers that are no key on their own.
 const RESERVED_KEYS := [KEY_ESCAPE, KEY_ENTER, KEY_KP_ENTER, KEY_TAB, KEY_SHIFT, KEY_CTRL, KEY_ALT, KEY_META, KEY_CAPSLOCK]
 
@@ -49,6 +49,10 @@ static func load_state(ui) -> void:
 			var code: Variant = saved.get(action)
 			if code is int and code > 0 and not code in RESERVED_KEYS:
 				keys[action] = code
+		# Files from before 结束回合 had 守御 on Space: Space now ends the turn and 守御 moves to its
+		# new default; a 守御 the player rebound stays where it is.
+		if not saved.has("end_turn") and int(keys.guard) == KEY_SPACE:
+			keys.guard = DEFAULT_KEYS.guard
 		# A file with one key on two actions falls back to the defaults.
 		var codes := {}
 		for action: String in ACTIONS:
@@ -136,12 +140,13 @@ static func key_name(ui, action: String) -> String:
 	var code := int(ui.keys.get(action, DEFAULT_KEYS[action]))
 	return "空格" if code == KEY_SPACE else OS.get_keycode_string(code)
 
-## Key names for texts that mention the controls (the guide's tips): {save}, {load}, {skills}, {guard}.
+## Key names for texts that mention the controls (the guide's tips): {save}, {load}, {skills},
+## {end_turn}, {guard}.
 static func key_hints(ui) -> Dictionary:
 	var skills: Array[String] = []
 	for index: int in range(1, 5):
 		skills.append(key_name(ui, "skill_%d" % index))
-	return {"save": key_name(ui, "save"), "load": key_name(ui, "load"), "skills": " / ".join(skills), "guard": key_name(ui, "guard")}
+	return {"save": key_name(ui, "save"), "load": key_name(ui, "load"), "skills": " / ".join(skills), "end_turn": key_name(ui, "end_turn"), "guard": key_name(ui, "guard")}
 
 ## Binds `keycode` to `action`; an action that had the key takes the action's old key instead.
 static func bind_key(ui, action: String, keycode: int) -> bool:

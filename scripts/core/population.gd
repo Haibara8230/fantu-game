@@ -218,15 +218,22 @@ static func foe(content, person_id: String, person: Dictionary) -> Dictionary:
 	var caps: Dictionary = content.stage(int(person.realm), int(person.stage))
 	var mods := Talents.sum(content, person.get("talents", []) + person.get("flaws", []))
 	var best: Dictionary = {}
+	var arts: Array = []
 	for art_id: String in person.loadout.arts:
 		var art: Dictionary = content.technique(art_id)
+		if art.is_empty():
+			continue
+		arts.append(art_id)
 		if art.get("kind", "") == "attack" and (best.is_empty() or int(art.damage_max) > int(best.damage_max)):
 			best = art
 	var bonus := int(caps.attack_bonus) + int(mods.get("attack", 0))
 	var power := maxf(0.1, 0.8 * (1.0 + float(int(mods.get("damage_all", 0)) + int(mods.get("damage_" + str(best.element), 0))) / 100.0))
+	# In a duel they cast their whole loadout from qi orbs like the player (combat.gd); the strongest art's
+	# numbers stay for duels begun before that.
 	return {
 		"name": person.name, "hp": Talents.scaled(int(caps.max_hp), int(mods.get("max_hp", 0)), 1), "damage_min": maxi(1, int(round(float(best.damage_min) * power)) + bonus),
 		"damage_max": maxi(1, int(round(float(best.damage_max) * power)) + bonus), "art": best.id, "art_name": best.name,
 		"vfx": best.vfx, "tier": int(best.tier), "xp": 10 * (int(person.stage) + 1) + 30 * int(person.realm), "npc": person_id,
-		"sect": person.sect, "gender": person.gender,
+		"sect": person.sect, "gender": person.gender, "arts": arts, "power": snappedf(power, 0.01), "bonus": bonus, "element": str(best.element),
+		"realm": int(person.realm),
 	}

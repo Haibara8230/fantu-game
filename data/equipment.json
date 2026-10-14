@@ -28,6 +28,8 @@
     "spirit": {"name": "聚灵", "stats": {"max_qi": 5}},
     "guard": {"name": "护身", "stats": {"defense": 0.04}},
     "attune": {"name": "契灵", "stats": {"element_damage": 0.05}},
-    "calm": {"name": "静心", "stats": {"cultivation": 0.04}}
+    "calm": {"name": "静心", "stats": {"cultivation": 0.04}},
+    "gather": {"name": "汇灵", "stats": {"orb_first": 1}},
+    "bind": {"name": "结灵", "stats": {"orb_cap": 1}}
   }
 }

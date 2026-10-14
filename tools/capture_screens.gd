@@ -103,6 +103,17 @@ func _run() -> void:
 	s.start_battle("disciple")
 	await _shot("18_battle")
 	s.flee()
+	# A spar with a generated disciple: their arts in the intent, pills, a shield and a burn.
+	var rivals: Array = s.present_npcs().filter(func(id: String) -> bool: return s.is_generated(id))
+	if not rivals.is_empty():
+		s.add_item("huiqi_pill", 2)
+		s.add_item("liaoshang_pill", 1)
+		s.begin_spar(str(rivals[0]))
+		s.battle.shield = 18
+		s.battle.status.burn = [4, 2]
+		main.set_view("place")
+		await _shot("18b_spar")
+		s.flee()
 	main.set_view("place")
 	s.pending_event = {"id": "tournament_entry", "day": int(s.world.day)}
 	await _shot("19_event")

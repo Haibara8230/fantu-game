@@ -107,7 +107,9 @@ func _stages() -> void:
 	stronger.use_skill("sword")
 	var hit: int = stronger.combat_events[0].amount
 	var boost: float = stronger.element_multiplier(stronger.content.technique("sword"))
-	check(is_equal_approx(boost, 1.1) and hit >= int(round((11 + 6) * boost)) and hit <= int(round((15 + 6) * boost)), "a higher stage hits harder, and a matching root a little more (%d)" % hit)
+	# The stage's attack bonus counts half for the one orb a 剑诀 spends.
+	var factor: float = boost * stronger.Combat.counter_multiplier(stronger, "metal")
+	check(is_equal_approx(boost, 1.1) and hit >= int(round((6 + 3) * factor)) and hit <= int(round((8 + 3) * factor)), "a higher stage hits harder, and a matching root a little more (%d)" % hit)
 
 ## Retreat fatigue: a fresh mind for the first half year in a row, then less each day down to half;
 ## two days of anything else ease one day of it. 炼气圆满 keeps the bottlenecks out of the way.

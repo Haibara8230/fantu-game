@@ -47,7 +47,8 @@
     "category": "pill",
     "price": 7,
     "rarity": 0,
-    "description": "服下恢复 20 点灵力。",
+    "description": "服下恢复 20 点灵力；斗法中服下可多得两颗灵气。",
+    "duel": {"orbs": 2},
     "use": [{"qi": 20}]
   },
   "liaoshang_pill": {
@@ -56,6 +57,7 @@
     "price": 10,
     "rarity": 0,
     "description": "服下恢复 40 点气血。",
+    "duel": {"heal": true},
     "use": [{"hp": 40}]
   },
   "ningqi_pill": {
@@ -82,6 +84,7 @@
     "rarity": 1,
     "fine_of": "liaoshang_pill",
     "description": "丹纹圆润的上品疗伤丹，服下恢复 70 点气血。",
+    "duel": {"heal": true},
     "use": [{"hp": 70}]
   },
   "huiqi_pill_fine": {
@@ -90,7 +93,8 @@
     "price": 14,
     "rarity": 1,
     "fine_of": "huiqi_pill",
-    "description": "丹香清冽的上品回气丹，服下恢复 35 点灵力。",
+    "description": "丹香清冽的上品回气丹，服下恢复 35 点灵力；斗法中服下可多得三颗灵气。",
+    "duel": {"orbs": 3},
     "use": [{"qi": 35}]
   },
   "ningqi_pill_fine": {

@@ -95,6 +95,8 @@ func _run() -> void:
 	check(main.battle_stage._enemy_art("rogue", {}).texture == "res://assets/art/rival_atlas_v2.png", "a named foe without its own sprite uses the shared one")
 	main.battle_stage.art.actors.rogue.preferred = rogue_preferred
 	_step("sword timeline")
+	# A known hand: enough for the sword, and for the fire and healing arts later.
+	main.session.battle.orbs = ["metal", "fire", "fire", "wood", "wood"]
 	_watch_stage("art_sword")
 	main.skill("sword")
 	check(main.presenting, "input lock starts before animation")
@@ -104,16 +106,20 @@ func _run() -> void:
 	main.run(func() -> String: return main.session.travel("wild"))
 	check(main.session.snapshot() == after, "repeated actions, load and travel blocked during animation")
 	await _wait_action()
-	check(cue_sequence == ["prepare", "release", "impact", "prepare", "release", "impact"], "player attack then enemy counterattack timeline")
+	check(cue_sequence == ["prepare", "release", "impact"], "a cast plays the art alone; the turn goes on")
 	check(not main.presenting, "input unlocks after animation")
+	_watch_stage("art_answer")
+	await main.battle_action("end_turn")
+	check(cue_sequence == ["prepare", "release", "impact"], "ending the turn plays the opponent's answer")
 	await main.battle_action("flee")
 	main.run(func() -> String: return main.session.act("rest"))
 	main.run(func() -> String: return main.session.travel("wild"))
 	main.run(func() -> String: return main.session.start_battle("wolf"))
 	_step("wolf duel: fire, heal, guard")
+	main.session.battle.orbs = ["fire", "fire", "wood", "wood"]
 	_watch_stage("art_fire")
 	await main.skill("fire")
-	check(cue_sequence.count("impact") == 2, "fire and counterattack produce impact cues")
+	check(cue_sequence.count("impact") == 1 and not main.session.battle.is_empty(), "fire produces its impact cue")
 	_watch_stage("art_heal")
 	await main.skill("wood")
 	check(cue_sequence[0] == "heal", "healing has its own visual event")
@@ -138,7 +144,7 @@ func _run() -> void:
 			for bout: int in 2:
 				main.run(func() -> String: return game.start_battle("disciple"))
 				while not game.battle.is_empty():
-					main.run(func() -> String: return game.use_skill("sword"))
+					main.run(func() -> String: return game.plain_turn())
 			main.run(func() -> String: return game.act("rest"))
 			main.run(func() -> String: return game.travel("wild"))
 			for i: int in 3:
@@ -170,6 +176,7 @@ func _run() -> void:
 	_step("serpent duel started")
 	await _capture("art_boss_idle")
 	check(main.battle_stage.enemy.sprite.region_rect.position.y == 472, "serpent uses its own calibrated atlas region")
+	main.session.battle.orbs = ["fire", "fire", "metal"]
 	_watch_stage("art_boss")
 	await main.skill("fire")
 	main._save_manual()

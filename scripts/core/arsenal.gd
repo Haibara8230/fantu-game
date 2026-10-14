@@ -58,8 +58,7 @@ static func technique(content, id: String) -> Dictionary:
 		"study_days": int(tier_def.study_days),
 	}
 	if archetype.slot == "art":
-		result.qi_cost = int(round(float(archetype.qi) * float(effect.get("qi_scale", 1.0))))
-		result.cooldown = maxi(0, int(archetype.cooldown) + int(effect.get("cooldown", 0)))
+		result.cost = _cost(archetype.cost, parts[2], int(effect.get("thrift", 0)))
 		result.vfx = archetype.vfx[parts[2]]
 		if archetype.has("damage"):
 			var scale := power * float(effect.get("damage_scale", 1.0)) * (1.0 + float(effect.get("pierce", 0.0)))
@@ -68,7 +67,9 @@ static func technique(content, id: String) -> Dictionary:
 			result.hits = int(archetype.get("hits", 1)) + int(effect.get("hits", 0))
 		if archetype.has("heal"):
 			result.heal = int(round(float(archetype.heal) * power))
-		for key: String in ["pierce", "lifesteal", "qi_gain"]:
+		if archetype.has("shield"):
+			result.shield = int(round(float(archetype.shield) * power))
+		for key: String in ["pierce", "lifesteal", "draw", "renew"]:
 			if effect.has(key):
 				result[key] = effect[key]
 		if effect.has("burn"):
@@ -94,8 +95,7 @@ static func _handwritten(content, id: String) -> Dictionary:
 		"id": id, "generated": false, "element": skill.get("element", "metal"), "tier": tier,
 		"tier_name": content.technique_data.tiers[tier - 1].name, "name": skill.name, "slot": "art", "kind": skill.kind,
 		"affixes": [], "affix_texts": [], "min_realm": 0, "value": int(content.technique_data.tiers[tier - 1].value),
-		"study_days": 0, "qi_cost": int(skill.qi_cost), "cooldown": int(skill.cooldown), "vfx": skill.vfx,
-		"description": skill.description,
+		"study_days": 0, "cost": skill.cost.duplicate(), "vfx": skill.vfx, "description": str(skill.description) + "耗灵气：%s。" % cost_text(content, skill.cost),
 	}
 	if skill.has("damage_min"):
 		result.damage_min = int(skill.damage_min)
@@ -103,10 +103,40 @@ static func _handwritten(content, id: String) -> Dictionary:
 		result.hits = int(skill.get("hits", 1))
 	if skill.has("heal"):
 		result.heal = int(skill.heal)
+	if skill.has("shield"):
+		result.shield = int(skill.shield)
 	return result
 
+## An archetype's cost for an element: "element" becomes the element; 省灵 drops an "any" orb first,
+## else one of the element, never below one orb.
+static func _cost(template: Dictionary, element: String, thrift: int) -> Dictionary:
+	var cost := {}
+	for key: String in template:
+		cost[element if key == "element" else key] = int(template[key])
+	for step: int in thrift:
+		var total := 0
+		for key: String in cost:
+			total += int(cost[key])
+		if total <= 1:
+			break
+		var dropped := "any" if cost.has("any") else element
+		cost[dropped] = int(cost[dropped]) - 1
+		if int(cost[dropped]) <= 0:
+			cost.erase(dropped)
+	return cost
+
+## "金×2、任意×1".
+static func cost_text(content, cost: Dictionary) -> String:
+	var parts: Array[String] = []
+	for key: String in content.technique_data.elements:
+		if cost.has(key):
+			parts.append("%s×%d" % [content.technique_data.elements[key].name, int(cost[key])])
+	if cost.has("any"):
+		parts.append("任意×%d" % int(cost.any))
+	return "、".join(parts)
+
 static func _scaled(key: String, value: float) -> Variant:
-	return int(round(value)) if key in ["max_hp", "max_qi", "attack"] else snappedf(value, 0.001)
+	return int(round(value)) if key in ["max_hp", "max_qi", "attack", "orb_weight"] else snappedf(value, 0.001)
 
 static func describe_technique(content, t: Dictionary) -> String:
 	var lines: Array[String] = []
@@ -118,10 +148,10 @@ static func describe_technique(content, t: Dictionary) -> String:
 			"heal":
 				lines.append("恢复 %d 点气血。" % t.heal)
 			"guard":
-				lines.append("恢复 %d 点气血，本回合所受伤害减半。" % t.heal)
-		lines.append("消耗 %d 灵力，冷却 %d 回合。" % [t.qi_cost, t.cooldown])
+				lines.append("结成 %d 点护盾，先替你挡下伤害，至对手下一回合结束。" % t.shield)
+		lines.append("耗灵气：%s。" % cost_text(content, t.cost))
 	else:
-		var names := {"cultivation": "修炼速度 +%d%%", "max_hp": "气血上限 +%d", "max_qi": "灵力上限 +%d", "element_damage": element_name + "属性伤害 +%d%%"}
+		var names := {"cultivation": "修炼速度 +%d%%", "max_hp": "气血上限 +%d", "max_qi": "灵力上限 +%d", "element_damage": element_name + "属性伤害 +%d%%", "orb_weight": "斗法中" + element_name + "灵气更易抽到 +%d"}
 		var parts: Array[String] = []
 		for key: String in t.passive:
 			var value: float = float(t.passive[key])
@@ -183,9 +213,10 @@ static func equipment(content, id: String) -> Dictionary:
 			return {}
 		affix_names.append(affix.name)
 		for key: String in affix.stats:
-			stats[key] = float(stats.get(key, 0.0)) + float(affix.stats[key]) * power
+			# Orb affixes count whole orbs and do not grow with the tier.
+			stats[key] = float(stats.get(key, 0.0)) + float(affix.stats[key]) * (1.0 if key.begins_with("orb_") else power)
 	for key: String in stats.keys():
-		stats[key] = _scaled(key, stats[key])
+		stats[key] = int(stats[key]) if key.begins_with("orb_") else _scaled(key, stats[key])
 	var nouns: Array = base.nouns
 	var material: String = data.materials[base.material][tier - 1]
 	var prefix := ""
@@ -201,7 +232,7 @@ static func equipment(content, id: String) -> Dictionary:
 	return result
 
 static func describe_equipment(content, item: Dictionary) -> String:
-	var names := {"attack": "攻击 +%d", "max_hp": "气血上限 +%d", "max_qi": "灵力上限 +%d", "defense": "受伤 -%d%%", "element_damage": "属性伤害 +%d%%", "cultivation": "修炼速度 +%d%%"}
+	var names := {"attack": "攻击 +%d", "max_hp": "气血上限 +%d", "max_qi": "灵力上限 +%d", "defense": "受伤 -%d%%", "element_damage": "属性伤害 +%d%%", "cultivation": "修炼速度 +%d%%", "orb_first": "斗法开局多抽 %d 颗灵气", "orb_cap": "灵气上限 +%d"}
 	var parts: Array[String] = []
 	var keys: Array = item.stats.keys()
 	keys.sort()
