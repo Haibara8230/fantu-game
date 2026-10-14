@@ -4,6 +4,7 @@ extends RefCounted
 ## furnace is lit. The field page shows the plots of the 洞府's field, what grows there and when it
 ## ripens, and what improving the field asks.
 const Calendar = preload("res://scripts/core/calendar.gd")
+const ArtLibrary = preload("res://scripts/ui/art_library.gd")
 const WARN := Color("#e3c08a")
 
 static func render(ui) -> void:
@@ -13,6 +14,7 @@ static func render(ui) -> void:
 	var heading := HBoxContainer.new()
 	heading.add_theme_constant_override("separation", 16)
 	center.add_child(heading)
+	_decoration(heading, "alchemy")
 	heading.add_child(ui.label("炼 丹", 26, ui.GOLD))
 	if known.is_empty():
 		center.add_child(ui.paragraph("你还不会任何丹方。云溪坊市的丹铺卖疗伤丹、回气丹的方子；凝气丹、破障丹与筑基丹的方子，可到青云山执事堂以贡献兑换。买来的丹方在行囊里研读后便可开炉。"))
@@ -59,6 +61,19 @@ static func render(ui) -> void:
 
 static func _span(pair: Array) -> String:
 	return str(int(pair[0])) if int(pair[0]) == int(pair[1]) else "%d–%d" % [int(pair[0]), int(pair[1])]
+
+## Ignore the source image's size so the illustration never stretches the scroll.
+static func _decoration(heading: HBoxContainer, art_id: String) -> void:
+	var texture := ArtLibrary.texture(ArtLibrary.ui_art(art_id))
+	if texture == null:
+		return
+	var picture := TextureRect.new()
+	picture.texture = texture
+	picture.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	picture.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	picture.custom_minimum_size = Vector2(72, 72)
+	picture.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	heading.add_child(picture)
 
 ## The main herbs the recipe takes, and how many are carried.
 static func _herbs(ui, center: VBoxContainer, plan: Dictionary) -> void:
@@ -127,6 +142,7 @@ static func render_field(ui) -> void:
 	var heading := HBoxContainer.new()
 	heading.add_theme_constant_override("separation", 16)
 	center.add_child(heading)
+	_decoration(heading, "spirit_field")
 	heading.add_child(ui.label("洞府灵田 · %s" % grade.name, 26, ui.GOLD))
 	heading.add_child(ui.label("%d 块 · 生长 %d%% 时日 · 每株多收 %d" % [int(grade.plots), int(grade.growth), int(grade.bonus)], 15, ui.MUTED))
 	center.add_child(ui.paragraph("一株灵草种下，长成后可收数株。灵田不靠运气：到了日子便能收，品级越高，长得越快、收得越多。"))

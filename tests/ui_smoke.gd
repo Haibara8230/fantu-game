@@ -164,13 +164,12 @@ func _run() -> void:
 	var test_path := "res://.godot/ui_saves_%d" % Time.get_ticks_usec()
 	main.manual_store = SaveStore.new(test_path + "/manual")
 	main.auto_store = SaveStore.new(test_path + "/auto")
+	# Isolate preferences before _ready builds the welcome from the guide state.
+	main.guide_path = test_path + "/guide.cfg"
+	main.settings_path = test_path + "/settings.cfg"
 	root.add_child(main)
 	main.session.encounters_enabled = false
 	main.audio.settings_path = test_path + "/settings.cfg"
-	main.guide_path = test_path + "/guide.cfg"
-	main.Guide.load_state(main)
-	main.settings_path = test_path + "/settings.cfg"
-	main.Settings.load_state(main)
 	main.refresh_key_labels()
 	# The welcome screen was built from the player's own guide file; build it again from the test's.
 	main.close_welcome()

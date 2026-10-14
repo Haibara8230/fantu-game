@@ -1,0 +1,81 @@
+{
+  "date": "2026-10-13",
+  "tool": "built-in imagegen",
+  "purpose": "High-appearance and ethereal young-adult portraits for the existing gender/age/role pool. Classification tags are art metadata for a future appearance attribute, not runtime gameplay rules.",
+  "source_policy": "Generated original PNGs copied unchanged; no image postprocessing.",
+  "allocation": "Current pool discovery still uses gender, age band and role prefix. appearance and bearing tags are documentation only; the future attribute will need to consume or map them explicitly.",
+  "assets": [
+    {
+      "file": "assets/local/portraits/pool/male_young/disciple_male_young_handsome_01.png",
+      "gender": "male",
+      "age_band": "young",
+      "role": "disciple",
+      "appearance": "high",
+      "bearing": "heroic",
+      "width": 1122,
+      "height": 1402,
+      "transparent": false,
+      "prompt": "Use case: stylized-concept\nAsset type: ONE original half-body NPC portrait for 凡途, a 2D Chinese cultivation RPG, for a high-appearance young adult portrait pool.\nCanvas: portrait 4:5, target 1024x1280 PNG. ONE adult only, waist-up, head in the upper third, three-quarter view FACING RIGHT, both shoulders and head fully inside safe margins. Face clear and readable at 120x150. Plain flat muted blue-jade background with only a slight wash, no scenery.\nStyle: unmistakably TWO-DIMENSIONAL hand-drawn Chinese xianxia character illustration, clear confident dark ink outlines, flat ivory/jade/slate color areas with one or two restrained cel shadows, simplified economical robe folds, graphic grouped dark hair. The subject is visibly attractive and refined, with distinct beautiful facial proportions and a cultivator's serene bearing, while still an illustrated adult individual. No skin pores, realistic anatomy rendering, photographic light, glossy satin, film effects, 3D, polished CGI, hyperreal concept painting, chibi or huge moe eyes. All adults 18+, modest fully clothed robes. No letters, text, UI, frame, signature, watermark, halos or heavy magic particles.\n\nSubject: A handsome 23-year-old male Qingyun sword sect disciple, elegant strong jaw and balanced high cheekbones, straight dark eyebrows and alert almond eyes, clean-shaven, warm confident slight smile. Jet-black hair in a neat high topknot with a dark blue cord, two short loose front locks. Pale ivory robe, slate-blue collar and cuffs, blue sash, subtle cloud motif and a simple sword at his hip. Athletic but slender, youthful heroic poise, distinct angular face."
+    },
+    {
+      "file": "assets/local/portraits/pool/female_young/disciple_female_young_beautiful_01.png",
+      "gender": "female",
+      "age_band": "young",
+      "role": "disciple",
+      "appearance": "high",
+      "bearing": "graceful",
+      "width": 1122,
+      "height": 1402,
+      "transparent": false,
+      "prompt": "Use case: stylized-concept\nAsset type: ONE original half-body NPC portrait for 凡途, a 2D Chinese cultivation RPG, for a high-appearance young adult portrait pool.\nCanvas: portrait 4:5, target 1024x1280 PNG. ONE adult only, waist-up, head in the upper third, three-quarter view FACING RIGHT, both shoulders and head fully inside safe margins. Face clear and readable at 120x150. Plain flat muted blue-jade background with only a slight wash, no scenery.\nStyle: unmistakably TWO-DIMENSIONAL hand-drawn Chinese xianxia character illustration, clear confident dark ink outlines, flat ivory/jade/slate color areas with one or two restrained cel shadows, simplified economical robe folds, graphic grouped dark hair. The subject is visibly attractive and refined, with distinct beautiful facial proportions and a cultivator's serene bearing, while still an illustrated adult individual. No skin pores, realistic anatomy rendering, photographic light, glossy satin, film effects, 3D, polished CGI, hyperreal concept painting, chibi or huge moe eyes. All adults 18+, modest fully clothed robes. No letters, text, UI, frame, signature, watermark, halos or heavy magic particles.\n\nSubject: A beautiful 22-year-old female Qingyun sword sect disciple, softly heart-shaped face, luminous expressive almond eyes of natural size, fine arched brows, elegant straight nose and gentle closed-lip smile. Black hair half-up with a simple small jade hairpin and neat long grouped locks. Ivory robe with slate-blue collar and cuffs and blue sash, modest crossed neckline, simple sword at her hip. Warm bright graceful energy and fresh adult beauty, face clearly distinct from a stern angular swordswoman."
+    },
+    {
+      "file": "assets/local/portraits/pool/male_young/disciple_male_young_ethereal_01.png",
+      "gender": "male",
+      "age_band": "young",
+      "role": "disciple",
+      "appearance": "high",
+      "bearing": "ethereal",
+      "width": 1122,
+      "height": 1402,
+      "transparent": false,
+      "prompt": "Use case: stylized-concept\nAsset type: ONE original half-body NPC portrait for 凡途, a 2D Chinese cultivation RPG, for a high-appearance young adult portrait pool.\nCanvas: portrait 4:5, target 1024x1280 PNG. ONE adult only, waist-up, head in the upper third, three-quarter view FACING RIGHT, both shoulders and head fully inside safe margins. Face clear and readable at 120x150. Plain flat muted blue-jade background with only a slight wash, no scenery.\nStyle: unmistakably TWO-DIMENSIONAL hand-drawn Chinese xianxia character illustration, clear confident dark ink outlines, flat ivory/jade/slate color areas with one or two restrained cel shadows, simplified economical robe folds, graphic grouped hair. The subject is visibly attractive and refined, with distinct beautiful facial proportions and a cultivator's serene bearing, while still an illustrated adult individual. No skin pores, realistic anatomy rendering, photographic light, glossy satin, film effects, 3D, polished CGI, hyperreal concept painting, chibi or huge moe eyes. All adults 18+, modest fully clothed robes. No letters, text, UI, frame, signature, watermark, halos or heavy magic particles.\n\nSubject: A strikingly beautiful 26-year-old male Qingyun sword cultivator with an immortal's serene unworldly bearing: narrow oval face, graceful long straight brows, clear thoughtful almond eyes, refined straight nose, slender clean jaw, clean-shaven, composed faintly distant expression. Very long silvery-white hair, a cultivation-inspired aesthetic with a clearly youthful smooth face, half-up in a simple pale jade crown, remaining hair falls in clean flowing groups. Modest layered ivory and pale slate-blue sect robes, small jade clasp, simple straight sword sheath visible at side. Slender elegant adult male, restrained cool beauty conveyed by silhouette and expression, not glowing particles."
+    },
+    {
+      "file": "assets/local/portraits/pool/female_young/disciple_female_young_ethereal_01.png",
+      "gender": "female",
+      "age_band": "young",
+      "role": "disciple",
+      "appearance": "high",
+      "bearing": "ethereal",
+      "width": 1122,
+      "height": 1402,
+      "transparent": false,
+      "prompt": "Use case: stylized-concept\nAsset type: ONE original half-body NPC portrait for 凡途, a 2D Chinese cultivation RPG, for a high-appearance young adult portrait pool.\nCanvas: portrait 4:5, target 1024x1280 PNG. ONE adult only, waist-up, head in the upper third, three-quarter view FACING RIGHT, both shoulders and head fully inside safe margins. Face clear and readable at 120x150. Plain flat muted blue-jade background with only a slight wash, no scenery.\nStyle: unmistakably TWO-DIMENSIONAL hand-drawn Chinese xianxia character illustration, clear confident dark ink outlines, flat ivory/jade/slate color areas with one or two restrained cel shadows, simplified economical robe folds, graphic grouped dark hair. The subject is visibly attractive and refined, with distinct beautiful facial proportions and a cultivator's serene bearing, while still an illustrated adult individual. No skin pores, realistic anatomy rendering, photographic light, glossy satin, film effects, 3D, polished CGI, hyperreal concept painting, chibi or huge moe eyes. All adults 18+, modest fully clothed robes. No letters, text, UI, frame, signature, watermark, halos or heavy magic particles.\n\nSubject: An exceptionally beautiful 27-year-old female Qingyun sword cultivator, cool serene immortal bearing: elongated oval face, delicately defined cheekbones, long calm almond eyes, slender straight brows, small balanced nose, softly closed lips, composed distant expression. Flowing black hair in a sleek center-parted half-up arrangement with a plain silver-blue hairpin, two long framing locks. Layered modest ivory sect robe with pale jade-blue collar, cuffs and blue sash, tiny jade pendant, both shoulders covered. Slender poised adult, very refined quiet beauty, clean graceful silhouette; no flower crown, halo or particles."
+    },
+    {
+      "file": "assets/local/portraits/pool/male_young/wanderer_male_young_handsome_01.png",
+      "gender": "male",
+      "age_band": "young",
+      "role": "wanderer",
+      "appearance": "high",
+      "bearing": "scholarly",
+      "width": 1122,
+      "height": 1402,
+      "transparent": false,
+      "prompt": "Use case: stylized-concept\nAsset type: ONE original half-body NPC portrait for 凡途, a 2D Chinese cultivation RPG, for a high-appearance young adult portrait pool.\nCanvas: portrait 4:5, target 1024x1280 PNG. ONE adult only, waist-up, head in the upper third, three-quarter view FACING RIGHT, both shoulders and head fully inside safe margins. Face clear and readable at 120x150. Plain flat muted blue-jade background with only a slight wash, no scenery.\nStyle: unmistakably TWO-DIMENSIONAL hand-drawn Chinese xianxia character illustration, clear confident dark ink outlines, flat ivory/jade/slate color areas with one or two restrained cel shadows, simplified economical robe folds, graphic grouped dark hair. The subject is visibly attractive and refined, with distinct beautiful facial proportions and a cultivator's serene bearing, while still an illustrated adult individual. No skin pores, realistic anatomy rendering, photographic light, glossy satin, film effects, 3D, polished CGI, hyperreal concept painting, chibi or huge moe eyes. All adults 18+, modest fully clothed robes. No letters, text, UI, frame, signature, watermark, halos or heavy magic particles.\n\nSubject: A handsome 29-year-old wandering male cultivator with warm scholarly elegance. Long face with a gentle square chin, slightly curved bold brows, kind intelligent narrow almond eyes, balanced straight nose, subtle cheerful closed-mouth smile, clean-shaven. Long black hair tied low with a simple grey cloth cord, a few soft framing locks. Practical modest ink-green travelling robe with a warm ivory inner collar and simple brown sash, a small plain gourd at the belt, holding a closed bamboo fan low near waist with one natural hand. Refined gentle adult beauty, modest travelling clothes with very few plain patches; the dignified face is the focus."
+    },
+    {
+      "file": "assets/local/portraits/pool/female_young/visitor_female_young_beautiful_01.png",
+      "gender": "female",
+      "age_band": "young",
+      "role": "visitor",
+      "appearance": "high",
+      "bearing": "heroic",
+      "width": 1122,
+      "height": 1402,
+      "transparent": false,
+      "prompt": "Use case: stylized-concept\nAsset type: ONE original half-body NPC portrait for 凡途, a 2D Chinese cultivation RPG, for a high-appearance young adult portrait pool.\nCanvas: portrait 4:5, target 1024x1280 PNG. ONE adult only, waist-up, head in the upper third, three-quarter view FACING RIGHT, both shoulders and head fully inside safe margins. Face clear and readable at 120x150. Plain flat muted blue-jade background with only a slight wash, no scenery.\nStyle: unmistakably TWO-DIMENSIONAL hand-drawn Chinese xianxia character illustration, clear confident dark ink outlines, flat ivory/jade/slate color areas with one or two restrained cel shadows, simplified economical robe folds, graphic grouped dark hair. The subject is visibly attractive and refined, with distinct beautiful facial proportions and a cultivator's serene bearing, while still an illustrated adult individual. No skin pores, realistic anatomy rendering, photographic light, glossy satin, film effects, 3D, polished CGI, hyperreal concept painting, chibi or huge moe eyes. All adults 18+, modest fully clothed robes. No letters, text, UI, frame, signature, watermark, halos or heavy magic particles.\n\nSubject: A stunning 25-year-old female visiting cultivator of the Chixiao sect, mature confident heroic beauty. Distinct slightly angular face, high balanced cheekbones, sharply expressive natural-sized almond eyes, dark straight brows, elegant straight nose and proud faint smile. Black hair in a high practical ponytail tied with a muted crimson cord, clean grouped flowing locks. Modest crossed charcoal and muted crimson robe, small stylized flame motif at sleeve, red sash, narrow sword sheath beside the hip. Tall poised athletic adult, attractive bold swordswoman bearing, calm fiery confidence without magic effects."
+    }
+  ]
+}
