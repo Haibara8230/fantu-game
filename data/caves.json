@@ -44,5 +44,50 @@
         "loot": [[{"manual": 3}], [{"stones": 120}, {"item": ["huiqi_pill_fine", 1]}], [{"item": ["shouyuan_guo", 1]}]]
       }
     ]
+  },
+  "chenxia": {
+    "name": "沉霞古境",
+    "location": "wild",
+    "requires_flag": "chenxia_open",
+    "step_days": 3,
+    "rooms": [
+      {
+        "id": "gate", "name": "古境入口", "start": true, "links": ["stairs"], "map": [0.08, 0.5],
+        "text": "晚霞沉在谷底的雾里，雾中现出一道石门。门后的天色是另一种颜色，像是许多年前的黄昏。"
+      },
+      {
+        "id": "stairs", "name": "雾锁长阶", "links": ["gate", "garden", "tomb"], "map": [0.28, 0.5], "requires_sense": 40,
+        "text": "长阶一级一级没入雾中，每走一步，脚下的石头都轻轻一震，像有什么在下面数着。",
+        "trap": {"names": ["移形阵", "落星禁制"], "sense": 50, "damage": [40, 60]}
+      },
+      {
+        "id": "garden", "name": "古药园", "links": ["stairs", "pool"], "map": [0.5, 0.22],
+        "text": "药园早已荒了，几株老药却活了下来，枝叶间灵气浓得化不开。",
+        "loot": [[{"item": ["lingzhi", 2]}], [{"item": ["ningyuan_dan", 1]}], [{"item": ["yanshou_dan", 1]}]],
+        "hidden": {"name": "药园深处的寿藤", "sense": 60, "qi": 30, "loot": [[{"item": ["shouyuan_guo", 1]}], [{"manual": 4}]]}
+      },
+      {
+        "id": "pool", "name": "霞光灵池", "links": ["garden"], "map": [0.74, 0.14],
+        "text": "池水映着天上不散的晚霞，水底沉着几块发光的石头。",
+        "hidden": {"name": "池底的灵石髓", "sense": 72, "qi": 40, "loot": [[{"stones": 600}], [{"item": ["ningyuan_dan", 2]}]]}
+      },
+      {
+        "id": "tomb", "name": "剑冢", "links": ["stairs", "library"], "map": [0.5, 0.78],
+        "text": "一柄柄断剑插在土里，剑身上的锈蚀成了霞色。剑冢中央，一具剑傀缓缓抬起了头。",
+        "guardian": "jian_kui",
+        "loot": [[{"equipment": 4}]]
+      },
+      {
+        "id": "library", "name": "藏经石阁", "links": ["tomb", "seat"], "map": [0.72, 0.78], "requires_sense": 66,
+        "text": "石阁里的玉简大多碎了，几枚完好的嵌在石壁里，要以神识慢慢引出来。",
+        "loot": [[{"manual": 4}, {"manual": 3}], [{"manual": 4}, {"stones": 300}]]
+      },
+      {
+        "id": "seat", "name": "古修坐化处", "links": ["library"], "map": [0.92, 0.55],
+        "text": "一具枯骨盘坐在蒲团上，身前的灯还亮着。灯影一晃，一缕残念从骨中站了起来。",
+        "guardian": "can_nian",
+        "loot": [[{"manual": 4}, {"equipment": 4}, {"item": ["shouyuan_guo", 1]}]]
+      }
+    ]
   }
 }

@@ -94,7 +94,7 @@
       "spots": [
         {"id": "entrance", "tag": [0.3, 0.6], "name": "谷口", "description": "乱石嶙峋，常有妖狼出没。", "actions": ["battle:wolf"]},
         {"id": "slope", "tag": [0.54, 0.56], "name": "灵草坡", "description": "向阳的缓坡上灵草丛生。", "actions": ["gather"]},
-        {"id": "spring", "tag": [0.37, 0.36], "name": "深谷灵泉", "description": "谷底的灵泉被赤鳞妖蟒盘踞。", "actions": ["battle:serpent", "battle:mo_xiu"]},
+        {"id": "spring", "tag": [0.37, 0.36], "name": "深谷灵泉", "description": "谷底的灵泉被赤鳞妖蟒盘踞。", "actions": ["battle:serpent", "battle:mo_xiu"]}, {"id": "chenxia", "tag": [0.55, 0.3], "name": "沉霞古境", "description": "晚霞沉进谷底的雾里，雾中现出一道石门。古境一甲子开一回，开一年便合上。", "actions": ["explore_cave"], "requires_flag": "chenxia_open"},
         {"id": "eye", "tag": [0.12, 0.36], "name": "灵眼", "description": "山壁裂隙后藏着一眼灵泉，天地灵气在此汇聚成漩。在这里闭关突破，把握更大。", "actions": ["breakthrough"], "requires_flag": "spirit_eye_found"}
       ]
     },
@@ -366,6 +366,38 @@
       "sect": "canglan",
       "drops": {"chance": 0.5, "tiers": [3, 4]}
     },
+    "jian_kui": {
+      "name": "霞锈剑傀",
+      "element": "metal",
+      "hp": 480,
+      "damage_min": 30,
+      "damage_max": 40,
+      "reward_stones": 0,
+      "reward_xp": 400,
+      "reward_herbs": 0,
+      "locations": [],
+      "min_realm": 2,
+      "human": true,
+      "sect": "qingyun",
+      "world_flag": "chenxia_puppet_down",
+      "flag_event": "chenxia_puppet_down"
+    },
+    "can_nian": {
+      "name": "古修残念",
+      "element": "water",
+      "hp": 600,
+      "damage_min": 34,
+      "damage_max": 44,
+      "reward_stones": 0,
+      "reward_xp": 800,
+      "reward_herbs": 0,
+      "locations": [],
+      "min_realm": 2,
+      "human": true,
+      "sect": "canglan",
+      "world_flag": "chenxia_remnant_down",
+      "flag_event": "chenxia_remnant_down"
+    },
     "den_wolf": {
       "name": "石窟影狼",
       "element": "earth",
@@ -513,7 +545,7 @@
     "search_ruin": 5,
     "road_recovery": 1
   },
-  "world_flags": ["ruin_den_cleared", "serpent_slain", "heard_auction_rumor", "found_ruin", "ruin_cleared", "helped_wanderer", "serpent_rampage", "azhi_promised", "azhi_mourned", "intro_done", "peddler_friend", "serpent_weakened", "spirit_eye_found"],
+  "world_flags": ["chenxia_open", "chenxia_puppet_down", "chenxia_remnant_down", "ruin_den_cleared", "serpent_slain", "heard_auction_rumor", "found_ruin", "ruin_cleared", "helped_wanderer", "serpent_rampage", "azhi_promised", "azhi_mourned", "intro_done", "peddler_friend", "serpent_weakened", "spirit_eye_found"],
   "sects": {
     "wanderer": {
       "name": "散修",

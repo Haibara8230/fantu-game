@@ -259,6 +259,30 @@
     "effects": [{"clear_flag": "serpent_rampage"}, {"flag": "serpent_slain"}],
     "chronicle": "封谷三年后，青云剑宗长老出手斩杀赤鳞妖蟒，落霞谷重新开放。"
   },
+  "chenxia_notice": {
+    "title": "古境将开",
+    "trigger": "date",
+    "priority": 5,
+    "periodic": {"start_year": 149, "every_years": 60, "month": 3, "from_day": 1, "to_day": 1},
+    "chronicle": "各宗都在传：明年开春，落霞谷底的晚霞会沉进雾里——一甲子一开的沉霞古境，又要现世了。"
+  },
+  "chenxia_open": {
+    "title": "沉霞古境",
+    "trigger": "date",
+    "priority": 6,
+    "major": true,
+    "periodic": {"start_year": 150, "every_years": 60, "month": 3, "from_day": 1, "to_day": 1},
+    "effects": [{"reset_cave": "chenxia"}, {"flag": "chenxia_open"}],
+    "chronicle": "落霞谷底，晚霞沉进了雾里，雾中现出一道石门——沉霞古境开了，一年后合上。"
+  },
+  "chenxia_close": {
+    "title": "古境闭合",
+    "trigger": "date",
+    "priority": 6,
+    "periodic": {"start_year": 151, "every_years": 60, "month": 3, "from_day": 1, "to_day": 1},
+    "effects": [{"clear_flag": "chenxia_open"}],
+    "chronicle": "落霞谷底的雾散了，沉霞古境的石门随晚霞一同沉了下去。"
+  },
   "five_sects_notice": {
     "title": "论道告示",
     "trigger": "date",

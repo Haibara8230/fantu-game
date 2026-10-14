@@ -120,6 +120,37 @@
       "faces_right": true,
       "height_ratio": 0.85
     },
+    "jian_kui": {
+      "texture": "res://assets/art/rival_atlas_v2.png",
+      "columns": 3,
+      "rows": 2,
+      "frames": {
+        "idle": 0,
+        "prepare": 1,
+        "attack": 2,
+        "cast": 3,
+        "hit": 4,
+        "guard": 5
+      },
+      "faces_right": true,
+      "height_ratio": 0.85
+    },
+    "can_nian": {
+      "texture": "res://assets/art/rival_atlas_v2.png",
+      "preferred": "res://assets/art/actors/ruin_rogue.png",
+      "columns": 3,
+      "rows": 2,
+      "frames": {
+        "idle": 0,
+        "prepare": 1,
+        "attack": 2,
+        "cast": 3,
+        "hit": 4,
+        "guard": 5
+      },
+      "faces_right": true,
+      "height_ratio": 0.85
+    },
     "cultivator": {
       "texture": "res://assets/art/rival_atlas_v2.png",
       "look": "res://assets/art/actors/cultivator_%s_%s.png",

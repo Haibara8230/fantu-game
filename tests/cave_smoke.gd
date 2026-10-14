@@ -26,6 +26,7 @@ func _run() -> void:
 	_rooms()
 	_guardian()
 	_saves()
+	_chenxia()
 	await _scroll()
 	print("CAVES: %d checks, %d failures" % [checks, failures])
 	quit(0 if failures == 0 else 1)
@@ -175,6 +176,39 @@ func _saves() -> void:
 	gone.world.caves.ruin.explored.append("moon_room")
 	var kept := Session.new()
 	check(kept.restore(gone) and not kept.world.caves.has("moon_cave") and not "moon_room" in kept.world.caves.ruin.explored, "caves and rooms no longer known are dropped")
+
+## 沉霞古境: opens in spring of 150 and every sixty years for one year, in the valley; its stairs ask
+## 神识 40; its guardians fall; it closes; the next opening starts afresh.
+func _chenxia() -> void:
+	var game := _game(0)
+	game.player.realm = 1
+	game.refresh_realm_stats()
+	game.player.location = "wild"
+	check(game.cave_here().is_empty(), "before 150 the valley holds no old realm")
+	var calendar = game.Calendar
+	game.world.day = calendar.to_day(150, 2, 30)
+	game.wait(1)
+	check(game.has_flag("chenxia_open") and game.cave_here() == "chenxia" and game.journal_lines().any(func(line: String) -> bool: return line.contains("沉霞古境开了")), "in the spring of 150 the 沉霞古境 opens in the valley")
+	check(game.enter_room("chenxia", "stairs").contains("神识 40"), "its stairs ask 神识 40")
+	check(game.Caves.fortunes_in(game, "chenxia").is_empty() and game.Caves.fortunes_in(game, "ruin").size() == 2, "the old cave's fortunes stay in the old cave")
+	game.player.realm = 2
+	game.player.stage = 1
+	game.refresh_realm_stats()
+	game.player.hp = game.player.max_hp
+	game.enter_room("chenxia", "stairs")
+	check(game.Caves.explored(game, "chenxia", "stairs") and game.journal_lines().any(func(line: String) -> bool: return line.contains("识破")), "a 金丹 sees through the stairs' array")
+	game.enter_room("chenxia", "tomb")
+	check(game.battle.get("enemy_id", "") == "jian_kui", "a sword puppet guards the tomb")
+	game.battle.hp = 1
+	game.battle.orbs = ["metal"]
+	game.use_skill("sword")
+	check(game.has_flag("chenxia_puppet_down") and game.Caves.reachable(game, "chenxia", "library"), "fallen, the way to the library opens")
+	game.world.day = calendar.to_day(151, 2, 30)
+	game.wait(1)
+	check(not game.has_flag("chenxia_open") and game.cave_here().is_empty(), "a year later it closes")
+	game.world.day = calendar.to_day(210, 2, 30)
+	game.wait(1)
+	check(game.has_flag("chenxia_open") and not game.has_flag("chenxia_puppet_down") and not game.world.caves.has("chenxia"), "sixty years on it opens afresh, its guardians standing again")
 
 func _scroll() -> void:
 	root.size = Vector2i(1920, 1080)

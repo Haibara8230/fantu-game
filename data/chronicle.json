@@ -48,6 +48,8 @@
   "cave_loot": "在{room_name}找到{loot_text}。",
   "cave_stones": "在{room_name}拾得灵石 {stones}。",
   "cave_hidden": "以神识看破{hidden}，耗 {qi} 灵力破开禁制。",
+  "chenxia_puppet_down": "剑冢里的霞锈剑傀散成了一地锈铁，通往藏经石阁的路开了。",
+  "chenxia_remnant_down": "古修的残念对你一揖，散进了灯影里。",
   "den_cleared": "兵器室里的石窟影狼伏诛，再往里去的路通了。",
   "search_ruin": "在洞府石室翻找 {duration}，得灵石 {stones}、灵草 {herbs}、筑基丹 {pills}。",
   "ruin_cleared": "占据古修洞府的散修败走，石室从此归于寂静。",

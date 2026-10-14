@@ -1298,6 +1298,8 @@ func _validate_effects(effects: Variant) -> String:
 				ok = auction_data.get("auctions", {}).has(value)
 			"summit":
 				ok = value is bool and value
+			"reset_cave":
+				ok = cave_data.has(value)
 			"longevity":
 				ok = value is Array and value.size() == 2 and value[0] is String and _whole(value[1]) and int(value[1]) >= 1
 		if not ok:

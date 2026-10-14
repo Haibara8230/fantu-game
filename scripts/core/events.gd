@@ -205,6 +205,8 @@ static func apply(s, effects: Array) -> void:
 				s.Auctions.open(s, value)
 			"summit":
 				s.Summit.begin(s, 1)
+			"reset_cave":
+				s.Caves.reset(s, value)
 
 static func _person(s, person_id: String) -> Dictionary:
 	if not s.world.people.has(person_id):

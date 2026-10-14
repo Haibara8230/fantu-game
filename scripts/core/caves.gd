@@ -48,10 +48,26 @@ static func _visit(s, cave_id: String) -> Dictionary:
 			if bool(candidate.get("start", false)):
 				explored.append(str(candidate.id))
 		var placed := {}
-		for id: String in FORTUNES:
+		for id: String in fortunes_in(s, cave_id):
 			placed[id] = not Fortune.met(s, id) and s.fortune_roll(id) < Fortune.chance(s, id)
 		s.world.caves[cave_id] = {"explored": explored, "taken": [], "fortune": placed}
 	return s.world.caves[cave_id]
+
+## The fortunes a cave's rooms may hold (a room's `fortune`, a hidden place's).
+static func fortunes_in(s, cave_id: String) -> Array:
+	var found: Array = []
+	for candidate: Dictionary in definition(s, cave_id).get("rooms", []):
+		for id: Variant in [candidate.get("fortune", ""), candidate.get("hidden", {}).get("fortune", "")]:
+			if str(id) in FORTUNES and not str(id) in found:
+				found.append(str(id))
+	return found
+
+## A cave that opens again (沉霞古境) starts afresh: its rooms unexplored, its guardians standing.
+static func reset(s, cave_id: String) -> void:
+	s.world.get("caves", {}).erase(cave_id)
+	for candidate: Dictionary in definition(s, cave_id).get("rooms", []):
+		if candidate.has("guardian"):
+			s.world.flags.erase(str(s.content.enemies[str(candidate.guardian)].world_flag))
 
 static func explored(s, cave_id: String, room_id: String) -> bool:
 	return room_id in state(s, cave_id).explored or bool(room(s, cave_id, room_id).get("start", false))

@@ -7,7 +7,7 @@ var checks := 0
 var failures := 0
 # Spots whose picture is still to be drawn (docs/BACKLOG.md, 尚缺的素材); their window falls back to the
 # location's picture until then.
-const PENDING_SPOTS := ["ruin/depths"]
+const PENDING_SPOTS := ["ruin/depths", "wild/chenxia"]
 
 func _initialize() -> void:
 	create_timer(60.0).timeout.connect(func() -> void: printerr("ART test timed out"); quit(1))
