@@ -571,6 +571,8 @@ func _guide_place() -> String:
 		return "event"
 	if not session.battle.is_empty():
 		return "battle"
+	if not session.auction.is_empty():
+		return "auction"
 	if view == "place" and not selected_npc.is_empty():
 		return ""
 	return view

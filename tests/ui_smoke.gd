@@ -623,6 +623,9 @@ func _run() -> void:
 	main.render()
 	check(main.current_screen() == "full" and _texts(main.center, "Label").contains("云溪夜市拍卖摊") and _texts(main.center, "Label").contains("第 1 / 3 件") and _button("出价") != null and _button("放弃此件") != null, "an auction takes the screen with the lot and the raises")
 	check(main.session.auction.bidders.all(func(person_id: String) -> bool: return _texts(main.center, "Label").contains(main.session.person(person_id).name)), "the bidders sit around the room")
+	main.set_guide_enabled(true)
+	check(_texts(main.center, "Label").contains("教学 · 拍卖"), "the first auction explains the bidding")
+	main.set_guide_enabled(false)
 	await _capture("auction")
 	var guard := 0
 	while not main.session.auction.is_empty() and guard < 100:
