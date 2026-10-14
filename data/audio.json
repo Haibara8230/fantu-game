@@ -1,17 +1,67 @@
 {
   "music": {
-    "sect": "res://assets/audio/music/qingyun_mountain.ogg",
-    "town": "res://assets/audio/music/qingshi_town.ogg",
-    "ferry": "res://assets/audio/music/bailu_ferry.ogg",
-    "market": "res://assets/audio/music/yunxi_market.ogg",
-    "ridge": "res://assets/audio/music/songfeng_ridge.ogg",
-    "wild": "res://assets/audio/music/luoxia_valley.ogg",
-    "ruin": "res://assets/audio/music/ancient_cave.ogg",
-    "map": "res://assets/audio/music/journey.ogg",
-    "event": "res://assets/audio/music/encounter.ogg",
-    "battle": "res://assets/audio/music/duel.ogg",
-    "ending": "res://assets/audio/music/life_ends.ogg"
+    "sect": "res://assets/audio/music/lotus_pond.ogg",
+    "town": "res://assets/audio/music/asian_oriental_2.ogg",
+    "ferry": "res://assets/audio/music/river_flute.ogg",
+    "market": "res://assets/audio/music/asian_oriental_2.ogg",
+    "ridge": "res://assets/audio/music/lotus_pond.ogg",
+    "wild": "res://assets/audio/music/eastern_thought.ogg",
+    "ruin": "res://assets/audio/music/eastern_thought.ogg",
+    "map": "res://assets/audio/music/asian_oriental_1.ogg",
+    "event": "res://assets/audio/music/eastern_thought.ogg",
+    "battle": "res://assets/audio/music/dragon_dance.ogg",
+    "ending": "res://assets/audio/music/river_flute_ending.ogg"
   },
+  "music_credits": [
+    {
+      "title": "Lotus Pond",
+      "author": "BiteMe Games",
+      "license": "CC0 1.0",
+      "source": "https://bitemegames.itch.io/chinese-game-music",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "changes": "转为 OGG、调整响度，循环接缝做微淡化。"
+    },
+    {
+      "title": "Dragon Dance",
+      "author": "BiteMe Games",
+      "license": "CC0 1.0",
+      "source": "https://bitemegames.itch.io/chinese-game-music",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "changes": "转为 OGG、调整响度，循环接缝做微淡化。"
+    },
+    {
+      "title": "Asianoriental1",
+      "author": "Tozan",
+      "license": "CC0 1.0",
+      "source": "https://opengameart.org/content/asianoriental1",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "changes": "节选、制作循环衔接，转为 OGG 并调整响度。"
+    },
+    {
+      "title": "Asianoriental2",
+      "author": "Tozan",
+      "license": "CC0 1.0",
+      "source": "https://opengameart.org/content/asianoriental2",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "changes": "节选、制作循环衔接，转为 OGG 并调整响度。"
+    },
+    {
+      "title": "Eastern Thought",
+      "author": "Kevin MacLeod",
+      "license": "CC BY 4.0",
+      "source": "https://incompetech.com/music/royalty-free/index.html?isrc=USUAN1100682",
+      "license_url": "https://creativecommons.org/licenses/by/4.0/",
+      "changes": "节选、制作循环衔接，转为 OGG 并调整响度。"
+    },
+    {
+      "title": "River Flute",
+      "author": "Kevin MacLeod",
+      "license": "CC BY 4.0",
+      "source": "https://incompetech.com/music/royalty-free/index.html?isrc=USUAN1900005",
+      "license_url": "https://creativecommons.org/licenses/by/4.0/",
+      "changes": "节选、制作循环衔接，转为 OGG 并调整响度。"
+    }
+  ],
   "ambience": {
     "sect": "res://assets/audio/ambience/mountain_wind_bells.ogg",
     "town": "res://assets/audio/ambience/town_street.ogg",

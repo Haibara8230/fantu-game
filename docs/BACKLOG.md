@@ -62,7 +62,7 @@
 | 霞锈剑傀、古修残念立绘 | 借用外门同门与洞府散修的图 | 独立图集（可选） |
 | 青云山「山门」场景图与魔潮魔将立绘（2026-10-14 加入） | 尚无；魔将借用洞府散修的图 | 场景图放到 `assets/art/scenes/sect_gate.png`，再从 `tests/art_smoke.gd` 的 `PENDING_SPOTS` 删去 |
 | 白鹭渡「天河渡口」场景图与飞升结局插图（2026-10-14 加入） | 尚无 | 场景图放到 `assets/art/scenes/ferry_crossing.png`，再从 `tests/art_smoke.gd` 的 `PENDING_SPOTS` 删去 |
-| 配乐 11 首、环境声 7 段 | 尚无文件，播放时为静音 | `docs/AUDIO_ASSETS.md` |
+| 环境声 7 段 | 尚无文件，播放时为静音；配乐已用六首作品、七个循环资源覆盖十一种情境（2026-10-14） | `docs/AUDIO_ASSETS.md` |
 | 音效 | 已有 CC0 素材 95 个（2026-10-13，Kenney 与 rubberduck），按元素与轻重随机变化 | 实机试听、调音量；有条件时换成定制的仙侠音效（剑鸣、法诀、钟磬） |
 
 **素材接入**

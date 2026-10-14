@@ -17,3 +17,39 @@ static func render(ui) -> void:
 		grid.add_child(entry)
 	var hints: Dictionary = Settings.key_hints(ui)
 	center.add_child(ui.paragraph("%s 保存 · %s 读取 · Esc 关闭面板 · 斗法中按 %s 施法，%s 守御。自动存档%s。" % [hints.save, hints.load, hints.skills, hints.guard, "开启" if ui.autosave_enabled else "已关闭"]))
+
+	if not ui.audio.library.get("music_credits", []).is_empty():
+		center.add_child(ui.button("配乐鸣谢", func() -> void: _show_music_credits(ui)))
+
+## Credits travel in audio.json, so they are available in source builds and exported games alike.
+static func _show_music_credits(ui) -> void:
+	var dialog := AcceptDialog.new()
+	dialog.title = "配乐鸣谢"
+	dialog.ok_button_text = "关闭"
+	var scroll := ScrollContainer.new()
+	scroll.custom_minimum_size = Vector2(680, 360)
+	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	dialog.add_child(scroll)
+	var body := VBoxContainer.new()
+	body.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	body.add_theme_constant_override("separation", 10)
+	scroll.add_child(body)
+	for entry: Dictionary in ui.audio.library.get("music_credits", []):
+		body.add_child(ui.label("%s · %s" % [entry.title, entry.author], 17, ui.GOLD))
+		body.add_child(ui.paragraph(str(entry.changes)))
+		var links := HBoxContainer.new()
+		links.add_theme_constant_override("separation", 24)
+		body.add_child(links)
+		var source := LinkButton.new()
+		source.text = "作品来源"
+		source.pressed.connect(func() -> void: OS.shell_open(str(entry.source)))
+		links.add_child(source)
+		var license_link := LinkButton.new()
+		license_link.text = str(entry.license)
+		license_link.pressed.connect(func() -> void: OS.shell_open(str(entry.license_url)))
+		links.add_child(license_link)
+	ui.add_child(dialog)
+	dialog.visibility_changed.connect(func() -> void:
+		if not dialog.visible:
+			dialog.queue_free())
+	dialog.popup_centered(Vector2i(740, 480))

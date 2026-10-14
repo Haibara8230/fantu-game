@@ -12,28 +12,29 @@
 
 | 类型 | 格式 | 响度 | 其他 |
 |---|---|---|---|
-| 配乐 | OGG Vorbis，44.1 kHz，立体声 | 约 -16 LUFS | 1.5–3 分钟，首尾可无缝循环 |
+| 配乐 | OGG Vorbis，44.1 kHz，立体声 | 日常约 -18 LUFS；斗法 -17，结局 -20 | 当前 64–228 秒，循环接缝已处理 |
 | 环境声 | OGG Vorbis，44.1 kHz，立体声 | 约 -24 LUFS | 30–90 秒，无缝循环，不要有明显旋律 |
 | 音效 | OGG Vorbis（或 WAV），单声道即可 | 峰值不超过 -3 dBFS | 尽量短，起音干脆 |
 
 来源需为原创，或可商用且允许再分发的授权（如 CC0）。使用第三方素材时，在本文末尾记录来源与许可。
 
 ## 配乐 `assets/audio/music/`
-风格建议：传统民乐为主（古琴、箫、笛、古筝、琵琶、编钟），节奏舒缓，避免过满的管弦铺底。
 
-| 文件 | 情境 | 方向 |
-|---|---|---|
-| `qingyun_mountain.ogg` | 青云山 | 古琴与箫，清远、山门气象 |
-| `qingshi_town.ogg` | 青石镇 | 笛与小打击，凡俗烟火、轻快 |
-| `bailu_ferry.ogg` | 白鹭渡 | 古筝流水音型，开阔平和 |
-| `yunxi_market.ogg` | 云溪坊市 | 琵琶与笛，热闹但不吵 |
-| `songfeng_ridge.ogg` | 松风岭 | 箫与低音古琴，幽静 |
-| `luoxia_valley.ogg` | 落霞谷 | 低沉弦乐垫与编钟，神秘、带危险感 |
-| `ancient_cave.ogg` | 古修洞府 | 稀疏的钟磬与回声，古老 |
-| `journey.ogg` | 舆图 | 行路感，中速 |
-| `encounter.ogg` | 抉择事件 | 短小悬念，可循环 |
-| `duel.ogg` | 斗法 | 鼓与琵琶轮指，紧张 |
-| `life_ends.ogg` | 此生终结 | 缓慢、释然 |
+**已接入（2026-10-14）**：六首作品制成七个 OGG，覆盖七处地点、舆图、事件、斗法与结局共十一种情境。相近地点共用配乐；修改 `data/audio.json` 的 `music` 对应项即可单独换曲。配乐保持传统拨弦、笛音和克制的氛围方向，声音以实际下载作品为准。
+
+| 文件 | 情境 | 作品与作者 | 时长 | 许可 |
+|---|---|---|---|---|
+| `lotus_pond.ogg` | 青云山、松风岭 | Lotus Pond · BiteMe Games | 64 秒 | CC0 1.0 |
+| `asian_oriental_2.ogg` | 青石镇、云溪坊市 | Asianoriental2 · Tozan | 182 秒 | CC0 1.0 |
+| `river_flute.ogg` | 白鹭渡 | River Flute · Kevin MacLeod | 180 秒 | CC BY 4.0 |
+| `eastern_thought.ogg` | 落霞谷、古修洞府、抉择事件 | Eastern Thought · Kevin MacLeod | 228 秒 | CC BY 4.0 |
+| `asian_oriental_1.ogg` | 舆图 | Asianoriental1 · Tozan | 94 秒 | CC0 1.0 |
+| `dragon_dance.ogg` | 斗法 | Dragon Dance · BiteMe Games | 约 68.57 秒 | CC0 1.0 |
+| `river_flute_ending.ogg` | 此生终结 | River Flute · Kevin MacLeod（另一节选） | 120 秒 | CC BY 4.0 |
+
+BiteMe 使用作者提供的循环版本；Tozan 与 Kevin MacLeod 的作品作节选和首尾交叉衔接。全部重采样至 44.1 kHz、调整响度，并作 5 毫秒接缝微淡化；已解码检查响度、峰值、时长和边界跳变。实际音色及长期聆听感仍可随试玩反馈更换。
+
+鸣谢保存在 `data/audio.json` 的 `music_credits`，游戏内可从「人物 · 系统 · 配乐鸣谢」查看作者、修改说明、作品来源与许可。资源目录另附 `CREDITS.txt`、完整许可文本和 `manifest.json`（来源、剪辑参数、文件校验和）。本轮仅补配乐，环境声仍按下列规格等待素材。
 
 ## 环境声 `assets/audio/ambience/`
 
@@ -74,7 +75,7 @@
 
 ## 第三方素材记录
 
-全部为 CC0（公有领域，可商用，不必署名；下列署名出于礼貌）：
+下表音效与粒子素材为 CC0。配乐分别使用 CC0 1.0 或 CC BY 4.0，作品来源与署名另见下文及游戏内「配乐鸣谢」。
 
 | 素材 | 作者与来源 | 位置 |
 |---|---|---|
@@ -85,3 +86,15 @@
 | Particle Pack（选 37 张，缩到 256 px：火花、星光、剑痕、光迹、烟尘、碎土、法阵、火焰、光圈） | Kenney，https://kenney.nl/assets/particle-pack | `assets/art/vfx/` |
 
 各 Kenney 素材包的许可文件随素材放在对应目录（`License.txt`）。
+
+### 第三方配乐来源
+
+| 作品 | 作者与官方下载页 | 许可 |
+|---|---|---|
+| Lotus Pond、Dragon Dance | [BiteMe Games](https://bitemegames.itch.io/chinese-game-music) | [CC0 1.0](https://creativecommons.org/publicdomain/zero/1.0/) |
+| Asianoriental1 | [Tozan](https://opengameart.org/content/asianoriental1) | CC0 1.0 |
+| Asianoriental2 | [Tozan](https://opengameart.org/content/asianoriental2) | CC0 1.0 |
+| Eastern Thought | [Kevin MacLeod / incompetech](https://incompetech.com/music/royalty-free/index.html?isrc=USUAN1100682) | [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
+| River Flute | [Kevin MacLeod / incompetech](https://incompetech.com/music/royalty-free/index.html?isrc=USUAN1900005) | CC BY 4.0 |
+
+“Eastern Thought” and “River Flute” by Kevin MacLeod (incompetech.com), licensed under Creative Commons Attribution 4.0 International: https://creativecommons.org/licenses/by/4.0/ . Game versions are edited excerpts, looped, resampled and loudness adjusted; see `assets/audio/music/manifest.json` for precise changes. These credits do not imply endorsement.

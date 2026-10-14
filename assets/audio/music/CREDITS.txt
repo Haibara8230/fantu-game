@@ -1,0 +1,37 @@
+凡途 · 修仙纪事 — 配乐鸣谢 / Music Credits
+Selected and adapted 2026-10-14.
+
+Lotus Pond — BiteMe Games
+https://bitemegames.itch.io/chinese-game-music
+License: CC0 1.0 — https://creativecommons.org/publicdomain/zero/1.0/
+Changes: 转为 OGG、调整响度，循环接缝做微淡化。
+
+Dragon Dance — BiteMe Games
+https://bitemegames.itch.io/chinese-game-music
+License: CC0 1.0 — https://creativecommons.org/publicdomain/zero/1.0/
+Changes: 转为 OGG、调整响度，循环接缝做微淡化。
+
+Asianoriental1 — Tozan
+https://opengameart.org/content/asianoriental1
+License: CC0 1.0 — https://creativecommons.org/publicdomain/zero/1.0/
+Changes: 节选、制作循环衔接，转为 OGG 并调整响度。
+
+Asianoriental2 — Tozan
+https://opengameart.org/content/asianoriental2
+License: CC0 1.0 — https://creativecommons.org/publicdomain/zero/1.0/
+Changes: 节选、制作循环衔接，转为 OGG 并调整响度。
+
+Eastern Thought — Kevin MacLeod
+https://incompetech.com/music/royalty-free/index.html?isrc=USUAN1100682
+License: CC BY 4.0 — https://creativecommons.org/licenses/by/4.0/
+Changes: 节选、制作循环衔接，转为 OGG 并调整响度。
+
+River Flute — Kevin MacLeod
+https://incompetech.com/music/royalty-free/index.html?isrc=USUAN1900005
+License: CC BY 4.0 — https://creativecommons.org/licenses/by/4.0/
+Changes: 节选、制作循环衔接，转为 OGG 并调整响度。
+
+River Flute is used in two edited excerpts (ferry and ending).
+Processing details and SHA-256 checksums: manifest.json.
+Full license texts: licenses/CC0-1.0.txt and licenses/CC-BY-4.0.txt.
+These credits identify the music creators and do not imply endorsement.
