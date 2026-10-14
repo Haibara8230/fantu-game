@@ -9,6 +9,11 @@ var out_dir := ""
 var shots := 0
 
 func _initialize() -> void:
+	# Only from capture.ps1's copy: anywhere else this would write into the player's own user dir.
+	if not OS.get_user_data_dir().ends_with("fantu_capture"):
+		printerr("CAPTURE refused: not running with the capture's own user dir (%s); use tools/capture.ps1" % OS.get_user_data_dir())
+		quit(1)
+		return
 	create_timer(120.0).timeout.connect(func() -> void: printerr("CAPTURE timed out"); quit(1))
 	call_deferred("_run")
 

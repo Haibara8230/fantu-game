@@ -179,7 +179,7 @@ func _key_people() -> void:
 	game.player.hp = game.player.max_hp
 	game.travel("wild")
 	game.start_battle("serpent")
-	check(int(game.battle.hp) == 112, "the serpent starts the duel with seven tenths of its health (%d)" % int(game.battle.hp))
+	check(int(game.battle.hp) == int(game.content.enemies.serpent.hp) * 7 / 10, "the serpent starts the duel with seven tenths of its health (%d)" % int(game.battle.hp))
 	game.world.people.azhi.relation = 39
 	Session.Events.apply(game, [{"relation": ["azhi", 1]}])
 	check(bool(game.world.people.azhi.get("sound", false)) and _last(game).contains("传音符"), "a close enough bond exchanges 传音符")

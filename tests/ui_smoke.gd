@@ -172,6 +172,9 @@ func _run() -> void:
 	main.settings_path = test_path + "/settings.cfg"
 	main.Settings.load_state(main)
 	main.refresh_key_labels()
+	# The welcome screen was built from the player's own guide file; build it again from the test's.
+	main.close_welcome()
+	main._show_welcome()
 	await _capture("welcome")
 	main.name_input.text = "青禾"
 	# Sensed roots and talents are random; an ordinary three-element root and no talents keep the
