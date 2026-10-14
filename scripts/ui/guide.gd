@@ -85,6 +85,28 @@ static func current(ui, where: String) -> Dictionary:
 			return tip
 	return {}
 
+## Points at the button the due card speaks of (its `highlight`, a part of the button's text): a gold
+## frame that breathes, until the card is dismissed. Looks through the window, the scene and the HUD.
+static func highlight(ui, where: String) -> void:
+	var tip := current(ui, where)
+	var mark := str(tip.get("highlight", ""))
+	if mark.is_empty():
+		return
+	var found: Array = []
+	for root: Node in [ui.center, ui.scene_layer, ui.hud_left]:
+		if root != null:
+			found.append_array(root.find_children("*", "Button", true, false))
+	for button: Button in found:
+		if not button.text.contains(mark) or button.disabled or not button.is_visible_in_tree():
+			continue
+		var frame: StyleBoxFlat = ui.style(Color("#2c4a46"), ui.GOLD, 10)
+		frame.set_border_width_all(2)
+		button.add_theme_stylebox_override("normal", frame)
+		var breathe := button.create_tween().set_loops()
+		breathe.tween_property(button, "modulate", Color(1.2, 1.12, 0.9), 0.7)
+		breathe.tween_property(button, "modulate", Color.WHITE, 0.7)
+		return
+
 ## The card with its pages and 知道了, when one is due; into the window, or into `parent` when the
 ## window is closed (a place's scene with no spot open).
 static func render(ui, where: String, parent: Control = null) -> void:

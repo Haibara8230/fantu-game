@@ -563,6 +563,8 @@ func render() -> void:
 				SystemView.render(self)
 			_:
 				PlaceView.render(self)
+	# The due card's button, once the view is built.
+	Guide.highlight(self, _guide_place())
 	if new_scene:
 		center.modulate.a = 0.0
 		create_tween().tween_property(center, "modulate:a", 1.0, 0.25)
