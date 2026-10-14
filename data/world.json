@@ -36,7 +36,7 @@
       "description": "云溪上游的渡口，渡船往返于青石镇与坊市之间，白鹭常在浅滩起落。",
       "terrain": "ferry",
       "map": [0.6, 0.5],
-      "spots": [
+      "spots": [{"id": "crossing", "tag": [0.7, 0.3], "name": "天河渡口", "description": "白鹭渡上空裂开一道银白的天河，河上浮着一座看不见对岸的渡桥。传说化神圆满的修士踏上桥去，便再不回来。", "actions": ["ascend"], "requires_flag": "ascension_open"}, 
         {"id": "dock", "tag": [0.33, 0.47], "name": "渡口", "description": "老艄公撑着竹篙，等客满便开船。等船的人最爱闲聊。", "actions": ["inquire"]}
       ]
     },
@@ -50,6 +50,7 @@
         {"item": "foundation_pill", "price": 120},
         {"item": "ningyuan_dan", "price": 900},
         {"item": "huaying_dan", "price": 3600},
+        {"item": "huashen_dan", "price": 12000},
         {"item": "huiqi_pill", "price": 15},
         {"item": "liaoshang_pill", "price": 20},
         {"item": "ningqi_pill", "price": 60},
@@ -503,7 +504,7 @@
     "cultivate_options": [30, 90, 360],
     "wait_options": [1, 10],
     "inn_price": 5,
-    "duel": {"draw": [3, 4, 5, 6], "first_extra": 1, "root_weight": 3, "other_weight": 1, "qi_per_orb": 5, "hand_least": 5, "convert": 2, "counter": 1.3, "countered": 0.75, "pills": 3, "guard_orbs": 1, "foe_draw": [3, 4, 5, 6], "generates": {"metal": "water", "water": "wood", "wood": "fire", "fire": "earth", "earth": "metal"}, "overcomes": {"metal": "wood", "wood": "earth", "earth": "water", "water": "fire", "fire": "metal"}},
+    "duel": {"draw": [3, 4, 5, 6, 7], "first_extra": 1, "root_weight": 3, "other_weight": 1, "qi_per_orb": 5, "hand_least": 5, "convert": 2, "counter": 1.3, "countered": 0.75, "pills": 3, "guard_orbs": 1, "foe_draw": [3, 4, 5, 6, 7], "generates": {"metal": "water", "water": "wood", "wood": "fire", "fire": "earth", "earth": "metal"}, "overcomes": {"metal": "wood", "wood": "earth", "earth": "water", "water": "fire", "fire": "metal"}},
     "lineage": {"home": "qingyun", "study_days": 30},
     "letters": {"kept": 60},
     "requests": {"period_days": 180, "chance": 0.25, "items": ["huichun_grass", "ninglu_grass", "chiyan_flower", "huiqi_pill", "liaoshang_pill"], "count": [1, 3], "favor": 12, "mind": 2, "reward_scale": 1.5},
@@ -546,7 +547,8 @@
       "breakthrough": {"xp": 6000, "pills": 1, "pill": "ningyuan_dan", "odds": -15}
     },
     {"id": "golden_core", "name": "金丹", "breakthrough_text": "丹田里的灵液一圈圈收拢、压实，最后凝成一枚浑圆的金丹，缓缓转动。周身灵力随之一变，再不是从前那般散漫，而是如臂使指。", "lifespan_years": 400, "retreat_step_days": 30, "wait_options": [1, 10, 30, 90], "fresh_days": 720, "stages": [{"name": "初期", "xp": 0, "max_hp": 230, "max_qi": 80, "attack_bonus": 18, "sense": 60, "mind": 110, "retreat_days": 1080}, {"name": "中期", "xp": 4000, "max_hp": 250, "max_qi": 88, "attack_bonus": 21, "sense": 66, "mind": 135, "retreat_days": 1440}, {"name": "后期", "xp": 8000, "max_hp": 270, "max_qi": 96, "attack_bonus": 24, "sense": 72, "mind": 160, "retreat_days": 1800}, {"name": "圆满", "xp": 12000, "max_hp": 290, "max_qi": 104, "attack_bonus": 27, "sense": 80, "mind": 190, "retreat_days": 2160}], "xp_cap": 16000, "breakthrough": {"xp": 16000, "pills": 1, "pill": "huaying_dan", "odds": -25}},
-    {"id": "nascent_soul", "name": "元婴", "breakthrough_text": "金丹轰然一震，裂开一道细纹，纹中透出一点灵光。灵光渐渐长成一个寸许的小人，眉眼与你一般无二，盘坐在丹田里，睁开了眼。", "lifespan_years": 700, "retreat_step_days": 90, "wait_options": [1, 10, 30, 90, 360], "fresh_days": 1080, "stages": [{"name": "初期", "xp": 0, "max_hp": 360, "max_qi": 130, "attack_bonus": 32, "sense": 120, "mind": 230, "retreat_days": 2520}, {"name": "中期", "xp": 10000, "max_hp": 390, "max_qi": 142, "attack_bonus": 36, "sense": 132, "mind": 270, "retreat_days": 2880}, {"name": "后期", "xp": 20000, "max_hp": 420, "max_qi": 154, "attack_bonus": 40, "sense": 144, "mind": 310, "retreat_days": 3240}, {"name": "圆满", "xp": 30000, "max_hp": 450, "max_qi": 166, "attack_bonus": 44, "sense": 160, "mind": 360, "retreat_days": 3600}], "xp_cap": 40000}
+    {"id": "nascent_soul", "name": "元婴", "breakthrough_text": "金丹轰然一震，裂开一道细纹，纹中透出一点灵光。灵光渐渐长成一个寸许的小人，眉眼与你一般无二，盘坐在丹田里，睁开了眼。", "lifespan_years": 700, "retreat_step_days": 90, "wait_options": [1, 10, 30, 90, 360], "fresh_days": 1080, "stages": [{"name": "初期", "xp": 0, "max_hp": 360, "max_qi": 130, "attack_bonus": 32, "sense": 120, "mind": 230, "retreat_days": 2520}, {"name": "中期", "xp": 10000, "max_hp": 390, "max_qi": 142, "attack_bonus": 36, "sense": 132, "mind": 270, "retreat_days": 2880}, {"name": "后期", "xp": 20000, "max_hp": 420, "max_qi": 154, "attack_bonus": 40, "sense": 144, "mind": 310, "retreat_days": 3240}, {"name": "圆满", "xp": 30000, "max_hp": 450, "max_qi": 166, "attack_bonus": 44, "sense": 160, "mind": 360, "retreat_days": 3600}], "xp_cap": 40000, "breakthrough": {"xp": 40000, "pills": 1, "pill": "huashen_dan", "odds": -35}},
+    {"id": "deity", "name": "化神", "breakthrough_text": "元婴睁眼的那一刻，你忽然能感到百里之外的一片落叶。神识不再拘于一身，天地间的灵气像潮水一样，随你的呼吸起落。", "lifespan_years": 1200, "retreat_step_days": 90, "wait_options": [1, 10, 30, 90, 360], "fresh_days": 1440, "stages": [{"name": "初期", "xp": 0, "max_hp": 560, "max_qi": 200, "attack_bonus": 50, "sense": 200, "mind": 420, "retreat_days": 3960}, {"name": "中期", "xp": 25000, "max_hp": 600, "max_qi": 214, "attack_bonus": 54, "sense": 220, "mind": 470, "retreat_days": 4320}, {"name": "后期", "xp": 50000, "max_hp": 640, "max_qi": 228, "attack_bonus": 58, "sense": 240, "mind": 520, "retreat_days": 4680}, {"name": "圆满", "xp": 75000, "max_hp": 680, "max_qi": 242, "attack_bonus": 62, "sense": 260, "mind": 580, "retreat_days": 5040}], "xp_cap": 100000}
   ],
   "routes": [
     {"between": ["sect", "town"], "days": 2, "danger": 0},
@@ -572,7 +574,7 @@
     "search_ruin": 5,
     "road_recovery": 1
   },
-  "world_flags": ["calamity", "calamity_turned", "chenxia_open", "chenxia_puppet_down", "chenxia_remnant_down", "ruin_den_cleared", "serpent_slain", "heard_auction_rumor", "found_ruin", "ruin_cleared", "helped_wanderer", "serpent_rampage", "azhi_promised", "azhi_mourned", "intro_done", "peddler_friend", "serpent_weakened", "spirit_eye_found"],
+  "world_flags": ["ascension_open", "calamity", "calamity_turned", "chenxia_open", "chenxia_puppet_down", "chenxia_remnant_down", "ruin_den_cleared", "serpent_slain", "heard_auction_rumor", "found_ruin", "ruin_cleared", "helped_wanderer", "serpent_rampage", "azhi_promised", "azhi_mourned", "intro_done", "peddler_friend", "serpent_weakened", "spirit_eye_found"],
   "sects": {
     "wanderer": {
       "name": "散修",

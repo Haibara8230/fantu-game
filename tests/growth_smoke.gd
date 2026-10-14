@@ -401,6 +401,28 @@ func _golden_core() -> void:
 	game.act("breakthrough")
 	check(game.player.realm == 3 and game.realm_name() == "元婴初期" and int(game.player.core_grade) == core_before and game.lifespan() >= 700, "元婴 is reached, the core's grade kept, seven hundred years")
 	check(game.journal_lines().any(func(line: String) -> bool: return line.contains("元婴初期")) and not game.journal_lines().back().contains("金丹品级"), "the record names the realm without regrading the core")
+	# 化神, then the crossing at the ferry from 480.
+	game.player.stage = 3
+	game.player.xp = 40000
+	game.player.mind = 600
+	game.refresh_realm_stats()
+	game.set_item_count("huashen_dan", 1)
+	game.fortune = {"demon": 0.99, "breakthrough": 0.0, "grade": 0.99}
+	game.act("breakthrough")
+	check(game.player.realm == 4 and game.realm_name() == "化神初期" and game.lifespan() >= 1200, "化神 is reached: twelve hundred years")
+	game.player.birth_day = int(game.Calendar.to_day(400, 1, 1))
+	game.travel("ferry")
+	game.world.day = game.Calendar.to_day(480, 5, 30)
+	game.wait(1)
+	check(game.has_flag("ascension_open") and game.available_here("ascend"), "in 480 the heavenly crossing opens over the ferry")
+	check(game.act("ascend").contains("化神圆满"), "only 化神圆满 may cross")
+	game.player.stage = 3
+	game.player.xp = 75000
+	game.refresh_realm_stats()
+	game.act("ascend")
+	check(game.ended.get("kind", "") == "ascension" and game.chronicle.entries.back().id == "ascended", "化神圆满 ascends: the life ends in the way of the Dao")
+	var risen := Session.new()
+	check(risen.restore(JSON.parse_string(JSON.stringify(game.snapshot()))) and risen.ended.kind == "ascension", "an ascension survives a save")
 	var plain := _game()
 	plain.player.realm = 1
 	plain.player.stage = 3

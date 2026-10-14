@@ -30,6 +30,7 @@
     {"id": "yellow", "manual": 2, "count": 2, "price": 50, "limit": 1, "per_days": 90},
     {"id": "mystic", "manual": 3, "count": 1, "price": 180, "limit": 1, "per_days": 180, "rank": "inner"},
     {"id": "huaying", "item": "huaying_dan", "price": 2000, "limit": 1, "per_days": 2880, "rank": "true"},
+    {"id": "huashen", "item": "huashen_dan", "price": 6000, "limit": 1, "per_days": 7200, "rank": "true"},
     {"id": "earthly", "manual": 4, "count": 1, "price": 450, "limit": 1, "per_days": 360, "rank": "true"}
   ]
 }

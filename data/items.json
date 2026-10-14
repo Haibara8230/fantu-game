@@ -216,6 +216,13 @@
     "rarity": 3,
     "description": "寒玉深处凝出的玉髓，地阶佩饰的胚子。炼器时同一种材料用三份。"
   },
+  "huashen_dan": {
+    "name": "化神丹",
+    "category": "pill",
+    "price": 12000,
+    "rarity": 5,
+    "description": "元婴化神所需的丹药，元婴圆满方可服用。世间所存，屈指可数。"
+  },
   "huaying_dan": {
     "name": "化婴丹",
     "category": "pill",

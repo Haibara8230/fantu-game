@@ -275,7 +275,7 @@ static func resolve(s, told: String) -> String:
 			reached.grade = grade
 		texts.append(s.log_event("breakthrough", reached, true))
 		texts.append_array(s.settle_stage())
-		texts.append_array(s.congratulate(["", "breakthrough", "core", "nascent"][mini(int(s.player.realm), 3)]))
+		texts.append_array(s.congratulate(["", "breakthrough", "core", "nascent", "deity"][mini(int(s.player.realm), 4)]))
 		return s.conclude(" ".join(texts), passed)
 	var failure: Dictionary = rules(s).failure
 	s.player.xp = int(attempt_state.xp) * int(failure.xp_percent) / 100

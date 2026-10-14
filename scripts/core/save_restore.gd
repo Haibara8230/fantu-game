@@ -209,7 +209,7 @@ static func restore(s, data: Variant) -> bool:
 		if not _whole_nonnegative(saved_pending.get("day")) or int(saved_pending.day) != day or not saved_battle.is_empty():
 			return false
 	if not saved_ended.is_empty():
-		if saved_ended.get("kind") != "lifespan" or not _whole_nonnegative(saved_ended.get("day")) or int(saved_ended.day) > day or not saved_ended.get("choice", false) is bool:
+		if not saved_ended.get("kind") in ["lifespan", "ascension"] or not _whole_nonnegative(saved_ended.get("day")) or int(saved_ended.day) > day or not saved_ended.get("choice", false) is bool:
 			return false
 	for stream: String in ["combat", "world"]:
 		if not saved_rng.get(stream) is String or not saved_rng[stream].is_valid_int():

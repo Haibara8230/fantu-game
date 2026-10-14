@@ -433,7 +433,22 @@ func act(action: String) -> String:
 			return conclude(log_event("sell_all", {"loot": loot_code(sold), "revenue": revenue}))
 		"breakthrough":
 			return Breakthrough.attempt(self, Breakthrough.default_plan(self))
+		"ascend":
+			var barred := ascend_block()
+			if not barred.is_empty():
+				return barred
+			ended = {"kind": "ascension", "day": int(world.day)}
+			var text := log_event("ascended", {"age": age()}, true)
+			changed.emit()
+			return text
 	return "未知操作。"
+
+## Why the player cannot ascend at the crossing now, or "": only at 化神圆满, the highest realm's last stage.
+func ascend_block() -> String:
+	var top: int = content.realms.size() - 1
+	if int(player.realm) < top or int(player.stage) < content.realm(top).stages.size() - 1:
+		return "唯有%s方能踏上天河渡桥。" % content.realm_title(top, content.realm(top).stages.size() - 1)
+	return ""
 
 ## Closed-door cultivation for a chosen number of days. Reminders and lifespan warnings can end it early,
 ## and so does reaching a bottleneck. Cultivation is credited per elapsed day with the day's efficiency

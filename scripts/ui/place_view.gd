@@ -205,6 +205,10 @@ static func _spot_action(ui, grid: GridContainer, action: String) -> void:
 		"alchemy":
 			var known: int = session.known_recipes().size()
 			_open(ui, grid, "开炉炼丹", ui.open_alchemy, "已会 %d 张丹方：按丹方投入主药与药引，择火候开炉" % known if known > 0 else "还不会丹方；坊市丹铺与宗门执事堂可得")
+		"ascend":
+			var reason: String = session.ascend_block()
+			var rise: Button = _timed(ui, grid, "踏上渡桥 · 白日飞升", func() -> String: return session.act("ascend"), reason if not reason.is_empty() else "此去便是天上，人间的一切都留在身后。这一生就此圆满。")
+			rise.disabled = not reason.is_empty()
 		"forge":
 			_open(ui, grid, "炼器", ui.open_forge, "以三份同种材料打一件法宝：材料定品阶，属性自选，词条看火候")
 		"field":

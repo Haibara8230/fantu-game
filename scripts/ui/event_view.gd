@@ -107,8 +107,12 @@ static func render_ending(ui) -> void:
 		rest.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		row.add_child(rest)
 		return
-	center.add_child(ui.label("此 生 已 尽", 30, ui.GOLD))
-	center.add_child(ui.paragraph("%s，%s，享年 %d 岁。" % [session.player.name, session.realm_name(), session.age()], ui.INK))
+	if str(session.ended.get("kind", "")) == "ascension":
+		center.add_child(ui.label("白 日 飞 升", 30, ui.GOLD))
+		center.add_child(ui.paragraph("%s，%s，享年 %d 岁，踏天河而去，大道得成。" % [session.player.name, session.realm_name(), session.age()], ui.INK))
+	else:
+		center.add_child(ui.label("此 生 已 尽", 30, ui.GOLD))
+		center.add_child(ui.paragraph("%s，%s，享年 %d 岁。" % [session.player.name, session.realm_name(), session.age()], ui.INK))
 	center.add_child(ui.label("生 平", 16, ui.GOLD))
 	for entry: Dictionary in session.chronicle.entries:
 		if entry.major:

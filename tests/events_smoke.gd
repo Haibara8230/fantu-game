@@ -286,7 +286,7 @@ func _pending_event_rules() -> void:
 	bad.pending_event.id = "missing_event"
 	check(not copy.restore(bad), "unknown pending event rejected")
 	bad = held.duplicate(true)
-	bad.ended = {"kind": "ascension", "day": 0}
+	bad.ended = {"kind": "vanished", "day": 0}
 	check(not copy.restore(bad), "unknown ending rejected")
 	bad = held.duplicate(true)
 	bad.world.events.night_market.state = "lost"

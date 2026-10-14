@@ -259,6 +259,31 @@
     "effects": [{"clear_flag": "serpent_rampage"}, {"flag": "serpent_slain"}],
     "chronicle": "封谷三年后，青云剑宗长老出手斩杀赤鳞妖蟒，落霞谷重新开放。"
   },
+  "ascension_omen": {
+    "title": "天河将开",
+    "trigger": "date",
+    "priority": 6,
+    "major": true,
+    "periodic": {"start_year": 479, "every_years": 1000, "month": 6, "from_day": 1, "to_day": 1},
+    "chronicle": "夜里，白鹭渡的河面上倒映出一条不属于人间的银河。修士们都在说：飞升的通道，又要开了。"
+  },
+  "ascension_opens": {
+    "title": "飞升通道",
+    "trigger": "date",
+    "priority": 6,
+    "major": true,
+    "periodic": {"start_year": 480, "every_years": 1000, "month": 6, "from_day": 1, "to_day": 1},
+    "effects": [{"flag": "ascension_open"}],
+    "chronicle": "白鹭渡上空裂开一道天河，渡桥从云里垂下。一年之内，化神圆满者可踏桥飞升。"
+  },
+  "ascension_closes": {
+    "title": "天河合拢",
+    "trigger": "date",
+    "priority": 6,
+    "periodic": {"start_year": 481, "every_years": 1000, "month": 6, "from_day": 1, "to_day": 1},
+    "effects": [{"clear_flag": "ascension_open"}],
+    "chronicle": "白鹭渡上的天河合拢了，渡桥收回云里，再开不知是何年。"
+  },
   "calamity_omen": {
     "title": "天现异兆",
     "trigger": "date",
