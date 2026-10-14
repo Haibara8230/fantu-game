@@ -942,7 +942,7 @@ func _travel(action: Callable) -> void:
 		walked = session.chronicle.entries.slice(-count)
 	for entry: Dictionary in walked:
 		if entry.id == "travel":
-			legs.append({"to": str(entry.args.location), "from_day": day, "day": int(entry.day), "days": int(entry.day) - day})
+			legs.append({"to": str(entry.args.location), "from_day": day, "day": int(entry.day), "days": int(entry.day) - day, "fly": bool(entry.args.get("fly", false))})
 			day = int(entry.day)
 	if not legs.is_empty():
 		await world_map.walk(start, legs, func(index: int, progress: float) -> void:

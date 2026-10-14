@@ -105,6 +105,18 @@ func _run() -> void:
 	await _shot("14_alchemy")
 	main.set_view("map")
 	await _shot("15_map")
+	# Mid-flight over the map (御剑): the figure on its blade between two places.
+	main.world_map.traveller = main.world_map.node_position("sect").lerp(main.world_map.node_position("town"), 0.5)
+	main.world_map.flying = true
+	main.world_map.stride = 3.0
+	main.world_map.queue_redraw()
+	for frame: int in 3:
+		await process_frame
+	await RenderingServer.frame_post_draw
+	root.get_texture().get_image().save_png(out_dir.path_join("15b_map_flight.png"))
+	shots += 1
+	main.world_map.traveller = null
+	main.world_map.flying = false
 	s.player.location = "market"
 	main.set_view("place")
 	await _shot("16_market")

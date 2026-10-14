@@ -30,6 +30,8 @@ var traveller: Variant = null
 var figure: Dictionary = {}
 var facing := 1.0
 var stride := 0.0
+# Riding a flying sword (御剑, from 金丹): the figure floats over a blade instead of walking.
+var flying := false
 
 func _ready() -> void:
 	font.font_names = PackedStringArray(["Microsoft YaHei", "Noto Sans CJK SC", "SimHei"])
@@ -89,17 +91,20 @@ func walk(start: String, legs: Array[Dictionary], on_leg: Callable) -> void:
 		if absf(b.x - a.x) > 1.0:
 			facing = 1.0 if b.x > a.x else -1.0
 		var steps := float(maxi(2, int(legs[index].days) * 2))
+		flying = bool(legs[index].get("fly", false))
 		var tween := create_tween()
+		var seconds := leg_seconds(int(legs[index].days)) * (0.7 if flying else 1.0)
 		tween.tween_method(func(progress: float) -> void:
 			traveller = a.lerp(b, progress)
 			stride = progress * steps
 			on_leg.call(index, progress)
-			queue_redraw(), 0.0, 1.0, leg_seconds(int(legs[index].days)))
+			queue_redraw(), 0.0, 1.0, seconds)
 		await tween.finished
 		current = to
 		from = to
 	traveller = null
 	stride = 0.0
+	flying = false
 	queue_redraw()
 
 func _gui_input(event: InputEvent) -> void:
@@ -137,8 +142,15 @@ func _draw_traveller(point: Vector2, walking: bool) -> void:
 		var width := height * region.size.x / region.size.y
 		var lift := absf(sin(stride * PI)) * height * 0.06 if walking else 0.0
 		var sway := sin(stride * PI) * 0.06 if walking else 0.0
+		if walking and flying:
+			# Aloft on the blade: steady, high above a fainter shadow, a streak of light behind.
+			lift = height * 0.3 + sin(stride * 0.8) * height * 0.02
+			sway = 0.0
+			var blade := point + Vector2(0, -lift + 2)
+			draw_line(blade + Vector2(-width * 0.55 * facing, 0), blade + Vector2(width * 0.55 * facing, 0), Color("#e8e2c4"), 3.0, true)
+			draw_line(blade - Vector2(width * 0.6 * facing, 0), blade - Vector2(width * 2.2 * facing, -2), Color(0.91, 0.87, 0.7, 0.35), 2.0, true)
 		draw_set_transform(point, 0.0, Vector2(1.0, 0.35))
-		draw_circle(Vector2.ZERO, width * 0.32, Color(0, 0, 0, 0.3))
+		draw_circle(Vector2.ZERO, width * (0.22 if walking and flying else 0.32), Color(0, 0, 0, 0.18 if walking and flying else 0.3))
 		var flip := facing * (1.0 if figure.faces_right else -1.0)
 		draw_set_transform(point + Vector2(0, -lift), sway * facing, Vector2(flip, 1.0))
 		draw_texture_rect_region(figure.texture, Rect2(-width * 0.5, -height, width, height), region)
