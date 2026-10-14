@@ -48,6 +48,7 @@
       "map": [0.86, 0.62],
       "shop": [
         {"item": "foundation_pill", "price": 120},
+        {"item": "ningyuan_dan", "price": 900},
         {"item": "huiqi_pill", "price": 15},
         {"item": "liaoshang_pill", "price": 20},
         {"item": "ningqi_pill", "price": 60},
@@ -396,7 +397,17 @@
         {"id": "mid", "name": "中品", "margin": 10, "stats": 0, "speed": 0},
         {"id": "high", "name": "上品", "margin": 30, "stats": 10, "speed": 10},
         {"id": "flawless", "name": "无瑕", "stats": 25, "speed": 25}
-      ]
+      ],
+      "core": {"foundation": 2, "margins": [0, 10, 30], "grades": [
+        {"id": "ninth", "name": "九品金丹", "stats": -5, "speed": -10},
+        {"id": "eighth", "name": "八品金丹", "stats": 0, "speed": -5},
+        {"id": "seventh", "name": "七品金丹", "stats": 0, "speed": 0},
+        {"id": "sixth", "name": "六品金丹", "stats": 5, "speed": 5},
+        {"id": "fifth", "name": "五品金丹", "stats": 10, "speed": 10},
+        {"id": "fourth", "name": "四品金丹", "stats": 15, "speed": 15},
+        {"id": "third", "name": "三品金丹", "stats": 20, "speed": 20},
+        {"id": "second", "name": "二品金丹", "stats": 30, "speed": 30},
+        {"id": "first", "name": "一品金丹", "stats": 40, "speed": 40}]}
     },
     "mind": {"gain": {"battle_win": 2, "spar": 1, "commission": 4, "event": 2, "consult": 3}, "short_percent": 50, "ample_margin": 10, "ample_percent": 120},
     "rest_full_days": 12,
@@ -419,7 +430,7 @@
     "cultivate_options": [30, 90, 360],
     "wait_options": [1, 10],
     "inn_price": 5,
-    "duel": {"draw": [3, 4], "first_extra": 1, "root_weight": 3, "other_weight": 1, "qi_per_orb": 5, "hand_least": 5, "convert": 2, "counter": 1.3, "countered": 0.75, "pills": 3, "guard_orbs": 1, "foe_draw": [3, 4], "generates": {"metal": "water", "water": "wood", "wood": "fire", "fire": "earth", "earth": "metal"}, "overcomes": {"metal": "wood", "wood": "earth", "earth": "water", "water": "fire", "fire": "metal"}},
+    "duel": {"draw": [3, 4, 5], "first_extra": 1, "root_weight": 3, "other_weight": 1, "qi_per_orb": 5, "hand_least": 5, "convert": 2, "counter": 1.3, "countered": 0.75, "pills": 3, "guard_orbs": 1, "foe_draw": [3, 4, 5], "generates": {"metal": "water", "water": "wood", "wood": "fire", "fire": "earth", "earth": "metal"}, "overcomes": {"metal": "wood", "wood": "earth", "earth": "water", "water": "fire", "fire": "metal"}},
     "lineage": {"home": "qingyun", "study_days": 30},
     "letters": {"kept": 60},
     "requests": {"period_days": 180, "chance": 0.25, "items": ["huichun_grass", "ninglu_grass", "chiyan_flower", "huiqi_pill", "liaoshang_pill"], "count": [1, 3], "favor": 12, "mind": 2, "reward_scale": 1.5},
@@ -442,7 +453,7 @@
         {"name": "后期", "xp": 1000, "max_hp": 110, "max_qi": 38, "attack_bonus": 4, "sense": 14, "mind": 14, "retreat_days": 150},
         {"name": "圆满", "xp": 1500, "max_hp": 120, "max_qi": 42, "attack_bonus": 6, "sense": 16, "mind": 24, "retreat_days": 180}
       ],
-      "breakthrough": {"xp": 2000, "pills": 1}
+      "breakthrough": {"xp": 2000, "pills": 1, "pill": "foundation_pill"}
     },
     {
       "id": "foundation",
@@ -458,8 +469,10 @@
         {"name": "后期", "xp": 3000, "max_hp": 170, "max_qi": 60, "attack_bonus": 12, "sense": 36, "mind": 66, "retreat_days": 720},
         {"name": "圆满", "xp": 4500, "max_hp": 185, "max_qi": 65, "attack_bonus": 14, "sense": 40, "mind": 84, "retreat_days": 900}
       ],
-      "xp_cap": 6000
-    }
+      "xp_cap": 6000,
+      "breakthrough": {"xp": 6000, "pills": 1, "pill": "ningyuan_dan", "odds": -15}
+    },
+    {"id": "golden_core", "name": "金丹", "breakthrough_text": "丹田里的灵液一圈圈收拢、压实，最后凝成一枚浑圆的金丹，缓缓转动。周身灵力随之一变，再不是从前那般散漫，而是如臂使指。", "lifespan_years": 400, "retreat_step_days": 30, "wait_options": [1, 10, 30, 90], "fresh_days": 720, "stages": [{"name": "初期", "xp": 0, "max_hp": 230, "max_qi": 80, "attack_bonus": 18, "sense": 60, "mind": 110, "retreat_days": 1080}, {"name": "中期", "xp": 4000, "max_hp": 250, "max_qi": 88, "attack_bonus": 21, "sense": 66, "mind": 135, "retreat_days": 1440}, {"name": "后期", "xp": 8000, "max_hp": 270, "max_qi": 96, "attack_bonus": 24, "sense": 72, "mind": 160, "retreat_days": 1800}, {"name": "圆满", "xp": 12000, "max_hp": 290, "max_qi": 104, "attack_bonus": 27, "sense": 80, "mind": 190, "retreat_days": 2160}], "xp_cap": 16000}
   ],
   "routes": [
     {"between": ["sect", "town"], "days": 2, "danger": 0},

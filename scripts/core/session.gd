@@ -107,7 +107,7 @@ func new_game(character_name: String = "无名", seed_value: int = -1, roots: Ar
 		"learned": [], "arts": [], "methods": [], "equipment": {"weapon": "", "robe": "", "accessory": ""}, "quests": [],
 		"deeds": {}, "taught": [],
 		"talents": born.get("talents", []).duplicate(), "flaws": born.get("flaws", []).duplicate(),
-		"foundation_grade": 1, "injury_until": 0, "lessons": 0, "boons": {}, "longevity": {},
+		"foundation_grade": 1, "core_grade": 0, "injury_until": 0, "lessons": 0, "boons": {}, "longevity": {},
 		"rank": 0, "contribution": 0, "merit": 0, "stipend_day": 0, "exchanged": {}, "donated": {},
 		"recipes": [], "practice": {}, "toxin": 0, "toxin_day": 0, "field": {"grade": 0, "plots": []},
 	}
@@ -676,7 +676,10 @@ func face_demon(stance: String) -> String:
 
 ## The foundation's grade ({"name", "stats", "speed"}), or {} before foundation.
 func foundation_grade() -> Dictionary:
-	return Breakthrough.grade_of(self)
+	return Breakthrough.foundation_of(self)
+
+func core_grade() -> Dictionary:
+	return Breakthrough.core_of(self)
 
 ## Whether a failed breakthrough still hurts.
 func injured() -> bool:

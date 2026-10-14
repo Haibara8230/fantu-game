@@ -94,7 +94,13 @@ func _promotion() -> void:
 	game.player.xp = 0
 	game.refresh_realm_stats()
 	game.promote()
-	check(game.sect_rank().name == "内门弟子" and game.next_sect_rank().is_empty() and not game.promotion_block().is_empty(), "the inner sect is the highest rank for now")
+	check(game.sect_rank().name == "内门弟子" and game.next_sect_rank().name == "真传弟子" and not game.promotion_block().is_empty(), "an inner disciple looks to 真传, which waits for the core")
+	game.player.merit = 1200
+	check(game.promotion_block().contains("金丹"), "a 真传弟子 must have formed the core (%s)" % game.promotion_block())
+	game.player.realm = 2
+	game.refresh_realm_stats()
+	game.promote()
+	check(game.sect_rank().name == "真传弟子" and game.next_sect_rank().is_empty(), "with the core formed, 真传 is the highest rank for now")
 	check(game.story_state("inner_court") == "active", "and opens the inner court's storyline")
 
 func _stipend() -> void:

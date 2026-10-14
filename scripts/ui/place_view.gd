@@ -128,7 +128,7 @@ static func _breakthrough_tooltip(session) -> String:
 	var need: Dictionary = session.next_breakthrough()
 	if need.is_empty():
 		return "后续境界尚未开放"
-	return "需修至%s，并有 %d 修为与 %d 枚筑基丹（或天材地宝）；成败看把握" % [session.content.realm_title(int(session.player.realm), session.content.realm(int(session.player.realm)).stages.size() - 1), int(need.xp), int(need.pills)]
+	return "需修至%s，并有 %d 修为与 %d 枚%s（或天材地宝）；成败看把握" % [session.content.realm_title(int(session.player.realm), session.content.realm(int(session.player.realm)).stages.size() - 1), int(need.xp), int(need.pills), session.content.item(str(need.get("pill", "foundation_pill"))).name]
 
 static func _open_spots(session, location_id: String) -> Array[Dictionary]:
 	var result: Array[Dictionary] = []

@@ -1,17 +1,20 @@
 extends RefCounted
-## Breaking through to the next realm (筑基), after the web novels: it may fail. Operates on a Session.
-## The odds start from the 资质 and add what was prepared: 筑基丹 (each worth less than the one before;
-## 上品筑基丹 are taken first and add a little more),
+## Breaking through to the next realm (筑基, then 金丹), after the web novels: it may fail. Operates on a
+## Session. Each realm names the pill its breakthrough asks (`pill`: 筑基丹, 凝元丹) and may make it
+## harder (`odds`). The odds start from the 资质 and add what was prepared: the pills (each worth less
+## than the one before; fine ones, 上品筑基丹, are taken first and add a little more),
 ## a 天材地宝 in their place, a mind beyond what the stage asks, a 心法 suited to the roots, someone to
 ## stand guard (护法), the 灵眼 to break through at, fortune met on the way (机缘: 顿悟, 生死之间), the
 ## lessons of earlier failures, and talents; 丹毒 still in the body takes a little off. They are shown
 ## before the attempt (`odds`).
 ## A mind short of the next realm's need, unguarded, may meet 心魔 first: a choice, slain or evaded.
 ## Success enters the realm with a 品质 (grade) from how far the roll fell under the odds, raised by
-## fortune; 无瑕 only by fortune. Failure costs the pills, some xp and months of injury, never the life,
+## fortune; 无瑕 only by fortune. Forming the 金丹 grades the core instead (九品 to 一品): the
+## foundation's grade counts twice, then the best 心法's tier, the margin and fortune. Failure costs the pills, some xp and months of injury, never the life,
 ## and leaves a lesson for the next attempt. A 残魂灌顶 accepted makes the next attempt certain, without
 ## pills, at a middling grade.
-## player.attempt holds an attempt waiting on 心魔; player.foundation_grade the grade reached;
+## player.attempt holds an attempt waiting on 心魔; player.foundation_grade and player.core_grade the
+## grades reached;
 ## player.injury_until the day the injury heals; player.lessons the failures learned from; player.boons
 ## the fortune met in this life ({id: "ready" | "spent"}).
 const Talents = preload("res://scripts/core/talents.gd")
@@ -21,18 +24,25 @@ const DEMON_EVENT := "heart_demon"
 static func rules(s) -> Dictionary:
 	return s.content.rules.breakthrough
 
-## Treasures in the 行囊 that can stand in for 筑基丹: item ids, cheapest first.
+## The pill the next breakthrough asks (筑基丹, 凝元丹).
+static func pill_of(s) -> String:
+	return str(s.next_breakthrough().get("pill", "foundation_pill"))
+
+## Treasures in the 行囊 that can stand in for the next breakthrough's pills (each for its own realm):
+## item ids, cheapest first.
 static func treasures(s) -> Array[String]:
 	var found: Array[String] = []
+	var target := int(s.player.realm) + 1
 	for item_id: String in s.content.items:
-		if s.content.items[item_id].has("breakthrough") and s.item_count(item_id) > 0:
+		var item: Dictionary = s.content.items[item_id]
+		if item.has("breakthrough") and int(item.breakthrough.get("realm", 1)) == target and s.item_count(item_id) > 0:
 			found.append(item_id)
 	found.sort()
 	return found
 
-## The plan a plain 突破 uses: one 筑基丹 if there is one, else the first treasure.
+## The plan a plain 突破 uses: one pill if there is one, else the first treasure.
 static func default_plan(s) -> Dictionary:
-	if s.pill_count("foundation_pill") > 0:
+	if s.pill_count(pill_of(s)) > 0:
 		return {"pills": 1, "treasure": "", "guard": ""}
 	var owned := treasures(s)
 	return {"pills": 0, "treasure": owned[0] if not owned.is_empty() else "", "guard": ""}
@@ -86,12 +96,13 @@ static func block(s, plan: Dictionary) -> String:
 		return "突破需修至%s，并有 %d 修为。" % [s.content.realm_title(int(s.player.realm), last_stage), int(need.xp)]
 	var pills := int(plan.get("pills", 0))
 	var treasure := str(plan.get("treasure", ""))
-	if pills < 0 or pills > rules(s).pill_bonus.size() or s.pill_count("foundation_pill") < pills:
-		return "行囊里没有那么多筑基丹。"
-	if not treasure.is_empty() and (not s.content.item(treasure).has("breakthrough") or s.item_count(treasure) < 1):
-		return "行囊里没有此物。"
+	var pill_name := str(s.content.item(pill_of(s)).name)
+	if pills < 0 or pills > rules(s).pill_bonus.size() or s.pill_count(pill_of(s)) < pills:
+		return "行囊里没有那么多%s。" % pill_name
+	if not treasure.is_empty() and not treasure in treasures(s):
+		return "行囊里没有此物，或此物于这次突破无用。"
 	if pills < int(need.pills) and treasure.is_empty() and not _ready_boon(s, "remnant"):
-		return "突破至少需要 %d 枚筑基丹，或一样天材地宝。" % int(need.pills)
+		return "突破至少需要 %d 枚%s，或一样天材地宝。" % [int(need.pills), pill_name]
 	var guard := str(plan.get("guard", ""))
 	if not guard.is_empty() and not guard in guards(s):
 		return "此人无法为你护法。"
@@ -104,6 +115,9 @@ static func odds(s, plan: Dictionary) -> Dictionary:
 	var parts: Array = []
 	var grade: Dictionary = s.aptitude()
 	parts.append(["资质 · %s" % grade.name, int(r.base[int(grade.index)])])
+	var need: Dictionary = s.next_breakthrough()
+	if int(need.get("odds", 0)) != 0:
+		parts.append(["%s之难" % s.content.realm(int(s.player.realm) + 1).name, int(need.odds)])
 	var talents: int = s.talent_modifier("breakthrough")
 	if talents != 0:
 		parts.append(["天赋", talents])
@@ -111,11 +125,12 @@ static func odds(s, plan: Dictionary) -> Dictionary:
 	var pill_points := 0
 	for index: int in mini(pills, r.pill_bonus.size()):
 		pill_points += int(r.pill_bonus[index])
-	# 上品筑基丹 go in first.
-	var fine := mini(pills, s.item_count(s.content.fine_pill("foundation_pill")))
+	# Fine pills (上品筑基丹) go in first.
+	var fine_id: String = s.content.fine_pill(pill_of(s))
+	var fine := 0 if fine_id.is_empty() else mini(pills, s.item_count(fine_id))
 	pill_points += fine * int(s.content.alchemy_data.foundation_fine_bonus)
 	if pills > 0:
-		parts.append(["筑基丹 ×%d%s" % [pills, "（上品 %d）" % fine if fine > 0 else ""], Talents.scaled(pill_points, s.talent_modifier("pill"))])
+		parts.append(["%s ×%d%s" % [s.content.item(pill_of(s)).name, pills, "（上品 %d）" % fine if fine > 0 else ""], Talents.scaled(pill_points, s.talent_modifier("pill"))])
 	var steps: Array = []
 	var treasure := str(plan.get("treasure", ""))
 	if not treasure.is_empty():
@@ -191,7 +206,7 @@ static func attempt(s, plan: Dictionary) -> String:
 		return reason
 	var need: Dictionary = s.next_breakthrough()
 	var chances := odds(s, plan)
-	s.Inventory.remove_family(s, "foundation_pill", int(plan.get("pills", 0)), true)
+	s.Inventory.remove_family(s, pill_of(s), int(plan.get("pills", 0)), true)
 	if not str(plan.get("treasure", "")).is_empty():
 		s.remove_item(str(plan.treasure), 1)
 	s.player.xp = int(s.player.xp) - int(need.xp)
@@ -244,7 +259,11 @@ static func resolve(s, told: String) -> String:
 		var grade := 1 if certain else _grade(s, float(attempt_state.odds) - roll, int(attempt_state.steps))
 		s.player.realm = int(s.player.realm) + 1
 		s.player.stage = 0
-		s.player["foundation_grade"] = grade
+		if int(s.player.realm) == 1:
+			s.player["foundation_grade"] = grade
+		else:
+			grade = _core_grade(s, float(attempt_state.odds) - roll, int(attempt_state.steps))
+			s.player["core_grade"] = grade
 		s.player["lessons"] = 0
 		s.player["injury_until"] = 0
 		s.refresh_realm_stats()
@@ -277,14 +296,47 @@ static func _grade(s, margin: float, steps: int) -> int:
 		steps += 1
 	return mini(grades.size() - 1, grade + steps)
 
-## A foundation grade's entry ({"name", "stats", "speed"}), or {} before foundation.
-static func grade_of(s, holder: Dictionary = {}) -> Dictionary:
+## The 金丹's grade: twice the foundation's grade, the best 心法's tier, the margin under the odds (0, 1
+## or 2 by `core.margins`), fortune's steps and the talents for a better grade; 九品 at worst (0),
+## 一品 at best.
+static func _core_grade(s, margin: float, steps: int) -> int:
+	var core: Dictionary = rules(s).core
+	var score := int(s.player.get("foundation_grade", 1)) * int(core.foundation)
+	var best_tier := 0
+	for method_id: Variant in s.player.get("methods", []):
+		best_tier = maxi(best_tier, int(s.content.technique(str(method_id)).get("tier", 0)))
+	score += best_tier
+	for index: int in range(1, core.margins.size()):
+		if margin >= float(core.margins[index]):
+			score += 1
+	var chance: int = s.talent_modifier("grade")
+	steps += chance / 100
+	if chance % 100 > 0 and s.fortune_roll("grade") * 100.0 < float(chance % 100):
+		steps += 1
+	return clampi(score + steps, 0, core.grades.size() - 1)
+
+## The foundation's grade entry ({"name", "stats", "speed"}), or {} before foundation.
+static func foundation_of(s, holder: Dictionary = {}) -> Dictionary:
 	if holder.is_empty():
 		holder = s.player
 	if int(holder.get("realm", 0)) < 1:
 		return {}
 	var grades: Array = rules(s).grades
 	return grades[clampi(int(holder.get("foundation_grade", 1)), 0, grades.size() - 1)]
+
+## The 金丹's grade entry, or {} before it is formed.
+static func core_of(s, holder: Dictionary = {}) -> Dictionary:
+	if holder.is_empty():
+		holder = s.player
+	if int(holder.get("realm", 0)) < 2:
+		return {}
+	var grades: Array = rules(s).core.grades
+	return grades[clampi(int(holder.get("core_grade", 0)), 0, grades.size() - 1)]
+
+## The grade that shapes the body and cultivation now: the 金丹's once formed, else the foundation's.
+static func grade_of(s, holder: Dictionary = {}) -> Dictionary:
+	var core := core_of(s, holder)
+	return core if not core.is_empty() else foundation_of(s, holder)
 
 ## Whether an earlier failure still hurts on `day`.
 static func injured(s, day: int = -1) -> bool:

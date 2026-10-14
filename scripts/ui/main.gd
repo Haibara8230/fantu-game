@@ -803,9 +803,10 @@ func _breakthrough_rite(mark: int) -> void:
 	for entry: Dictionary in session.chronicle.entries.slice(-count) if count > 0 else []:
 		match str(entry.id):
 			"breakthrough":
+				var core: Dictionary = session.core_grade()
 				var grade: Dictionary = session.foundation_grade()
 				var realm_name: String = str(session.content.realm(int(session.player.realm)).name)
-				var grade_name: String = "根基 · " + str(grade.name) if not grade.is_empty() else ""
+				var grade_name: String = ("金丹 · " + str(core.name)) if not core.is_empty() else ("根基 · " + str(grade.name) if not grade.is_empty() else "")
 				await _rite(func(rite) -> void: await rite.play_breakthrough("success", realm_name, grade_name))
 				return
 			"breakthrough_failed":

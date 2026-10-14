@@ -55,9 +55,10 @@ func format(entry: Dictionary, content) -> String:
 			template = "{npc_name}传音：" + letter_text(entry.args, content)
 		_:
 			template = str(content.chronicle.get(entry.id, "（失传的记载）"))
-	# Breakthroughs since grades also tell the foundation's grade.
+	# Breakthroughs since grades also tell the foundation's grade, or the 金丹's.
+	var forming_core: bool = entry.id == "breakthrough" and int(entry.args.get("realm", 1)) >= 2
 	if entry.id == "breakthrough" and entry.args.has("grade"):
-		template += str(content.chronicle.get("breakthrough_grade", ""))
+		template += str(content.chronicle.get("breakthrough_core_grade" if forming_core else "breakthrough_grade", ""))
 	var values: Dictionary = entry.args.duplicate()
 	for key: String in NAMED_ARGS:
 		if values.has(key):
@@ -91,6 +92,8 @@ func format(entry: Dictionary, content) -> String:
 		values["loot_text"] = loot_text(str(values.loot), content)
 	if values.has("grade"):
 		var grades: Array = content.rules.get("breakthrough", {}).get("grades", [])
+		if forming_core:
+			grades = content.rules.breakthrough.core.grades
 		var grade := int(values.grade)
 		values["grade_name"] = str(grades[grade].name) if grade >= 0 and grade < grades.size() else str(values.grade)
 	if values.has("rank"):

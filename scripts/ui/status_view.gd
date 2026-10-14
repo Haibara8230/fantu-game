@@ -99,8 +99,11 @@ static func _cultivation(ui, parent: VBoxContainer) -> void:
 	if session.at_bottleneck():
 		_row(ui, parent, "瓶颈", "修为卡在瓶颈，闭关难进", "需外出历练，或服一枚破障丹", BAD)
 	var grade: Dictionary = session.foundation_grade()
+	var core: Dictionary = session.core_grade()
 	if not grade.is_empty():
-		_row(ui, parent, "根基", str(grade.name), "筑基时的根基品质，影响体魄与修炼速度")
+		_row(ui, parent, "根基", str(grade.name), "筑基时的根基品质；结丹前影响体魄与修炼速度，结丹时决定金丹品级的大半")
+	if not core.is_empty():
+		_row(ui, parent, "金丹", str(core.name), "结丹时由根基、心法品阶与把握定下，影响体魄与修炼速度")
 
 static func _body(ui, parent: VBoxContainer) -> void:
 	var session = ui.session

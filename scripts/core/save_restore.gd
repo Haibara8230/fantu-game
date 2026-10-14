@@ -129,7 +129,7 @@ static func restore(s, data: Variant) -> bool:
 		born = Talents.roll(content, rng, str(content.talent_data.player.table))
 	# Health and qi within the caps the save was made with (before any talents awakened).
 	var holder: Dictionary = loadout.duplicate()
-	holder.merge({"realm": int(saved_player.realm), "stage": saved_stage, "talents": [] if awakened else born.talents, "flaws": [] if awakened else born.flaws, "foundation_grade": int(progress.foundation_grade)}, true)
+	holder.merge({"realm": int(saved_player.realm), "stage": saved_stage, "talents": [] if awakened else born.talents, "flaws": [] if awakened else born.flaws, "foundation_grade": int(progress.foundation_grade), "core_grade": int(progress.core_grade)}, true)
 	var saved_caps: Dictionary = s.stat_caps(holder)
 	if int(saved_player.hp) <= 0 or int(saved_player.hp) > int(saved_caps.max_hp) or int(saved_player.qi) > int(saved_caps.max_qi):
 		return false
@@ -315,6 +315,10 @@ static func _valid_breakthrough(content, saved_player: Dictionary, saved_pending
 	if not _whole_nonnegative(grade) or int(grade) >= rules.grades.size():
 		return null
 	result["foundation_grade"] = int(grade)
+	var core: Variant = saved_player.get("core_grade", 0)
+	if not _whole_nonnegative(core) or int(core) >= rules.core.grades.size():
+		return null
+	result["core_grade"] = int(core)
 	var injury: Variant = saved_player.get("injury_until", 0)
 	var lessons: Variant = saved_player.get("lessons", 0)
 	if not _whole_nonnegative(injury) or not _whole_nonnegative(lessons) or int(lessons) > int(rules.lesson.most):

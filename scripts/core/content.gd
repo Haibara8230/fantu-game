@@ -343,6 +343,17 @@ func _validate_breakthrough() -> String:
 		return "突破成功率上下限无效。"
 	if not r.get("method_tier") is Dictionary:
 		return "心法品阶加成无效。"
+	var core: Variant = r.get("core")
+	if not core is Dictionary or not _whole(core.get("foundation")) or not core.get("margins") is Array or core.margins.is_empty() or core.margins.any(func(value: Variant) -> bool: return not _whole(value)) or not core.get("grades") is Array or core.grades.size() < 2 or core.grades.any(func(grade: Variant) -> bool: return not grade is Dictionary or not grade.get("name") is String or not _signed(grade.get("stats")) or not _signed(grade.get("speed"))):
+		return "金丹品级配置无效。"
+	for realm: Dictionary in realms:
+		var step: Variant = realm.get("breakthrough")
+		if step is Dictionary and (not items.has(step.get("pill", "foundation_pill")) or (step.has("odds") and not _signed(step.odds))):
+			return "突破所需丹药或难度无效：%s" % realm.get("id", "")
+	for item_id: String in items:
+		var used: Variant = items[item_id].get("breakthrough")
+		if used is Dictionary and used.has("realm") and (not _whole(used.realm) or int(used.realm) < 1 or int(used.realm) >= realms.size()):
+			return "天材地宝适用的境界无效：" + item_id
 	var guard: Variant = r.get("guard")
 	if not guard is Dictionary or not people.has(guard.get("mentor", "")) or not storylines.has(guard.get("mentor_story", "")) or not storylines[guard.mentor_story].steps.any(func(step: Dictionary) -> bool: return step.id == guard.get("mentor_step", "")) or not _whole(guard.get("favor")) or not _whole(guard.get("bonus")) or not _whole(guard.get("mentor_bonus")):
 		return "护法配置无效。"

@@ -21,6 +21,7 @@ func _initialize() -> void:
 	_pacing()
 	_saves()
 	_items()
+	_golden_core()
 	_static_checks()
 	print("GROWTH: %d checks, %d failures" % [checks, failures])
 	quit(0 if failures == 0 else 1)
@@ -184,7 +185,7 @@ func _limits() -> void:
 	ripe.player.mind = 84
 	ripe.refresh_realm_stats()
 	ripe.cultivate(900)
-	check(int(ripe.player.xp) == 6000 and ripe.cultivate(30).contains("后续境界尚未开放"), "the last open realm holds 6000 at most")
+	check(int(ripe.player.xp) == 6000 and ripe.cultivate(30).contains("便可突破"), "foundation holds 6000 at most; the core is formed from there")
 	var old := Session.new()
 	check(old.restore(JSON.parse_string(FileAccess.get_file_as_string("res://tests/fixtures/v10_heavenly_midstage.json"))) and int(old.player.mind) == 6 and old.mind_percent() == 100, "older journeys start with the mind their stage asks for")
 	var copy := Session.new()
@@ -338,5 +339,50 @@ func _static_checks() -> void:
 
 ## Fixes the breakthrough's rolls: no 心魔, and a roll twenty points under the odds (a 中品 foundation,
 ## whose numbers are the plain ones).
+## 金丹: foundation's end asks a 凝元丹 and is harder; the core is graded by the foundation, the 心法
+## and the margin; the treasures of foundation do not serve; the grade survives a save.
+func _golden_core() -> void:
+	var game := _game()
+	game.player.realm = 1
+	game.player.stage = 3
+	game.player.xp = 6000
+	game.player.mind = 200
+	game.player.foundation_grade = 2
+	game.refresh_realm_stats()
+	game.travel("sect")
+	check(game.next_breakthrough().get("pill", "") == "ningyuan_dan" and game.act("breakthrough").contains("凝元丹"), "forming the core asks a 凝元丹")
+	game.set_item_count("qiannian_shiru", 1)
+	check(game.breakthrough_treasures().is_empty(), "a treasure for foundation does not serve the core")
+	game.set_item_count("ningyuan_dan", 1)
+	var odds: Dictionary = game.breakthrough_odds(game.breakthrough_plan())
+	check(odds.parts.any(func(part: Array) -> bool: return str(part[0]) == "金丹之难" and int(part[1]) == -15), "and is harder than foundation")
+	var method := "t:breath:wood:3::0"
+	game.player.learned.append(method)
+	game.player.methods = [method]
+	game.fortune = {"demon": 0.99, "breakthrough": 0.0, "grade": 0.99}
+	game.act("breakthrough")
+	check(game.player.realm == 2 and game.realm_name() == "金丹初期" and game.lifespan() >= 400 and game.item_count("ningyuan_dan") == 0, "the core is formed: 金丹初期, four hundred years")
+	# Foundation 上品 (2 × 2) + a 玄阶 心法 (3) + a wide margin (2) = 9 → clamped to 一品 (8).
+	check(int(game.player.core_grade) == 8 and game.core_grade().name == "一品金丹", "a fine foundation, a 玄阶 心法 and a wide margin make an 一品金丹 (%s)" % game.core_grade().get("name", ""))
+	check(int(game.player.max_hp) > int(game.content.stage(2, 0).max_hp), "and a fine core strengthens the body")
+	var copy := Session.new()
+	check(copy.restore(JSON.parse_string(JSON.stringify(game.snapshot()))) and copy.core_grade() == game.core_grade(), "the core's grade survives a save")
+	var broken: Dictionary = JSON.parse_string(JSON.stringify(game.snapshot()))
+	broken.player.core_grade = 99
+	check(not Session.new().restore(broken), "a grade out of range is refused")
+	check(game.next_breakthrough().is_empty(), "there is no realm past 金丹 yet")
+	var plain := _game()
+	plain.player.realm = 1
+	plain.player.stage = 3
+	plain.player.xp = 6000
+	plain.player.mind = 200
+	plain.player.foundation_grade = 0
+	plain.refresh_realm_stats()
+	plain.travel("sect")
+	plain.set_item_count("ningyuan_dan", 1)
+	plain.fortune = {"demon": 0.99, "breakthrough": float(plain.breakthrough_odds(plain.breakthrough_plan()).total - 1) / 100.0, "grade": 0.99}
+	plain.act("breakthrough")
+	check(plain.player.realm == 2 and int(plain.player.core_grade) == 0 and plain.core_grade().name == "九品金丹", "a poor foundation, no 心法 and a narrow margin make a 九品金丹")
+
 func _steady(game) -> void:
 	game.fortune = {"demon": 0.99, "breakthrough": maxf(0.0, float(game.breakthrough_odds(game.breakthrough_plan()).total - 20) / 100.0)}

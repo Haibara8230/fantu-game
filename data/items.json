@@ -153,6 +153,13 @@
     "rarity": 0,
     "description": "从蒙面劫修手里夺回的货担，丹瓶一个没少，该还给钱货郎。"
   },
+  "ningyuan_dan": {
+    "name": "凝元丹",
+    "category": "pill",
+    "price": 900,
+    "rarity": 3,
+    "description": "凝聚灵液、结成金丹所需的丹药，筑基圆满方可服用。"
+  },
   "yanshou_dan": {
     "name": "延寿丹",
     "category": "pill",
@@ -175,7 +182,7 @@
     "price": 300,
     "rarity": 4,
     "description": "古洞石钟乳千年才凝一滴，灵气精纯。突破时服下可代替筑基丹，并让根基更为扎实。",
-    "breakthrough": {"bonus": 35, "grade": 1}
+    "breakthrough": {"bonus": 35, "grade": 1, "realm": 1}
   },
   "jiuqu_lingshen": {
     "name": "九曲灵参",
@@ -183,7 +190,7 @@
     "price": 360,
     "rarity": 4,
     "description": "根须九曲的老参，生在灵气汇聚的深谷。突破时服下可代替筑基丹，并让根基更为扎实。",
-    "breakthrough": {"bonus": 35, "grade": 1}
+    "breakthrough": {"bonus": 35, "grade": 1, "realm": 1}
   },
   "recipe_liaoshang": {
     "name": "疗伤丹丹方",

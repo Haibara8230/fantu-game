@@ -109,7 +109,7 @@ static func plan_of(ui) -> Dictionary:
 	var plan: Dictionary = ui.breakthrough_plan
 	if plan.is_empty():
 		plan = session.breakthrough_plan()
-	var most := mini(session.pill_count("foundation_pill"), session.content.rules.breakthrough.pill_bonus.size())
+	var most := mini(session.pill_count(session.Breakthrough.pill_of(session)), session.content.rules.breakthrough.pill_bonus.size())
 	plan.pills = clampi(int(plan.get("pills", 0)), 0, most)
 	if not str(plan.get("treasure", "")) in session.breakthrough_treasures():
 		plan.treasure = ""
@@ -118,24 +118,26 @@ static func plan_of(ui) -> Dictionary:
 	ui.breakthrough_plan = plan
 	return plan
 
-## How many 筑基丹 to take, a treasure in their place, and who stands guard.
+## How many of the realm's pills (筑基丹, 凝元丹) to take, a treasure in their place, and who stands
+## guard.
 static func _plan_controls(ui, parent: VBoxContainer, plan: Dictionary) -> void:
 	var session = ui.session
 	var pills := HBoxContainer.new()
 	pills.add_theme_constant_override("separation", 10)
 	parent.add_child(pills)
-	var most := mini(session.pill_count("foundation_pill"), session.content.rules.breakthrough.pill_bonus.size())
+	var pill_id: String = session.Breakthrough.pill_of(session)
+	var most := mini(session.pill_count(pill_id), session.content.rules.breakthrough.pill_bonus.size())
 	var fewer: Button = ui.button("－", func() -> void: ui.breakthrough_plan.pills = int(plan.pills) - 1; ui.render(), "少服一枚")
 	fewer.disabled = int(plan.pills) <= 0
 	pills.add_child(fewer)
-	pills.add_child(ui.label("服筑基丹 %d 枚（行囊 %d，至多 %d）" % [int(plan.pills), session.pill_count("foundation_pill"), session.content.rules.breakthrough.pill_bonus.size()], 17))
+	pills.add_child(ui.label("服%s %d 枚（行囊 %d，至多 %d）" % [session.content.item(pill_id).name, int(plan.pills), session.pill_count(pill_id), session.content.rules.breakthrough.pill_bonus.size()], 17))
 	var more: Button = ui.button("＋", func() -> void: ui.breakthrough_plan.pills = int(plan.pills) + 1; ui.render(), "多服一枚，一枚比一枚见效少")
 	more.disabled = int(plan.pills) >= most
 	pills.add_child(more)
 	for item_id: String in session.breakthrough_treasures():
 		var use := CheckBox.new()
 		var item: Dictionary = session.content.item(item_id)
-		use.text = "服下%s（成功率 +%d，根基更稳）" % [item.name, int(item.breakthrough.bonus)]
+		use.text = "服下%s（成功率 +%d%s）" % [item.name, int(item.breakthrough.bonus), "，根基更稳" if int(item.breakthrough.get("grade", 0)) > 0 else ""]
 		use.button_pressed = plan.treasure == item_id
 		use.toggled.connect(func(on: bool) -> void: ui.breakthrough_plan.treasure = item_id if on else ""; ui.render())
 		parent.add_child(use)
