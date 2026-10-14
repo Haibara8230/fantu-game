@@ -1,0 +1,16 @@
+{
+  "count": 3,
+  "fee": [5, 20, 60, 180, 500],
+  "days": [5, 10, 20, 40, 80],
+  "materials": {
+    "ore_qinggang": {"family": "metal", "tier": 2},
+    "ore_xuantie": {"family": "metal", "tier": 3},
+    "ore_hantie": {"family": "metal", "tier": 4},
+    "silk_qing": {"family": "cloth", "tier": 2},
+    "silk_xuancan": {"family": "cloth", "tier": 3},
+    "silk_yunjin": {"family": "cloth", "tier": 4},
+    "jade_qing": {"family": "jade", "tier": 2},
+    "jade_mo": {"family": "jade", "tier": 3},
+    "jade_han": {"family": "jade", "tier": 4}
+  }
+}

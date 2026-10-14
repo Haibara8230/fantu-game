@@ -153,6 +153,69 @@
     "rarity": 0,
     "description": "从蒙面劫修手里夺回的货担，丹瓶一个没少，该还给钱货郎。"
   },
+  "ore_qinggang": {
+    "name": "青钢锭",
+    "category": "material",
+    "price": 30,
+    "rarity": 1,
+    "description": "百炼青钢铸成的锭子，打兵刃、软甲的寻常好料。炼器时同一种材料用三份。"
+  },
+  "ore_xuantie": {
+    "name": "玄铁锭",
+    "category": "material",
+    "price": 90,
+    "rarity": 2,
+    "description": "玄铁沉重如山，打出的兵刃斩金断玉。炼器时同一种材料用三份。"
+  },
+  "ore_hantie": {
+    "name": "寒铁精",
+    "category": "material",
+    "price": 260,
+    "rarity": 3,
+    "description": "极北寒铁淬出的精华，触手生寒，地阶法宝的胚子。炼器时同一种材料用三份。"
+  },
+  "silk_qing": {
+    "name": "青丝",
+    "category": "material",
+    "price": 30,
+    "rarity": 1,
+    "description": "灵蚕吐出的青丝，织法袍的寻常好料。炼器时同一种材料用三份。"
+  },
+  "silk_xuancan": {
+    "name": "玄蚕丝",
+    "category": "material",
+    "price": 90,
+    "rarity": 2,
+    "description": "玄蚕所吐，刀剑难断，织成的法袍能挡飞剑。炼器时同一种材料用三份。"
+  },
+  "silk_yunjin": {
+    "name": "云锦",
+    "category": "material",
+    "price": 260,
+    "rarity": 3,
+    "description": "以云气织就的锦缎，轻若无物，地阶法袍的料子。炼器时同一种材料用三份。"
+  },
+  "jade_qing": {
+    "name": "青玉料",
+    "category": "material",
+    "price": 30,
+    "rarity": 1,
+    "description": "温润的青玉，雕佩饰、玉扇的寻常好料。炼器时同一种材料用三份。"
+  },
+  "jade_mo": {
+    "name": "墨玉料",
+    "category": "material",
+    "price": 90,
+    "rarity": 2,
+    "description": "墨玉沉静，养人心神，雕成的佩饰聚灵更快。炼器时同一种材料用三份。"
+  },
+  "jade_han": {
+    "name": "寒玉髓",
+    "category": "material",
+    "price": 260,
+    "rarity": 3,
+    "description": "寒玉深处凝出的玉髓，地阶佩饰的胚子。炼器时同一种材料用三份。"
+  },
   "ningyuan_dan": {
     "name": "凝元丹",
     "category": "pill",

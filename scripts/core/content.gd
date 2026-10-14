@@ -38,6 +38,8 @@ var cave_data: Dictionary = {}
 var auction_data: Dictionary = {}
 # 五宗论道's champions and rewards (summit.gd).
 var summit_data: Dictionary = {}
+# 炼器's materials and costs (forge.gd).
+var forge_data: Dictionary = {}
 # Born-with talent ids by tier, built on first use (talents.gd).
 var talent_pools: Dictionary = {}
 var error_message: String = ""
@@ -46,7 +48,7 @@ const FAVOR_MAX := 200
 const FAVOR_STAGES := [[0, "初识"], [40, "相熟"], [80, "友好"], [140, "信赖"], [200, "亲密"]]
 const ATTITUDES := {"friendly": "友善", "neutral": "中立", "hostile": "敌意"}
 const BUILT_IN_INTERACTIONS := ["talk", "gift", "help", "consult", "teach", "invite_spar", "invite_help"]
-const PLAIN_ACTIONS := ["cultivate", "rest", "breakthrough", "study", "teach", "sell", "shop", "gather", "inn_rest", "search_ruin", "explore_cave", "inquire", "commissions", "sect", "alchemy", "field", "tournament"]
+const PLAIN_ACTIONS := ["cultivate", "rest", "breakthrough", "study", "teach", "sell", "shop", "gather", "inn_rest", "search_ruin", "explore_cave", "forge", "inquire", "commissions", "sect", "alchemy", "field", "tournament"]
 const ITEM_CATEGORIES := {"herb": "灵草", "pill": "丹药", "treasure": "天材地宝", "manual": "玉简", "equipment": "法宝", "material": "材料", "recipe": "丹方", "tool": "器具", "quest": "信物"}
 # Milestones friends send word of, and the deeds the session counts besides victories ("win:<enemy>").
 const CONGRATS := ["breakthrough", "core", "serpent", "champion", "summit", "promotion"]
@@ -87,7 +89,7 @@ func load_data() -> bool:
 		error_message = "物品配置格式错误。"
 		return false
 	items = item_data
-	for pair: Array in [["techniques", "res://data/techniques.json"], ["equipment", "res://data/equipment.json"], ["vfx_tiers", "res://data/vfx_tiers.json"], ["vfx", "res://data/vfx.json"], ["population", "res://data/population.json"], ["commissions", "res://data/commissions.json"], ["storylines", "res://data/storylines.json"], ["talents", "res://data/talents.json"], ["sect", "res://data/sect.json"], ["bonds", "res://data/bonds.json"], ["alchemy", "res://data/alchemy.json"], ["caves", "res://data/caves.json"], ["auctions", "res://data/auctions.json"], ["summit", "res://data/summit.json"]]:
+	for pair: Array in [["techniques", "res://data/techniques.json"], ["equipment", "res://data/equipment.json"], ["vfx_tiers", "res://data/vfx_tiers.json"], ["vfx", "res://data/vfx.json"], ["population", "res://data/population.json"], ["commissions", "res://data/commissions.json"], ["storylines", "res://data/storylines.json"], ["talents", "res://data/talents.json"], ["sect", "res://data/sect.json"], ["bonds", "res://data/bonds.json"], ["alchemy", "res://data/alchemy.json"], ["caves", "res://data/caves.json"], ["auctions", "res://data/auctions.json"], ["summit", "res://data/summit.json"], ["forge", "res://data/forge.json"]]:
 		var loaded: Variant = _read_json(pair[1])
 		if not loaded is Dictionary:
 			error_message = "配置格式错误：" + pair[1]
@@ -124,6 +126,8 @@ func load_data() -> bool:
 				auction_data = loaded
 			"summit":
 				summit_data = loaded
+			"forge":
+				forge_data = loaded
 	map = parsed.map
 	locations = parsed.locations
 	skills = parsed.skills
@@ -324,6 +328,8 @@ func _validate() -> String:
 		problem = _validate_auctions()
 	if problem.is_empty():
 		problem = _validate_summit()
+	if problem.is_empty():
+		problem = _validate_forge()
 	if not problem.is_empty():
 		return problem
 	problem = _validate_storylines()
@@ -482,6 +488,24 @@ func _valid_cost(cost: Variant, keys: Array) -> bool:
 			return false
 		total += int(cost[key])
 	return total >= 1
+
+# --- 炼器 ----------------------------------------------------------------------------------------
+
+func _validate_forge() -> String:
+	var data := forge_data
+	var tiers: int = equipment_data.tiers.size()
+	if not _whole(data.get("count")) or int(data.count) < 1:
+		return "炼器的材料份数无效。"
+	for key: String in ["fee", "days"]:
+		if not data.get(key) is Array or data[key].size() != tiers or data[key].any(func(value: Variant) -> bool: return not _whole(value)):
+			return "炼器须按品阶给出：" + key
+	if not data.get("materials") is Dictionary or data.materials.is_empty():
+		return "没有炼器材料。"
+	for material_id: String in data.materials:
+		var material: Variant = data.materials[material_id]
+		if not items.has(material_id) or str(items[material_id].get("category", "")) != "material" or not material is Dictionary or not equipment_data.materials.has(material.get("family", "")) or not _whole(material.get("tier")) or int(material.tier) < 1 or int(material.tier) > tiers:
+			return "炼器材料配置无效：" + material_id
+	return ""
 
 # --- 五宗论道 --------------------------------------------------------------------------------------
 

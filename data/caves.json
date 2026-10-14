@@ -35,7 +35,7 @@
         "id": "armory", "name": "兵器室", "links": ["study", "sealed"], "map": [0.7, 0.75],
         "text": "兵器架东倒西歪，锈剑断戟散了一地。",
         "guardian": "den_wolf",
-        "loot": [[{"equipment": 2}]]
+        "loot": [[{"equipment": 2}], [{"item": ["ore_xuantie", 3]}]]
       },
       {
         "id": "sealed", "name": "封禁石室", "links": ["armory"], "map": [0.9, 0.6], "requires_sense": 14,
@@ -69,13 +69,13 @@
       {
         "id": "pool", "name": "霞光灵池", "links": ["garden"], "map": [0.74, 0.14],
         "text": "池水映着天上不散的晚霞，水底沉着几块发光的石头。",
-        "hidden": {"name": "池底的灵石髓", "sense": 72, "qi": 40, "loot": [[{"stones": 600}], [{"item": ["ningyuan_dan", 2]}]]}
+        "hidden": {"name": "池底的灵石髓", "sense": 72, "qi": 40, "loot": [[{"stones": 600}], [{"item": ["ningyuan_dan", 2]}], [{"item": ["jade_han", 3]}, {"item": ["silk_yunjin", 3]}]]}
       },
       {
         "id": "tomb", "name": "剑冢", "links": ["stairs", "library"], "map": [0.5, 0.78],
         "text": "一柄柄断剑插在土里，剑身上的锈蚀成了霞色。剑冢中央，一具剑傀缓缓抬起了头。",
         "guardian": "jian_kui",
-        "loot": [[{"equipment": 4}]]
+        "loot": [[{"equipment": 4}], [{"item": ["ore_hantie", 3]}]]
       },
       {
         "id": "library", "name": "藏经石阁", "links": ["tomb", "seat"], "map": [0.72, 0.78], "requires_sense": 66,

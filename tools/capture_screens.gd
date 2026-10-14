@@ -146,6 +146,12 @@ func _run() -> void:
 	s.Auctions.open(s, "yunxi_special")
 	await _shot("18d_auction")
 	s.auction = {}
+	# The forge, with materials of two kinds.
+	s.set_item_count("ore_qinggang", 3)
+	s.set_item_count("jade_mo", 4)
+	main.open_forge()
+	await _shot("18e_forge")
+	main.set_view("place")
 	s.player.location = "sect"
 	main.set_view("place")
 	s.pending_event = {"id": "tournament_entry", "day": int(s.world.day)}

@@ -344,6 +344,10 @@ static func _valid_breakthrough(content, saved_player: Dictionary, saved_pending
 			return null
 		gained[kind] = int(longevity[kind])
 	result["longevity"] = gained
+	var forged: Variant = saved_player.get("forged", 0)
+	if not _whole_nonnegative(forged):
+		return null
+	result["forged"] = int(forged)
 	var waiting: bool = str(saved_pending.get("id", "")) == "heart_demon"
 	var attempt: Variant = saved_player.get("attempt", null)
 	if waiting != (attempt != null):

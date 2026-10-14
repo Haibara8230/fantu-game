@@ -31,6 +31,7 @@ const BagView = preload("res://scripts/ui/bag_view.gd")
 const ArtsView = preload("res://scripts/ui/arts_view.gd")
 const BattleView = preload("res://scripts/ui/battle_view.gd")
 const AuctionView = preload("res://scripts/ui/auction_view.gd")
+const ForgeView = preload("res://scripts/ui/forge_view.gd")
 const EventView = preload("res://scripts/ui/event_view.gd")
 const WelcomeScreen = preload("res://scripts/ui/welcome_screen.gd")
 const ChronicleView = preload("res://scripts/ui/chronicle_view.gd")
@@ -43,7 +44,7 @@ const MUTED := Color("#97aaa4")
 const PANEL_TABS := [["status", "属性"], ["sect", "宗门"], ["arts", "神通"], ["methods", "功法"], ["bag", "行囊"], ["people", "相识"], ["chronicle", "编年史"], ["system", "系统"]]
 const SCROLL_TABS := [["goals", "当前目标"], ["stories", "剧情"], ["quests", "委托"], ["letters", "传音"], ["upcoming", "约定"], ["messages", "消息"]]
 const RETREAT_TABS := [["retreat", "修炼"], ["breakthrough", "突破"]]
-const TAB_GROUPS := {"panel": PANEL_TABS, "scroll": SCROLL_TABS, "retreat": RETREAT_TABS, "trade": [["trade", "交易"]], "alchemy": [["alchemy", "炼丹"]], "field": [["field", "灵田"]]}
+const TAB_GROUPS := {"panel": PANEL_TABS, "scroll": SCROLL_TABS, "retreat": RETREAT_TABS, "trade": [["trade", "交易"]], "alchemy": [["alchemy", "炼丹"]], "field": [["field", "灵田"]], "forge": [["forge", "炼器"]]}
 var session = Session.new()
 var manual_store = SaveStore.new("user://saves/manual")
 var auto_store = SaveStore.new("user://saves/auto")
@@ -94,6 +95,8 @@ var selected_spot := ""
 var selected_npc := ""
 # The room chosen on the old cave's map (cave_view.gd).
 var cave_room := ""
+# The forging being set out (forge_view.gd): {"material", "base", "element"}.
+var forge_plan := {}
 var shown_location := ""
 var show_everyone_here := false
 var welcome_roots: Array = []
@@ -420,7 +423,7 @@ func _arrange(screen: String) -> void:
 				window.offset_top = -300.0
 			else:
 				_place_window(0.0, 1.0, 14.0, -60.0, 14.0)
-		"retreat", "trade", "alchemy", "field":
+		"retreat", "trade", "alchemy", "field", "forge":
 			# Smaller scrolls over the place, which darkens behind them.
 			shade.color.a = 0.6
 			_place_window(0.0, 1.0, 40.0, -64.0, 96.0)
@@ -540,6 +543,8 @@ func render() -> void:
 				SectView.render(self)
 			"alchemy":
 				AlchemyView.render(self)
+			"forge":
+				ForgeView.render(self)
 			"field":
 				AlchemyView.render_field(self)
 			"goals":
@@ -682,6 +687,10 @@ func tint(target: Button, color: Color) -> Button:
 	return target
 
 # --- The alchemy page (alchemy_view.gd) -------------------------------------------------------------
+
+func open_forge() -> void:
+	forge_plan = {}
+	set_view("forge")
 
 func open_alchemy() -> void:
 	alchemy_plan = {}

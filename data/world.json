@@ -56,9 +56,12 @@
         {"item": "recipe_liaoshang", "price": 30},
         {"item": "recipe_huiqi", "price": 30},
         {"item": "furnace_bronze", "price": 160},
-        {"item": "kongho_fu", "price": 20}
+        {"item": "kongho_fu", "price": 20},
+        {"item": "ore_qinggang", "price": 30},
+        {"item": "silk_qing", "price": 30},
+        {"item": "jade_qing", "price": 30}
       ],
-      "buys": ["herb", "pill", "manual", "equipment", "treasure"],
+      "buys": ["herb", "pill", "manual", "equipment", "treasure", "material"],
       "stock": {
         "restock_days": 30,
         "lines": [
@@ -68,7 +71,7 @@
         ]
       },
       "spots": [
-        {"id": "street", "tag": [0.46, 0.5], "name": "长街", "description": "丹铺、器铺与散修地摊挤满长街。丹铺明码标价。", "actions": ["shop", "inquire", "commissions"]},
+        {"id": "street", "tag": [0.46, 0.5], "name": "长街", "description": "丹铺、器铺与散修地摊挤满长街。丹铺明码标价。", "actions": ["shop", "forge", "inquire", "commissions"]},
         {"id": "pharmacy", "tag": [0.27, 0.38], "name": "云溪药铺", "description": "沈墨的药铺，收购各色灵草，出价公道。后堂有一口药炉，熟客可付些灵石借用，沈墨还会在旁提点。", "actions": ["sell", "alchemy"]}
       ]
     },

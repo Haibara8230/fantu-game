@@ -23,6 +23,7 @@ func _initialize() -> void:
 	_toxin()
 	_fine_pills()
 	_field()
+	_forging()
 	_saves()
 	_static_checks()
 	print("ALCHEMY: %d checks, %d failures" % [checks, failures])
@@ -33,6 +34,35 @@ func _game() -> Session:
 	game.encounters_enabled = false
 	game.new_game("丹师", 11, ["metal", "wood", "fire"])
 	return game
+
+## 炼器: three of one material at the market's 器铺 make a piece at its tier, of the chosen base and
+## element; its affixes follow the world and the count; a wrong material or too few are refused.
+func _forging() -> void:
+	var game := _game()
+	game.travel("market")
+	check(game.available_here("forge"), "the market's street has a forge")
+	game.set_item_count("ore_qinggang", 3)
+	game.set_item_count("silk_qing", 3)
+	game.player.stones = 100
+	var plan := {"material": "ore_qinggang", "base": "sword", "element": "fire"}
+	check(game.Forge.block(game, {"material": "silk_qing", "base": "sword", "element": "none"}).contains("打不出"), "silk makes no sword")
+	var twin := _game()
+	twin.travel("market")
+	twin.set_item_count("ore_qinggang", 3)
+	twin.player.stones = 100
+	var day := int(game.world.day)
+	game.forge_item(plan)
+	twin.forge_item(plan)
+	var made: Array = game.player.items.keys().filter(func(item_id: String) -> bool: return item_id.begins_with("e:sword:2:fire:"))
+	check(made.size() == 1 and game.item_count("ore_qinggang") == 0 and int(game.player.stones) == 80 and int(game.world.day) == day + 10, "three 青钢锭 make a 黄阶 fire sword for 20 stones and ten days")
+	check(twin.player.items.has(made[0]), "the same world forges the same piece")
+	check(game.Forge.block(game, plan).contains("不足"), "without materials nothing is forged")
+	check(int(game.player.forged) == 1, "the count of pieces forged is kept")
+	var copy := Session.new()
+	check(copy.restore(JSON.parse_string(JSON.stringify(game.snapshot()))) and int(copy.player.forged) == 1, "and survives a save")
+	game.travel("sect")
+	game.set_item_count("ore_qinggang", 3)
+	check(game.Forge.block(game, plan).contains("器铺"), "and only at a forge")
 
 func _recipes() -> void:
 	var game := _game()

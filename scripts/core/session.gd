@@ -21,6 +21,7 @@ const Talents = preload("res://scripts/core/talents.gd")
 const Caves = preload("res://scripts/core/caves.gd")
 const Auctions = preload("res://scripts/core/auctions.gd")
 const Summit = preload("res://scripts/core/summit.gd")
+const Forge = preload("res://scripts/core/forge.gd")
 const Breakthrough = preload("res://scripts/core/breakthrough.gd")
 const Fortune = preload("res://scripts/core/fortune.gd")
 const Sect = preload("res://scripts/core/sect.gd")
@@ -108,7 +109,7 @@ func new_game(character_name: String = "无名", seed_value: int = -1, roots: Ar
 		"learned": [], "arts": [], "methods": [], "equipment": {"weapon": "", "robe": "", "accessory": ""}, "quests": [],
 		"deeds": {}, "taught": [],
 		"talents": born.get("talents", []).duplicate(), "flaws": born.get("flaws", []).duplicate(),
-		"foundation_grade": 1, "core_grade": 0, "injury_until": 0, "lessons": 0, "boons": {}, "longevity": {},
+		"foundation_grade": 1, "core_grade": 0, "injury_until": 0, "lessons": 0, "boons": {}, "longevity": {}, "forged": 0,
 		"rank": 0, "contribution": 0, "merit": 0, "stipend_day": 0, "exchanged": {}, "donated": {},
 		"recipes": [], "practice": {}, "toxin": 0, "toxin_day": 0, "field": {"grade": 0, "plots": []},
 	}
@@ -1125,6 +1126,11 @@ func duel_pill_block(item_id: String) -> String:
 
 func take_duel_pill(item_id: String) -> String:
 	return Combat.take_pill(self, item_id)
+
+## --- 炼器 (forge.gd) ---
+
+func forge_item(plan: Dictionary) -> String:
+	return Forge.forge(self, plan)
 
 ## --- Auctions (auctions.gd) ---
 
