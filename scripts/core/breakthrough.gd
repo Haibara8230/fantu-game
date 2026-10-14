@@ -261,7 +261,7 @@ static func resolve(s, told: String) -> String:
 		s.player.stage = 0
 		if int(s.player.realm) == 1:
 			s.player["foundation_grade"] = grade
-		else:
+		elif int(s.player.realm) == 2:
 			grade = _core_grade(s, float(attempt_state.odds) - roll, int(attempt_state.steps))
 			s.player["core_grade"] = grade
 		s.player["lessons"] = 0
@@ -269,9 +269,13 @@ static func resolve(s, told: String) -> String:
 		s.refresh_realm_stats()
 		s.player.hp = s.player.max_hp
 		s.player.qi = s.player.max_qi
-		texts.append(s.log_event("breakthrough", {"days": passed.elapsed, "realm": int(s.player.realm), "stage": 0, "grade": grade}, true))
+		var reached := {"days": passed.elapsed, "realm": int(s.player.realm), "stage": 0}
+		# Foundation and the core are graded; later realms keep the core's grade.
+		if int(s.player.realm) <= 2:
+			reached.grade = grade
+		texts.append(s.log_event("breakthrough", reached, true))
 		texts.append_array(s.settle_stage())
-		texts.append_array(s.congratulate("breakthrough" if int(s.player.realm) == 1 else "core"))
+		texts.append_array(s.congratulate(["", "breakthrough", "core", "nascent"][mini(int(s.player.realm), 3)]))
 		return s.conclude(" ".join(texts), passed)
 	var failure: Dictionary = rules(s).failure
 	s.player.xp = int(attempt_state.xp) * int(failure.xp_percent) / 100

@@ -33,7 +33,8 @@ static func current(session) -> Array[Dictionary]:
 		if result.size() >= SHOWN:
 			break
 		if applies(session, goal.id):
-			result.append({"id": goal.id, "title": str(goal.title), "text": str(goal.text).format(values(session, goal.id))})
+			var filled: Dictionary = values(session, goal.id)
+			result.append({"id": goal.id, "title": str(goal.title).format(filled), "text": str(goal.text).format(filled)})
 	for goal: Dictionary in told:
 		if result.size() >= SHOWN:
 			break
@@ -91,7 +92,7 @@ static func applies(session, goal_id: String) -> bool:
 			return not ready_xp and not session.at_bottleneck()
 		"core_breach", "core_pill":
 			var forming: Dictionary = session.next_breakthrough()
-			if int(player.realm) != 1 or forming.is_empty() or int(player.xp) < int(forming.xp):
+			if int(player.realm) < 1 or forming.is_empty() or int(player.xp) < int(forming.xp):
 				return false
 			var pill_ready: bool = session.pill_count(str(forming.get("pill", ""))) >= int(forming.get("pills", 1)) or not session.breakthrough_treasures().is_empty()
 			return pill_ready == (goal_id == "core_breach")
@@ -136,10 +137,11 @@ static func values(session, goal_id: String) -> Dictionary:
 			return {"date": Calendar.date_text(opening), "until": _span(opening - day)}
 		"foundation_pill":
 			return {"pill_price": _price(session, "foundation_pill")}
-		"foundation_breach", "core_breach":
+		"foundation_breach":
 			return {"odds": int(session.breakthrough_odds(session.breakthrough_plan()).total)}
-		"core_pill":
-			return {"pill_price": _price(session, "ningyuan_dan")}
+		"core_breach", "core_pill":
+			var pill: String = session.Breakthrough.pill_of(session)
+			return {"odds": int(session.breakthrough_odds(session.breakthrough_plan()).total), "pill_name": session.content.item(pill).name, "pill_price": _price(session, pill), "next_realm": session.content.realm(int(player.realm) + 1).name}
 		"promotion", "rank":
 			var next: Dictionary = session.next_sect_rank()
 			return {"rank_name": next.name, "merit": int(player.get("merit", 0)), "merit_needed": int(next.merit), "stage_name": session.content.realm_title(int(next.stage[0]), int(next.stage[1]))}

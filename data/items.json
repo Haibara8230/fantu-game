@@ -216,6 +216,13 @@
     "rarity": 3,
     "description": "寒玉深处凝出的玉髓，地阶佩饰的胚子。炼器时同一种材料用三份。"
   },
+  "huaying_dan": {
+    "name": "化婴丹",
+    "category": "pill",
+    "price": 3600,
+    "rarity": 4,
+    "description": "碎丹成婴所需的丹药，金丹圆满方可服用。"
+  },
   "ningyuan_dan": {
     "name": "凝元丹",
     "category": "pill",

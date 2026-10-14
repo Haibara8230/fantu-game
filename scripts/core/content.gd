@@ -51,7 +51,7 @@ const BUILT_IN_INTERACTIONS := ["talk", "gift", "help", "consult", "teach", "inv
 const PLAIN_ACTIONS := ["cultivate", "rest", "breakthrough", "study", "teach", "sell", "shop", "gather", "inn_rest", "search_ruin", "explore_cave", "forge", "inquire", "commissions", "sect", "alchemy", "field", "tournament"]
 const ITEM_CATEGORIES := {"herb": "灵草", "pill": "丹药", "treasure": "天材地宝", "manual": "玉简", "equipment": "法宝", "material": "材料", "recipe": "丹方", "tool": "器具", "quest": "信物"}
 # Milestones friends send word of, and the deeds the session counts besides victories ("win:<enemy>").
-const CONGRATS := ["breakthrough", "core", "serpent", "champion", "summit", "promotion"]
+const CONGRATS := ["breakthrough", "core", "nascent", "serpent", "champion", "summit", "promotion"]
 const DEEDS := ["retreat_days", "duel", "trade", "gather", "commission", "help", "tournament_champion", "summit_champion"]
 const STORY_STATES := ["none", "active", "done", "closed"]
 const Arsenal = preload("res://scripts/core/arsenal.gd")

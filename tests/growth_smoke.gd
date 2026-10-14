@@ -389,7 +389,18 @@ func _golden_core() -> void:
 	var broken: Dictionary = JSON.parse_string(JSON.stringify(game.snapshot()))
 	broken.player.core_grade = 99
 	check(not Session.new().restore(broken), "a grade out of range is refused")
-	check(game.next_breakthrough().is_empty(), "there is no realm past 金丹 yet")
+	check(game.next_breakthrough().get("pill", "") == "huaying_dan", "past 金丹 lies 元婴, asking a 化婴丹")
+	# 元婴: the core keeps its grade; 天阶 arts can be studied.
+	var core_before: int = int(game.player.core_grade)
+	game.player.stage = 3
+	game.player.xp = 16000
+	game.player.mind = 400
+	game.refresh_realm_stats()
+	game.set_item_count("huaying_dan", 1)
+	game.fortune = {"demon": 0.99, "breakthrough": 0.0, "grade": 0.99}
+	game.act("breakthrough")
+	check(game.player.realm == 3 and game.realm_name() == "元婴初期" and int(game.player.core_grade) == core_before and game.lifespan() >= 700, "元婴 is reached, the core's grade kept, seven hundred years")
+	check(game.journal_lines().any(func(line: String) -> bool: return line.contains("元婴初期")) and not game.journal_lines().back().contains("金丹品级"), "the record names the realm without regrading the core")
 	var plain := _game()
 	plain.player.realm = 1
 	plain.player.stage = 3

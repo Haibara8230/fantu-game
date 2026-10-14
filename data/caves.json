@@ -86,7 +86,7 @@
         "id": "seat", "name": "古修坐化处", "links": ["library"], "map": [0.92, 0.55],
         "text": "一具枯骨盘坐在蒲团上，身前的灯还亮着。灯影一晃，一缕残念从骨中站了起来。",
         "guardian": "can_nian",
-        "loot": [[{"manual": 4}, {"equipment": 4}, {"item": ["shouyuan_guo", 1]}]]
+        "loot": [[{"manual": 4}, {"equipment": 4}, {"item": ["shouyuan_guo", 1]}], [{"manual": 5}, {"item": ["huaying_dan", 1]}]]
       }
     ]
   }
