@@ -89,13 +89,21 @@ static func _render_failure(ui) -> void:
 	done.custom_minimum_size.x = 200
 	row.add_child(done)
 
+## An ending's title and its first words, centred, clear of the frame's corners.
+static func _ending_head(ui, center: VBoxContainer, title: String, words: String) -> void:
+	var heading: Label = ui.label(title, 30, ui.GOLD)
+	heading.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	center.add_child(heading)
+	var line: Label = ui.paragraph(words, ui.INK)
+	line.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	center.add_child(line)
+
 static func render_ending(ui) -> void:
 	var session = ui.session
 	var center: VBoxContainer = ui.center
 	if session.at_brink():
 		# Once in a life the end waits: to sit in peace, or to defy fate.
-		center.add_child(ui.label("大 限 将 至", 30, ui.GOLD))
-		center.add_child(ui.paragraph("%s，%s，寿元已尽，享年 %d 岁。气机一点点散去，是就此坐化，还是强提最后一口真元，逆冲死关？" % [session.player.name, session.realm_name(), session.age()], ui.INK))
+		_ending_head(ui, center, "大 限 将 至", "%s，%s，寿元已尽，享年 %d 岁。气机一点点散去，是就此坐化，还是强提最后一口真元，逆冲死关？" % [session.player.name, session.realm_name(), session.age()])
 		var row := HBoxContainer.new()
 		row.add_theme_constant_override("separation", 14)
 		center.add_child(row)
@@ -108,11 +116,9 @@ static func render_ending(ui) -> void:
 		row.add_child(rest)
 		return
 	if str(session.ended.get("kind", "")) == "ascension":
-		center.add_child(ui.label("白 日 飞 升", 30, ui.GOLD))
-		center.add_child(ui.paragraph("%s，%s，享年 %d 岁，踏天河而去，大道得成。" % [session.player.name, session.realm_name(), session.age()], ui.INK))
+		_ending_head(ui, center, "白 日 飞 升", "%s，%s，享年 %d 岁，踏天河而去，大道得成。" % [session.player.name, session.realm_name(), session.age()])
 	else:
-		center.add_child(ui.label("此 生 已 尽", 30, ui.GOLD))
-		center.add_child(ui.paragraph("%s，%s，享年 %d 岁。" % [session.player.name, session.realm_name(), session.age()], ui.INK))
+		_ending_head(ui, center, "此 生 已 尽", "%s，%s，享年 %d 岁。" % [session.player.name, session.realm_name(), session.age()])
 	center.add_child(ui.label("生 平", 16, ui.GOLD))
 	for entry: Dictionary in session.chronicle.entries:
 		if entry.major:

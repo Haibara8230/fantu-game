@@ -173,6 +173,23 @@ func _run() -> void:
 		rite.length = moment[4]
 		await _shot(moment[0])
 		rite.queue_free()
+	# High realms: the breakthrough scroll toward 元婴, then the ascension's ending.
+	s.player.realm = 2
+	s.player.stage = 3
+	s.player.xp = 16000
+	s.player.mind = 300
+	s.player.core_grade = 5
+	s.refresh_realm_stats()
+	s.set_item_count("huaying_dan", 1)
+	main.set_view("breakthrough")
+	await _shot("25_breakthrough_nascent")
+	s.player.realm = 4
+	s.player.stage = 3
+	s.refresh_realm_stats()
+	s.ended = {"kind": "ascension", "day": int(s.world.day)}
+	s.log_event("ascended", {"age": s.age()}, true)
+	main.render()
+	await _shot("26_ascension")
 	print("CAPTURE: %d shots at %dx%d in %s" % [shots, size.x, size.y, out_dir])
 	main.queue_free()
 	await create_timer(0.2).timeout
