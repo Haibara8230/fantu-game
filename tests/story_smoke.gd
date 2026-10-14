@@ -23,6 +23,7 @@ func _initialize() -> void:
 	_key_people()
 	_requests()
 	_foundation_pace()
+	_true_disciple()
 	_older_journeys()
 	print("STORIES: %d checks, %d failures" % [checks, failures])
 	quit(0 if failures == 0 else 1)
@@ -316,6 +317,32 @@ func _foundation_pace() -> void:
 	game.travel("sect")
 	_duel(game, "disciple")
 	check(game.story_state("inner_court") == "done" and game.player.items.keys().any(func(item_id: String) -> bool: return item_id.begins_with("j:")), "the trial ends with the elder's own manual")
+
+## 真传之责: forming the core summons the player to the elder; two 魔修 put down; two years on, an old
+## story and a 地阶 slip.
+func _true_disciple() -> void:
+	var game := _game("plain", 62)
+	game.player.realm = 2
+	game.player.mind = 120
+	game.refresh_realm_stats()
+	game.player.hp = game.player.max_hp
+	game.wait(1)
+	check(game.story_at("true_disciple", "summon") or game.story_at("true_disciple", "demons"), "forming the core summons the player to the elder")
+	game.travel("ferry")
+	game.travel("sect")
+	check(game.story_at("true_disciple", "demons"), "who sends them after the 魔修")
+	game.record_deed("win:mo_xiu", 2)
+	var stones := int(game.player.stones)
+	game.wait(1)
+	check(game.story_step("true_disciple").id == "wait_secret" and int(game.player.stones) == stones + 300, "two put down, the sect rewards it")
+	game.travel("ferry")
+	var stays := 0
+	while not game.story_at("true_disciple", "secret") and stays < 6:
+		stays += 1
+		game.wait(400)
+	check(game.story_at("true_disciple", "secret"), "two years later an old story waits at the hall")
+	game.travel("sect")
+	check(game.story_state("true_disciple") == "done" and game.player.items.keys().any(func(item_id: String) -> bool: return item_id.begins_with("j:") and int(game.content.item(item_id).tier) == 4), "and a 地阶 slip from the old secret realm")
 
 ## Journeys from before the storylines are past the introduction, and the sect's storylines begin.
 func _older_journeys() -> void:
