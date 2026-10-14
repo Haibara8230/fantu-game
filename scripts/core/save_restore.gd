@@ -43,6 +43,10 @@ static func restore(s, data: Variant) -> bool:
 	var supply: Variant = _valid_supply(content, saved_world.get("market_supply", {}), day)
 	if events == null or people == null or caves == null or supply == null:
 		return false
+	var companion: Variant = saved_world.get("companion", "")
+	var disciples: Variant = saved_world.get("disciples", [])
+	if not companion is String or not disciples is Array or disciples.size() > 10 or disciples.any(func(person_id: Variant) -> bool: return not person_id is String):
+		return false
 	if not saved_player.get("name") is String or not saved_player.get("location") is String or not content.locations.has(saved_player.location):
 		return false
 	for key: String in PLAYER_COUNTS:
@@ -224,7 +228,7 @@ static func restore(s, data: Variant) -> bool:
 	var bonds: Variant = _valid_bonds(s, content, saved_world, day)
 	if bonds == null:
 		return false
-	s.world = {"day": day, "flags": saved_world.flags.duplicate(), "events": events, "people": people, "seed": int(seed_value) if _whole_nonnegative(seed_value) else 0, "stock_sold": sold, "rumors": rumors, "quests_taken": taken, "storylines": storylines, "letters": letters, "talent_lives": shaped, "invites": bonds.invites, "loans": bonds.loans, "visit_period": bonds.visit_period, "caves": caves, "market_supply": supply}
+	s.world = {"day": day, "flags": saved_world.flags.duplicate(), "events": events, "people": people, "seed": int(seed_value) if _whole_nonnegative(seed_value) else 0, "stock_sold": sold, "rumors": rumors, "quests_taken": taken, "storylines": storylines, "letters": letters, "talent_lives": shaped, "invites": bonds.invites, "loans": bonds.loans, "visit_period": bonds.visit_period, "caves": caves, "market_supply": supply, "companion": companion, "disciples": disciples.duplicate()}
 	s.populate()
 	var player: Dictionary = saved_player.duplicate(true)
 	for key: String in PLAYER_COUNTS:

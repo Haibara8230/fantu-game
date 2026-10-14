@@ -28,6 +28,7 @@ func _initialize() -> void:
 	_appointments()
 	_loans()
 	_aid()
+	_kin()
 	print("BONDS: %d checks, %d failures" % [checks, failures])
 	quit(0 if failures == 0 else 1)
 
@@ -175,6 +176,46 @@ func _saves() -> void:
 	check(old.sect_rank().name == "外门弟子" and int(old.player.merit) == 30 and int(old.player.contribution) == 30 and int(old.player.stipend_day) == int(old.world.day), "its delivered commissions count as contribution; the stipend starts now")
 
 ## A generated person met and present here.
+## 道侣 and 师徒: who may be asked, what they bring, how they end, and that a save keeps them.
+func _kin() -> void:
+	var game := _game(43)
+	var other := _someone(game)
+	game.world.people[other].relation = 200
+	check(not game.npc_options(other).any(func(option: Dictionary) -> bool: return option.id == "companion"), "no 道侣 before foundation")
+	game.player.realm = 1
+	game.refresh_realm_stats()
+	var speed: float = game.cultivation_speed()
+	check(game.npc_options(other).any(func(option: Dictionary) -> bool: return option.id == "companion" and option.available), "from foundation, one 亲密 may become 道侣")
+	game.interact(other, "companion")
+	check(game.world.companion == other and is_equal_approx(game.cultivation_speed(), speed * 1.1), "a 道侣 quickens cultivation by a tenth")
+	check(game.chronicle.entries.any(func(entry: Dictionary) -> bool: return entry.id == "companion_bound" and entry.major), "and is a milestone")
+	var life: Dictionary = game.life_by_id(other)
+	var copy := Session.new()
+	check(copy.restore(JSON.parse_string(JSON.stringify(game.snapshot()))) and copy.world.companion == other, "a 道侣 survives a save")
+	game.world.day = int(life.death) + 1
+	check(game.Bonds.companion_speed(game) == 0, "and the quickening ends with their life")
+	# 师徒.
+	var master := _game(44)
+	var pupil := ""
+	for person_id: String in master.present_npcs():
+		if master.is_generated(person_id) and int(master.person(person_id).realm) == 0:
+			pupil = person_id
+			master.mark_met(person_id)
+			break
+	master.world.people[pupil].relation = 80
+	check(not master.npc_options(pupil).any(func(option: Dictionary) -> bool: return option.id == "disciple"), "no disciples before 金丹")
+	master.player.realm = 2
+	master.refresh_realm_stats()
+	master.interact(pupil, "disciple")
+	check(pupil in master.world.disciples and master.npc_options(pupil).any(func(option: Dictionary) -> bool: return option.id == "instruct"), "a 金丹 takes a disciple, and may teach them")
+	var mind := int(master.player.mind)
+	master.interact(pupil, "instruct")
+	check(int(master.player.mind) > mind and not master.npc_options(pupil).filter(func(option: Dictionary) -> bool: return option.id == "instruct")[0].available, "teaching tempers the mind, once a year")
+	var stones := int(master.player.stones)
+	master.world.day = 6 * 60 * 3
+	master.Bonds.write_letters(master)
+	check(int(master.player.stones) > stones and master.world.letters.any(func(letter: Dictionary) -> bool: return str(letter.get("kind", "")) == "bond:tribute"), "now and then a disciple sends silver")
+
 func _someone(game: Session) -> String:
 	for person_id: String in game.present_npcs():
 		if game.is_generated(person_id) and game.person(person_id).attitude != "hostile":

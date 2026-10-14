@@ -16,7 +16,10 @@
       "gift": {"weight": 2, "items": ["huichun_grass", "ninglu_grass", "chiyan_flower", "huiqi_pill", "liaoshang_pill"], "count": [1, 3], "close_weight": 6}
     }
   },
+  "companion": {"favor": 200, "realm": 1, "speed": 10, "mind": 5},
+  "disciple": {"favor": 80, "realm": 2, "most": 2, "instruct": {"cooldown_days": 360, "mind": 3, "favor": 8}, "tribute": {"every_periods": 6, "stones": [20, 60]}},
   "letters": {
+    "tribute": {"豪爽": "师父！徒儿这半年跑了几趟买卖，攒下 {amount} 块灵石，一并孝敬您老人家！", "谨慎": "弟子近来修行无碍。另附灵石 {amount} 块，请师父笑纳。", "孤傲": "灵石 {amount}。师父留着用。", "温和": "师父安好？弟子省下 {amount} 块灵石，托人捎去，天冷记得添衣。", "好胜": "师父，弟子前些日子赢了一场切磋，彩头 {amount} 块灵石，孝敬您！", "多疑": "这 {amount} 块灵石来路干净，师父放心收下。", "健谈": "师父师父，跟您说，弟子最近又悟了一点东西——对了，顺带捎上 {amount} 块灵石！", "沉稳": "修行有进。附灵石 {amount}，聊表心意。"},
     "spar": {
       "豪爽": "手痒了！一月之内来找我，痛痛快快打一场！",
       "谨慎": "近来修行有些心得，想与道友印证一二。一月之内若得空，来寻我切磋。",

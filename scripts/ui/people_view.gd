@@ -184,7 +184,12 @@ static func render_person(ui, person_id: String) -> void:
 	who.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	middle.add_child(who)
 	if bool(progress.get("met", false)):
-		var bond: Label = ui.label("好感 · %s  %d" % [session.content.favor_stage(favor), favor], 15)
+		var tie := ""
+		if str(session.world.get("companion", "")) == person_id:
+			tie = " · 道侣"
+		elif person_id in session.world.get("disciples", []):
+			tie = " · 弟子"
+		var bond: Label = ui.label("好感 · %s  %d%s" % [session.content.favor_stage(favor), favor, tie], 15)
 		bond.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		middle.add_child(bond)
 	else:

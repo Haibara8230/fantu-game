@@ -309,6 +309,8 @@ static func fire(s, due: Dictionary) -> Dictionary:
 			progress.mourned = true
 			s.obituaries_changed()
 			var life: Dictionary = s.life_by_id(due.event)
+			if str(s.world.get("companion", "")) == str(due.event):
+				return {"interrupt": true, "message": s.log_event("companion_gone", {"npc": due.event}, true)}
 			return {"interrupt": false, "message": s.log_event("obituary", {"npc": due.event, "age": (int(life.death) - int(life.birth)) / 360})}
 		"story":
 			return s.story_fire(due.event)

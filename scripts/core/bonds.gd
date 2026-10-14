@@ -4,7 +4,10 @@ extends RefCounted
 ## Favor opens, stage by stage: 相熟 — a 传音符 with any acquaintance (key people keep their own
 ## thresholds); 友好 — 请教 (a few days learning from someone of one's own standing or above); 信赖 —
 ## guarding a breakthrough (breakthrough.gd) and, once, being taught one of their arts; 亲密 — calling
-## them into a duel by 传音 (传音求援), once a duel.
+## them into a duel by 传音 (传音求援), once a duel; and, from foundation, becoming 道侣 (world.companion:
+## cultivation a tenth faster while they live). From 金丹 a generated person below the player's realm and
+## 友好 may be taken as a disciple (world.disciples, at most two): 传道 once a year, and now and then
+## they send silver.
 ## Every so often (visits.period_days) each generated acquaintance holding a 传音符 may write: to spar
 ## (come within a month), to ask for help (an herb or a pill within two months), to gather together
 ## (a trip to a place within a month brings twice the herbs), to borrow silver (repaid half again in
@@ -50,6 +53,14 @@ static func options(s, person_id: String) -> Array[Dictionary]:
 		result.append({"id": "consult", "label": "请教（%d 日，得历练与心境）" % int(rules.consult.days), "cooldown_days": int(rules.consult.cooldown_days)})
 	if favor >= int(rules.teach.favor) and s.is_generated(person_id):
 		result.append({"id": "teach", "label": "求传功法（一生一次）", "once": true})
+	var companion: Dictionary = rules.companion
+	if favor >= int(companion.favor) and int(s.player.realm) >= int(companion.realm) and s.is_generated(person_id) and str(s.world.get("companion", "")).is_empty() and not person_id in s.world.get("disciples", []):
+		result.append({"id": "companion", "label": "结为道侣（一生一位）"})
+	var disciple: Dictionary = rules.disciple
+	if s.is_generated(person_id) and person_id in s.world.get("disciples", []):
+		result.append({"id": "instruct", "label": "传道（数日，教学相长）", "cooldown_days": int(disciple.instruct.cooldown_days)})
+	elif favor >= int(disciple.favor) and int(s.player.realm) >= int(disciple.realm) and s.is_generated(person_id) and person_id != str(s.world.get("companion", "")) and int(standing(s, person_id)[0]) < int(s.player.realm) and s.world.get("disciples", []).size() < int(disciple.most):
+		result.append({"id": "disciple", "label": "收为弟子（至多 %d 人）" % int(disciple.most)})
 	for invite: Dictionary in s.world.get("invites", []):
 		if invite.npc != person_id:
 			continue
@@ -94,6 +105,21 @@ static func interact(s, person_id: String, option_id: String) -> String:
 			s.add_item("j:" + taught, 1)
 			Events.apply(s, [{"relation": [person_id, 5]}])
 			return s.conclude(s.log_event("taught_by", {"npc": person_id, "technique": taught}, true))
+		"companion":
+			s.world["companion"] = person_id
+			Events.apply(s, [{"mind": int(rules.companion.mind)}])
+			return s.conclude(s.log_event("companion_bound", {"npc": person_id}, true))
+		"disciple":
+			if not s.world.has("disciples"):
+				s.world["disciples"] = []
+			s.world.disciples.append(person_id)
+			Events.apply(s, [{"relation": [person_id, 10]}])
+			return s.conclude(s.log_event("disciple_taken", {"npc": person_id}, true))
+		"instruct":
+			var teaching: Dictionary = rules.disciple.instruct
+			var passed: Dictionary = s.advance_days(int(rules.consult.days))
+			Events.apply(s, [{"relation": [person_id, int(teaching.favor)]}, {"mind": int(teaching.mind)}])
+			return s.conclude(s.log_event("disciple_taught", {"npc": person_id, "days": passed.elapsed}), passed)
 		"invite_spar":
 			var invite := invite_of(s, person_id, "spar")
 			s.begin_spar(person_id)
@@ -198,12 +224,23 @@ static func next_due(s, from_day: int) -> Dictionary:
 			best = {"day": maxi(from_day, int(loan.due)), "kind": "loan"}
 	return best
 
-## The period's letters: each friend may write (gifts arrive with theirs). Never ends a retreat.
+## The period's letters: each friend may write (gifts arrive with theirs), and every so often each
+## disciple sends silver. Never ends a retreat.
 static func write_letters(s) -> Array[String]:
 	var texts: Array[String] = []
 	var visits: Dictionary = data(s).visits
 	var period := int(s.world.day) / int(visits.period_days)
 	s.world["visit_period"] = period
+	var tribute: Dictionary = data(s).disciple.tribute
+	if period % int(tribute.every_periods) == 0:
+		for person_id: String in s.world.get("disciples", []):
+			if not _alive(s, person_id):
+				continue
+			var rng := RandomNumberGenerator.new()
+			rng.seed = hash([int(s.world.get("seed", 0)), "tribute", person_id, period])
+			var amount := rng.randi_range(int(tribute.stones[0]), int(tribute.stones[1]))
+			s.player.stones = int(s.player.stones) + amount
+			texts.append(Storylines.send_letter(s, person_id, {"kind": "bond:tribute", "amount": amount}))
 	for person_id: String in friends(s):
 		if s.world.invites.size() >= int(visits.most_open):
 			break
@@ -289,6 +326,11 @@ static func congratulate(s) -> Array[String]:
 	return texts
 
 # --- 传音求援 ------------------------------------------------------------------------------
+
+## The 道侣's share of cultivation speed (a percentage), while they live.
+static func companion_speed(s) -> int:
+	var companion := str(s.world.get("companion", ""))
+	return int(data(s).companion.speed) if not companion.is_empty() and _alive(s, companion) else 0
 
 ## Close friends who can be called into a duel now: 亲密, holding a 传音符, alive, not the opponent.
 static func allies(s) -> Array[String]:

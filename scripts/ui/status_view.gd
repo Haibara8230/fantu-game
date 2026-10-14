@@ -131,6 +131,12 @@ static func _life(ui, parent: VBoxContainer) -> void:
 	_row(ui, parent, "心神", "%s · 闭关收益 %d%%" % [mood, efficiency], "连日闭关心神渐倦；外出做些别的事可平复")
 	_row(ui, parent, "闭关上限", Calendar.duration_text(session.retreat_cap()), "单次闭关至多这么久，随境界与心境放宽")
 	_row(ui, parent, "年岁", "%d 岁 · 寿元 %d · 尽于历元 %d 年" % [session.age(), session.lifespan(), Calendar.year(session.lifespan_end_day())], "寿元耗尽此生便终；突破境界可增寿")
+	var companion := str(session.world.get("companion", ""))
+	if not companion.is_empty():
+		_row(ui, parent, "道侣", str(session.person(companion).get("name", "")) + ("" if session.Bonds.companion_speed(session) > 0 else " · 已故"), "同修之人在世时，修炼速度 +%d%%" % int(session.content.bonds_data.companion.speed))
+	var disciples: Array = session.world.get("disciples", [])
+	if not disciples.is_empty():
+		_row(ui, parent, "弟子", "、".join(disciples.map(func(person_id: String) -> String: return str(session.person(person_id).get("name", "")))), "每年可传道一次；弟子不时捎来灵石")
 
 static func _roots(ui, parent: VBoxContainer) -> void:
 	var session = ui.session

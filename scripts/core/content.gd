@@ -47,7 +47,7 @@ const DANGER_LEVELS := 4
 const FAVOR_MAX := 200
 const FAVOR_STAGES := [[0, "初识"], [40, "相熟"], [80, "友好"], [140, "信赖"], [200, "亲密"]]
 const ATTITUDES := {"friendly": "友善", "neutral": "中立", "hostile": "敌意"}
-const BUILT_IN_INTERACTIONS := ["talk", "gift", "help", "consult", "teach", "invite_spar", "invite_help"]
+const BUILT_IN_INTERACTIONS := ["talk", "gift", "help", "consult", "teach", "invite_spar", "invite_help", "companion", "disciple", "instruct"]
 const PLAIN_ACTIONS := ["cultivate", "rest", "breakthrough", "study", "teach", "sell", "shop", "gather", "inn_rest", "search_ruin", "explore_cave", "forge", "inquire", "commissions", "sect", "alchemy", "field", "tournament"]
 const ITEM_CATEGORIES := {"herb": "灵草", "pill": "丹药", "treasure": "天材地宝", "manual": "玉简", "equipment": "法宝", "material": "材料", "recipe": "丹方", "tool": "器具", "quest": "信物"}
 # Milestones friends send word of, and the deeds the session counts besides victories ("win:<enemy>").
@@ -726,6 +726,14 @@ func _validate_bonds() -> String:
 			return "人情配置缺少：" + key
 	if not _whole(data.consult.get("days")) or not _whole(data.consult.get("cooldown_days")) or not (data.aid.get("power") is float or data.aid.get("power") is int):
 		return "请教或求援配置无效。"
+	var companion: Variant = data.get("companion")
+	if not companion is Dictionary or ["favor", "realm", "speed", "mind"].any(func(key: String) -> bool: return not _whole(companion.get(key))) or int(companion.realm) >= realms.size():
+		return "道侣配置无效。"
+	var disciple: Variant = data.get("disciple")
+	if not disciple is Dictionary or ["favor", "realm", "most"].any(func(key: String) -> bool: return not _whole(disciple.get(key))) or int(disciple.realm) >= realms.size() or not disciple.get("instruct") is Dictionary or not disciple.get("tribute") is Dictionary or not _whole(disciple.tribute.get("every_periods")) or int(disciple.tribute.every_periods) < 1:
+		return "收徒配置无效。"
+	if not data.get("letters", {}).has("tribute"):
+		return "弟子孝敬缺少传音的话。"
 	if not rules.bottleneck.insight.has("consult"):
 		return "请教缺少历练数值。"
 	var visits: Variant = data.get("visits")
