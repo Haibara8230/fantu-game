@@ -305,6 +305,47 @@
           552
         ]
       ]
+    },
+    "jiao": {
+      "texture": "res://assets/art/beasts_atlas_v1.png",
+      "columns": 2,
+      "rows": 2,
+      "frames": {
+        "idle": 2,
+        "prepare": 2,
+        "attack": 3,
+        "cast": 2,
+        "hit": 2,
+        "guard": 2
+      },
+      "faces_right": false,
+      "height_ratio": 0.83,
+      "frame_regions": [
+        [
+          0,
+          0,
+          768,
+          464
+        ],
+        [
+          768,
+          0,
+          768,
+          464
+        ],
+        [
+          0,
+          472,
+          768,
+          552
+        ],
+        [
+          768,
+          472,
+          768,
+          552
+        ]
+      ]
     }
   },
   "portrait_art": {

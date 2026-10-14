@@ -261,6 +261,15 @@ func _demon_hunts() -> void:
 		seen_low = seen_low or low.commission_offers("sect").any(func(offer: Dictionary) -> bool: return offer.kind == "demon")
 		seen_high = seen_high or high.commission_offers("sect").any(func(offer: Dictionary) -> bool: return offer.kind == "demon")
 	check(seen_high and not seen_low, "only a 金丹 disciple is asked to put down 魔修")
+	var elder := _game(9)
+	elder.player.realm = 3
+	elder.refresh_realm_stats()
+	var seen_jiao := false
+	for period: int in 30:
+		elder.world.day = period * 60
+		seen_jiao = seen_jiao or elder.commission_offers("sect").any(func(offer: Dictionary) -> bool: return offer.kind == "jiao")
+	check(seen_jiao and not high.commission_offers("sect").any(func(offer: Dictionary) -> bool: return offer.kind == "jiao"), "a 元婴 is asked to slay the river's 千年蛟")
+	check(elder.content.locations.ferry.spots.any(func(spot: Dictionary) -> bool: return "battle:jiao" in spot.actions), "which lurks under the ferry")
 	var hunter := _game(9)
 	hunter.player.realm = 2
 	hunter.refresh_realm_stats()

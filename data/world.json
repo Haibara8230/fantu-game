@@ -37,7 +37,7 @@
       "terrain": "ferry",
       "map": [0.6, 0.5],
       "spots": [{"id": "crossing", "tag": [0.7, 0.3], "name": "天河渡口", "description": "白鹭渡上空裂开一道银白的天河，河上浮着一座看不见对岸的渡桥。传说化神圆满的修士踏上桥去，便再不回来。", "actions": ["ascend"], "requires_flag": "ascension_open"}, 
-        {"id": "dock", "tag": [0.33, 0.47], "name": "渡口", "description": "老艄公撑着竹篙，等客满便开船。等船的人最爱闲聊。", "actions": ["inquire"]}
+        {"id": "dock", "tag": [0.33, 0.47], "name": "渡口", "description": "老艄公撑着竹篙，等客满便开船。等船的人最爱闲聊。", "actions": ["inquire", "battle:jiao"]}
       ]
     },
     "market": {
@@ -390,6 +390,19 @@
       "congrats": "calamity",
       "world_flag": "calamity_turned",
       "flag_event": "calamity_turned"
+    },
+    "jiao": {
+      "name": "千年蛟",
+      "element": "water",
+      "hp": 800,
+      "damage_min": 44,
+      "damage_max": 56,
+      "reward_stones": 400,
+      "reward_xp": 1500,
+      "reward_herbs": 0,
+      "locations": [],
+      "min_realm": 3,
+      "drops": {"chance": 0.5, "tiers": [4, 5]}
     },
     "jian_kui": {
       "name": "霞锈剑傀",
