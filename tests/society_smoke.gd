@@ -23,6 +23,7 @@ func _initialize() -> void:
 	_rumors()
 	_commissions()
 	_tournament()
+	_summit()
 	_meetings_and_saves()
 	_portraits()
 	print("SOCIETY: %d checks, %d failures" % [checks, failures])
@@ -33,6 +34,56 @@ func _game(seed_value: int = 5) -> Session:
 	game.encounters_enabled = false
 	game.new_game("入世", seed_value, ["metal", "wood", "fire"])
 	return game
+
+## 五宗论道: offered at 青云山 every sixty years to those of foundation or above; four rounds against
+## the other sects' senior disciples; the champion's reward; a loss costs nothing; a save keeps it.
+func _summit_game(seed_value: int) -> Session:
+	var game := _game(seed_value)
+	game.player.realm = 1
+	game.player.stage = 1
+	game.player.xp = 1500
+	game.player.mind = 60
+	game.refresh_realm_stats()
+	game.player.hp = game.player.max_hp
+	_jump(game, 60, 8, 29)
+	game.travel("sect")
+	game.wait(1)
+	game.wait(1)
+	return game
+
+func _summit() -> void:
+	var game := _summit_game(5)
+	check(game.pending_event.get("id", "") == "five_sects_entry", "the five sects' summit opens at 青云山 in year sixty")
+	game.choose_event("enter")
+	check(game.battle.get("context", "") == "summit" and int(game.battle.round) == 1 and str(game.battle.foe.name).contains("赤霄") and game.battle.foe.arts == game.content.sects.chixiao.skills, "round one: 赤霄's senior disciple with 赤霄's own arts")
+	var copy := Session.new()
+	check(copy.restore(JSON.parse_string(JSON.stringify(game.snapshot()))) and copy.battle.context == "summit", "a summit duel survives a save")
+	var stones := int(game.player.stones)
+	var merit := int(game.player.get("contribution", 0))
+	var foes: Array[String] = []
+	for round: int in 4:
+		if game.battle.is_empty():
+			break
+		foes.append(str(game.battle.foe.sect))
+		game.battle.hp = 1
+		game.battle.orbs = ["metal"]
+		game.use_skill("sword")
+	check(foes == ["chixiao", "changqing", "canglan", "xuanyue"] and game.battle.is_empty(), "four rounds, one for each of the other sects")
+	check(int(game.player.stones) >= stones + 4 * 50 + 500 and int(game.player.get("contribution", 0)) > merit and game.player.items.keys().any(func(item_id: String) -> bool: return item_id.begins_with("j:") and int(game.content.item(item_id).tier) == 4), "the champion takes stones, contribution and a 地阶 slip")
+	check(game.chronicle.entries.any(func(entry: Dictionary) -> bool: return entry.major and entry.id == "summit_champion"), "and a milestone")
+	var out := _summit_game(6)
+	out.choose_event("enter")
+	out.player.hp = 1
+	for turn: int in 8:
+		if not out.battle.is_empty():
+			out.defend()
+	check(out.battle.is_empty() and out.player.location == "sect" and out.journal_lines().any(func(line: String) -> bool: return line.contains("下台")), "a loss ends the run without penalty")
+	var young := _game(7)
+	_jump(young, 60, 8, 29)
+	young.travel("sect")
+	young.wait(1)
+	young.wait(1)
+	check(young.pending_event.get("id", "") != "five_sects_entry", "a 炼气 disciple is not sent")
 
 func _jump(game: Session, year: int, month: int, day: int) -> void:
 	game.advance_days(Calendar.to_day(year, month, day) - int(game.world.day))

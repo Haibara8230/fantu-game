@@ -36,6 +36,8 @@ var alchemy_data: Dictionary = {}
 var cave_data: Dictionary = {}
 # Auctions, their lots and how bidders value them (auctions.gd).
 var auction_data: Dictionary = {}
+# 五宗论道's champions and rewards (summit.gd).
+var summit_data: Dictionary = {}
 # Born-with talent ids by tier, built on first use (talents.gd).
 var talent_pools: Dictionary = {}
 var error_message: String = ""
@@ -47,8 +49,8 @@ const BUILT_IN_INTERACTIONS := ["talk", "gift", "help", "consult", "teach", "inv
 const PLAIN_ACTIONS := ["cultivate", "rest", "breakthrough", "study", "teach", "sell", "shop", "gather", "inn_rest", "search_ruin", "explore_cave", "inquire", "commissions", "sect", "alchemy", "field", "tournament"]
 const ITEM_CATEGORIES := {"herb": "灵草", "pill": "丹药", "treasure": "天材地宝", "manual": "玉简", "equipment": "法宝", "material": "材料", "recipe": "丹方", "tool": "器具", "quest": "信物"}
 # Milestones friends send word of, and the deeds the session counts besides victories ("win:<enemy>").
-const CONGRATS := ["breakthrough", "serpent", "champion", "promotion"]
-const DEEDS := ["retreat_days", "duel", "trade", "gather", "commission", "help", "tournament_champion"]
+const CONGRATS := ["breakthrough", "core", "serpent", "champion", "summit", "promotion"]
+const DEEDS := ["retreat_days", "duel", "trade", "gather", "commission", "help", "tournament_champion", "summit_champion"]
 const STORY_STATES := ["none", "active", "done", "closed"]
 const Arsenal = preload("res://scripts/core/arsenal.gd")
 const Talents = preload("res://scripts/core/talents.gd")
@@ -85,7 +87,7 @@ func load_data() -> bool:
 		error_message = "物品配置格式错误。"
 		return false
 	items = item_data
-	for pair: Array in [["techniques", "res://data/techniques.json"], ["equipment", "res://data/equipment.json"], ["vfx_tiers", "res://data/vfx_tiers.json"], ["vfx", "res://data/vfx.json"], ["population", "res://data/population.json"], ["commissions", "res://data/commissions.json"], ["storylines", "res://data/storylines.json"], ["talents", "res://data/talents.json"], ["sect", "res://data/sect.json"], ["bonds", "res://data/bonds.json"], ["alchemy", "res://data/alchemy.json"], ["caves", "res://data/caves.json"], ["auctions", "res://data/auctions.json"]]:
+	for pair: Array in [["techniques", "res://data/techniques.json"], ["equipment", "res://data/equipment.json"], ["vfx_tiers", "res://data/vfx_tiers.json"], ["vfx", "res://data/vfx.json"], ["population", "res://data/population.json"], ["commissions", "res://data/commissions.json"], ["storylines", "res://data/storylines.json"], ["talents", "res://data/talents.json"], ["sect", "res://data/sect.json"], ["bonds", "res://data/bonds.json"], ["alchemy", "res://data/alchemy.json"], ["caves", "res://data/caves.json"], ["auctions", "res://data/auctions.json"], ["summit", "res://data/summit.json"]]:
 		var loaded: Variant = _read_json(pair[1])
 		if not loaded is Dictionary:
 			error_message = "配置格式错误：" + pair[1]
@@ -120,6 +122,8 @@ func load_data() -> bool:
 				cave_data = loaded
 			"auctions":
 				auction_data = loaded
+			"summit":
+				summit_data = loaded
 	map = parsed.map
 	locations = parsed.locations
 	skills = parsed.skills
@@ -318,6 +322,8 @@ func _validate() -> String:
 		problem = _validate_caves()
 	if problem.is_empty():
 		problem = _validate_auctions()
+	if problem.is_empty():
+		problem = _validate_summit()
 	if not problem.is_empty():
 		return problem
 	problem = _validate_storylines()
@@ -473,6 +479,27 @@ func _valid_cost(cost: Variant, keys: Array) -> bool:
 			return false
 		total += int(cost[key])
 	return total >= 1
+
+# --- 五宗论道 --------------------------------------------------------------------------------------
+
+func _validate_summit() -> String:
+	var data := summit_data
+	if not events.has(str(data.get("event", ""))):
+		return "五宗论道的报名事件不存在。"
+	var champions: Variant = data.get("champions")
+	if not champions is Array or champions.is_empty():
+		return "五宗论道没有对手。"
+	for champion: Variant in champions:
+		if not champion is Dictionary or not sects.has(champion.get("sect", "")) or not champion.get("name") is String or not champion.get("title") is String or not champion.get("gender") in ["male", "female"]:
+			return "五宗论道的对手配置无效。"
+	for key: String in ["levels", "power"]:
+		if not data.get(key) is Array or data[key].size() != champions.size():
+			return "五宗论道须按轮次给出：" + key
+	if data.levels.any(func(level: Variant) -> bool: return not level is Array or level.size() != 2 or not _whole(level[0]) or int(level[0]) >= realms.size() or not _whole(level[1]) or int(level[1]) >= realms[int(level[0])].stages.size()):
+		return "五宗论道的对手修为无效。"
+	if not _whole(data.get("recover_percent")) or not data.get("round") is Dictionary or not data.get("champion") is Dictionary:
+		return "五宗论道的奖赏配置无效。"
+	return ""
 
 # --- Auctions --------------------------------------------------------------------------------------
 
@@ -1269,6 +1296,8 @@ func _validate_effects(effects: Variant) -> String:
 				ok = alchemy_data.get("recipes", {}).has(value)
 			"auction":
 				ok = auction_data.get("auctions", {}).has(value)
+			"summit":
+				ok = value is bool and value
 			"longevity":
 				ok = value is Array and value.size() == 2 and value[0] is String and _whole(value[1]) and int(value[1]) >= 1
 		if not ok:

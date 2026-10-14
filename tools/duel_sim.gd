@@ -10,6 +10,8 @@ func _initialize() -> void:
 	for setup: Array in [["wolf", 0, 0, []], ["disciple", 0, 0, []], ["rogue", 0, 2, []], ["wolf", 0, 3, ["qingyun"]], ["serpent", 1, 0, ["qingyun"]], ["serpent", 1, 0, []], ["ruin_rogue", 0, 3, ["qingyun"]], ["ruin_rogue", 0, 3, []], ["den_wolf", 0, 3, []], ["den_wolf", 0, 3, ["qingyun"]]]:
 		_report(str(setup[0]), int(setup[1]), int(setup[2]), setup[3])
 	_spars()
+	for setup: Array in [[1, 1], [1, 3], [2, 0], [2, 2]]:
+		_summit(int(setup[0]), int(setup[1]))
 	quit(0)
 
 ## Spars with the generated disciples at the sect, who cast their whole loadout from orbs.
@@ -74,3 +76,28 @@ func _report(enemy_id: String, realm: int, stage: int, lineage: Array) -> void:
 
 func _play_turn(game) -> void:
 	game.plain_turn()
+
+## 五宗论道 at a realm and stage, 青云 lineage: how many of the four rounds are won, on average.
+func _summit(realm: int, stage: int) -> void:
+	var rounds := 0
+	var champions := 0
+	var runs := 30
+	for seed_value: int in range(runs):
+		var game := Session.new()
+		game.encounters_enabled = false
+		game.new_game("试", 3000 + seed_value, ROOTS[seed_value % ROOTS.size()])
+		game.Loadout.take_lineage(game, "qingyun")
+		game.player.realm = realm
+		game.player.stage = stage
+		game.refresh_realm_stats()
+		game.player.hp = game.player.max_hp
+		game.Summit.begin(game, 1)
+		var turns := 0
+		while not game.battle.is_empty() and turns < 120:
+			turns += 1
+			_play_turn(game)
+		var won: int = game.chronicle.entries.filter(func(entry: Dictionary) -> bool: return entry.id == "summit_round").size()
+		rounds += won
+		if won == 4:
+			champions += 1
+	print("summit     realm %d stage %d  rounds won %.1f / 4  champion %d%%" % [realm, stage, float(rounds) / runs, champions * 100 / runs])

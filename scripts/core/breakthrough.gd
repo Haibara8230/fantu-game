@@ -271,7 +271,7 @@ static func resolve(s, told: String) -> String:
 		s.player.qi = s.player.max_qi
 		texts.append(s.log_event("breakthrough", {"days": passed.elapsed, "realm": int(s.player.realm), "stage": 0, "grade": grade}, true))
 		texts.append_array(s.settle_stage())
-		texts.append_array(s.congratulate("breakthrough"))
+		texts.append_array(s.congratulate("breakthrough" if int(s.player.realm) == 1 else "core"))
 		return s.conclude(" ".join(texts), passed)
 	var failure: Dictionary = rules(s).failure
 	s.player.xp = int(attempt_state.xp) * int(failure.xp_percent) / 100

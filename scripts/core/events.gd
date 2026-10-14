@@ -203,6 +203,8 @@ static func apply(s, effects: Array) -> void:
 				s.begin_tournament(1)
 			"auction":
 				s.Auctions.open(s, value)
+			"summit":
+				s.Summit.begin(s, 1)
 
 static func _person(s, person_id: String) -> Dictionary:
 	if not s.world.people.has(person_id):

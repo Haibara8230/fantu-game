@@ -7,7 +7,7 @@ const Calendar = preload("res://scripts/core/calendar.gd")
 const GOALS_PATH := "res://data/goals.json"
 const SHOWN := 3
 # The goals whose situation applies() knows; every goal in the data must be one of them.
-const GOAL_IDS := ["bottleneck", "azhi_return", "auction", "serpent", "tournament", "foundation_breach", "foundation_pill", "foundation_xp", "core_breach", "core_pill", "azhi_token", "ruin", "sealed", "cultivate", "promotion", "rank"]
+const GOAL_IDS := ["bottleneck", "azhi_return", "auction", "serpent", "tournament", "summit", "foundation_breach", "foundation_pill", "foundation_xp", "core_breach", "core_pill", "azhi_token", "ruin", "sealed", "cultivate", "promotion", "rank"]
 # Upcoming dates are mentioned this long ahead.
 const TOURNAMENT_NOTICE_DAYS := 360
 static var _goals: Array = []
@@ -74,6 +74,9 @@ static func applies(session, goal_id: String) -> bool:
 		"tournament":
 			var next := _next_tournament(session)
 			return next >= day and next - day <= TOURNAMENT_NOTICE_DAYS
+		"summit":
+			var opening := _next_opening(session, "five_sects_entry")
+			return int(player.realm) >= 1 and opening >= day and opening - day <= TOURNAMENT_NOTICE_DAYS
 		"foundation_breach", "foundation_pill", "foundation_xp":
 			var breakthrough: Dictionary = session.next_breakthrough()
 			if int(player.realm) != 0 or breakthrough.is_empty():
@@ -128,6 +131,9 @@ static func values(session, goal_id: String) -> Dictionary:
 		"tournament":
 			var next := _next_tournament(session)
 			return {"date": Calendar.date_text(next), "until": _span(next - day)}
+		"summit":
+			var opening := _next_opening(session, "five_sects_entry")
+			return {"date": Calendar.date_text(opening), "until": _span(opening - day)}
 		"foundation_pill":
 			return {"pill_price": _price(session, "foundation_pill")}
 		"foundation_breach", "core_breach":
@@ -177,7 +183,11 @@ static func _window_end(session, event_id: String) -> int:
 
 ## The first day of the next tournament's sign-up that has not closed yet.
 static func _next_tournament(session) -> int:
-	var periodic: Dictionary = session.content.events.tournament_entry.periodic
+	return _next_opening(session, "tournament_entry")
+
+## The next day a periodic event opens (today's opening while it is still open).
+static func _next_opening(session, event_id: String) -> int:
+	var periodic: Dictionary = session.content.events[event_id].periodic
 	var day := int(session.world.day)
 	var year := maxi(int(periodic.start_year), Calendar.year(day))
 	year += posmod(int(periodic.start_year) - year, int(periodic.every_years))

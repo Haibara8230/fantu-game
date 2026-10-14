@@ -259,6 +259,28 @@
     "effects": [{"clear_flag": "serpent_rampage"}, {"flag": "serpent_slain"}],
     "chronicle": "封谷三年后，青云剑宗长老出手斩杀赤鳞妖蟒，落霞谷重新开放。"
   },
+  "five_sects_notice": {
+    "title": "论道告示",
+    "trigger": "date",
+    "priority": 5,
+    "periodic": {"start_year": 59, "every_years": 60, "month": 9, "from_day": 1, "to_day": 1},
+    "chronicle": "青云剑宗传书四方：明年九月，五宗论道在青云山开坛。各宗遣首徒登台，筑基以上的本门弟子可代青云出战。"
+  },
+  "five_sects_entry": {
+    "title": "五宗论道",
+    "trigger": "location",
+    "location": "sect",
+    "priority": 26,
+    "listed": true,
+    "major": true,
+    "periodic": {"start_year": 60, "every_years": 60, "month": 9, "from_day": 1, "to_day": 30},
+    "conditions": [{"realm_at_least": 1}],
+    "text": "演武坪上搭起五座高台，赤霄、长青、沧澜、玄岳的首徒依次落座。一甲子一回的五宗论道开坛，青云要派人登台。",
+    "choices": [
+      {"id": "enter", "label": "代青云登台（四轮，点到为止）", "effects": [{"summit": true}], "chronicle": "你代青云登上了五宗论道的高台。"},
+      {"id": "watch", "label": "在台下观战", "chronicle": "你在台下看完了这一届五宗论道。"}
+    ]
+  },
   "tournament_entry": {
     "title": "外门小比",
     "trigger": "location",

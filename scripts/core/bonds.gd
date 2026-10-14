@@ -293,7 +293,7 @@ static func congratulate(s) -> Array[String]:
 ## Close friends who can be called into a duel now: 亲密, holding a 传音符, alive, not the opponent.
 static func allies(s) -> Array[String]:
 	var found: Array[String] = []
-	if s.battle.is_empty() or s.battle.get("context", "") in ["spar", "tournament"] or bool(s.battle.get("aid_used", false)):
+	if s.battle.is_empty() or s.battle.get("context", "") in ["spar", "tournament", "summit"] or bool(s.battle.get("aid_used", false)):
 		return found
 	for person_id: String in s.world.people:
 		if s.favor(person_id) >= int(data(s).aid.favor) and bool(s.world.people[person_id].get("sound", false)) and _alive(s, person_id) and person_id != str(s.battle.get("npc", "")) and not standing(s, person_id).is_empty():

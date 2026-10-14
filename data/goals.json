@@ -3,6 +3,7 @@
   {"id": "azhi_return", "title": "交还竹牌", "text": "回松风岭，把刻着“阿芷”的竹牌交给她。"},
   {"id": "auction", "title": "云溪特殊拍卖", "text": "{date}起在云溪坊市举行，{access}。还有 {until}。"},
   {"id": "serpent", "title": "除去妖蟒", "text": "赤鳞妖蟒将于{date}冲出落霞谷灵泉，届时封谷。筑基后可往深谷灵泉与它一战。还有 {until}。"},
+  {"id": "summit", "title": "五宗论道", "text": "{date}起，五宗论道在青云山开坛，至月末为止；筑基以上可代青云登台，四轮斗法，夺魁可得地阶玉简。还有 {until}。"},
   {"id": "tournament", "title": "外门小比", "text": "{date}至十五，在青云山演武坪报名。还有 {until}。"},
   {"id": "foundation_breach", "title": "筑基", "text": "修为与筑基丹都已齐备，回青云山静室闭关突破。眼下把握约 {odds}%：多服几枚筑基丹、心境更足、请人护法，都能更稳。"},
   {"id": "foundation_pill", "title": "筑基", "text": "修为已足，还缺一枚筑基丹：长街丹铺 {pill_price} 灵石，灵草可在云溪药铺换成灵石；若有天材地宝，也可代替。"},

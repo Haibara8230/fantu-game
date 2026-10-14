@@ -167,7 +167,7 @@ static func restore(s, data: Variant) -> bool:
 		for skill_id: Variant in saved_battle.cooldowns:
 			if not skill_id is String or content.technique(skill_id).is_empty() or not _whole_nonnegative(saved_battle.cooldowns[skill_id]):
 				return false
-		if saved_battle.has("context") and not saved_battle.context in ["event", "spar", "tournament"]:
+		if saved_battle.has("context") and not saved_battle.context in ["event", "spar", "tournament", "summit"]:
 			return false
 		for status_key: String in ["status", "player_status"]:
 			var status: Variant = saved_battle.get(status_key, {})

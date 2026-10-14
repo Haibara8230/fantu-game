@@ -1,0 +1,14 @@
+{
+  "event": "five_sects_entry",
+  "champions": [
+    {"sect": "chixiao", "name": "炎千秋", "title": "赤霄首徒", "gender": "male"},
+    {"sect": "changqing", "name": "林晚照", "title": "长青首徒", "gender": "female"},
+    {"sect": "canglan", "name": "白听澜", "title": "沧澜首徒", "gender": "female"},
+    {"sect": "xuanyue", "name": "石镇岳", "title": "玄岳首徒", "gender": "male"}
+  ],
+  "levels": [[1, 2], [1, 3], [2, 0], [2, 1]],
+  "power": [0.9, 0.95, 0.9, 0.95],
+  "recover_percent": 40,
+  "round": {"stones": 50, "contribution": 40, "xp": 120},
+  "champion": {"stones": 500, "contribution": 300, "xp": 800, "manual": 4}
+}

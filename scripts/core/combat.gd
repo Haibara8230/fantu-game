@@ -580,6 +580,8 @@ static func _lose(s) -> String:
 		return _spar_over(s, false)
 	if s.battle.get("context", "") == "tournament":
 		return _tournament_over(s, false)
+	if s.battle.get("context", "") == "summit":
+		return s.Summit.over(s, false)
 	s.battle.clear()
 	s.record_deed("duel")
 	var lost := mini(int(s.player.stones), 10)
@@ -708,6 +710,8 @@ static func _win(s) -> String:
 		return _spar_over(s, true)
 	if s.battle.get("context", "") == "tournament":
 		return _tournament_over(s, true)
+	if s.battle.get("context", "") == "summit":
+		return s.Summit.over(s, true)
 	var enemy_id: String = s.battle.enemy_id
 	var enemy: Dictionary = s.content.enemies[enemy_id]
 	var days := _recovery_days(s, "battle_victory")
