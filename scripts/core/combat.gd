@@ -626,6 +626,16 @@ static func plain_turn(s) -> String:
 		return text
 	return end_turn(s)
 
+## 速战: the plain turn again and again until the duel ends (at most `most` turns); returns the last
+## turn's text. The turn's events are those of the last turn, ending with the outcome.
+static func quick(s, most: int = 60) -> String:
+	var text := ""
+	for turn: int in most:
+		if s.battle.is_empty():
+			break
+		text = plain_turn(s)
+	return text
+
 ## The simplest full turn: casts the art if the orbs allow, then ends the turn (simulations, tests).
 static func duel_turn(s, skill_id: String) -> String:
 	var t: Dictionary = s.content.technique(skill_id)

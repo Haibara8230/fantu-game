@@ -325,6 +325,7 @@ func _run() -> void:
 	check(_screen("Label").contains("教学 · 斗法  1 / 3") and _screen("Label").contains("按 1 / 2 / 3 / 4 或点按钮") and _button("[1] ") != null, "the first duel explains the controls with the bound keys")
 	main.set_guide_enabled(false)
 	check(main.current_screen() == "full" and not main.hud_left.visible and main.window.get_global_rect().size.is_equal_approx(main.get_global_rect().size) and _texts(main.center, "Label").contains("斗 法  ·  第 1 回合") and _button("守御") != null and _button("撤离") != null, "the duel takes the whole screen, with its dock along the bottom")
+	check(_button("速战") != null, "the dock offers to finish the duel quickly")
 	_button("记录").pressed.emit()
 	check(main.battle_record_open and _texts(main.center, "Label").contains("展开斗法"), "记录 shows the duel's latest entries")
 	check(_button("结束回合") != null and _texts(main.center, "Label").contains("对手下一回合：") and _button("[2] ").text.contains("火×2"), "the dock shows 结束回合, the arts' orb costs, and the stage the opponent's intent")

@@ -1008,6 +1008,8 @@ func battle_action(action: String) -> void:
 		message = session.defend()
 	elif action == "end_turn":
 		message = session.end_turn()
+	elif action == "quick":
+		message = session.quick_duel()
 	elif action.begins_with("convert:"):
 		message = session.convert_qi(action.trim_prefix("convert:"))
 	elif action.begins_with("pill:"):

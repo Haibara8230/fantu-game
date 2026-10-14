@@ -1184,6 +1184,10 @@ func collect_room(cave_id: String, room_id: String) -> String:
 func challenge_guardian(cave_id: String, room_id: String) -> String:
 	return Caves.challenge(self, cave_id, room_id)
 
+## 速战: plain turns until the duel ends.
+func quick_duel() -> String:
+	return Combat.quick(self)
+
 ## A plain full turn: the strongest arts the orbs allow, then the end of the turn.
 func plain_turn() -> String:
 	return Combat.plain_turn(self)

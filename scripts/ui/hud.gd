@@ -199,8 +199,9 @@ static func place_notice(ui, top: bool) -> void:
 	label.anchor_right = 0.75 if top else 0.985
 	label.anchor_top = 0.0 if top else 1.0
 	label.anchor_bottom = 0.0 if top else 1.0
-	label.offset_top = 104.0 if top else -8.0 - NOTICE_HEIGHT
-	label.offset_bottom = 104.0 + NOTICE_HEIGHT if top else -8.0
+	# In a duel it sits under the stage's corner panels (intent, shields), not across them.
+	label.offset_top = 150.0 if top else -8.0 - NOTICE_HEIGHT
+	label.offset_bottom = 150.0 + NOTICE_HEIGHT if top else -8.0
 	# A longer notice grows away from the edge it sits on.
 	label.grow_vertical = Control.GROW_DIRECTION_END if top else Control.GROW_DIRECTION_BEGIN
 
