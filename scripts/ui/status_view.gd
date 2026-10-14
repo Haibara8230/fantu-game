@@ -110,6 +110,7 @@ static func _body(ui, parent: VBoxContainer) -> void:
 	ui.meter(parent, "灵力", p.qi, p.max_qi, Color("#5f999b"))
 	_row(ui, parent, "攻击加成", "+%d" % session.attack_bonus(), "每次神通伤害额外增加；随境界与法宝、天赋提升")
 	_row(ui, parent, "减伤", "%d%%" % int(round(session.defense() * 100.0)), "受到的伤害减少，至多五成")
+	_row(ui, parent, "神识", str(session.sense()), "随境界与天赋增长：识破洞府机关、看见暗格，看穿神识不及你的人的天赋")
 	var toxin: int = session.toxin()
 	var rule: Dictionary = session.content.alchemy_data.toxin
 	_row(ui, parent, "丹毒", "%d / %d · 每日消退 %d" % [toxin, int(rule.limit), int(rule.decay_per_day)] + (" · 突破把握 -%d" % (toxin / int(rule.breakthrough_step)) if toxin >= int(rule.breakthrough_step) else ""), "服增长修为的丹药会积丹毒；积满便服不下，突破时也少几分把握", ui.INK if toxin * 2 < int(rule.limit) else WARN)

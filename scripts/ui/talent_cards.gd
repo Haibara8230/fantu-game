@@ -15,7 +15,7 @@ const WORDS := {
 	"encounter": ["途中遇险", "%"], "rest": ["养伤耗时", "%"], "stones": ["初始灵石", ""],
 	"orb_draw": ["斗法每回合多抽灵气", ""], "orb_cap": ["灵气上限", ""], "orb_first": ["斗法开局多抽灵气", ""],
 	"orb_metal": ["金灵气更易抽到", ""], "orb_wood": ["木灵气更易抽到", ""], "orb_water": ["水灵气更易抽到", ""],
-	"orb_fire": ["火灵气更易抽到", ""], "orb_earth": ["土灵气更易抽到", ""],
+	"orb_fire": ["火灵气更易抽到", ""], "orb_earth": ["土灵气更易抽到", ""], "sense": ["神识", ""],
 }
 
 ## "修炼速度 +10%、寿元 +3 年", in the order of Talents.MODIFIERS.

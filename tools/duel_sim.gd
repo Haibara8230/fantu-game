@@ -7,7 +7,7 @@ const Session = preload("res://scripts/core/session.gd")
 const ROOTS := [["metal", "wood", "fire"], ["water", "earth"], ["metal"], ["wood", "water", "fire", "earth"], ["fire", "earth", "metal"]]
 
 func _initialize() -> void:
-	for setup: Array in [["wolf", 0, 0, []], ["disciple", 0, 0, []], ["rogue", 0, 2, []], ["wolf", 0, 3, ["qingyun"]], ["serpent", 1, 0, ["qingyun"]], ["serpent", 1, 0, []], ["ruin_rogue", 0, 3, ["qingyun"]], ["ruin_rogue", 0, 3, []]]:
+	for setup: Array in [["wolf", 0, 0, []], ["disciple", 0, 0, []], ["rogue", 0, 2, []], ["wolf", 0, 3, ["qingyun"]], ["serpent", 1, 0, ["qingyun"]], ["serpent", 1, 0, []], ["ruin_rogue", 0, 3, ["qingyun"]], ["ruin_rogue", 0, 3, []], ["den_wolf", 0, 3, []], ["den_wolf", 0, 3, ["qingyun"]]]:
 		_report(str(setup[0]), int(setup[1]), int(setup[2]), setup[3])
 	_spars()
 	quit(0)

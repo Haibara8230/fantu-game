@@ -7,6 +7,7 @@ extends RefCounted
 const Calendar = preload("res://scripts/core/calendar.gd")
 const Landscape = preload("res://scripts/ui/landscape.gd")
 const PeopleView = preload("res://scripts/ui/people_view.gd")
+const CaveView = preload("res://scripts/ui/cave_view.gd")
 const PAPER := Color("#e9dfc4")
 const INK_DARK := Color("#2c261c")
 
@@ -93,13 +94,17 @@ static func render(ui) -> void:
 	where.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	title_row.add_child(where)
 	title_row.add_child(ui.button("关闭 Esc", ui.close_spot, "回到%s" % location.name))
-	var landscape = Landscape.new()
-	landscape.location_id = location_id
-	landscape.terrain = location.terrain
-	landscape.spot_id = spot.id
-	landscape.custom_minimum_size.y = 170
-	center.add_child(landscape)
-	center.add_child(ui.paragraph(spot.description if not str(spot.description).is_empty() else location.description, ui.INK))
+	# The cave's depths show their rooms in place of the picture: the map is what the scroll is for.
+	if "explore_cave" in spot.actions:
+		CaveView.render(ui, center)
+	else:
+		var landscape = Landscape.new()
+		landscape.location_id = location_id
+		landscape.terrain = location.terrain
+		landscape.spot_id = spot.id
+		landscape.custom_minimum_size.y = 170
+		center.add_child(landscape)
+		center.add_child(ui.paragraph(spot.description if not str(spot.description).is_empty() else location.description, ui.INK))
 	var grid := GridContainer.new()
 	grid.columns = 2
 	grid.add_theme_constant_override("h_separation", 12)
@@ -172,7 +177,7 @@ static func _spot_action(ui, grid: GridContainer, action: String) -> void:
 			_action(ui, grid, "客栈歇息  ·  %s · %d 灵石" % [ui.duration("inn_rest"), int(rules.inn_price)], "inn_rest", "恢复全部气血与灵力")
 		"search_ruin":
 			_action(ui, grid, "翻找石室  ·  " + ui.duration("search_ruin"), "search_ruin", "或得灵石、灵草，偶有丹药；搜过后需隔些时日")
-		"study":
+		"study", "explore_cave":
 			pass
 		"inquire":
 			var cost: Dictionary = session.content.rules.inquire

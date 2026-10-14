@@ -1,0 +1,48 @@
+{
+  "ruin": {
+    "name": "古修洞府深处",
+    "location": "ruin",
+    "requires_flag": "ruin_cleared",
+    "step_days": 2,
+    "rooms": [
+      {
+        "id": "hall", "name": "前厅", "start": true, "links": ["corridor"], "map": [0.1, 0.5],
+        "text": "石门后是一间方正的前厅，壁上的灯盏早已干涸，尘土里有新旧两串脚印，都往甬道深处去了。"
+      },
+      {
+        "id": "corridor", "name": "幽暗甬道", "links": ["hall", "elixir", "study"], "map": [0.3, 0.5],
+        "text": "甬道又窄又长，两侧石壁上刻着褪色的云纹，越往里走越冷。",
+        "trap": {"names": ["翻板陷坑", "落石机括"], "sense": 13, "damage": [12, 20]}
+      },
+      {
+        "id": "elixir", "name": "丹房", "links": ["corridor", "drip"], "map": [0.5, 0.25],
+        "text": "一尊半人高的青铜丹炉倒在角落，炉腹里还结着焦黑的药渣，药柜的抽屉半开着。",
+        "loot": [[{"item": ["huiqi_pill", 2]}, {"item": ["liaoshang_pill", 2]}], [{"item": ["pozhang_pill", 1]}], [{"item": ["ninglu_grass", 3]}, {"item": ["chiyan_flower", 2]}]],
+        "hidden": {"name": "炉座下的暗格", "sense": 12, "qi": 10, "loot": [[{"pills": 1}], [{"stones": 80}]]}
+      },
+      {
+        "id": "drip", "name": "石乳洞", "links": ["elixir"], "map": [0.72, 0.15],
+        "text": "洞顶垂着一排钟乳，石乳一滴一滴落进下面的石槽，叮咚作响，回声久久不散。",
+        "hidden": {"name": "钟乳后的石隙", "sense": 16, "qi": 15, "fortune": "shiru", "loot": [[{"stones": 60}], [{"item": ["ninglu_grass", 4]}]]}
+      },
+      {
+        "id": "study", "name": "书室", "links": ["corridor", "armory"], "map": [0.5, 0.75],
+        "text": "石架上的竹简大多朽烂成灰，只有几枚玉简还泛着微光。",
+        "trap": {"names": ["毒针机括", "迷魂禁制"], "sense": 15, "damage": [15, 24]},
+        "loot": [[{"manual": 2}]]
+      },
+      {
+        "id": "armory", "name": "兵器室", "links": ["study", "sealed"], "map": [0.7, 0.75],
+        "text": "兵器架东倒西歪，锈剑断戟散了一地。",
+        "guardian": "den_wolf",
+        "loot": [[{"equipment": 2}]]
+      },
+      {
+        "id": "sealed", "name": "封禁石室", "links": ["armory"], "map": [0.9, 0.6], "requires_sense": 14,
+        "text": "门上的禁制已经残破，门后静得出奇，连自己的心跳都听得见。",
+        "fortune": "remnant",
+        "loot": [[{"manual": 3}], [{"stones": 120}, {"item": ["huiqi_pill_fine", 1]}]]
+      }
+    ]
+  }
+}

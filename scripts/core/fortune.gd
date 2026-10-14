@@ -7,9 +7,12 @@ extends RefCounted
 ##   breakthrough, leaves it surer and the foundation better (ready until the attempt).
 ## - 生死之间 (brink): winning a duel against an equal or stronger foe with almost no health left, held
 ##   at the same thresholds: the same, without the choice.
-## - 天材地宝: a 千年石乳 in the old cave's stone room, a 九曲灵参 on the valley's slope.
-## - 灵眼: found while gathering in the valley; breaking through there is surer.
-## - 残魂灌顶: a remnant soul in the old cave offers its blessing before foundation. Accepted with mind
+## - 天材地宝: a 千年石乳 behind the old cave's dripstones (caves.gd: placed or not on the first visit,
+##   found with 神识 enough), a 九曲灵参 on the valley's slope.
+## - 灵眼: found while gathering in the valley, more often the keener the 神识; breaking through there
+##   is surer.
+## - 残魂灌顶: a remnant soul in the old cave's sealed chamber (caves.gd: placed or not on the first
+##   visit) offers its blessing before foundation. Accepted with mind
 ##   enough, the next breakthrough is certain and a talent is left behind; without, it tries to take the
 ##   body and leaves a wound and a flaw. Refused, it leaves a jade slip.
 ## Some of these may also leave a talent behind (rules.fortune.*.talent).
@@ -60,29 +63,21 @@ static func after_win(s, foe_realm: int) -> Array[String]:
 		texts.append_array(_insight(s, "brink"))
 	return texts
 
-## After searching the old cave: perhaps a 千年石乳, perhaps the remnant soul (a choice).
-static func after_search(s) -> Array[String]:
-	var texts: Array[String] = []
-	var treasure: Dictionary = rules(s).shiru
-	if _comes(s, "shiru"):
-		_mark(s, "shiru", "spent")
-		s.add_item(str(treasure.item), 1)
-		texts.append(s.log_event("boon_treasure", {"item": str(treasure.item), "location": str(s.player.location)}, true))
-	var remnant: Dictionary = rules(s).remnant
-	if s.pending_event.is_empty() and int(s.player.realm) < int(remnant.before_realm) and _comes(s, "remnant"):
-		s.pending_event = {"id": str(remnant.event), "day": int(s.world.day)}
-	return texts
+## A 天材地宝 found (`shiru`, `lingshen`): into the pack, once in a life, a milestone.
+static func grant_treasure(s, id: String) -> String:
+	var item := str(rules(s)[id].item)
+	_mark(s, id, "spent")
+	s.add_item(item, 1)
+	return s.log_event("boon_treasure", {"item": item, "location": str(s.player.location)}, true)
 
 ## After gathering: in the valley perhaps a 九曲灵参, perhaps the 灵眼.
 static func after_gather(s) -> Array[String]:
 	var texts: Array[String] = []
 	var herb: Dictionary = rules(s).lingshen
 	if str(s.player.location) == str(herb.location) and _comes(s, "lingshen"):
-		_mark(s, "lingshen", "spent")
-		s.add_item(str(herb.item), 1)
-		texts.append(s.log_event("boon_treasure", {"item": str(herb.item), "location": str(s.player.location)}, true))
+		texts.append(grant_treasure(s, "lingshen"))
 	var eye: Dictionary = rules(s).spirit_eye
-	if str(s.player.location) == str(eye.location) and not s.has_flag(str(eye.flag)) and _comes(s, "spirit_eye"):
+	if str(s.player.location) == str(eye.location) and not s.has_flag(str(eye.flag)) and _comes(s, "spirit_eye", float(s.sense()) / float(eye.sense_reference)):
 		_mark(s, "spirit_eye", "spent")
 		texts.append(s.Events.start(s, str(eye.event)))
 	return texts

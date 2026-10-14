@@ -83,12 +83,12 @@
         "conditions": [{"relation_at_least": ["boatman", 10]}, {"story_state": ["boatman_sword", "none"]}],
         "effects": [{"start_story": "boatman_sword"}],
         "once": true,
-        "chronicle": "老艄公眯起眼：“那年冬天河面冻得结实，一位剑修踏冰而过，随手一剑，冰面裂开三丈。后来我撑船经过那里，总觉得河底有东西发冷……你要是哪天筑了基、神识够用，替老汉下去瞧瞧。”"
+        "chronicle": "老艄公眯起眼：“那年冬天河面冻得结实，一位剑修踏冰而过，随手一剑，冰面裂开三丈。后来我撑船经过那里，总觉得河底有东西发冷……你要是哪天神识够用了，替老汉下去瞧瞧。”"
       },
       {
         "id": "dive",
         "label": "请老艄公撑船，以神识探查河底",
-        "conditions": [{"story_at": ["boatman_sword", "dive"]}, {"realm_at_least": 1}],
+        "conditions": [{"story_at": ["boatman_sword", "dive"]}, {"sense_at_least": 30}],
         "effects": [{"story_advance": "boatman_sword"}],
         "chronicle": "老艄公把船撑到河心，你闭目放出神识，探向河底。"
       }

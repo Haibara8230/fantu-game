@@ -105,7 +105,7 @@
       "map": [0.24, 0.88],
       "hidden_until": "found_ruin",
       "spots": [
-        {"id": "stone_room", "tag": [0.27, 0.32], "name": "洞府石室", "description": "石室中散落着前人遗物，仔细翻找或许还有收获。", "actions": ["search_ruin"], "requires_flag": "ruin_cleared"}
+        {"id": "stone_room", "tag": [0.27, 0.32], "name": "洞府石室", "description": "石室中散落着前人遗物，仔细翻找或许还有收获。", "actions": ["search_ruin"], "requires_flag": "ruin_cleared"}, {"id": "depths", "tag": [0.62, 0.42], "name": "洞府深处", "description": "前厅后面还有甬道与几间石室，机关、暗格与守洞的东西都还在。每探一间要费些日子；神识越强，看得越清。", "actions": ["explore_cave"], "requires_flag": "ruin_cleared"}
       ]
     }
   },
@@ -347,6 +347,20 @@
       "drops": {"chance": 1.0, "tiers": [2, 2]},
       "world_flag": "ruin_cleared",
       "flag_event": "ruin_cleared"
+    },
+    "den_wolf": {
+      "name": "石窟影狼",
+      "element": "earth",
+      "hp": 180,
+      "damage_min": 13,
+      "damage_max": 18,
+      "reward_stones": 30,
+      "reward_xp": 60,
+      "reward_herbs": 0,
+      "locations": [],
+      "min_realm": 0,
+      "world_flag": "ruin_den_cleared",
+      "flag_event": "den_cleared"
     }
   },
   "rules": {
@@ -358,10 +372,10 @@
     "fortune": {
       "epiphany": {"chance": 0.02, "per_days": 10, "days": 10, "places": ["ferry", "ridge", "sect"], "event": "epiphany", "talent": "dunwu_yuyun", "talent_chance": 0.1},
       "brink": {"chance": 0.05, "hp_percent": 15, "talent": "shengsi_lilian", "talent_chance": 0.1},
-      "shiru": {"chance": 0.01, "item": "qiannian_shiru"},
+      "shiru": {"chance": 0.3, "item": "qiannian_shiru"},
       "lingshen": {"chance": 0.005, "item": "jiuqu_lingshen", "location": "wild"},
-      "spirit_eye": {"chance": 0.02, "location": "wild", "flag": "spirit_eye_found", "event": "spirit_eye"},
-      "remnant": {"chance": 0.01, "before_realm": 1, "event": "remnant_soul", "mind": 30, "talent": "qianbei_yize", "flaw": "canhun_raoshen", "injury_days": 360}
+      "spirit_eye": {"chance": 0.02, "location": "wild", "flag": "spirit_eye_found", "event": "spirit_eye", "sense_reference": 10},
+      "remnant": {"chance": 0.3, "before_realm": 1, "event": "remnant_soul", "mind": 30, "talent": "qianbei_yize", "flaw": "canhun_raoshen", "injury_days": 360}
     },
     "breakthrough": {
       "base": [25, 35, 45, 55, 65],
@@ -419,10 +433,10 @@
       "wait_options": [1, 10],
       "fresh_days": 180,
       "stages": [
-        {"name": "初期", "xp": 0, "max_hp": 90, "max_qi": 30, "attack_bonus": 0, "mind": 0, "retreat_days": 90},
-        {"name": "中期", "xp": 500, "max_hp": 100, "max_qi": 34, "attack_bonus": 2, "mind": 6, "retreat_days": 120},
-        {"name": "后期", "xp": 1000, "max_hp": 110, "max_qi": 38, "attack_bonus": 4, "mind": 14, "retreat_days": 150},
-        {"name": "圆满", "xp": 1500, "max_hp": 120, "max_qi": 42, "attack_bonus": 6, "mind": 24, "retreat_days": 180}
+        {"name": "初期", "xp": 0, "max_hp": 90, "max_qi": 30, "attack_bonus": 0, "sense": 10, "mind": 0, "retreat_days": 90},
+        {"name": "中期", "xp": 500, "max_hp": 100, "max_qi": 34, "attack_bonus": 2, "sense": 12, "mind": 6, "retreat_days": 120},
+        {"name": "后期", "xp": 1000, "max_hp": 110, "max_qi": 38, "attack_bonus": 4, "sense": 14, "mind": 14, "retreat_days": 150},
+        {"name": "圆满", "xp": 1500, "max_hp": 120, "max_qi": 42, "attack_bonus": 6, "sense": 16, "mind": 24, "retreat_days": 180}
       ],
       "breakthrough": {"xp": 2000, "pills": 1}
     },
@@ -435,10 +449,10 @@
       "wait_options": [1, 10, 30, 90],
       "fresh_days": 540,
       "stages": [
-        {"name": "初期", "xp": 0, "max_hp": 140, "max_qi": 50, "attack_bonus": 8, "mind": 36, "retreat_days": 360},
-        {"name": "中期", "xp": 1500, "max_hp": 155, "max_qi": 55, "attack_bonus": 10, "mind": 50, "retreat_days": 540},
-        {"name": "后期", "xp": 3000, "max_hp": 170, "max_qi": 60, "attack_bonus": 12, "mind": 66, "retreat_days": 720},
-        {"name": "圆满", "xp": 4500, "max_hp": 185, "max_qi": 65, "attack_bonus": 14, "mind": 84, "retreat_days": 900}
+        {"name": "初期", "xp": 0, "max_hp": 140, "max_qi": 50, "attack_bonus": 8, "sense": 30, "mind": 36, "retreat_days": 360},
+        {"name": "中期", "xp": 1500, "max_hp": 155, "max_qi": 55, "attack_bonus": 10, "sense": 33, "mind": 50, "retreat_days": 540},
+        {"name": "后期", "xp": 3000, "max_hp": 170, "max_qi": 60, "attack_bonus": 12, "sense": 36, "mind": 66, "retreat_days": 720},
+        {"name": "圆满", "xp": 4500, "max_hp": 185, "max_qi": 65, "attack_bonus": 14, "sense": 40, "mind": 84, "retreat_days": 900}
       ],
       "xp_cap": 6000
     }
@@ -467,7 +481,7 @@
     "search_ruin": 5,
     "road_recovery": 1
   },
-  "world_flags": ["serpent_slain", "heard_auction_rumor", "found_ruin", "ruin_cleared", "helped_wanderer", "serpent_rampage", "azhi_promised", "azhi_mourned", "intro_done", "peddler_friend", "serpent_weakened", "spirit_eye_found"],
+  "world_flags": ["ruin_den_cleared", "serpent_slain", "heard_auction_rumor", "found_ruin", "ruin_cleared", "helped_wanderer", "serpent_rampage", "azhi_promised", "azhi_mourned", "intro_done", "peddler_friend", "serpent_weakened", "spirit_eye_found"],
   "sects": {
     "wanderer": {
       "name": "散修",

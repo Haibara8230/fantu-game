@@ -223,9 +223,9 @@
     "trigger": "location",
     "location": "wild",
     "priority": 6,
-    "conditions": [{"realm_at_least": 1}, {"not": {"flag": "found_ruin"}}],
+    "conditions": [{"sense_at_least": 30}, {"not": {"flag": "found_ruin"}}],
     "effects": [{"flag": "found_ruin"}],
-    "chronicle": "筑基后神识敏锐了许多，你在谷底察觉一条被藤蔓遮住的小径，通往一处古修洞府。"
+    "chronicle": "神识敏锐了许多，你在谷底察觉一条被藤蔓遮住的小径，通往一处古修洞府。"
   },
   "ruin_occupied": {
     "retired": true,

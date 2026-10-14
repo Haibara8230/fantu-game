@@ -408,6 +408,15 @@ func _at_ruin(game: Session) -> void:
 	game.world.flags["ruin_cleared"] = true
 	game.player.location = "ruin"
 
+## Walks the old cave room by room along `path`, its guardian already fallen and health kept up.
+func _delve(game: Session, path: Array) -> void:
+	_at_ruin(game)
+	game.world.flags["ruin_den_cleared"] = true
+	for room_id: String in path:
+		game.player.hp = game.player.max_hp
+		game.player.qi = game.player.max_qi
+		game.enter_room("ruin", room_id)
+
 func _fortune() -> void:
 	# 顿悟: staying at a stirring place while held at the realm's most.
 	var still := _ripe()
@@ -473,14 +482,17 @@ func _fortune() -> void:
 	lofty.fortune = {"brink": 0.0}
 	check(Session.Fortune.after_win(lofty, 0).is_empty(), "nor against a weaker foe")
 	# Treasures, the 灵眼, the remnant soul.
-	var digger := _game()
-	_at_ruin(digger)
+	var digger := _ripe()
 	digger.fortune = {"shiru": 0.0, "remnant": 0.99}
-	digger.act("search_ruin")
-	check(digger.item_count("qiannian_shiru") == 1 and digger.journal_lines().any(func(line: String) -> bool: return line.contains("千年石乳")), "a 千年石乳 in the stone room, once in a life")
-	digger.player.cooldowns.clear()
-	digger.act("search_ruin")
-	check(digger.item_count("qiannian_shiru") == 1, "only once")
+	_delve(digger, ["corridor", "elixir", "drip"])
+	digger.open_hidden("ruin", "drip")
+	check(digger.item_count("qiannian_shiru") == 1 and digger.journal_lines().any(func(line: String) -> bool: return line.contains("千年石乳")), "a 千年石乳 behind the old cave's dripstones, once in a life")
+	check(digger.open_hidden("ruin", "drip").contains("取空") and digger.item_count("qiannian_shiru") == 1, "only once")
+	var unlucky := _ripe()
+	unlucky.fortune = {"shiru": 0.99, "remnant": 0.99}
+	_delve(unlucky, ["corridor", "elixir", "drip"])
+	unlucky.open_hidden("ruin", "drip")
+	check(unlucky.item_count("qiannian_shiru") == 0 and unlucky.world.caves.ruin.taken.has("drip:hidden"), "in a world where it was not placed, the crevice holds lesser things")
 	var gatherer := _ripe()
 	gatherer.player.location = "wild"
 	gatherer.fortune = {"lingshen": 0.0, "spirit_eye": 0.0}
@@ -494,21 +506,21 @@ func _fortune() -> void:
 	_at_ruin(blessed)
 	blessed.player.mind = 30
 	blessed.fortune = {"shiru": 0.99, "remnant": 0.0}
-	blessed.act("search_ruin")
-	check(blessed.pending_event.get("id", "") == "remnant_soul", "a remnant soul may offer its blessing before foundation")
+	_delve(blessed, ["corridor", "study", "armory", "sealed"])
+	check(blessed.pending_event.get("id", "") == "remnant_soul", "a remnant soul in the sealed chamber may offer its blessing before foundation")
 	blessed.choose_event("accept")
 	check(blessed.player.boons.get("remnant", "") == "ready" and blessed.has_talent("qianbei_yize"), "accepted with mind enough, it blesses and leaves a talent")
 	var seized := _ripe()
 	_at_ruin(seized)
 	seized.player.mind = 20
 	seized.fortune = {"shiru": 0.99, "remnant": 0.0}
-	seized.act("search_ruin")
+	_delve(seized, ["corridor", "study", "armory", "sealed"])
 	seized.choose_event("accept")
 	check(seized.player.boons.get("remnant", "") == "spent" and seized.has_talent("canhun_raoshen") and seized.injured() and int(seized.player.injury_until) - int(seized.world.day) == 360, "without, it tries to take the body: a long wound and a flaw")
 	var wary := _ripe()
 	_at_ruin(wary)
 	wary.fortune = {"shiru": 0.99, "remnant": 0.0}
-	wary.act("search_ruin")
+	_delve(wary, ["corridor", "study", "armory", "sealed"])
 	var slips: int = wary.player.items.keys().filter(func(id: String) -> bool: return id.begins_with("j:")).size()
 	wary.choose_event("refuse")
 	check(wary.player.items.keys().filter(func(id: String) -> bool: return id.begins_with("j:")).size() == slips + 1, "refused, it leaves a jade slip")

@@ -32,6 +32,8 @@ var sect_data: Dictionary = {}
 var bonds_data: Dictionary = {}
 # Recipes, furnaces, 丹毒 and the 灵田 (alchemy.gd).
 var alchemy_data: Dictionary = {}
+# The old cave's rooms (caves.gd).
+var cave_data: Dictionary = {}
 # Born-with talent ids by tier, built on first use (talents.gd).
 var talent_pools: Dictionary = {}
 var error_message: String = ""
@@ -40,7 +42,7 @@ const FAVOR_MAX := 200
 const FAVOR_STAGES := [[0, "初识"], [40, "相熟"], [80, "友好"], [140, "信赖"], [200, "亲密"]]
 const ATTITUDES := {"friendly": "友善", "neutral": "中立", "hostile": "敌意"}
 const BUILT_IN_INTERACTIONS := ["talk", "gift", "help", "consult", "teach", "invite_spar", "invite_help"]
-const PLAIN_ACTIONS := ["cultivate", "rest", "breakthrough", "study", "teach", "sell", "shop", "gather", "inn_rest", "search_ruin", "inquire", "commissions", "sect", "alchemy", "field", "tournament"]
+const PLAIN_ACTIONS := ["cultivate", "rest", "breakthrough", "study", "teach", "sell", "shop", "gather", "inn_rest", "search_ruin", "explore_cave", "inquire", "commissions", "sect", "alchemy", "field", "tournament"]
 const ITEM_CATEGORIES := {"herb": "灵草", "pill": "丹药", "treasure": "天材地宝", "manual": "玉简", "equipment": "法宝", "material": "材料", "recipe": "丹方", "tool": "器具", "quest": "信物"}
 # Milestones friends send word of, and the deeds the session counts besides victories ("win:<enemy>").
 const CONGRATS := ["breakthrough", "serpent", "champion", "promotion"]
@@ -81,7 +83,7 @@ func load_data() -> bool:
 		error_message = "物品配置格式错误。"
 		return false
 	items = item_data
-	for pair: Array in [["techniques", "res://data/techniques.json"], ["equipment", "res://data/equipment.json"], ["vfx_tiers", "res://data/vfx_tiers.json"], ["vfx", "res://data/vfx.json"], ["population", "res://data/population.json"], ["commissions", "res://data/commissions.json"], ["storylines", "res://data/storylines.json"], ["talents", "res://data/talents.json"], ["sect", "res://data/sect.json"], ["bonds", "res://data/bonds.json"], ["alchemy", "res://data/alchemy.json"]]:
+	for pair: Array in [["techniques", "res://data/techniques.json"], ["equipment", "res://data/equipment.json"], ["vfx_tiers", "res://data/vfx_tiers.json"], ["vfx", "res://data/vfx.json"], ["population", "res://data/population.json"], ["commissions", "res://data/commissions.json"], ["storylines", "res://data/storylines.json"], ["talents", "res://data/talents.json"], ["sect", "res://data/sect.json"], ["bonds", "res://data/bonds.json"], ["alchemy", "res://data/alchemy.json"], ["caves", "res://data/caves.json"]]:
 		var loaded: Variant = _read_json(pair[1])
 		if not loaded is Dictionary:
 			error_message = "配置格式错误：" + pair[1]
@@ -112,6 +114,8 @@ func load_data() -> bool:
 				bonds_data = loaded
 			"alchemy":
 				alchemy_data = loaded
+			"caves":
+				cave_data = loaded
 	map = parsed.map
 	locations = parsed.locations
 	skills = parsed.skills
@@ -152,7 +156,7 @@ func _validate() -> String:
 		for stage: Variant in realm.stages:
 			if not stage is Dictionary or not stage.get("name") is String:
 				return "小阶段配置错误：%s" % realm.get("id", index)
-			for key: String in ["xp", "max_hp", "max_qi", "attack_bonus", "mind", "retreat_days"]:
+			for key: String in ["xp", "max_hp", "max_qi", "attack_bonus", "mind", "retreat_days", "sense"]:
 				if not _whole(stage.get(key)) or (key in ["max_hp", "max_qi", "retreat_days"] and int(stage[key]) < 1):
 					return "小阶段数值错误：%s.%s.%s" % [realm.get("id", index), stage.name, key]
 			if int(stage.xp) <= previous_xp:
@@ -306,6 +310,8 @@ func _validate() -> String:
 		problem = _validate_sect()
 	if problem.is_empty():
 		problem = _validate_bonds()
+	if problem.is_empty():
+		problem = _validate_caves()
 	if not problem.is_empty():
 		return problem
 	problem = _validate_storylines()
@@ -382,7 +388,7 @@ func _validate_fortune() -> String:
 	var epiphany: Dictionary = fortune.epiphany
 	if not epiphany.get("places") is Array or epiphany.places.any(func(place: Variant) -> bool: return not locations.has(place)) or not _whole(epiphany.get("per_days")) or int(epiphany.per_days) < 1 or not _whole(epiphany.get("days")):
 		return "顿悟配置无效。"
-	if not _whole(fortune.brink.get("hp_percent")) or not fortune.spirit_eye.get("flag") in world_flags:
+	if not _whole(fortune.brink.get("hp_percent")) or not fortune.spirit_eye.get("flag") in world_flags or not _whole(fortune.spirit_eye.get("sense_reference")) or int(fortune.spirit_eye.sense_reference) < 1:
 		return "生死之间或灵眼配置无效。"
 	for key: String in ["before_realm", "mind", "injury_days"]:
 		if not _whole(fortune.remnant.get(key)):
@@ -448,6 +454,76 @@ func _valid_cost(cost: Variant, keys: Array) -> bool:
 			return false
 		total += int(cost[key])
 	return total >= 1
+
+# --- The old cave's rooms --------------------------------------------------------------------------
+
+func _validate_caves() -> String:
+	for cave_id: String in cave_data:
+		var cave: Variant = cave_data[cave_id]
+		if not cave is Dictionary or not cave.get("name") is String or not locations.has(cave.get("location", "")) or not cave.get("requires_flag") in world_flags or not _whole(cave.get("step_days")) or int(cave.step_days) < 1:
+			return "洞府配置无效：" + cave_id
+		if not locations[cave.location].spots.any(func(spot: Dictionary) -> bool: return "explore_cave" in spot.actions):
+			return "洞府所在地点没有探索的场景：" + cave_id
+		if not cave.get("rooms") is Array or cave.rooms.is_empty():
+			return "洞府没有石室：" + cave_id
+		var ids := {}
+		for room: Variant in cave.rooms:
+			if not room is Dictionary or not room.get("id") is String or ids.has(room.id) or not room.get("name") is String or not room.get("text") is String:
+				return "石室配置无效：%s" % cave_id
+			ids[room.id] = room
+		if not cave.rooms.any(func(room: Dictionary) -> bool: return bool(room.get("start", false))):
+			return "洞府没有入口：" + cave_id
+		for room: Dictionary in cave.rooms:
+			var where := "%s.%s" % [cave_id, room.id]
+			var spot: Variant = room.get("map")
+			if not spot is Array or spot.size() != 2 or spot.any(func(value: Variant) -> bool: return not (value is float or value is int) or float(value) < 0.0 or float(value) > 1.0):
+				return "石室在图上的位置无效：" + where
+			if not room.get("links") is Array or room.links.is_empty() or room.links.any(func(link: Variant) -> bool: return not ids.has(link) or not room.id in ids[link].get("links", [])):
+				return "石室的通路须双向且指向已知石室：" + where
+			if room.has("trap"):
+				var trap: Variant = room.trap
+				if not trap is Dictionary or not trap.get("names") is Array or trap.names.is_empty() or trap.names.any(func(name: Variant) -> bool: return not name is String) or not _whole(trap.get("sense")) or not trap.get("damage") is Array or trap.damage.size() != 2 or not _whole(trap.damage[0]) or not _whole(trap.damage[1]) or int(trap.damage[0]) > int(trap.damage[1]):
+					return "机关配置无效：" + where
+			if room.has("loot") and not _valid_cave_loot(room.loot):
+				return "石室宝物配置无效：" + where
+			if room.has("hidden"):
+				var hidden: Variant = room.hidden
+				if not hidden is Dictionary or not hidden.get("name") is String or not _whole(hidden.get("sense")) or not _whole(hidden.get("qi")) or not _valid_cave_loot(hidden.get("loot")) or (hidden.has("fortune") and hidden.fortune != "shiru"):
+					return "暗格配置无效：" + where
+			if room.has("guardian") and (not enemies.has(room.guardian) or not enemies[room.guardian].get("world_flag", "") in world_flags):
+				return "守洞的对手须有世界标记：" + where
+			if room.has("fortune") and (room.fortune != "remnant" or not room.has("loot")):
+				return "残魂须在有宝物可替的石室：" + where
+			if room.has("requires_sense") and not _whole(room.requires_sense):
+				return "禁制的神识要求无效：" + where
+	return ""
+
+## A room's `loot`: choices, each a non-empty list of {"stones" | "pills": n}, {"item": [id, n]},
+## {"manual" | "equipment": tier}.
+func _valid_cave_loot(choices: Variant) -> bool:
+	if not choices is Array or choices.is_empty():
+		return false
+	for choice: Variant in choices:
+		if not choice is Array or choice.is_empty():
+			return false
+		for effect: Variant in choice:
+			if not effect is Dictionary or effect.size() != 1:
+				return false
+			var key: String = effect.keys()[0]
+			var value: Variant = effect[key]
+			match key:
+				"stones", "pills":
+					if not _whole(value) or int(value) < 1:
+						return false
+				"item":
+					if not value is Array or value.size() != 2 or not items.has(value[0]) or not _whole(value[1]) or int(value[1]) < 1:
+						return false
+				"manual", "equipment":
+					if not _whole(value) or int(value) < 1 or int(value) > technique_data.tiers.size():
+						return false
+				_:
+					return false
+	return true
 
 # --- Alchemy static checks ------------------------------------------------------------------------
 
@@ -1055,7 +1131,7 @@ func _validate_condition(condition: Variant) -> String:
 			return "" if value in world_flags else "未知世界标记：%s" % value
 		"item_at_least":
 			return "" if value is Array and value.size() == 2 and items.has(value[0]) and _whole(value[1]) else "物品条件无效"
-		"stones_at_least", "herbs_at_least", "mind_at_least":
+		"stones_at_least", "herbs_at_least", "mind_at_least", "sense_at_least":
 			return "" if _whole(value) else "%s 数值无效" % key
 		"met":
 			return "" if people.has(value) else "未知人物：%s" % value

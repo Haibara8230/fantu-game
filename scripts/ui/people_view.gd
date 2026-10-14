@@ -252,7 +252,7 @@ static func _talents(ui, person_id: String) -> void:
 	var session = ui.session
 	var born: Dictionary = session.talents_of(person_id)
 	if not session.talents_visible(person_id):
-		ui.center.add_child(ui.label("天赋 · 看不透（相熟之后，或修为高过此人，方能看出）", 15, ui.MUTED))
+		ui.center.add_child(ui.label("天赋 · 看不透（相熟之后，或神识高过此人，方能看出）", 15, ui.MUTED))
 		return
 	var row := HBoxContainer.new()
 	row.add_theme_constant_override("separation", 12)

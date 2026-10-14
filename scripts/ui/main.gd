@@ -91,6 +91,8 @@ var notice_tween: Tween
 var selected_spot := ""
 # The person whose profile is open in the centre panel ("" when none).
 var selected_npc := ""
+# The room chosen on the old cave's map (cave_view.gd).
+var cave_room := ""
 var shown_location := ""
 var show_everyone_here := false
 var welcome_roots: Array = []

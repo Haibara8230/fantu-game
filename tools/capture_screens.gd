@@ -120,6 +120,20 @@ func _run() -> void:
 		await _shot("18b_spar")
 		s.flee()
 	main.set_view("place")
+	# The old cave's depths, a room in.
+	s.world.flags["found_ruin"] = true
+	s.world.flags["ruin_cleared"] = true
+	s.player.location = "ruin"
+	s.player.stage = 3
+	s.refresh_realm_stats()
+	s.enter_room("ruin", "corridor")
+	s.enter_room("ruin", "elixir")
+	main.set_view("place")
+	main.select_spot("depths")
+	await _shot("18c_cave")
+	main.close_spot()
+	s.player.location = "sect"
+	main.set_view("place")
 	s.pending_event = {"id": "tournament_entry", "day": int(s.world.day)}
 	await _shot("19_event")
 	s.pending_event = {}

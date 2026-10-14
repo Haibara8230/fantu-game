@@ -35,7 +35,8 @@ static func restore(s, data: Variant) -> bool:
 			return false
 	var events: Variant = _valid_event_progress(saved_world.events)
 	var people: Variant = _valid_people(content, saved_world.people, day)
-	if events == null or people == null:
+	var caves: Variant = _valid_caves(content, saved_world.get("caves", {}))
+	if events == null or people == null or caves == null:
 		return false
 	if not saved_player.get("name") is String or not saved_player.get("location") is String or not content.locations.has(saved_player.location):
 		return false
@@ -218,7 +219,7 @@ static func restore(s, data: Variant) -> bool:
 	var bonds: Variant = _valid_bonds(s, content, saved_world, day)
 	if bonds == null:
 		return false
-	s.world = {"day": day, "flags": saved_world.flags.duplicate(), "events": events, "people": people, "seed": int(seed_value) if _whole_nonnegative(seed_value) else 0, "stock_sold": sold, "rumors": rumors, "quests_taken": taken, "storylines": storylines, "letters": letters, "talent_lives": shaped, "invites": bonds.invites, "loans": bonds.loans, "visit_period": bonds.visit_period}
+	s.world = {"day": day, "flags": saved_world.flags.duplicate(), "events": events, "people": people, "seed": int(seed_value) if _whole_nonnegative(seed_value) else 0, "stock_sold": sold, "rumors": rumors, "quests_taken": taken, "storylines": storylines, "letters": letters, "talent_lives": shaped, "invites": bonds.invites, "loans": bonds.loans, "visit_period": bonds.visit_period, "caves": caves}
 	s.populate()
 	var player: Dictionary = saved_player.duplicate(true)
 	for key: String in PLAYER_COUNTS:
@@ -373,6 +374,39 @@ static func _valid_bonds(s, content, saved_world: Dictionary, day: int) -> Varia
 	if not _whole_nonnegative(period):
 		return null
 	return {"invites": invites, "loans": loans, "visit_period": int(period)}
+
+## The old cave's rooms (optional: saves before it have none), or null when malformed. Caves and rooms
+## no longer in the content are dropped.
+static func _valid_caves(content, saved: Variant) -> Variant:
+	if not saved is Dictionary:
+		return null
+	var result := {}
+	for cave_id: Variant in saved:
+		var cave: Variant = saved[cave_id]
+		if not cave is Dictionary or not cave.get("explored") is Array or not cave.get("taken") is Array or not cave.get("fortune") is Dictionary:
+			return null
+		if not content.cave_data.has(cave_id):
+			continue
+		var rooms: Array = content.cave_data[cave_id].rooms.map(func(room: Dictionary) -> String: return str(room.id))
+		var explored: Array = []
+		for room_id: Variant in cave.explored:
+			if not room_id is String:
+				return null
+			if room_id in rooms and not room_id in explored:
+				explored.append(room_id)
+		var taken: Array = []
+		for key: Variant in cave.taken:
+			if not key is String:
+				return null
+			if str(key).trim_suffix(":hidden") in rooms and not key in taken:
+				taken.append(key)
+		var fortune := {}
+		for id: Variant in cave.fortune:
+			if not id in ["shiru", "remnant"] or not cave.fortune[id] is bool:
+				return null
+			fortune[id] = cave.fortune[id]
+		result[cave_id] = {"explored": explored, "taken": taken, "fortune": fortune}
+	return result
 
 ## The player's standing in the sect, normalized (optional fields default to an outer disciple with
 ## nothing yet), or null when malformed.

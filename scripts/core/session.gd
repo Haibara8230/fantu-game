@@ -18,6 +18,7 @@ const Journey = preload("res://scripts/core/journey.gd")
 const Cultivation = preload("res://scripts/core/cultivation.gd")
 const Storylines = preload("res://scripts/core/storylines.gd")
 const Talents = preload("res://scripts/core/talents.gd")
+const Caves = preload("res://scripts/core/caves.gd")
 const Breakthrough = preload("res://scripts/core/breakthrough.gd")
 const Fortune = preload("res://scripts/core/fortune.gd")
 const Sect = preload("res://scripts/core/sect.gd")
@@ -91,7 +92,7 @@ func new_game(character_name: String = "无名", seed_value: int = -1, roots: Ar
 		chosen_name = "无名"
 	# talent_lives: the generated population's talents shape their lives (journeys begun before talents
 	# keep the lives they had).
-	world = {"day": 0, "flags": {}, "events": {}, "people": {}, "seed": seed_value if seed_value >= 0 else absi(int(world_rng.randi())), "stock_sold": {}, "rumors": {}, "quests_taken": {}, "storylines": {}, "letters": [], "talent_lives": true, "invites": [], "loans": [], "visit_period": 0}
+	world = {"day": 0, "flags": {}, "events": {}, "people": {}, "seed": seed_value if seed_value >= 0 else absi(int(world_rng.randi())), "stock_sold": {}, "rumors": {}, "quests_taken": {}, "storylines": {}, "letters": [], "talent_lives": true, "invites": [], "loans": [], "visit_period": 0, "caves": {}}
 	populate()
 	player = {
 		"name": chosen_name, "birth_day": -int(content.rules.starting_age) * Calendar.DAYS_PER_YEAR,
@@ -355,9 +356,7 @@ func act(action: String) -> String:
 			add_item("huichun_grass", int(found.herbs))
 			add_item("foundation_pill", int(found.pills))
 			player.cooldowns[action] = int(world.day) + int(content.rules.action_cooldowns.get(action, 0))
-			var searched := [log_event("search_ruin", found)]
-			searched.append_array(Fortune.after_search(self))
-			return conclude(" ".join(searched), passed)
+			return conclude(log_event("search_ruin", found), passed)
 		"sell":
 			# Sell every item this place buys, in one go.
 			var sold := {}
@@ -672,10 +671,21 @@ func person_aptitude(person_id: String) -> Dictionary:
 func talents_visible(person_id: String) -> bool:
 	if favor(person_id) >= int(content.FAVOR_STAGES[1][0]):
 		return true
-	var someone := person(person_id)
-	if not someone.get("generated", false):
+	if not person(person_id).get("generated", false):
 		return false
-	return int(player.realm) * 10 + int(player.stage) > int(someone.realm) * 10 + int(someone.stage)
+	return sense() > person_sense(person_id)
+
+## 神识: the stage's, plus the talents' (`sense`, flat). It sees through people (their talents), the
+## traps and hidden things of the old cave (caves.gd), the riverbed at the ferry and the 灵眼.
+func sense() -> int:
+	return maxi(0, int(stage_stats().sense) + talent_modifier("sense"))
+
+## A generated person's 神识, by the same rule.
+func person_sense(person_id: String) -> int:
+	var someone := person(person_id)
+	var born := talents_of(person_id)
+	var mods := Talents.sum(content, born.get("talents", []) + born.get("flaws", []))
+	return maxi(0, int(content.stage(int(someone.get("realm", 0)), int(someone.get("stage", 0))).sense) + int(mods.get("sense", 0)))
 
 ## Days to study a technique, after talents.
 func study_days(technique: Dictionary) -> int:
@@ -1044,6 +1054,23 @@ func duel_pill_block(item_id: String) -> String:
 
 func take_duel_pill(item_id: String) -> String:
 	return Combat.take_pill(self, item_id)
+
+## --- The old cave's rooms (caves.gd) ---
+
+func cave_here() -> String:
+	return Caves.here(self)
+
+func enter_room(cave_id: String, room_id: String) -> String:
+	return Caves.enter(self, cave_id, room_id)
+
+func open_hidden(cave_id: String, room_id: String) -> String:
+	return Caves.open_hidden(self, cave_id, room_id)
+
+func collect_room(cave_id: String, room_id: String) -> String:
+	return Caves.collect(self, cave_id, room_id)
+
+func challenge_guardian(cave_id: String, room_id: String) -> String:
+	return Caves.challenge(self, cave_id, room_id)
 
 ## A plain full turn: the strongest arts the orbs allow, then the end of the turn.
 func plain_turn() -> String:

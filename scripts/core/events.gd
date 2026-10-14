@@ -89,6 +89,8 @@ static func met(s, condition: Dictionary) -> bool:
 			return int(s.world.people.get(value[0], {}).get("relation", 0)) >= int(value[1])
 		"mind_at_least":
 			return int(s.player.get("mind", 0)) >= int(value)
+		"sense_at_least":
+			return s.sense() >= int(value)
 		"stage_at_least":
 			return int(s.player.realm) > int(value[0]) or (int(s.player.realm) == int(value[0]) and int(s.player.stage) >= int(value[1]))
 		"sect":
