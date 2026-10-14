@@ -126,7 +126,7 @@ func _learning() -> void:
 	game.add_item(low, 1)
 	var day := int(game.world.day)
 	game.study_manual(low)
-	check(int(game.world.day) == day + 10 and "t:breath:wood:1::0" in game.player.learned and game.player.methods == ["t:breath:wood:1::0"], "studying a slip takes the tier's days and fills a free 心法 slot")
+	check(int(game.world.day) == day + 8 and "t:breath:wood:1::0" in game.player.learned and game.player.methods == ["t:breath:wood:1::0"], "studying a slip takes the tier's days (a fifth less for a wood art with a wood root) and fills a free 心法 slot")
 	check(game.item_count(low) == 0 and game.journal_lines().back().contains("习得"), "the slip is used up and the learning recorded")
 	game.add_item("j:t:burst:fire:3::0", 1)
 	check(game.study_manual("j:t:burst:fire:3::0").contains("筑基初期"), "a 玄阶 art needs 筑基")

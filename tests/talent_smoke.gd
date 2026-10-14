@@ -139,6 +139,8 @@ func _modifiers() -> void:
 	check(int(calm.player.mind) == 6, "静心 turns more experience into mind")
 	var reader := _game(_born(["bowen"]))
 	check(reader.study_days({"study_days": 10}) == 7, "博闻强记 studies faster")
+	var rooted := _game({}, ["water"])
+	check(rooted.study_days({"study_days": 10, "element": "water"}) == 8 and rooted.study_days({"study_days": 10, "element": "fire"}) == 10, "an art of one's own root is studied a fifth faster")
 	var walker := _game(_born(["shenxing"]))
 	check(walker.route_days({"days": 4}) == 3 and walker.path_days(walker.path_to("ridge")) == 3, "神行 shortens the road")
 	walker.travel("ridge")

@@ -394,6 +394,8 @@ func _validate_fortune() -> String:
 	var epiphany: Dictionary = fortune.epiphany
 	if not epiphany.get("places") is Array or epiphany.places.any(func(place: Variant) -> bool: return not locations.has(place)) or not _whole(epiphany.get("per_days")) or int(epiphany.per_days) < 1 or not _whole(epiphany.get("days")):
 		return "顿悟配置无效。"
+	if not _whole(rules.get("root_study")) or int(rules.root_study) >= 100:
+		return "灵根参悟加成配置无效。"
 	if not _whole(fortune.brink.get("hp_percent")) or not fortune.spirit_eye.get("flag") in world_flags or not _whole(fortune.spirit_eye.get("sense_reference")) or int(fortune.spirit_eye.sense_reference) < 1:
 		return "生死之间或灵眼配置无效。"
 	for key: String in ["before_realm", "mind", "injury_days"]:

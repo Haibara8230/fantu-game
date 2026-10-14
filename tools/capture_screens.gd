@@ -65,6 +65,14 @@ func _run() -> void:
 	await _shot("04b_sect_chamber")
 	main.select_spot("hall")
 	await _shot("05_sect_hall")
+	# A handwritten person's card, then a generated one's.
+	main.open_person("xu_qinghe")
+	await _shot("05b_person")
+	var fellows: Array = main.session.present_npcs().filter(func(id: String) -> bool: return main.session.is_generated(id))
+	if not fellows.is_empty():
+		main.open_person(str(fellows[0]))
+		await _shot("05c_person_generated")
+	main.close_spot()
 	main.notice("闭关 3 个月，修为增加 360，灵力恢复。青云山执事堂贴出告示：外门小比将于六月一日至十五日在演武坪报名，三轮斗法，点到为止，头名可得宗门赏赐的功法玉简。沈墨传音：药铺新到了一批凝露草，道友若要炼回气丹，可来取用。")
 	await _shot("06_long_notice")
 	main.set_view("status")

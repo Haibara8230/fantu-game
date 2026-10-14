@@ -743,8 +743,13 @@ func person_sense(person_id: String) -> int:
 	return maxi(0, int(content.stage(int(someone.get("realm", 0)), int(someone.get("stage", 0))).sense) + int(mods.get("sense", 0)))
 
 ## Days to study a technique, after talents.
+## Days to study a technique: talents for study, and an element the spirit roots share quickens it
+## (`rules.root_study`, a percentage off).
 func study_days(technique: Dictionary) -> int:
-	return Talents.scaled(int(technique.study_days), talent_modifier("study"), 1)
+	var percent := talent_modifier("study")
+	if str(technique.get("element", "")) in player.get("roots", []):
+		percent -= int(content.rules.root_study)
+	return Talents.scaled(int(technique.study_days), percent, 1)
 
 ## Days on the road along a path, after talents.
 func path_days(path: Array[String]) -> int:
