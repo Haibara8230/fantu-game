@@ -24,6 +24,7 @@ func _initialize() -> void:
 	_commissions()
 	_tournament()
 	_summit()
+	_demon_hunts()
 	_meetings_and_saves()
 	_portraits()
 	print("SOCIETY: %d checks, %d failures" % [checks, failures])
@@ -244,6 +245,31 @@ func _rumors() -> void:
 			break
 		game.inquire()
 	check(game.has_flag("heard_auction_rumor") and game.upcoming().size() == 1, "hearing of the auction counts as knowing about it")
+
+## The 魔修: a 金丹 disciple's commission, and a foe at the valley's spring.
+func _demon_hunts() -> void:
+	var low := _game(9)
+	var high := _game(9)
+	high.player.realm = 2
+	high.refresh_realm_stats()
+	var seen_low := false
+	var seen_high := false
+	for period: int in 30:
+		low.world.day = period * 60
+		high.world.day = period * 60
+		seen_low = seen_low or low.commission_offers("sect").any(func(offer: Dictionary) -> bool: return offer.kind == "demon")
+		seen_high = seen_high or high.commission_offers("sect").any(func(offer: Dictionary) -> bool: return offer.kind == "demon")
+	check(seen_high and not seen_low, "only a 金丹 disciple is asked to put down 魔修")
+	var hunter := _game(9)
+	hunter.player.realm = 2
+	hunter.refresh_realm_stats()
+	hunter.player.hp = hunter.player.max_hp
+	hunter.travel("wild")
+	check(hunter.available_here("battle:mo_xiu") or hunter.content.locations.wild.spots.any(func(spot: Dictionary) -> bool: return "battle:mo_xiu" in spot.actions), "a 魔修 lurks at the valley's spring")
+	var young := _game(9)
+	young.travel("wild")
+	young.start_battle("mo_xiu")
+	check(young.battle.is_empty(), "too strong a foe for one below 金丹")
 
 func _commissions() -> void:
 	var game := _game()

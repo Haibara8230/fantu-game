@@ -6,7 +6,7 @@
     "sect": {"name": "执事堂告示", "location": "sect"},
     "market": {"name": "坊市告示", "location": "market"}
   },
-  "templates": {
+  "templates": {"demon": {"weight": 2, "boards": ["sect"], "min_realm": 2, "enemies": ["mo_xiu"], "count": [1, 2], "days": 120, "reward_stones": 260, "reward_xp": 400, "contribution": 60, "unit": "名", "title": "诛除{enemy_name}", "text": "深谷灵泉一带有{enemy_name}出没，掳人炼魂。宗门请金丹弟子出手：{days} 日内诛除 {count} 名。"}, 
     "gather": {
       "weight": 3,
       "boards": ["sect", "market"],

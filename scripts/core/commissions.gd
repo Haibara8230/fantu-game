@@ -3,6 +3,7 @@ extends RefCounted
 ## Boards post a few offers per period (deterministic per world, board and period). Accepted ones live
 ## in player.quests with a deadline; world.quests_taken keeps an offer from being posted twice.
 ## Three kinds: deliver items, hunt beasts, and (on the sect's board) patrol a place and report back.
+## A kind may wait for a realm (`min_realm`: the 魔修 for 金丹 disciples).
 ## The sect's own board (data/sect.json `board`) also pays contribution (`contribution` per count).
 
 static func board_here(s) -> String:
@@ -19,7 +20,7 @@ static func offers(s, board: String) -> Array[Dictionary]:
 	var period := int(s.world.day) / int(data.period_days)
 	var rng := RandomNumberGenerator.new()
 	rng.seed = hash([int(s.world.get("seed", 0)), "commission", board, period])
-	var kinds: Array = data.templates.keys().filter(func(kind: String) -> bool: return board in data.templates[kind].boards)
+	var kinds: Array = data.templates.keys().filter(func(kind: String) -> bool: return board in data.templates[kind].boards and int(s.player.realm) >= int(data.templates[kind].get("min_realm", 0)))
 	kinds.sort()
 	var total := 0
 	for kind: String in kinds:
@@ -89,7 +90,7 @@ static func delivery_block(s, quest: Dictionary) -> String:
 	if quest.has("item") and s.pill_count(quest.item) < int(quest.count):
 		return "%s还不够 %d。" % [s.content.item(quest.item).name, int(quest.count)]
 	if quest.has("enemy") and int(quest.progress) < int(quest.count):
-		return "还差 %d 头。" % (int(quest.count) - int(quest.progress))
+		return "还差 %d %s。" % [int(quest.count) - int(quest.progress), str(s.content.commission_data.templates[quest.kind].get("unit", "头"))]
 	if quest.has("place") and int(quest.progress) < 1:
 		return "还未去过%s。" % s.content.locations[quest.place].name
 	return ""
