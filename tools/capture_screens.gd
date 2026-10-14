@@ -105,6 +105,15 @@ func _run() -> void:
 	await _shot("14_alchemy")
 	main.set_view("map")
 	await _shot("15_map")
+	# The sect page of an inner disciple holding a duty.
+	main.session.player.rank = main.session.Sect.rank_index(main.session, "inner")
+	main.session.player.duty = "alchemy"
+	main.session.player.duty_day = int(main.session.world.day)
+	main.set_view("sect")
+	await _shot("15c_sect_duty")
+	main.session.player.rank = 0
+	main.session.player.duty = ""
+	main.set_view("map")
 	# Mid-flight over the map (御剑): the figure on its blade between two places.
 	main.world_map.traveller = main.world_map.node_position("sect").lerp(main.world_map.node_position("town"), 0.5)
 	main.world_map.flying = true
