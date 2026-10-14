@@ -259,6 +259,43 @@
     "effects": [{"clear_flag": "serpent_rampage"}, {"flag": "serpent_slain"}],
     "chronicle": "封谷三年后，青云剑宗长老出手斩杀赤鳞妖蟒，落霞谷重新开放。"
   },
+  "calamity_omen": {
+    "title": "天现异兆",
+    "trigger": "date",
+    "priority": 6,
+    "major": true,
+    "periodic": {"start_year": 299, "every_years": 1000, "month": 1, "from_day": 1, "to_day": 1},
+    "chronicle": "北天裂开一道血色的缝，三日不合。老辈修士说，这是大劫将至的兆头。"
+  },
+  "calamity_begins": {
+    "title": "大劫",
+    "trigger": "date",
+    "priority": 6,
+    "major": true,
+    "periodic": {"start_year": 300, "every_years": 1000, "month": 3, "from_day": 1, "to_day": 1},
+    "effects": [{"flag": "calamity"}],
+    "chronicle": "天魔破界，魔潮涌向青云山。护山大阵升起，宗门传令：金丹以上弟子，到山门守山。"
+  },
+  "calamity_ends_won": {
+    "title": "魔潮退去",
+    "trigger": "date",
+    "priority": 6,
+    "major": true,
+    "periodic": {"start_year": 302, "every_years": 1000, "month": 3, "from_day": 1, "to_day": 1},
+    "conditions": [{"flag": "calamity_turned"}],
+    "effects": [{"clear_flag": "calamity"}, {"mind": 10}],
+    "chronicle": "群龙无首的魔潮退回了裂缝，北天的血缝慢慢合拢。青云山保住了，山门前立起一块新碑。"
+  },
+  "calamity_ends_lost": {
+    "title": "魔潮退去",
+    "trigger": "date",
+    "priority": 6,
+    "major": true,
+    "periodic": {"start_year": 302, "every_years": 1000, "month": 3, "from_day": 1, "to_day": 1},
+    "conditions": [{"not": {"flag": "calamity_turned"}}],
+    "effects": [{"clear_flag": "calamity"}],
+    "chronicle": "魔潮终于退去，可青云山已是满目疮痍：外门的屋舍塌了大半，许多熟悉的面孔再也见不到了。"
+  },
   "chenxia_notice": {
     "title": "古境将开",
     "trigger": "date",

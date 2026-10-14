@@ -11,7 +11,7 @@
       "description": "青云剑宗外门所在。云雾绕着峰腰，钟声每日三响。",
       "terrain": "mountain",
       "map": [0.24, 0.24],
-      "spots": [
+      "spots": [{"id": "gate", "tag": [0.5, 0.78], "name": "山门", "description": "魔潮压在山门之外，护山大阵的光幕时明时暗。魔将就在阵外叫阵。", "actions": ["battle:mo_jiang"], "requires_flag": "calamity"}, 
         {"id": "chamber", "tag": [0.32, 0.29], "name": "静室", "description": "外门弟子的静修之所，灵气清润，可闭关、休整与突破；角落里有一口公用丹炉，也可开炉炼丹。", "actions": ["cultivate", "rest", "breakthrough", "alchemy"]},
         {"id": "office", "tag": [0.53, 0.35], "name": "执事堂", "description": "执事们在这里张贴宗门的委托，按时完成可得酬劳与贡献；月俸、晋升、兑换与捐献也在这里办理。", "actions": ["commissions", "sect"], "requires_flag": "intro_done"},
         {"id": "abode", "tag": [0.3, 0.12], "name": "洞府", "description": "内门弟子各有一处洞府，石门后是静修的石室，门外辟出一方灵田，引了山泉浇灌。", "actions": ["field"], "requires_rank": "inner"},
@@ -371,6 +371,25 @@
       "sect": "canglan",
       "drops": {"chance": 0.5, "tiers": [3, 4]}
     },
+    "mo_jiang": {
+      "name": "魔潮魔将",
+      "element": "fire",
+      "hp": 650,
+      "damage_min": 36,
+      "damage_max": 46,
+      "reward_stones": 1000,
+      "reward_xp": 3000,
+      "reward_herbs": 0,
+      "locations": [],
+      "min_realm": 2,
+      "human": true,
+      "sect": "chixiao",
+      "drops": {"chance": 1.0, "tiers": [5, 5]},
+      "contribution": 500,
+      "congrats": "calamity",
+      "world_flag": "calamity_turned",
+      "flag_event": "calamity_turned"
+    },
     "jian_kui": {
       "name": "霞锈剑傀",
       "element": "metal",
@@ -553,7 +572,7 @@
     "search_ruin": 5,
     "road_recovery": 1
   },
-  "world_flags": ["chenxia_open", "chenxia_puppet_down", "chenxia_remnant_down", "ruin_den_cleared", "serpent_slain", "heard_auction_rumor", "found_ruin", "ruin_cleared", "helped_wanderer", "serpent_rampage", "azhi_promised", "azhi_mourned", "intro_done", "peddler_friend", "serpent_weakened", "spirit_eye_found"],
+  "world_flags": ["calamity", "calamity_turned", "chenxia_open", "chenxia_puppet_down", "chenxia_remnant_down", "ruin_den_cleared", "serpent_slain", "heard_auction_rumor", "found_ruin", "ruin_cleared", "helped_wanderer", "serpent_rampage", "azhi_promised", "azhi_mourned", "intro_done", "peddler_friend", "serpent_weakened", "spirit_eye_found"],
   "sects": {
     "wanderer": {
       "name": "散修",

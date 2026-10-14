@@ -7,7 +7,7 @@ const Session = preload("res://scripts/core/session.gd")
 const ROOTS := [["metal", "wood", "fire"], ["water", "earth"], ["metal"], ["wood", "water", "fire", "earth"], ["fire", "earth", "metal"]]
 
 func _initialize() -> void:
-	for setup: Array in [["wolf", 0, 0, []], ["disciple", 0, 0, []], ["rogue", 0, 2, []], ["wolf", 0, 3, ["qingyun"]], ["serpent", 1, 0, ["qingyun"]], ["serpent", 1, 0, []], ["ruin_rogue", 0, 3, ["qingyun"]], ["ruin_rogue", 0, 3, []], ["den_wolf", 0, 3, []], ["den_wolf", 0, 3, ["qingyun"]], ["mo_xiu", 2, 0, ["qingyun"]], ["mo_xiu", 2, 0, []], ["jian_kui", 2, 1, ["qingyun"]], ["can_nian", 2, 2, ["qingyun"]], ["can_nian", 2, 3, []]]:
+	for setup: Array in [["wolf", 0, 0, []], ["disciple", 0, 0, []], ["rogue", 0, 2, []], ["wolf", 0, 3, ["qingyun"]], ["serpent", 1, 0, ["qingyun"]], ["serpent", 1, 0, []], ["ruin_rogue", 0, 3, ["qingyun"]], ["ruin_rogue", 0, 3, []], ["den_wolf", 0, 3, []], ["den_wolf", 0, 3, ["qingyun"]], ["mo_xiu", 2, 0, ["qingyun"]], ["mo_xiu", 2, 0, []], ["jian_kui", 2, 1, ["qingyun"]], ["can_nian", 2, 2, ["qingyun"]], ["can_nian", 2, 3, []], ["mo_jiang", 2, 3, ["qingyun"]], ["mo_jiang", 3, 0, ["qingyun"]]]:
 		_report(str(setup[0]), int(setup[1]), int(setup[2]), setup[3])
 	_spars()
 	for setup: Array in [[1, 1], [1, 3], [2, 0], [2, 2]]:

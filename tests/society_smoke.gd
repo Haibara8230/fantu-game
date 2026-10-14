@@ -25,6 +25,7 @@ func _initialize() -> void:
 	_tournament()
 	_summit()
 	_demon_hunts()
+	_calamity()
 	_meetings_and_saves()
 	_portraits()
 	print("SOCIETY: %d checks, %d failures" % [checks, failures])
@@ -270,6 +271,36 @@ func _demon_hunts() -> void:
 	young.travel("wild")
 	young.start_battle("mo_xiu")
 	check(young.battle.is_empty(), "too strong a foe for one below 金丹")
+
+## 大劫: omens in 299, the demon tide at 青云山 in the spring of 300, its general at the gate for a
+## 金丹; slain, the tide breaks and the sect rewards it; unanswered, the sect is left in ruins.
+func _calamity() -> void:
+	var game := _game(10)
+	game.player.realm = 2
+	game.player.stage = 3
+	game.refresh_realm_stats()
+	game.player.birth_day = int(Calendar.to_day(290, 1, 1))
+	game.world.day = Calendar.to_day(298, 12, 30)
+	game.wait(1)
+	check(game.journal_lines().any(func(line: String) -> bool: return line.contains("北天裂开")), "omens a year ahead")
+	game.world.day = Calendar.to_day(300, 2, 30)
+	game.wait(1)
+	check(game.has_flag("calamity") and game.available_here("battle:mo_jiang"), "in the spring of 300 the tide reaches the gate, and a 金丹 may face its general")
+	var merit := int(game.player.get("contribution", 0))
+	game.start_battle("mo_jiang")
+	game.battle.hp = 1
+	game.battle.orbs = ["metal"]
+	game.use_skill("sword")
+	check(game.has_flag("calamity_turned") and int(game.player.get("contribution", 0)) >= merit + 500 and game.player.items.keys().any(func(item_id: String) -> bool: return game.content.item(item_id).get("tier", 0) == 5), "the general slain: the sect's thanks and a 天阶 treasure")
+	game.world.day = Calendar.to_day(302, 2, 30)
+	game.wait(1)
+	check(not game.has_flag("calamity") and game.journal_lines().any(func(line: String) -> bool: return line.contains("青云山保住了")), "the tide breaks and the sect is saved")
+	var idle := _game(11)
+	idle.player.birth_day = int(Calendar.to_day(290, 1, 1))
+	idle.world.day = Calendar.to_day(302, 2, 30)
+	idle.world.flags["calamity"] = true
+	idle.wait(1)
+	check(not idle.has_flag("calamity") and idle.journal_lines().any(func(line: String) -> bool: return line.contains("满目疮痍")), "unanswered, the sect is left in ruins")
 
 func _commissions() -> void:
 	var game := _game()
