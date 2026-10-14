@@ -199,6 +199,8 @@ static func apply(s, effects: Array) -> void:
 				s.begin_spar(s.acting_npc)
 			"tournament":
 				s.begin_tournament(1)
+			"auction":
+				s.Auctions.open(s, value)
 
 static func _person(s, person_id: String) -> Dictionary:
 	if not s.world.people.has(person_id):

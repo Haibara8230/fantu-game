@@ -21,6 +21,7 @@ func _initialize() -> void:
 	_arrival_and_rumor()
 	_invitation_path_with_interrupt()
 	_introduction_path_and_cooldown()
+	_auction_bidding()
 	_missed_event()
 	_periodic_and_cross_year()
 	_lifespan()
@@ -88,20 +89,84 @@ func _invitation_path_with_interrupt() -> void:
 	check(int(game.world.day) == Calendar.to_day(5, 3, 1), "retreat stops on the day the auction opens")
 	check(message.contains("提前出关") and message.contains("特殊拍卖已经开场"), "interruption explains why")
 	check(int(game.player.xp) == (int(game.world.day) - before) * game.cultivation_rate() / 30, "cultivation credited only for elapsed days")
-	game.player.stones = 50
+	game.player.stones = 200
 	game.travel("market")
 	check(game.pending_event.get("id", "") == "special_auction", "arrival inside the window opens the auction")
 	check(not game.player.items.has("auction_invitation"), "invitation handed over at the door")
-	var refused := game.choose_event("ganoderma")
-	check(refused == "条件不足，无法如此选择。" and not game.pending_event.is_empty(), "unaffordable lot cannot be chosen")
 	var insight := int(game.player.insight)
-	game.choose_event("pill")
-	check(game.pending_event.is_empty() and int(game.item_count("foundation_pill")) == 1 and int(game.player.stones) == 5, "lot bought")
+	game.choose_event("enter")
+	check(game.pending_event.is_empty() and game.auction.lots.size() == 4 and game.auction.bidders.size() == 4, "seated among named bidders, four lots to come")
+	check(game.travel("sect") == "拍卖尚未结束。", "nothing else is done while it runs")
+	var rounds := 0
+	while not game.auction.is_empty() and rounds < 200:
+		rounds += 1
+		if game.Auctions.bid_block(game).is_empty() and game.Auctions.next_bid(game) <= 60:
+			game.auction_bid()
+		else:
+			game.auction_pass()
+	check(game.auction.is_empty() and game.journal_lines().any(func(line: String) -> bool: return line.contains("特殊拍卖落幕")), "the lots are bid for one by one until it closes")
+	check(int(game.player.stones) <= 200 and int(game.player.stones) >= 0, "only what was won is paid")
 	check(int(game.player.insight) == insight + 15, "an encounter lived through is insight")
 	check(_state(game, "special_auction") == "completed", "auction completed")
 	game.wait(1)
 	check(game.pending_event.is_empty(), "completed event does not repeat")
 	check(game.upcoming().is_empty(), "completed event leaves the upcoming list")
+
+## Bidding: the same world holds the same lots, bidders and ceilings; a raise nobody answers wins; a
+## lot let go is settled among the bidders and told; leaving settles the rest; a save keeps it.
+func _auction_bidding() -> void:
+	var game := _game(8)
+	_jump(game, 5, 3, 1)
+	game.player.location = "market"
+	game.player.stones = 1000
+	game.Auctions.open(game, "yunxi_special")
+	var twin := _game(8)
+	_jump(twin, 5, 3, 1)
+	twin.player.location = "market"
+	twin.Auctions.open(twin, "yunxi_special")
+	check(game.auction.bidders == twin.auction.bidders and game.auction.lots.map(func(lot: Dictionary) -> int: return int(lot.value)) == twin.auction.lots.map(func(lot: Dictionary) -> int: return int(lot.value)), "the same world holds the same lots and bidders")
+	var lot: Dictionary = game.Auctions.lot(game)
+	check(game.Auctions.ceiling(game, game.auction.bidders[0], lot) == twin.Auctions.ceiling(twin, twin.auction.bidders[0], twin.Auctions.lot(twin)), "and the same ceilings")
+	# Outbid everyone: the lot is the player's at the last raise.
+	var top := 0
+	for person_id: String in game.auction.bidders:
+		top = maxi(top, game.Auctions.ceiling(game, person_id, lot))
+	var stones := int(game.player.stones)
+	var item := str(lot.item)
+	var before := game.item_count(item)
+	var guard := 0
+	while int(game.auction.index) == 0 and guard < 100:
+		guard += 1
+		game.auction_bid()
+	check(game.item_count(item) == before + int(lot.count) and stones - int(game.player.stones) <= top + 2 * int(lot.step) and stones > int(game.player.stones), "a raise nobody answers wins the lot, a step or so past the keenest ceiling")
+	# Let the next go: a bidder takes it and the chronicle says who and for how much.
+	var next: Dictionary = game.Auctions.lot(game)
+	var keen := ""
+	for person_id: String in game.auction.bidders:
+		if game.Auctions.ceiling(game, person_id, next) >= int(next.start) and (keen.is_empty() or game.Auctions.ceiling(game, person_id, next) > game.Auctions.ceiling(game, keen, next)):
+			keen = person_id
+	game.auction_pass()
+	if keen.is_empty():
+		check(game.journal_lines().back().contains("流拍"), "a lot nobody wants goes unsold")
+	else:
+		check(game.journal_lines().back().contains(game.person(keen).name) and game.journal_lines().back().contains("拍走"), "a lot let go is taken by the keenest bidder, and told")
+	# Saved mid-auction, it carries on; broken, it is refused.
+	var copy := Session.new()
+	check(copy.restore(JSON.parse_string(JSON.stringify(game.snapshot()))) and copy.auction == game.auction, "an auction survives a save")
+	var broken: Dictionary = JSON.parse_string(JSON.stringify(game.snapshot()))
+	broken.auction.leader = "nobody_at_all"
+	check(not Session.new().restore(broken), "a broken auction is refused")
+	var older: Dictionary = JSON.parse_string(JSON.stringify(game.snapshot()))
+	older.erase("auction")
+	var old := Session.new()
+	check(old.restore(older) and old.auction.is_empty(), "saves from before auctions have none")
+	game.auction_leave()
+	check(game.auction.is_empty() and game.journal_lines().back().contains("落幕"), "leaving settles the rest without the player")
+	# The night market is an auction too.
+	var night := _game(9)
+	night.player.location = "market"
+	night.Auctions.open(night, "night_market")
+	check(night.auction.lots.size() == 3 and night.auction.bidders.size() == 3, "the night market's stall sells three lots")
 
 func _introduction_path_and_cooldown() -> void:
 	var game := _game(3)

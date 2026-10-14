@@ -19,6 +19,7 @@ const Cultivation = preload("res://scripts/core/cultivation.gd")
 const Storylines = preload("res://scripts/core/storylines.gd")
 const Talents = preload("res://scripts/core/talents.gd")
 const Caves = preload("res://scripts/core/caves.gd")
+const Auctions = preload("res://scripts/core/auctions.gd")
 const Breakthrough = preload("res://scripts/core/breakthrough.gd")
 const Fortune = preload("res://scripts/core/fortune.gd")
 const Sect = preload("res://scripts/core/sect.gd")
@@ -37,6 +38,8 @@ var world_rng := RandomNumberGenerator.new()
 var world: Dictionary = {}
 var player: Dictionary = {}
 var battle: Dictionary = {}
+# An auction under way (auctions.gd), {} otherwise.
+var auction: Dictionary = {}
 # A location event waiting for the player's choice: {"id", "day"}.
 var pending_event: Dictionary = {}
 # Set when this life is over: {"kind", "day"}.
@@ -290,6 +293,8 @@ func blocked() -> String:
 		return "眼前之事尚未了结。"
 	if not battle.is_empty():
 		return "斗法中无法进行此操作。"
+	if not auction.is_empty():
+		return "拍卖尚未结束。"
 	return ""
 
 func act(action: String) -> String:
@@ -469,7 +474,7 @@ func location_visible(location_id: String) -> bool:
 func snapshot() -> Dictionary:
 	return {
 		"version": SAVE_VERSION, "world": world.duplicate(true), "player": player.duplicate(true),
-		"battle": battle.duplicate(true), "pending_event": pending_event.duplicate(true), "ended": ended.duplicate(true),
+		"battle": battle.duplicate(true), "pending_event": pending_event.duplicate(true), "ended": ended.duplicate(true), "auction": auction.duplicate(true),
 		"chronicle": chronicle.to_save(), "rng": {"combat": str(combat_rng.state), "world": str(world_rng.state)}
 	}
 
@@ -1054,6 +1059,17 @@ func duel_pill_block(item_id: String) -> String:
 
 func take_duel_pill(item_id: String) -> String:
 	return Combat.take_pill(self, item_id)
+
+## --- Auctions (auctions.gd) ---
+
+func auction_bid(steps: int = 1) -> String:
+	return Auctions.bid(self, steps)
+
+func auction_pass() -> String:
+	return Auctions.pass_lot(self)
+
+func auction_leave() -> String:
+	return Auctions.leave(self)
 
 ## --- The old cave's rooms (caves.gd) ---
 

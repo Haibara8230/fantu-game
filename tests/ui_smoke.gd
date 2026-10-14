@@ -616,6 +616,21 @@ func _run() -> void:
 	check(_texts(main.center, "Label").contains("近来消息") and _texts(main.center, "Label").contains("灵田"), "the 消息 tab keeps the latest records")
 	check(main.session.content.rarity_of(main.session.content.item("foundation_pill")) == 2 and main.grade_color(main.session.content.item("qiannian_shiru")) == Color("#e59d52") and main.session.content.rarity_of(main.session.content.technique("t:bolt:metal:1::15")) == 0, "items and techniques are graded by color")
 	main.set_view("place")
+	# An auction takes the screen: the lot, the price and who holds it, the bidders, and the raises.
+	main.run(func() -> String: return main.session.travel("market"))
+	main.session.player.stones = 500
+	main.session.Auctions.open(main.session, "night_market")
+	main.render()
+	check(main.current_screen() == "full" and _texts(main.center, "Label").contains("云溪夜市拍卖摊") and _texts(main.center, "Label").contains("第 1 / 3 件") and _button("出价") != null and _button("放弃此件") != null, "an auction takes the screen with the lot and the raises")
+	check(main.session.auction.bidders.all(func(person_id: String) -> bool: return _texts(main.center, "Label").contains(main.session.person(person_id).name)), "the bidders sit around the room")
+	await _capture("auction")
+	var guard := 0
+	while not main.session.auction.is_empty() and guard < 100:
+		guard += 1
+		if _button("放弃此件").disabled:
+			break
+		_button("放弃此件").pressed.emit()
+	check(main.session.auction.is_empty() and main.current_screen() == "place", "letting every lot go ends it and returns to the place")
 	# Breaking through: the rules decide, and a realm reached has its own screen until 确定.
 	main.run(func() -> String: return main.session.travel("sect"))
 	main.session.player.stage = 3

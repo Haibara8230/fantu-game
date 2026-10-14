@@ -30,6 +30,7 @@ const MapView = preload("res://scripts/ui/map_view.gd")
 const BagView = preload("res://scripts/ui/bag_view.gd")
 const ArtsView = preload("res://scripts/ui/arts_view.gd")
 const BattleView = preload("res://scripts/ui/battle_view.gd")
+const AuctionView = preload("res://scripts/ui/auction_view.gd")
 const EventView = preload("res://scripts/ui/event_view.gd")
 const WelcomeScreen = preload("res://scripts/ui/welcome_screen.gd")
 const ChronicleView = preload("res://scripts/ui/chronicle_view.gd")
@@ -350,7 +351,7 @@ func _build_layout() -> void:
 ## or a duel holds the player; the scroll a view belongs to ("panel", "scroll", "retreat", "trade");
 ## otherwise the world, "place" or "map".
 func current_screen() -> String:
-	if not session.ended.is_empty() or not ceremony.is_empty() or not story.is_empty() or not session.pending_event.is_empty() or not session.battle.is_empty():
+	if not session.ended.is_empty() or not ceremony.is_empty() or not story.is_empty() or not session.pending_event.is_empty() or not session.battle.is_empty() or not session.auction.is_empty():
 		return "full"
 	var group := _tab_group(view)
 	if not group.is_empty():
@@ -402,6 +403,12 @@ func _arrange(screen: String) -> void:
 			if dueling:
 				# The duel's stage is the screen; its dock runs along the bottom.
 				_place_window(0.0, 1.0, 0.0, 0.0)
+			elif not session.auction.is_empty() and session.pending_event.is_empty() and story.is_empty() and ceremony.is_empty():
+				# The auction sits over the darkened market.
+				backdrop.texture = ArtLibrary.texture(ArtLibrary.fullscreen_location_path(str(session.player.location)))
+				backdrop.visible = true
+				shade.color.a = 0.6
+				_place_window(0.14, 0.86, 64.0, -96.0)
 			elif not art.is_empty():
 				# An event or a story moment with its illustration: the picture is the screen and the
 				# words and choices sit in a box along the bottom, like a picture book.
@@ -505,6 +512,8 @@ func render() -> void:
 		EventView.render_event(self)
 	elif not session.battle.is_empty():
 		BattleView.render(self)
+	elif not session.auction.is_empty():
+		AuctionView.render(self)
 	else:
 		match view:
 			"map":

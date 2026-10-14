@@ -132,6 +132,12 @@ func _run() -> void:
 	main.select_spot("depths")
 	await _shot("18c_cave")
 	main.close_spot()
+	# An auction under way.
+	s.player.location = "market"
+	s.player.stones = 300
+	s.Auctions.open(s, "yunxi_special")
+	await _shot("18d_auction")
+	s.auction = {}
 	s.player.location = "sect"
 	main.set_view("place")
 	s.pending_event = {"id": "tournament_entry", "day": int(s.world.day)}

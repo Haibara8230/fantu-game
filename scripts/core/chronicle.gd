@@ -79,6 +79,8 @@ func format(entry: Dictionary, content) -> String:
 	if values.has("item"):
 		var named: Dictionary = content.item(str(values.item))
 		values["item_name"] = named.name if not named.is_empty() else str(values.item)
+	if values.has("auction"):
+		values["auction_name"] = str(content.auction_data.get("auctions", {}).get(str(values.auction), {}).get("name", values.auction))
 	if values.has("cave") and content.cave_data.has(str(values.cave)):
 		var cave: Dictionary = content.cave_data[str(values.cave)]
 		values["cave_name"] = cave.name

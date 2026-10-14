@@ -66,21 +66,13 @@
       ]}
     ],
     "effects": [{"take_item": "auction_invitation"}],
-    "text": "朱漆小楼里灯火通明，来客皆以帷帽遮面。今日压轴的是一株百年灵芝，另有几枚成色上佳的筑基丹。",
+    "text": "朱漆小楼里灯火通明，来客皆以帷帽遮面。今日的拍品挂在帘后，听说有灵药、丹药，也有前人留下的玉简法宝。",
     "choices": [
       {
-        "id": "ganoderma",
-        "label": "竞拍百年灵芝（120 灵石）",
-        "conditions": [{"stones_at_least": 120}],
-        "effects": [{"stones": -120}, {"item": ["lingzhi", 1]}],
-        "chronicle": "你在云溪特殊拍卖中拍得一株百年灵芝。"
-      },
-      {
-        "id": "pill",
-        "label": "竞拍筑基丹（45 灵石）",
-        "conditions": [{"stones_at_least": 45}],
-        "effects": [{"stones": -45}, {"item": ["foundation_pill", 1]}],
-        "chronicle": "你在云溪特殊拍卖中以四十五灵石拍得一枚筑基丹。"
+        "id": "enter",
+        "label": "入座竞拍",
+        "effects": [{"auction": "yunxi_special"}],
+        "chronicle": "你在云溪特殊拍卖入了座。"
       },
       {
         "id": "watch",
@@ -94,7 +86,7 @@
     },
     "expire": {
       "conditions": [{"any": [{"flag": "heard_auction_rumor"}, {"item_at_least": ["auction_invitation", 1]}]}],
-      "chronicle": "云溪特殊拍卖已经落幕。听说那株百年灵芝被一位外来散修高价拍走。"
+      "chronicle": "云溪特殊拍卖已经落幕。听说压轴的拍品被一位外来散修高价拍走。"
     }
   },
   "night_market": {
@@ -106,11 +98,10 @@
     "text": "三年一度的云溪夜市开张，长街挂满灯笼，散修们把压箱底的丹药都摆了出来。",
     "choices": [
       {
-        "id": "pill",
-        "label": "购入折价筑基丹（40 灵石）",
-        "conditions": [{"stones_at_least": 40}],
-        "effects": [{"stones": -40}, {"item": ["foundation_pill", 1]}],
-        "chronicle": "你在云溪夜市以四十灵石购得一枚折价筑基丹。"
+        "id": "bid",
+        "label": "去拍卖摊凑个热闹",
+        "effects": [{"auction": "night_market"}],
+        "chronicle": "你在云溪夜市的拍卖摊前坐了下来。"
       },
       {
         "id": "stroll",

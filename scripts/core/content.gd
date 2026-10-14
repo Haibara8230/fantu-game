@@ -34,6 +34,8 @@ var bonds_data: Dictionary = {}
 var alchemy_data: Dictionary = {}
 # The old cave's rooms (caves.gd).
 var cave_data: Dictionary = {}
+# Auctions, their lots and how bidders value them (auctions.gd).
+var auction_data: Dictionary = {}
 # Born-with talent ids by tier, built on first use (talents.gd).
 var talent_pools: Dictionary = {}
 var error_message: String = ""
@@ -83,7 +85,7 @@ func load_data() -> bool:
 		error_message = "物品配置格式错误。"
 		return false
 	items = item_data
-	for pair: Array in [["techniques", "res://data/techniques.json"], ["equipment", "res://data/equipment.json"], ["vfx_tiers", "res://data/vfx_tiers.json"], ["vfx", "res://data/vfx.json"], ["population", "res://data/population.json"], ["commissions", "res://data/commissions.json"], ["storylines", "res://data/storylines.json"], ["talents", "res://data/talents.json"], ["sect", "res://data/sect.json"], ["bonds", "res://data/bonds.json"], ["alchemy", "res://data/alchemy.json"], ["caves", "res://data/caves.json"]]:
+	for pair: Array in [["techniques", "res://data/techniques.json"], ["equipment", "res://data/equipment.json"], ["vfx_tiers", "res://data/vfx_tiers.json"], ["vfx", "res://data/vfx.json"], ["population", "res://data/population.json"], ["commissions", "res://data/commissions.json"], ["storylines", "res://data/storylines.json"], ["talents", "res://data/talents.json"], ["sect", "res://data/sect.json"], ["bonds", "res://data/bonds.json"], ["alchemy", "res://data/alchemy.json"], ["caves", "res://data/caves.json"], ["auctions", "res://data/auctions.json"]]:
 		var loaded: Variant = _read_json(pair[1])
 		if not loaded is Dictionary:
 			error_message = "配置格式错误：" + pair[1]
@@ -116,6 +118,8 @@ func load_data() -> bool:
 				alchemy_data = loaded
 			"caves":
 				cave_data = loaded
+			"auctions":
+				auction_data = loaded
 	map = parsed.map
 	locations = parsed.locations
 	skills = parsed.skills
@@ -312,6 +316,8 @@ func _validate() -> String:
 		problem = _validate_bonds()
 	if problem.is_empty():
 		problem = _validate_caves()
+	if problem.is_empty():
+		problem = _validate_auctions()
 	if not problem.is_empty():
 		return problem
 	problem = _validate_storylines()
@@ -454,6 +460,41 @@ func _valid_cost(cost: Variant, keys: Array) -> bool:
 			return false
 		total += int(cost[key])
 	return total >= 1
+
+# --- Auctions --------------------------------------------------------------------------------------
+
+func _validate_auctions() -> String:
+	var data := auction_data
+	if not data.get("temper") is Dictionary or data.temper.values().any(func(value: Variant) -> bool: return not (value is float or value is int) or float(value) <= 0.0):
+		return "拍卖的性情系数无效。"
+	if not data.get("wealth") is Array or data.wealth.size() != realms.size():
+		return "拍卖的身家须按境界逐一给出。"
+	for index: int in realms.size():
+		var row: Variant = data.wealth[index]
+		if not row is Array or row.size() != realms[index].stages.size() or row.any(func(value: Variant) -> bool: return not (value is float or value is int) or float(value) <= 0.0):
+			return "拍卖的身家须按小阶段逐一给出：%d" % index
+	if not data.get("spread") is Array or data.spread.size() != 2 or float(data.spread[0]) <= 0.0 or float(data.spread[0]) > float(data.spread[1]):
+		return "拍卖的出价浮动无效。"
+	if not data.get("auctions") is Dictionary or data.auctions.is_empty():
+		return "没有拍卖。"
+	for auction_id: String in data.auctions:
+		var auction: Variant = data.auctions[auction_id]
+		if not auction is Dictionary or not auction.get("name") is String or not auction.get("pool") is Array or not _whole(auction.get("lots")) or int(auction.lots) < 1 or auction.pool.size() < int(auction.lots) or not _whole(auction.get("bidders")) or int(auction.bidders) < 1:
+			return "拍卖配置无效：" + auction_id
+		for entry: Variant in auction.pool:
+			if not entry is Dictionary or [entry.has("item"), entry.has("manual"), entry.has("equipment")].count(true) != 1:
+				return "拍品须是物品、玉简或法宝之一：" + auction_id
+			if entry.has("item") and not items.has(entry.item):
+				return "拍品引用了未知物品：%s" % entry.item
+			for key: String in ["manual", "equipment"]:
+				if entry.has(key) and (not _whole(entry[key]) or int(entry[key]) < 1 or int(entry[key]) > technique_data.tiers.size()):
+					return "拍品品阶无效：" + auction_id
+			for key: String in ["start", "step", "value"]:
+				if not _whole(entry.get(key)) or int(entry[key]) < 1:
+					return "拍品价格无效：" + auction_id
+			if entry.has("count") and (not _whole(entry.count) or int(entry.count) < 1):
+				return "拍品数量无效：" + auction_id
+	return ""
 
 # --- The old cave's rooms --------------------------------------------------------------------------
 
@@ -1213,6 +1254,8 @@ func _validate_effects(effects: Variant) -> String:
 				ok = value in ["epiphany", "remnant"]
 			"recipe":
 				ok = alchemy_data.get("recipes", {}).has(value)
+			"auction":
+				ok = auction_data.get("auctions", {}).has(value)
 		if not ok:
 			return "效果无效：%s" % key
 	return ""

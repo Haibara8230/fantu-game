@@ -22,9 +22,13 @@ static func restore(s, data: Variant) -> bool:
 	var saved_pending: Variant = saved.get("pending_event")
 	var saved_ended: Variant = saved.get("ended")
 	var saved_rng: Variant = saved.get("rng")
-	for part: Variant in [saved_world, saved_player, saved_battle, saved_pending, saved_ended, saved_rng]:
+	# An auction under way (optional: saves before auctions have none).
+	var saved_auction: Variant = saved.get("auction", {})
+	for part: Variant in [saved_world, saved_player, saved_battle, saved_pending, saved_ended, saved_rng, saved_auction]:
 		if not part is Dictionary:
 			return false
+	if not saved_auction.is_empty() and not _valid_auction(s, content, saved_auction):
+		return false
 	if not _whole_nonnegative(saved_world.get("day")) or not saved_world.get("flags") is Dictionary:
 		return false
 	if not saved_world.get("events") is Dictionary or not saved_world.get("people") is Dictionary:
@@ -284,6 +288,7 @@ static func restore(s, data: Variant) -> bool:
 			if foe_stats.has(key):
 				foe_stats[key] = int(foe_stats[key])
 	s.battle = battle
+	s.auction = _normalized_auction(saved_auction)
 	s.pending_event = {} if saved_pending.is_empty() else {"id": saved_pending.id, "day": int(saved_pending.day)}
 	s.ended = {} if saved_ended.is_empty() else {"kind": saved_ended.kind, "day": int(saved_ended.day)}
 	s.chronicle.entries = saved_chronicle
@@ -374,6 +379,35 @@ static func _valid_bonds(s, content, saved_world: Dictionary, day: int) -> Varia
 	if not _whole_nonnegative(period):
 		return null
 	return {"invites": invites, "loans": loans, "visit_period": int(period)}
+
+## An auction under way: a known auction, lots of known items, a lot in range, a whole price, a leader
+## who is the player, nobody or a bidder, and bidders who are people.
+static func _valid_auction(s, content, saved: Dictionary) -> bool:
+	if not content.auction_data.auctions.has(saved.get("id", "")) or not saved.get("lots") is Array or saved.lots.is_empty() or not saved.get("bidders") is Array:
+		return false
+	for lot: Variant in saved.lots:
+		if not lot is Dictionary or content.item(str(lot.get("item", ""))).is_empty():
+			return false
+		for key: String in ["count", "start", "step", "value"]:
+			if not _whole_nonnegative(lot.get(key)):
+				return false
+	if not _whole_nonnegative(saved.get("index")) or int(saved.index) >= saved.lots.size() or not _whole_nonnegative(saved.get("price")):
+		return false
+	if saved.bidders.any(func(person_id: Variant) -> bool: return not person_id is String or not s.is_person(person_id)):
+		return false
+	var leader: Variant = saved.get("leader")
+	return leader is String and (leader in ["", "player"] or leader in saved.bidders)
+
+static func _normalized_auction(saved: Dictionary) -> Dictionary:
+	if saved.is_empty():
+		return {}
+	var result := saved.duplicate(true)
+	result.index = int(result.index)
+	result.price = int(result.price)
+	for lot: Dictionary in result.lots:
+		for key: String in ["count", "start", "step", "value"]:
+			lot[key] = int(lot[key])
+	return result
 
 ## The old cave's rooms (optional: saves before it have none), or null when malformed. Caves and rooms
 ## no longer in the content are dropped.
