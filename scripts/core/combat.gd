@@ -106,6 +106,18 @@ static func _battle_place(s) -> String:
 # battle: orbs (the player's), chain (the element last cast this turn), shield, player_status, pills;
 # foe_orbs, foe_shield, intent [{"art"?, "kind", "name", "min", "max" | "amount"}].
 
+## Lingering effects either side may carry: 灼烧 (burn: damage each turn), 寒蚀 (weaken: deals less),
+## 破甲 (sunder: takes more), 冰封 (slow: draws fewer orbs, or strikes weaker without orbs); each
+## [amount, turns].
+const LINGERING := ["burn", "weaken", "sunder", "slow"]
+## How much weaker a slowed opponent without orbs strikes.
+const SLOW_BLOW := 0.8
+
+## A lingering effect as it is kept: a share (weaken, sunder) or a whole amount, and whole turns, the
+## same whether it came from the data or from a save.
+static func lingering_value(key: String, value: Array) -> Array:
+	return [float(value[0]) if key in ["weaken", "sunder"] else int(value[0]), int(value[1])]
+
 static func rules(s) -> Dictionary:
 	return s.content.rules.duel
 
@@ -259,6 +271,8 @@ static func use_skill(s, skill_id: String) -> String:
 			var factor: float = s.element_multiplier(t) * counter
 			if s.battle.get("player_status", {}).has("weaken"):
 				factor *= 1.0 - float(s.battle.player_status.weaken[0])
+			if s.battle.status.has("sunder"):
+				factor *= 1.0 + float(s.battle.status.sunder[0])
 			var dealt := _strike_foe(s, maxi(1, int(round(float(roll) * factor))))
 			s.combat_events.append(_event({"type": "attack", "actor": "player", "hits": int(t.hits), "amount": dealt, "hp_after": int(s.battle.hp), "counter": "克" if counter > 1.0 else ("被克" if counter < 1.0 else "")}, look))
 			text = s.log_event("skill_attack", {"skill": skill_id, "amount": dealt})
@@ -267,9 +281,9 @@ static func use_skill(s, skill_id: String) -> String:
 				if healed > 0:
 					s.player.hp += healed
 					s.combat_events.append(_event({"type": "heal", "amount": healed, "hp_after": int(s.player.hp)}, look))
-			for status: String in ["burn", "weaken"]:
+			for status: String in LINGERING:
 				if t.has(status):
-					s.battle.status[status] = t[status].duplicate()
+					s.battle.status[status] = lingering_value(status, t[status])
 	if t.has("draw"):
 		_gain(s, _draw(s, int(t.draw), player_weights(s)))
 	if t.has("renew"):
@@ -333,9 +347,10 @@ static func end_turn(s, guarding: bool = false) -> String:
 		released.append(most)
 	if not released.is_empty():
 		s.combat_events.append({"type": "discard", "orbs": released})
-	var weakened: Dictionary = s.battle.get("player_status", {})
-	if weakened.has("weaken"):
-		_count_down(weakened, "weaken")
+	var lingering: Dictionary = s.battle.get("player_status", {})
+	for status: String in ["weaken", "sunder", "slow"]:
+		if lingering.has(status):
+			_count_down(lingering, status)
 	return _enemy_turn(s, guarding)
 
 ## 守御: the turn ends at once, the next blows are halved and one more orb comes next turn.
@@ -428,7 +443,8 @@ static func _foe_prepare(s) -> void:
 		s.battle.intent = [{"kind": "attack", "name": name, "min": int(stats.damage_min), "max": int(stats.damage_max)}]
 		return
 	var orbs: Array = s.battle.get("foe_orbs", [])
-	orbs.append_array(_draw(s, _by_realm(s, "foe_draw", int(foe.get("realm", 0))), _foe_weights(s)))
+	var short := int(s.battle.status.slow[0]) if s.battle.get("status", {}).has("slow") else 0
+	orbs.append_array(_draw(s, maxi(1, _by_realm(s, "foe_draw", int(foe.get("realm", 0))) - short), _foe_weights(s)))
 	while orbs.size() > int(rules(s).hand_least) + 2 * int(foe.get("realm", 0)) + 1:
 		orbs.remove_at(0)
 	s.battle.foe_orbs = orbs
@@ -497,7 +513,9 @@ static func _enemy_turn(s, guarding: bool) -> String:
 				var blow := {"style": _counter_style(s)}
 				if not foe.is_empty():
 					blow = {"style": foe.art, "name": foe.art_name, "vfx": foe.vfx, "tier": int(foe.tier)}
-				if _hurt_player(s, s.combat_rng.randi_range(int(stats.damage_min), int(stats.damage_max)), factor, guarding, blow):
+				# Without orbs to be short of, a slowed opponent strikes weaker.
+				var strength: float = factor * (SLOW_BLOW if status.has("slow") else 1.0)
+				if _hurt_player(s, s.combat_rng.randi_range(int(stats.damage_min), int(stats.damage_max)), strength, guarding, blow):
 					return _lose(s)
 			continue
 		var art: Dictionary = s.content.technique(str(planned.art))
@@ -514,9 +532,9 @@ static func _enemy_turn(s, guarding: bool) -> String:
 				s.battle.foe_shield = int(s.battle.get("foe_shield", 0)) + int(art.shield)
 				s.combat_events.append(_event({"type": "guard", "actor": "enemy", "amount": 0, "shield": int(s.battle.foe_shield)}, look))
 			_:
-				for lingering: String in ["burn", "weaken"]:
+				for lingering: String in LINGERING:
 					if art.has(lingering):
-						s.battle.player_status[lingering] = art[lingering].duplicate()
+						s.battle.player_status[lingering] = lingering_value(lingering, art[lingering])
 				if _hurt_player(s, s.combat_rng.randi_range(int(planned.min), int(planned.max)), factor, guarding, look):
 					return _lose(s)
 	# The player's turn: the shield has done its work, burning bites, new orbs come and the opponent
@@ -530,13 +548,21 @@ static func _enemy_turn(s, guarding: bool) -> String:
 		s.player.hp = int(s.player.hp) - bite
 		s.combat_events.append({"type": "attack", "actor": "enemy", "style": "burn", "name": "灼烧", "vfx": "flame_bolt", "tier": 1, "hits": 1, "amount": bite, "hp_after": int(s.player.hp)})
 		_count_down(burning, "burn")
-	_gain(s, _draw(s, draw_count(s) + (int(rules(s).guard_orbs) if guarding else 0), player_weights(s)))
+	var short := int(burning.slow[0]) if burning.has("slow") else 0
+	_gain(s, _draw(s, maxi(1, draw_count(s) - short + (int(rules(s).guard_orbs) if guarding else 0)), player_weights(s)))
 	_foe_prepare(s)
+	# The opponent's sunder and slow last through its turns.
+	for lingering: String in ["sunder", "slow"]:
+		if status.has(lingering):
+			_count_down(status, lingering)
 	s.changed.emit()
 	return "轮到你出招。"
 
 ## One blow at the player through defense, a weakening, a guard and the shield. True when it fells them.
 static func _hurt_player(s, roll: int, factor: float, guarding: bool, look: Dictionary) -> bool:
+	var sundered: Dictionary = s.battle.get("player_status", {})
+	if sundered.has("sunder"):
+		factor *= 1.0 + float(sundered.sunder[0])
 	var damage := maxi(1, int(round(float(roll) * factor)))
 	if guarding:
 		damage = maxi(1, damage / 2)

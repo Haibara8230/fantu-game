@@ -174,7 +174,7 @@ static func restore(s, data: Variant) -> bool:
 			if not status is Dictionary:
 				return false
 			for key: Variant in status:
-				if not key in ["burn", "weaken"] or not status[key] is Array or status[key].size() != 2:
+				if not key in ["burn", "weaken", "sunder", "slow"] or not status[key] is Array or status[key].size() != 2:
 					return false
 		# Qi orbs (optional: duels saved before them draw a fresh hand when loaded).
 		for orbs_key: String in ["orbs", "foe_orbs"]:
@@ -282,7 +282,7 @@ static func restore(s, data: Variant) -> bool:
 		for status_key: String in ["status", "player_status"]:
 			var lingering: Dictionary = battle.get(status_key, {})
 			for key: String in lingering:
-				lingering[key] = [lingering[key][0] if key == "weaken" else int(lingering[key][0]), int(lingering[key][1])]
+				lingering[key] = s.Combat.lingering_value(key, lingering[key])
 		var foe_stats: Dictionary = battle.get("foe", {})
 		for key: String in ["hp", "damage_min", "damage_max", "tier", "xp", "bonus", "realm"]:
 			if foe_stats.has(key):

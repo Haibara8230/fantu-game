@@ -55,6 +55,8 @@
     "chill": {"name": "寒蚀", "applies": ["bolt", "barrage", "burst"], "effect": {"weaken": [0.25, 2]}, "text": "对手 2 回合内伤害 -25%"},
     "fierce": {"name": "暴烈", "applies": ["bolt", "barrage", "burst"], "effect": {"damage_scale": 1.15}, "text": "伤害 +15%"},
     "echo": {"name": "连环", "applies": ["bolt", "barrage"], "effect": {"hits": 1}, "text": "多一段命中"},
+    "sunder": {"name": "破甲", "applies": ["barrage", "burst"], "effect": {"sunder": [0.2, 2]}, "text": "对手 2 回合内受到的伤害 +20%"},
+    "frost": {"name": "冰封", "applies": ["bolt", "barrage"], "effect": {"slow": [1, 2]}, "text": "对手 2 回合内每回合少抽一颗灵气；不用灵气的对手出手 -20%"},
     "renew": {"name": "回灵", "applies": ["bolt", "barrage", "burst", "mend", "ward"], "effect": {"renew": 1}, "text": "施展后得一颗同属性灵气"},
     "deep": {"name": "深厚", "applies": ["breath", "body", "focus", "affinity"], "effect": {"passive_scale": 1.3}, "text": "被动效果 +30%"},
     "sturdy": {"name": "坚实", "applies": ["breath", "focus", "affinity"], "effect": {"max_hp": 8}, "text": "气血上限 +8"},

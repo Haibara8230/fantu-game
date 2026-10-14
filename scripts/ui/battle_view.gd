@@ -8,7 +8,7 @@ const PlaceView = preload("res://scripts/ui/place_view.gd")
 const Settings = preload("res://scripts/ui/settings.gd")
 const RECORD_LINES := 6
 const DOCK_HEIGHT := 178.0
-const STATUS_NAMES := {"burn": "灼烧", "weaken": "寒蚀"}
+const STATUS_NAMES := {"burn": "灼烧", "weaken": "寒蚀", "sunder": "破甲", "slow": "冰封"}
 const FOE_COLOR := Color("#f0b49a")
 
 static func render(ui) -> void:
@@ -224,7 +224,14 @@ static func _effects_text(shield: int, status: Dictionary) -> String:
 	for key: String in STATUS_NAMES:
 		if status.has(key):
 			var value: float = float(status[key][0])
-			var amount := ("-%d%% 伤害" % int(round(value * 100))) if key == "weaken" else str(int(value))
+			var amount := str(int(value))
+			match key:
+				"weaken":
+					amount = "-%d%% 伤害" % int(round(value * 100))
+				"sunder":
+					amount = "+%d%% 受伤" % int(round(value * 100))
+				"slow":
+					amount = "少抽 %d 颗" % int(value)
 			parts.append("%s %s（余 %d 回合）" % [STATUS_NAMES[key], amount, int(status[key][1])])
 	return "  ·  ".join(parts)
 

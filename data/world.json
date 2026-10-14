@@ -215,9 +215,10 @@
       "name": "寒霜刺",
       "element": "water",
       "cost": {"water": 2, "any": 1},
-      "description": "造成 24–30 点伤害。",
+      "description": "造成 24–30 点伤害，寒气冰封对手 2 回合：每回合少抽一颗灵气（不用灵气的对手出手 -20%）。",
       "damage_min": 24,
       "damage_max": 30,
+      "slow": [1, 2],
       "kind": "attack",
       "vfx": "ice_lance"
     },
@@ -244,9 +245,10 @@
       "name": "地脉冲",
       "element": "earth",
       "cost": {"earth": 3},
-      "description": "造成 27–33 点伤害。",
+      "description": "造成 27–33 点伤害，地脉震裂对手护体 2 回合：受到的伤害 +20%。",
       "damage_min": 27,
       "damage_max": 33,
+      "sunder": [0.2, 2],
       "kind": "attack",
       "vfx": "rock_spire"
     },

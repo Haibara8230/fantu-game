@@ -74,8 +74,9 @@ static func technique(content, id: String) -> Dictionary:
 				result[key] = effect[key]
 		if effect.has("burn"):
 			result.burn = [int(round(float(effect.burn[0]) * power)), int(effect.burn[1])]
-		if effect.has("weaken"):
-			result.weaken = effect.weaken.duplicate()
+		for lingering: String in ["weaken", "sunder", "slow"]:
+			if effect.has(lingering):
+				result[lingering] = effect[lingering].duplicate()
 	else:
 		var passive := {}
 		var scale := power * float(effect.get("passive_scale", 1.0))
@@ -105,6 +106,9 @@ static func _handwritten(content, id: String) -> Dictionary:
 		result.heal = int(skill.heal)
 	if skill.has("shield"):
 		result.shield = int(skill.shield)
+	for lingering: String in ["burn", "weaken", "sunder", "slow"]:
+		if skill.has(lingering):
+			result[lingering] = skill[lingering].duplicate()
 	return result
 
 ## An archetype's cost for an element: "element" becomes the element; 省灵 drops an "any" orb first,

@@ -211,6 +211,28 @@ func _effects() -> void:
 	chill.use_skill("t:bolt:water:2:chill:0")
 	chill.end_turn()
 	check(chill.battle.status.has("weaken") and int(chill.battle.status.weaken[1]) == 1, "a chilled opponent is weakened for the next turns")
+	# 破甲: the sundered take more, for two of their turns.
+	var sunder := _fight("t:burst:fire:2:sunder:0")
+	sunder.use_skill("t:burst:fire:2:sunder:0")
+	check(sunder.battle.status.has("sunder") and int(sunder.battle.status.sunder[1]) == 2, "a sundering art lays 破甲 on the opponent")
+	sunder.end_turn()
+	check(int(sunder.battle.status.sunder[1]) == 1, "破甲 counts down at the opponent's turn")
+	# 冰封: an opponent without orbs strikes weaker; a slowed player draws one orb fewer.
+	var frost := _fight("t:bolt:water:2:frost:0")
+	frost.use_skill("t:bolt:water:2:frost:0")
+	check(frost.battle.status.has("slow"), "a freezing art lays 冰封 on the opponent")
+	var slowed := _fight("t:bolt:metal:1::0")
+	slowed.battle.orbs = []
+	slowed.battle.player_status["slow"] = [1, 2]
+	slowed.end_turn()
+	check(slowed.battle.is_empty() or slowed.battle.orbs.size() == slowed.Combat.draw_count(slowed) - 1, "a slowed player draws one orb fewer")
+	var hit := _fight("t:bolt:metal:1::0")
+	hit.battle.player_status["sunder"] = [0.5, 2]
+	hit.battle.orbs = []
+	var hp_before_hit := int(hit.player.hp)
+	hit.end_turn()
+	var taken := hp_before_hit - int(hit.player.hp)
+	check(taken >= int(round(6 * (1.0 - hit.defense()) * 1.5)) - 1, "a sundered player takes more (%d)" % taken)
 	var drain := _fight("t:bolt:wood:2:drain:0")
 	drain.player.hp = 30
 	drain.use_skill("t:bolt:wood:2:drain:0")
