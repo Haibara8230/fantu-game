@@ -51,6 +51,7 @@
   "auction_close": "{auction_name}落幕。",
   "cave_enter": "在{cave_name}探入{room_name}，费时 {duration}。",
   "cave_trap_seen": "神识扫过，识破了{room_name}里的{trap}，从旁绕了过去。",
+  "cave_trap_grazed": "{room_name}里的{trap}骤然发动，你拼着最后一口气躲了过去。",
   "cave_trap_sprung": "{room_name}里的{trap}骤然发动，你受伤 {amount} 点气血。",
   "cave_loot": "在{room_name}找到{loot_text}。",
   "cave_stones": "在{room_name}拾得灵石 {stones}。",

@@ -125,7 +125,8 @@ static func enter(s, cave_id: String, room_id: String) -> String:
 			var hurt: int = s.world_rng.randi_range(int(trap.damage[0]), int(trap.damage[1]))
 			hurt = mini(hurt, int(s.player.hp) - 1)
 			s.player.hp = int(s.player.hp) - hurt
-			texts.append(s.log_event("cave_trap_sprung", args.merged({"trap": name, "amount": hurt})))
+			# One already hanging by a thread is spared the telling of a wound of nothing.
+			texts.append(s.log_event("cave_trap_sprung" if hurt > 0 else "cave_trap_grazed", args.merged({"trap": name, "amount": hurt})))
 	if guarded(s, cave_id, room_id):
 		texts.append(s.begin_battle(str(target.guardian), "event"))
 	elif str(target.get("fortune", "")) == "remnant" and _remnant_waits(s, cave_id):
