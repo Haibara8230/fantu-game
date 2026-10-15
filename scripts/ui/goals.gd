@@ -4,6 +4,7 @@ extends RefCounted
 ## goal is required. The texts live in data/goals.json in order of importance; when each applies and
 ## the numbers in it are worked out here.
 const Calendar = preload("res://scripts/core/calendar.gd")
+const Sources = preload("res://scripts/core/sources.gd")
 const GOALS_PATH := "res://data/goals.json"
 const SHOWN := 3
 # The goals whose situation applies() knows; every goal in the data must be one of them.
@@ -136,12 +137,12 @@ static func values(session, goal_id: String) -> Dictionary:
 			var opening := _next_opening(session, "five_sects_entry")
 			return {"date": Calendar.date_text(opening), "until": _span(opening - day)}
 		"foundation_pill":
-			return {"pill_price": _price(session, "foundation_pill")}
+			return {"pill_price": _price(session, "foundation_pill"), "sources": _sources(session, "foundation_pill")}
 		"foundation_breach":
 			return {"odds": int(session.breakthrough_odds(session.breakthrough_plan()).total)}
 		"core_breach", "core_pill":
 			var pill: String = session.Breakthrough.pill_of(session)
-			return {"odds": int(session.breakthrough_odds(session.breakthrough_plan()).total), "pill_name": session.content.item(pill).name, "pill_price": _price(session, pill), "next_realm": session.content.realm(int(player.realm) + 1).name}
+			return {"odds": int(session.breakthrough_odds(session.breakthrough_plan()).total), "pill_name": session.content.item(pill).name, "pill_price": _price(session, pill), "sources": _sources(session, pill), "next_realm": session.content.realm(int(player.realm) + 1).name}
 		"promotion", "rank":
 			var next: Dictionary = session.next_sect_rank()
 			return {"rank_name": next.name, "merit": int(player.get("merit", 0)), "merit_needed": int(next.merit), "stage_name": session.content.realm_title(int(next.stage[0]), int(next.stage[1]))}
@@ -202,6 +203,11 @@ static func _next_stage(session) -> Dictionary:
 	var stages: Array = session.content.realm(int(session.player.realm)).stages
 	var next := int(session.player.stage) + 1
 	return stages[next] if next < stages.size() else {}
+
+## Where the player knows the item can be had, or a word that they know of nowhere yet.
+static func _sources(session, item_id: String) -> String:
+	var known := Sources.line(session, item_id)
+	return known if not known.is_empty() else "眼下还不知何处可得，不妨到茶馆打听。"
 
 static func _price(session, item_id: String) -> int:
 	for line: Dictionary in session.content.locations.market.get("shop", []):

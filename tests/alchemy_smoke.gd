@@ -3,6 +3,7 @@ extends SceneTree
 ## pills are asked for, toxin, the field and its grades, saves and their migration, and static checks.
 const Session = preload("res://scripts/core/session.gd")
 const Content = preload("res://scripts/core/content.gd")
+const Sources = preload("res://scripts/core/sources.gd")
 var checks := 0
 var failures := 0
 
@@ -24,6 +25,7 @@ func _initialize() -> void:
 	_fine_pills()
 	_field()
 	_forging()
+	_sources()
 	_saves()
 	_static_checks()
 	print("ALCHEMY: %d checks, %d failures" % [checks, failures])
@@ -34,6 +36,26 @@ func _game() -> Session:
 	game.encounters_enabled = false
 	game.new_game("丹师", 11, ["metal", "wood", "fire"])
 	return game
+
+## Where a breakthrough pill is known to be had, for the current goals (docs/WORLD_EXPANSION.md 7.6,
+## item 41): the market's shop, the sect's exchange with its rank, and a known recipe with the herbs in
+## hand against those it asks.
+func _sources() -> void:
+	var game := _game()
+	var found := Sources.of(game, "foundation_pill")
+	var kinds: Array = found.map(func(source: Dictionary) -> String: return source.kind)
+	check(kinds == ["shop", "exchange"] and str(found[0].text).contains("120 灵石") and not bool(found[1].ready) and str(found[1].text).contains("外门精英"), "a 筑基丹 is sold at the market and exchanged by the elite (%s)" % [found])
+	game.Alchemy.learn(game, "foundation")
+	game.set_item_count("lingzhi", 1)
+	var brewing: Dictionary = Sources.of(game, "foundation_pill").back()
+	check(brewing.kind == "recipe" and str(brewing.text).contains("灵芝 1/1") and str(brewing.text).contains("回春草 0/3") and not bool(brewing.ready), "a known recipe counts the herbs in hand")
+	for herb: String in game.Alchemy.recipe(game, "foundation").main:
+		game.set_item_count(herb, 5)
+	check(bool(Sources.of(game, "foundation_pill").back().ready), "and is ready once every herb is there")
+	var core_line := Sources.line(game, "ningyuan_dan")
+	check(core_line.contains("900 灵石") and core_line.contains("真传弟子"), "a 凝元丹 at the market, or for a 真传 at the exchange (%s)" % core_line)
+	check(Sources.line(game, "huashen_dan").contains("12000 灵石") and not Sources.line(game, "huashen_dan").contains("贡献"), "the small sect exchanges no 化神丹")
+	check(Sources.line(game, "jade_han").is_empty(), "nothing known, nothing told")
 
 ## 炼器: three of one material at the market's 器铺 make a piece at its tier, of the chosen base and
 ## element; its affixes follow the world and the count; a wrong material or too few are refused.
