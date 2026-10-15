@@ -179,6 +179,21 @@ static func _spot_action(ui, grid: GridContainer, action: String) -> void:
 			_action(ui, grid, "翻找石室  ·  " + ui.duration("search_ruin"), "search_ruin", "或得灵石、灵草，偶有丹药；搜过后需隔些时日")
 		"study", "explore_cave":
 			pass
+		"arena":
+			var stage: Dictionary = session.Arena.stage(session)
+			var current: Dictionary = session.Arena.run(session)
+			var reason: String = session.Arena.block(session)
+			var prizes: Array[String] = []
+			for prize: Dictionary in stage.get("prizes", []):
+				prizes.append("%d 连胜" % int(prize.streak))
+			var about := "每胜一场得 %d × 连胜数的灵石；%s另有彩头。败了不伤和气，随时可下台。最高连胜 %d。" % [int(stage.purse), "、".join(prizes), session.Arena.best(session)]
+			if current.is_empty():
+				var enter: Button = _timed(ui, grid, "登台 · %s（彩头 %d 灵石）" % [stage.name, int(stage.fee)], session.arena_fight, reason if not reason.is_empty() else about)
+				enter.disabled = not reason.is_empty()
+			else:
+				var next: Button = _timed(ui, grid, "迎战下一位 · 已连胜 %d" % int(current.streak), session.arena_fight, reason if not reason.is_empty() else about)
+				next.disabled = not reason.is_empty()
+				_timed(ui, grid, "见好就收，下台", session.arena_leave, "保住所得，结束这一轮")
 		"hunt":
 			var hunting: Dictionary = session.content.locations[session.player.location].hunt
 			var beasts: Array[String] = []

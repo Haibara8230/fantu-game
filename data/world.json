@@ -13,6 +13,7 @@
     "sect": {
       "name": "青云山",
       "subtitle": "山中无甲子，修行亦有时。",
+      "arena": {"name": "演武坪连胜榜", "kinds": ["disciple"], "fee": 0, "purse": 6, "prizes": [{"streak": 3, "stones": 40}, {"streak": 5, "manual": 2}, {"streak": 8, "equipment": 2}]},
       "description": "青云剑宗外门所在。云雾绕着峰腰，钟声每日三响。",
       "terrain": "mountain",
       "map": [0.24, 0.24],
@@ -20,7 +21,7 @@
         {"id": "chamber", "tag": [0.32, 0.29], "name": "静室", "description": "外门弟子的静修之所，灵气清润，可闭关、休整与突破；角落里有一口公用丹炉，也可开炉炼丹。", "actions": ["cultivate", "rest", "breakthrough", "alchemy"]},
         {"id": "office", "tag": [0.53, 0.35], "name": "执事堂", "description": "执事们在这里张贴宗门的委托，按时完成可得酬劳与贡献；月俸、晋升、兑换与捐献也在这里办理。", "actions": ["commissions", "sect"], "requires_flag": "intro_done"},
         {"id": "abode", "tag": [0.3, 0.12], "name": "洞府", "description": "内门弟子各有一处洞府，石门后是静修的石室，门外辟出一方灵田，引了山泉浇灌。", "actions": ["field"], "requires_rank": "inner"},
-        {"id": "arena", "tag": [0.42, 0.5], "name": "演武坪", "description": "青石铺就的演武坪，同门常在此切磋。十年一度的外门小比也在这里报名、比斗。", "actions": ["battle:disciple", "tournament"]},
+        {"id": "arena", "tag": [0.42, 0.5], "name": "演武坪", "description": "青石铺就的演武坪，同门常在此切磋。十年一度的外门小比也在这里报名、比斗；平日有人摆擂，连胜榜挂在坪边。", "actions": ["battle:disciple", "tournament", "arena"]},
         {"id": "hall", "tag": [0.25, 0.42], "name": "传功堂", "description": "堂中供着本门青云剑诀的传承玉简，弟子可在此研习；执事也传授几门入门功法，参悟需要时日。他派神通不在此传授。", "actions": ["study", "teach"], "requires_flag": "intro_done", "teach": ["t:breath:wood:1::0", "t:body:earth:1::5", "t:focus:water:1::10", "t:bolt:metal:1::15"]}
       ]
     },
@@ -170,10 +171,12 @@
       "terrain": "ridge",
       "map": [0.36, 0.42],
       "hidden_until": "tiannan_known",
+      "arena": {"name": "赤枫岭斗法台", "kinds": ["chixiao_disciple", "changqing_disciple", "canglan_disciple", "xuanyue_disciple", "southern_wanderer"], "fee": 20, "purse": 15, "prizes": [{"streak": 3, "stones": 80}, {"streak": 5, "manual": 3}, {"streak": 8, "equipment": 3}, {"streak": 10, "stones": 400}]},
       "gather": {"picks": [1, 3], "table": [{"item": "chiyan_flower", "weight": 52}, {"item": "huichun_grass", "weight": 30}, {"item": "ninglu_grass", "weight": 15}, {"item": "dihuo_jing", "weight": 3}]},
       "hunt": {"days": 2, "table": [{"enemy": "huo_ya", "weight": 3}, {"enemy": "yanjia_xi", "weight": 2}, {"enemy": "wolf_pack", "weight": 1}]},
       "spots": [
         {"id": "maples", "tag": [0.45, 0.5], "name": "赤枫林", "description": "火红的枫林下，赤炎花一丛丛开在温热的石缝里，运气好时还能在石缝里拾到一颗地火精；林间火鸦成群，岩缝里卧着岩甲蜥。", "actions": ["gather", "hunt"]},
+        {"id": "stage", "tag": [0.3, 0.34], "name": "斗法台", "description": "南明坊市不许斗法，各宗弟子与散修便在坊外赤枫岭上搭了这座斗法台。登台交彩头，连胜越多，台主给的越多；败了不伤和气。", "actions": ["arena"]},
         {"id": "cavern", "tag": [0.72, 0.36], "name": "地火熔窟", "description": "枫林深处的山壁裂开一道口子，热风一阵阵涌出来。据说里头连着火脉，还盘踞着一头火蜥。", "actions": ["explore_cave"]}
       ]
     },

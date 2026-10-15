@@ -73,6 +73,13 @@ static func restore(s, data: Variant) -> bool:
 	var wake: Variant = _valid_wake(content, saved_player.get("wake", []))
 	if wake == null:
 		return false
+	# A run at a 擂台 and the best streaks (optional).
+	var run: Variant = saved_player.get("arena", {})
+	if not run is Dictionary or (not run.is_empty() and (not content.locations.has(run.get("place", "")) or not _whole_nonnegative(run.get("streak")) or not run.get("fought") is Array or run.fought.any(func(person_id: Variant) -> bool: return not person_id is String))):
+		return false
+	var bests: Variant = saved_player.get("arena_best", {})
+	if not bests is Dictionary or bests.keys().any(func(place: Variant) -> bool: return not content.locations.has(place) or not _whole_nonnegative(bests[place])):
+		return false
 	# Dwellings let for a term (optional: journeys before leases hold none).
 	var leases: Variant = saved_player.get("leases", {})
 	if not leases is Dictionary or leases.size() > 16 or leases.keys().any(func(flag: Variant) -> bool: return not flag in content.world_flags or not _whole_nonnegative(leases[flag])):
@@ -183,7 +190,7 @@ static func restore(s, data: Variant) -> bool:
 		for skill_id: Variant in saved_battle.cooldowns:
 			if not skill_id is String or content.technique(skill_id).is_empty() or not _whole_nonnegative(saved_battle.cooldowns[skill_id]):
 				return false
-		if saved_battle.has("context") and not saved_battle.context in ["event", "spar", "tournament", "summit"]:
+		if saved_battle.has("context") and not saved_battle.context in ["event", "spar", "tournament", "summit", "arena"]:
 			return false
 		for status_key: String in ["status", "player_status"]:
 			var status: Variant = saved_battle.get(status_key, {})
@@ -282,6 +289,12 @@ static func restore(s, data: Variant) -> bool:
 	player.qi = mini(int(player.qi), int(caps.max_qi))
 	player.warned_for = int(warned)
 	player["wake"] = wake
+	if not run.is_empty():
+		player["arena"] = {"place": str(run.place), "streak": int(run.streak), "fought": run.fought.duplicate()}
+	var best_streaks := {}
+	for place: String in bests:
+		best_streaks[place] = int(bests[place])
+	player["arena_best"] = best_streaks
 	var terms := {}
 	for flag: String in leases:
 		terms[flag] = int(leases[flag])

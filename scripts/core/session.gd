@@ -23,6 +23,7 @@ const Auctions = preload("res://scripts/core/auctions.gd")
 const Summit = preload("res://scripts/core/summit.gd")
 const Forge = preload("res://scripts/core/forge.gd")
 const Leases = preload("res://scripts/core/leases.gd")
+const Arena = preload("res://scripts/core/arena.gd")
 const Breakthrough = preload("res://scripts/core/breakthrough.gd")
 const Fortune = preload("res://scripts/core/fortune.gd")
 const Sect = preload("res://scripts/core/sect.gd")
@@ -104,7 +105,7 @@ func new_game(character_name: String = "无名", seed_value: int = -1, roots: Ar
 	populate()
 	player = {
 		"name": chosen_name, "birth_day": -int(content.rules.starting_age) * Calendar.DAYS_PER_YEAR,
-		"realm": 0, "stage": 0, "xp": 0, "hp": 0, "qi": 0, "cultivation_carry": 0, "warned_for": -1, "wake": [], "leases": {}, "roots": roots.duplicate(),
+		"realm": 0, "stage": 0, "xp": 0, "hp": 0, "qi": 0, "cultivation_carry": 0, "warned_for": -1, "wake": [], "leases": {}, "arena_best": {}, "roots": roots.duplicate(),
 		"fatigue": 0, "fatigue_day": 0, "insight": 0, "mind": 0,
 		"stones": int(content.rules.starting_stones), "items": {},
 		"journey": {}, "cooldowns": {},
@@ -1176,6 +1177,13 @@ func take_duty(duty_id: String) -> String:
 
 func forge_item(plan: Dictionary) -> String:
 	return Forge.forge(self, plan)
+
+## Takes the stage (or faces the next challenger) at a place's 擂台 (arena.gd).
+func arena_fight() -> String:
+	return Arena.fight(self)
+
+func arena_leave() -> String:
+	return Arena.leave(self)
 
 ## Takes the dwelling let out here for a term (leases.gd).
 func take_lease() -> String:

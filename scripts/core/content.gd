@@ -52,7 +52,7 @@ const FAVOR_MAX := 200
 const FAVOR_STAGES := [[0, "初识"], [40, "相熟"], [80, "友好"], [140, "信赖"], [200, "亲密"]]
 const ATTITUDES := {"friendly": "友善", "neutral": "中立", "hostile": "敌意"}
 const BUILT_IN_INTERACTIONS := ["talk", "gift", "help", "consult", "teach", "invite_spar", "invite_help", "companion", "disciple", "instruct", "sworn"]
-const PLAIN_ACTIONS := ["cultivate", "rest", "breakthrough", "study", "teach", "sell", "shop", "gather", "inn_rest", "search_ruin", "explore_cave", "forge", "ascend", "inquire", "commissions", "sect", "alchemy", "field", "tournament", "lease", "hunt"]
+const PLAIN_ACTIONS := ["cultivate", "rest", "breakthrough", "study", "teach", "sell", "shop", "gather", "inn_rest", "search_ruin", "explore_cave", "forge", "ascend", "inquire", "commissions", "sect", "alchemy", "field", "tournament", "lease", "hunt", "arena"]
 const ITEM_CATEGORIES := {"herb": "灵草", "pill": "丹药", "treasure": "天材地宝", "manual": "玉简", "equipment": "宝物", "material": "材料", "recipe": "丹方", "tool": "器具", "quest": "信物"}
 # Milestones friends send word of, and the deeds the session counts besides victories ("win:<enemy>").
 const CONGRATS := ["breakthrough", "core", "nascent", "deity", "serpent", "champion", "summit", "calamity", "promotion"]
@@ -1143,6 +1143,15 @@ func _validate_map() -> String:
 					return "出赁住处的地点缺少租约配置：" + location_id
 				if action == "hunt" and not location.has("hunt"):
 					return "可历练的地点缺少妖兽表：" + location_id
+				if action == "arena" and not location.has("arena"):
+					return "设擂的地点缺少擂台配置：" + location_id
+		if location.has("arena"):
+			var stage: Variant = location.arena
+			if not stage is Dictionary or not stage.get("name") is String or not stage.get("kinds") is Array or stage.kinds.is_empty() or stage.kinds.any(func(kind: Variant) -> bool: return not population_data.kinds.has(kind)) or not _whole(stage.get("fee")) or not _whole(stage.get("purse")) or int(stage.purse) < 1:
+				return "擂台配置无效：" + location_id
+			for prize: Variant in stage.get("prizes", []):
+				if not prize is Dictionary or not _whole(prize.get("streak")) or int(prize.streak) < 1 or (prize.has("manual") and (not _whole(prize.manual) or int(prize.manual) < 1 or int(prize.manual) > technique_data.tiers.size())) or (prize.has("equipment") and (not _whole(prize.equipment) or int(prize.equipment) < 1 or int(prize.equipment) > equipment_data.tiers.size())) or (prize.has("stones") and not _whole(prize.stones)) or not (prize.has("manual") or prize.has("equipment") or prize.has("stones")):
+					return "擂台彩头无效：" + location_id
 		if location.has("hunt"):
 			var hunting: Variant = location.hunt
 			if not hunting is Dictionary or not _whole(hunting.get("days")) or int(hunting.days) < 1 or not hunting.get("table") is Array or hunting.table.is_empty():

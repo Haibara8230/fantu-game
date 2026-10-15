@@ -470,6 +470,10 @@ static func flee(s) -> String:
 		return "当前无需撤退。"
 	if s.battle.get("player_status", {}).has("entangle"):
 		return "被缠住了，脱身不得；先撑过这几回合，或打倒对手。"
+	# Stepping off the stage mid-bout is conceding it.
+	if s.battle.get("context", "") == "arena":
+		s.combat_events.append({"type": "end", "result": "flee"})
+		return s.Arena.over(s, false)
 	s.combat_events.append({"type": "end", "result": "flee"})
 	var days := _recovery_days(s, "flee")
 	s.battle.clear()
@@ -789,6 +793,8 @@ static func _hurt_player(s, roll: int, factor: float, guarding: bool, look: Dict
 
 static func _lose(s) -> String:
 	s.combat_events.append({"type": "end", "result": "lose"})
+	if s.battle.get("context", "") == "arena":
+		return s.Arena.over(s, false)
 	if s.battle.get("context", "") == "spar":
 		return _spar_over(s, false)
 	if s.battle.get("context", "") == "tournament":
@@ -929,6 +935,8 @@ static func _counter_style(s) -> String:
 
 static func _win(s) -> String:
 	s.combat_events.append({"type": "end", "result": "win"})
+	if s.battle.get("context", "") == "arena":
+		return s.Arena.over(s, true)
 	if s.battle.get("context", "") == "spar":
 		return _spar_over(s, true)
 	if s.battle.get("context", "") == "tournament":

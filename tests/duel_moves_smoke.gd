@@ -27,6 +27,7 @@ func _initialize() -> void:
 	_saves()
 	_hunts()
 	_roads()
+	_arenas()
 	print("DUEL MOVES: %d checks, %d failures" % [checks, failures])
 	quit(0 if failures == 0 else 1)
 
@@ -217,6 +218,50 @@ func _roads() -> void:
 	gate.content.rules.encounter_chance = [1.0, 1.0, 1.0, 1.0]
 	gate.travel("nanming")
 	check(gate.player.location == "nanming" and gate.pending_event.is_empty() and gate.battle.is_empty(), "nothing waylays the 传送阵")
+
+## 擂台 (part two, B3): 演武坪's 连胜榜 and 赤枫岭's 斗法台; challengers are local people, each no weaker
+## than the last and never the same twice; the purse grows with the streak, some streaks bring a prize;
+## a loss, fleeing or stepping down ends the run without penalty, and the best streak is kept.
+func _arenas() -> void:
+	var game := Session.new()
+	game.encounters_enabled = false
+	game.new_game("打擂", 56, ["metal", "wood", "fire"])
+	game.player.location = "sect"
+	check(game.available_here("arena") and game.Arena.block(game).is_empty(), "the 演武坪 keeps a 连胜榜")
+	var stones := int(game.player.stones)
+	var strengths: Array[int] = []
+	for bout: int in 3:
+		game.arena_fight()
+		check(game.battle.get("context", "") == "arena" and str(game.life_by_id(str(game.battle.npc)).kind) == "disciple", "a fellow outer disciple comes up (bout %d)" % (bout + 1))
+		strengths.append(int(game.person(str(game.battle.npc)).realm) * 10 + int(game.person(str(game.battle.npc)).stage))
+		game.battle.hp = 1
+		game.Combat._win(game)
+	check(int(game.Arena.run(game).streak) == 3 and game.Arena.run(game).fought.size() == 3 and strengths[1] >= strengths[0] and strengths[2] >= strengths[1], "three in a row, none met twice, each no weaker (%s)" % [strengths])
+	check(int(game.player.stones) == stones + 6 + 12 + 18 + 40, "the purse grows with the streak, and the third win brings its prize")
+	game.arena_fight()
+	game.flee()
+	check(game.Arena.run(game).is_empty() and game.battle.is_empty() and game.Arena.best(game) == 3, "stepping off mid-bout concedes it; the best streak is kept")
+	game.arena_fight()
+	game.battle.hp = 1
+	game.Combat._win(game)
+	var kept := Session.new()
+	check(kept.restore(JSON.parse_string(JSON.stringify(game.snapshot()))) and int(kept.Arena.run(kept).streak) == 1 and kept.Arena.best(kept) == 3, "a run and the best streak survive a save")
+	game.arena_leave()
+	check(game.Arena.run(game).is_empty() and game.journal_lines().back().contains("下了擂台"), "stepping down keeps what was won")
+	var south := Session.new()
+	south.encounters_enabled = false
+	south.new_game("打擂", 57, ["metal", "wood", "fire"])
+	south.player.realm = 1
+	south.refresh_realm_stats()
+	south.player.stones = 100
+	south.world.flags["tiannan_known"] = true
+	south.player.location = "chifeng"
+	south.arena_fight()
+	var kinds: Array = south.content.locations.chifeng.arena.kinds
+	check(int(south.player.stones) == 80 and str(south.life_by_id(str(south.battle.npc)).kind) in kinds, "赤枫岭's 斗法台 takes twenty stones and sends up 天南's own")
+	south.battle.hp = 0
+	south.Combat._lose(south)
+	check(south.Arena.run(south).is_empty() and int(south.player.hp) >= 1, "a loss ends the run, nothing more")
 
 func _saves() -> void:
 	var game := _duel("wolf", "pounce")
