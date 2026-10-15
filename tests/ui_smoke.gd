@@ -324,6 +324,13 @@ func _run() -> void:
 	main.run(func() -> String: return main.session.start_battle("wolf"))
 	check(_screen("Label").contains("教学 · 斗法  1 / 3") and _screen("Label").contains("按 1 / 2 / 3 / 4 或点按钮") and _button("[1] ") != null, "the first duel explains the controls with the bound keys")
 	check(_button("结束回合") != null and _button("结束回合").has_theme_stylebox_override("normal") and not _button("守御").has_theme_stylebox_override("normal"), "and points at the button it speaks of")
+	for frame: int in 3:
+		await process_frame
+	var bubble: Rect2 = main.tip_card.get_global_rect() if main.tip_card != null else Rect2()
+	var aimed: Rect2 = _button("结束回合").get_global_rect()
+	var beside := bubble.end.y <= aimed.position.y + 1.0 or bubble.position.y >= aimed.end.y - 1.0
+	check(main.tip_card != null and main.tip_card.top_level and beside and bubble.position.y - aimed.end.y < 40.0 and aimed.position.y - bubble.end.y < 40.0, "the card sits as a bubble just beside that button, not over it (%s by %s)" % [bubble, aimed])
+	check(main.get_viewport_rect().encloses(bubble), "and stays on screen (%s in %s)" % [bubble, main.get_viewport_rect()])
 	main.set_guide_enabled(false)
 	check(main.current_screen() == "full" and not main.hud_left.visible and main.window.get_global_rect().size.is_equal_approx(main.get_global_rect().size) and _texts(main.center, "Label").contains("斗 法  ·  第 1 回合") and _button("守御") != null and _button("撤离") != null, "the duel takes the whole screen, with its dock along the bottom")
 	check(_button("速战") != null, "the dock offers to finish the duel quickly")

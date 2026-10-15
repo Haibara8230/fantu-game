@@ -1,5 +1,6 @@
 extends RefCounted
-## Teaching cards: one card at a time at the top of the centre panel, the first time its situation comes
+## Teaching cards: one card at a time at the top of the centre panel (or as a bubble beside the button it
+## speaks of, when that button is on screen), the first time its situation comes
 ## up in a journey (the first retreat, the market, a duel, the mind falling short, the first 传音...).
 ## A card may have a few pages. Cards live in data/guide.json in the order they are offered; when each
 ## applies is decided here. Which cards were dismissed is kept in the journey (player.taught), so every
@@ -11,6 +12,12 @@ const Settings = preload("res://scripts/ui/settings.gd")
 # The cards whose situation applies() knows; every card in the data must be one of them.
 const TIP_IDS := ["intro", "retreat", "people", "map", "battle", "event", "gather", "trade", "commissions", "lineage", "mind", "fatigue", "bottleneck", "stories", "letters", "breakthrough", "sect", "bonds", "fortune", "talents", "arts", "alchemy", "field", "cave", "sense", "auction", "forge"]
 static var _tips: Array = []
+# A card beside its button: its width, the gap to the button and the margin kept from the screen's edge.
+const BUBBLE_WIDTH := 460.0
+const BUBBLE_GAP := 14.0
+const BUBBLE_MARGIN := 12.0
+# Room left beside the words for the card's paddings and its page buttons.
+const BUBBLE_BUTTONS := 150.0
 
 static func tips() -> Array:
 	if _tips.is_empty():
@@ -105,11 +112,53 @@ static func highlight(ui, where: String) -> void:
 		var breathe := button.create_tween().set_loops()
 		breathe.tween_property(button, "modulate", Color(1.2, 1.12, 0.9), 0.7)
 		breathe.tween_property(button, "modulate", Color.WHITE, 0.7)
+		_attach(ui, button)
 		return
+
+## Turns the card on screen into a bubble beside the button it speaks of: it leaves the flow of its
+## panel (top_level, so containers no longer place it) and sits below the button, or above it when
+## there is no room, with a small pointer. A card whose button is not on screen stays where it is.
+static func _attach(ui, button: Button) -> void:
+	var card: Control = ui.tip_card
+	if card == null or not is_instance_valid(card) or not card.is_inside_tree():
+		return
+	card.top_level = true
+	card.custom_minimum_size.x = BUBBLE_WIDTH
+	# Wrapped words out of a container's flow need a width of their own, or they wrap at every character.
+	for words: Label in card.find_children("*", "Label", true, false):
+		if words.autowrap_mode != TextServer.AUTOWRAP_OFF:
+			words.custom_minimum_size.x = BUBBLE_WIDTH - BUBBLE_BUTTONS
+	card.reset_size()
+	var pointer := Polygon2D.new()
+	pointer.color = ui.GOLD
+	card.add_child(pointer)
+	var place := func() -> void:
+		if not is_instance_valid(button) or not button.is_inside_tree():
+			return
+		# A control never shrinks by itself: once the words have wrapped, fit the card to them (resized
+		# then places it again).
+		var fit := Vector2(maxf(BUBBLE_WIDTH, card.get_combined_minimum_size().x), card.get_combined_minimum_size().y)
+		if not card.size.is_equal_approx(fit):
+			card.size = fit
+			return
+		var target := button.get_global_rect()
+		var view: Rect2 = card.get_viewport_rect()
+		var below := target.end.y + BUBBLE_GAP + card.size.y <= view.end.y - BUBBLE_MARGIN
+		var x := clampf(target.get_center().x - card.size.x / 2.0, view.position.x + BUBBLE_MARGIN, view.end.x - card.size.x - BUBBLE_MARGIN)
+		var y := target.end.y + BUBBLE_GAP if below else target.position.y - BUBBLE_GAP - card.size.y
+		card.global_position = Vector2(x, y)
+		var tip_x := clampf(target.get_center().x - x, 16.0, card.size.x - 16.0)
+		var edge := 0.0 if below else card.size.y
+		var reach := -BUBBLE_GAP + 2.0 if below else BUBBLE_GAP - 2.0
+		pointer.polygon = PackedVector2Array([Vector2(tip_x - 9.0, edge), Vector2(tip_x + 9.0, edge), Vector2(tip_x, edge + reach)])
+	# The card's height is known once its text has wrapped to the new width.
+	card.resized.connect(place)
+	place.call_deferred()
 
 ## The card with its pages and 知道了, when one is due; into the window, or into `parent` when the
 ## window is closed (a place's scene with no spot open).
 static func render(ui, where: String, parent: Control = null) -> void:
+	ui.tip_card = null
 	var tip := current(ui, where)
 	if tip.is_empty():
 		return
@@ -143,6 +192,7 @@ static func render(ui, where: String, parent: Control = null) -> void:
 	else:
 		buttons.add_child(ui.button("知道了", func() -> void: ui.dismiss_tip(tip_id), "这段旅程里不再显示这张教学"))
 	(parent if parent != null else ui.center).add_child(box)
+	ui.tip_card = box
 
 static func load_state(ui) -> void:
 	var config := ConfigFile.new()

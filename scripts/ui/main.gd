@@ -145,6 +145,8 @@ var guide_path := Guide.DEFAULT_PATH
 var guide_enabled := true
 var intro_finished_once := false
 var tip_page: Dictionary = {}
+# The card on screen, if any, so it can be turned into a bubble beside its button (guide.gd).
+var tip_card: Control = null
 var guide_toggle: CheckBox
 # The welcome screen's choice to skip the introduction (shown once it has been finished before).
 var skip_intro: CheckBox
