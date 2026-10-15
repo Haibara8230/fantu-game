@@ -93,7 +93,7 @@ static func _cultivation(ui, parent: VBoxContainer) -> void:
 	var p: Dictionary = session.player
 	_heading(ui, parent, "修 为")
 	ui.meter(parent, "修为", p.xp, maxi(1, maxi(int(p.xp), xp_goal(session))), ui.GOLD)
-	_row(ui, parent, "修炼速度", "×%.2f · 每月闭关约 %d 修为" % [session.cultivation_speed(), session.cultivation_rate()], "灵根、心法与法宝、根基、宗门身份共同决定")
+	_row(ui, parent, "修炼速度", "×%.2f · 每月闭关约 %d 修为" % [session.cultivation_speed(), session.cultivation_rate()], "灵根、心法与宝物、根基、宗门身份共同决定")
 	if session.xp_limit() >= 0:
 		_row(ui, parent, "历练", "%d / %d" % [int(p.insight), session.insight_needed()], "斗法、切磋、委托、奇遇积累历练，攒满可冲开下一个瓶颈")
 	if session.at_bottleneck():
@@ -111,7 +111,7 @@ static func _body(ui, parent: VBoxContainer) -> void:
 	_heading(ui, parent, "体 魄")
 	ui.meter(parent, "气血", p.hp, p.max_hp, Color("#a96f66"))
 	ui.meter(parent, "灵力", p.qi, p.max_qi, Color("#5f999b"))
-	_row(ui, parent, "攻击加成", "+%d" % session.attack_bonus(), "每次神通伤害额外增加；随境界与法宝、天赋提升")
+	_row(ui, parent, "攻击加成", "+%d" % session.attack_bonus(), "每次神通伤害额外增加；随境界与宝物、天赋提升")
 	_row(ui, parent, "减伤", "%d%%" % int(round(session.defense() * 100.0)), "受到的伤害减少，至多五成")
 	_row(ui, parent, "神识", str(session.sense()), "随境界与天赋增长：识破洞府机关、看见暗格，看穿神识不及你的人的天赋")
 	var toxin: int = session.toxin()
@@ -154,17 +154,17 @@ static func _roots(ui, parent: VBoxContainer) -> void:
 static func _loadout(ui, parent: VBoxContainer) -> void:
 	var session = ui.session
 	var p: Dictionary = session.player
-	_heading(ui, parent, "法 宝")
+	_heading(ui, parent, "宝 物")
 	for slot: String in session.content.equipment_data.slots:
 		var item_id := str(p.equipment.get(slot, ""))
 		var gear: Dictionary = session.content.equipment(item_id) if not item_id.is_empty() else {}
-		_row(ui, parent, str(session.content.equipment_data.slots[slot]), str(gear.get("name", "未佩戴")), str(gear.get("description", "在「行囊」里佩戴法宝")), ui.MUTED if gear.is_empty() else ui.grade_color(gear))
+		_row(ui, parent, str(session.content.equipment_data.slots[slot]), str(gear.get("name", "未佩戴")), str(gear.get("description", "在「行囊」里佩戴宝物")), ui.MUTED if gear.is_empty() else ui.grade_color(gear))
 	_heading(ui, parent, "神 通 与 心 法")
 	for technique_id: Variant in p.get("arts", []) + p.get("methods", []):
 		var t: Dictionary = session.content.technique(str(technique_id))
 		if t.is_empty():
 			continue
-		_row(ui, parent, "心法" if t.slot == "method" else "神通", "%s · %s" % [t.name, t.tier_name], str(t.description), ui.grade_color(t))
+		_row(ui, parent, "心法" if t.slot == "method" else "神通", t.name, "%s\n%s" % [session.Arsenal.technique_tag(session.content, t), t.description], ui.grade_color(t))
 
 ## The next xp milestone: the next sub-stage, or the breakthrough once at the last stage.
 static func xp_goal(session) -> int:

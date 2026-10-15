@@ -49,7 +49,7 @@ const FAVOR_STAGES := [[0, "初识"], [40, "相熟"], [80, "友好"], [140, "信
 const ATTITUDES := {"friendly": "友善", "neutral": "中立", "hostile": "敌意"}
 const BUILT_IN_INTERACTIONS := ["talk", "gift", "help", "consult", "teach", "invite_spar", "invite_help", "companion", "disciple", "instruct", "sworn"]
 const PLAIN_ACTIONS := ["cultivate", "rest", "breakthrough", "study", "teach", "sell", "shop", "gather", "inn_rest", "search_ruin", "explore_cave", "forge", "ascend", "inquire", "commissions", "sect", "alchemy", "field", "tournament"]
-const ITEM_CATEGORIES := {"herb": "灵草", "pill": "丹药", "treasure": "天材地宝", "manual": "玉简", "equipment": "法宝", "material": "材料", "recipe": "丹方", "tool": "器具", "quest": "信物"}
+const ITEM_CATEGORIES := {"herb": "灵草", "pill": "丹药", "treasure": "天材地宝", "manual": "玉简", "equipment": "宝物", "material": "材料", "recipe": "丹方", "tool": "器具", "quest": "信物"}
 # Milestones friends send word of, and the deeds the session counts besides victories ("win:<enemy>").
 const CONGRATS := ["breakthrough", "core", "nascent", "deity", "serpent", "champion", "summit", "calamity", "promotion"]
 const DEEDS := ["retreat_days", "duel", "trade", "gather", "commission", "help", "tournament_champion", "summit_champion"]
@@ -571,7 +571,7 @@ func _validate_auctions() -> String:
 			return "拍卖配置无效：" + auction_id
 		for entry: Variant in auction.pool:
 			if not entry is Dictionary or [entry.has("item"), entry.has("manual"), entry.has("equipment")].count(true) != 1:
-				return "拍品须是物品、玉简或法宝之一：" + auction_id
+				return "拍品须是物品、玉简或宝物之一：" + auction_id
 			if entry.has("item") and not items.has(entry.item):
 				return "拍品引用了未知物品：%s" % entry.item
 			for key: String in ["manual", "equipment"]:
@@ -1562,7 +1562,7 @@ func _validate_item(item: Variant) -> String:
 	return _validate_effects(item.get("use", []))
 
 ## 品级, 0–5 for 白、绿、蓝、紫、橙、红 (the talents' colors): catalogue items name theirs (`rarity`);
-## techniques, manuals and equipment follow their tier (凡品 white up to 天阶 orange).
+## techniques, manuals and equipment follow their tier (凡阶 / 凡兵 white up to 天阶 / 灵宝 orange).
 func rarity_of(entry: Dictionary) -> int:
 	var top: int = talent_data.tiers.size() - 1
 	if entry.has("rarity"):

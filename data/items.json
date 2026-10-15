@@ -172,7 +172,7 @@
     "category": "material",
     "price": 260,
     "rarity": 3,
-    "description": "极北寒铁淬出的精华，触手生寒，地阶法宝的胚子。炼器时同一种材料用三份。"
+    "description": "极北寒铁淬出的精华，触手生寒，打造法宝的胚子。炼器时同一种材料用三份。"
   },
   "silk_qing": {
     "name": "青丝",
@@ -193,7 +193,7 @@
     "category": "material",
     "price": 260,
     "rarity": 3,
-    "description": "以云气织就的锦缎，轻若无物，地阶法袍的料子。炼器时同一种材料用三份。"
+    "description": "以云气织就的锦缎，轻若无物，织出的法袍可入法宝之列。炼器时同一种材料用三份。"
   },
   "jade_qing": {
     "name": "青玉料",
@@ -214,7 +214,7 @@
     "category": "material",
     "price": 260,
     "rarity": 3,
-    "description": "寒玉深处凝出的玉髓，地阶佩饰的胚子。炼器时同一种材料用三份。"
+    "description": "寒玉深处凝出的玉髓，雕成法宝佩饰的胚子。炼器时同一种材料用三份。"
   },
   "huashen_dan": {
     "name": "化神丹",

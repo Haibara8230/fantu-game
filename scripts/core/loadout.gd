@@ -165,9 +165,9 @@ static func unequip_technique(s, technique_id: String) -> String:
 static func equip_item(s, item_id: String) -> String:
 	var gear: Dictionary = s.content.equipment(item_id)
 	if gear.is_empty() or s.item_count(item_id) < 1:
-		return "行囊里没有这件法宝。"
+		return "行囊里没有这件宝物。"
 	if not s.battle.is_empty():
-		return "斗法中无法更换法宝。"
+		return "斗法中无法更换宝物。"
 	var worn := str(s.player.equipment.get(gear.slot, ""))
 	s.remove_item(item_id, 1)
 	if not worn.is_empty():
@@ -179,9 +179,9 @@ static func equip_item(s, item_id: String) -> String:
 static func unequip_slot(s, slot: String) -> String:
 	var worn := str(s.player.equipment.get(slot, ""))
 	if worn.is_empty():
-		return "此处没有佩戴法宝。"
+		return "此处没有佩戴宝物。"
 	if not s.battle.is_empty():
-		return "斗法中无法更换法宝。"
+		return "斗法中无法更换宝物。"
 	s.player.equipment[slot] = ""
 	s.add_item(worn, 1)
 	s.refresh_realm_stats()

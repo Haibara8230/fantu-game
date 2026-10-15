@@ -53,7 +53,7 @@ static func render(ui) -> void:
 	var elements: Dictionary = session.content.technique_data.elements
 	for element: String in ["none"] + elements.keys():
 		var nature := element
-		var pick: Button = ui.button("无属性" if element == "none" else str(elements[element].name), func() -> void: ui.forge_plan.element = nature; ui.render(), "法宝带上属性，同属神通伤害更高" if element != "none" else "不带属性")
+		var pick: Button = ui.button("无属性" if element == "none" else str(elements[element].name), func() -> void: ui.forge_plan.element = nature; ui.render(), "宝物带上属性，同属神通伤害更高" if element != "none" else "不带属性")
 		if element != "none":
 			ui.tint(pick, Color(elements[element].color))
 		pick.disabled = element == str(plan.element)
@@ -67,7 +67,7 @@ static func render(ui) -> void:
 	center.add_child(ui.paragraph(str(plain.get("description", "")) + ("　另有随机词条 %d 条。" % affixes if affixes > 0 else ""), ui.INK))
 	center.add_child(ui.label("耗%s %d 份　·　%d 灵石　·　耗时 %s" % [session.content.item(material).name, int(forge.data(session).count), forge.fee(session, material), Calendar.duration_text(forge.days(session, material))], 17, ui.GOLD))
 	var reason: String = forge.block(session, plan)
-	var light: Button = ui.button("开炉炼器", func() -> void: ui.run(func() -> String: return session.forge_item(ui.forge_plan)), reason if not reason.is_empty() else "材料入炉，打出一件法宝")
+	var light: Button = ui.button("开炉炼器", func() -> void: ui.run(func() -> String: return session.forge_item(ui.forge_plan)), reason if not reason.is_empty() else "材料入炉，打出一件宝物")
 	light.disabled = not reason.is_empty()
 	light.custom_minimum_size = Vector2(180, 44)
 	center.add_child(light)

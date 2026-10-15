@@ -210,7 +210,7 @@ static func _spot_action(ui, grid: GridContainer, action: String) -> void:
 			var rise: Button = _timed(ui, grid, "踏上渡桥 · 白日飞升", func() -> String: return session.act("ascend"), reason if not reason.is_empty() else "此去便是天上，人间的一切都留在身后。这一生就此圆满。")
 			rise.disabled = not reason.is_empty()
 		"forge":
-			_open(ui, grid, "炼器", ui.open_forge, "以三份同种材料打一件法宝：材料定品阶，属性自选，词条看火候")
+			_open(ui, grid, "炼器", ui.open_forge, "以三份同种材料打一件宝物：材料定品阶，属性自选，词条看火候")
 		"field":
 			_open(ui, grid, "照料灵田", func() -> void: ui.set_view("field"), "种下灵草，到了日子便可收获")
 		"sect":
@@ -221,7 +221,7 @@ static func _spot_action(ui, grid: GridContainer, action: String) -> void:
 				var taught: Dictionary = session.content.technique(technique_id)
 				var reason: String = session.learn_block(technique_id)
 				var learned_id := technique_id
-				var study: Button = ui.button("参悟%s  ·  %s · %d 日" % [taught.name, taught.tier_name, session.study_days(taught)], func() -> void: ui.run(func() -> String: return session.learn_here(learned_id)), reason if not reason.is_empty() else taught.description)
+				var study: Button = ui.button("参悟%s  ·  %d 日" % [taught.name, session.study_days(taught)], func() -> void: ui.run(func() -> String: return session.learn_here(learned_id)), "%s\n%s" % [session.Arsenal.technique_tag(session.content, taught), reason if not reason.is_empty() else taught.description])
 				ui.tint(study, ui.grade_color(taught))
 				study.disabled = not reason.is_empty()
 				study.size_flags_horizontal = Control.SIZE_EXPAND_FILL

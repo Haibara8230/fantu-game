@@ -25,7 +25,7 @@ static func render_retreat(ui) -> void:
 	sources.add_theme_constant_override("h_separation", 24)
 	right.add_child(sources)
 	sources.add_child(ui.label("灵根 · %s  ×%.2f" % [session.root_title(), float(grade.speed)], 15))
-	sources.add_child(ui.label("心法与法宝  +%d%%" % int(round(float(session.bonuses().cultivation) * 100.0)), 15))
+	sources.add_child(ui.label("心法与宝物  +%d%%" % int(round(float(session.bonuses().cultivation) * 100.0)), 15))
 	sources.add_child(ui.label("心神 · %s  收益 %d%%" % [_mood(efficiency), efficiency], 15, ui.INK if efficiency >= 100 else Color("#e3c08a")))
 	sources.add_child(ui.label("修为  %d" % int(session.player.xp), 15))
 	sources.add_child(ui.label("心境 · %s  %d / %d" % [mind_word(mind_percent), int(session.player.mind), session.mind_needed()], 15, ui.INK if mind_percent >= 100 else Color("#e3c08a")))

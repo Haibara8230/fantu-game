@@ -1,6 +1,6 @@
 {
   "tiers": [
-    {"name": "凡品", "power": 1.0, "affixes": 0, "min_realm": 0, "value": 20, "study_days": 10},
+    {"name": "凡阶", "power": 1.0, "affixes": 0, "min_realm": 0, "value": 20, "study_days": 10},
     {"name": "黄阶", "power": 1.25, "affixes": 1, "min_realm": 0, "value": 60, "study_days": 20},
     {"name": "玄阶", "power": 1.55, "affixes": 2, "min_realm": 1, "value": 180, "study_days": 40},
     {"name": "地阶", "power": 1.9, "affixes": 3, "min_realm": 2, "value": 500, "study_days": 80},

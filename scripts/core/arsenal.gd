@@ -142,6 +142,10 @@ static func cost_text(content, cost: Dictionary) -> String:
 static func _scaled(key: String, value: float) -> Variant:
 	return int(round(value)) if key in ["max_hp", "max_qi", "attack", "orb_weight"] else snappedf(value, 0.001)
 
+## The attribute line shown beside a technique's name, never inside it: "黄阶 · 金 · 神通".
+static func technique_tag(content, t: Dictionary) -> String:
+	return "%s · %s · %s" % [t.tier_name, content.technique_data.elements[t.element].name, "心法" if t.slot == "method" else "神通"]
+
 static func describe_technique(content, t: Dictionary) -> String:
 	var lines: Array[String] = []
 	var element_name: String = content.technique_data.elements[t.element].name

@@ -45,7 +45,7 @@ func _ids(content: Content) -> void:
 		check(content.technique(bad).is_empty(), "malformed technique rejected: " + bad)
 	check(content.technique("sword").name == "御剑诀" and content.technique("sword").tier == 2 and content.technique("sword").element == "metal", "handwritten sect arts share the same model")
 	var gear := content.equipment("e:sword:3:fire:sharp+tough:2")
-	check(gear.slot == "weapon" and gear.tier_name == "玄阶" and gear.name.ends_with("玄铁剑") and int(gear.stats.attack) == 10, "equipment is described by its id")
+	check(gear.slot == "weapon" and gear.tier_name == "灵器" and gear.name.ends_with("玄铁剑") and int(gear.stats.attack) == 10, "equipment is described by its id")
 	check(content.equipment("e:sword:3:fire:sharp+sharp:2").is_empty() and content.equipment("e:cannon:1:none::0").is_empty(), "malformed equipment rejected")
 	var manual := content.item("j:t:bolt:fire:2:burn:3")
 	check(manual.category == "manual" and manual.teaches == "t:bolt:fire:2:burn:3" and manual.name == "《炎阳诀》玉简", "jade slips teach the technique in their id")

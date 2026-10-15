@@ -242,7 +242,7 @@ static func render_person(ui, person_id: String) -> void:
 		var arts: Array[String] = []
 		for art_id: String in person.loadout.arts:
 			var art: Dictionary = session.content.technique(art_id)
-			arts.append("%s（%s）" % [art.name, art.tier_name])
+			arts.append(art.name)
 		var methods: Array[String] = []
 		for method_id: String in person.loadout.methods:
 			methods.append(session.content.technique(method_id).name)
@@ -250,7 +250,7 @@ static func render_person(ui, person_id: String) -> void:
 		for slot: String in person.loadout.equipment:
 			if not str(person.loadout.equipment[slot]).is_empty():
 				gear.append(session.content.equipment(person.loadout.equipment[slot]).name)
-		center.add_child(ui.paragraph("神通 · %s\n心法 · %s%s" % ["、".join(arts), "、".join(methods), "\n法宝 · " + "、".join(gear) if not gear.is_empty() else ""]))
+		center.add_child(ui.paragraph("神通 · %s\n心法 · %s%s" % ["、".join(arts), "、".join(methods), "\n宝物 · " + "、".join(gear) if not gear.is_empty() else ""]))
 	_record(ui, person_id, person)
 
 ## Someone's talents and 资质 once the player can see through them (acquainted, or above them), else a

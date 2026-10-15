@@ -11,7 +11,7 @@ static func render(ui) -> void:
 	worn.custom_minimum_size.x = 300
 	worn.add_theme_constant_override("separation", 8)
 	columns.add_child(worn)
-	worn.add_child(ui.label("法 宝", 18, ui.GOLD))
+	worn.add_child(ui.label("宝 物", 18, ui.GOLD))
 	for slot: String in session.content.equipment_data.slots:
 		var item_id: String = str(session.player.equipment.get(slot, ""))
 		var row := HBoxContainer.new()
@@ -87,7 +87,7 @@ static func _item_row(ui, parent: VBoxContainer, item_id: String) -> void:
 		study.disabled = not block.is_empty()
 		row.add_child(study)
 	if item.get("category", "") == "equipment":
-		row.add_child(ui.button("装备", func() -> void: ui.run(func() -> String: return session.equip_item(item_id)), "换上这件法宝"))
+		row.add_child(ui.button("装备", func() -> void: ui.run(func() -> String: return session.equip_item(item_id)), "换上这件宝物"))
 	var price: int = session.sell_price(item_id)
 	if price > 0:
 		row.add_child(ui.button("出售 · %d" % price, func() -> void: ui.run(func() -> String: return session.sell(item_id, 1)), "在此地出售一件"))
