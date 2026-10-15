@@ -3,6 +3,7 @@ extends RefCounted
 var locations: Dictionary = {}
 var skills: Dictionary = {}
 var enemies: Dictionary = {}
+var series: Dictionary = {}
 var rules: Dictionary = {}
 var sects: Dictionary = {}
 var realms: Array = []
@@ -52,7 +53,7 @@ const FAVOR_MAX := 200
 const FAVOR_STAGES := [[0, "初识"], [40, "相熟"], [80, "友好"], [140, "信赖"], [200, "亲密"]]
 const ATTITUDES := {"friendly": "友善", "neutral": "中立", "hostile": "敌意"}
 const BUILT_IN_INTERACTIONS := ["talk", "gift", "help", "consult", "teach", "invite_spar", "invite_help", "companion", "disciple", "instruct", "sworn"]
-const PLAIN_ACTIONS := ["cultivate", "rest", "breakthrough", "study", "teach", "sell", "shop", "gather", "inn_rest", "search_ruin", "explore_cave", "forge", "ascend", "inquire", "commissions", "sect", "alchemy", "field", "tournament", "lease", "hunt", "arena"]
+const PLAIN_ACTIONS := ["cultivate", "rest", "breakthrough", "study", "teach", "sell", "shop", "gather", "inn_rest", "search_ruin", "explore_cave", "forge", "ascend", "inquire", "commissions", "sect", "alchemy", "field", "tournament", "lease", "hunt", "arena", "series"]
 const ITEM_CATEGORIES := {"herb": "灵草", "pill": "丹药", "treasure": "天材地宝", "manual": "玉简", "equipment": "宝物", "material": "材料", "recipe": "丹方", "talisman": "符箓", "tool": "器具", "quest": "信物"}
 # Milestones friends send word of, and the deeds the session counts besides victories ("win:<enemy>").
 const CONGRATS := ["breakthrough", "core", "nascent", "deity", "serpent", "champion", "summit", "calamity", "promotion"]
@@ -140,6 +141,7 @@ func load_data() -> bool:
 	locations = parsed.locations
 	skills = parsed.skills
 	enemies = parsed.enemies
+	series = parsed.get("series", {})
 	rules = parsed.rules
 	sects = parsed.sects
 	realms = parsed.realms
@@ -157,6 +159,25 @@ func _read_json(path: String) -> Variant:
 	return JSON.parse_string(file.get_as_text())
 
 func _validate() -> String:
+	# 成串的战斗 (series.gd): where, how strong, the waves and what they pay.
+	for series_id: String in series:
+		var entry: Variant = series[series_id]
+		if not entry is Dictionary or not entry.get("name") is String or not entry.get("done_text") is String or not locations.has(entry.get("location", "")) or not _whole(entry.get("min_realm", 0)) or not _whole(entry.get("min_stage", 0)) or not entry.get("waves") is Array or entry.waves.is_empty():
+			return "连战配置错误：" + series_id
+		for wave: Variant in entry.waves:
+			if not wave is Dictionary or not wave.get("text") is String or not wave.get("foes") is Array or wave.foes.is_empty() or wave.foes.size() > 4 or wave.foes.any(func(enemy_id: Variant) -> bool: return not enemies.has(enemy_id)):
+				return "连战的一波配置错误：" + series_id
+		if entry.has("event") and (not events.has(entry.event) or not events[entry.event].has("periodic")):
+			return "连战引用的事件须按年开放：" + series_id
+		if entry.has("to") and (not locations.has(entry.to) or not _whole(entry.get("days")) or int(entry.days) < 1):
+			return "护送的去处或日程错误：" + series_id
+		if entry.has("cooldown_days") and (not _whole(entry.cooldown_days) or int(entry.cooldown_days) < 1):
+			return "连战冷却错误：" + series_id
+		var reward: Variant = entry.get("reward", {})
+		if not reward is Dictionary or not _whole(reward.get("stones", 0)) or not _whole(reward.get("contribution", 0)) or not reward.get("items", {}) is Dictionary or reward.get("items", {}).keys().any(func(item_id: Variant) -> bool: return item(str(item_id)).is_empty()):
+			return "连战奖励错误：" + series_id
+		if not entry.location in locations or not locations[entry.location].get("spots", []).any(func(spot: Dictionary) -> bool: return "series" in spot.get("actions", [])):
+			return "连战所在地点没有可接下它的去处：" + series_id
 	for sect_id: String in sects:
 		var definition: Dictionary = sects[sect_id]
 		if not definition.get("skills") is Array or definition.skills.size() != 3:
@@ -1523,6 +1544,10 @@ func _validate_effects(effects: Variant) -> String:
 				ok = value is Array and value.size() == 2 and people.has(value[0]) and (value[1] is int or value[1] is float)
 			"battle":
 				ok = enemies.has(value)
+			"pack":
+				ok = value is Array and not value.is_empty() and value.all(func(enemy_id: Variant) -> bool: return enemies.has(enemy_id))
+			"series":
+				ok = series.has(value)
 			"hp", "qi":
 				ok = (value is int or value is float) and float(value) == floor(float(value))
 			"leave":

@@ -4,11 +4,22 @@ extends SceneTree
 ## when low, otherwise the strongest affordable arts, 相生 idle orbs, end the turn). Prints turns, win
 ## rate and health left per opponent.
 const Session = preload("res://scripts/core/session.gd")
+const SERIES := [["beast_tide", "town", 1, 0, ["qingyun"]], ["beast_tide", "town", 1, 1, ["qingyun"]], ["beast_tide", "town", 1, 1, []], ["beast_tide", "town", 1, 2, []], ["escort_qingshi", "town", 0, 1, []], ["escort_qingshi", "town", 0, 2, []], ["escort_qingshi", "town", 0, 2, ["qingyun"]], ["escort_qingshi", "town", 0, 3, ["qingyun"]], ["escort_nanming", "nanming", 1, 2, ["qingyun"]], ["escort_nanming", "nanming", 1, 3, []]]
 const ROOTS := [["metal", "wood", "fire"], ["water", "earth"], ["metal"], ["wood", "water", "fire", "earth"], ["fire", "earth", "metal"]]
 
 func _initialize() -> void:
-	for setup: Array in [["wolf", 0, 0, []], ["disciple", 0, 0, []], ["rogue", 0, 2, []], ["wolf", 0, 3, ["qingyun"]], ["serpent", 1, 0, ["qingyun"]], ["serpent", 1, 0, []], ["ruin_rogue", 0, 3, ["qingyun"]], ["ruin_rogue", 0, 3, []], ["den_wolf", 0, 3, []], ["den_wolf", 0, 3, ["qingyun"]], ["mo_xiu", 2, 0, ["qingyun"]], ["mo_xiu", 2, 0, []], ["jian_kui", 2, 1, ["qingyun"]], ["can_nian", 2, 2, ["qingyun"]], ["can_nian", 2, 3, []], ["mo_jiang", 2, 3, ["qingyun"]], ["mo_jiang", 3, 0, ["qingyun"]], ["jiao", 3, 0, ["qingyun"]], ["jiao", 3, 1, []], ["qinglin_snake", 0, 0, []], ["shan_xiao", 0, 1, []], ["wolf_pack", 0, 2, []], ["wolf_pack", 0, 3, ["qingyun"]], ["chilian_snake", 1, 0, ["qingyun"]], ["huo_ya", 1, 1, ["qingyun"]], ["yanjia_xi", 1, 2, ["qingyun"]], ["yanjia_xi", 1, 1, []], ["zhui_bing", 0, 2, []], ["shui_fei", 1, 0, ["qingyun"]], ["mo_tan", 1, 2, ["qingyun"]], ["xuesha_tu", 1, 2, ["qingyun"]], ["xuesha_tu", 1, 3, []]]:
+	# FANTU_SIM=series runs only the series (and their bosses), for quick calibration.
+	if OS.get_environment("FANTU_SIM") == "series":
+		for setup: Array in [["bear_king", 1, 1, ["qingyun"]], ["bear_king", 1, 2, []]]:
+			_report(str(setup[0]), int(setup[1]), int(setup[2]), setup[3])
+		for setup: Array in SERIES:
+			_series(str(setup[0]), str(setup[1]), int(setup[2]), int(setup[3]), setup[4])
+		quit(0)
+		return
+	for setup: Array in [["wolf", 0, 0, []], ["disciple", 0, 0, []], ["rogue", 0, 2, []], ["wolf", 0, 3, ["qingyun"]], ["serpent", 1, 0, ["qingyun"]], ["serpent", 1, 0, []], ["ruin_rogue", 0, 3, ["qingyun"]], ["ruin_rogue", 0, 3, []], ["den_wolf", 0, 3, []], ["den_wolf", 0, 3, ["qingyun"]], ["mo_xiu", 2, 0, ["qingyun"]], ["mo_xiu", 2, 0, []], ["jian_kui", 2, 1, ["qingyun"]], ["can_nian", 2, 2, ["qingyun"]], ["can_nian", 2, 3, []], ["mo_jiang", 2, 3, ["qingyun"]], ["mo_jiang", 3, 0, ["qingyun"]], ["jiao", 3, 0, ["qingyun"]], ["jiao", 3, 1, []], ["qinglin_snake", 0, 0, []], ["shan_xiao", 0, 1, []], ["wolf_pack", 0, 2, []], ["wolf_pack", 0, 3, ["qingyun"]], ["chilian_snake", 1, 0, ["qingyun"]], ["huo_ya", 1, 1, ["qingyun"]], ["yanjia_xi", 1, 2, ["qingyun"]], ["yanjia_xi", 1, 1, []], ["zhui_bing", 0, 2, []], ["shui_fei", 1, 0, ["qingyun"]], ["mo_tan", 1, 2, ["qingyun"]], ["xuesha_tu", 1, 2, ["qingyun"]], ["xuesha_tu", 1, 3, []], ["bear_king", 1, 1, ["qingyun"]], ["bear_king", 1, 2, []]]:
 		_report(str(setup[0]), int(setup[1]), int(setup[2]), setup[3])
+	for setup: Array in SERIES:
+		_series(str(setup[0]), str(setup[1]), int(setup[2]), int(setup[3]), setup[4])
 	_spars()
 	for setup: Array in [[1, 1], [1, 3], [2, 0], [2, 2]]:
 		_summit(int(setup[0]), int(setup[1]))
@@ -73,6 +84,32 @@ func _report(enemy_id: String, realm: int, stage: int, lineage: Array) -> void:
 			wins += 1
 			left += int(game.player.hp) * 100 / int(game.player.max_hp)
 	print("%-10s realm %d stage %d %-8s  turns %.1f  win %d%%  hp left %d%%" % [enemy_id, realm, stage, str(lineage), float(turns) / fights, wins * 100 / fights, left / maxi(1, wins)])
+
+## 成串的战斗 (series.gd): how often the whole series is seen through, with the breath between waves.
+func _series(series_id: String, location: String, realm: int, stage: int, lineage: Array) -> void:
+	var done := 0
+	var waves := 0
+	var runs := 40
+	for seed_value: int in range(runs):
+		var game := Session.new()
+		game.encounters_enabled = false
+		game.new_game("试", 4000 + seed_value, ROOTS[seed_value % ROOTS.size()])
+		game.player.realm = realm
+		game.player.stage = stage
+		if not lineage.is_empty():
+			game.Loadout.take_lineage(game, str(lineage[0]))
+		game.refresh_realm_stats()
+		game.player.hp = game.player.max_hp
+		game.player.location = location
+		game.Series.begin(game, series_id)
+		var count := 0
+		while not game.battle.is_empty() and count < 120:
+			count += 1
+			_play_turn(game)
+		if game.chronicle.entries.any(func(entry: Dictionary) -> bool: return entry.id == "series_done"):
+			done += 1
+		waves += game.chronicle.entries.filter(func(entry: Dictionary) -> bool: return entry.id == "series_wave").size()
+	print("%-15s realm %d stage %d %-8s  done %d%%  waves reached %.1f" % [series_id, realm, stage, str(lineage), done * 100 / runs, float(waves) / runs])
 
 func _play_turn(game) -> void:
 	game.plain_turn()

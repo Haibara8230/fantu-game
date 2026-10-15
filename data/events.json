@@ -1,4 +1,19 @@
 {
+  "beast_tide": {
+    "title": "兽潮",
+    "trigger": "location",
+    "location": "town",
+    "priority": 25,
+    "listed": true,
+    "periodic": {"start_year": 4, "every_years": 6, "month": 9, "from_day": 1, "to_day": 30},
+    "conditions": [{"realm_at_least": 1}],
+    "text": "镇口的木栅外人声嘈杂。几个满身泥水的山民说落霞谷又闹兽潮了，狼群已经下了山，镇长正挨家挨户地求修士帮忙守镇。",
+    "choices": [
+      {"id": "defend", "label": "留下守镇", "conditions": [{"stage_at_least": [1, 1]}], "effects": [{"series": "beast_tide"}], "chronicle": "你答应留下来守镇。"},
+      {"id": "unready", "label": "自知修为不够（须筑基中期）", "conditions": [{"not": {"stage_at_least": [1, 1]}}], "chronicle": "你自知修为不够，只帮镇上的人把老人孩子送去了后山。"},
+      {"id": "leave", "label": "爱莫能助", "chronicle": "你没有留下，镇上的人只好紧闭门户。"}
+    ]
+  },
   "nanming_rules": {
     "title": "南明坊规",
     "trigger": "location",

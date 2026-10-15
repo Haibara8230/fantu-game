@@ -1056,6 +1056,8 @@ func battle_action(action: String) -> void:
 		message = session.flee()
 	elif action == "release":
 		message = session.Combat.release(session)
+	elif action.begins_with("target:"):
+		message = session.set_target(int(action.trim_prefix("target:")))
 	else:
 		message = session.use_skill(action)
 	var events: Array[Dictionary] = session.combat_events.duplicate(true)

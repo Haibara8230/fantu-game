@@ -34,6 +34,8 @@ var world := Node2D.new()
 var hero
 var enemy
 var background: Texture2D
+var enemy_names := {}
+var enemy_max_hps := {}
 var enemy_id := ""
 var enemy_art: Dictionary = {}
 var human_enemy := false
@@ -79,6 +81,10 @@ func configure(snapshot: Dictionary, enemy_definition: Dictionary) -> void:
 	background = load(art_path([str(art.place_background) % str(snapshot.battle.get("place", "")), art.background]))
 	var definitions: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://data/world.json"))
 	skills = definitions.skills
+	enemy_names = {}
+	for id: String in definitions.enemies:
+		enemy_names[id] = str(definitions.enemies[id].name)
+		enemy_max_hps[id] = int(definitions.enemies[id].hp)
 	elements = JSON.parse_string(FileAccess.get_file_as_string("res://data/techniques.json")).elements
 	sects = definitions.sects
 	profiles = JSON.parse_string(FileAccess.get_file_as_string("res://data/vfx.json"))
@@ -342,6 +348,23 @@ func play(events: Array[Dictionary]) -> void:
 				_emit_cue("guard")
 				await _pause(0.25)
 				guarding.set_pose("idle")
+			"fell":
+				# 群敌: one of the pack falls (the lead fades; the next steps up in "next_foe").
+				banner = "%s 倒下" % enemy_names.get(str(event.enemy_id), "")
+				_emit_cue("impact")
+				await _pause(0.45)
+			"next_foe":
+				var fade := create_tween()
+				fade.tween_property(enemy, "modulate:a", 0.0, 0.2)
+				await fade.finished
+				enemy_name = enemy_names.get(str(event.enemy_id), enemy_name)
+				enemy_max_hp = int(enemy_max_hps.get(str(event.enemy_id), enemy_max_hp))
+				enemy_hp = int(event.hp_after)
+				enemy_chip = enemy_hp
+				banner = "%s 顶了上来" % enemy_name
+				var back := create_tween()
+				back.tween_property(enemy, "modulate:a", 1.0, 0.25)
+				await _pause(0.5)
 			"chain":
 				# 五行轮转: the art just cast was born of the last one, and an orb comes of it.
 				banner = "五行轮转 · %s生%s" % [elements.get(str(event.from), {}).get("name", ""), elements.get(str(event.to), {}).get("name", "")]

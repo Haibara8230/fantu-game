@@ -33,7 +33,8 @@
       "map": [0.4, 0.42],
       "spots": [
         {"id": "inn", "tag": [0.11, 0.4], "name": "青石客栈", "description": "掌柜识得修士，备有净室与药膳。花几块灵石便能好好歇上一日。", "actions": ["inn_rest"]},
-        {"id": "teahouse", "tag": [0.35, 0.44], "name": "听雨茶馆", "description": "说书先生醒木一拍，南来北往的消息都汇在这里。", "actions": ["inquire"]}
+        {"id": "teahouse", "tag": [0.35, 0.44], "name": "听雨茶馆", "description": "说书先生醒木一拍，南来北往的消息都汇在这里。", "actions": ["inquire"]},
+        {"id": "palisade", "tag": [0.66, 0.58], "name": "镇口木栅", "description": "镇口的木栅新旧相间，补过不止一回。商队在这里雇修士护送；落霞谷闹兽潮的年头，镇上也在这里求修士帮忙守镇。", "actions": ["series"]}
       ]
     },
     "ferry": {
@@ -164,7 +165,7 @@
       "rules": [{"forbid": "duel", "text": "南明坊市的规矩：坊内不许斗法切磋，违者罚灵石、逐出坊市。要比划，出坊去赤枫岭。"}],
       "lease": {"flag": "nanming_abode", "name": "坊外石屋", "days": 360, "price": 150},
       "spots": [
-        {"id": "wanbao", "tag": [0.42, 0.42], "name": "万宝楼", "description": "万宝楼天南分号，三层朱楼，灵器料与丹药明码标价，也收各色灵材；楼前的告示板上贴着各家的委托，不问出身。", "actions": ["shop", "sell", "forge", "commissions"]},
+        {"id": "wanbao", "tag": [0.42, 0.42], "name": "万宝楼", "description": "万宝楼天南分号，三层朱楼，灵器料与丹药明码标价，也收各色灵材；楼前的告示板上贴着各家的委托，不问出身。", "actions": ["shop", "sell", "forge", "commissions", "series"]},
         {"id": "teahouse", "tag": [0.6, 0.36], "name": "听涛茶楼", "description": "往来的行商与各宗弟子都爱在这里歇脚，天南的消息多半从这里传开。", "actions": ["inquire"]},
         {"id": "broker", "tag": [0.66, 0.6], "name": "牙行", "description": "替人赁屋、作保的牙行。坊外赤枫岭脚下有几间石屋，引了一缕地脉灵气，赁下便可闭关静养。", "actions": ["lease"]},
         {"id": "abode", "tag": [0.82, 0.3], "name": "坊外石屋", "description": "赁来的石屋，门前一株老枫，屋里一张蒲团，地上引了一缕温热的地脉灵气。", "actions": ["cultivate", "rest", "breakthrough"], "requires_flag": "nanming_abode"}
@@ -415,6 +416,7 @@
     }
   },
   "enemies": {
+    "bear_king": {"moves": [{"id": "swipe", "name": "熊掌横扫", "weight": 3}, {"id": "slam", "name": "人立拍击", "kind": "charge", "power": 1.8, "weight": 2}, {"id": "roar", "name": "震山吼", "power": 0.5, "inflict": {"weaken": [0.2, 2]}, "weight": 1}], "phases": [{"below": 0.3, "name": "狂暴", "text": "铁背熊王背上的铁鬃根根竖起，双目赤红，人立而起，狂暴了！", "power": 1.35}], "name": "铁背熊王", "element": "earth", "hp": 420, "damage_min": 17, "damage_max": 24, "reward_stones": 40, "reward_xp": 260, "reward_herbs": 0, "locations": [], "min_realm": 1, "parts": [{"item": "xiong_dan", "chance": 1.0, "count": [1, 1]}, {"item": "yaodan", "chance": 0.5, "count": [1, 1]}]},
     "shui_fei": {"moves": [{"id": "stab", "name": "分水刺", "weight": 3}, {"id": "drag", "name": "拉人下水", "power": 0.5, "inflict": {"entangle": [1, 1]}, "weight": 2}, {"id": "volley", "name": "同伙放冷箭", "hits": 2, "power": 0.5, "weight": 2}], "name": "白鹭渡水匪", "element": "water", "hp": 210, "damage_min": 13, "damage_max": 18, "reward_stones": 40, "reward_xp": 80, "reward_herbs": 0, "locations": [], "min_realm": 1, "human": true, "sect": "canglan", "drops": {"chance": 0.3, "tiers": [2, 3]}},
     "zhui_bing": {"moves": [{"id": "chop", "name": "刀劈", "weight": 3}, {"id": "twin", "name": "连环刀", "hits": 2, "power": 0.6, "weight": 2}, {"id": "caltrops", "name": "撒铁蒺藜", "power": 0.5, "inflict": {"bleed": [2, 2]}, "weight": 1}], "name": "追杀的劫修", "element": "metal", "hp": 135, "damage_min": 10, "damage_max": 14, "reward_stones": 30, "reward_xp": 45, "reward_herbs": 0, "locations": [], "min_realm": 0, "human": true, "sect": "xuanyue"},
     "mo_tan": {"moves": [{"id": "palm", "name": "阴风掌", "weight": 3}, {"id": "drain", "name": "吸血诀", "power": 0.8, "drain": 0.5, "weight": 2}, {"id": "curse", "name": "蚀心咒", "power": 0.6, "inflict": {"weaken": [0.25, 2]}, "weight": 1}], "name": "魔修探子", "element": "water", "hp": 240, "damage_min": 15, "damage_max": 21, "reward_stones": 50, "reward_xp": 110, "reward_herbs": 0, "locations": [], "min_realm": 1, "human": true, "sect": "canglan", "drops": {"chance": 0.4, "tiers": [2, 3]}},
@@ -607,6 +609,21 @@
       "world_flag": "ruin_den_cleared",
       "flag_event": "den_cleared"
     }
+  },
+  "series": {
+    "beast_tide": {"name": "兽潮守镇", "location": "town", "event": "beast_tide", "min_realm": 1, "min_stage": 1, "breather": 0.5, "waves": [
+      {"foes": ["wolf_pack", "wolf"], "text": "第一波：狼群从落霞谷方向涌来，直扑镇口的木栅。"},
+      {"foes": ["qinglin_snake", "shan_xiao"], "text": "第二波：青鳞蛇与山魈趁乱从田埂里钻出，翻过了木栅。"},
+      {"foes": ["bear_king"], "text": "第三波：地面一阵阵发颤，铁背熊王撞断两根木桩，闯到镇口。"}
+    ], "reward": {"stones": 150, "contribution": 30}, "done_text": "兽潮退回落霞谷，镇上的人提着灯笼出来，把凑来的谢礼塞到你手里。"},
+    "escort_qingshi": {"name": "护送商队", "location": "town", "to": "market", "days": 5, "cooldown_days": 90, "min_realm": 0, "min_stage": 2, "breather": 0.5, "waves": [
+      {"foes": ["rogue"], "text": "商队过了青石镇不远，一个劫修从林子里跳出来，要商队留下货物。"},
+      {"foes": ["zhui_bing", "rogue"], "text": "白鹭渡前的河滩上，劫修叫来了同伙，两个人一前一后堵住了商队。"}
+    ], "reward": {"stones": 70}, "done_text": "商队平安到了云溪坊市，掌柜点清货物，付了护送的酬金。"},
+    "escort_nanming": {"name": "护送药商", "location": "nanming", "to": "chifeng", "days": 3, "cooldown_days": 90, "min_realm": 1, "min_stage": 2, "breather": 0.5, "waves": [
+      {"foes": ["mo_tan"], "text": "出了南明坊市第二日，一个魔修探子拦在山道上，盯着药商的驮子。"},
+      {"foes": ["xuesha_tu", "zhui_bing"], "text": "赤枫岭脚下，血煞教徒带着个打手追来，要连人带货一并劫走。"}
+    ], "reward": {"stones": 220, "items": {"chiyan_flower": 3}}, "done_text": "药商平安到了赤枫岭，除了酬金，另送了几株赤焰花。"}
   },
   "rules": {
     "starting_age": 16,

@@ -7,7 +7,7 @@ var checks := 0
 var failures := 0
 # Spots whose picture is still to be drawn (docs/BACKLOG.md, 尚缺的素材); their window falls back to the
 # location's picture until then.
-const PENDING_SPOTS := ["ruin/depths", "wild/chenxia", "sect/gate", "ferry/crossing"]
+const PENDING_SPOTS := ["ruin/depths", "wild/chenxia", "sect/gate", "ferry/crossing", "town/palisade"]
 # Places of a new region whose pictures are still to be drawn (docs/BACKLOG.md): the place view shows
 # the code-drawn landscape until then.
 const PENDING_LOCATIONS := ["nanming", "chifeng", "chixiao_gate", "changqing_valley", "canglan_pavilion", "xuanyue_gate"]

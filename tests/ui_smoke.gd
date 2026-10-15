@@ -697,6 +697,29 @@ func _run() -> void:
 	check(main.current_screen() == "full" and _texts(main.center, "Label").contains("筑基") and _texts(main.center, "Label").contains("寿元 120 → 220 年") and _texts(main.center, "Label").contains("根基 · "), "a realm reached is shown on its own screen, with its grade")
 	_button("确定").pressed.emit()
 	check(main.ceremony.is_empty() and main.view == "place" and main.session.player.realm == 1, "确定 returns to the place")
+	# 护送 at 青石镇's 镇口木栅 (series.gd), fought as a pack with a target to pick (群敌).
+	main.session.player.location = "town"
+	var stage_was := int(main.session.player.stage)
+	main.session.player.stage = maxi(stage_was, 2)
+	main.set_view("place")
+	main.select_spot("palisade")
+	check(_button("接下 · 护送商队") != null and not _button("接下 · 护送商队").disabled and _button("接下 · 护送商队").tooltip_text.contains("云溪坊市"), "the 镇口 offers the caravan escort and says where it goes")
+	_button("接下 · 护送商队").pressed.emit()
+	check(not main.session.battle.is_empty() and str(main.session.battle.get("series", "")) == "escort_qingshi", "taking it starts the first ambush")
+	# A second robber joins (the later ambush is a pack).
+	main.session.Combat.add_pack(main.session, ["zhui_bing"])
+	main.render()
+	var rogue_name: String = main.session.content.enemies.rogue.name
+	check(not main.session.battle.is_empty() and _button("◆ " + rogue_name) != null and _texts(main.center, "Label").contains("另有 1 个围攻"), "the ambush is a pack: the lead is aimed at, the other's blows are in the intent")
+	await main.battle_action("target:1")
+	check(int(main.session.battle.target) == 1 and _button("◆ ") != null and _button("◆ ").disabled, "picking the other one turns the arts on it")
+	while not main.session.battle.is_empty():
+		main.session.player.hp = main.session.player.max_hp
+		await main.battle_action("flee")
+	check(not main.session.player.has("series"), "fleeing gives the escort up")
+	main.session.player.stage = stage_was
+	main.session.player.location = "sect"
+	main.set_view("place")
 	# The end of a life.
 	main.session.player.birth_day = int(main.session.world.day) + 30 - main.session.lifespan() * 360
 	main.run(func() -> String: return main.session.cultivate(360))

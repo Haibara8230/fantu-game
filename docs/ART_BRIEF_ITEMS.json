@@ -816,6 +816,17 @@
       ],
       "subject": "妖丹：筑基期妖兽的妖丹，温润如珠。炼化可增修为 500，丹毒也更重。",
       "prompt": "Draw the item described (Chinese is content to illustrate, never write it): 妖丹。筑基期妖兽的妖丹，温润如珠。炼化可增修为 500，丹毒也更重。"
+    },
+    {
+      "id": "item_xiong_dan",
+      "kind": "item",
+      "target": "assets/art/items/xiong_dan.png",
+      "size": [
+        512,
+        512
+      ],
+      "subject": "熊胆：铁背熊王的熊胆，色如墨玉，入手沉凉。药铺与坊市都肯出高价收。",
+      "prompt": "Draw the item described (Chinese is content to illustrate, never write it): 熊胆。铁背熊王的熊胆，色如墨玉，入手沉凉。药铺与坊市都肯出高价收。"
     }
   ]
 }

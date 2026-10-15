@@ -305,6 +305,48 @@
         ]
       ]
     },
+    "bear_king": {
+      "preferred": "res://assets/art/battle/bear_king.png",
+      "texture": "res://assets/art/beasts_atlas_v1.png",
+      "columns": 2,
+      "rows": 2,
+      "frames": {
+        "idle": 0,
+        "prepare": 0,
+        "attack": 1,
+        "cast": 0,
+        "hit": 0,
+        "guard": 0
+      },
+      "faces_right": false,
+      "height_ratio": 0.8,
+      "frame_regions": [
+        [
+          0,
+          0,
+          768,
+          464
+        ],
+        [
+          768,
+          0,
+          768,
+          464
+        ],
+        [
+          0,
+          472,
+          768,
+          552
+        ],
+        [
+          768,
+          472,
+          768,
+          552
+        ]
+      ]
+    },
     "shan_xiao": {
       "preferred": "res://assets/art/battle/shan_xiao.png",
       "texture": "res://assets/art/beasts_atlas_v1.png",

@@ -81,6 +81,18 @@ static func render(ui) -> void:
 		thrown.disabled = not reason.is_empty()
 		_small(thrown)
 		side.add_child(thrown)
+	# 群敌: whom the arts strike (连击 catch the others for a third).
+	var pack: Array = session.battle.get("pack", [])
+	if not pack.is_empty():
+		var aimed := int(session.battle.get("target", 0))
+		var foes: Array = [{"enemy_id": session.battle.enemy_id, "hp": session.battle.hp}] + pack
+		for foe_index: int in foes.size():
+			var member: Dictionary = session.content.enemies[str(foes[foe_index].enemy_id)]
+			var mark := "◆ " if foe_index == aimed else ""
+			var pick: Button = ui.button("%s%s %d/%d" % [mark, member.name, int(foes[foe_index].hp), int(member.hp)], func() -> void: ui.battle_action("target:%d" % foe_index), "以神通攻击%s（不占回合）。%s" % [member.name, "领头的按意图出手，其余每回合各扑一次；连击神通会波及其余对手。" if foe_index == 0 else "围攻者：每回合各扑一次。打倒领头的，下一个顶上来。"])
+			pick.disabled = foe_index == aimed
+			_small(pick)
+			side.add_child(pick)
 	var allies: Array[String] = session.duel_allies()
 	if not allies.is_empty():
 		var friend: String = allies[0]
@@ -234,6 +246,16 @@ static func intent_text(session) -> String:
 				parts.append("%s 护盾 %d" % [entry.name, int(entry.amount)])
 			_:
 				parts.append(str(entry.name))
+	# 群敌: the others strike too, each once a turn.
+	var pack: Array = session.battle.get("pack", [])
+	if not pack.is_empty():
+		var low := 0
+		var high := 0
+		for member: Dictionary in pack:
+			var enemy: Dictionary = session.content.enemies[str(member.enemy_id)]
+			low += int(round(float(enemy.damage_min) * session.Combat.PACK_BLOW))
+			high += int(round(float(enemy.damage_max) * session.Combat.PACK_BLOW))
+		parts.append("另有 %d 个围攻（合计约 %d–%d）" % [pack.size(), low, high])
 	return " · ".join(parts) if not parts.is_empty() else "不明"
 
 ## "护盾 18  ·  灼烧 4（余 2 回合）".

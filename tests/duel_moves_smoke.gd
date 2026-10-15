@@ -29,6 +29,7 @@ func _initialize() -> void:
 	_roads()
 	_arenas()
 	_gear_and_talismans()
+	_packs_and_series()
 	print("DUEL MOVES: %d checks, %d failures" % [checks, failures])
 	quit(0 if failures == 0 else 1)
 
@@ -364,6 +365,115 @@ func _gear_and_talismans() -> void:
 	var kept := Session.new()
 	guarded.battle.intent[0]["landing"] = true
 	check(kept.restore(JSON.parse_string(JSON.stringify(guarded.snapshot()))) and kept.battle.traits_used.size() == 2, "spent gear effects survive a save")
+
+## 群敌 (part one, stage five) and 成串的战斗 (part two, B4): a pack strikes beside its lead, the player
+## picks a target, 连击 sweeps the rest, the next steps up when the lead falls and the spoils of all are
+## paid at the end; 兽潮守镇 comes in its window, three waves to 铁背熊王; 护送 ends at its destination.
+func _packs_and_series() -> void:
+	var game := _duel("wolf", "bite", 1)
+	game.Combat.add_pack(game, ["wolf", "wolf"])
+	var joined := int(round(float(game.content.enemies.wolf.hp) * Combat.PACK_HP))
+	check(game.battle.pack.size() == 2 and int(game.battle.target) == 0 and int(game.battle.pack[0].hp) == joined, "two more wolves join the fight, lighter than the lead")
+	var before := int(game.player.hp)
+	game.battle.intent = [{"kind": "guard", "move": "bite", "name": "伏低", "amount": 0}]
+	game.end_turn()
+	check(int(game.player.hp) < before, "the pack strikes even when the lead holds back")
+	game.set_target(2)
+	var lead_hp := int(game.battle.hp)
+	game.Combat._strike_foe(game, 5)
+	check(int(game.battle.hp) == lead_hp and int(game.battle.pack[1].hp) == joined - 5, "the chosen target takes the blow")
+	game.Combat._strike_foe(game, 999)
+	check(game.battle.pack.size() == 1 and game.battle.felled == ["wolf"] and int(game.battle.target) == 0, "a fallen pack wolf leaves the fight; the aim returns to the lead")
+	game.Combat._sweep(game, 7)
+	check(int(game.battle.pack[0].hp) == joined - 7, "a 连击 catches the others")
+	var kept := Session.new()
+	check(kept.restore(JSON.parse_string(JSON.stringify(game.snapshot()))) and kept.battle.pack.size() == 1 and kept.battle.pack[0].hp is int, "a pack survives a save")
+	game.battle.hp = 0
+	var text: String = game.Combat._win(game)
+	check(not game.battle.is_empty() and game.battle.pack.is_empty() and int(game.battle.hp) == joined - 7 and text.contains("顶了上来"), "the lead falls; the last wolf steps up")
+	var stones := int(game.player.stones)
+	game.battle.hp = 0
+	game.Combat._win(game)
+	check(game.battle.is_empty() and int(game.player.stones) >= stones + 3 * int(game.content.enemies.wolf.reward_stones), "the spoils of all three are paid (%d)" % (int(game.player.stones) - stones))
+	# A lead felled by bleeding at the turn's start hands over without acting.
+	var bled := _duel("wolf", "bite", 1)
+	bled.Combat.add_pack(bled, ["wolf"])
+	bled.battle.hp = 1
+	bled.battle.status.bleed = [5, 2]
+	bled.end_turn()
+	check(not bled.battle.is_empty() and bled.battle.pack.is_empty() and int(bled.battle.turn) == 2, "bled out, the lead gives way and the turn goes on")
+	# 兽潮守镇.
+	var town := Session.new()
+	town.encounters_enabled = false
+	town.new_game("守镇", 58, ["metal", "wood", "fire"])
+	town.player.realm = 1
+	town.refresh_realm_stats()
+	town.player.location = "town"
+	var tide_window: Dictionary = town.Events.next_window(town.content.events.beast_tide, 0)
+	town.world.day = int(tide_window.from)
+	check(town.Series.block(town, "beast_tide").contains("需达到"), "筑基初期 is not yet up to the tide")
+	town.player.stage = 1
+	town.refresh_realm_stats()
+	town.world.day = 0
+	check(not town.Series.block(town, "beast_tide").is_empty(), "no beast tide out of season")
+	var tide: Dictionary = town.content.events.beast_tide
+	town.world.day = int(town.Events.next_window(tide, 0).from)
+	check(town.Series.block(town, "beast_tide").is_empty(), "in its window the town asks for help")
+	town.take_series("beast_tide")
+	check(str(town.battle.enemy_id) == "wolf_pack" and town.battle.pack.size() == 1 and str(town.battle.series) == "beast_tide", "the first wave: the wolves")
+	var day := int(town.world.day)
+	var waves: Array[String] = []
+	for wave: int in 3:
+		waves.append(str(town.battle.enemy_id))
+		while not town.battle.is_empty() and str(town.battle.get("series", "")) == "beast_tide" and town.player.has("series") and int(town.player.series.wave) == wave:
+			town.battle.hp = 0
+			town.Combat._win(town)
+	check(waves == ["wolf_pack", "qinglin_snake", "bear_king"], "three waves to 铁背熊王 (%s)" % [waves])
+	check(not town.player.has("series") and town.battle.is_empty() and town.item_count("xiong_dan") >= 1 and town.journal_lines().any(func(line: String) -> bool: return line.contains("兽潮退回")), "the tide is turned and paid for; 熊王 leaves its 熊胆")
+	check(not town.Series.block(town, "beast_tide").is_empty(), "once a window")
+	# The town's plea on arrival: only one up to it may stay.
+	var plea := Session.new()
+	plea.encounters_enabled = false
+	plea.new_game("守镇", 61, ["metal", "wood", "fire"])
+	plea.player.realm = 1
+	plea.refresh_realm_stats()
+	plea.world.day = int(plea.Events.next_window(plea.content.events.beast_tide, 0).from)
+	plea.player.location = "ridge"
+	plea.travel("town")
+	var offered: Array = plea.pending_definition().get("choices", []).filter(func(choice: Dictionary) -> bool: return plea.Events.all_met(plea, choice.get("conditions", []))).map(func(choice: Dictionary) -> String: return str(choice.id))
+	check(plea.pending_event.get("id", "") == "beast_tide" and not "defend" in offered and "unready" in offered, "筑基初期 hears the plea but cannot stay to defend (%s)" % [offered])
+	# 护送: two ambushes, then the road's days and the far end.
+	var escort := Session.new()
+	escort.encounters_enabled = false
+	escort.new_game("护送", 59, ["metal", "wood", "fire"])
+	escort.player.location = "town"
+	check(escort.Series.block(escort, "escort_qingshi").contains("需达到"), "炼气初期 is not trusted with a caravan")
+	escort.player.stage = 2
+	escort.refresh_realm_stats()
+	escort.take_series("escort_qingshi")
+	check(escort.battle.get("pack", []).is_empty() and str(escort.battle.enemy_id) == "rogue", "the first ambush: a lone 劫修")
+	var start := int(escort.world.day)
+	escort.player.hp = 1
+	escort.battle.hp = 0
+	escort.Combat._win(escort)
+	check(escort.player.has("series") and int(escort.player.hp) > 1 and int(escort.world.day) == start and escort.battle.pack.size() == 1, "a breath, and the second ambush, two of them, at once")
+	var mid := Session.new()
+	check(mid.restore(JSON.parse_string(JSON.stringify(escort.snapshot()))) and int(mid.player.series.wave) == 1, "a series under way survives a save")
+	escort.battle.pack.clear()
+	escort.battle.hp = 0
+	escort.Combat._win(escort)
+	check(str(escort.player.location) == "market" and int(escort.world.day) >= start + 5 and not escort.player.has("series"), "the caravan reaches 云溪坊市 after the road's days")
+	escort.player.location = "town"
+	check(not escort.Series.block(escort, "escort_qingshi").is_empty(), "no new caravan until the cooldown is over")
+	var lost := Session.new()
+	lost.encounters_enabled = false
+	lost.new_game("护送", 60, ["metal", "wood", "fire"])
+	lost.player.location = "town"
+	lost.player.stage = 2
+	lost.take_series("escort_qingshi")
+	lost.player.hp = 0
+	lost.Combat._lose(lost)
+	check(not lost.player.has("series") and lost.journal_lines().any(func(line: String) -> bool: return line.contains("没能撑到最后")), "a lost ambush ends the escort")
 
 func _saves() -> void:
 	var game := _duel("wolf", "pounce")

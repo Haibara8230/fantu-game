@@ -197,6 +197,11 @@ static func apply(s, effects: Array) -> void:
 				s.npc_depart(s.acting_npc)
 			"battle":
 				s.begin_battle(value, "event")
+			"pack":
+				if not s.battle.is_empty():
+					s.Combat.add_pack(s, value)
+			"series":
+				s.Series.begin(s, value)
 			"spar":
 				s.begin_spar(s.acting_npc)
 			"tournament":
@@ -491,11 +496,11 @@ static func upcoming(s) -> Array[Dictionary]:
 		if int(fixed.to) < day or not all_met(s, definition.remind.get("conditions", [])):
 			continue
 		result.append({"event": event_id, "from": int(fixed.from), "to": int(fixed.to), "title": definition.title, "location": definition.location})
-	# Recurring occasions the player should plan for (外门小比): the open window not yet taken part in,
-	# or the next one within a year.
+	# Recurring occasions the player should plan for (外门小比, 兽潮) and may take part in: the open window
+	# not yet taken part in, or the next one within a year.
 	for event_id: String in s.content.events:
 		var definition: Dictionary = s.content.events[event_id]
-		if not bool(definition.get("listed", false)) or not definition.has("periodic"):
+		if not bool(definition.get("listed", false)) or not definition.has("periodic") or not all_met(s, definition.get("conditions", [])):
 			continue
 		var window := window_at(definition, day)
 		if window.is_empty() or not open_for(s, event_id, window, day):

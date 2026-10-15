@@ -321,6 +321,8 @@ static func use_skill(s, skill_id: String) -> String:
 			if s.battle.status.has("sunder"):
 				factor *= 1.0 + float(s.battle.status.sunder[0])
 			var dealt := _strike_foe(s, maxi(1, int(round(float(roll) * factor))))
+			if int(t.hits) > 1:
+				_sweep(s, int(round(float(roll) * factor * PACK_SPLASH)))
 			s.combat_events.append(_event({"type": "attack", "actor": "player", "hits": int(t.hits), "amount": dealt, "hp_after": int(s.battle.hp), "counter": "克" if counter > 1.0 else ("被克" if counter < 1.0 else "")}, look))
 			text = s.log_event("skill_attack", {"skill": skill_id, "amount": dealt})
 			if t.has("lifesteal"):
@@ -354,11 +356,100 @@ static func _gain(s, orbs: Array) -> void:
 
 ## Damage to the opponent through its shield; returns what reached it.
 static func _strike_foe(s, damage: int) -> int:
+	var target := int(s.battle.get("target", 0))
+	if target > 0 and target <= s.battle.get("pack", []).size():
+		return _strike_member(s, target - 1, damage)
 	var absorbed := mini(int(s.battle.get("foe_shield", 0)), damage)
 	s.battle.foe_shield = int(s.battle.get("foe_shield", 0)) - absorbed
 	var dealt := damage - absorbed
 	s.battle.hp = maxi(0, int(s.battle.hp) - dealt)
 	return dealt
+
+## 群敌 (docs/COMBAT_PLAN.md, part one, stage five): more foes in the fight than the one in front
+## (battle.pack: [{"enemy_id", "hp"}]). The lead (battle.enemy_id and hp) acts by its intent and carries
+## the lingering effects; the others join at PACK_HP of their health and each strikes once a turn at
+## PACK_BLOW of its force. The player
+## picks whom to strike (battle.target: 0 the lead, n the pack's nth); an art of several hits (连击)
+## catches every other foe for PACK_SPLASH of the blow. When the lead falls the next steps up
+## (battle.felled keeps the fallen for the spoils); the fight is won when none is left.
+const PACK_BLOW := 0.4
+const PACK_HP := 0.6
+const PACK_SPLASH := 1.0 / 3.0
+
+## Joins more foes to the fight under way (an event's `pack`, a wave of a series).
+static func add_pack(s, enemy_ids: Array) -> void:
+	if not s.battle.has("pack"):
+		s.battle.pack = []
+	for enemy_id: Variant in enemy_ids:
+		s.battle.pack.append({"enemy_id": str(enemy_id), "hp": int(round(float(s.content.enemies[str(enemy_id)].hp) * PACK_HP))})
+	s.battle.target = 0
+	s.changed.emit()
+
+## Turns the player's arts on another foe of the pack (0 the lead); it takes no turn.
+static func set_target(s, index: int) -> String:
+	s.combat_events.clear()
+	if s.battle.is_empty() or index < 0 or index > s.battle.get("pack", []).size():
+		return "没有这个对手。"
+	s.battle.target = index
+	s.changed.emit()
+	var aimed: String = s.battle.enemy_id if index == 0 else str(s.battle.pack[index - 1].enemy_id)
+	return "转而对付%s。" % s.content.enemies[aimed].name
+
+static func _strike_member(s, index: int, damage: int) -> int:
+	var member: Dictionary = s.battle.pack[index]
+	var dealt := mini(damage, int(member.hp))
+	member.hp = int(member.hp) - dealt
+	if int(member.hp) <= 0:
+		s.battle.pack.remove_at(index)
+		if not s.battle.has("felled"):
+			s.battle.felled = []
+		s.battle.felled.append(str(member.enemy_id))
+		s.battle.target = 0
+		s.combat_events.append({"type": "fell", "enemy_id": str(member.enemy_id)})
+		s.log_event("pack_fell", {"enemy": str(member.enemy_id)})
+	return dealt
+
+## A 连击 sweeps the rest: every foe but the one aimed at takes a share of the blow.
+static func _sweep(s, damage: int) -> void:
+	if damage < 1 or s.battle.get("pack", []).is_empty():
+		return
+	var target := int(s.battle.get("target", 0))
+	if target != 0:
+		s.battle.hp = maxi(0, int(s.battle.hp) - damage)
+	for index: int in range(s.battle.pack.size() - 1, -1, -1):
+		if index + 1 != target:
+			_strike_member(s, index, damage)
+
+## The lead has fallen with others still standing: the next steps up, fresh, and shows its intent.
+static func _next_foe(s) -> String:
+	var fallen := str(s.battle.enemy_id)
+	if not s.battle.has("felled"):
+		s.battle.felled = []
+	s.battle.felled.append(fallen)
+	var next: Dictionary = s.battle.pack.pop_front()
+	s.battle.enemy_id = str(next.enemy_id)
+	s.battle.hp = int(next.hp)
+	s.battle.status = {}
+	s.battle.foe_shield = 0
+	s.battle.target = 0
+	for key: String in ["phase", "used", "charged"]:
+		s.battle.erase(key)
+	s.combat_events.append({"type": "fell", "enemy_id": fallen})
+	s.combat_events.append({"type": "next_foe", "enemy_id": str(next.enemy_id), "hp_after": int(s.battle.hp)})
+	var text: String = s.log_event("pack_fell", {"enemy": fallen}) + " " + s.log_event("pack_next", {"enemy": str(next.enemy_id)})
+	_foe_prepare(s)
+	s.changed.emit()
+	return text
+
+## The others of the pack strike, each once. True when they fell the player.
+static func _pack_strikes(s, guarding: bool) -> bool:
+	var factor: float = (1.0 - s.defense()) * PACK_BLOW
+	for member: Dictionary in s.battle.get("pack", []):
+		var enemy: Dictionary = s.content.enemies[str(member.enemy_id)]
+		var name: String = str(enemy.moves[0].name) if enemy.has("moves") else "围攻"
+		if _hurt_player(s, s.combat_rng.randi_range(int(enemy.damage_min), int(enemy.damage_max)), factor, guarding, {"style": "enemy", "name": "%s · %s" % [enemy.name, name]}):
+			return true
+	return false
 
 ## 相生: two orbs of an element become one of the element it gives rise to; it takes no turn.
 static func convert_qi(s, element: String) -> String:
@@ -532,6 +623,7 @@ static func _escape(s, text: String) -> String:
 	s.battle.clear()
 	# Outcomes are recorded on the day they happen; the recovery time follows.
 	var message: String = s.log_event("flee", {"days": days})
+	message = (s.Series.abandon(s) + " " + message).strip_edges()
 	return s.conclude((text + " " + message).strip_edges(), s.advance_days(days))
 
 ## 祭出 (part one, stage two): the worn 兵刃 thrown into the duel once (twice from 法宝 up), without
@@ -807,6 +899,7 @@ static func _do_move(s, planned: Dictionary, factor: float, guarding: bool) -> b
 	return false
 
 static func _enemy_turn(s, guarding: bool) -> String:
+	var arrived := false
 	var enemy_id: String = s.battle.enemy_id
 	# Lingering effects on the opponent act first: burning and bleeding can finish a fight.
 	var status: Dictionary = s.battle.get("status", {})
@@ -818,7 +911,13 @@ static func _enemy_turn(s, guarding: bool) -> String:
 		s.combat_events.append({"type": "attack", "actor": "player", "style": wound[0], "name": wound[1], "vfx": wound[2], "tier": 1, "hits": 1, "amount": bite, "hp_after": int(s.battle.hp)})
 		_count_down(status, wound[0])
 		if int(s.battle.hp) <= 0:
-			return _win(s)
+			if s.battle.get("pack", []).is_empty():
+				return _win(s)
+			# The next of the pack steps up; it has not yet had its turn.
+			_next_foe(s)
+			arrived = true
+			status = s.battle.status
+			break
 	s.battle.foe_shield = 0
 	var factor: float = 1.0 - s.defense()
 	if status.has("weaken"):
@@ -830,7 +929,7 @@ static func _enemy_turn(s, guarding: bool) -> String:
 		if _hurt_player(s, int(status.minions[0]), factor, guarding, {"style": "enemy", "name": "%s的帮手" % s.content.enemies[enemy_id].name}):
 			return _lose(s)
 		_count_down(status, "minions")
-	for planned: Dictionary in s.battle.get("intent", []):
+	for planned: Dictionary in (s.battle.get("intent", []) if not arrived else []):
 		if planned.has("move"):
 			if _do_move(s, planned, factor, guarding):
 				return _lose(s)
@@ -865,6 +964,8 @@ static func _enemy_turn(s, guarding: bool) -> String:
 						_inflict(s.battle.player_status, lingering, art[lingering])
 				if _hurt_player(s, s.combat_rng.randi_range(int(planned.min), int(planned.max)), factor, guarding, look):
 					return _lose(s)
+	if _pack_strikes(s, guarding):
+		return _lose(s)
 	# The player's turn: the shield has done its work, burning bites, new orbs come and the opponent
 	# shows its next intent.
 	s.battle.shield = 0
@@ -963,7 +1064,7 @@ static func _lose(s) -> String:
 	s.player.stones -= lost
 	s.player.location = "sect"
 	s.player.journey = {}
-	var message: String = s.log_event("battle_defeat", {"lost": lost})
+	var message: String = (s.Series.abandon(s) + " " + s.log_event("battle_defeat", {"lost": lost})).strip_edges()
 	var passed: Dictionary = s.advance_days(s.content.action_days("battle_defeat"))
 	s.player.hp = maxi(1, int(s.player.max_hp) / 2)
 	s.player.qi = s.player.max_qi
@@ -1090,6 +1191,8 @@ static func _counter_style(s) -> String:
 	return str(s.content.sects[sect_id].skills[0])
 
 static func _win(s) -> String:
+	if not s.battle.get("pack", []).is_empty():
+		return _next_foe(s)
 	s.combat_events.append({"type": "end", "result": "win"})
 	if s.battle.get("context", "") == "arena":
 		return s.Arena.over(s, true)
@@ -1103,6 +1206,8 @@ static func _win(s) -> String:
 	var enemy: Dictionary = s.content.enemies[enemy_id]
 	var days := _recovery_days(s, "battle_victory")
 	var npc: String = s.battle.get("npc", "")
+	var series_id := str(s.battle.get("series", ""))
+	var felled: Array = s.battle.get("felled", []).duplicate()
 	s.record_kill(enemy_id)
 	s.record_deed("duel")
 	s.record_deed("win:" + enemy_id)
@@ -1126,6 +1231,20 @@ static func _win(s) -> String:
 			var count: int = s.world_rng.randi_range(int(part.count[0]), int(part.count[1]))
 			s.add_item(str(part.item), count)
 			parts[str(part.item)] = int(parts.get(str(part.item), 0)) + count
+	# The rest of a pack (群敌) yields its stones, cultivation and parts too.
+	var pack_xp := 0
+	for fallen: String in felled:
+		var other: Dictionary = s.content.enemies[fallen]
+		s.record_kill(fallen)
+		s.player.stones += int(other.reward_stones)
+		pack_xp += int(other.reward_xp)
+		for part: Dictionary in other.get("parts", []):
+			if s.world_rng.randf() < float(part.chance):
+				var count: int = s.world_rng.randi_range(int(part.count[0]), int(part.count[1]))
+				s.add_item(str(part.item), count)
+				parts[str(part.item)] = int(parts.get(str(part.item), 0)) + count
+	if not felled.is_empty():
+		message += " " + s.log_event("pack_spoils", {"count": felled.size()})
 	if not parts.is_empty():
 		message += " " + s.log_event("loot", {"loot": s.loot_code(parts)})
 	if enemy.has("drops") and s.world_rng.randf() < float(enemy.drops.chance):
@@ -1134,8 +1253,10 @@ static func _win(s) -> String:
 		s.add_item(loot, 1)
 		message += " " + s.log_event("loot", {"loot": loot + ":1"})
 	message = _with_milestones(message, s.gain_insight("battle_win"))
-	message = _with_milestones(message, s.gain_xp(int(enemy.reward_xp)))
+	message = _with_milestones(message, s.gain_xp(int(enemy.reward_xp) + pack_xp))
 	# Won with almost nothing left against a foe of one's own realm or above: perhaps 生死之间.
 	message = _with_milestones(message, s.Fortune.after_win(s, int(enemy.min_realm)))
 	s.npc_depart(npc)
+	if not series_id.is_empty() and s.player.has("series"):
+		return s.Series.wave_won(s, message)
 	return s.conclude(message, s.advance_days(days))

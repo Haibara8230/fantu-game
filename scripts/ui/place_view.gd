@@ -179,6 +179,14 @@ static func _spot_action(ui, grid: GridContainer, action: String) -> void:
 			_action(ui, grid, "翻找石室  ·  " + ui.duration("search_ruin"), "search_ruin", "或得灵石、灵草，偶有丹药；搜过后需隔些时日")
 		"study", "explore_cave":
 			pass
+		"series":
+			for series_id: String in session.Series.here(session):
+				var series: Dictionary = session.Series.definition(session, series_id)
+				var reason: String = session.Series.block(session, series_id)
+				var reward: Dictionary = series.get("reward", {})
+				var about := "共 %d 场，接连打完，中间只喘口气；酬金 %d 灵石%s。败了或逃了便前功尽弃。" % [series.waves.size(), int(reward.get("stones", 0)), "，到%s，路上 %d 日" % [session.content.locations[series.to].name, int(series.days)] if series.has("to") else ""]
+				var take: Button = _timed(ui, grid, "接下 · %s" % series.name, func() -> String: return session.take_series(series_id), reason if not reason.is_empty() else about)
+				take.disabled = not reason.is_empty()
 		"arena":
 			var stage: Dictionary = session.Arena.stage(session)
 			var current: Dictionary = session.Arena.run(session)

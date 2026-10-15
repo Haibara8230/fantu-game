@@ -7,6 +7,7 @@
     {"id": "youming", "text": "北荒九幽魔宗有位幽冥老祖，以万魂幡炼魂。北边来的行商提起他，都要先压低声音。", "conditions": [{"realm_at_least": 1}]},
     {"id": "cangming", "text": "星罗海深处住着一位沧溟上人，不属任何宗门。出海的人说，他的船从不靠岸。", "conditions": [{"realm_at_least": 2}]},
     {"id": "due", "text": "中州大觉寺供着一块天外坠下的石碑，渡厄神僧守着它，从不许外人近前。", "conditions": [{"realm_at_least": 2}]},
-    {"id": "four_deities", "text": "都说如今人界确知在世的化神不过四位，元婴老祖们多半也只听过名号。另有一位剑修，下落至今成谜。", "conditions": [{"realm_at_least": 2}]}
+    {"id": "four_deities", "text": "都说如今人界确知在世的化神不过四位，元婴老祖们多半也只听过名号。另有一位剑修，下落至今成谜。", "conditions": [{"realm_at_least": 2}]},
+    {"id": "beast_tide", "text": "茶客说落霞谷每隔五六年便闹一回兽潮，秋天里狼群下山；到那时青石镇镇口总有人求修士帮忙守镇，上回压阵的是一头铁背熊王。", "conditions": [{"realm_at_least": 1}]}
   ]
 }

@@ -73,6 +73,13 @@ static func restore(s, data: Variant) -> bool:
 	var wake: Variant = _valid_wake(content, saved_player.get("wake", []))
 	if wake == null:
 		return false
+	# A series of fights under way and when each was last taken (optional).
+	var underway: Variant = saved_player.get("series", {})
+	if not underway is Dictionary or (not underway.is_empty() and (not content.series.has(underway.get("id", "")) or not _whole_nonnegative(underway.get("wave")) or int(underway.wave) >= content.series[underway.id].waves.size())):
+		return false
+	var series_last: Variant = saved_player.get("series_last", {})
+	if not series_last is Dictionary or series_last.keys().any(func(series_id: Variant) -> bool: return not content.series.has(series_id) or not _whole_nonnegative(series_last[series_id])):
+		return false
 	# A run at a 擂台 and the best streaks (optional).
 	var run: Variant = saved_player.get("arena", {})
 	if not run is Dictionary or (not run.is_empty() and (not content.locations.has(run.get("place", "")) or not _whole_nonnegative(run.get("streak")) or not run.get("fought") is Array or run.fought.any(func(person_id: Variant) -> bool: return not person_id is String))):
@@ -215,6 +222,17 @@ static func restore(s, data: Variant) -> bool:
 		var traits_used: Variant = saved_battle.get("traits_used", [])
 		if not traits_used is Array or traits_used.any(func(kind: Variant) -> bool: return not kind in ["heart_guard", "mirror"]):
 			return false
+		# 群敌 and 连战 (optional).
+		var pack: Variant = saved_battle.get("pack", [])
+		if not pack is Array or pack.size() > 4 or pack.any(func(member: Variant) -> bool: return not member is Dictionary or not content.enemies.has(member.get("enemy_id", "")) or not _whole_nonnegative(member.get("hp"))):
+			return false
+		if int(saved_battle.get("target", 0)) > pack.size():
+			return false
+		var felled: Variant = saved_battle.get("felled", [])
+		if not felled is Array or felled.any(func(enemy_id: Variant) -> bool: return not content.enemies.has(enemy_id)):
+			return false
+		if saved_battle.has("series") and not content.series.has(saved_battle.series):
+			return false
 		# Qi orbs (optional: duels saved before them draw a fresh hand when loaded).
 		for orbs_key: String in ["orbs", "foe_orbs"]:
 			var orbs: Variant = saved_battle.get(orbs_key, [])
@@ -223,7 +241,7 @@ static func restore(s, data: Variant) -> bool:
 		var chain: Variant = saved_battle.get("chain", "")
 		if not chain is String or (not chain.is_empty() and not content.technique_data.elements.has(chain)):
 			return false
-		for count_key: String in ["shield", "foe_shield", "pills", "talismans", "released"]:
+		for count_key: String in ["shield", "foe_shield", "pills", "talismans", "released", "target"]:
 			if not _whole_nonnegative(saved_battle.get(count_key, 0)):
 				return false
 		var intent: Variant = saved_battle.get("intent", [])
@@ -292,6 +310,12 @@ static func restore(s, data: Variant) -> bool:
 	player.qi = mini(int(player.qi), int(caps.max_qi))
 	player.warned_for = int(warned)
 	player["wake"] = wake
+	if not underway.is_empty():
+		player["series"] = {"id": str(underway.id), "wave": int(underway.wave)}
+	var last_taken := {}
+	for series_id: String in series_last:
+		last_taken[series_id] = int(series_last[series_id])
+	player["series_last"] = last_taken
 	if not run.is_empty():
 		player["arena"] = {"place": str(run.place), "streak": int(run.streak), "fought": run.fought.duplicate()}
 	var best_streaks := {}
@@ -321,7 +345,9 @@ static func restore(s, data: Variant) -> bool:
 		for skill_id: String in battle.cooldowns:
 			battle.cooldowns[skill_id] = int(battle.cooldowns[skill_id])
 		fresh_hand = not battle.has("orbs")
-		for count_key: String in ["shield", "foe_shield", "pills", "talismans", "released"]:
+		for member: Dictionary in battle.get("pack", []):
+			member.hp = int(member.hp)
+		for count_key: String in ["shield", "foe_shield", "pills", "talismans", "released", "target"]:
 			if battle.has(count_key):
 				battle[count_key] = int(battle[count_key])
 		# JSON brings every number back as a float; the whole ones are whole again.

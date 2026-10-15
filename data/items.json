@@ -402,6 +402,13 @@
     "aid": {"success": 15, "safe": true},
     "description": "贴在炉口，可稳住炉火。炼丹时用一张：成功率 +15%，武火失手也不会炸炉。"
   },
+  "xiong_dan": {
+    "name": "熊胆",
+    "category": "material",
+    "price": 60,
+    "rarity": 2,
+    "description": "铁背熊王的熊胆，色如墨玉，入手沉凉。药铺与坊市都肯出高价收。"
+  },
   "lei_fu": {
     "name": "掌心雷符",
     "category": "talisman",
