@@ -1,0 +1,50 @@
+{
+  "date": "2026-10-15",
+  "purpose": "天南（docs/WORLD_EXPANSION.md 阶段二）所缺的图。放到 target 路径即自动接入；地点整屏图画好后从 tests/art_smoke.gd 的 PENDING_LOCATIONS 删去对应地点。",
+  "style": "Use case: illustration-story. Production art for 凡途, an original Chinese cultivation 2D RPG. Style: CLEAR dark hand-drawn ink outlines, flat opaque color areas, restrained two-tone cel shading, simplified shapes and expressive illustrated faces, matching Chinese 2D cultivation game art. Muted jade, dusty teal, warm ivory, restrained gold; for 天南 add warm maple red, ember orange and soot grey as accents. No photorealism, realistic skin/textile, 3D, cinematic rendering, text, labels, UI, watermark.",
+  "assets": [
+    {
+      "id": "map_tiannan", "kind": "map", "target": "assets/art/map/region_tiannan.png", "size": [2560, 1600],
+      "subject": "天南舆图：西北是赤霄门（建在火脉上的山门，炉烟不断），中部是赤枫岭（四季火红的枫林，地下有火脉与熔窟口），东南是南明坊市（朱楼长街，坊西头一座传送阵）。北边一条远路翻过群山通回青云山周边。",
+      "prompt": "Top-down illustrated regional map in the same painted style as the existing 青云山周边 map (assets/art/map/region_qingyun.png), 16:10. Place landmarks at these relative positions so code-drawn nodes sit on them: 赤霄门 sect gate at (0.16, 0.24) on a mountain ridge with forge smoke; 赤枫岭 red maple ridge at (0.36, 0.42) with a glowing fissure; 南明坊市 market street at (0.56, 0.66) with a small stone teleport circle on its west side. Leave the right third calm (sky, river, haze) for the route window. No text, no node markers, no roads drawn as UI lines."
+    },
+    {
+      "id": "location_nanming", "kind": "location", "target": "assets/art/locations/nanming_fullscreen.png", "size": [1672, 941],
+      "subject": "南明坊市：地火映街，千炉不熄。天南最热闹的坊市，坐落在赤霄门脚下。万宝楼的分号占了半条街，器铺多半挂着赤霄门的旗；坊市西头的传送阵直通云溪坊市。",
+      "prompt": "Wide landscape 16:9 full-screen environment with generous sky height, foreground and readable architectural focal points. NO characters. Left-center landmarks: a three-storey vermilion 万宝楼 with lanterns, forge shops with red banners and glowing furnace mouths, a stone teleport circle at the far left; quiet right side for menu overlay. No banner framing."
+    },
+    {
+      "id": "location_chifeng", "kind": "location", "target": "assets/art/locations/chifeng_fullscreen.png", "size": [1672, 941],
+      "subject": "赤枫岭：枫叶如火，地气蒸腾。地下有火脉经过，枫林四季皆红，火性灵草长得比别处旺；枫林深处的山壁裂开一道热风扑面的熔窟口。",
+      "prompt": "Wide landscape 16:9 full-screen environment. NO characters. A ridge of flame-red maples on warm grey rock, faint heat shimmer, small clusters of red flowers in rock cracks; left-center a dark fissure in the cliff breathing orange glow; quiet right side for menu overlay."
+    },
+    {
+      "id": "location_chixiao_gate", "kind": "location", "target": "assets/art/locations/chixiao_gate_fullscreen.png", "size": [1672, 941],
+      "subject": "赤霄门：炉火映天，剑出赤霄。天南五宗之一，以火法与炼器闻名，山门建在一道火脉之上，器坊的炉火据说三百年未曾熄过。",
+      "prompt": "Wide landscape 16:9 full-screen environment. NO characters. A sect gate of dark stone and red lacquer on a mountain spur, a great foundry hall with chimneys and a steady ember glow, a small welcome pavilion by the gate; restrained, dignified; quiet right side for menu overlay."
+    },
+    {"id": "scene_nanming_wanbao", "kind": "scene", "target": "assets/art/scenes/nanming_wanbao.png", "size": [2400, 600], "subject": "万宝楼天南分号，三层朱楼，灵器料与丹药明码标价；楼前告示板贴着各家委托。", "prompt": "4:1 panorama banner, NO characters. Vermilion three-storey shop hall, shelves of ore ingots, silk bolts and jade, a notice board with blank paper slips (no writing)."},
+    {"id": "scene_nanming_teahouse", "kind": "scene", "target": "assets/art/scenes/nanming_teahouse.png", "size": [2400, 600], "subject": "听涛茶楼，往来的行商与各宗弟子歇脚的地方。", "prompt": "4:1 panorama banner, NO characters. Open teahouse terrace with low tables and teapots, maple shade, the market street beyond."},
+    {"id": "scene_nanming_broker", "kind": "scene", "target": "assets/art/scenes/nanming_broker.png", "size": [2400, 600], "subject": "牙行：替人赁屋、作保。", "prompt": "4:1 panorama banner, NO characters. A small broker's office with a wooden counter, rows of hanging keys on a board, a door curtain."},
+    {"id": "scene_nanming_abode", "kind": "scene", "target": "assets/art/scenes/nanming_abode.png", "size": [2400, 600], "subject": "坊外石屋：门前一株老枫，屋里一张蒲团，地上引了一缕温热的地脉灵气。", "prompt": "4:1 panorama banner, NO characters. A modest stone hut under an old red maple at the foot of a ridge, doorway showing a meditation cushion and a faint warm glow from the floor."},
+    {"id": "scene_chifeng_maples", "kind": "scene", "target": "assets/art/scenes/chifeng_maples.png", "size": [2400, 600], "subject": "赤枫林：火红的枫林下，赤炎花一丛丛开在温热的石缝里。", "prompt": "4:1 panorama banner, NO characters. Red maple grove floor, warm rocks with red flower clusters, a few glinting ember-red crystals in cracks."},
+    {"id": "scene_chifeng_cavern", "kind": "scene", "target": "assets/art/scenes/chifeng_cavern.png", "size": [2400, 600], "subject": "地火熔窟：枫林深处的山壁裂开一道口子，热风一阵阵涌出来。", "prompt": "4:1 panorama banner, NO characters. A cliff fissure glowing orange from within, scorched rock, falling maple leaves caught in rising heat."},
+    {"id": "scene_chixiao_gate_foundry", "kind": "scene", "target": "assets/art/scenes/chixiao_gate_foundry.png", "size": [2400, 600], "subject": "赤霄门器坊：引地火入炉，外人付了炉钱也可借用。", "prompt": "4:1 panorama banner, NO characters. A great forge hall with a furnace fed by a red vein in the floor, anvils, racks of unfinished swords."},
+    {"id": "scene_chixiao_gate_pavilion", "kind": "scene", "target": "assets/art/scenes/chixiao_gate_pavilion.png", "size": [2400, 600], "subject": "迎客亭：山门外的迎客亭，来访的修士在这里等候通传。", "prompt": "4:1 panorama banner, NO characters. A small red-pillared pavilion outside a sect gate, stone benches, the gate and smoking chimneys behind."},
+    {
+      "id": "portrait_yuan_chifeng", "kind": "portrait", "target": "assets/art/portraits/yuan_chifeng_unique.png", "size": [1122, 1402],
+      "subject": "袁赤锋，赤霄门器堂执事，金丹初期，132 岁看去四十许：一双手被炉火烤得黝黑，说起炼器头头是道，看人时总先看对方腰间挂着什么。",
+      "prompt": "Single distinct character half-body portrait, 4:5 vertical canvas. Face turned slightly RIGHT, hands and signature prop visible: a forging hammer and a small ember-red crystal. Strong middle-aged man, soot-darkened forearms, dark red and charcoal sect robe with rolled sleeves, sharp appraising eyes, faint calculating smile. Simple muted teal background. Register in data/art.json portrait_art."
+    },
+    {
+      "id": "portrait_han_jin", "kind": "portrait", "target": "assets/art/portraits/han_jin_unique.png", "size": [1122, 1402],
+      "subject": "韩烬，赤霄门弃徒，筑基后期，41 岁：衣衫被地火烧得破烂，怀里抱着一块暗红的古铜，被悬赏追拿，却没有要逃的样子。",
+      "prompt": "Single distinct character half-body portrait, 4:5 vertical canvas. Face turned slightly RIGHT. Lean man in a scorched, torn red-and-grey robe, ash on his face, holding a dark red bronze core to his chest, a singed ledger tucked in his belt, calm resolute eyes. Simple muted teal background. Register in data/art.json portrait_art."
+    },
+    {
+      "id": "battle_huo_xi", "kind": "battle", "target": "assets/art/battle/huo_xi.png", "size": [1536, 1024],
+      "subject": "熔窟火蜥：盘踞地火熔窟的火属妖兽。",
+      "prompt": "Duel sprite sheet on the same 2x2 grid as assets/art/beasts_atlas_v1.png (cells 768x464 on top, 768x552 below, transparent background): a large crimson-and-charcoal lizard with ember-glowing scales; top-left idle, top-right lunging attack, bottom row two hit/guard poses. Faces LEFT. Same frame regions so data/art.json actors.huo_xi works unchanged."
+    }
+  ]
+}

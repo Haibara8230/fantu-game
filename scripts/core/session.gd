@@ -186,7 +186,7 @@ func conclude(text: String, passed: Dictionary = {}) -> String:
 
 ## Records a chronicle entry and returns its display text.
 func log_event(id: String, args: Dictionary = {}, major: bool = false) -> String:
-	return chronicle.format(chronicle.add(int(world.day), id, args, major), content)
+	return chronicle.format(chronicle.add(int(world.day), id, args, major, str(player.get("location", ""))), content)
 
 func finish(message: String) -> String:
 	var told := Storylines.update(self)

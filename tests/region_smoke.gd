@@ -207,6 +207,12 @@ func _tiannan_market() -> void:
 	check(not game.available_here("cultivate") and game.Leases.until(game, "nanming_abode") == -1 and _texts(game).contains("租期满了"), "when the term ends the house closes and the chronicle says so")
 	check(int(game.item_count("huichun_grass")) == held, "and nothing of the player's is lost with it")
 	check(not game.commission_offers("nanming").is_empty() and game.available_here("commissions"), "万宝楼's board offers work to anyone")
+	# 「此地」 recall: each record remembers where the player was, and a save keeps it.
+	var here: Array = game.chronicle.entries.filter(func(entry: Dictionary) -> bool: return str(entry.get("at", "")) == "nanming").map(func(entry: Dictionary) -> String: return str(entry.id))
+	check("lease_taken" in here and "event" in here and not "start" in here, "what happened at 南明坊市 is recalled there (%s)" % [here])
+	var reloaded := Session.new()
+	reloaded.restore(JSON.parse_string(JSON.stringify(game.snapshot())))
+	check(reloaded.chronicle.entries.filter(func(entry: Dictionary) -> bool: return str(entry.get("at", "")) == "nanming").size() == here.size(), "and a save remembers where")
 	var board: Array = game.commission_offers("nanming").map(func(offer: Dictionary) -> String: return str(offer.kind))
 	check(board.all(func(kind: String) -> bool: return kind in ["fire_herbs", "fire_essence", "south_wolves"]), "of its own kinds (%s)" % [board])
 

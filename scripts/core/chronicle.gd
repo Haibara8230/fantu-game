@@ -13,8 +13,11 @@ var added := 0
 func clear() -> void:
 	entries.clear()
 
-func add(day: int, id: String, args: Dictionary = {}, major: bool = false) -> Dictionary:
+## `at` is the place the player was when it happened, for the 「此地」 recall (empty when unknown).
+func add(day: int, id: String, args: Dictionary = {}, major: bool = false, at: String = "") -> Dictionary:
 	var entry := {"day": day, "id": id, "args": args.duplicate(true), "major": major}
+	if not at.is_empty():
+		entry.at = at
 	entries.append(entry)
 	added += 1
 	_trim()
@@ -238,5 +241,11 @@ static func parse(data: Variant, current_day: int) -> Variant:
 			elif not (value is int or value is bool):
 				return null
 			args[key] = value
-		result.append({"day": int(day), "id": item.id, "args": args, "major": item.major})
+		var entry := {"day": int(day), "id": item.id, "args": args, "major": item.major}
+		# Where it happened (optional: entries before 2026-10-15 do not know).
+		if item.has("at"):
+			if not item.at is String or item.at.length() > 64:
+				return null
+			entry.at = item.at
+		result.append(entry)
 	return result

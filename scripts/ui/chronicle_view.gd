@@ -24,8 +24,10 @@ static func matches(entry: Dictionary, filter: String) -> bool:
 	return false
 
 ## The entries a filter shows, newest first.
+## 「此地」 ("here") recalls what happened where the player now stands, as far as the record knows.
 static func shown(ui) -> Array:
-	var result: Array = ui.session.chronicle.entries.filter(func(entry: Dictionary) -> bool: return matches(entry, ui.chronicle_filter))
+	var here: String = str(ui.session.player.get("location", ""))
+	var result: Array = ui.session.chronicle.entries.filter(func(entry: Dictionary) -> bool: return str(entry.get("at", "")) == here if ui.chronicle_filter == "here" else matches(entry, ui.chronicle_filter))
 	result.reverse()
 	return result
 
@@ -43,6 +45,7 @@ static func render(ui) -> void:
 	center.add_child(filters)
 	var choices: Array = [{"id": "all", "name": "全部"}]
 	choices.append_array(groups())
+	choices.append({"id": "here", "name": "此地 · " + str(session.content.locations.get(str(session.player.location), {}).get("name", ""))})
 	for group: Dictionary in choices:
 		var filter_id: String = group.id
 		var choice: Button = ui.button(str(group.name), func() -> void: ui.set_chronicle_filter(filter_id))
