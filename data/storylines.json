@@ -168,6 +168,15 @@
       }
     ]
   },
+  "furnace_bounty": {
+    "title": "熔窟逃人",
+    "giver": "yuan_chifeng",
+    "steps": [
+      {"id": "fire", "goal": "带三枚地火精回赤霄门器坊，交给袁赤锋。", "place": "chixiao_gate", "done": [{"item_at_least": ["dihuo_jing", 3]}, {"at_location": "chixiao_gate"}], "after": "袁赤锋掂了掂地火精：“成色不错。”他压低声音，“还有一桩：器坊的弃徒韩烬偷了镇炉的炉心铜，躲进了熔窟。执事堂悬赏三百灵石——活要见人，死要见铜。”", "effects": [{"item": ["dihuo_jing", -3]}, {"stones": 200}, {"relation": ["yuan_chifeng", 10]}]},
+      {"id": "find", "goal": "到赤枫岭的地火熔窟里找到韩烬（熔窟火蜥守着去路）。", "place": "chifeng", "done": [{"flag": "dihuo_lizard_down"}, {"at_location": "chifeng"}], "after": "火蜥巢后的岔道里蜷着一个人，衣衫烧得破烂，怀里死死抱着一块暗红的古铜。他抬头看你，没有逃：“袁赤锋派你来的？……也好。听我说完，再动手不迟。”", "effects": [{"meet": "han_jin"}]},
+      {"id": "decide", "goal": "在赤枫岭的熔窟口，决定如何处置韩烬与这份悬赏。", "place": "chifeng", "done": [{"any": [{"flag": "bounty_turned_in"}, {"flag": "bounty_exposed"}, {"flag": "bounty_let_go"}]}], "major": true}
+    ]
+  },
   "boatman_sword": {
     "title": "冰河剑痕",
     "giver": "boatman",

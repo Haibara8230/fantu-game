@@ -62,6 +62,7 @@
 | 霞锈剑傀、古修残念立绘 | 借用外门同门与洞府散修的图 | 独立图集（可选） |
 | 青云山「山门」场景图与魔潮魔将立绘（2026-10-14 加入） | 尚无；魔将借用洞府散修的图 | 场景图放到 `assets/art/scenes/sect_gate.png`，再从 `tests/art_smoke.gd` 的 `PENDING_SPOTS` 删去 |
 | 白鹭渡「天河渡口」场景图与飞升结局插图（2026-10-14 加入） | 尚无 | 场景图放到 `assets/art/scenes/ferry_crossing.png`，再从 `tests/art_smoke.gd` 的 `PENDING_SPOTS` 删去 |
+| 袁赤锋、韩烬立绘（2026-10-15 加入） | 尚无，资料卡显示首字印章 | 与许清和、顾长庚同规格的专属立绘，登记在 `data/art.json` 的 `portrait_art` |
 | 熔窟火蜥立绘（2026-10-15 加入） | 借用石窟影狼的图 | `assets/art/battle/huo_xi.png`，与妖狼图集同规格；放好即自动替换（`art.json` 的 `preferred`） |
 | 天南舆图与三处地点的图（2026-10-15 加入） | 天南舆图（`assets/art/map/region_tiannan.png`）、南明坊市、赤枫岭、赤霄门的整屏背景与各场景图一张也没有；舆图用代码画的山水，场景用 `landscape.gd` | 与青云各地同规格：16:9 整屏 `*_fullscreen.png`，场景图按 `scenes/<地点>_<场景>.png`；画好后从 `tests/art_smoke.gd` 的 `PENDING_LOCATIONS` 删去 |
 | 物品立绘（2026-10-15 加入） | 43 种物品（灵草、丹药、材料、丹方、器具、信物）一张也没有；`tests/content_smoke.gd` 只报告覆盖数 | 按 `docs/WORLD_EXPANSION.md` 2.8：常见物品可同族基稿改细节，目标九成以上；映射登记在 `data/art.json` 的 `item_art`，补齐后把测试改为必查 |

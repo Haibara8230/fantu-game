@@ -418,5 +418,90 @@
         "chronicle": "你向顾长庚请教筑基之道。"
       }
     ]
+  },
+  "yuan_chifeng": {
+    "name": "袁赤锋",
+    "title": "赤霄门器堂执事",
+    "attitude": "neutral",
+    "realm_text": "金丹初期",
+    "affiliation": "赤霄门",
+    "age": 132,
+    "gender": "male",
+    "personality": "好胜",
+    "description": "赤霄门器坊的执事，一双手被炉火烤得黝黑，说起炼器头头是道，看人时总先看对方腰间挂着什么。",
+    "home": "chixiao_gate",
+    "spot": "foundry",
+    "present_if": [{"not": {"flag": "bounty_exposed"}}],
+    "talk_favor": 2,
+    "gift_favor": 2,
+    "talk": [
+      "“青云的剑修？剑是好剑，就是炉子小了些。”",
+      "“赤霄的炉火三百年没熄过，靠的是什么，外人不必知道。”",
+      "“地火精？熔窟里有的是，就看你有没有胆子下去拿。”"
+    ],
+    "interactions": [
+      {
+        "id": "ask_bounty",
+        "label": "问起器坊要的地火精",
+        "conditions": [{"realm_at_least": 1}, {"story_state": ["furnace_bounty", "none"]}],
+        "effects": [{"start_story": "furnace_bounty"}],
+        "once": true,
+        "chronicle": "袁赤锋上下打量你一眼：“器坊开炉大典缺三枚地火精，熔窟里就有。你肯跑这一趟，赤霄不会亏待你。”"
+      }
+    ]
+  },
+  "han_jin": {
+    "name": "韩烬",
+    "title": "赤霄门弃徒",
+    "attitude": "neutral",
+    "realm_text": "筑基后期",
+    "affiliation": "赤霄门弃徒",
+    "age": 41,
+    "gender": "male",
+    "personality": "沉稳",
+    "description": "衣衫被地火烧得破烂，怀里抱着一块暗红的古铜。被赤霄门悬赏追拿，却没有要逃的样子。",
+    "home": "chifeng",
+    "spot": "cavern",
+    "present_if": [{"story_at": ["furnace_bounty", "decide"]}],
+    "talk_favor": 1,
+    "gift_favor": 3,
+    "talk": [
+      "“炉心铜不能落在他手里。”",
+      "“你要拿我领赏，我不拦你。听我说完再动手。”"
+    ],
+    "interactions": [
+      {
+        "id": "hear_out",
+        "label": "听他说完",
+        "conditions": [{"story_at": ["furnace_bounty", "decide"]}],
+        "effects": [{"flag": "hanjin_heard"}],
+        "once": true,
+        "chronicle": "韩烬说，炉心铜是赤霄器坊镇炉的古铜，炉火靠它才三百年不熄。袁赤锋暗中拿炉心铜淬火的兵器卖给北荒的血煞教，被他撞破，他才带着铜逃了出来。他摊开一本烧焦了边的账册：“证据都在这里。可执事堂只认悬赏，不认账册。”"
+      },
+      {
+        "id": "turn_in",
+        "label": "押他回赤霄门领赏（三百灵石）",
+        "conditions": [{"story_at": ["furnace_bounty", "decide"]}],
+        "effects": [{"flag": "bounty_turned_in"}, {"stones": 300}, {"relation": ["yuan_chifeng", 15]}, {"mind": -3}, {"story_advance": "furnace_bounty"}],
+        "once": true,
+        "chronicle": "你押着韩烬回了赤霄门。袁赤锋验过炉心铜，当场付了三百灵石，笑着拍了拍你的肩。韩烬被带走时，一句话也没说。"
+      },
+      {
+        "id": "expose",
+        "label": "带着账册去见赤霄门的传功长老",
+        "conditions": [{"story_at": ["furnace_bounty", "decide"]}, {"flag": "hanjin_heard"}],
+        "effects": [{"flag": "bounty_exposed"}, {"stones": 150}, {"mind": 6}, {"relation": ["han_jin", 30]}, {"story_advance": "furnace_bounty"}],
+        "once": true,
+        "chronicle": "你带着账册与韩烬去见赤霄门的传功长老。长老一页页翻完，脸色铁青，当夜便革了袁赤锋的执事之职。韩烬的名籍恢复了，炉心铜回到了器坊的炉底；长老按悬赏的一半付你一百五十灵石，算是谢礼。"
+      },
+      {
+        "id": "let_go",
+        "label": "放他离开天南",
+        "conditions": [{"story_at": ["furnace_bounty", "decide"]}],
+        "effects": [{"flag": "bounty_let_go"}, {"mind": 3}, {"relation": ["han_jin", 20]}, {"story_advance": "furnace_bounty"}],
+        "once": true,
+        "chronicle": "你给韩烬指了条往北的远路。他把账册塞进怀里，深深一揖，消失在赤枫林里。袁赤锋后来又贴了一回悬赏，再没有人揭。"
+      }
+    ]
   }
 }

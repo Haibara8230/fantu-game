@@ -1,5 +1,6 @@
 {
   "rumors": [
+    {"id": "chixiao_bounty", "text": "茶客说赤霄门器坊贴了悬赏，要拿一个偷了镇炉之物的弃徒；器堂执事袁赤锋还在找人下赤枫岭的熔窟取地火精。", "conditions": [{"flag": "tiannan_known"}, {"story_state": ["furnace_bounty", "none"]}]},
     {"id": "five_sects", "text": "茶客数起天南五宗：青云剑宗、赤霄门、长青谷、沧澜阁、玄岳宗。青云最小，可每逢论道，剑修的名声总要压别家一头。"},
     {"id": "tianyan", "text": "听说五宗之上还有一座天衍宗，专精阵法推演。五宗为灵脉、商路起了争执，都要请天衍的人来断。"},
     {"id": "xuanwei", "text": "中州太虚道宫的玄微真君，据说已闭关三百年。有人说他在找修复上古飞升台的法子，也有人说他早已不在人世。", "conditions": [{"realm_at_least": 1}]},

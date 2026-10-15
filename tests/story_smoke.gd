@@ -24,6 +24,7 @@ func _initialize() -> void:
 	_requests()
 	_foundation_pace()
 	_true_disciple()
+	_furnace_bounty()
 	_older_journeys()
 	print("STORIES: %d checks, %d failures" % [checks, failures])
 	quit(0 if failures == 0 else 1)
@@ -33,6 +34,12 @@ func _game(start: String = "guided", seed_value: int = 21) -> Session:
 	game.encounters_enabled = false
 	game.new_game("入门", seed_value, ["metal", "wood", "fire"], start)
 	return game
+
+func _option(game: Session, person_id: String, option_id: String) -> Dictionary:
+	for option: Dictionary in game.npc_options(person_id):
+		if option.id == option_id:
+			return option
+	return {}
 
 func _last(game: Session) -> String:
 	return game.journal_lines().back()
@@ -349,6 +356,44 @@ func _true_disciple() -> void:
 	check(game.story_at("true_disciple", "secret"), "two years later an old story waits at the hall")
 	game.travel("sect")
 	check(game.story_state("true_disciple") == "done" and game.player.items.keys().any(func(item_id: String) -> bool: return item_id.begins_with("j:") and int(game.content.item(item_id).tier) == 4), "and a 地阶 slip from the old secret realm")
+
+## 熔窟逃人 (stage two, batch D): 袁赤锋 at 赤霄门's foundry asks three 地火精, then names a bounty on
+## 韩烬, hidden past the 火蜥 in the 熔窟. Three endings: turned in for the bounty, exposed with his
+## ledger (only once heard out; the 执事 is dismissed), or let go north.
+func _furnace_bounty() -> void:
+	for ending: String in ["turn_in", "expose", "let_go"]:
+		var game := _game("plain", 64)
+		game.player.realm = 1
+		game.refresh_realm_stats()
+		game.player.hp = game.player.max_hp
+		game.player.stones = 400
+		game.world.flags.tiannan_known = true
+		game.travel("chixiao_gate")
+		check(game.player.location == "chixiao_gate" and "yuan_chifeng" in game.present_npcs(), "袁赤锋 keeps 赤霄门's foundry (%s)" % ending)
+		game.interact("yuan_chifeng", "ask_bounty")
+		check(game.story_at("furnace_bounty", "fire"), "he asks for three 地火精")
+		game.set_item_count("dihuo_jing", 3)
+		var stones := int(game.player.stones)
+		game.wait(1)
+		check(game.story_at("furnace_bounty", "find") and game.item_count("dihuo_jing") == 0 and int(game.player.stones) == stones + 200, "brought, they are paid for, and the bounty on 韩烬 is named")
+		game.world.flags.dihuo_lizard_down = true
+		game.travel("chifeng")
+		check(game.story_at("furnace_bounty", "decide") and "han_jin" in game.present_npcs(), "past the 火蜥 he is found at the 熔窟")
+		if ending == "expose":
+			check(_option(game, "han_jin", "expose").is_empty() or not _option(game, "han_jin", "expose").get("reason", "").is_empty(), "the ledger cannot be shown before he is heard out")
+			game.interact("han_jin", "hear_out")
+		stones = int(game.player.stones)
+		game.interact("han_jin", ending)
+		game.wait(1)
+		check(game.story_state("furnace_bounty") == "done" and not "han_jin" in game.present_npcs(), "%s ends the storyline, and he is gone" % ending)
+		match ending:
+			"turn_in":
+				check(game.has_flag("bounty_turned_in") and int(game.player.stones) == stones + 300, "turned in: three hundred stones")
+			"expose":
+				game.travel("chixiao_gate")
+				check(game.has_flag("bounty_exposed") and int(game.player.stones) >= stones + 150 and not "yuan_chifeng" in game.present_npcs(), "exposed: half the bounty, and 袁赤锋 is dismissed from the foundry")
+			"let_go":
+				check(game.has_flag("bounty_let_go") and int(game.player.stones) == stones, "let go: no bounty paid")
 
 ## Journeys from before the storylines are past the introduction, and the sect's storylines begin.
 func _older_journeys() -> void:
