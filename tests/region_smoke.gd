@@ -4,6 +4,7 @@ const Session = preload("res://scripts/core/session.gd")
 const Content = preload("res://scripts/core/content.gd")
 const AudioDirector = preload("res://scripts/presentation/audio_director.gd")
 const ArtLibrary = preload("res://scripts/ui/art_library.gd")
+const SaveStore = preload("res://scripts/core/save_store.gd")
 var checks := 0
 var failures := 0
 
@@ -29,6 +30,8 @@ func _run() -> void:
 	_azhi()
 	_people()
 	_saves()
+	_tiannan()
+	await _tiannan_screens()
 	await _audio()
 	_art()
 	print("REGION: %d checks, %d failures" % [checks, failures])
@@ -113,6 +116,93 @@ func _journeys() -> void:
 	passing.travel("sect")
 	passing.travel("ferry")
 	check(_texts(passing).contains("三十灵石作谢"), "plain event fires while passing through")
+
+## 天南 (docs/WORLD_EXPANSION.md, stage two, batch A): a region of its own on the map, opened after
+## foundation by 顾长庚's 「南行」; the 传送阵 from the 云溪 market asks foundation and 40 stones a way,
+## and a long road from the ferry asks nothing but the days.
+func _tiannan() -> void:
+	var content := Content.new()
+	content.load_data()
+	check(content.region_of("market") == "qingyun" and content.region_of("nanming") == "tiannan", "places belong to regions; those that name none, to the first")
+	check(_broken(func(c) -> void: c.locations.nanming.region = "moon").contains("未知地区"), "an unknown region is reported")
+	check(_broken(func(c) -> void: c.routes.back().fee = 0).contains("费用"), "a fee must be a number of stones")
+	check(_broken(func(c) -> void: c.routes.back().realm = 9).contains("境界"), "a realm asked must exist")
+	var opened := {"tiannan_known": true}
+	check(content.find_path("market", "nanming", opened) == ["market", "nanming"], "the gate is the short way")
+	check(content.find_path("market", "nanming", opened, 0) == ["market", "ferry", "chifeng", "nanming"], "before foundation only the long road is open")
+	var game := _game(81)
+	check(game.travel("nanming") == "未知地点。", "天南 is unknown at first")
+	game.player.realm = 1
+	game.refresh_realm_stats()
+	game.world.flags.intro_done = true
+	game.wait(1)
+	check(game.story_state("south_journey") == "active", "after foundation 顾长庚 has word of the south")
+	var waited := 0
+	while not game.story_at("south_journey", "summon") and waited < 6:
+		waited += 1
+		game.wait(30)
+	game.travel("sect")
+	check(game.has_flag("tiannan_known") and game.story_at("south_journey", "visit"), "and at the hall he tells of it: 天南 opens")
+	game.travel("market")
+	game.player.stones = 30
+	check(game.travel("nanming").contains("盘缠不足") and game.player.location == "market", "the gate wants its fee before setting out")
+	game.player.stones = 100
+	var day := int(game.world.day)
+	game.travel("nanming")
+	check(game.player.location == "nanming" and int(game.world.day) == day + 1 and int(game.player.stones) == 60, "one day and 40 stones through the gate")
+	check(_texts(game).contains("经传送阵前往南明坊市"), "the fee is in the chronicle")
+	check(game.story_state("south_journey") == "done", "arriving ends 南行")
+	check(game.available_here("shop") and game.available_here("sell") and game.available_here("forge") and game.available_here("inquire"), "the market trades, forges and has news")
+	check(not game.Inventory.shop_goods(game).filter(func(good: Dictionary) -> bool: return good.item == "ore_xuantie").is_empty(), "天南 sells what 灵器 are forged from")
+	game.travel("chixiao_gate")
+	check(game.player.location == "chixiao_gate" and game.available_here("forge"), "赤霄门's foundry lends its fire")
+	# The long road home: no fee, no realm, eighteen days.
+	var walker := _game(82)
+	walker.world.flags.tiannan_known = true
+	walker.travel("ferry")
+	var start := int(walker.world.day)
+	walker.travel("chifeng")
+	check(walker.player.location == "chifeng" and int(walker.world.day) == start + 18, "a 炼气 disciple can walk the long road south")
+	check(walker.path_to("market") == ["chifeng", "ferry", "market"], "and walks it back, the gate being closed to them")
+
+## The map turns to 天南 on its own page, and the new places render (without their art yet).
+func _tiannan_screens() -> void:
+	var main = load("res://scenes/main.tscn").instantiate()
+	var isolated := "res://.godot/region_saves_%d" % Time.get_ticks_usec()
+	main.manual_store = SaveStore.new(isolated + "/manual")
+	main.auto_store = SaveStore.new(isolated + "/auto")
+	main.settings_path = isolated + "/settings.cfg"
+	main.guide_path = isolated + "/guide.cfg"
+	root.add_child(main)
+	main.close_welcome()
+	main.started = true
+	main.guide_enabled = false
+	main.session.encounters_enabled = false
+	main.session.new_game("南行", 83, ["metal", "wood", "fire"])
+	main.story = {}
+	main.session.player.realm = 1
+	main.session.refresh_realm_stats()
+	main.session.world.flags.tiannan_known = true
+	main.set_view("map")
+	var tabs: Array = main.center.find_children("*", "Button", true, false).map(func(button: Button) -> String: return button.text)
+	check(tabs.has("青云山周边（此处）") and tabs.has("天南"), "two regions known, two map pages (%s)" % [tabs])
+	check(main.world_map.region == "qingyun" and not "nanming" in main.world_map.visible_ids(), "the map opens on the player's own region")
+	main.set_map_region("tiannan")
+	check(main.world_map.region == "tiannan" and main.world_map.visible_ids().has("nanming") and not main.world_map.visible_ids().has("sect"), "and turns to 天南")
+	main.select_map_target("nanming")
+	var told := "\n".join(main.center.find_children("*", "Label", true, false).map(func(label: Label) -> String: return label.text))
+	check(told.contains("传送阵共 40 灵石") and told.contains("云溪坊市 → 南明坊市"), "the route tells the gate's fee (%s)" % told)
+	main.session.player.realm = 0
+	main.render()
+	told = "\n".join(main.center.find_children("*", "Label", true, false).map(func(label: Label) -> String: return label.text))
+	check(told.contains("南下远路") or told.contains("路线"), "before foundation the long road is offered instead")
+	for location_id: String in ["nanming", "chifeng", "chixiao_gate"]:
+		main.session.player.location = location_id
+		main.set_view("place")
+		await process_frame
+		check(main.current_screen() == "place", location_id + " shows its place without its art yet")
+	main.queue_free()
+	await process_frame
 
 func _single_encounter(game: Session, keep: String) -> void:
 	for event_id: String in game.content.events.keys():

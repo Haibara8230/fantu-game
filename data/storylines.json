@@ -277,6 +277,16 @@
       {"id": "secret", "letter": true, "goal": "回传功堂，听顾长庚说一桩旧事。", "place": "sect", "done": [{"at_location": "sect"}], "say": "有一桩旧事，老夫想了许多年，也该让你知道了。回传功堂来。", "after": "顾长庚取出一枚边角残缺的玉简：“沉霞古境百年后才会再开。这是老夫当年从里面带出来的，可惜残了。你拿去参一参，或许用得上。”", "effects": [{"manual": 4}, {"mind": 6}], "major": true}
     ]
   },
+  "south_journey": {
+    "title": "南行",
+    "giver": "gu_changgeng",
+    "begin_if": [{"realm_at_least": 1}, {"flag": "intro_done"}],
+    "steps": [
+      {"id": "wait", "wait_days": 90},
+      {"id": "summon", "letter": true, "goal": "回传功堂见顾长庚，听他说说天南。", "place": "sect", "done": [{"at_location": "sect"}], "say": "筑基也有些日子了。青云山小，天南却大，回传功堂一趟，老夫同你说说外头。", "after": "顾长庚：“天南五宗，青云最小。云溪坊市有座传送阵，直通南明坊市，赤霄门就在那边——炼器的炉火三百年没熄过。去走一走，见见别家的炉子与剑，回来再说你的路。”", "effects": [{"flag": "tiannan_known"}, {"stones": 80}, {"mind": 3}]},
+      {"id": "visit", "goal": "经云溪坊市的传送阵，去南明坊市看看。", "place": "nanming", "done": [{"at_location": "nanming"}], "after": "传送阵的光一收，热风便扑面而来。南明坊市的长街被千百座炉火映得通红，万宝楼的伙计一眼认出你腰间青云的玉牌，笑着迎了上来。", "effects": [{"mind": 4}], "major": true}
+    ]
+  },
   "talent_xianren": {"title": "前世残忆", "giver": "boatman", "begin_if": [{"talent": "xianren_zhuanshi"}], "steps": [{"id": "dream", "requires": [{"stage_at_least": [0, 1]}], "say": "你又做了那个梦：立于云端，脚下是翻涌的雷海。醒来时，掌心多了一道看不懂的纹路，一闪便隐去了。", "effects": [{"mind": 5}], "auto": true}, {"id": "eye", "requires": [{"stage_at_least": [0, 3]}], "say": "残缺的记忆又浮上来一片：落霞谷深处，山壁裂隙之后，有一眼灵眼——前世的你，曾在那里破境。", "effects": [{"flag": "spirit_eye_found"}, {"mind": 3}], "major": true, "auto": true}, {"id": "boatman", "goal": "筑基之后，去白鹭渡见见那位老艄公。", "place": "ferry", "requires": [{"realm_at_least": 1}], "done": [{"at_location": "ferry"}], "after": "老艄公盯着你看了许久，手里的竹篙都忘了撑：“……是你？三百年了。”他从船底摸出一只木匣，“你当年托我保管的，如今物归原主。”", "effects": [{"manual": 4}, {"relation": ["boatman", 30]}, {"mind": 5}], "major": true}]},
   "talent_tianming": {"title": "天命", "giver": "storyteller", "begin_if": [{"talent": "tianming"}], "steps": [{"id": "omen", "goal": "去青石镇听雨茶馆，见一见说书的何三更。", "place": "town", "requires": [{"flag": "intro_done"}], "done": [{"at_location": "town"}], "after": "何三更一见你便停了醒木，半晌才道：“小友的命格，老朽说了一辈子书也没见过——福也大，劫也大。”他塞给你一枚破障丹，“路上用得着。”", "effects": [{"item": ["pozhang_pill", 1]}, {"mind": 5}]}, {"id": "verse", "goal": "筑基之后，再去听雨茶馆找何三更。", "place": "town", "requires": [{"realm_at_least": 1}], "done": [{"at_location": "town"}], "after": "何三更把一本旧书推到你面前：“这是我年轻时从一位前辈手里得来的，写的是天命之人的事。如今看来，书里说的就是你。”书页里夹着几张灵石票。", "effects": [{"stones": 200}, {"item": ["ningqi_pill", 2]}, {"relation": ["storyteller", 20]}], "major": true}]},
   "talent_hundun": {"title": "混沌之体", "giver": "gu_changgeng", "begin_if": [{"talent": "hundun"}], "steps": [{"id": "notice", "goal": "去青云山传功堂，见一见传功长老顾长庚。", "place": "sect", "requires": [{"flag": "intro_done"}], "done": [{"talked": "gu_changgeng"}, {"at_location": "sect"}], "after": "顾长庚一把扣住你的脉门，脸色变了又变：“五行俱全，混沌未分……混沌灵体！老夫活了一百多年，只在典籍里见过。”他取出一枚珍藏的玉简，“你的路，宗门的功法怕是不够用。”", "effects": [{"manual": 3}, {"mind": 5}, {"relation": ["gu_changgeng", 20]}], "major": true}, {"id": "trial", "goal": "筑基之后，回传功堂见顾长庚。", "place": "sect", "requires": [{"realm_at_least": 1}], "done": [{"at_location": "sect"}], "after": "顾长庚领你到后山一处灵脉，亲自为你护持了三日：“混沌灵体筑基之后，便该引五行之气淬体了。”", "effects": [{"xp": 500}, {"mind": 5}]}]},

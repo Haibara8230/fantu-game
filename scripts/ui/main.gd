@@ -110,6 +110,8 @@ var portrait_root := ArtLibrary.LOCAL_PORTRAITS
 var _pool_assignments := {}
 var _pool_key := ""
 var map_target := ""
+# The region the map is turned to (map_view.gd); empty is the one the player is in.
+var map_region := ""
 # The 编年史 view's filter (a group in data/chronicle_groups.json, or "all") and page (0 = newest).
 var chronicle_filter := "all"
 var chronicle_page := 0
@@ -627,6 +629,8 @@ func set_view(next_view: String) -> void:
 		session.mark_letters_read()
 	if next_view == "map" and map_target.is_empty():
 		map_target = str(session.player.journey.get("to", ""))
+	if next_view == "map":
+		map_region = ""
 	render()
 
 func set_chronicle_filter(filter: String) -> void:
@@ -907,6 +911,12 @@ func close_person() -> void:
 
 func close_story() -> void:
 	story = {}
+	audio.cue("page")
+	render()
+
+## Turns the map to another region's page.
+func set_map_region(region_id: String) -> void:
+	map_region = region_id
 	audio.cue("page")
 	render()
 

@@ -1,6 +1,7 @@
 extends Control
-## Node map of the region. Routes, nodes and labels are drawn in code on top of either the painted
-## background (when the art file exists) or a code-drawn ink placeholder. The player stands as a small
+## Node map of one region (舆图分页: data/world.json `regions`). Routes, nodes and labels are drawn in code
+## on top of either the painted background (when the art file exists) or a code-drawn ink placeholder;
+## a road that leaves the region is drawn as a marked exit at the place it starts from. The player stands as a small
 ## figure (the hero's duel art) at the place they are; a journey is played back by walk(): the figure
 ## walks leg by leg along the route, stepping and turning toward where it goes, after 觅长生.
 signal location_selected(location_id: String)
@@ -22,6 +23,9 @@ var preview_path: Array[String] = []
 # Acquaintances by location: location id -> names. Only people the player knows are shown.
 var people_at: Dictionary = {}
 var background: Texture2D
+# The region shown, and the one whose background is loaded.
+var region := ""
+var _background_region := ""
 var font := SystemFont.new()
 # The traveller's point while a journey is played back (null when standing at `current`).
 var traveller: Variant = null
@@ -37,12 +41,13 @@ func _ready() -> void:
 	font.font_names = PackedStringArray(["Microsoft YaHei", "Noto Sans CJK SC", "SimHei"])
 	mouse_filter = Control.MOUSE_FILTER_STOP
 	resized.connect(queue_redraw)
-	background = ArtLibrary.texture(ArtLibrary.map_path())
 	figure = ArtLibrary.actor_frame("hero", "idle")
 
-func configure(source_content, world_flags: Dictionary, here: String, target: String, path: Array[String], journey: String, known_people: Dictionary = {}) -> void:
+## `shown_region` is the region to draw (empty: the one the player is in).
+func configure(source_content, world_flags: Dictionary, here: String, target: String, path: Array[String], journey: String, known_people: Dictionary = {}, shown_region: String = "") -> void:
 	people_at = known_people
 	content = source_content
+	_show_region(shown_region if not shown_region.is_empty() else str(content.region_of(here)))
 	flags = world_flags
 	current = here
 	selected = target
@@ -52,8 +57,16 @@ func configure(source_content, world_flags: Dictionary, here: String, target: St
 
 ## The drawing area keeps the configured aspect ratio and covers the control (a wider screen crops a
 ## little off the top and bottom instead of leaving bars at the sides).
+func _show_region(region_id: String) -> void:
+	region = region_id
+	if _background_region != region:
+		_background_region = region
+		background = ArtLibrary.texture(ArtLibrary.map_path(region))
+
 func map_rect() -> Rect2:
-	var aspect := float(content.map.aspect) if content != null else 1.6
+	var aspect := 1.6
+	if content != null:
+		aspect = float(content.regions.get(region, content.map).get("aspect", content.map.aspect))
 	var width := maxf(size.x, size.y * aspect)
 	var height := width / aspect
 	return Rect2((size - Vector2(width, height)) * 0.5, Vector2(width, height))
@@ -66,7 +79,7 @@ func node_position(location_id: String) -> Vector2:
 func visible_ids() -> Array[String]:
 	var ids: Array[String] = []
 	for location_id: String in content.locations:
-		if content.location_visible(location_id, flags):
+		if content.location_visible(location_id, flags) and content.region_of(location_id) == region:
 			ids.append(location_id)
 	return ids
 
@@ -86,6 +99,17 @@ func walk(start: String, legs: Array[Dictionary], on_leg: Callable) -> void:
 	var from := start
 	for index: int in legs.size():
 		var to: String = legs[index].to
+		# A road out of the region (a 传送阵): the map turns to the other region, the time still passes.
+		if content.region_of(to) != content.region_of(from):
+			traveller = null
+			current = to
+			from = to
+			_show_region(str(content.region_of(to)))
+			queue_redraw()
+			var crossing := create_tween()
+			crossing.tween_method(func(progress: float) -> void: on_leg.call(index, progress), 0.0, 1.0, leg_seconds(int(legs[index].days)))
+			await crossing.finished
+			continue
 		var a := node_position(from)
 		var b := node_position(to)
 		if absf(b.x - a.x) > 1.0:
@@ -126,10 +150,10 @@ func _draw() -> void:
 	_draw_nodes()
 	if traveller is Vector2:
 		_draw_traveller(traveller, true)
-	elif not current.is_empty() and content.locations.has(current):
+	elif not current.is_empty() and content.locations.has(current) and content.region_of(current) == region:
 		_draw_traveller(node_position(current) + Vector2(NODE_RADIUS * 1.6, 0), false)
 	# The region's name at the top centre, clear of the HUD's corners.
-	var title := str(content.map.name)
+	var title := str(content.regions.get(region, content.map).get("name", content.map.name))
 	var width := font.get_string_size(title, HORIZONTAL_ALIGNMENT_LEFT, -1, 20).x
 	draw_string(font, Vector2(rect.position.x + (rect.size.x - width) * 0.5, rect.position.y + 30), title, HORIZONTAL_ALIGNMENT_LEFT, -1, 20, GOLD)
 
@@ -207,6 +231,13 @@ func _draw_routes() -> void:
 		var b: String = route.between[1]
 		if not content.location_visible(a, flags) or not content.location_visible(b, flags):
 			continue
+		var inside_a: bool = content.region_of(a) == region
+		var inside_b: bool = content.region_of(b) == region
+		if not inside_a and not inside_b:
+			continue
+		if inside_a != inside_b:
+			_draw_exit(route, a if inside_a else b, b if inside_a else a)
+			continue
 		var from := node_position(a)
 		var to := node_position(b)
 		var highlighted := _on_preview(a, b)
@@ -217,6 +248,30 @@ func _draw_routes() -> void:
 		draw_string(font, middle + Vector2(-16, -6), label, HORIZONTAL_ALIGNMENT_LEFT, -1, 13, GOLD if highlighted else MUTED)
 		for mark: int in range(int(route.danger)):
 			draw_circle(middle + Vector2(-8 + mark * 8, 8), 3.0, DANGER)
+
+## A road out of the region, at the place it leaves from: an arrow off the map and where it goes.
+func _draw_exit(route: Dictionary, here: String, there: String) -> void:
+	var at := node_position(here)
+	var highlighted := _on_preview(here, there)
+	var color := GOLD if highlighted else Color(0.72, 0.8, 0.76, 0.75)
+	# The arrow points away from the middle of the map, toward the edge the road leaves by.
+	var away := (at - map_rect().get_center()).normalized()
+	if away.is_zero_approx():
+		away = Vector2.RIGHT
+	var tip := at + away * NODE_RADIUS * 3.4
+	draw_dashed_line(at, tip, color, 3.0 if highlighted else 2.0, 6.0)
+	var side := away.orthogonal()
+	draw_colored_polygon(PackedVector2Array([tip + away * 7.0, tip + side * 5.0, tip - side * 5.0]), color)
+	# Kept short over the painted map; the days and the fee are in the route's window once a place is picked.
+	var words := "%s往%s" % [str(route.get("by", "")), content.regions.get(content.region_of(there), {}).get("name", content.locations[there].name)]
+	# Words run on from the arrow, or end at it when they would leave the screen on that side.
+	var width := font.get_string_size(words, HORIZONTAL_ALIGNMENT_LEFT, -1, 13).x
+	var left := tip.x + 10.0 if away.x >= 0.0 else tip.x - 10.0 - width
+	if left + width > size.x - 8.0:
+		left = tip.x - 10.0 - width
+	elif left < 8.0:
+		left = tip.x + 10.0
+	draw_string(font, Vector2(left, tip.y + (16.0 if away.y > 0.3 else -6.0)), words, HORIZONTAL_ALIGNMENT_LEFT, -1, 13, GOLD if highlighted else INK)
 
 func _draw_nodes() -> void:
 	for location_id: String in visible_ids():

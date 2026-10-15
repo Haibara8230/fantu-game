@@ -4,8 +4,16 @@ extends RefCounted
 ## encounter or an event can be continued.
 const Events = preload("res://scripts/core/events.gd")
 
+## The shortest way the player can take: roads that ask a higher realm (a 传送阵) are left out.
 static func path_to(s, location_id: String) -> Array[String]:
-	return s.content.find_path(s.player.location, location_id, s.world.flags)
+	return s.content.find_path(s.player.location, location_id, s.world.flags, int(s.player.realm))
+
+## The stones the roads of `path` ask (a 传送阵's fee), paid leg by leg.
+static func path_fee(s, path: Array[String]) -> int:
+	var total := 0
+	for index: int in range(1, path.size()):
+		total += int(s.content.route_between(path[index - 1], path[index]).get("fee", 0))
+	return total
 
 ## Sets out for a destination along the shortest known path and walks it leg by leg.
 static func travel(s, location_id: String) -> String:
@@ -18,8 +26,12 @@ static func travel(s, location_id: String) -> String:
 		return "%s已被封锁，暂时无法进入。" % s.content.locations[location_id].name
 	if s.player.location == location_id:
 		return "你已在此处。"
-	if path_to(s, location_id).is_empty():
+	var path := path_to(s, location_id)
+	if path.is_empty():
 		return "两地之间没有可走的路。"
+	var fee := path_fee(s, path)
+	if fee > int(s.player.stones):
+		return "盘缠不足：这一路要 %d 灵石。" % fee
 	var held: String = s.guide_block("travel", location_id)
 	if not held.is_empty():
 		return held
@@ -47,6 +59,14 @@ static func _walk(s) -> String:
 			break
 		var next: String = path[1]
 		var route: Dictionary = s.content.route_between(s.player.location, next)
+		var fee := int(route.get("fee", 0))
+		if fee > 0:
+			if int(s.player.stones) < fee:
+				s.player.journey = {}
+				parts.append("灵石不够%s的 %d 灵石，行程作罢。" % [route.get("by", "这一程"), fee])
+				break
+			s.player.stones = int(s.player.stones) - fee
+			parts.append(s.log_event("route_fee", {"fee": fee, "by": str(route.get("by", "")), "location": next}))
 		var passed: Dictionary = s.advance_days(s.route_days(route))
 		parts.append_array(passed.messages)
 		if not s.ended.is_empty():

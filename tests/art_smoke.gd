@@ -8,6 +8,9 @@ var failures := 0
 # Spots whose picture is still to be drawn (docs/BACKLOG.md, 尚缺的素材); their window falls back to the
 # location's picture until then.
 const PENDING_SPOTS := ["ruin/depths", "wild/chenxia", "sect/gate", "ferry/crossing"]
+# Places of a new region whose pictures are still to be drawn (docs/BACKLOG.md): the place view shows
+# the code-drawn landscape until then.
+const PENDING_LOCATIONS := ["nanming", "chifeng", "chixiao_gate"]
 
 func _initialize() -> void:
 	create_timer(60.0).timeout.connect(func() -> void: printerr("ART test timed out"); quit(1))
@@ -24,6 +27,9 @@ func _run() -> void:
 	var art: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://data/art.json"))
 	var events: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://data/events.json"))
 	for location_id: String in content.locations:
+		if location_id in PENDING_LOCATIONS:
+			check(ArtLibrary.texture(ArtLibrary.fullscreen_location_path(location_id)) == null, location_id + " is still pending; remove it from PENDING_LOCATIONS once drawn")
+			continue
 		var fullscreen := ArtLibrary.texture(ArtLibrary.fullscreen_location_path(location_id))
 		check(fullscreen != null and fullscreen.resource_path.ends_with("_fullscreen.png"), location_id + " has its full-screen composition")
 		if fullscreen != null:
@@ -79,6 +85,8 @@ func _run() -> void:
 	main.view = "place"
 	main.world_view = "place"
 	for location_id: String in content.locations:
+		if location_id in PENDING_LOCATIONS:
+			continue
 		main.session.player.location = location_id
 		main.render()
 		check(main.backdrop.texture.resource_path == ArtLibrary.fullscreen_location_path(location_id), location_id + " full-screen art reaches the place view")

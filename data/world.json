@@ -2,7 +2,12 @@
   "map": {
     "name": "青云山周边",
     "aspect": 1.6,
-    "start": "sect"
+    "start": "sect",
+    "region": "qingyun"
+  },
+  "regions": {
+    "qingyun": {"name": "青云山周边", "aspect": 1.6},
+    "tiannan": {"name": "天南", "aspect": 1.6}
   },
   "locations": {
     "sect": {
@@ -113,6 +118,66 @@
       "hidden_until": "found_ruin",
       "spots": [
         {"id": "stone_room", "tag": [0.27, 0.32], "name": "洞府石室", "description": "石室中散落着前人遗物，仔细翻找或许还有收获。", "actions": ["search_ruin"], "requires_flag": "ruin_cleared"}, {"id": "depths", "tag": [0.62, 0.42], "name": "洞府深处", "description": "前厅后面还有甬道与几间石室，机关、暗格与守洞的东西都还在。每探一间要费些日子；神识越强，看得越清。", "actions": ["explore_cave"], "requires_flag": "ruin_cleared"}
+      ]
+    },
+    "nanming": {
+      "name": "南明坊市",
+      "region": "tiannan",
+      "subtitle": "地火映街，千炉不熄。",
+      "description": "天南最热闹的坊市，坐落在赤霄门脚下。万宝楼的分号占了半条街，器铺多半挂着赤霄门的旗；坊市西头的传送阵直通云溪坊市。",
+      "terrain": "market",
+      "map": [0.56, 0.66],
+      "hidden_until": "tiannan_known",
+      "shop": [
+        {"item": "foundation_pill", "price": 130},
+        {"item": "ningyuan_dan", "price": 950},
+        {"item": "huiqi_pill", "price": 15},
+        {"item": "liaoshang_pill", "price": 20},
+        {"item": "ningqi_pill", "price": 60},
+        {"item": "pozhang_pill", "price": 40},
+        {"item": "kongho_fu", "price": 20},
+        {"item": "ore_xuantie", "price": 90},
+        {"item": "silk_xuancan", "price": 90},
+        {"item": "jade_mo", "price": 90}
+      ],
+      "buys": ["herb", "pill", "manual", "equipment", "treasure", "material"],
+      "stock": {
+        "restock_days": 30,
+        "lines": [
+          {"kind": "manual", "count": 2, "tiers": [2, 3], "slot": "art"},
+          {"kind": "manual", "count": 1, "tiers": [2, 3], "slot": "method"},
+          {"kind": "equipment", "count": 3, "tiers": [2, 3]}
+        ]
+      },
+      "spots": [
+        {"id": "wanbao", "tag": [0.42, 0.42], "name": "万宝楼", "description": "万宝楼天南分号，三层朱楼，灵器料与丹药明码标价，也收各色灵材。", "actions": ["shop", "sell", "forge"]},
+        {"id": "teahouse", "tag": [0.2, 0.55], "name": "听涛茶楼", "description": "往来的行商与各宗弟子都爱在这里歇脚，天南的消息多半从这里传开。", "actions": ["inquire"]}
+      ]
+    },
+    "chifeng": {
+      "name": "赤枫岭",
+      "region": "tiannan",
+      "subtitle": "枫叶如火，地气蒸腾。",
+      "description": "南明坊市与赤霄门之间的山岭，地下有火脉经过，枫林四季皆红，火性灵草长得比别处旺。北边有一条远路，翻过群山可回白鹭渡。",
+      "terrain": "ridge",
+      "map": [0.36, 0.42],
+      "hidden_until": "tiannan_known",
+      "gather": {"picks": [1, 3], "table": [{"item": "chiyan_flower", "weight": 55}, {"item": "huichun_grass", "weight": 30}, {"item": "ninglu_grass", "weight": 15}]},
+      "spots": [
+        {"id": "maples", "tag": [0.45, 0.5], "name": "赤枫林", "description": "火红的枫林下，赤炎花一丛丛开在温热的石缝里。", "actions": ["gather"]}
+      ]
+    },
+    "chixiao_gate": {
+      "name": "赤霄门",
+      "region": "tiannan",
+      "subtitle": "炉火映天，剑出赤霄。",
+      "description": "天南五宗之一，以火法与炼器闻名。山门建在一道火脉之上，器坊的炉火据说三百年未曾熄过。",
+      "terrain": "mountain",
+      "map": [0.16, 0.24],
+      "hidden_until": "tiannan_known",
+      "spots": [
+        {"id": "foundry", "tag": [0.55, 0.45], "name": "器坊", "description": "赤霄门对外的器坊，引地火入炉，外人付了炉钱也可借用。", "actions": ["forge"]},
+        {"id": "pavilion", "tag": [0.25, 0.6], "name": "迎客亭", "description": "山门外的迎客亭，来访的修士在这里等候通传，也听得到些门内的事。", "actions": ["inquire"]}
       ]
     }
   },
@@ -571,7 +636,12 @@
     {"between": ["town", "ridge"], "days": 3, "danger": 1},
     {"between": ["ridge", "wild"], "days": 3, "danger": 2},
     {"between": ["market", "wild"], "days": 6, "danger": 2},
-    {"between": ["wild", "ruin"], "days": 2, "danger": 3}
+    {"between": ["wild", "ruin"], "days": 2, "danger": 3},
+    {"between": ["market", "nanming"], "days": 1, "danger": 0, "by": "传送阵", "fee": 40, "realm": 1},
+    {"between": ["ferry", "chifeng"], "days": 18, "danger": 2, "by": "南下远路"},
+    {"between": ["nanming", "chifeng"], "days": 3, "danger": 1},
+    {"between": ["chifeng", "chixiao_gate"], "days": 2, "danger": 1},
+    {"between": ["nanming", "chixiao_gate"], "days": 4, "danger": 0}
   ],
   "actions": {
     "cultivate": 30,
@@ -587,7 +657,7 @@
     "search_ruin": 5,
     "road_recovery": 1
   },
-  "world_flags": ["ascension_open", "calamity", "calamity_turned", "chenxia_open", "chenxia_puppet_down", "chenxia_remnant_down", "ruin_den_cleared", "serpent_slain", "heard_auction_rumor", "found_ruin", "ruin_cleared", "helped_wanderer", "serpent_rampage", "azhi_promised", "azhi_mourned", "intro_done", "peddler_friend", "serpent_weakened", "spirit_eye_found"],
+  "world_flags": ["ascension_open", "calamity", "calamity_turned", "chenxia_open", "chenxia_puppet_down", "chenxia_remnant_down", "ruin_den_cleared", "serpent_slain", "heard_auction_rumor", "found_ruin", "ruin_cleared", "helped_wanderer", "serpent_rampage", "azhi_promised", "azhi_mourned", "intro_done", "peddler_friend", "serpent_weakened", "spirit_eye_found", "tiannan_known"],
   "sects": {
     "wanderer": {
       "name": "散修",

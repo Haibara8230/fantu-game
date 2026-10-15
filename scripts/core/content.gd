@@ -14,6 +14,8 @@ var items: Dictionary = {}
 var events: Dictionary = {}
 var chronicle: Dictionary = {}
 var map: Dictionary = {}
+# The regions the map is drawn in (舆图分页); places name theirs, or belong to map.region.
+var regions: Dictionary = {}
 var technique_data: Dictionary = {}
 var equipment_data: Dictionary = {}
 var vfx_tiers: Array = []
@@ -133,6 +135,7 @@ func load_data() -> bool:
 			"lore":
 				lore_data = loaded
 	map = parsed.map
+	regions = parsed.get("regions", {})
 	locations = parsed.locations
 	skills = parsed.skills
 	enemies = parsed.enemies
@@ -205,6 +208,13 @@ func _validate() -> String:
 			return "路线天数错误。"
 		if not _whole(route.get("danger")) or int(route.danger) >= DANGER_LEVELS:
 			return "路线危险度错误：%s" % "—".join(route.between)
+		# A road may be a 传送阵 or the like (`by`), cost stones each way (`fee`) and ask a realm (`realm`).
+		if route.has("by") and (not route.by is String or str(route.by).is_empty()):
+			return "路线名称无效：%s" % "—".join(route.between)
+		if route.has("fee") and (not _whole(route.fee) or int(route.fee) < 1):
+			return "路线费用无效：%s" % "—".join(route.between)
+		if route.has("realm") and (not _whole(route.realm) or int(route.realm) >= realms.size()):
+			return "路线境界要求无效：%s" % "—".join(route.between)
 	for action_id: String in actions:
 		if not _whole(actions[action_id]):
 			return "行为耗时错误：" + action_id
@@ -948,6 +958,12 @@ func _validate_map() -> String:
 		return "地图起点无效。"
 	if not (map.get("aspect") is float or map.get("aspect") is int) or float(map.aspect) <= 0.0:
 		return "地图比例无效。"
+	if not regions.has(map.get("region", "")):
+		return "地图缺少所属地区。"
+	for region_id: String in regions:
+		var region: Variant = regions[region_id]
+		if not region is Dictionary or not region.get("name") is String or not (region.get("aspect") is float or region.get("aspect") is int) or float(region.aspect) <= 0.0:
+			return "地区配置无效：" + region_id
 	for location_id: String in locations:
 		var location: Dictionary = locations[location_id]
 		var point: Variant = location.get("map")
@@ -958,6 +974,8 @@ func _validate_map() -> String:
 				return "地图坐标超出范围：" + location_id
 		if not location.get("terrain") is String:
 			return "地点缺少地貌：" + location_id
+		if location.has("region") and not regions.has(location.region):
+			return "地点属于未知地区：" + location_id
 		if location.has("hidden_until") and not location.hidden_until in world_flags:
 			return "隐藏地点引用了未知标记：" + location_id
 		if location.has("sealed_if") and not location.sealed_if in world_flags:
@@ -1067,6 +1085,10 @@ func location_visible(location_id: String, flags: Dictionary) -> bool:
 	var location: Dictionary = locations.get(location_id, {})
 	return not location.is_empty() and (not location.has("hidden_until") or bool(flags.get(location.hidden_until, false)))
 
+## The region a place is drawn in: its own, or the map's first.
+func region_of(location_id: String) -> String:
+	return str(locations.get(location_id, {}).get("region", map.get("region", "")))
+
 func route_between(from_id: String, to_id: String) -> Dictionary:
 	for route: Dictionary in routes:
 		if from_id in route.between and to_id in route.between and from_id != to_id:
@@ -1086,9 +1108,12 @@ func location_sealed(location_id: String, flags: Dictionary) -> bool:
 	var location: Dictionary = locations.get(location_id, {})
 	return location.has("sealed_if") and bool(flags.get(location.sealed_if, false))
 
-func neighbors(location_id: String, flags: Dictionary) -> Array[String]:
+## Places one road away. With `realm` at 0 or above, roads that ask a higher realm are left out.
+func neighbors(location_id: String, flags: Dictionary, realm: int = -1) -> Array[String]:
 	var result: Array[String] = []
 	for route: Dictionary in routes:
+		if realm >= 0 and int(route.get("realm", 0)) > realm:
+			continue
 		if location_id in route.between:
 			var other: String = route.between[1] if route.between[0] == location_id else route.between[0]
 			if location_visible(other, flags) and not location_sealed(other, flags):
@@ -1097,7 +1122,8 @@ func neighbors(location_id: String, flags: Dictionary) -> Array[String]:
 
 ## Shortest path by days over visible locations, including both ends; empty when unreachable.
 ## Ties prefer the lower total danger, then the alphabetical order of ids, so paths are stable.
-func find_path(from_id: String, to_id: String, flags: Dictionary) -> Array[String]:
+## With `realm` at 0 or above, roads that ask a higher realm (a 传送阵 before foundation) are not taken.
+func find_path(from_id: String, to_id: String, flags: Dictionary, realm: int = -1) -> Array[String]:
 	var empty: Array[String] = []
 	if not location_visible(from_id, flags) or not location_visible(to_id, flags):
 		return empty
@@ -1114,7 +1140,7 @@ func find_path(from_id: String, to_id: String, flags: Dictionary) -> Array[Strin
 		done[current] = true
 		if current == to_id:
 			break
-		for other: String in neighbors(current, flags):
+		for other: String in neighbors(current, flags, realm):
 			var route := route_between(current, other)
 			var cost := [int(best[current][0]) + int(route.days), int(best[current][1]) + int(route.danger)]
 			if not best.has(other) or cost[0] < best[other][0] or (cost[0] == best[other][0] and cost[1] < best[other][1]):

@@ -127,7 +127,7 @@
   "road_wolf": {
     "title": "山道妖狼",
     "trigger": "route",
-    "routes": [["ridge", "wild"], ["market", "wild"], ["wild", "ruin"]],
+    "routes": [["ridge", "wild"], ["market", "wild"], ["wild", "ruin"], ["ferry", "chifeng"], ["nanming", "chifeng"], ["chifeng", "chixiao_gate"]],
     "min_danger": 1,
     "weight": 3,
     "repeat": {"cooldown_days": 1},

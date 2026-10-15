@@ -305,7 +305,10 @@ func _calamity() -> void:
 	game.wait(1)
 	check(game.journal_lines().any(func(line: String) -> bool: return line.contains("北天裂开")), "omens a year ahead")
 	game.world.day = Calendar.to_day(300, 2, 30)
-	game.wait(1)
+	# A storyline's 传音 (南行, 真传之责) may end a stay on its first day; stay on until the spring comes.
+	for stay: int in 3:
+		if int(game.world.day) <= Calendar.to_day(300, 2, 30):
+			game.wait(1)
 	check(game.has_flag("calamity") and game.available_here("battle:mo_jiang"), "in the spring of 300 the tide reaches the gate, and a 金丹 may face its general")
 	var merit := int(game.player.get("contribution", 0))
 	game.start_battle("mo_jiang")

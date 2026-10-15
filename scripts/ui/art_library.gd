@@ -3,8 +3,8 @@ extends RefCounted
 ## so art can be dropped in later without code changes (see docs/ART_ASSETS.md).
 const ROOT := "res://assets/art/"
 
-static func map_path() -> String:
-	return ROOT + "map/region_qingyun.png"
+static func map_path(region: String = "qingyun") -> String:
+	return ROOT + "map/region_%s.png" % region
 
 static func location_path(location_id: String) -> String:
 	return ROOT + "locations/%s.png" % location_id

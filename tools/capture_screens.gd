@@ -108,6 +108,19 @@ func _run() -> void:
 	await _shot("14_alchemy")
 	main.set_view("map")
 	await _shot("15_map")
+	# 天南 known: the map's two pages, the gate drawn as an exit from the 云溪 market.
+	main.session.world.flags["tiannan_known"] = true
+	main.session.player.realm = 1
+	main.session.refresh_realm_stats()
+	main.select_map_target("nanming")
+	await _shot("15d_map_gate")
+	main.set_map_region("tiannan")
+	await _shot("15e_map_tiannan")
+	main.session.world.flags.erase("tiannan_known")
+	main.session.player.realm = 0
+	main.session.refresh_realm_stats()
+	main.map_target = ""
+	main.map_region = ""
 	# The sect page of an inner disciple holding a duty.
 	main.session.player.rank = main.session.Sect.rank_index(main.session, "inner")
 	main.session.player.duty = "alchemy"

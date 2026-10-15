@@ -293,22 +293,28 @@ func _foundation_pace() -> void:
 	check(game.story_state("inner_court") == "active", "and entering the inner court opens its storyline")
 	var letters: Array[int] = []
 	var start := int(game.world.day)
-	game.wait(400)
+	# Other 传音 of those years (南行 after foundation, the auction's reminder) may end a stay first.
+	var stays := 0
+	while not game.story_at("inner_court", "patrol") and stays < 6:
+		stays += 1
+		game.wait(400)
 	letters.append(int(game.world.day) - start)
 	check(game.story_at("inner_court", "patrol") and letters[0] == 360, "a year later the first summons ends the stay (%d)" % letters[0])
 	game.record_deed("win:rogue")
 	game.wait(1)
 	check(game.story_step("inner_court").id == "wait_tide", "the patrol done, the court is quiet again")
 	start = int(game.world.day)
-	game.wait(800)
+	stays = 0
+	while not game.story_at("inner_court", "tide") and stays < 6:
+		stays += 1
+		game.wait(800)
 	letters.append(int(game.world.day) - start)
 	check(game.story_at("inner_court", "tide") and letters[1] == 720, "two years later the spirit tide (%d)" % letters[1])
 	var xp := int(game.player.xp)
 	game.travel("wild")
 	check(game.story_step("inner_court").id == "wait_trial" and int(game.player.xp) == xp + 360, "reaching the spring takes in the tide")
-	# Other appointments of those years (the auction's reminder) may end a stay first.
 	start = int(game.world.storylines.inner_court.since)
-	var stays := 0
+	stays = 0
 	while not game.story_at("inner_court", "trial") and stays < 10:
 		stays += 1
 		game.wait(1200)

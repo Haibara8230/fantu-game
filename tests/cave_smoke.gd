@@ -204,10 +204,15 @@ func _chenxia() -> void:
 	game.use_skill("sword")
 	check(game.has_flag("chenxia_puppet_down") and game.Caves.reachable(game, "chenxia", "library"), "fallen, the way to the library opens")
 	game.world.day = calendar.to_day(151, 2, 30)
-	game.wait(1)
+	# A storyline's 传音 (南行) may end a stay on its first day; stay on until the day has passed.
+	for stay: int in 3:
+		if int(game.world.day) <= calendar.to_day(151, 2, 30):
+			game.wait(1)
 	check(not game.has_flag("chenxia_open") and game.cave_here().is_empty(), "a year later it closes")
 	game.world.day = calendar.to_day(210, 2, 30)
-	game.wait(1)
+	for stay: int in 3:
+		if int(game.world.day) <= calendar.to_day(210, 2, 30):
+			game.wait(1)
 	check(game.has_flag("chenxia_open") and not game.has_flag("chenxia_puppet_down") and not game.world.caves.has("chenxia"), "sixty years on it opens afresh, its guardians standing again")
 
 func _scroll() -> void:
