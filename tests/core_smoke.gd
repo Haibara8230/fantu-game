@@ -104,7 +104,12 @@ func _initialize() -> void:
 	check(game.snapshot() == copy.snapshot(), "RNG continues identically after loading")
 	var held: int = game.battle.orbs.size()
 	game.defend()
-	check(game.battle.is_empty() or game.battle.orbs.size() == mini(held, game.Combat.hand_cap(game)) + game.Combat.draw_count(game) + int(game.content.rules.duel.guard_orbs), "guarding ends the turn and brings one more orb")
+	# A coil (缠绕) or a freeze (冰封) put on the player in the serpent's turn draws fewer.
+	var held_back := 0
+	for binding: String in ["slow", "entangle"]:
+		if not game.battle.is_empty() and game.battle.player_status.has(binding):
+			held_back += int(game.battle.player_status[binding][0])
+	check(game.battle.is_empty() or game.battle.orbs.size() == mini(held, game.Combat.hand_cap(game)) + maxi(1, game.Combat.draw_count(game) - held_back + int(game.content.rules.duel.guard_orbs)), "guarding ends the turn and brings one more orb")
 	var rounds := 0
 	while not game.battle.is_empty() and rounds < 40:
 		rounds += 1

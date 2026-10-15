@@ -60,6 +60,7 @@ const DEEDS := ["retreat_days", "duel", "trade", "gather", "commission", "help",
 const STORY_STATES := ["none", "active", "done", "closed"]
 const Arsenal = preload("res://scripts/core/arsenal.gd")
 const Talents = preload("res://scripts/core/talents.gd")
+const Combat = preload("res://scripts/core/combat.gd")
 
 func load_data() -> bool:
 	var parsed: Variant = _read_json("res://data/world.json")
@@ -238,6 +239,9 @@ func _validate() -> String:
 			return "敌人引用了未知贺信：" + enemy_id
 		if enemy.has("contribution") and (not _whole(enemy.contribution) or not enemy.has("world_flag")):
 			return "敌人的宗门贡献无效：" + enemy_id
+		var moves_problem := _validate_moves(enemy)
+		if not moves_problem.is_empty():
+			return "敌人招式配置无效：%s（%s）" % [enemy_id, moves_problem]
 	var chance: Variant = rules.get("encounter_chance")
 	if not chance is Array or chance.size() != DANGER_LEVELS:
 		return "遭遇几率需要按危险度给出 %d 档。" % DANGER_LEVELS
@@ -506,6 +510,51 @@ func _validate_sect() -> String:
 	return ""
 
 ## A qi-orb cost: {key: count} with known keys and whole counts, at least one orb.
+## A handwritten opponent's move table and phases (combat.gd _plan_move): optional; when present each
+## move has a unique id, a name, a known kind and the numbers its kind needs; phases fall in order.
+func _validate_moves(enemy: Dictionary) -> String:
+	if not enemy.has("moves"):
+		return "有阶段须先有招式表" if enemy.has("phases") else ""
+	var ids := {}
+	var groups: Array = [enemy.moves]
+	var last := 1.0
+	for phase: Variant in enemy.get("phases", []):
+		if not phase is Dictionary or not (phase.get("below") is float or phase.get("below") is int) or float(phase.below) <= 0.0 or float(phase.below) >= last or not phase.get("text") is String or not (phase.get("power", 1.0) is float or phase.get("power", 1.0) is int):
+			return "阶段须按血量从高到低，并写明说明"
+		last = float(phase.below)
+		groups.append(phase.get("moves", []))
+	if not enemy.moves is Array or enemy.moves.is_empty():
+		return "招式表为空"
+	for group: Variant in groups:
+		if not group is Array:
+			return "招式须是列表"
+		for move: Variant in group:
+			if not move is Dictionary or not move.get("id") is String or ids.has(move.id) or not move.get("name") is String or not move.get("kind", "attack") in Combat.MOVE_KINDS:
+				return "招式缺少唯一编号、名称或类别"
+			ids[move.id] = true
+			for key: String in ["weight", "hits", "every"]:
+				if move.has(key) and (not _whole(move[key]) or int(move[key]) < 1):
+					return "%s.%s 无效" % [move.id, key]
+			for key: String in ["power", "below", "heal", "shield", "drain"]:
+				if move.has(key) and (not (move[key] is float or move[key] is int) or float(move[key]) <= 0.0):
+					return "%s.%s 无效" % [move.id, key]
+			var kind := str(move.get("kind", "attack"))
+			for needed: Array in [["heal", "heal"], ["guard", "shield"], ["focus", "focus"], ["summon", "summon"]]:
+				if kind == needed[0] and not move.has(needed[1]):
+					return "%s 缺少 %s" % [move.id, needed[1]]
+			var lingering: Array = []
+			for key: String in ["focus", "summon"]:
+				if move.has(key):
+					lingering.append(move[key])
+			for key: Variant in move.get("inflict", {}):
+				if not key in Combat.LINGERING:
+					return "%s 施加了未知状态 %s" % [move.id, key]
+				lingering.append(move.inflict[key])
+			for value: Variant in lingering:
+				if not value is Array or value.size() != 2 or not (value[0] is float or value[0] is int) or float(value[0]) <= 0.0 or not _whole(value[1]) or int(value[1]) < 1:
+					return "%s 的状态须是 [数值, 回合]" % move.id
+	return ""
+
 func _valid_cost(cost: Variant, keys: Array) -> bool:
 	if not cost is Dictionary or cost.is_empty():
 		return false

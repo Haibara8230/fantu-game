@@ -402,9 +402,9 @@
     }
   },
   "enemies": {
-    "yue_disciple": {"name": "玄岳弟子", "element": "earth", "hp": 170, "damage_min": 10, "damage_max": 15, "reward_stones": 20, "reward_xp": 45, "reward_herbs": 0, "locations": ["xuanyue_gate"], "min_realm": 1, "human": true, "sect": "xuanyue"},
-    "huo_xi": {"name": "熔窟火蜥", "element": "fire", "hp": 300, "damage_min": 20, "damage_max": 28, "reward_stones": 60, "reward_xp": 220, "reward_herbs": 0, "locations": [], "min_realm": 1, "world_flag": "dihuo_lizard_down", "flag_event": "lizard_down"},
-    "disciple": {
+    "yue_disciple": {"moves": [{"id": "fist", "name": "山拳", "weight": 3}, {"id": "armor", "name": "结岩甲", "kind": "guard", "shield": 0.12, "weight": 1}, {"id": "quake", "name": "崩山", "kind": "charge", "power": 1.5, "weight": 1}], "name": "玄岳弟子", "element": "earth", "hp": 170, "damage_min": 10, "damage_max": 15, "reward_stones": 20, "reward_xp": 45, "reward_herbs": 0, "locations": ["xuanyue_gate"], "min_realm": 1, "human": true, "sect": "xuanyue"},
+    "huo_xi": {"moves": [{"id": "claw", "name": "火爪", "weight": 3}, {"id": "breath", "name": "喷火", "power": 0.7, "inflict": {"burn": [4, 3]}, "weight": 2}, {"id": "curl", "name": "蜷甲", "kind": "guard", "shield": 0.1, "weight": 1}], "phases": [{"below": 0.35, "name": "鳞片泛红", "text": "火蜥背上的鳞片一片片烧得通红，热浪逼得人睁不开眼。", "power": 1.2}], "name": "熔窟火蜥", "element": "fire", "hp": 300, "damage_min": 20, "damage_max": 28, "reward_stones": 60, "reward_xp": 220, "reward_herbs": 0, "locations": [], "min_realm": 1, "world_flag": "dihuo_lizard_down", "flag_event": "lizard_down"},
+    "disciple": {"moves": [{"id": "cut", "name": "剑招", "weight": 3}, {"id": "twin", "name": "连环剑", "hits": 2, "power": 0.6, "weight": 2}], 
       "name": "外门同门",
       "element": "metal",
       "hp": 80,
@@ -417,7 +417,7 @@
       "min_realm": 0,
       "human": true
     },
-    "wolf": {
+    "wolf": {"moves": [{"id": "bite", "name": "扑咬", "weight": 3}, {"id": "rend", "name": "撕咬", "power": 0.8, "inflict": {"bleed": [2, 3]}, "weight": 2}, {"id": "pounce", "name": "伏身扑杀", "kind": "charge", "power": 1.6, "weight": 1}], 
       "name": "山谷妖狼",
       "element": "metal",
       "hp": 115,
@@ -429,7 +429,7 @@
       "locations": ["wild"],
       "min_realm": 0
     },
-    "serpent": {
+    "serpent": {"moves": [{"id": "tail", "name": "甩尾", "weight": 3}, {"id": "coil", "name": "缠身", "power": 0.5, "inflict": {"entangle": [1, 1]}, "weight": 2}, {"id": "fang", "name": "毒牙", "power": 0.7, "inflict": {"bleed": [2, 3]}, "weight": 2}], "phases": [{"below": 0.3, "name": "狂暴", "text": "赤鳞妖蟒鳞片尽数翻起，双目赤红，吐出一口腥臭的毒雾。", "power": 1.2, "moves": [{"id": "miasma", "name": "毒雾", "power": 0.7, "inflict": {"wound": [0.5, 3]}, "weight": 2}]}], 
       "name": "赤鳞妖蟒",
       "element": "fire",
       "hp": 250,
@@ -447,7 +447,7 @@
       "world_flag": "serpent_slain",
       "flag_event": "serpent_slain"
     },
-    "rogue": {
+    "rogue": {"moves": [{"id": "fire", "name": "火诀", "weight": 3}, {"id": "lime", "name": "撒石灰", "power": 0.5, "inflict": {"weaken": [0.3, 2]}, "weight": 1}, {"id": "slash", "name": "赤焰斩", "kind": "charge", "power": 1.5, "weight": 1}], 
       "name": "拦路劫修",
       "element": "fire",
       "hp": 125,
@@ -474,7 +474,7 @@
       "min_realm": 0,
       "human": true
     },
-    "ruin_rogue": {
+    "ruin_rogue": {"moves": [{"id": "fist", "name": "岩拳", "weight": 3}, {"id": "vein", "name": "地脉冲", "power": 0.9, "inflict": {"sunder": [0.2, 2]}, "weight": 2}, {"id": "armor", "name": "结岩甲", "kind": "guard", "shield": 0.15, "below": 0.7, "weight": 1}], 
       "name": "占据洞府的散修",
       "element": "earth",
       "hp": 175,
@@ -491,7 +491,7 @@
       "world_flag": "ruin_cleared",
       "flag_event": "ruin_cleared"
     },
-    "mo_xiu": {
+    "mo_xiu": {"moves": [{"id": "palm", "name": "阴煞掌", "weight": 3}, {"id": "drain", "name": "吸血诀", "power": 0.8, "drain": 0.5, "weight": 2}, {"id": "curse", "name": "蚀骨咒", "power": 0.6, "inflict": {"wound": [0.5, 3], "bleed": [4, 2]}, "weight": 1}], 
       "name": "魔修",
       "element": "water",
       "hp": 420,
@@ -506,7 +506,7 @@
       "sect": "canglan",
       "drops": {"chance": 0.5, "tiers": [3, 4]}
     },
-    "mo_jiang": {
+    "mo_jiang": {"moves": [{"id": "blade", "name": "魔刀", "weight": 3}, {"id": "horde", "name": "召魔卒", "kind": "summon", "summon": [20, 3], "weight": 2}, {"id": "inferno", "name": "魔焰斩", "kind": "charge", "power": 1.8, "weight": 1}], "phases": [{"below": 0.4, "name": "魔焰滔天", "text": "魔将身上的魔焰暴涨三尺，魔刀上的血纹一齐亮了起来。", "power": 1.3}], 
       "name": "魔潮魔将",
       "element": "fire",
       "hp": 650,
@@ -525,7 +525,7 @@
       "world_flag": "calamity_turned",
       "flag_event": "calamity_turned"
     },
-    "jiao": {
+    "jiao": {"moves": [{"id": "tail", "name": "蛟尾", "weight": 3}, {"id": "tide", "name": "翻江", "power": 0.7, "inflict": {"slow": [1, 2]}, "weight": 2}, {"id": "dive", "name": "潜渊", "kind": "guard", "shield": 0.12, "weight": 1}, {"id": "swallow", "name": "吞浪", "kind": "charge", "power": 1.8, "weight": 1}], "phases": [{"below": 0.3, "name": "蛟龙怒", "text": "千年蛟长啸一声，河水倒卷，整条白鹭渡都在震动。", "power": 1.25}], 
       "name": "千年蛟",
       "element": "water",
       "hp": 800,
@@ -538,7 +538,7 @@
       "min_realm": 3,
       "drops": {"chance": 0.5, "tiers": [4, 5]}
     },
-    "jian_kui": {
+    "jian_kui": {"moves": [{"id": "rust", "name": "锈剑", "weight": 3}, {"id": "array", "name": "剑阵连斩", "hits": 3, "power": 0.5, "every": 3}, {"id": "pierce", "name": "破甲剑", "power": 0.8, "inflict": {"sunder": [0.2, 2]}, "weight": 1}], 
       "name": "霞锈剑傀",
       "element": "metal",
       "hp": 480,
@@ -554,7 +554,7 @@
       "world_flag": "chenxia_puppet_down",
       "flag_event": "chenxia_puppet_down"
     },
-    "can_nian": {
+    "can_nian": {"moves": [{"id": "chill", "name": "寒魄", "weight": 3}, {"id": "seize", "name": "夺神", "power": 0.6, "inflict": {"entangle": [1, 2]}, "weight": 2}, {"id": "revive", "name": "残念回生", "kind": "heal", "heal": 0.12, "weight": 2}], "phases": [{"below": 0.3, "name": "欲夺舍", "text": "残念的身形忽明忽暗，一缕神识直扑你的眉心，竟是要夺舍！", "power": 1.3}], 
       "name": "古修残念",
       "element": "water",
       "hp": 600,
@@ -570,7 +570,7 @@
       "world_flag": "chenxia_remnant_down",
       "flag_event": "chenxia_remnant_down"
     },
-    "den_wolf": {
+    "den_wolf": {"moves": [{"id": "bite", "name": "扑咬", "weight": 2}, {"id": "shadow", "name": "隐入暗处", "kind": "focus", "focus": [0.6, 2], "weight": 1}, {"id": "rend", "name": "撕咬", "power": 0.8, "inflict": {"bleed": [3, 3]}, "weight": 2}], 
       "name": "石窟影狼",
       "element": "earth",
       "hp": 180,

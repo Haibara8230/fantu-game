@@ -301,6 +301,12 @@ func play(events: Array[Dictionary]) -> void:
 		match event.type:
 			"attack":
 				await _attack(event)
+			"phase":
+				# A boss changes its ways (combat.gd phases): its name over the stage and a shudder.
+				banner = str(event.get("name", ""))
+				enemy.squash(Vector2(1.08, 0.94), 0.5)
+				_emit_cue("impact")
+				await _pause(0.6)
 			"heal":
 				# Either side heals: the player's arts and pills, a generated opponent's arts.
 				var foe_side: bool = event.get("actor", "player") == "enemy"

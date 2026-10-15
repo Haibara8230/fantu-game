@@ -8,7 +8,7 @@ const PlaceView = preload("res://scripts/ui/place_view.gd")
 const Settings = preload("res://scripts/ui/settings.gd")
 const RECORD_LINES := 6
 const DOCK_HEIGHT := 178.0
-const STATUS_NAMES := {"burn": "灼烧", "weaken": "寒蚀", "sunder": "破甲", "slow": "冰封"}
+const STATUS_NAMES := {"burn": "灼烧", "weaken": "寒蚀", "sunder": "破甲", "slow": "冰封", "bleed": "流血", "entangle": "缠绕", "wound": "禁疗", "focus": "蓄势", "minions": "帮手"}
 const FOE_COLOR := Color("#f0b49a")
 
 static func render(ui) -> void:
@@ -210,7 +210,14 @@ static func intent_text(session) -> String:
 	for entry: Dictionary in session.battle.get("intent", []):
 		match str(entry.kind):
 			"attack":
-				parts.append("%s %d–%d" % [entry.name, int(entry.min), int(entry.max)])
+				var hits := " ×%d" % int(entry.hits) if int(entry.get("hits", 1)) > 1 else ""
+				parts.append("%s %d–%d%s" % [entry.name, int(entry.min), int(entry.max), hits])
+			"charge":
+				parts.append("蓄力：%s（下回合 %d–%d，可守御）" % [entry.name, int(entry.min), int(entry.max)])
+			"focus":
+				parts.append("%s（下一击 +%d%%）" % [entry.name, int(entry.amount)])
+			"summon":
+				parts.append("%s（帮手每回合 %d）" % [entry.name, int(entry.amount)])
 			"heal":
 				parts.append("%s 回复 %d" % [entry.name, int(entry.amount)])
 			"guard":
@@ -233,8 +240,14 @@ static func _effects_text(shield: int, status: Dictionary) -> String:
 					amount = "-%d%% 伤害" % int(round(value * 100))
 				"sunder":
 					amount = "+%d%% 受伤" % int(round(value * 100))
-				"slow":
-					amount = "少抽 %d 颗" % int(value)
+				"slow", "entangle":
+					amount = "少抽 %d 颗" % int(value) + ("、不能撤离" if key == "entangle" else "")
+				"wound":
+					amount = "疗愈 -%d%%" % int(round(value * 100))
+				"focus":
+					amount = "下一击 +%d%%" % int(round(value * 100))
+				"minions":
+					amount = "每回合 %d" % int(value)
 			parts.append("%s %s（余 %d 回合）" % [STATUS_NAMES[key], amount, int(status[key][1])])
 	return "  ·  ".join(parts)
 

@@ -107,16 +107,37 @@ static func _battle_place(s) -> String:
 # foe_orbs, foe_shield, intent [{"art"?, "kind", "name", "min", "max" | "amount"}].
 
 ## Lingering effects either side may carry: 灼烧 (burn: damage each turn), 寒蚀 (weaken: deals less),
-## 破甲 (sunder: takes more), 冰封 (slow: draws fewer orbs, or strikes weaker without orbs); each
-## [amount, turns].
-const LINGERING := ["burn", "weaken", "sunder", "slow"]
+## 破甲 (sunder: takes more), 冰封 (slow: draws fewer orbs, or strikes weaker without orbs), 流血 (bleed:
+## damage each turn, piling up), 缠绕 (entangle: draws fewer orbs and cannot flee), 禁疗 (wound: heals
+## less), 蓄势 (focus: the next blow lands harder, then it is spent), 召唤 (minions: helpers strike each
+## turn); each [amount, turns]. docs/COMBAT_PLAN.md, part one, stage one.
+const LINGERING := ["burn", "weaken", "sunder", "slow", "bleed", "entangle", "wound", "focus", "minions"]
+# Lingering effects kept as a share rather than a whole amount.
+const SHARES := ["weaken", "sunder", "wound", "focus"]
+# 流血 piles up to this much at most.
+const BLEED_MOST := 12
+# Kinds of move a handwritten opponent may make (data/world.json enemies' `moves`).
+const MOVE_KINDS := ["attack", "charge", "heal", "guard", "focus", "summon"]
 ## How much weaker a slowed opponent without orbs strikes.
 const SLOW_BLOW := 0.8
 
 ## A lingering effect as it is kept: a share (weaken, sunder) or a whole amount, and whole turns, the
 ## same whether it came from the data or from a save.
 static func lingering_value(key: String, value: Array) -> Array:
-	return [float(value[0]) if key in ["weaken", "sunder"] else int(value[0]), int(value[1])]
+	return [float(value[0]) if key in SHARES else int(value[0]), int(value[1])]
+
+## Puts a lingering effect on one side: 流血 piles up (to BLEED_MOST) and lasts the longer of the two;
+## the others are replaced.
+static func _inflict(status: Dictionary, key: String, value: Array) -> void:
+	var added := lingering_value(key, value)
+	if key == "bleed" and status.has("bleed"):
+		status.bleed = [mini(BLEED_MOST, int(status.bleed[0]) + int(added[0])), maxi(int(status.bleed[1]), int(added[1]))]
+		return
+	status[key] = added
+
+## A heal through 禁疗: what is left of `amount`.
+static func _healed(status: Dictionary, amount: int) -> int:
+	return int(round(float(amount) * (1.0 - float(status.wound[0])))) if status.has("wound") else amount
 
 static func rules(s) -> Dictionary:
 	return s.content.rules.duel
@@ -255,7 +276,7 @@ static func use_skill(s, skill_id: String) -> String:
 	var text := ""
 	match str(t.kind):
 		"heal":
-			var recovered := mini(int(t.heal), int(s.player.max_hp) - int(s.player.hp))
+			var recovered := mini(_healed(s.battle.get("player_status", {}), int(t.heal)), int(s.player.max_hp) - int(s.player.hp))
 			s.player.hp += recovered
 			s.combat_events.append(_event({"type": "heal", "amount": recovered, "hp_after": int(s.player.hp)}, look))
 			text = s.log_event("skill_heal", {"skill": skill_id, "amount": recovered})
@@ -283,7 +304,7 @@ static func use_skill(s, skill_id: String) -> String:
 					s.combat_events.append(_event({"type": "heal", "amount": healed, "hp_after": int(s.player.hp)}, look))
 			for status: String in LINGERING:
 				if t.has(status):
-					s.battle.status[status] = lingering_value(status, t[status])
+					_inflict(s.battle.status, status, t[status])
 	if t.has("draw"):
 		_gain(s, _draw(s, int(t.draw), player_weights(s)))
 	if t.has("renew"):
@@ -348,7 +369,7 @@ static func end_turn(s, guarding: bool = false) -> String:
 	if not released.is_empty():
 		s.combat_events.append({"type": "discard", "orbs": released})
 	var lingering: Dictionary = s.battle.get("player_status", {})
-	for status: String in ["weaken", "sunder", "slow"]:
+	for status: String in ["weaken", "sunder", "slow", "entangle", "wound"]:
 		if lingering.has(status):
 			_count_down(lingering, status)
 	return _enemy_turn(s, guarding)
@@ -390,7 +411,7 @@ static func take_pill(s, item_id: String) -> String:
 	if bool(effect.get("heal", false)):
 		for granted: Dictionary in s.Inventory.pill_effects(s, item):
 			if granted.has("hp"):
-				var recovered := mini(int(granted.hp), int(s.player.max_hp) - int(s.player.hp))
+				var recovered := mini(_healed(s.battle.get("player_status", {}), int(granted.hp)), int(s.player.max_hp) - int(s.player.hp))
 				s.player.hp += recovered
 				s.combat_events.append({"type": "heal", "style": "pill", "name": str(item.name), "vfx": "heal", "amount": recovered, "hp_after": int(s.player.hp)})
 	var text: String = s.log_event("duel_pill", {"item": item_id})
@@ -421,6 +442,8 @@ static func flee(s) -> String:
 	s.combat_events.clear()
 	if s.battle.is_empty():
 		return "当前无需撤退。"
+	if s.battle.get("player_status", {}).has("entangle"):
+		return "被缠住了，脱身不得；先撑过这几回合，或打倒对手。"
 	s.combat_events.append({"type": "end", "result": "flee"})
 	var days := _recovery_days(s, "flee")
 	s.battle.clear()
@@ -438,6 +461,9 @@ static func _recovery_days(s, action: String) -> int:
 static func _foe_prepare(s) -> void:
 	var foe: Dictionary = s.battle.get("foe", {})
 	if foe.get("arts", []).is_empty():
+		if foe.is_empty() and s.content.enemies[s.battle.enemy_id].has("moves"):
+			_plan_move(s)
+			return
 		var stats: Dictionary = foe if not foe.is_empty() else s.content.enemies[s.battle.enemy_id]
 		var name: String = str(foe.get("art_name", "")) if not foe.is_empty() else _counter_name(s)
 		s.battle.intent = [{"kind": "attack", "name": name, "min": int(stats.damage_min), "max": int(stats.damage_max)}]
@@ -489,15 +515,164 @@ static func _foe_prepare(s) -> void:
 		plan.append({"kind": "gather", "name": "凝神聚气"})
 	s.battle.intent = plan
 
+## A handwritten opponent's next move from its table (data/world.json enemies' `moves`, plus those of
+## the `phases` it has entered): a blow wound up last turn lands now; a move whose `every` comes round
+## is made; otherwise one is drawn by weight among those whose conditions hold.
+static func _plan_move(s) -> void:
+	var enemy: Dictionary = s.content.enemies[s.battle.enemy_id]
+	_enter_phase(s, enemy)
+	if s.battle.has("charged"):
+		var wound_up := _move(enemy, str(s.battle.charged))
+		s.battle.erase("charged")
+		s.battle.intent = [_intent(s, enemy, wound_up, true)]
+		return
+	var moves := _moves(s, enemy)
+	var pick: Dictionary = {}
+	for move: Dictionary in moves:
+		if move.has("every") and int(s.battle.turn) % int(move.every) == 0:
+			pick = move
+			break
+	if pick.is_empty():
+		var open: Array = moves.filter(func(move: Dictionary) -> bool: return _move_open(s, enemy, move))
+		var total := 0
+		for move: Dictionary in open:
+			total += int(move.get("weight", 1))
+		var roll: int = s.combat_rng.randi_range(1, maxi(1, total))
+		for move: Dictionary in open:
+			roll -= int(move.get("weight", 1))
+			if roll <= 0:
+				pick = move
+				break
+	if pick.is_empty():
+		pick = moves[0]
+	s.battle.intent = [_intent(s, enemy, pick, false)]
+
+## The moves open to the opponent now: its own and those of the phases it has entered.
+static func _moves(s, enemy: Dictionary) -> Array:
+	var moves: Array = enemy.moves.duplicate()
+	for index: int in mini(int(s.battle.get("phase", 0)), enemy.get("phases", []).size()):
+		moves.append_array(enemy.phases[index].get("moves", []))
+	return moves
+
+static func _move(enemy: Dictionary, move_id: String) -> Dictionary:
+	for phase: Dictionary in [{"moves": enemy.moves}] + enemy.get("phases", []):
+		for move: Dictionary in phase.get("moves", []):
+			if move.id == move_id:
+				return move
+	return enemy.moves[0]
+
+## Whether a move may be drawn now: not one that only comes round every few turns; one kept for when
+## hurt (`below`, a share of health; heals default to half) only then; a `once` move only once; no new
+## helpers while the last ones still fight.
+static func _move_open(s, enemy: Dictionary, move: Dictionary) -> bool:
+	if move.has("every"):
+		return false
+	var share := float(s.battle.hp) / float(enemy.hp)
+	if share >= float(move.get("below", 0.5 if move.get("kind", "") == "heal" else 2.0)):
+		return false
+	if bool(move.get("once", false)) and str(move.id) in s.battle.get("used", []):
+		return false
+	return not (move.get("kind", "") == "summon" and s.battle.status.has("minions"))
+
+## The power the opponent's phases add, multiplied.
+static func _phase_power(s, enemy: Dictionary) -> float:
+	var power := 1.0
+	for index: int in mini(int(s.battle.get("phase", 0)), enemy.get("phases", []).size()):
+		power *= float(enemy.phases[index].get("power", 1.0))
+	return power
+
+## What the intent shows for a move: a blow's range (the wound-up one when `landing`), or a heal's,
+## a shield's or the helpers' amount.
+static func _intent(s, enemy: Dictionary, move: Dictionary, landing: bool) -> Dictionary:
+	var kind := "attack" if landing else str(move.get("kind", "attack"))
+	var entry := {"kind": kind, "move": str(move.id), "name": str(move.name)}
+	var power := float(move.get("power", 1.0)) * _phase_power(s, enemy)
+	match kind:
+		"attack", "charge":
+			entry.min = maxi(1, int(round(float(enemy.damage_min) * power)))
+			entry.max = maxi(1, int(round(float(enemy.damage_max) * power)))
+			if int(move.get("hits", 1)) > 1:
+				entry.hits = int(move.hits)
+		"heal":
+			entry.amount = int(round(float(enemy.hp) * float(move.heal)))
+		"guard":
+			entry.amount = int(round(float(enemy.hp) * float(move.shield)))
+		"summon":
+			entry.amount = int(move.summon[0])
+		"focus":
+			entry.amount = int(round(float(move.focus[0]) * 100.0))
+	return entry
+
+## Phases (头目分阶段): once health falls below a phase's share, it is entered for good and told.
+static func _enter_phase(s, enemy: Dictionary) -> void:
+	var phases: Array = enemy.get("phases", [])
+	while int(s.battle.get("phase", 0)) < phases.size() and float(s.battle.hp) < float(enemy.hp) * float(phases[int(s.battle.get("phase", 0))].below):
+		var phase: Dictionary = phases[int(s.battle.get("phase", 0))]
+		s.battle.phase = int(s.battle.get("phase", 0)) + 1
+		s.combat_events.append({"type": "phase", "actor": "enemy", "name": str(phase.get("name", ""))})
+		s.log_event("enemy_phase", {"phase_text": str(phase.text)})
+
+## Carries out a planned move of a handwritten opponent. True when it fells the player.
+static func _do_move(s, planned: Dictionary, factor: float, guarding: bool) -> bool:
+	var enemy: Dictionary = s.content.enemies[s.battle.enemy_id]
+	var move := _move(enemy, str(planned.move))
+	var status: Dictionary = s.battle.status
+	var args := {"enemy": str(s.battle.enemy_id), "move_name": str(move.name)}
+	if bool(move.get("once", false)):
+		if not s.battle.has("used"):
+			s.battle.used = []
+		s.battle.used.append(str(move.id))
+	match str(planned.kind):
+		"charge":
+			s.battle.charged = str(move.id)
+			s.log_event("enemy_charge", args)
+		"heal":
+			var recovered := mini(_healed(status, int(planned.amount)), int(enemy.hp) - int(s.battle.hp))
+			s.battle.hp = int(s.battle.hp) + recovered
+			s.combat_events.append({"type": "heal", "actor": "enemy", "style": "enemy", "name": str(move.name), "vfx": "heal", "amount": recovered, "hp_after": int(s.battle.hp)})
+			args.amount = recovered
+			s.log_event("enemy_heal", args)
+		"guard":
+			s.battle.foe_shield = int(s.battle.get("foe_shield", 0)) + int(planned.amount)
+			s.combat_events.append({"type": "guard", "actor": "enemy", "style": "enemy", "name": str(move.name), "amount": 0, "shield": int(s.battle.foe_shield)})
+			args.amount = int(planned.amount)
+			s.log_event("enemy_guard", args)
+		"focus":
+			_inflict(status, "focus", move.focus)
+			s.log_event("enemy_focus", args)
+		"summon":
+			_inflict(status, "minions", move.summon)
+			s.log_event("enemy_summon", args)
+		_:
+			# Slowed or entangled, a beast strikes weaker; 蓄势 makes the next blow harder, once.
+			var strength := factor * (SLOW_BLOW if status.has("slow") or status.has("entangle") else 1.0)
+			if status.has("focus"):
+				strength *= 1.0 + float(status.focus[0])
+				status.erase("focus")
+			var blow := {"style": "enemy" if not bool(enemy.get("human", false)) else _counter_style(s), "name": str(move.name)}
+			for hit: int in int(planned.get("hits", 1)):
+				var before := int(s.player.hp)
+				if _hurt_player(s, s.combat_rng.randi_range(int(planned.min), int(planned.max)), strength, guarding, blow):
+					return true
+				if move.has("drain"):
+					var drained := mini(_healed(status, int(round(float(before - int(s.player.hp)) * float(move.drain)))), int(enemy.hp) - int(s.battle.hp))
+					s.battle.hp = int(s.battle.hp) + drained
+			for lingering: String in LINGERING:
+				if move.get("inflict", {}).has(lingering):
+					_inflict(s.battle.player_status, lingering, move.inflict[lingering])
+	return false
+
 static func _enemy_turn(s, guarding: bool) -> String:
 	var enemy_id: String = s.battle.enemy_id
-	# Lingering effects on the opponent act first: burning can finish a fight.
+	# Lingering effects on the opponent act first: burning and bleeding can finish a fight.
 	var status: Dictionary = s.battle.get("status", {})
-	if status.has("burn"):
-		var burn: Array = status.burn
-		s.battle.hp = maxi(0, int(s.battle.hp) - int(burn[0]))
-		s.combat_events.append({"type": "attack", "actor": "player", "style": "burn", "name": "灼烧", "vfx": "flame_bolt", "tier": 1, "hits": 1, "amount": int(burn[0]), "hp_after": int(s.battle.hp)})
-		_count_down(status, "burn")
+	for wound: Array in [["burn", "灼烧", "flame_bolt"], ["bleed", "流血", "sword"]]:
+		if not status.has(wound[0]):
+			continue
+		var bite := int(status[wound[0]][0])
+		s.battle.hp = maxi(0, int(s.battle.hp) - bite)
+		s.combat_events.append({"type": "attack", "actor": "player", "style": wound[0], "name": wound[1], "vfx": wound[2], "tier": 1, "hits": 1, "amount": bite, "hp_after": int(s.battle.hp)})
+		_count_down(status, wound[0])
 		if int(s.battle.hp) <= 0:
 			return _win(s)
 	s.battle.foe_shield = 0
@@ -506,7 +681,16 @@ static func _enemy_turn(s, guarding: bool) -> String:
 		factor *= 1.0 - float(status.weaken[0])
 		_count_down(status, "weaken")
 	var foe: Dictionary = s.battle.get("foe", {})
+	# Helpers it called (召唤) strike before it does.
+	if status.has("minions"):
+		if _hurt_player(s, int(status.minions[0]), factor, guarding, {"style": "enemy", "name": "%s的帮手" % s.content.enemies[enemy_id].name}):
+			return _lose(s)
+		_count_down(status, "minions")
 	for planned: Dictionary in s.battle.get("intent", []):
+		if planned.has("move"):
+			if _do_move(s, planned, factor, guarding):
+				return _lose(s)
+			continue
 		if not planned.has("art"):
 			if str(planned.kind) == "attack":
 				var stats: Dictionary = foe if not foe.is_empty() else s.content.enemies[enemy_id]
@@ -525,7 +709,7 @@ static func _enemy_turn(s, guarding: bool) -> String:
 		var look := {"style": str(art.id), "name": str(art.name), "vfx": str(art.vfx), "tier": int(art.tier), "element": str(art.element), "spent": spent}
 		match str(art.kind):
 			"heal":
-				var recovered := mini(int(art.heal), int(foe.hp) - int(s.battle.hp))
+				var recovered := mini(_healed(status, int(art.heal)), int(foe.hp) - int(s.battle.hp))
 				s.battle.hp = int(s.battle.hp) + recovered
 				s.combat_events.append(_event({"type": "heal", "actor": "enemy", "amount": recovered, "hp_after": int(s.battle.hp)}, look))
 			"guard":
@@ -534,7 +718,7 @@ static func _enemy_turn(s, guarding: bool) -> String:
 			_:
 				for lingering: String in LINGERING:
 					if art.has(lingering):
-						s.battle.player_status[lingering] = lingering_value(lingering, art[lingering])
+						_inflict(s.battle.player_status, lingering, art[lingering])
 				if _hurt_player(s, s.combat_rng.randi_range(int(planned.min), int(planned.max)), factor, guarding, look):
 					return _lose(s)
 	# The player's turn: the shield has done its work, burning bites, new orbs come and the opponent
@@ -543,16 +727,19 @@ static func _enemy_turn(s, guarding: bool) -> String:
 	s.battle.turn += 1
 	s.battle.chain = ""
 	var burning: Dictionary = s.battle.get("player_status", {})
-	if burning.has("burn"):
-		var bite := mini(int(burning.burn[0]), int(s.player.hp) - 1)
+	for wound: Array in [["burn", "灼烧", "flame_bolt"], ["bleed", "流血", "sword"]]:
+		if not burning.has(wound[0]):
+			continue
+		# Lingering harm leaves the player a sliver; it is the blows that fell them.
+		var bite := mini(int(burning[wound[0]][0]), int(s.player.hp) - 1)
 		s.player.hp = int(s.player.hp) - bite
-		s.combat_events.append({"type": "attack", "actor": "enemy", "style": "burn", "name": "灼烧", "vfx": "flame_bolt", "tier": 1, "hits": 1, "amount": bite, "hp_after": int(s.player.hp)})
-		_count_down(burning, "burn")
-	var short := int(burning.slow[0]) if burning.has("slow") else 0
+		s.combat_events.append({"type": "attack", "actor": "enemy", "style": wound[0], "name": wound[1], "vfx": wound[2], "tier": 1, "hits": 1, "amount": bite, "hp_after": int(s.player.hp)})
+		_count_down(burning, wound[0])
+	var short := (int(burning.slow[0]) if burning.has("slow") else 0) + (int(burning.entangle[0]) if burning.has("entangle") else 0)
 	_gain(s, _draw(s, maxi(1, draw_count(s) - short + (int(rules(s).guard_orbs) if guarding else 0)), player_weights(s)))
 	_foe_prepare(s)
-	# The opponent's sunder and slow last through its turns.
-	for lingering: String in ["sunder", "slow"]:
+	# The opponent's sunder, slow, entangle, wound and focus last through its turns.
+	for lingering: String in ["sunder", "slow", "entangle", "wound", "focus"]:
 		if status.has(lingering):
 			_count_down(status, lingering)
 	s.changed.emit()
