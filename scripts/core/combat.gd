@@ -218,6 +218,8 @@ static func _draw(s, count: int, weights: Dictionary) -> Array:
 
 ## The first turn of a duel: the player's first hand, and the opponent's orbs and intent.
 static func open_hand(s) -> void:
+	if wounded(s):
+		s.player.hp = mini(int(s.player.hp), int(round(float(s.player.max_hp) * float(rules(s).get("wound_hp", 0.75)))))
 	var drawn := _draw(s, draw_count(s) + int(rules(s).first_extra) + int(s.orb_bonus("orb_first")), player_weights(s))
 	s.battle.orbs = drawn
 	s.battle.chain = ""
@@ -315,7 +317,7 @@ static func use_skill(s, skill_id: String) -> String:
 			# from it than one great one.
 			var roll: int = s.combat_rng.randi_range(int(t.damage_min), int(t.damage_max)) + int(round(float(s.attack_bonus()) * spent.size() / 2.0))
 			var counter := counter_multiplier(s, t.element)
-			var factor: float = s.element_multiplier(t) * counter
+			var factor: float = s.element_multiplier(t) * counter * ground(s, str(t.element), false)
 			if s.battle.get("player_status", {}).has("weaken"):
 				factor *= 1.0 - float(s.battle.player_status.weaken[0])
 			if s.battle.status.has("sunder"):
@@ -364,6 +366,126 @@ static func _strike_foe(s, damage: int) -> int:
 	var dealt := damage - absorbed
 	s.battle.hp = maxi(0, int(s.battle.hp) - dealt)
 	return dealt
+
+## 地利 (docs/COMBAT_PLAN.md, part one, stage three): where a fight happens may favour some elements
+## (a location's or a cave's `field`: {"name", "mods": {element: share}}), and a sect's own ground
+## (a location's `home`) lends its people a tenth more force. Both sides alike; applied as blows land.
+const HOME_EDGE := 0.1
+
+static func field(s) -> Dictionary:
+	var cave := str(s.battle.get("cave", ""))
+	if not cave.is_empty():
+		return s.content.cave_data.get(cave, {}).get("field", {})
+	return s.content.locations.get(str(s.battle.get("place", "")), {}).get("field", {})
+
+## The multiplier the ground gives an element's blows (and a sect's own ground its people's).
+static func ground(s, element: String, foe_side: bool) -> float:
+	var share := 1.0 + float(field(s).get("mods", {}).get(element, 0.0))
+	var home := str(s.content.locations.get(str(s.battle.get("place", "")), {}).get("home", ""))
+	if not home.is_empty() and s.battle.get("cave", "") == "":
+		if foe_side and _foe_is_person(s) and str(s.battle.get("opponent_sect", "")) == home:
+			share += HOME_EDGE
+		elif not foe_side and str(s.player.get("sect", "")) == home:
+			share += HOME_EDGE
+	return share
+
+static func _foe_is_person(s) -> bool:
+	return s.battle.has("foe") or bool(s.content.enemies[str(s.battle.enemy_id)].get("human", false))
+
+## "地火：火法 +20%、水法 -20%" and the home ground, or "".
+static func ground_text(s) -> String:
+	var parts: Array[String] = []
+	var spot := field(s)
+	var names: Dictionary = s.content.technique_data.elements
+	if not spot.is_empty():
+		var mods: Array[String] = []
+		for element: String in spot.get("mods", {}):
+			mods.append("%s法 %+d%%" % [names[element].name, int(round(float(spot.mods[element]) * 100.0))])
+		parts.append("%s：%s" % [spot.name, "、".join(mods)])
+	var home := str(s.content.locations.get(str(s.battle.get("place", "")), {}).get("home", ""))
+	if not home.is_empty() and s.battle.get("cave", "") == "":
+		if str(s.player.get("sect", "")) == home:
+			parts.append("本门地界：你出手 +%d%%" % int(HOME_EDGE * 100.0))
+		elif _foe_is_person(s) and str(s.battle.get("opponent_sect", "")) == home:
+			parts.append("%s地界：对手出手 +%d%%" % [s.content.sects[home].name, int(HOME_EDGE * 100.0)])
+	return " · ".join(parts)
+
+## 神识探查 (part one, stage three): with 神识 above the opponent's the player sees its whole make-up
+## before and during the fight; below it, only its name and rough cultivation.
+## {"seen": bool, "lines": [String]}.
+static func scout(s) -> Dictionary:
+	var enemy: Dictionary = s.content.enemies[str(s.battle.enemy_id)]
+	var foe: Dictionary = s.battle.get("foe", {})
+	var npc := str(s.battle.get("npc", ""))
+	var realm := int(foe.get("realm", enemy.min_realm)) if not foe.is_empty() else int(enemy.min_realm)
+	var foe_sense: int = s.person_sense(npc) if not npc.is_empty() and s.is_person(npc) else int(s.content.stage(realm, 1).sense) + (10 if enemy.has("phases") else 0)
+	var names: Dictionary = s.content.technique_data.elements
+	var element := foe_element(s)
+	var lines: Array[String] = []
+	if s.sense() < foe_sense:
+		lines.append("神识不及对手（%d / %d），只看出是%s修为。" % [s.sense(), foe_sense, s.content.realm(realm).name])
+		return {"seen": false, "lines": lines}
+	lines.append("神识压过对手（%d / %d）：" % [s.sense(), foe_sense])
+	if names.has(element):
+		var weak := ""
+		for other: String in rules(s).overcomes:
+			if str(rules(s).overcomes[other]) == element:
+				weak = other
+		lines.append("五行属%s，畏%s。" % [names[element].name, names[weak].name if names.has(weak) else "—"])
+	if not foe.is_empty():
+		var arts: Array[String] = []
+		for art_id: String in foe.get("arts", []):
+			arts.append(str(s.content.technique(art_id).get("name", art_id)))
+		lines.append("所修神通：%s。" % ("、".join(arts) if not arts.is_empty() else str(foe.get("art_name", "—"))))
+	elif enemy.has("moves"):
+		var moves: Array[String] = []
+		for move: Dictionary in enemy.moves:
+			moves.append(_move_word(move))
+		lines.append("招式：%s。" % "、".join(moves))
+		for phase: Dictionary in enemy.get("phases", []):
+			var added: Array[String] = []
+			for move: Dictionary in phase.get("moves", []):
+				added.append(_move_word(move))
+			lines.append("气血不足%d成时「%s」：出手 ×%.2f%s。" % [int(round(float(phase.below) * 10.0)), phase.name, float(phase.get("power", 1.0)), "，添" + "、".join(added) if not added.is_empty() else ""])
+	var parts: Array[String] = []
+	for part: Dictionary in enemy.get("parts", []):
+		parts.append(str(s.content.item(str(part.item)).name))
+	if not parts.is_empty():
+		lines.append("身上可取：%s。" % "、".join(parts))
+	return {"seen": true, "lines": lines}
+
+static func _move_word(move: Dictionary) -> String:
+	var kind := str(move.get("kind", "attack"))
+	var notes: Array[String] = []
+	match kind:
+		"charge":
+			notes.append("蓄力 ×%.1f" % float(move.get("power", 1.0)))
+		"heal":
+			notes.append("回血")
+		"guard":
+			notes.append("护盾")
+		"focus":
+			notes.append("蓄势")
+		"summon":
+			notes.append("召帮手")
+	if int(move.get("hits", 1)) > 1:
+		notes.append("%d 连击" % int(move.hits))
+	for status: String in move.get("inflict", {}):
+		notes.append({"bleed": "流血", "burn": "灼烧", "weaken": "削弱", "sunder": "破甲", "slow": "迟缓", "entangle": "缠绕", "wound": "禁疗"}.get(status, status))
+	if move.has("drain"):
+		notes.append("吸血")
+	return str(move.name) + ("（%s）" % "，".join(notes) if not notes.is_empty() else "")
+
+## 伤势 (part one, stage three): a lost fight leaves 外伤 and 内伤, a narrow win 外伤 (player.wound_until).
+## While 外伤 lasts the player starts a fight short of health; 内伤 halves retreat gains (as a failed
+## breakthrough's). 疗伤丹 or a night at an inn treats 外伤; 内伤 only heals with time.
+static func wounded(s) -> bool:
+	return int(s.world.day) < int(s.player.get("wound_until", 0))
+
+static func _wound(s, days: int, inner_days: int = 0) -> void:
+	s.player["wound_until"] = maxi(int(s.player.get("wound_until", 0)), int(s.world.day) + days)
+	if inner_days > 0:
+		s.player["injury_until"] = maxi(int(s.player.get("injury_until", 0)), int(s.world.day) + inner_days)
 
 ## 群敌 (docs/COMBAT_PLAN.md, part one, stage five): more foes in the fight than the one in front
 ## (battle.pack: [{"enemy_id", "hp"}]). The lead (battle.enemy_id and hp) acts by its intent and carries
@@ -664,7 +786,7 @@ static func release(s) -> String:
 	s.battle.released = int(s.battle.get("released", 0)) + 1
 	var element := str(gear.element)
 	var counter := 1.0 if element == "none" else counter_multiplier(s, element)
-	var dealt := _strike_foe(s, maxi(1, int(round(float(release.damage) * counter))))
+	var dealt := _strike_foe(s, maxi(1, int(round(float(release.damage) * counter * ground(s, element, false)))))
 	var look := {"style": "release", "name": str(release.name), "vfx": str(release.move.get("vfx", "sword")), "tier": int(gear.tier), "element": "metal" if element == "none" else element}
 	s.combat_events.append(_event({"type": "attack", "actor": "player", "hits": 1, "amount": dealt, "hp_after": int(s.battle.hp), "counter": "克" if counter > 1.0 else ("被克" if counter < 1.0 else "")}, look))
 	for lingering: String in LINGERING:
@@ -881,7 +1003,7 @@ static func _do_move(s, planned: Dictionary, factor: float, guarding: bool) -> b
 			s.log_event("enemy_stunned", args)
 		_:
 			# Slowed or entangled, a beast strikes weaker; 蓄势 makes the next blow harder, once.
-			var strength := factor * (SLOW_BLOW if status.has("slow") or status.has("entangle") else 1.0)
+			var strength := factor * (SLOW_BLOW if status.has("slow") or status.has("entangle") else 1.0) * ground(s, str(enemy.element), true)
 			if status.has("focus"):
 				strength *= 1.0 + float(status.focus[0])
 				status.erase("focus")
@@ -941,7 +1063,7 @@ static func _enemy_turn(s, guarding: bool) -> String:
 				if not foe.is_empty():
 					blow = {"style": foe.art, "name": foe.art_name, "vfx": foe.vfx, "tier": int(foe.tier)}
 				# Without orbs to be short of, a slowed opponent strikes weaker.
-				var strength: float = factor * (SLOW_BLOW if status.has("slow") else 1.0)
+				var strength: float = factor * (SLOW_BLOW if status.has("slow") else 1.0) * ground(s, foe_element(s), true)
 				if _hurt_player(s, s.combat_rng.randi_range(int(stats.damage_min), int(stats.damage_max)), strength, guarding, blow):
 					return _lose(s)
 			continue
@@ -962,7 +1084,7 @@ static func _enemy_turn(s, guarding: bool) -> String:
 				for lingering: String in LINGERING:
 					if art.has(lingering):
 						_inflict(s.battle.player_status, lingering, art[lingering])
-				if _hurt_player(s, s.combat_rng.randi_range(int(planned.min), int(planned.max)), factor, guarding, look):
+				if _hurt_player(s, s.combat_rng.randi_range(int(planned.min), int(planned.max)), factor * ground(s, str(art.element), true), guarding, look):
 					return _lose(s)
 	if _pack_strikes(s, guarding):
 		return _lose(s)
@@ -1069,6 +1191,8 @@ static func _lose(s) -> String:
 	s.player.journey = {}
 	var message: String = (s.Series.abandon(s) + " " + s.log_event("battle_defeat", {"lost": lost})).strip_edges()
 	var passed: Dictionary = s.advance_days(s.content.action_days("battle_defeat"))
+	# The wounds outlast the days spent being carried home.
+	_wound(s, int(rules(s).get("defeat_wound_days", 12)), int(rules(s).get("defeat_injury_days", 10)))
 	s.player.hp = maxi(1, int(s.player.max_hp) / 2)
 	s.player.qi = s.player.max_qi
 	return s.conclude(message, passed)
@@ -1211,6 +1335,9 @@ static func _win(s) -> String:
 	var npc: String = s.battle.get("npc", "")
 	var series_id := str(s.battle.get("series", ""))
 	var felled: Array = s.battle.get("felled", []).duplicate()
+	# 惨胜: won with under a tenth of health left, the body pays for it.
+	if int(s.player.hp) * 10 < int(s.player.max_hp):
+		_wound(s, int(rules(s).get("narrow_wound_days", 6)))
 	var grudge_id := str(s.battle.get("grudge", ""))
 	var wanted_key := str(s.battle.get("wanted", ""))
 	s.record_kill(enemy_id)

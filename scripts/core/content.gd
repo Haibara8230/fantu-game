@@ -1184,6 +1184,10 @@ func _validate_map() -> String:
 					return "可历练的地点缺少妖兽表：" + location_id
 				if action == "arena" and not location.has("arena"):
 					return "设擂的地点缺少擂台配置：" + location_id
+		if location.has("field") and (not location.field is Dictionary or not location.field.get("name") is String or not location.field.get("mods") is Dictionary or location.field.mods.keys().any(func(element: Variant) -> bool: return not technique_data.elements.has(element))):
+			return "地利配置无效：" + location_id
+		if location.has("home") and not sects.has(location.home):
+			return "地点的本门无效：" + location_id
 		if location.has("arena"):
 			var stage: Variant = location.arena
 			if not stage is Dictionary or not stage.get("name") is String or not stage.get("kinds") is Array or stage.kinds.is_empty() or stage.kinds.any(func(kind: Variant) -> bool: return not population_data.kinds.has(kind)) or not _whole(stage.get("fee")) or not _whole(stage.get("purse")) or int(stage.purse) < 1:
@@ -1568,7 +1572,7 @@ func _validate_effects(effects: Variant) -> String:
 				ok = value is Array and not value.is_empty() and value.all(func(enemy_id: Variant) -> bool: return enemies.has(enemy_id))
 			"series":
 				ok = series.has(value)
-			"grudge_fight", "grudge_pay", "grudge_evade", "bounty_fight", "bounty_wait", "bounty_drop":
+			"grudge_fight", "grudge_pay", "grudge_evade", "bounty_fight", "bounty_wait", "bounty_drop", "mend_wound":
 				ok = value is bool and value
 			"hp", "qi":
 				ok = (value is int or value is float) and float(value) == floor(float(value))

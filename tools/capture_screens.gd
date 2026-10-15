@@ -169,6 +169,23 @@ func _run() -> void:
 		main.set_view("place")
 		await _shot("18b_spar")
 		s.flee()
+	# A pack on 赤枫岭 (群敌): targets, a sword to release, a talisman, the ground's favour and 探查.
+	s.player.location = "chifeng"
+	var blade: String = s.Arsenal.equipment_id("sword", 2, "fire", [], 0)
+	s.add_item(blade, 1)
+	s.player.equipment.weapon = blade
+	s.add_item("lei_fu", 2)
+	s.begin_battle("huo_ya", "event")
+	s.Combat.add_pack(s, ["huo_ya", "wolf"])
+	main.toggle_battle_scout()
+	main.set_view("place")
+	await _shot("18i_pack")
+	main.toggle_battle_scout()
+	while not s.battle.is_empty():
+		s.player.hp = s.player.max_hp
+		s.flee()
+	s.player.equipment.weapon = ""
+	s.player.location = "sect"
 	main.set_view("place")
 	# The old cave's depths, a room in.
 	s.world.flags["found_ruin"] = true

@@ -233,6 +233,8 @@ static func restore(s, data: Variant) -> bool:
 			return false
 		if saved_battle.has("series") and not content.series.has(saved_battle.series):
 			return false
+		if saved_battle.has("cave") and not content.cave_data.has(saved_battle.cave):
+			return false
 		for named: String in ["title", "grudge", "wanted"]:
 			if saved_battle.has(named) and not saved_battle[named] is String:
 				return false
@@ -427,6 +429,11 @@ static func _valid_breakthrough(content, saved_player: Dictionary, saved_pending
 		return null
 	result["injury_until"] = int(injury)
 	result["lessons"] = int(lessons)
+	# 外伤 from a fight (optional).
+	var wound: Variant = saved_player.get("wound_until", 0)
+	if not _whole_nonnegative(wound):
+		return null
+	result["wound_until"] = int(wound)
 	var boons: Variant = saved_player.get("boons", {})
 	if not boons is Dictionary:
 		return null

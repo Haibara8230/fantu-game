@@ -1,6 +1,7 @@
 {
   "dihuo": {
     "name": "地火熔窟",
+    "field": {"name": "地火", "mods": {"fire": 0.2, "water": -0.2}},
     "location": "chifeng",
     "requires_flag": "tiannan_known",
     "step_days": 2,

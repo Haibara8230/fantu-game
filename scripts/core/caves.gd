@@ -134,6 +134,7 @@ static func enter(s, cave_id: String, room_id: String) -> String:
 			texts.append(s.log_event("cave_trap_sprung" if hurt > 0 else "cave_trap_grazed", args.merged({"trap": name, "amount": hurt})))
 	if guarded(s, cave_id, room_id):
 		texts.append(s.begin_battle(str(target.guardian), "event"))
+		s.battle.cave = cave_id
 	elif str(target.get("fortune", "")) == "remnant" and _remnant_waits(s, cave_id):
 		visit.fortune.remnant = false
 		visit.taken.append(room_id)
@@ -154,7 +155,9 @@ static func challenge(s, cave_id: String, room_id: String) -> String:
 		return reason
 	if here(s) != cave_id or not explored(s, cave_id, room_id) or not guarded(s, cave_id, room_id):
 		return "这里没有对手。"
-	return s.finish(s.begin_battle(str(room(s, cave_id, room_id).guardian), "event"))
+	var text: String = s.begin_battle(str(room(s, cave_id, room_id).guardian), "event")
+	s.battle.cave = cave_id
+	return s.finish(text)
 
 ## Whether a room's things still wait (left behind a guardian that has fallen since).
 static func loot_waits(s, cave_id: String, room_id: String) -> bool:

@@ -115,7 +115,7 @@ func new_game(character_name: String = "无名", seed_value: int = -1, roots: Ar
 		"learned": [], "arts": [], "methods": [], "equipment": {"weapon": "", "robe": "", "accessory": ""}, "quests": [],
 		"deeds": {}, "taught": [],
 		"talents": born.get("talents", []).duplicate(), "flaws": born.get("flaws", []).duplicate(),
-		"foundation_grade": 1, "core_grade": 0, "injury_until": 0, "lessons": 0, "boons": {}, "longevity": {}, "forged": 0, "duty": "", "duty_day": -1,
+		"foundation_grade": 1, "core_grade": 0, "injury_until": 0, "wound_until": 0, "lessons": 0, "boons": {}, "longevity": {}, "forged": 0, "duty": "", "duty_day": -1,
 		"rank": 0, "contribution": 0, "merit": 0, "stipend_day": 0, "exchanged": {}, "donated": {},
 		"recipes": [], "practice": {}, "toxin": 0, "toxin_day": 0, "field": {"grade": 0, "plots": []},
 	}
@@ -413,6 +413,8 @@ func act(action: String) -> String:
 				return conclude("", passed)
 			player.hp = player.max_hp
 			player.qi = player.max_qi
+			# A night's care and a physician's salve treat 外伤 (combat.gd 伤势).
+			player["wound_until"] = 0
 			return conclude(log_event("inn_rest", {"days": passed.elapsed, "price": price}), passed)
 		"search_ruin":
 			var ready := int(player.cooldowns.get(action, 0))

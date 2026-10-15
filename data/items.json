@@ -56,9 +56,9 @@
     "category": "pill",
     "price": 10,
     "rarity": 0,
-    "description": "服下恢复 40 点气血。",
+    "description": "服下恢复 40 点气血，也能治好斗法留下的外伤。",
     "duel": {"heal": true},
-    "use": [{"hp": 40}]
+    "use": [{"hp": 40}, {"mend_wound": true}]
   },
   "ningqi_pill": {
     "name": "凝气丹",
@@ -83,9 +83,9 @@
     "price": 20,
     "rarity": 1,
     "fine_of": "liaoshang_pill",
-    "description": "丹纹圆润的上品疗伤丹，服下恢复 70 点气血。",
+    "description": "丹纹圆润的上品疗伤丹，服下恢复 70 点气血，也能治好斗法留下的外伤。",
     "duel": {"heal": true},
-    "use": [{"hp": 70}]
+    "use": [{"hp": 70}, {"mend_wound": true}]
   },
   "huiqi_pill_fine": {
     "name": "上品回气丹",

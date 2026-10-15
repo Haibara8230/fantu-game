@@ -71,6 +71,7 @@ var scene_layer: Control
 # the breakthrough just achieved, the open person's details, the people drawer, the filters of the
 # 神通 / 功法 and 行囊 pages, and what is laid out on the trading table.
 var battle_record_open := false
+var battle_scout_open := false
 var retreat_days := 90
 var retreat_playback: Dictionary = {}
 var retreat_labels: Dictionary = {}
@@ -693,6 +694,13 @@ func toggle_drawer() -> void:
 
 func toggle_battle_record() -> void:
 	battle_record_open = not battle_record_open
+	battle_scout_open = false
+	render()
+
+## 探查: the opponent's make-up, in the record's place (combat.gd scout).
+func toggle_battle_scout() -> void:
+	battle_scout_open = not battle_scout_open
+	battle_record_open = battle_scout_open
 	render()
 
 func set_arts_filter(element: String) -> void:

@@ -206,6 +206,8 @@ static func apply(s, effects: Array) -> void:
 					s.Combat.add_pack(s, value)
 			"series":
 				s.Series.begin(s, value)
+			"mend_wound":
+				s.player["wound_until"] = 0
 			"grudge_fight":
 				s.Feuds.fight(s)
 			"grudge_pay":

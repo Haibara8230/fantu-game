@@ -117,8 +117,10 @@ static func _body(ui, parent: VBoxContainer) -> void:
 	var toxin: int = session.toxin()
 	var rule: Dictionary = session.content.alchemy_data.toxin
 	_row(ui, parent, "丹毒", "%d / %d · 每日消退 %d" % [toxin, int(rule.limit), int(rule.decay_per_day)] + (" · 突破把握 -%d" % (toxin / int(rule.breakthrough_step)) if toxin >= int(rule.breakthrough_step) else ""), "服增长修为的丹药会积丹毒；积满便服不下，突破时也少几分把握", ui.INK if toxin * 2 < int(rule.limit) else WARN)
+	if session.Combat.wounded(session):
+		_row(ui, parent, "外伤", "尚需将养 %s" % Calendar.duration_text(int(p.wound_until) - int(session.world.day)), "斗法留下的外伤：其间开打时气血至多七成半。服疗伤丹或到客栈歇一夜可治", BAD)
 	if session.injured():
-		_row(ui, parent, "内伤", "尚需将养 %s" % Calendar.duration_text(int(p.injury_until) - int(session.world.day)), "冲关受创，其间闭关收益减半", BAD)
+		_row(ui, parent, "内伤", "尚需将养 %s" % Calendar.duration_text(int(p.injury_until) - int(session.world.day)), "冲关受创或斗法落败所致，其间闭关收益减半", BAD)
 
 static func _life(ui, parent: VBoxContainer) -> void:
 	var session = ui.session

@@ -34,7 +34,8 @@ static func render(ui) -> void:
 	if ui.battle_record_open:
 		var record := PanelContainer.new()
 		record.add_theme_stylebox_override("panel", ui.style(Color(0.03, 0.07, 0.08, 0.86), Color("#41615e"), 10))
-		var lines: Label = ui.label("\n".join(session.journal_lines().slice(-RECORD_LINES)), 14, ui.INK)
+		var shown: Array = session.Combat.scout(session).lines if ui.battle_scout_open else session.journal_lines().slice(-RECORD_LINES)
+		var lines: Label = ui.label("\n".join(shown), 14, ui.INK)
 		lines.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		record.add_child(lines)
 		center.add_child(record)
@@ -66,8 +67,11 @@ static func render(ui) -> void:
 	var quick: Button = ui.button("速战", func() -> void: ui.battle_action("quick"), "按简单的出法自动打完这一场：气血低时疗伤，否则出最强的神通，灵气闲着便相生。对付弱敌省事，强敌还是亲手来。")
 	quick.custom_minimum_size = Vector2(72, 62)
 	row.add_child(quick)
-	var side := VBoxContainer.new()
-	side.add_theme_constant_override("separation", 4)
+	# The lesser controls (撤离, 祭出, targets, 求援, 记录, 探查) two abreast, so the dock stays low.
+	var side := GridContainer.new()
+	side.columns = 2
+	side.add_theme_constant_override("h_separation", 4)
+	side.add_theme_constant_override("v_separation", 4)
 	row.add_child(side)
 	var odds := "比斗中随时可认输" if session.battle.get("context", "") in ["spar", "tournament", "summit", "arena"] else "约 %d%% 能脱身，脱不了身便挨对手一回合" % int(round(session.Combat.flee_chance(session) * 100.0))
 	var flee: Button = ui.button("撤离 · " + ui.duration("flee"), func() -> void: ui.battle_action("flee"), "保留资源，耗时 %s；%s；被缠住时走不了" % [ui.duration("flee"), odds])
@@ -99,9 +103,13 @@ static func render(ui) -> void:
 		var call: Button = ui.button("传音求援", func() -> void: ui.battle_action("aid:" + friend), "以传音符请%s出手一击（每场一次，不占回合）" % session.person(friend).name)
 		_small(call)
 		side.add_child(call)
-	var record_toggle: Button = ui.button("收起记录" if ui.battle_record_open else "记录", ui.toggle_battle_record, "这场斗法的最近几条记载")
+	var record_toggle: Button = ui.button("收起记录" if ui.battle_record_open and not ui.battle_scout_open else "记录", ui.toggle_battle_record, "这场斗法的最近几条记载")
 	_small(record_toggle)
 	side.add_child(record_toggle)
+	var seen: bool = session.Combat.scout(session).seen
+	var scout_toggle: Button = ui.button("收起探查" if ui.battle_scout_open else "神识探查", ui.toggle_battle_scout, "以神识探查对手：神识压过对手可看清它的招式、阶段、五行与身上可取之物" if seen else "神识不及对手，只能看出大致修为")
+	_small(scout_toggle)
+	side.add_child(scout_toggle)
 
 static func _small(target: Button) -> void:
 	target.custom_minimum_size = Vector2(110, 0)
@@ -205,6 +213,10 @@ static func _corners(ui, stage: Control) -> void:
 		left.set_anchors_and_offsets_preset(Control.PRESET_TOP_LEFT)
 		left.position = Vector2(16, 60)
 	var lines: Array[String] = ["对手下一回合：" + intent_text(session)]
+	# 地利: the ground's favour for some elements, and a sect's own ground.
+	var ground: String = session.Combat.ground_text(session)
+	if not ground.is_empty():
+		lines.append("地利 · " + ground)
 	var theirs := _effects_text(int(b.get("foe_shield", 0)), b.get("status", {}))
 	if not b.get("foe", {}).get("arts", []).is_empty():
 		theirs = ("灵气 %d" % b.get("foe_orbs", []).size()) + ("  ·  " + theirs if not theirs.is_empty() else "")

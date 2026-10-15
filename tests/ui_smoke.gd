@@ -343,6 +343,13 @@ func _run() -> void:
 	check(_button("木 2") != null and not _button("木 2").disabled and _button("[2] ") != null and not _button("[2] ").disabled, "the hand shows each element's orbs; an affordable art is ready")
 	await main.battle_action("convert:wood")
 	check(main.session.battle.orbs.count("fire") == 3 and _button("火 3") != null, "clicking an element 相生s two of its orbs (木生火)")
+	# 地利 in the foe's corner, and 神识探查 in the record's place (batch eight).
+	check(_texts(main.center, "Label").contains("地利 · 山谷"), "the valley's favour for wood is shown")
+	_button("神识探查").pressed.emit()
+	var scouted: String = "神识压过对手" if main.session.Combat.scout(main.session).seen else "神识不及对手"
+	check(main.battle_scout_open and _texts(main.center, "Label").contains(scouted) and _button("收起探查") != null, "探查 shows what 神识 makes of the wolf (%s)" % scouted)
+	_button("收起探查").pressed.emit()
+	check(not main.battle_scout_open and not main.battle_record_open, "and folds away")
 	# 祭出 the worn 兵刃 and 符箓 from the dock (batch five), without taking the turn.
 	var sword: String = main.session.Arsenal.equipment_id("sword", 2, "fire", [], 0)
 	main.session.add_item(sword, 1)

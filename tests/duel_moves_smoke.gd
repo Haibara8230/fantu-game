@@ -31,6 +31,7 @@ func _initialize() -> void:
 	_gear_and_talismans()
 	_packs_and_series()
 	_feuds()
+	_ground_scout_wounds()
 	print("DUEL MOVES: %d checks, %d failures" % [checks, failures])
 	quit(0 if failures == 0 else 1)
 
@@ -576,6 +577,70 @@ func _feuds() -> void:
 	check(str(framed.pending_event.get("id", "")) == "bounty_twist", "sometimes the poster lied")
 	framed.choose_event("spare")
 	check(framed.player.quests.is_empty() and int(framed.player.mind) >= mind, "letting the framed one go drops the bounty")
+
+## Part one, stage three: the ground favours some elements (and a sect's people on its own ground),
+## 神识 above the foe's sees its make-up, and fights leave 外伤 (and a defeat 内伤) to be treated.
+func _ground_scout_wounds() -> void:
+	var game := _duel("wolf", "bite", 1)
+	game.battle.place = "ferry"
+	check(is_equal_approx(Combat.ground(game, "water", false), 1.15) and is_equal_approx(Combat.ground(game, "fire", true), 0.9) and Combat.ground_text(game).contains("临水"), "by the river water arts gain and fire arts lose, both sides alike")
+	game.battle.cave = "dihuo"
+	check(is_equal_approx(Combat.ground(game, "fire", false), 1.2) and Combat.ground_text(game).contains("地火"), "in the 熔窟 the 地火 rules")
+	game.battle.erase("cave")
+	game.battle.place = "sect"
+	game.Loadout.take_lineage(game, "qingyun")
+	check(is_equal_approx(Combat.ground(game, "metal", false), 1.1) and Combat.ground_text(game).contains("本门地界"), "on one's own sect's ground one strikes harder")
+	var guest := _duel("yue_disciple", "", 1)
+	guest.battle.place = "xuanyue_gate"
+	check(is_equal_approx(Combat.ground(guest, "earth", true), 1.25) and Combat.ground_text(guest).contains("玄岳宗地界"), "and a sect's people on theirs (the mountain's earth too)")
+	var wolf_here := _duel("wolf", "bite", 1)
+	wolf_here.battle.place = "sect"
+	check(is_equal_approx(Combat.ground(wolf_here, "metal", true), 1.0), "a beast has no sect ground")
+	# The ground's favour lands in the blow: a fire sword released in 赤枫岭 against at home.
+	var dealt: Array[int] = []
+	for place: String in ["town", "chifeng"]:
+		var thrower := _duel("wolf", "bite", 1)
+		var sword := thrower.Arsenal.equipment_id("sword", 2, "fire", [], 0)
+		thrower.player.equipment.weapon = sword
+		thrower.battle.place = place
+		thrower.battle.hp = 500
+		thrower.Combat.release(thrower)
+		dealt.append(500 - int(thrower.battle.hp))
+	check(dealt[1] > dealt[0], "the fire blade bites deeper among the red maples (%s)" % [dealt])
+	# 神识探查.
+	var keen := _duel("wolf_pack", "", 1)
+	var look: Dictionary = keen.Combat.scout(keen)
+	check(bool(look.seen) and "
+".join(look.lines).contains("招式") and "
+".join(look.lines).contains("群扑") and "
+".join(look.lines).contains("妖狼牙"), "神识 above a wolf pack's sees its moves and what it carries")
+	var dull := _duel("mo_jiang", "", 1)
+	var veiled: Dictionary = dull.Combat.scout(dull)
+	check(not bool(veiled.seen) and veiled.lines.size() == 1 and str(veiled.lines[0]).contains("神识不及"), "below a 魔将's, only its rough cultivation")
+	# 伤势.
+	var beaten := _duel("wolf", "bite", 1)
+	var day := int(beaten.world.day)
+	beaten.player.hp = 0
+	beaten.Combat._lose(beaten)
+	check(beaten.Combat.wounded(beaten) and beaten.injured(), "a defeat leaves 外伤 and 内伤")
+	beaten.player.hp = beaten.player.max_hp
+	beaten.Combat.begin_battle(beaten, "wolf", "event")
+	check(int(beaten.player.hp) <= int(round(float(beaten.player.max_hp) * 0.75)), "wounded, one starts a fight short of health")
+	var kept := Session.new()
+	check(kept.restore(JSON.parse_string(JSON.stringify(beaten.snapshot()))) and kept.Combat.wounded(kept), "a wound survives a save")
+	beaten.battle.clear()
+	beaten.set_item_count("liaoshang_pill", 1)
+	beaten.use_item("liaoshang_pill")
+	check(not beaten.Combat.wounded(beaten) and beaten.injured(), "a 疗伤丹 treats the 外伤; the 内伤 only time heals")
+	var narrow := _duel("wolf", "bite", 1)
+	narrow.player.hp = 1
+	narrow.battle.hp = 0
+	narrow.Combat._win(narrow)
+	check(narrow.Combat.wounded(narrow) and not narrow.injured(), "a narrow win leaves 外伤 only")
+	narrow.player.location = "town"
+	narrow.player.stones = 100
+	narrow.act("inn_rest")
+	check(not narrow.Combat.wounded(narrow), "a night at the inn treats it")
 
 func _saves() -> void:
 	var game := _duel("wolf", "pounce")

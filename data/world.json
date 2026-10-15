@@ -12,6 +12,7 @@
   "locations": {
     "sect": {
       "name": "青云山",
+      "home": "qingyun",
       "subtitle": "山中无甲子，修行亦有时。",
       "arena": {"name": "演武坪连胜榜", "kinds": ["disciple"], "fee": 0, "purse": 6, "prizes": [{"streak": 3, "stones": 40}, {"streak": 5, "manual": 2}, {"streak": 8, "equipment": 2}]},
       "description": "青云剑宗外门所在。云雾绕着峰腰，钟声每日三响。",
@@ -39,6 +40,7 @@
     },
     "ferry": {
       "name": "白鹭渡",
+      "field": {"name": "临水", "mods": {"water": 0.15, "fire": -0.1}},
       "subtitle": "一水横陈，舟渡东西。",
       "description": "云溪上游的渡口，渡船往返于青石镇与坊市之间，白鹭常在浅滩起落。",
       "terrain": "ferry",
@@ -89,6 +91,7 @@
     },
     "ridge": {
       "name": "松风岭",
+      "field": {"name": "松林", "mods": {"wood": 0.15}},
       "subtitle": "松涛万壑，山径通幽。",
       "description": "青云山与落霞谷之间的山岭，松林里偶尔也生着灵草。",
       "terrain": "ridge",
@@ -101,6 +104,7 @@
     },
     "wild": {
       "name": "落霞谷",
+      "field": {"name": "山谷", "mods": {"wood": 0.1}},
       "subtitle": "机缘藏于险处。",
       "description": "谷中灵草繁盛，也有妖兽出没。深处的赤鳞妖蟒守着一处灵泉，筑基后方可挑战。",
       "terrain": "valley",
@@ -173,6 +177,7 @@
     },
     "chifeng": {
       "name": "赤枫岭",
+      "field": {"name": "赤枫燥热", "mods": {"fire": 0.1, "water": -0.1}},
       "region": "tiannan",
       "subtitle": "枫叶如火，地气蒸腾。",
       "description": "南明坊市与赤霄门之间的山岭，地下有火脉经过，枫林四季皆红，火性灵草长得比别处旺。北边有一条远路，翻过群山可回白鹭渡。",
@@ -190,6 +195,8 @@
     },
     "changqing_valley": {
       "name": "长青谷",
+      "home": "changqing",
+      "field": {"name": "百草", "mods": {"wood": 0.15}},
       "region": "tiannan",
       "subtitle": "四时长青，百草成园。",
       "description": "天南五宗之一，长于灵植与丹药。谷中气候温润，百草园里的灵草一年可收几茬，丹坊的药香终年不散；对外人也开着丹坊，按炉收钱。",
@@ -213,6 +220,8 @@
     },
     "canglan_pavilion": {
       "name": "沧澜阁",
+      "home": "canglan",
+      "field": {"name": "临海", "mods": {"water": 0.15, "fire": -0.1}},
       "region": "tiannan",
       "subtitle": "阁临沧水，书藏万卷。",
       "description": "天南五宗之一，修水法、善阵图，阁中藏书之富在天南首屈一指。藏经阁对外抄卖玉简，价钱公道。",
@@ -237,6 +246,8 @@
     },
     "xuanyue_gate": {
       "name": "玄岳宗",
+      "home": "xuanyue",
+      "field": {"name": "山岳", "mods": {"earth": 0.15}},
       "region": "tiannan",
       "subtitle": "负山而立，以身为岳。",
       "description": "天南五宗之一，修土法与炼体，山门凿在整座石山里。炼体场对外开着，来访的修士可与玄岳弟子过几招。",
@@ -250,6 +261,7 @@
     },
     "chixiao_gate": {
       "name": "赤霄门",
+      "home": "chixiao",
       "region": "tiannan",
       "subtitle": "炉火映天，剑出赤霄。",
       "description": "天南五宗之一，以火法与炼器闻名。山门建在一道火脉之上，器坊的炉火据说三百年未曾熄过。",
@@ -702,7 +714,7 @@
     "cultivate_options": [30, 90, 360],
     "wait_options": [1, 10],
     "inn_price": 5,
-    "duel": {"draw": [3, 4, 5, 6, 7], "first_extra": 1, "root_weight": 3, "other_weight": 1, "qi_per_orb": 5, "hand_least": 5, "convert": 2, "counter": 1.3, "countered": 0.75, "pills": 3, "talismans": 3, "flee": 0.8, "guard_orbs": 1, "foe_draw": [3, 4, 5, 6, 7], "generates": {"metal": "water", "water": "wood", "wood": "fire", "fire": "earth", "earth": "metal"}, "overcomes": {"metal": "wood", "wood": "earth", "earth": "water", "water": "fire", "fire": "metal"}},
+    "duel": {"draw": [3, 4, 5, 6, 7], "first_extra": 1, "root_weight": 3, "other_weight": 1, "qi_per_orb": 5, "hand_least": 5, "convert": 2, "counter": 1.3, "countered": 0.75, "pills": 3, "talismans": 3, "flee": 0.8, "wound_hp": 0.75, "defeat_wound_days": 12, "defeat_injury_days": 10, "narrow_wound_days": 6, "guard_orbs": 1, "foe_draw": [3, 4, 5, 6, 7], "generates": {"metal": "water", "water": "wood", "wood": "fire", "fire": "earth", "earth": "metal"}, "overcomes": {"metal": "wood", "wood": "earth", "earth": "water", "water": "fire", "fire": "metal"}},
     "lineage": {"home": "qingyun", "study_days": 30},
     "letters": {"kept": 60},
     "requests": {"period_days": 180, "chance": 0.25, "items": ["huichun_grass", "ninglu_grass", "chiyan_flower", "huiqi_pill", "liaoshang_pill"], "count": [1, 3], "favor": 12, "mind": 2, "reward_scale": 1.5},
