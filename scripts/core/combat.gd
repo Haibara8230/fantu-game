@@ -137,9 +137,9 @@ static func _battle_place(s) -> String:
 ## damage each turn, piling up), 缠绕 (entangle: draws fewer orbs and cannot flee), 禁疗 (wound: heals
 ## less), 蓄势 (focus: the next blow lands harder, then it is spent), 召唤 (minions: helpers strike each
 ## turn); each [amount, turns]. docs/COMBAT_PLAN.md, part one, stage one.
-const LINGERING := ["burn", "weaken", "sunder", "slow", "bleed", "entangle", "wound", "focus", "minions"]
+const LINGERING := ["burn", "weaken", "sunder", "slow", "bleed", "entangle", "wound", "focus", "minions", "fervor"]
 # Lingering effects kept as a share rather than a whole amount.
-const SHARES := ["weaken", "sunder", "wound", "focus"]
+const SHARES := ["weaken", "sunder", "wound", "focus", "fervor"]
 # 流血 piles up to this much at most.
 const BLEED_MOST := 12
 # Kinds of move a handwritten opponent may make (data/world.json enemies' `moves`).
@@ -322,6 +322,8 @@ static func use_skill(s, skill_id: String) -> String:
 			var roll: int = s.combat_rng.randi_range(int(t.damage_min), int(t.damage_max)) + int(round(float(s.attack_bonus()) * spent.size() / 2.0))
 			var counter := counter_multiplier(s, t.element)
 			var factor: float = s.element_multiplier(t) * counter * ground(s, str(t.element), false) * _school_force(s, str(t.element))
+			if s.battle.get("player_status", {}).has("fervor"):
+				factor *= 1.0 + float(s.battle.player_status.fervor[0])
 			if s.battle.get("player_status", {}).has("weaken"):
 				factor *= 1.0 - float(s.battle.player_status.weaken[0])
 			if s.battle.status.has("sunder"):
@@ -542,6 +544,62 @@ static func _wound(s, days: int, inner_days: int = 0) -> void:
 	s.player["wound_until"] = maxi(int(s.player.get("wound_until", 0)), int(s.world.day) + days)
 	if inner_days > 0:
 		s.player["injury_until"] = maxi(int(s.player.get("injury_until", 0)), int(s.world.day) + inner_days)
+
+## 禁忌秘术 (docs/COMBAT_PLAN.md, part one, stage five): a burst bought with lifespan, a crippling
+## injury or a 妖丹, each once a duel, from 筑基 (rules `secret_arts`). Their costs are written into the
+## character at once (player.burned_years, injury_until, the pack), so every save after keeps them and no
+## change of gear undoes them. None in a bout among fellows.
+static func secret_block(s, art_id: String) -> String:
+	if s.battle.is_empty():
+		return "当前没有对手。"
+	var art: Dictionary = rules(s).get("secret_arts", {}).get(art_id, {})
+	if art.is_empty():
+		return "没有这门秘术。"
+	if int(s.player.realm) < int(art.min_realm):
+		return "须%s方能催动禁忌秘术。" % s.content.realm(int(art.min_realm)).name
+	if s.battle.get("context", "") in ["spar", "tournament", "summit", "arena"]:
+		return "比斗点到为止，用不着搏命的秘术。"
+	if art_id in s.battle.get("secrets", []):
+		return "这一场已用过%s。" % art.name
+	if art.has("items") and _secret_item(s, art).is_empty():
+		return "行囊里没有妖丹可祭。"
+	return ""
+
+static func _secret_item(s, art: Dictionary) -> String:
+	for item_id: String in art.get("items", []):
+		if s.item_count(item_id) > 0:
+			return item_id
+	return ""
+
+static func use_secret(s, art_id: String) -> String:
+	s.combat_events.clear()
+	var reason := secret_block(s, art_id)
+	if not reason.is_empty():
+		return reason
+	var art: Dictionary = rules(s).secret_arts[art_id]
+	if not s.battle.has("secrets"):
+		s.battle.secrets = []
+	s.battle.secrets.append(art_id)
+	var look := {"style": "secret", "name": str(art.name), "vfx": "fire_burst", "tier": 4}
+	match art_id:
+		"burn_blood":
+			s.player["burned_years"] = int(s.player.get("burned_years", 0)) + int(art.years)
+		"shatter":
+			s.player["injury_until"] = maxi(int(s.player.get("injury_until", 0)), int(s.world.day) + int(art.injury_days))
+			s.player["wound_until"] = maxi(int(s.player.get("wound_until", 0)), int(s.world.day) + int(art.wound_days))
+			var gained := _draw(s, int(art.orbs), player_weights(s))
+			_gain(s, gained)
+		"offer_core":
+			s.remove_item(_secret_item(s, art), 1)
+			var healed := mini(int(round(float(s.player.max_hp) * float(art.heal))), int(s.player.max_hp) - int(s.player.hp))
+			s.player.hp = int(s.player.hp) + healed
+			s.battle.shield = int(s.battle.get("shield", 0)) + int(art.shield)
+			s.combat_events.append(_event({"type": "heal", "amount": healed, "hp_after": int(s.player.hp)}, look))
+	if art.has("fervor"):
+		_inflict(s.battle.player_status, "fervor", art.fervor)
+		s.combat_events.append(_event({"type": "guard", "amount": 0, "shield": int(s.battle.get("shield", 0))}, look))
+	s.changed.emit()
+	return s.log_event("secret_art", {"art_name": str(art.name), "art_text": str(art.text)}, true)
 
 ## 心魔斗法 (docs/COMBAT_PLAN.md, part two, B7): the demon takes the player's own shape, arts and school,
 ## at a share of their health and force. Fought while a breakthrough waits (breakthrough.gd).
@@ -1225,6 +1283,8 @@ static func _enemy_turn(s, guarding: bool) -> String:
 		s.player.hp = int(s.player.hp) - bite
 		s.combat_events.append({"type": "attack", "actor": "enemy", "style": wound[0], "name": wound[1], "vfx": wound[2], "tier": 1, "hits": 1, "amount": bite, "hp_after": int(s.player.hp)})
 		_count_down(burning, wound[0])
+	if burning.has("fervor"):
+		_count_down(burning, "fervor")
 	var short := (int(burning.slow[0]) if burning.has("slow") else 0) + (int(burning.entangle[0]) if burning.has("entangle") else 0)
 	_gain(s, _draw(s, maxi(1, draw_count(s) - short + formation + (int(rules(s).guard_orbs) if guarding else 0)), player_weights(s)))
 	_foe_prepare(s)
@@ -1317,8 +1377,18 @@ static func _lose(s) -> String:
 	if s.battle.get("context", "") == "summit":
 		return s.Summit.over(s, false)
 	var grudge_id := str(s.battle.get("grudge", ""))
+	var deadly := bool(s.battle.get("deadly", false))
+	var killer := str(s.battle.get("title", s.content.enemies[str(s.battle.enemy_id)].name))
 	s.battle.clear()
 	s.record_deed("duel")
+	# 死斗 (part one, stage five): marked before it began, lost, it ends the life.
+	if deadly:
+		# The ending marks the fall; health stays a sliver, as saves keep it.
+		s.player.hp = 1
+		s.ended = {"kind": "fallen", "day": int(s.world.day)}
+		var fall: String = s.log_event("fallen", {"foe": killer, "age": s.age()}, true)
+		s.changed.emit()
+		return fall
 	if not grudge_id.is_empty():
 		s.Feuds.fight_over(s, grudge_id, false)
 	var lost := mini(int(s.player.stones), 10)

@@ -161,6 +161,11 @@ func _read_json(path: String) -> Variant:
 	return JSON.parse_string(file.get_as_text())
 
 func _validate() -> String:
+	# 禁忌秘术 (combat.gd).
+	for art_id: String in rules.get("duel", {}).get("secret_arts", {}):
+		var art: Variant = rules.duel.secret_arts[art_id]
+		if not art_id in ["burn_blood", "shatter", "offer_core"] or not art is Dictionary or not art.get("name") is String or not art.get("text") is String or not _whole(art.get("min_realm")) or (art.has("fervor") and (not art.fervor is Array or art.fervor.size() != 2)) or art.get("items", []).any(func(item_id: Variant) -> bool: return item(str(item_id)).is_empty()):
+			return "禁忌秘术配置错误：" + art_id
 	# 流派 (schools.gd).
 	for school_id: String in technique_data.get("schools", {}):
 		var school: Variant = technique_data.schools[school_id]
@@ -1579,7 +1584,7 @@ func _validate_effects(effects: Variant) -> String:
 				ok = value is Array and not value.is_empty() and value.all(func(enemy_id: Variant) -> bool: return enemies.has(enemy_id))
 			"series":
 				ok = series.has(value)
-			"grudge_fight", "grudge_pay", "grudge_evade", "bounty_fight", "bounty_wait", "bounty_drop", "mend_wound", "terms_search", "terms_press":
+			"grudge_fight", "grudge_pay", "grudge_evade", "bounty_fight", "bounty_wait", "bounty_drop", "mend_wound", "terms_search", "terms_press", "deadly":
 				ok = value is bool and value
 			"hp", "qi":
 				ok = (value is int or value is float) and float(value) == floor(float(value))

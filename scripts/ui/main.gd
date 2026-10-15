@@ -49,6 +49,8 @@ const TAB_GROUPS := {"panel": PANEL_TABS, "scroll": SCROLL_TABS, "retreat": RETR
 var session = Session.new()
 var manual_store = SaveStore.new("user://saves/manual")
 var auto_store = SaveStore.new("user://saves/auto")
+## 劫前存档: written as a 死斗 begins (combat.gd), read from the 斗法陨落 ending.
+var trial_store = SaveStore.new("user://saves/trial")
 var started := false
 var autosave_error := ""
 # The content of the current screen; every view builds into it.
@@ -72,6 +74,9 @@ var scene_layer: Control
 # 神通 / 功法 and 行囊 pages, and what is laid out on the trading table.
 var battle_record_open := false
 var battle_scout_open := false
+var battle_secret_open := false
+## The 死斗 last saved before (day and foe), so the 劫前 save is written once per fight.
+var trial_saved_for := ""
 var retreat_days := 90
 var retreat_playback: Dictionary = {}
 var retreat_labels: Dictionary = {}
@@ -191,6 +196,7 @@ func _ready() -> void:
 	if preview_mode:
 		manual_store = SaveStore.new("user://art_preview/manual")
 		auto_store = SaveStore.new("user://art_preview/auto")
+		trial_store = SaveStore.new("user://art_preview/trial")
 		guide_enabled = false
 		started = true
 		reset_preview()
@@ -695,11 +701,20 @@ func toggle_drawer() -> void:
 func toggle_battle_record() -> void:
 	battle_record_open = not battle_record_open
 	battle_scout_open = false
+	battle_secret_open = false
+	render()
+
+## 禁忌秘术, in the record's place.
+func toggle_battle_secret() -> void:
+	battle_secret_open = not battle_secret_open
+	battle_scout_open = false
+	battle_record_open = battle_secret_open
 	render()
 
 ## 探查: the opponent's make-up, in the record's place (combat.gd scout).
 func toggle_battle_scout() -> void:
 	battle_scout_open = not battle_scout_open
+	battle_secret_open = false
 	battle_record_open = battle_scout_open
 	render()
 
@@ -1066,6 +1081,8 @@ func battle_action(action: String) -> void:
 		message = session.Combat.release(session)
 	elif action == "array":
 		message = session.Combat.lay_array(session)
+	elif action.begins_with("secret:"):
+		message = session.Combat.use_secret(session, action.trim_prefix("secret:"))
 	elif action.begins_with("target:"):
 		message = session.set_target(int(action.trim_prefix("target:")))
 	else:
@@ -1170,6 +1187,13 @@ func _on_changed() -> void:
 		Guide.save_state(self)
 	if not presenting:
 		render()
+	# A 死斗 just begun: its 劫前 save, once.
+	if started and bool(session.battle.get("deadly", false)):
+		var key := "%d:%s:%s" % [int(session.world.day), str(session.battle.enemy_id), str(session.battle.get("title", ""))]
+		if key != trial_saved_for and int(session.battle.get("turn", 1)) == 1:
+			trial_saved_for = key
+			if not trial_store.save_game(session):
+				notice(trial_store.last_error)
 	if started and autosave_enabled:
 		autosave_error = "" if auto_store.save_game(session) else auto_store.last_error
 	else:
@@ -1196,6 +1220,17 @@ func _load_manual() -> void:
 		notice("已读取手动存档。")
 	else:
 		notice(manual_store.last_error)
+
+## Back to the start of the 死斗 that ended the life.
+func load_trial() -> void:
+	if not started or presenting:
+		return
+	story = {}
+	dialogue = {}
+	if trial_store.load_game(session):
+		notice("已读取劫前存档：回到这场死斗开打之时。")
+	else:
+		notice(trial_store.last_error)
 
 func _ask_new_game() -> void:
 	if presenting:

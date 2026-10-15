@@ -119,6 +119,11 @@ static func render_ending(ui) -> void:
 		return
 	if str(session.ended.get("kind", "")) == "ascension":
 		_ending_head(ui, center, "白 日 飞 升", "%s，%s，享年 %d 岁，踏天河而去，大道得成。" % [session.player.name, session.realm_name(), session.age()])
+	elif str(session.ended.get("kind", "")) == "fallen":
+		_ending_head(ui, center, "斗 法 陨 落", "%s，%s，在一场死斗中落败，陨落时 %d 岁。" % [session.player.name, session.realm_name(), session.age()])
+		if ui.trial_store.has_save():
+			var back: Button = ui.button("读取劫前存档", ui.load_trial, "回到这场死斗开打之时")
+			center.add_child(back)
 	else:
 		_ending_head(ui, center, "此 生 已 尽", "%s，%s，享年 %d 岁。" % [session.player.name, session.realm_name(), session.age()])
 	center.add_child(ui.label("生 平", 16, ui.GOLD))

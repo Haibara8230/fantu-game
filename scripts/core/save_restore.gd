@@ -240,7 +240,10 @@ static func restore(s, data: Variant) -> bool:
 			return false
 		if saved_battle.has("cave") and not content.cave_data.has(saved_battle.cave):
 			return false
-		for flag_key: String in ["array", "body_ready"]:
+		var secrets: Variant = saved_battle.get("secrets", [])
+		if not secrets is Array or secrets.any(func(art_id: Variant) -> bool: return not content.rules.get("duel", {}).get("secret_arts", {}).has(art_id)):
+			return false
+		for flag_key: String in ["array", "body_ready", "deadly"]:
 			if saved_battle.has(flag_key) and not saved_battle[flag_key] is bool:
 				return false
 		for named: String in ["title", "grudge", "wanted"]:
@@ -277,7 +280,7 @@ static func restore(s, data: Variant) -> bool:
 		if not values is Dictionary or values.keys().any(func(key: Variant) -> bool: return not key is String or not values[key] is String):
 			return false
 	if not saved_ended.is_empty():
-		if not saved_ended.get("kind") in ["lifespan", "ascension"] or not _whole_nonnegative(saved_ended.get("day")) or int(saved_ended.day) > day or not saved_ended.get("choice", false) is bool:
+		if not saved_ended.get("kind") in ["lifespan", "ascension", "fallen"] or not _whole_nonnegative(saved_ended.get("day")) or int(saved_ended.day) > day or not saved_ended.get("choice", false) is bool:
 			return false
 	for stream: String in ["combat", "world"]:
 		if not saved_rng.get(stream) is String or not saved_rng[stream].is_valid_int():
@@ -451,6 +454,10 @@ static func _valid_breakthrough(content, saved_player: Dictionary, saved_pending
 	if not _whole_nonnegative(wound):
 		return null
 	result["wound_until"] = int(wound)
+	var burned: Variant = saved_player.get("burned_years", 0)
+	if not _whole_nonnegative(burned):
+		return null
+	result["burned_years"] = int(burned)
 	var boons: Variant = saved_player.get("boons", {})
 	if not boons is Dictionary:
 		return null

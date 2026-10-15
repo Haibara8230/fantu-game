@@ -90,6 +90,8 @@ static func fight(s) -> void:
 	s.Combat.begin_battle(s, str(grudge.enemy), "event")
 	s.battle.grudge = str(grudge.id)
 	s.battle.title = str(grudge.name)
+	# 仇杀 is a 死斗 (combat.gd): the choice says so.
+	s.battle.deadly = true
 
 ## Paid off, or beaten in a fight, the grudge is laid to rest.
 static func settle(s, grudge_id: String) -> void:

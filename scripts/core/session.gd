@@ -116,7 +116,7 @@ func new_game(character_name: String = "无名", seed_value: int = -1, roots: Ar
 		"learned": [], "arts": [], "methods": [], "equipment": {"weapon": "", "robe": "", "accessory": ""}, "quests": [],
 		"deeds": {}, "taught": [],
 		"talents": born.get("talents", []).duplicate(), "flaws": born.get("flaws", []).duplicate(),
-		"foundation_grade": 1, "core_grade": 0, "injury_until": 0, "wound_until": 0, "lessons": 0, "boons": {}, "longevity": {}, "forged": 0, "duty": "", "duty_day": -1,
+		"foundation_grade": 1, "core_grade": 0, "injury_until": 0, "wound_until": 0, "burned_years": 0, "lessons": 0, "boons": {}, "longevity": {}, "forged": 0, "duty": "", "duty_day": -1,
 		"rank": 0, "contribution": 0, "merit": 0, "stipend_day": 0, "exchanged": {}, "donated": {},
 		"recipes": [], "practice": {}, "toxin": 0, "toxin_day": 0, "field": {"grade": 0, "plots": []},
 	}
@@ -257,7 +257,8 @@ func lifespan() -> int:
 	var extended := 0
 	for years: Variant in player.get("longevity", {}).values():
 		extended += int(years)
-	return maxi(int(content.rules.starting_age) + 10, int(content.realm(int(player.realm)).lifespan_years) + talent_modifier("lifespan")) + extended
+	# 燃血术 burns years away for good (combat.gd 禁忌秘术).
+	return maxi(int(content.rules.starting_age) + 10, int(content.realm(int(player.realm)).lifespan_years) + talent_modifier("lifespan")) + extended - int(player.get("burned_years", 0))
 
 ## Years of life gained from `kind` (an elixir, a fruit, defying fate), once per kind.
 func extend_life(kind: String, years: int) -> void:

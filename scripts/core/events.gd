@@ -208,6 +208,9 @@ static func apply(s, effects: Array) -> void:
 				s.Series.begin(s, value)
 			"mend_wound":
 				s.player["wound_until"] = 0
+			"deadly":
+				if not s.battle.is_empty():
+					s.battle.deadly = true
 			"terms_search":
 				s.Feuds.search(s)
 			"terms_press":

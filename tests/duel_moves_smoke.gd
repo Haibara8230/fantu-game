@@ -34,6 +34,7 @@ func _initialize() -> void:
 	_ground_scout_wounds()
 	_terms_and_schools()
 	_demon_and_tribulation()
+	_deadly_and_secrets()
 	print("DUEL MOVES: %d checks, %d failures" % [checks, failures])
 	quit(0 if failures == 0 else 1)
 
@@ -819,6 +820,55 @@ func _demon_and_tribulation() -> void:
 	struck.player.hp = 1
 	struck.defend()
 	check(struck.battle.is_empty() and int(struck.player.realm) == 1 and int(struck.player.injury_until) - int(struck.world.day) == 2 * int(struck.content.rules.breakthrough.failure.injury_days), "struck down, the attempt fails with twice the injury")
+
+## Part one, stage five: 禁忌秘术 (a burst for lifespan, an injury or a 妖丹, costs kept for good) and
+## 死斗 (marked before it begins; lost, the life ends).
+func _deadly_and_secrets() -> void:
+	var low := _duel("wolf", "bite", 0)
+	check(low.Combat.secret_block(low, "burn_blood").contains("筑基"), "秘术 wait for 筑基")
+	var game := _duel("wolf", "bite", 1)
+	var years := game.lifespan()
+	game.Combat.use_secret(game, "burn_blood")
+	check(game.lifespan() == years - 3 and game.battle.player_status.has("fervor") and not game.Combat.secret_block(game, "burn_blood").is_empty(), "燃血 burns three years for a burst, once a duel")
+	var kept := Session.new()
+	check(kept.restore(JSON.parse_string(JSON.stringify(game.snapshot()))) and kept.lifespan() == years - 3 and "burn_blood" in kept.battle.secrets, "the years stay burned through a save")
+	game.end_turn()
+	check(game.battle.is_empty() or int(game.battle.player_status.get("fervor", [0, 0])[1]) == 2, "the burst wanes turn by turn")
+	var torn := _duel("wolf", "bite", 1)
+	var orbs := int(torn.battle.orbs.size())
+	torn.Combat.use_secret(torn, "shatter")
+	check(torn.battle.orbs.size() >= orbs + 1 and torn.injured() and torn.Combat.wounded(torn), "解体 tears the body for qi at once")
+	var offered := _duel("wolf", "bite", 1)
+	check(not offered.Combat.secret_block(offered, "offer_core").is_empty(), "祭丹 needs a 妖丹")
+	offered.set_item_count("yaodan_small", 1)
+	offered.player.hp = 10
+	offered.Combat.use_secret(offered, "offer_core")
+	check(offered.item_count("yaodan_small") == 0 and int(offered.player.hp) > 10 and int(offered.battle.shield) >= 30, "and gives it up for health and a shield")
+	var bout := _duel("wolf", "bite", 1)
+	bout.battle.context = "spar"
+	check(not bout.Combat.secret_block(bout, "burn_blood").is_empty(), "no 秘术 in a bout among fellows")
+	# 死斗.
+	var doomed := _duel("xuesha_tu", "", 1)
+	doomed.battle.deadly = true
+	doomed.player.hp = 0
+	doomed.Combat._lose(doomed)
+	check(str(doomed.ended.get("kind", "")) == "fallen" and doomed.journal_lines().back().contains("陨落"), "a 死斗 lost ends the life")
+	var after := Session.new()
+	check(after.restore(JSON.parse_string(JSON.stringify(doomed.snapshot()))) and str(after.ended.kind) == "fallen", "and the fall is kept in a save")
+	var rescued := _duel("xuesha_tu", "", 1)
+	rescued.player.hp = 0
+	rescued.Combat._lose(rescued)
+	check(rescued.ended.is_empty(), "an unmarked defeat is still survived")
+	var road := _duel("wolf", "bite", 1)
+	road.battle.clear()
+	Session.Events.apply(road, [{"battle": "xuesha_tu"}, {"deadly": true}])
+	check(bool(road.battle.get("deadly", false)), "the 血煞截杀 fight is marked a 死斗")
+	var avenged := _duel("wolf", "bite", 1)
+	avenged.battle.clear()
+	avenged.Feuds._add(avenged, {"name": "「黑风」林照", "enemy": "rogue", "cause": "comrade", "region": "qingyun"})
+	avenged.pending_event = {"id": "grudge_ambush", "day": int(avenged.world.day), "values": {"grudge": str(avenged.world.grudges[0].id), "foe": "「黑风」林照"}}
+	avenged.Feuds.fight(avenged)
+	check(bool(avenged.battle.get("deadly", false)) and avenged.content.events.grudge_ambush.choices[0].label.contains("死斗"), "仇杀 is a 死斗, and its choice says so")
 
 func _saves() -> void:
 	var game := _duel("wolf", "pounce")

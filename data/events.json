@@ -14,7 +14,7 @@
     "trigger": "manual",
     "text": "{foe}拦在路中，冷冷看着你：“{words}”",
     "choices": [
-      {"id": "fight", "label": "应战", "effects": [{"grudge_fight": true}], "chronicle": "{foe}拦路寻仇，你与之斗法。"},
+      {"id": "fight", "label": "应战（死斗：落败即身死，开打时自动留下劫前存档）", "effects": [{"grudge_fight": true}], "chronicle": "{foe}拦路寻仇，你与之以命相搏。"},
       {"id": "pay", "label": "交出 {pay} 灵石了结恩怨", "conditions": [{"grudge_pay": true}], "effects": [{"grudge_pay": true}], "chronicle": "你交出 {pay} 灵石，{foe}收了，这段恩怨就此了结。"},
       {"id": "slip", "label": "绕路遁走（气血 -20）", "effects": [{"hp": -20}, {"grudge_evade": true}], "chronicle": "你硬受一击，抽身遁走。{foe}没有追上，可这笔账还在。"}
     ]
@@ -251,7 +251,7 @@
     "conditions": [{"realm_at_least": 1}],
     "text": "一个披着血红斗篷的修士拦在路中，刀刃上的血还没干：“血煞教办事。识相的，把灵石留下。”",
     "choices": [
-      {"id": "fight", "label": "迎战", "effects": [{"battle": "xuesha_tu"}], "chronicle": "你与拦路的血煞教徒斗法。"},
+      {"id": "fight", "label": "迎战（死斗：落败即身死，开打时自动留下劫前存档）", "effects": [{"battle": "xuesha_tu"}, {"deadly": true}], "chronicle": "你与拦路的血煞教徒以命相搏。"},
       {"id": "pay", "label": "交出四十块灵石", "conditions": [{"stones_at_least": 40}], "effects": [{"stones": -40}], "chronicle": "你丢下四十块灵石，血煞教徒冷笑着让开了路。"},
       {"id": "dash", "label": "拼着受伤冲过去（气血 -25）", "effects": [{"hp": -25}], "chronicle": "你硬受了一刀，冲过拦截，头也不回地赶路。"}
     ]

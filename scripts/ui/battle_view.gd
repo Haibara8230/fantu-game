@@ -8,7 +8,7 @@ const PlaceView = preload("res://scripts/ui/place_view.gd")
 const Settings = preload("res://scripts/ui/settings.gd")
 const RECORD_LINES := 6
 const DOCK_HEIGHT := 178.0
-const STATUS_NAMES := {"burn": "灼烧", "weaken": "寒蚀", "sunder": "破甲", "slow": "冰封", "bleed": "流血", "entangle": "缠绕", "wound": "禁疗", "focus": "蓄势", "minions": "帮手"}
+const STATUS_NAMES := {"burn": "灼烧", "weaken": "寒蚀", "sunder": "破甲", "slow": "冰封", "bleed": "流血", "entangle": "缠绕", "wound": "禁疗", "focus": "蓄势", "minions": "帮手", "fervor": "秘术"}
 const FOE_COLOR := Color("#f0b49a")
 
 static func render(ui) -> void:
@@ -34,10 +34,13 @@ static func render(ui) -> void:
 	if ui.battle_record_open:
 		var record := PanelContainer.new()
 		record.add_theme_stylebox_override("panel", ui.style(Color(0.03, 0.07, 0.08, 0.86), Color("#41615e"), 10))
-		var shown: Array = session.Combat.scout(session).lines if ui.battle_scout_open else session.journal_lines().slice(-RECORD_LINES)
-		var lines: Label = ui.label("\n".join(shown), 14, ui.INK)
-		lines.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-		record.add_child(lines)
+		if ui.battle_secret_open:
+			record.add_child(_secret_row(ui))
+		else:
+			var shown: Array = session.Combat.scout(session).lines if ui.battle_scout_open else session.journal_lines().slice(-RECORD_LINES)
+			var lines: Label = ui.label("\n".join(shown), 14, ui.INK)
+			lines.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+			record.add_child(lines)
 		center.add_child(record)
 	var dock := PanelContainer.new()
 	dock.add_theme_stylebox_override("panel", ui.style(Color(0.05, 0.11, 0.12, 0.94), Color("#5d7a6f"), 10))
@@ -121,9 +124,30 @@ static func render(ui) -> void:
 	_small(record_toggle)
 	side.add_child(record_toggle)
 	var seen: bool = session.Combat.scout(session).seen
+	if int(session.player.realm) >= 1 and not session.battle.get("context", "") in ["spar", "tournament", "summit", "arena"]:
+		var secret_toggle: Button = ui.button("收起秘术" if ui.battle_secret_open else "禁忌秘术", ui.toggle_battle_secret, "以寿元、重伤或妖丹换一时爆发，每门每场一次")
+		_small(secret_toggle)
+		side.add_child(secret_toggle)
 	var scout_toggle: Button = ui.button("收起探查" if ui.battle_scout_open else "神识探查", ui.toggle_battle_scout, "以神识探查对手：神识压过对手可看清它的招式、阶段、五行与身上可取之物" if seen else "神识不及对手，只能看出大致修为")
 	_small(scout_toggle)
 	side.add_child(scout_toggle)
+
+## 禁忌秘术: each with its price written on it, once a duel (combat.gd).
+static func _secret_row(ui) -> HBoxContainer:
+	var session = ui.session
+	var row := HBoxContainer.new()
+	row.add_theme_constant_override("separation", 10)
+	var arts: Dictionary = session.content.rules.duel.get("secret_arts", {})
+	for art_id: String in arts:
+		var art: Dictionary = arts[art_id]
+		var reason: String = session.Combat.secret_block(session, art_id)
+		var cast: Button = ui.button("%s\n%s" % [art.name, str(art.text).get_slice("：", 0)], func() -> void: ui.battle_action("secret:" + art_id), reason if not reason.is_empty() else str(art.text) + "（不占回合；代价立即记下，读档换装都抹不去）")
+		cast.disabled = not reason.is_empty()
+		cast.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		cast.custom_minimum_size = Vector2(0, 58)
+		ui.tint(cast, Color("#c9785f"))
+		row.add_child(cast)
+	return row
 
 static func _small(target: Button) -> void:
 	target.custom_minimum_size = Vector2(110, 0)
@@ -227,6 +251,9 @@ static func _corners(ui, stage: Control) -> void:
 		left.set_anchors_and_offsets_preset(Control.PRESET_TOP_LEFT)
 		left.position = Vector2(16, 60)
 	var lines: Array[String] = ["对手下一回合：" + intent_text(session)]
+	# 死斗: lost, the life ends (a save from its start is kept).
+	if bool(b.get("deadly", false)):
+		lines.append("死斗：落败即身死（已留劫前存档）")
 	# 地利: the ground's favour for some elements, and a sect's own ground.
 	var ground: String = session.Combat.ground_text(session)
 	if not ground.is_empty():
@@ -307,6 +334,8 @@ static func _effects_text(shield: int, status: Dictionary) -> String:
 					amount = "疗愈 -%d%%" % int(round(value * 100))
 				"focus":
 					amount = "下一击 +%d%%" % int(round(value * 100))
+				"fervor":
+					amount = "神通 +%d%%" % int(round(value * 100))
 				"minions":
 					amount = "每回合 %d" % int(value)
 			parts.append("%s %s（余 %d 回合）" % [STATUS_NAMES[key], amount, int(status[key][1])])

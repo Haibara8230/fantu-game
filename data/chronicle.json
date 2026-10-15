@@ -39,6 +39,8 @@
   "tribulation_start": "破境之际，天边雷云翻涌，{enemy_name}降下，共 {rounds} 道天雷。",
   "tribulation_passed": "最后一道天雷散去，你立在焦土之上，渡过了天劫。",
   "tribulation_failed": "天雷劈落，你没能撑过天劫，境界跌回原处。",
+  "secret_art": "你催动禁忌秘术「{art_name}」：{art_text}",
+  "fallen": "你在与{foe}的死斗中落败，陨落于此，享年 {age} 岁。",
   "flee_failed": "想要脱身，却被{enemy_name}截住了去路。",
   "hunt_start": "在{location_name}历练 {duration}，撞上了{enemy_name}。",
   "enemy_charge": "{enemy_name}{move_name}，下一招非同小可。",

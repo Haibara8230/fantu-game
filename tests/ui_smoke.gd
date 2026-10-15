@@ -164,6 +164,7 @@ func _run() -> void:
 	var test_path := "res://.godot/ui_saves_%d" % Time.get_ticks_usec()
 	main.manual_store = SaveStore.new(test_path + "/manual")
 	main.auto_store = SaveStore.new(test_path + "/auto")
+	main.trial_store = SaveStore.new(test_path + "/trial")
 	# Isolate preferences before _ready builds the welcome from the guide state.
 	main.guide_path = test_path + "/guide.cfg"
 	main.settings_path = test_path + "/settings.cfg"
@@ -746,6 +747,28 @@ func _run() -> void:
 	check(_button("撤离") != null and _button("撤离").disabled and _texts(main.center, "Label").contains("第 1 道天雷") and _texts(main.center, "Label").contains("余 3 道天雷"), "the 天劫 cannot be fled and counts its bolts")
 	main.session.battle.clear()
 	main.session.player.erase("tribulation")
+	main.render()
+	# A 死斗 (combat.gd): its 劫前 save as it begins, the 禁忌秘术 at hand, and the fall.
+	var realm_was := int(main.session.player.realm)
+	main.session.player.realm = maxi(realm_was, 1)
+	main.session.refresh_realm_stats()
+	main.run(func() -> String:
+		main.session.Events.apply(main.session, [{"battle": "xuesha_tu"}, {"deadly": true}])
+		main.session.changed.emit()
+		return "")
+	check(main.trial_store.has_save() and _texts(main.center, "Label").contains("死斗：落败即身死"), "a 死斗 says so and leaves a 劫前 save as it begins")
+	_button("禁忌秘术").pressed.emit()
+	check(main.battle_secret_open and _button("燃血术") != null and _button("祭丹术") != null and _button("祭丹术").disabled, "the 秘术 are at hand, each with its price")
+	main.toggle_battle_secret()
+	main.run(func() -> String:
+		main.session.player.hp = 0
+		return main.session.Combat._lose(main.session))
+	check(str(main.session.ended.get("kind", "")) == "fallen" and _texts(main.center, "Label").contains("斗 法 陨 落") and _button("读取劫前存档") != null, "lost, the life ends; the 劫前 save is offered")
+	_button("读取劫前存档").pressed.emit()
+	check(main.session.ended.is_empty() and not main.session.battle.is_empty() and bool(main.session.battle.get("deadly", false)), "and reading it returns to the fight's start")
+	main.session.battle.clear()
+	main.session.player.realm = realm_was
+	main.session.refresh_realm_stats()
 	main.render()
 	main.session.player.location = "sect"
 	main.set_view("place")
