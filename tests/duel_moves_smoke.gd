@@ -26,6 +26,7 @@ func _initialize() -> void:
 	_phases()
 	_saves()
 	_hunts()
+	_roads()
 	print("DUEL MOVES: %d checks, %d failures" % [checks, failures])
 	quit(0 if failures == 0 else 1)
 
@@ -176,6 +177,46 @@ func _hunts() -> void:
 	strong.use_item("yaodan")
 	check(int(strong.player.xp) == xp + 500 and strong.Alchemy.toxin(strong) > toxin, "refining a 妖丹 brings 修为 and 丹毒")
 	check(not strong.commission_offers("sect").is_empty(), "the boards still post")
+
+## Road encounters (part two, B2): 水匪 on the river, a traveller pursued, 魔修探子 and 血煞教徒; each
+## can be fought, paid or slipped at a cost, and the 传送阵 is never waylaid.
+func _roads() -> void:
+	var game := Session.new()
+	game.encounters_enabled = false
+	game.new_game("行路", 54, ["metal", "wood", "fire"])
+	game.player.realm = 1
+	game.refresh_realm_stats()
+	game.player.hp = game.player.max_hp
+	game.player.stones = 100
+	for event_id: String in ["river_pirates", "pursued_traveller", "demon_scout", "blood_cult"]:
+		check(game.content.events.has(event_id) and game.content.events[event_id].trigger == "route", event_id + " waylays travellers")
+	game.Events.start(game, "river_pirates")
+	game.choose_event("pay")
+	check(int(game.player.stones) == 80 and game.battle.is_empty(), "paying the 水匪 costs twenty stones and no fight")
+	game.Events.start(game, "river_pirates")
+	var hp := int(game.player.hp)
+	game.choose_event("wade")
+	check(int(game.player.hp) == hp - 15 and game.battle.is_empty(), "wading round them costs health")
+	game.Events.start(game, "river_pirates")
+	game.choose_event("fight")
+	check(game.battle.get("enemy_id", "") == "shui_fei", "or they are fought")
+	game.battle.clear()
+	var mind := int(game.player.mind)
+	game.Events.start(game, "pursued_traveller")
+	game.choose_event("save")
+	check(game.battle.get("enemy_id", "") == "zhui_bing" and int(game.player.mind) >= mind + 4, "standing up for the pursued brings their pursuer, and tempers the mind (%s, %d → %d)" % [game.battle.get("enemy_id", ""), mind, int(game.player.mind)])
+	game.battle.clear()
+	var gate := Session.new()
+	gate.encounters_enabled = true
+	gate.new_game("传送", 55, ["metal", "wood", "fire"])
+	gate.player.realm = 1
+	gate.refresh_realm_stats()
+	gate.player.stones = 200
+	gate.world.flags["tiannan_known"] = true
+	gate.player.location = "market"
+	gate.content.rules.encounter_chance = [1.0, 1.0, 1.0, 1.0]
+	gate.travel("nanming")
+	check(gate.player.location == "nanming" and gate.pending_event.is_empty() and gate.battle.is_empty(), "nothing waylays the 传送阵")
 
 func _saves() -> void:
 	var game := _duel("wolf", "pounce")

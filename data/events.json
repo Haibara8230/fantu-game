@@ -144,6 +144,64 @@
       {"id": "lure", "label": "抛出一株灵草引开它", "conditions": [{"herbs_at_least": 1}], "effects": [{"herbs": -1}], "chronicle": "你抛出一株灵草引开妖狼，绕路而行。"}
     ]
   },
+  "river_pirates": {
+    "title": "白鹭渡水匪",
+    "trigger": "route",
+    "routes": [["town", "ferry"], ["ferry", "market"]],
+    "min_danger": 0,
+    "weight": 2,
+    "repeat": {"cooldown_days": 30},
+    "conditions": [{"realm_at_least": 1}],
+    "text": "渡船行到河心，芦苇丛里撑出两条快船，船头站着几个水匪，刀尖朝你一指：“过路的修士，留下二十块灵石当船钱。”",
+    "choices": [
+      {"id": "fight", "label": "迎战", "effects": [{"battle": "shui_fei"}], "chronicle": "你在河心与白鹭渡的水匪斗法。"},
+      {"id": "pay", "label": "交出二十块灵石", "conditions": [{"stones_at_least": 20}], "effects": [{"stones": -20}], "chronicle": "你交出二十块灵石，水匪收了钱，撑着快船隐进芦苇丛。"},
+      {"id": "wade", "label": "弃船涉水绕开（气血 -15）", "effects": [{"hp": -15}], "chronicle": "你跃下渡船，踏着浅滩绕开水匪，一身泥水上了岸。"}
+    ]
+  },
+  "pursued_traveller": {
+    "title": "落难求救",
+    "trigger": "route",
+    "routes": [["sect", "ridge"], ["town", "ridge"], ["town", "ferry"], ["ridge", "wild"]],
+    "min_danger": 1,
+    "weight": 2,
+    "repeat": {"cooldown_days": 60},
+    "text": "一个衣衫带血的采药人跌跌撞撞地扑到你面前：“道友救命！后头有人追杀我，就为了我篓里那株灵草！”远处已传来脚步声。",
+    "choices": [
+      {"id": "save", "label": "出手相救", "effects": [{"battle": "zhui_bing"}, {"mind": 2}], "chronicle": "你挡在采药人身前，与追来的劫修斗法。"},
+      {"id": "hide", "label": "给他指条小路，让他快走", "effects": [{"mind": 1}], "chronicle": "你给采药人指了条林间小路，他千恩万谢地钻进了林子。"},
+      {"id": "leave", "label": "不管闲事", "chronicle": "你侧身让过采药人，没有多管闲事。"}
+    ]
+  },
+  "demon_scout": {
+    "title": "魔修探子",
+    "trigger": "route",
+    "routes": [["ridge", "wild"], ["market", "wild"], ["wild", "ruin"]],
+    "min_danger": 1,
+    "weight": 2,
+    "repeat": {"cooldown_days": 60},
+    "conditions": [{"realm_at_least": 1}],
+    "text": "山道旁的树影里有人在窥探，袖口露出一截黑色的魂幡。那人见被你看破，阴恻恻一笑。",
+    "choices": [
+      {"id": "fight", "label": "迎战", "effects": [{"battle": "mo_tan"}], "chronicle": "你与窥探的魔修探子斗法。"},
+      {"id": "pass", "label": "按住不发，绕道而行", "chronicle": "你按住不发，绕道离开，那魔修探子也没有追来。"}
+    ]
+  },
+  "blood_cult": {
+    "title": "血煞截杀",
+    "trigger": "route",
+    "routes": [["ferry", "chifeng"], ["nanming", "chifeng"], ["chifeng", "chixiao_gate"], ["chixiao_gate", "xuanyue_gate"], ["canglan_pavilion", "xuanyue_gate"], ["chifeng", "changqing_valley"]],
+    "min_danger": 0,
+    "weight": 2,
+    "repeat": {"cooldown_days": 45},
+    "conditions": [{"realm_at_least": 1}],
+    "text": "一个披着血红斗篷的修士拦在路中，刀刃上的血还没干：“血煞教办事。识相的，把灵石留下。”",
+    "choices": [
+      {"id": "fight", "label": "迎战", "effects": [{"battle": "xuesha_tu"}], "chronicle": "你与拦路的血煞教徒斗法。"},
+      {"id": "pay", "label": "交出四十块灵石", "conditions": [{"stones_at_least": 40}], "effects": [{"stones": -40}], "chronicle": "你丢下四十块灵石，血煞教徒冷笑着让开了路。"},
+      {"id": "dash", "label": "拼着受伤冲过去（气血 -25）", "effects": [{"hp": -25}], "chronicle": "你硬受了一刀，冲过拦截，头也不回地赶路。"}
+    ]
+  },
   "road_rogue": {
     "retired": true,
     "title": "劫修拦路",
