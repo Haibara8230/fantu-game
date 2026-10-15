@@ -5,6 +5,7 @@ extends SceneTree
 ## names carry no tier. Art coverage of items is reported, not yet required: item art is still to come.
 const Content = preload("res://scripts/core/content.gd")
 const Arsenal = preload("res://scripts/core/arsenal.gd")
+const ArtLibrary = preload("res://scripts/ui/art_library.gd")
 const TIER_WORDS := ["凡阶", "黄阶", "玄阶", "地阶", "天阶", "灵阶", "凡兵", "灵器", "灵宝", "玄天之宝"]
 var checks := 0
 var failures := 0
@@ -116,6 +117,6 @@ func _names(content) -> void:
 func _art_coverage(content) -> void:
 	var art: Variant = JSON.parse_string(FileAccess.get_file_as_string("res://data/art.json"))
 	var mapped: Dictionary = art.get("item_art", {}) if art is Dictionary else {}
-	var covered: int = content.items.keys().filter(func(item_id: String) -> bool: return mapped.has(item_id)).size()
+	var covered: int = content.items.keys().filter(func(item_id: String) -> bool: return not ArtLibrary.item_icon_path(content.item(item_id)).is_empty()).size()
 	print("ITEM ART: %d / %d items mapped (item art still to come)" % [covered, content.items.size()])
 	check(mapped.keys().all(func(item_id: String) -> bool: return content.items.has(item_id)), "item art maps only known items")

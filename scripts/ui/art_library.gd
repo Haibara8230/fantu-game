@@ -23,6 +23,26 @@ static func texture(path: String) -> Texture2D:
 		return null
 	return load(path) as Texture2D
 
+## An item's picture (docs/WORLD_EXPANSION.md 2.8): data/art.json `item_art` if it names one, else the
+## item's own file, else a picture shared by its kind (gear by base, slips by the art they teach, then the
+## category). "" until any of them is drawn; lists then show the name alone.
+static func item_icon_path(item: Dictionary) -> String:
+	var id := str(item.get("id", ""))
+	var candidates: Array[String] = []
+	var mapped := str(_config().get("item_art", {}).get(id, ""))
+	if not mapped.is_empty():
+		candidates.append(mapped)
+	candidates.append(ROOT + "items/%s.png" % id.replace(":", "_"))
+	if id.begins_with("e:"):
+		candidates.append(ROOT + "items/gear_%s.png" % id.get_slice(":", 1))
+	if id.begins_with("j:"):
+		candidates.append(ROOT + "items/manual_%s.png" % id.get_slice(":", 2))
+	candidates.append(ROOT + "items/category_%s.png" % str(item.get("category", "")))
+	for path: String in candidates:
+		if ResourceLoader.exists(path):
+			return path
+	return ""
+
 static func preferred_portrait_path(person_id: String) -> String:
 	return str(_config().get("portrait_art", {}).get(person_id, ""))
 

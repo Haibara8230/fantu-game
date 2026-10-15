@@ -1,6 +1,7 @@
 extends RefCounted
 ## The panel's 行囊, after Mi Chang Sheng: what is worn on the left (the three equipment slots and what
 ## they add), everything carried on the right, filtered by category, each with what can be done with it.
+const ArtLibrary = preload("res://scripts/ui/art_library.gd")
 
 static func render(ui) -> void:
 	var session = ui.session
@@ -70,6 +71,14 @@ static func _item_row(ui, parent: VBoxContainer, item_id: String) -> void:
 	var row := HBoxContainer.new()
 	row.add_theme_constant_override("separation", 8)
 	parent.add_child(row)
+	# The item's picture once drawn (art_library.gd item_icon_path); until then the name stands alone.
+	var icon_path: String = ArtLibrary.item_icon_path(item)
+	if not icon_path.is_empty():
+		var icon: TextureRect = ui.picture(icon_path, 40)
+		icon.custom_minimum_size = Vector2(40, 40)
+		icon.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
+		icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		row.add_child(icon)
 	var name_label: Label = ui.label("%s ×%d" % [item.name, session.item_count(item_id)], 16, ui.grade_color(item))
 	name_label.custom_minimum_size.x = 150
 	row.add_child(name_label)

@@ -1,0 +1,689 @@
+{
+  "date": "2026-10-15",
+  "purpose": "物品立绘（docs/WORLD_EXPANSION.md 2.8）。放到 target 路径即自动显示在行囊里（scripts/ui/art_library.gd 的 item_icon_path：物品自己的图 → 宝物按底材、玉简按神通类型的共用图 → 品类图）。tests/content_smoke.gd 报告覆盖数；九成以上后改为必查。",
+  "style": "Use case: stylized-concept. Asset type: transparent square item icon for 凡途, a 2D Chinese cultivation RPG, shown at about 40-96 px in lists and larger in item details. Create ONE object, 512x512, genuinely transparent background, centred, filling about 80% of the square with safe margins, slight three-quarter view. Style: original unmistakably 2D HAND DRAWN Chinese cultivation game art, crisp dark ink outlines, flat opaque muted jade, ivory, bronze and accent colours by the item's grade, restrained one or two cel shadow tones, economical large shapes readable when small. No text, labels, UI, border, frame, backdrop, floor, drop shadow, checkerboard, photorealism or 3D.",
+  "assets": [
+    {
+      "id": "item_huichun_grass",
+      "kind": "item",
+      "target": "assets/art/items/huichun_grass.png",
+      "size": [
+        512,
+        512
+      ],
+      "subject": "回春草：最常见的灵草，药性温和，炼制疗伤丹的主材。",
+      "prompt": "Draw the item described (Chinese is content to illustrate, never write it): 回春草。最常见的灵草，药性温和，炼制疗伤丹的主材。"
+    },
+    {
+      "id": "item_chiyan_flower",
+      "kind": "item",
+      "target": "assets/art/items/chiyan_flower.png",
+      "size": [
+        512,
+        512
+      ],
+      "subject": "赤炎花：只生在落霞谷向阳坡上的火性灵花，花瓣摸上去微微发烫。",
+      "prompt": "Draw the item described (Chinese is content to illustrate, never write it): 赤炎花。只生在落霞谷向阳坡上的火性灵花，花瓣摸上去微微发烫。"
+    },
+    {
+      "id": "item_ninglu_grass",
+      "kind": "item",
+      "target": "assets/art/items/ninglu_grass.png",
+      "size": [
+        512,
+        512
+      ],
+      "subject": "凝露草：松风岭林下阴处的灵草，叶尖常挂露珠，性凉。",
+      "prompt": "Draw the item described (Chinese is content to illustrate, never write it): 凝露草。松风岭林下阴处的灵草，叶尖常挂露珠，性凉。"
+    },
+    {
+      "id": "item_lingzhi",
+      "kind": "item",
+      "target": "assets/art/items/lingzhi.png",
+      "size": [
+        512,
+        512
+      ],
+      "subject": "百年灵芝：百年方成的灵芝，罕见。炼化可得 300 修为。",
+      "prompt": "Draw the item described (Chinese is content to illustrate, never write it): 百年灵芝。百年方成的灵芝，罕见。炼化可得 300 修为。"
+    },
+    {
+      "id": "item_foundation_pill",
+      "kind": "item",
+      "target": "assets/art/items/foundation_pill.png",
+      "size": [
+        512,
+        512
+      ],
+      "subject": "筑基丹：突破筑基所需的丹药。",
+      "prompt": "Draw the item described (Chinese is content to illustrate, never write it): 筑基丹。突破筑基所需的丹药。"
+    },
+    {
+      "id": "item_huiqi_pill",
+      "kind": "item",
+      "target": "assets/art/items/huiqi_pill.png",
+      "size": [
+        512,
+        512
+      ],
+      "subject": "回气丹：服下恢复 20 点灵力；斗法中服下可多得两颗灵气。",
+      "prompt": "Draw the item described (Chinese is content to illustrate, never write it): 回气丹。服下恢复 20 点灵力；斗法中服下可多得两颗灵气。"
+    },
+    {
+      "id": "item_liaoshang_pill",
+      "kind": "item",
+      "target": "assets/art/items/liaoshang_pill.png",
+      "size": [
+        512,
+        512
+      ],
+      "subject": "疗伤丹：服下恢复 40 点气血。",
+      "prompt": "Draw the item described (Chinese is content to illustrate, never write it): 疗伤丹。服下恢复 40 点气血。"
+    },
+    {
+      "id": "item_ningqi_pill",
+      "kind": "item",
+      "target": "assets/art/items/ningqi_pill.png",
+      "size": [
+        512,
+        512
+      ],
+      "subject": "凝气丹：服下增加 100 修为。丹毒积累，连服须隔些时日。",
+      "prompt": "Draw the item described (Chinese is content to illustrate, never write it): 凝气丹。服下增加 100 修为。丹毒积累，连服须隔些时日。"
+    },
+    {
+      "id": "item_pozhang_pill",
+      "kind": "item",
+      "target": "assets/art/items/pozhang_pill.png",
+      "size": [
+        512,
+        512
+      ],
+      "subject": "破障丹：修为卡在瓶颈时服下，可冲开关隘、升入下一小阶段。未遇瓶颈时服之无益。",
+      "prompt": "Draw the item described (Chinese is content to illustrate, never write it): 破障丹。修为卡在瓶颈时服下，可冲开关隘、升入下一小阶段。未遇瓶颈时服之无益。"
+    },
+    {
+      "id": "item_liaoshang_pill_fine",
+      "kind": "item",
+      "target": "assets/art/items/liaoshang_pill_fine.png",
+      "size": [
+        512,
+        512
+      ],
+      "subject": "上品疗伤丹：丹纹圆润的上品疗伤丹，服下恢复 70 点气血。",
+      "prompt": "Draw the item described (Chinese is content to illustrate, never write it): 上品疗伤丹。丹纹圆润的上品疗伤丹，服下恢复 70 点气血。"
+    },
+    {
+      "id": "item_huiqi_pill_fine",
+      "kind": "item",
+      "target": "assets/art/items/huiqi_pill_fine.png",
+      "size": [
+        512,
+        512
+      ],
+      "subject": "上品回气丹：丹香清冽的上品回气丹，服下恢复 35 点灵力；斗法中服下可多得三颗灵气。",
+      "prompt": "Draw the item described (Chinese is content to illustrate, never write it): 上品回气丹。丹香清冽的上品回气丹，服下恢复 35 点灵力；斗法中服下可多得三颗灵气。"
+    },
+    {
+      "id": "item_ningqi_pill_fine",
+      "kind": "item",
+      "target": "assets/art/items/ningqi_pill_fine.png",
+      "size": [
+        512,
+        512
+      ],
+      "subject": "上品凝气丹：药力凝练的上品凝气丹，服下增加 160 修为，丹毒也轻些。",
+      "prompt": "Draw the item described (Chinese is content to illustrate, never write it): 上品凝气丹。药力凝练的上品凝气丹，服下增加 160 修为，丹毒也轻些。"
+    },
+    {
+      "id": "item_pozhang_pill_fine",
+      "kind": "item",
+      "target": "assets/art/items/pozhang_pill_fine.png",
+      "size": [
+        512,
+        512
+      ],
+      "subject": "上品破障丹：上品破障丹，冲开瓶颈之余，还让心境更为通透。未遇瓶颈时服之无益。",
+      "prompt": "Draw the item described (Chinese is content to illustrate, never write it): 上品破障丹。上品破障丹，冲开瓶颈之余，还让心境更为通透。未遇瓶颈时服之无益。"
+    },
+    {
+      "id": "item_foundation_pill_fine",
+      "kind": "item",
+      "target": "assets/art/items/foundation_pill_fine.png",
+      "size": [
+        512,
+        512
+      ],
+      "subject": "上品筑基丹：丹纹九转的上品筑基丹，突破筑基时药力更足。",
+      "prompt": "Draw the item described (Chinese is content to illustrate, never write it): 上品筑基丹。丹纹九转的上品筑基丹，突破筑基时药力更足。"
+    },
+    {
+      "id": "item_auction_invitation",
+      "kind": "item",
+      "target": "assets/art/items/auction_invitation.png",
+      "size": [
+        512,
+        512
+      ],
+      "subject": "云溪请柬：烫金请柬，凭此可入云溪坊市历元五年春的特殊拍卖。",
+      "prompt": "Draw the item described (Chinese is content to illustrate, never write it): 云溪请柬。烫金请柬，凭此可入云溪坊市历元五年春的特殊拍卖。"
+    },
+    {
+      "id": "item_azhi_token",
+      "kind": "item",
+      "target": "assets/art/items/azhi_token.png",
+      "size": [
+        512,
+        512
+      ],
+      "subject": "刻字竹牌：药篓上挂的竹牌，刻着“阿芷”二字，背面是一行采药人的记号。",
+      "prompt": "Draw the item described (Chinese is content to illustrate, never write it): 刻字竹牌。药篓上挂的竹牌，刻着“阿芷”二字，背面是一行采药人的记号。"
+    },
+    {
+      "id": "item_polin_powder",
+      "kind": "item",
+      "target": "assets/art/items/polin_powder.png",
+      "size": [
+        512,
+        512
+      ],
+      "subject": "破鳞散：沈墨以凝露草、赤炎花熬成的药散。服下后药力沉在丹田，与赤鳞妖蟒斗法时可破其鳞甲（妖蟒气血减三成）。",
+      "prompt": "Draw the item described (Chinese is content to illustrate, never write it): 破鳞散。沈墨以凝露草、赤炎花熬成的药散。服下后药力沉在丹田，与赤鳞妖蟒斗法时可破其鳞甲（妖蟒气血减三成）。"
+    },
+    {
+      "id": "item_peddler_pack",
+      "kind": "item",
+      "target": "assets/art/items/peddler_pack.png",
+      "size": [
+        512,
+        512
+      ],
+      "subject": "货郎的货担：从蒙面劫修手里夺回的货担，丹瓶一个没少，该还给钱货郎。",
+      "prompt": "Draw the item described (Chinese is content to illustrate, never write it): 货郎的货担。从蒙面劫修手里夺回的货担，丹瓶一个没少，该还给钱货郎。"
+    },
+    {
+      "id": "item_ore_qinggang",
+      "kind": "item",
+      "target": "assets/art/items/ore_qinggang.png",
+      "size": [
+        512,
+        512
+      ],
+      "subject": "青钢锭：百炼青钢铸成的锭子，打兵刃、软甲的寻常好料。炼器时同一种材料用三份。",
+      "prompt": "Draw the item described (Chinese is content to illustrate, never write it): 青钢锭。百炼青钢铸成的锭子，打兵刃、软甲的寻常好料。炼器时同一种材料用三份。"
+    },
+    {
+      "id": "item_ore_xuantie",
+      "kind": "item",
+      "target": "assets/art/items/ore_xuantie.png",
+      "size": [
+        512,
+        512
+      ],
+      "subject": "玄铁锭：玄铁沉重如山，打出的兵刃斩金断玉。炼器时同一种材料用三份。",
+      "prompt": "Draw the item described (Chinese is content to illustrate, never write it): 玄铁锭。玄铁沉重如山，打出的兵刃斩金断玉。炼器时同一种材料用三份。"
+    },
+    {
+      "id": "item_ore_hantie",
+      "kind": "item",
+      "target": "assets/art/items/ore_hantie.png",
+      "size": [
+        512,
+        512
+      ],
+      "subject": "寒铁精：极北寒铁淬出的精华，触手生寒，打造法宝的胚子。炼器时同一种材料用三份。",
+      "prompt": "Draw the item described (Chinese is content to illustrate, never write it): 寒铁精。极北寒铁淬出的精华，触手生寒，打造法宝的胚子。炼器时同一种材料用三份。"
+    },
+    {
+      "id": "item_dihuo_jing",
+      "kind": "item",
+      "target": "assets/art/items/dihuo_jing.png",
+      "size": [
+        512,
+        512
+      ],
+      "subject": "地火精：赤枫岭地底火脉凝出的火精，赤红透亮，握久了掌心发烫。天南特产。炼器时投一枚入炉，炉温陡升，打出的宝物多带一条词条。",
+      "prompt": "Draw the item described (Chinese is content to illustrate, never write it): 地火精。赤枫岭地底火脉凝出的火精，赤红透亮，握久了掌心发烫。天南特产。炼器时投一枚入炉，炉温陡升，打出的宝物多带一条词条。"
+    },
+    {
+      "id": "item_silk_qing",
+      "kind": "item",
+      "target": "assets/art/items/silk_qing.png",
+      "size": [
+        512,
+        512
+      ],
+      "subject": "青丝：灵蚕吐出的青丝，织法袍的寻常好料。炼器时同一种材料用三份。",
+      "prompt": "Draw the item described (Chinese is content to illustrate, never write it): 青丝。灵蚕吐出的青丝，织法袍的寻常好料。炼器时同一种材料用三份。"
+    },
+    {
+      "id": "item_silk_xuancan",
+      "kind": "item",
+      "target": "assets/art/items/silk_xuancan.png",
+      "size": [
+        512,
+        512
+      ],
+      "subject": "玄蚕丝：玄蚕所吐，刀剑难断，织成的法袍能挡飞剑。炼器时同一种材料用三份。",
+      "prompt": "Draw the item described (Chinese is content to illustrate, never write it): 玄蚕丝。玄蚕所吐，刀剑难断，织成的法袍能挡飞剑。炼器时同一种材料用三份。"
+    },
+    {
+      "id": "item_silk_yunjin",
+      "kind": "item",
+      "target": "assets/art/items/silk_yunjin.png",
+      "size": [
+        512,
+        512
+      ],
+      "subject": "云锦：以云气织就的锦缎，轻若无物，织出的法袍可入法宝之列。炼器时同一种材料用三份。",
+      "prompt": "Draw the item described (Chinese is content to illustrate, never write it): 云锦。以云气织就的锦缎，轻若无物，织出的法袍可入法宝之列。炼器时同一种材料用三份。"
+    },
+    {
+      "id": "item_jade_qing",
+      "kind": "item",
+      "target": "assets/art/items/jade_qing.png",
+      "size": [
+        512,
+        512
+      ],
+      "subject": "青玉料：温润的青玉，雕佩饰、玉扇的寻常好料。炼器时同一种材料用三份。",
+      "prompt": "Draw the item described (Chinese is content to illustrate, never write it): 青玉料。温润的青玉，雕佩饰、玉扇的寻常好料。炼器时同一种材料用三份。"
+    },
+    {
+      "id": "item_jade_mo",
+      "kind": "item",
+      "target": "assets/art/items/jade_mo.png",
+      "size": [
+        512,
+        512
+      ],
+      "subject": "墨玉料：墨玉沉静，养人心神，雕成的佩饰聚灵更快。炼器时同一种材料用三份。",
+      "prompt": "Draw the item described (Chinese is content to illustrate, never write it): 墨玉料。墨玉沉静，养人心神，雕成的佩饰聚灵更快。炼器时同一种材料用三份。"
+    },
+    {
+      "id": "item_jade_han",
+      "kind": "item",
+      "target": "assets/art/items/jade_han.png",
+      "size": [
+        512,
+        512
+      ],
+      "subject": "寒玉髓：寒玉深处凝出的玉髓，雕成法宝佩饰的胚子。炼器时同一种材料用三份。",
+      "prompt": "Draw the item described (Chinese is content to illustrate, never write it): 寒玉髓。寒玉深处凝出的玉髓，雕成法宝佩饰的胚子。炼器时同一种材料用三份。"
+    },
+    {
+      "id": "item_huashen_dan",
+      "kind": "item",
+      "target": "assets/art/items/huashen_dan.png",
+      "size": [
+        512,
+        512
+      ],
+      "subject": "化神丹：元婴化神所需的丹药，元婴圆满方可服用。世间所存，屈指可数。",
+      "prompt": "Draw the item described (Chinese is content to illustrate, never write it): 化神丹。元婴化神所需的丹药，元婴圆满方可服用。世间所存，屈指可数。"
+    },
+    {
+      "id": "item_huaying_dan",
+      "kind": "item",
+      "target": "assets/art/items/huaying_dan.png",
+      "size": [
+        512,
+        512
+      ],
+      "subject": "化婴丹：碎丹成婴所需的丹药，金丹圆满方可服用。",
+      "prompt": "Draw the item described (Chinese is content to illustrate, never write it): 化婴丹。碎丹成婴所需的丹药，金丹圆满方可服用。"
+    },
+    {
+      "id": "item_ningyuan_dan",
+      "kind": "item",
+      "target": "assets/art/items/ningyuan_dan.png",
+      "size": [
+        512,
+        512
+      ],
+      "subject": "凝元丹：凝聚灵液、结成金丹所需的丹药，筑基圆满方可服用。",
+      "prompt": "Draw the item described (Chinese is content to illustrate, never write it): 凝元丹。凝聚灵液、结成金丹所需的丹药，筑基圆满方可服用。"
+    },
+    {
+      "id": "item_yanshou_dan",
+      "kind": "item",
+      "target": "assets/art/items/yanshou_dan.png",
+      "size": [
+        512,
+        512
+      ],
+      "subject": "延寿丹：以百年寿木与龟息草炼成，服下可延寿五年。同种延寿之物一生只见效一次。",
+      "prompt": "Draw the item described (Chinese is content to illustrate, never write it): 延寿丹。以百年寿木与龟息草炼成，服下可延寿五年。同种延寿之物一生只见效一次。"
+    },
+    {
+      "id": "item_shouyuan_guo",
+      "kind": "item",
+      "target": "assets/art/items/shouyuan_guo.png",
+      "size": [
+        512,
+        512
+      ],
+      "subject": "寿元果：千年寿藤上结的果子，服下可延寿十二年。同种延寿之物一生只见效一次。",
+      "prompt": "Draw the item described (Chinese is content to illustrate, never write it): 寿元果。千年寿藤上结的果子，服下可延寿十二年。同种延寿之物一生只见效一次。"
+    },
+    {
+      "id": "item_qiannian_shiru",
+      "kind": "item",
+      "target": "assets/art/items/qiannian_shiru.png",
+      "size": [
+        512,
+        512
+      ],
+      "subject": "千年石乳：古洞石钟乳千年才凝一滴，灵气精纯。突破时服下可代替筑基丹，并让根基更为扎实。",
+      "prompt": "Draw the item described (Chinese is content to illustrate, never write it): 千年石乳。古洞石钟乳千年才凝一滴，灵气精纯。突破时服下可代替筑基丹，并让根基更为扎实。"
+    },
+    {
+      "id": "item_jiuqu_lingshen",
+      "kind": "item",
+      "target": "assets/art/items/jiuqu_lingshen.png",
+      "size": [
+        512,
+        512
+      ],
+      "subject": "九曲灵参：根须九曲的老参，生在灵气汇聚的深谷。突破时服下可代替筑基丹，并让根基更为扎实。",
+      "prompt": "Draw the item described (Chinese is content to illustrate, never write it): 九曲灵参。根须九曲的老参，生在灵气汇聚的深谷。突破时服下可代替筑基丹，并让根基更为扎实。"
+    },
+    {
+      "id": "item_recipe_liaoshang",
+      "kind": "item",
+      "target": "assets/art/items/recipe_liaoshang.png",
+      "size": [
+        512,
+        512
+      ],
+      "subject": "疗伤丹丹方：以回春草为主药的疗伤丹方子，寒热平和，最适合初学炼丹。",
+      "prompt": "Draw the item described (Chinese is content to illustrate, never write it): 疗伤丹丹方。以回春草为主药的疗伤丹方子，寒热平和，最适合初学炼丹。"
+    },
+    {
+      "id": "item_recipe_huiqi",
+      "kind": "item",
+      "target": "assets/art/items/recipe_huiqi.png",
+      "size": [
+        512,
+        512
+      ],
+      "subject": "回气丹丹方：以凝露草为主药的回气丹方子。主药偏寒，须以热性药引调和。",
+      "prompt": "Draw the item described (Chinese is content to illustrate, never write it): 回气丹丹方。以凝露草为主药的回气丹方子。主药偏寒，须以热性药引调和。"
+    },
+    {
+      "id": "item_recipe_ningqi",
+      "kind": "item",
+      "target": "assets/art/items/recipe_ningqi.png",
+      "size": [
+        512,
+        512
+      ],
+      "subject": "凝气丹丹方：增长修为的凝气丹方子。赤炎花入药，药性偏热，须以寒性药引调和。",
+      "prompt": "Draw the item described (Chinese is content to illustrate, never write it): 凝气丹丹方。增长修为的凝气丹方子。赤炎花入药，药性偏热，须以寒性药引调和。"
+    },
+    {
+      "id": "item_recipe_pozhang",
+      "kind": "item",
+      "target": "assets/art/items/recipe_pozhang.png",
+      "size": [
+        512,
+        512
+      ],
+      "subject": "破障丹丹方：冲关破障的方子，凝露草与赤炎花寒热相济。",
+      "prompt": "Draw the item described (Chinese is content to illustrate, never write it): 破障丹丹方。冲关破障的方子，凝露草与赤炎花寒热相济。"
+    },
+    {
+      "id": "item_recipe_foundation",
+      "kind": "item",
+      "target": "assets/art/items/recipe_foundation.png",
+      "size": [
+        512,
+        512
+      ],
+      "subject": "筑基丹丹方：筑基丹的方子，以百年灵芝为主药，辅以三味灵草。成丹极难，却是自家筑基的底气。",
+      "prompt": "Draw the item described (Chinese is content to illustrate, never write it): 筑基丹丹方。筑基丹的方子，以百年灵芝为主药，辅以三味灵草。成丹极难，却是自家筑基的底气。"
+    },
+    {
+      "id": "item_furnace_bronze",
+      "kind": "item",
+      "target": "assets/art/items/furnace_bronze.png",
+      "size": [
+        512,
+        512
+      ],
+      "subject": "青铜丹炉：坊市常见的青铜丹炉，炉壁厚实，火候好掌握些。炼丹成功率 +8%，出上品 +5%。",
+      "prompt": "Draw the item described (Chinese is content to illustrate, never write it): 青铜丹炉。坊市常见的青铜丹炉，炉壁厚实，火候好掌握些。炼丹成功率 +8%，出上品 +5%。"
+    },
+    {
+      "id": "item_furnace_purple",
+      "kind": "item",
+      "target": "assets/art/items/furnace_purple.png",
+      "size": [
+        512,
+        512
+      ],
+      "subject": "紫铜丹炉：宗门炼丹房淘换下来的紫铜丹炉，炉膛宽大。成功率 +12%，出上品 +10%，每炉多成一枚。",
+      "prompt": "Draw the item described (Chinese is content to illustrate, never write it): 紫铜丹炉。宗门炼丹房淘换下来的紫铜丹炉，炉膛宽大。成功率 +12%，出上品 +10%，每炉多成一枚。"
+    },
+    {
+      "id": "item_furnace_xuantie",
+      "kind": "item",
+      "target": "assets/art/items/furnace_xuantie.png",
+      "size": [
+        512,
+        512
+      ],
+      "subject": "玄铁丹炉：玄铁铸就、刻有聚火阵纹的丹炉，内门长老才舍得用。成功率 +18%，出上品 +18%，每炉多成一枚。",
+      "prompt": "Draw the item described (Chinese is content to illustrate, never write it): 玄铁丹炉。玄铁铸就、刻有聚火阵纹的丹炉，内门长老才舍得用。成功率 +18%，出上品 +18%，每炉多成一枚。"
+    },
+    {
+      "id": "item_kongho_fu",
+      "kind": "item",
+      "target": "assets/art/items/kongho_fu.png",
+      "size": [
+        512,
+        512
+      ],
+      "subject": "控火符：贴在炉口，可稳住炉火。炼丹时用一张：成功率 +15%，武火失手也不会炸炉。",
+      "prompt": "Draw the item described (Chinese is content to illustrate, never write it): 控火符。贴在炉口，可稳住炉火。炼丹时用一张：成功率 +15%，武火失手也不会炸炉。"
+    },
+    {
+      "id": "item_bihuo_zhu",
+      "kind": "item",
+      "target": "assets/art/items/bihuo_zhu.png",
+      "size": [
+        512,
+        512
+      ],
+      "subject": "避火珠：一枚冰蓝色的珠子，贴身带着，周身三尺的热浪便退开去。带着它可进地火熔窟最深处的地火之心；没有它，须神识足够，寻出一条凉些的岔道。不会损耗。",
+      "prompt": "Draw the item described (Chinese is content to illustrate, never write it): 避火珠。一枚冰蓝色的珠子，贴身带着，周身三尺的热浪便退开去。带着它可进地火熔窟最深处的地火之心；没有它，须神识足够，寻出一条凉些的岔道。不会损耗。"
+    },
+    {
+      "id": "gear_sword",
+      "kind": "item_family",
+      "target": "assets/art/items/gear_sword.png",
+      "size": [
+        512,
+        512
+      ],
+      "subject": "生成宝物的共用图：长剑（兵刃，金属所制）。各阶各属性的长剑都用此图；紫色及以上的手写作品另画专属图。",
+      "prompt": "A plain, well-made 长剑 as a generic cultivation artefact of no particular grade, neutral steel/silk/jade materials so one picture can stand for every grade; elegant but simple."
+    },
+    {
+      "id": "gear_saber",
+      "kind": "item_family",
+      "target": "assets/art/items/gear_saber.png",
+      "size": [
+        512,
+        512
+      ],
+      "subject": "生成宝物的共用图：雁翎刀（兵刃，金属所制）。各阶各属性的雁翎刀都用此图；紫色及以上的手写作品另画专属图。",
+      "prompt": "A plain, well-made 雁翎刀 as a generic cultivation artefact of no particular grade, neutral steel/silk/jade materials so one picture can stand for every grade; elegant but simple."
+    },
+    {
+      "id": "gear_fan",
+      "kind": "item_family",
+      "target": "assets/art/items/gear_fan.png",
+      "size": [
+        512,
+        512
+      ],
+      "subject": "生成宝物的共用图：折扇（兵刃，玉石所制）。各阶各属性的折扇都用此图；紫色及以上的手写作品另画专属图。",
+      "prompt": "A plain, well-made 折扇 as a generic cultivation artefact of no particular grade, neutral steel/silk/jade materials so one picture can stand for every grade; elegant but simple."
+    },
+    {
+      "id": "gear_bell",
+      "kind": "item_family",
+      "target": "assets/art/items/gear_bell.png",
+      "size": [
+        512,
+        512
+      ],
+      "subject": "生成宝物的共用图：摄魂铃（兵刃，金属所制）。各阶各属性的摄魂铃都用此图；紫色及以上的手写作品另画专属图。",
+      "prompt": "A plain, well-made 摄魂铃 as a generic cultivation artefact of no particular grade, neutral steel/silk/jade materials so one picture can stand for every grade; elegant but simple."
+    },
+    {
+      "id": "gear_robe",
+      "kind": "item_family",
+      "target": "assets/art/items/gear_robe.png",
+      "size": [
+        512,
+        512
+      ],
+      "subject": "生成宝物的共用图：道袍（法袍，丝帛所制）。各阶各属性的道袍都用此图；紫色及以上的手写作品另画专属图。",
+      "prompt": "A plain, well-made 道袍 as a generic cultivation artefact of no particular grade, neutral steel/silk/jade materials so one picture can stand for every grade; elegant but simple."
+    },
+    {
+      "id": "gear_vest",
+      "kind": "item_family",
+      "target": "assets/art/items/gear_vest.png",
+      "size": [
+        512,
+        512
+      ],
+      "subject": "生成宝物的共用图：护心甲（法袍，金属所制）。各阶各属性的护心甲都用此图；紫色及以上的手写作品另画专属图。",
+      "prompt": "A plain, well-made 护心甲 as a generic cultivation artefact of no particular grade, neutral steel/silk/jade materials so one picture can stand for every grade; elegant but simple."
+    },
+    {
+      "id": "gear_pendant",
+      "kind": "item_family",
+      "target": "assets/art/items/gear_pendant.png",
+      "size": [
+        512,
+        512
+      ],
+      "subject": "生成宝物的共用图：玉佩（佩饰，玉石所制）。各阶各属性的玉佩都用此图；紫色及以上的手写作品另画专属图。",
+      "prompt": "A plain, well-made 玉佩 as a generic cultivation artefact of no particular grade, neutral steel/silk/jade materials so one picture can stand for every grade; elegant but simple."
+    },
+    {
+      "id": "gear_ring",
+      "kind": "item_family",
+      "target": "assets/art/items/gear_ring.png",
+      "size": [
+        512,
+        512
+      ],
+      "subject": "生成宝物的共用图：指环（佩饰，玉石所制）。各阶各属性的指环都用此图；紫色及以上的手写作品另画专属图。",
+      "prompt": "A plain, well-made 指环 as a generic cultivation artefact of no particular grade, neutral steel/silk/jade materials so one picture can stand for every grade; elegant but simple."
+    },
+    {
+      "id": "manual_bolt",
+      "kind": "item_family",
+      "target": "assets/art/items/manual_bolt.png",
+      "size": [
+        512,
+        512
+      ],
+      "subject": "玉简的共用图：传授「法术」一类神通的玉简。",
+      "prompt": "A slim rectangular jade slip with a faint inner glow hinting at a 法术 technique (motion lines or a small aura shape inside the jade, no characters or writing), tied with a short silk cord."
+    },
+    {
+      "id": "manual_barrage",
+      "kind": "item_family",
+      "target": "assets/art/items/manual_barrage.png",
+      "size": [
+        512,
+        512
+      ],
+      "subject": "玉简的共用图：传授「连击」一类神通的玉简。",
+      "prompt": "A slim rectangular jade slip with a faint inner glow hinting at a 连击 technique (motion lines or a small aura shape inside the jade, no characters or writing), tied with a short silk cord."
+    },
+    {
+      "id": "manual_burst",
+      "kind": "item_family",
+      "target": "assets/art/items/manual_burst.png",
+      "size": [
+        512,
+        512
+      ],
+      "subject": "玉简的共用图：传授「重击」一类神通的玉简。",
+      "prompt": "A slim rectangular jade slip with a faint inner glow hinting at a 重击 technique (motion lines or a small aura shape inside the jade, no characters or writing), tied with a short silk cord."
+    },
+    {
+      "id": "manual_mend",
+      "kind": "item_family",
+      "target": "assets/art/items/manual_mend.png",
+      "size": [
+        512,
+        512
+      ],
+      "subject": "玉简的共用图：传授「疗愈」一类神通的玉简。",
+      "prompt": "A slim rectangular jade slip with a faint inner glow hinting at a 疗愈 technique (motion lines or a small aura shape inside the jade, no characters or writing), tied with a short silk cord."
+    },
+    {
+      "id": "manual_ward",
+      "kind": "item_family",
+      "target": "assets/art/items/manual_ward.png",
+      "size": [
+        512,
+        512
+      ],
+      "subject": "玉简的共用图：传授「护体」一类神通的玉简。",
+      "prompt": "A slim rectangular jade slip with a faint inner glow hinting at a 护体 technique (motion lines or a small aura shape inside the jade, no characters or writing), tied with a short silk cord."
+    },
+    {
+      "id": "manual_breath",
+      "kind": "item_family",
+      "target": "assets/art/items/manual_breath.png",
+      "size": [
+        512,
+        512
+      ],
+      "subject": "玉简的共用图：传授「吐纳」一类心法的玉简。",
+      "prompt": "A slim rectangular jade slip with a faint inner glow hinting at a 吐纳 technique (motion lines or a small aura shape inside the jade, no characters or writing), tied with a short silk cord."
+    },
+    {
+      "id": "manual_body",
+      "kind": "item_family",
+      "target": "assets/art/items/manual_body.png",
+      "size": [
+        512,
+        512
+      ],
+      "subject": "玉简的共用图：传授「炼体」一类心法的玉简。",
+      "prompt": "A slim rectangular jade slip with a faint inner glow hinting at a 炼体 technique (motion lines or a small aura shape inside the jade, no characters or writing), tied with a short silk cord."
+    },
+    {
+      "id": "manual_focus",
+      "kind": "item_family",
+      "target": "assets/art/items/manual_focus.png",
+      "size": [
+        512,
+        512
+      ],
+      "subject": "玉简的共用图：传授「凝神」一类心法的玉简。",
+      "prompt": "A slim rectangular jade slip with a faint inner glow hinting at a 凝神 technique (motion lines or a small aura shape inside the jade, no characters or writing), tied with a short silk cord."
+    },
+    {
+      "id": "manual_affinity",
+      "kind": "item_family",
+      "target": "assets/art/items/manual_affinity.png",
+      "size": [
+        512,
+        512
+      ],
+      "subject": "玉简的共用图：传授「元气」一类心法的玉简。",
+      "prompt": "A slim rectangular jade slip with a faint inner glow hinting at a 元气 technique (motion lines or a small aura shape inside the jade, no characters or writing), tied with a short silk cord."
+    }
+  ]
+}
