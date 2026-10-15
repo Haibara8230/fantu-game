@@ -4,7 +4,8 @@
   "max_active": 3,
   "boards": {
     "sect": {"name": "执事堂告示", "location": "sect"},
-    "market": {"name": "坊市告示", "location": "market"}
+    "market": {"name": "坊市告示", "location": "market"},
+    "nanming": {"name": "万宝楼告示", "location": "nanming"}
   },
   "templates": {"jiao": {"weight": 2, "boards": ["sect"], "min_realm": 3, "enemies": ["jiao"], "count": [1, 1], "days": 360, "reward_stones": 800, "reward_xp": 1500, "contribution": 200, "unit": "条", "title": "斩{enemy_name}", "text": "白鹭渡河底的{enemy_name}翻船伤人，渡口已经断了月余。宗门请元婴长老出手：{days} 日内斩之。"}, "demon": {"weight": 2, "boards": ["sect"], "min_realm": 2, "enemies": ["mo_xiu"], "count": [1, 2], "days": 120, "reward_stones": 260, "reward_xp": 400, "contribution": 60, "unit": "名", "title": "诛除{enemy_name}", "text": "深谷灵泉一带有{enemy_name}出没，掳人炼魂。宗门请金丹弟子出手：{days} 日内诛除 {count} 名。"}, 
     "gather": {
@@ -41,6 +42,38 @@
       "contribution": 25,
       "title": "巡视{place_name}",
       "text": "宗门差事：到{place_name}走一趟，看看有无异状，{days} 日内回{board_name}复命。"
+    },
+    "fire_herbs": {
+      "weight": 3,
+      "boards": ["nanming"],
+      "items": ["chiyan_flower"],
+      "count": [4, 8],
+      "days": 60,
+      "reward_scale": 2.5,
+      "title": "收购{item_name}",
+      "text": "丹铺要 {count} 株{item_name}，{days} 日内交到{board_name}。赤枫岭的枫林里最多。"
+    },
+    "fire_essence": {
+      "weight": 2,
+      "boards": ["nanming"],
+      "min_realm": 1,
+      "items": ["dihuo_jing"],
+      "count": [1, 2],
+      "days": 90,
+      "reward_scale": 2.0,
+      "title": "求购{item_name}",
+      "text": "器铺急需 {count} 枚{item_name}，{days} 日内送到{board_name}。"
+    },
+    "south_wolves": {
+      "weight": 2,
+      "boards": ["nanming"],
+      "enemies": ["wolf"],
+      "count": [1, 3],
+      "days": 60,
+      "reward_stones": 45,
+      "reward_xp": 35,
+      "title": "清剿{enemy_name}",
+      "text": "赤枫岭山道上的{enemy_name}扰了商队，{days} 日内斩杀 {count} 头。"
     },
     "pills": {
       "weight": 1,

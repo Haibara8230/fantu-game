@@ -52,7 +52,7 @@ const FAVOR_MAX := 200
 const FAVOR_STAGES := [[0, "初识"], [40, "相熟"], [80, "友好"], [140, "信赖"], [200, "亲密"]]
 const ATTITUDES := {"friendly": "友善", "neutral": "中立", "hostile": "敌意"}
 const BUILT_IN_INTERACTIONS := ["talk", "gift", "help", "consult", "teach", "invite_spar", "invite_help", "companion", "disciple", "instruct", "sworn"]
-const PLAIN_ACTIONS := ["cultivate", "rest", "breakthrough", "study", "teach", "sell", "shop", "gather", "inn_rest", "search_ruin", "explore_cave", "forge", "ascend", "inquire", "commissions", "sect", "alchemy", "field", "tournament"]
+const PLAIN_ACTIONS := ["cultivate", "rest", "breakthrough", "study", "teach", "sell", "shop", "gather", "inn_rest", "search_ruin", "explore_cave", "forge", "ascend", "inquire", "commissions", "sect", "alchemy", "field", "tournament", "lease"]
 const ITEM_CATEGORIES := {"herb": "灵草", "pill": "丹药", "treasure": "天材地宝", "manual": "玉简", "equipment": "宝物", "material": "材料", "recipe": "丹方", "tool": "器具", "quest": "信物"}
 # Milestones friends send word of, and the deeds the session counts besides victories ("win:<enemy>").
 const CONGRATS := ["breakthrough", "core", "nascent", "deity", "serpent", "champion", "summit", "calamity", "promotion"]
@@ -1072,6 +1072,17 @@ func _validate_map() -> String:
 					return "收购的地点没有收购品类：" + location_id
 				if action == "alchemy" and not alchemy_data.get("places", {}).has(location_id):
 					return "可炼丹的地点缺少丹炉配置：" + location_id
+				if action == "lease" and not location.has("lease"):
+					return "出赁住处的地点缺少租约配置：" + location_id
+		if location.has("lease"):
+			var lease: Variant = location.lease
+			if not lease is Dictionary or not lease.get("flag") in world_flags or not lease.get("name") is String or not _whole(lease.get("days")) or int(lease.days) < 1 or not _whole(lease.get("price")) or int(lease.price) < 1:
+				return "租约配置无效：" + location_id
+			if not location.spots.any(func(spot: Dictionary) -> bool: return spot.get("requires_flag", "") == lease.flag):
+				return "租约没有对应的住处场景：" + location_id
+		for rule: Variant in location.get("rules", []):
+			if not rule is Dictionary or not rule.get("forbid") in ["duel"] or not rule.get("text") is String:
+				return "地方规矩配置无效：" + location_id
 	# Every location must be reachable once everything is revealed; unhidden ones without any reveal.
 	var everything := {}
 	var seals := {}
@@ -1106,6 +1117,10 @@ func _validate_reveals() -> String:
 		for effect: Dictionary in effects:
 			if effect.has("flag"):
 				settable[effect.flag] = true
+	# A dwelling's flag is set by taking its lease (leases.gd).
+	for location: Dictionary in locations.values():
+		if location.has("lease"):
+			settable[location.lease.flag] = true
 	for location_id: String in locations:
 		var location: Dictionary = locations[location_id]
 		if location.has("hidden_until") and not settable.has(location.hidden_until):

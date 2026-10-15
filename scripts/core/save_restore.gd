@@ -73,6 +73,10 @@ static func restore(s, data: Variant) -> bool:
 	var wake: Variant = _valid_wake(content, saved_player.get("wake", []))
 	if wake == null:
 		return false
+	# Dwellings let for a term (optional: journeys before leases hold none).
+	var leases: Variant = saved_player.get("leases", {})
+	if not leases is Dictionary or leases.size() > 16 or leases.keys().any(func(flag: Variant) -> bool: return not flag in content.world_flags or not _whole_nonnegative(leases[flag])):
+		return false
 	var items: Variant = saved_player.get("items")
 	if not items is Dictionary:
 		return false
@@ -265,6 +269,10 @@ static func restore(s, data: Variant) -> bool:
 	player.qi = mini(int(player.qi), int(caps.max_qi))
 	player.warned_for = int(warned)
 	player["wake"] = wake
+	var terms := {}
+	for flag: String in leases:
+		terms[flag] = int(leases[flag])
+	player["leases"] = terms
 	for item_id: String in player.items:
 		player.items[item_id] = int(player.items[item_id])
 	player.journey = {} if journey.is_empty() else {"to": journey.to}

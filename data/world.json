@@ -151,9 +151,13 @@
           {"kind": "equipment", "count": 3, "tiers": [2, 3]}
         ]
       },
+      "rules": [{"forbid": "duel", "text": "南明坊市的规矩：坊内不许斗法切磋，违者罚灵石、逐出坊市。要比划，出坊去赤枫岭。"}],
+      "lease": {"flag": "nanming_abode", "name": "坊外石屋", "days": 360, "price": 150},
       "spots": [
-        {"id": "wanbao", "tag": [0.42, 0.42], "name": "万宝楼", "description": "万宝楼天南分号，三层朱楼，灵器料与丹药明码标价，也收各色灵材。", "actions": ["shop", "sell", "forge"]},
-        {"id": "teahouse", "tag": [0.2, 0.55], "name": "听涛茶楼", "description": "往来的行商与各宗弟子都爱在这里歇脚，天南的消息多半从这里传开。", "actions": ["inquire"]}
+        {"id": "wanbao", "tag": [0.42, 0.42], "name": "万宝楼", "description": "万宝楼天南分号，三层朱楼，灵器料与丹药明码标价，也收各色灵材；楼前的告示板上贴着各家的委托，不问出身。", "actions": ["shop", "sell", "forge", "commissions"]},
+        {"id": "teahouse", "tag": [0.2, 0.55], "name": "听涛茶楼", "description": "往来的行商与各宗弟子都爱在这里歇脚，天南的消息多半从这里传开。", "actions": ["inquire"]},
+        {"id": "broker", "tag": [0.66, 0.6], "name": "牙行", "description": "替人赁屋、作保的牙行。坊外赤枫岭脚下有几间石屋，引了一缕地脉灵气，赁下便可闭关静养。", "actions": ["lease"]},
+        {"id": "abode", "tag": [0.82, 0.3], "name": "坊外石屋", "description": "赁来的石屋，门前一株老枫，屋里一张蒲团，地上引了一缕温热的地脉灵气。", "actions": ["cultivate", "rest", "breakthrough"], "requires_flag": "nanming_abode"}
       ]
     },
     "chifeng": {
@@ -661,7 +665,7 @@
     "search_ruin": 5,
     "road_recovery": 1
   },
-  "world_flags": ["ascension_open", "calamity", "calamity_turned", "chenxia_open", "chenxia_puppet_down", "chenxia_remnant_down", "ruin_den_cleared", "serpent_slain", "heard_auction_rumor", "found_ruin", "ruin_cleared", "helped_wanderer", "serpent_rampage", "azhi_promised", "azhi_mourned", "intro_done", "peddler_friend", "serpent_weakened", "spirit_eye_found", "tiannan_known", "dihuo_lizard_down", "hanjin_heard", "bounty_turned_in", "bounty_exposed", "bounty_let_go"],
+  "world_flags": ["ascension_open", "calamity", "calamity_turned", "chenxia_open", "chenxia_puppet_down", "chenxia_remnant_down", "ruin_den_cleared", "serpent_slain", "heard_auction_rumor", "found_ruin", "ruin_cleared", "helped_wanderer", "serpent_rampage", "azhi_promised", "azhi_mourned", "intro_done", "peddler_friend", "serpent_weakened", "spirit_eye_found", "tiannan_known", "dihuo_lizard_down", "hanjin_heard", "bounty_turned_in", "bounty_exposed", "bounty_let_go", "nanming_abode"],
   "sects": {
     "wanderer": {
       "name": "散修",

@@ -1,4 +1,11 @@
 {
+  "nanming_rules": {
+    "title": "南明坊规",
+    "trigger": "location",
+    "location": "nanming",
+    "priority": 25,
+    "chronicle": "南明坊市口立着一块石碑，刻着万宝楼与赤霄门共订的坊规：坊内不许斗法切磋，违者罚灵石、逐出坊市；坊市里的买卖、告示与牙行，不问来人出身。"
+  },
   "meet_shen": {
     "title": "药铺掌柜",
     "trigger": "location",

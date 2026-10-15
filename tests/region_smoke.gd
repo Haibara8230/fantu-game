@@ -31,6 +31,7 @@ func _run() -> void:
 	_people()
 	_saves()
 	_tiannan()
+	_tiannan_market()
 	await _tiannan_screens()
 	await _audio()
 	_art()
@@ -177,6 +178,37 @@ func _tiannan() -> void:
 	walker.travel("chifeng")
 	check(walker.player.location == "chifeng" and int(walker.world.day) == start + 18, "a 炼气 disciple can walk the long road south")
 	check(walker.path_to("market") == ["chifeng", "ferry", "market"], "and walks it back, the gate being closed to them")
+
+## Batch E: 南明坊市's rule against duels, a stone house let by the year for retreats far from home,
+## and 万宝楼's board, open to anyone.
+func _tiannan_market() -> void:
+	var game := _game(84)
+	game.player.realm = 1
+	game.refresh_realm_stats()
+	game.player.stones = 600
+	game.world.flags.tiannan_known = true
+	game.travel("nanming")
+	check(_texts(game).contains("坊内不许斗法切磋"), "arriving, the market's rule is told")
+	var local: Array = game.present_npcs().filter(func(person_id: String) -> bool: return game.is_generated(person_id))
+	var spar := _option(game, str(local[0]), "spar")
+	check(not spar.is_empty() and not bool(spar.available) and str(spar.reason).contains("不许斗法"), "no spar inside the market, and the rule says why (%s)" % spar.get("reason", ""))
+	check(not game.available_here("cultivate"), "no retreat at the market before a house is let")
+	var stones := int(game.player.stones)
+	game.take_lease()
+	check(game.available_here("cultivate") and game.available_here("breakthrough") and int(game.player.stones) == stones - 150, "150 stones let the stone house for a year: retreat, rest and breakthrough")
+	var until: int = game.Leases.until(game, "nanming_abode")
+	check(until == int(game.world.day) + 359, "the term runs a year from today")
+	game.take_lease()
+	check(game.Leases.until(game, "nanming_abode") == until + 360, "taking it again adds a year after the first")
+	var kept := Session.new()
+	check(kept.restore(JSON.parse_string(JSON.stringify(game.snapshot()))) and kept.Leases.until(kept, "nanming_abode") == until + 360 and kept.available_here("cultivate"), "the term survives a save")
+	var held := int(game.item_count("huichun_grass"))
+	game.advance_days(until + 361 - int(game.world.day))
+	check(not game.available_here("cultivate") and game.Leases.until(game, "nanming_abode") == -1 and _texts(game).contains("租期满了"), "when the term ends the house closes and the chronicle says so")
+	check(int(game.item_count("huichun_grass")) == held, "and nothing of the player's is lost with it")
+	check(not game.commission_offers("nanming").is_empty() and game.available_here("commissions"), "万宝楼's board offers work to anyone")
+	var board: Array = game.commission_offers("nanming").map(func(offer: Dictionary) -> String: return str(offer.kind))
+	check(board.all(func(kind: String) -> bool: return kind in ["fire_herbs", "fire_essence", "south_wolves"]), "of its own kinds (%s)" % [board])
 
 ## The map turns to 天南 on its own page, and the new places render (without their art yet).
 func _tiannan_screens() -> void:

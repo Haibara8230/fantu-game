@@ -179,6 +179,14 @@ static func _spot_action(ui, grid: GridContainer, action: String) -> void:
 			_action(ui, grid, "翻找石室  ·  " + ui.duration("search_ruin"), "search_ruin", "或得灵石、灵草，偶有丹药；搜过后需隔些时日")
 		"study", "explore_cave":
 			pass
+		"lease":
+			var lease: Dictionary = session.Leases.offer(session)
+			var last: int = session.Leases.until(session, str(lease.flag))
+			var title := ("续租%s" if last >= 0 else "赁下%s") % lease.name
+			var term := "租期至 %s" % Calendar.short_text(last) if last >= 0 else "可在里头闭关、静养与突破"
+			var reason: String = session.Leases.block(session)
+			var take: Button = _timed(ui, grid, "%s  ·  %d 日 · %d 灵石" % [title, int(lease.days), int(lease.price)], session.take_lease, reason if not reason.is_empty() else term)
+			take.disabled = not reason.is_empty()
 		"inquire":
 			var cost: Dictionary = session.content.rules.inquire
 			_timed(ui, grid, "打听消息  ·  %s · %d 灵石" % [Calendar.duration_text(int(cost.days)), int(cost.price)], session.inquire, "请人喝壶茶，听听最近的消息：人物去向、宝物、委托与世事。")

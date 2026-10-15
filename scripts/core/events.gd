@@ -289,6 +289,9 @@ static func next_due(s, from_day: int) -> Dictionary:
 		if definition.has("remind") and int(progress.reminded) != 0 and from_day <= int(fixed.to):
 			best = _earlier(best, {"day": maxi(from_day, int(fixed.from)), "kind": "remind", "event": event_id})
 		best = _earlier(best, {"day": maxi(from_day, int(fixed.to) + 1), "kind": "expire", "event": event_id})
+	var lease: Dictionary = s.Leases.next_end(s, from_day)
+	if not lease.is_empty():
+		best = _earlier(best, {"day": int(lease.day), "kind": "lease_end", "event": str(lease.flag)})
 	# Last, so on a shared day the appointment's own reminder is told before the retreat ends for it.
 	for wake: Dictionary in s.player.get("wake", []):
 		best = _earlier(best, {"day": maxi(from_day, int(wake.day)), "kind": "wake", "event": str(wake.event)})
@@ -320,6 +323,8 @@ static func fire(s, due: Dictionary) -> Dictionary:
 		"wake":
 			s.player.wake = s.player.wake.filter(func(wake: Dictionary) -> bool: return str(wake.event) != str(due.event))
 			return {"interrupt": true, "message": s.log_event("wake", {"event": due.event})}
+		"lease_end":
+			return {"interrupt": true, "message": s.Leases.end(s, str(due.event))}
 		"visits":
 			return {"interrupt": false, "message": " ".join(s.Bonds.write_letters(s))}
 		"loan":

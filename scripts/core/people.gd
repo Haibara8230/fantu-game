@@ -358,10 +358,23 @@ static func npc_options(s, person_id: String) -> Array[Dictionary]:
 			reason = "%s后再来。" % Calendar.duration_text(int(last[option.id]) + int(option.cooldown_days) - int(s.world.day))
 		elif not Events.all_met(s, option.get("conditions", [])):
 			reason = "条件不足。"
+		elif _duels(option) and not forbidden(s, "duel").is_empty():
+			reason = forbidden(s, "duel")
 		else:
 			reason = Bonds.option_block(s, person_id, str(option.id))
 		result.append({"id": option.id, "label": option.label, "available": reason.is_empty(), "reason": reason})
 	return result
+
+## Whether an option comes to blows (a spar, a duel).
+static func _duels(option: Dictionary) -> bool:
+	return str(option.id) == "invite_spar" or option.get("effects", []).any(func(effect: Dictionary) -> bool: return effect.has("spar") or effect.has("battle"))
+
+## The local rule against `what` where the player stands (data/world.json location `rules`), or "".
+static func forbidden(s, what: String) -> String:
+	for rule: Dictionary in s.content.locations.get(str(s.player.location), {}).get("rules", []):
+		if rule.forbid == what:
+			return str(rule.text)
+	return ""
 
 static func interact(s, person_id: String, option_id: String) -> String:
 	if not is_person(s, person_id) or person(s, person_id).is_empty():

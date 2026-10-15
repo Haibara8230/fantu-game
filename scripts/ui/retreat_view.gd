@@ -225,6 +225,12 @@ static func _columns(ui) -> HBoxContainer:
 		wake.add_theme_font_size_override("font_size", 15)
 		wake.toggled.connect(func(on: bool) -> void: session.set_wake(event_id, on); ui.render())
 		left.add_child(wake)
+	# Dwellings let for a term (leases.gd): when the house is taken back.
+	for location_id: String in session.content.locations:
+		var lease: Dictionary = session.content.locations[location_id].get("lease", {})
+		if not lease.is_empty() and session.Leases.until(session, str(lease.flag)) >= 0:
+			left.add_child(ui.label("%s · 租期至 %s" % [lease.name, Calendar.short_text(session.Leases.until(session, str(lease.flag)))], 15))
+			any = true
 	if not any:
 		left.add_child(ui.label("近期无事", 15, ui.MUTED))
 	if markable:
