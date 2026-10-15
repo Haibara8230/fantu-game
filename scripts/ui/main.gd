@@ -13,6 +13,7 @@ const SaveStore = preload("res://scripts/core/save_store.gd")
 const Calendar = preload("res://scripts/core/calendar.gd")
 const AudioDirector = preload("res://scripts/presentation/audio_director.gd")
 const ArtLibrary = preload("res://scripts/ui/art_library.gd")
+const Landscape = preload("res://scripts/ui/landscape.gd")
 const UiSkin = preload("res://scripts/ui/ui_skin.gd")
 const Hud = preload("res://scripts/ui/hud.gd")
 const StatusView = preload("res://scripts/ui/status_view.gd")
@@ -58,6 +59,8 @@ var world_view := "place"
 # The screen's parts: the backdrop picture and its shade, the window holding `center` with the tab row
 # above it (for the panel and the scroll).
 var backdrop: TextureRect
+# A place whose picture is not drawn yet shows a code-drawn landscape of its terrain instead.
+var backdrop_sketch: Control
 var shade: ColorRect
 var window: PanelContainer
 var tab_row: HBoxContainer
@@ -310,6 +313,10 @@ func _build_layout() -> void:
 	backdrop.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
 	backdrop.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(backdrop)
+	backdrop_sketch = Landscape.new()
+	backdrop_sketch.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	backdrop_sketch.visible = false
+	add_child(backdrop_sketch)
 	shade = ColorRect.new()
 	shade.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	shade.color = Color(0.02, 0.05, 0.06, 0.4)
@@ -380,6 +387,8 @@ func _arrange(screen: String) -> void:
 	Hud.set_shown(self, world, screen == "map")
 	world_map.visible = screen == "map"
 	scene_layer.visible = screen == "place"
+	if screen != "place":
+		_sketch_backdrop(false)
 	var dueling: bool = screen == "full" and not session.battle.is_empty() and ceremony.is_empty() and story.is_empty() and session.pending_event.is_empty() and session.ended.is_empty()
 	window.add_theme_stylebox_override("panel", StyleBoxEmpty.new() if dueling else window_style)
 	Hud.place_notice(self, dueling)
@@ -389,6 +398,7 @@ func _arrange(screen: String) -> void:
 			# or the person the player turned to.
 			backdrop.texture = ArtLibrary.texture(ArtLibrary.fullscreen_location_path(str(session.player.location)))
 			backdrop.visible = true
+			_sketch_backdrop(backdrop.texture == null)
 			# The scene stays whole; a spot or a person opens as a scroll in the middle over a dimmed scene.
 			if place_popup_open():
 				shade.color.a = 0.45
@@ -457,6 +467,18 @@ func _telling_art() -> String:
 	if not session.pending_event.is_empty():
 		return ArtLibrary.event_art(str(session.pending_event.id))
 	return ""
+
+## Shows the code-drawn landscape behind a place that has no picture yet (or hides it).
+func _sketch_backdrop(shown: bool) -> void:
+	backdrop_sketch.visible = shown
+	if not shown:
+		return
+	var here := str(session.player.location)
+	if backdrop_sketch.location_id != here or backdrop_sketch.art != null:
+		backdrop_sketch.location_id = here
+		backdrop_sketch.terrain = str(session.content.locations[here].terrain)
+		backdrop_sketch.art = null
+		backdrop_sketch.queue_redraw()
 
 func _place_window(left: float, right: float, top: float, bottom: float, side: float = 0.0) -> void:
 	window.anchor_left = left

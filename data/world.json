@@ -155,7 +155,7 @@
       "lease": {"flag": "nanming_abode", "name": "坊外石屋", "days": 360, "price": 150},
       "spots": [
         {"id": "wanbao", "tag": [0.42, 0.42], "name": "万宝楼", "description": "万宝楼天南分号，三层朱楼，灵器料与丹药明码标价，也收各色灵材；楼前的告示板上贴着各家的委托，不问出身。", "actions": ["shop", "sell", "forge", "commissions"]},
-        {"id": "teahouse", "tag": [0.2, 0.55], "name": "听涛茶楼", "description": "往来的行商与各宗弟子都爱在这里歇脚，天南的消息多半从这里传开。", "actions": ["inquire"]},
+        {"id": "teahouse", "tag": [0.6, 0.36], "name": "听涛茶楼", "description": "往来的行商与各宗弟子都爱在这里歇脚，天南的消息多半从这里传开。", "actions": ["inquire"]},
         {"id": "broker", "tag": [0.66, 0.6], "name": "牙行", "description": "替人赁屋、作保的牙行。坊外赤枫岭脚下有几间石屋，引了一缕地脉灵气，赁下便可闭关静养。", "actions": ["lease"]},
         {"id": "abode", "tag": [0.82, 0.3], "name": "坊外石屋", "description": "赁来的石屋，门前一株老枫，屋里一张蒲团，地上引了一缕温热的地脉灵气。", "actions": ["cultivate", "rest", "breakthrough"], "requires_flag": "nanming_abode"}
       ]
@@ -184,7 +184,7 @@
       "hidden_until": "tiannan_known",
       "spots": [
         {"id": "foundry", "tag": [0.55, 0.45], "name": "器坊", "description": "赤霄门对外的器坊，引地火入炉，外人付了炉钱也可借用。", "actions": ["forge"]},
-        {"id": "pavilion", "tag": [0.25, 0.6], "name": "迎客亭", "description": "山门外的迎客亭，来访的修士在这里等候通传，也听得到些门内的事。", "actions": ["inquire"]}
+        {"id": "pavilion", "tag": [0.36, 0.62], "name": "迎客亭", "description": "山门外的迎客亭，来访的修士在这里等候通传，也听得到些门内的事。", "actions": ["inquire"]}
       ]
     }
   },

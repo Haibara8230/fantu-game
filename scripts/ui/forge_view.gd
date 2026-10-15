@@ -62,10 +62,11 @@ static func render(ui) -> void:
 	var flux_id: String = forge.flux_item(session)
 	if not flux_id.is_empty() and session.item_count(flux_id) > 0:
 		var fire := CheckBox.new()
-		fire.text = "投一枚%s（行囊 %d）：多出一条词条" % [session.content.item(flux_id).name, session.item_count(flux_id)]
+		fire.text = "投一枚%s（%d）：多一条词条" % [session.content.item(flux_id).name, session.item_count(flux_id)]
 		fire.button_pressed = bool(plan.get("flux", false))
 		fire.toggled.connect(func(on: bool) -> void: ui.forge_plan.flux = on; ui.render())
-		center.add_child(fire)
+		# On the element row, so the furnace's button stays in view.
+		natures.add_child(fire)
 	else:
 		plan.erase("flux")
 	center.add_child(HSeparator.new())

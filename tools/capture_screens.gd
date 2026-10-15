@@ -192,6 +192,19 @@ func _run() -> void:
 	s.set_item_count("jade_mo", 4)
 	main.open_forge()
 	await _shot("18e_forge")
+	# 天南: the forge with 地火精 to throw in, 南明坊市 without its art yet, and the broker's window.
+	s.world.flags["tiannan_known"] = true
+	s.set_item_count("dihuo_jing", 2)
+	main.forge_plan["flux"] = true
+	main.open_forge()
+	await _shot("18f_forge_flux")
+	s.player.location = "nanming"
+	main.set_view("place")
+	await _shot("18g_nanming")
+	main.select_spot("broker")
+	await _shot("18h_nanming_broker")
+	main.close_spot()
+	s.world.flags.erase("tiannan_known")
 	main.set_view("place")
 	s.player.location = "sect"
 	main.set_view("place")
