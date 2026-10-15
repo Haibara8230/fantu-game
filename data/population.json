@@ -30,7 +30,10 @@
     "visitor": {"title": "游方修士", "affiliation": "chixiao", "weight": 2, "schedule": ["ferry", "market", "town", "away", "away"], "attitude": "neutral"},
     "chixiao_disciple": {"region": "tiannan", "title": "赤霄门弟子", "affiliation": "chixiao", "weight": 6, "home": ["chixiao_gate"], "attitude": "neutral"},
     "nanming_trader": {"region": "tiannan", "title": "南明坊修士", "affiliation": "wanderer", "weight": 4, "home": ["nanming"], "attitude": "friendly"},
-    "southern_wanderer": {"region": "tiannan", "title": "天南散修", "affiliation": "wanderer", "weight": 6, "schedule": ["nanming", "chifeng", "chixiao_gate", "away"], "attitude": "neutral"},
+    "southern_wanderer": {"region": "tiannan", "title": "天南散修", "affiliation": "wanderer", "weight": 6, "schedule": ["nanming", "chifeng", "chixiao_gate", "changqing_valley", "canglan_pavilion", "away"], "attitude": "neutral"},
+    "changqing_disciple": {"region": "tiannan", "title": "长青谷弟子", "affiliation": "changqing", "weight": 3, "home": ["changqing_valley"], "attitude": "friendly"},
+    "canglan_disciple": {"region": "tiannan", "title": "沧澜阁弟子", "affiliation": "canglan", "weight": 3, "home": ["canglan_pavilion"], "attitude": "neutral"},
+    "xuanyue_disciple": {"region": "tiannan", "title": "玄岳宗弟子", "affiliation": "xuanyue", "weight": 3, "home": ["xuanyue_gate"], "attitude": "neutral"},
     "fire_gatherer": {"region": "tiannan", "title": "采火草的修士", "affiliation": "wanderer", "weight": 3, "schedule": ["chifeng", "nanming"], "attitude": "friendly"}
   },
   "region_talk": {

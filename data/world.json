@@ -174,6 +174,66 @@
         {"id": "cavern", "tag": [0.72, 0.36], "name": "地火熔窟", "description": "枫林深处的山壁裂开一道口子，热风一阵阵涌出来。据说里头连着火脉，还盘踞着一头火蜥。", "actions": ["explore_cave"]}
       ]
     },
+    "changqing_valley": {
+      "name": "长青谷",
+      "region": "tiannan",
+      "subtitle": "四时长青，百草成园。",
+      "description": "天南五宗之一，长于灵植与丹药。谷中气候温润，百草园里的灵草一年可收几茬，丹坊的药香终年不散；对外人也开着丹坊，按炉收钱。",
+      "terrain": "valley",
+      "map": [0.28, 0.78],
+      "hidden_until": "tiannan_known",
+      "gather": {"picks": [2, 3], "table": [{"item": "huichun_grass", "weight": 45}, {"item": "ninglu_grass", "weight": 38}, {"item": "chiyan_flower", "weight": 14}, {"item": "lingzhi", "weight": 3}]},
+      "shop": [
+        {"item": "liaoshang_pill", "price": 18},
+        {"item": "huiqi_pill", "price": 14},
+        {"item": "ningqi_pill", "price": 55},
+        {"item": "recipe_ningqi", "price": 70},
+        {"item": "recipe_pozhang", "price": 70},
+        {"item": "furnace_purple", "price": 280}
+      ],
+      "buys": ["herb", "pill"],
+      "spots": [
+        {"id": "garden", "tag": [0.5, 0.5], "name": "百草园", "description": "长青谷开给外人的一角药园，交一份采摘的规矩钱便可进去。偶尔还能在老树根下寻到百年灵芝。", "actions": ["gather"]},
+        {"id": "pill_hall", "tag": [0.7, 0.36], "name": "丹坊", "description": "长青谷的丹坊，卖丹药与丹方，也收灵草；后院的药炉付钱可借，谷中丹师会在旁提点。", "actions": ["shop", "sell", "alchemy"]}
+      ]
+    },
+    "canglan_pavilion": {
+      "name": "沧澜阁",
+      "region": "tiannan",
+      "subtitle": "阁临沧水，书藏万卷。",
+      "description": "天南五宗之一，修水法、善阵图，阁中藏书之富在天南首屈一指。藏经阁对外抄卖玉简，价钱公道。",
+      "terrain": "ferry",
+      "map": [0.6, 0.3],
+      "hidden_until": "tiannan_known",
+      "shop": [
+        {"item": "huiqi_pill", "price": 15}
+      ],
+      "buys": ["manual", "herb"],
+      "stock": {
+        "restock_days": 30,
+        "lines": [
+          {"kind": "manual", "count": 3, "tiers": [2, 3], "slot": "art"},
+          {"kind": "manual", "count": 2, "tiers": [2, 3], "slot": "method"}
+        ]
+      },
+      "spots": [
+        {"id": "library", "tag": [0.42, 0.42], "name": "藏经阁", "description": "沧澜阁对外的藏经阁，抄卖各家流传的黄阶、玄阶玉简，每月换一批；也收玉简。", "actions": ["shop", "sell"]},
+        {"id": "tide_terrace", "tag": [0.66, 0.55], "name": "观潮台", "description": "阁前的观潮台，沧澜弟子与往来的修士常在这里论道闲谈。", "actions": ["inquire"]}
+      ]
+    },
+    "xuanyue_gate": {
+      "name": "玄岳宗",
+      "region": "tiannan",
+      "subtitle": "负山而立，以身为岳。",
+      "description": "天南五宗之一，修土法与炼体，山门凿在整座石山里。炼体场对外开着，来访的修士可与玄岳弟子过几招。",
+      "terrain": "mountain",
+      "map": [0.44, 0.16],
+      "hidden_until": "tiannan_known",
+      "spots": [
+        {"id": "training_ground", "tag": [0.5, 0.5], "name": "炼体场", "description": "凿在山腹里的炼体场，玄岳弟子赤膊扛石，见了外人便要过几招。", "actions": ["battle:yue_disciple"]},
+        {"id": "stone_hall", "tag": [0.7, 0.36], "name": "迎客石厅", "description": "山门里的石厅，来客在这里等候，也听得到天南各宗的消息。", "actions": ["inquire"]}
+      ]
+    },
     "chixiao_gate": {
       "name": "赤霄门",
       "region": "tiannan",
@@ -342,6 +402,7 @@
     }
   },
   "enemies": {
+    "yue_disciple": {"name": "玄岳弟子", "element": "earth", "hp": 170, "damage_min": 10, "damage_max": 15, "reward_stones": 20, "reward_xp": 45, "reward_herbs": 0, "locations": ["xuanyue_gate"], "min_realm": 1, "human": true, "sect": "xuanyue"},
     "huo_xi": {"name": "熔窟火蜥", "element": "fire", "hp": 300, "damage_min": 20, "damage_max": 28, "reward_stones": 60, "reward_xp": 220, "reward_herbs": 0, "locations": [], "min_realm": 1, "world_flag": "dihuo_lizard_down", "flag_event": "lizard_down"},
     "disciple": {
       "name": "外门同门",
@@ -649,7 +710,12 @@
     {"between": ["ferry", "chifeng"], "days": 18, "danger": 2, "by": "南下远路"},
     {"between": ["nanming", "chifeng"], "days": 3, "danger": 1},
     {"between": ["chifeng", "chixiao_gate"], "days": 2, "danger": 1},
-    {"between": ["nanming", "chixiao_gate"], "days": 4, "danger": 0}
+    {"between": ["nanming", "chixiao_gate"], "days": 4, "danger": 0},
+    {"between": ["nanming", "changqing_valley"], "days": 3, "danger": 0},
+    {"between": ["chifeng", "changqing_valley"], "days": 3, "danger": 1},
+    {"between": ["nanming", "canglan_pavilion"], "days": 3, "danger": 0},
+    {"between": ["chixiao_gate", "xuanyue_gate"], "days": 3, "danger": 1},
+    {"between": ["canglan_pavilion", "xuanyue_gate"], "days": 3, "danger": 1}
   ],
   "actions": {
     "cultivate": 30,

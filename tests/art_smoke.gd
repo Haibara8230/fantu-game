@@ -10,7 +10,7 @@ var failures := 0
 const PENDING_SPOTS := ["ruin/depths", "wild/chenxia", "sect/gate", "ferry/crossing"]
 # Places of a new region whose pictures are still to be drawn (docs/BACKLOG.md): the place view shows
 # the code-drawn landscape until then.
-const PENDING_LOCATIONS := ["nanming", "chifeng", "chixiao_gate"]
+const PENDING_LOCATIONS := ["nanming", "chifeng", "chixiao_gate", "changqing_valley", "canglan_pavilion", "xuanyue_gate"]
 
 func _initialize() -> void:
 	create_timer(60.0).timeout.connect(func() -> void: printerr("ART test timed out"); quit(1))

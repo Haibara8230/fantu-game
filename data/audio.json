@@ -10,6 +10,9 @@
     "nanming": "res://assets/audio/music/asian_oriental_2.ogg",
     "chifeng": "res://assets/audio/music/eastern_thought.ogg",
     "chixiao_gate": "res://assets/audio/music/lotus_pond.ogg",
+    "changqing_valley": "res://assets/audio/music/lotus_pond.ogg",
+    "canglan_pavilion": "res://assets/audio/music/river_flute.ogg",
+    "xuanyue_gate": "res://assets/audio/music/eastern_thought.ogg",
     "map": "res://assets/audio/music/asian_oriental_1.ogg",
     "event": "res://assets/audio/music/eastern_thought.ogg",
     "battle": "res://assets/audio/music/dragon_dance.ogg",
@@ -75,7 +78,10 @@
     "ruin": "res://assets/audio/ambience/cave_drips.ogg",
     "nanming": "res://assets/audio/ambience/market_crowd.ogg",
     "chifeng": "res://assets/audio/ambience/pine_wind.ogg",
-    "chixiao_gate": "res://assets/audio/ambience/mountain_wind_bells.ogg"
+    "chixiao_gate": "res://assets/audio/ambience/mountain_wind_bells.ogg",
+    "changqing_valley": "res://assets/audio/ambience/valley_insects.ogg",
+    "canglan_pavilion": "res://assets/audio/ambience/river_egrets.ogg",
+    "xuanyue_gate": "res://assets/audio/ambience/mountain_wind_bells.ogg"
   },
   "sfx": {
     "click": {

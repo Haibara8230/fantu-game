@@ -32,6 +32,7 @@ func _run() -> void:
 	_saves()
 	_tiannan()
 	_tiannan_market()
+	_tiannan_sects()
 	await _tiannan_screens()
 	await _audio()
 	_art()
@@ -178,6 +179,30 @@ func _tiannan() -> void:
 	walker.travel("chifeng")
 	check(walker.player.location == "chifeng" and int(walker.world.day) == start + 18, "a 炼气 disciple can walk the long road south")
 	check(walker.path_to("market") == ["chifeng", "ferry", "market"], "and walks it back, the gate being closed to them")
+
+## The other sects of 天南: 长青谷's herb garden (百年灵芝 now and then) and pill hall with a furnace to
+## borrow, 沧澜阁's library of slips, 玄岳宗's training ground; each with disciples of its own.
+func _tiannan_sects() -> void:
+	var game := _game(85)
+	game.player.realm = 1
+	game.refresh_realm_stats()
+	game.player.hp = game.player.max_hp
+	game.player.stones = 800
+	game.world.flags.tiannan_known = true
+	for place: String in ["changqing_valley", "canglan_pavilion", "xuanyue_gate"]:
+		check(not game.path_to(place).is_empty() and game.content.region_of(place) == "tiannan", place + " lies in 天南 and can be reached")
+	game.travel("changqing_valley")
+	check(game.available_here("gather") and game.available_here("alchemy") and game.available_here("shop"), "长青谷: a garden to gather in, a furnace to borrow, a pill shop")
+	check(game.content.locations.changqing_valley.gather.table.any(func(entry: Dictionary) -> bool: return entry.item == "lingzhi"), "and its garden is another source of 百年灵芝")
+	var gardeners: Array = game.present_npcs().filter(func(person_id: String) -> bool: return game.is_generated(person_id) and str(game.life_by_id(person_id).kind) == "changqing_disciple")
+	check(not gardeners.is_empty(), "长青谷's own disciples live there")
+	game.travel("canglan_pavilion")
+	var slips: Array = game.Inventory.shop_goods(game).filter(func(good: Dictionary) -> bool: return str(good.item).begins_with("j:"))
+	check(slips.size() == 5 and slips.all(func(good: Dictionary) -> bool: return int(game.content.item(good.item).tier) <= 3), "沧澜阁's library sells five slips a month, none above 玄阶")
+	game.travel("xuanyue_gate")
+	check(game.available_here("battle:yue_disciple"), "玄岳宗's training ground offers a bout with its disciples")
+	game.start_battle("yue_disciple")
+	check(game.battle.get("enemy_id", "") == "yue_disciple" and str(game.battle.get("opponent_sect", "")) == "xuanyue", "who fight with 玄岳's earth arts")
 
 ## Batch E: 南明坊市's rule against duels, a stone house let by the year for retreats far from home,
 ## and 万宝楼's board, open to anyone.

@@ -9,6 +9,7 @@
   },
   "places": {
     "sect": {"name": "静室的公用丹炉", "success": 0, "fee": 0},
+    "changqing_valley": {"name": "借长青谷丹坊的药炉", "success": 12, "fee": 15, "help": "谷中丹师提点"},
     "market": {"name": "借沈墨的药炉", "success": 10, "fee": 10, "needs_met": "shen_mo", "help": "沈墨提点"}
   },
   "fires": {
