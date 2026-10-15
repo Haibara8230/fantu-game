@@ -278,7 +278,7 @@
       },
       "faces_right": true,
       "height_ratio": 0.85,
-      "tint": "#9fc3ff"
+      "tint": "#bcd8ff8c"
     },
     "tribulation_nascent": {
       "texture": "res://assets/art/rival_atlas_v2.png",
@@ -295,7 +295,7 @@
       },
       "faces_right": true,
       "height_ratio": 0.85,
-      "tint": "#9fc3ff"
+      "tint": "#bcd8ff8c"
     },
     "tribulation_deity": {
       "texture": "res://assets/art/rival_atlas_v2.png",
@@ -312,7 +312,7 @@
       },
       "faces_right": true,
       "height_ratio": 0.85,
-      "tint": "#9fc3ff"
+      "tint": "#bcd8ff8c"
     },
     "xin_mo": {
       "texture": "res://assets/art/cultivator_atlas_v2.png",

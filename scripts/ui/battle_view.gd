@@ -120,7 +120,7 @@ static func render(ui) -> void:
 		var call: Button = ui.button("传音求援", func() -> void: ui.battle_action("aid:" + friend), "以传音符请%s出手一击（每场一次，不占回合）" % session.person(friend).name)
 		_small(call)
 		side.add_child(call)
-	var record_toggle: Button = ui.button("收起记录" if ui.battle_record_open and not ui.battle_scout_open else "记录", ui.toggle_battle_record, "这场斗法的最近几条记载")
+	var record_toggle: Button = ui.button("收起记录" if ui.battle_record_open and not ui.battle_scout_open and not ui.battle_secret_open else "记录", ui.toggle_battle_record, "这场斗法的最近几条记载")
 	_small(record_toggle)
 	side.add_child(record_toggle)
 	var seen: bool = session.Combat.scout(session).seen

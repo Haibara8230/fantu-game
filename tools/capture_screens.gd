@@ -187,6 +187,23 @@ func _run() -> void:
 	s.player.equipment.weapon = ""
 	s.player.location = "sect"
 	main.set_view("place")
+	# 天劫 with the 禁忌秘术 open (batch nine), then a 死斗's fall.
+	var realm_was := int(s.player.realm)
+	s.player.realm = 1
+	s.refresh_realm_stats()
+	s.player.hp = s.player.max_hp
+	s.player["tribulation"] = {"grade": 1, "days": 0, "xp": 0}
+	s.Combat.begin_tribulation(s, "tribulation_core")
+	main.toggle_battle_secret()
+	main.set_view("place")
+	await _shot("18j_tribulation")
+	main.toggle_battle_secret()
+	s.battle.clear()
+	s.player.erase("tribulation")
+	s.player.realm = realm_was
+	s.refresh_realm_stats()
+	s.player.hp = s.player.max_hp
+	main.set_view("place")
 	# The old cave's depths, a room in.
 	s.world.flags["found_ruin"] = true
 	s.world.flags["ruin_cleared"] = true
