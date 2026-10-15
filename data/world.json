@@ -428,6 +428,10 @@
     }
   },
   "enemies": {
+    "xin_mo": {"name": "心魔", "element": "water", "hp": 100, "damage_min": 10, "damage_max": 14, "reward_stones": 0, "reward_xp": 0, "reward_herbs": 0, "locations": [], "min_realm": 0, "human": true},
+    "tribulation_core": {"name": "三九雷劫", "element": "metal", "hp": 3, "damage_min": 70, "damage_max": 90, "reward_stones": 0, "reward_xp": 0, "reward_herbs": 0, "locations": [], "min_realm": 1, "tribulation": true},
+    "tribulation_nascent": {"name": "六九雷劫", "element": "metal", "hp": 4, "damage_min": 96, "damage_max": 118, "reward_stones": 0, "reward_xp": 0, "reward_herbs": 0, "locations": [], "min_realm": 2, "tribulation": true},
+    "tribulation_deity": {"name": "九九雷劫", "element": "metal", "hp": 5, "damage_min": 135, "damage_max": 160, "reward_stones": 0, "reward_xp": 0, "reward_herbs": 0, "locations": [], "min_realm": 3, "tribulation": true},
     "chixiao_zhifa": {"moves": [{"id": "combo", "name": "赤霄连焰", "hits": 2, "power": 0.6, "inflict": {"burn": [4, 2]}, "weight": 3}, {"id": "seal", "name": "执法火印", "power": 1.1, "weight": 2}, {"id": "ward", "name": "火云护体", "kind": "guard", "shield": 0.12, "weight": 1}], "name": "赤霄执法弟子", "element": "fire", "hp": 430, "damage_min": 19, "damage_max": 26, "reward_stones": 90, "reward_xp": 400, "reward_herbs": 0, "locations": [], "min_realm": 2, "human": true, "sect": "chixiao", "drops": {"chance": 0.5, "tiers": [3, 3]}},
     "bear_king": {"moves": [{"id": "swipe", "name": "熊掌横扫", "weight": 3}, {"id": "slam", "name": "人立拍击", "kind": "charge", "power": 1.8, "weight": 2}, {"id": "roar", "name": "震山吼", "power": 0.5, "inflict": {"weaken": [0.2, 2]}, "weight": 1}], "phases": [{"below": 0.3, "name": "狂暴", "text": "铁背熊王背上的铁鬃根根竖起，双目赤红，人立而起，狂暴了！", "power": 1.35}], "name": "铁背熊王", "element": "earth", "hp": 420, "damage_min": 17, "damage_max": 24, "reward_stones": 40, "reward_xp": 260, "reward_herbs": 0, "locations": [], "min_realm": 1, "parts": [{"item": "xiong_dan", "chance": 1.0, "count": [1, 1]}, {"item": "yaodan", "chance": 0.5, "count": [1, 1]}]},
     "shui_fei": {"moves": [{"id": "stab", "name": "分水刺", "weight": 3}, {"id": "drag", "name": "拉人下水", "power": 0.5, "inflict": {"entangle": [1, 1]}, "weight": 2}, {"id": "volley", "name": "同伙放冷箭", "hits": 2, "power": 0.5, "weight": 2}], "name": "白鹭渡水匪", "element": "water", "hp": 210, "damage_min": 13, "damage_max": 18, "reward_stones": 40, "reward_xp": 80, "reward_herbs": 0, "locations": [], "min_realm": 1, "human": true, "sect": "canglan", "drops": {"chance": 0.3, "tiers": [2, 3]}},
@@ -674,7 +678,8 @@
       "lesson": {"bonus": 5, "most": 3},
       "least": 5, "most": 95,
       "failure": {"xp_percent": 85, "injury_days": 90, "injury_percent": 50, "mind": 4},
-      "demon": {"chance": 0.6, "slay_mind": 6, "slay_penalty": 15, "evade_penalty": 10},
+      "demon": {"chance": 0.6, "slay_mind": 6, "slay_penalty": 15, "evade_penalty": 10, "hp_share": 1.2, "power": 1.05},
+      "tribulation": {"2": "tribulation_core", "3": "tribulation_nascent", "4": "tribulation_deity", "injury_factor": 2},
       "grades": [
         {"id": "low", "name": "下品", "margin": 0, "stats": -5, "speed": -10},
         {"id": "mid", "name": "中品", "margin": 10, "stats": 0, "speed": 0},

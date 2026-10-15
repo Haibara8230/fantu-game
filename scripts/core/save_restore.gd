@@ -73,6 +73,10 @@ static func restore(s, data: Variant) -> bool:
 	var wake: Variant = _valid_wake(content, saved_player.get("wake", []))
 	if wake == null:
 		return false
+	# A 天劫 under way: the grade the attempt earned waits on it (optional; only with its duel).
+	var trial: Variant = saved_player.get("tribulation", {})
+	if not trial is Dictionary or (trial.is_empty() != (str(saved_battle.get("context", "")) != "tribulation")) or (not trial.is_empty() and (not _whole_nonnegative(trial.get("grade")) or not _whole_nonnegative(trial.get("days")) or not _whole_nonnegative(trial.get("xp")))):
+		return false
 	# A series of fights under way and when each was last taken (optional).
 	var underway: Variant = saved_player.get("series", {})
 	if not underway is Dictionary or (not underway.is_empty() and (not content.series.has(underway.get("id", "")) or not _whole_nonnegative(underway.get("wave")) or int(underway.wave) >= content.series[underway.id].waves.size())):
@@ -143,7 +147,8 @@ static func restore(s, data: Variant) -> bool:
 	var taught: Variant = saved_player.get("taught", [])
 	if storylines == null or letters == null or deeds == null or not taught is Array or taught.any(func(tip: Variant) -> bool: return not tip is String):
 		return false
-	var progress: Variant = _valid_breakthrough(content, saved_player, saved_pending)
+	# An attempt waits on 心魔 while its choice is pending or its duel is fought.
+	var progress: Variant = _valid_breakthrough(content, saved_player, saved_pending if str(saved_battle.get("context", "")) != "demon" else {"id": "heart_demon"})
 	var standing: Variant = _valid_standing(content, saved_player, day)
 	var alchemy: Variant = _valid_alchemy(content, saved_player, day)
 	if progress == null or standing == null or alchemy == null:
@@ -197,7 +202,7 @@ static func restore(s, data: Variant) -> bool:
 		for skill_id: Variant in saved_battle.cooldowns:
 			if not skill_id is String or content.technique(skill_id).is_empty() or not _whole_nonnegative(saved_battle.cooldowns[skill_id]):
 				return false
-		if saved_battle.has("context") and not saved_battle.context in ["event", "spar", "tournament", "summit", "arena"]:
+		if saved_battle.has("context") and not saved_battle.context in ["event", "spar", "tournament", "summit", "arena", "demon", "tribulation"]:
 			return false
 		for status_key: String in ["status", "player_status"]:
 			var status: Variant = saved_battle.get(status_key, {})
@@ -249,7 +254,7 @@ static func restore(s, data: Variant) -> bool:
 		var chain: Variant = saved_battle.get("chain", "")
 		if not chain is String or (not chain.is_empty() and not content.technique_data.elements.has(chain)):
 			return false
-		for count_key: String in ["shield", "foe_shield", "pills", "talismans", "released", "target", "sword_streak", "soul_turn"]:
+		for count_key: String in ["shield", "foe_shield", "pills", "talismans", "released", "target", "sword_streak", "soul_turn", "dispel"]:
 			if not _whole_nonnegative(saved_battle.get(count_key, 0)):
 				return false
 		var intent: Variant = saved_battle.get("intent", [])
@@ -344,6 +349,8 @@ static func restore(s, data: Variant) -> bool:
 	player.qi = mini(int(player.qi), int(caps.max_qi))
 	player.warned_for = int(warned)
 	player["wake"] = wake
+	if not trial.is_empty():
+		player["tribulation"] = {"grade": int(trial.grade), "days": int(trial.days), "xp": int(trial.xp)}
 	if not underway.is_empty():
 		player["series"] = {"id": str(underway.id), "wave": int(underway.wave)}
 	var last_taken := {}
@@ -381,7 +388,7 @@ static func restore(s, data: Variant) -> bool:
 		fresh_hand = not battle.has("orbs")
 		for member: Dictionary in battle.get("pack", []):
 			member.hp = int(member.hp)
-		for count_key: String in ["shield", "foe_shield", "pills", "talismans", "released", "target", "sword_streak", "soul_turn"]:
+		for count_key: String in ["shield", "foe_shield", "pills", "talismans", "released", "target", "sword_streak", "soul_turn", "dispel"]:
 			if battle.has(count_key):
 				battle[count_key] = int(battle[count_key])
 		# JSON brings every number back as a float; the whole ones are whole again.

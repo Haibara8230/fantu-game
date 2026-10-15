@@ -99,6 +99,7 @@ func _stages() -> void:
 	Session.Events.apply(game, [{"xp": 300}])
 	_steady(game)
 	game.act("breakthrough")
+	_weather(game)
 	check(game.player.realm == 1 and game.player.stage == 0 and game.realm_name() == "筑基初期" and game.lifespan() == 220, "breakthrough from 炼气圆满 into 筑基初期")
 	var stronger := _game()
 	stronger.player.xp = 1500
@@ -177,6 +178,7 @@ func _limits() -> void:
 	ripe.set_item_count("foundation_pill", 1)
 	_steady(ripe)
 	ripe.act("breakthrough")
+	_weather(ripe)
 	check(ripe.player.realm == 1 and int(ripe.player.xp) == 0 and ripe.retreat_cap() == 180 and ripe.mind_percent() == 50, "筑基 asks more of the mind (36) and allows a year at a time once it is there")
 	ripe.player.mind = 36
 	check(ripe.retreat_cap() == 360, "a year in seclusion is nothing to a foundation cultivator")
@@ -380,6 +382,7 @@ func _golden_core() -> void:
 	game.player.methods = [method]
 	game.fortune = {"demon": 0.99, "breakthrough": 0.0, "grade": 0.99}
 	game.act("breakthrough")
+	_weather(game)
 	check(game.player.realm == 2 and game.realm_name() == "金丹初期" and game.lifespan() >= 400 and game.item_count("ningyuan_dan") == 0, "the core is formed: 金丹初期, four hundred years")
 	# Foundation 上品 (2 × 2) + a 玄阶 心法 (3) + a wide margin (2) = 9 → clamped to 一品 (8).
 	check(int(game.player.core_grade) == 8 and game.core_grade().name == "一品金丹", "a fine foundation, a 玄阶 心法 and a wide margin make an 一品金丹 (%s)" % game.core_grade().get("name", ""))
@@ -399,6 +402,7 @@ func _golden_core() -> void:
 	game.set_item_count("huaying_dan", 1)
 	game.fortune = {"demon": 0.99, "breakthrough": 0.0, "grade": 0.99}
 	game.act("breakthrough")
+	_weather(game)
 	check(game.player.realm == 3 and game.realm_name() == "元婴初期" and int(game.player.core_grade) == core_before and game.lifespan() >= 700, "元婴 is reached, the core's grade kept, seven hundred years")
 	check(game.journal_lines().any(func(line: String) -> bool: return line.contains("元婴初期")) and not game.journal_lines().back().contains("金丹品级"), "the record names the realm without regrading the core")
 	# 化神, then the crossing at the ferry from 480.
@@ -409,6 +413,7 @@ func _golden_core() -> void:
 	game.set_item_count("huashen_dan", 1)
 	game.fortune = {"demon": 0.99, "breakthrough": 0.0, "grade": 0.99}
 	game.act("breakthrough")
+	_weather(game)
 	check(game.player.realm == 4 and game.realm_name() == "化神初期" and game.lifespan() >= 1200, "化神 is reached: twelve hundred years")
 	game.player.mind = 600
 	var sat := int(game.world.day)
@@ -438,7 +443,17 @@ func _golden_core() -> void:
 	plain.set_item_count("ningyuan_dan", 1)
 	plain.fortune = {"demon": 0.99, "breakthrough": float(plain.breakthrough_odds(plain.breakthrough_plan()).total - 1) / 100.0, "grade": 0.99}
 	plain.act("breakthrough")
+	_weather(plain)
 	check(plain.player.realm == 2 and int(plain.player.core_grade) == 0 and plain.core_grade().name == "九品金丹", "a poor foundation, no 心法 and a narrow margin make a 九品金丹")
 
 func _steady(game) -> void:
 	game.fortune = {"demon": 0.99, "breakthrough": maxf(0.0, float(game.breakthrough_odds(game.breakthrough_plan()).total - 20) / 100.0)}
+
+## 天劫 (combat.gd): from the 金丹 on a breakthrough is tested by lightning; weathered here by guarding
+## at full health. Nothing when no 天劫 comes.
+func _weather(game) -> void:
+	var bolts := 0
+	while not game.battle.is_empty() and str(game.battle.get("context", "")) == "tribulation" and bolts < 12:
+		bolts += 1
+		game.player.hp = game.player.max_hp
+		game.defend()

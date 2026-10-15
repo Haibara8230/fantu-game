@@ -14,6 +14,8 @@ func _initialize() -> void:
 			_report(str(setup[0]), int(setup[1]), int(setup[2]), setup[3])
 		for setup: Array in SERIES:
 			_series(str(setup[0]), str(setup[1]), int(setup[2]), int(setup[3]), setup[4])
+		for setup: Array in [["tribulation_core", 1, 3], ["tribulation_nascent", 2, 3], ["tribulation_deity", 3, 3], ["demon", 0, 3], ["demon", 1, 3], ["demon", 2, 3]]:
+			_trial(str(setup[0]), int(setup[1]), int(setup[2]))
 		quit(0)
 		return
 	for setup: Array in [["wolf", 0, 0, []], ["disciple", 0, 0, []], ["rogue", 0, 2, []], ["wolf", 0, 3, ["qingyun"]], ["serpent", 1, 0, ["qingyun"]], ["serpent", 1, 0, []], ["ruin_rogue", 0, 3, ["qingyun"]], ["ruin_rogue", 0, 3, []], ["den_wolf", 0, 3, []], ["den_wolf", 0, 3, ["qingyun"]], ["mo_xiu", 2, 0, ["qingyun"]], ["mo_xiu", 2, 0, []], ["jian_kui", 2, 1, ["qingyun"]], ["can_nian", 2, 2, ["qingyun"]], ["can_nian", 2, 3, []], ["mo_jiang", 2, 3, ["qingyun"]], ["mo_jiang", 3, 0, ["qingyun"]], ["jiao", 3, 0, ["qingyun"]], ["jiao", 3, 1, []], ["qinglin_snake", 0, 0, []], ["shan_xiao", 0, 1, []], ["wolf_pack", 0, 2, []], ["wolf_pack", 0, 3, ["qingyun"]], ["chilian_snake", 1, 0, ["qingyun"]], ["huo_ya", 1, 1, ["qingyun"]], ["yanjia_xi", 1, 2, ["qingyun"]], ["yanjia_xi", 1, 1, []], ["zhui_bing", 0, 2, []], ["shui_fei", 1, 0, ["qingyun"]], ["mo_tan", 1, 2, ["qingyun"]], ["xuesha_tu", 1, 2, ["qingyun"]], ["xuesha_tu", 1, 3, []], ["bear_king", 1, 1, ["qingyun"]], ["bear_king", 1, 2, []], ["chixiao_zhifa", 2, 0, ["qingyun"]], ["chixiao_zhifa", 2, 1, []]]:
@@ -110,6 +112,33 @@ func _series(series_id: String, location: String, realm: int, stage: int, lineag
 			done += 1
 		waves += game.chronicle.entries.filter(func(entry: Dictionary) -> bool: return entry.id == "series_wave").size()
 	print("%-15s realm %d stage %d %-8s  done %d%%  waves reached %.1f" % [series_id, realm, stage, str(lineage), done * 100 / runs, float(waves) / runs])
+
+## 天劫 and 心魔 (B7) at the end of a realm, 青云 lineage, by the plain policy: how often weathered or won.
+func _trial(trial: String, realm: int, stage: int) -> void:
+	var won := 0
+	var runs := 40
+	for seed_value: int in range(runs):
+		var game := Session.new()
+		game.encounters_enabled = false
+		game.new_game("试", 5000 + seed_value, ROOTS[seed_value % ROOTS.size()])
+		game.player.realm = realm
+		game.player.stage = stage
+		game.Loadout.take_lineage(game, "qingyun")
+		game.refresh_realm_stats()
+		game.player.hp = game.player.max_hp
+		if trial == "demon":
+			game.player["attempt"] = {"odds": 50, "certain": false, "steps": 0, "xp": 0, "guard": ""}
+			game.Combat.begin_demon(game)
+		else:
+			game.player["tribulation"] = {"grade": 1, "days": 0, "xp": 0}
+			game.Combat.begin_tribulation(game, trial)
+		var count := 0
+		while not game.battle.is_empty() and count < 40:
+			count += 1
+			_play_turn(game)
+		if game.chronicle.entries.any(func(entry: Dictionary) -> bool: return entry.id in ["tribulation_passed", "demon_slain"]):
+			won += 1
+	print("%-20s realm %d stage %d  won %d%%" % [trial, realm, stage, won * 100 / runs])
 
 func _play_turn(game) -> void:
 	game.plain_turn()

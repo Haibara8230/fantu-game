@@ -20,6 +20,9 @@ func configure(art: Dictionary, faces_right: bool) -> void:
 	sprite.region_enabled = art.has("frame_regions")
 	sprite.region_filter_clip_enabled = true
 	sprite.flip_h = bool(art.faces_right) != faces_right
+	# A borrowed figure may be tinted to tell it apart (心魔 in the hero's shape, 天劫's pale light).
+	if art.has("tint"):
+		sprite.self_modulate = Color(str(art.tint))
 	var material := ShaderMaterial.new()
 	material.shader = load("res://assets/shaders/hit_flash.gdshader")
 	sprite.material = material

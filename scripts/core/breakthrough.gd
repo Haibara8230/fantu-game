@@ -223,6 +223,9 @@ static func face_demon(s, stance: String) -> String:
 		return ""
 	var demon: Dictionary = rules(s).demon
 	var text := ""
+	if stance == "duel":
+		s.Combat.begin_demon(s)
+		return ""
 	if stance == "slay":
 		var chance := clampf(float(s.player.get("mind", 0)) / float(maxi(1, demon_mind(s))), 0.0, 1.0)
 		if s.fortune_roll("slay") < chance:
@@ -236,6 +239,39 @@ static func face_demon(s, stance: String) -> String:
 		attempt_state.odds = maxi(int(rules(s).least), int(attempt_state.odds) - int(demon.evade_penalty))
 		text = s.log_event("demon_evaded", {"points": int(demon.evade_penalty)})
 	return text
+
+## The 心魔 duel is over (combat.gd, docs/COMBAT_PLAN.md B7): won, it is slain; lost, it lingers;
+## fled, it was evaded. Then the attempt goes on.
+static func demon_over(s, outcome: String) -> String:
+	var attempt_state: Dictionary = s.player.get("attempt", {})
+	var demon: Dictionary = rules(s).demon
+	s.player.hp = maxi(int(s.player.hp), int(s.player.max_hp) / 3)
+	var text := ""
+	match outcome:
+		"won":
+			attempt_state.steps = int(attempt_state.get("steps", 0)) + 1
+			s.gain_mind(int(demon.slay_mind))
+			text = s.log_event("demon_slain", {"mind": int(demon.slay_mind)}, true)
+		"lost":
+			attempt_state.odds = maxi(int(rules(s).least), int(attempt_state.get("odds", 0)) - int(demon.slay_penalty))
+			text = s.log_event("demon_lingers", {"points": int(demon.slay_penalty)}, true)
+		_:
+			attempt_state.odds = maxi(int(rules(s).least), int(attempt_state.get("odds", 0)) - int(demon.evade_penalty))
+			text = s.log_event("demon_evaded", {"points": int(demon.evade_penalty)})
+	return resolve(s, text)
+
+## 天劫 (B7): the foe that waits on a breakthrough to the realm, or "" for none (筑基 has none).
+static func tribulation_of(target: int, s) -> String:
+	return str(rules(s).get("tribulation", {}).get(str(target), ""))
+
+## The 天劫 is over (combat.gd): weathered, the realm is entered with the grade the attempt earned;
+## struck down, the attempt fails, the injury the heavier.
+static func tribulation_over(s, won: bool) -> String:
+	var state: Dictionary = s.player.get("tribulation", {})
+	s.player.erase("tribulation")
+	if won:
+		return _ascend(s, int(state.grade), int(state.days), [s.log_event("tribulation_passed", {"realm": int(s.player.realm) + 1}, true)], {})
+	return _fail(s, int(state.xp), [s.log_event("tribulation_failed", {}, true)], {}, int(rules(s).tribulation.injury_factor))
 
 ## The retreat of the attempt and its outcome. `told` leads the texts.
 static func resolve(s, told: String) -> String:
@@ -257,33 +293,53 @@ static func resolve(s, told: String) -> String:
 		boons["remnant"] = "spent"
 	if certain or roll < float(attempt_state.odds):
 		var grade := 1 if certain else _grade(s, float(attempt_state.odds) - roll, int(attempt_state.steps))
-		s.player.realm = int(s.player.realm) + 1
-		s.player.stage = 0
-		if int(s.player.realm) == 1:
-			s.player["foundation_grade"] = grade
-		elif int(s.player.realm) == 2:
+		if int(s.player.realm) + 1 == 2:
 			grade = _core_grade(s, float(attempt_state.odds) - roll, int(attempt_state.steps))
-			s.player["core_grade"] = grade
-		s.player["lessons"] = 0
-		s.player["injury_until"] = 0
-		s.refresh_realm_stats()
-		s.player.hp = s.player.max_hp
-		s.player.qi = s.player.max_qi
-		var reached := {"days": passed.elapsed, "realm": int(s.player.realm), "stage": 0}
-		# Foundation and the core are graded; later realms keep the core's grade.
-		if int(s.player.realm) <= 2:
-			reached.grade = grade
-		texts.append(s.log_event("breakthrough", reached, true))
-		texts.append_array(s.settle_stage())
-		texts.append_array(s.congratulate(["", "breakthrough", "core", "nascent", "deity"][mini(int(s.player.realm), 4)]))
-		return s.conclude(" ".join(texts), passed)
+		# From the 金丹 on, Heaven tests the breakthrough with its lightning first.
+		var trial := tribulation_of(int(s.player.realm) + 1, s)
+		if not trial.is_empty():
+			# The months of the attempt's retreat leave body and qi full for the trial.
+			s.player.hp = s.player.max_hp
+			s.player.qi = s.player.max_qi
+			s.player["tribulation"] = {"grade": grade, "days": int(passed.elapsed), "xp": int(attempt_state.xp)}
+			s.Combat.begin_tribulation(s, trial)
+			texts.append(s.log_event("tribulation_start", {"enemy": trial, "rounds": int(s.content.enemies[trial].hp)}, true))
+			return s.conclude(" ".join(texts), passed)
+		return _ascend(s, grade, int(passed.elapsed), texts, passed)
+	return _fail(s, int(attempt_state.xp), texts, passed, 1)
+
+## The realm entered: its grade kept, health and qi made whole, the news sent.
+static func _ascend(s, grade: int, days: int, texts: Array, passed: Dictionary) -> String:
+	s.player.realm = int(s.player.realm) + 1
+	s.player.stage = 0
+	if int(s.player.realm) == 1:
+		s.player["foundation_grade"] = grade
+	elif int(s.player.realm) == 2:
+		s.player["core_grade"] = grade
+	s.player["lessons"] = 0
+	s.player["injury_until"] = 0
+	s.refresh_realm_stats()
+	s.player.hp = s.player.max_hp
+	s.player.qi = s.player.max_qi
+	var reached := {"days": days, "realm": int(s.player.realm), "stage": 0}
+	# Foundation and the core are graded; later realms keep the core's grade.
+	if int(s.player.realm) <= 2:
+		reached.grade = grade
+	texts.append(s.log_event("breakthrough", reached, true))
+	texts.append_array(s.settle_stage())
+	texts.append_array(s.congratulate(["", "breakthrough", "core", "nascent", "deity"][mini(int(s.player.realm), 4)]))
+	return s.conclude(" ".join(texts), passed)
+
+## The attempt failed: some xp back, an injury (heavier after a 天劫), a lesson learned.
+static func _fail(s, xp: int, texts: Array, passed: Dictionary, injury_factor: int) -> String:
 	var failure: Dictionary = rules(s).failure
-	s.player.xp = int(attempt_state.xp) * int(failure.xp_percent) / 100
-	s.player["injury_until"] = int(s.world.day) + int(failure.injury_days)
+	var injury := int(failure.injury_days) * injury_factor
+	s.player.xp = xp * int(failure.xp_percent) / 100
+	s.player["injury_until"] = int(s.world.day) + injury
 	s.player["lessons"] = mini(int(rules(s).lesson.most), int(s.player.get("lessons", 0)) + 1)
 	s.gain_mind(int(failure.mind))
 	s.player.hp = maxi(1, int(s.player.max_hp) / 3)
-	texts.append(s.log_event("breakthrough_failed", {"days": passed.elapsed, "xp": int(s.player.xp), "injury": int(failure.injury_days)}, true))
+	texts.append(s.log_event("breakthrough_failed", {"days": int(passed.get("elapsed", 0)), "xp": int(s.player.xp), "injury": injury}, true))
 	return s.conclude(" ".join(texts), passed)
 
 ## The grade from the margin under the odds (up to 上品), raised by fortune's steps and by talents, at

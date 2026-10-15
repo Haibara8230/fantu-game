@@ -75,6 +75,13 @@ static func render(ui) -> void:
 	row.add_child(side)
 	var odds := "比斗中随时可认输" if session.battle.get("context", "") in ["spar", "tournament", "summit", "arena"] else "约 %d%% 能脱身，脱不了身便挨对手一回合" % int(round(session.Combat.flee_chance(session) * 100.0))
 	var flee: Button = ui.button("撤离 · " + ui.duration("flee"), func() -> void: ui.battle_action("flee"), "保留资源，耗时 %s；%s；被缠住时走不了" % [ui.duration("flee"), odds])
+	# 天劫 cannot be fled; turning from 心魔 is evading it.
+	if session.battle.get("context", "") == "tribulation":
+		flee.disabled = true
+		flee.tooltip_text = "天劫临身，无处可逃"
+	elif session.battle.get("context", "") == "demon":
+		flee.text = "紧守灵台"
+		flee.tooltip_text = "不与心魔纠缠：突破把握略减"
 	_small(flee)
 	side.add_child(flee)
 	# 阵修 布阵 (schools.gd): a turn to lay the formation.
@@ -265,6 +272,9 @@ static func intent_text(session) -> String:
 				parts.append("%s 护盾 %d" % [entry.name, int(entry.amount)])
 			_:
 				parts.append(str(entry.name))
+	# 天劫: the bolts left, and how much of the next one is dispersed.
+	if session.battle.get("context", "") == "tribulation":
+		parts.append("余 %d 道天雷；攻击神通的三成化作散雷（已散 %d）" % [int(session.battle.hp), int(session.battle.get("dispel", 0)) * session.Combat.DISPEL_PERCENT / 100])
 	# 群敌: the others strike too, each once a turn.
 	var pack: Array = session.battle.get("pack", [])
 	if not pack.is_empty():

@@ -550,7 +550,7 @@ func choose_event(choice_id: String) -> String:
 		return "眼下没有需要抉择的事。"
 	var message: String = Events.choose(self, choice_id)
 	# A breakthrough that met 心魔 goes on once it is faced.
-	if pending_event.is_empty() and player.has("attempt") and ended.is_empty():
+	if pending_event.is_empty() and player.has("attempt") and ended.is_empty() and battle.is_empty():
 		message = Breakthrough.resolve(self, message)
 	var told := Storylines.update(self)
 	if not told.is_empty():

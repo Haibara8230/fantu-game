@@ -93,8 +93,13 @@ static func render_breakthrough(ui) -> void:
 	right.add_child(ui.paragraph("　".join(parts)))
 	if not chances.steps.is_empty():
 		right.add_child(ui.paragraph("根基可望更上一层：" + "、".join(chances.steps), ui.INK))
+	# From the 金丹 on, Heaven's lightning tests the breakthrough (combat.gd 天劫).
+	var trial: String = session.Breakthrough.tribulation_of(int(session.player.realm) + 1, session)
+	if not trial.is_empty():
+		var bolts: Dictionary = session.content.enemies[trial]
+		right.add_child(ui.paragraph("冲关成功后还要渡%s：%d 道天雷，每道 %d–%d，不能撤离。攻击神通可散去来雷三成，守御、护盾、丹药与符箓可抵挡；渡不过则冲关失败，内伤加倍。" % [bolts.name, int(bolts.hp), int(bolts.damage_min), int(bolts.damage_max)], Color("#e3c08a")))
 	if bool(chances.demon):
-		right.add_child(ui.paragraph("心境 %d，筑基需 %d：心境不足，突破关头可能心魔丛生（约 %d%%）。请人护法可保无虞。" % [int(session.player.mind), session.Breakthrough.demon_mind(session), int(round(session.Breakthrough.demon_chance(session) * 100.0))], Color("#e3c08a")))
+		right.add_child(ui.paragraph("心境 %d，%s需 %d：心境不足，突破关头可能心魔丛生（约 %d%%），可与它斗法、以心境硬压或避而不战。请人护法可保无虞。" % [int(session.player.mind), session.content.realm(int(session.player.realm) + 1).name, session.Breakthrough.demon_mind(session), int(round(session.Breakthrough.demon_chance(session) * 100.0))], Color("#e3c08a")))
 	var failure: Dictionary = session.content.rules.breakthrough.failure
 	right.add_child(ui.paragraph("闭关 %s。若失败：所服之物药力散尽，修为跌回 %d，内伤 %d 日（其间闭关收益减半），但性命无碍，且下次把握更大。" % [ui.duration("breakthrough"), int(need.xp) * int(failure.xp_percent) / 100, int(failure.injury_days)]))
 	var block: String = session.breakthrough_block(plan)

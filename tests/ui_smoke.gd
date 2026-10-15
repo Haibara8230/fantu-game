@@ -739,6 +739,14 @@ func _run() -> void:
 	check(_texts(main.center, "Label").contains(str(main.session.content.enemies.rogue.name) + "倒在地上") and _button("放他走") != null and _button("搜身") != null and _button("逼问") != null, "a beaten outlaw awaits the verdict: let go, search, or press")
 	main.choose("release")
 	check(main.session.pending_event.is_empty(), "the verdict is given")
+	# 天劫 (B7): no fleeing, the bolts counted, the dispersal stated.
+	main.session.player["tribulation"] = {"grade": 1, "days": 0, "xp": 0}
+	main.session.Combat.begin_tribulation(main.session, "tribulation_core")
+	main.render()
+	check(_button("撤离") != null and _button("撤离").disabled and _texts(main.center, "Label").contains("第 1 道天雷") and _texts(main.center, "Label").contains("余 3 道天雷"), "the 天劫 cannot be fled and counts its bolts")
+	main.session.battle.clear()
+	main.session.player.erase("tribulation")
+	main.render()
 	main.session.player.location = "sect"
 	main.set_view("place")
 	# The end of a life.

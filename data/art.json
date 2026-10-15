@@ -168,6 +168,22 @@
       "faces_right": true,
       "height_ratio": 0.85
     },
+    "chixiao_zhifa": {
+      "texture": "res://assets/art/rival_atlas_v2.png",
+      "preferred": "res://assets/art/battle/chixiao_zhifa.png",
+      "columns": 3,
+      "rows": 2,
+      "frames": {
+        "idle": 0,
+        "prepare": 1,
+        "attack": 2,
+        "cast": 3,
+        "hit": 4,
+        "guard": 5
+      },
+      "faces_right": true,
+      "height_ratio": 0.85
+    },
     "mo_xiu": {
       "texture": "res://assets/art/rival_atlas_v2.png",
       "preferred": "res://assets/art/actors/rogue.png",
@@ -246,6 +262,73 @@
       },
       "faces_right": true,
       "height_ratio": 0.85
+    },
+    "tribulation_core": {
+      "texture": "res://assets/art/rival_atlas_v2.png",
+      "preferred": "res://assets/art/battle/tribulation.png",
+      "columns": 3,
+      "rows": 2,
+      "frames": {
+        "idle": 0,
+        "prepare": 1,
+        "attack": 2,
+        "cast": 3,
+        "hit": 4,
+        "guard": 5
+      },
+      "faces_right": true,
+      "height_ratio": 0.85,
+      "tint": "#9fc3ff"
+    },
+    "tribulation_nascent": {
+      "texture": "res://assets/art/rival_atlas_v2.png",
+      "preferred": "res://assets/art/battle/tribulation.png",
+      "columns": 3,
+      "rows": 2,
+      "frames": {
+        "idle": 0,
+        "prepare": 1,
+        "attack": 2,
+        "cast": 3,
+        "hit": 4,
+        "guard": 5
+      },
+      "faces_right": true,
+      "height_ratio": 0.85,
+      "tint": "#9fc3ff"
+    },
+    "tribulation_deity": {
+      "texture": "res://assets/art/rival_atlas_v2.png",
+      "preferred": "res://assets/art/battle/tribulation.png",
+      "columns": 3,
+      "rows": 2,
+      "frames": {
+        "idle": 0,
+        "prepare": 1,
+        "attack": 2,
+        "cast": 3,
+        "hit": 4,
+        "guard": 5
+      },
+      "faces_right": true,
+      "height_ratio": 0.85,
+      "tint": "#9fc3ff"
+    },
+    "xin_mo": {
+      "texture": "res://assets/art/cultivator_atlas_v2.png",
+      "columns": 3,
+      "rows": 2,
+      "frames": {
+        "idle": 0,
+        "prepare": 1,
+        "attack": 2,
+        "cast": 3,
+        "hit": 4,
+        "guard": 5
+      },
+      "faces_right": true,
+      "height_ratio": 0.85,
+      "tint": "#7f6a9e"
     },
     "cultivator": {
       "texture": "res://assets/art/rival_atlas_v2.png",

@@ -33,6 +33,7 @@ func _initialize() -> void:
 	_feuds()
 	_ground_scout_wounds()
 	_terms_and_schools()
+	_demon_and_tribulation()
 	print("DUEL MOVES: %d checks, %d failures" % [checks, failures])
 	quit(0 if failures == 0 else 1)
 
@@ -56,7 +57,8 @@ func _set_move(game: Session, move_id: String) -> void:
 func _content() -> void:
 	var game := Session.new()
 	check(game.content.error_message.is_empty(), "every move table passes its checks: " + game.content.error_message)
-	var handwritten: Array = game.content.enemies.keys().filter(func(id: String) -> bool: return id != "cultivator")
+	# Generated people fight by their loadout, 心魔 by the player's own arts, 天劫 by counted bolts.
+	var handwritten: Array = game.content.enemies.keys().filter(func(id: String) -> bool: return id != "cultivator" and id != "xin_mo" and not bool(game.content.enemies[id].get("tribulation", false)))
 	check(handwritten.all(func(id: String) -> bool: return game.content.enemies[id].has("moves") and game.content.enemies[id].moves.size() >= 2), "every handwritten opponent has two moves or more")
 	var broken := Session.new()
 	broken.content.enemies.wolf.moves[1].inflict = {"poison": [2, 2]}
@@ -732,6 +734,91 @@ func _terms_and_schools() -> void:
 		if not str(foe_school.Population.foe(foe_school.content, person_id, foe_school.person(person_id)).get("school", "")).is_empty():
 			schooled += 1
 	check(schooled > 0, "some of the world's people fight by a school too (%d of %d)" % [schooled, people.size()])
+
+## B7: 心魔 as a duel against the player's own arts, and 天劫 as rounds of lightning before the 金丹.
+func _ready_to_found(seed_value: int, mind: int) -> Session:
+	var game := Session.new()
+	game.encounters_enabled = false
+	game.new_game("渡劫", seed_value, ["metal", "wood", "fire"])
+	game.player.stage = 3
+	game.player.xp = 2000
+	game.player.mind = mind
+	game.refresh_realm_stats()
+	game.set_item_count("foundation_pill", 1)
+	game.player.hp = game.player.max_hp
+	return game
+
+func _demon_and_tribulation() -> void:
+	var game := _ready_to_found(63, 0)
+	game.fortune = {"demon": 0.0, "breakthrough": 0.0}
+	game.act("breakthrough")
+	check(str(game.pending_event.get("id", "")) == "heart_demon" and game.pending_definition().choices.any(func(choice: Dictionary) -> bool: return choice.id == "duel"), "心魔 may be met in a duel")
+	game.choose_event("duel")
+	check(str(game.battle.get("context", "")) == "demon" and str(game.battle.foe.name) == "心魔" and game.battle.foe.arts == game.active_skills() and int(game.battle.hp) == int(round(float(game.player.max_hp) * float(game.content.rules.breakthrough.demon.hp_share))) and game.player.has("attempt"), "it takes the player's own arts, with more health than they have")
+	var kept := Session.new()
+	check(kept.restore(JSON.parse_string(JSON.stringify(game.snapshot()))) and str(kept.battle.context) == "demon" and kept.player.has("attempt"), "a 心魔 duel survives a save")
+	game.battle.hp = 0
+	game.Combat._win(game)
+	check(game.battle.is_empty() and int(game.player.realm) == 1 and game.journal_lines().any(func(line: String) -> bool: return line.contains("心魔")), "slain, the breakthrough goes on (筑基 has no 天劫)")
+	var lost := _ready_to_found(64, 0)
+	lost.fortune = {"demon": 0.0, "breakthrough": 0.0}
+	lost.act("breakthrough")
+	var odds := int(lost.player.attempt.odds)
+	lost.choose_event("duel")
+	lost.player.hp = 0
+	lost.Combat._lose(lost)
+	check(lost.battle.is_empty() and not lost.player.has("attempt") and int(lost.player.hp) >= 1, "lost to 心魔, the attempt still goes on, weaker (from %d)" % odds)
+	var fled := _ready_to_found(65, 0)
+	fled.fortune = {"demon": 0.0, "breakthrough": 0.0}
+	fled.act("breakthrough")
+	fled.choose_event("duel")
+	fled.flee()
+	check(fled.battle.is_empty() and fled.journal_lines().any(func(line: String) -> bool: return line.contains("避开心魔")), "turning from it is evading it")
+	# 天劫 before the 金丹.
+	var core := Session.new()
+	core.encounters_enabled = false
+	core.new_game("渡劫", 66, ["metal", "wood", "fire"])
+	core.player.realm = 1
+	core.player.stage = 3
+	core.player.xp = 6000
+	core.player.mind = 200
+	core.refresh_realm_stats()
+	core.player.hp = core.player.max_hp
+	core.set_item_count("ningyuan_dan", 1)
+	core.fortune = {"demon": 0.99, "breakthrough": 0.0, "grade": 0.5}
+	core.act("breakthrough")
+	check(str(core.battle.get("context", "")) == "tribulation" and str(core.battle.enemy_id) == "tribulation_core" and int(core.battle.hp) == 3 and int(core.player.realm) == 1 and core.player.has("tribulation"), "the 金丹 waits on 三九雷劫: three bolts")
+	check(core.flee().contains("无处可逃") and not core.battle.is_empty(), "there is no fleeing it")
+	check(str(core.battle.intent[0].name) == "第 1 道天雷", "the bolts are counted")
+	core.battle.orbs = ["metal", "metal", "metal", "wood", "wood", "fire", "fire", "fire"]
+	var hp := int(core.battle.hp)
+	for art_id: String in core.active_skills():
+		if str(core.content.technique(art_id).kind) == "attack":
+			core.use_skill(art_id)
+			break
+	check(int(core.battle.hp) == hp and int(core.battle.get("dispel", 0)) > 0, "an attack art disperses the coming bolt instead")
+	var saved := Session.new()
+	check(saved.restore(JSON.parse_string(JSON.stringify(core.snapshot()))) and str(saved.battle.context) == "tribulation" and saved.player.has("tribulation"), "a 天劫 under way survives a save")
+	var bolts := 0
+	while not core.battle.is_empty() and bolts < 6:
+		bolts += 1
+		core.player.hp = core.player.max_hp
+		core.defend()
+	check(bolts == 3 and int(core.player.realm) == 2 and int(core.player.core_grade) >= 0 and core.journal_lines().any(func(line: String) -> bool: return line.contains("渡过了天劫")), "three bolts weathered, the core is formed (%d)" % bolts)
+	var struck := Session.new()
+	struck.encounters_enabled = false
+	struck.new_game("渡劫", 67, ["metal", "wood", "fire"])
+	struck.player.realm = 1
+	struck.player.stage = 3
+	struck.player.xp = 6000
+	struck.player.mind = 200
+	struck.refresh_realm_stats()
+	struck.set_item_count("ningyuan_dan", 1)
+	struck.fortune = {"demon": 0.99, "breakthrough": 0.0}
+	struck.act("breakthrough")
+	struck.player.hp = 1
+	struck.defend()
+	check(struck.battle.is_empty() and int(struck.player.realm) == 1 and int(struck.player.injury_until) - int(struck.world.day) == 2 * int(struck.content.rules.breakthrough.failure.injury_days), "struck down, the attempt fails with twice the injury")
 
 func _saves() -> void:
 	var game := _duel("wolf", "pounce")

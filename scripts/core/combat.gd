@@ -362,6 +362,10 @@ static func _gain(s, orbs: Array) -> void:
 
 ## Damage to the opponent through its shield; returns what reached it.
 static func _strike_foe(s, damage: int) -> int:
+	# Against 天劫, a blow disperses the coming bolt instead.
+	if s.battle.get("context", "") == "tribulation":
+		s.battle.dispel = int(s.battle.get("dispel", 0)) + damage
+		return damage
 	var target := int(s.battle.get("target", 0))
 	if target > 0 and target <= s.battle.get("pack", []).size():
 		return _strike_member(s, target - 1, damage)
@@ -539,6 +543,39 @@ static func _wound(s, days: int, inner_days: int = 0) -> void:
 	if inner_days > 0:
 		s.player["injury_until"] = maxi(int(s.player.get("injury_until", 0)), int(s.world.day) + inner_days)
 
+## 心魔斗法 (docs/COMBAT_PLAN.md, part two, B7): the demon takes the player's own shape, arts and school,
+## at a share of their health and force. Fought while a breakthrough waits (breakthrough.gd).
+static func begin_demon(s) -> void:
+	var demon: Dictionary = s.content.rules.breakthrough.demon
+	var arts: Array = []
+	var best: Dictionary = {}
+	for art_id: String in s.active_skills():
+		var art: Dictionary = s.content.technique(art_id)
+		if art.is_empty():
+			continue
+		arts.append(art_id)
+		if str(art.get("kind", "")) == "attack" and (best.is_empty() or int(art.damage_max) > int(best.damage_max)):
+			best = art
+	if best.is_empty():
+		best = s.content.technique(str(arts[0])) if not arts.is_empty() else {"id": "", "name": "心魔一击", "vfx": "water", "tier": 1, "element": "water", "damage_min": 10, "damage_max": 14}
+	var power := float(demon.power)
+	var foe := {"name": "心魔", "hp": int(round(float(s.player.max_hp) * float(demon.hp_share))), "damage_min": maxi(1, int(round(float(best.get("damage_min", 10)) * power))), "damage_max": maxi(1, int(round(float(best.get("damage_max", 14)) * power))),
+		"art": str(best.get("id", "")), "art_name": str(best.get("name", "")), "vfx": str(best.get("vfx", "water")), "tier": int(best.get("tier", 1)), "xp": 0, "npc": "", "sect": str(s.player.get("sect", "wanderer")),
+		"arts": arts, "power": power, "bonus": s.attack_bonus(), "element": str(best.get("element", "water")), "realm": int(s.player.realm), "school": s.Schools.player(s)}
+	var lineage := str(s.player.get("sect", "wanderer"))
+	s.battle = {"enemy_id": "xin_mo", "hp": int(foe.hp), "turn": 1, "cooldowns": {}, "opponent_sect": "qingyun" if lineage == "wanderer" else lineage, "status": {}, "context": "demon", "foe": foe, "place": str(s.player.location)}
+	s.combat_events.clear()
+	open_hand(s)
+
+## 天劫 (B7): rounds of lightning to weather (the foe's health counts the bolts left). The player's
+## attack arts disperse a third of what they would deal from the coming bolt (`dispel`), guarding and
+## shields take the rest; there is no fleeing.
+const DISPEL_PERCENT := 33
+static func begin_tribulation(s, trial: String) -> void:
+	begin_battle(s, trial, "")
+	s.battle.context = "tribulation"
+	s.battle.dispel = 0
+
 ## 群敌 (docs/COMBAT_PLAN.md, part one, stage five): more foes in the fight than the one in front
 ## (battle.pack: [{"enemy_id", "hp"}]). The lead (battle.enemy_id and hp) acts by its intent and carries
 ## the lingering effects; the others join at PACK_HP of their health and each strikes once a turn at
@@ -687,7 +724,7 @@ static func pill_block(s, item_id: String) -> String:
 	if str(item.get("category", "")) == "talisman":
 		if int(s.battle.get("talismans", 0)) >= int(rules(s).get("talismans", 3)):
 			return "这一场已祭了 %d 张符箓，手上的灵力催不动更多了。" % int(rules(s).get("talismans", 3))
-		if bool(item.duel.get("escape", false)) and s.battle.get("context", "") in ["spar", "tournament", "summit", "arena"]:
+		if bool(item.duel.get("escape", false)) and s.battle.get("context", "") in ["spar", "tournament", "summit", "arena", "tribulation"]:
 			return "比斗之中遁走，与认输无异；不必用符。"
 		return ""
 	if int(s.battle.get("pills", 0)) >= int(rules(s).pills):
@@ -781,6 +818,12 @@ static func flee(s) -> String:
 	if s.battle.get("context", "") == "arena":
 		s.combat_events.append({"type": "end", "result": "flee"})
 		return s.Arena.over(s, false)
+	if s.battle.get("context", "") == "tribulation":
+		return "天劫临身，无处可逃。"
+	# Turning from 心魔 is evading it.
+	if s.battle.get("context", "") == "demon":
+		s.combat_events.append({"type": "end", "result": "flee"})
+		return _trial_over(s, "fled")
 	# A bout among fellows can always be conceded; a real fight may not let go (遁逃 by the odds).
 	if not s.battle.get("context", "") in ["spar", "tournament", "summit"] and s.combat_rng.randf() >= flee_chance(s):
 		var failed: String = s.log_event("flee_failed", {"enemy": str(s.battle.enemy_id)})
@@ -872,6 +915,9 @@ static func _foe_prepare(s) -> void:
 			return
 		var stats: Dictionary = foe if not foe.is_empty() else s.content.enemies[s.battle.enemy_id]
 		var name: String = str(foe.get("art_name", "")) if not foe.is_empty() else _counter_name(s)
+		# 天劫's bolts are counted: the first, the second... of all it brings.
+		if bool(stats.get("tribulation", false)):
+			name = "第 %d 道天雷" % (int(stats.hp) - int(s.battle.hp) + 1)
 		s.battle.intent = [{"kind": "attack", "name": name, "min": int(stats.damage_min), "max": int(stats.damage_max)}]
 		return
 	var orbs: Array = s.battle.get("foe_orbs", [])
@@ -1118,8 +1164,17 @@ static func _enemy_turn(s, guarding: bool) -> String:
 					blow = {"style": foe.art, "name": foe.art_name, "vfx": foe.vfx, "tier": int(foe.tier)}
 				# Without orbs to be short of, a slowed opponent strikes weaker.
 				var strength: float = factor * (SLOW_BLOW if status.has("slow") else 1.0) * ground(s, foe_element(s), true)
-				if _hurt_player(s, s.combat_rng.randi_range(int(stats.damage_min), int(stats.damage_max)), strength, guarding, blow):
+				var roll: int = s.combat_rng.randi_range(int(stats.damage_min), int(stats.damage_max))
+				if s.battle.get("context", "") == "tribulation":
+					roll = maxi(1, roll - int(s.battle.get("dispel", 0)) * DISPEL_PERCENT / 100)
+					s.battle.dispel = 0
+					blow = {"style": "enemy", "name": str(stats.name), "vfx": "sword_rain", "tier": 3}
+				if _hurt_player(s, roll, strength, guarding, blow):
 					return _lose(s)
+				if s.battle.get("context", "") == "tribulation":
+					s.battle.hp = int(s.battle.hp) - 1
+					if int(s.battle.hp) <= 0:
+						return _win(s)
 			continue
 		var art: Dictionary = s.content.technique(str(planned.art))
 		if art.is_empty() or not affordable(s.battle.foe_orbs, art.cost):
@@ -1240,8 +1295,19 @@ static func worn_traits(s) -> Array[Dictionary]:
 			traits.append(base["trait"])
 	return traits
 
+## The end of a 心魔 or 天劫 duel: the breakthrough it stood in goes on (breakthrough.gd).
+static func _trial_over(s, outcome: String) -> String:
+	var context := str(s.battle.context)
+	s.battle.clear()
+	s.player.hp = maxi(int(s.player.hp), 1)
+	if context == "demon":
+		return s.Breakthrough.demon_over(s, outcome)
+	return s.Breakthrough.tribulation_over(s, outcome == "won")
+
 static func _lose(s) -> String:
 	s.combat_events.append({"type": "end", "result": "lose"})
+	if s.battle.get("context", "") in ["demon", "tribulation"]:
+		return _trial_over(s, "lost")
 	if s.battle.get("context", "") == "arena":
 		return s.Arena.over(s, false)
 	if s.battle.get("context", "") == "spar":
@@ -1391,6 +1457,8 @@ static func _win(s) -> String:
 	if not s.battle.get("pack", []).is_empty():
 		return _next_foe(s)
 	s.combat_events.append({"type": "end", "result": "win"})
+	if s.battle.get("context", "") in ["demon", "tribulation"]:
+		return _trial_over(s, "won")
 	if s.battle.get("context", "") == "arena":
 		return s.Arena.over(s, true)
 	if s.battle.get("context", "") == "spar":

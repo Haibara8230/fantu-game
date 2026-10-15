@@ -26,6 +26,9 @@ func _run() -> void:
 	var content: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://data/world.json"))
 	var art: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://data/art.json"))
 	var events: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://data/events.json"))
+	# Every foe can be drawn on the stage: its own entry, borrowing an atlas until its art comes.
+	for enemy_id: String in content.enemies:
+		check(art.actors.has(enemy_id), enemy_id + " has a stage figure")
 	for location_id: String in content.locations:
 		if location_id in PENDING_LOCATIONS:
 			check(ArtLibrary.texture(ArtLibrary.fullscreen_location_path(location_id)) == null, location_id + " is still pending; remove it from PENDING_LOCATIONS once drawn")

@@ -1598,7 +1598,7 @@ func _validate_effects(effects: Variant) -> String:
 			"talent":
 				ok = is_talent(value)
 			"demon":
-				ok = value in ["slay", "evade"]
+				ok = value in ["slay", "evade", "duel"]
 			"fortune":
 				ok = value in ["epiphany", "remnant"]
 			"recipe":
