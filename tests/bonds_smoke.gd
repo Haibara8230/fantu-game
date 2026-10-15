@@ -96,18 +96,14 @@ func _promotion() -> void:
 	game.player.xp = 0
 	game.refresh_realm_stats()
 	game.promote()
-	check(game.sect_rank().name == "内门弟子" and game.next_sect_rank().name == "真传弟子" and not game.promotion_block().is_empty(), "an inner disciple looks to 真传, which waits for the core")
+	check(game.sect_rank().name == "内门弟子" and game.next_sect_rank().name == "真传弟子" and not game.promotion_block().is_empty(), "an inner disciple looks to 真传, which waits for 筑基后期")
 	game.player.merit = 1200
-	check(game.promotion_block().contains("金丹"), "a 真传弟子 must have formed the core (%s)" % game.promotion_block())
-	game.player.realm = 2
+	check(game.promotion_block().contains("筑基后期"), "a 真传弟子 must have reached 筑基后期 (%s)" % game.promotion_block())
+	game.player.stage = 2
 	game.refresh_realm_stats()
 	game.promote()
-	check(game.sect_rank().name == "真传弟子" and game.next_sect_rank().name == "长老", "with the core formed, 真传; 长老 waits for 元婴")
-	game.player.merit = 3000
-	game.player.realm = 3
-	game.refresh_realm_stats()
-	game.promote()
-	check(game.sect_rank().name == "长老" and game.next_sect_rank().is_empty(), "a 元婴 with merit enough becomes an elder, the highest rank")
+	check(game.sect_rank().name == "真传弟子" and game.next_sect_rank().is_empty(), "at 筑基后期, 真传: the highest a small sect gives")
+	check(game.promotion_block().contains("最高身份"), "and nothing above it")
 	check(game.story_state("inner_court") == "active", "and opens the inner court's storyline")
 
 func _stipend() -> void:
@@ -145,8 +141,10 @@ func _exchange() -> void:
 	check(game.item_count("foundation_pill") == 1 and game.sect_exchange(key_of.call("foundation")).contains("已换完"), "one in two years")
 	var slips: Array = game.sect_goods().filter(func(good: Dictionary) -> bool: return str(good.key).begins_with("yellow:"))
 	check(slips.size() == 2 and slips.all(func(good: Dictionary) -> bool: return str(good.item).begins_with("j:")), "two yellow-tier jade slips each period")
-	var mystic: Array = game.sect_goods().filter(func(good: Dictionary) -> bool: return str(good.key).begins_with("mystic:"))
-	check(mystic.size() == 1 and str(mystic[0].block).contains("内门弟子"), "a mystic-tier slip only for the inner sect")
+	# 青云 is a small sect: its slips and gear stop at 黄阶 and 法器 (docs/WORLD_EXPANSION.md, part four).
+	check(game.sect_goods().all(func(good: Dictionary) -> bool: return not str(good.item).begins_with("j:") and not str(good.item).begins_with("e:") or int(game.content.item(good.item).tier) <= 2), "a small sect's exchange stops at 黄阶 and 法器")
+	var core_pill: Array = game.sect_goods().filter(func(good: Dictionary) -> bool: return str(good.key).begins_with("ningyuan:"))
+	check(core_pill.size() == 1 and str(core_pill[0].block).contains("真传弟子"), "the sect's one 凝元丹 only for a 真传")
 	game.player.location = "town"
 	check(game.sect_exchange(key_of.call("liaoshang")).contains("执事堂"), "the exchange is at the 执事堂")
 	var poor := _game()

@@ -24,7 +24,6 @@ func _initialize() -> void:
 	_requests()
 	_foundation_pace()
 	_true_disciple()
-	_elder_seat()
 	_older_journeys()
 	print("STORIES: %d checks, %d failures" % [checks, failures])
 	quit(0 if failures == 0 else 1)
@@ -344,24 +343,6 @@ func _true_disciple() -> void:
 	check(game.story_at("true_disciple", "secret"), "two years later an old story waits at the hall")
 	game.travel("sect")
 	check(game.story_state("true_disciple") == "done" and game.player.items.keys().any(func(item_id: String) -> bool: return item_id.begins_with("j:") and int(game.content.item(item_id).tier) == 4), "and a 地阶 slip from the old secret realm")
-
-## 长老之位: 元婴 summons the player home; the elder's crown ends it.
-func _elder_seat() -> void:
-	var game := _game("plain", 63)
-	game.player.realm = 3
-	game.player.mind = 240
-	game.refresh_realm_stats()
-	game.player.hp = game.player.max_hp
-	game.travel("ferry")
-	game.wait(1)
-	check(game.story_at("elder_seat", "summon"), "元婴 summons the player home")
-	game.travel("sect")
-	check(game.story_at("elder_seat", "crown"), "where the elder's seat is offered")
-	game.player.merit = 3000
-	for rank: int in 4:
-		game.promote()
-	game.wait(1)
-	check(game.story_state("elder_seat") == "done" and game.sect_rank().name == "长老", "and the crown ends it")
 
 ## Journeys from before the storylines are past the introduction, and the sect's storylines begin.
 func _older_journeys() -> void:

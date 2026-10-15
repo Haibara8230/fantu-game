@@ -6,10 +6,8 @@
       "words": "许清和把一枚青玉腰牌递到你手里：“外门精英。往后每月多领几块灵石，宗门的筑基丹也能拿贡献来换了——一年里能换到的人，外门不过十来个。”"},
     {"id": "inner", "name": "内门弟子", "merit": 400, "stage": [1, 0], "stipend": 20, "retreat": 10, "host": "gu_changgeng",
       "words": "顾长庚亲手为你系上内门的白玉腰牌：“入了内门，你便有了自己的静室，灵气比外门浓上一成。宗门的大事，往后也要算你一份。”"},
-    {"id": "true", "name": "真传弟子", "merit": 1200, "stage": [2, 0], "stipend": 50, "retreat": 15, "host": "gu_changgeng",
-      "words": "顾长庚把一枚紫玉令牌按进你掌心：“结了丹，便是本门真传。宗门的典籍、丹房与灵脉，往后都向你敞开；宗门有事，你也得站在前头。”"},
-    {"id": "elder", "name": "长老", "merit": 3000, "stage": [3, 0], "stipend": 150, "retreat": 20, "host": "gu_changgeng",
-      "words": "顾长庚亲手把长老的青玉冠戴到你头上，退后一步，郑重一揖：“青云山的长老。往后这座山，有你一份担子。”"}
+    {"id": "true", "name": "真传弟子", "merit": 1200, "stage": [1, 2], "stipend": 50, "retreat": 15, "host": "gu_changgeng",
+      "words": "顾长庚把一枚紫玉令牌按进你掌心：“筑基后期，又有这一身功劳，便是本门真传。青云山门小，典籍、丹房与灵脉却都向你敞开；宗门有事，你也得站在前头。”"}
   ],
   "stipend": {"period_days": 30, "most_periods": 12},
   "duties": {"rank": "inner", "change_days": 360, "list": {
@@ -33,11 +31,7 @@
     {"id": "xuantie", "item": "ore_xuantie", "price": 50, "limit": 3, "per_days": 180, "rank": "inner"},
     {"id": "xuancan", "item": "silk_xuancan", "price": 50, "limit": 3, "per_days": 180, "rank": "inner"},
     {"id": "mojade", "item": "jade_mo", "price": 50, "limit": 3, "per_days": 180, "rank": "inner"},
-    {"id": "ningyuan", "item": "ningyuan_dan", "price": 600, "limit": 1, "per_days": 1440, "rank": "inner"},
-    {"id": "yellow", "manual": 2, "count": 2, "price": 50, "limit": 1, "per_days": 90},
-    {"id": "mystic", "manual": 3, "count": 1, "price": 180, "limit": 1, "per_days": 180, "rank": "inner"},
-    {"id": "huaying", "item": "huaying_dan", "price": 2000, "limit": 1, "per_days": 2880, "rank": "true"},
-    {"id": "huashen", "item": "huashen_dan", "price": 6000, "limit": 1, "per_days": 7200, "rank": "true"},
-    {"id": "earthly", "manual": 4, "count": 1, "price": 450, "limit": 1, "per_days": 360, "rank": "true"}
+    {"id": "ningyuan", "item": "ningyuan_dan", "price": 600, "limit": 1, "per_days": 1440, "rank": "true"},
+    {"id": "yellow", "manual": 2, "count": 2, "price": 50, "limit": 1, "per_days": 90}
   ]
 }
