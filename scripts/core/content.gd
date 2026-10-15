@@ -349,6 +349,8 @@ func _validate() -> String:
 	if problem.is_empty():
 		problem = _validate_lore()
 	if problem.is_empty():
+		problem = _validate_population()
+	if problem.is_empty():
 		problem = _validate_duties()
 	if not problem.is_empty():
 		return problem
@@ -542,6 +544,34 @@ func _validate_forge() -> String:
 		var material: Variant = data.materials[material_id]
 		if not items.has(material_id) or str(items[material_id].get("category", "")) != "material" or not material is Dictionary or not equipment_data.materials.has(material.get("family", "")) or not _whole(material.get("tier")) or int(material.tier) < 1 or int(material.tier) > tiers:
 			return "炼器材料配置无效：" + material_id
+	return ""
+
+## Generated people: the regions with seats, and each kind living in or travelling through places of its
+## own region; a region's own small talk covers every personality.
+func _validate_population() -> String:
+	var shares: Variant = population_data.get("regions")
+	if not shares is Dictionary or shares.is_empty():
+		return "人口配置缺少 regions。"
+	var total := 0.0
+	for region_id: String in shares:
+		if not regions.has(region_id) or not (shares[region_id] is float or shares[region_id] is int) or float(shares[region_id]) <= 0.0:
+			return "人口地区或比例无效：" + region_id
+		total += float(shares[region_id])
+	if total > 1.0:
+		return "人口地区比例之和超过一。"
+	var personalities: Array = population_data.personalities.keys()
+	for kind_id: String in population_data.kinds:
+		var kind: Dictionary = population_data.kinds[kind_id]
+		var region := str(kind.get("region", map.get("region", "")))
+		if not shares.has(region):
+			return "人口类型属于没有席位的地区：" + kind_id
+		for place: Variant in kind.get("home", []) + kind.get("schedule", []):
+			if place != "away" and (not locations.has(place) or region_of(place) != region):
+				return "人口类型去了别区或未知的地点：%s（%s）" % [kind_id, place]
+	for region_id: Variant in population_data.get("region_talk", {}):
+		var talk: Variant = population_data.region_talk[region_id]
+		if not shares.has(region_id) or not talk is Dictionary or personalities.any(func(personality: String) -> bool: return not talk.get(personality) is Array or talk[personality].is_empty()):
+			return "地区闲谈须覆盖每种性情：%s" % region_id
 	return ""
 
 ## Teahouse lore: each a unique id, words to hear and optional conditions (the player's own state).

@@ -44,8 +44,9 @@ static func open(s, auction_id: String) -> String:
 static func _bidders(s, auction_id: String, year: int, count: int) -> Array:
 	var known: Array = []
 	var others: Array = []
+	var here: String = s.content.region_of(s.player.location)
 	for person_id: String in s.living_people():
-		if not s.is_generated(person_id):
+		if not s.is_generated(person_id) or str(s.life_by_id(person_id).get("region", "")) != here:
 			continue
 		if bool(s.world.people.get(person_id, {}).get("met", false)):
 			known.append(person_id)

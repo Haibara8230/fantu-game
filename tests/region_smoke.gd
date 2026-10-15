@@ -154,8 +154,21 @@ func _tiannan() -> void:
 	check(game.story_state("south_journey") == "done", "arriving ends 南行")
 	check(game.available_here("shop") and game.available_here("sell") and game.available_here("forge") and game.available_here("inquire"), "the market trades, forges and has news")
 	check(not game.Inventory.shop_goods(game).filter(func(good: Dictionary) -> bool: return good.item == "ore_xuantie").is_empty(), "天南 sells what 灵器 are forged from")
+	# Batch B: 天南 has people of its own, drawn from seats that were 'elsewhere' before.
+	var southerners: Array = game.present_npcs().filter(func(person_id: String) -> bool: return game.is_generated(person_id))
+	check(not southerners.is_empty() and southerners.all(func(person_id: String) -> bool: return str(game.life_by_id(person_id).region) == "tiannan"), "the market has people of its own, all of 天南 (%d)" % southerners.size())
+	var talk: Array = game.person(southerners[0]).talk
+	var all_talk: Array = []
+	for lines: Array in game.content.population_data.region_talk.tiannan.values():
+		all_talk.append_array(lines)
+	check(talk.all(func(line: String) -> bool: return line in all_talk), "and they talk of 天南, not of 青云")
 	game.travel("chixiao_gate")
 	check(game.player.location == "chixiao_gate" and game.available_here("forge"), "赤霄门's foundry lends its fire")
+	var disciples: Array = game.present_npcs().filter(func(person_id: String) -> bool: return game.is_generated(person_id) and str(game.life_by_id(person_id).kind) == "chixiao_disciple")
+	check(disciples.size() >= 5 and game.person(disciples[0]).title == "赤霄门弟子", "赤霄门's own disciples live at its gate (%d)" % disciples.size())
+	var home := _game(81)
+	var fellows: Array = home.present_npcs().filter(func(person_id: String) -> bool: return home.is_generated(person_id))
+	check(fellows.all(func(person_id: String) -> bool: return str(home.life_by_id(person_id).region) == "qingyun" and not game.content.population_data.kinds[home.life_by_id(person_id).kind].has("region")), "青云山's people stay as they were")
 	# The long road home: no fee, no realm, eighteen days.
 	var walker := _game(82)
 	walker.world.flags.tiannan_known = true

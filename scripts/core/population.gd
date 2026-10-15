@@ -4,7 +4,8 @@ extends RefCounted
 ## may break through, and dies of age or misfortune; some time later a newcomer takes the seat.
 ## A life is "g:<seat>:<generation>". Everything is a pure function of the world seed, the seat and the
 ## generation, so nothing about these people is saved except what happens between them and the player.
-## Only seats belonging to a built region (currently 青云山周边) ever place people on the map.
+## Only seats belonging to a built region (青云山周边, 天南) ever place people on the map; each region has
+## kinds of people of its own (data/population.json `kinds`, `region`).
 ## Each life is born with talents (talents.gd), drawn on a stream of their own. In worlds begun with
 ## talents (`shaped`) they shape the life: its pace, its chance of foundation and its years; worlds begun
 ## before keep the lives they had, and the talents only show.
@@ -23,6 +24,15 @@ static func region_of(content, world_seed: int, seat: int) -> String:
 			return region
 	return "elsewhere"
 
+## The kinds of people a region has; a kind that names no region belongs to the map's first.
+static func kinds_of(content, region: String) -> Dictionary:
+	var result := {}
+	for kind_id: String in content.population_data.kinds:
+		var kind: Dictionary = content.population_data.kinds[kind_id]
+		if str(kind.get("region", content.map.get("region", ""))) == region:
+			result[kind_id] = kind
+	return result
+
 ## The seats whose people live in or pass through built regions.
 static func local_seats(content, world_seed: int) -> Array[int]:
 	var seats: Array[int] = []
@@ -40,7 +50,12 @@ static func next_life(content, world_seed: int, seat: int, previous: Dictionary,
 	var mods := Talents.sum(content, born.talents + born.flaws)
 	var rng := RandomNumberGenerator.new()
 	rng.seed = hash([world_seed, "life", seat, generation])
-	var kind_id: String = _weighted(rng, data.kinds)
+	# A seat of a region with no kinds of its own (one not built yet) draws from the map's first region,
+	# as every seat did before regions had kinds.
+	var kinds := kinds_of(content, region_of(content, world_seed, seat))
+	if kinds.is_empty():
+		kinds = kinds_of(content, str(content.map.get("region", "")))
+	var kind_id: String = _weighted(rng, kinds)
 	var kind: Dictionary = data.kinds[kind_id]
 	var personalities: Array = data.personalities.keys()
 	personalities.sort()
@@ -119,7 +134,7 @@ static func view(content, world_seed: int, life: Dictionary, day: int, loadout: 
 		"gender": life.gender, "kind": life.kind, "birth": life.birth, "appear": life.appear, "death": life.death,
 		"talents": life.talents, "flaws": life.flaws, "speed": int(life.speed),
 		"description": "一名%s的%s，修为%s，惯用%s。" % [life.personality, kind.title, realm_text, content.technique(loadout.arts[0]).name],
-		"talk_favor": 2, "gift_favor": 3, "talk": data.personalities[life.personality].duplicate(), "loadout": loadout,
+		"talk_favor": 2, "gift_favor": 3, "talk": data.get("region_talk", {}).get(str(life.get("region", "")), {}).get(life.personality, data.personalities[life.personality]).duplicate(), "loadout": loadout,
 		"interactions": [{"id": "spar", "label": "切磋（点到为止）", "effects": [{"spar": true}], "cooldown_days": 30, "chronicle": "你与{npc_name}切磋了一场。"}],
 	}
 	for key: String in ["home", "schedule", "offset"]:

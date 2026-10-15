@@ -70,6 +70,11 @@
    },
    "flaw_chance": 0.2
   },
+  "tiannan": {
+   "counts": [[0, 46], [1, 36], [2, 14], [3, 4]],
+   "weights": {"white": 880, "green": 100, "blue": 18, "purple": 2},
+   "flaw_chance": 0.2
+  },
   "player": {
    "counts": [
     [

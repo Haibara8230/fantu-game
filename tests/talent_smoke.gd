@@ -110,13 +110,15 @@ func _rolls() -> void:
 	check(session.roll_talents(a) == session.roll_talents(b), "the same draw gives the same talents")
 	# The generated people of the region follow the local table.
 	var game := _game()
-	var best := 0
+	var best := {}
 	var order: Array = content.talent_data.tiers.map(func(tier: Dictionary) -> String: return tier.id)
 	for seat: int in game._local_seats:
 		for life: Dictionary in game.seat_lives(seat, Calendar.to_day(200, 1, 1)):
 			for id: String in life.talents:
-				best = maxi(best, order.find(str(Talents.tier_of(content, id).id)))
-	check(best <= order.find("blue"), "two centuries of the region's people, and none above blue")
+				best[life.region] = maxi(int(best.get(life.region, 0)), order.find(str(Talents.tier_of(content, id).id)))
+	check(int(best.get("qingyun", 0)) <= order.find("blue"), "two centuries of 青云山's people, and none above blue")
+	# 天南 (金丹 country) is a little more gifted: purple at the rarest, never above.
+	check(best.has("tiannan") and int(best.tiannan) <= order.find("purple"), "and 天南's, none above purple")
 
 func _modifiers() -> void:
 	var plain := _game()

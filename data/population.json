@@ -1,6 +1,6 @@
 {
   "world_total": 1200,
-  "regions": {"qingyun": 0.15},
+  "regions": {"qingyun": 0.15, "tiannan": 0.12},
   "life": {
     "start_age": [16, 20],
     "speed": [300, 1200],
@@ -27,7 +27,23 @@
     "wanderer": {"title": "散修", "affiliation": "wanderer", "weight": 8, "schedule": ["town", "ferry", "market", "ridge", "wild"], "attitude": "neutral"},
     "trader": {"title": "坊市修士", "affiliation": "wanderer", "weight": 4, "home": ["market"], "attitude": "friendly"},
     "gatherer": {"title": "采药人", "affiliation": "wanderer", "weight": 4, "schedule": ["ridge", "wild", "town"], "attitude": "friendly"},
-    "visitor": {"title": "游方修士", "affiliation": "chixiao", "weight": 2, "schedule": ["ferry", "market", "town", "away", "away"], "attitude": "neutral"}
+    "visitor": {"title": "游方修士", "affiliation": "chixiao", "weight": 2, "schedule": ["ferry", "market", "town", "away", "away"], "attitude": "neutral"},
+    "chixiao_disciple": {"region": "tiannan", "title": "赤霄门弟子", "affiliation": "chixiao", "weight": 6, "home": ["chixiao_gate"], "attitude": "neutral"},
+    "nanming_trader": {"region": "tiannan", "title": "南明坊修士", "affiliation": "wanderer", "weight": 4, "home": ["nanming"], "attitude": "friendly"},
+    "southern_wanderer": {"region": "tiannan", "title": "天南散修", "affiliation": "wanderer", "weight": 6, "schedule": ["nanming", "chifeng", "chixiao_gate", "away"], "attitude": "neutral"},
+    "fire_gatherer": {"region": "tiannan", "title": "采火草的修士", "affiliation": "wanderer", "weight": 3, "schedule": ["chifeng", "nanming"], "attitude": "friendly"}
+  },
+  "region_talk": {
+    "tiannan": {
+      "豪爽": ["“到了天南，就该去赤霄门的器坊看看，那炉火才叫炉火！”", "“道友打北边来？走，喝一杯去。”"],
+      "谨慎": ["“赤枫岭底下有火脉，走路看着点脚下。”", "“坊市里斗法要罚灵石的，别惹事。”"],
+      "孤傲": ["“……有事？”", "“赤霄门的人，也不过如此。”"],
+      "温和": ["“天南热，道友多备些清心的丹药。”", "“修行辛苦，多保重。”"],
+      "好胜": ["“听说青云的剑修了得？改日切磋切磋。”", "“五宗论道那年，我定要去看看。”"],
+      "多疑": ["“你打听这些做什么？”", "“万宝楼的价钱，没一样是实的。”"],
+      "健谈": ["“你知道吗？赤霄门的器坊，炉火三百年没熄过。”", "“传送阵那头的云溪坊市，听说灵草便宜得很。”"],
+      "沉稳": ["“急不得，炼器和修行一样，火候最要紧。”", "“一步一步来。”"]
+    }
   },
   "loadout_tiers": [[1, 1], [1, 2], [1, 2], [2, 2], [2, 3]],
   "age": [18, 70]

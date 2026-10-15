@@ -31,7 +31,7 @@ static func candidates(s) -> Array[Dictionary]:
 			found.append({"key": "commission:%s:%d" % [board, day / int(s.content.commission_data.period_days)], "id": "rumor_commission", "args": {"board": board}})
 	for person_id: String in s.living_people():
 		var where: String = s.npc_location(person_id)
-		if where.is_empty() or bool(s.world.people.get(person_id, {}).get("met", false)):
+		if where.is_empty() or bool(s.world.people.get(person_id, {}).get("met", false)) or not s.location_visible(where):
 			continue
 		found.append({"key": "person:%s:%s" % [person_id, where], "id": "rumor_person", "args": {"npc": person_id, "title": s.person(person_id).title, "location": where}})
 	var recent := int(s.content.rules.inquire.repeat_after_days)

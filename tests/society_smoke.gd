@@ -98,7 +98,9 @@ func _loadout_key(person: Dictionary) -> String:
 func _population() -> void:
 	var game := _game(77)
 	var seats: Array[int] = game._local_seats
-	check(int(game.content.population_data.world_total) == 1200 and seats.size() > 120 and seats.size() < 240, "a world of 1200 seats, about a sixth of them in this region (%d)" % seats.size())
+	var home := seats.filter(func(seat: int) -> bool: return game.Population.region_of(game.content, 77, seat) == "qingyun").size()
+	var south := seats.filter(func(seat: int) -> bool: return game.Population.region_of(game.content, 77, seat) == "tiannan").size()
+	check(int(game.content.population_data.world_total) == 1200 and home > 120 and home < 240 and south > 90 and south < 200 and home + south == seats.size(), "a world of 1200 seats: about 15%% in 青云山周边 (%d), 12%% in 天南 (%d)" % [home, south])
 	check(seats == game.Population.local_seats(game.content, 77) and seats != game.Population.local_seats(game.content, 78), "the same world keeps its people; another world has others")
 	var living: Variant = game.living_people().filter(func(person_id: String) -> bool: return game.is_generated(person_id))
 	check(living.size() > seats.size() * 0.85, "nearly every seat is held by someone at the start (%d of %d)" % [living.size(), seats.size()])
@@ -442,7 +444,7 @@ func _portraits() -> void:
 				files.append("pool/%s_%s/%s%02d.png" % [gender, band, "disciple_" if n < 5 else "", n])
 			index["%s_%s" % [gender, band]] = files
 	var assigned: Dictionary = ArtLibrary.assign_pool(people, 5, index)
-	check(assigned.size() == generated.size() and _unique(assigned.values()).size() >= generated.size() * 0.4, "faces are spread across the pool (%d different images for %d people)" % [_unique(assigned.values()).size(), generated.size()])
+	check(assigned.size() == generated.size() and _unique(assigned.values()).size() >= mini(int(generated.size() * 0.4), 96), "faces are spread across the pool (most of its 120 images) (%d different images for %d people)" % [_unique(assigned.values()).size(), generated.size()])
 	var matched := true
 	for person_id: String in assigned:
 		var person: Dictionary = people[person_id]
