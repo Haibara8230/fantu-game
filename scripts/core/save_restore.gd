@@ -69,6 +69,10 @@ static func restore(s, data: Variant) -> bool:
 	var warned: Variant = saved_player.get("warned_for")
 	if not _whole_signed(warned) or int(warned) < -1:
 		return false
+	# Appointments chosen to leave a retreat for (optional: journeys before them chose none).
+	var wake: Variant = _valid_wake(content, saved_player.get("wake", []))
+	if wake == null:
+		return false
 	var items: Variant = saved_player.get("items")
 	if not items is Dictionary:
 		return false
@@ -260,6 +264,7 @@ static func restore(s, data: Variant) -> bool:
 	player.hp = mini(int(player.hp), int(caps.max_hp))
 	player.qi = mini(int(player.qi), int(caps.max_qi))
 	player.warned_for = int(warned)
+	player["wake"] = wake
 	for item_id: String in player.items:
 		player.items[item_id] = int(player.items[item_id])
 	player.journey = {} if journey.is_empty() else {"to": journey.to}
@@ -482,6 +487,17 @@ static func _valid_caves(content, saved: Variant) -> Variant:
 				return null
 			fortune[id] = cave.fortune[id]
 		result[cave_id] = {"explored": explored, "taken": taken, "fortune": fortune}
+	return result
+
+## Appointments to leave a retreat for, normalized, or null when malformed: each a known event and a day.
+static func _valid_wake(content, saved: Variant) -> Variant:
+	if not saved is Array or saved.size() > 32:
+		return null
+	var result: Array = []
+	for wake: Variant in saved:
+		if not wake is Dictionary or not wake.get("event") is String or not content.events.has(wake.event) or not _whole_nonnegative(wake.get("day")):
+			return null
+		result.append({"event": wake.event, "day": int(wake.day)})
 	return result
 
 ## The player's standing in the sect, normalized (optional fields default to an outer disciple with

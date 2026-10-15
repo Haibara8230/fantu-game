@@ -32,6 +32,8 @@ const SaveMigration = preload("res://scripts/core/save_migration.gd")
 const SAVE_VERSION := SaveMigration.CURRENT_VERSION
 const MAX_SPAN_DAYS := 3600
 const MAX_DUE_PER_SPAN := 100000
+# What may end a retreat early: the appointments the player chose, and the lifespan running out.
+const RETREAT_ALARMS := ["wake", "lifespan_warning", "lifespan_end"]
 signal changed
 var content = Content.new()
 # Separate streams: world-side draws (gathering, later simulation) never shift duel results.
@@ -101,7 +103,7 @@ func new_game(character_name: String = "无名", seed_value: int = -1, roots: Ar
 	populate()
 	player = {
 		"name": chosen_name, "birth_day": -int(content.rules.starting_age) * Calendar.DAYS_PER_YEAR,
-		"realm": 0, "stage": 0, "xp": 0, "hp": 0, "qi": 0, "cultivation_carry": 0, "warned_for": -1, "roots": roots.duplicate(),
+		"realm": 0, "stage": 0, "xp": 0, "hp": 0, "qi": 0, "cultivation_carry": 0, "warned_for": -1, "wake": [], "roots": roots.duplicate(),
 		"fatigue": 0, "fatigue_day": 0, "insight": 0, "mind": 0,
 		"stones": int(content.rules.starting_stones), "items": {},
 		"journey": {}, "cooldowns": {},
@@ -140,13 +142,15 @@ func new_game(character_name: String = "无名", seed_value: int = -1, roots: Ar
 
 ## The single entry point that moves world time. Every due item inside the span is fired on its own day,
 ## in order. Interruptible spans stop on the day an interrupting item fires; a life that ends stops time.
-## Returns {"elapsed", "interrupted", "messages"}.
-func advance_days(days: int, interruptible: bool = false) -> Dictionary:
+## A retreat stops only for RETREAT_ALARMS: the appointments the player chose and the lifespan's alarms.
+## Returns {"elapsed", "interrupted", "by", "messages"}; "by" is the kind of item that stopped it.
+func advance_days(days: int, interruptible: bool = false, retreat: bool = false) -> Dictionary:
 	assert(days >= 0, "time cannot move backwards")
 	var start := int(world.day)
 	var target := start + maxi(0, days)
 	var messages: Array[String] = []
 	var interrupted := false
+	var by := ""
 	var fired := 0
 	while ended.is_empty():
 		fired += 1
@@ -160,12 +164,13 @@ func advance_days(days: int, interruptible: bool = false) -> Dictionary:
 		var result: Dictionary = Events.fire(self, due)
 		if not str(result.message).is_empty():
 			messages.append(result.message)
-		if result.interrupt and interruptible and int(world.day) < target:
+		if result.interrupt and interruptible and int(world.day) < target and (not retreat or due.kind in RETREAT_ALARMS):
 			interrupted = true
+			by = str(due.kind)
 			break
 	if ended.is_empty() and not interrupted:
 		world.day = target
-	return {"elapsed": int(world.day) - start, "interrupted": interrupted, "messages": messages}
+	return {"elapsed": int(world.day) - start, "interrupted": interrupted, "by": by, "messages": messages}
 
 ## Joins an action's text with what happened meanwhile, fires location events, and notifies listeners.
 func conclude(text: String, passed: Dictionary = {}) -> String:
@@ -301,6 +306,14 @@ func lifespan_end_day() -> int:
 
 func upcoming() -> Array[Dictionary]:
 	return Events.upcoming(self)
+
+func wakes_for(event_id: String) -> bool:
+	return Events.wakes_for(self, event_id)
+
+## Marks an upcoming appointment to leave a retreat for (a choice on the retreat scroll; takes no time).
+func set_wake(event_id: String, on: bool) -> void:
+	Events.set_wake(self, event_id, on)
+	changed.emit()
 
 func pending_definition() -> Dictionary:
 	return {} if pending_event.is_empty() else content.events[pending_event.id]
@@ -474,7 +487,7 @@ func cultivate(days: int) -> String:
 	var tired := Cultivation.fatigue(self)
 	var plan := Cultivation.plan_retreat(self, days, tired)
 	var start := int(world.day)
-	var passed := advance_days(int(plan.days), true)
+	var passed := advance_days(int(plan.days), true, true)
 	if not ended.is_empty():
 		return conclude("", passed)
 	var done := Cultivation.plan_retreat(self, int(passed.elapsed), tired, start)
@@ -487,8 +500,10 @@ func cultivate(days: int) -> String:
 	var milestones := gain_xp(int(done.xp))
 	if not milestones.is_empty():
 		text += " " + " ".join(milestones)
-	if passed.interrupted:
-		text = "闭关第 %d 日，外事惊动，你提前出关。%s" % [passed.elapsed, text]
+	if passed.interrupted and passed.by == "wake":
+		text = "闭关第 %d 日，依闭关前所定提前出关。%s" % [passed.elapsed, text]
+	elif passed.interrupted:
+		text = "闭关第 %d 日，寿元告急，你提前出关。%s" % [passed.elapsed, text]
 	elif int(passed.elapsed) < days and at_xp_cap():
 		text = "闭关第 %d 日，修为已臻此境之极。%s" % [passed.elapsed, text]
 	elif int(passed.elapsed) < days:

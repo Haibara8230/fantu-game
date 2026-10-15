@@ -289,6 +289,9 @@ static func next_due(s, from_day: int) -> Dictionary:
 		if definition.has("remind") and int(progress.reminded) != 0 and from_day <= int(fixed.to):
 			best = _earlier(best, {"day": maxi(from_day, int(fixed.from)), "kind": "remind", "event": event_id})
 		best = _earlier(best, {"day": maxi(from_day, int(fixed.to) + 1), "kind": "expire", "event": event_id})
+	# Last, so on a shared day the appointment's own reminder is told before the retreat ends for it.
+	for wake: Dictionary in s.player.get("wake", []):
+		best = _earlier(best, {"day": maxi(from_day, int(wake.day)), "kind": "wake", "event": str(wake.event)})
 	return best
 
 static func _earlier(a: Dictionary, b: Dictionary) -> Dictionary:
@@ -314,6 +317,9 @@ static func fire(s, due: Dictionary) -> Dictionary:
 			return {"interrupt": false, "message": s.log_event("obituary", {"npc": due.event, "age": (int(life.death) - int(life.birth)) / 360})}
 		"story":
 			return s.story_fire(due.event)
+		"wake":
+			s.player.wake = s.player.wake.filter(func(wake: Dictionary) -> bool: return str(wake.event) != str(due.event))
+			return {"interrupt": true, "message": s.log_event("wake", {"event": due.event})}
 		"visits":
 			return {"interrupt": false, "message": " ".join(s.Bonds.write_letters(s))}
 		"loan":
@@ -450,6 +456,23 @@ static func start(s, event_id: String) -> String:
 		s.pending_event = {"id": event_id, "day": day}
 		return ""
 	return s.log_event("event", {"event": event_id, "part": "chronicle"}, bool(definition.get("major", false)))
+
+## The appointments the player chose, before a retreat, to leave it for. Only these and the lifespan's
+## alarms end a retreat early; other news waits in 任务 · 消息 (docs/WORLD_EXPANSION.md 7.6, item 42).
+## player.wake: [{"event", "day"}] where day is the appointment's opening day.
+static func wakes_for(s, event_id: String) -> bool:
+	return s.player.get("wake", []).any(func(wake: Dictionary) -> bool: return str(wake.event) == event_id)
+
+## Marks or clears an upcoming appointment to leave a retreat for. Only an appointment still ahead can
+## be marked; one already open would end the retreat on its first day.
+static func set_wake(s, event_id: String, on: bool) -> void:
+	var kept: Array = s.player.get("wake", []).filter(func(wake: Dictionary) -> bool: return str(wake.event) != event_id)
+	if on:
+		for entry: Dictionary in upcoming(s):
+			if entry.event == event_id and int(entry.from) > int(s.world.day):
+				kept.append({"event": event_id, "day": int(entry.from)})
+	kept.sort_custom(func(a: Dictionary, b: Dictionary) -> bool: return int(a.day) < int(b.day))
+	s.player.wake = kept
 
 ## Upcoming windows the player knows about (reminder conditions hold), soonest first.
 static func upcoming(s) -> Array[Dictionary]:

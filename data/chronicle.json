@@ -2,6 +2,7 @@
   "legacy": "{text}",
   "start": "你拜入青云山。先修炼功法、积攒灵石，再寻筑基之机。",
   "cultivate": "闭关 {duration}，修为增加 {xp}，灵力恢复。",
+  "wake": "{event_title}之期已到。",
   "rest": "静养 {duration}，气血与灵力尽复。",
   "gather": "在山谷采得 {amount} 株灵草。",
   "sell": "售出全部灵草，获得 {revenue} 灵石。",

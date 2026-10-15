@@ -58,7 +58,7 @@ static func render_retreat(ui) -> void:
 	right.add_child(length)
 	var preview: Label = ui.paragraph("", ui.INK)
 	right.add_child(preview)
-	var start: Button = ui.button("开始闭关", func() -> void: ui.start_retreat(ui.retreat_days), "约定或寿元告急时会提前出关")
+	var start: Button = ui.button("开始闭关", func() -> void: ui.start_retreat(ui.retreat_days), "只在勾选的约定到期或寿元告急时提前出关")
 	start.custom_minimum_size.x = 200
 	right.add_child(start)
 	var refresh := func(value: float) -> void:
@@ -166,10 +166,21 @@ static func mind_word(percent: int) -> String:
 	return "不足" if percent < 100 else ("澄明" if percent > 100 else "安定")
 
 ## What a retreat of `days` would bring, as the rules plan it.
+## A marked appointment inside the span ends it on its day (player.wake is kept soonest first).
 static func preview_text(session, days: int) -> String:
-	var plan: Dictionary = session.retreat_preview(days)
+	var stop := days
+	var woken := ""
+	for wake: Dictionary in session.player.get("wake", []):
+		var at := int(wake.day) - int(session.world.day)
+		if at > 0 and at < stop:
+			stop = at
+			woken = str(session.content.events[wake.event].title)
+			break
+	var plan: Dictionary = session.retreat_preview(stop)
 	var lines: Array[String] = ["修为约 +%d" % int(plan.xp)]
-	if int(plan.days) < days:
+	if not woken.is_empty() and int(plan.days) >= stop:
+		lines.append("第 %d 日%s开始，届时出关" % [stop, woken])
+	if int(plan.days) < stop:
 		lines.append("约第 %d 日修为%s而出关" % [int(plan.days), "臻于此境之极" if int(session.player.xp) + int(plan.xp) >= session.xp_cap() and session.xp_cap() >= 0 else "触及瓶颈"])
 	var after := Cultivation.efficiency(session, int(plan.fatigue))
 	lines.append("出关时心神%s，闭关收益 %d%%" % [_mood(after), after])
@@ -198,12 +209,26 @@ static func _columns(ui) -> HBoxContainer:
 		if goal.id in DEADLINE_GOALS:
 			left.add_child(ui.label("%s · 还有 %s" % [goal.title, Goals.values(session, goal.id).until], 15))
 			any = true
+	var markable := false
 	for entry: Dictionary in session.upcoming():
-		var state := "进行中" if int(entry.from) <= int(session.world.day) else "始于 " + Calendar.short_text(int(entry.from))
-		left.add_child(ui.label("%s · %s" % [entry.title, state], 15))
 		any = true
+		if int(entry.from) <= int(session.world.day):
+			left.add_child(ui.label("%s · 进行中" % entry.title, 15))
+			continue
+		# An appointment still ahead can be marked to leave the retreat for; nothing else ends it.
+		markable = true
+		var event_id: String = entry.event
+		var wake := CheckBox.new()
+		wake.text = "%s · 始于 %s" % [entry.title, Calendar.short_text(int(entry.from))]
+		wake.tooltip_text = "勾选后，闭关到此日便出关"
+		wake.button_pressed = session.wakes_for(event_id)
+		wake.add_theme_font_size_override("font_size", 15)
+		wake.toggled.connect(func(on: bool) -> void: session.set_wake(event_id, on); ui.render())
+		left.add_child(wake)
 	if not any:
 		left.add_child(ui.label("近期无事", 15, ui.MUTED))
+	if markable:
+		left.add_child(ui.paragraph("勾选的约定到期时提前出关；其余消息不打断闭关，出关后在「任务 · 消息」查看。", ui.MUTED))
 	left.add_child(ui.label("寿元尽于历元 %d 年" % Calendar.year(session.lifespan_end_day()), 14, ui.MUTED))
 	return columns
 
