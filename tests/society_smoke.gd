@@ -237,6 +237,18 @@ func _rumors() -> void:
 	var heard: String = game.world.rumors.keys()[0]
 	check(not game.rumor_candidates().any(func(rumor: Dictionary) -> bool: return rumor.key == heard), "the same news is not repeated soon")
 	check(game.journal_lines().back().length() > 4 and not game.journal_lines().back().contains("{"), "the rumor reads as a sentence")
+	# Word of the wider world (data/lore.json), one piece at a time; the distant 化神 only once the player
+	# has built a foundation.
+	var lore := func() -> Array: return game.rumor_candidates().filter(func(rumor: Dictionary) -> bool: return rumor.id == "rumor_lore")
+	check(lore.call().size() == 1 and str(lore.call()[0].key) in ["lore:five_sects", "lore:tianyan"], "one piece of lore about the five sects at a time")
+	game.world.rumors["lore:five_sects"] = int(game.world.day)
+	game.world.rumors["lore:tianyan"] = int(game.world.day)
+	check(lore.call().is_empty(), "a 炼气 disciple hears nothing of the distant 化神")
+	game.player.realm = 1
+	check(lore.call().size() == 1 and lore.call()[0].key == "lore:xuanwei", "after foundation, word of 玄微真君")
+	game.log_event("rumor_lore", {"lore": "tianyan"})
+	check(game.journal_lines().back().contains("天衍宗"), "and lore reads as its own words")
+	game.player.realm = 0
 	_jump(game, 4, 2, 1)
 	check(game.rumor_candidates().any(func(rumor: Dictionary) -> bool: return rumor.key == "auction"), "in the auction year people talk about it")
 	# News is drawn at random among everything worth hearing; enough asking hears of the auction.

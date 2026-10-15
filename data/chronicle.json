@@ -86,6 +86,7 @@
   "rumor_stock": "云溪坊市本月新到了{item_name}。",
   "rumor_tournament": "青云剑宗的外门小比快到了，听说头名能得一卷好功法。",
   "rumor_commission": "{board_name}新贴了几张委托，报酬还算丰厚。",
+  "rumor_lore": "{lore_text}",
   "rumor_none": "众人聊的都是些家长里短，没什么要紧的消息。",
   "quest_accept": "接下委托：{quest_title}。",
   "quest_done": "完成委托「{quest_title}」，得灵石 {stones}、修为 {xp}。",

@@ -82,6 +82,11 @@ func format(entry: Dictionary, content) -> String:
 	if values.has("item"):
 		var named: Dictionary = content.item(str(values.item))
 		values["item_name"] = named.name if not named.is_empty() else str(values.item)
+	if values.has("lore"):
+		values["lore_text"] = "（失传的记载）"
+		for lore: Dictionary in content.lore_data.get("rumors", []):
+			if lore.id == str(values.lore):
+				values["lore_text"] = lore.text
 	if values.has("event") and content.events.has(str(values.event)):
 		values["event_title"] = str(content.events[str(values.event)].title)
 	if values.has("auction"):

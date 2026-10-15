@@ -35,6 +35,14 @@ static func candidates(s) -> Array[Dictionary]:
 			continue
 		found.append({"key": "person:%s:%s" % [person_id, where], "id": "rumor_person", "args": {"npc": person_id, "title": s.person(person_id).title, "location": where}})
 	var recent := int(s.content.rules.inquire.repeat_after_days)
+	# Word of the wider world (data/lore.json): the other sects, the 化神 of distant lands. One piece at a
+	# time, in order, so news of the player's own surroundings is not crowded out; only lore the player's
+	# standing lets them make sense of is heard, and none of it gives away a storyline.
+	for lore: Dictionary in s.content.lore_data.rumors:
+		var key := "lore:" + str(lore.id)
+		if day - int(s.world.rumors.get(key, -recent)) >= recent and Events.all_met(s, lore.get("conditions", [])):
+			found.append({"key": key, "id": "rumor_lore", "args": {"lore": lore.id}})
+			break
 	found = found.filter(func(rumor: Dictionary) -> bool: return day - int(s.world.rumors.get(rumor.key, -recent)) >= recent)
 	found.sort_custom(func(a: Dictionary, b: Dictionary) -> bool: return a.key < b.key)
 	return found

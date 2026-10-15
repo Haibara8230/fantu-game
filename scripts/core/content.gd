@@ -40,6 +40,8 @@ var auction_data: Dictionary = {}
 var summit_data: Dictionary = {}
 # 炼器's materials and costs (forge.gd).
 var forge_data: Dictionary = {}
+# Lore heard in teahouses about the wider world (rumors.gd).
+var lore_data: Dictionary = {}
 # Born-with talent ids by tier, built on first use (talents.gd).
 var talent_pools: Dictionary = {}
 var error_message: String = ""
@@ -89,7 +91,7 @@ func load_data() -> bool:
 		error_message = "物品配置格式错误。"
 		return false
 	items = item_data
-	for pair: Array in [["techniques", "res://data/techniques.json"], ["equipment", "res://data/equipment.json"], ["vfx_tiers", "res://data/vfx_tiers.json"], ["vfx", "res://data/vfx.json"], ["population", "res://data/population.json"], ["commissions", "res://data/commissions.json"], ["storylines", "res://data/storylines.json"], ["talents", "res://data/talents.json"], ["sect", "res://data/sect.json"], ["bonds", "res://data/bonds.json"], ["alchemy", "res://data/alchemy.json"], ["caves", "res://data/caves.json"], ["auctions", "res://data/auctions.json"], ["summit", "res://data/summit.json"], ["forge", "res://data/forge.json"]]:
+	for pair: Array in [["techniques", "res://data/techniques.json"], ["equipment", "res://data/equipment.json"], ["vfx_tiers", "res://data/vfx_tiers.json"], ["vfx", "res://data/vfx.json"], ["population", "res://data/population.json"], ["commissions", "res://data/commissions.json"], ["storylines", "res://data/storylines.json"], ["talents", "res://data/talents.json"], ["sect", "res://data/sect.json"], ["bonds", "res://data/bonds.json"], ["alchemy", "res://data/alchemy.json"], ["caves", "res://data/caves.json"], ["auctions", "res://data/auctions.json"], ["summit", "res://data/summit.json"], ["forge", "res://data/forge.json"], ["lore", "res://data/lore.json"]]:
 		var loaded: Variant = _read_json(pair[1])
 		if not loaded is Dictionary:
 			error_message = "配置格式错误：" + pair[1]
@@ -128,6 +130,8 @@ func load_data() -> bool:
 				summit_data = loaded
 			"forge":
 				forge_data = loaded
+			"lore":
+				lore_data = loaded
 	map = parsed.map
 	locations = parsed.locations
 	skills = parsed.skills
@@ -333,6 +337,8 @@ func _validate() -> String:
 	if problem.is_empty():
 		problem = _validate_forge()
 	if problem.is_empty():
+		problem = _validate_lore()
+	if problem.is_empty():
 		problem = _validate_duties()
 	if not problem.is_empty():
 		return problem
@@ -526,6 +532,22 @@ func _validate_forge() -> String:
 		var material: Variant = data.materials[material_id]
 		if not items.has(material_id) or str(items[material_id].get("category", "")) != "material" or not material is Dictionary or not equipment_data.materials.has(material.get("family", "")) or not _whole(material.get("tier")) or int(material.tier) < 1 or int(material.tier) > tiers:
 			return "炼器材料配置无效：" + material_id
+	return ""
+
+## Teahouse lore: each a unique id, words to hear and optional conditions (the player's own state).
+func _validate_lore() -> String:
+	if not lore_data.get("rumors") is Array:
+		return "传闻配置缺少 rumors。"
+	var seen := {}
+	for rumor: Variant in lore_data.rumors:
+		if not rumor is Dictionary or not rumor.get("id") is String or str(rumor.id).is_empty() or seen.has(rumor.id):
+			return "传闻缺少编号或编号重复。"
+		seen[rumor.id] = true
+		if not rumor.get("text") is String or str(rumor.text).is_empty():
+			return "传闻缺少文字：" + str(rumor.id)
+		var problem := _validate_conditions(rumor.get("conditions", []))
+		if not problem.is_empty():
+			return "传闻条件无效：%s（%s）" % [rumor.id, problem]
 	return ""
 
 # --- 五宗论道 --------------------------------------------------------------------------------------
