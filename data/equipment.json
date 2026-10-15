@@ -1,11 +1,16 @@
 {
+  "mastery": [
+    {"share": 1.0, "affixes": 99},
+    {"share": 0.5, "affixes": 1},
+    {"share": 0.2, "affixes": 0}
+  ],
   "slots": {"weapon": "兵刃", "robe": "法袍", "accessory": "佩饰"},
   "tiers": [
-    {"name": "凡兵", "power": 1.0, "affixes": 0, "value": 15},
-    {"name": "法器", "power": 1.4, "affixes": 1, "value": 50},
-    {"name": "灵器", "power": 1.9, "affixes": 2, "value": 160},
-    {"name": "法宝", "power": 2.6, "affixes": 3, "value": 450},
-    {"name": "灵宝", "power": 3.5, "affixes": 4, "value": 1300}
+    {"name": "凡兵", "realm": 0, "power": 1.0, "affixes": 0, "value": 15},
+    {"name": "法器", "realm": 0, "power": 1.4, "affixes": 1, "value": 50},
+    {"name": "灵器", "realm": 1, "power": 1.9, "affixes": 2, "value": 160},
+    {"name": "法宝", "realm": 2, "power": 2.6, "affixes": 3, "value": 450},
+    {"name": "灵宝", "realm": 3, "power": 3.5, "affixes": 4, "value": 1300}
   ],
   "materials": {
     "metal": ["凡铁", "青钢", "玄铁", "寒铁", "星陨"],

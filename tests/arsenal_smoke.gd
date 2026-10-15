@@ -175,6 +175,31 @@ func _bonuses() -> void:
 	calm.add_item(ring, 1)
 	calm.equip_item(ring)
 	check(calm.cultivation_rate() > 60, "a ring of calm speeds cultivation (%d)" % calm.cultivation_rate())
+	_mastery()
+
+## 驾驭度 (docs/WORLD_EXPANSION.md 2.3): a piece above its wielder's realm gives half its stats and one
+## affix a realm short, a fifth and none two short, and cannot be used three short.
+func _mastery() -> void:
+	var game := _game()
+	var content = game.content
+	var blade: Dictionary = content.equipment(Arsenal.equipment_id("sword", 3, "none", ["sharp", "tough"], 0))
+	check(int(blade.realm) == 1 and blade.affix_stats.size() == 2, "a 灵器 is wielded fully from 筑基")
+	var full := Arsenal.wielded(content, blade, 1)
+	check(full.usable and is_equal_approx(float(full.share), 1.0) and full.stats == blade.stats, "at 筑基 all of it")
+	var short := Arsenal.wielded(content, blade, 0)
+	check(short.usable and is_equal_approx(float(short.share), 0.5) and int(short.affixes) == 1 and int(short.stats.attack) < int(blade.stats.attack) and not short.stats.has("max_hp"), "at 炼气 half its stats and only its first affix (%s)" % [short.stats])
+	var treasure: Dictionary = content.equipment(Arsenal.equipment_id("sword", 5, "none", ["sharp"], 0))
+	check(int(Arsenal.wielded(content, treasure, 1).affixes) == 0 and is_equal_approx(float(Arsenal.wielded(content, treasure, 1).share), 0.2), "a 灵宝 at 筑基: a fifth, no affix")
+	check(not Arsenal.wielded(content, treasure, 0).usable, "and beyond reach for 炼气")
+	var base := int(game.attack_bonus())
+	var blade_id: String = blade.id
+	game.add_item(blade_id, 1)
+	game.equip_item(blade_id)
+	check(int(game.attack_bonus()) == base + int(short.stats.attack), "worn at 炼气, the 灵器 adds only what can be drawn on")
+	var treasure_id: String = treasure.id
+	game.add_item(treasure_id, 1)
+	check(game.equip_item(treasure_id).contains("元婴") and game.item_count(treasure_id) == 1, "a 灵宝 refuses a 炼气 wielder and stays in the pack")
+	check(Arsenal.mastery_text(content, blade, 0).contains("50%") and Arsenal.mastery_text(content, blade, 1).is_empty(), "the bag says how much can be drawn on")
 
 func _fight(technique_id: String) -> Session:
 	var game := _game(["water"])

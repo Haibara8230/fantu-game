@@ -21,8 +21,12 @@ static func bonuses(s, holder: Dictionary = {}) -> Dictionary:
 			sources.append({"stats": method.passive, "element": method.element})
 	for slot: String in holder.get("equipment", {}):
 		var gear: Dictionary = s.content.equipment(str(holder.equipment[slot]))
-		if not gear.is_empty():
-			sources.append({"stats": gear.stats, "element": "*" if gear.element == "none" else gear.element})
+		if gear.is_empty():
+			continue
+		# A piece above the holder's realm gives only what they can draw on (驾驭度, arsenal.gd).
+		var held: Dictionary = s.Arsenal.wielded(s.content, gear, int(holder.get("realm", 0)))
+		if bool(held.usable):
+			sources.append({"stats": held.stats, "element": "*" if gear.element == "none" else gear.element})
 	for source: Dictionary in sources:
 		for key: String in source.stats:
 			if key == "element_damage":
@@ -168,6 +172,8 @@ static func equip_item(s, item_id: String) -> String:
 		return "行囊里没有这件宝物。"
 	if not s.battle.is_empty():
 		return "斗法中无法更换宝物。"
+	if not bool(s.Arsenal.wielded(s.content, gear, int(s.player.realm)).usable):
+		return s.Arsenal.mastery_text(s.content, gear, int(s.player.realm))
 	var worn := str(s.player.equipment.get(gear.slot, ""))
 	s.remove_item(item_id, 1)
 	if not worn.is_empty():

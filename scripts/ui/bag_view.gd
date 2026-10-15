@@ -25,7 +25,7 @@ static func render(ui) -> void:
 			continue
 		var gear: Dictionary = session.content.equipment(item_id)
 		var name: Label = ui.label(gear.name, 15, ui.grade_color(gear))
-		name.tooltip_text = gear.description
+		name.tooltip_text = (gear.description + "\n" + session.Arsenal.mastery_text(session.content, gear, int(session.player.realm))).strip_edges()
 		name.mouse_filter = Control.MOUSE_FILTER_PASS
 		name.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		row.add_child(name)
@@ -73,7 +73,8 @@ static func _item_row(ui, parent: VBoxContainer, item_id: String) -> void:
 	var name_label: Label = ui.label("%s ×%d" % [item.name, session.item_count(item_id)], 16, ui.grade_color(item))
 	name_label.custom_minimum_size.x = 150
 	row.add_child(name_label)
-	var text: Label = ui.paragraph(item.description)
+	var mastery: String = session.Arsenal.mastery_text(session.content, item, int(session.player.realm)) if item.get("category", "") == "equipment" else ""
+	var text: Label = ui.paragraph(item.description + ("\n" + mastery if not mastery.is_empty() else ""))
 	text.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	row.add_child(text)
 	if item.has("use"):
@@ -87,7 +88,10 @@ static func _item_row(ui, parent: VBoxContainer, item_id: String) -> void:
 		study.disabled = not block.is_empty()
 		row.add_child(study)
 	if item.get("category", "") == "equipment":
-		row.add_child(ui.button("装备", func() -> void: ui.run(func() -> String: return session.equip_item(item_id)), "换上这件宝物"))
+		var usable: bool = session.Arsenal.wielded(session.content, item, int(session.player.realm)).usable
+		var wear: Button = ui.button("装备", func() -> void: ui.run(func() -> String: return session.equip_item(item_id)), "换上这件宝物" if usable else mastery)
+		wear.disabled = not usable
+		row.add_child(wear)
 	var price: int = session.sell_price(item_id)
 	if price > 0:
 		row.add_child(ui.button("出售 · %d" % price, func() -> void: ui.run(func() -> String: return session.sell(item_id, 1)), "在此地出售一件"))

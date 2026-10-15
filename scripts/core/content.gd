@@ -349,6 +349,8 @@ func _validate() -> String:
 	if problem.is_empty():
 		problem = _validate_lore()
 	if problem.is_empty():
+		problem = _validate_mastery()
+	if problem.is_empty():
 		problem = _validate_population()
 	if problem.is_empty():
 		problem = _validate_duties()
@@ -529,6 +531,19 @@ func _validate_duties() -> String:
 	return ""
 
 # --- 炼器 ----------------------------------------------------------------------------------------
+
+## 宝物's tiers name the realm that wields them fully; `mastery` the share and affixes for each realm short.
+func _validate_mastery() -> String:
+	for tier: Dictionary in equipment_data.tiers:
+		if not _whole(tier.get("realm", 0)) or int(tier.get("realm", 0)) >= realms.size():
+			return "宝物品阶的驾驭境界无效：" + str(tier.name)
+	var table: Variant = equipment_data.get("mastery", [{"share": 1.0, "affixes": 99}])
+	if not table is Array or table.is_empty() or float(table[0].get("share", 0.0)) != 1.0:
+		return "驾驭度表须从全力驾驭起。"
+	for step: Variant in table:
+		if not step is Dictionary or not (step.get("share") is float or step.get("share") is int) or float(step.share) <= 0.0 or float(step.share) > 1.0 or not _whole(step.get("affixes")):
+			return "驾驭度表无效。"
+	return ""
 
 func _validate_forge() -> String:
 	var data := forge_data

@@ -210,21 +210,24 @@ static func equipment(content, id: String) -> Dictionary:
 		return {}
 	var tier_def: Dictionary = data.tiers[tier - 1]
 	var power := float(tier_def.power)
-	var stats := {}
+	var base_stats := {}
 	for key: String in base.stats:
-		stats[key] = float(base.stats[key]) * power
+		base_stats[key] = float(base.stats[key]) * power
 	var affix_ids: Array = Array(parts[4].split("+", false))
 	var affix_names: Array[String] = []
+	# Each affix's own share, kept apart so a piece wielded below its realm can count only some of them.
+	var affix_stats: Array[Dictionary] = []
 	for affix_id: String in affix_ids:
 		var affix: Variant = data.affixes.get(affix_id)
 		if not affix is Dictionary or affix_ids.count(affix_id) != 1:
 			return {}
 		affix_names.append(affix.name)
+		var own := {}
 		for key: String in affix.stats:
 			# Orb affixes count whole orbs and do not grow with the tier.
-			stats[key] = float(stats.get(key, 0.0)) + float(affix.stats[key]) * (1.0 if key.begins_with("orb_") else power)
-	for key: String in stats.keys():
-		stats[key] = int(stats[key]) if key.begins_with("orb_") else _scaled(key, stats[key])
+			own[key] = float(affix.stats[key]) * (1.0 if key.begins_with("orb_") else power)
+		affix_stats.append(own)
+	var stats := _sum_stats(base_stats, affix_stats, 1.0, affix_stats.size())
 	var nouns: Array = base.nouns
 	var material: String = data.materials[base.material][tier - 1]
 	var prefix := ""
@@ -235,9 +238,46 @@ static func equipment(content, id: String) -> Dictionary:
 		"id": id, "category": "equipment", "slot": base.slot, "tier": tier, "tier_name": tier_def.name, "element": element,
 		"name": prefix + material + str(nouns[variant % nouns.size()]), "stats": stats, "affixes": affix_names,
 		"price": int(tier_def.value) + 10 * affix_ids.size(),
+		"realm": int(tier_def.get("realm", 0)), "base_stats": base_stats, "affix_stats": affix_stats,
 	}
 	result.description = describe_equipment(content, result)
 	return result
+
+## Base stats at `share` plus the first `affixes` affixes (in the piece's own order), at `share` too;
+## whole orbs are not scaled. Rounded as the piece's own stats are.
+static func _sum_stats(base_stats: Dictionary, affix_stats: Array, share: float, affixes: int) -> Dictionary:
+	var stats := {}
+	for key: String in base_stats:
+		stats[key] = float(base_stats[key]) * share
+	for index: int in mini(affixes, affix_stats.size()):
+		for key: String in affix_stats[index]:
+			stats[key] = float(stats.get(key, 0.0)) + float(affix_stats[index][key]) * (1.0 if key.begins_with("orb_") else share)
+	for key: String in stats.keys():
+		stats[key] = int(stats[key]) if key.begins_with("orb_") else _scaled(key, stats[key])
+	return stats
+
+## 驾驭度 (docs/WORLD_EXPANSION.md 2.3): a piece above its wielder's realm gives only a share of its
+## stats and some of its affixes (data/equipment.json `mastery`, by how many realms short); three or more
+## realms short it cannot be used at all. {"usable", "share", "affixes", "stats", "short"}.
+static func wielded(content, item: Dictionary, realm: int) -> Dictionary:
+	var short := maxi(0, int(item.get("realm", 0)) - realm)
+	var table: Array = content.equipment_data.get("mastery", [{"share": 1.0, "affixes": 99}])
+	if short >= table.size():
+		return {"usable": false, "share": 0.0, "affixes": 0, "stats": {}, "short": short}
+	var step: Dictionary = table[short]
+	var affixes: int = mini(int(step.affixes), item.get("affix_stats", []).size())
+	return {"usable": true, "share": float(step.share), "affixes": affixes, "stats": _sum_stats(item.get("base_stats", item.stats), item.get("affix_stats", []), float(step.share), affixes), "short": short}
+
+## A word on how much of a piece its wielder can draw on, or "" when all of it.
+static func mastery_text(content, item: Dictionary, realm: int) -> String:
+	var held := wielded(content, item, realm)
+	var needed: String = content.realm(int(item.get("realm", 0))).name
+	if not bool(held.usable):
+		return "须%s方能催动，眼下境界差得太远。" % needed
+	if float(held.share) >= 1.0:
+		return ""
+	var affixes := "词条只生效 %d 条" % int(held.affixes) if int(held.affixes) > 0 else "词条不生效"
+	return "须%s方能全力驾驭：眼下驾驭 %d%%，%s。" % [needed, int(round(float(held.share) * 100.0)), affixes]
 
 static func describe_equipment(content, item: Dictionary) -> String:
 	var names := {"attack": "攻击 +%d", "max_hp": "气血上限 +%d", "max_qi": "灵力上限 +%d", "defense": "受伤 -%d%%", "element_damage": "属性伤害 +%d%%", "cultivation": "修炼速度 +%d%%", "orb_first": "斗法开局多抽 %d 颗灵气", "orb_cap": "灵气上限 +%d"}
