@@ -64,16 +64,26 @@ func _commissions() -> void:
 	var stones := int(game.player.stones)
 	var text := game.deliver_commission("sect:test:0")
 	check(int(game.player.contribution) == 25 and int(game.player.stones) == stones + 10 and text.contains("贡献 25"), "and reported for its contribution")
-	# Deliveries count by the piece.
-	for offer: Dictionary in game.commission_offers("sect"):
-		if offer.has("item"):
-			var before := int(game.player.contribution)
-			var per := int(game.content.commission_data.templates[offer.kind].get("contribution", 0))
-			game.accept_commission(offer.key)
-			game.set_item_count(offer.item, int(offer.count))
-			game.deliver_commission(offer.key)
-			check(per > 0 and int(game.player.contribution) == before + per * int(offer.count), "a delivery pays its contribution by the piece (%s)" % offer.kind)
+	# Deliveries count by the piece (the board's first delivery in the next few periods).
+	var today := int(game.world.day)
+	var delivery := {}
+	for period: int in 12:
+		game.world.day = today + period * int(game.content.commission_data.period_days)
+		for offer: Dictionary in game.commission_offers("sect"):
+			if offer.has("item"):
+				delivery = offer
+				break
+		if not delivery.is_empty():
 			break
+	check(not delivery.is_empty(), "the sect's board posts deliveries")
+	if not delivery.is_empty():
+		var before := int(game.player.contribution)
+		var per := int(game.content.commission_data.templates[delivery.kind].get("contribution", 0))
+		game.accept_commission(delivery.key)
+		game.set_item_count(delivery.item, int(delivery.count))
+		game.deliver_commission(delivery.key)
+		check(per > 0 and int(game.player.contribution) == before + per * int(delivery.count), "a delivery pays its contribution by the piece (%s)" % delivery.kind)
+	game.world.day = today
 	check(int(game.content.enemies.serpent.contribution) == 100 and int(game.content.sect_data.awards.tournament_champion) == 80, "great deeds for the sect count too")
 
 func _promotion() -> void:
@@ -387,6 +397,8 @@ func _aid() -> void:
 	game.travel("wild")
 	game.start_battle("wolf")
 	check(game.duel_allies() == [friend], "a close friend (亲密) can be called into a duel")
+	# Sturdy enough to outlast the strike, so the second call is tried.
+	game.battle.hp = 999
 	var hp := int(game.battle.hp)
 	game.call_aid(friend)
 	check(game.battle.is_empty() or (int(game.battle.hp) < hp and bool(game.battle.aid_used)), "their strike lands")

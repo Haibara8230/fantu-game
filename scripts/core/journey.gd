@@ -83,7 +83,9 @@ static func _walk(s) -> String:
 		# Beasts leave a newcomer on the guided start alone, and nothing on the road troubles one in flight.
 		# Nothing waylays a paid passage (a 传送阵).
 		if s.encounters_enabled and s.guide_step().is_empty() and not s.flying() and not route.has("fee"):
-			parts.append(Events.roll_encounter(s, route))
+			# Someone bearing a grudge (feuds.gd) comes before the road's chance encounters.
+			if not s.Feuds.ambush(s, route):
+				parts.append(Events.roll_encounter(s, route))
 		if s.pending_event.is_empty():
 			parts.append_array(Events.check_location(s, not s.player.journey.is_empty()))
 		if not s.pending_event.is_empty() or not s.battle.is_empty():

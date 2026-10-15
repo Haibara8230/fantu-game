@@ -1,4 +1,33 @@
 {
+  "grudge_ambush": {
+    "title": "寻仇",
+    "trigger": "manual",
+    "text": "{foe}拦在路中，冷冷看着你：“{words}”",
+    "choices": [
+      {"id": "fight", "label": "应战", "effects": [{"grudge_fight": true}], "chronicle": "{foe}拦路寻仇，你与之斗法。"},
+      {"id": "pay", "label": "交出 {pay} 灵石了结恩怨", "conditions": [{"grudge_pay": true}], "effects": [{"grudge_pay": true}], "chronicle": "你交出 {pay} 灵石，{foe}收了，这段恩怨就此了结。"},
+      {"id": "slip", "label": "绕路遁走（气血 -20）", "effects": [{"hp": -20}, {"grudge_evade": true}], "chronicle": "你硬受一击，抽身遁走。{foe}没有追上，可这笔账还在。"}
+    ]
+  },
+  "bounty_found": {
+    "title": "通缉犯",
+    "trigger": "manual",
+    "text": "你在附近打听了两日，终于在一处破屋里堵住了{board_name}通缉的{foe}。那人见你来者不善，已经摸向了腰间的兵刃。",
+    "choices": [
+      {"id": "fight", "label": "动手拿人", "effects": [{"bounty_fight": true}], "chronicle": "你与通缉犯{foe}斗法。"},
+      {"id": "wait", "label": "先不惊动，改日再来", "effects": [{"bounty_wait": true}], "chronicle": "你没有惊动{foe}，悄悄退了出来。"}
+    ]
+  },
+  "bounty_twist": {
+    "title": "另有隐情",
+    "trigger": "manual",
+    "text": "你堵住了{board_name}通缉的{foe}。那人却不逃，只苦笑道：“悬赏是仇家出钱贴的。我不过是不肯把祖传的药方卖给他。”他袖中露出的，确是一卷泛黄的药方。",
+    "choices": [
+      {"id": "fight", "label": "照样拿人", "effects": [{"bounty_fight": true}], "chronicle": "你没有理会{foe}的辩解，动手拿人。"},
+      {"id": "spare", "label": "放他走，撕了这张悬赏", "effects": [{"bounty_drop": true}, {"mind": 3}], "chronicle": "你放{foe}走了，回头撕了那张悬赏。"},
+      {"id": "wait", "label": "先不表态，改日再来", "effects": [{"bounty_wait": true}], "chronicle": "你一时拿不定主意，先离开了。"}
+    ]
+  },
   "beast_tide": {
     "title": "兽潮",
     "trigger": "location",

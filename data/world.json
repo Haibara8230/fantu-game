@@ -416,6 +416,7 @@
     }
   },
   "enemies": {
+    "chixiao_zhifa": {"moves": [{"id": "combo", "name": "赤霄连焰", "hits": 2, "power": 0.6, "inflict": {"burn": [4, 2]}, "weight": 3}, {"id": "seal", "name": "执法火印", "power": 1.1, "weight": 2}, {"id": "ward", "name": "火云护体", "kind": "guard", "shield": 0.12, "weight": 1}], "name": "赤霄执法弟子", "element": "fire", "hp": 430, "damage_min": 19, "damage_max": 26, "reward_stones": 90, "reward_xp": 400, "reward_herbs": 0, "locations": [], "min_realm": 2, "human": true, "sect": "chixiao", "drops": {"chance": 0.5, "tiers": [3, 3]}},
     "bear_king": {"moves": [{"id": "swipe", "name": "熊掌横扫", "weight": 3}, {"id": "slam", "name": "人立拍击", "kind": "charge", "power": 1.8, "weight": 2}, {"id": "roar", "name": "震山吼", "power": 0.5, "inflict": {"weaken": [0.2, 2]}, "weight": 1}], "phases": [{"below": 0.3, "name": "狂暴", "text": "铁背熊王背上的铁鬃根根竖起，双目赤红，人立而起，狂暴了！", "power": 1.35}], "name": "铁背熊王", "element": "earth", "hp": 420, "damage_min": 17, "damage_max": 24, "reward_stones": 40, "reward_xp": 260, "reward_herbs": 0, "locations": [], "min_realm": 1, "parts": [{"item": "xiong_dan", "chance": 1.0, "count": [1, 1]}, {"item": "yaodan", "chance": 0.5, "count": [1, 1]}]},
     "shui_fei": {"moves": [{"id": "stab", "name": "分水刺", "weight": 3}, {"id": "drag", "name": "拉人下水", "power": 0.5, "inflict": {"entangle": [1, 1]}, "weight": 2}, {"id": "volley", "name": "同伙放冷箭", "hits": 2, "power": 0.5, "weight": 2}], "name": "白鹭渡水匪", "element": "water", "hp": 210, "damage_min": 13, "damage_max": 18, "reward_stones": 40, "reward_xp": 80, "reward_herbs": 0, "locations": [], "min_realm": 1, "human": true, "sect": "canglan", "drops": {"chance": 0.3, "tiers": [2, 3]}},
     "zhui_bing": {"moves": [{"id": "chop", "name": "刀劈", "weight": 3}, {"id": "twin", "name": "连环刀", "hits": 2, "power": 0.6, "weight": 2}, {"id": "caltrops", "name": "撒铁蒺藜", "power": 0.5, "inflict": {"bleed": [2, 2]}, "weight": 1}], "name": "追杀的劫修", "element": "metal", "hp": 135, "damage_min": 10, "damage_max": 14, "reward_stones": 30, "reward_xp": 45, "reward_herbs": 0, "locations": [], "min_realm": 0, "human": true, "sect": "xuanyue"},
@@ -609,6 +610,16 @@
       "world_flag": "ruin_den_cleared",
       "flag_event": "den_cleared"
     }
+  },
+  "feuds": {
+    "nicknames": ["血手", "独眼", "鬼影", "黑风", "笑面", "断指", "毒蝎", "铁爪", "白衣", "瘸腿"],
+    "avengers": ["rogue", "zhui_bing", "shui_fei", "mo_tan", "xuesha_tu"],
+    "grudge_chance": 0.25, "ripen_days": 20, "ambush_chance": 0.35, "max": 3, "pay": 40, "bounty_wait_days": 10,
+    "causes": {
+      "comrade": "上回栽在你手里的，是我的兄弟。这笔账，今日算清。",
+      "exposed": "器堂袁执事的事，是你揭出来的吧？赤霄门的脸面，总要有人来讨。"
+    },
+    "seeded": [{"flag": "bounty_exposed", "enemy": "chixiao_zhifa", "name": "赤霄执法弟子", "cause": "exposed", "region": "tiannan"}]
   },
   "series": {
     "beast_tide": {"name": "兽潮守镇", "location": "town", "event": "beast_tide", "min_realm": 1, "min_stage": 1, "breather": 0.5, "waves": [

@@ -10,13 +10,13 @@ const ROOTS := [["metal", "wood", "fire"], ["water", "earth"], ["metal"], ["wood
 func _initialize() -> void:
 	# FANTU_SIM=series runs only the series (and their bosses), for quick calibration.
 	if OS.get_environment("FANTU_SIM") == "series":
-		for setup: Array in [["bear_king", 1, 1, ["qingyun"]], ["bear_king", 1, 2, []]]:
+		for setup: Array in [["bear_king", 1, 1, ["qingyun"]], ["bear_king", 1, 2, []], ["chixiao_zhifa", 2, 0, ["qingyun"]], ["chixiao_zhifa", 2, 0, []], ["chixiao_zhifa", 2, 1, ["qingyun"]], ["mo_xiu", 2, 0, ["qingyun"]]]:
 			_report(str(setup[0]), int(setup[1]), int(setup[2]), setup[3])
 		for setup: Array in SERIES:
 			_series(str(setup[0]), str(setup[1]), int(setup[2]), int(setup[3]), setup[4])
 		quit(0)
 		return
-	for setup: Array in [["wolf", 0, 0, []], ["disciple", 0, 0, []], ["rogue", 0, 2, []], ["wolf", 0, 3, ["qingyun"]], ["serpent", 1, 0, ["qingyun"]], ["serpent", 1, 0, []], ["ruin_rogue", 0, 3, ["qingyun"]], ["ruin_rogue", 0, 3, []], ["den_wolf", 0, 3, []], ["den_wolf", 0, 3, ["qingyun"]], ["mo_xiu", 2, 0, ["qingyun"]], ["mo_xiu", 2, 0, []], ["jian_kui", 2, 1, ["qingyun"]], ["can_nian", 2, 2, ["qingyun"]], ["can_nian", 2, 3, []], ["mo_jiang", 2, 3, ["qingyun"]], ["mo_jiang", 3, 0, ["qingyun"]], ["jiao", 3, 0, ["qingyun"]], ["jiao", 3, 1, []], ["qinglin_snake", 0, 0, []], ["shan_xiao", 0, 1, []], ["wolf_pack", 0, 2, []], ["wolf_pack", 0, 3, ["qingyun"]], ["chilian_snake", 1, 0, ["qingyun"]], ["huo_ya", 1, 1, ["qingyun"]], ["yanjia_xi", 1, 2, ["qingyun"]], ["yanjia_xi", 1, 1, []], ["zhui_bing", 0, 2, []], ["shui_fei", 1, 0, ["qingyun"]], ["mo_tan", 1, 2, ["qingyun"]], ["xuesha_tu", 1, 2, ["qingyun"]], ["xuesha_tu", 1, 3, []], ["bear_king", 1, 1, ["qingyun"]], ["bear_king", 1, 2, []]]:
+	for setup: Array in [["wolf", 0, 0, []], ["disciple", 0, 0, []], ["rogue", 0, 2, []], ["wolf", 0, 3, ["qingyun"]], ["serpent", 1, 0, ["qingyun"]], ["serpent", 1, 0, []], ["ruin_rogue", 0, 3, ["qingyun"]], ["ruin_rogue", 0, 3, []], ["den_wolf", 0, 3, []], ["den_wolf", 0, 3, ["qingyun"]], ["mo_xiu", 2, 0, ["qingyun"]], ["mo_xiu", 2, 0, []], ["jian_kui", 2, 1, ["qingyun"]], ["can_nian", 2, 2, ["qingyun"]], ["can_nian", 2, 3, []], ["mo_jiang", 2, 3, ["qingyun"]], ["mo_jiang", 3, 0, ["qingyun"]], ["jiao", 3, 0, ["qingyun"]], ["jiao", 3, 1, []], ["qinglin_snake", 0, 0, []], ["shan_xiao", 0, 1, []], ["wolf_pack", 0, 2, []], ["wolf_pack", 0, 3, ["qingyun"]], ["chilian_snake", 1, 0, ["qingyun"]], ["huo_ya", 1, 1, ["qingyun"]], ["yanjia_xi", 1, 2, ["qingyun"]], ["yanjia_xi", 1, 1, []], ["zhui_bing", 0, 2, []], ["shui_fei", 1, 0, ["qingyun"]], ["mo_tan", 1, 2, ["qingyun"]], ["xuesha_tu", 1, 2, ["qingyun"]], ["xuesha_tu", 1, 3, []], ["bear_king", 1, 1, ["qingyun"]], ["bear_king", 1, 2, []], ["chixiao_zhifa", 2, 0, ["qingyun"]], ["chixiao_zhifa", 2, 1, []]]:
 		_report(str(setup[0]), int(setup[1]), int(setup[2]), setup[3])
 	for setup: Array in SERIES:
 		_series(str(setup[0]), str(setup[1]), int(setup[2]), int(setup[3]), setup[4])

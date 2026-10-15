@@ -74,6 +74,10 @@ static func met(s, condition: Dictionary) -> bool:
 			return not met(s, value)
 		"realm_at_least":
 			return int(s.player.realm) >= int(value)
+		"grudge":
+			return s.Feuds.any(s) == bool(value)
+		"grudge_pay":
+			return (int(s.player.stones) >= s.Feuds.pay(s)) == bool(value)
 		"flag":
 			return s.has_flag(value)
 		"item_at_least":
@@ -202,6 +206,18 @@ static func apply(s, effects: Array) -> void:
 					s.Combat.add_pack(s, value)
 			"series":
 				s.Series.begin(s, value)
+			"grudge_fight":
+				s.Feuds.fight(s)
+			"grudge_pay":
+				s.Feuds.pay_off(s)
+			"grudge_evade":
+				s.Feuds.evade(s)
+			"bounty_fight":
+				s.Feuds.bounty_fight(s)
+			"bounty_wait":
+				s.Feuds.bounty_wait(s)
+			"bounty_drop":
+				s.Feuds.bounty_drop(s)
 			"spar":
 				s.begin_spar(s.acting_npc)
 			"tournament":
@@ -397,9 +413,12 @@ static func check_location(s, passing: bool = false) -> Array[String]:
 			s.pending_event = {"id": event_id, "day": day}
 		else:
 			messages.append(s.log_event("event", {"event": event_id, "part": "chronicle"}, bool(definition.get("major", false))))
-	# Stopping somewhere means seeing who is there (after first-meeting stories have had their say).
+	# Stopping somewhere means seeing who is there (after first-meeting stories have had their say), and
+	# perhaps finding an outlaw the player hunts (feuds.gd).
 	if not passing:
 		s.meet_present()
+		s.Feuds.update(s)
+		s.Feuds.check_bounties(s)
 	return messages
 
 static func choose(s, choice_id: String) -> String:
@@ -412,9 +431,12 @@ static func choose(s, choice_id: String) -> String:
 			continue
 		if not all_met(s, choice.get("conditions", [])):
 			return "条件不足，无法如此选择。"
+		# An event raised with its own values (who waylays the player, whom they hunt) tells them on.
+		var args := {"event": event_id, "part": "choice", "choice": choice_id}
+		args.merge(s.pending_event.get("values", {}))
 		apply(s, choice.get("effects", []))
 		s.pending_event = {}
-		var text: String = s.log_event("event", {"event": event_id, "part": "choice", "choice": choice_id}, bool(definition.get("major", false)))
+		var text: String = s.log_event("event", args, bool(definition.get("major", false)))
 		# Living through an encounter, whatever the choice, is insight toward the next bottleneck.
 		var milestones: Array[String] = s.gain_insight("event")
 		var follow := check_location(s)

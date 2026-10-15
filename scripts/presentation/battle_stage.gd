@@ -94,6 +94,9 @@ func configure(snapshot: Dictionary, enemy_definition: Dictionary) -> void:
 	human_enemy = bool(enemy_definition.get("human", false))
 	hero_name = snapshot.player.name + " · " + str(sects[hero_sect].name)
 	enemy_name = enemy_definition.name + (" · " + str(sects[enemy_sect].name) if enemy_definition.get("human", false) else "")
+	# A named foe (an avenger, an outlaw) goes by their own name.
+	if snapshot.battle.has("title"):
+		enemy_name = "%s · %s" % [snapshot.battle.title, enemy_definition.name]
 	hero_hp = int(snapshot.player.hp)
 	hero_max_hp = int(snapshot.player.max_hp)
 	enemy_hp = int(snapshot.battle.hp)

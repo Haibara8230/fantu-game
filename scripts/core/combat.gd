@@ -1058,8 +1058,11 @@ static func _lose(s) -> String:
 		return _tournament_over(s, false)
 	if s.battle.get("context", "") == "summit":
 		return s.Summit.over(s, false)
+	var grudge_id := str(s.battle.get("grudge", ""))
 	s.battle.clear()
 	s.record_deed("duel")
+	if not grudge_id.is_empty():
+		s.Feuds.fight_over(s, grudge_id, false)
 	var lost := mini(int(s.player.stones), 10)
 	s.player.stones -= lost
 	s.player.location = "sect"
@@ -1208,6 +1211,8 @@ static func _win(s) -> String:
 	var npc: String = s.battle.get("npc", "")
 	var series_id := str(s.battle.get("series", ""))
 	var felled: Array = s.battle.get("felled", []).duplicate()
+	var grudge_id := str(s.battle.get("grudge", ""))
+	var wanted_key := str(s.battle.get("wanted", ""))
 	s.record_kill(enemy_id)
 	s.record_deed("duel")
 	s.record_deed("win:" + enemy_id)
@@ -1215,6 +1220,13 @@ static func _win(s) -> String:
 	s.add_item("huichun_grass", int(enemy.reward_herbs))
 	s.battle.clear()
 	var message: String = s.log_event("battle_victory", {"enemy": enemy_id, "stones": int(enemy.reward_stones), "xp": int(enemy.reward_xp), "herbs": int(enemy.reward_herbs)})
+	# 恩怨与悬赏 (feuds.gd): a grudge settled, an outlaw taken, or a comrade left to remember.
+	if not grudge_id.is_empty():
+		message += " " + s.Feuds.fight_over(s, grudge_id, true)
+	elif not wanted_key.is_empty():
+		message += " " + s.Feuds.caught(s, wanted_key)
+	else:
+		s.Feuds.after_win(s, enemy_id)
 	# A defeated regional threat changes the world; the journey itself continues.
 	var flag: String = enemy.get("world_flag", "")
 	if not flag.is_empty() and not s.has_flag(flag):

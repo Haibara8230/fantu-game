@@ -2,7 +2,8 @@ extends RefCounted
 ## Commission boards. Operates on a Session.
 ## Boards post a few offers per period (deterministic per world, board and period). Accepted ones live
 ## in player.quests with a deadline; world.quests_taken keeps an offer from being posted twice.
-## Three kinds: deliver items, hunt beasts, and (on the sect's board) patrol a place and report back.
+## Kinds: deliver items, hunt beasts, (on the sect's board) patrol a place and report back, and 悬赏 an
+## outlaw by name (`wanted`: found where they hide, feuds.gd; sometimes the poster lied).
 ## A kind may wait for a realm (`min_realm`: the 魔修 for 金丹 disciples).
 ## The sect's own board (data/sect.json `board`) also pays contribution (`contribution` per count).
 
@@ -35,7 +36,18 @@ static func offers(s, board: String) -> Array[Dictionary]:
 				break
 		var template: Dictionary = data.templates[kind]
 		var offer := {"key": "%s:%d:%d" % [board, period, index], "kind": kind, "board": board, "count": rng.randi_range(int(template.count[0]), int(template.count[1])), "days": int(template.days)}
-		if template.has("items"):
+		if template.has("wanted"):
+			# 悬赏: an outlaw of the board's region the player's realm can take, hiding at one of its places.
+			var region: String = s.content.region_of(str(data.boards[board].location))
+			var fitting: Array = template.wanted.filter(func(entry: Dictionary) -> bool: return int(entry.min_realm) <= int(s.player.realm) and entry.places.any(func(place: String) -> bool: return s.content.region_of(place) == region))
+			if fitting.is_empty():
+				continue
+			var entry: Dictionary = fitting[rng.randi_range(0, fitting.size() - 1)]
+			var places: Array = entry.places.filter(func(place: String) -> bool: return s.content.region_of(place) == region)
+			var enemy: Dictionary = s.content.enemies[str(entry.enemy)]
+			offer.wanted = {"name": s.Feuds.outlaw_name(s, rng), "enemy": str(entry.enemy), "place": str(places[rng.randi_range(0, places.size() - 1)]), "twist": rng.randf() < float(template.twist)}
+			offer.reward = {"stones": int(enemy.reward_stones) * int(template.reward_scale), "xp": int(enemy.reward_xp) * 2}
+		elif template.has("items"):
 			offer.item = template.items[rng.randi_range(0, template.items.size() - 1)]
 			offer.reward = {"stones": int(round(float(s.content.item(offer.item).price) * float(offer.count) * float(template.reward_scale))), "xp": 0}
 		elif template.has("places"):
@@ -59,6 +71,10 @@ static func text(s, quest: Dictionary) -> Dictionary:
 		values.enemy_name = s.content.enemies[quest.enemy].name
 	if quest.has("place"):
 		values.place_name = s.content.locations[quest.place].name
+	if quest.has("wanted"):
+		values.wanted_name = str(quest.wanted.name)
+		values.enemy_name = s.content.enemies[str(quest.wanted.enemy)].name
+		values.place_name = s.content.locations[str(quest.wanted.place)].name
 	return {"title": str(template.title).format(values), "text": str(template.text).format(values)}
 
 static func accept(s, key: String) -> String:
@@ -91,6 +107,8 @@ static func delivery_block(s, quest: Dictionary) -> String:
 		return "%s还不够 %d。" % [s.content.item(quest.item).name, int(quest.count)]
 	if quest.has("enemy") and int(quest.progress) < int(quest.count):
 		return "还差 %d %s。" % [int(quest.count) - int(quest.progress), str(s.content.commission_data.templates[quest.kind].get("unit", "头"))]
+	if quest.has("wanted") and int(quest.progress) < 1:
+		return "还未拿下%s。" % quest.wanted.name
 	if quest.has("place") and int(quest.progress) < 1:
 		return "还未去过%s。" % s.content.locations[quest.place].name
 	return ""

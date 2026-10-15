@@ -718,6 +718,14 @@ func _run() -> void:
 		await main.battle_action("flee")
 	check(not main.session.player.has("series"), "fleeing gives the escort up")
 	main.session.player.stage = stage_was
+	# A grudge on the road (feuds.gd): the ambush speaks in the avenger's name and states its price.
+	main.session.Feuds._add(main.session, {"name": "「独眼」韩青", "enemy": "rogue", "cause": "comrade", "region": "qingyun"})
+	main.session.pending_event = {"id": "grudge_ambush", "day": int(main.session.world.day), "values": {"grudge": str(main.session.world.grudges.back().id), "foe": "「独眼」韩青", "words": str(main.session.content.feuds.causes.comrade), "pay": str(main.session.Feuds.pay(main.session))}}
+	main.render()
+	check(_texts(main.center, "Label").contains("「独眼」韩青拦在路中") and _button("交出 %d 灵石" % main.session.Feuds.pay(main.session)) != null, "the ambush names the avenger and the price of peace")
+	main.choose("slip")
+	check(main.session.pending_event.is_empty() and main.session.journal_lines().any(func(line: String) -> bool: return line.contains("「独眼」韩青没有追上")), "the choice is told in their name")
+	main.session.world.grudges.clear()
 	main.session.player.location = "sect"
 	main.set_view("place")
 	# The end of a life.

@@ -4,6 +4,7 @@ var locations: Dictionary = {}
 var skills: Dictionary = {}
 var enemies: Dictionary = {}
 var series: Dictionary = {}
+var feuds: Dictionary = {}
 var rules: Dictionary = {}
 var sects: Dictionary = {}
 var realms: Array = []
@@ -142,6 +143,7 @@ func load_data() -> bool:
 	skills = parsed.skills
 	enemies = parsed.enemies
 	series = parsed.get("series", {})
+	feuds = parsed.get("feuds", {})
 	rules = parsed.rules
 	sects = parsed.sects
 	realms = parsed.realms
@@ -159,6 +161,22 @@ func _read_json(path: String) -> Variant:
 	return JSON.parse_string(file.get_as_text())
 
 func _validate() -> String:
+	# 恩怨与悬赏 (feuds.gd).
+	if not feuds.is_empty():
+		if not feuds.get("nicknames") is Array or feuds.nicknames.is_empty() or not feuds.get("avengers") is Array or feuds.avengers.any(func(enemy_id: Variant) -> bool: return not enemies.has(enemy_id)) or not feuds.get("causes") is Dictionary:
+			return "恩怨配置错误"
+		for key: String in ["ripen_days", "max", "pay", "bounty_wait_days"]:
+			if not _whole(feuds.get(key)) or int(feuds[key]) < 1:
+				return "恩怨配置错误：" + key
+		for key: String in ["grudge_chance", "ambush_chance"]:
+			if not (feuds.get(key) is float or feuds.get(key) is int) or float(feuds[key]) < 0.0 or float(feuds[key]) > 1.0:
+				return "恩怨配置错误：" + key
+		for sworn: Variant in feuds.get("seeded", []):
+			if not sworn is Dictionary or not sworn.get("flag") in world_flags or not enemies.has(sworn.get("enemy", "")) or not sworn.get("name") is String or not feuds.causes.has(sworn.get("cause", "")) or not regions.has(sworn.get("region", "")):
+				return "恩怨来源配置错误"
+		for event_id: String in ["grudge_ambush", "bounty_found", "bounty_twist"]:
+			if not events.has(event_id):
+				return "缺少恩怨事件：" + event_id
 	# 成串的战斗 (series.gd): where, how strong, the waves and what they pay.
 	for series_id: String in series:
 		var entry: Variant = series[series_id]
@@ -1480,6 +1498,8 @@ func _validate_condition(condition: Variant) -> String:
 			return _validate_condition(value)
 		"realm_at_least":
 			return "" if _whole(value) and int(value) < realms.size() else "境界条件超出已开放境界"
+		"grudge", "grudge_pay":
+			return "" if value is bool else "%s 须为真假" % key
 		"flag":
 			return "" if value in world_flags else "未知世界标记：%s" % value
 		"item_at_least":
@@ -1548,6 +1568,8 @@ func _validate_effects(effects: Variant) -> String:
 				ok = value is Array and not value.is_empty() and value.all(func(enemy_id: Variant) -> bool: return enemies.has(enemy_id))
 			"series":
 				ok = series.has(value)
+			"grudge_fight", "grudge_pay", "grudge_evade", "bounty_fight", "bounty_wait", "bounty_drop":
+				ok = value is bool and value
 			"hp", "qi":
 				ok = (value is int or value is float) and float(value) == floor(float(value))
 			"leave":

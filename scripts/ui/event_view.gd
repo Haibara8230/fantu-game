@@ -13,7 +13,9 @@ static func render_event(ui) -> void:
 	center.add_child(title_row)
 	title_row.add_child(ui.label(definition.title, 30, ui.GOLD))
 	title_row.add_child(ui.label(session.content.locations[session.player.location].name, 16, ui.MUTED))
-	var text: Label = ui.paragraph(definition.text, ui.INK)
+	# An event raised with values (an avenger's name, an outlaw's) shows them in its words.
+	var values: Dictionary = session.pending_event.get("values", {})
+	var text: Label = ui.paragraph(str(definition.text).format(values), ui.INK)
 	center.add_child(text)
 	ui.type_out(text, "event|%d" % session.pending_event.hash())
 	var choices := VBoxContainer.new()
@@ -21,7 +23,7 @@ static func render_event(ui) -> void:
 	center.add_child(choices)
 	for choice: Dictionary in definition.choices:
 		var choice_id: String = choice.id
-		var option: Button = ui.button(choice.label, func() -> void: ui.choose(choice_id), "" if session.choice_available(choice) else "条件不足")
+		var option: Button = ui.button(str(choice.label).format(values), func() -> void: ui.choose(choice_id), "" if session.choice_available(choice) else "条件不足")
 		option.disabled = not session.choice_available(choice)
 		choices.add_child(option)
 

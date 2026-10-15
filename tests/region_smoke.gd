@@ -239,7 +239,7 @@ func _tiannan_market() -> void:
 	reloaded.restore(JSON.parse_string(JSON.stringify(game.snapshot())))
 	check(reloaded.chronicle.entries.filter(func(entry: Dictionary) -> bool: return str(entry.get("at", "")) == "nanming").size() == here.size(), "and a save remembers where")
 	var board: Array = game.commission_offers("nanming").map(func(offer: Dictionary) -> String: return str(offer.kind))
-	check(board.all(func(kind: String) -> bool: return kind in ["fire_herbs", "fire_essence", "south_wolves", "fire_parts"]), "of its own kinds (%s)" % [board])
+	check(board.all(func(kind: String) -> bool: return kind in ["fire_herbs", "fire_essence", "south_wolves", "fire_parts", "wanted"]), "of its own kinds (%s)" % [board])
 
 ## The map turns to 天南 on its own page, and the new places render (without their art yet).
 func _tiannan_screens() -> void:

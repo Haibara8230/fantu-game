@@ -30,6 +30,7 @@ func _initialize() -> void:
 	_arenas()
 	_gear_and_talismans()
 	_packs_and_series()
+	_feuds()
 	print("DUEL MOVES: %d checks, %d failures" % [checks, failures])
 	quit(0 if failures == 0 else 1)
 
@@ -474,6 +475,107 @@ func _packs_and_series() -> void:
 	lost.player.hp = 0
 	lost.Combat._lose(lost)
 	check(not lost.player.has("series") and lost.journal_lines().any(func(line: String) -> bool: return line.contains("没能撑到最后")), "a lost ambush ends the escort")
+
+## 恩怨找上门 (B5) and 悬赏猎杀 (B6), feuds.gd: a beaten road foe's comrade remembers, the teahouse
+## whispers, and once ripe they waylay the player on a road of their region (fight, pay or slip away);
+## exposing 袁赤锋 sets 赤霄门 on the player once they can face it. Outlaws are posted by name, found
+## where they hide (some framed), and paid for at the board.
+func _feuds() -> void:
+	var game := _duel("rogue", "", 1)
+	game.content.feuds.grudge_chance = 1.0
+	game.player.location = "town"
+	game.battle.hp = 0
+	game.Combat._win(game)
+	check(game.world.grudges.size() == 1 and str(game.world.grudges[0].enemy) == "rogue" and str(game.world.grudges[0].region) == "qingyun", "a beaten 劫修's comrade remembers")
+	var foe: String = str(game.world.grudges[0].name)
+	check(foe.begins_with("「") and game.journal_lines().any(func(line: String) -> bool: return line.contains(foe + "记下了")), "by name (%s)" % foe)
+	check(game.Events.met(game, {"grudge": true}), "the teahouse may whisper of it")
+	var road: Dictionary = game.content.route_between("sect", "town")
+	game.content.feuds.ambush_chance = 1.0
+	check(not game.Feuds.ambush(game, road), "not before it ripens")
+	game.world.day = int(game.world.day) + 21
+	check(not game.Feuds.ambush(game, game.content.route_between("nanming", "chifeng")), "not on a road of another region")
+	check(game.Feuds.ambush(game, road) and str(game.pending_event.id) == "grudge_ambush" and str(game.pending_event.values.foe) == foe, "once ripe, on a road of its region, they waylay the player")
+	var kept := Session.new()
+	check(kept.restore(JSON.parse_string(JSON.stringify(game.snapshot()))) and kept.world.grudges.size() == 1 and str(kept.pending_event.values.foe) == foe, "the grudge and the ambush survive a save")
+	var stones := int(game.player.stones)
+	game.player.stones = stones + 100
+	game.choose_event("pay")
+	check(game.world.grudges.is_empty() and int(game.player.stones) == stones + 100 - game.Feuds.pay(game) and game.journal_lines().slice(-3).any(func(line: String) -> bool: return line.contains(foe) and line.contains("交出 %d 灵石" % game.Feuds.pay(game))), "paying it off settles it, in the avenger's name")
+	# Slipping away, then fighting it out.
+	game.Feuds._add(game, {"name": "「独眼」韩青", "enemy": "zhui_bing", "cause": "comrade", "region": "qingyun"})
+	game.world.day = int(game.world.day) + 21
+	game.Feuds.ambush(game, road)
+	game.choose_event("slip")
+	check(game.world.grudges.size() == 1 and int(game.world.grudges[0].since) == int(game.world.day), "slipping away only puts it off")
+	game.world.day = int(game.world.day) + 21
+	game.Feuds.ambush(game, road)
+	game.choose_event("fight")
+	check(str(game.battle.get("title", "")) == "「独眼」韩青" and str(game.battle.enemy_id) == "zhui_bing", "the avenger fights under their own name")
+	game.battle.hp = 0
+	game.Combat._win(game)
+	check(game.world.grudges.is_empty() and game.journal_lines().any(func(line: String) -> bool: return line.contains("了结")), "beaten, the account is closed")
+	# 袁赤锋 exposed: 赤霄门 sends its enforcer once the player can face a 金丹.
+	game.world.flags["bounty_exposed"] = true
+	game.Feuds.update(game)
+	game.Feuds.update(game)
+	check(game.world.grudges.size() == 1 and str(game.world.grudges[0].enemy) == "chixiao_zhifa", "exposing 袁赤锋 sets 赤霄门 against the player, once")
+	game.world.day = int(game.world.day) + 21
+	check(not game.Feuds.ambush(game, game.content.route_between("nanming", "chifeng")), "not while the player is short of 金丹")
+	game.player.realm = 2
+	check(game.Feuds.ambush(game, game.content.route_between("nanming", "chifeng")), "then on 天南's roads")
+	game.pending_event = {}
+	# 悬赏.
+	var hunter := Session.new()
+	hunter.encounters_enabled = false
+	hunter.new_game("悬赏", 62, ["metal", "wood", "fire"])
+	hunter.player.location = "market"
+	var posted: Dictionary = {}
+	for period: int in 60:
+		hunter.world.day = period * int(hunter.content.commission_data.period_days)
+		for offer: Dictionary in hunter.Commissions.offers(hunter, "market"):
+			if offer.has("wanted"):
+				posted = offer
+				break
+		if not posted.is_empty():
+			break
+	check(not posted.is_empty() and hunter.content.region_of(str(posted.wanted.place)) == "qingyun" and int(hunter.content.enemies[str(posted.wanted.enemy)].min_realm) == 0, "the market posts an outlaw of its region a 炼气 can take")
+	check(hunter.Commissions.text(hunter, posted).title.contains(str(posted.wanted.name)), "by name")
+	hunter.accept_commission(str(posted.key))
+	var quest: Dictionary = hunter.player.quests.back()
+	quest.wanted.twist = false
+	check(not hunter.delivery_block(quest).is_empty(), "nothing to claim before they are taken")
+	hunter.player.location = str(quest.wanted.place)
+	hunter.Events.check_location(hunter)
+	check(str(hunter.pending_event.get("id", "")) == "bounty_found" and str(hunter.pending_event.values.foe) == str(quest.wanted.name), "stopping where they hide finds them")
+	hunter.choose_event("wait")
+	hunter.Events.check_location(hunter)
+	check(hunter.pending_event.is_empty(), "held back, they are left alone a while")
+	hunter.world.day = int(quest.wanted.wait_until)
+	hunter.Events.check_location(hunter)
+	hunter.choose_event("fight")
+	check(str(hunter.battle.get("wanted", "")) == str(quest.key) and str(hunter.battle.title) == str(quest.wanted.name), "taking them on")
+	hunter.battle.hp = 0
+	hunter.Combat._win(hunter)
+	check(int(quest.progress) == 1 and hunter.journal_lines().any(func(line: String) -> bool: return line.contains("拿下了通缉犯")), "taken, the bounty waits at the board")
+	hunter.player.location = "market"
+	var purse := int(hunter.player.stones)
+	hunter.deliver_commission(str(quest.key))
+	check(int(hunter.player.stones) == purse + int(quest.reward.stones) and hunter.player.quests.is_empty(), "and is paid there")
+	var framed := Session.new()
+	framed.encounters_enabled = false
+	framed.new_game("悬赏", 62, ["metal", "wood", "fire"])
+	framed.player.location = "market"
+	framed.world.day = int(posted.key.get_slice(":", 1)) * int(framed.content.commission_data.period_days)
+	framed.accept_commission(str(posted.key))
+	var lie: Dictionary = framed.player.quests.back()
+	lie.wanted.twist = true
+	framed.player.location = str(lie.wanted.place)
+	var mind := int(framed.player.mind)
+	framed.Events.check_location(framed)
+	check(str(framed.pending_event.get("id", "")) == "bounty_twist", "sometimes the poster lied")
+	framed.choose_event("spare")
+	check(framed.player.quests.is_empty() and int(framed.player.mind) >= mind, "letting the framed one go drops the bounty")
 
 func _saves() -> void:
 	var game := _duel("wolf", "pounce")

@@ -233,6 +233,9 @@ static func restore(s, data: Variant) -> bool:
 			return false
 		if saved_battle.has("series") and not content.series.has(saved_battle.series):
 			return false
+		for named: String in ["title", "grudge", "wanted"]:
+			if saved_battle.has(named) and not saved_battle[named] is String:
+				return false
 		# Qi orbs (optional: duels saved before them draw a fresh hand when loaded).
 		for orbs_key: String in ["orbs", "foe_orbs"]:
 			var orbs: Variant = saved_battle.get(orbs_key, [])
@@ -260,6 +263,9 @@ static func restore(s, data: Variant) -> bool:
 			return false
 		if not _whole_nonnegative(saved_pending.get("day")) or int(saved_pending.day) != day or not saved_battle.is_empty():
 			return false
+		var values: Variant = saved_pending.get("values", {})
+		if not values is Dictionary or values.keys().any(func(key: Variant) -> bool: return not key is String or not values[key] is String):
+			return false
 	if not saved_ended.is_empty():
 		if not saved_ended.get("kind") in ["lifespan", "ascension"] or not _whole_nonnegative(saved_ended.get("day")) or int(saved_ended.day) > day or not saved_ended.get("choice", false) is bool:
 			return false
@@ -280,7 +286,23 @@ static func restore(s, data: Variant) -> bool:
 	var bonds: Variant = _valid_bonds(s, content, saved_world, day)
 	if bonds == null:
 		return false
+	# 恩怨 (feuds.gd, optional).
+	var grudges: Variant = saved_world.get("grudges", [])
+	if not grudges is Array or grudges.any(func(grudge: Variant) -> bool: return not grudge is Dictionary or not grudge.get("id") is String or not grudge.get("name") is String or not content.enemies.has(grudge.get("enemy", "")) or not content.feuds.get("causes", {}).has(grudge.get("cause", "")) or not _whole_nonnegative(grudge.get("since")) or not content.regions.has(grudge.get("region", ""))):
+		return false
+	var grudge_seeds: Variant = saved_world.get("grudge_seeds", {})
+	if not grudge_seeds is Dictionary or grudge_seeds.values().any(func(seen: Variant) -> bool: return not _whole_nonnegative(seen)) or not _whole_nonnegative(saved_world.get("grudge_serial", 0)):
+		return false
 	s.world = {"day": day, "flags": saved_world.flags.duplicate(), "events": events, "people": people, "seed": int(seed_value) if _whole_nonnegative(seed_value) else 0, "stock_sold": sold, "rumors": rumors, "quests_taken": taken, "storylines": storylines, "letters": letters, "talent_lives": shaped, "invites": bonds.invites, "loans": bonds.loans, "visit_period": bonds.visit_period, "caves": caves, "market_supply": supply, "companion": companion, "disciples": disciples.duplicate(), "sworn": sworn.duplicate()}
+	var kept_grudges: Array = []
+	for grudge: Dictionary in grudges:
+		kept_grudges.append({"id": str(grudge.id), "name": str(grudge.name), "enemy": str(grudge.enemy), "cause": str(grudge.cause), "since": int(grudge.since), "region": str(grudge.region)})
+	s.world["grudges"] = kept_grudges
+	var seen_seeds := {}
+	for key: String in grudge_seeds:
+		seen_seeds[key] = int(grudge_seeds[key])
+	s.world["grudge_seeds"] = seen_seeds
+	s.world["grudge_serial"] = int(saved_world.get("grudge_serial", 0))
 	s.populate()
 	var player: Dictionary = saved_player.duplicate(true)
 	for key: String in PLAYER_COUNTS:
@@ -368,6 +390,8 @@ static func restore(s, data: Variant) -> bool:
 	s.battle = battle
 	s.auction = _normalized_auction(saved_auction)
 	s.pending_event = {} if saved_pending.is_empty() else {"id": saved_pending.id, "day": int(saved_pending.day)}
+	if not saved_pending.get("values", {}).is_empty():
+		s.pending_event["values"] = saved_pending.values.duplicate()
 	s.ended = {} if saved_ended.is_empty() else {"kind": saved_ended.kind, "day": int(saved_ended.day)}
 	if bool(saved_ended.get("choice", false)):
 		s.ended["choice"] = true
@@ -822,9 +846,14 @@ static func _valid_quests(content, data: Variant) -> Variant:
 			continue
 		if quest.has("place") and not content.locations.has(quest.place):
 			continue
+		var wanted: Variant = quest.get("wanted", {})
+		if not wanted is Dictionary or (quest.has("wanted") and (not wanted.get("name") is String or not content.enemies.has(wanted.get("enemy", "")) or not content.locations.has(wanted.get("place", "")) or not wanted.get("twist") is bool or not _whole_nonnegative(wanted.get("wait_until", 0)))):
+			continue
 		var normalized: Dictionary = quest.duplicate(true)
 		for key: String in ["count", "days", "deadline", "progress"]:
 			normalized[key] = int(normalized[key])
+		if normalized.has("wanted") and normalized.wanted.has("wait_until"):
+			normalized.wanted.wait_until = int(normalized.wanted.wait_until)
 		# Commissions from before contribution pay none.
 		normalized.reward = {"stones": int(quest.reward.get("stones", 0)), "xp": int(quest.reward.get("xp", 0)), "contribution": int(quest.reward.get("contribution", 0))}
 		result.append(normalized)
