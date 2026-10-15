@@ -27,6 +27,8 @@ func _run() -> void:
 	_guardian()
 	_saves()
 	_chenxia()
+	_dihuo()
+	_flux()
 	await _scroll()
 	print("CAVES: %d checks, %d failures" % [checks, failures])
 	quit(0 if failures == 0 else 1)
@@ -40,6 +42,74 @@ func _game(stage: int = 0, born: Dictionary = {}, seed_value: int = 31) -> Sessi
 	game.player.hp = game.player.max_hp
 	game.player.qi = game.player.max_qi
 	return game
+
+## 地火熔窟 in 天南 (stage two, batch C): open once 天南 is known; a trap, a vein of 地火精, the 火蜥
+## guarding the way, and the 地火之心 that asks a 避火珠 or 神识 45.
+func _dihuo() -> void:
+	var game := _game(0)
+	game.player.realm = 1
+	game.player.stage = 0
+	game.refresh_realm_stats()
+	game.player.hp = game.player.max_hp
+	game.player.location = "chifeng"
+	check(game.cave_here().is_empty(), "the 熔窟 is not known before 天南 is")
+	game.world.flags["tiannan_known"] = true
+	check(game.cave_here() == "dihuo", "at 赤枫岭 the 地火熔窟 can be explored")
+	game.enter_room("dihuo", "tunnel")
+	game.enter_room("dihuo", "vein")
+	check(game.Caves.explored(game, "dihuo", "vein"), "the vein is reached")
+	var before := game.item_count("dihuo_jing")
+	game.enter_room("dihuo", "nest")
+	check(game.battle.get("enemy_id", "") == "huo_xi", "a 火蜥 guards its nest")
+	game.battle.hp = 1
+	game.battle.orbs = ["water"]
+	for skill_id: String in game.player.arts:
+		if game.battle.is_empty():
+			break
+		game.use_skill(skill_id)
+	if not game.battle.is_empty():
+		game.battle.hp = 0
+		game.use_skill(game.player.arts[0])
+	check(game.has_flag("dihuo_lizard_down") and game.Caves.reachable(game, "dihuo", "core"), "fallen, the way to the 地火之心 opens")
+	var blocked: String = game.Caves.enter_block(game, "dihuo", "core")
+	check(blocked.contains("避火珠") and blocked.contains("神识 45"), "the heat asks a 避火珠, or 神识 45 to find a cooler way (%s)" % blocked)
+	game.set_item_count("bihuo_zhu", 1)
+	check(game.Caves.enter_block(game, "dihuo", "core").is_empty(), "with a 避火珠 the heat gives way")
+	var keen := _game(0)
+	keen.world.flags["tiannan_known"] = true
+	keen.world.flags["dihuo_lizard_down"] = true
+	keen.player.location = "chifeng"
+	keen.world.caves = {"dihuo": {"explored": ["mouth", "tunnel", "nest"], "taken": [], "fortune": {}}}
+	keen.player.realm = 2
+	keen.player.stage = 0
+	keen.refresh_realm_stats()
+	check(keen.sense() >= 45 and keen.item_count("bihuo_zhu") == 0 and keen.Caves.enter_block(keen, "dihuo", "core").is_empty(), "a 金丹's 神识 finds the cooler way without the pearl")
+	check(game.content.item("bihuo_zhu").category == "tool" and game.content.item("dihuo_jing").category == "material", "the pearl is a tool, the 地火精 a material")
+	check(before >= 0 and game.content.locations.nanming.shop.any(func(good: Dictionary) -> bool: return good.item == "dihuo_jing") and game.content.locations.chifeng.gather.table.any(func(entry: Dictionary) -> bool: return entry.item == "dihuo_jing"), "地火精 is sold at 南明 and found now and then at 赤枫岭, so it never runs out")
+
+## 地火精 in the furnace: one more spent, one more affix on the piece.
+func _flux() -> void:
+	var plain := _game(0)
+	var fired := _game(0)
+	for game: Session in [plain, fired]:
+		game.player.location = "market"
+		game.player.stones = 500
+		game.set_item_count("ore_xuantie", 3)
+	fired.set_item_count("dihuo_jing", 1)
+	var plan := {"material": "ore_xuantie", "base": "sword", "element": "fire"}
+	var with_flux := plan.duplicate()
+	with_flux.flux = true
+	check(plain.Forge.block(plain, with_flux).contains("地火精"), "no 地火精, no flux")
+	plain.forge_item(plan.duplicate())
+	fired.forge_item(with_flux)
+	var made := func(game: Session) -> Dictionary:
+		for item_id: String in game.player.items:
+			if item_id.begins_with("e:"):
+				return game.content.item(item_id)
+		return {}
+	var a: Dictionary = made.call(plain)
+	var b: Dictionary = made.call(fired)
+	check(a.affixes.size() == 2 and b.affixes.size() == 3 and fired.item_count("dihuo_jing") == 0, "a 灵器 sword has two affixes, three with a 地火精 (%d, %d)" % [a.affixes.size(), b.affixes.size()])
 
 func _at_cave(game: Session) -> void:
 	game.world.flags["found_ruin"] = true

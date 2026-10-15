@@ -11,7 +11,7 @@ static func render(ui) -> void:
 	center.add_child(ui.label("炼 器", 26, ui.GOLD))
 	var held: Array[String] = forge.materials_held(session)
 	if held.is_empty():
-		center.add_child(ui.paragraph("行囊里没有炼器的材料。长街器铺卖青钢锭、青丝与青玉料；更好的玄铁、玄蚕丝与墨玉可到青云山执事堂以贡献兑换，古修洞府、沉霞古境与拍卖里也有。每炉要同一种材料 %d 份。" % int(forge.data(session).count)))
+		center.add_child(ui.paragraph("行囊里没有炼器的材料。长街器铺卖青钢锭、青丝与青玉料；更好的玄铁、玄蚕丝与墨玉可到青云山执事堂以贡献兑换，或到天南南明坊市的万宝楼买，古修洞府、沉霞古境与拍卖里也有。每炉要同一种材料 %d 份。" % int(forge.data(session).count)))
 		return
 	var plan: Dictionary = ui.forge_plan
 	if not str(plan.get("material", "")) in held:
@@ -58,11 +58,21 @@ static func render(ui) -> void:
 			ui.tint(pick, Color(elements[element].color))
 		pick.disabled = element == str(plan.element)
 		natures.add_child(pick)
+	# The flux (地火精): one more into the furnace, one more affix.
+	var flux_id: String = forge.flux_item(session)
+	if not flux_id.is_empty() and session.item_count(flux_id) > 0:
+		var fire := CheckBox.new()
+		fire.text = "投一枚%s（行囊 %d）：多出一条词条" % [session.content.item(flux_id).name, session.item_count(flux_id)]
+		fire.button_pressed = bool(plan.get("flux", false))
+		fire.toggled.connect(func(on: bool) -> void: ui.forge_plan.flux = on; ui.render())
+		center.add_child(fire)
+	else:
+		plan.erase("flux")
 	center.add_child(HSeparator.new())
 	# What will come out, before its random affixes.
 	var tier: int = forge.tier_of(session, material)
 	var plain: Dictionary = session.content.equipment(session.Arsenal.equipment_id(str(plan.base), tier, str(plan.element), [], 0))
-	var affixes := int(session.content.equipment_data.tiers[tier - 1].affixes)
+	var affixes: int = forge.affix_count(session, material, bool(plan.get("flux", false)))
 	center.add_child(ui.label("将炼出 · %s" % plain.get("name", ""), 20, ui.grade_color(plain)))
 	center.add_child(ui.paragraph(str(plain.get("description", "")) + ("　另有随机词条 %d 条。" % affixes if affixes > 0 else ""), ui.INK))
 	center.add_child(ui.label("耗%s %d 份　·　%d 灵石　·　耗时 %s" % [session.content.item(material).name, int(forge.data(session).count), forge.fee(session, material), Calendar.duration_text(forge.days(session, material))], 17, ui.GOLD))

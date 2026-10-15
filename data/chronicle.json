@@ -10,6 +10,7 @@
   "breakthrough": "闭关 {duration}，丹田化海，你已踏入{realm_name}。",
   "travel": "跋涉 {duration}，抵达{location_name}。",
   "fly": "御剑而行 {duration}，落在{location_name}。",
+  "lizard_down": "熔窟火蜥伏诛，火蜥巢后通往地火之心的岔道露了出来。",
   "route_fee": "付 {fee} 灵石，经{by}前往{location_name}。",
   "choose_sect": "开始研习{sect_name}传承，神通已更换。",
   "skill_shield": "施展{skill_name}，结成 {amount} 点护盾。",

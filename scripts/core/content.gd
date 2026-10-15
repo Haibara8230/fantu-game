@@ -540,6 +540,8 @@ func _validate_forge() -> String:
 			return "炼器须按品阶给出：" + key
 	if not data.get("materials") is Dictionary or data.materials.is_empty():
 		return "没有炼器材料。"
+	if data.has("flux") and (not data.flux is Dictionary or not items.has(data.flux.get("item", "")) or not _whole(data.flux.get("affixes")) or int(data.flux.affixes) < 1):
+		return "炼器的助熔之物无效。"
 	for material_id: String in data.materials:
 		var material: Variant = data.materials[material_id]
 		if not items.has(material_id) or str(items[material_id].get("category", "")) != "material" or not material is Dictionary or not equipment_data.materials.has(material.get("family", "")) or not _whole(material.get("tier")) or int(material.tier) < 1 or int(material.tier) > tiers:
@@ -687,6 +689,10 @@ func _validate_caves() -> String:
 				return "残魂须在有宝物可替的石室：" + where
 			if room.has("requires_sense") and not _whole(room.requires_sense):
 				return "禁制的神识要求无效：" + where
+			if room.has("heat"):
+				var heat: Variant = room.heat
+				if not heat is Dictionary or not items.has(heat.get("item", "")) or not _whole(heat.get("sense")) or not heat.get("text") is String:
+					return "热浪须写明避火之物、替代的神识与说明：" + where
 	return ""
 
 ## A room's `loot`: choices, each a non-empty list of {"stones" | "pills": n}, {"item": [id, n]},

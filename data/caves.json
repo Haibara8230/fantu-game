@@ -1,4 +1,39 @@
 {
+  "dihuo": {
+    "name": "地火熔窟",
+    "location": "chifeng",
+    "requires_flag": "tiannan_known",
+    "step_days": 2,
+    "rooms": [
+      {
+        "id": "mouth", "name": "熔窟口", "start": true, "links": ["tunnel"], "map": [0.08, 0.5],
+        "text": "赤枫林深处的山壁裂开一道口子，热风从里头一阵阵涌出来，吹得枫叶簌簌作响。"
+      },
+      {
+        "id": "tunnel", "name": "炙热甬道", "links": ["mouth", "vein", "nest"], "map": [0.3, 0.5],
+        "text": "甬道的石壁被烤得发红，脚下的岩缝里时不时冒出一缕青烟。",
+        "trap": {"names": ["地火喷涌", "熔岩暗流"], "sense": 30, "damage": [25, 40]}
+      },
+      {
+        "id": "vein", "name": "赤铜矿脉", "links": ["tunnel"], "map": [0.52, 0.22],
+        "text": "一道赤铜色的矿脉横贯洞壁，缝隙里嵌着几颗通红的火晶，像是凝住的炭火。",
+        "loot": [[{"item": ["dihuo_jing", 1]}, {"item": ["chiyan_flower", 2]}], [{"item": ["ore_xuantie", 3]}], [{"item": ["dihuo_jing", 2]}]],
+        "hidden": {"name": "矿脉深处的火晶簇", "sense": 38, "qi": 20, "loot": [[{"item": ["dihuo_jing", 2]}], [{"stones": 160}]]}
+      },
+      {
+        "id": "nest", "name": "火蜥巢", "links": ["tunnel", "core"], "map": [0.58, 0.72],
+        "text": "洞底一片焦黑的石台，碎骨与蜕下的鳞皮堆成一圈，石台上还留着灼热的爪印。",
+        "guardian": "huo_xi",
+        "loot": [[{"equipment": 3}], [{"item": ["silk_xuancan", 3]}]]
+      },
+      {
+        "id": "core", "name": "地火之心", "links": ["nest"], "map": [0.86, 0.5],
+        "heat": {"item": "bihuo_zhu", "sense": 45, "text": "再往里热浪扑面，衣角都要燎着"},
+        "text": "火脉在这里涌出地面，汇成一汪缓缓翻滚的岩浆池。池边的石头被烧成了半透明，里头封着细碎的火光。",
+        "loot": [[{"item": ["dihuo_jing", 3]}], [{"manual": 3}], [{"item": ["silk_yunjin", 3]}]]
+      }
+    ]
+  },
   "ruin": {
     "name": "古修洞府深处",
     "location": "ruin",

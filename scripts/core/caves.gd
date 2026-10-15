@@ -9,6 +9,7 @@ extends RefCounted
 ## - a guardian, a duel on entering; the rooms beyond it stay shut and its room's things wait until it
 ##   falls (its enemy's world flag);
 ## - a seal (`requires_sense`) that only 神识 enough opens;
+## - heat (`heat`): a protective thing in the pack (避火珠), or 神识 enough to find a cooler way round;
 ## - the remnant soul (fortune "remnant"), which offers its blessing before foundation.
 ## Whether the 千年石乳 and the remnant soul are there is decided once, when the cave is first entered
 ## (fortune.gd's chance, after the talents for fortune). Which of a room's `loot` choices lies there
@@ -100,6 +101,10 @@ static func enter_block(s, cave_id: String, room_id: String) -> String:
 		return "还找不到通往这里的路。"
 	if s.sense() < int(target.get("requires_sense", 0)):
 		return "门上的禁制须神识 %d 方能破开（你的神识 %d）。" % [int(target.requires_sense), s.sense()]
+	# Heat (地火之心): a 避火珠 in the pack, or 神识 enough to find a cooler way round.
+	var heat: Dictionary = target.get("heat", {})
+	if not heat.is_empty() and s.item_count(str(heat.item)) < 1 and s.sense() < int(heat.sense):
+		return "%s：须带%s，或神识 %d 寻出一条凉些的岔道（你的神识 %d）。" % [heat.text, s.content.item(str(heat.item)).name, int(heat.sense), s.sense()]
 	return ""
 
 ## Enters a room: the days pass, then its trap, things, guardian or remnant soul.

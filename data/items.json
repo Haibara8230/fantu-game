@@ -174,6 +174,13 @@
     "rarity": 3,
     "description": "极北寒铁淬出的精华，触手生寒，打造法宝的胚子。炼器时同一种材料用三份。"
   },
+  "dihuo_jing": {
+    "name": "地火精",
+    "category": "material",
+    "price": 70,
+    "rarity": 2,
+    "description": "赤枫岭地底火脉凝出的火精，赤红透亮，握久了掌心发烫。天南特产。炼器时投一枚入炉，炉温陡升，打出的宝物多带一条词条。"
+  },
   "silk_qing": {
     "name": "青丝",
     "category": "material",
@@ -340,5 +347,12 @@
     "rarity": 0,
     "aid": {"success": 15, "safe": true},
     "description": "贴在炉口，可稳住炉火。炼丹时用一张：成功率 +15%，武火失手也不会炸炉。"
+  },
+  "bihuo_zhu": {
+    "name": "避火珠",
+    "category": "tool",
+    "price": 240,
+    "rarity": 2,
+    "description": "一枚冰蓝色的珠子，贴身带着，周身三尺的热浪便退开去。带着它可进地火熔窟最深处的地火之心；没有它，须神识足够，寻出一条凉些的岔道。不会损耗。"
   }
 }

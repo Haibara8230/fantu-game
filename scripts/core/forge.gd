@@ -5,7 +5,8 @@ extends RefCounted
 ## the same family, an element chosen by the player (or none), a fee and days by the tier; the piece
 ## comes out at the material's tier. Its affixes and variant follow from the world seed and how many
 ## pieces have been forged in this life (player.forged), so loading a save forges the same piece again.
-## plan: {"base", "material", "element"}.
+## plan: {"base", "material", "element", "flux"}. With `flux` (data `flux`, 地火精 from 天南) one more is
+## spent and the piece comes out with that many more affixes.
 const Arsenal = preload("res://scripts/core/arsenal.gd")
 
 static func data(s) -> Dictionary:
@@ -58,7 +59,20 @@ static func block(s, plan: Dictionary) -> String:
 		return "%s不足 %d 份。" % [s.content.item(material).name, int(data(s).count)]
 	if int(s.player.stones) < fee(s, material):
 		return "灵石不足：炉火与器师要 %d 灵石。" % fee(s, material)
+	if bool(plan.get("flux", false)) and s.item_count(flux_item(s)) < 1:
+		return "行囊里没有%s。" % s.content.item(flux_item(s)).name
 	return ""
+
+## What can be thrown into the furnace for more affixes (地火精), or "" when nothing can.
+static func flux_item(s) -> String:
+	return str(data(s).get("flux", {}).get("item", ""))
+
+## The affixes a piece of this material comes out with, with or without the flux.
+static func affix_count(s, material_id: String, flux: bool) -> int:
+	var count := int(s.content.equipment_data.tiers[tier_of(s, material_id) - 1].affixes)
+	if flux and not flux_item(s).is_empty():
+		count += int(data(s).flux.affixes)
+	return mini(count, s.content.equipment_data.affixes.size())
 
 ## Forges the piece: materials and fee are spent, the days pass, the piece goes into the pack.
 static func forge(s, plan: Dictionary) -> String:
@@ -68,6 +82,9 @@ static func forge(s, plan: Dictionary) -> String:
 	var material := str(plan.material)
 	var tier := tier_of(s, material)
 	s.remove_item(material, int(data(s).count))
+	var flux := bool(plan.get("flux", false))
+	if flux:
+		s.remove_item(flux_item(s), 1)
 	s.player.stones = int(s.player.stones) - fee(s, material)
 	var made := int(s.player.get("forged", 0))
 	s.player["forged"] = made + 1
@@ -75,7 +92,7 @@ static func forge(s, plan: Dictionary) -> String:
 	rng.seed = hash([int(s.world.get("seed", 0)), "forge", made, str(plan.base), material])
 	var affixes: Array = s.content.equipment_data.affixes.keys()
 	affixes.sort()
-	var piece := Arsenal.equipment_id(str(plan.base), tier, str(plan.get("element", "none")), Arsenal._pick(rng, affixes, int(s.content.equipment_data.tiers[tier - 1].affixes)), rng.randi_range(0, 9))
+	var piece := Arsenal.equipment_id(str(plan.base), tier, str(plan.get("element", "none")), Arsenal._pick(rng, affixes, affix_count(s, material, flux)), rng.randi_range(0, 9))
 	var passed: Dictionary = s.advance_days(days(s, material))
 	if not s.ended.is_empty():
 		return s.conclude("", passed)
