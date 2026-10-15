@@ -373,6 +373,8 @@ func act(action: String) -> String:
 	match action:
 		"cultivate":
 			return cultivate(days)
+		"hunt":
+			return Combat.hunt(self)
 		"rest":
 			var passed := advance_days(rest_days())
 			if not ended.is_empty():

@@ -67,10 +67,12 @@ func _commissions() -> void:
 	# Deliveries count by the piece.
 	for offer: Dictionary in game.commission_offers("sect"):
 		if offer.has("item"):
+			var before := int(game.player.contribution)
+			var per := int(game.content.commission_data.templates[offer.kind].get("contribution", 0))
 			game.accept_commission(offer.key)
 			game.set_item_count(offer.item, int(offer.count))
 			game.deliver_commission(offer.key)
-			check(int(game.player.contribution) == 25 + 3 * int(offer.count), "an herb commission pays three a piece")
+			check(per > 0 and int(game.player.contribution) == before + per * int(offer.count), "a delivery pays its contribution by the piece (%s)" % offer.kind)
 			break
 	check(int(game.content.enemies.serpent.contribution) == 100 and int(game.content.sect_data.awards.tournament_champion) == 80, "great deeds for the sect count too")
 

@@ -11,6 +11,7 @@
   "travel": "跋涉 {duration}，抵达{location_name}。",
   "fly": "御剑而行 {duration}，落在{location_name}。",
   "lizard_down": "熔窟火蜥伏诛，火蜥巢后通往地火之心的岔道露了出来。",
+  "hunt_start": "在{location_name}历练 {duration}，撞上了{enemy_name}。",
   "enemy_charge": "{enemy_name}{move_name}，下一招非同小可。",
   "enemy_heal": "{enemy_name}{move_name}，回复 {amount} 气血。",
   "enemy_guard": "{enemy_name}{move_name}，结成 {amount} 点护盾。",

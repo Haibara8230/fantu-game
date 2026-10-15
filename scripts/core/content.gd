@@ -52,11 +52,11 @@ const FAVOR_MAX := 200
 const FAVOR_STAGES := [[0, "初识"], [40, "相熟"], [80, "友好"], [140, "信赖"], [200, "亲密"]]
 const ATTITUDES := {"friendly": "友善", "neutral": "中立", "hostile": "敌意"}
 const BUILT_IN_INTERACTIONS := ["talk", "gift", "help", "consult", "teach", "invite_spar", "invite_help", "companion", "disciple", "instruct", "sworn"]
-const PLAIN_ACTIONS := ["cultivate", "rest", "breakthrough", "study", "teach", "sell", "shop", "gather", "inn_rest", "search_ruin", "explore_cave", "forge", "ascend", "inquire", "commissions", "sect", "alchemy", "field", "tournament", "lease"]
+const PLAIN_ACTIONS := ["cultivate", "rest", "breakthrough", "study", "teach", "sell", "shop", "gather", "inn_rest", "search_ruin", "explore_cave", "forge", "ascend", "inquire", "commissions", "sect", "alchemy", "field", "tournament", "lease", "hunt"]
 const ITEM_CATEGORIES := {"herb": "灵草", "pill": "丹药", "treasure": "天材地宝", "manual": "玉简", "equipment": "宝物", "material": "材料", "recipe": "丹方", "tool": "器具", "quest": "信物"}
 # Milestones friends send word of, and the deeds the session counts besides victories ("win:<enemy>").
 const CONGRATS := ["breakthrough", "core", "nascent", "deity", "serpent", "champion", "summit", "calamity", "promotion"]
-const DEEDS := ["retreat_days", "duel", "trade", "gather", "commission", "help", "tournament_champion", "summit_champion"]
+const DEEDS := ["retreat_days", "duel", "trade", "gather", "hunt", "commission", "help", "tournament_champion", "summit_champion"]
 const STORY_STATES := ["none", "active", "done", "closed"]
 const Arsenal = preload("res://scripts/core/arsenal.gd")
 const Talents = preload("res://scripts/core/talents.gd")
@@ -239,6 +239,9 @@ func _validate() -> String:
 			return "敌人引用了未知贺信：" + enemy_id
 		if enemy.has("contribution") and (not _whole(enemy.contribution) or not enemy.has("world_flag")):
 			return "敌人的宗门贡献无效：" + enemy_id
+		for part: Variant in enemy.get("parts", []):
+			if not part is Dictionary or not items.has(part.get("item", "")) or not (part.get("chance") is float or part.get("chance") is int) or float(part.chance) <= 0.0 or float(part.chance) > 1.0 or not part.get("count") is Array or part.count.size() != 2 or not _whole(part.count[0]) or int(part.count[0]) < 1 or int(part.count[0]) > int(part.count[1]):
+				return "敌人掉落的材料配置无效：" + enemy_id
 		var moves_problem := _validate_moves(enemy)
 		if not moves_problem.is_empty():
 			return "敌人招式配置无效：%s（%s）" % [enemy_id, moves_problem]
@@ -1138,6 +1141,15 @@ func _validate_map() -> String:
 					return "可炼丹的地点缺少丹炉配置：" + location_id
 				if action == "lease" and not location.has("lease"):
 					return "出赁住处的地点缺少租约配置：" + location_id
+				if action == "hunt" and not location.has("hunt"):
+					return "可历练的地点缺少妖兽表：" + location_id
+		if location.has("hunt"):
+			var hunting: Variant = location.hunt
+			if not hunting is Dictionary or not _whole(hunting.get("days")) or int(hunting.days) < 1 or not hunting.get("table") is Array or hunting.table.is_empty():
+				return "历练配置无效：" + location_id
+			for entry: Variant in hunting.table:
+				if not entry is Dictionary or not enemies.has(entry.get("enemy", "")) or not _whole(entry.get("weight")) or int(entry.weight) < 1 or enemies[entry.enemy].has("world_flag"):
+					return "历练的妖兽须是可反复遇到的已知对手：" + location_id
 		if location.has("lease"):
 			var lease: Variant = location.lease
 			if not lease is Dictionary or not lease.get("flag") in world_flags or not lease.get("name") is String or not _whole(lease.get("days")) or int(lease.days) < 1 or not _whole(lease.get("price")) or int(lease.price) < 1:

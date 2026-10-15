@@ -362,11 +362,12 @@ func _commissions() -> void:
 	var hunt: Dictionary = game.player.quests[0]
 	game.travel("wild")
 	insight = int(game.player.insight)
+	# The order names a beast (妖狼, or a pack met while hunting); each one slain counts.
 	for kill: int in int(hunt.count):
-		game.start_battle("wolf")
+		game.Combat.begin_battle(game, str(hunt.enemy), "event")
 		game.battle.hp = 1
 		game.use_skill("sword")
-	check(int(game.player.quests[0].progress) == int(hunt.count), "slain wolves count toward the hunt")
+	check(int(game.player.quests[0].progress) == int(hunt.count), "slain beasts count toward the hunt (%s)" % hunt.enemy)
 	check(int(game.player.insight) == mini(insight + 20 * int(hunt.count), game.insight_needed()), "each won duel is insight")
 	check(game.delivery_block(game.player.quests[0]).contains("执事堂告示"), "the hunt is reported back at the board")
 	game.travel("sect")

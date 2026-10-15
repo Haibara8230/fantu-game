@@ -199,6 +199,132 @@
       "faces_right": true,
       "height_ratio": 0.85
     },
+    "wolf_pack": {
+      "preferred": "res://assets/art/battle/wolf_pack.png",
+      "texture": "res://assets/art/beasts_atlas_v1.png",
+      "columns": 2,
+      "rows": 2,
+      "frames": {
+        "idle": 0,
+        "prepare": 0,
+        "attack": 1,
+        "cast": 0,
+        "hit": 0,
+        "guard": 0
+      },
+      "faces_right": false,
+      "height_ratio": 0.64,
+      "frame_regions": [
+        [
+          0,
+          0,
+          768,
+          464
+        ],
+        [
+          768,
+          0,
+          768,
+          464
+        ],
+        [
+          0,
+          472,
+          768,
+          552
+        ],
+        [
+          768,
+          472,
+          768,
+          552
+        ]
+      ]
+    },
+    "shan_xiao": {
+      "preferred": "res://assets/art/battle/shan_xiao.png",
+      "texture": "res://assets/art/beasts_atlas_v1.png",
+      "columns": 2,
+      "rows": 2,
+      "frames": {
+        "idle": 0,
+        "prepare": 0,
+        "attack": 1,
+        "cast": 0,
+        "hit": 0,
+        "guard": 0
+      },
+      "faces_right": false,
+      "height_ratio": 0.64,
+      "frame_regions": [
+        [
+          0,
+          0,
+          768,
+          464
+        ],
+        [
+          768,
+          0,
+          768,
+          464
+        ],
+        [
+          0,
+          472,
+          768,
+          552
+        ],
+        [
+          768,
+          472,
+          768,
+          552
+        ]
+      ]
+    },
+    "huo_ya": {
+      "preferred": "res://assets/art/battle/huo_ya.png",
+      "texture": "res://assets/art/beasts_atlas_v1.png",
+      "columns": 2,
+      "rows": 2,
+      "frames": {
+        "idle": 0,
+        "prepare": 0,
+        "attack": 1,
+        "cast": 0,
+        "hit": 0,
+        "guard": 0
+      },
+      "faces_right": false,
+      "height_ratio": 0.64,
+      "frame_regions": [
+        [
+          0,
+          0,
+          768,
+          464
+        ],
+        [
+          768,
+          0,
+          768,
+          464
+        ],
+        [
+          0,
+          472,
+          768,
+          552
+        ],
+        [
+          768,
+          472,
+          768,
+          552
+        ]
+      ]
+    },
     "wolf": {
       "texture": "res://assets/art/beasts_atlas_v1.png",
       "columns": 2,
@@ -282,6 +408,48 @@
         ]
       ]
     },
+    "yanjia_xi": {
+      "preferred": "res://assets/art/battle/yanjia_xi.png",
+      "texture": "res://assets/art/beasts_atlas_v1.png",
+      "columns": 2,
+      "rows": 2,
+      "frames": {
+        "idle": 0,
+        "prepare": 0,
+        "attack": 1,
+        "cast": 0,
+        "hit": 0,
+        "guard": 0
+      },
+      "faces_right": false,
+      "height_ratio": 0.64,
+      "frame_regions": [
+        [
+          0,
+          0,
+          768,
+          464
+        ],
+        [
+          768,
+          0,
+          768,
+          464
+        ],
+        [
+          0,
+          472,
+          768,
+          552
+        ],
+        [
+          768,
+          472,
+          768,
+          552
+        ]
+      ]
+    },
     "den_wolf": {
       "texture": "res://assets/art/beasts_atlas_v1.png",
       "columns": 2,
@@ -296,6 +464,90 @@
       },
       "faces_right": false,
       "height_ratio": 0.64,
+      "frame_regions": [
+        [
+          0,
+          0,
+          768,
+          464
+        ],
+        [
+          768,
+          0,
+          768,
+          464
+        ],
+        [
+          0,
+          472,
+          768,
+          552
+        ],
+        [
+          768,
+          472,
+          768,
+          552
+        ]
+      ]
+    },
+    "qinglin_snake": {
+      "preferred": "res://assets/art/battle/qinglin_snake.png",
+      "texture": "res://assets/art/beasts_atlas_v1.png",
+      "columns": 2,
+      "rows": 2,
+      "frames": {
+        "idle": 2,
+        "prepare": 2,
+        "attack": 3,
+        "cast": 2,
+        "hit": 2,
+        "guard": 2
+      },
+      "faces_right": false,
+      "height_ratio": 0.83,
+      "frame_regions": [
+        [
+          0,
+          0,
+          768,
+          464
+        ],
+        [
+          768,
+          0,
+          768,
+          464
+        ],
+        [
+          0,
+          472,
+          768,
+          552
+        ],
+        [
+          768,
+          472,
+          768,
+          552
+        ]
+      ]
+    },
+    "chilian_snake": {
+      "preferred": "res://assets/art/battle/chilian_snake.png",
+      "texture": "res://assets/art/beasts_atlas_v1.png",
+      "columns": 2,
+      "rows": 2,
+      "frames": {
+        "idle": 2,
+        "prepare": 2,
+        "attack": 3,
+        "cast": 2,
+        "hit": 2,
+        "guard": 2
+      },
+      "faces_right": false,
+      "height_ratio": 0.83,
       "frame_regions": [
         [
           0,

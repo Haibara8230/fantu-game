@@ -15,6 +15,32 @@ static func start_battle(s, enemy_id: String, opponent_sect: String = "") -> Str
 		return "%s已经伏诛，此地重归安宁。" % enemy.name
 	return s.finish(begin_battle(s, enemy_id, "", opponent_sect))
 
+## 历练 (docs/COMBAT_PLAN.md, part two, B1): days in the wilds, then a beast from the place's table
+## (data/world.json location `hunt`) that the player's realm can face, fought as an encounter (a short
+## rest after). Drawn on the world stream, so the same world meets the same beasts.
+static func hunt(s) -> String:
+	var hunting: Dictionary = s.content.locations[str(s.player.location)].get("hunt", {})
+	var open: Array = hunting.get("table", []).filter(func(entry: Dictionary) -> bool: return int(s.content.enemies[entry.enemy].min_realm) <= int(s.player.realm))
+	if open.is_empty():
+		return "此地没有你应付得来的妖兽。"
+	var passed: Dictionary = s.advance_days(int(hunting.days))
+	if not s.ended.is_empty() or not s.pending_event.is_empty():
+		return s.conclude("", passed)
+	var total := 0
+	for entry: Dictionary in open:
+		total += int(entry.weight)
+	var roll: int = s.world_rng.randi_range(1, total)
+	var pick: String = open[0].enemy
+	for entry: Dictionary in open:
+		roll -= int(entry.weight)
+		if roll <= 0:
+			pick = str(entry.enemy)
+			break
+	s.record_deed("hunt")
+	var text: String = s.log_event("hunt_start", {"days": passed.elapsed, "location": s.player.location, "enemy": pick})
+	begin_battle(s, pick, "event")
+	return s.conclude(text, passed)
+
 ## Starts a duel without location checks; used by spots and by event effects (context "event").
 static func begin_battle(s, enemy_id: String, context: String = "", opponent_sect: String = "") -> String:
 	var enemy: Dictionary = s.content.enemies[enemy_id]
@@ -929,6 +955,15 @@ static func _win(s) -> String:
 			message = _with_milestones(message, s.congratulate(str(enemy.congrats)))
 		if enemy.has("contribution"):
 			message += " " + s.Sect.gain(s, int(enemy.contribution), "为宗门除去%s" % enemy.name)
+	# Beast parts (妖兽材料): each by its own chance, from the world stream.
+	var parts := {}
+	for part: Dictionary in enemy.get("parts", []):
+		if s.world_rng.randf() < float(part.chance):
+			var count: int = s.world_rng.randi_range(int(part.count[0]), int(part.count[1]))
+			s.add_item(str(part.item), count)
+			parts[str(part.item)] = int(parts.get(str(part.item), 0)) + count
+	if not parts.is_empty():
+		message += " " + s.log_event("loot", {"loot": s.loot_code(parts)})
 	if enemy.has("drops") and s.world_rng.randf() < float(enemy.drops.chance):
 		var tier: int = s.world_rng.randi_range(int(enemy.drops.tiers[0]), int(enemy.drops.tiers[1]))
 		var loot: String = "j:" + s.Arsenal.generate_technique(s.content, s.world_rng, tier) if s.world_rng.randf() < 0.5 else s.Arsenal.generate_equipment(s.content, s.world_rng, tier)

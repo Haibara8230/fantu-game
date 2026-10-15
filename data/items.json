@@ -174,6 +174,60 @@
     "rarity": 3,
     "description": "极北寒铁淬出的精华，触手生寒，打造法宝的胚子。炼器时同一种材料用三份。"
   },
+  "wolf_fang": {
+    "name": "妖狼牙",
+    "category": "material",
+    "price": 8,
+    "rarity": 0,
+    "description": "妖狼的獠牙，比寻常狼牙长出一截，尖上泛着青光。坊市收购，执事堂的委托也常要。"
+  },
+  "snake_gall": {
+    "name": "蛇胆",
+    "category": "herb",
+    "price": 12,
+    "rarity": 1,
+    "nature": "cold",
+    "description": "蛇妖的胆，墨绿发亮，性寒。炼丹时可作药引，调和偏热的主药。"
+  },
+  "shanxiao_pelt": {
+    "name": "山魈皮",
+    "category": "material",
+    "price": 10,
+    "rarity": 0,
+    "description": "偷药山魈的皮毛，粗硬耐磨，山民拿它缝药篓。坊市收购。"
+  },
+  "huoya_feather": {
+    "name": "火鸦羽",
+    "category": "material",
+    "price": 18,
+    "rarity": 1,
+    "description": "赤枫岭火鸦的翎羽，羽根还带着余温。天南的器铺与万宝楼都收。"
+  },
+  "yanjia_scale": {
+    "name": "岩甲片",
+    "category": "material",
+    "price": 22,
+    "rarity": 1,
+    "description": "岩甲蜥背上剥下的甲片，硬如青石。天南的器铺收来打护具的衬里。"
+  },
+  "yaodan_small": {
+    "name": "小妖丹",
+    "category": "treasure",
+    "price": 45,
+    "rarity": 1,
+    "toxin": 15,
+    "use": [{"xp": 150}],
+    "description": "炼气期妖兽体内凝出的妖丹，只有黄豆大小。炼化可增修为 150，但妖气驳杂，留下丹毒。"
+  },
+  "yaodan": {
+    "name": "妖丹",
+    "category": "treasure",
+    "price": 160,
+    "rarity": 2,
+    "toxin": 25,
+    "use": [{"xp": 500}],
+    "description": "筑基期妖兽的妖丹，温润如珠。炼化可增修为 500，丹毒也更重。"
+  },
   "dihuo_jing": {
     "name": "地火精",
     "category": "material",

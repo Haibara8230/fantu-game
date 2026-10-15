@@ -89,8 +89,9 @@
       "terrain": "ridge",
       "map": [0.2, 0.6],
       "gather": {"picks": [1, 2], "table": [{"item": "huichun_grass", "weight": 50}, {"item": "ninglu_grass", "weight": 50}]},
+      "hunt": {"days": 2, "table": [{"enemy": "shan_xiao", "weight": 3}, {"enemy": "qinglin_snake", "weight": 2}, {"enemy": "wolf", "weight": 1}]},
       "spots": [
-        {"id": "pines", "tag": [0.42, 0.52], "name": "松林", "description": "古松参天，林下偶见灵草。", "actions": ["gather"]}
+        {"id": "pines", "tag": [0.42, 0.52], "name": "松林", "description": "古松参天，林下偶见灵草；偷药的山魈和青鳞蛇也在林子里出没。", "actions": ["gather", "hunt"]}
       ]
     },
     "wild": {
@@ -102,8 +103,9 @@
       "detour": "ridge",
       "map": [0.44, 0.8],
       "gather": {"picks": [1, 3], "table": [{"item": "huichun_grass", "weight": 60}, {"item": "chiyan_flower", "weight": 35}, {"item": "lingzhi", "weight": 2}]},
+      "hunt": {"days": 2, "table": [{"enemy": "wolf", "weight": 3}, {"enemy": "wolf_pack", "weight": 2}, {"enemy": "qinglin_snake", "weight": 2}, {"enemy": "chilian_snake", "weight": 3}]},
       "spots": [
-        {"id": "entrance", "tag": [0.3, 0.6], "name": "谷口", "description": "乱石嶙峋，常有妖狼出没。", "actions": ["battle:wolf"]},
+        {"id": "entrance", "tag": [0.3, 0.6], "name": "谷口", "description": "乱石嶙峋，常有妖狼出没；再往里去，狼群与蛇妖更多。", "actions": ["battle:wolf", "hunt"]},
         {"id": "slope", "tag": [0.54, 0.56], "name": "灵草坡", "description": "向阳的缓坡上灵草丛生。", "actions": ["gather"]},
         {"id": "spring", "tag": [0.37, 0.36], "name": "深谷灵泉", "description": "谷底的灵泉被赤鳞妖蟒盘踞。", "actions": ["battle:serpent", "battle:mo_xiu"]}, {"id": "chenxia", "tag": [0.55, 0.3], "name": "沉霞古境", "description": "晚霞沉进谷底的雾里，雾中现出一道石门。古境一甲子开一回，开一年便合上。", "actions": ["explore_cave"], "requires_flag": "chenxia_open"},
         {"id": "eye", "tag": [0.12, 0.36], "name": "灵眼", "description": "山壁裂隙后藏着一眼灵泉，天地灵气在此汇聚成漩。在这里闭关突破，把握更大。", "actions": ["breakthrough"], "requires_flag": "spirit_eye_found"}
@@ -169,8 +171,9 @@
       "map": [0.36, 0.42],
       "hidden_until": "tiannan_known",
       "gather": {"picks": [1, 3], "table": [{"item": "chiyan_flower", "weight": 52}, {"item": "huichun_grass", "weight": 30}, {"item": "ninglu_grass", "weight": 15}, {"item": "dihuo_jing", "weight": 3}]},
+      "hunt": {"days": 2, "table": [{"enemy": "huo_ya", "weight": 3}, {"enemy": "yanjia_xi", "weight": 2}, {"enemy": "wolf_pack", "weight": 1}]},
       "spots": [
-        {"id": "maples", "tag": [0.45, 0.5], "name": "赤枫林", "description": "火红的枫林下，赤炎花一丛丛开在温热的石缝里，运气好时还能在石缝里拾到一颗地火精。", "actions": ["gather"]},
+        {"id": "maples", "tag": [0.45, 0.5], "name": "赤枫林", "description": "火红的枫林下，赤炎花一丛丛开在温热的石缝里，运气好时还能在石缝里拾到一颗地火精；林间火鸦成群，岩缝里卧着岩甲蜥。", "actions": ["gather", "hunt"]},
         {"id": "cavern", "tag": [0.72, 0.36], "name": "地火熔窟", "description": "枫林深处的山壁裂开一道口子，热风一阵阵涌出来。据说里头连着火脉，还盘踞着一头火蜥。", "actions": ["explore_cave"]}
       ]
     },
@@ -402,6 +405,12 @@
     }
   },
   "enemies": {
+    "wolf_pack": {"moves": [{"id": "swarm", "name": "群扑", "hits": 3, "power": 0.4, "weight": 3}, {"id": "howl", "name": "头狼嚎叫", "kind": "focus", "focus": [0.5, 2], "weight": 1}, {"id": "rend", "name": "撕咬", "power": 0.7, "inflict": {"bleed": [2, 2]}, "weight": 2}], "name": "狼群", "element": "metal", "hp": 150, "damage_min": 8, "damage_max": 12, "reward_stones": 10, "reward_xp": 35, "reward_herbs": 0, "locations": [], "min_realm": 0, "parts": [{"item": "wolf_fang", "chance": 0.8, "count": [1, 3]}, {"item": "yaodan_small", "chance": 0.15, "count": [1, 1]}]},
+    "qinglin_snake": {"moves": [{"id": "bite", "name": "咬", "weight": 3}, {"id": "fang", "name": "毒牙", "power": 0.8, "inflict": {"bleed": [2, 3]}, "weight": 2}, {"id": "wrap", "name": "缠绕", "power": 0.5, "inflict": {"entangle": [1, 1]}, "weight": 1}, {"id": "shed", "name": "蜕皮", "kind": "heal", "heal": 0.2, "once": true, "weight": 2}], "name": "青鳞蛇", "element": "wood", "hp": 95, "damage_min": 8, "damage_max": 12, "reward_stones": 8, "reward_xp": 25, "reward_herbs": 0, "locations": [], "min_realm": 0, "parts": [{"item": "snake_gall", "chance": 0.6, "count": [1, 1]}]},
+    "shan_xiao": {"moves": [{"id": "claw", "name": "抓挠", "weight": 3}, {"id": "stone", "name": "掷石", "power": 0.8, "inflict": {"weaken": [0.2, 2]}, "weight": 2}, {"id": "climb", "name": "攀树躲闪", "kind": "guard", "shield": 0.15, "weight": 1}], "name": "偷药山魈", "element": "earth", "hp": 110, "damage_min": 9, "damage_max": 13, "reward_stones": 6, "reward_xp": 30, "reward_herbs": 2, "locations": [], "min_realm": 0, "parts": [{"item": "shanxiao_pelt", "chance": 0.7, "count": [1, 1]}]},
+    "chilian_snake": {"moves": [{"id": "tail", "name": "甩尾", "weight": 3}, {"id": "coil", "name": "缠身", "power": 0.6, "inflict": {"entangle": [1, 2]}, "weight": 2}, {"id": "bites", "name": "连咬", "hits": 2, "power": 0.6, "inflict": {"bleed": [3, 2]}, "weight": 2}, {"id": "spit", "name": "喷毒", "power": 0.7, "inflict": {"wound": [0.5, 2]}, "weight": 1}], "name": "赤练妖蛇", "element": "fire", "hp": 190, "damage_min": 13, "damage_max": 18, "reward_stones": 30, "reward_xp": 90, "reward_herbs": 0, "locations": [], "min_realm": 1, "parts": [{"item": "snake_gall", "chance": 0.8, "count": [1, 2]}, {"item": "yaodan", "chance": 0.2, "count": [1, 1]}]},
+    "huo_ya": {"moves": [{"id": "peck", "name": "群啄", "hits": 3, "power": 0.45, "weight": 3}, {"id": "feather", "name": "火羽", "power": 0.7, "inflict": {"burn": [3, 3]}, "weight": 2}, {"id": "scatter", "name": "四散盘旋", "kind": "guard", "shield": 0.1, "weight": 1}], "name": "火鸦群", "element": "fire", "hp": 200, "damage_min": 14, "damage_max": 19, "reward_stones": 25, "reward_xp": 80, "reward_herbs": 0, "locations": [], "min_realm": 1, "parts": [{"item": "huoya_feather", "chance": 0.8, "count": [1, 3]}, {"item": "yaodan_small", "chance": 0.2, "count": [1, 1]}]},
+    "yanjia_xi": {"moves": [{"id": "ram", "name": "甲撞", "weight": 3}, {"id": "armor", "name": "结岩甲", "kind": "guard", "shield": 0.18, "weight": 2}, {"id": "crush", "name": "崩岩", "kind": "charge", "power": 1.6, "weight": 1}], "name": "岩甲蜥", "element": "earth", "hp": 280, "damage_min": 15, "damage_max": 22, "reward_stones": 35, "reward_xp": 100, "reward_herbs": 0, "locations": [], "min_realm": 1, "parts": [{"item": "yanjia_scale", "chance": 0.8, "count": [1, 2]}, {"item": "yaodan", "chance": 0.2, "count": [1, 1]}]},
     "yue_disciple": {"moves": [{"id": "fist", "name": "山拳", "weight": 3}, {"id": "armor", "name": "结岩甲", "kind": "guard", "shield": 0.12, "weight": 1}, {"id": "quake", "name": "崩山", "kind": "charge", "power": 1.5, "weight": 1}], "name": "玄岳弟子", "element": "earth", "hp": 170, "damage_min": 10, "damage_max": 15, "reward_stones": 20, "reward_xp": 45, "reward_herbs": 0, "locations": ["xuanyue_gate"], "min_realm": 1, "human": true, "sect": "xuanyue"},
     "huo_xi": {"moves": [{"id": "claw", "name": "火爪", "weight": 3}, {"id": "breath", "name": "喷火", "power": 0.7, "inflict": {"burn": [4, 3]}, "weight": 2}, {"id": "curl", "name": "蜷甲", "kind": "guard", "shield": 0.1, "weight": 1}], "phases": [{"below": 0.35, "name": "鳞片泛红", "text": "火蜥背上的鳞片一片片烧得通红，热浪逼得人睁不开眼。", "power": 1.2}], "name": "熔窟火蜥", "element": "fire", "hp": 300, "damage_min": 20, "damage_max": 28, "reward_stones": 60, "reward_xp": 220, "reward_herbs": 0, "locations": [], "min_realm": 1, "world_flag": "dihuo_lizard_down", "flag_event": "lizard_down"},
     "disciple": {"moves": [{"id": "cut", "name": "剑招", "weight": 3}, {"id": "twin", "name": "连环剑", "hits": 2, "power": 0.6, "weight": 2}], 
@@ -719,6 +728,7 @@
   ],
   "actions": {
     "cultivate": 30,
+    "hunt": 2,
     "rest": 30,
     "gather": 5,
     "sell": 0,

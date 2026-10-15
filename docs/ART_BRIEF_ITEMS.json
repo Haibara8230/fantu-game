@@ -684,6 +684,83 @@
       ],
       "subject": "玉简的共用图：传授「元气」一类心法的玉简。",
       "prompt": "A slim rectangular jade slip with a faint inner glow hinting at a 元气 technique (motion lines or a small aura shape inside the jade, no characters or writing), tied with a short silk cord."
+    },
+    {
+      "id": "item_wolf_fang",
+      "kind": "item",
+      "target": "assets/art/items/wolf_fang.png",
+      "size": [
+        512,
+        512
+      ],
+      "subject": "妖狼牙：妖狼的獠牙，比寻常狼牙长出一截，尖上泛着青光。坊市收购，执事堂的委托也常要。",
+      "prompt": "Draw the item described (Chinese is content to illustrate, never write it): 妖狼牙。妖狼的獠牙，比寻常狼牙长出一截，尖上泛着青光。坊市收购，执事堂的委托也常要。"
+    },
+    {
+      "id": "item_snake_gall",
+      "kind": "item",
+      "target": "assets/art/items/snake_gall.png",
+      "size": [
+        512,
+        512
+      ],
+      "subject": "蛇胆：蛇妖的胆，墨绿发亮，性寒。炼丹时可作药引，调和偏热的主药。",
+      "prompt": "Draw the item described (Chinese is content to illustrate, never write it): 蛇胆。蛇妖的胆，墨绿发亮，性寒。炼丹时可作药引，调和偏热的主药。"
+    },
+    {
+      "id": "item_shanxiao_pelt",
+      "kind": "item",
+      "target": "assets/art/items/shanxiao_pelt.png",
+      "size": [
+        512,
+        512
+      ],
+      "subject": "山魈皮：偷药山魈的皮毛，粗硬耐磨，山民拿它缝药篓。坊市收购。",
+      "prompt": "Draw the item described (Chinese is content to illustrate, never write it): 山魈皮。偷药山魈的皮毛，粗硬耐磨，山民拿它缝药篓。坊市收购。"
+    },
+    {
+      "id": "item_huoya_feather",
+      "kind": "item",
+      "target": "assets/art/items/huoya_feather.png",
+      "size": [
+        512,
+        512
+      ],
+      "subject": "火鸦羽：赤枫岭火鸦的翎羽，羽根还带着余温。天南的器铺与万宝楼都收。",
+      "prompt": "Draw the item described (Chinese is content to illustrate, never write it): 火鸦羽。赤枫岭火鸦的翎羽，羽根还带着余温。天南的器铺与万宝楼都收。"
+    },
+    {
+      "id": "item_yanjia_scale",
+      "kind": "item",
+      "target": "assets/art/items/yanjia_scale.png",
+      "size": [
+        512,
+        512
+      ],
+      "subject": "岩甲片：岩甲蜥背上剥下的甲片，硬如青石。天南的器铺收来打护具的衬里。",
+      "prompt": "Draw the item described (Chinese is content to illustrate, never write it): 岩甲片。岩甲蜥背上剥下的甲片，硬如青石。天南的器铺收来打护具的衬里。"
+    },
+    {
+      "id": "item_yaodan_small",
+      "kind": "item",
+      "target": "assets/art/items/yaodan_small.png",
+      "size": [
+        512,
+        512
+      ],
+      "subject": "小妖丹：炼气期妖兽体内凝出的妖丹，只有黄豆大小。炼化可增修为 150，但妖气驳杂，留下丹毒。",
+      "prompt": "Draw the item described (Chinese is content to illustrate, never write it): 小妖丹。炼气期妖兽体内凝出的妖丹，只有黄豆大小。炼化可增修为 150，但妖气驳杂，留下丹毒。"
+    },
+    {
+      "id": "item_yaodan",
+      "kind": "item",
+      "target": "assets/art/items/yaodan.png",
+      "size": [
+        512,
+        512
+      ],
+      "subject": "妖丹：筑基期妖兽的妖丹，温润如珠。炼化可增修为 500，丹毒也更重。",
+      "prompt": "Draw the item described (Chinese is content to illustrate, never write it): 妖丹。筑基期妖兽的妖丹，温润如珠。炼化可增修为 500，丹毒也更重。"
     }
   ]
 }

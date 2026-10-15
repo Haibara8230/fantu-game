@@ -63,6 +63,7 @@
 | 青云山「山门」场景图与魔潮魔将立绘（2026-10-14 加入） | 尚无；魔将借用洞府散修的图 | 场景图放到 `assets/art/scenes/sect_gate.png`，再从 `tests/art_smoke.gd` 的 `PENDING_SPOTS` 删去 |
 | 白鹭渡「天河渡口」场景图与飞升结局插图（2026-10-14 加入） | 尚无 | 场景图放到 `assets/art/scenes/ferry_crossing.png`，再从 `tests/art_smoke.gd` 的 `PENDING_SPOTS` 删去 |
 | 袁赤锋、韩烬立绘（2026-10-15 加入） | 尚无，资料卡显示首字印章 | 与许清和、顾长庚同规格的专属立绘，登记在 `data/art.json` 的 `portrait_art` |
+| 新妖兽斗法图（2026-10-15 加入） | 狼群、偷药山魈、火鸦群借妖狼图集，青鳞蛇、赤练妖蛇借妖蟒，岩甲蜥借影狼 | 放到 `assets/art/battle/<敌人编号>.png`（wolf_pack、shan_xiao、huo_ya、qinglin_snake、chilian_snake、yanjia_xi），与所借图集同格式即自动替换 |
 | 熔窟火蜥立绘（2026-10-15 加入） | 借用石窟影狼的图 | `assets/art/battle/huo_xi.png`，与妖狼图集同规格；放好即自动替换（`art.json` 的 `preferred`） |
 | 天南舆图与三处地点的图（2026-10-15 加入） | 天南舆图（`assets/art/map/region_tiannan.png`）、南明坊市、赤枫岭、赤霄门的整屏背景与各场景图一张也没有；舆图用代码画的山水，场景用 `landscape.gd` | 提示词与规格见 `docs/ART_BRIEF_TIANNAN.json`（舆图、三处整屏、八张场景、两张立绘与火蜥图集）；画好后从 `tests/art_smoke.gd` 的 `PENDING_LOCATIONS` 删去 |
 | 物品立绘（2026-10-15 加入） | 45 种物品（灵草、丹药、材料、丹方、器具、信物）一张也没有；`tests/content_smoke.gd` 只报告覆盖数 | 提示词见 `docs/ART_BRIEF_ITEMS.json`（45 种物品、8 种宝物底材与 9 类玉简的共用图）。放到 `assets/art/items/` 即在行囊显示（`art_library.gd` 的 `item_icon_path`，按约定的文件名查找，`data/art.json` 的 `item_art` 可另指），九成以上后把测试改为必查 |

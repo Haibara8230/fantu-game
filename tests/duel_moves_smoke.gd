@@ -25,6 +25,7 @@ func _initialize() -> void:
 	_rhythm()
 	_phases()
 	_saves()
+	_hunts()
 	print("DUEL MOVES: %d checks, %d failures" % [checks, failures])
 	quit(0 if failures == 0 else 1)
 
@@ -135,6 +136,46 @@ func _phases() -> void:
 	game.battle.hp = 200
 	Combat._plan_move(game)
 	check(int(game.battle.phase) == 1, "a phase once entered stays")
+
+## 历练 (part two, B1): days in the wilds, then a beast the realm can face; beasts leave parts that
+## have uses: 蛇胆 a cold 药引, 妖丹 修为 at the price of 丹毒.
+func _hunts() -> void:
+	var game := Session.new()
+	game.encounters_enabled = false
+	game.new_game("历练", 52, ["metal", "wood", "fire"])
+	game.player.location = "wild"
+	check(game.available_here("hunt"), "the valley's mouth can be hunted")
+	var met := {}
+	for trip: int in 12:
+		var day := int(game.world.day)
+		game.act("hunt")
+		if game.battle.is_empty():
+			continue
+		check(int(game.world.day) == day + 2, "a hunt takes two days before the beast is met")
+		met[str(game.battle.enemy_id)] = true
+		game.battle.hp = 1
+		game.Combat._win(game)
+		game.player.hp = game.player.max_hp
+	check(not met.has("chilian_snake") and met.size() >= 2, "a 炼气 disciple meets the valley's lesser beasts, never the 赤练妖蛇 (%s)" % [met.keys()])
+	var strong := Session.new()
+	strong.encounters_enabled = false
+	strong.new_game("历练", 53, ["metal", "wood", "fire"])
+	strong.player.realm = 1
+	strong.refresh_realm_stats()
+	strong.player.location = "wild"
+	for beast: Dictionary in strong.content.enemies.values():
+		for part: Dictionary in beast.get("parts", []):
+			part.chance = 1.0
+	strong.Combat.begin_battle(strong, "chilian_snake", "event")
+	strong.battle.hp = 1
+	strong.Combat._win(strong)
+	check(strong.item_count("snake_gall") >= 1 and strong.item_count("yaodan") == 1 and strong.journal_lines().any(func(line: String) -> bool: return line.contains("蛇胆")), "a fallen 赤练妖蛇 leaves its gall and its 妖丹")
+	check(strong.content.item("snake_gall").category == "herb" and strong.Alchemy.nature(strong, "snake_gall") == "cold", "蛇胆 serves the furnace as a cold 药引")
+	var xp := int(strong.player.xp)
+	var toxin: int = strong.Alchemy.toxin(strong)
+	strong.use_item("yaodan")
+	check(int(strong.player.xp) == xp + 500 and strong.Alchemy.toxin(strong) > toxin, "refining a 妖丹 brings 修为 and 丹毒")
+	check(not strong.commission_offers("sect").is_empty(), "the boards still post")
 
 func _saves() -> void:
 	var game := _duel("wolf", "pounce")

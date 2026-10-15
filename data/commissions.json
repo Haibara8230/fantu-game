@@ -22,7 +22,7 @@
     "hunt": {
       "weight": 2,
       "boards": ["sect", "market"],
-      "enemies": ["wolf"],
+      "enemies": ["wolf", "wolf_pack"],
       "count": [1, 3],
       "days": 60,
       "reward_stones": 30,
@@ -42,6 +42,28 @@
       "contribution": 25,
       "title": "巡视{place_name}",
       "text": "宗门差事：到{place_name}走一趟，看看有无异状，{days} 日内回{board_name}复命。"
+    },
+    "beast_parts": {
+      "weight": 2,
+      "boards": ["sect", "market"],
+      "items": ["wolf_fang", "shanxiao_pelt", "snake_gall"],
+      "count": [2, 4],
+      "days": 60,
+      "reward_scale": 2.2,
+      "contribution": 4,
+      "title": "收购{item_name}",
+      "text": "需要 {count} 件{item_name}，{days} 日内交到{board_name}。到野外历练时从妖兽身上取得。"
+    },
+    "fire_parts": {
+      "weight": 2,
+      "boards": ["nanming"],
+      "min_realm": 1,
+      "items": ["huoya_feather", "yanjia_scale"],
+      "count": [2, 4],
+      "days": 60,
+      "reward_scale": 2.0,
+      "title": "收购{item_name}",
+      "text": "器铺要 {count} 件{item_name}，{days} 日内交到{board_name}。赤枫岭历练时可得。"
     },
     "fire_herbs": {
       "weight": 3,
@@ -67,7 +89,7 @@
     "south_wolves": {
       "weight": 2,
       "boards": ["nanming"],
-      "enemies": ["wolf"],
+      "enemies": ["wolf", "huo_ya"],
       "count": [1, 3],
       "days": 60,
       "reward_stones": 45,

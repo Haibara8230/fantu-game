@@ -179,6 +179,14 @@ static func _spot_action(ui, grid: GridContainer, action: String) -> void:
 			_action(ui, grid, "翻找石室  ·  " + ui.duration("search_ruin"), "search_ruin", "或得灵石、灵草，偶有丹药；搜过后需隔些时日")
 		"study", "explore_cave":
 			pass
+		"hunt":
+			var hunting: Dictionary = session.content.locations[session.player.location].hunt
+			var beasts: Array[String] = []
+			for entry: Dictionary in hunting.table:
+				var beast: Dictionary = session.content.enemies[entry.enemy]
+				if int(beast.min_realm) <= int(session.player.realm):
+					beasts.append(str(beast.name))
+			_action(ui, grid, "历练  ·  %s" % Calendar.duration_text(int(hunting.days)), "hunt", "在野外转上几日，撞上什么便斗什么。此地可能遇上：%s；妖兽身上取得材料与妖丹" % ("、".join(beasts) if not beasts.is_empty() else "（你还应付不来此地的妖兽）"))
 		"lease":
 			var lease: Dictionary = session.Leases.offer(session)
 			var last: int = session.Leases.until(session, str(lease.flag))
