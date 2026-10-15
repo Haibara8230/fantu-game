@@ -94,6 +94,9 @@ func _run() -> void:
 	await _shot("10_goals")
 	main.set_view("messages")
 	await _shot("11_messages")
+	# An appointment ahead to mark on the retreat scroll: the invitation makes the auction known.
+	s.set_item_count("auction_invitation", 1)
+	s.set_wake("special_auction", true)
 	main.set_view("retreat")
 	await _shot("12_retreat")
 	main.set_view("breakthrough")
