@@ -69,9 +69,18 @@ static func render(ui) -> void:
 	var side := VBoxContainer.new()
 	side.add_theme_constant_override("separation", 4)
 	row.add_child(side)
-	var flee: Button = ui.button("撤离 · " + ui.duration("flee"), func() -> void: ui.battle_action("flee"), "保留资源，耗时 %s；落败可休整后继续，最多损失 10 灵石" % ui.duration("flee"))
+	var odds := "比斗中随时可认输" if session.battle.get("context", "") in ["spar", "tournament", "summit", "arena"] else "约 %d%% 能脱身，脱不了身便挨对手一回合" % int(round(session.Combat.flee_chance(session) * 100.0))
+	var flee: Button = ui.button("撤离 · " + ui.duration("flee"), func() -> void: ui.battle_action("flee"), "保留资源，耗时 %s；%s；被缠住时走不了" % [ui.duration("flee"), odds])
 	_small(flee)
 	side.add_child(flee)
+	# 祭出 the worn 兵刃 (combat.gd release): its own move, once a duel (twice from 法宝 up).
+	var release: Dictionary = session.Combat.release_of(session)
+	if not release.is_empty():
+		var reason: String = session.Combat.release_block(session)
+		var thrown: Button = ui.button("祭出 · %s（余 %d）" % [release.move.name, int(release.left)], func() -> void: ui.battle_action("release"), reason if not reason.is_empty() else "祭出%s，打出约 %d 点伤害，不占回合" % [release.name, int(release.damage)])
+		thrown.disabled = not reason.is_empty()
+		_small(thrown)
+		side.add_child(thrown)
 	var allies: Array[String] = session.duel_allies()
 	if not allies.is_empty():
 		var friend: String = allies[0]
@@ -122,7 +131,8 @@ static func _hand_row(ui) -> HBoxContainer:
 	var taken := int(b.get("pills", 0))
 	for item_id: String in _duel_pills(session):
 		var item: Dictionary = session.content.item(item_id)
-		var pill: Button = ui.button("%s ×%d" % [item.name, session.item_count(item_id)], func() -> void: ui.battle_action("pill:" + item_id), "%s（不占回合；每场至多 %d 枚，已服 %d 枚）" % [item.description, int(duel.pills), taken])
+		var limit := "每场至多 %d 张符箓，已用 %d 张" % [int(duel.get("talismans", 3)), int(b.get("talismans", 0))] if str(item.get("category", "")) == "talisman" else "每场至多 %d 枚，已服 %d 枚" % [int(duel.pills), taken]
+		var pill: Button = ui.button("%s ×%d" % [item.name, session.item_count(item_id)], func() -> void: ui.battle_action("pill:" + item_id), "%s（不占回合；%s）" % [item.description, limit])
 		ui.tint(pill, ui.grade_color(item))
 		pill.add_theme_font_size_override("font_size", 14)
 		pill.custom_minimum_size = Vector2(0, 34)

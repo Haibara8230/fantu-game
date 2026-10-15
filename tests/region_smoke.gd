@@ -306,7 +306,10 @@ func _encounters() -> void:
 	check(stopped.battle.get("context", "") == "event" and stopped.battle.enemy_id == "wolf", "fighting the ambush")
 	check(stopped.battle.get("place", "") == "road", "an ambush is fought on the road, not at the node reached")
 	var day := int(stopped.world.day)
-	stopped.flee()
+	# Fleeing may fail (遁逃 by the odds); a failed try costs the turn, not days.
+	while not stopped.battle.is_empty():
+		stopped.player.hp = stopped.player.max_hp
+		stopped.flee()
 	check(int(stopped.world.day) == day + 1, "a road skirmish costs a day, not a month")
 	stopped.content.rules.encounter_chance = [0.0, 0.0, 0.0, 0.0]
 	stopped.continue_journey()

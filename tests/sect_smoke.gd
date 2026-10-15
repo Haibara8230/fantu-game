@@ -47,7 +47,10 @@ func _run() -> void:
 	var bad: Dictionary = legacy.snapshot()
 	bad.player.sect = "missing"
 	check(not migrated.restore(bad), "unknown saved sect rejected")
-	legacy.flee()
+	# Fleeing may fail (遁逃 by the odds); a failed try costs the turn, not days.
+	while not legacy.battle.is_empty():
+		legacy.player.hp = legacy.player.max_hp
+		legacy.flee()
 	legacy.Loadout.take_lineage(legacy, "canglan")
 	legacy.start_battle("disciple", "chixiao")
 	var before: Dictionary = legacy.snapshot()

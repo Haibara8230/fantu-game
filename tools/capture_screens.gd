@@ -156,7 +156,8 @@ func _run() -> void:
 	main.set_guide_enabled(true)
 	await _shot("18a_battle_card")
 	main.set_guide_enabled(false)
-	s.flee()
+	while not s.battle.is_empty():
+		s.flee()
 	# A spar with a generated disciple: their arts in the intent, pills, a shield and a burn.
 	var rivals: Array = s.present_npcs().filter(func(id: String) -> bool: return s.is_generated(id))
 	if not rivals.is_empty():

@@ -209,7 +209,10 @@ func _kin() -> void:
 	check(brother in kin.world.sworn, "one trusted may become a sworn sibling")
 	kin.start_battle("disciple")
 	check(brother in kin.Bonds.allies(kin), "who answers a 传音 for aid before 亲密")
-	kin.flee()
+	# Fleeing may fail (遁逃 by the odds); a failed try costs the turn, not days.
+	while not kin.battle.is_empty():
+		kin.player.hp = kin.player.max_hp
+		kin.flee()
 	var kept := Session.new()
 	check(kept.restore(JSON.parse_string(JSON.stringify(kin.snapshot()))) and brother in kept.world.sworn, "sworn siblings survive a save")
 	# 师徒.

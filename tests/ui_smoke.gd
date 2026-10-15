@@ -343,6 +343,27 @@ func _run() -> void:
 	check(_button("木 2") != null and not _button("木 2").disabled and _button("[2] ") != null and not _button("[2] ").disabled, "the hand shows each element's orbs; an affordable art is ready")
 	await main.battle_action("convert:wood")
 	check(main.session.battle.orbs.count("fire") == 3 and _button("火 3") != null, "clicking an element 相生s two of its orbs (木生火)")
+	# 祭出 the worn 兵刃 and 符箓 from the dock (batch five), without taking the turn.
+	var sword: String = main.session.Arsenal.equipment_id("sword", 2, "fire", [], 0)
+	main.session.add_item(sword, 1)
+	main.session.player.equipment.weapon = sword
+	main.session.set_item_count("lei_fu", 1)
+	main.render()
+	check(_button("祭出 · 飞剑") != null and not _button("祭出 · 飞剑").disabled and _button("掌心雷符") != null and _button("掌心雷符").tooltip_text.contains("符箓"), "the dock offers to release the sword and the talisman")
+	check(_button("撤离").tooltip_text.contains("能脱身"), "撤离 states the odds of getting away")
+	var foe_hp := int(main.session.battle.hp)
+	main.session.battle.hp = 500
+	var turn := int(main.session.battle.turn)
+	await main.battle_action("release")
+	check(int(main.session.battle.get("hp", 0)) < 500 and _button("祭出 · 飞剑") != null and _button("祭出 · 飞剑").disabled, "releasing strikes once, then the button rests")
+	if not main.session.battle.is_empty():
+		await main.battle_action("pill:lei_fu")
+		check(main.session.battle.is_empty() or (int(main.session.battle.turn) == turn and int(main.session.battle.talismans) == 1), "a talisman is used without ending the turn")
+	main.session.player.equipment.weapon = ""
+	if not main.session.battle.is_empty():
+		main.session.battle.hp = foe_hp
+		main.session.battle.orbs = ["fire", "fire", "fire"]
+	main.render()
 	await main.skill("fire")
 	check(main.session.battle.orbs == ["fire"] and _button("[2] ").disabled, "a cast spends its orbs and disables what the hand no longer covers")
 	await _capture("battle")

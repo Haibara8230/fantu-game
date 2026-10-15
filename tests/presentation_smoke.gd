@@ -111,7 +111,9 @@ func _run() -> void:
 	_watch_stage("art_answer")
 	await main.battle_action("end_turn")
 	check(cue_sequence == ["prepare", "release", "impact"], "ending the turn plays the opponent's answer")
-	await main.battle_action("flee")
+	# Fleeing a foe of one's own realm may fail (the foe then takes its turn); keep trying.
+	while not main.session.battle.is_empty():
+		await main.battle_action("flee")
 	main.run(func() -> String: return main.session.act("rest"))
 	main.run(func() -> String: return main.session.travel("wild"))
 	main.run(func() -> String: return main.session.start_battle("wolf"))
@@ -126,7 +128,8 @@ func _run() -> void:
 	_watch_stage("art_guard")
 	await main.battle_action("guard")
 	check(cue_sequence[0] == "guard", "guard has its own visual event")
-	await main.battle_action("flee")
+	while not main.session.battle.is_empty():
+		await main.battle_action("flee")
 	# Legal progression so boss presentation also exercises the real game's gate.
 	_step("progressing to foundation")
 	main.run(func() -> String: return main.session.travel("sect"))

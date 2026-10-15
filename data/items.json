@@ -402,6 +402,38 @@
     "aid": {"success": 15, "safe": true},
     "description": "贴在炉口，可稳住炉火。炼丹时用一张：成功率 +15%，武火失手也不会炸炉。"
   },
+  "lei_fu": {
+    "name": "掌心雷符",
+    "category": "talisman",
+    "price": 30,
+    "rarity": 1,
+    "duel": {"damage": 40, "vfx": "sword_rain"},
+    "description": "朱砂画就的雷符，斗法中一扬手便是一道掌心雷，打出 40 点伤害，不占回合。每场至多祭三张符箓。"
+  },
+  "jinguang_fu": {
+    "name": "金光符",
+    "category": "talisman",
+    "price": 25,
+    "rarity": 1,
+    "duel": {"shield": 35, "vfx": "heal"},
+    "description": "贴在胸口，金光罩体，结成 35 点护盾，不占回合。"
+  },
+  "dingshen_fu": {
+    "name": "定身符",
+    "category": "talisman",
+    "price": 35,
+    "rarity": 1,
+    "duel": {"bind": [1, 2], "vfx": "vine"},
+    "description": "拍向对手，定住其身形两回合：妖兽出手减两成，修士少抽一颗灵气，也逃不走。不占回合。"
+  },
+  "dundi_fu": {
+    "name": "遁地符",
+    "category": "talisman",
+    "price": 40,
+    "rarity": 1,
+    "duel": {"escape": true, "vfx": "earth"},
+    "description": "捏碎即遁入地下，必能脱身，被缠住也不例外。比斗之中用不上。"
+  },
   "bihuo_zhu": {
     "name": "避火珠",
     "category": "tool",

@@ -292,7 +292,14 @@ static func describe_equipment(content, item: Dictionary) -> String:
 			text = content.technique_data.elements[item.element].name + text
 		parts.append(text)
 	var slot_name: String = content.equipment_data.slots[item.slot]
-	return "%s · %s。%s%s" % [item.tier_name, slot_name, "，".join(parts), "。词条：" + "、".join(item.affixes) if not item.affixes.is_empty() else "。"]
+	var text := "%s · %s。%s%s" % [item.tier_name, slot_name, "，".join(parts), "。词条：" + "、".join(item.affixes) if not item.affixes.is_empty() else "。"]
+	# What the piece does in a duel of its own (combat.gd): 祭出 for 兵刃, a 特性 for some others.
+	var base: Dictionary = content.equipment_data.bases.get(str(item.get("id", "")).get_slice(":", 1), {})
+	if base.has("release"):
+		text += "可祭出「%s」（斗法中每场%s，不占回合）。" % [base.release.name, "两次" if int(item.tier) >= 4 else "一次"]
+	if base.has("trait"):
+		text += "特性「%s」：%s" % [base["trait"].name, base["trait"].text]
+	return text
 
 static func generate_equipment(content, rng: RandomNumberGenerator, tier: int, slot: String = "") -> String:
 	var data: Dictionary = content.equipment_data

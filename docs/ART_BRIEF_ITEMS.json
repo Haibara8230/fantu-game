@@ -488,6 +488,50 @@
       "prompt": "Draw the item described (Chinese is content to illustrate, never write it): 控火符。贴在炉口，可稳住炉火。炼丹时用一张：成功率 +15%，武火失手也不会炸炉。"
     },
     {
+      "id": "item_lei_fu",
+      "kind": "item",
+      "target": "assets/art/items/lei_fu.png",
+      "size": [
+        512,
+        512
+      ],
+      "subject": "掌心雷符：朱砂画就的雷符，斗法中一扬手便是一道掌心雷，打出 40 点伤害，不占回合。每场至多祭三张符箓。",
+      "prompt": "Draw the item described (Chinese is content to illustrate, never write it): 掌心雷符。朱砂画就的雷符，斗法中一扬手便是一道掌心雷，打出 40 点伤害，不占回合。每场至多祭三张符箓。"
+    },
+    {
+      "id": "item_jinguang_fu",
+      "kind": "item",
+      "target": "assets/art/items/jinguang_fu.png",
+      "size": [
+        512,
+        512
+      ],
+      "subject": "金光符：贴在胸口，金光罩体，结成 35 点护盾，不占回合。",
+      "prompt": "Draw the item described (Chinese is content to illustrate, never write it): 金光符。贴在胸口，金光罩体，结成 35 点护盾，不占回合。"
+    },
+    {
+      "id": "item_dingshen_fu",
+      "kind": "item",
+      "target": "assets/art/items/dingshen_fu.png",
+      "size": [
+        512,
+        512
+      ],
+      "subject": "定身符：拍向对手，定住其身形两回合：妖兽出手减两成，修士少抽一颗灵气，也逃不走。不占回合。",
+      "prompt": "Draw the item described (Chinese is content to illustrate, never write it): 定身符。拍向对手，定住其身形两回合：妖兽出手减两成，修士少抽一颗灵气，也逃不走。不占回合。"
+    },
+    {
+      "id": "item_dundi_fu",
+      "kind": "item",
+      "target": "assets/art/items/dundi_fu.png",
+      "size": [
+        512,
+        512
+      ],
+      "subject": "遁地符：捏碎即遁入地下，必能脱身，被缠住也不例外。比斗之中用不上。",
+      "prompt": "Draw the item described (Chinese is content to illustrate, never write it): 遁地符。捏碎即遁入地下，必能脱身，被缠住也不例外。比斗之中用不上。"
+    },
+    {
       "id": "item_bihuo_zhu",
       "kind": "item",
       "target": "assets/art/items/bihuo_zhu.png",
@@ -585,6 +629,17 @@
       ],
       "subject": "生成宝物的共用图：指环（佩饰，玉石所制）。各阶各属性的指环都用此图；紫色及以上的手写作品另画专属图。",
       "prompt": "A plain, well-made 指环 as a generic cultivation artefact of no particular grade, neutral steel/silk/jade materials so one picture can stand for every grade; elegant but simple."
+    },
+    {
+      "id": "gear_mirror",
+      "kind": "item_family",
+      "target": "assets/art/items/gear_mirror.png",
+      "size": [
+        512,
+        512
+      ],
+      "subject": "生成宝物的共用图：照影镜（佩饰，玉石所制；特性「反照」）。各阶各属性的照影镜都用此图；紫色及以上的手写作品另画专属图。",
+      "prompt": "A plain, well-made 照影镜, a small round hand mirror of polished jade-bronze with a simple carved rim and a tassel, as a generic cultivation artefact of no particular grade, neutral materials so one picture can stand for every grade; elegant but simple."
     },
     {
       "id": "manual_bolt",

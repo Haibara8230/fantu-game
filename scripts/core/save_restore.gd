@@ -212,6 +212,9 @@ static func restore(s, data: Variant) -> bool:
 		var used: Variant = saved_battle.get("used", [])
 		if not used is Array or used.any(func(move_id: Variant) -> bool: return not move_id in move_ids):
 			return false
+		var traits_used: Variant = saved_battle.get("traits_used", [])
+		if not traits_used is Array or traits_used.any(func(kind: Variant) -> bool: return not kind in ["heart_guard", "mirror"]):
+			return false
 		# Qi orbs (optional: duels saved before them draw a fresh hand when loaded).
 		for orbs_key: String in ["orbs", "foe_orbs"]:
 			var orbs: Variant = saved_battle.get(orbs_key, [])
@@ -220,11 +223,11 @@ static func restore(s, data: Variant) -> bool:
 		var chain: Variant = saved_battle.get("chain", "")
 		if not chain is String or (not chain.is_empty() and not content.technique_data.elements.has(chain)):
 			return false
-		for count_key: String in ["shield", "foe_shield", "pills"]:
+		for count_key: String in ["shield", "foe_shield", "pills", "talismans", "released"]:
 			if not _whole_nonnegative(saved_battle.get(count_key, 0)):
 				return false
 		var intent: Variant = saved_battle.get("intent", [])
-		if not intent is Array or intent.any(func(entry: Variant) -> bool: return not entry is Dictionary or not entry.get("kind") is String or not entry.get("name") is String or (entry.has("art") and content.technique(str(entry.art)).is_empty()) or (entry.has("move") and not entry.move in move_ids) or ["min", "max", "amount", "hits"].any(func(key: String) -> bool: return entry.has(key) and not _whole_nonnegative(entry[key]))):
+		if not intent is Array or intent.any(func(entry: Variant) -> bool: return not entry is Dictionary or not entry.get("kind") is String or not entry.get("name") is String or (entry.has("art") and content.technique(str(entry.art)).is_empty()) or (entry.has("move") and not entry.move in move_ids) or (entry.has("landing") and not entry.landing is bool) or ["min", "max", "amount", "hits"].any(func(key: String) -> bool: return entry.has(key) and not _whole_nonnegative(entry[key]))):
 			return false
 		if foe.has("arts") and (not foe.arts is Array or foe.arts.any(func(art: Variant) -> bool: return not art is String or content.technique(art).is_empty()) or not (foe.get("power") is float or foe.get("power") is int) or not _whole_signed(foe.get("bonus")) or not content.technique_data.elements.has(foe.get("element", ""))):
 			return false
@@ -318,7 +321,7 @@ static func restore(s, data: Variant) -> bool:
 		for skill_id: String in battle.cooldowns:
 			battle.cooldowns[skill_id] = int(battle.cooldowns[skill_id])
 		fresh_hand = not battle.has("orbs")
-		for count_key: String in ["shield", "foe_shield", "pills"]:
+		for count_key: String in ["shield", "foe_shield", "pills", "talismans", "released"]:
 			if battle.has(count_key):
 				battle[count_key] = int(battle[count_key])
 		# JSON brings every number back as a float; the whole ones are whole again.

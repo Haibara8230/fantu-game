@@ -405,7 +405,10 @@ func _v2_migration() -> void:
 	check(market.world.people.get("shen_mo", {}).get("met", false), "events run on migrated saves")
 	var battle := Session.new()
 	check(battle.restore(JSON.parse_string(FileAccess.get_file_as_string("res://tests/fixtures/v2_battle.json"))) and battle.battle.opponent_sect == "canglan", "v2 battle migrates")
-	battle.flee()
+	# Fleeing may fail (遁逃 by the odds); a failed try costs the turn, not days.
+	while not battle.battle.is_empty():
+		battle.player.hp = battle.player.max_hp
+		battle.flee()
 	check(battle.battle.is_empty() and int(battle.world.day) == battle.content.action_days("flee"), "migrated battle resolves through the scheduler")
 	var serpent := Session.new()
 	check(serpent.restore(JSON.parse_string(FileAccess.get_file_as_string("res://tests/fixtures/v2_foundation_serpent.json"))) and serpent.has_flag("serpent_slain") and int(serpent.player.realm) == 1, "v2 world flags and realm kept")

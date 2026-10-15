@@ -217,7 +217,10 @@ func _guardian() -> void:
 	game.enter_room("ruin", "armory")
 	check(game.battle.get("enemy_id", "") == "den_wolf", "the guardian falls on whoever enters its room")
 	check(not game.Caves.reachable(game, "ruin", "sealed") and not game.Caves.loot_waits(game, "ruin", "armory"), "while it stands, the way on and its room's things are barred")
-	game.flee()
+	# Fleeing may fail (遁逃 by the odds); a failed try costs the turn, not days.
+	while not game.battle.is_empty():
+		game.player.hp = game.player.max_hp
+		game.flee()
 	check(game.challenge_guardian("ruin", "armory").contains("斗法") and game.battle.get("enemy_id", "") == "den_wolf", "it can be faced again")
 	game.battle.hp = 1
 	game.battle.orbs = ["metal"]

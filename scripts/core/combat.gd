@@ -409,15 +409,22 @@ static func defend(s) -> String:
 	s.log_event("guard_turn", {"amount": int(rules(s).guard_orbs)})
 	return end_turn(s, true)
 
-## Why a pill cannot be taken in the duel now (`duel` in data/items.json), or "".
+## Why a pill or a talisman cannot be used in the duel now (`duel` in data/items.json), or "". Pills and
+## 符箓 are counted apart, each within its own limit a duel.
 static func pill_block(s, item_id: String) -> String:
 	if s.battle.is_empty():
 		return "当前没有对手。"
 	var item: Dictionary = s.content.item(item_id)
 	if not item.has("duel"):
-		return "斗法中服不得此物。"
+		return "斗法中用不得此物。"
 	if s.item_count(item_id) < 1:
 		return "行囊里没有%s。" % item.get("name", item_id)
+	if str(item.get("category", "")) == "talisman":
+		if int(s.battle.get("talismans", 0)) >= int(rules(s).get("talismans", 3)):
+			return "这一场已祭了 %d 张符箓，手上的灵力催不动更多了。" % int(rules(s).get("talismans", 3))
+		if bool(item.duel.get("escape", false)) and s.battle.get("context", "") in ["spar", "tournament", "summit", "arena"]:
+			return "比斗之中遁走，与认输无异；不必用符。"
+		return ""
 	if int(s.battle.get("pills", 0)) >= int(rules(s).pills):
 		return "这一场已服了 %d 枚丹药，药力再难化开。" % int(rules(s).pills)
 	return ""
@@ -430,6 +437,8 @@ static func take_pill(s, item_id: String) -> String:
 		return reason
 	var item: Dictionary = s.content.item(item_id)
 	s.remove_item(item_id, 1)
+	if str(item.get("category", "")) == "talisman":
+		return _use_talisman(s, item_id, item)
 	s.battle.pills = int(s.battle.get("pills", 0)) + 1
 	var effect: Dictionary = item.duel
 	if effect.has("orbs"):
@@ -464,13 +473,57 @@ static func call_aid(s, person_id: String) -> String:
 	s.changed.emit()
 	return text
 
+## 符箓 (docs/COMBAT_PLAN.md, part one, stage two): used without taking a turn. 雷符 strikes, 金光符 shields,
+## 定身符 binds the opponent (缠绕), 遁地符 carries the player away whatever holds them.
+static func _use_talisman(s, item_id: String, item: Dictionary) -> String:
+	s.battle.talismans = int(s.battle.get("talismans", 0)) + 1
+	var effect: Dictionary = item.duel
+	var look := {"style": "talisman", "name": str(item.name), "vfx": str(effect.get("vfx", "sword")), "tier": 2}
+	var text: String = s.log_event("duel_talisman", {"item": item_id})
+	if bool(effect.get("escape", false)):
+		return _escape(s, text)
+	if effect.has("damage"):
+		var dealt := _strike_foe(s, int(effect.damage))
+		s.combat_events.append(_event({"type": "attack", "actor": "player", "hits": 1, "amount": dealt, "hp_after": int(s.battle.hp)}, look))
+		if int(s.battle.hp) <= 0:
+			return _win(s)
+	if effect.has("shield"):
+		s.battle.shield = int(s.battle.get("shield", 0)) + int(effect.shield)
+		s.combat_events.append(_event({"type": "guard", "amount": 0, "shield": int(s.battle.shield)}, look))
+	if effect.has("bind"):
+		_inflict(s.battle.status, "entangle", effect.bind)
+	s.changed.emit()
+	return text
+
+## How likely the player gets away (遁逃): four in five against a foe of their own realm, a quarter less
+## for each realm the foe stands above them, surely from a lesser one; badly hurt (under three tenths of
+## health) or wounded (重创), harder; never below a fifth.
+static func flee_chance(s) -> float:
+	var foe: Dictionary = s.battle.get("foe", {})
+	var foe_realm := int(foe.get("realm", 0)) if not foe.is_empty() else int(s.content.enemies[s.battle.enemy_id].min_realm)
+	var hurt := 0.15 if int(s.player.hp) * 10 < int(s.player.max_hp) * 3 else 0.0
+	if s.battle.get("player_status", {}).has("wound"):
+		hurt += 0.1
+	return clampf(float(rules(s).get("flee", 0.8)) - 0.25 * float(foe_realm - int(s.player.realm)) + (1.0 if foe_realm < int(s.player.realm) else 0.0) - hurt, 0.2, 1.0)
+
 static func flee(s) -> String:
 	s.combat_events.clear()
 	if s.battle.is_empty():
 		return "当前无需撤退。"
 	if s.battle.get("player_status", {}).has("entangle"):
-		return "被缠住了，脱身不得；先撑过这几回合，或打倒对手。"
+		return "被缠住了，脱身不得；先撑过这几回合、打倒对手，或祭一张遁地符。"
 	# Stepping off the stage mid-bout is conceding it.
+	if s.battle.get("context", "") == "arena":
+		s.combat_events.append({"type": "end", "result": "flee"})
+		return s.Arena.over(s, false)
+	# A bout among fellows can always be conceded; a real fight may not let go (遁逃 by the odds).
+	if not s.battle.get("context", "") in ["spar", "tournament", "summit"] and s.combat_rng.randf() >= flee_chance(s):
+		var failed: String = s.log_event("flee_failed", {"enemy": str(s.battle.enemy_id)})
+		return failed + " " + end_turn(s)
+	return _escape(s, "")
+
+## Gets away from the duel: the recovery days pass.
+static func _escape(s, text: String) -> String:
 	if s.battle.get("context", "") == "arena":
 		s.combat_events.append({"type": "end", "result": "flee"})
 		return s.Arena.over(s, false)
@@ -479,7 +532,64 @@ static func flee(s) -> String:
 	s.battle.clear()
 	# Outcomes are recorded on the day they happen; the recovery time follows.
 	var message: String = s.log_event("flee", {"days": days})
-	return s.conclude(message, s.advance_days(days))
+	return s.conclude((text + " " + message).strip_edges(), s.advance_days(days))
+
+## 祭出 (part one, stage two): the worn 兵刃 thrown into the duel once (twice from 法宝 up), without
+## taking a turn: its own move by its base (data/equipment.json bases' `release`), as strong as its
+## attack drawn on (驾驭度); not at all two realms short. {} when nothing can be released.
+static func release_of(s) -> Dictionary:
+	var weapon := str(s.player.get("equipment", {}).get("weapon", ""))
+	if weapon.is_empty():
+		return {}
+	var gear: Dictionary = s.content.equipment(weapon)
+	var base: Dictionary = s.content.equipment_data.bases.get(weapon.get_slice(":", 1), {})
+	if gear.is_empty() or not base.has("release"):
+		return {}
+	var held: Dictionary = s.Arsenal.wielded(s.content, gear, int(s.player.realm))
+	var uses := 2 if int(gear.tier) >= 4 else 1
+	var damage := int(round((12.0 + 5.0 * float(held.stats.get("attack", 0))) * float(base.release.power)))
+	return {"name": "%s · %s" % [gear.name, base.release.name], "move": base.release, "gear": gear, "damage": damage, "left": maxi(0, uses - int(s.battle.get("released", 0))), "usable": bool(held.usable) and float(held.share) >= 0.5}
+
+static func release_block(s) -> String:
+	if s.battle.is_empty():
+		return "当前没有对手。"
+	var release := release_of(s)
+	if release.is_empty():
+		return "没有佩着可以祭出的兵刃。"
+	if not bool(release.usable):
+		return "驾驭不足五成，祭不出%s。" % release.gear.name
+	if int(release.left) <= 0:
+		return "这一场已经祭过了。"
+	return ""
+
+static func release(s) -> String:
+	s.combat_events.clear()
+	var reason := release_block(s)
+	if not reason.is_empty():
+		return reason
+	var release := release_of(s)
+	var gear: Dictionary = release.gear
+	s.battle.released = int(s.battle.get("released", 0)) + 1
+	var element := str(gear.element)
+	var counter := 1.0 if element == "none" else counter_multiplier(s, element)
+	var dealt := _strike_foe(s, maxi(1, int(round(float(release.damage) * counter))))
+	var look := {"style": "release", "name": str(release.name), "vfx": str(release.move.get("vfx", "sword")), "tier": int(gear.tier), "element": "metal" if element == "none" else element}
+	s.combat_events.append(_event({"type": "attack", "actor": "player", "hits": 1, "amount": dealt, "hp_after": int(s.battle.hp), "counter": "克" if counter > 1.0 else ("被克" if counter < 1.0 else "")}, look))
+	for lingering: String in LINGERING:
+		if release.move.get("inflict", {}).has(lingering):
+			_inflict(s.battle.status, lingering, release.move.inflict[lingering])
+	var text: String = s.log_event("weapon_release", {"item": str(gear.id), "amount": dealt})
+	# 铃音 breaks a blow the opponent has wound up: it lands as nothing.
+	if bool(release.move.get("interrupt", false)):
+		for index: int in s.battle.get("intent", []).size():
+			var planned: Dictionary = s.battle.intent[index]
+			if bool(planned.get("landing", false)):
+				s.battle.intent[index] = {"kind": "stunned", "move": str(planned.move), "name": "%s被打散" % planned.name}
+				text += " " + s.log_event("charge_broken", {"move_name": str(planned.name)})
+	if int(s.battle.hp) <= 0:
+		return _win(s)
+	s.changed.emit()
+	return text
 
 ## Duels started by events (road encounters, ruins) only cost a short rest afterwards.
 static func _recovery_days(s, action: String) -> int:
@@ -616,6 +726,8 @@ static func _phase_power(s, enemy: Dictionary) -> float:
 static func _intent(s, enemy: Dictionary, move: Dictionary, landing: bool) -> Dictionary:
 	var kind := "attack" if landing else str(move.get("kind", "attack"))
 	var entry := {"kind": kind, "move": str(move.id), "name": str(move.name)}
+	if landing:
+		entry.landing = true
 	var power := float(move.get("power", 1.0)) * _phase_power(s, enemy)
 	match kind:
 		"attack", "charge":
@@ -673,13 +785,15 @@ static func _do_move(s, planned: Dictionary, factor: float, guarding: bool) -> b
 		"summon":
 			_inflict(status, "minions", move.summon)
 			s.log_event("enemy_summon", args)
+		"stunned":
+			s.log_event("enemy_stunned", args)
 		_:
 			# Slowed or entangled, a beast strikes weaker; 蓄势 makes the next blow harder, once.
 			var strength := factor * (SLOW_BLOW if status.has("slow") or status.has("entangle") else 1.0)
 			if status.has("focus"):
 				strength *= 1.0 + float(status.focus[0])
 				status.erase("focus")
-			var blow := {"style": "enemy" if not bool(enemy.get("human", false)) else _counter_style(s), "name": str(move.name)}
+			var blow := {"style": "enemy" if not bool(enemy.get("human", false)) else _counter_style(s), "name": str(move.name), "wound_up": bool(planned.get("landing", false))}
 			for hit: int in int(planned.get("hits", 1)):
 				var before := int(s.player.hp)
 				if _hurt_player(s, s.combat_rng.randi_range(int(planned.min), int(planned.max)), strength, guarding, blow):
@@ -783,6 +897,7 @@ static func _hurt_player(s, roll: int, factor: float, guarding: bool, look: Dict
 	var damage := maxi(1, int(round(float(roll) * factor)))
 	if guarding:
 		damage = maxi(1, damage / 2)
+	damage = _gear_traits(s, damage, look)
 	var absorbed := mini(int(s.battle.get("shield", 0)), damage)
 	s.battle.shield = int(s.battle.get("shield", 0)) - absorbed
 	damage -= absorbed
@@ -790,6 +905,47 @@ static func _hurt_player(s, roll: int, factor: float, guarding: bool, look: Dict
 	s.combat_events.append(_event({"type": "attack", "actor": "enemy", "amount": damage, "absorbed": absorbed, "hp_after": int(s.player.hp)}, look))
 	s.log_event("enemy_attack", {"enemy": s.battle.enemy_id, "amount": damage})
 	return int(s.player.hp) <= 0
+
+## The worn pieces' own effects (data/equipment.json bases' `trait`), each once a duel, on a blow about
+## to land: 护心 halves a heavy one; 反照 turns half of an art's or a wound-up blow back on the foe
+## (never felling it). Pieces two realms short do nothing. Returns what is left of the blow.
+static func _gear_traits(s, damage: int, look: Dictionary) -> int:
+	for perk: Dictionary in worn_traits(s):
+		if str(perk.kind) in s.battle.get("traits_used", []):
+			continue
+		var kept := damage
+		match str(perk.kind):
+			"heart_guard":
+				if float(damage) >= float(s.player.max_hp) * float(perk.heavy):
+					kept = int(round(float(damage) * (1.0 - float(perk.cut))))
+			"mirror":
+				if look.has("spent") or bool(look.get("wound_up", false)):
+					var turned := int(round(float(damage) * float(perk.reflect)))
+					kept = damage - turned
+					var back := mini(turned, int(s.battle.hp) - 1)
+					s.battle.hp = int(s.battle.hp) - back
+					s.combat_events.append({"type": "attack", "actor": "player", "style": "mirror", "name": str(perk.name), "vfx": "water", "tier": 2, "hits": 1, "amount": back, "hp_after": int(s.battle.hp)})
+		if kept == damage:
+			continue
+		if not s.battle.has("traits_used"):
+			s.battle.traits_used = []
+		s.battle.traits_used.append(str(perk.kind))
+		s.log_event("gear_trait", {"trait_name": str(perk.name), "amount": damage - kept})
+		damage = kept
+	return damage
+
+## The effects of the pieces the player wears that they can draw on (not two realms short).
+static func worn_traits(s) -> Array[Dictionary]:
+	var traits: Array[Dictionary] = []
+	for slot: String in s.player.get("equipment", {}):
+		var item_id := str(s.player.equipment[slot])
+		if item_id.is_empty():
+			continue
+		var base: Dictionary = s.content.equipment_data.bases.get(item_id.get_slice(":", 1), {})
+		var gear: Dictionary = s.content.equipment(item_id)
+		if base.has("trait") and not gear.is_empty() and bool(s.Arsenal.wielded(s.content, gear, int(s.player.realm)).usable):
+			traits.append(base["trait"])
+	return traits
 
 static func _lose(s) -> String:
 	s.combat_events.append({"type": "end", "result": "lose"})

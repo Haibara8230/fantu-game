@@ -28,6 +28,7 @@ func _initialize() -> void:
 	_hunts()
 	_roads()
 	_arenas()
+	_gear_and_talismans()
 	print("DUEL MOVES: %d checks, %d failures" % [checks, failures])
 	quit(0 if failures == 0 else 1)
 
@@ -262,6 +263,107 @@ func _arenas() -> void:
 	south.battle.hp = 0
 	south.Combat._lose(south)
 	check(south.Arena.run(south).is_empty() and int(south.player.hp) >= 1, "a loss ends the run, nothing more")
+
+## Part one, stage two: 祭出 the worn 兵刃 (once, twice from 法宝; not two realms short), 符箓 counted apart
+## from pills, and fleeing by the odds (a 遁地符 always gets away, even coiled).
+func _gear_and_talismans() -> void:
+	var game := _duel("wolf", "bite", 0)
+	check(game.Combat.release_of(game).is_empty(), "no 兵刃, nothing to release")
+	var sword := game.Arsenal.equipment_id("sword", 2, "fire", [], 0)
+	game.battle.clear()
+	game.add_item(sword, 1)
+	game.equip_item(sword)
+	game.Combat.begin_battle(game, "wolf", "event")
+	var release: Dictionary = game.Combat.release_of(game)
+	check(int(release.left) == 1 and int(release.damage) > 20, "a 法器 sword can be released once (%d)" % int(release.damage))
+	var hp := int(game.battle.hp)
+	game.Combat.release(game)
+	check(int(game.battle.hp) < hp and int(game.Combat.release_of(game).left) == 0 and not game.Combat.release_block(game).is_empty(), "it strikes without taking the turn, and only once")
+	var saber_game := _duel("wolf", "bite", 3)
+	var treasure := saber_game.Arsenal.equipment_id("saber", 4, "none", [], 0)
+	saber_game.battle.clear()
+	saber_game.add_item(treasure, 1)
+	saber_game.equip_item(treasure)
+	saber_game.Combat.begin_battle(saber_game, "wolf", "event")
+	check(int(saber_game.Combat.release_of(saber_game).left) == 2, "a 法宝 can be released twice")
+	saber_game.Combat.release(saber_game)
+	check(saber_game.battle.is_empty() or saber_game.battle.status.has("sunder"), "刀芒 leaves 破甲")
+	var low := _duel("wolf", "bite", 0)
+	var far := low.Arsenal.equipment_id("sword", 4, "none", [], 0)
+	low.player.equipment.weapon = far
+	check(not bool(low.Combat.release_of(low).usable), "a 法宝 two realms above cannot be released")
+	# 符箓
+	var charm := _duel("wolf", "bite", 0)
+	for talisman: String in ["lei_fu", "jinguang_fu", "dingshen_fu", "dundi_fu"]:
+		check(charm.content.item(talisman).category == "talisman", talisman + " is a 符箓")
+		charm.set_item_count(talisman, 2)
+	charm.battle.hp = 200
+	charm.take_duel_pill("lei_fu")
+	check(int(charm.battle.hp) == 160 and int(charm.battle.get("pills", 0)) == 0 and int(charm.battle.talismans) == 1, "a 雷符 strikes forty, counted apart from pills")
+	charm.take_duel_pill("jinguang_fu")
+	check(int(charm.battle.shield) >= 35, "a 金光符 shields")
+	charm.take_duel_pill("dingshen_fu")
+	check(charm.battle.status.has("entangle"), "a 定身符 binds the foe")
+	check(not charm.duel_pill_block("lei_fu").is_empty(), "three 符箓 a duel at most")
+	var coiled := _duel("serpent", "coil", 1)
+	coiled.end_turn()
+	coiled.set_item_count("dundi_fu", 1)
+	check(coiled.flee().contains("脱身不得") and not coiled.battle.is_empty(), "coiled, no fleeing on foot")
+	coiled.take_duel_pill("dundi_fu")
+	check(coiled.battle.is_empty(), "but a 遁地符 always gets away")
+	# 遁逃 by the odds.
+	var strong := _duel("wolf", "bite", 1)
+	check(is_equal_approx(strong.Combat.flee_chance(strong), 1.0), "from a lesser foe one always gets away")
+	var weak := _duel("mo_jiang", "blade", 1)
+	check(weak.Combat.flee_chance(weak) < 0.6, "from a foe a realm above, the odds fall (%.2f)" % weak.Combat.flee_chance(weak))
+	var tries := 0
+	while not weak.battle.is_empty() and tries < 10:
+		tries += 1
+		weak.player.hp = weak.player.max_hp
+		weak.flee()
+	check(tries > 1 or weak.battle.is_empty(), "fleeing may fail, and then the foe takes its turn")
+	var hurt := _duel("wolf", "bite", 0)
+	var fresh: float = hurt.Combat.flee_chance(hurt)
+	hurt.player.hp = 1
+	check(hurt.Combat.flee_chance(hurt) < fresh, "badly hurt, getting away is harder")
+	# Gear of its own (part one, stage two): 护心甲 halves one heavy blow, 照影镜 turns half an art back,
+	# a bell's 铃音 breaks a wound-up blow; the pieces say so.
+	var guarded := _duel("wolf", "bite", 1)
+	var vest := guarded.Arsenal.equipment_id("vest", 1, "none", [], 0)
+	var mirror := guarded.Arsenal.equipment_id("mirror", 1, "water", [], 0)
+	check(guarded.content.equipment(vest).description.contains("护心") and guarded.content.equipment(mirror).description.contains("反照") and guarded.content.equipment(guarded.Arsenal.equipment_id("bell", 1, "none", [], 0)).description.contains("祭出"), "a piece's description names what it does in a duel")
+	guarded.player.equipment.robe = vest
+	guarded.player.equipment.accessory = mirror
+	guarded.player.hp = guarded.player.max_hp
+	var heavy := int(guarded.player.max_hp) / 2
+	var before := int(guarded.player.hp)
+	Combat._hurt_player(guarded, heavy, 1.0, false, {"style": "enemy"})
+	check(before - int(guarded.player.hp) == heavy - int(round(heavy * 0.5)), "护心 halves the first heavy blow (%d of %d)" % [before - int(guarded.player.hp), heavy])
+	before = int(guarded.player.hp)
+	Combat._hurt_player(guarded, 20, 1.0, false, {"style": "enemy"})
+	check(before - int(guarded.player.hp) == 20, "only once a duel")
+	var foe_before := int(guarded.battle.hp)
+	before = int(guarded.player.hp)
+	Combat._hurt_player(guarded, 20, 1.0, false, {"style": "enemy", "wound_up": true})
+	check(before - int(guarded.player.hp) == 10 and foe_before - int(guarded.battle.hp) == 10, "反照 turns half a wound-up blow back")
+	before = int(guarded.player.hp)
+	Combat._hurt_player(guarded, 20, 1.0, false, {"style": "fire_burst", "spent": []})
+	check(before - int(guarded.player.hp) == 20, "and only once")
+	var rung := _duel("wolf", "", 1)
+	var bell := rung.Arsenal.equipment_id("bell", 1, "none", [], 0)
+	rung.player.equipment.weapon = bell
+	var wolf: Dictionary = rung.content.enemies.wolf
+	rung.battle.intent = [Combat._intent(rung, wolf, Combat._move(wolf, "pounce"), true)]
+	check(bool(rung.battle.intent[0].landing), "a wound-up blow is marked as landing")
+	rung.battle.hp = 500
+	rung.Combat.release(rung)
+	check(str(rung.battle.intent[0].kind) == "stunned", "the bell's 铃音 breaks it")
+	before = int(rung.player.hp)
+	rung.end_turn()
+	check(int(rung.player.hp) == before or rung.battle.is_empty(), "and it lands as nothing")
+	var kept := Session.new()
+	guarded.battle.intent[0]["landing"] = true
+	check(kept.restore(JSON.parse_string(JSON.stringify(guarded.snapshot()))) and kept.battle.traits_used.size() == 2, "spent gear effects survive a save")
 
 func _saves() -> void:
 	var game := _duel("wolf", "pounce")

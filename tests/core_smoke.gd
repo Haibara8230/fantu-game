@@ -139,7 +139,12 @@ func _initialize() -> void:
 	var escaping = Session.new()
 	escaping.new_game("撤离测试", 6)
 	escaping.start_battle("disciple")
-	escaping.flee()
+	# Fleeing a foe of one's own realm may fail (it costs the turn, not days); try until away.
+	for attempt: int in 10:
+		if escaping.battle.is_empty():
+			break
+		escaping.player.hp = escaping.player.max_hp
+		escaping.flee()
 	check(escaping.battle.is_empty() and escaping.world.day == escaping.content.action_days("flee"), "retreat consumes configured days")
 	var corrupt: Dictionary = game.snapshot()
 	corrupt.player.hp = -1

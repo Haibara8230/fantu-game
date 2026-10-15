@@ -18,14 +18,15 @@
     "jade": ["顽石", "青玉", "墨玉", "寒玉", "星辰"]
   },
   "bases": {
-    "sword": {"slot": "weapon", "material": "metal", "nouns": ["剑", "长剑"], "stats": {"attack": 3}},
-    "saber": {"slot": "weapon", "material": "metal", "nouns": ["刀", "雁翎刀"], "stats": {"attack": 4}},
-    "fan": {"slot": "weapon", "material": "jade", "nouns": ["扇", "折扇"], "stats": {"attack": 2, "element_damage": 0.05}},
-    "bell": {"slot": "weapon", "material": "metal", "nouns": ["铃", "摄魂铃"], "stats": {"attack": 2, "max_qi": 4}},
+    "sword": {"slot": "weapon", "material": "metal", "nouns": ["剑", "长剑"], "stats": {"attack": 3}, "release": {"name": "飞剑", "power": 1.0, "vfx": "sword"}},
+    "saber": {"slot": "weapon", "material": "metal", "nouns": ["刀", "雁翎刀"], "stats": {"attack": 4}, "release": {"name": "刀芒", "power": 0.8, "vfx": "sword_arc", "inflict": {"sunder": [0.2, 2]}}},
+    "fan": {"slot": "weapon", "material": "jade", "nouns": ["扇", "折扇"], "stats": {"attack": 2, "element_damage": 0.05}, "release": {"name": "扇风", "power": 0.8, "vfx": "leaf_blade", "inflict": {"weaken": [0.2, 2]}}},
+    "bell": {"slot": "weapon", "material": "metal", "nouns": ["铃", "摄魂铃"], "stats": {"attack": 2, "max_qi": 4}, "release": {"name": "铃音扰神", "power": 0.6, "vfx": "water", "inflict": {"slow": [1, 2]}, "interrupt": true}},
     "robe": {"slot": "robe", "material": "cloth", "nouns": ["法袍", "道袍"], "stats": {"max_hp": 12}},
-    "vest": {"slot": "robe", "material": "metal", "nouns": ["软甲", "护心甲"], "stats": {"max_hp": 8, "defense": 0.05}},
+    "vest": {"slot": "robe", "material": "metal", "nouns": ["软甲", "护心甲"], "stats": {"max_hp": 8, "defense": 0.05}, "trait": {"kind": "heart_guard", "name": "护心", "heavy": 0.15, "cut": 0.5, "text": "每场一次：一击重过气血上限一成半时，替你挡下一半。"}},
     "pendant": {"slot": "accessory", "material": "jade", "nouns": ["佩", "玉佩"], "stats": {"max_qi": 5}},
-    "ring": {"slot": "accessory", "material": "jade", "nouns": ["戒", "指环"], "stats": {"attack": 1, "cultivation": 0.04}}
+    "ring": {"slot": "accessory", "material": "jade", "nouns": ["戒", "指环"], "stats": {"attack": 1, "cultivation": 0.04}},
+    "mirror": {"slot": "accessory", "material": "jade", "nouns": ["镜", "照影镜"], "stats": {"max_qi": 3, "defense": 0.02}, "trait": {"kind": "mirror", "name": "反照", "reflect": 0.5, "text": "每场一次：对手的法术或蓄力的一击，镜面反照其半数伤害回去，你只受另一半。"}}
   },
   "affixes": {
     "sharp": {"name": "锋锐", "stats": {"attack": 2}},

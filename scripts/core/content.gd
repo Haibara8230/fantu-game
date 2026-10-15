@@ -53,7 +53,7 @@ const FAVOR_STAGES := [[0, "初识"], [40, "相熟"], [80, "友好"], [140, "信
 const ATTITUDES := {"friendly": "友善", "neutral": "中立", "hostile": "敌意"}
 const BUILT_IN_INTERACTIONS := ["talk", "gift", "help", "consult", "teach", "invite_spar", "invite_help", "companion", "disciple", "instruct", "sworn"]
 const PLAIN_ACTIONS := ["cultivate", "rest", "breakthrough", "study", "teach", "sell", "shop", "gather", "inn_rest", "search_ruin", "explore_cave", "forge", "ascend", "inquire", "commissions", "sect", "alchemy", "field", "tournament", "lease", "hunt", "arena"]
-const ITEM_CATEGORIES := {"herb": "灵草", "pill": "丹药", "treasure": "天材地宝", "manual": "玉简", "equipment": "宝物", "material": "材料", "recipe": "丹方", "tool": "器具", "quest": "信物"}
+const ITEM_CATEGORIES := {"herb": "灵草", "pill": "丹药", "treasure": "天材地宝", "manual": "玉简", "equipment": "宝物", "material": "材料", "recipe": "丹方", "talisman": "符箓", "tool": "器具", "quest": "信物"}
 # Milestones friends send word of, and the deeds the session counts besides victories ("win:<enemy>").
 const CONGRATS := ["breakthrough", "core", "nascent", "deity", "serpent", "champion", "summit", "calamity", "promotion"]
 const DEEDS := ["retreat_days", "duel", "trade", "gather", "hunt", "commission", "help", "tournament_champion", "summit_champion"]
@@ -1735,7 +1735,7 @@ func _validate_item(item: Variant) -> String:
 		return "品类未知"
 	if not _whole(item.get("price")):
 		return "价格无效"
-	if item.has("duel") and (not item.duel is Dictionary or item.duel.is_empty() or (item.duel.has("orbs") and (not _whole(item.duel.orbs) or int(item.duel.orbs) < 1)) or (item.duel.has("heal") and not item.duel.heal is bool)):
+	if item.has("duel") and (not item.duel is Dictionary or item.duel.is_empty() or (item.duel.has("orbs") and (not _whole(item.duel.orbs) or int(item.duel.orbs) < 1)) or (item.duel.has("heal") and not item.duel.heal is bool) or ["damage", "shield"].any(func(key: String) -> bool: return item.duel.has(key) and (not _whole(item.duel[key]) or int(item.duel[key]) < 1)) or (item.duel.has("bind") and (not item.duel.bind is Array or item.duel.bind.size() != 2)) or (item.duel.has("escape") and not item.duel.escape is bool)):
 		return "斗法中服用的配置无效"
 	if item.has("rarity") and (not _whole(item.rarity) or int(item.rarity) >= talent_data.tiers.size()):
 		return "品级无效"
@@ -1864,6 +1864,10 @@ func _validate_arsenal() -> String:
 		var base: Dictionary = gear.bases[base_id]
 		if not gear.slots.has(base.get("slot", "")) or not gear.materials.has(base.get("material", "")) or gear.materials[base.material].size() < gear.tiers.size() or base.get("nouns", []).is_empty():
 			return "装备底材配置错误：" + base_id
+		if base.has("release") and (not base.release is Dictionary or not base.release.get("name") is String or not (base.release.get("power") is float or base.release.get("power") is int) or float(base.release.power) <= 0.0 or base.get("slot") != "weapon"):
+			return "兵刃祭出配置错误：" + base_id
+		if base.has("trait") and (not base["trait"] is Dictionary or not base["trait"].get("kind") in ["heart_guard", "mirror"] or not base["trait"].get("name") is String or not base["trait"].get("text") is String):
+			return "宝物特性配置错误：" + base_id
 	# Tier effects must escalate on every measure, so a stronger art never looks weaker. Layers that
 	# unlock at a tier (the charge, the rune circle, the zoom...) may stay level but never fall back.
 	if vfx_tiers.size() != data.tiers.size():
