@@ -1,4 +1,10 @@
 {
+  "schools": {
+    "sword": {"name": "剑修", "archetype": "affinity", "element": "metal", "min_tier": 2, "stack": 0.15, "most": 3, "text": "剑意：同一回合里每多出一道金行神通，伤害再 +15%，至多 +45%。"},
+    "body": {"name": "体修", "archetype": "body", "min_tier": 2, "counter_back": 0.25, "heavy": 0.1, "countered": 0.9, "text": "反震：挨了一记重过气血一成的打，下一道神通 +25%；被五行克制时只减一成。"},
+    "soul": {"name": "魂修", "archetype": "focus", "min_tier": 2, "weaken": 0.1, "text": "神识冲击：每回合第一道神通震散对手一颗灵气；对手若是妖兽，则削弱它下一击一成。"},
+    "array": {"name": "阵修", "archetype": "breath", "element": "earth", "min_tier": 2, "orbs": 1, "shield": 8, "text": "布阵：花一回合布下阵法，此后每回合多抽一颗灵气、结 8 点护盾。"}
+  },
   "tiers": [
     {"name": "凡阶", "power": 1.0, "affixes": 0, "min_realm": 0, "value": 20, "study_days": 10},
     {"name": "黄阶", "power": 1.25, "affixes": 1, "min_realm": 0, "value": 60, "study_days": 20},

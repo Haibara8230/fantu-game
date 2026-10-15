@@ -113,6 +113,10 @@ static func _body(ui, parent: VBoxContainer) -> void:
 	ui.meter(parent, "灵力", p.qi, p.max_qi, Color("#5f999b"))
 	_row(ui, parent, "攻击加成", "+%d" % session.attack_bonus(), "每次神通伤害额外增加；随境界与宝物、天赋提升")
 	_row(ui, parent, "减伤", "%d%%" % int(round(session.defense() * 100.0)), "受到的伤害减少，至多五成")
+	var school: String = session.Schools.player(session)
+	if not school.is_empty():
+		var way: Dictionary = session.content.technique_data.schools[school]
+		_row(ui, parent, "流派", str(way.name), str(way.text))
 	_row(ui, parent, "神识", str(session.sense()), "随境界与天赋增长：识破洞府机关、看见暗格，看穿神识不及你的人的天赋")
 	var toxin: int = session.toxin()
 	var rule: Dictionary = session.content.alchemy_data.toxin

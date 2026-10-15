@@ -9,6 +9,7 @@ extends RefCounted
 ## Each life is born with talents (talents.gd), drawn on a stream of their own. In worlds begun with
 ## talents (`shaped`) they shape the life: its pace, its chance of foundation and its years; worlds begun
 ## before keep the lives they had, and the talents only show.
+const Schools = preload("res://scripts/core/schools.gd")
 const Arsenal = preload("res://scripts/core/arsenal.gd")
 const Talents = preload("res://scripts/core/talents.gd")
 const ATTACK_ARCHETYPES := ["bolt", "barrage", "burst"]
@@ -250,5 +251,5 @@ static func foe(content, person_id: String, person: Dictionary) -> Dictionary:
 		"damage_max": maxi(1, int(round(float(best.damage_max) * power)) + bonus), "art": best.id, "art_name": best.name,
 		"vfx": best.vfx, "tier": int(best.tier), "xp": 10 * (int(person.stage) + 1) + 30 * int(person.realm), "npc": person_id,
 		"sect": person.sect, "gender": person.gender, "arts": arts, "power": snappedf(power, 0.01), "bonus": bonus, "element": str(best.element),
-		"realm": int(person.realm),
+		"realm": int(person.realm), "school": Schools.of(content, person.loadout.get("methods", [])),
 	}

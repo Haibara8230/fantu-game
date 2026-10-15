@@ -733,6 +733,12 @@ func _run() -> void:
 	main.choose("slip")
 	check(main.session.pending_event.is_empty() and main.session.journal_lines().any(func(line: String) -> bool: return line.contains("「独眼」韩青没有追上")), "the choice is told in their name")
 	main.session.world.grudges.clear()
+	# 收尾抉择 after a road outlaw: let go, search, or press for the hoard.
+	main.session.pending_event = {"id": "victory_terms", "day": int(main.session.world.day), "values": {"enemy": "rogue", "foe": str(main.session.content.enemies.rogue.name)}}
+	main.render()
+	check(_texts(main.center, "Label").contains(str(main.session.content.enemies.rogue.name) + "倒在地上") and _button("放他走") != null and _button("搜身") != null and _button("逼问") != null, "a beaten outlaw awaits the verdict: let go, search, or press")
+	main.choose("release")
+	check(main.session.pending_event.is_empty(), "the verdict is given")
 	main.session.player.location = "sect"
 	main.set_view("place")
 	# The end of a life.

@@ -87,6 +87,13 @@ static func technique(content, id: String) -> Dictionary:
 				passive[key] = int(passive.get(key, 0)) + int(effect[key])
 		result.passive = passive
 	result.description = describe_technique(content, result)
+	# A 心法 of a school's kind teaches its way of fighting (schools.gd).
+	if archetype.slot == "method":
+		for school_id: String in content.technique_data.get("schools", {}):
+			var school: Dictionary = content.technique_data.schools[school_id]
+			if str(school.archetype) == parts[1] and tier >= int(school.min_tier) and (not school.has("element") or str(school.element) == parts[2]):
+				result.description += "流派 · %s：%s" % [school.name, school.text]
+				break
 	return result
 
 static func _handwritten(content, id: String) -> Dictionary:

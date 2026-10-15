@@ -32,6 +32,7 @@ func _initialize() -> void:
 	_packs_and_series()
 	_feuds()
 	_ground_scout_wounds()
+	_terms_and_schools()
 	print("DUEL MOVES: %d checks, %d failures" % [checks, failures])
 	quit(0 if failures == 0 else 1)
 
@@ -487,6 +488,8 @@ func _feuds() -> void:
 	game.player.location = "town"
 	game.battle.hp = 0
 	game.Combat._win(game)
+	check(str(game.pending_event.get("id", "")) == "victory_terms", "a beaten road outlaw awaits the player's verdict")
+	game.choose_event("search")
 	check(game.world.grudges.size() == 1 and str(game.world.grudges[0].enemy) == "rogue" and str(game.world.grudges[0].region) == "qingyun", "a beaten 劫修's comrade remembers")
 	var foe: String = str(game.world.grudges[0].name)
 	check(foe.begins_with("「") and game.journal_lines().any(func(line: String) -> bool: return line.contains(foe + "记下了")), "by name (%s)" % foe)
@@ -641,6 +644,94 @@ func _ground_scout_wounds() -> void:
 	narrow.player.stones = 100
 	narrow.act("inn_rest")
 	check(not narrow.Combat.wounded(narrow), "a night at the inn treats it")
+
+## 收尾抉择 (part one, stage three) and 流派 (stage four, schools.gd).
+func _terms_and_schools() -> void:
+	# Let go: no grudge, the mind eased.
+	var mercy := _duel("zhui_bing", "", 1)
+	mercy.content.feuds.grudge_chance = 1.0
+	var mind := int(mercy.player.mind)
+	mercy.battle.hp = 0
+	mercy.Combat._win(mercy)
+	mercy.choose_event("release")
+	check(mercy.world.grudges.is_empty() and int(mercy.player.mind) >= mind and mercy.journal_lines().any(func(line: String) -> bool: return line.contains("改邪归正")), "letting the outlaw go leaves no grudge")
+	# Searched: half their purse again.
+	var frisk := _duel("rogue", "", 1)
+	frisk.content.feuds.grudge_chance = 0.0
+	frisk.battle.hp = 0
+	frisk.Combat._win(frisk)
+	var stones := int(frisk.player.stones)
+	frisk.choose_event("search")
+	check(int(frisk.player.stones) == stones + int(frisk.content.enemies.rogue.reward_stones) / 2 and frisk.journal_lines().any(func(line: String) -> bool: return line.contains("身上搜出")), "searching them finds half their purse again")
+	# Pressed: a hoard waits at a place of the region.
+	var squeeze := _duel("rogue", "", 1)
+	squeeze.content.feuds.grudge_chance = 0.0
+	squeeze.player.location = "town"
+	squeeze.battle.hp = 0
+	squeeze.Combat._win(squeeze)
+	squeeze.choose_event("press")
+	check(squeeze.world.stashes.size() == 1 and squeeze.content.region_of(str(squeeze.world.stashes[0].place)) == "qingyun", "pressing them gives up their gang's hoard")
+	var kept := Session.new()
+	check(kept.restore(JSON.parse_string(JSON.stringify(squeeze.snapshot()))) and kept.world.stashes.size() == 1, "a confessed hoard survives a save")
+	var hoard: Dictionary = squeeze.world.stashes[0]
+	stones = int(squeeze.player.stones)
+	squeeze.player.location = str(hoard.place)
+	squeeze.Events.check_location(squeeze)
+	check(squeeze.world.stashes.is_empty() and int(squeeze.player.stones) == stones + int(hoard.stones), "and stopping there takes it")
+	var named := _duel("rogue", "", 1)
+	named.battle.npc = "rogue"
+	named.battle.hp = 0
+	named.Combat._win(named)
+	check(str(named.pending_event.get("id", "")) != "victory_terms", "a named person's fate is their story's")
+	var beast := _duel("wolf", "bite", 1)
+	beast.battle.hp = 0
+	beast.Combat._win(beast)
+	check(beast.pending_event.is_empty(), "a beast is simply beaten")
+	# 流派.
+	var sword := _duel("wolf", "", 1)
+	var affinity := sword.Arsenal.technique_id("affinity", "metal", 2, [], 0)
+	sword.player.methods = [affinity]
+	check(sword.Schools.player(sword) == "sword" and sword.content.technique(affinity).description.contains("剑意"), "a metal 元气 心法 of 黄阶 makes a 剑修, and says so")
+	var low := sword.Arsenal.technique_id("affinity", "metal", 1, [], 0)
+	sword.player.methods = [low]
+	check(sword.Schools.player(sword).is_empty(), "not from a 凡阶 one")
+	sword.player.methods = [affinity]
+	var first := Combat._school_force(sword, "metal")
+	var second := Combat._school_force(sword, "metal")
+	var third := Combat._school_force(sword, "metal")
+	check(is_equal_approx(first, 1.0) and is_equal_approx(second, 1.15) and is_equal_approx(third, 1.3), "剑意 grows with each metal art of the turn (%.2f %.2f %.2f)" % [first, second, third])
+	sword.end_turn()
+	check(sword.battle.is_empty() or not sword.battle.has("sword_streak"), "and fades with the turn")
+	var body := _duel("wolf", "bite", 1)
+	body.player.methods = [body.Arsenal.technique_id("body", "earth", 2, [], 0)]
+	check(body.Schools.player(body) == "body", "a 炼体 心法 makes a 体修")
+	Combat._hurt_player(body, int(body.player.max_hp) / 5, 1.0, false, {"style": "enemy"})
+	check(bool(body.battle.get("body_ready", false)) and is_equal_approx(Combat._school_force(body, "fire"), 1.25) and not body.battle.has("body_ready"), "a heavy blow taken readies 反震, once")
+	body.battle.enemy_id = "wolf"
+	var overcome := ""
+	for element: String in body.content.technique_data.elements:
+		if str(body.Combat.rules(body).overcomes.get("metal", "")) == element:
+			overcome = element
+	check(is_equal_approx(Combat.counter_multiplier(body, overcome), 0.9), "being overcome costs a 体修 less")
+	var soul := _duel("wolf", "bite", 1)
+	soul.player.methods = [soul.Arsenal.technique_id("focus", "water", 2, [], 0)]
+	soul.battle.orbs = ["metal", "metal", "wood", "wood", "fire", "fire", "water", "earth"]
+	var art: String = soul.active_skills()[0]
+	soul.use_skill(art)
+	check(soul.battle.is_empty() or soul.battle.status.has("weaken"), "魂修 shakes a beast's next blow")
+	var array := _duel("wolf", "bite", 1)
+	array.player.methods = [array.Arsenal.technique_id("breath", "earth", 2, [], 0)]
+	check(array.Schools.player(array) == "array" and array.Combat.array_block(array).is_empty(), "an earth 吐纳 心法 makes a 阵修")
+	array.player.hp = array.player.max_hp
+	array.Combat.lay_array(array)
+	check(array.battle.is_empty() or (bool(array.battle.array) and int(array.battle.shield) >= 8 and not array.Combat.array_block(array).is_empty()), "布阵 takes a turn, then shields every turn")
+	var foe_school := _duel("wolf", "bite", 1)
+	var people: Array = foe_school.living_people().filter(func(id: String) -> bool: return foe_school.is_generated(id))
+	var schooled := 0
+	for person_id: String in people:
+		if not str(foe_school.Population.foe(foe_school.content, person_id, foe_school.person(person_id)).get("school", "")).is_empty():
+			schooled += 1
+	check(schooled > 0, "some of the world's people fight by a school too (%d of %d)" % [schooled, people.size()])
 
 func _saves() -> void:
 	var game := _duel("wolf", "pounce")

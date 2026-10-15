@@ -627,6 +627,7 @@
     "nicknames": ["血手", "独眼", "鬼影", "黑风", "笑面", "断指", "毒蝎", "铁爪", "白衣", "瘸腿"],
     "avengers": ["rogue", "zhui_bing", "shui_fei", "mo_tan", "xuesha_tu"],
     "grudge_chance": 0.25, "ripen_days": 20, "ambush_chance": 0.35, "max": 3, "pay": 40, "bounty_wait_days": 10,
+    "stash_scale": 2, "search_find": 0.4, "search_items": ["liaoshang_pill", "huiqi_pill", "lei_fu", "dundi_fu", "kongho_fu"],
     "causes": {
       "comrade": "上回栽在你手里的，是我的兄弟。这笔账，今日算清。",
       "exposed": "器堂袁执事的事，是你揭出来的吧？赤霄门的脸面，总要有人来讨。"

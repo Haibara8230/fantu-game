@@ -161,6 +161,11 @@ func _read_json(path: String) -> Variant:
 	return JSON.parse_string(file.get_as_text())
 
 func _validate() -> String:
+	# 流派 (schools.gd).
+	for school_id: String in technique_data.get("schools", {}):
+		var school: Variant = technique_data.schools[school_id]
+		if not school is Dictionary or not school.get("name") is String or not school.get("text") is String or not technique_data.archetypes.has(school.get("archetype", "")) or str(technique_data.archetypes[school.archetype].slot) != "method" or not _whole(school.get("min_tier")) or int(school.min_tier) < 1 or int(school.min_tier) > technique_data.tiers.size() or (school.has("element") and not technique_data.elements.has(school.element)):
+			return "流派配置错误：" + school_id
 	# 恩怨与悬赏 (feuds.gd).
 	if not feuds.is_empty():
 		if not feuds.get("nicknames") is Array or feuds.nicknames.is_empty() or not feuds.get("avengers") is Array or feuds.avengers.any(func(enemy_id: Variant) -> bool: return not enemies.has(enemy_id)) or not feuds.get("causes") is Dictionary:
@@ -174,7 +179,9 @@ func _validate() -> String:
 		for sworn: Variant in feuds.get("seeded", []):
 			if not sworn is Dictionary or not sworn.get("flag") in world_flags or not enemies.has(sworn.get("enemy", "")) or not sworn.get("name") is String or not feuds.causes.has(sworn.get("cause", "")) or not regions.has(sworn.get("region", "")):
 				return "恩怨来源配置错误"
-		for event_id: String in ["grudge_ambush", "bounty_found", "bounty_twist"]:
+		if not _whole(feuds.get("stash_scale")) or not (feuds.get("search_find") is float) or not feuds.get("search_items") is Array or feuds.search_items.any(func(item_id: Variant) -> bool: return item(str(item_id)).is_empty()):
+			return "收尾抉择配置错误"
+		for event_id: String in ["grudge_ambush", "bounty_found", "bounty_twist", "victory_terms"]:
 			if not events.has(event_id):
 				return "缺少恩怨事件：" + event_id
 	# 成串的战斗 (series.gd): where, how strong, the waves and what they pay.
@@ -1572,7 +1579,7 @@ func _validate_effects(effects: Variant) -> String:
 				ok = value is Array and not value.is_empty() and value.all(func(enemy_id: Variant) -> bool: return enemies.has(enemy_id))
 			"series":
 				ok = series.has(value)
-			"grudge_fight", "grudge_pay", "grudge_evade", "bounty_fight", "bounty_wait", "bounty_drop", "mend_wound":
+			"grudge_fight", "grudge_pay", "grudge_evade", "bounty_fight", "bounty_wait", "bounty_drop", "mend_wound", "terms_search", "terms_press":
 				ok = value is bool and value
 			"hp", "qi":
 				ok = (value is int or value is float) and float(value) == floor(float(value))

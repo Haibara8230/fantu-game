@@ -235,6 +235,9 @@ static func restore(s, data: Variant) -> bool:
 			return false
 		if saved_battle.has("cave") and not content.cave_data.has(saved_battle.cave):
 			return false
+		for flag_key: String in ["array", "body_ready"]:
+			if saved_battle.has(flag_key) and not saved_battle[flag_key] is bool:
+				return false
 		for named: String in ["title", "grudge", "wanted"]:
 			if saved_battle.has(named) and not saved_battle[named] is String:
 				return false
@@ -246,7 +249,7 @@ static func restore(s, data: Variant) -> bool:
 		var chain: Variant = saved_battle.get("chain", "")
 		if not chain is String or (not chain.is_empty() and not content.technique_data.elements.has(chain)):
 			return false
-		for count_key: String in ["shield", "foe_shield", "pills", "talismans", "released", "target"]:
+		for count_key: String in ["shield", "foe_shield", "pills", "talismans", "released", "target", "sword_streak", "soul_turn"]:
 			if not _whole_nonnegative(saved_battle.get(count_key, 0)):
 				return false
 		var intent: Variant = saved_battle.get("intent", [])
@@ -292,6 +295,9 @@ static func restore(s, data: Variant) -> bool:
 	var grudges: Variant = saved_world.get("grudges", [])
 	if not grudges is Array or grudges.any(func(grudge: Variant) -> bool: return not grudge is Dictionary or not grudge.get("id") is String or not grudge.get("name") is String or not content.enemies.has(grudge.get("enemy", "")) or not content.feuds.get("causes", {}).has(grudge.get("cause", "")) or not _whole_nonnegative(grudge.get("since")) or not content.regions.has(grudge.get("region", ""))):
 		return false
+	var stashes: Variant = saved_world.get("stashes", [])
+	if not stashes is Array or stashes.any(func(stash: Variant) -> bool: return not stash is Dictionary or not content.locations.has(stash.get("place", "")) or not _whole_nonnegative(stash.get("stones"))):
+		return false
 	var grudge_seeds: Variant = saved_world.get("grudge_seeds", {})
 	if not grudge_seeds is Dictionary or grudge_seeds.values().any(func(seen: Variant) -> bool: return not _whole_nonnegative(seen)) or not _whole_nonnegative(saved_world.get("grudge_serial", 0)):
 		return false
@@ -305,6 +311,10 @@ static func restore(s, data: Variant) -> bool:
 		seen_seeds[key] = int(grudge_seeds[key])
 	s.world["grudge_seeds"] = seen_seeds
 	s.world["grudge_serial"] = int(saved_world.get("grudge_serial", 0))
+	var kept_stashes: Array = []
+	for stash: Dictionary in stashes:
+		kept_stashes.append({"place": str(stash.place), "stones": int(stash.stones)})
+	s.world["stashes"] = kept_stashes
 	s.populate()
 	var player: Dictionary = saved_player.duplicate(true)
 	for key: String in PLAYER_COUNTS:
@@ -371,7 +381,7 @@ static func restore(s, data: Variant) -> bool:
 		fresh_hand = not battle.has("orbs")
 		for member: Dictionary in battle.get("pack", []):
 			member.hp = int(member.hp)
-		for count_key: String in ["shield", "foe_shield", "pills", "talismans", "released", "target"]:
+		for count_key: String in ["shield", "foe_shield", "pills", "talismans", "released", "target", "sword_streak", "soul_turn"]:
 			if battle.has(count_key):
 				battle[count_key] = int(battle[count_key])
 		# JSON brings every number back as a float; the whole ones are whole again.

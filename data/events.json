@@ -1,4 +1,14 @@
 {
+  "victory_terms": {
+    "title": "胜负已分",
+    "trigger": "manual",
+    "text": "{foe}倒在地上，再没有还手之力，只拿眼睛盯着你，等你发落。",
+    "choices": [
+      {"id": "release", "label": "放他走，劝他改邪归正", "effects": [{"mind": 2}], "chronicle": "你放{foe}走了，劝他从此改邪归正。"},
+      {"id": "search", "label": "搜身", "effects": [{"terms_search": true}], "chronicle": "你从{foe}身上搜出 {stones} 灵石，{loot_text}。"},
+      {"id": "press", "label": "逼问同伙的藏赃之处", "effects": [{"terms_press": true}], "chronicle": "你逼问{foe}，问出他们一伙在{place_name}藏了赃物。"}
+    ]
+  },
   "grudge_ambush": {
     "title": "寻仇",
     "trigger": "manual",

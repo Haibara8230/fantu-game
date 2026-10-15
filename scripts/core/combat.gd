@@ -281,9 +281,12 @@ static func foe_element(s) -> String:
 static func counter_multiplier(s, element: String) -> float:
 	var foe := foe_element(s)
 	if str(rules(s).overcomes.get(element, "")) == foe:
-		return float(rules(s).counter)
+		# A 体修 opponent takes being overcome half as hard.
+		var counter := float(rules(s).counter)
+		return 1.0 + (counter - 1.0) / 2.0 if s.Schools.foe(s) == "body" else counter
 	if str(rules(s).overcomes.get(foe, "")) == element:
-		return float(rules(s).countered)
+		# A 体修 loses less to being overcome.
+		return s.Schools.value(s, "body", "countered") if s.Schools.player(s) == "body" else float(rules(s).countered)
 	return 1.0
 
 static func use_skill(s, skill_id: String) -> String:
@@ -297,6 +300,7 @@ static func use_skill(s, skill_id: String) -> String:
 		return "灵气不足：%s需要%s。" % [t.name, s.Arsenal.cost_text(s.content, t.cost)]
 	var spent := _pay(s.battle.orbs, t.cost)
 	var look := {"style": skill_id, "name": t.name, "vfx": t.vfx, "tier": int(t.tier), "element": t.element, "spent": spent}
+	_soul_strike(s)
 	# A sect's own art cast by its disciple carries the lineage's signature layer.
 	var lineage: String = s.content.legacy_sect(skill_id, str(s.player.get("sect", "wanderer")))
 	if not lineage.is_empty():
@@ -317,7 +321,7 @@ static func use_skill(s, skill_id: String) -> String:
 			# from it than one great one.
 			var roll: int = s.combat_rng.randi_range(int(t.damage_min), int(t.damage_max)) + int(round(float(s.attack_bonus()) * spent.size() / 2.0))
 			var counter := counter_multiplier(s, t.element)
-			var factor: float = s.element_multiplier(t) * counter * ground(s, str(t.element), false)
+			var factor: float = s.element_multiplier(t) * counter * ground(s, str(t.element), false) * _school_force(s, str(t.element))
 			if s.battle.get("player_status", {}).has("weaken"):
 				factor *= 1.0 - float(s.battle.player_status.weaken[0])
 			if s.battle.status.has("sunder"):
@@ -366,6 +370,54 @@ static func _strike_foe(s, damage: int) -> int:
 	var dealt := damage - absorbed
 	s.battle.hp = maxi(0, int(s.battle.hp) - dealt)
 	return dealt
+
+## 流派 in the player's blow (schools.gd): 剑意 grows with each metal art of the turn; 反震 answers a
+## heavy blow taken, once.
+static func _school_force(s, element: String) -> float:
+	var force := 1.0
+	match s.Schools.player(s):
+		"sword":
+			if element == "metal":
+				var streak := int(s.battle.get("sword_streak", 0))
+				force *= 1.0 + s.Schools.value(s, "sword", "stack") * float(mini(streak, int(s.Schools.value(s, "sword", "most"))))
+				s.battle.sword_streak = streak + 1
+		"body":
+			if bool(s.battle.get("body_ready", false)):
+				force *= 1.0 + s.Schools.value(s, "body", "counter_back")
+				s.battle.erase("body_ready")
+	return force
+
+## 魂修: the turn's first art shakes the opponent: a generated one loses an orb, a beast is weakened.
+static func _soul_strike(s) -> void:
+	if s.Schools.player(s) != "soul" or int(s.battle.get("soul_turn", 0)) == int(s.battle.turn):
+		return
+	s.battle.soul_turn = int(s.battle.turn)
+	var orbs: Array = s.battle.get("foe_orbs", [])
+	if not orbs.is_empty():
+		orbs.remove_at(0)
+	else:
+		_inflict(s.battle.status, "weaken", [s.Schools.value(s, "soul", "weaken"), 1])
+	s.log_event("school_soul", {})
+
+## 阵修 布阵: a turn spent laying the formation; from then on an orb and a shield every turn.
+static func array_block(s) -> String:
+	if s.battle.is_empty():
+		return "当前没有对手。"
+	if s.Schools.player(s) != "array":
+		return "不通阵法。"
+	if bool(s.battle.get("array", false)):
+		return "阵已布下。"
+	return ""
+
+static func lay_array(s) -> String:
+	s.combat_events.clear()
+	var reason := array_block(s)
+	if not reason.is_empty():
+		return reason
+	s.battle.array = true
+	s.combat_events.append({"type": "guard", "amount": 0, "name": "布阵", "sect": str(s.player.get("sect", "wanderer"))})
+	s.log_event("school_array", {})
+	return end_turn(s)
 
 ## 地利 (docs/COMBAT_PLAN.md, part one, stage three): where a fight happens may favour some elements
 ## (a location's or a cave's `field`: {"name", "mods": {element: share}}), and a sect's own ground
@@ -1022,6 +1074,8 @@ static func _do_move(s, planned: Dictionary, factor: float, guarding: bool) -> b
 
 static func _enemy_turn(s, guarding: bool) -> String:
 	var arrived := false
+	var soul_done := false
+	var foe_swords := 0
 	var enemy_id: String = s.battle.enemy_id
 	# Lingering effects on the opponent act first: burning and bleeding can finish a fight.
 	var status: Dictionary = s.battle.get("status", {})
@@ -1072,6 +1126,15 @@ static func _enemy_turn(s, guarding: bool) -> String:
 			continue
 		var spent := _pay(s.battle.foe_orbs, art.cost)
 		var look := {"style": str(art.id), "name": str(art.name), "vfx": str(art.vfx), "tier": int(art.tier), "element": str(art.element), "spent": spent}
+		# Their 流派 too: 剑意 across their metal arts, 魂修 shaking the player's next draw.
+		var foe_school: String = s.Schools.foe(s)
+		if foe_school == "soul" and not soul_done:
+			soul_done = true
+			_inflict(s.battle.player_status, "slow", [1, 1])
+		var school_force := 1.0
+		if foe_school == "sword" and str(art.element) == "metal":
+			school_force += s.Schools.value(s, "sword", "stack") * float(mini(foe_swords, int(s.Schools.value(s, "sword", "most"))))
+			foe_swords += 1
 		match str(art.kind):
 			"heal":
 				var recovered := mini(_healed(status, int(art.heal)), int(foe.hp) - int(s.battle.hp))
@@ -1084,7 +1147,7 @@ static func _enemy_turn(s, guarding: bool) -> String:
 				for lingering: String in LINGERING:
 					if art.has(lingering):
 						_inflict(s.battle.player_status, lingering, art[lingering])
-				if _hurt_player(s, s.combat_rng.randi_range(int(planned.min), int(planned.max)), factor * ground(s, str(art.element), true), guarding, look):
+				if _hurt_player(s, s.combat_rng.randi_range(int(planned.min), int(planned.max)), factor * ground(s, str(art.element), true) * school_force, guarding, look):
 					return _lose(s)
 	if _pack_strikes(s, guarding):
 		return _lose(s)
@@ -1093,6 +1156,11 @@ static func _enemy_turn(s, guarding: bool) -> String:
 	s.battle.shield = 0
 	s.battle.turn += 1
 	s.battle.chain = ""
+	s.battle.erase("sword_streak")
+	var formation := 0
+	if bool(s.battle.get("array", false)):
+		formation = int(s.Schools.value(s, "array", "orbs"))
+		s.battle.shield = int(s.Schools.value(s, "array", "shield"))
 	var burning: Dictionary = s.battle.get("player_status", {})
 	for wound: Array in [["burn", "灼烧", "flame_bolt"], ["bleed", "流血", "sword"]]:
 		if not burning.has(wound[0]):
@@ -1103,7 +1171,7 @@ static func _enemy_turn(s, guarding: bool) -> String:
 		s.combat_events.append({"type": "attack", "actor": "enemy", "style": wound[0], "name": wound[1], "vfx": wound[2], "tier": 1, "hits": 1, "amount": bite, "hp_after": int(s.player.hp)})
 		_count_down(burning, wound[0])
 	var short := (int(burning.slow[0]) if burning.has("slow") else 0) + (int(burning.entangle[0]) if burning.has("entangle") else 0)
-	_gain(s, _draw(s, maxi(1, draw_count(s) - short + (int(rules(s).guard_orbs) if guarding else 0)), player_weights(s)))
+	_gain(s, _draw(s, maxi(1, draw_count(s) - short + formation + (int(rules(s).guard_orbs) if guarding else 0)), player_weights(s)))
 	_foe_prepare(s)
 	# The opponent's sunder, slow, entangle, wound and focus last through its turns.
 	for lingering: String in ["sunder", "slow", "entangle", "wound", "focus"]:
@@ -1125,6 +1193,8 @@ static func _hurt_player(s, roll: int, factor: float, guarding: bool, look: Dict
 	s.battle.shield = int(s.battle.get("shield", 0)) - absorbed
 	damage -= absorbed
 	s.player.hp = maxi(0, int(s.player.hp) - damage)
+	if s.Schools.player(s) == "body" and float(damage) >= float(s.player.max_hp) * s.Schools.value(s, "body", "heavy"):
+		s.battle.body_ready = true
 	s.combat_events.append(_event({"type": "attack", "actor": "enemy", "amount": damage, "absorbed": absorbed, "hp_after": int(s.player.hp)}, look))
 	s.log_event("enemy_attack", {"enemy": s.battle.enemy_id, "amount": damage})
 	return int(s.player.hp) <= 0
@@ -1352,8 +1422,9 @@ static func _win(s) -> String:
 		message += " " + s.Feuds.fight_over(s, grudge_id, true)
 	elif not wanted_key.is_empty():
 		message += " " + s.Feuds.caught(s, wanted_key)
-	else:
-		s.Feuds.after_win(s, enemy_id)
+	elif series_id.is_empty() and npc.is_empty():
+		# A named person's fate belongs to their story; a nameless road outlaw's to the player.
+		s.Feuds.offer_terms(s, enemy_id)
 	# A defeated regional threat changes the world; the journey itself continues.
 	var flag: String = enemy.get("world_flag", "")
 	if not flag.is_empty() and not s.has_flag(flag):

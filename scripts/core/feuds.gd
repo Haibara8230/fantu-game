@@ -9,6 +9,8 @@ extends RefCounted
 ## avenger, a road leg in its region may bring the ambush (`grudge_ambush` in data/events.json), never in
 ## flight, on a paid passage or in retreat. The player fights, pays, or slips away to be found later.
 ##
+## 收尾抉择: a beaten road outlaw is let go, searched, or pressed for their gang's hoard.
+##
 ## 悬赏猎杀: an accepted outlaw commission names someone hiding at a place; stopping there finds them
 ## (`bounty_found`, or `bounty_twist` when the poster lied). Taking them in counts the commission done.
 
@@ -113,6 +115,62 @@ static func fight_over(s, grudge_id: String, won: bool) -> String:
 		return ""
 	settle(s, grudge_id)
 	return s.log_event("grudge_won" if won else "grudge_lost", {"foe": str(grudge.name)})
+
+# --- 收尾抉择 (part one, stage three) ------------------------------------------------------------------
+
+## A road outlaw beaten (not in a series, nor a grudge or a bounty fight): the player decides what to do
+## with them (`victory_terms`). Letting them go ends it there; searching them or pressing them for their
+## gang's hoard may leave a comrade who remembers (after_win).
+static func offer_terms(s, enemy_id: String) -> void:
+	var enemy: Dictionary = s.content.enemies[enemy_id]
+	if not enemy_id in rules(s).avengers or not s.pending_event.is_empty():
+		return
+	s.pending_event = {"id": "victory_terms", "day": int(s.world.day), "values": {"enemy": enemy_id, "foe": str(enemy.name)}}
+
+static func _terms_enemy(s) -> String:
+	return str(s.pending_event.get("values", {}).get("enemy", ""))
+
+## 搜身: half their purse again, and now and then something they carried.
+static func search(s) -> void:
+	var enemy_id := _terms_enemy(s)
+	if enemy_id.is_empty():
+		return
+	var enemy: Dictionary = s.content.enemies[enemy_id]
+	var found := {}
+	var stones := int(enemy.reward_stones) / 2
+	s.player.stones = int(s.player.stones) + stones
+	if s.world_rng.randf() < float(rules(s).search_find):
+		var pick: String = rules(s).search_items[s.world_rng.randi_range(0, rules(s).search_items.size() - 1)]
+		s.add_item(pick, 1)
+		found[pick] = 1
+	s.pending_event.values["stones"] = str(stones)
+	s.pending_event.values["loot_text"] = s.Chronicle.loot_text(s.loot_code(found), s.content) if not found.is_empty() else "别无他物"
+	after_win(s, enemy_id)
+
+## 逼问: where their gang hides its takings; it waits there for the player (world.stashes).
+static func press(s) -> void:
+	var enemy_id := _terms_enemy(s)
+	if enemy_id.is_empty():
+		return
+	var region: String = s.content.region_of(str(s.player.location))
+	var places: Array = s.content.locations.keys().filter(func(place: String) -> bool: return s.content.region_of(place) == region and place != str(s.player.location) and not s.content.locations[place].has("home"))
+	places.sort()
+	if places.is_empty():
+		return
+	var place: String = places[s.world_rng.randi_range(0, places.size() - 1)]
+	if not s.world.has("stashes"):
+		s.world["stashes"] = []
+	s.world.stashes.append({"place": place, "stones": int(s.content.enemies[enemy_id].reward_stones) * int(rules(s).stash_scale)})
+	s.pending_event.values["place_name"] = str(s.content.locations[place].name)
+	after_win(s, enemy_id)
+
+## Stopping where a hoard was confessed: it is taken. The chronicle text, or "".
+static func collect_stash(s) -> void:
+	for stash: Dictionary in s.world.get("stashes", []).duplicate():
+		if str(stash.place) == str(s.player.location):
+			s.world.stashes.erase(stash)
+			s.player.stones = int(s.player.stones) + int(stash.stones)
+			s.log_event("stash_found", {"location": str(stash.place), "stones": int(stash.stones)})
 
 # --- 悬赏 ---------------------------------------------------------------------------------------------
 

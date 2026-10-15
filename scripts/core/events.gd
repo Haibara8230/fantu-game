@@ -208,6 +208,10 @@ static func apply(s, effects: Array) -> void:
 				s.Series.begin(s, value)
 			"mend_wound":
 				s.player["wound_until"] = 0
+			"terms_search":
+				s.Feuds.search(s)
+			"terms_press":
+				s.Feuds.press(s)
 			"grudge_fight":
 				s.Feuds.fight(s)
 			"grudge_pay":
@@ -420,6 +424,7 @@ static func check_location(s, passing: bool = false) -> Array[String]:
 	if not passing:
 		s.meet_present()
 		s.Feuds.update(s)
+		s.Feuds.collect_stash(s)
 		s.Feuds.check_bounties(s)
 	return messages
 
@@ -435,8 +440,9 @@ static func choose(s, choice_id: String) -> String:
 			return "条件不足，无法如此选择。"
 		# An event raised with its own values (who waylays the player, whom they hunt) tells them on.
 		var args := {"event": event_id, "part": "choice", "choice": choice_id}
-		args.merge(s.pending_event.get("values", {}))
+		var raised: Dictionary = s.pending_event
 		apply(s, choice.get("effects", []))
+		args.merge(raised.get("values", {}))
 		s.pending_event = {}
 		var text: String = s.log_event("event", args, bool(definition.get("major", false)))
 		# Living through an encounter, whatever the choice, is insight toward the next bottleneck.

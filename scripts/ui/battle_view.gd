@@ -77,6 +77,13 @@ static func render(ui) -> void:
 	var flee: Button = ui.button("撤离 · " + ui.duration("flee"), func() -> void: ui.battle_action("flee"), "保留资源，耗时 %s；%s；被缠住时走不了" % [ui.duration("flee"), odds])
 	_small(flee)
 	side.add_child(flee)
+	# 阵修 布阵 (schools.gd): a turn to lay the formation.
+	if session.Schools.player(session) == "array":
+		var array_reason: String = session.Combat.array_block(session)
+		var lay: Button = ui.button("布阵", func() -> void: ui.battle_action("array"), array_reason if not array_reason.is_empty() else str(session.content.technique_data.schools.array.text) + "（结束本回合）")
+		lay.disabled = not array_reason.is_empty()
+		_small(lay)
+		side.add_child(lay)
 	# 祭出 the worn 兵刃 (combat.gd release): its own move, once a duel (twice from 法宝 up).
 	var release: Dictionary = session.Combat.release_of(session)
 	if not release.is_empty():
