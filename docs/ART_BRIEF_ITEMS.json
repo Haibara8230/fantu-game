@@ -312,37 +312,59 @@
       "prompt": "Draw the item described (Chinese is content to illustrate, never write it): 寒玉髓。寒玉深处凝出的玉髓，雕成法宝佩饰的胚子。炼器时同一种材料用三份。"
     },
     {
-      "id": "item_huashen_dan",
+      "id": "item_xiaguang_lingsui",
       "kind": "item",
-      "target": "assets/art/items/huashen_dan.png",
+      "target": "assets/art/items/xiaguang_lingsui.png",
       "size": [
         512,
         512
       ],
-      "subject": "化神丹：元婴化神所需的丹药，元婴圆满方可服用。世间所存，屈指可数。",
-      "prompt": "Draw the item described (Chinese is content to illustrate, never write it): 化神丹。元婴化神所需的丹药，元婴圆满方可服用。世间所存，屈指可数。"
+      "subject": "霞光灵髓：沉在霞光灵池底下的灵髓，映着不散的晚霞。筑基圆满时服下再闭关结丹，灵液更易收拢成丹，金丹也更凝实。",
+      "prompt": "Draw the item described (Chinese is content to illustrate, never write it): 霞光灵髓。沉在霞光灵池底下的灵髓，映着不散的晚霞。筑基圆满时服下再闭关结丹，灵液更易收拢成丹，金丹也更凝实。"
     },
     {
-      "id": "item_huaying_dan",
+      "id": "item_dixin_huolian",
       "kind": "item",
-      "target": "assets/art/items/huaying_dan.png",
+      "target": "assets/art/items/dixin_huolian.png",
       "size": [
         512,
         512
       ],
-      "subject": "化婴丹：碎丹成婴所需的丹药，金丹圆满方可服用。",
-      "prompt": "Draw the item described (Chinese is content to illustrate, never write it): 化婴丹。碎丹成婴所需的丹药，金丹圆满方可服用。"
+      "subject": "地心火莲：生在地火最深处的赤莲，百年才开一朵。结丹时服下，借地火之力压实灵液，金丹也更凝实。",
+      "prompt": "Draw the item described (Chinese is content to illustrate, never write it): 地心火莲。生在地火最深处的赤莲，百年才开一朵。结丹时服下，借地火之力压实灵液，金丹也更凝实。"
     },
     {
-      "id": "item_ningyuan_dan",
+      "id": "item_yanghun_mu",
       "kind": "item",
-      "target": "assets/art/items/ningyuan_dan.png",
+      "target": "assets/art/items/yanghun_mu.png",
       "size": [
         512,
         512
       ],
-      "subject": "凝元丹：凝聚灵液、结成金丹所需的丹药，筑基圆满方可服用。",
-      "prompt": "Draw the item described (Chinese is content to illustrate, never write it): 凝元丹。凝聚灵液、结成金丹所需的丹药，筑基圆满方可服用。"
+      "subject": "养魂木：温养神魂的奇木，握在手里便觉心神宁定。金丹圆满碎丹成婴时以它护住神魂，元婴更易成形。",
+      "prompt": "Draw the item described (Chinese is content to illustrate, never write it): 养魂木。温养神魂的奇木，握在手里便觉心神宁定。金丹圆满碎丹成婴时以它护住神魂，元婴更易成形。"
+    },
+    {
+      "id": "item_qiannian_zhuguo",
+      "kind": "item",
+      "target": "assets/art/items/qiannian_zhuguo.png",
+      "size": [
+        512,
+        512
+      ],
+      "subject": "千年朱果：千年一熟的朱红灵果，果肉里裹着一团温润的生机。碎丹成婴时服下，元婴更易成形。",
+      "prompt": "Draw the item described (Chinese is content to illustrate, never write it): 千年朱果。千年一熟的朱红灵果，果肉里裹着一团温润的生机。碎丹成婴时服下，元婴更易成形。"
+    },
+    {
+      "id": "item_tianxin_lianzi",
+      "kind": "item",
+      "target": "assets/art/items/tianxin_lianzi.png",
+      "size": [
+        512,
+        512
+      ],
+      "subject": "天心莲子：上古灵莲留下的莲子，据说是从灵界流落人间。元婴圆满冲击化神时含在口中，神识更易与天地相合。",
+      "prompt": "Draw the item described (Chinese is content to illustrate, never write it): 天心莲子。上古灵莲留下的莲子，据说是从灵界流落人间。元婴圆满冲击化神时含在口中，神识更易与天地相合。"
     },
     {
       "id": "item_yanshou_dan",

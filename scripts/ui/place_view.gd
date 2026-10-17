@@ -105,6 +105,9 @@ static func render(ui) -> void:
 		landscape.custom_minimum_size.y = 170
 		center.add_child(landscape)
 		center.add_child(ui.paragraph(spot.description if not str(spot.description).is_empty() else location.description, ui.INK))
+	# The hall's own lineage comes first, above the everyday actions and the stays.
+	if "study" in spot.actions and not ui.preview_mode:
+		sect_choices(ui, center, false)
 	var grid := GridContainer.new()
 	grid.columns = 2
 	grid.add_theme_constant_override("h_separation", 12)
@@ -120,15 +123,16 @@ static func render(ui) -> void:
 		_spot_action(ui, grid, action)
 	for days: Variant in session.wait_options():
 		var span := int(days)
-		_timed(ui, grid, "停留  ·  " + Calendar.duration_text(span), func() -> String: return session.wait(span), "原地停留，等候时机；约定临近时会提醒")
-	if "study" in spot.actions and not ui.preview_mode:
-		sect_choices(ui, center, false)
+		_timed(ui, grid, "停留  ·  " + Calendar.duration_text(span), func() -> String: return session.wait(span), "原地停留调息，气血慢慢恢复（静室的一半快）；约定临近时会提醒")
 
 static func _breakthrough_tooltip(session) -> String:
 	var need: Dictionary = session.next_breakthrough()
 	if need.is_empty():
 		return "后续境界尚未开放"
-	return "需修至%s，并有 %d 修为与 %d 枚%s（或天材地宝）；成败看把握" % [session.content.realm_title(int(session.player.realm), session.content.realm(int(session.player.realm)).stages.size() - 1), int(need.xp), int(need.pills), session.content.item(str(need.get("pill", "foundation_pill"))).name]
+	var stage: String = session.content.realm_title(int(session.player.realm), session.content.realm(int(session.player.realm)).stages.size() - 1)
+	if int(need.get("pills", 0)) <= 0:
+		return "需修至%s，并有 %d 修为；不靠丹药，成败看自身的把握，天材地宝与机缘可添几分" % [stage, int(need.xp)]
+	return "需修至%s，并有 %d 修为与 %d 枚%s（或天材地宝）；成败看把握" % [stage, int(need.xp), int(need.pills), session.content.item(str(need.pill)).name]
 
 static func _open_spots(session, location_id: String) -> Array[Dictionary]:
 	var result: Array[Dictionary] = []

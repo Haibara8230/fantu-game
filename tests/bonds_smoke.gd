@@ -155,8 +155,8 @@ func _exchange() -> void:
 	check(slips.size() == 2 and slips.all(func(good: Dictionary) -> bool: return str(good.item).begins_with("j:")), "two yellow-tier jade slips each period")
 	# 青云 is a small sect: its slips and gear stop at 黄阶 and 法器 (docs/WORLD_EXPANSION.md, part four).
 	check(game.sect_goods().all(func(good: Dictionary) -> bool: return not str(good.item).begins_with("j:") and not str(good.item).begins_with("e:") or int(game.content.item(good.item).tier) <= 2), "a small sect's exchange stops at 黄阶 and 法器")
-	var core_pill: Array = game.sect_goods().filter(func(good: Dictionary) -> bool: return str(good.key).begins_with("ningyuan:"))
-	check(core_pill.size() == 1 and str(core_pill[0].block).contains("真传弟子"), "the sect's one 凝元丹 only for a 真传")
+	# Breakthroughs past 筑基 ask no pill, so the exchange keeps none for them.
+	check(not game.sect_goods().any(func(good: Dictionary) -> bool: return game.content.item(str(good.item)).has("breakthrough")), "the sect exchanges no breakthrough aid past the 筑基丹")
 	game.player.location = "town"
 	check(game.sect_exchange(key_of.call("liaoshang")).contains("执事堂"), "the exchange is at the 执事堂")
 	var poor := _game()

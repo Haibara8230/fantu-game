@@ -11,8 +11,7 @@
   {"id": "azhi_token", "title": "阿芷的竹牌", "text": "她父亲的药篓或许落在落霞谷深处的古修洞府。{ruin_hint}"},
   {"id": "ruin", "title": "古修洞府", "text": "落霞谷深处的洞府被散修石寒占据，击败他才能搜寻石室。"},
   {"id": "sealed", "title": "封谷", "text": "落霞谷封锁中，宗门长老将于{date}出手，还有 {until}；其间可在别处采药、接委托。"},
-  {"id": "core_breach", "title": "冲击{next_realm}", "text": "修为与{pill_name}都已齐备，回静室闭关冲击{next_realm}。眼下把握约 {odds}%：越往上越难，心境更足、请人护法、心法品阶高些都能更稳。"},
-  {"id": "core_pill", "title": "冲击{next_realm}", "text": "修为已到此境之极，还缺一枚{pill_name}。{sources}"},
+  {"id": "core_breach", "title": "冲击{next_realm}", "text": "修为已到此境之极，回静室闭关冲击{next_realm}，不靠丹药，全凭自身。眼下把握约 {odds}%：心境更足、请人护法、心法品阶高些都能更稳，此境的天材地宝与机缘也能添几分。"},
   {"id": "cultivate", "title": "精进修为", "text": "修为 {xp} / {next_xp}，向{next_stage}迈进。"},
   {"id": "promotion", "title": "宗门晋升", "text": "晋升{rank_name}的条件已齐，回青云山执事堂申请。"},
   {"id": "rank", "title": "宗门晋升", "text": "晋升{rank_name}需累计贡献 {merit_needed}（现有 {merit}）、修为{stage_name}。执事堂的委托与巡视、师门差事、捐献都记贡献。"}

@@ -1,9 +1,10 @@
 extends RefCounted
 ## Breaking through to the next realm (筑基, then 金丹), after the web novels: it may fail. Operates on a
-## Session. Each realm names the pill its breakthrough asks (`pill`: 筑基丹, 凝元丹) and may make it
-## harder (`odds`). The odds start from the 资质 and add what was prepared: the pills (each worth less
-## than the one before; fine ones, 上品筑基丹, are taken first and add a little more),
-## a 天材地宝 in their place, a mind beyond what the stage asks, a 心法 suited to the roots, someone to
+## Session. Only 筑基 asks a pill (`pill`, `pills`: the 筑基丹, or a 天材地宝 in its place); from 金丹 on
+## the cultivator stands on their own, a 天材地宝 for that realm or fortune adding to the odds. A realm may
+## make it harder or easier (`odds`). The odds start from the 资质 and add what was prepared: the pills
+## (each worth less than the one before; fine ones, 上品筑基丹, are taken first and add a little more),
+## a 天材地宝, a mind beyond what the stage asks, a 心法 suited to the roots, someone to
 ## stand guard (护法), the 灵眼 to break through at, fortune met on the way (机缘: 顿悟, 生死之间), the
 ## lessons of earlier failures, and talents; 丹毒 still in the body takes a little off. They are shown
 ## before the attempt (`odds`).
@@ -24,9 +25,9 @@ const DEMON_EVENT := "heart_demon"
 static func rules(s) -> Dictionary:
 	return s.content.rules.breakthrough
 
-## The pill the next breakthrough asks (筑基丹, 凝元丹).
+## The pill the next breakthrough asks (筑基丹), or "" when it asks none.
 static func pill_of(s) -> String:
-	return str(s.next_breakthrough().get("pill", "foundation_pill"))
+	return str(s.next_breakthrough().get("pill", ""))
 
 ## Treasures in the 行囊 that can stand in for the next breakthrough's pills (each for its own realm):
 ## item ids, cheapest first.
@@ -42,7 +43,7 @@ static func treasures(s) -> Array[String]:
 
 ## The plan a plain 突破 uses: one pill if there is one, else the first treasure.
 static func default_plan(s) -> Dictionary:
-	if s.pill_count(pill_of(s)) > 0:
+	if not pill_of(s).is_empty() and s.pill_count(pill_of(s)) > 0:
 		return {"pills": 1, "treasure": "", "guard": ""}
 	var owned := treasures(s)
 	return {"pills": 0, "treasure": owned[0] if not owned.is_empty() else "", "guard": ""}
@@ -96,12 +97,12 @@ static func block(s, plan: Dictionary) -> String:
 		return "突破需修至%s，并有 %d 修为。" % [s.content.realm_title(int(s.player.realm), last_stage), int(need.xp)]
 	var pills := int(plan.get("pills", 0))
 	var treasure := str(plan.get("treasure", ""))
-	var pill_name := str(s.content.item(pill_of(s)).name)
-	if pills < 0 or pills > rules(s).pill_bonus.size() or s.pill_count(pill_of(s)) < pills:
+	var pill_name := str(s.content.item(pill_of(s)).get("name", "丹药"))
+	if pills < 0 or pills > rules(s).pill_bonus.size() or (pills > 0 and (pill_of(s).is_empty() or s.pill_count(pill_of(s)) < pills)):
 		return "行囊里没有那么多%s。" % pill_name
 	if not treasure.is_empty() and not treasure in treasures(s):
 		return "行囊里没有此物，或此物于这次突破无用。"
-	if pills < int(need.pills) and treasure.is_empty() and not _ready_boon(s, "remnant"):
+	if pills < int(need.get("pills", 0)) and treasure.is_empty() and not _ready_boon(s, "remnant"):
 		return "突破至少需要 %d 枚%s，或一样天材地宝。" % [int(need.pills), pill_name]
 	var guard := str(plan.get("guard", ""))
 	if not guard.is_empty() and not guard in guards(s):
@@ -117,7 +118,7 @@ static func odds(s, plan: Dictionary) -> Dictionary:
 	parts.append(["资质 · %s" % grade.name, int(r.base[int(grade.index)])])
 	var need: Dictionary = s.next_breakthrough()
 	if int(need.get("odds", 0)) != 0:
-		parts.append(["%s之难" % s.content.realm(int(s.player.realm) + 1).name, int(need.odds)])
+		parts.append(["冲击%s" % s.content.realm(int(s.player.realm) + 1).name, int(need.odds)])
 	var talents: int = s.talent_modifier("breakthrough")
 	if talents != 0:
 		parts.append(["天赋", talents])

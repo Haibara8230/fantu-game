@@ -236,7 +236,7 @@ func _validate() -> String:
 		if int(realm.stages[0].xp) != 0:
 			return "第一个小阶段的门槛必须是 0：%s" % realm.get("id", index)
 		var breakthrough: Variant = realm.get("breakthrough")
-		if breakthrough != null and (not breakthrough is Dictionary or not _whole(breakthrough.get("xp")) or not _whole(breakthrough.get("pills"))):
+		if breakthrough != null and (not breakthrough is Dictionary or not _whole(breakthrough.get("xp")) or not _whole(breakthrough.get("pills", 0))):
 			return "突破条件错误：%s" % realm.get("id", index)
 		if breakthrough != null and int(breakthrough.xp) < int(realm.stages.back().xp):
 			return "突破所需修为不能低于最后一个小阶段：%s" % realm.get("id", index)
@@ -313,6 +313,9 @@ func _validate() -> String:
 			return "灵根等级配置无效。"
 	if not _whole(rules.get("rest_full_days")) or int(rules.rest_full_days) < 1:
 		return "静养天数无效。"
+	var field_rest: Variant = rules.get("field_rest", 0.0)
+	if not (field_rest is float or field_rest is int) or float(field_rest) < 0.0 or float(field_rest) > 1.0:
+		return "野外调息的恢复比例无效。"
 	var retreat: Variant = rules.get("retreat")
 	if not retreat is Dictionary or not _whole(retreat.get("fresh_days")) or not _whole(retreat.get("decline_days")) or int(retreat.decline_days) < 1 or not _whole(retreat.get("recovery_per_day")) or int(retreat.recovery_per_day) < 1:
 		return "闭关心境配置无效。"
@@ -444,7 +447,8 @@ func _validate_breakthrough() -> String:
 		return "金丹品级配置无效。"
 	for realm: Dictionary in realms:
 		var step: Variant = realm.get("breakthrough")
-		if step is Dictionary and (not items.has(step.get("pill", "foundation_pill")) or (step.has("odds") and not _signed(step.odds))):
+		# Only 筑基 asks a pill; later realms rest on the cultivator, a 天材地宝 or fortune adding to it.
+		if step is Dictionary and ((int(step.get("pills", 0)) > 0 and not items.has(step.get("pill", ""))) or (step.has("pill") and int(step.get("pills", 0)) < 1) or (step.has("odds") and not _signed(step.odds))):
 			return "突破所需丹药或难度无效：%s" % realm.get("id", "")
 	for item_id: String in items:
 		var used: Variant = items[item_id].get("breakthrough")
@@ -1855,6 +1859,8 @@ func rarity_color(rarity: int) -> Color:
 
 ## The fine (上品) pill made beside a pill, or "".
 func fine_pill(pill_id: String) -> String:
+	if pill_id.is_empty():
+		return ""
 	for item_id: String in items:
 		if str(items[item_id].get("fine_of", "")) == pill_id:
 			return item_id

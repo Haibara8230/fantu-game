@@ -31,7 +31,7 @@
         "id": "core", "name": "地火之心", "links": ["nest"], "map": [0.86, 0.5],
         "heat": {"item": "bihuo_zhu", "sense": 45, "text": "再往里热浪扑面，衣角都要燎着"},
         "text": "火脉在这里涌出地面，汇成一汪缓缓翻滚的岩浆池。池边的石头被烧成了半透明，里头封着细碎的火光。",
-        "loot": [[{"item": ["dihuo_jing", 3]}], [{"manual": 3}], [{"item": ["silk_yunjin", 3]}]]
+        "loot": [[{"item": ["dihuo_jing", 3]}], [{"manual": 3}], [{"item": ["silk_yunjin", 3]}], [{"item": ["dixin_huolian", 1]}]]
       }
     ]
   },
@@ -99,13 +99,13 @@
       {
         "id": "garden", "name": "古药园", "links": ["stairs", "pool"], "map": [0.5, 0.22],
         "text": "药园早已荒了，几株老药却活了下来，枝叶间灵气浓得化不开。",
-        "loot": [[{"item": ["lingzhi", 2]}], [{"item": ["ningyuan_dan", 1]}], [{"item": ["yanshou_dan", 1]}]],
+        "loot": [[{"item": ["lingzhi", 2]}], [{"item": ["xiaguang_lingsui", 1]}], [{"item": ["yanshou_dan", 1]}]],
         "hidden": {"name": "药园深处的寿藤", "sense": 60, "qi": 30, "loot": [[{"item": ["shouyuan_guo", 1]}], [{"manual": 4}]]}
       },
       {
         "id": "pool", "name": "霞光灵池", "links": ["garden"], "map": [0.74, 0.14],
         "text": "池水映着天上不散的晚霞，水底沉着几块发光的石头。",
-        "hidden": {"name": "池底的灵石髓", "sense": 72, "qi": 40, "loot": [[{"stones": 600}], [{"item": ["ningyuan_dan", 2]}], [{"item": ["jade_han", 3]}, {"item": ["silk_yunjin", 3]}]]}
+        "hidden": {"name": "池底的灵石髓", "sense": 72, "qi": 40, "loot": [[{"stones": 600}], [{"item": ["qiannian_zhuguo", 1]}], [{"item": ["jade_han", 3]}, {"item": ["silk_yunjin", 3]}]]}
       },
       {
         "id": "tomb", "name": "剑冢", "links": ["stairs", "library"], "map": [0.5, 0.78],
@@ -122,7 +122,7 @@
         "id": "seat", "name": "古修坐化处", "links": ["library"], "map": [0.92, 0.55],
         "text": "一具枯骨盘坐在蒲团上，身前的灯还亮着。灯影一晃，一缕残念从骨中站了起来。",
         "guardian": "can_nian",
-        "loot": [[{"manual": 4}, {"equipment": 4}, {"item": ["shouyuan_guo", 1]}], [{"manual": 5}, {"item": ["huaying_dan", 1]}]]
+        "loot": [[{"manual": 4}, {"equipment": 4}, {"item": ["shouyuan_guo", 1]}], [{"manual": 5}, {"item": ["yanghun_mu", 1]}], [{"manual": 4}, {"item": ["tianxin_lianzi", 1]}]]
       }
     ]
   }

@@ -374,8 +374,13 @@ static func restore(s, data: Variant) -> bool:
 	for flag: String in leases:
 		terms[flag] = int(leases[flag])
 	player["leases"] = terms
+	# Items the content no longer knows (the pills retired from breakthroughs past 筑基) are dropped,
+	# so retired content cannot lock a journey.
+	var carried := {}
 	for item_id: String in player.items:
-		player.items[item_id] = int(player.items[item_id])
+		if not content.item(item_id).is_empty():
+			carried[item_id] = int(player.items[item_id])
+	player.items = carried
 	player.journey = {} if journey.is_empty() else {"to": journey.to}
 	for action_id: String in player.cooldowns:
 		player.cooldowns[action_id] = int(player.cooldowns[action_id])

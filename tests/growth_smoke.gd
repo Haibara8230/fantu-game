@@ -206,7 +206,18 @@ func _pacing() -> void:
 	day = int(game.world.day)
 	game.act("gather")
 	check(int(game.world.day) == day + 5, "gathering takes five days")
-	check(int(game.content.locations.market.shop[0].price) == 120 and int(game.content.items.huichun_grass.price) == 4, "prices follow the slower economy")
+	check(int(game.content.locations.market.shop[0].price) == 280 and int(game.content.items.huichun_grass.price) == 4, "prices follow the slower economy: the 筑基丹 is something to save for")
+	# Waiting anywhere is 调息: half the quiet room's pace, so a hurt player need not walk home.
+	game.player.hp = 45
+	game.wait(6)
+	check(int(game.player.hp) == 45 + int(round(90.0 * 6.0 * 0.5 / 12.0)), "six days of 调息 in the wild heal a quarter (%d)" % int(game.player.hp))
+	# 全部卖出 keeps what an accepted commission asks for.
+	game.travel("market")
+	game.set_item_count("huichun_grass", 5)
+	game.player.quests = [{"key": "market:0:0", "kind": "gather", "board": "market", "item": "huichun_grass", "count": 3, "days": 60, "deadline": int(game.world.day) + 60, "progress": 0, "reward": {"stones": 30, "xp": 0, "contribution": 0}}]
+	var told: String = game.act("sell")
+	check(game.item_count("huichun_grass") == 3 and told.contains("留着没卖"), "selling everything keeps the commission's herbs")
+	game.player.quests = []
 
 ## Takes away the talents an old journey awakened with, so the migrated numbers can be checked as saved.
 func _untalented(game) -> void:
@@ -298,7 +309,7 @@ func _items() -> void:
 		prices[game.sell_price("chiyan_flower")] = true
 	check(prices.size() > 1, "prices move from month to month")
 	game.player.stones = 30
-	check(game.buy("foundation_pill").contains("灵石不足"), "a pill costs 120 at the shop")
+	check(game.buy("foundation_pill").contains("灵石不足"), "a pill costs more than a new disciple has")
 	game.buy("liaoshang_pill")
 	check(game.item_count("liaoshang_pill") == 1 and int(game.player.stones) == 10, "the shop sells pills")
 	game.player.hp = 30
@@ -371,19 +382,22 @@ func _golden_core() -> void:
 	game.player.foundation_grade = 2
 	game.refresh_realm_stats()
 	game.travel("sect")
-	check(game.next_breakthrough().get("pill", "") == "ningyuan_dan" and game.act("breakthrough").contains("凝元丹"), "forming the core asks a 凝元丹")
+	check(not game.next_breakthrough().has("pill") and game.breakthrough_block(game.breakthrough_plan()).is_empty(), "forming the core asks no pill: the cultivator stands on their own")
 	game.set_item_count("qiannian_shiru", 1)
 	check(game.breakthrough_treasures().is_empty(), "a treasure for foundation does not serve the core")
-	game.set_item_count("ningyuan_dan", 1)
 	var odds: Dictionary = game.breakthrough_odds(game.breakthrough_plan())
-	check(odds.parts.any(func(part: Array) -> bool: return str(part[0]) == "金丹之难" and int(part[1]) == -15), "and is harder than foundation")
+	check(odds.parts.any(func(part: Array) -> bool: return str(part[0]) == "冲击金丹" and int(part[1]) == 10), "the realm's own share of the odds is shown")
+	game.set_item_count("xiaguang_lingsui", 1)
+	var aided: Dictionary = game.breakthrough_odds(game.breakthrough_plan())
+	check(game.breakthrough_treasures() == ["xiaguang_lingsui"] and int(aided.total) == mini(int(game.content.rules.breakthrough.most), int(odds.total) + 20) and aided.parts.any(func(part: Array) -> bool: return str(part[0]) == "霞光灵髓"), "a 天材地宝 for the core adds to the odds")
+	game.set_item_count("xiaguang_lingsui", 0)
 	var method := "t:breath:wood:3::0"
 	game.player.learned.append(method)
 	game.player.methods = [method]
 	game.fortune = {"demon": 0.99, "breakthrough": 0.0, "grade": 0.99}
 	game.act("breakthrough")
 	_weather(game)
-	check(game.player.realm == 2 and game.realm_name() == "金丹初期" and game.lifespan() >= 400 and game.item_count("ningyuan_dan") == 0, "the core is formed: 金丹初期, four hundred years")
+	check(game.player.realm == 2 and game.realm_name() == "金丹初期" and game.lifespan() >= 400, "the core is formed: 金丹初期, four hundred years")
 	# Foundation 上品 (2 × 2) + a 玄阶 心法 (3) + a wide margin (2) = 9 → clamped to 一品 (8).
 	check(int(game.player.core_grade) == 8 and game.core_grade().name == "一品金丹", "a fine foundation, a 玄阶 心法 and a wide margin make an 一品金丹 (%s)" % game.core_grade().get("name", ""))
 	check(int(game.player.max_hp) > int(game.content.stage(2, 0).max_hp), "and a fine core strengthens the body")
@@ -392,14 +406,13 @@ func _golden_core() -> void:
 	var broken: Dictionary = JSON.parse_string(JSON.stringify(game.snapshot()))
 	broken.player.core_grade = 99
 	check(not Session.new().restore(broken), "a grade out of range is refused")
-	check(game.next_breakthrough().get("pill", "") == "huaying_dan", "past 金丹 lies 元婴, asking a 化婴丹")
+	check(not game.next_breakthrough().is_empty() and not game.next_breakthrough().has("pill"), "past 金丹 lies 元婴, asking no pill either")
 	# 元婴: the core keeps its grade; 天阶 arts can be studied.
 	var core_before: int = int(game.player.core_grade)
 	game.player.stage = 3
 	game.player.xp = 16000
 	game.player.mind = 400
 	game.refresh_realm_stats()
-	game.set_item_count("huaying_dan", 1)
 	game.fortune = {"demon": 0.99, "breakthrough": 0.0, "grade": 0.99}
 	game.act("breakthrough")
 	_weather(game)
@@ -410,7 +423,6 @@ func _golden_core() -> void:
 	game.player.xp = 40000
 	game.player.mind = 600
 	game.refresh_realm_stats()
-	game.set_item_count("huashen_dan", 1)
 	game.fortune = {"demon": 0.99, "breakthrough": 0.0, "grade": 0.99}
 	game.act("breakthrough")
 	_weather(game)
@@ -440,7 +452,6 @@ func _golden_core() -> void:
 	plain.player.foundation_grade = 0
 	plain.refresh_realm_stats()
 	plain.travel("sect")
-	plain.set_item_count("ningyuan_dan", 1)
 	plain.fortune = {"demon": 0.99, "breakthrough": float(plain.breakthrough_odds(plain.breakthrough_plan()).total - 1) / 100.0, "grade": 0.99}
 	plain.act("breakthrough")
 	_weather(plain)

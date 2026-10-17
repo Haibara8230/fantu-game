@@ -444,12 +444,19 @@ func act(action: String) -> String:
 		"sell":
 			# Sell every item this place buys, in one go.
 			var sold := {}
-			# Treasures are sold one at a time, never swept up with the rest.
+			# Treasures are sold one at a time, never swept up with the rest; what a commission or an
+			# errand asks for stays in the 行囊.
+			var keep := Inventory.reserved(self)
+			var kept: Array[String] = []
 			for item_id: String in player.items.keys():
 				if sell_price(item_id) > 0 and content.item(item_id).get("category", "") != "treasure":
-					sold[item_id] = item_count(item_id)
+					var count := item_count(item_id) - int(keep.get(item_id, 0))
+					if count > 0:
+						sold[item_id] = count
+					if keep.has(item_id):
+						kept.append(content.item(item_id).name)
 			if sold.is_empty():
-				return "行囊里没有这里收购的东西。"
+				return "行囊里没有这里收购的东西。" if kept.is_empty() else "行囊里只剩委托与差事要交的%s，没有可卖的。" % "、".join(kept)
 			var revenue := 0
 			for item_id: String in sold:
 				revenue += sell_price(item_id) * int(sold[item_id])
@@ -457,7 +464,10 @@ func act(action: String) -> String:
 				Inventory.flood(self, item_id, int(sold[item_id]))
 			player.stones += revenue
 			record_deed("trade")
-			return conclude(log_event("sell_all", {"loot": loot_code(sold), "revenue": revenue}))
+			var text := log_event("sell_all", {"loot": loot_code(sold), "revenue": revenue})
+			if not kept.is_empty():
+				text += " 委托与差事要交的%s留着没卖。" % "、".join(kept)
+			return conclude(text)
 		"breakthrough":
 			return Breakthrough.attempt(self, Breakthrough.default_plan(self))
 		"ascend":
@@ -538,6 +548,12 @@ func wait(days: int) -> String:
 		return conclude("", passed)
 	meet_during(start + 1, int(world.day))
 	var text := log_event("wait", {"days": passed.elapsed, "location": player.location})
+	# Sitting still is 调息: health comes back at `rules.field_rest` of a quiet room's pace, anywhere.
+	var healed := mini(int(player.max_hp) - int(player.hp), int(round(float(player.max_hp) * float(passed.elapsed) * float(content.rules.get("field_rest", 0.0)) / float(content.rules.rest_full_days))))
+	if healed > 0:
+		player.hp = int(player.hp) + healed
+		player.qi = player.max_qi
+		text += " 调息间气血恢复 %d。" % healed
 	Fortune.after_wait(self, int(passed.elapsed))
 	return conclude(text, passed)
 

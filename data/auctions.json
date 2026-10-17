@@ -9,12 +9,13 @@
       "bidders": 4,
       "pool": [
         {"item": "lingzhi", "start": 80, "step": 10, "value": 150},
-        {"item": "foundation_pill", "start": 30, "step": 5, "value": 70},
+        {"item": "foundation_pill", "start": 80, "step": 10, "value": 170},
         {"manual": 3, "start": 90, "step": 10, "value": 170},
         {"equipment": 2, "start": 50, "step": 5, "value": 90},
         {"item": "pozhang_pill", "start": 25, "step": 5, "value": 50},
         {"item": "huiqi_pill_fine", "count": 3, "start": 20, "step": 5, "value": 45},
         {"item": "yanshou_dan", "start": 60, "step": 10, "value": 130},
+        {"item": "xiaguang_lingsui", "start": 200, "step": 20, "value": 480},
         {"item": "silk_xuancan", "count": 3, "start": 120, "step": 10, "value": 220}
       ]
     },
@@ -23,7 +24,7 @@
       "lots": 3,
       "bidders": 3,
       "pool": [
-        {"item": "foundation_pill", "start": 25, "step": 5, "value": 60},
+        {"item": "foundation_pill", "start": 70, "step": 10, "value": 150},
         {"manual": 2, "start": 35, "step": 5, "value": 70},
         {"equipment": 1, "start": 15, "step": 5, "value": 35},
         {"item": "pozhang_pill", "start": 20, "step": 5, "value": 45},

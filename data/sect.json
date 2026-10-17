@@ -31,7 +31,6 @@
     {"id": "xuantie", "item": "ore_xuantie", "price": 50, "limit": 3, "per_days": 180, "rank": "inner"},
     {"id": "xuancan", "item": "silk_xuancan", "price": 50, "limit": 3, "per_days": 180, "rank": "inner"},
     {"id": "mojade", "item": "jade_mo", "price": 50, "limit": 3, "per_days": 180, "rank": "inner"},
-    {"id": "ningyuan", "item": "ningyuan_dan", "price": 600, "limit": 1, "per_days": 1440, "rank": "true"},
     {"id": "yellow", "manual": 2, "count": 2, "price": 50, "limit": 1, "per_days": 90}
   ]
 }

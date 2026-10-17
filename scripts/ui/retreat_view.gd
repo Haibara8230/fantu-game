@@ -123,14 +123,18 @@ static func plan_of(ui) -> Dictionary:
 	ui.breakthrough_plan = plan
 	return plan
 
-## How many of the realm's pills (筑基丹, 凝元丹) to take, a treasure in their place, and who stands
-## guard.
+## How many 筑基丹 to take (only 筑基 asks a pill), a treasure, and who stands guard.
 static func _plan_controls(ui, parent: VBoxContainer, plan: Dictionary) -> void:
 	var session = ui.session
+	var pill_id: String = session.Breakthrough.pill_of(session)
+	if pill_id.is_empty():
+		parent.add_child(ui.paragraph("此番突破不靠丹药，全凭自身修为、心境与准备；天材地宝与机缘可添几分把握。", ui.INK))
+		_treasure_controls(ui, parent, plan)
+		_guard_controls(ui, parent, plan)
+		return
 	var pills := HBoxContainer.new()
 	pills.add_theme_constant_override("separation", 10)
 	parent.add_child(pills)
-	var pill_id: String = session.Breakthrough.pill_of(session)
 	var most := mini(session.pill_count(pill_id), session.content.rules.breakthrough.pill_bonus.size())
 	var fewer: Button = ui.button("－", func() -> void: ui.breakthrough_plan.pills = int(plan.pills) - 1; ui.render(), "少服一枚")
 	fewer.disabled = int(plan.pills) <= 0
@@ -139,6 +143,11 @@ static func _plan_controls(ui, parent: VBoxContainer, plan: Dictionary) -> void:
 	var more: Button = ui.button("＋", func() -> void: ui.breakthrough_plan.pills = int(plan.pills) + 1; ui.render(), "多服一枚，一枚比一枚见效少")
 	more.disabled = int(plan.pills) >= most
 	pills.add_child(more)
+	_treasure_controls(ui, parent, plan)
+	_guard_controls(ui, parent, plan)
+
+static func _treasure_controls(ui, parent: VBoxContainer, plan: Dictionary) -> void:
+	var session = ui.session
 	for item_id: String in session.breakthrough_treasures():
 		var use := CheckBox.new()
 		var item: Dictionary = session.content.item(item_id)
@@ -146,6 +155,9 @@ static func _plan_controls(ui, parent: VBoxContainer, plan: Dictionary) -> void:
 		use.button_pressed = plan.treasure == item_id
 		use.toggled.connect(func(on: bool) -> void: ui.breakthrough_plan.treasure = item_id if on else ""; ui.render())
 		parent.add_child(use)
+
+static func _guard_controls(ui, parent: VBoxContainer, plan: Dictionary) -> void:
+	var session = ui.session
 	var guards: Array[String] = session.breakthrough_guards()
 	if guards.is_empty():
 		parent.add_child(ui.paragraph("无人护法：交情到了信赖的人，或传功长老，可以为你护法。"))

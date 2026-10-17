@@ -270,3 +270,22 @@ static func pill_effects(s, item: Dictionary) -> Array:
 		else:
 			effects.append(effect)
 	return effects
+
+## What the player should keep when selling in bulk: the items an accepted commission asks for, and
+## those a storyline step now waiting asks to be handed over (许清和's 凝露草). {item id: count}.
+static func reserved(s) -> Dictionary:
+	var keep := {}
+	for quest: Dictionary in s.player.get("quests", []):
+		if quest.has("item"):
+			keep[quest.item] = int(keep.get(quest.item, 0)) + int(quest.count)
+	for person_id: String in s.content.people:
+		for interaction: Dictionary in s.content.people[person_id].get("interactions", []):
+			var conditions: Array = interaction.get("conditions", [])
+			var waiting: Array = conditions.filter(func(condition: Dictionary) -> bool: return condition.has("story_at"))
+			if waiting.is_empty() or not Events.all_met(s, waiting):
+				continue
+			for condition: Dictionary in conditions:
+				if condition.has("item_at_least"):
+					var wanted: Array = condition.item_at_least
+					keep[str(wanted[0])] = maxi(int(keep.get(str(wanted[0]), 0)), int(wanted[1]))
+	return keep

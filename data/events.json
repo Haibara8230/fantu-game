@@ -191,11 +191,12 @@
     "routes": [["ridge", "wild"], ["market", "wild"], ["wild", "ruin"], ["ferry", "chifeng"], ["nanming", "chifeng"], ["chifeng", "chixiao_gate"]],
     "min_danger": 1,
     "weight": 3,
-    "repeat": {"cooldown_days": 1},
+    "repeat": {"cooldown_days": 20},
     "text": "山道转角，一头妖狼伏在乱石后，眼冒绿光，喉中低吼。",
     "choices": [
       {"id": "fight", "label": "迎战", "effects": [{"battle": "wolf"}], "chronicle": "你在山道上与妖狼斗法。"},
-      {"id": "lure", "label": "抛出一株灵草引开它", "conditions": [{"herbs_at_least": 1}], "effects": [{"herbs": -1}], "chronicle": "你抛出一株灵草引开妖狼，绕路而行。"}
+      {"id": "lure", "label": "抛出一株灵草引开它", "conditions": [{"herbs_at_least": 1}], "effects": [{"herbs": -1}], "chronicle": "你抛出一株灵草引开妖狼，绕路而行。"},
+      {"id": "awe", "label": "放出威压吓退它（筑基）", "conditions": [{"realm_at_least": 1}], "effects": [], "chronicle": "你放出一丝筑基修士的威压，妖狼夹着尾巴逃进了林子。"}
     ]
   },
   "river_pirates": {
@@ -219,7 +220,7 @@
     "routes": [["sect", "ridge"], ["town", "ridge"], ["town", "ferry"], ["ridge", "wild"]],
     "min_danger": 1,
     "weight": 2,
-    "repeat": {"cooldown_days": 60},
+    "repeat": {"cooldown_days": 120},
     "text": "一个衣衫带血的采药人跌跌撞撞地扑到你面前：“道友救命！后头有人追杀我，就为了我篓里那株灵草！”远处已传来脚步声。",
     "choices": [
       {"id": "save", "label": "出手相救", "effects": [{"battle": "zhui_bing"}, {"mind": 2}], "chronicle": "你挡在采药人身前，与追来的劫修斗法。"},

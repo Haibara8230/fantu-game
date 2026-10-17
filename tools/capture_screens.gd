@@ -269,7 +269,7 @@ func _run() -> void:
 	s.player.mind = 300
 	s.player.core_grade = 5
 	s.refresh_realm_stats()
-	s.set_item_count("huaying_dan", 1)
+	s.set_item_count("yanghun_mu", 1)
 	main.set_view("breakthrough")
 	await _shot("25_breakthrough_nascent")
 	s.player.realm = 4

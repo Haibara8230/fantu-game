@@ -43,10 +43,12 @@ static func render(ui) -> void:
 		mine.add_child(ui.paragraph("此地不收你行囊里的东西。" if session.available_here("sell") else "这里只卖不收。"))
 	else:
 		mine.add_child(ui.button("全部摆上", func() -> void:
+			var keep: Dictionary = session.Inventory.reserved(session)
 			for item_id: String in session.player.items.keys():
-				if session.sell_price(item_id) > 0:
-					ui.trade.sell[item_id] = session.item_count(item_id)
-			ui.render(), "把这里收购的东西全部摆上台面"))
+				var count: int = session.item_count(item_id) - int(keep.get(item_id, 0))
+				if session.sell_price(item_id) > 0 and count > 0:
+					ui.trade.sell[item_id] = count
+			ui.render(), "把这里收购的东西全部摆上台面（委托与差事要交的留着）"))
 
 	var goods: Array = session.shop_goods()
 	for good: Dictionary in goods:

@@ -47,7 +47,6 @@ static func _page(ui, slot_kind: String, title: String, in_use: Array, limit: in
 		name.mouse_filter = Control.MOUSE_FILTER_PASS
 		name.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		row.add_child(name)
-		row.add_child(_comprehend_button(ui, technique_id))
 		var stop: Button = ui.button("停下", func() -> void: ui.run(func() -> String: return session.unequip_technique(technique_id)), "移出栏位")
 		stop.disabled = not session.battle.is_empty()
 		row.add_child(stop)

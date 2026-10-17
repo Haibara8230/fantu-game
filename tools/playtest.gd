@@ -131,14 +131,16 @@ func _step() -> void:
 		return
 	if _bottleneck():
 		return
-	if _commissions():
-		return
 	if _learn():
 		return
-	if s.retreat_efficiency() < 70 or s.mind_percent() < 60:
-		_outing()
+	# Cultivation first, as the game means it: out of the room (commissions, hunting, gathering) only
+	# when the retreat has grown stale or the xp waits at the stage's cap.
+	if s.retreat_efficiency() >= 70 and s.mind_percent() >= 60 and not s.at_xp_cap():
+		_retreat()
 		return
-	_retreat()
+	if _commissions():
+		return
+	_outing()
 
 func _event() -> void:
 	var definition: Dictionary = s.pending_definition()
@@ -170,9 +172,12 @@ func _duel() -> void:
 	elif int(s.battle.get("turn", 0)) > 40 or before_turn == int(s.battle.get("turn", 0)) and text.is_empty():
 		_do("act", "FLEE", s.flee())
 
+## Hurt: a quiet room or an inn where there is one, else sitting still to 调息 where the player stands.
 func _rest() -> void:
 	if s.available_here("rest") or s.available_here("inn_rest"):
 		_do("act", "REST", s.act("rest" if s.available_here("rest") else "inn_rest"))
+	elif float(s.content.rules.get("field_rest", 0.0)) > 0.0:
+		_do("act", "WAIT", s.wait(10))
 	else:
 		_go("sect")
 
@@ -247,17 +252,10 @@ func _gather() -> void:
 		return
 	_do("act", "GATHER", s.act("gather"))
 
-## 全部卖出 sells every herb, the ones an errand wants as well: a careful player sells only when the
-## errand's herbs are not among them.
+## 全部卖出 keeps what commissions and errands ask for (inventory.gd reserved).
 func _sell_all() -> void:
 	if not s.available_here("sell"):
 		_go("market")
-		return
-	if s.story_at("errands", "dew") and s.item_count("ninglu_grass") > 0:
-		var keep := s.item_count("ninglu_grass")
-		s.player.items.erase("ninglu_grass")
-		_do("act", "SELL", s.act("sell") + "（留下凝露草）")
-		s.add_item("ninglu_grass", keep)
 		return
 	_do("act", "SELL", s.act("sell"))
 
@@ -343,9 +341,10 @@ func _bottleneck() -> bool:
 	if s.item_count("pozhang_pill") > 0:
 		_do("act", "PILL", s.use_item("pozhang_pill"))
 		return true
-	# 历练: duels and outings break it.
-	if str(s.player.location) == "wild" or _go("wild"):
-		_do("act", "FIGHT", s.start_battle("wolf"))
+	# 历练: duels and outings break it — 松风岭's woods when 落霞谷 is sealed.
+	var ground := "ridge" if s.has_flag("serpent_rampage") else "wild"
+	if str(s.player.location) == ground or not _go(ground):
+		_do("act", "FIGHT", s.act("hunt"))
 	return true
 
 ## At the threshold of 筑基: earn the pill, buy it, break through.
@@ -366,7 +365,7 @@ func _breakthrough() -> bool:
 		if int(s.player.realm) >= 1:
 			_mark("筑基")
 		return true
-	if int(s.player.stones) >= 120 and pill == "foundation_pill":
+	if int(s.player.stones) >= Goals._price(s, pill) and pill == "foundation_pill":
 		if _go("market"):
 			return true
 		_do("act", "BUY", s.buy(pill))

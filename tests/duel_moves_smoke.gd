@@ -785,7 +785,6 @@ func _demon_and_tribulation() -> void:
 	core.player.mind = 200
 	core.refresh_realm_stats()
 	core.player.hp = core.player.max_hp
-	core.set_item_count("ningyuan_dan", 1)
 	core.fortune = {"demon": 0.99, "breakthrough": 0.0, "grade": 0.5}
 	core.act("breakthrough")
 	check(str(core.battle.get("context", "")) == "tribulation" and str(core.battle.enemy_id) == "tribulation_core" and int(core.battle.hp) == 3 and int(core.player.realm) == 1 and core.player.has("tribulation"), "the 金丹 waits on 三九雷劫: three bolts")
@@ -814,7 +813,6 @@ func _demon_and_tribulation() -> void:
 	struck.player.xp = 6000
 	struck.player.mind = 200
 	struck.refresh_realm_stats()
-	struck.set_item_count("ningyuan_dan", 1)
 	struck.fortune = {"demon": 0.99, "breakthrough": 0.0}
 	struck.act("breakthrough")
 	struck.player.hp = 1

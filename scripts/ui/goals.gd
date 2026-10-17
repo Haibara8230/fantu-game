@@ -8,7 +8,7 @@ const Sources = preload("res://scripts/core/sources.gd")
 const GOALS_PATH := "res://data/goals.json"
 const SHOWN := 3
 # The goals whose situation applies() knows; every goal in the data must be one of them.
-const GOAL_IDS := ["bottleneck", "azhi_return", "auction", "serpent", "tournament", "summit", "foundation_breach", "foundation_pill", "foundation_xp", "core_breach", "core_pill", "azhi_token", "ruin", "sealed", "cultivate", "promotion", "rank"]
+const GOAL_IDS := ["bottleneck", "azhi_return", "auction", "serpent", "tournament", "summit", "foundation_breach", "foundation_pill", "foundation_xp", "core_breach", "azhi_token", "ruin", "sealed", "cultivate", "promotion", "rank"]
 # Upcoming dates are mentioned this long ahead.
 const TOURNAMENT_NOTICE_DAYS := 360
 static var _goals: Array = []
@@ -91,12 +91,10 @@ static func applies(session, goal_id: String) -> bool:
 				"foundation_pill":
 					return ready_xp and not ready_pill
 			return not ready_xp and not session.at_bottleneck()
-		"core_breach", "core_pill":
+		"core_breach":
+			# From 金丹 on a breakthrough asks no pill: the xp is all.
 			var forming: Dictionary = session.next_breakthrough()
-			if int(player.realm) < 1 or forming.is_empty() or int(player.xp) < int(forming.xp):
-				return false
-			var pill_ready: bool = session.pill_count(str(forming.get("pill", ""))) >= int(forming.get("pills", 1)) or not session.breakthrough_treasures().is_empty()
-			return pill_ready == (goal_id == "core_breach")
+			return int(player.realm) >= 1 and not forming.is_empty() and int(player.xp) >= int(forming.xp)
 		"azhi_token":
 			return flags.call("azhi_promised") and not flags.call("azhi_mourned") and session.item_count("azhi_token") == 0
 		"ruin":
@@ -140,9 +138,8 @@ static func values(session, goal_id: String) -> Dictionary:
 			return {"pill_price": _price(session, "foundation_pill"), "sources": _sources(session, "foundation_pill")}
 		"foundation_breach":
 			return {"odds": int(session.breakthrough_odds(session.breakthrough_plan()).total)}
-		"core_breach", "core_pill":
-			var pill: String = session.Breakthrough.pill_of(session)
-			return {"odds": int(session.breakthrough_odds(session.breakthrough_plan()).total), "pill_name": session.content.item(pill).name, "pill_price": _price(session, pill), "sources": _sources(session, pill), "next_realm": session.content.realm(int(player.realm) + 1).name}
+		"core_breach":
+			return {"odds": int(session.breakthrough_odds(session.breakthrough_plan()).total), "next_realm": session.content.realm(int(player.realm) + 1).name}
 		"promotion", "rank":
 			var next: Dictionary = session.next_sect_rank()
 			return {"rank_name": next.name, "merit": int(player.get("merit", 0)), "merit_needed": int(next.merit), "stage_name": session.content.realm_title(int(next.stage[0]), int(next.stage[1]))}

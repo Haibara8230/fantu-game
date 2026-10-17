@@ -33,8 +33,8 @@
       "enemies": ["wolf", "wolf_pack"],
       "count": [1, 3],
       "days": 60,
-      "reward_stones": 30,
-      "reward_xp": 25,
+      "reward_stones": 18,
+      "reward_xp": 10,
       "contribution": 10,
       "title": "清剿{enemy_name}",
       "text": "落霞谷谷口的{enemy_name}伤了采药人，{days} 日内斩杀 {count} 头。"
@@ -100,8 +100,8 @@
       "enemies": ["wolf", "huo_ya"],
       "count": [1, 3],
       "days": 60,
-      "reward_stones": 45,
-      "reward_xp": 35,
+      "reward_stones": 25,
+      "reward_xp": 14,
       "title": "清剿{enemy_name}",
       "text": "赤枫岭山道上的{enemy_name}扰了商队，{days} 日内斩杀 {count} 头。"
     },

@@ -153,7 +153,7 @@ func _modifiers() -> void:
 	for good: Dictionary in trader.shop_goods():
 		if good.item == "foundation_pill":
 			price = int(good.price)
-	check(price == 91 and trader.sell_price("huichun_grass") == 5, "商道天成 buys cheaper and sells dearer")
+	check(price == 213 and trader.sell_price("huichun_grass") == 5, "商道天成 buys cheaper and sells dearer (a 280 pill for 213)")
 	var sturdy := _game(_born(["kunyuan"]))
 	check(sturdy.player.max_hp == 117 and is_equal_approx(sturdy.defense(), 0.3) and is_equal_approx(sturdy.element_multiplier({"element": "earth"}), 1.75), "坤元土体 hardens the body and the earth arts")
 	var hermit := _game(_born(["kuzuo"]))

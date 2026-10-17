@@ -132,6 +132,9 @@ var settings_controls := {}
 var journey_button: Button
 var journal_text: RichTextLabel
 var status_label: Label
+# Which screen is up, and which one the notice was given on (hud.gd): a notice stays with its screen.
+var screen_key := ""
+var notice_key := ""
 var clock_label: Label
 var save_button: Button
 var load_button: Button
@@ -399,6 +402,7 @@ func _arrange(screen: String) -> void:
 	var dueling: bool = screen == "full" and not session.battle.is_empty() and ceremony.is_empty() and story.is_empty() and session.pending_event.is_empty() and session.ended.is_empty()
 	window.add_theme_stylebox_override("panel", StyleBoxEmpty.new() if dueling else window_style)
 	Hud.place_notice(self, dueling)
+	Hud.screen_changed(self, "%s:%s:%s" % [screen, str(dueling), str(not session.pending_event.is_empty())])
 	match screen:
 		"place":
 			# The place's picture fills the screen as its scene; the window on the right holds the spot

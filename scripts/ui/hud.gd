@@ -205,8 +205,18 @@ static func place_notice(ui, top: bool) -> void:
 	# A longer notice grows away from the edge it sits on.
 	label.grow_vertical = Control.GROW_DIRECTION_END if top else Control.GROW_DIRECTION_BEGIN
 
+## A notice belongs to the screen it was given on: going to another screen (a duel begun, an event)
+## puts away what the last one said.
+static func screen_changed(ui, key: String) -> void:
+	if key == ui.screen_key:
+		return
+	ui.screen_key = key
+	if ui.notice_key != key:
+		ui.status_label.visible = false
+
 ## Shows what just happened, then lets it fade.
 static func notice(ui, message: String) -> void:
+	ui.notice_key = ui.screen_key
 	var label: Label = ui.status_label
 	# Back to one line's height before the new text, which grows it again as far as it needs.
 	if label.grow_vertical == Control.GROW_DIRECTION_BEGIN:

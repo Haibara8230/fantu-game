@@ -36,7 +36,11 @@ func _initialize() -> void:
 	game.travel("wild")
 	game.start_battle("serpent")
 	check(game.battle.is_empty(), "boss gated by realm")
-	while game.herb_count() * 4 + game.player.stones < 120:
+	var pill_price := 0
+	for good: Dictionary in game.content.locations.market.shop:
+		if good.item == "foundation_pill":
+			pill_price = int(good.price)
+	while game.herb_count() * 4 + game.player.stones < pill_price:
 		game.act("gather")
 	game.travel("market")
 	if not game.pending_event.is_empty():

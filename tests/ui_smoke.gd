@@ -49,7 +49,7 @@ func _goals() -> void:
 	check(ids.call() == ["bottleneck", "serpent"], "a bottleneck comes first and hides the plain xp goal")
 	game.player.xp = 2000
 	game.player.stage = 3
-	check("foundation_pill" in ids.call() and Goals.current(game)[ids.call().find("foundation_pill")].text.contains("120 灵石"), "enough xp: the pill is next, with its price")
+	check("foundation_pill" in ids.call() and Goals.current(game)[ids.call().find("foundation_pill")].text.contains("280 灵石"), "enough xp: the pill is next, with its price")
 	game.set_item_count("foundation_pill", 1)
 	check("foundation_breach" in ids.call(), "with the pill: back to the chamber")
 	# Breaking through starts the new realm's xp from nothing.
@@ -447,7 +447,7 @@ func _run() -> void:
 	# The trading table: goods are laid out, and only 确定 trades them.
 	main.select_spot("street")
 	_button("交易").pressed.emit()
-	check(main.current_screen() == "trade" and _button("筑基丹 · 120 灵石") != null and _button("回气丹 ·") != null, "交易 lays out the shop's goods")
+	check(main.current_screen() == "trade" and _button("筑基丹 · 280 灵石") != null and _button("回气丹 ·") != null, "交易 lays out the shop's goods")
 	main.session.player.stones = 40
 	main.session.set_item_count("huichun_grass", 2)
 	_button("疗伤丹 ·").pressed.emit()

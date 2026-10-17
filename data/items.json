@@ -38,7 +38,7 @@
   "foundation_pill": {
     "name": "筑基丹",
     "category": "pill",
-    "price": 60,
+    "price": 140,
     "rarity": 2,
     "description": "突破筑基所需的丹药。"
   },
@@ -119,7 +119,7 @@
   "foundation_pill_fine": {
     "name": "上品筑基丹",
     "category": "pill",
-    "price": 120,
+    "price": 280,
     "rarity": 3,
     "fine_of": "foundation_pill",
     "description": "丹纹九转的上品筑基丹，突破筑基时药力更足。"
@@ -277,27 +277,6 @@
     "rarity": 3,
     "description": "寒玉深处凝出的玉髓，雕成法宝佩饰的胚子。炼器时同一种材料用三份。"
   },
-  "huashen_dan": {
-    "name": "化神丹",
-    "category": "pill",
-    "price": 12000,
-    "rarity": 5,
-    "description": "元婴化神所需的丹药，元婴圆满方可服用。世间所存，屈指可数。"
-  },
-  "huaying_dan": {
-    "name": "化婴丹",
-    "category": "pill",
-    "price": 3600,
-    "rarity": 4,
-    "description": "碎丹成婴所需的丹药，金丹圆满方可服用。"
-  },
-  "ningyuan_dan": {
-    "name": "凝元丹",
-    "category": "pill",
-    "price": 900,
-    "rarity": 3,
-    "description": "凝聚灵液、结成金丹所需的丹药，筑基圆满方可服用。"
-  },
   "yanshou_dan": {
     "name": "延寿丹",
     "category": "pill",
@@ -329,6 +308,46 @@
     "rarity": 4,
     "description": "根须九曲的老参，生在灵气汇聚的深谷。突破时服下可代替筑基丹，并让根基更为扎实。",
     "breakthrough": {"bonus": 35, "grade": 1, "realm": 1}
+  },
+  "xiaguang_lingsui": {
+    "name": "霞光灵髓",
+    "category": "treasure",
+    "price": 900,
+    "rarity": 4,
+    "description": "沉在霞光灵池底下的灵髓，映着不散的晚霞。筑基圆满时服下再闭关结丹，灵液更易收拢成丹，金丹也更凝实。",
+    "breakthrough": {"bonus": 20, "grade": 1, "realm": 2}
+  },
+  "dixin_huolian": {
+    "name": "地心火莲",
+    "category": "treasure",
+    "price": 950,
+    "rarity": 4,
+    "description": "生在地火最深处的赤莲，百年才开一朵。结丹时服下，借地火之力压实灵液，金丹也更凝实。",
+    "breakthrough": {"bonus": 20, "grade": 1, "realm": 2}
+  },
+  "yanghun_mu": {
+    "name": "养魂木",
+    "category": "treasure",
+    "price": 3200,
+    "rarity": 5,
+    "description": "温养神魂的奇木，握在手里便觉心神宁定。金丹圆满碎丹成婴时以它护住神魂，元婴更易成形。",
+    "breakthrough": {"bonus": 20, "grade": 1, "realm": 3}
+  },
+  "qiannian_zhuguo": {
+    "name": "千年朱果",
+    "category": "treasure",
+    "price": 3400,
+    "rarity": 5,
+    "description": "千年一熟的朱红灵果，果肉里裹着一团温润的生机。碎丹成婴时服下，元婴更易成形。",
+    "breakthrough": {"bonus": 20, "grade": 1, "realm": 3}
+  },
+  "tianxin_lianzi": {
+    "name": "天心莲子",
+    "category": "treasure",
+    "price": 10000,
+    "rarity": 5,
+    "description": "上古灵莲留下的莲子，据说是从灵界流落人间。元婴圆满冲击化神时含在口中，神识更易与天地相合。",
+    "breakthrough": {"bonus": 20, "grade": 1, "realm": 4}
   },
   "recipe_liaoshang": {
     "name": "疗伤丹丹方",
