@@ -122,6 +122,12 @@ func format(entry: Dictionary, content) -> String:
 		values["talents_text"] = content.Talents.names(content, str(values.talents).split(",", false))
 	if values.has("days"):
 		values["duration"] = Calendar.duration_text(int(values.days))
+	if template.contains("{chenxia_date}"):
+		var definition: Dictionary = content.events.chenxia_open
+		var window: Dictionary = preload("res://scripts/core/events.gd").window_at(definition, int(entry.day))
+		if window.is_empty():
+			window = preload("res://scripts/core/events.gd").next_window(definition, int(entry.day))
+		values["chenxia_date"] = Calendar.date_text(int(window.from)) if not window.is_empty() else "尚待观测"
 	return template.format(values)
 
 ## "id:count,id:count" as "回春草×2、赤炎花"; unknown ids keep their id so old records still read.

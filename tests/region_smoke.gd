@@ -147,7 +147,7 @@ func _tiannan() -> void:
 	check(game.has_flag("tiannan_known") and game.story_at("south_journey", "visit"), "and at the hall he tells of it: 天南 opens")
 	game.travel("market")
 	game.player.stones = 30
-	check(game.travel("nanming").contains("盘缠不足") and game.player.location == "market", "the gate wants its fee before setting out")
+	check(game.Journey.preview(game, "nanming").mode == "cheap", "without the gate fee an affordable road is offered")
 	game.player.stones = 100
 	var day := int(game.world.day)
 	game.travel("nanming")
@@ -259,6 +259,7 @@ func _tiannan_screens() -> void:
 	main.session.player.realm = 1
 	main.session.refresh_realm_stats()
 	main.session.world.flags.tiannan_known = true
+	main.session.player.stones = 100
 	main.set_view("map")
 	var tabs: Array = main.center.find_children("*", "Button", true, false).map(func(button: Button) -> String: return button.text)
 	check(tabs.has("青云山周边（此处）") and tabs.has("天南"), "two regions known, two map pages (%s)" % [tabs])

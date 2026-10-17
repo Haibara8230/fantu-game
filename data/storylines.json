@@ -283,7 +283,7 @@
       {"id": "summon", "letter": true, "goal": "结丹之后，到传功堂拜见顾长庚。", "place": "sect", "done": [{"at_location": "sect"}], "say": "结丹了？青云山上下，如今数你修为最高。来传功堂一趟，有件事得托给你。", "after": "顾长庚：“结丹之后，你便不是只为自己修行了。深谷灵泉那边魔修猖獗，掳人炼魂，执事堂的告示你也看见了。去，诛了它们。”", "effects": [{"mind": 4}]},
       {"id": "demons", "goal": "到落霞谷深谷灵泉，诛除两名魔修。", "deeds": {"win:mo_xiu": 2}, "after": "两名魔修伏诛，灵泉一带的采药人又敢进谷了。顾长庚传音：“做得干净。”", "effects": [{"stones": 300}, {"contribution": 120}, {"mind": 6}, {"relation": ["gu_changgeng", 10]}]},
       {"id": "wait_secret", "wait_days": 720},
-      {"id": "secret", "letter": true, "goal": "回传功堂，听顾长庚说一桩旧事。", "place": "sect", "done": [{"at_location": "sect"}], "say": "有一桩旧事，老夫想了许多年，也该让你知道了。回传功堂来。", "after": "顾长庚取出一枚边角残缺的玉简：“沉霞古境百年后才会再开。这是老夫当年从里面带出来的，可惜残了。你拿去参一参，或许用得上。”", "effects": [{"manual": 4}, {"mind": 6}], "major": true}
+      {"id": "secret", "letter": true, "goal": "回传功堂，听顾长庚说一桩旧事。", "place": "sect", "done": [{"at_location": "sect"}], "say": "有一桩旧事，老夫想了许多年，也该让你知道了。回传功堂来。", "after": "顾长庚取出一枚边角残缺的玉简：“沉霞古境一甲子一开，可留意{chenxia_date}这一轮开门。这是老夫当年从里面带出来的，可惜残了。你拿去参一参，或许用得上。”", "effects": [{"manual": 4}, {"mind": 6}], "major": true}
     ]
   },
   "south_journey": {
@@ -514,6 +514,342 @@
           }
         ],
         "major": true
+      }
+    ]
+  },
+  "azhi_route": {
+    "title": "药路识草",
+    "giver": "azhi",
+    "steps": [
+      {
+        "id": "herbs",
+        "goal": "备回春草、凝露草各两株，在松风岭向阿芷请教辨药。",
+        "place": "ridge",
+        "say": "阿芷挑开药篓：“光认名字不够。同一片松林，向阳与背阴的草性子也不同。你带两株回春草、两株凝露草来，我拿实物与你说。”"
+      },
+      {
+        "id": "consult",
+        "goal": "到云溪药铺，问沈墨怎样把采来的草配成药。",
+        "place": "market",
+        "speaker": "shen_mo"
+      },
+      {
+        "id": "choose",
+        "goal": "回松风岭，选择请阿芷同行认药，或带回一份疗伤丹方。",
+        "place": "ridge"
+      },
+      {
+        "id": "practice",
+        "goal": "在松风岭采一次药，试试新学的辨药法。",
+        "place": "ridge",
+        "deeds": {
+          "gather": 1
+        },
+        "done": [
+          {
+            "at_location": "ridge"
+          }
+        ],
+        "after": "你终于能从叶脉、露水与根须分辨药性。阿芷在篓边点点头：“往后进山，就不只是碰运气了。”",
+        "effects": [
+          {
+            "mind": 2
+          },
+          {
+            "relation": [
+              "azhi",
+              5
+            ]
+          }
+        ],
+        "major": true
+      }
+    ]
+  },
+  "shen_order": {
+    "title": "一炉药的去处",
+    "giver": "shen_mo",
+    "steps": [
+      {
+        "id": "prepare",
+        "goal": "备两枚疗伤丹到云溪药铺，可自炼或购买，上品也可交。",
+        "place": "market",
+        "done": [
+          {
+            "at_location": "market"
+          },
+          {
+            "item_at_least": [
+              "liaoshang_pill",
+              2
+            ]
+          }
+        ],
+        "say": "沈墨摊开疗伤方：“一份药商的单子，两枚疗伤丹。方子先教你，草自己采也好，买成药周转也好，备好了再来。”"
+      },
+      {
+        "id": "decide",
+        "goal": "药铺忽然来了求药的药农：决定先救急，还是按约完成药商订单。",
+        "place": "market",
+        "say": "两枚药备齐时，门外来了个扶着伤者的药农。沈墨看了看约好的取药时辰：“这次药不多。先给谁，你拿主意；另一头我会把话说明白。”"
+      },
+      {
+        "id": "visit",
+        "goal": "到松风岭问阿芷，两头的后续怎样了。",
+        "place": "ridge"
+      },
+      {
+        "id": "settle",
+        "goal": "回云溪药铺与沈墨结清这一单，领回气方与三十灵石。",
+        "place": "market",
+        "effects": [
+          {
+            "stones": 30
+          },
+          {
+            "recipe": "huiqi"
+          },
+          {
+            "relation": [
+              "shen_mo",
+              5
+            ]
+          },
+          {
+            "mind": 2
+          }
+        ],
+        "after": "沈墨收起账册，把回气方与三十灵石递给你：“药能炼出来，还得知道交到谁手里。往后若想在这行站住脚，就记着自己应过的话。”",
+        "major": true
+      }
+    ]
+  },
+  "inner_exam": {
+    "title": "内门考校",
+    "giver": "gu_changgeng",
+    "steps": [
+      {
+        "id": "path",
+        "goal": "向顾长庚选择巡山、筹备丹药或调解药价三种考校之一。",
+        "place": "sect",
+        "say": "顾长庚指着执事簿：“入内门不只看修为。巡山战功、替丹房筹药，或把两边的争执讲清，都能证明你愿担事。选一项，办完记一百六十贡献；筑基与四百累计贡献的门槛照旧。”"
+      },
+      {
+        "id": "work",
+        "goal": "完成所选考校：两次狼群战功（旧战功可验）、两枚疗伤丹及两枚回气丹，或分别听阿芷与沈墨说明药价争议，再回报。",
+        "goal_variants": [
+          {
+            "conditions": [
+              {
+                "flag": "exam_patrol"
+              }
+            ],
+            "goal": "到落霞谷谷口清剿狼群，回传功堂核验两次战功；已有战功也算。若药路封锁，可向长老改选筹药或调解。",
+            "place": "wild"
+          },
+          {
+            "conditions": [
+              {
+                "flag": "exam_alchemy"
+              }
+            ],
+            "goal": "向青云山许清和交疗伤丹、回气丹各两枚，可自炼或购买，上品也可。",
+            "place": "sect"
+          },
+          {
+            "conditions": [
+              {
+                "flag": "exam_mediation"
+              }
+            ],
+            "goal": "到松风岭听阿芷说损耗、到云溪药铺听沈墨说赊账，再回传功堂调解药价。",
+            "place": "sect"
+          }
+        ]
+      },
+      {
+        "id": "witness",
+        "goal": "到松风岭问阿芷，核实这次考校给药农带来了什么。",
+        "place": "ridge"
+      },
+      {
+        "id": "report",
+        "goal": "回传功堂交考校回报，领取一次性一百六十贡献。",
+        "place": "sect",
+        "after": "顾长庚在执事簿上记下一百六十贡献：“这份功劳只记一次。内门须筑基、累计四百贡献；未满的继续担事，满了去执事堂办晋升。境界高，我敬你修为；身份是你在宗门做过的事。”",
+        "effects": [
+          {
+            "contribution": 160
+          },
+          {
+            "mind": 3
+          },
+          {
+            "relation": [
+              "gu_changgeng",
+              5
+            ]
+          }
+        ],
+        "major": true
+      }
+    ]
+  },
+  "south_settlement": {
+    "title": "南明落脚",
+    "giver": "gu_changgeng",
+    "begin_if": [
+      {
+        "story_state": [
+          "south_journey",
+          "done"
+        ]
+      }
+    ],
+    "steps": [
+      {
+        "id": "contact",
+        "goal": "到南明坊市，拿引介信认一认万宝楼。",
+        "place": "nanming",
+        "done": [
+          {
+            "at_location": "nanming"
+          }
+        ],
+        "say": "顾长庚传音：“到了天南先认门路。拿这封引介信去南明万宝楼，沈墨的旧相识在那里；别把盘缠全花在第一件好东西上。”",
+        "after": "万宝楼伙计验过引介信，给你记下药材收购处与赤枫岭药路：“先帮备两株回春、两株凝露，给你六十灵石。传送回青云要四十，陆路不收费，时日却长。”"
+      },
+      {
+        "id": "supplies",
+        "goal": "带回春草、凝露草各两株到南明坊市交小药单（六十灵石）。",
+        "place": "nanming",
+        "done": [
+          {
+            "at_location": "nanming"
+          },
+          {
+            "item_at_least": [
+              "huichun_grass",
+              2
+            ]
+          },
+          {
+            "item_at_least": [
+              "ninglu_grass",
+              2
+            ]
+          }
+        ],
+        "effects": [
+          {
+            "item": [
+              "huichun_grass",
+              -2
+            ]
+          },
+          {
+            "item": [
+              "ninglu_grass",
+              -2
+            ]
+          },
+          {
+            "stones": 60
+          }
+        ],
+        "after": "伙计付清六十灵石，拿炭条画出两条路：传送阵快，南下远路慢但不收过路费。"
+      },
+      {
+        "id": "route",
+        "goal": "在南明坊市记下返程方式，留好盘缠或认清免费陆路。",
+        "place": "nanming",
+        "choice_event": "south_return_routes"
+      },
+      {
+        "id": "visit",
+        "goal": "到赤霄门器坊见袁赤锋，听他说一说当地差事。",
+        "place": "chixiao_gate",
+        "done": [
+          {
+            "at_location": "chixiao_gate"
+          },
+          {
+            "talked": "yuan_chifeng"
+          }
+        ],
+        "after": "你递过引介信，认清器坊与熔窟的来往。南明不再只是舆图上的一个地名；要接差事、买器料，或回青云，都有了门路。",
+        "effects": [
+          {
+            "mind": 2
+          }
+        ],
+        "major": true
+      }
+    ],
+    "close_if": [
+      {
+        "flag": "bounty_exposed"
+      }
+    ],
+    "closed": "袁赤锋已被革职，引介信不必再交给他。已经认清的商铺与返程道路照常可用。"
+  },
+  "furnace_inquiry": {
+    "title": "核对旧账",
+    "giver": "han_jin",
+    "begin_if": [
+      {
+        "story_at": [
+          "furnace_bounty",
+          "decide"
+        ]
+      },
+      {
+        "flag": "hanjin_heard"
+      },
+      {
+        "flag": "furnace_review_open"
+      }
+    ],
+    "close_if": [
+      {
+        "story_state": [
+          "furnace_bounty",
+          "done"
+        ]
+      }
+    ],
+    "closed": "你已了结悬赏，未再继续查核。",
+    "steps": [
+      {
+        "id": "verify",
+        "goal": "核对一项证据：向赤霄器坊袁赤锋查出货痕迹，或找来往青石镇、白鹭渡与云溪的钱货郎问行商证言。",
+        "done": [
+          {
+            "flag": "furnace_evidence"
+          }
+        ],
+        "say": "韩烬指着焦黑账页：“你不必只信我。器坊那批出货牌的时辰对不上，钱货郎也见过同车的兵器。核对一处，再决定怎么处置我。”",
+        "after": "账页之外的证据已能相互印证。你可以回熔窟口与韩烬把话说清，再决定押回、揭露或放他走；赏金依旧按原悬赏办理。",
+        "major": true
+      }
+    ]
+  },
+  "furnace_aftermath": {
+    "title": "旧账回音",
+    "giver": "shen_mo",
+    "begin_if": [
+      {
+        "story_state": [
+          "furnace_bounty",
+          "done"
+        ]
+      }
+    ],
+    "steps": [
+      {
+        "id": "return",
+        "goal": "回云溪药铺，听沈墨说天南悬赏的后续。",
+        "place": "market"
       }
     ]
   }

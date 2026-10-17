@@ -382,6 +382,10 @@ func _furnace_bounty() -> void:
 		if ending == "expose":
 			check(_option(game, "han_jin", "expose").is_empty() or not _option(game, "han_jin", "expose").get("reason", "").is_empty(), "the ledger cannot be shown before he is heard out")
 			game.interact("han_jin", "hear_out")
+			game.travel("chixiao_gate")
+			game.interact("yuan_chifeng", "verify_forge")
+			check(game.has_flag("furnace_evidence"), "the ledger is corroborated at the foundry")
+			game.travel("chifeng")
 		stones = int(game.player.stones)
 		game.interact("han_jin", ending)
 		game.wait(1)

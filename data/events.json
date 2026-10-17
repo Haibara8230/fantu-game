@@ -800,5 +800,46 @@
         "chronicle": "你记下了这条难得的机缘线索，准备妥当后再去追寻。"
       }
     ]
+  },
+  "south_return_routes": {
+    "title": "两条归路",
+    "trigger": "manual",
+    "conditions": [
+      {
+        "story_at": [
+          "south_settlement",
+          "route"
+        ]
+      }
+    ],
+    "text": "传送阵直通云溪坊市，来回各收四十灵石。另一条路由赤枫岭越山去白鹭渡，不收费，却有妖兽劫修。地图可选快捷或省钱；记下哪条路，都不限制以后改主意。",
+    "choices": [
+      {
+        "id": "gate",
+        "label": "记下传送阵，提醒自己留足四十灵石",
+        "effects": [
+          {
+            "flag": "south_gate_known"
+          },
+          {
+            "story_advance": "south_settlement"
+          }
+        ],
+        "chronicle": "你记下了返程传送阵的费用，提醒自己为回程留足四十灵石。"
+      },
+      {
+        "id": "road",
+        "label": "记下免费陆路，日后可选省钱路线",
+        "effects": [
+          {
+            "flag": "south_road_known"
+          },
+          {
+            "story_advance": "south_settlement"
+          }
+        ],
+        "chronicle": "你记下赤枫岭通往白鹭渡的免费陆路，知道它更慢也更险。"
+      }
+    ]
   }
 }

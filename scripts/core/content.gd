@@ -1126,6 +1126,17 @@ func _validate_step(step: Dictionary) -> String:
 		return "传音的步骤需要 say"
 	if step.has("place") and not locations.has(step.place):
 		return "未知地点"
+	if step.has("goal_variants"):
+		if not step.goal_variants is Array:
+			return "剧情目标分支须为列表"
+		for variant: Variant in step.goal_variants:
+			if not variant is Dictionary or not variant.get("goal") is String or (variant.has("place") and not locations.has(variant.place)):
+				return "剧情目标分支缺少说明或去处"
+			var issue := _validate_conditions(variant.get("conditions", []))
+			if not issue.is_empty():
+				return issue
+	if step.has("choice_event") and (not step.choice_event is String or not events.has(step.choice_event) or not events[step.choice_event].has("choices")):
+		return "剧情抉择引用了未知事件"
 	if step.has("speaker") and not people.has(step.speaker):
 		return "未知人物"
 	for key: String in ["wait_days", "retreat_days"]:
@@ -1360,17 +1371,17 @@ func neighbors(location_id: String, flags: Dictionary, realm: int = -1) -> Array
 ## Shortest path by days over visible locations, including both ends; empty when unreachable.
 ## Ties prefer the lower total danger, then the alphabetical order of ids, so paths are stable.
 ## With `realm` at 0 or above, roads that ask a higher realm (a 传送阵 before foundation) are not taken.
-func find_path(from_id: String, to_id: String, flags: Dictionary, realm: int = -1) -> Array[String]:
+func find_path(from_id: String, to_id: String, flags: Dictionary, realm: int = -1, mode: String = "fast") -> Array[String]:
 	var empty: Array[String] = []
 	if not location_visible(from_id, flags) or not location_visible(to_id, flags):
 		return empty
-	var best := {from_id: [0, 0]}
+	var best := {from_id: [0, 0, 0]}
 	var previous := {}
 	var open: Array[String] = [from_id]
 	var done := {}
 	while not open.is_empty():
 		open.sort_custom(func(a: String, b: String) -> bool:
-			return best[a][0] < best[b][0] or (best[a][0] == best[b][0] and (best[a][1] < best[b][1] or (best[a][1] == best[b][1] and a < b))))
+			return _path_less(best[a], best[b]) or (best[a] == best[b] and a < b))
 		var current: String = open.pop_front()
 		if done.has(current):
 			continue
@@ -1379,8 +1390,9 @@ func find_path(from_id: String, to_id: String, flags: Dictionary, realm: int = -
 			break
 		for other: String in neighbors(current, flags, realm):
 			var route := route_between(current, other)
-			var cost := [int(best[current][0]) + int(route.days), int(best[current][1]) + int(route.danger)]
-			if not best.has(other) or cost[0] < best[other][0] or (cost[0] == best[other][0] and cost[1] < best[other][1]):
+			var edge := [int(route.get("fee", 0)), int(route.days), int(route.danger)] if mode == "cheap" else [int(route.days), int(route.danger), int(route.get("fee", 0))]
+			var cost := [int(best[current][0]) + edge[0], int(best[current][1]) + edge[1], int(best[current][2]) + edge[2]]
+			if not best.has(other) or _path_less(cost, best[other]):
 				best[other] = cost
 				previous[other] = current
 				open.append(other)
@@ -1390,6 +1402,12 @@ func find_path(from_id: String, to_id: String, flags: Dictionary, realm: int = -
 	while path[0] != from_id:
 		path.push_front(previous[path[0]])
 	return path
+
+static func _path_less(a: Array, b: Array) -> bool:
+	for index: int in 3:
+		if a[index] != b[index]:
+			return a[index] < b[index]
+	return false
 
 func path_days(path: Array[String]) -> int:
 	var total := 0

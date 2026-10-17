@@ -173,6 +173,9 @@ static func apply(s, effects: Array) -> void:
 			"qi":
 				s.player.qi = clampi(int(s.player.qi) + int(value), 0, int(s.player.max_qi))
 			"item":
+				if int(value[1]) < 0:
+					s.Inventory.remove_family(s, str(value[0]), mini(-int(value[1]), s.pill_count(str(value[0]))))
+					continue
 				var count := maxi(0, int(s.player.items.get(value[0], 0)) + int(value[1]))
 				if count == 0:
 					s.player.items.erase(value[0])

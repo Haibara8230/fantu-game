@@ -19,12 +19,15 @@ static func render_messages(ui) -> void:
 	entries = entries.slice(-MESSAGE_COUNT)
 	entries.reverse()
 	center.add_child(ui.label("近来消息 · 最近 %d 条，更早的在「编年史」" % entries.size(), 15, ui.MUTED))
-	var shown_day := -1
-	for entry: Dictionary in entries:
-		if int(entry.day) != shown_day:
-			shown_day = int(entry.day)
-			center.add_child(ui.label(Calendar.date_text(shown_day), 16, ui.GOLD))
-		center.add_child(ui.paragraph(session.chronicle.format(entry, session.content), ui.GOLD if bool(entry.major) else ui.INK))
+	var important := true
+	center.add_child(ui.label("要事与传音", 18, ui.GOLD))
+	for row: Dictionary in preload("res://scripts/ui/experience_text.gd").messages(session, entries):
+		if important and not row.important:
+			important = false
+			center.add_child(ui.label("日常与故人近况", 18, ui.MUTED))
+		var date := Calendar.short_text(int(row.day)) + " · " if int(row.day) >= 0 else ""
+		center.add_child(ui.paragraph(date + str(row.text), ui.GOLD if row.important else ui.INK))
+	center.add_child(ui.button("查看完整编年史", func() -> void: ui.set_view("chronicle")))
 
 static func render_goals(ui) -> void:
 	var center: VBoxContainer = ui.center
@@ -33,7 +36,7 @@ static func render_goals(ui) -> void:
 		center.add_child(ui.paragraph("眼下没有特别的目标，随心修行便是。"))
 		return
 	for goal: Dictionary in current:
-		center.add_child(ui.label(goal.title, 18, ui.GOLD))
+		center.add_child(ui.label(("暂缓 · " if goal.get("state", "ready") == "waiting" else "") + goal.title, 18, ui.GOLD))
 		center.add_child(ui.paragraph(goal.text, ui.INK))
 		var goal_id := str(goal.id)
 		center.add_child(ui.button("取消追踪" if ui.tracked_goal == goal_id else "追踪此目标", func() -> void:
@@ -74,7 +77,7 @@ static func render_stories(ui) -> void:
 			continue
 		if state != "active":
 			continue
-		var step: Dictionary = session.story_step(story_id)
+		var step: Dictionary = Goals.described_step(session, session.story_step(story_id))
 		var giver: String = session.content.people[definition.giver].name
 		var line := ""
 		if session.story_at(story_id, str(step.id)) and step.has("goal"):

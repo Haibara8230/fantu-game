@@ -55,7 +55,7 @@ static func required_items(s, story_id: String) -> Dictionary:
 	for person_id: String in s.content.people:
 		for interaction: Dictionary in s.content.people[person_id].get("interactions", []):
 			var belongs: bool = interaction.get("conditions", []).any(func(c: Dictionary) -> bool: return c.has("story_at") and c.story_at == [story_id, str(step.id)])
-			if not belongs:
+			if not belongs or not _cost_option_known(s, interaction):
 				continue
 			var costs := _consumed(interaction.get("effects", []))
 			for item_id: String in costs:
@@ -73,11 +73,18 @@ static func required_herbs(s, story_id: String) -> int:
 		for interaction: Dictionary in s.content.people[person_id].get("interactions", []):
 			if not interaction.get("conditions", []).any(func(c: Dictionary) -> bool: return c.has("story_at") and c.story_at == [story_id, str(step.id)]):
 				continue
+			if not _cost_option_known(s, interaction):
+				continue
 			var cost := 0
 			for effect: Dictionary in interaction.get("effects", []):
 				cost += maxi(0, -int(effect.get("herbs", 0)))
 			count = maxi(count, cost)
 	return count
+
+## Material shortages do not hide delivery costs, but an unchosen branch must not reserve them.
+static func _cost_option_known(s, interaction: Dictionary) -> bool:
+	var known: Array = interaction.get("conditions", []).filter(func(c: Dictionary) -> bool: return not c.has("item_at_least") and not c.has("herbs_at_least") and not c.has("stones_at_least") and not c.has("at_location") and not c.has("deed_at_least"))
+	return Events.all_met(s, known)
 
 static func _consumed(effects: Array) -> Dictionary:
 	var result := {}
@@ -156,6 +163,8 @@ static func update(s) -> Array[String]:
 					texts.append_array(_begin(s, story_id))
 					moved = true
 				continue
+			if step.has("choice_event") and s.pending_event.is_empty() and s.battle.is_empty():
+				s.pending_event = {"id": str(step.choice_event), "day": int(s.world.day)}
 			if _finished(s, story_id, step):
 				texts.append_array(complete_step(s, story_id))
 				moved = true

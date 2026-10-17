@@ -5,8 +5,21 @@ extends RefCounted
 const Events = preload("res://scripts/core/events.gd")
 
 ## The shortest way the player can take: roads that ask a higher realm (a 传送阵) are left out.
-static func path_to(s, location_id: String) -> Array[String]:
-	return s.content.find_path(s.player.location, location_id, s.world.flags, int(s.player.realm))
+static func path_to(s, location_id: String, mode: String = "fast") -> Array[String]:
+	return s.content.find_path(s.player.location, location_id, s.world.flags, int(s.player.realm), mode)
+
+## The offered path and its actual mode; expensive shortcuts fall back to an affordable cheap road.
+static func preview(s, location_id: String, mode: String = "fast") -> Dictionary:
+	var path := path_to(s, location_id, mode)
+	var actual := mode
+	var fallback := false
+	if mode == "fast" and not path.is_empty() and path_fee(s, path) > int(s.player.stones):
+		var cheap := path_to(s, location_id, "cheap")
+		if not cheap.is_empty() and path_fee(s, cheap) <= int(s.player.stones):
+			path = cheap
+			actual = "cheap"
+			fallback = true
+	return {"path": path, "mode": actual, "fallback": fallback}
 
 ## The stones the roads of `path` ask (a 传送阵's fee), paid leg by leg.
 static func path_fee(s, path: Array[String]) -> int:
@@ -16,7 +29,7 @@ static func path_fee(s, path: Array[String]) -> int:
 	return total
 
 ## Sets out for a destination along the shortest known path and walks it leg by leg.
-static func travel(s, location_id: String) -> String:
+static func travel(s, location_id: String, mode: String = "fast") -> String:
 	var blocked: String = s.blocked()
 	if not blocked.is_empty():
 		return "斗法中无法离开。" if not s.battle.is_empty() else blocked
@@ -26,7 +39,10 @@ static func travel(s, location_id: String) -> String:
 		return "%s已被封锁，暂时无法进入。" % s.content.locations[location_id].name
 	if s.player.location == location_id:
 		return "你已在此处。"
-	var path := path_to(s, location_id)
+	if not mode in ["fast", "cheap"]:
+		return "未知路线方式。"
+	var plan := preview(s, location_id, mode)
+	var path: Array[String] = plan.path
 	if path.is_empty():
 		return "两地之间没有可走的路。"
 	var fee := path_fee(s, path)
@@ -35,7 +51,7 @@ static func travel(s, location_id: String) -> String:
 	var held: String = s.guide_block("travel", location_id)
 	if not held.is_empty():
 		return held
-	s.player.journey = {"to": location_id}
+	s.player.journey = {"to": location_id, "mode": plan.mode}
 	return _walk(s)
 
 ## Resumes a journey interrupted by an encounter or an event on the way.
@@ -52,7 +68,8 @@ static func continue_journey(s) -> String:
 static func _walk(s) -> String:
 	var parts: Array[String] = []
 	while not s.player.journey.is_empty():
-		var path := path_to(s, s.player.journey.to)
+		var mode := str(s.player.journey.get("mode", "fast"))
+		var path := path_to(s, s.player.journey.to, mode)
 		if path.size() < 2:
 			s.player.journey = {}
 			parts.append("前路已断，行程作罢。")

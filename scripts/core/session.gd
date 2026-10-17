@@ -406,6 +406,12 @@ func act(action: String) -> String:
 			if not outing.is_empty():
 				for item_id: String in found:
 					found[item_id] = int(found[item_id]) * 2
+			var help_text := ""
+			var help: Dictionary = content.rules.get("story_help", {}).get("azhi_route", {})
+			if not help.is_empty() and has_flag(str(help.flag)) and str(player.location) == str(help.place):
+				found[str(help.item)] = int(found.get(str(help.item), 0)) + int(help.count)
+				world.flags.erase(str(help.flag))
+				help_text = " " + log_event("story_gather_help", {"npc":"azhi", "item":str(help.item), "count":int(help.count)})
 			for item_id: String in found:
 				add_item(item_id, int(found[item_id]))
 			record_deed("gather")
@@ -413,7 +419,7 @@ func act(action: String) -> String:
 			if not outing.is_empty():
 				gathered.append(Bonds.finish_outing(self, outing))
 			gathered.append_array(Fortune.after_gather(self))
-			return conclude(" ".join(gathered), passed)
+			return conclude(" ".join(gathered) + help_text, passed)
 		"inn_rest":
 			var price := int(content.rules.inn_price)
 			if int(player.stones) < price:
@@ -1166,11 +1172,11 @@ func interact(person_id: String, option_id: String) -> String:
 
 # --- Travel (journey.gd) ------------------------------------------------------------------------
 
-func path_to(location_id: String) -> Array[String]:
-	return Journey.path_to(self, location_id)
+func path_to(location_id: String, mode: String = "fast") -> Array[String]:
+	return Journey.path_to(self, location_id, mode)
 
-func travel(location_id: String) -> String:
-	return Journey.travel(self, location_id)
+func travel(location_id: String, mode: String = "fast") -> String:
+	return Journey.travel(self, location_id, mode)
 
 func continue_journey() -> String:
 	return Journey.continue_journey(self)

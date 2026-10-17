@@ -122,6 +122,7 @@ var portrait_root := ArtLibrary.LOCAL_PORTRAITS
 var _pool_assignments := {}
 var _pool_key := ""
 var map_target := ""
+var map_route_mode := "fast"
 # The region the map is turned to (map_view.gd); empty is the one the player is in.
 var map_region := ""
 # The 编年史 view's filter (a group in data/chronicle_groups.json, or "all") and page (0 = newest).
@@ -851,6 +852,7 @@ func start_retreat(days: int) -> void:
 	var message: String = session.cultivate(days)
 	if int(session.world.day) > from_day:
 		retreat_result = "上次出关 · %s\n实际闭关 %s，修为 %+d，灵石 %+d；心境 %d，心神收益 %d%%。新增未读传音 %d，详细消息见「任务 · 消息」。" % [session.time_name(), Calendar.duration_text(int(session.world.day) - from_day), int(session.player.xp) - from_xp, int(session.player.stones) - from_stones, int(session.player.mind), session.retreat_efficiency(), maxi(0, session.unread_letters() - from_letters)]
+		retreat_result += "\n" + preload("res://scripts/ui/experience_text.gd").next_step(session)
 	retreat_playback = {"from_day": from_day, "to_day": int(session.world.day), "from_xp": from_xp, "to_xp": int(session.player.xp)}
 	render()
 	_lock_buttons(self)
@@ -993,7 +995,7 @@ func select_map_target(location_id: String) -> void:
 	render()
 
 func depart(location_id: String) -> void:
-	await _travel(func() -> String: return session.travel(location_id))
+	await _travel(func() -> String: return session.travel(location_id, map_route_mode))
 
 ## Resumes a journey cut short on the road, walking the rest on the map.
 func continue_journey() -> void:
@@ -1208,7 +1210,7 @@ func _cue_changes(before: Dictionary) -> void:
 		audio.cue("choice")
 
 func notice(message: String) -> void:
-	Hud.notice(self, message)
+	Hud.notice(self, preload("res://scripts/ui/experience_text.gd").notice(session, message))
 
 func _on_changed() -> void:
 	# Finishing the introduction once (or playing a journey from before it) lets later journeys skip it.

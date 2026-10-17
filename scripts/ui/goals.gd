@@ -41,7 +41,7 @@ static func current(session) -> Array[Dictionary]:
 		if applies(session, goal.id):
 			var filled: Dictionary = values(session, goal.id)
 			result.append({"id": goal.id, "title": str(goal.title).format(filled), "text": str(goal.text).format(filled)})
-	return result
+	return actionable(session, result)
 
 ## Tracking changes order only; all goals remain accessible and guidance remains first.
 static func displayed(ui) -> Array[Dictionary]:
@@ -62,13 +62,14 @@ static func story_goals(session) -> Array[Dictionary]:
 		var step: Dictionary = session.story_step(story_id)
 		if step.is_empty() or not step.has("goal") or not session.story_at(story_id, str(step.id)):
 			continue
-		var text := str(step.goal)
-		if step.has("place") and str(step.place) != str(session.player.location):
-			text += "（%s）" % session.content.locations[step.place].name
+		var shown := described_step(session, step)
+		var text := str(shown.goal)
+		if shown.has("place") and str(shown.place) != str(session.player.location):
+			text += "（%s）" % session.content.locations[shown.place].name
 		var needs: Dictionary = session.Storylines.required_items(session, story_id)
 		for item_id: String in needs:
-			text += "\n%s %d/%d" % [session.content.item(item_id).name, session.item_count(item_id), int(needs[item_id])]
-			if session.item_count(item_id) < int(needs[item_id]):
+			text += "\n%s %d/%d" % [session.content.item(item_id).name, session.pill_count(item_id), int(needs[item_id])]
+			if session.pill_count(item_id) < int(needs[item_id]):
 				text += " " + Sources.line(session, item_id)
 		result.append({"id": "story:" + story_id, "title": str(definition.title), "text": text, "guide": bool(definition.get("guide", false))})
 	return result
@@ -160,12 +161,14 @@ static func values(session, goal_id: String) -> Dictionary:
 			return {"rank_name": next.name, "merit": int(player.get("merit", 0)), "merit_needed": int(next.merit), "stage_name": session.content.realm_title(int(next.stage[0]), int(next.stage[1]))}
 		"foundation_xp":
 			return {"xp": int(player.xp), "breakthrough_xp": int(session.next_breakthrough().xp)}
+		"ruin":
+			return {"ruin_hint": ruin_hint(session)}
 		"azhi_token":
 			var hint := ""
 			if not session.has_flag("found_ruin"):
 				hint = "洞府的方位，青石镇茶馆的说书先生最清楚。"
 			elif not session.has_flag("ruin_cleared"):
-				hint = "洞府被散修石寒占据，须先击败他。"
+				hint = ruin_hint(session)
 			else:
 				hint = "到洞府石室看看。"
 			return {"ruin_hint": hint}
@@ -173,6 +176,11 @@ static func values(session, goal_id: String) -> Dictionary:
 			var next := _next_stage(session)
 			return {"xp": int(player.xp), "next_xp": int(next.xp), "next_stage": session.content.realm_title(int(player.realm), int(player.stage) + 1)}
 	return {}
+
+static func ruin_hint(session) -> String:
+	if session.story_state("liu_squatter") == "active":
+		return "洞府被石寒占据，可转告柳寒舟的话劝他离开，或选择斗法。"
+	return "洞府被散修石寒占据，须先设法让他让出石室。"
 
 ## Time left as text: "N 日", "N 个月" or "N 年 M 个月".
 static func _span(days: int) -> String:
@@ -226,3 +234,39 @@ static func _price(session, item_id: String) -> int:
 		if line.item == item_id:
 			return int(line.price)
 	return int(session.content.item(item_id).get("price", 0))
+
+## Keep discovered but blocked goals; show another activity before them.
+static func actionable(session, goals_list: Array[Dictionary]) -> Array[Dictionary]:
+	var ready: Array[Dictionary] = []
+	var waiting: Array[Dictionary] = []
+	for goal: Dictionary in goals_list:
+		var reason := ""
+		var id := str(goal.id)
+		var place := ""
+		if id.begins_with("story:"):
+			place = str(described_step(session, session.story_step(id.trim_prefix("story:"))).get("place", ""))
+		elif id in ["ruin", "azhi_token", "serpent"]:
+			place = "wild"
+		if not place.is_empty() and session.content.location_sealed(place, session.world.flags):
+			reason = "%s暂时封锁，可先在松风岭采药、处理别处托付。" % session.content.locations[place].name
+		elif id == "serpent" and int(session.player.realm) < 1:
+			reason = "需先筑基；眼下可修行、筹备丹药与神通。"
+		goal["state"] = "waiting" if not reason.is_empty() else "ready"
+		if not reason.is_empty():
+			goal.text += "\n" + reason
+			waiting.append(goal)
+		else:
+			ready.append(goal)
+	ready.append_array(waiting)
+	return ready
+
+## Branch wording affects presentation only; the step ID and completion rules never change.
+static func described_step(session, step: Dictionary) -> Dictionary:
+	for variant: Dictionary in step.get("goal_variants", []):
+		if session.Events.all_met(session, variant.get("conditions", [])):
+			var shown := step.duplicate()
+			shown.goal = variant.goal
+			if variant.has("place"):
+				shown.place = variant.place
+			return shown
+	return step

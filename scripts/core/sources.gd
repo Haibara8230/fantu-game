@@ -15,7 +15,7 @@ static func of(s, item_id: String) -> Array[Dictionary]:
 			continue
 		for line: Dictionary in location.get("shop", []):
 			if line.item == item_id:
-				result.append({"kind": "shop", "text": "%s丹铺 %d 灵石" % [location.name, int(line.price)], "ready": int(s.player.stones) >= int(line.price)})
+				result.append({"kind": "shop", "text": "%s商铺 %d 灵石" % [location.name, int(line.price)], "ready": int(s.player.stones) >= int(line.price)})
 	for location_id: String in s.content.locations:
 		if not s.location_visible(location_id):
 			continue

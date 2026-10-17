@@ -8,9 +8,13 @@ static func render(ui) -> void:
 	var center: VBoxContainer = ui.center
 	var map_target: String = ui.map_target
 	var world_map = ui.world_map
+	var continuing: bool = not session.player.journey.is_empty() and str(session.player.journey.get("to", "")) == map_target
+	var route_mode: String = str(session.player.journey.get("mode", "fast")) if continuing else ui.map_route_mode
 	var path: Array[String] = []
+	var plan := {"fallback": false}
 	if not map_target.is_empty() and map_target != session.player.location:
-		path = session.path_to(map_target)
+		plan = {"path": session.path_to(map_target, route_mode), "fallback": false} if continuing else session.Journey.preview(session, map_target, route_mode)
+		path = plan.path
 	var people_at := {}
 	for person_id: String in session.known_npcs():
 		var where: String = session.npc_location(person_id)
@@ -32,6 +36,17 @@ static func render(ui) -> void:
 	if map_target == session.player.location:
 		center.add_child(ui.paragraph("你就在此地。", ui.INK))
 		return
+	var modes := OptionButton.new()
+	modes.add_item("快捷路线 · 优先省时")
+	modes.add_item("省钱路线 · 优先少花灵石")
+	modes.select(1 if route_mode == "cheap" else 0)
+	modes.disabled = continuing
+	modes.item_selected.connect(func(index: int) -> void:
+		ui.map_route_mode = "cheap" if index == 1 else "fast"
+		ui.render())
+	center.add_child(modes)
+	if bool(plan.get("fallback", false)):
+		center.add_child(ui.paragraph("灵石不足以走快捷路线，以下为可负担的省钱路线。", ui.GOLD))
 	if path.is_empty():
 		center.add_child(ui.paragraph(_no_path_reason(session, map_target), ui.INK))
 		return
@@ -49,7 +64,11 @@ static func render(ui) -> void:
 	var held: String = session.guide_block("travel", map_target)
 	if held.is_empty() and fee > int(session.player.stones):
 		held = "盘缠不足：这一路要 %d 灵石。" % fee
-	var go: Button = ui.button("启程前往" + target.name, func() -> void: ui.depart(ui.map_target), held)
+	var go: Button = ui.button(("继续前往" if continuing else "启程前往") + target.name, func() -> void:
+		if continuing:
+			ui.continue_journey()
+		else:
+			ui.depart(ui.map_target), held)
 	go.disabled = not ui.settled() or not held.is_empty()
 	center.add_child(go)
 	if not held.is_empty():

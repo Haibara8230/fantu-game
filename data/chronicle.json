@@ -179,5 +179,7 @@
   "alchemy_burst": "开炉 {duration}，武火过猛，丹炉轰然炸开，一炉{item_name}尽毁，你被炉火灼伤，气血 -{amount}。",
   "field_plant": "在洞府灵田种下一株{item_name}，约 {duration} 后可收。",
   "field_harvest": "灵田收获{loot_text}。",
-  "field_upgrade": "灵田重新翻整、引来灵泉，如今已是{field}。"
+  "field_upgrade": "灵田重新翻整、引来灵泉，如今已是{field}。",
+  "battle_review": "战后回顾：与{enemy_name}交手 {turns} 回合，开战气血 {opening_percent}%，守御 {guards} 次。",
+  "story_gather_help": "{npc_name}同行指草，额外找到{item_name}×{count}；这次认药相助已用过。"
 }

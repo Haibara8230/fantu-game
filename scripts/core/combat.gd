@@ -56,6 +56,9 @@ static func begin_battle(s, enemy_id: String, context: String = "", opponent_sec
 	s.battle = {"enemy_id": enemy_id, "hp": hp, "turn": 1, "cooldowns": {}, "opponent_sect": opponent_sect, "status": {}, "place": _battle_place(s)}
 	if not context.is_empty():
 		s.battle.context = context
+	s.battle.opening_percent = int(s.player.hp) * 100 / maxi(1, int(s.player.max_hp))
+	s.battle.old_wound = int(s.player.get("wound_until", 0)) > int(s.world.day) or int(s.player.get("injury_until", 0)) > int(s.world.day)
+	s.battle.guarded_turns = 0
 	s.combat_events.clear()
 	open_hand(s)
 	return s.log_event("battle_start", {"enemy": enemy_id})
@@ -777,6 +780,7 @@ static func defend(s) -> String:
 	if s.battle.is_empty():
 		return "当前没有对手。"
 	s.combat_events.append({"type": "guard", "amount": 0, "sect": str(s.player.get("sect", "wanderer"))})
+	s.battle.guarded_turns = int(s.battle.get("guarded_turns", 0)) + 1
 	s.log_event("guard_turn", {"amount": int(rules(s).guard_orbs)})
 	return end_turn(s, true)
 
@@ -1390,6 +1394,7 @@ static func _lose(s) -> String:
 	var grudge_id := str(s.battle.get("grudge", ""))
 	var deadly := bool(s.battle.get("deadly", false))
 	var killer := str(s.battle.get("title", s.content.enemies[str(s.battle.enemy_id)].name))
+	var review := {"enemy":str(s.battle.enemy_id), "turns":int(s.battle.turn), "guards":int(s.battle.get("guarded_turns", 0)), "opening_percent":int(s.battle.get("opening_percent", 100)), "old_wound":bool(s.battle.get("old_wound", false))}
 	s.battle.clear()
 	s.record_deed("duel")
 	# 死斗 (part one, stage five): marked before it began, lost, it ends the life.
@@ -1412,6 +1417,7 @@ static func _lose(s) -> String:
 	_wound(s, int(rules(s).get("defeat_wound_days", 12)), int(rules(s).get("defeat_injury_days", 10)))
 	s.player.hp = maxi(1, int(s.player.max_hp) / 2)
 	s.player.qi = s.player.max_qi
+	message += " " + s.log_event("battle_review", review)
 	return s.conclude(message, passed)
 
 ## A plain full turn (simulations, tests): heal when low, otherwise cast the strongest affordable arts

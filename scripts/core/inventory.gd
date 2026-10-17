@@ -281,6 +281,11 @@ static func reserved(s) -> Dictionary:
 		var costs: Dictionary = s.Storylines.required_items(s, story_id)
 		for item_id: String in costs:
 			keep[item_id] = int(keep.get(item_id, 0)) + int(costs[item_id])
+	for item_id: String in keep.keys():
+		var fine: String = s.content.fine_pill(item_id)
+		if not fine.is_empty():
+			var missing := maxi(0, int(keep[item_id]) - item_count(s, item_id))
+			keep[fine] = int(keep.get(fine, 0)) + mini(missing, maxi(0, item_count(s, fine) - int(keep.get(fine, 0))))
 	var herbs_needed := 0
 	for story_id: String in s.world.get("storylines", {}):
 		herbs_needed += s.Storylines.required_herbs(s, story_id)

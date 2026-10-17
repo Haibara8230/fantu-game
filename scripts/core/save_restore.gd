@@ -105,6 +105,8 @@ static func restore(s, data: Variant) -> bool:
 	var journey: Variant = saved_player.get("journey")
 	if not journey is Dictionary or (not journey.is_empty() and (not journey.get("to") is String or not content.location_visible(journey.to, saved_world.flags))):
 		return false
+	if not journey.is_empty() and (not journey.get("mode", "fast") is String or not journey.get("mode", "fast") in ["fast", "cheap"]):
+		return false
 	var cooldowns: Variant = saved_player.get("cooldowns")
 	if not cooldowns is Dictionary:
 		return false
@@ -247,7 +249,7 @@ static func restore(s, data: Variant) -> bool:
 		var secrets: Variant = saved_battle.get("secrets", [])
 		if not secrets is Array or secrets.any(func(art_id: Variant) -> bool: return not content.rules.get("duel", {}).get("secret_arts", {}).has(art_id)):
 			return false
-		for flag_key: String in ["array", "body_ready", "deadly"]:
+		for flag_key: String in ["array", "body_ready", "deadly", "old_wound"]:
 			if saved_battle.has(flag_key) and not saved_battle[flag_key] is bool:
 				return false
 		for named: String in ["title", "grudge", "wanted"]:
@@ -261,9 +263,11 @@ static func restore(s, data: Variant) -> bool:
 		var chain: Variant = saved_battle.get("chain", "")
 		if not chain is String or (not chain.is_empty() and not content.technique_data.elements.has(chain)):
 			return false
-		for count_key: String in ["shield", "foe_shield", "pills", "talismans", "released", "target", "sword_streak", "soul_turn", "dispel"]:
+		for count_key: String in ["shield", "foe_shield", "pills", "talismans", "released", "target", "sword_streak", "soul_turn", "dispel", "opening_percent", "guarded_turns"]:
 			if not _whole_nonnegative(saved_battle.get(count_key, 0)):
 				return false
+		if int(saved_battle.get("opening_percent", 100)) > 100:
+			return false
 		var intent: Variant = saved_battle.get("intent", [])
 		if not intent is Array or intent.any(func(entry: Variant) -> bool: return not entry is Dictionary or not entry.get("kind") is String or not entry.get("name") is String or (entry.has("art") and content.technique(str(entry.art)).is_empty()) or (entry.has("move") and not entry.move in move_ids) or (entry.has("landing") and not entry.landing is bool) or ["min", "max", "amount", "hits"].any(func(key: String) -> bool: return entry.has(key) and not _whole_nonnegative(entry[key]))):
 			return false
@@ -381,7 +385,7 @@ static func restore(s, data: Variant) -> bool:
 		if not content.item(item_id).is_empty():
 			carried[item_id] = int(player.items[item_id])
 	player.items = carried
-	player.journey = {} if journey.is_empty() else {"to": journey.to}
+	player.journey = {} if journey.is_empty() else {"to": journey.to, "mode": journey.get("mode", "fast")}
 	for action_id: String in player.cooldowns:
 		player.cooldowns[action_id] = int(player.cooldowns[action_id])
 	s.player = player
@@ -400,7 +404,7 @@ static func restore(s, data: Variant) -> bool:
 		fresh_hand = not battle.has("orbs")
 		for member: Dictionary in battle.get("pack", []):
 			member.hp = int(member.hp)
-		for count_key: String in ["shield", "foe_shield", "pills", "talismans", "released", "target", "sword_streak", "soul_turn", "dispel"]:
+		for count_key: String in ["shield", "foe_shield", "pills", "talismans", "released", "target", "sword_streak", "soul_turn", "dispel", "opening_percent", "guarded_turns"]:
 			if battle.has(count_key):
 				battle[count_key] = int(battle[count_key])
 		# JSON brings every number back as a float; the whole ones are whole again.

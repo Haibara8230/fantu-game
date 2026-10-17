@@ -114,7 +114,7 @@
           }
         ],
         "once": true,
-        "chronicle": "沈墨放下算盘：“赤鳞果？那东西长在妖蟒窝边，妖蟒吃了它，鳞甲硬得像铁。阿芷她爹就是贪那几颗果子……你若真想对付那孽畜，凑齐三株凝露草、两株赤炎花来，我替你熬一剂破鳞散。”"
+        "chronicle": "沈墨放下算盘：“赤鳞果？那东西长在妖蟒窝边，妖蟒吃了它，鳞甲硬得像铁。阿芷她爹也是那一回进谷后没回来，究竟出了什么事，还得找回留下的东西才知道。你若真想对付那孽畜，凑齐三株凝露草、两株赤炎花来，我替你熬一剂破鳞散。”"
       },
       {
         "id": "brew",
@@ -210,9 +210,305 @@
         ],
         "once": true,
         "chronicle": "你收下药农备好的谢礼，沈墨说：“报酬是你应得的，往后路上多备些丹药。”"
+      },
+      {
+        "id": "route_consult",
+        "label": "请教两种灵草的配药用处",
+        "conditions": [
+          {
+            "story_at": [
+              "azhi_route",
+              "consult"
+            ]
+          }
+        ],
+        "effects": [
+          {
+            "story_advance": "azhi_route"
+          }
+        ],
+        "once": true,
+        "chronicle": "沈墨把药杵搁下：“认草是根，成药是枝。回春温和，凝露清润；先学治伤与回气，往后再想大丹。”"
+      },
+      {
+        "id": "offer_order",
+        "label": "接一份小药单，学着配药周转",
+        "conditions": [
+          {
+            "flag": "intro_done"
+          },
+          {
+            "story_state": [
+              "shen_order",
+              "none"
+            ]
+          }
+        ],
+        "effects": [
+          {
+            "recipe": "liaoshang"
+          },
+          {
+            "start_story": "shen_order"
+          }
+        ],
+        "once": true,
+        "chronicle": "你接下两枚疗伤丹的小订单，沈墨先传疗伤方，不强求必须亲自炼成。"
+      },
+      {
+        "id": "order_relief",
+        "label": "先给药农救急，请沈墨向药商说明（交两枚疗伤丹）",
+        "conditions": [
+          {
+            "story_at": [
+              "shen_order",
+              "decide"
+            ]
+          },
+          {
+            "item_at_least": [
+              "liaoshang_pill",
+              2
+            ]
+          }
+        ],
+        "effects": [
+          {
+            "item": [
+              "liaoshang_pill",
+              -2
+            ]
+          },
+          {
+            "flag": "medicine_relief"
+          },
+          {
+            "story_advance": "shen_order"
+          }
+        ],
+        "once": true,
+        "chronicle": "你把药先给了受伤药农，沈墨亲自向药商解释迟交。"
+      },
+      {
+        "id": "order_order",
+        "label": "先履行药商订单，请沈墨安排伤者候药（交两枚疗伤丹）",
+        "conditions": [
+          {
+            "story_at": [
+              "shen_order",
+              "decide"
+            ]
+          },
+          {
+            "item_at_least": [
+              "liaoshang_pill",
+              2
+            ]
+          }
+        ],
+        "effects": [
+          {
+            "item": [
+              "liaoshang_pill",
+              -2
+            ]
+          },
+          {
+            "flag": "medicine_order"
+          },
+          {
+            "story_advance": "shen_order"
+          }
+        ],
+        "once": true,
+        "chronicle": "你先把药交给约好的药商，沈墨另开一炉照料伤者；你答应出门后问问后续。"
+      },
+      {
+        "id": "order_settle",
+        "label": "结清药单，收下回气方与三十灵石",
+        "conditions": [
+          {
+            "story_at": [
+              "shen_order",
+              "settle"
+            ]
+          }
+        ],
+        "effects": [
+          {
+            "story_advance": "shen_order"
+          }
+        ],
+        "once": true,
+        "chronicle": "你与沈墨核清药单，往后的来往多了一份信任。"
+      },
+      {
+        "id": "exam_hear_shen",
+        "label": "听他说明药铺为何不敢加价",
+        "conditions": [
+          {
+            "story_at": [
+              "inner_exam",
+              "work"
+            ]
+          },
+          {
+            "flag": "exam_mediation"
+          }
+        ],
+        "effects": [
+          {
+            "flag": "exam_shen_heard"
+          }
+        ],
+        "once": true,
+        "chronicle": "沈墨翻开药价旧账：药农有损耗，赊药的病人也多。价该讲清，急用药不该一概翻倍。"
+      },
+      {
+        "id": "bounty_echo_turned_in",
+        "label": "问天南悬赏的后续",
+        "conditions": [
+          {
+            "story_at": [
+              "furnace_aftermath",
+              "return"
+            ]
+          },
+          {
+            "flag": "bounty_turned_in"
+          }
+        ],
+        "effects": [
+          {
+            "story_advance": "furnace_aftermath"
+          }
+        ],
+        "once": true,
+        "chronicle": "沈墨合上远来药商的信：“韩烬被押回了赤霄，器坊按原悬赏付账。你办的是告示上的差事；账页没说完的那些话，往后也许还会有人提。”"
+      },
+      {
+        "id": "bounty_echo_exposed",
+        "label": "问天南悬赏的后续",
+        "conditions": [
+          {
+            "story_at": [
+              "furnace_aftermath",
+              "return"
+            ]
+          },
+          {
+            "flag": "bounty_exposed"
+          }
+        ],
+        "effects": [
+          {
+            "story_advance": "furnace_aftermath"
+          }
+        ],
+        "once": true,
+        "chronicle": "沈墨合上远来药商的信：“长老撤了袁赤锋的执事职，韩烬恢复名籍。器坊公炉照常借用，袁本人已不在原处；他会不会咽下这口气，还得留心。”"
+      },
+      {
+        "id": "bounty_echo_let_go",
+        "label": "问天南悬赏的后续",
+        "conditions": [
+          {
+            "story_at": [
+              "furnace_aftermath",
+              "return"
+            ]
+          },
+          {
+            "flag": "bounty_let_go"
+          }
+        ],
+        "effects": [
+          {
+            "story_advance": "furnace_aftermath"
+          }
+        ],
+        "once": true,
+        "chronicle": "沈墨合上远来药商的信：“悬赏后来又贴了一回，却再没抓到人。你放走的是个人，也留下了一桩没由官面结清的旧账。”"
       }
     ],
     "talk_variants": [
+      {
+        "conditions": [
+          {
+            "flag": "bounty_let_go"
+          }
+        ],
+        "lines": [
+          "“悬赏后来又贴了一回，却再没抓到人。你放走的是个人，也留下了一桩没由官面结清的旧账。”"
+        ]
+      },
+      {
+        "conditions": [
+          {
+            "flag": "bounty_exposed"
+          }
+        ],
+        "lines": [
+          "“长老撤了袁赤锋的执事职，韩烬恢复名籍。器坊公炉照常借用，袁本人已不在原处；他会不会咽下这口气，还得留心。”"
+        ]
+      },
+      {
+        "conditions": [
+          {
+            "flag": "bounty_turned_in"
+          }
+        ],
+        "lines": [
+          "“韩烬被押回了赤霄，器坊按原悬赏付账。你办的是告示上的差事；账页没说完的那些话，往后也许还会有人提。”"
+        ]
+      },
+      {
+        "conditions": [
+          {
+            "flag": "medicine_relief"
+          }
+        ],
+        "lines": [
+          "“伤者缓过来了。那药商肯等，是因为有人认真把缘由说清；下次接单，别忘了给急事留些余地。”"
+        ]
+      },
+      {
+        "conditions": [
+          {
+            "flag": "medicine_order"
+          }
+        ],
+        "lines": [
+          "“那单药按约交到了，药商后来还提过你。至于伤者，我另开了炉；往后若能多备一份，就少一次两难。”"
+        ]
+      },
+      {
+        "conditions": [
+          {
+            "talked": "azhi"
+          },
+          {
+            "relation_at_least": [
+              "shen_mo",
+              15
+            ]
+          },
+          {
+            "story_state": [
+              "shen_redscale",
+              "none"
+            ]
+          },
+          {
+            "not": {
+              "flag": "serpent_slain"
+            }
+          }
+        ],
+        "lines": [
+          "“听阿芷说你留心谷里的事。若是要对付妖蟒，先问问赤鳞果，药铺也有准备的法子。”"
+        ]
+      },
       {
         "conditions": [
           {
@@ -358,6 +654,28 @@
         "conditions": [{"story_at": ["peddler_robbed", "return"]}, {"item_at_least": ["peddler_pack", 1]}],
         "effects": [{"story_advance": "peddler_robbed"}],
         "chronicle": "你把夺回的货担还给钱货郎。"
+      },
+      {
+        "id": "verify_caravan",
+        "label": "问起那批北荒兵器的行商见闻",
+        "conditions": [
+          {
+            "story_at": [
+              "furnace_inquiry",
+              "verify"
+            ]
+          }
+        ],
+        "effects": [
+          {
+            "flag": "furnace_evidence"
+          },
+          {
+            "flag": "furnace_witness"
+          }
+        ],
+        "once": true,
+        "chronicle": "钱货郎认出账上的商队号：“我在渡口见过那车兵器，封条是赤霄器坊的。去的却是北荒血煞那条线。”你把证言记在账页背面。"
       }
     ]
   },
@@ -596,9 +914,251 @@
         ],
         "once": true,
         "chronicle": "你听阿芷讲起重新进谷采药、绘制药路的打算。"
+      },
+      {
+        "id": "offer_route",
+        "label": "请教她辨药与走药路的门道",
+        "conditions": [
+          {
+            "flag": "intro_done"
+          },
+          {
+            "story_state": [
+              "azhi_route",
+              "none"
+            ]
+          }
+        ],
+        "effects": [
+          {
+            "start_story": "azhi_route"
+          }
+        ],
+        "once": true,
+        "chronicle": "阿芷答应拿两种常见灵草教你辨药，不收学费。"
+      },
+      {
+        "id": "route_herbs",
+        "label": "带来两种灵草，请她辨药",
+        "conditions": [
+          {
+            "story_at": [
+              "azhi_route",
+              "herbs"
+            ]
+          },
+          {
+            "item_at_least": [
+              "huichun_grass",
+              2
+            ]
+          },
+          {
+            "item_at_least": [
+              "ninglu_grass",
+              2
+            ]
+          }
+        ],
+        "effects": [
+          {
+            "item": [
+              "huichun_grass",
+              -2
+            ]
+          },
+          {
+            "item": [
+              "ninglu_grass",
+              -2
+            ]
+          },
+          {
+            "story_advance": "azhi_route"
+          }
+        ],
+        "once": true,
+        "chronicle": "阿芷把草根并排摆好，教你辨认叶脉与水气，再让你去问沈墨如何配药。"
+      },
+      {
+        "id": "route_company",
+        "label": "请她同行认药（下次松风岭采集多得两株回春草）",
+        "conditions": [
+          {
+            "story_at": [
+              "azhi_route",
+              "choose"
+            ]
+          }
+        ],
+        "effects": [
+          {
+            "flag": "azhi_route_ready"
+          },
+          {
+            "story_advance": "azhi_route"
+          }
+        ],
+        "once": true,
+        "chronicle": "阿芷应下同行认药：“下次就在这片松林走，我替你指出漏看的草。只帮这一回，往后要靠你自己。”"
+      },
+      {
+        "id": "route_recipe",
+        "label": "带回疗伤丹方（已会则重读配药笔记）",
+        "conditions": [
+          {
+            "story_at": [
+              "azhi_route",
+              "choose"
+            ]
+          }
+        ],
+        "effects": [
+          {
+            "recipe": "liaoshang"
+          },
+          {
+            "flag": "azhi_route_recipe"
+          },
+          {
+            "story_advance": "azhi_route"
+          }
+        ],
+        "once": true,
+        "chronicle": "阿芷把沈墨抄给她的疗伤方交给你，边角还有她标出的药性；已经会炼，也能拿它核对辨药所得。"
+      },
+      {
+        "id": "order_visit",
+        "label": "问起药单与伤者的后续",
+        "conditions": [
+          {
+            "story_at": [
+              "shen_order",
+              "visit"
+            ]
+          }
+        ],
+        "effects": [
+          {
+            "story_advance": "shen_order"
+          }
+        ],
+        "once": true,
+        "chronicle": "阿芷说，伤者已经用上了药，药商也听到了沈墨的说明。她叮嘱你，既答应的事，就再回药铺把账结清。"
+      },
+      {
+        "id": "exam_hear_azhi",
+        "label": "听她说明药农为何急着涨价",
+        "conditions": [
+          {
+            "story_at": [
+              "inner_exam",
+              "work"
+            ]
+          },
+          {
+            "flag": "exam_mediation"
+          }
+        ],
+        "effects": [
+          {
+            "flag": "exam_azhi_heard"
+          }
+        ],
+        "once": true,
+        "chronicle": "阿芷说路上花的时日和折损都得算，单压草价，最后没人肯去走险路。"
+      },
+      {
+        "id": "exam_witness_patrol",
+        "label": "核实清剿狼群后的药路",
+        "conditions": [
+          {
+            "story_at": [
+              "inner_exam",
+              "witness"
+            ]
+          },
+          {
+            "flag": "exam_patrol"
+          }
+        ],
+        "effects": [
+          {
+            "story_advance": "inner_exam"
+          }
+        ],
+        "once": true,
+        "chronicle": "阿芷说，狼群的踪迹少了，药农敢结伴走那条路；仍须认清险处，不能见一场胜仗便以为山里无事。"
+      },
+      {
+        "id": "exam_witness_alchemy",
+        "label": "核实丹房备药是否够用",
+        "conditions": [
+          {
+            "story_at": [
+              "inner_exam",
+              "witness"
+            ]
+          },
+          {
+            "flag": "exam_alchemy"
+          }
+        ],
+        "effects": [
+          {
+            "story_advance": "inner_exam"
+          }
+        ],
+        "once": true,
+        "chronicle": "阿芷打开巡山药箱，疗伤丹与回气丹各有标记：“你备的药到了，出门受伤的人就多一份把握。”"
+      },
+      {
+        "id": "exam_witness_mediation",
+        "label": "核实两边是否按约明列药价",
+        "conditions": [
+          {
+            "story_at": [
+              "inner_exam",
+              "witness"
+            ]
+          },
+          {
+            "flag": "exam_mediation"
+          }
+        ],
+        "effects": [
+          {
+            "story_advance": "inner_exam"
+          }
+        ],
+        "once": true,
+        "chronicle": "阿芷展开新价簿，损耗与赊账分开记着：“沈掌柜也认这本账。急用药留了一份，平常生意照做。”"
       }
     ],
     "talk_variants": [
+      {
+        "conditions": [
+          {
+            "flag": "medicine_relief"
+          }
+        ],
+        "lines": [
+          "“上回你先把药给了伤者，他托我道谢。药商那边也得有人解释，沈掌柜替你担下了。”"
+        ]
+      },
+      {
+        "conditions": [
+          {
+            "story_state": [
+              "azhi_route",
+              "done"
+            ]
+          }
+        ],
+        "lines": [
+          "“你如今认草有章法了。有些药路可以一起走，有些判断，得自己下。”"
+        ]
+      },
       {
         "conditions": [
           {
@@ -664,6 +1224,69 @@
         "conditions": [{"story_at": ["errands", "wolf_report"]}],
         "effects": [{"story_advance": "errands"}],
         "chronicle": "你把狼牙交给许清和。"
+      },
+      {
+        "id": "exam_pills",
+        "label": "交丹房备药（疗伤丹、回气丹各两枚）",
+        "conditions": [
+          {
+            "story_at": [
+              "inner_exam",
+              "work"
+            ]
+          },
+          {
+            "flag": "exam_alchemy"
+          },
+          {
+            "item_at_least": [
+              "liaoshang_pill",
+              2
+            ]
+          },
+          {
+            "item_at_least": [
+              "huiqi_pill",
+              2
+            ]
+          }
+        ],
+        "effects": [
+          {
+            "item": [
+              "liaoshang_pill",
+              -2
+            ]
+          },
+          {
+            "item": [
+              "huiqi_pill",
+              -2
+            ]
+          },
+          {
+            "story_advance": "inner_exam"
+          }
+        ],
+        "once": true,
+        "chronicle": "许清和把丹药分入巡山药箱，记下你的名字，托你去向药农核实需要。"
+      }
+    ],
+    "talk_variants": [
+      {
+        "conditions": [
+          {
+            "realm_at_least": 1
+          },
+          {
+            "not": {
+              "rank_at_least": "inner"
+            }
+          }
+        ],
+        "lines": [
+          "“如今论修为，该称你一声前辈。执事簿上的身份还须记贡献，去传功堂问考校，能选自己擅长的事。”"
+        ]
       }
     ]
   },
@@ -741,6 +1364,281 @@
         ],
         "once": true,
         "chronicle": "你向顾长庚回禀药道重开之事，也谈起远行的打算。"
+      },
+      {
+        "id": "offer_exam",
+        "label": "请领内门考校（一次一百六十贡献）",
+        "conditions": [
+          {
+            "flag": "intro_done"
+          },
+          {
+            "realm_at_least": 1
+          },
+          {
+            "not": {
+              "rank_at_least": "inner"
+            }
+          },
+          {
+            "story_state": [
+              "inner_exam",
+              "none"
+            ]
+          }
+        ],
+        "effects": [
+          {
+            "start_story": "inner_exam"
+          }
+        ],
+        "once": true,
+        "chronicle": "顾长庚给你一份自选考校，说明战功与筹药、调解都可记贡献，晋升门槛保持不变。"
+      },
+      {
+        "id": "exam_patrol",
+        "label": "以两次狼群战功应考（已有战功也算）",
+        "conditions": [
+          {
+            "story_at": [
+              "inner_exam",
+              "path"
+            ]
+          }
+        ],
+        "effects": [
+          {
+            "flag": "exam_patrol"
+          },
+          {
+            "story_advance": "inner_exam"
+          }
+        ],
+        "once": true,
+        "chronicle": "你选择以巡山战功应考。"
+      },
+      {
+        "id": "exam_alchemy",
+        "label": "替丹房筹两枚疗伤丹、两枚回气丹（可自炼或购买）",
+        "conditions": [
+          {
+            "story_at": [
+              "inner_exam",
+              "path"
+            ]
+          }
+        ],
+        "effects": [
+          {
+            "flag": "exam_alchemy"
+          },
+          {
+            "story_advance": "inner_exam"
+          }
+        ],
+        "once": true,
+        "chronicle": "你选择以筹备丹药应考。"
+      },
+      {
+        "id": "exam_mediation",
+        "label": "听药农与药铺两边的话，调解药价争议",
+        "conditions": [
+          {
+            "story_at": [
+              "inner_exam",
+              "path"
+            ]
+          }
+        ],
+        "effects": [
+          {
+            "flag": "exam_mediation"
+          },
+          {
+            "story_advance": "inner_exam"
+          }
+        ],
+        "once": true,
+        "chronicle": "你选择以调解争议应考。"
+      },
+      {
+        "id": "exam_patrol_report",
+        "label": "核验两次狼群战功",
+        "conditions": [
+          {
+            "story_at": [
+              "inner_exam",
+              "work"
+            ]
+          },
+          {
+            "flag": "exam_patrol"
+          },
+          {
+            "deed_at_least": [
+              "win:wolf_pack",
+              2
+            ]
+          }
+        ],
+        "effects": [
+          {
+            "story_advance": "inner_exam"
+          }
+        ],
+        "once": true,
+        "chronicle": "顾长庚核过两次清剿狼群的记录，让你再听听药农的回报。"
+      },
+      {
+        "id": "exam_mediate",
+        "label": "带两边的账与说法回报，约定明列草价和急用份额",
+        "conditions": [
+          {
+            "story_at": [
+              "inner_exam",
+              "work"
+            ]
+          },
+          {
+            "flag": "exam_mediation"
+          },
+          {
+            "flag": "exam_azhi_heard"
+          },
+          {
+            "flag": "exam_shen_heard"
+          }
+        ],
+        "effects": [
+          {
+            "story_advance": "inner_exam"
+          }
+        ],
+        "once": true,
+        "chronicle": "你把损耗、赊账与急用份额逐条说清，顾长庚让两边明列草价，不再只凭一句压价或涨价争执。"
+      },
+      {
+        "id": "exam_finish",
+        "label": "回报考校（一次一百六十贡献）",
+        "conditions": [
+          {
+            "story_at": [
+              "inner_exam",
+              "report"
+            ]
+          }
+        ],
+        "effects": [
+          {
+            "story_advance": "inner_exam"
+          }
+        ],
+        "once": true,
+        "chronicle": "你将核实过的事交回考校，顾长庚记下这次贡献。"
+      },
+      {
+        "id": "exam_switch_patrol",
+        "label": "改选巡山战功考校",
+        "conditions": [
+          {
+            "story_at": [
+              "inner_exam",
+              "work"
+            ]
+          },
+          {
+            "not": {
+              "flag": "exam_patrol"
+            }
+          }
+        ],
+        "effects": [
+          {
+            "clear_flag": "exam_alchemy"
+          },
+          {
+            "clear_flag": "exam_mediation"
+          },
+          {
+            "flag": "exam_patrol"
+          }
+        ],
+        "chronicle": "你改以巡山战功继续考校，尚未交付的材料仍留在行囊里，最终贡献仍只记一次。"
+      },
+      {
+        "id": "exam_switch_alchemy",
+        "label": "改选丹房筹药考校",
+        "conditions": [
+          {
+            "story_at": [
+              "inner_exam",
+              "work"
+            ]
+          },
+          {
+            "not": {
+              "flag": "exam_alchemy"
+            }
+          }
+        ],
+        "effects": [
+          {
+            "clear_flag": "exam_patrol"
+          },
+          {
+            "clear_flag": "exam_mediation"
+          },
+          {
+            "flag": "exam_alchemy"
+          }
+        ],
+        "chronicle": "你改以丹房筹药继续考校，尚未交付的材料仍留在行囊里，最终贡献仍只记一次。"
+      },
+      {
+        "id": "exam_switch_mediation",
+        "label": "改选药价调解考校",
+        "conditions": [
+          {
+            "story_at": [
+              "inner_exam",
+              "work"
+            ]
+          },
+          {
+            "not": {
+              "flag": "exam_mediation"
+            }
+          }
+        ],
+        "effects": [
+          {
+            "clear_flag": "exam_patrol"
+          },
+          {
+            "clear_flag": "exam_alchemy"
+          },
+          {
+            "flag": "exam_mediation"
+          }
+        ],
+        "chronicle": "你改以药价调解继续考校，尚未交付的材料仍留在行囊里，最终贡献仍只记一次。"
+      }
+    ],
+    "talk_variants": [
+      {
+        "conditions": [
+          {
+            "realm_at_least": 2
+          },
+          {
+            "not": {
+              "rank_at_least": "inner"
+            }
+          }
+        ],
+        "lines": [
+          "“道友修为已在老夫之上，礼数自然不同。宗门身份另论功劳；若愿入内门，可从考校与执事差事做起。”"
+        ]
       }
     ]
   },
@@ -772,6 +1670,28 @@
         "effects": [{"start_story": "furnace_bounty"}],
         "once": true,
         "chronicle": "袁赤锋上下打量你一眼：“器坊开炉大典缺三枚地火精，熔窟里就有。你肯跑这一趟，赤霄不会亏待你。”"
+      },
+      {
+        "id": "verify_forge",
+        "label": "核对器坊出货牌与炉心铜账页",
+        "conditions": [
+          {
+            "story_at": [
+              "furnace_inquiry",
+              "verify"
+            ]
+          }
+        ],
+        "effects": [
+          {
+            "flag": "furnace_evidence"
+          },
+          {
+            "flag": "furnace_trace"
+          }
+        ],
+        "once": true,
+        "chronicle": "袁赤锋拿出货牌催你离开。你记下时辰和料号，与韩烬账页上那批送往北荒的兵器一一对上；账页的说法有了旁证。"
       }
     ]
   },
@@ -799,7 +1719,7 @@
         "id": "hear_out",
         "label": "听他说完",
         "conditions": [{"story_at": ["furnace_bounty", "decide"]}],
-        "effects": [{"flag": "hanjin_heard"}],
+        "effects": [{"flag": "hanjin_heard"}, {"flag": "furnace_review_open"}],
         "once": true,
         "chronicle": "韩烬说，炉心铜是赤霄器坊镇炉的古铜，炉火靠它才三百年不熄。袁赤锋暗中拿炉心铜淬火的兵器卖给北荒的血煞教，被他撞破，他才带着铜逃了出来。他摊开一本烧焦了边的账册：“证据都在这里。可执事堂只认悬赏，不认账册。”"
       },
@@ -814,7 +1734,7 @@
       {
         "id": "expose",
         "label": "带着账册去见赤霄门的传功长老",
-        "conditions": [{"story_at": ["furnace_bounty", "decide"]}, {"flag": "hanjin_heard"}],
+        "conditions": [{"story_at": ["furnace_bounty", "decide"]}, {"flag": "hanjin_heard"}, {"any": [{"not": {"flag": "furnace_review_open"}}, {"flag": "furnace_evidence"}]}],
         "effects": [{"flag": "bounty_exposed"}, {"stones": 150}, {"mind": 6}, {"relation": ["han_jin", 30]}, {"story_advance": "furnace_bounty"}],
         "once": true,
         "chronicle": "你带着账册与韩烬去见赤霄门的传功长老。长老一页页翻完，脸色铁青，当夜便革了袁赤锋的执事之职。韩烬的名籍恢复了，炉心铜回到了器坊的炉底；长老按悬赏的一半付你一百五十灵石，算是谢礼。"

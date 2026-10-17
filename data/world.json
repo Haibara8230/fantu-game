@@ -733,7 +733,15 @@
     "inquire": {"days": 1, "price": 2, "repeat_after_days": 90},
     "encounter_chance": [0.08, 0.18, 0.3, 0.42],
     "ruin_search": {"stones": [10, 30], "herbs": [1, 3], "pill_chance": 0.1, "manual_chance": 0.15, "manual_tiers": [2, 2]},
-    "action_cooldowns": {"search_ruin": 90}
+    "action_cooldowns": {"search_ruin": 90},
+    "story_help": {
+      "azhi_route": {
+        "flag": "azhi_route_ready",
+        "place": "ridge",
+        "item": "huichun_grass",
+        "count": 2
+      }
+    }
   },
   "realms": [
     {
@@ -807,7 +815,7 @@
     "search_ruin": 5,
     "road_recovery": 1
   },
-  "world_flags": ["ascension_open", "calamity", "calamity_turned", "chenxia_open", "chenxia_puppet_down", "chenxia_remnant_down", "ruin_den_cleared", "serpent_slain", "heard_auction_rumor", "found_ruin", "ruin_cleared", "helped_wanderer", "serpent_rampage", "azhi_promised", "azhi_mourned", "intro_done", "peddler_friend", "serpent_weakened", "spirit_eye_found", "tiannan_known", "dihuo_lizard_down", "hanjin_heard", "bounty_turned_in", "bounty_exposed", "bounty_let_go", "nanming_abode", "valley_patron", "azhi_livelihood", "valley_remembered"],
+  "world_flags": ["ascension_open", "calamity", "calamity_turned", "chenxia_open", "chenxia_puppet_down", "chenxia_remnant_down", "ruin_den_cleared", "serpent_slain", "heard_auction_rumor", "found_ruin", "ruin_cleared", "helped_wanderer", "serpent_rampage", "azhi_promised", "azhi_mourned", "intro_done", "peddler_friend", "serpent_weakened", "spirit_eye_found", "tiannan_known", "dihuo_lizard_down", "hanjin_heard", "bounty_turned_in", "bounty_exposed", "bounty_let_go", "nanming_abode", "valley_patron", "azhi_livelihood", "valley_remembered", "azhi_route_ready", "azhi_route_recipe", "medicine_relief", "medicine_order", "exam_patrol", "exam_alchemy", "exam_mediation", "exam_azhi_heard", "exam_shen_heard", "south_gate_known", "south_road_known", "furnace_review_open", "furnace_evidence", "furnace_trace", "furnace_witness"],
   "sects": {
     "wanderer": {
       "name": "散修",

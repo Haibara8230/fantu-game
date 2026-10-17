@@ -173,12 +173,12 @@ static func render(ui) -> void:
 	ui.goal_label.visible = not goals.is_empty()
 	ui.goal_label.get_parent().visible = not goals.is_empty()
 	ui.goal_label.get_parent().custom_minimum_size.y = minf(96.0, goals.size() * 22.0)
-	ui.goal_label.text = "\n".join(goals.map(func(goal: Dictionary) -> String: return "目标 · " + goal.title))
+	ui.goal_label.text = "\n".join(goals.map(func(goal: Dictionary) -> String: return ("暂缓 · " if goal.get("state", "ready") == "waiting" else "目标 · ") + goal.title))
 	ui.goal_label.tooltip_text = "\n\n".join(goals.map(func(goal: Dictionary) -> String: return goal.title + "：" + goal.text))
 	ui.clear(ui.journey_box)
 	ui.journey_button = null
 	if not p.journey.is_empty():
-		var remaining: int = session.path_days(session.path_to(p.journey.to))
+		var remaining: int = session.path_days(session.path_to(p.journey.to, str(p.journey.get("mode", "fast"))))
 		ui.journey_box.add_child(ui.label("行程未竟 · %s · 约 %d 日" % [session.content.locations[p.journey.to].name, remaining], 14))
 		var go_on: Button = ui.button("继续赶路", ui.continue_journey, "沿原定路线继续前进")
 		go_on.custom_minimum_size.y = 30
