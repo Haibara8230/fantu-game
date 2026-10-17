@@ -751,6 +751,16 @@ func set_bag_filter(category: String) -> void:
 func grade_color(entry: Dictionary) -> Color:
 	return session.content.rarity_color(session.content.rarity_of(entry))
 
+## The grade's badge (白绿蓝紫橙红, each more ornate), for a button's icon or beside a name.
+func grade_icon(entry: Dictionary) -> Texture2D:
+	return ArtLibrary.ui_icon("grades/grade_%d" % session.content.rarity_of(entry))
+
+## Gives a button a small icon at `side` pixels.
+func with_icon(target: Button, icon: Texture2D, side: int = 20) -> Button:
+	target.icon = icon
+	target.add_theme_constant_override("icon_max_width", side)
+	return target
+
 ## Colors a button's text the same in every state.
 func tint(target: Button, color: Color) -> Button:
 	for state: String in ["font_color", "font_hover_color", "font_focus_color", "font_pressed_color", "font_hover_pressed_color"]:

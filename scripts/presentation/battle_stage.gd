@@ -8,6 +8,7 @@ extends Control
 const Actor = preload("res://scripts/presentation/actor.gd")
 const Effect = preload("res://scripts/presentation/effect.gd")
 const SpriteFx = preload("res://scripts/presentation/sprite_fx.gd")
+const Storm = preload("res://scripts/presentation/storm.gd")
 # The most the screen moves at full trauma, in pixels, and how fast trauma fades per second.
 const SHAKE_PIXELS := 18.0
 const TRAUMA_DECAY := 1.8
@@ -60,6 +61,8 @@ var chip_hold := 0.0
 var impact_point := Vector2.ZERO
 var impact_until := 0
 var overlay := Node2D.new()
+# 天劫's clouds and bolts (storm.gd), only for a tribulation.
+var storm: Control = null
 var busy := false
 var motion_enabled := true
 var last_cue := ""
@@ -114,6 +117,9 @@ func configure(snapshot: Dictionary, enemy_definition: Dictionary) -> void:
 	enemy_art = _enemy_art(enemy_id, snapshot.battle)
 	enemy.configure(enemy_art, false)
 	world.add_child(enemy)
+	if enemy_id.begins_with("tribulation"):
+		storm = Storm.new()
+		add_child(storm)
 	overlay.z_index = 20
 	overlay.draw.connect(_draw_overlay)
 	add_child(overlay)
@@ -148,6 +154,8 @@ func _layout() -> void:
 	enemy.set_height(minf(size.y * float(enemy_art.height_ratio), maxf(0.0, size.y - 70.0)))
 	hero.position = Vector2(size.x * 0.24, size.y * 0.94)
 	enemy.position = Vector2(size.x * 0.76, size.y * 0.94)
+	if storm != null:
+		storm.fit(size)
 	queue_redraw()
 
 func _process(delta: float) -> void:
@@ -435,6 +443,9 @@ func _attack(event: Dictionary) -> void:
 	_emit_cue("prepare", "prepare_sword" if visual_id.begins_with("sword") else "prepare")
 	await prepare.finished
 	attacking.set_pose(profile.release_pose)
+	# A 天雷 comes down from the clouds onto its mark.
+	if storm != null and event.actor == "enemy":
+		storm.strike(world.position + target.chest() * world.scale)
 	var aim: Vector2 = (target.chest() - attacking.chest()).normalized()
 	# The release: a stretch toward the target, a flash at the hand, afterimages behind a fast move.
 	attacking.squash(Vector2(1.12, 0.92), 0.2)

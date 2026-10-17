@@ -8,9 +8,11 @@ if not exist "%TASK_GODOT%" (
 rem Outer time limits in seconds; the slowest test takes about 40 seconds.
 set "TASK_TEST_SECONDS=180"
 set "TASK_IMPORT_SECONDS=600"
-call :godot "%TEMP%\fantu_import.log" %TASK_IMPORT_SECONDS% --headless --path . --import
+rem Logs stay in the project (.tmp), never on the system drive.
+if not exist ".tmp" mkdir ".tmp"
+call :godot ".tmp\fantu_import.log" %TASK_IMPORT_SECONDS% --headless --log-file ".tmp\godot_import.log" --path . --import
 if "%errorlevel%"=="124" (
-  type "%TEMP%\fantu_import.log"
+  type ".tmp\fantu_import.log"
   echo Resource import timed out
   exit /b 1
 )
@@ -22,8 +24,8 @@ exit /b 0
 rem Runs one test; fails on a non-zero exit, on a timeout, or on any script error in its output,
 rem because Godot keeps running after a script error.
 :run
-set "TASK_LOG=%TEMP%\fantu_%1.log"
-call :godot "%TASK_LOG%" %TASK_TEST_SECONDS% --headless --path . --script res://tests/%1.gd
+set "TASK_LOG=.tmp\fantu_%1.log"
+call :godot "%TASK_LOG%" %TASK_TEST_SECONDS% --headless --log-file ".tmp\godot_%1.log" --path . --script res://tests/%1.gd
 set "TASK_CODE=%errorlevel%"
 type "%TASK_LOG%"
 if "%TASK_CODE%"=="124" (

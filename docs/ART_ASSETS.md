@@ -67,6 +67,14 @@ Art is unmistakably 2D DRAWN: crisp dark contours, flat color areas, simple cel 
 人物图集通过 Sprite2D 的 hframes/vframes 读取；妖兽通过配置中的精确区域取帧，排除相邻行的图像，并校准定位。没有用 Python 抠图或编辑角色。透明通道已检查。
 `data/art.json` 定义图集、姿态帧、朝向与相对高度；替换角色不应修改战斗规则。
 
+## 矢量界面美术与功法、宝物图标（2026-10-17）
+
+由脚本生成的 SVG，平涂、深色描边、一道克制的高光，与手绘画面相配；改图时改脚本重新生成，不手改 SVG。
+
+- `tools/art/make_ui_art.py` → `assets/art/ui/`：斗法状态徽记 11 个（`status/`，减益红边、增益金边）、五行灵珠（`orbs/`）、品阶徽记白绿蓝紫橙红（`grades/`，阶越高纹饰越繁）、首字朱印 `seal.svg`、地点纸条 `tag.svg` / `tag_chosen.svg`（九宫拉伸：上 24、下 12、左右 8）、云纹分隔线 `divider.svg`、舆图地标按地形 7 个（`map/`）。导入时栅格化：小图标 1 倍、地标与分隔线 2 倍、朱印 4 倍，均生成 mipmap（各 `.svg.import` 的 `svg/scale`）。
+- `tools/art/make_item_icons.py` → `assets/art/icons/`（带 `.gdignore`，不导入）：功法与宝物图标的部件——按品阶的边框 6 种、按五行的底 6 种（含无属性）、神通与心法主体 9 类 × 五行、宝物主体 9 种底材 × 5 档材质、玉简角标，以及 `items/` 下每种目录物品（`data/items.json`，2026-10-17 共 59 种）各一张「底 + 主体」：灵草、丹药（上品加金色丹纹与星点）、材料、天材地宝、丹方、丹炉、符箓与信物，各按物品挑五行底色，边框按品级（`rarity`）在运行时加。新物品没画时仍显示品阶徽记，脚本会列出缺图的物品。运行时 `art_library.gd` 把「底 + 主体 + 边框」的 SVG 文本拼成一张、按 2 倍栅格化并缓存，同种同阶共用一张；手绘的物品图（`item_icon_path`）存在时优先。**导出时须在导出预设的非资源文件过滤里加入 `*.svg`**，否则图标部件不会打进安装包。
+- 天劫的雷云与闪电是代码绘制（`scripts/presentation/storm.gd`），不用图片。
+
 ## 动画与反馈
 
 - 人物：六张关键姿态，加蓄势、前冲、后仰、回位与轻微呼吸补间。

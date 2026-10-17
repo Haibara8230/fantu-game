@@ -1,0 +1,143 @@
+{
+  "date": "2026-10-17",
+  "purpose": "docs/BACKLOG.md 第三节里还没有提示词的图：五张场景、飞升插图、九套斗法图集，以及闭关打坐与丹炉两张演出图。场景、插图与图集放到 target 路径即自动接入（场景画好后从 tests/art_smoke.gd 的 PENDING_SPOTS 删去；插图登记在 data/art.json 的 event_art）；打坐与丹炉两张还需要在 scripts/presentation/rite.gd 接上，图到位后再改代码。天南的图见 docs/ART_BRIEF_TIANNAN.json，物品图见 docs/ART_BRIEF_ITEMS.json。",
+  "style": "Use case: illustration-story. Production art for 凡途, an original Chinese cultivation 2D RPG. Style: CLEAR dark hand-drawn ink outlines, flat opaque color areas, restrained two-tone cel shading, simplified shapes and expressive illustrated faces, matching Chinese 2D cultivation game art. Muted jade, dusty teal, warm ivory, restrained gold. Match the existing scenes in assets/art/scenes and the sheets beasts_atlas_v1.png / rival_atlas_v2.png. No photorealism, realistic fur/skin/textile, 3D, cinematic rendering, text, labels, UI, watermark.",
+  "assets": [
+    {
+      "id": "scene_ruin_depths",
+      "kind": "scene",
+      "target": "assets/art/scenes/ruin_depths.png",
+      "size": [2400, 600],
+      "subject": "古修洞府·洞府深处：前厅后面的甬道与几间石室，机关、暗格与守洞的东西都还在。",
+      "prompt": "4:1 panorama banner, NO characters. A carved stone corridor deep inside an ancient cultivator's cave dwelling, several dark doorways to side chambers, faint rune lines on the walls, a half-hidden mechanism plate on the floor, dust and a few glowing moss patches, cold teal darkness with one warm lamp glow."
+    },
+    {
+      "id": "scene_wild_chenxia",
+      "kind": "scene",
+      "target": "assets/art/scenes/wild_chenxia.png",
+      "size": [2400, 600],
+      "subject": "落霞谷·沉霞古境：晚霞沉进谷底的雾里，雾中现出一道石门。古境一甲子开一回。",
+      "prompt": "4:1 panorama banner, NO characters. Valley floor at dusk filled with layered sunset-colored mist (rose, amber, violet), an ancient weathered stone gate standing in the mist with a soft light inside it, distant valley ridges as silhouettes, a few old pines, quiet and mysterious."
+    },
+    {
+      "id": "scene_sect_gate",
+      "kind": "scene",
+      "target": "assets/art/scenes/sect_gate.png",
+      "size": [2400, 600],
+      "subject": "青云山·山门：魔潮压在山门之外，护山大阵的光幕时明时暗。",
+      "prompt": "4:1 panorama banner, NO characters. The stone mountain gate of 青云 sect (paifang arch and long stone stairs among pines), a translucent jade-green protective barrier dome flickering over it, dark violet demonic mist and shadowy shapes massing outside the barrier, tense but not gory."
+    },
+    {
+      "id": "scene_ferry_crossing",
+      "kind": "scene",
+      "target": "assets/art/scenes/ferry_crossing.png",
+      "size": [2400, 600],
+      "subject": "白鹭渡·天河渡口：渡口上空裂开一道银白的天河，河上浮着一座看不见对岸的渡桥。",
+      "prompt": "4:1 panorama banner, NO characters. The quiet egret ferry landing by a river at night, above it the sky split by a silver-white celestial river, a pale floating bridge rising from the ferry into the sky and fading into light with no visible far end, egrets asleep in the reeds, awe and stillness."
+    },
+    {
+      "id": "scene_town_palisade",
+      "kind": "scene",
+      "target": "assets/art/scenes/town_palisade.png",
+      "size": [2400, 600],
+      "subject": "青石镇·镇口木栅：镇口的木栅新旧相间，补过不止一回；商队在这里雇修士护送。",
+      "prompt": "4:1 panorama banner, NO characters. A mortal town entrance with a wooden palisade of mixed old grey and new pale timbers, a small watchtower, a gate with lanterns, a parked caravan of packhorses and covered carts, distant mountains of the sunset valley on the horizon, daylight."
+    },
+    {
+      "id": "event_ascension_opens",
+      "kind": "event",
+      "target": "assets/art/events/ascension_opens.png",
+      "size": [1672, 941],
+      "subject": "飞升通道开启：天河渡桥现于白鹭渡上空（事件 ascension_opens；白日飞升结局也用这一景）。",
+      "prompt": "Wide event illustration. A lone cultivator in pale robes seen from behind, small in frame, standing at the foot of a glowing bridge that rises from the river ferry into a silver celestial river across the sky, robes and hair lifted by a gentle wind of light, egrets taking flight. Calm, luminous, final. Register in data/art.json event_art as ascension_opens."
+    },
+    {
+      "id": "battle_bear_king",
+      "kind": "battle",
+      "target": "assets/art/battle/bear_king.png",
+      "size": [1536, 1024],
+      "subject": "铁背熊王：背生铁鬃的巨熊，会人立拍击、震山吼。",
+      "prompt": "Duel sprite sheet, same 2x2 layout as assets/art/beasts_atlas_v1.png (cells 768x464 on top, 768x552 below, transparent background). Only the TOP row is read: top-left idle (a huge brown bear on all fours, iron-grey bristles along the spine, scarred muzzle), top-right attack (rearing up on hind legs, paw swiping). Bottom row: repeat the idle pose. Faces LEFT."
+    },
+    {
+      "id": "battle_wolf_pack",
+      "kind": "battle",
+      "target": "assets/art/battle/wolf_pack.png",
+      "size": [1536, 1024],
+      "subject": "狼群：一头头狼带着三四只妖狼。",
+      "prompt": "Duel sprite sheet, same 2x2 layout as assets/art/beasts_atlas_v1.png, transparent background. Only the TOP row is read: top-left idle (a lead wolf in front with three smaller grey-green demon wolves behind it, overlapping, all facing left), top-right attack (the pack lunging together, the lead wolf leaping). Bottom row: repeat the idle pose. Faces LEFT."
+    },
+    {
+      "id": "battle_shan_xiao",
+      "kind": "battle",
+      "target": "assets/art/battle/shan_xiao.png",
+      "size": [1536, 1024],
+      "subject": "偷药山魈：偷药的山魈，抓挠、掷石、攀树躲闪。",
+      "prompt": "Duel sprite sheet, same 2x2 layout as assets/art/beasts_atlas_v1.png, transparent background. Only the TOP row is read: top-left idle (a wiry mountain baboon-like spirit beast with a red-and-blue face, shaggy grey-brown fur, a stolen herb bundle in one hand), top-right attack (lunging with claws out, a rock in the other hand). Bottom row: repeat the idle pose. Faces LEFT."
+    },
+    {
+      "id": "battle_huo_ya",
+      "kind": "battle",
+      "target": "assets/art/battle/huo_ya.png",
+      "size": [1536, 1024],
+      "subject": "火鸦群：赤枫岭的火鸦，群啄、火羽。",
+      "prompt": "Duel sprite sheet, same 2x2 layout as assets/art/beasts_atlas_v1.png, transparent background. Only the TOP row is read: top-left idle (a flock of five crows with crimson-tipped, ember-glowing feathers, wings half spread, grouped), top-right attack (the flock diving forward, sparks trailing from the feathers). Bottom row: repeat the idle pose. Faces LEFT."
+    },
+    {
+      "id": "battle_qinglin_snake",
+      "kind": "battle",
+      "target": "assets/art/battle/qinglin_snake.png",
+      "size": [1536, 1024],
+      "subject": "青鳞蛇：青绿鳞片的毒蛇，会缠绕、蜕皮。",
+      "prompt": "Duel sprite sheet, same 2x2 layout as assets/art/beasts_atlas_v1.png, transparent background. Only the BOTTOM row is read (the serpent cells): bottom-left idle (a coiled green-scaled snake, head raised, about half the size of the existing great serpent), bottom-right attack (striking forward, fangs bared). Top row: repeat the idle pose. Faces LEFT."
+    },
+    {
+      "id": "battle_chilian_snake",
+      "kind": "battle",
+      "target": "assets/art/battle/chilian_snake.png",
+      "size": [1536, 1024],
+      "subject": "赤练妖蛇：火属的赤红妖蛇，缠身、连咬、喷毒。",
+      "prompt": "Duel sprite sheet, same 2x2 layout as assets/art/beasts_atlas_v1.png, transparent background. Only the BOTTOM row is read: bottom-left idle (a long crimson snake with black bands and a faint heat shimmer, coiled and raised), bottom-right attack (lunging with mouth open, a spray of venom). Top row: repeat the idle pose. Faces LEFT."
+    },
+    {
+      "id": "battle_yanjia_xi",
+      "kind": "battle",
+      "target": "assets/art/battle/yanjia_xi.png",
+      "size": [1536, 1024],
+      "subject": "岩甲蜥：背负岩甲的巨蜥，甲撞、结岩甲、崩岩。",
+      "prompt": "Duel sprite sheet, same 2x2 layout as assets/art/beasts_atlas_v1.png, transparent background. Only the TOP row is read: top-left idle (a squat heavy lizard whose back is covered in grey-brown stone plates like the item 岩甲片), top-right attack (charging with head lowered, rock fragments flying). Bottom row: repeat the idle pose. Faces LEFT."
+    },
+    {
+      "id": "battle_tribulation",
+      "kind": "battle",
+      "target": "assets/art/battle/tribulation.png",
+      "size": [1536, 1024],
+      "subject": "雷劫（三九、六九、九九共用）：结丹、成婴、化神时降下的天劫。",
+      "prompt": "Duel sprite sheet on the same 3x2 grid as assets/art/rival_atlas_v2.png (six 512x512 cells, transparent background), read in order idle, prepare, attack, cast, hit, guard. A humanoid figure formed of storm cloud and lightning, faceless, pale blue-white glow, crackling arcs: idle hovering, prepare gathering lightning, attack hurling a bolt, cast raising both arms with a ring of lightning, hit flickering apart, guard folding into a cloud shield. Faces RIGHT like the rival sheet."
+    },
+    {
+      "id": "battle_chixiao_zhifa",
+      "kind": "battle",
+      "target": "assets/art/battle/chixiao_zhifa.png",
+      "size": [1536, 1024],
+      "subject": "赤霄执法弟子：赤霄门执法堂的筑基弟子，赤霄连焰、执法火印、火云护体。",
+      "prompt": "Duel sprite sheet on the same 3x2 grid as assets/art/rival_atlas_v2.png (six 512x512 cells, transparent background), in order idle, prepare, attack, cast, hit, guard. A stern young man in a crimson-and-soot-grey sect robe with a black lacquer enforcement token at the waist, holding a fire seal: idle, prepare drawing a flame sigil, attack twin fire streams, cast pressing a burning seal forward, hit recoiling, guard behind a ring of fire cloud. Faces RIGHT."
+    },
+    {
+      "id": "rite_meditation",
+      "kind": "presentation",
+      "target": "assets/art/actors/hero_meditate.png",
+      "size": [512, 512],
+      "subject": "闭关打坐：主角盘膝入定（闭关与突破演出用，现借斗法施法姿势）。",
+      "prompt": "Single pose on a transparent 512x512 canvas, same character design and line weight as the hero in assets/art/cultivator_atlas_v2.png: seated cross-legged in lotus position, eyes closed, hands resting in a meditation mudra on the lap, robe pooled around, front three-quarter view. Hookup: scripts/presentation/rite.gd uses actor_frame(\"hero\", \"cast\") and needs a small change to prefer this file."
+    },
+    {
+      "id": "rite_furnace",
+      "kind": "presentation",
+      "target": "assets/art/ui/rite_furnace.png",
+      "size": [768, 768],
+      "subject": "丹炉：炼丹演出里的三足丹炉（现为代码画的平涂几何形）。",
+      "prompt": "Single object on a transparent 768x768 canvas: a bronze three-legged alchemy cauldron (ding) with two upright handles and a domed lid with a knob, cloud pattern band on the belly, a small fire burning between the legs, front view, centered. Hookup: scripts/presentation/rite.gd draws the furnace in _draw_brew and needs a small change to draw this image instead."
+    }
+  ]
+}

@@ -64,10 +64,21 @@ static func _figure(ui, parent: HBoxContainer) -> void:
 	column.add_child(purse)
 
 ## A group heading.
+## A section's name, with the cloud-scroll divider (assets/art/ui/divider.svg) under it.
 static func _heading(ui, parent: VBoxContainer, title: String) -> void:
 	if parent.get_child_count() > 0:
-		parent.add_child(HSeparator.new())
+		var gap := Control.new()
+		gap.custom_minimum_size.y = 6
+		parent.add_child(gap)
 	parent.add_child(ui.label(title, 18, ui.GOLD))
+	var line := TextureRect.new()
+	line.texture = ArtLibrary.ui_icon("divider")
+	line.custom_minimum_size = Vector2(0, 12)
+	line.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	line.stretch_mode = TextureRect.STRETCH_SCALE
+	line.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS
+	line.modulate = Color(1, 1, 1, 0.8)
+	parent.add_child(line)
 
 ## One attribute: its name, its value and what it means when the pointer rests on it.
 static func _row(ui, parent: VBoxContainer, title: String, value: String, tooltip: String, color: Color = Color(0, 0, 0, 0)) -> void:

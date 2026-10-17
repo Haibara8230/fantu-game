@@ -5,6 +5,7 @@ const Calendar = preload("res://scripts/core/calendar.gd")
 const ConditionText = preload("res://scripts/ui/condition_text.gd")
 const ArtLibrary = preload("res://scripts/ui/art_library.gd")
 const TalentCards = preload("res://scripts/ui/talent_cards.gd")
+const Hud = preload("res://scripts/ui/hud.gd")
 const PEOPLE_SHOWN_HERE := 12
 # How many of the latest chronicle entries about a person their profile shows.
 const RECORD_ENTRIES := 6
@@ -439,8 +440,8 @@ static func _portrait(ui, person_id: String, person: Dictionary, size: Vector2 =
 	# Placeholder: an ink seal with the person's first character until portrait art exists.
 	var seal := PanelContainer.new()
 	seal.custom_minimum_size = size
-	seal.add_theme_stylebox_override("panel", ui.style(Color("#1b3236"), Color("#e39a82") if person.attitude == "hostile" else ui.GOLD, 0))
-	var initial: Label = ui.label(str(person.name).left(1), int(round(size.y * 56.0 / 150.0)), ui.GOLD)
+	seal.add_theme_stylebox_override("panel", Hud.seal_style())
+	var initial: Label = ui.label(str(person.name).left(1), int(round(size.y * 56.0 / 150.0)), Hud.SEAL_INK)
 	initial.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	initial.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	seal.add_child(initial)

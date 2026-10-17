@@ -5,6 +5,7 @@ extends RefCounted
 ## notice of what just happened at the bottom. Everything else has a screen or a panel of its own.
 const Goals = preload("res://scripts/ui/goals.gd")
 const StatusView = preload("res://scripts/ui/status_view.gd")
+const ArtLibrary = preload("res://scripts/ui/art_library.gd")
 # The top-left buttons: the view each one opens, and its name.
 const ICONS := [["status", "人物"], ["bag", "行囊"], ["arts", "神通"], ["map", "舆图"], ["chronicle", "编年史"]]
 const LOG_LINES := 2
@@ -146,8 +147,8 @@ static func render(ui) -> void:
 	ui.hud_status.add_child(title)
 	var seal := PanelContainer.new()
 	seal.custom_minimum_size = Vector2(44, 44)
-	seal.add_theme_stylebox_override("panel", ui.style(Color("#1b3236"), ui.GOLD, 0))
-	var initial: Label = ui.label(str(p.name).left(1), 24, ui.GOLD)
+	seal.add_theme_stylebox_override("panel", seal_style())
+	var initial: Label = ui.label(str(p.name).left(1), 24, SEAL_INK)
 	initial.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	initial.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	seal.add_child(initial)
@@ -199,6 +200,18 @@ static func _bar(ui, title: String, value: int, maximum: int, color: Color) -> v
 	bar.add_theme_stylebox_override("background", ui.style(Color("#1d3539"), Color("#1d3539"), 0))
 	bar.add_theme_stylebox_override("fill", ui.style(color, color, 0))
 	ui.hud_status.add_child(bar)
+
+## A vermilion seal (assets/art/ui/seal.svg) behind a name's first character, where no portrait is drawn.
+const SEAL_INK := Color("#f6ead0")
+static func seal_style() -> StyleBox:
+	var art: Texture2D = ArtLibrary.ui_icon("seal")
+	if art == null:
+		var flat := StyleBoxFlat.new()
+		flat.bg_color = Color("#b8392c")
+		return flat
+	var box := StyleBoxTexture.new()
+	box.texture = art
+	return box
 
 ## Puts the notice along the bottom, or near the top during a duel, whose dock owns the bottom.
 static func place_notice(ui, top: bool) -> void:

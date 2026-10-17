@@ -110,27 +110,28 @@
     },
     "arrive": {
       "files": [
-        "res://assets/audio/sfx/kenney_ui/drop_002.ogg"
+        "res://assets/audio/sfx/synth/small_bell.ogg"
       ],
-      "volume": -4
+      "volume": -9
     },
     "event": {
       "files": [
-        "res://assets/audio/sfx/kenney_ui/open_001.ogg"
+        "res://assets/audio/sfx/synth/stone_chime.ogg"
       ],
-      "volume": -3
+      "volume": -8
     },
     "choice": {
       "files": [
-        "res://assets/audio/sfx/kenney_ui/select_001.ogg",
-        "res://assets/audio/sfx/kenney_ui/select_002.ogg"
+        "res://assets/audio/sfx/synth/wooden_fish_1.ogg",
+        "res://assets/audio/sfx/synth/wooden_fish_2.ogg"
       ],
-      "volume": -4
+      "volume": -5
     },
     "reminder": {
       "files": [
-        "res://assets/audio/sfx/kenney_ui/bong_001.ogg"
-      ]
+        "res://assets/audio/sfx/synth/two_bells.ogg"
+      ],
+      "volume": -5
     },
     "prepare": {
       "files": [
@@ -346,23 +347,22 @@
     },
     "breakthrough": {
       "files": [
-        "res://assets/audio/sfx/kenney_ui/confirmation_004.ogg",
-        "res://assets/audio/sfx/kenney_impact/impactBell_heavy_000.ogg"
+        "res://assets/audio/sfx/synth/breakthrough.ogg"
       ],
       "pitch": [
-        0.9,
-        0.95
+        0.98,
+        1.02
       ]
     },
     "ending": {
       "files": [
-        "res://assets/audio/sfx/kenney_ui/bong_001.ogg"
+        "res://assets/audio/sfx/synth/temple_bell.ogg"
       ],
       "pitch": [
-        0.7,
-        0.75
+        0.97,
+        1.0
       ]
     }
   },
-  "_sfx_note": "Each cue picks one of its files at random and varies its pitch a little (pitch, default 0.92-1.08); volume is in dB. All files are CC0: Kenney's Impact Sounds, RPG Audio and Interface Sounds (kenney.nl) and rubberduck's 80 CC0 RPG SFX (opengameart.org)."
+  "_sfx_note": "Each cue picks one of its files at random and varies its pitch a little (pitch, default 0.92-1.08); volume is in dB. Files are CC0: Kenney's Impact Sounds, RPG Audio and Interface Sounds (kenney.nl) and rubberduck's 80 CC0 RPG SFX (opengameart.org); the bells, stone chime, wooden fish and breakthrough under sfx/synth are synthesized for this game by tools/audio/make_synth_audio.py."
 }

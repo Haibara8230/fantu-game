@@ -1,6 +1,7 @@
 extends SceneTree
 ## Resource coverage plus the actual event/portrait/background consumers, without player saves.
 const ArtLibrary = preload("res://scripts/ui/art_library.gd")
+const Session = preload("res://scripts/core/session.gd")
 const PeopleView = preload("res://scripts/ui/people_view.gd")
 const SaveStore = preload("res://scripts/core/save_store.gd")
 var checks := 0
@@ -96,5 +97,39 @@ func _run() -> void:
 	check(main.window_style is StyleBoxTexture and main.window_style.get_minimum_size().y <= 80, "painted frame does not impose image-sized minimums, only room for its border")
 	main.queue_free()
 	await process_frame
+	_icons()
 	print("ART: %d checks, %d failures" % [checks, failures])
 	quit(0 if failures == 0 else 1)
+
+## Every technique and 宝物 has a composed icon (art_library.gd): each archetype in each element and tier,
+## each sect's handwritten art, each base in each tier and element, a 玉简; the parts are the vector art in
+## assets/art/icons. The same kind shares one texture.
+func _icons() -> void:
+	var game := Session.new()
+	game.new_game("图标", 5, ["metal", "wood", "fire"])
+	var content = game.content
+	var missing: Array[String] = []
+	for archetype: String in content.technique_data.archetypes:
+		for element: String in content.technique_data.elements:
+			for tier: int in range(1, content.technique_data.tiers.size() + 1):
+				var t: Dictionary = content.technique("t:%s:%s:%d::0" % [archetype, element, tier])
+				if ArtLibrary.technique_icon(t) == null:
+					missing.append(t.id)
+	for skill_id: String in content.skills:
+		if ArtLibrary.technique_icon(content.technique(skill_id)) == null:
+			missing.append(skill_id)
+	for base: String in content.equipment_data.bases:
+		for tier: int in range(1, content.equipment_data.tiers.size() + 1):
+			for element: String in ["none"] + content.technique_data.elements.keys():
+				var gear: Dictionary = content.equipment(game.Arsenal.equipment_id(base, tier, element, [], 0))
+				if ArtLibrary.gear_icon(gear) == null:
+					missing.append(gear.id)
+	check(missing.is_empty(), "every technique and 宝物 has its icon (missing %s)" % str(missing.slice(0, 5)))
+	var goods: Array = content.items.keys().filter(func(item_id: String) -> bool: return ArtLibrary.item_icon(content, content.item(item_id)) == null)
+	check(goods.is_empty(), "every catalogue item has its icon (missing %s)" % str(goods.slice(0, 5)))
+	check(ArtLibrary.item_icon_path(content.item("foundation_pill")).is_empty() and content.item("foundation_pill").get("id") == "foundation_pill", "a catalogue item knows its id, so painted art could replace its icon")
+	var icon := ArtLibrary.technique_icon(content.technique("t:bolt:fire:2::0"))
+	check(icon != null and icon.get_width() == 128 and icon == ArtLibrary.technique_icon(content.technique("t:bolt:fire:2:burn:3")), "an icon is 128 pixels and shared by techniques of one kind, element and tier")
+	check(ArtLibrary.technique_kind(content.technique("sword_rain")) == "barrage" and ArtLibrary.technique_kind(content.technique("wood")) == "mend", "a sect's art is drawn by what it does")
+	var slip: Dictionary = content.item("j:t:ward:earth:3::0")
+	check(ArtLibrary.item_icon(content, slip) != null and ArtLibrary.item_icon(content, slip) != ArtLibrary.technique_icon(content.technique("t:ward:earth:3::0")), "a 玉简 shows the art it teaches with a slip over it")

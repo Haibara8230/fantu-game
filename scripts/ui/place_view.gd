@@ -8,6 +8,7 @@ const Calendar = preload("res://scripts/core/calendar.gd")
 const Landscape = preload("res://scripts/ui/landscape.gd")
 const PeopleView = preload("res://scripts/ui/people_view.gd")
 const CaveView = preload("res://scripts/ui/cave_view.gd")
+const ArtLibrary = preload("res://scripts/ui/art_library.gd")
 const PAPER := Color("#e9dfc4")
 const INK_DARK := Color("#2c261c")
 
@@ -42,7 +43,7 @@ static func render_scene(ui, layer: Control) -> void:
 		tag.tooltip_text = spot.name
 		tag.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 		var chosen: bool = spot_id == ui.selected_spot and ui.selected_npc.is_empty()
-		var paper: StyleBoxFlat = ui.style(PAPER if not chosen else Color("#f6e7b8"), ui.GOLD if chosen else Color("#6b5536"), 8)
+		var paper: StyleBox = _paper_tag(ui, chosen)
 		for state: String in ["normal", "hover", "pressed", "focus"]:
 			tag.add_theme_stylebox_override(state, paper)
 		tag.add_theme_color_override("font_color", INK_DARK)
@@ -124,6 +125,25 @@ static func render(ui) -> void:
 	for days: Variant in session.wait_options():
 		var span := int(days)
 		_timed(ui, grid, "停留  ·  " + Calendar.duration_text(span), func() -> String: return session.wait(span), "原地停留调息，气血慢慢恢复（静室的一半快）；约定临近时会提醒")
+
+## A spot's paper tag (assets/art/ui/tag.svg): a strip hung by a red cord, ragged at the foot; the chosen
+## one brighter with a gold edge. Flat paper when the art is missing.
+static func _paper_tag(ui, chosen: bool) -> StyleBox:
+	var art: Texture2D = ArtLibrary.ui_icon("tag_chosen" if chosen else "tag")
+	if art == null:
+		return ui.style(PAPER if not chosen else Color("#f6e7b8"), ui.GOLD if chosen else Color("#6b5536"), 8)
+	var box := StyleBoxTexture.new()
+	box.texture = art
+	# The cord and knot stay whole above, the ragged foot below; the paper between stretches.
+	box.texture_margin_top = 24.0
+	box.texture_margin_bottom = 12.0
+	box.texture_margin_left = 8.0
+	box.texture_margin_right = 8.0
+	box.content_margin_top = 28.0
+	box.content_margin_bottom = 14.0
+	box.content_margin_left = 12.0
+	box.content_margin_right = 12.0
+	return box
 
 static func _breakthrough_tooltip(session) -> String:
 	var need: Dictionary = session.next_breakthrough()

@@ -140,6 +140,14 @@ func _button(text_part: String) -> Button:
 			return button
 	return null
 
+## The qi orb chip of an element in the duel's dock: its orb icon and "×count"; the element is named in
+## its tooltip.
+func _orb_chip(element_name: String, count: int) -> Button:
+	for button: Button in main.center.find_children("*", "Button", true, false):
+		if button.icon != null and button.text == "×%d" % count and button.tooltip_text.begins_with("%s灵气 %d 颗" % [element_name, count]):
+			return button
+	return null
+
 func _welcome_button(text_part: String) -> Button:
 	for button: Button in main.welcome_layer.find_children("*", "Button", true, false):
 		if button.text.contains(text_part):
@@ -346,9 +354,9 @@ func _run() -> void:
 	main.toggle_battle_record()
 	main.session.battle.orbs = ["fire", "fire", "wood", "wood"]
 	main.render()
-	check(_button("木 2") != null and not _button("木 2").disabled and _button("[2] ") != null and not _button("[2] ").disabled, "the hand shows each element's orbs; an affordable art is ready")
+	check(_orb_chip("木", 2) != null and not _orb_chip("木", 2).disabled and _button("[2] ") != null and not _button("[2] ").disabled, "the hand shows each element's orbs; an affordable art is ready")
 	await main.battle_action("convert:wood")
-	check(main.session.battle.orbs.count("fire") == 3 and _button("火 3") != null, "clicking an element 相生s two of its orbs (木生火)")
+	check(main.session.battle.orbs.count("fire") == 3 and _orb_chip("火", 3) != null, "clicking an element 相生s two of its orbs (木生火)")
 	# 地利 in the foe's corner, and 神识探查 in the record's place (batch eight).
 	check(_texts(main.center, "Label").contains("地利 · 山谷"), "the valley's favour for wood is shown")
 	_button("神识探查").pressed.emit()
