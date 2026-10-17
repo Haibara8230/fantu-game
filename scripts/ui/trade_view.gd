@@ -40,6 +40,7 @@ static func render(ui) -> void:
 本月行情：收价为常价的 %d%%（各月有涨落，同一种卖得多了会压价，过些日子回升）" % int(round(rate * 100.0)) if not is_equal_approx(rate, 1.0) else "")
 		var offer: Button = ui.button("%s ×%d · 售 %d%s" % [item.name, left, price, trend], func() -> void: ui.stage_sale(item_id), tip)
 		ui.tint(offer, ui.grade_color(item))
+		_set_icon(ui, offer, item)
 		offer.disabled = left <= 0
 		offer.alignment = HORIZONTAL_ALIGNMENT_LEFT
 		mine.add_child(offer)
@@ -61,6 +62,7 @@ static func render(ui) -> void:
 		var once := good.has("key")
 		var pick: Button = ui.button("%s · %d 灵石" % [item.name, int(good.price)], func() -> void: ui.stage_purchase(bought), item.description)
 		ui.tint(pick, ui.grade_color(item))
+		_set_icon(ui, pick, item)
 		pick.disabled = once and bought in ui.trade.buy
 		pick.alignment = HORIZONTAL_ALIGNMENT_LEFT
 		shop.add_child(pick)
@@ -108,3 +110,11 @@ static func _price(goods: Array, item_id: String) -> int:
 ## An item by its id, or a refined 宝物 by its instance id.
 static func _item(session, item_id: String) -> Dictionary:
 	return session.gear_item(item_id) if session.Gear.is_instance(item_id) else session.content.item(item_id)
+
+## A good's own icon (a 宝物's or a 玉简's composed one) on its button, else its grade's badge.
+static func _set_icon(ui, button: Button, item: Dictionary) -> void:
+	var picture: Texture2D = ui.ArtLibrary.item_icon(ui.session.content, item)
+	if picture != null:
+		ui.with_icon(button, picture, 30)
+	else:
+		ui.with_icon(button, ui.grade_icon(item), 16)

@@ -25,6 +25,8 @@ static func render(ui) -> void:
 			row.add_child(ui.label("未佩戴", 15, ui.MUTED))
 			continue
 		var gear: Dictionary = session.gear_item(item_id)
+		var worn_icon: Texture2D = ArtLibrary.gear_icon(gear)
+		row.add_child(_icon(worn_icon, 36) if worn_icon != null else ArtLibrary.icon_rect("grades/grade_%d" % session.content.rarity_of(gear), 16))
 		var name: Label = ui.label(gear.name, 15, ui.grade_color(gear))
 		name.tooltip_text = (gear.description + "\n" + session.Gear.refine_text(gear) + "\n" + session.Arsenal.mastery_text(session.content, gear, int(session.player.realm))).strip_edges()
 		name.mouse_filter = Control.MOUSE_FILTER_PASS
@@ -81,17 +83,20 @@ static func _item_row(ui, parent: VBoxContainer, item_id: String) -> void:
 	var row := HBoxContainer.new()
 	row.add_theme_constant_override("separation", 8)
 	parent.add_child(row)
-	# The item's picture once drawn (art_library.gd item_icon_path); until then the name stands alone.
-	var icon_path: String = ArtLibrary.item_icon_path(item)
-	var icon_holder := Control.new()
-	icon_holder.custom_minimum_size = Vector2(40, 40)
+	# The item's picture (art_library.gd item_icon): painted art, or the composed icon of a 宝物 or 玉简,
+	# whose frame tells the grade; without one, the grade's badge. A holder of fixed width keeps the names
+	# in line whether there is a picture or not.
+	var icon_holder := CenterContainer.new()
+	icon_holder.size_flags_vertical = Control.SIZE_SHRINK_BEGIN
 	row.add_child(icon_holder)
-	if not icon_path.is_empty():
-		var icon: TextureRect = ui.picture(icon_path, 40)
-		icon.custom_minimum_size = Vector2(40, 40)
-		icon.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
-		icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-		icon_holder.add_child(icon)
+	var picture: Texture2D = ArtLibrary.item_icon(session.content, item)
+	if picture != null:
+		icon_holder.custom_minimum_size = Vector2(44, 44)
+		icon_holder.add_child(_icon(picture, 44))
+	else:
+		# One line high, so the badge sits beside the name.
+		icon_holder.custom_minimum_size = Vector2(44, 26)
+		icon_holder.add_child(ArtLibrary.icon_rect("grades/grade_%d" % session.content.rarity_of(item), 18))
 	var name_label: Label = ui.label(item.name if item.has("instance") else "%s ×%d" % [item.name, session.item_count(item_id)], 16, ui.grade_color(item))
 	name_label.custom_minimum_size.x = 200
 	name_label.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
@@ -153,3 +158,15 @@ static func comparison_text(session, item_id: String) -> String:
 		var amount := float(changes[key]) * (100.0 if percentage else 1.0)
 		lines.append("%s %+d%s" % [names[key], int(round(amount)), "%" if percentage else ""])
 	return "换上后：" + "、".join(lines) if not lines.is_empty() else ""
+
+## An item's picture at `side` pixels square, smoothed as it shrinks.
+static func _icon(picture: Texture2D, side: float) -> TextureRect:
+	var rect := TextureRect.new()
+	rect.texture = picture
+	rect.custom_minimum_size = Vector2(side, side)
+	rect.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
+	rect.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	rect.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	rect.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	rect.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS
+	return rect

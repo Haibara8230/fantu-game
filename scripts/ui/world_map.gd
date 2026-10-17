@@ -14,7 +14,12 @@ const GOLD := Color("#d5b777")
 const MUTED := Color("#97aaa4")
 const DANGER := Color("#c9785f")
 const NODE_RADIUS := 15.0
+# The plate under a name or a road's days, so they read over any painted ground.
+const PLATE := Color(0.04, 0.09, 0.1, 0.72)
 var content
+# Markers by terrain (assets/art/ui/map/*.svg), loaded once.
+var _markers: Dictionary = {}
+var _plate := StyleBoxFlat.new()
 var flags: Dictionary = {}
 var current := ""
 var selected := ""
@@ -38,6 +43,8 @@ var stride := 0.0
 var flying := false
 
 func _ready() -> void:
+	# The vector markers shrink smoothly (they are imported larger than drawn).
+	texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS
 	font.font_names = PackedStringArray(["Microsoft YaHei", "Noto Sans CJK SC", "SimHei"])
 	mouse_filter = Control.MOUSE_FILTER_STOP
 	resized.connect(queue_redraw)
@@ -245,11 +252,13 @@ func _draw_routes() -> void:
 		draw_dashed_line(from, to, color, 3.0 if highlighted else 2.0, 9.0)
 		var middle := (from + to) * 0.5
 		var label := "%d 日" % int(route.days)
-		var label_width := font.get_string_size(label, HORIZONTAL_ALIGNMENT_LEFT, -1, 17).x
-		draw_rect(Rect2(middle + Vector2(-label_width / 2.0 - 5.0, -24.0), Vector2(label_width + 10.0, 24.0)), Color(0.04, 0.09, 0.1, 0.9))
-		draw_string(font, middle + Vector2(-label_width / 2.0, -6), label, HORIZONTAL_ALIGNMENT_LEFT, -1, 17, GOLD if highlighted else INK)
+		# A plate holds the days, large enough to read over the painting, and the danger marks under them.
+		var width := font.get_string_size(label, HORIZONTAL_ALIGNMENT_LEFT, -1, 17).x
+		var plate_width := maxf(width, 8.0 * int(route.danger)) + 12.0
+		_draw_plate(Rect2(middle + Vector2(-plate_width * 0.5, -24), Vector2(plate_width, 24 + (10 if int(route.danger) > 0 else 0))), highlighted)
+		draw_string(font, middle + Vector2(-width * 0.5, -6), label, HORIZONTAL_ALIGNMENT_LEFT, -1, 17, GOLD if highlighted else INK)
 		for mark: int in range(int(route.danger)):
-			draw_circle(middle + Vector2(-8 + mark * 8, 8), 3.0, DANGER)
+			draw_circle(middle + Vector2(-(int(route.danger) - 1) * 4.0 + mark * 8.0, 4.0), 3.0, DANGER)
 
 ## A road out of the region, at the place it leaves from: an arrow off the map and where it goes.
 func _draw_exit(route: Dictionary, here: String, there: String) -> void:
@@ -275,6 +284,21 @@ func _draw_exit(route: Dictionary, here: String, there: String) -> void:
 		left = tip.x + 10.0
 	draw_string(font, Vector2(left, tip.y + (16.0 if away.y > 0.3 else -6.0)), words, HORIZONTAL_ALIGNMENT_LEFT, -1, 13, GOLD if highlighted else INK)
 
+## A dark rounded plate under words drawn over the map; gold-edged on the route being previewed.
+func _draw_plate(rect: Rect2, highlighted: bool = false) -> void:
+	_plate.bg_color = PLATE
+	_plate.set_corner_radius_all(5)
+	_plate.set_border_width_all(1 if highlighted else 0)
+	_plate.border_color = GOLD
+	draw_style_box(_plate, rect)
+
+## A place's marker by its terrain (宗门, town, ferry, market, ridge, valley, cave), null without the art.
+func _marker(location_id: String) -> Texture2D:
+	var terrain := str(content.locations[location_id].get("terrain", ""))
+	if not _markers.has(terrain):
+		_markers[terrain] = ArtLibrary.ui_icon("map/" + terrain)
+	return _markers[terrain]
+
 func _draw_nodes() -> void:
 	for location_id: String in visible_ids():
 		var center := node_position(location_id)
@@ -282,19 +306,32 @@ func _draw_nodes() -> void:
 		var is_current := location_id == current
 		var is_selected := location_id == selected
 		if is_current:
-			draw_circle(center, NODE_RADIUS + 9, Color(0.84, 0.72, 0.47, 0.22))
-		draw_circle(center, NODE_RADIUS, Color("#1b3236"))
-		draw_arc(center, NODE_RADIUS, 0, TAU, 32, GOLD if is_current or is_selected else INK, 3.0 if is_selected else 2.0, true)
+			draw_circle(center, NODE_RADIUS + 13, Color(0.84, 0.72, 0.47, 0.22))
+		var marker := _marker(location_id)
+		if marker != null:
+			# The token is drawn a little larger than the old dot: its sign must read at a glance.
+			var side := NODE_RADIUS * 3.2
+			draw_texture_rect(marker, Rect2(center - Vector2(side, side) * 0.5, Vector2(side, side)), false)
+			if is_current or is_selected:
+				draw_arc(center, side * 0.5 + 2.0, 0, TAU, 40, GOLD, 3.0 if is_selected else 2.0, true)
+		else:
+			draw_circle(center, NODE_RADIUS, Color("#1b3236"))
+			draw_arc(center, NODE_RADIUS, 0, TAU, 32, GOLD if is_current or is_selected else INK, 3.0 if is_selected else 2.0, true)
 		if content.location_sealed(location_id, flags):
 			draw_line(center + Vector2(-NODE_RADIUS, -NODE_RADIUS), center + Vector2(NODE_RADIUS, NODE_RADIUS), DANGER, 3.0)
 			draw_line(center + Vector2(-NODE_RADIUS, NODE_RADIUS), center + Vector2(NODE_RADIUS, -NODE_RADIUS), DANGER, 3.0)
 		if location_id == journey_to:
-			draw_arc(center, NODE_RADIUS + 5, 0, TAU, 32, DANGER, 2.0, true)
-		draw_circle(center, 4.5, GOLD if is_current else MUTED)
-		var label_width := font.get_string_size(str(definition.name), HORIZONTAL_ALIGNMENT_LEFT, -1, 19).x
-		draw_rect(Rect2(center + Vector2(-label_width / 2.0 - 8.0, NODE_RADIUS + 2.0), Vector2(label_width + 16.0, 27.0)), Color(0.04, 0.09, 0.1, 0.9))
-		draw_string(font, center + Vector2(-label_width / 2.0, NODE_RADIUS + 23), definition.name, HORIZONTAL_ALIGNMENT_LEFT, -1, 19, GOLD if is_current or is_selected else INK)
+			draw_arc(center, NODE_RADIUS * 1.6 + 5, 0, TAU, 40, DANGER, 2.0, true)
+		if marker == null:
+			draw_circle(center, 4.5, GOLD if is_current else MUTED)
+		# The name on its plate under the marker, large enough to read over the painting.
+		var name_top := NODE_RADIUS * 1.6 + 2.0
+		var name_width := font.get_string_size(str(definition.name), HORIZONTAL_ALIGNMENT_LEFT, -1, 19).x
+		_draw_plate(Rect2(center + Vector2(-name_width * 0.5 - 8, name_top), Vector2(name_width + 16, 27)), is_current or is_selected)
+		draw_string(font, center + Vector2(-name_width * 0.5, name_top + 21), definition.name, HORIZONTAL_ALIGNMENT_LEFT, -1, 19, GOLD if is_current or is_selected else INK)
 		if people_at.has(location_id):
 			var names: Array = people_at[location_id]
 			var line := "、".join(names.slice(0, 2)) + (" 等%d人" % names.size() if names.size() > 2 else "")
-			draw_string(font, center + Vector2(-NODE_RADIUS * 4, NODE_RADIUS + 48), line, HORIZONTAL_ALIGNMENT_CENTER, NODE_RADIUS * 8, 12, MUTED)
+			var line_width := font.get_string_size(line, HORIZONTAL_ALIGNMENT_LEFT, -1, 12).x
+			_draw_plate(Rect2(center + Vector2(-line_width * 0.5 - 5, name_top + 30), Vector2(line_width + 10, 17)))
+			draw_string(font, center + Vector2(-line_width * 0.5, name_top + 43), line, HORIZONTAL_ALIGNMENT_LEFT, -1, 12, INK)

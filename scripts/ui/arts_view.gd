@@ -3,6 +3,7 @@ extends RefCounted
 ## with their keys, the 心法 in their slots), everything learned on the right, filtered by element.
 ## A learned art is put into use, or taken out, by pressing it.
 const Settings = preload("res://scripts/ui/settings.gd")
+const ArtLibrary = preload("res://scripts/ui/art_library.gd")
 
 static func render_arts(ui) -> void:
 	var session = ui.session
@@ -42,6 +43,7 @@ static func _page(ui, slot_kind: String, title: String, in_use: Array, limit: in
 			continue
 		var technique_id: String = in_use[index]
 		var t: Dictionary = session.held_technique(technique_id)
+		row.add_child(_technique_picture(t, 44))
 		var name: Label = ui.label("%s\n%s" % [t.name, session.Layers.progress_text(session, technique_id)], 15, ui.grade_color(t))
 		name.tooltip_text = "%s\n%s" % [session.Arsenal.technique_tag(session.content, t), t.description]
 		name.mouse_filter = Control.MOUSE_FILTER_PASS
@@ -85,6 +87,7 @@ static func _page(ui, slot_kind: String, title: String, in_use: Array, limit: in
 			else:
 				ui.run(func() -> String: return session.equip_technique(technique_id)), t.description + ("\n点击停下" if active else ("\n栏位已满，先停下一门" if full else "\n点击运转")))
 		ui.tint(card, ui.grade_color(t))
+		ui.with_icon(card, ArtLibrary.technique_icon(t), 40)
 		card.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		card.custom_minimum_size.y = 56
 		card.alignment = HORIZONTAL_ALIGNMENT_LEFT
@@ -112,3 +115,14 @@ static func _comprehend_button(ui, technique_id: String) -> Button:
 	button.disabled = not reason.is_empty()
 	button.custom_minimum_size = Vector2(76, 56)
 	return button
+
+## A technique's composed icon (art_library.gd technique_icon) at `side` pixels square.
+static func _technique_picture(t: Dictionary, side: float) -> TextureRect:
+	var rect := TextureRect.new()
+	rect.texture = ArtLibrary.technique_icon(t)
+	rect.custom_minimum_size = Vector2(side, side)
+	rect.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	rect.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	rect.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	rect.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS
+	return rect

@@ -6,6 +6,7 @@ extends RefCounted
 const BattleStage = preload("res://scripts/presentation/battle_stage.gd")
 const PlaceView = preload("res://scripts/ui/place_view.gd")
 const Settings = preload("res://scripts/ui/settings.gd")
+const ArtLibrary = preload("res://scripts/ui/art_library.gd")
 const RECORD_LINES := 6
 const DOCK_HEIGHT := 178.0
 const STATUS_NAMES := {"burn": "灼烧", "weaken": "寒蚀", "sunder": "破甲", "slow": "冰封", "bleed": "流血", "entangle": "缠绕", "wound": "禁疗", "focus": "蓄势", "minions": "帮手", "fervor": "秘术"}
@@ -177,8 +178,10 @@ static func _hand_row(ui) -> HBoxContainer:
 		if held == 0:
 			continue
 		var made := str(duel.generates[element])
-		var chip: Button = ui.button("%s %d" % [elements[element].name, held], func() -> void: ui.battle_action("convert:" + element), "%s灵气 %d 颗。点击以两颗相生为一颗%s灵气（%s生%s，不占回合）。" % [elements[element].name, held, elements[made].name, elements[element].name, elements[made].name])
+		var chip: Button = ui.button("×%d" % held, func() -> void: ui.battle_action("convert:" + element), "%s灵气 %d 颗。点击以两颗相生为一颗%s灵气（%s生%s，不占回合）。" % [elements[element].name, held, elements[made].name, elements[element].name, elements[made].name])
 		_orb_style(ui, chip, Color(elements[element].color))
+		# The element's own orb (assets/art/ui/orbs) says which it is; its name is in the tooltip.
+		ui.with_icon(chip, ArtLibrary.ui_icon("orbs/" + element), 24)
 		chip.disabled = held < need
 		row.add_child(chip)
 	if orbs.is_empty():
@@ -192,6 +195,7 @@ static func _hand_row(ui) -> HBoxContainer:
 		var limit := "每场至多 %d 张符箓，已用 %d 张" % [int(duel.get("talismans", 3)), int(b.get("talismans", 0))] if str(item.get("category", "")) == "talisman" else "每场至多 %d 枚，已服 %d 枚" % [int(duel.pills), taken]
 		var pill: Button = ui.button("%s ×%d" % [item.name, session.item_count(item_id)], func() -> void: ui.battle_action("pill:" + item_id), "%s（不占回合；%s）" % [item.description, limit])
 		ui.tint(pill, ui.grade_color(item))
+		ui.with_icon(pill, ui.grade_icon(item), 16)
 		pill.add_theme_font_size_override("font_size", 14)
 		pill.custom_minimum_size = Vector2(0, 34)
 		pill.disabled = not session.duel_pill_block(item_id).is_empty()
@@ -232,6 +236,7 @@ static func _art_button(ui, skill_id: String, index: int) -> Button:
 		tooltip += "\n对手属%s：%s伤害 ×%s。" % [session.content.technique_data.elements[session.Combat.foe_element(session)].name, "克制，" if counter > 1.0 else "被克，", _number(counter)]
 	var cast: Button = ui.button("[%s] %s\n%s%s" % [Settings.key_name(ui, "skill_%d" % index), skill.name, cost_text, counter_text], func() -> void: ui.skill(skill_id), tooltip)
 	ui.tint(cast, ui.grade_color(skill))
+	ui.with_icon(cast, ArtLibrary.technique_icon(skill), 44)
 	cast.disabled = not session.Combat.affordable(session.battle.get("orbs", []), skill.cost)
 	cast.custom_minimum_size = Vector2(124, 62)
 	cast.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -245,9 +250,9 @@ static func _number(value: float) -> String:
 static func _corners(ui, stage: Control) -> void:
 	var session = ui.session
 	var b: Dictionary = session.battle
-	var mine := _effects_text(int(b.get("shield", 0)), b.get("player_status", {}))
+	var mine := _effect_entries(int(b.get("shield", 0)), b.get("player_status", {}))
 	if not mine.is_empty():
-		var left := _corner(ui, stage, mine, Color("#cfe9e1"))
+		var left := _corner(ui, stage, "", Color("#cfe9e1"), mine)
 		left.set_anchors_and_offsets_preset(Control.PRESET_TOP_LEFT)
 		left.position = Vector2(16, 60)
 	var lines: Array[String] = ["对手下一回合：" + intent_text(session)]
@@ -258,24 +263,46 @@ static func _corners(ui, stage: Control) -> void:
 	var ground: String = session.Combat.ground_text(session)
 	if not ground.is_empty():
 		lines.append("地利 · " + ground)
-	var theirs := _effects_text(int(b.get("foe_shield", 0)), b.get("status", {}))
 	if not b.get("foe", {}).get("arts", []).is_empty():
-		theirs = ("灵气 %d" % b.get("foe_orbs", []).size()) + ("  ·  " + theirs if not theirs.is_empty() else "")
-	if not theirs.is_empty():
-		lines.append(theirs)
-	var right := _corner(ui, stage, "\n".join(lines), FOE_COLOR)
+		lines.append("灵气 %d" % b.get("foe_orbs", []).size())
+	var right := _corner(ui, stage, "\n".join(lines), FOE_COLOR, _effect_entries(int(b.get("foe_shield", 0)), b.get("status", {})))
 	right.set_anchors_and_offsets_preset(Control.PRESET_TOP_RIGHT)
 	right.grow_horizontal = Control.GROW_DIRECTION_BEGIN
 	right.offset_right = -16
 	right.offset_top = 60
 
-static func _corner(ui, stage: Control, text: String, color: Color) -> PanelContainer:
+## A panel over a corner of the stage: lines of text, then the lingering effects as badges
+## (assets/art/ui/status), each with its figure and turns, the full words when the pointer rests on it.
+static func _corner(ui, stage: Control, text: String, color: Color, effects: Array = []) -> PanelContainer:
 	var box := PanelContainer.new()
 	box.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	box.add_theme_stylebox_override("panel", ui.style(Color(0.04, 0.09, 0.1, 0.78), Color(color, 0.5), 8))
-	var words: Label = ui.label(text, 15, color)
-	words.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	box.add_child(words)
+	var column := VBoxContainer.new()
+	column.add_theme_constant_override("separation", 6)
+	column.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	box.add_child(column)
+	if not text.is_empty():
+		var words: Label = ui.label(text, 15, color)
+		words.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		column.add_child(words)
+	if not effects.is_empty():
+		var row := HBoxContainer.new()
+		row.add_theme_constant_override("separation", 12)
+		row.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		column.add_child(row)
+		for effect: Dictionary in effects:
+			var item := HBoxContainer.new()
+			item.add_theme_constant_override("separation", 4)
+			item.tooltip_text = str(effect.long)
+			item.mouse_filter = Control.MOUSE_FILTER_PASS
+			var badge: TextureRect = ArtLibrary.icon_rect("status/" + str(effect.key), 28)
+			badge.tooltip_text = str(effect.long)
+			item.add_child(badge)
+			var figure: Label = ui.label(str(effect.short), 14, color)
+			figure.mouse_filter = Control.MOUSE_FILTER_PASS
+			figure.tooltip_text = str(effect.long)
+			item.add_child(figure)
+			row.add_child(item)
 	stage.add_child(box)
 	return box
 
@@ -316,9 +343,14 @@ static func intent_text(session) -> String:
 
 ## "护盾 18  ·  灼烧 4（余 2 回合）".
 static func _effects_text(shield: int, status: Dictionary) -> String:
-	var parts: Array[String] = []
+	return "  ·  ".join(_effect_entries(shield, status).map(func(effect: Dictionary) -> String: return str(effect.long)))
+
+## The shield and lingering effects: {"key" (its badge), "short" (the figure and turns beside it), "long"
+## (the words, as the tooltip reads them)}.
+static func _effect_entries(shield: int, status: Dictionary) -> Array:
+	var parts: Array = []
 	if shield > 0:
-		parts.append("护盾 %d" % shield)
+		parts.append({"key": "shield", "short": str(shield), "long": "护盾 %d：先替你挡下伤害" % shield})
 	for key: String in STATUS_NAMES:
 		if status.has(key):
 			var value: float = float(status[key][0])
@@ -338,8 +370,16 @@ static func _effects_text(shield: int, status: Dictionary) -> String:
 					amount = "神通 +%d%%" % int(round(value * 100))
 				"minions":
 					amount = "每回合 %d" % int(value)
-			parts.append("%s %s（余 %d 回合）" % [STATUS_NAMES[key], amount, int(status[key][1])])
-	return "  ·  ".join(parts)
+			# Beside the badge only the figure: damage a turn, a share, or orbs short.
+			var figure := str(int(value))
+			if key in ["weaken", "wound"]:
+				figure = "-%d%%" % int(round(value * 100))
+			elif key in ["sunder", "focus", "fervor"]:
+				figure = "+%d%%" % int(round(value * 100))
+			elif key in ["slow", "entangle"]:
+				figure = "-%d" % int(value)
+			parts.append({"key": key, "short": "%s · %d" % [figure, int(status[key][1])], "long": "%s %s（余 %d 回合）" % [STATUS_NAMES[key], amount, int(status[key][1])]})
+	return parts
 
 static func _realm_bonus_text(session) -> String:
 	var bonus: int = session.attack_bonus()

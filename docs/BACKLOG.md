@@ -67,7 +67,7 @@ M0–M3 的系统与内容、M4 的界面改版与演出、斗法扩充九个批
 
 | 素材 | 现状 | 规格 |
 |---|---|---|
-| 物品立绘 | 45 种物品（灵草、丹药、材料、丹方、器具、信物）一张也没有；`tests/content_smoke.gd` 只报告覆盖数 | 提示词见 `docs/ART_BRIEF_ITEMS.json`（45 种物品、8 种宝物底材与 9 类玉简的共用图）。放到 `assets/art/items/` 即在行囊显示（`art_library.gd` 的 `item_icon_path`，`data/art.json` 的 `item_art` 可另指），九成以上后把测试改为必查 |
+| 物品立绘 | 45 种物品（灵草、丹药、材料、丹方、器具、信物）一张也没有；`tests/content_smoke.gd` 只报告覆盖数。功法、宝物与玉简已有矢量合成图标（2026-10-17，见 `docs/ART_ASSETS.md`），手绘图放好后优先显示 | 提示词见 `docs/ART_BRIEF_ITEMS.json`（45 种物品、8 种宝物底材与 9 类玉简的共用图）。放到 `assets/art/items/` 即在行囊显示（`art_library.gd` 的 `item_icon_path`，`data/art.json` 的 `item_art` 可另指），九成以上后把测试改为必查 |
 | 天南舆图与三处地点的图 | 天南舆图（`assets/art/map/region_tiannan.png`）、南明坊市、赤枫岭、赤霄门的整屏背景与各场景图一张也没有 | 提示词与规格见 `docs/ART_BRIEF_TIANNAN.json`（舆图、三处整屏、八张场景、两张立绘与火蜥图集）；画好后从 `tests/art_smoke.gd` 的 `PENDING_LOCATIONS` 删去 |
 | 袁赤锋、韩烬立绘 | 资料卡显示首字印章 | 与许清和、顾长庚同规格，登记在 `data/art.json` 的 `portrait_art` |
 | 场景图五张 | 古修洞府「洞府深处」、沉霞古境入口、青云山「山门」、白鹭渡「天河渡口」、青石镇「镇口木栅」都还没有图 | 分别放到 `assets/art/scenes/` 的 `ruin_depths.png`、`wild_chenxia.png`、`sect_gate.png`、`ferry_crossing.png`、`town_palisade.png`（凡人小镇镇口，新旧相间的木栅与望楼，驮货的商队，远处落霞谷的山影），再从 `tests/art_smoke.gd` 的 `PENDING_SPOTS` 删去 |
@@ -79,7 +79,7 @@ M0–M3 的系统与内容、M4 的界面改版与演出、斗法扩充九个批
 
 ## 四、发行与工程
 
-- 导出独立 exe（需同版本导出模板与导出预设），附 Godot 许可声明。
+- 导出独立 exe（需同版本导出模板与导出预设），附 Godot 许可声明；导出预设的非资源文件过滤须加入 `*.svg`（功法与宝物图标的部件在运行时读取，见 `docs/ART_ASSETS.md`）。
 - 长流程性能已测（`tools/long_play.gd`，2026-10-15）：480 年一生约 5 秒，最慢一步 108 毫秒，存档 106 KB。人口或系统继续增加时复测。
 
 ## 五、已知限制与技术债

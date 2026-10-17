@@ -203,6 +203,20 @@ func _run() -> void:
 	main.set_view("place")
 	await _shot("18j_tribulation")
 	main.toggle_battle_secret()
+	# A 天雷 coming down (storm.gd), caught as it strikes.
+	main.set_view("place")
+	await process_frame
+	if main.battle_stage != null and main.battle_stage.storm != null:
+		main.battle_stage.storm.strike(main.battle_stage.hero.chest() + main.battle_stage.world.position)
+		# Held still: an off-screen window draws too seldom to catch a bolt in passing.
+		main.battle_stage.storm.set_process(false)
+		main.battle_stage.storm.queue_redraw()
+		# Not _shot: it renders the screen anew, and the stage with its bolt with it.
+		for frame: int in 3:
+			await process_frame
+		await RenderingServer.frame_post_draw
+		root.get_texture().get_image().save_png(out_dir.path_join("18k_tribulation_bolt.png"))
+		shots += 1
 	s.battle.clear()
 	s.player.erase("tribulation")
 	s.player.realm = realm_was
