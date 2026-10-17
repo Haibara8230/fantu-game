@@ -8,6 +8,13 @@ const SERIES := [["beast_tide", "town", 1, 0, ["qingyun"]], ["beast_tide", "town
 const ROOTS := [["metal", "wood", "fire"], ["water", "earth"], ["metal"], ["wood", "water", "fire", "earth"], ["fire", "earth", "metal"]]
 
 func _initialize() -> void:
+	# Focused early-game sample for polish work; the broad simulation remains available by default.
+	if OS.get_environment("FANTU_SIM") == "polish":
+		for setup: Array in [["wolf",0,0,[]],["qinglin_snake",0,0,[]],["wolf_pack",0,2,[]],["rogue",0,2,[]],["serpent",1,0,[]],["serpent",1,0,["qingyun"]]]:
+			_report(str(setup[0]), int(setup[1]), int(setup[2]), setup[3])
+		_report("serpent",1,0,[],true)
+		quit(0)
+		return
 	# FANTU_SIM=series runs only the series (and their bosses), for quick calibration.
 	if OS.get_environment("FANTU_SIM") == "series":
 		for setup: Array in [["bear_king", 1, 1, ["qingyun"]], ["bear_king", 1, 2, []], ["chixiao_zhifa", 2, 0, ["qingyun"]], ["chixiao_zhifa", 2, 0, []], ["chixiao_zhifa", 2, 1, ["qingyun"]], ["mo_xiu", 2, 0, ["qingyun"]]]:
@@ -67,7 +74,7 @@ func _spars() -> void:
 			wins += 1
 	print("spar       generated disciples       turns %.1f  win %d%%  foe arts planned per turn %.1f" % [float(turns) / maxi(1, fights), wins * 100 / maxi(1, fights), float(foe_casts) / maxi(1, turns)], " stages ", stages)
 
-func _report(enemy_id: String, realm: int, stage: int, lineage: Array) -> void:
+func _report(enemy_id: String, realm: int, stage: int, lineage: Array, prepared: bool = false) -> void:
 	var wins := 0
 	var turns := 0
 	var left := 0
@@ -83,6 +90,9 @@ func _report(enemy_id: String, realm: int, stage: int, lineage: Array) -> void:
 		_seasoned(game)
 		game.refresh_realm_stats()
 		game.player.hp = game.player.max_hp
+		if prepared:
+			game.add_item("polin_powder", 1)
+			game.use_item("polin_powder")
 		game.begin_battle(enemy_id, "event")
 		var count := 0
 		while not game.battle.is_empty() and count < 30:
@@ -90,10 +100,10 @@ func _report(enemy_id: String, realm: int, stage: int, lineage: Array) -> void:
 			_play_turn(game)
 		fights += 1
 		turns += count
-		if int(game.player.hp) > 0 and game.journal_lines()[-1].find("落败") < 0 and not game.chronicle.entries.any(func(entry: Dictionary) -> bool: return entry.id == "battle_defeat"):
+		if game.battle.is_empty() and int(game.player.hp) > 0 and game.journal_lines()[-1].find("落败") < 0 and not game.chronicle.entries.any(func(entry: Dictionary) -> bool: return entry.id == "battle_defeat"):
 			wins += 1
 			left += int(game.player.hp) * 100 / int(game.player.max_hp)
-	print("%-10s realm %d stage %d %-8s  turns %.1f  win %d%%  hp left %d%%" % [enemy_id, realm, stage, str(lineage), float(turns) / fights, wins * 100 / fights, left / maxi(1, wins)])
+	print("%-10s realm %d stage %d %-8s  turns %.1f  win %d%%  hp left %d%%" % [enemy_id + ("+破鳞散" if prepared else ""), realm, stage, str(lineage), float(turns) / fights, wins * 100 / fights, left / maxi(1, wins)])
 
 ## 成串的战斗 (series.gd): how often the whole series is seen through, with the breath between waves.
 func _series(series_id: String, location: String, realm: int, stage: int, lineage: Array) -> void:

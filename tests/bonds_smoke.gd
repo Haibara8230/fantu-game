@@ -121,15 +121,14 @@ func _promotion() -> void:
 func _stipend() -> void:
 	var game := _game()
 	check(int(game.stipend_due().periods) == 0 and game.collect_stipend().contains("领过"), "no stipend before a month has passed")
-	game.advance_days(95)
-	var due := game.stipend_due()
 	var stones := int(game.player.stones)
-	game.collect_stipend()
-	check(int(due.periods) == 3 and int(due.stones) == 9 and int(game.player.stones) == stones + 9 and int(game.player.stipend_day) == 90, "three months of an outer disciple's stipend, the odd days kept")
+	game.advance_days(95)
+	check(int(game.player.stones) == stones + 9 and int(game.player.stipend_day) == 90 and int(game.stipend_due().periods) == 0, "three months are paid automatically and the five odd days remain")
 	game.advance_days(30 * 20)
-	check(int(game.stipend_due().periods) == 12, "a stipend piles up for a year at most")
+	check(int(game.player.stones) == stones + 69 and int(game.player.stipend_day) == 690, "a long retreat receives all twenty new months without an annual cap")
+	stones = int(game.player.stones)
 	game.collect_stipend()
-	check(int(game.player.stipend_day) == int(game.world.day), "months beyond it are lost")
+	check(int(game.player.stones) == stones, "manual collection cannot duplicate automatic payments")
 
 func _exchange() -> void:
 	var game := _game()

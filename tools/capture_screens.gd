@@ -7,6 +7,7 @@ const Calendar = preload("res://scripts/core/calendar.gd")
 var main
 var out_dir := ""
 var shots := 0
+var only: PackedStringArray = []
 
 func _initialize() -> void:
 	# Only from capture.ps1's copy: anywhere else this would write into the player's own user dir.
@@ -19,6 +20,8 @@ func _initialize() -> void:
 
 func _shot(name: String) -> void:
 	main.render()
+	if not only.is_empty() and not name in only:
+		return
 	for frame: int in 4:
 		await process_frame
 	await RenderingServer.frame_post_draw
@@ -28,6 +31,8 @@ func _shot(name: String) -> void:
 
 func _run() -> void:
 	var args := OS.get_cmdline_user_args()
+	if args.size() > 2 and not args[2].is_empty():
+		only = args[2].split(",")
 	out_dir = args[0] if args.size() > 0 else OS.get_user_data_dir().path_join("captures")
 	var size := Vector2i(1920, 1080)
 	if args.size() > 1 and args[1].contains("x"):

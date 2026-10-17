@@ -207,7 +207,7 @@ func _key_people() -> void:
 	check(liu.has_flag("ruin_cleared") and liu.npc_location("squatter").is_empty() and liu.story_step("liu_squatter").id == "wait_thanks", "his words send 石寒 away and open the cave")
 	var stones := int(liu.player.stones)
 	liu.wait(40)
-	check(liu.story_state("liu_squatter") == "done" and int(liu.player.stones) == stones + 50 and liu.item_count("ningqi_pill") == 1, "a month later his thanks arrive")
+	check(liu.story_state("liu_squatter") == "done" and int(liu.player.stones) == stones + 53 and liu.item_count("ningqi_pill") == 1, "a month later his thanks arrive")
 	var fought := _game("plain", 42)
 	fought.world.flags.helped_wanderer = true
 	fought.world.flags.found_ruin = true

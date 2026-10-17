@@ -71,7 +71,14 @@ static func build(ui) -> void:
 	ui.hud_icons["goals"] = tasks
 	ui.goal_label = ui.label("", 14, ui.MUTED)
 	ui.goal_label.mouse_filter = Control.MOUSE_FILTER_PASS
-	info.add_child(ui.goal_label)
+	var goal_scroll := ScrollContainer.new()
+	goal_scroll.name = "CurrentGoals"
+	goal_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	goal_scroll.custom_minimum_size.x = 310
+	info.add_child(goal_scroll)
+	ui.goal_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	ui.goal_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	goal_scroll.add_child(ui.goal_label)
 	ui.journey_box = HBoxContainer.new()
 	ui.journey_box.add_theme_constant_override("separation", 8)
 	info.add_child(ui.journey_box)
@@ -162,11 +169,12 @@ static func render(ui) -> void:
 	ui.place_label.text = session.content.locations[p.location].name
 	var goals: Array[Dictionary] = []
 	if ui.goals_enabled:
-		goals = Goals.current(session)
+		goals = Goals.displayed(ui)
 	ui.goal_label.visible = not goals.is_empty()
-	if not goals.is_empty():
-		ui.goal_label.text = "目标 · " + goals[0].title
-		ui.goal_label.tooltip_text = goals[0].text
+	ui.goal_label.get_parent().visible = not goals.is_empty()
+	ui.goal_label.get_parent().custom_minimum_size.y = minf(96.0, goals.size() * 22.0)
+	ui.goal_label.text = "\n".join(goals.map(func(goal: Dictionary) -> String: return "目标 · " + goal.title))
+	ui.goal_label.tooltip_text = "\n\n".join(goals.map(func(goal: Dictionary) -> String: return goal.title + "：" + goal.text))
 	ui.clear(ui.journey_box)
 	ui.journey_button = null
 	if not p.journey.is_empty():

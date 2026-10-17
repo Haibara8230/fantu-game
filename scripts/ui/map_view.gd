@@ -22,7 +22,9 @@ static func render(ui) -> void:
 	world_map.configure(session.content, session.world.flags, session.player.location, map_target, path, str(session.player.journey.get("to", "")), people_at, shown)
 	_region_tabs(ui, shown)
 	if map_target.is_empty() or not session.location_visible(map_target):
-		center.add_child(ui.paragraph("点选舆图上的地点，查看路线与危险。路上每段都可能有遭遇，境界越高越少受扰。", ui.MUTED))
+		center.add_child(ui.label("所在 · " + session.content.locations[session.player.location].name, 20, ui.GOLD))
+		center.add_child(ui.paragraph(session.content.locations[session.player.location].description))
+		center.add_child(ui.paragraph("点选地名查看路线、天数与危险，再决定是否启程。", ui.MUTED))
 		return
 	var target: Dictionary = session.content.locations[map_target]
 	center.add_child(ui.label("%s  ·  %s" % [target.name, target.subtitle], 20, ui.GOLD))

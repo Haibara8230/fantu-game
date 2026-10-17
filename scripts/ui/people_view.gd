@@ -2,6 +2,7 @@ extends RefCounted
 ## People in the interface: the drawer of who is here, the 相识 list, facing a person (their portrait,
 ## what can be done with them, their details and what has passed between you — 人物志), portraits.
 const Calendar = preload("res://scripts/core/calendar.gd")
+const ConditionText = preload("res://scripts/ui/condition_text.gd")
 const ArtLibrary = preload("res://scripts/ui/art_library.gd")
 const TalentCards = preload("res://scripts/ui/talent_cards.gd")
 const PEOPLE_SHOWN_HERE := 12
@@ -83,6 +84,19 @@ static func render_drawer(ui, layer: Control) -> void:
 	var fold: Button = ui.button("◀", ui.toggle_drawer, "收起")
 	fold.custom_minimum_size = Vector2(36, 30)
 	header.add_child(fold)
+	var filters := OptionButton.new()
+	var filter_ids := ["all", "story", "familiar", "trade"]
+	for title_text: String in ["全部人物", "剧情与托付", "相熟之人", "可交易之人"]:
+		filters.add_item(title_text)
+	filters.select(maxi(0, filter_ids.find(ui.people_filter)))
+	filters.item_selected.connect(func(index: int) -> void:
+		ui.people_filter = filter_ids[index]
+		ui.show_everyone_here = true
+		ui.render())
+	column.add_child(filters)
+	here = filtered_here(ui, here)
+	if here.is_empty():
+		column.add_child(ui.paragraph("此地暂无符合筛选的人物。", ui.MUTED))
 	var scroll := ScrollContainer.new()
 	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
@@ -114,6 +128,25 @@ static func render_drawer(ui, layer: Control) -> void:
 		list.add_child(ui.button("更多 · %d 人" % hidden, func() -> void:
 			ui.show_everyone_here = true
 			ui.render(), "显示此地的所有人"))
+
+## Filter using discovered interactions; missing delivery items do not hide the quest giver.
+static func filtered_here(ui, people: Array[String]) -> Array[String]:
+	var result: Array[String] = []
+	for person_id: String in people:
+		var keep: bool = ui.people_filter == "all"
+		if ui.people_filter == "familiar":
+			keep = ui.session.favor(person_id) >= 40
+		elif ui.people_filter in ["story", "trade"]:
+			for option: Dictionary in ui.session.npc_options(person_id):
+				if str(option.reason) == "此事已了。" or ConditionText.future(ui.session, option.get("conditions", [])):
+					continue
+				if ui.people_filter == "story" and is_errand(ui, person_id, str(option.id)):
+					keep = true
+				elif ui.people_filter == "trade" and (str(option.id).begins_with("buy_") or str(option.id).begins_with("sell_")):
+					keep = true
+		if keep:
+			result.append(person_id)
+	return result
 
 ## Whether the person has something for the player now: a step of a story, the start of one, or a
 ## request for help (marked ❗ in the drawer).
@@ -201,17 +234,34 @@ static func render_person(ui, person_id: String) -> void:
 	right.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	right.alignment = BoxContainer.ALIGNMENT_CENTER
 	stage.add_child(right)
-	var options: Array[Button] = []
+	var options: Array[Control] = []
 	if here:
 		for option: Dictionary in session.npc_options(person_id):
 			var option_id: String = option.id
-			var choice: Button = ui.button(option.label, func() -> void: ui.run(func() -> String: return session.interact(person_id, option_id)), option.reason)
+			var definition: Dictionary = {}
+			for interaction: Dictionary in person.get("interactions", []):
+				if str(interaction.id) == option_id:
+					definition = interaction
+			if not definition.is_empty():
+				if bool(definition.get("once", false)) and progress.get("last", {}).has(option_id):
+					continue
+				if ConditionText.future(session, definition.get("conditions", [])):
+					continue
+			var reason: String = str(option.reason)
+			if reason == "条件不足。":
+				reason = ConditionText.missing(session, option.get("conditions", []))
+			var label: String = str(option.label)
+			var choice: Button = ui.button(label, func() -> void: ui.run(func() -> String: return session.interact(person_id, option_id)), reason)
 			choice.disabled = not option.available
 			if option_id == "fight":
 				choice.add_theme_stylebox_override("normal", ui.style(Color("#5a2b26"), Color("#c9785f"), 10))
 			elif option.available and is_errand(ui, person_id, option_id):
 				choice.add_theme_stylebox_override("normal", ui.style(Color("#3a3524"), ui.GOLD, 10))
-			options.append(choice)
+			var option_box := VBoxContainer.new()
+			option_box.add_child(choice)
+			if not option.available and not reason.is_empty():
+				option_box.add_child(ui.paragraph(reason, ui.MUTED))
+			options.append(option_box)
 	var half := (options.size() + 1) / 2
 	for index: int in options.size():
 		(left if index < half else right).add_child(options[index])

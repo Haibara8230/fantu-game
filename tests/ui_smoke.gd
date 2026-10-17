@@ -44,7 +44,8 @@ func _goals() -> void:
 	game.new_game("目标", 7, ["metal", "wood", "fire"])
 	var ids := func() -> Array: return Goals.current(game).map(func(goal: Dictionary) -> String: return goal.id)
 	var filled := func() -> bool: return Goals.current(game).all(func(goal: Dictionary) -> bool: return not goal.text.contains("{"))
-	check(ids.call() == ["serpent", "foundation_xp"] and filled.call(), "a new life aims at the serpent and at breaking through")
+	check(ids.call() == ["foundation_xp", "serpent"] and filled.call(), "a new life starts with a nearby cultivation goal, before distant threats")
+	game.world.flags.intro_done = true
 	game.player.xp = 500
 	check(ids.call() == ["bottleneck", "serpent"], "a bottleneck comes first and hides the plain xp goal")
 	game.player.xp = 2000
@@ -78,7 +79,7 @@ func _goals() -> void:
 	check("tournament" in ids.call() and soon[ids.call().find("tournament")].text.contains("历元 10 年 6 月初一至十五"), "the tournament is mentioned within a year of it")
 	game.world.day = Calendar.to_day(10, 6, 16)
 	check(not "tournament" in ids.call(), "and not again until the next one draws near")
-	check(Goals.current(game).size() <= Goals.SHOWN, "at most a few goals at once")
+	check(Goals.current(game).size() == ids.call().size(), "all current goals are available without a three-item cap")
 
 ## The guided start as a first-time player meets it: the mentor's words open it, the HUD's goal follows
 ## the step, the map holds the player to the step's place, the first retreat lasts the month asked for,
@@ -201,6 +202,9 @@ func _run() -> void:
 	# this journey.
 	var tips: Array = main.Guide.tips()
 	check(not tips.is_empty() and tips.all(func(tip: Dictionary) -> bool: return main.Guide.known(tip.id) and tip.title is String and tip.pages is Array and not tip.pages.is_empty() and not tip.where.is_empty()), "every card in the data has a known situation, a title and pages")
+	check(not main.Guide.applies(main, "retreat") and not _screen("Label").contains("教学 · 闭关修炼"), "the retreat card waits until the chamber is entered")
+	main.select_spot("chamber")
+	check(main.Guide.applies(main, "retreat"), "the chamber opens the retreat teaching")
 	check(_screen("Label").contains("教学 · 闭关修炼  1 / 2") and _button("下一页") != null and _button("知道了") == null, "a new journey first sees the retreat card, page one of two")
 	_button("下一页").pressed.emit()
 	check(_screen("Label").contains("一次闭关有上限") and _button("上一页") != null and _button("知道了") != null, "the last page explains the limits and can be dismissed")
@@ -221,6 +225,7 @@ func _run() -> void:
 	main.reset_guide()
 	check(main.guide_enabled and main.session.player.taught.is_empty() and _screen("Label").contains("教学 · 闭关修炼"), "and every card of the journey can be shown again")
 	main.set_guide_enabled(false)
+	main.close_spot()
 	# A place is a scene: its name on top, its spots as paper tags, the people in a drawer at the left.
 	check(main.scene_layer.visible and _tag("静室") != null and _tag("演武坪") != null and _tag("传功堂") != null, "the sect's spots hang on its scene as paper tags")
 	await process_frame
@@ -270,7 +275,7 @@ func _run() -> void:
 	check(status.contains("攻击加成") and status.contains("减伤") and status.contains("丹毒") and status.contains("资质") and status.contains("兵刃") and main.center.find_children("*", "TextureRect", true, false).size() > 0, "the character page shows the figure, the attributes in groups and the loadout")
 	main.hud_icons.status.pressed.emit()
 	check(main.view == "place" and main.hud_left.visible, "the same button closes the panel")
-	check(main.goal_label.visible and main.goal_label.text == "目标 · 除去妖蟒", "the HUD names the first goal")
+	check(main.goal_label.visible and main.goal_label.text.begins_with("目标 · " + str(Goals.current(main.session)[0].title)) and main.goal_label.text.contains("除去妖蟒"), "the HUD names the first goal")
 	main.hud_icons.goals.pressed.emit()
 	var goals_text := _screen("Label")
 	check(main.current_screen() == "scroll" and goals_text.contains("除去妖蟒") and goals_text.contains("历元 6 年 3 月初一") and goals_text.contains("还有 5 年 2 个月") and goals_text.contains("修为 0 / 2000"), "任务 opens the scroll: the serpent's deadline and breaking through")
@@ -286,8 +291,8 @@ func _run() -> void:
 	# The retreat scroll: the monthly rate and where it comes from, the deadlines, a length to pick.
 	_button("闭关修炼").pressed.emit()
 	var scroll := _screen("Label")
-	check(main.current_screen() == "retreat" and scroll.contains("每月修为") and scroll.contains("灵根 ·") and scroll.contains("近 期 大 事") and scroll.contains("除去妖蟒 · 还有"), "闭关修炼 opens the retreat scroll: the rate, its sources and the deadlines")
-	check(scroll.contains("此番至多 3 个月") and scroll.contains("心境 · 安定  0 / 0"), "the scroll names the longest retreat allowed and the mind")
+	check(main.current_screen() == "retreat" and scroll.contains("每月修为") and scroll.contains("灵根 ·") and scroll.contains("近 期 大 事") and not scroll.contains("除去妖蟒 · 还有") and scroll.contains("远期约定"), "闭关修炼 names current constraints and keeps distant deadlines in the task calendar")
+	check(scroll.contains("此番至多 3 个月") and scroll.contains("此阶段无心境门槛") and scroll.contains("当前修为  0 / 2000"), "the scroll names the longest retreat allowed and the mind")
 	var length: HSlider = main.center.find_children("*", "HSlider", true, false)[0]
 	check(int(length.max_value) == 9, "炼气初期 retreats run in ten-day steps up to ninety days")
 	main.session.player.xp = 400
@@ -473,7 +478,7 @@ func _run() -> void:
 	main.world_map.location_selected.emit("ridge")
 	var route_text := _texts(main.center, "Label")
 	check(route_text.contains("云溪坊市 → 白鹭渡 → 青石镇 → 松风岭") and route_text.contains("共 8 日"), "shortest route previewed with days")
-	check(main.current_screen() == "map" and main.world_map.visible and main.window.get_global_rect().end.y < 460, "the map fills the screen, the route in a small window")
+	check(main.current_screen() == "map" and main.world_map.visible and main.window.get_global_rect().end.y < root.size.y * 0.65 and not main.window.get_global_rect().intersects(main.hud_right.get_global_rect()), "the map fills the screen, the route in a small window")
 	_button("启程前往松风岭").pressed.emit()
 	await process_frame
 	check(main.presenting and main.world_map.visible and main.session.player.location == "ridge", "the rules walk the route at once; the map plays it back")

@@ -83,17 +83,23 @@ static func _item_row(ui, parent: VBoxContainer, item_id: String) -> void:
 	parent.add_child(row)
 	# The item's picture once drawn (art_library.gd item_icon_path); until then the name stands alone.
 	var icon_path: String = ArtLibrary.item_icon_path(item)
+	var icon_holder := Control.new()
+	icon_holder.custom_minimum_size = Vector2(40, 40)
+	row.add_child(icon_holder)
 	if not icon_path.is_empty():
 		var icon: TextureRect = ui.picture(icon_path, 40)
 		icon.custom_minimum_size = Vector2(40, 40)
 		icon.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
 		icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-		row.add_child(icon)
+		icon_holder.add_child(icon)
 	var name_label: Label = ui.label(item.name if item.has("instance") else "%s ×%d" % [item.name, session.item_count(item_id)], 16, ui.grade_color(item))
-	name_label.custom_minimum_size.x = 150
+	name_label.custom_minimum_size.x = 200
+	name_label.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
+	name_label.clip_text = true
+	name_label.tooltip_text = name_label.text
 	row.add_child(name_label)
 	var mastery: String = session.Arsenal.mastery_text(session.content, item, int(session.player.realm)) if item.get("category", "") == "equipment" else ""
-	var details := "\n".join([item.description, session.Gear.refine_text(item), mastery].filter(func(line: String) -> bool: return not line.is_empty()))
+	var details := "\n".join([item.description, session.Gear.refine_text(item), mastery, comparison_text(session, item_id)].filter(func(line: String) -> bool: return not line.is_empty()))
 	var text: Label = ui.paragraph(details)
 	text.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	row.add_child(text)
@@ -119,6 +125,10 @@ static func _item_row(ui, parent: VBoxContainer, item_id: String) -> void:
 	if price > 0:
 		row.add_child(ui.button("出售 · %d" % price, func() -> void: ui.run(func() -> String: return session.sell(item_id, 1)), "在此地出售一件"))
 
+	# Wrapped manual descriptions must not stretch the buttons or centre the item name vertically.
+	for child: Control in row.get_children():
+		child.size_flags_vertical = Control.SIZE_SHRINK_BEGIN
+
 ## 祭炼 for a piece worn short of its realm (gear.gd), its days and stones shown before it is pressed;
 ## null for a piece already wielded fully or far beyond reach.
 static func _refine_button(ui, item_id: String, slot: String) -> Button:
@@ -133,3 +143,13 @@ static func _refine_button(ui, item_id: String, slot: String) -> Button:
 	var button: Button = ui.button("祭炼 · %d 日" % int(cost.days), func() -> void: ui.run(func() -> String: return session.refine_gear(item_id, slot)), tip if reason.is_empty() else reason)
 	button.disabled = not reason.is_empty()
 	return button
+
+static func comparison_text(session, item_id: String) -> String:
+	var names := {"attack":"攻击", "max_hp":"气血上限", "max_qi":"灵力上限", "defense":"减伤", "cultivation":"修炼速度", "orb_cap":"灵气上限", "orb_first":"开局灵气"}
+	var changes: Dictionary = session.Loadout.equipment_comparison(session, item_id)
+	var lines: Array[String] = []
+	for key: String in changes:
+		var percentage := key in ["defense", "cultivation"]
+		var amount := float(changes[key]) * (100.0 if percentage else 1.0)
+		lines.append("%s %+d%s" % [names[key], int(round(amount)), "%" if percentage else ""])
+	return "换上后：" + "、".join(lines) if not lines.is_empty() else ""

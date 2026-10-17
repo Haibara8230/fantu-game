@@ -271,21 +271,30 @@ static func pill_effects(s, item: Dictionary) -> Array:
 			effects.append(effect)
 	return effects
 
-## What the player should keep when selling in bulk: the items an accepted commission asks for, and
-## those a storyline step now waiting asks to be handed over (许清和's 凝露草). {item id: count}.
+## Delivery costs of accepted commissions and each current storyline add together.
 static func reserved(s) -> Dictionary:
 	var keep := {}
 	for quest: Dictionary in s.player.get("quests", []):
 		if quest.has("item"):
-			keep[quest.item] = int(keep.get(quest.item, 0)) + int(quest.count)
-	for person_id: String in s.content.people:
-		for interaction: Dictionary in s.content.people[person_id].get("interactions", []):
-			var conditions: Array = interaction.get("conditions", [])
-			var waiting: Array = conditions.filter(func(condition: Dictionary) -> bool: return condition.has("story_at"))
-			if waiting.is_empty() or not Events.all_met(s, waiting):
-				continue
-			for condition: Dictionary in conditions:
-				if condition.has("item_at_least"):
-					var wanted: Array = condition.item_at_least
-					keep[str(wanted[0])] = maxi(int(keep.get(str(wanted[0]), 0)), int(wanted[1]))
+			keep[str(quest.item)] = int(keep.get(str(quest.item), 0)) + int(quest.count)
+	for story_id: String in s.world.get("storylines", {}):
+		var costs: Dictionary = s.Storylines.required_items(s, story_id)
+		for item_id: String in costs:
+			keep[item_id] = int(keep.get(item_id, 0)) + int(costs[item_id])
+	var herbs_needed := 0
+	for story_id: String in s.world.get("storylines", {}):
+		herbs_needed += s.Storylines.required_herbs(s, story_id)
+	for item_id: String in s.content.herbs_by_value():
+		var taken := mini(herbs_needed, maxi(0, item_count(s, item_id) - int(keep.get(item_id, 0))))
+		if taken > 0:
+			keep[item_id] = int(keep.get(item_id, 0)) + taken
+			herbs_needed -= taken
 	return keep
+
+## Ordinary gifts use an unreserved herb and name it before the player chooses.
+static func gift_herb(s) -> String:
+	var keep := reserved(s)
+	for item_id: String in s.content.herbs_by_value():
+		if item_count(s, item_id) > int(keep.get(item_id, 0)):
+			return item_id
+	return ""

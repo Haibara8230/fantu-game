@@ -16,8 +16,11 @@ static func render_retreat(ui) -> void:
 	if not ui.retreat_playback.is_empty():
 		_playback(ui, right)
 		return
+	if not ui.retreat_result.is_empty():
+		right.add_child(ui.paragraph(ui.retreat_result, ui.INK))
 	var efficiency: int = session.retreat_efficiency()
 	var mind_percent: int = session.mind_percent()
+	right.add_child(ui.paragraph(limitation(session), ui.GOLD))
 	right.add_child(ui.label("每月修为  %d" % int(round(session.cultivation_rate() * mind_percent / 100.0 * efficiency / 100.0)), 26, ui.GOLD))
 	var grade: Dictionary = session.content.root_grade(session.player.get("roots", []))
 	var sources := GridContainer.new()
@@ -27,8 +30,8 @@ static func render_retreat(ui) -> void:
 	sources.add_child(ui.label("灵根 · %s  ×%.2f" % [session.root_title(), float(grade.speed)], 15))
 	sources.add_child(ui.label("心法与宝物  +%d%%" % int(round(float(session.bonuses().cultivation) * 100.0)), 15))
 	sources.add_child(ui.label("心神 · %s  收益 %d%%" % [_mood(efficiency), efficiency], 15, ui.INK if efficiency >= 100 else Color("#e3c08a")))
-	sources.add_child(ui.label("修为  %d" % int(session.player.xp), 15))
-	sources.add_child(ui.label("心境 · %s  %d / %d" % [mind_word(mind_percent), int(session.player.mind), session.mind_needed()], 15, ui.INK if mind_percent >= 100 else Color("#e3c08a")))
+	sources.add_child(ui.label("当前修为  %d / %d（此境上限）" % [int(session.player.xp), Cultivation.xp_cap(session)], 15))
+	sources.add_child(ui.label(("心境  %d · 此阶段无心境门槛" % int(session.player.mind) if session.mind_needed() == 0 else "心境 · %s  当前 %d / 所需 %d" % [mind_word(mind_percent), int(session.player.mind), session.mind_needed()]), 15, ui.INK if mind_percent >= 100 else Color("#e3c08a")))
 	sources.add_child(ui.label("心境收益  %d%%" % mind_percent, 15, ui.INK if mind_percent >= 100 else Color("#e3c08a")))
 	if session.at_bottleneck():
 		right.add_child(ui.paragraph("修为卡在瓶颈，闭关难有寸进。需外出历练（斗法、切磋、委托、奇遇），或服一枚破障丹。", Color("#e39a82")))
@@ -178,6 +181,18 @@ static func _guard_controls(ui, parent: VBoxContainer, plan: Dictionary) -> void
 static func step_days(session) -> int:
 	return int(session.content.realm(int(session.player.realm)).get("retreat_step_days", Calendar.DAYS_PER_MONTH))
 
+## Explain the strongest present constraint with actionable alternatives.
+static func limitation(session) -> String:
+	if session.at_bottleneck():
+		return "当前限制：阶段瓶颈。可切磋、完成委托积累历练，或服破障丹。"
+	if session.at_xp_cap():
+		return "当前限制：此境修为已满。请在突破页检查丹药、护法与冲关准备。"
+	if session.mind_percent() < 100:
+		return "当前限制：心境不足。可处理人物托付或完成委托；疲惫时同时减少连续闭关。"
+	if session.retreat_efficiency() < 100:
+		return "当前限制：连续闭关后心神疲惫。可外出采药、办委托，再回山修炼。"
+	return "眼下可安心修炼。下方可预估日期、修为与出关时的状态。"
+
 ## The mind against the stage's need, in a word.
 static func mind_word(percent: int) -> String:
 	return "不足" if percent < 100 else ("澄明" if percent > 100 else "安定")
@@ -224,10 +239,17 @@ static func _columns(ui) -> HBoxContainer:
 	var any := false
 	for goal: Dictionary in Goals.current(session):
 		if goal.id in DEADLINE_GOALS:
+			var fixed := {"serpent": "serpent_rampage", "auction": "special_auction"}
+			if fixed.has(str(goal.id)):
+				var opening := Calendar.to_day(session.content.events[fixed[str(goal.id)]].window.from[0], session.content.events[fixed[str(goal.id)]].window.from[1], session.content.events[fixed[str(goal.id)]].window.from[2])
+				if opening - int(session.world.day) > 360:
+					continue
 			left.add_child(ui.label("%s · 还有 %s" % [goal.title, Goals.values(session, goal.id).until], 15))
 			any = true
 	var markable := false
 	for entry: Dictionary in session.upcoming():
+		if int(entry.from) - int(session.world.day) > 360:
+			continue
 		any = true
 		if int(entry.from) <= int(session.world.day):
 			left.add_child(ui.label("%s · 进行中" % entry.title, 15))
@@ -252,6 +274,7 @@ static func _columns(ui) -> HBoxContainer:
 		left.add_child(ui.label("近期无事", 15, ui.MUTED))
 	if markable:
 		left.add_child(ui.paragraph("勾选的约定到期时提前出关；其余消息不打断闭关，出关后在「任务 · 消息」查看。", ui.MUTED))
+	left.add_child(ui.paragraph("远期约定可在「任务 · 约定」查看。", ui.MUTED))
 	left.add_child(ui.label("寿元尽于历元 %d 年" % Calendar.year(session.lifespan_end_day()), 14, ui.MUTED))
 	return columns
 

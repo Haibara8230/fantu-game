@@ -1,6 +1,32 @@
 extends RefCounted
 ## Upgrades saved sessions one version at a time. Output still goes through Session validation.
 const CURRENT_VERSION := 15
+# Frozen order for saves made before stable step IDs were written. Never change the historical step lists.
+const LEGACY_STORY_STEPS := {
+	"intro": ["retreat", "spar", "herbs", "return", "market", "report"],
+	"errands": ["wait_dew", "dew", "wait_wolf", "wolf", "wolf_report", "wait_advice", "advice"],
+	"lineage": ["visit", "choose", "foundation", "ruin"],
+	"shen_redscale": ["brew", "slay"],
+	"furnace_bounty": ["fire", "find", "decide"],
+	"boatman_sword": ["dive"],
+	"peddler_robbed": ["hunt", "return"],
+	"liu_squatter": ["persuade", "wait_thanks", "thanks"],
+	"inner_court": ["wait_patrol", "patrol", "wait_tide", "tide", "wait_trial", "trial"],
+	"true_disciple": ["summon", "demons", "wait_secret", "secret"],
+	"south_journey": ["wait", "summon", "visit"],
+	"talent_xianren": ["dream", "eye", "boatman"],
+	"talent_tianming": ["omen", "verse"],
+	"talent_hundun": ["notice", "trial"],
+	"talent_jianti": ["river", "cave"],
+	"talent_wangqing": ["pulse", "after"],
+	"talent_wangu": ["pines", "grove"],
+	"talent_daogu": ["bones", "after"],
+	"talent_ziqi": ["luck", "fortune"],
+	"talent_tiandu": ["pulse", "remedy"],
+	"talent_sushi": ["library", "memory"],
+	"valley_recovery": ["summon", "medicine", "road", "report"]
+}
+
 # Before version 15 the 凝气丹 asked thirty days between pills (player.cooldowns["use:<item>"]); since
 # then 丹毒 decides: a pill adds 60 to a limit of 100 and it fades by 2 a day.
 const V14_TOXIN_LIMIT := 100

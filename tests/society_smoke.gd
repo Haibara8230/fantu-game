@@ -75,6 +75,7 @@ func _summit() -> void:
 	check(game.chronicle.entries.any(func(entry: Dictionary) -> bool: return entry.major and entry.id == "summit_champion"), "and a milestone")
 	var out := _summit_game(6)
 	out.choose_event("enter")
+	var before_loss_stones := int(out.player.stones)
 	out.player.hp = 1
 	for turn: int in 8:
 		if not out.battle.is_empty():
@@ -404,12 +405,13 @@ func _tournament() -> void:
 	_jump(out, 10, 6, 2)
 	out.wait(1)
 	out.choose_event("enter")
+	var before_loss_stones := int(out.player.stones)
 	out.player.hp = 1
 	# They may gather qi or guard before they strike.
 	for turn: int in 6:
 		if not out.battle.is_empty():
 			out.defend()
-	check(out.battle.is_empty() and out.player.location == "sect" and int(out.player.stones) == 30 and out.journal_lines().any(func(line: String) -> bool: return line.contains("止步")), "losing a round ends the run without penalty")
+	check(out.battle.is_empty() and out.player.location == "sect" and int(out.player.stones) == before_loss_stones and out.journal_lines().any(func(line: String) -> bool: return line.contains("止步")), "losing a round ends the run without penalty")
 	check(out.tournament_block().contains("报过名"), "one entry a tournament")
 	# Entering at the arena: a retreat through the sign-up no longer misses it, and the 约定 lists it.
 	var arena := _game()

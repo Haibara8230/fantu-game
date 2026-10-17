@@ -448,7 +448,7 @@ func _people() -> void:
 	check(not _option(trader, "peddler", "buy_pill").available, "a pill needs seventy stones")
 	trader.player.stones = 80
 	trader.interact("peddler", "buy_pill")
-	check(int(trader.item_count("foundation_pill")) == 1 and int(trader.player.stones) == 10 and _option(trader, "peddler", "buy_pill").reason == "条件不足。", "trades repeat whenever affordable")
+	check(int(trader.item_count("foundation_pill")) == 1 and int(trader.player.stones) == 10 and _option(trader, "peddler", "buy_pill").reason.contains("本月这一份已售出"), "discounted pills share limited monthly stock")
 	trader.set_item_count("huichun_grass", 1)
 	trader.interact("peddler", "gift")
 	check(trader.favor("peddler") == 5 and int(trader.herb_count()) == 0, "a gift of herbs raises favor")

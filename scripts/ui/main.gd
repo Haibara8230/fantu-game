@@ -79,12 +79,15 @@ var battle_secret_open := false
 var trial_saved_for := ""
 var retreat_days := 90
 var retreat_playback: Dictionary = {}
+var retreat_result := ""
 var retreat_labels: Dictionary = {}
 var ceremony: Dictionary = {}
 # The breakthrough being prepared on the retreat scroll: {"pills", "treasure", "guard"} (retreat_view.gd).
 var breakthrough_plan: Dictionary = {}
 var profile_open := false
 var drawer_open := true
+var people_filter := "all"
+var tracked_goal := ""
 var arts_filter := "all"
 var bag_filter := "all"
 var trade: Dictionary = {"sell": {}, "buy": []}
@@ -422,7 +425,8 @@ func _arrange(screen: String) -> void:
 			# has no places.
 			backdrop.visible = false
 			shade.color.a = 0.0
-			_place_window(0.68, 0.985, 124.0, 404.0)
+			window.add_theme_stylebox_override("panel", style(Color(0.04, 0.09, 0.1, 0.94), Color("#41615e"), 14))
+			_place_window(0.68, 0.985, 198.0, 402.0)
 			window.anchor_bottom = 0.0
 		"full":
 			backdrop.visible = false
@@ -447,7 +451,16 @@ func _arrange(screen: String) -> void:
 				window.anchor_top = 1.0
 				window.offset_top = -300.0
 			else:
-				_place_window(0.0, 1.0, 14.0, -60.0, 14.0)
+				var text := str(story.get("text", session.pending_definition().get("text", "") if not session.pending_event.is_empty() else ""))
+				if ceremony.is_empty() and session.ended.is_empty():
+					var choices: int = session.pending_definition().get("choices", []).size() if not session.pending_event.is_empty() else 1
+					var height := clampf(170.0 + ceilf(float(text.length()) / 48.0) * 28.0 + choices * 64.0, 330.0, size.y - 120.0)
+					_place_window(0.15, 0.85, -height / 2.0, height / 2.0)
+					window.anchor_top = 0.5
+					window.anchor_bottom = 0.5
+					shade.color.a = 0.4
+				else:
+					_place_window(0.0, 1.0, 14.0, -60.0, 14.0)
 		"retreat", "trade", "alchemy", "field", "forge":
 			# Smaller scrolls over the place, which darkens behind them.
 			shade.color.a = 0.6
@@ -602,6 +615,7 @@ func render() -> void:
 				PlaceView.render(self)
 	# The due card's button, once the view is built.
 	Guide.highlight(self, _guide_place())
+	_fit_story_scroll.call_deferred()
 	if new_scene:
 		center.modulate.a = 0.0
 		create_tween().tween_property(center, "modulate:a", 1.0, 0.25)
@@ -831,8 +845,12 @@ func start_retreat(days: int) -> void:
 	var mark: int = session.chronicle.added
 	var from_day := int(session.world.day)
 	var from_xp := int(session.player.xp)
+	var from_stones := int(session.player.stones)
+	var from_letters: int = session.unread_letters()
 	presenting = true
 	var message: String = session.cultivate(days)
+	if int(session.world.day) > from_day:
+		retreat_result = "上次出关 · %s\n实际闭关 %s，修为 %+d，灵石 %+d；心境 %d，心神收益 %d%%。新增未读传音 %d，详细消息见「任务 · 消息」。" % [session.time_name(), Calendar.duration_text(int(session.world.day) - from_day), int(session.player.xp) - from_xp, int(session.player.stones) - from_stones, int(session.player.mind), session.retreat_efficiency(), maxi(0, session.unread_letters() - from_letters)]
 	retreat_playback = {"from_day": from_day, "to_day": int(session.world.day), "from_xp": from_xp, "to_xp": int(session.player.xp)}
 	render()
 	_lock_buttons(self)
@@ -1137,6 +1155,7 @@ func _stage_story(mark: int) -> void:
 	var lines: Array[String] = []
 	var told: Array[String] = []
 	var told_title := ""
+	var told_speaker := ""
 	var staged := false
 	for entry: Dictionary in session.chronicle.entries.slice(-count):
 		var args: Dictionary = entry.args
@@ -1148,6 +1167,13 @@ func _stage_story(mark: int) -> void:
 		elif entry.id in ["story", "letter"]:
 			if told_title.is_empty():
 				told_title = "传音" if entry.id == "letter" and not args.has("story") else str(session.content.storylines.get(str(args.get("story", "")), {}).get("title", "传音"))
+			if told_speaker.is_empty():
+				var definition: Dictionary = session.content.storylines.get(str(args.get("story", "")), {})
+				var step: Dictionary = {}
+				for candidate: Dictionary in definition.get("steps", []):
+					if str(candidate.id) == str(args.get("step", "")):
+						step = candidate
+				told_speaker = str(args.get("npc", step.get("speaker", definition.get("giver", ""))))
 			told.append(session.chronicle.format(entry, session.content))
 		elif entry.id in ["talk", "gift", "npc", "help"] and not selected_npc.is_empty() and str(args.get("npc", "")) == selected_npc:
 			lines.append(session.chronicle.format(entry, session.content))
@@ -1157,7 +1183,7 @@ func _stage_story(mark: int) -> void:
 		if staged:
 			story.text = str(story.text) + "\n\n" + "\n\n".join(told)
 		else:
-			story = {"event": "", "title": told_title, "text": "\n\n".join(told), "mark": mark}
+			story = {"event": "", "title": told_title, "text": "\n\n".join(told), "mark": mark, "speaker": told_speaker}
 			staged = true
 	if staged or not lines.is_empty():
 		render()
@@ -1221,6 +1247,8 @@ func _load_manual() -> void:
 	story = {}
 	dialogue = {}
 	if manual_store.load_game(session):
+		retreat_result = ""
+		tracked_goal = ""
 		notice("已读取手动存档。")
 	else:
 		notice(manual_store.last_error)
@@ -1232,6 +1260,8 @@ func load_trial() -> void:
 	story = {}
 	dialogue = {}
 	if trial_store.load_game(session):
+		retreat_result = ""
+		tracked_goal = ""
 		notice("已读取劫前存档：回到这场死斗开打之时。")
 	else:
 		notice(trial_store.last_error)
@@ -1255,6 +1285,9 @@ func close_welcome() -> void:
 	welcome_layer = null
 
 func begin() -> void:
+	retreat_result = ""
+	tracked_goal = ""
+	people_filter = "all"
 	var character_name := name_input.text
 	close_welcome()
 	started = true
@@ -1277,6 +1310,8 @@ func continue_saved() -> void:
 	if manual_store.saved_at() > auto_store.saved_at():
 		stores.reverse()
 	if stores[0].load_game(session) or stores[1].load_game(session):
+		retreat_result = ""
+		tracked_goal = ""
 		started = true
 		close_welcome()
 		render()
@@ -1328,3 +1363,11 @@ func reset_preview(sect_id: String = "qingyun", opponent_id: String = "qingyun")
 	session.player.hp = maxi(1, int(session.player.max_hp) - 20)
 	session.start_battle("disciple", opponent_id)
 	notice("门派试演 · {skills} 施法，{end_turn}结束回合，{guard}守御；切换传承会重置试演，正常旅程不受影响。".format(Settings.key_hints(self)))
+
+## Fit a short telling after labels have wrapped, including the scroll frame's real padding.
+func _fit_story_scroll() -> void:
+	if current_screen() != "full" or not ceremony.is_empty() or not session.ended.is_empty() or not session.battle.is_empty() or not session.auction.is_empty() or not _telling_art().is_empty():
+		return
+	var height := clampf(center.get_combined_minimum_size().y + window_style.get_minimum_size().y + 12.0, 260.0, size.y - 100.0)
+	window.offset_top = -height / 2.0
+	window.offset_bottom = height / 2.0

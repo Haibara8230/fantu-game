@@ -203,9 +203,11 @@ static func living_people(s) -> Array[String]:
 static func meet_during(s, first_day: int, last_day: int) -> void:
 	var here: String = s.player.location
 	for person_id: String in s.content.people:
+		if bool(s.world.people.get(person_id, {}).get("met", false)):
+			continue
 		var someone: Dictionary = s.content.people[person_id]
 		var places: Array = [someone.home] if someone.has("home") else someone.schedule.map(func(stop: Dictionary) -> String: return stop.location)
-		if not here in places or bool(s.world.people.get(person_id, {}).get("met", false)):
+		if not here in places:
 			continue
 		for day: int in range(first_day, last_day + 1):
 			if npc_location(s, person_id, day) == here:
@@ -220,7 +222,7 @@ static func meet_during(s, first_day: int, last_day: int) -> void:
 		var end_map := _people_on(s, last_day)
 		for map: Dictionary in ([start_map] if start_map == end_map else [start_map, end_map]):
 			for person_id: String in map.get(here, []):
-				if is_generated(s, person_id) and not bool(s.world.people.get(person_id, {}).get("met", false)):
+				if not bool(s.world.people.get(person_id, {}).get("met", false)) and is_generated(s, person_id):
 					ids[person_id] = true
 		for person_id: String in ids:
 			if not bool(s.world.people.get(person_id, {}).get("met", false)):
@@ -249,7 +251,7 @@ static func meet_present(s) -> void:
 	var covered: bool = s._met_through.get("location", "") == s.player.location and int(s._met_through.get("day", -1)) == int(s.world.day)
 	if covered:
 		for person_id: String in s.content.people:
-			if npc_location(s, person_id) == s.player.location:
+			if not bool(s.world.people.get(person_id, {}).get("met", false)) and npc_location(s, person_id) == s.player.location:
 				mark_met(s, person_id)
 		return
 	for person_id: String in present_npcs(s):
@@ -333,8 +335,9 @@ static func npc_options(s, person_id: String) -> Array[Dictionary]:
 	var someone: Dictionary = person(s, person_id)
 	if someone.attitude != "hostile" and not someone.get("talk", []).is_empty():
 		options.append({"id": "talk", "label": "交谈", "cooldown_days": TALK_COOLDOWN_DAYS})
+	var gift_item: String = s.Inventory.gift_herb(s)
 	if someone.attitude != "hostile" and int(someone.get("gift_favor", 0)) > 0:
-		options.append({"id": "gift", "label": "赠一株灵草（好感 +%d）" % int(someone.gift_favor), "conditions": [{"herbs_at_least": 1}], "cooldown_days": TALK_COOLDOWN_DAYS})
+		options.append({"id": "gift", "label": "赠一株灵草（%s，好感 +%d）" % [s.content.item(gift_item).name if not gift_item.is_empty() else "无可赠余量", int(someone.gift_favor)], "conditions": [{"herbs_at_least": 1}], "cooldown_days": TALK_COOLDOWN_DAYS})
 	if request_open(s, person_id):
 		var request := request_of(s, person_id)
 		options.append({"id": "help", "label": "相助：送上%s×%d（好感 +%d，酬谢 %d 灵石）" % [s.content.item(request.item).name, int(request.count), int(s.content.rules.requests.favor), int(request.stones)], "conditions": [{"item_at_least": [request.item, int(request.count)]}]})
@@ -356,14 +359,29 @@ static func npc_options(s, person_id: String) -> Array[Dictionary]:
 			reason = "此事已了。"
 		elif last.has(option.id) and int(s.world.day) < int(last[option.id]) + int(option.get("cooldown_days", 0)):
 			reason = "%s后再来。" % Calendar.duration_text(int(last[option.id]) + int(option.cooldown_days) - int(s.world.day))
+		elif str(option.id) == "gift" and gift_item.is_empty():
+			reason = "没有可赠的灵草，交付预留的药材会保留。"
+		elif not _monthly_block(s, someone, option, last).is_empty():
+			reason = _monthly_block(s, someone, option, last)
 		elif not Events.all_met(s, option.get("conditions", [])):
 			reason = "条件不足。"
 		elif _duels(option) and not forbidden(s, "duel").is_empty():
 			reason = forbidden(s, "duel")
 		else:
 			reason = Bonds.option_block(s, person_id, str(option.id))
-		result.append({"id": option.id, "label": option.label, "available": reason.is_empty(), "reason": reason})
+		result.append({"id": option.id, "label": option.label, "available": reason.is_empty(), "reason": reason, "conditions": option.get("conditions", [])})
 	return result
+
+## Related purchase options share one calendar-month stock, including in old saves.
+static func _monthly_block(s, someone: Dictionary, option: Dictionary, last: Dictionary) -> String:
+	var group := str(option.get("monthly_stock", ""))
+	if group.is_empty():
+		return ""
+	var month := int(s.world.day) / 30
+	for other: Dictionary in someone.get("interactions", []):
+		if str(other.get("monthly_stock", "")) == group and last.has(other.id) and int(last[other.id]) / 30 == month:
+			return "本月这一份已售出，下月再来。"
+	return ""
 
 ## Whether an option comes to blows (a spar, a duel).
 static func _duels(option: Dictionary) -> bool:
@@ -397,11 +415,17 @@ static func interact(s, person_id: String, option_id: String) -> String:
 	match option_id:
 		"talk":
 			var lines: Array = someone.talk
-			text = s.log_event("talk", {"npc": person_id, "line": int(progress.talks) % lines.size()})
+			for variant: Dictionary in someone.get("talk_variants", []):
+				if Events.all_met(s, variant.get("conditions", [])):
+					lines = variant.lines
+					break
+			text = s.log_event("talk", {"npc": person_id, "line": int(progress.talks) % lines.size(), "spoken": str(lines[int(progress.talks) % lines.size()])})
 			progress.talks = int(progress.talks) + 1
 			Events.apply(s, [{"relation": [person_id, int(someone.get("talk_favor", 0))]}])
 		"gift":
-			Events.apply(s, [{"herbs": -1}, {"relation": [person_id, int(someone.gift_favor)]}])
+			var herb: String = s.Inventory.gift_herb(s)
+			s.remove_item(herb, 1)
+			Events.apply(s, [{"relation": [person_id, int(someone.gift_favor)]}])
 			text = s.log_event("gift", {"npc": person_id, "favor": int(someone.gift_favor)})
 		"help":
 			var request := request_of(s, person_id)

@@ -28,13 +28,20 @@ static func render_messages(ui) -> void:
 
 static func render_goals(ui) -> void:
 	var center: VBoxContainer = ui.center
-	var current: Array[Dictionary] = Goals.current(ui.session)
+	var current: Array[Dictionary] = Goals.displayed(ui)
 	if current.is_empty():
 		center.add_child(ui.paragraph("眼下没有特别的目标，随心修行便是。"))
 		return
 	for goal: Dictionary in current:
 		center.add_child(ui.label(goal.title, 18, ui.GOLD))
 		center.add_child(ui.paragraph(goal.text, ui.INK))
+		var goal_id := str(goal.id)
+		center.add_child(ui.button("取消追踪" if ui.tracked_goal == goal_id else "追踪此目标", func() -> void:
+			ui.tracked_goal = "" if ui.tracked_goal == goal_id else goal_id
+			ui.render(), "追踪目标置前，其他目标仍然保留"))
+		if goal_id.begins_with("fortune:"):
+			var clue_id := goal_id.trim_prefix("fortune:")
+			center.add_child(ui.button("追寻线索", func() -> void: ui.run(func() -> String: return ui.session.Fortune.pursue(ui.session, clue_id))))
 
 static func render_quests(ui) -> void:
 	var session = ui.session

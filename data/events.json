@@ -355,11 +355,32 @@
   "serpent_rampage": {
     "title": "妖蟒之乱",
     "trigger": "date",
-    "window": {"from": [6, 3, 1], "to": [6, 3, 1]},
+    "window": {
+      "from": [
+        6,
+        3,
+        1
+      ],
+      "to": [
+        6,
+        3,
+        1
+      ]
+    },
     "major": true,
-    "conditions": [{"not": {"flag": "serpent_slain"}}],
-    "effects": [{"flag": "serpent_rampage"}],
-    "chronicle": "赤鳞妖蟒冲出灵泉，落霞谷妖气弥漫，青云剑宗下令封谷。"
+    "conditions": [
+      {
+        "not": {
+          "flag": "serpent_slain"
+        }
+      }
+    ],
+    "effects": [
+      {
+        "flag": "serpent_rampage"
+      }
+    ],
+    "chronicle": "赤鳞妖蟒冲出灵泉，妖瘴随泉潮漫过落霞谷。青云剑宗下令封谷止损，传功堂告示说，须等三年一度的退瘴窗口，才能入泉除蟒。"
   },
   "serpent_averted": {
     "title": "落霞谷安然",
@@ -373,11 +394,36 @@
   "serpent_rampage_ends": {
     "title": "长老出手",
     "trigger": "date",
-    "window": {"from": [9, 3, 1], "to": [9, 3, 1]},
+    "window": {
+      "from": [
+        9,
+        3,
+        1
+      ],
+      "to": [
+        9,
+        3,
+        1
+      ]
+    },
     "major": true,
-    "conditions": [{"flag": "serpent_rampage"}],
-    "effects": [{"clear_flag": "serpent_rampage"}, {"flag": "serpent_slain"}],
-    "chronicle": "封谷三年后，青云剑宗长老出手斩杀赤鳞妖蟒，落霞谷重新开放。"
+    "conditions": [
+      {
+        "flag": "serpent_rampage"
+      }
+    ],
+    "effects": [
+      {
+        "clear_flag": "serpent_rampage"
+      },
+      {
+        "flag": "serpent_slain"
+      },
+      {
+        "start_story": "valley_recovery"
+      }
+    ],
+    "chronicle": "三年退瘴之期已至，青云长老循封谷时留下的阵标入泉斩蟒，落霞谷重新开放。"
   },
   "ascension_omen": {
     "title": "天河将开",
@@ -505,12 +551,45 @@
     "trigger": "location",
     "location": "ridge",
     "priority": 14,
-    "repeat": {"cooldown_days": 180},
-    "conditions": [{"relation_at_least": ["azhi", 20]}, {"not": {"flag": "azhi_promised"}}],
-    "text": "阿芷把药篓放在松根下，望着落霞谷的方向出神。“三年前我爹进谷采赤鳞果，再也没回来。有人说在谷底见过占了山洞的散修……道友若去得了谷里深处，能不能替我留意一只竹牌？上头刻着我的名字，挂在他的药篓上。”",
+    "repeat": {
+      "cooldown_days": 180
+    },
+    "conditions": [
+      {
+        "relation_at_least": [
+          "azhi",
+          20
+        ]
+      },
+      {
+        "not": {
+          "flag": "azhi_promised"
+        }
+      }
+    ],
+    "text": "阿芷把药篓放在松根下，望着落霞谷。“我爹当年与几位药农进谷，只有他没回来。有人说，谷底洞府的主人收留过逃难的人……若能进去，能不能替我找找一只竹牌？上头刻着我的名字。”",
     "choices": [
-      {"id": "promise", "label": "答应替她留意", "effects": [{"flag": "azhi_promised"}, {"relation": ["azhi", 5]}], "chronicle": "你答应阿芷，若在落霞谷深处见到刻着她名字的竹牌，一定带回来。"},
-      {"id": "decline", "label": "眼下无能为力", "chronicle": "你没有答应阿芷的请托。她笑了笑，说本也不该麻烦旁人。"}
+      {
+        "id": "promise",
+        "label": "答应替她留意",
+        "effects": [
+          {
+            "flag": "azhi_promised"
+          },
+          {
+            "relation": [
+              "azhi",
+              5
+            ]
+          }
+        ],
+        "chronicle": "你答应阿芷，若在落霞谷深处见到刻着她名字的竹牌，一定带回来。"
+      },
+      {
+        "id": "decline",
+        "label": "眼下无能为力",
+        "chronicle": "你没有答应阿芷的请托。她笑了笑，说本也不该麻烦旁人。"
+      }
     ]
   },
   "azhi_token": {
@@ -518,10 +597,29 @@
     "trigger": "location",
     "location": "ruin",
     "priority": 25,
-    "conditions": [{"flag": "azhi_promised"}, {"flag": "ruin_cleared"}],
-    "text": "石室角落里堆着几只破旧药篓，像是被人随手丢在这里。其中一只挂着竹牌，刻着“阿芷”二字；篓底压着半本采药手记，最后一页字迹潦草：谷底有人占洞，切莫靠近。",
+    "conditions": [
+      {
+        "flag": "azhi_promised"
+      },
+      {
+        "flag": "ruin_cleared"
+      }
+    ],
+    "text": "石室角落有一只修补过的药篓，竹牌上刻着“阿芷”。半本手记末页写着：妖蟒惊动，先送同行人上岸。后面夹着石寒留下的口述：那药农独自引开妖蟒，最后一位逃上山道的药农亲眼见他被拖入水中。石寒救下幸存者，收起冲上岸的药篓，一直等人来认领。",
     "choices": [
-      {"id": "take", "label": "收起竹牌与手记", "effects": [{"item": ["azhi_token", 1]}], "chronicle": "你在古修洞府的石室里找到了阿芷父亲的药篓与竹牌。"}
+      {
+        "id": "take",
+        "label": "收起竹牌与手记",
+        "effects": [
+          {
+            "item": [
+              "azhi_token",
+              1
+            ]
+          }
+        ],
+        "chronicle": "你在古修洞府的石室里找到了阿芷父亲的药篓与竹牌。"
+      }
     ]
   },
   "azhi_sealed": {
@@ -633,5 +731,74 @@
   "talent_huigen": {"title": "天生慧根", "trigger": "location", "location": "sect", "priority": 5, "major": true, "conditions": [{"talent": "huigen"}, {"flag": "intro_done"}], "effects": [{"manual": 2}, {"mind": 3}, {"relation": ["gu_changgeng", 10]}], "chronicle": "顾长庚考校新弟子，你答得头头是道，连他都捋着胡子笑了，随手赠你一枚玉简。"},
   "talent_bulao": {"title": "不老泉体", "trigger": "location", "location": "wild", "priority": 5, "major": true, "conditions": [{"talent": "bulao"}], "effects": [{"xp": 150}, {"mind": 3}], "chronicle": "深谷里一眼清泉，你掬水喝了一口，只觉周身轻灵，像是年轻了好几岁。"},
   "talent_jiandan": {"title": "剑胆琴心", "trigger": "location", "location": "town", "priority": 5, "major": true, "conditions": [{"talent": "jiandan"}, {"met": "storyteller"}], "effects": [{"mind": 6}, {"relation": ["storyteller", 15]}], "chronicle": "茶馆里你随手抚琴一曲，琴声里隐隐藏着剑意。何三更听罢一拍醒木：“这一曲，我要编进书里！”"},
-  "talent_fuze": {"title": "福泽深厚", "trigger": "location", "location": "market", "priority": 5, "major": true, "conditions": [{"talent": "fuze"}], "effects": [{"stones": 150}], "chronicle": "坊市里一位老掌柜认出你身上祖传的信物，说是欠了你家祖上一份人情，执意赠你一袋灵石。"}
+  "talent_fuze": {"title": "福泽深厚", "trigger": "location", "location": "market", "priority": 5, "major": true, "conditions": [{"talent": "fuze"}], "effects": [{"stones": 150}], "chronicle": "坊市里一位老掌柜认出你身上祖传的信物，说是欠了你家祖上一份人情，执意赠你一袋灵石。"},
+  "humble_spring": {
+    "title": "崖底玉露",
+    "trigger": "manual",
+    "major": true,
+    "text": "你在松风岭采药时发现一条山鼠往返的隐径，枯藤上凝着乳白水光。这或许是洗髓玉露的线索，需留出十日细察并炼化。",
+    "choices": [
+      {
+        "id": "accept",
+        "label": "循迹寻露并炼化（十日）",
+        "effects": [
+          {
+            "fortune": "humble_spring"
+          }
+        ],
+        "chronicle": "你在崖底偶得洗髓玉露，后天经脉得以疏通，修炼速度提高六成。"
+      },
+      {
+        "id": "later",
+        "label": "记下线索，日后再来",
+        "chronicle": "你记下了这条难得的机缘线索，准备妥当后再去追寻。"
+      }
+    ]
+  },
+  "humble_echo": {
+    "title": "石壁余音",
+    "trigger": "manual",
+    "major": true,
+    "text": "静坐时，石壁传来断续的吐纳声，掌印随声音明灭。你记住了方位和节律，若花十日静心参悟，或能补足这段古修调息法。",
+    "choices": [
+      {
+        "id": "accept",
+        "label": "循掌印参悟调息（十日）",
+        "effects": [
+          {
+            "fortune": "humble_echo"
+          }
+        ],
+        "chronicle": "你偶然听得古修留下的吐纳余音，悟得调息之法，修炼与历练都更有所得。"
+      },
+      {
+        "id": "later",
+        "label": "记下线索，日后再来",
+        "chronicle": "你记下了这条难得的机缘线索，准备妥当后再去追寻。"
+      }
+    ]
+  },
+  "humble_temper": {
+    "title": "凡躯百炼",
+    "trigger": "manual",
+    "major": true,
+    "text": "险胜之后，你觉察到气血流转的一条异样路径，忙将它记下。回青云山静养时花十日循序淬炼，或能使凡躯成为护道的根本。",
+    "choices": [
+      {
+        "id": "accept",
+        "label": "依手记静养淬体（十日）",
+        "effects": [
+          {
+            "fortune": "humble_temper"
+          }
+        ],
+        "chronicle": "你在险胜之后悟得凡躯百炼之法，以后天淬体弥补先天不足。"
+      },
+      {
+        "id": "later",
+        "label": "记下线索，日后再来",
+        "chronicle": "你记下了这条难得的机缘线索，准备妥当后再去追寻。"
+      }
+    ]
+  }
 }

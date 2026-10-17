@@ -14,6 +14,7 @@ static func render(ui) -> void:
 	var table := _column(ui, columns, "交易")
 	var shop := _column(ui, columns, location + " · 店家")
 
+	var reserved: Dictionary = session.Inventory.reserved(session)
 	var sellable := 0
 	# Refined 宝物 are offered one by one (gear.gd); 全部摆上 leaves them out.
 	for item_id: String in session.player.items.keys() + session.Gear.carried(session):
@@ -32,6 +33,9 @@ static func render(ui) -> void:
 			trend = " ↑"
 		elif rate <= 0.95:
 			trend = " ↓"
+		var held_for_delivery := int(reserved.get(item_id, 0))
+		if held_for_delivery > 0:
+			mine.add_child(ui.label("交付预留 · %s ×%d" % [item.name, mini(held_for_delivery, session.item_count(item_id))], 14, ui.GOLD))
 		var tip := str(item.description) + ("
 本月行情：收价为常价的 %d%%（各月有涨落，同一种卖得多了会压价，过些日子回升）" % int(round(rate * 100.0)) if not is_equal_approx(rate, 1.0) else "")
 		var offer: Button = ui.button("%s ×%d · 售 %d%s" % [item.name, left, price, trend], func() -> void: ui.stage_sale(item_id), tip)

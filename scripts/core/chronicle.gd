@@ -24,26 +24,25 @@ func add(day: int, id: String, args: Dictionary = {}, major: bool = false, at: S
 	return entry
 
 func _trim() -> void:
-	var minor_count := 0
-	var major_count := 0
-	for entry: Dictionary in entries:
-		if entry.major:
-			major_count += 1
-		else:
-			minor_count += 1
-	if minor_count <= RECENT_LIMIT and major_count <= MAJOR_LIMIT:
+	if entries.size() <= RECENT_LIMIT:
 		return
 	var kept: Array[Dictionary] = []
-	var minor_drop := maxi(0, minor_count - RECENT_LIMIT)
-	var major_drop := maxi(0, major_count - MAJOR_LIMIT)
-	for entry: Dictionary in entries:
-		if entry.major and major_drop > 0:
-			major_drop -= 1
-		elif not entry.major and minor_drop > 0:
-			minor_drop -= 1
+	var minor_count := 0
+	var major_count := 0
+	# Walk newest first so each category keeps its most recent entries in one pass.
+	for index: int in range(entries.size() - 1, -1, -1):
+		var entry: Dictionary = entries[index]
+		if bool(entry.major):
+			major_count += 1
+			if major_count <= MAJOR_LIMIT:
+				kept.append(entry)
 		else:
-			kept.append(entry)
-	entries = kept
+			minor_count += 1
+			if minor_count <= RECENT_LIMIT:
+				kept.append(entry)
+	if kept.size() != entries.size():
+		kept.reverse()
+		entries = kept
 
 func format(entry: Dictionary, content) -> String:
 	var template: String
@@ -143,6 +142,8 @@ static func _person_text(kind: String, args: Dictionary, content) -> String:
 	if person.is_empty():
 		return "（失传的记载）"
 	if kind == "talk":
+		if args.get("spoken") is String:
+			return "{npc_name}：" + str(args.spoken)
 		var lines: Array = person.get("talk", [])
 		var index := int(args.get("line", 0))
 		return "{npc_name}：" + str(lines[index]) if index >= 0 and index < lines.size() else "（失传的记载）"

@@ -57,6 +57,8 @@ var pending_event: Dictionary = {}
 var ended: Dictionary = {}
 # Road encounters can be switched off by tests that exercise other systems along fixed paths.
 var encounters_enabled := true
+# Local preference supplied by the UI; old journeys retain the default of asking.
+var auto_release := false
 # The single-retreat limit can be switched off by tests that run long spans of time through a retreat.
 var retreat_limits := true
 # Fixed rolls in [0, 1) for chance draws by tag ("breakthrough", "demon", "slay", "grade", fortune's own),
@@ -179,6 +181,9 @@ func advance_days(days: int, interruptible: bool = false, retreat: bool = false)
 			break
 	if ended.is_empty() and not interrupted:
 		world.day = target
+	var stipend := Sect.pay_passive(self, start)
+	if not stipend.is_empty():
+		messages.append(stipend)
 	return {"elapsed": int(world.day) - start, "interrupted": interrupted, "by": by, "messages": messages}
 
 ## Joins an action's text with what happened meanwhile, fires location events, and notifies listeners.
@@ -588,7 +593,7 @@ func location_visible(location_id: String) -> bool:
 
 func snapshot() -> Dictionary:
 	return {
-		"version": SAVE_VERSION, "world": world.duplicate(true), "player": player.duplicate(true),
+		"version": SAVE_VERSION, "world": Storylines.saved_world(self), "player": player.duplicate(true),
 		"battle": battle.duplicate(true), "pending_event": pending_event.duplicate(true), "ended": ended.duplicate(true), "auction": auction.duplicate(true),
 		"chronicle": chronicle.to_save(), "rng": {"combat": str(combat_rng.state), "world": str(world_rng.state)}
 	}

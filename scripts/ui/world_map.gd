@@ -151,7 +151,7 @@ func _draw() -> void:
 	if traveller is Vector2:
 		_draw_traveller(traveller, true)
 	elif not current.is_empty() and content.locations.has(current) and content.region_of(current) == region:
-		_draw_traveller(node_position(current) + Vector2(NODE_RADIUS * 1.6, 0), false)
+		_draw_traveller(node_position(current) + Vector2(-NODE_RADIUS * 2.8, -NODE_RADIUS * 0.6), false)
 	# The region's name at the top centre, clear of the HUD's corners.
 	var title := str(content.regions.get(region, content.map).get("name", content.map.name))
 	var width := font.get_string_size(title, HORIZONTAL_ALIGNMENT_LEFT, -1, 20).x
@@ -245,7 +245,9 @@ func _draw_routes() -> void:
 		draw_dashed_line(from, to, color, 3.0 if highlighted else 2.0, 9.0)
 		var middle := (from + to) * 0.5
 		var label := "%d 日" % int(route.days)
-		draw_string(font, middle + Vector2(-16, -6), label, HORIZONTAL_ALIGNMENT_LEFT, -1, 13, GOLD if highlighted else MUTED)
+		var label_width := font.get_string_size(label, HORIZONTAL_ALIGNMENT_LEFT, -1, 17).x
+		draw_rect(Rect2(middle + Vector2(-label_width / 2.0 - 5.0, -24.0), Vector2(label_width + 10.0, 24.0)), Color(0.04, 0.09, 0.1, 0.9))
+		draw_string(font, middle + Vector2(-label_width / 2.0, -6), label, HORIZONTAL_ALIGNMENT_LEFT, -1, 17, GOLD if highlighted else INK)
 		for mark: int in range(int(route.danger)):
 			draw_circle(middle + Vector2(-8 + mark * 8, 8), 3.0, DANGER)
 
@@ -289,8 +291,10 @@ func _draw_nodes() -> void:
 		if location_id == journey_to:
 			draw_arc(center, NODE_RADIUS + 5, 0, TAU, 32, DANGER, 2.0, true)
 		draw_circle(center, 4.5, GOLD if is_current else MUTED)
-		draw_string(font, center + Vector2(-NODE_RADIUS * 2, NODE_RADIUS + 20), definition.name, HORIZONTAL_ALIGNMENT_CENTER, NODE_RADIUS * 4, 15, GOLD if is_current or is_selected else INK)
+		var label_width := font.get_string_size(str(definition.name), HORIZONTAL_ALIGNMENT_LEFT, -1, 19).x
+		draw_rect(Rect2(center + Vector2(-label_width / 2.0 - 8.0, NODE_RADIUS + 2.0), Vector2(label_width + 16.0, 27.0)), Color(0.04, 0.09, 0.1, 0.9))
+		draw_string(font, center + Vector2(-label_width / 2.0, NODE_RADIUS + 23), definition.name, HORIZONTAL_ALIGNMENT_LEFT, -1, 19, GOLD if is_current or is_selected else INK)
 		if people_at.has(location_id):
 			var names: Array = people_at[location_id]
 			var line := "、".join(names.slice(0, 2)) + (" 等%d人" % names.size() if names.size() > 2 else "")
-			draw_string(font, center + Vector2(-NODE_RADIUS * 4, NODE_RADIUS + 38), line, HORIZONTAL_ALIGNMENT_CENTER, NODE_RADIUS * 8, 12, MUTED)
+			draw_string(font, center + Vector2(-NODE_RADIUS * 4, NODE_RADIUS + 48), line, HORIZONTAL_ALIGNMENT_CENTER, NODE_RADIUS * 8, 12, MUTED)

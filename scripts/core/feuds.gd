@@ -123,11 +123,17 @@ static func fight_over(s, grudge_id: String, won: bool) -> String:
 ## A road outlaw beaten (not in a series, nor a grudge or a bounty fight): the player decides what to do
 ## with them (`victory_terms`). Letting them go ends it there; searching them or pressing them for their
 ## gang's hoard may leave a comrade who remembers (after_win).
-static func offer_terms(s, enemy_id: String) -> void:
+static func offer_terms(s, enemy_id: String) -> String:
 	var enemy: Dictionary = s.content.enemies[enemy_id]
 	if not enemy_id in rules(s).avengers or not s.pending_event.is_empty():
-		return
+		return ""
+	if s.auto_release:
+		var choice: Dictionary = s.content.events.victory_terms.choices[0]
+		s.Events.apply(s, choice.get("effects", []))
+		var message: String = s.log_event("event", {"event": "victory_terms", "part": "choice", "choice": "release", "enemy": enemy_id, "foe": str(enemy.name)})
+		return " ".join([message] + s.gain_insight("event"))
 	s.pending_event = {"id": "victory_terms", "day": int(s.world.day), "values": {"enemy": enemy_id, "foe": str(enemy.name)}}
+	return ""
 
 static func _terms_enemy(s) -> String:
 	return str(s.pending_event.get("values", {}).get("enemy", ""))

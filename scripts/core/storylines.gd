@@ -35,6 +35,60 @@ static func current_step(s, story_id: String) -> Dictionary:
 	var index := int(saved.step)
 	return steps[index] if index < steps.size() else {}
 
+## Serialize a stable step ID alongside the legacy index, without changing live progress.
+static func saved_world(s) -> Dictionary:
+	var world: Dictionary = s.world.duplicate(true)
+	for story_id: String in world.get("storylines", {}):
+		var saved: Dictionary = world.storylines[story_id]
+		var steps: Array = definitions(s).get(story_id, {}).get("steps", [])
+		var index := int(saved.step)
+		saved["step_id"] = str(steps[index].id) if index < steps.size() else ""
+	return world
+
+## Consumable items requested by the current begun step, shared by UI, selling and playtests.
+## A possession threshold without a consuming effect is not a delivery cost.
+static func required_items(s, story_id: String) -> Dictionary:
+	var step := current_step(s, story_id)
+	if step.is_empty() or not bool(progress(s, story_id).get("begun", false)):
+		return {}
+	var required := _consumed(step.get("effects", []))
+	for person_id: String in s.content.people:
+		for interaction: Dictionary in s.content.people[person_id].get("interactions", []):
+			var belongs: bool = interaction.get("conditions", []).any(func(c: Dictionary) -> bool: return c.has("story_at") and c.story_at == [story_id, str(step.id)])
+			if not belongs:
+				continue
+			var costs := _consumed(interaction.get("effects", []))
+			for item_id: String in costs:
+				required[item_id] = maxi(int(required.get(item_id, 0)), int(costs[item_id]))
+	return required
+
+static func required_herbs(s, story_id: String) -> int:
+	var step := current_step(s, story_id)
+	if step.is_empty() or not bool(progress(s, story_id).get("begun", false)):
+		return 0
+	var count := 0
+	for effect: Dictionary in step.get("effects", []):
+		count += maxi(0, -int(effect.get("herbs", 0)))
+	for person_id: String in s.content.people:
+		for interaction: Dictionary in s.content.people[person_id].get("interactions", []):
+			if not interaction.get("conditions", []).any(func(c: Dictionary) -> bool: return c.has("story_at") and c.story_at == [story_id, str(step.id)]):
+				continue
+			var cost := 0
+			for effect: Dictionary in interaction.get("effects", []):
+				cost += maxi(0, -int(effect.get("herbs", 0)))
+			count = maxi(count, cost)
+	return count
+
+static func _consumed(effects: Array) -> Dictionary:
+	var result := {}
+	for effect: Dictionary in effects:
+		if effect.has("item") and int(effect.item[1]) < 0:
+			var item_id := str(effect.item[0])
+			result[item_id] = int(result.get(item_id, 0)) - int(effect.item[1])
+		elif effect.has("take_item"):
+			result[str(effect.take_item)] = 1
+	return result
+
 ## Whether the storyline is active at the step with this id, and that step has begun.
 static func at_step(s, story_id: String, step_id: String) -> bool:
 	var step := current_step(s, story_id)
@@ -76,7 +130,8 @@ static func update(s) -> Array[String]:
 		var moved := false
 		for story_id: String in definitions(s):
 			var definition: Dictionary = definitions(s)[story_id]
-			var now := state(s, story_id)
+			var saved: Dictionary = s.world.storylines.get(story_id, {})
+			var now := str(saved.get("state", ""))
 			if now.is_empty():
 				if definition.has("begin_if") and Events.all_met(s, definition.begin_if):
 					s.world.storylines[story_id] = {"state": "active", "step": 0, "since": int(s.world.day), "begun": false, "base": {}}
@@ -84,13 +139,12 @@ static func update(s) -> Array[String]:
 				continue
 			if now != "active":
 				continue
-			var step := current_step(s, story_id)
+			var step: Dictionary = definition.steps[int(saved.step)]
 			var closing: Array = definition.get("close_if", []) + step.get("close_if", [])
 			if _any_met(s, closing):
 				texts.append(_close(s, story_id, step))
 				moved = true
 				continue
-			var saved: Dictionary = s.world.storylines[story_id]
 			if not bool(saved.begun):
 				# A step overtaken by events (a question about foundation once past it) passes unspoken.
 				if _any_met(s, step.get("skip_if", [])):
@@ -242,7 +296,7 @@ static func mark_letters_read(s) -> void:
 ## The earliest storyline wait that ends on or after `from_day`: {"day", "story"}, or {}.
 static func next_due(s, from_day: int) -> Dictionary:
 	var best := {}
-	for story_id: String in definitions(s):
+	for story_id: String in s.world.get("storylines", {}):
 		var step := current_step(s, story_id)
 		if step.is_empty() or not step.has("wait_days") or not bool(progress(s, story_id).get("begun", false)):
 			continue

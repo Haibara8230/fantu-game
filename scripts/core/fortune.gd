@@ -46,6 +46,8 @@ static func at_threshold(s) -> bool:
 static func after_wait(s, days: int) -> Array[String]:
 	var texts: Array[String] = []
 	var rule: Dictionary = rules(s).epiphany
+	if days >= 10:
+		_humble(s, "humble_echo")
 	if not s.pending_event.is_empty() or not at_threshold(s) or not str(s.player.location) in rule.places:
 		return texts
 	if _comes(s, "epiphany", minf(1.0, float(days) / float(rule.per_days))):
@@ -56,6 +58,8 @@ static func after_wait(s, days: int) -> Array[String]:
 static func after_win(s, foe_realm: int) -> Array[String]:
 	var texts: Array[String] = []
 	var rule: Dictionary = rules(s).brink
+	if foe_realm >= int(s.player.realm) and int(s.player.hp) * 100 <= int(s.player.max_hp) * int(rule.hp_percent):
+		_humble(s, "humble_temper")
 	if foe_realm < int(s.player.realm) or int(s.player.hp) * 100 > int(s.player.max_hp) * int(rule.hp_percent) or not at_threshold(s):
 		return texts
 	if _comes(s, "brink"):
@@ -73,6 +77,8 @@ static func grant_treasure(s, id: String) -> String:
 ## After gathering: in the valley perhaps a 九曲灵参, perhaps the 灵眼.
 static func after_gather(s) -> Array[String]:
 	var texts: Array[String] = []
+	if str(s.player.location) == "ridge":
+		_humble(s, "humble_spring")
 	var herb: Dictionary = rules(s).lingshen
 	if str(s.player.location) == str(herb.location) and _comes(s, "lingshen"):
 		texts.append(grant_treasure(s, "lingshen"))
@@ -85,6 +91,13 @@ static func after_gather(s) -> Array[String]:
 ## What fortune leaves when taken up (the effect `fortune`): 顿悟 sat through, the remnant accepted.
 static func bestow(s, id: String) -> void:
 	match id:
+		"humble_spring", "humble_echo", "humble_temper":
+			var rule: Dictionary = rules(s)[id]
+			if s.has_talent(str(rule.talent)):
+				return
+			_mark(s, id, "spent")
+			s.advance_days(int(rule.follow_days))
+			s.gain_talent(str(rule.talent))
 		"epiphany":
 			var rule: Dictionary = rules(s).epiphany
 			s.advance_days(int(rule.days))
@@ -119,3 +132,35 @@ static func _insight(s, id: String) -> Array[String]:
 		if not told.is_empty():
 			texts.append(told)
 	return texts
+
+## Each low-aptitude opportunity is checked once in a life, with a seed fixed draw.
+## The boon marker records both success and failure and already has save validation/defaults.
+static func _humble(s, id: String) -> void:
+	var rule: Dictionary = rules(s)[id]
+	if met(s, id) or not s.pending_event.is_empty() or int(s.player.realm) >= int(rule.before_realm) or not s.has_flag("intro_done") or int(s.player.mind) < int(rule.mind):
+		return
+	if rule.has("places") and not str(s.player.location) in rule.places:
+		return
+	if int(s.aptitude().index) > int(rule.max_aptitude):
+		return
+	var rng := RandomNumberGenerator.new()
+	rng.seed = hash([int(s.world.get("seed", 0)), "humble_opportunity", id])
+	var roll := float(s.fortune[id]) if s.fortune.has(id) else rng.randf()
+	_mark(s, id, "spent")
+	if roll < minf(float(rule.chance_cap), chance(s, id)):
+		_mark(s, id, "ready")
+		s.pending_event = {"id": str(rule.event), "day": int(s.world.day)}
+
+## Follow an already discovered clue without another draw. Postponing never erases it.
+static func pursue(s, id: String) -> String:
+	if not id in ["humble_spring", "humble_echo", "humble_temper"] or str(s.player.get("boons", {}).get(id, "")) != "ready":
+		return "眼下没有这条线索。"
+	var blocked: String = s.blocked()
+	if not blocked.is_empty():
+		return blocked
+	var places: Array = rules(s)[id].get("places", ["sect"])
+	if not str(s.player.location) in places:
+		return "请先到%s追寻线索。" % s.content.locations[str(places[0])].name
+	s.pending_event = {"id": str(rules(s)[id].event), "day": int(s.world.day)}
+	s.changed.emit()
+	return "你循着记下的线索重新寻去。"

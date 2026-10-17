@@ -4,8 +4,8 @@ extends RefCounted
 ## Contribution (贡献) comes from the sect's commissions (patrols among them), the sect's errands,
 ## donations, the outer tournament and great deeds. It is kept twice: player.contribution is what can
 ## be spent at the exchange; player.merit only grows and decides promotion. A rank asks for merit and a
-## stage of cultivation; it pays a monthly stipend (collected at the 执事堂, piling up for a year at
-## most) and makes retreats in the sect a little richer. The exchange sells pills and rotating jade
+## stage of cultivation; it pays a modest monthly stipend automatically as world time passes
+## and makes retreats in the sect a little richer. Old unclaimed arrears retain their one-year cap. The exchange sells pills and rotating jade
 ## slips for contribution, each good within its own limit per period; some only to a rank.
 ## From the inner court a disciple may hold one duty (职司, `duties`), changed at most once a year:
 ## 丹房执事 (alchemy), 巡山执事 (more contribution from commissions), 传功执事 (faster study).
@@ -102,6 +102,7 @@ static func promote(s) -> String:
 		reason = promotion_block(s)
 	if not reason.is_empty():
 		return reason
+	pay_passive(s, int(s.world.day))
 	s.player["rank"] = int(s.player.get("rank", 0)) + 1
 	var now := rank(s)
 	var texts: Array[String] = [s.log_event("rank_up", {"rank": int(s.player.rank)}, true)]
@@ -109,6 +110,23 @@ static func promote(s) -> String:
 		s.Events.apply(s, [{"relation": [str(now.host), 10]}])
 	texts.append_array(s.congratulate("promotion"))
 	return s.conclude(" ".join(texts.filter(func(text: String) -> bool: return not text.is_empty())))
+
+## Pays months elapsed during this action plus capped old arrears, keeping incomplete months.
+## Called before a promotion as well, so an old rank's arrears cannot acquire the new rate.
+static func pay_passive(s, from_day: int) -> String:
+	var rule: Dictionary = data(s).stipend
+	var since := int(s.player.get("stipend_day", from_day))
+	var span := int(rule.period_days)
+	var old_months := maxi(0, from_day - since) / span
+	var total_months := maxi(0, int(s.world.day) - since) / span
+	var paid := mini(old_months, int(rule.most_periods)) + total_months - old_months
+	if total_months == 0:
+		return ""
+	s.player["stipend_day"] = since + total_months * span
+	# player.sect selects a martial lineage; sect membership is represented by rank.
+	var stones := paid * int(rank(s).stipend)
+	s.player.stones = int(s.player.stones) + stones
+	return "月俸自动入账：%d 个月，共 %d 灵石。" % [paid, stones] if stones > 0 else ""
 
 ## The stipend waiting to be collected: {"periods", "stones"}.
 static func stipend_due(s) -> Dictionary:

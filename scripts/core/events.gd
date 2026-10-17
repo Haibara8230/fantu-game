@@ -111,6 +111,8 @@ static func met(s, condition: Dictionary) -> bool:
 			return s.story_state(value[0]) == ("" if value[1] == "none" else value[1])
 		"event_state":
 			return str(s.world.events.get(value[0], {}).get("state", "")) == value[1]
+		"event_applied":
+			return applied(s, str(value))
 		"talent":
 			return s.has_talent(value)
 		"rank_at_least":
@@ -251,8 +253,16 @@ static func _progress(s, event_id: String) -> Dictionary:
 		s.world.events[event_id] = {"state": "", "count": 0, "last_day": -1, "last_occurrence": -1, "reminded": -1}
 	return s.world.events[event_id]
 
+## Completed scheduling is not proof that an event's effects actually occurred.
+static func applied(s, event_id: String) -> bool:
+	var progress: Dictionary = s.world.events.get(event_id, {})
+	if progress.has("applied"):
+		return bool(progress.applied)
+	# Older saves keep dated world changes as permanent major chronicle entries.
+	return s.chronicle.entries.any(func(entry: Dictionary) -> bool: return str(entry.id) == "event" and str(entry.args.get("event", "")) == event_id and str(entry.args.get("part", "")) == "chronicle")
+
 static func progress_of(s, event_id: String) -> Dictionary:
-	return s.world.events.get(event_id, {"state": "", "count": 0, "last_day": -1, "last_occurrence": -1, "reminded": -1})
+	return s.world.events[event_id] if s.world.events.has(event_id) else {"state": "", "count": 0, "last_day": -1, "last_occurrence": -1, "reminded": -1}
 
 ## Whether the event may fire in `window` given its saved progress (not its conditions).
 static func open_for(s, event_id: String, window: Dictionary, day: int) -> bool:
@@ -271,6 +281,7 @@ static func mark_fired(s, event_id: String, window: Dictionary, day: int) -> voi
 static func _mark_fired(s, event_id: String, window: Dictionary, day: int) -> void:
 	var definition: Dictionary = s.content.events[event_id]
 	var progress := _progress(s, event_id)
+	progress["applied"] = true
 	progress.count = int(progress.count) + 1
 	progress.last_day = day
 	progress.last_occurrence = int(window.occurrence)
@@ -294,18 +305,18 @@ static func next_due(s, from_day: int) -> Dictionary:
 	var obituary: Dictionary = s.next_obituary(from_day)
 	if not obituary.is_empty():
 		best = _earlier(best, {"day": int(obituary.day), "kind": "obituary", "event": obituary.id})
-		var story: Dictionary = s.story_due(from_day)
-		if not story.is_empty():
-			best = _earlier(best, {"day": int(story.day), "kind": "story", "event": story.story})
+	var story: Dictionary = s.story_due(from_day)
+	if not story.is_empty():
+		best = _earlier(best, {"day": int(story.day), "kind": "story", "event": story.story})
 	var bond: Dictionary = s.Bonds.next_due(s, from_day)
 	if not bond.is_empty():
 		best = _earlier(best, {"day": int(bond.day), "kind": str(bond.kind), "event": ""})
-	for event_id: String in _sorted_ids(s):
+	for event_id: String in s.content.scheduled_events():
 		var definition: Dictionary = s.content.events[event_id]
-		# Only dated events and fixed windows (reminders, expiries) are ever due.
-		if definition.trigger != "date" and not definition.has("window"):
-			continue
 		var progress := progress_of(s, event_id)
+		# Completed fixed windows cannot become due again. Avoid rebuilding their calendars.
+		if str(progress.state) in STATES and not definition.has("periodic"):
+			continue
 		var window := window_at(definition, from_day)
 		if window.is_empty() or not open_for(s, event_id, window, from_day):
 			window = next_window(definition, from_day + 1) if not window.is_empty() else next_window(definition, from_day)
@@ -373,6 +384,7 @@ static func fire(s, due: Dictionary) -> Dictionary:
 				window = {"occurrence": -2}
 			_mark_fired(s, due.event, window, day)
 			if not all_met(s, definition.get("conditions", [])):
+				_progress(s, due.event)["applied"] = false
 				return {"interrupt": false, "message": ""}
 			apply(s, definition.get("effects", []))
 			var text: String = s.log_event("event", {"event": due.event, "part": "chronicle"}, bool(definition.get("major", false)))
@@ -449,7 +461,9 @@ static func choose(s, choice_id: String) -> String:
 		s.pending_event = {}
 		var text: String = s.log_event("event", args, bool(definition.get("major", false)))
 		# Living through an encounter, whatever the choice, is insight toward the next bottleneck.
-		var milestones: Array[String] = s.gain_insight("event")
+		var milestones: Array[String] = []
+		if not (event_id.begins_with("humble_") and choice_id == "later"):
+			milestones = s.gain_insight("event")
 		var follow := check_location(s)
 		return " ".join([text] + milestones + follow)
 	return "没有这个选项。"

@@ -656,6 +656,10 @@
     "retreat": {"fresh_days": 180, "decline_days": 720, "floor_percent": 50, "recovery_per_day": 2},
     "bottleneck": {"insight_needed": 100, "insight": {"battle_win": 20, "spar": 10, "commission": 25, "event": 15, "consult": 15}},
     "fortune": {
+      "humble_spring": {"follow_days": 10, "chance": 0.01, "talent": "xisui_yulu", "event": "humble_spring", "mind": 6, "chance_cap": 0.05, "before_realm": 1, "max_aptitude": 0, "places": ["ridge"]},
+      "humble_echo": {"follow_days": 10, "chance": 0.008, "talent": "guxiu_tiaoxi", "event": "humble_echo", "mind": 6, "chance_cap": 0.05, "before_realm": 1, "max_aptitude": 0, "places": ["sect", "ridge", "ferry"]},
+      "humble_temper": {"follow_days": 10, "chance": 0.005, "talent": "fanqu_bailian", "event": "humble_temper", "mind": 6, "chance_cap": 0.05, "before_realm": 1, "max_aptitude": 0},
+
       "epiphany": {"chance": 0.02, "per_days": 10, "days": 10, "places": ["ferry", "ridge", "sect"], "event": "epiphany", "talent": "dunwu_yuyun", "talent_chance": 0.1},
       "brink": {"chance": 0.05, "hp_percent": 15, "talent": "shengsi_lilian", "talent_chance": 0.1},
       "shiru": {"chance": 0.3, "item": "qiannian_shiru"},
@@ -803,7 +807,7 @@
     "search_ruin": 5,
     "road_recovery": 1
   },
-  "world_flags": ["ascension_open", "calamity", "calamity_turned", "chenxia_open", "chenxia_puppet_down", "chenxia_remnant_down", "ruin_den_cleared", "serpent_slain", "heard_auction_rumor", "found_ruin", "ruin_cleared", "helped_wanderer", "serpent_rampage", "azhi_promised", "azhi_mourned", "intro_done", "peddler_friend", "serpent_weakened", "spirit_eye_found", "tiannan_known", "dihuo_lizard_down", "hanjin_heard", "bounty_turned_in", "bounty_exposed", "bounty_let_go", "nanming_abode"],
+  "world_flags": ["ascension_open", "calamity", "calamity_turned", "chenxia_open", "chenxia_puppet_down", "chenxia_remnant_down", "ruin_den_cleared", "serpent_slain", "heard_auction_rumor", "found_ruin", "ruin_cleared", "helped_wanderer", "serpent_rampage", "azhi_promised", "azhi_mourned", "intro_done", "peddler_friend", "serpent_weakened", "spirit_eye_found", "tiannan_known", "dihuo_lizard_down", "hanjin_heard", "bounty_turned_in", "bounty_exposed", "bounty_let_go", "nanming_abode", "valley_patron", "azhi_livelihood", "valley_remembered"],
   "sects": {
     "wanderer": {
       "name": "散修",

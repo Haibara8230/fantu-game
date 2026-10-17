@@ -33,7 +33,8 @@ static func applies(ui, tip_id: String) -> bool:
 		"intro":
 			return not guided.is_empty()
 		"retreat":
-			return session.player.location == "sect" and (guided.is_empty() or guided.has("retreat_days"))
+			var in_chamber: bool = ui.view == "retreat" or (ui.view == "place" and ui.selected_npc.is_empty() and ui.selected_spot == "chamber")
+			return session.player.location == "sect" and in_chamber and (guided.is_empty() or guided.has("retreat_days"))
 		"people":
 			return not session.present_npcs().is_empty() and (guided.is_empty() or str(guided.id) != "retreat")
 		"map":
@@ -67,7 +68,7 @@ static func applies(ui, tip_id: String) -> bool:
 		"bonds":
 			return session.known_npcs().any(func(person_id: String) -> bool: return session.favor(person_id) >= int(session.content.bonds_data.consult.favor))
 		"fortune":
-			return not session.player.get("boons", {}).is_empty()
+			return session.player.get("boons", {}).keys().any(func(id: String) -> bool: return not id.begins_with("humble_") or session.has_talent(str(session.content.rules.fortune[id].talent)))
 		"breakthrough":
 			return int(session.player.realm) == 0 and int(session.player.stage) >= session.content.realm(0).stages.size() - 1
 		"alchemy", "field", "sense", "auction", "forge":

@@ -8,12 +8,21 @@ static func build(ui) -> void:
 	var session = ui.session
 	var welcome_layer := ColorRect.new()
 	ui.welcome_layer = welcome_layer
+	welcome_layer.z_index = 20
+	ui.status_label.visible = false
 	welcome_layer.color = Color(0.025, 0.045, 0.055, 0.97)
 	welcome_layer.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	ui.add_child(welcome_layer)
+	var scroll := ScrollContainer.new()
+	scroll.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	scroll.offset_top = 32
+	scroll.offset_bottom = -32
+	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	welcome_layer.add_child(scroll)
 	var centered := CenterContainer.new()
-	centered.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	welcome_layer.add_child(centered)
+	centered.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	centered.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	scroll.add_child(centered)
 	var panel: PanelContainer = ui.panel()
 	panel.custom_minimum_size.x = 520
 	centered.add_child(panel)

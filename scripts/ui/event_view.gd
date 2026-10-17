@@ -2,6 +2,8 @@ extends RefCounted
 ## A pending event with its choices, a story moment, a realm reached and the end of a life with its
 ## major milestones. An event's or story's illustration fills the screen behind them (main.gd).
 const Calendar = preload("res://scripts/core/calendar.gd")
+const ConditionText = preload("res://scripts/ui/condition_text.gd")
+const PeopleView = preload("res://scripts/ui/people_view.gd")
 const Settings = preload("res://scripts/ui/settings.gd")
 
 static func render_event(ui) -> void:
@@ -18,14 +20,24 @@ static func render_event(ui) -> void:
 	var text: Label = ui.paragraph(str(definition.text).format(values), ui.INK)
 	center.add_child(text)
 	ui.type_out(text, "event|%d" % session.pending_event.hash())
+	if str(session.pending_event.id) == "victory_terms":
+		var release := CheckBox.new()
+		release.text = "今后普通遭遇战获胜后默认放行"
+		release.button_pressed = session.auto_release
+		release.toggled.connect(func(on: bool) -> void:
+			session.auto_release = on
+			Settings.save_state(ui))
+		center.add_child(release)
 	var choices := VBoxContainer.new()
 	choices.add_theme_constant_override("separation", 10)
 	center.add_child(choices)
 	for choice: Dictionary in definition.choices:
 		var choice_id: String = choice.id
-		var option: Button = ui.button(str(choice.label).format(values), func() -> void: ui.choose(choice_id), "" if session.choice_available(choice) else "条件不足")
+		var option: Button = ui.button(str(choice.label).format(values), func() -> void: ui.choose(choice_id), ConditionText.missing(session, choice.get("conditions", [])))
 		option.disabled = not session.choice_available(choice)
 		choices.add_child(option)
+		if option.disabled:
+			choices.add_child(ui.paragraph(ConditionText.missing(session, choice.get("conditions", [])), ui.MUTED))
 
 ## A moment that needed no choice but deserves a look (the serpent breaking out), until 继续.
 static func render_story(ui) -> void:
@@ -33,7 +45,19 @@ static func render_story(ui) -> void:
 	var story: Dictionary = ui.story
 	center.add_child(ui.label(str(story.title), 30, ui.GOLD))
 	var text: Label = ui.paragraph(str(story.text), ui.INK)
-	center.add_child(text)
+	var person_id := speaker(ui)
+	if not person_id.is_empty():
+		var row := HBoxContainer.new()
+		row.add_theme_constant_override("separation", 20)
+		center.add_child(row)
+		row.add_child(PeopleView._portrait(ui, person_id, ui.session.person(person_id), Vector2(128, 160)))
+		var words := VBoxContainer.new()
+		words.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		row.add_child(words)
+		words.add_child(ui.label(ui.session.person(person_id).name, 18, ui.GOLD))
+		words.add_child(text)
+	else:
+		center.add_child(text)
 	ui.type_out(text, "story|%d" % int(story.get("mark", 0)))
 	center.add_child(ui.button("继续", ui.close_story))
 
@@ -131,3 +155,14 @@ static func render_ending(ui) -> void:
 		if entry.major:
 			center.add_child(ui.paragraph("【%s】%s" % [Calendar.short_text(int(entry.day)), session.chronicle.format(entry, session.content)]))
 	center.add_child(ui.paragraph("可按 %s 读取手动存档，或开启新旅程。" % Settings.key_name(ui, "load"), ui.GOLD))
+
+## Only a known storyline author or an explicitly supplied speaker receives a portrait.
+static func speaker(ui) -> String:
+	var explicit := str(ui.story.get("speaker", ""))
+	if ui.session.content.people.has(explicit):
+		return explicit
+	var event_id := str(ui.story.get("event", ""))
+	if event_id.begins_with("story:"):
+		var story_id := event_id.get_slice(":", 1)
+		return str(ui.session.content.storylines.get(story_id, {}).get("giver", ""))
+	return ""

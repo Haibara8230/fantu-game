@@ -1573,7 +1573,7 @@ static func _win(s) -> String:
 		message += " " + s.Feuds.caught(s, wanted_key)
 	elif series_id.is_empty() and npc.is_empty():
 		# A named person's fate belongs to their story; a nameless road outlaw's to the player.
-		s.Feuds.offer_terms(s, enemy_id)
+		message = _with_milestones(message, [s.Feuds.offer_terms(s, enemy_id)])
 	# A defeated regional threat changes the world; the journey itself continues.
 	var flag: String = enemy.get("world_flag", "")
 	if not flag.is_empty() and not s.has_flag(flag):

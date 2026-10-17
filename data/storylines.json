@@ -305,5 +305,216 @@
   "talent_daogu": {"title": "道骨天成", "giver": "gu_changgeng", "begin_if": [{"talent": "daogu"}], "steps": [{"id": "bones", "goal": "修到炼气圆满，去传功堂见顾长庚。", "place": "sect", "requires": [{"stage_at_least": [0, 3]}], "done": [{"at_location": "sect"}], "after": "顾长庚摸过你的骨相，长叹一声：“道骨天成。旁人筑基是闯关，你是推门。”他取出一枚筑基丹，“老夫当年留着没舍得用，给你吧。”", "effects": [{"item": ["foundation_pill", 1]}, {"relation": ["gu_changgeng", 15]}], "major": true}, {"id": "after", "goal": "筑基之后，回传功堂。", "place": "sect", "requires": [{"realm_at_least": 1}], "done": [{"at_location": "sect"}], "after": "顾长庚看着你，笑得像个孩子：“老夫没看走眼。”他把压箱底的一枚玉简交到你手里。", "effects": [{"manual": 3}, {"mind": 5}]}]},
   "talent_ziqi": {"title": "紫气东来", "giver": "peddler", "begin_if": [{"talent": "ziqi"}], "steps": [{"id": "luck", "goal": "去云溪坊市逛一逛。", "place": "market", "requires": [{"flag": "intro_done"}], "done": [{"at_location": "market"}], "after": "你在坊市里随手买的一块旧砚台，掌柜刚找完零钱，砚台就裂开了——里面藏着一叠灵石票。路过的行脚药贩钱货郎看得直咂嘴：“紫气东来，紫气东来啊！”", "effects": [{"stones": 300}, {"meet": "peddler"}]}, {"id": "fortune", "goal": "筑基之后，再去云溪坊市。", "place": "market", "requires": [{"realm_at_least": 1}], "done": [{"at_location": "market"}], "after": "坊市里的掌柜们像是约好了一样，纷纷把压箱底的好东西拿出来，只收你本钱价。你满载而归。", "effects": [{"stones": 500}, {"item": ["ningqi_pill", 2]}], "major": true}]},
   "talent_tiandu": {"title": "天妒", "giver": "shen_mo", "begin_if": [{"talent": "tiandu"}], "steps": [{"id": "pulse", "goal": "去云溪药铺，请沈墨把一把脉。", "place": "market", "requires": [{"flag": "intro_done"}], "done": [{"at_location": "market"}], "after": "沈墨把完脉，半天没说话，最后只道：“天资太好的人，老天爷是要收回去的。你修行要快——比谁都快。”他塞给你两枚凝气丹。", "effects": [{"item": ["ningqi_pill", 2]}, {"mind": 5}], "major": true}, {"id": "remedy", "requires": [{"stage_at_least": [0, 3]}], "say": "沈墨托人捎来一只药匣，里面是他多年搜集的续命方子，还有一句话：“筑基能续寿。快些。”", "effects": [{"item": ["liaoshang_pill", 2]}, {"mind": 5}], "auto": true}]},
-  "talent_sushi": {"title": "宿世灵童", "giver": "xu_qinghe", "begin_if": [{"talent": "sushi"}], "steps": [{"id": "library", "goal": "回青云山，去执事堂见许清和。", "place": "sect", "requires": [{"flag": "intro_done"}], "done": [{"talked": "xu_qinghe"}, {"at_location": "sect"}], "after": "许清和满脸狐疑：“藏经阁第三排架子底下有个暗格，连我都是上个月才知道的——你怎么会知道？”暗格里是一枚落满灰的玉简。", "effects": [{"manual": 2}, {"mind": 5}, {"relation": ["xu_qinghe", 10]}]}, {"id": "memory", "goal": "筑基之后，再去执事堂。", "place": "sect", "requires": [{"realm_at_least": 1}], "done": [{"at_location": "sect"}], "after": "又一段前世的记忆醒来：宗门后山的一块青石下，埋着你前世留下的东西。许清和陪你挖了半日，挖出一只玉匣。", "effects": [{"manual": 3}, {"mind": 5}], "major": true}]}
+  "talent_sushi": {"title": "宿世灵童", "giver": "xu_qinghe", "begin_if": [{"talent": "sushi"}], "steps": [{"id": "library", "goal": "回青云山，去执事堂见许清和。", "place": "sect", "requires": [{"flag": "intro_done"}], "done": [{"talked": "xu_qinghe"}, {"at_location": "sect"}], "after": "许清和满脸狐疑：“藏经阁第三排架子底下有个暗格，连我都是上个月才知道的——你怎么会知道？”暗格里是一枚落满灰的玉简。", "effects": [{"manual": 2}, {"mind": 5}, {"relation": ["xu_qinghe", 10]}]}, {"id": "memory", "goal": "筑基之后，再去执事堂。", "place": "sect", "requires": [{"realm_at_least": 1}], "done": [{"at_location": "sect"}], "after": "又一段前世的记忆醒来：宗门后山的一块青石下，埋着你前世留下的东西。许清和陪你挖了半日，挖出一只玉匣。", "effects": [{"manual": 3}, {"mind": 5}], "major": true}]},
+  "valley_recovery": {
+    "title": "落霞余患",
+    "giver": "gu_changgeng",
+    "begin_if": [
+      {
+        "flag": "intro_done"
+      },
+      {
+        "event_applied": "serpent_rampage_ends"
+      },
+      {
+        "flag": "serpent_slain"
+      },
+      {
+        "not": {
+          "deed_at_least": [
+            "win:serpent",
+            1
+          ]
+        }
+      }
+    ],
+    "steps": [
+      {
+        "id": "summon",
+        "letter": true,
+        "goal": "回青云山传功堂，问顾长庚落霞谷解封后的事。",
+        "place": "sect",
+        "done": [
+          {
+            "at_location": "sect"
+          }
+        ],
+        "say": "妖蟒虽已被长老斩去，谷里的采药人还不敢回来。你若愿意，回传功堂，替他们做些事。",
+        "after": "顾长庚：“你没赶上当年除蟒，不必强求。如今药道荒了，伤者缺药。备三株回春草、三株凝露草送给沈墨，再去谷口清理狼患。此事炼气修士也做得。”"
+      },
+      {
+        "id": "medicine",
+        "speaker": "shen_mo",
+        "goal": "带三株回春草、三株凝露草到云溪坊市，交给沈墨救治受伤药农。",
+        "place": "market",
+        "done": [
+          {
+            "at_location": "market"
+          },
+          {
+            "item_at_least": [
+              "huichun_grass",
+              3
+            ]
+          },
+          {
+            "item_at_least": [
+              "ninglu_grass",
+              3
+            ]
+          }
+        ],
+        "after": "沈墨把药分包妥当：“三年封谷，药农们欠下的债比身上的伤还重。妖蟒已死，接下来还得有人把药道重新踩出来。”",
+        "effects": [
+          {
+            "item": [
+              "huichun_grass",
+              -3
+            ]
+          },
+          {
+            "item": [
+              "ninglu_grass",
+              -3
+            ]
+          },
+          {
+            "relation": [
+              "shen_mo",
+              5
+            ]
+          },
+          {
+            "mind": 3
+          }
+        ]
+      },
+      {
+        "id": "road",
+        "goal": "到落霞谷谷口，清剿两群盘踞药道的妖狼。",
+        "place": "wild",
+        "deeds": {
+          "win:wolf_pack": 2
+        },
+        "after": "你将盘踞谷口的狼群赶散，沿路刻下标记。几个药农试探着跟上来，终于又走进了阔别三年的山谷。",
+        "effects": [
+          {
+            "mind": 4
+          }
+        ]
+      },
+      {
+        "id": "report",
+        "goal": "回青云山传功堂，向顾长庚复命。",
+        "place": "sect",
+        "done": [
+          {
+            "at_location": "sect"
+          }
+        ],
+        "after": "顾长庚收起药农送来的谢帖：“斩妖是一份功，替活人收拾残局也是一份功。你走得慢些，也有自己能走的路。”宗门给你一百灵石、六十贡献，并赠一枚黄阶玉简。",
+        "effects": [
+          {
+            "stones": 100
+          },
+          {
+            "contribution": 60
+          },
+          {
+            "manual": 2
+          },
+          {
+            "mind": 4
+          },
+          {
+            "relation": [
+              "gu_changgeng",
+              8
+            ]
+          }
+        ],
+        "major": true
+      }
+    ]
+  },
+  "valley_aftermath": {
+    "title": "谷雨新路",
+    "giver": "shen_mo",
+    "begin_if": [
+      {
+        "flag": "intro_done"
+      },
+      {
+        "deed_at_least": [
+          "win:serpent",
+          1
+        ]
+      }
+    ],
+    "steps": [
+      {
+        "id": "thanks",
+        "place": "market",
+        "letter": true,
+        "say": "沈墨托人传来消息：“妖蟒伏诛，药农终于能下谷了。有一份谢礼，也有药道重开的事，得请你来拿个主意。”",
+        "goal": "到云溪坊市见沈墨，决定如何使用药农备下的谢礼。",
+        "after": "沈墨记下你的决定：“除妖有你的功，往后这条药道，也有人记得你。”",
+        "effects": [
+          {
+            "contribution": 20
+          },
+          {
+            "mind": 2
+          }
+        ]
+      },
+      {
+        "id": "azhi",
+        "place": "ridge",
+        "speaker": "azhi",
+        "goal": "到松风岭见阿芷，问问药道重开后的打算。",
+        "after": "阿芷把药草分成几束：“沈掌柜肯收我自己采的草了。我想把安全的采药路画下来，让后来的药农少走些险路。”她将第一份药路手记交给你。",
+        "effects": [
+          {
+            "flag": "azhi_livelihood"
+          },
+          {
+            "relation": [
+              "azhi",
+              8
+            ]
+          },
+          {
+            "item": [
+              "huichun_grass",
+              3
+            ]
+          }
+        ],
+        "major": true
+      },
+      {
+        "id": "report",
+        "place": "sect",
+        "speaker": "gu_changgeng",
+        "goal": "回青云山传功堂，向顾长庚回禀谷中近况。",
+        "after": "顾长庚听完药农的消息，点头道：“剑能除妖，路却要人来走。你已能担一方的事，也该去天南看看了。远行之前，把故人的托付安顿好。”",
+        "effects": [
+          {
+            "flag": "valley_remembered"
+          },
+          {
+            "mind": 3
+          },
+          {
+            "relation": [
+              "gu_changgeng",
+              5
+            ]
+          }
+        ],
+        "major": true
+      }
+    ]
+  }
 }

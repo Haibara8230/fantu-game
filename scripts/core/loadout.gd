@@ -240,3 +240,27 @@ static func take_lineage(s, sect_id: String) -> void:
 			s.player.learned.append(skill_id)
 		Layers.begin(s, skill_id)
 		s.player.arts.append(skill_id)
+
+## Effective changes if this carried piece replaced the same slot; never mutates player state.
+static func equipment_comparison(s, item_id: String) -> Dictionary:
+	var item: Dictionary = Gear.item(s, item_id)
+	if item.is_empty() or not bool(s.Arsenal.wielded(s.content, item, int(s.player.realm)).usable):
+		return {}
+	var holder: Dictionary = s.player.duplicate()
+	holder["equipment"] = s.player.equipment.duplicate()
+	holder.equipment[str(item.slot)] = item_id
+	var before := bonuses(s)
+	var after := bonuses(s, holder)
+	var before_caps: Dictionary = s.stat_caps(s.player)
+	var after_caps: Dictionary = s.stat_caps(holder)
+	for key: String in ["max_hp", "max_qi"]:
+		before[key] = before_caps[key]
+		after[key] = after_caps[key]
+	before.defense = minf(0.5, float(before.defense))
+	after.defense = minf(0.5, float(after.defense))
+	var delta := {}
+	for key: String in ["attack", "max_hp", "max_qi", "defense", "cultivation", "orb_cap", "orb_first"]:
+		var change := float(after.get(key, 0)) - float(before.get(key, 0))
+		if not is_zero_approx(change):
+			delta[key] = change
+	return delta

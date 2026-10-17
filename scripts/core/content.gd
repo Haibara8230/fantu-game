@@ -489,7 +489,7 @@ func _validate_fortune() -> String:
 	var fortune: Variant = rules.get("fortune")
 	if not fortune is Dictionary:
 		return "机缘配置无效。"
-	for id: String in ["epiphany", "brink", "shiru", "lingshen", "spirit_eye", "remnant"]:
+	for id: String in ["epiphany", "brink", "shiru", "lingshen", "spirit_eye", "remnant", "humble_spring", "humble_echo", "humble_temper"]:
 		var rule: Variant = fortune.get(id)
 		if not rule is Dictionary or not (rule.get("chance") is float or rule.get("chance") is int) or float(rule.chance) < 0.0 or float(rule.chance) > 1.0:
 			return "机缘配置无效：" + id
@@ -502,6 +502,16 @@ func _validate_fortune() -> String:
 		for key: String in ["talent", "flaw"]:
 			if rule.has(key) and not is_talent(rule[key]):
 				return "机缘引用了未知天赋：" + id
+	for id: String in ["humble_spring", "humble_echo", "humble_temper"]:
+		var rule: Dictionary = fortune[id]
+		if not _whole(rule.get("follow_days")) or int(rule.follow_days) < 1:
+			return "后天机缘追寻时日无效：" + id
+		if not _whole(rule.get("mind")) or not _whole(rule.get("before_realm")) or int(rule.before_realm) < 1 or int(rule.before_realm) >= realms.size() or not _whole(rule.get("max_aptitude")) or int(rule.max_aptitude) >= talent_data.aptitude.size():
+			return "后天机缘门槛无效：" + id
+		if not (rule.get("chance_cap") is float or rule.get("chance_cap") is int) or float(rule.chance_cap) < float(rule.chance) or float(rule.chance_cap) > 1.0:
+			return "后天机缘概率上限无效：" + id
+		if rule.has("places") and (not rule.places is Array or rule.places.is_empty() or rule.places.any(func(place: Variant) -> bool: return not locations.has(place))):
+			return "后天机缘地点无效：" + id
 	var epiphany: Dictionary = fortune.epiphany
 	if not epiphany.get("places") is Array or epiphany.places.any(func(place: Variant) -> bool: return not locations.has(place)) or not _whole(epiphany.get("per_days")) or int(epiphany.per_days) < 1 or not _whole(epiphany.get("days")):
 		return "顿悟配置无效。"
@@ -1562,6 +1572,8 @@ func _validate_condition(condition: Variant) -> String:
 			return "" if people.has(value) else "未知人物：%s" % value
 		"relation_at_least":
 			return "" if value is Array and value.size() == 2 and people.has(value[0]) and (value[1] is int or value[1] is float) else "关系条件无效"
+		"event_applied":
+			return "" if value is String and events.has(value) else "事件发生条件无效"
 		"event_state":
 			if not value is Array or value.size() != 2 or not events.has(value[0]) or not value[1] in ["completed", "expired"]:
 				return "事件状态条件无效"
@@ -1641,7 +1653,7 @@ func _validate_effects(effects: Variant) -> String:
 			"demon":
 				ok = value in ["slay", "evade", "duel"]
 			"fortune":
-				ok = value in ["epiphany", "remnant"]
+				ok = value in ["epiphany", "remnant", "humble_spring", "humble_echo", "humble_temper"]
 			"recipe":
 				ok = alchemy_data.get("recipes", {}).has(value)
 			"auction":
@@ -1751,6 +1763,15 @@ func _validate_person(person: Variant) -> String:
 		return "天赋无效"
 	if person.has("talk") and (not person.talk is Array or person.talk.any(func(line: Variant) -> bool: return not line is String)):
 		return "对话必须是文字列表"
+	if person.has("talk_variants"):
+		if not person.talk_variants is Array:
+			return "情境对话必须是数组"
+		for variant: Variant in person.talk_variants:
+			if not variant is Dictionary or not variant.get("lines") is Array or variant.lines.is_empty() or variant.lines.any(func(line: Variant) -> bool: return not line is String):
+				return "情境对话缺少文字"
+			problem = _validate_conditions(variant.get("conditions", []))
+			if not problem.is_empty():
+				return problem
 	var ids := {}
 	for interaction: Variant in person.get("interactions", []):
 		if not interaction is Dictionary or not interaction.get("id") is String or ids.has(interaction.id) or interaction.id in BUILT_IN_INTERACTIONS:
@@ -1758,6 +1779,8 @@ func _validate_person(person: Variant) -> String:
 		ids[interaction.id] = true
 		if not interaction.get("label") is String or not interaction.get("chronicle") is String:
 			return "交互 %s 缺少文字" % interaction.id
+		if interaction.has("monthly_stock") and (not interaction.monthly_stock is String or str(interaction.monthly_stock).strip_edges().is_empty()):
+			return "交互 %s 月度货品组无效" % interaction.id
 		if interaction.has("cooldown_days") and not _whole(interaction.cooldown_days):
 			return "交互 %s 冷却无效" % interaction.id
 		problem = _validate_conditions(interaction.get("conditions", []))
@@ -2003,3 +2026,18 @@ func location_events(location_id: String) -> Array[String]:
 				ids.append(event_id)
 		_by_location[location_id] = ids
 	return _by_location[location_id]
+
+## Only dated events and fixed windows enter the time scheduler. Manual and location
+## events are indexed separately so longer worlds do not rescan them every month.
+var _scheduled_events: Array[String] = []
+var _scheduled_source := -1
+
+func scheduled_events() -> Array[String]:
+	if _scheduled_source != events.size():
+		_scheduled_source = events.size()
+		_scheduled_events.clear()
+		for event_id: String in events_by_priority():
+			var event: Dictionary = events[event_id]
+			if event.trigger == "date" or event.has("window"):
+				_scheduled_events.append(event_id)
+	return _scheduled_events

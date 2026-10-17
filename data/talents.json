@@ -194,6 +194,10 @@
   }
  ],
  "talents": {
+    "xisui_yulu": {"name": "洗髓玉露", "tier": "blue", "gained": true, "description": "偶得崖底石泉凝成的玉露，后天疏通经脉，修炼速度 +60%。先天灵根不变。", "mods": {"cultivation": 60}},
+    "guxiu_tiaoxi": {"name": "古修调息", "tier": "blue", "gained": true, "description": "偶悟无名古修调息法，修炼速度 +30%，历练所得 +35%。", "mods": {"cultivation": 30, "insight": 35}},
+    "fanqu_bailian": {"name": "凡躯百炼", "tier": "blue", "gained": true, "description": "生死斗法中悟得淬体之道：气血上限 +35%，灵力上限 +20%，攻击 +4，受伤 -8%。", "mods": {"max_hp": 35, "max_qi": 20, "attack": 4, "defense": 8}},
+
   "affinity_metal": {
    "name": "金灵亲和",
    "tier": "green",

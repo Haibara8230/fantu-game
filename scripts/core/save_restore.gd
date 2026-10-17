@@ -736,6 +736,10 @@ static func _valid_event_progress(data: Dictionary) -> Variant:
 			if not _whole_signed(progress.get(key)) or int(progress[key]) < -1:
 				return null
 			normalized[key] = int(progress[key])
+		if progress.has("applied"):
+			if not progress.applied is bool:
+				return null
+			normalized["applied"] = progress.applied
 		result[event_id] = normalized
 	return result
 
@@ -789,9 +793,30 @@ static func _valid_storylines(content, data: Variant, day: int) -> Variant:
 		if not content.storylines.has(story_id):
 			continue
 		var steps := int(content.storylines[story_id].steps.size())
-		if int(saved.step) > steps or (saved.state == "active" and int(saved.step) >= steps):
+		var known_steps := maxi(steps, SaveMigration.LEGACY_STORY_STEPS.get(story_id, []).size())
+		if int(saved.step) > known_steps or (saved.state == "active" and int(saved.step) >= known_steps):
 			return null
-		result[story_id] = {"state": saved.state, "step": int(saved.step), "since": int(saved.since), "begun": saved.begun, "base": base}
+		var index := int(saved.step)
+		var step_id: Variant = saved.get("step_id", null)
+		if step_id != null and not step_id is String:
+			return null
+		if step_id == null:
+			var legacy: Array = SaveMigration.LEGACY_STORY_STEPS.get(story_id, [])
+			if index < legacy.size():
+				step_id = str(legacy[index])
+		if saved.state == "done":
+			index = steps
+		elif step_id != null and not str(step_id).is_empty():
+			index = -1
+			for i: int in steps:
+				if str(content.storylines[story_id].steps[i].id) == str(step_id):
+					index = i
+					break
+			if index < 0:
+				return null
+		elif saved.state == "active" and step_id != null:
+			return null
+		result[story_id] = {"state": saved.state, "step": index, "since": int(saved.since), "begun": saved.begun, "base": base}
 	return result
 
 ## Normalized 传音, or null when malformed. Letters about storylines no longer in the content are dropped.

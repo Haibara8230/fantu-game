@@ -25,6 +25,7 @@ static func load_state(ui) -> void:
 	ui.text_speed = DEFAULT_TEXT_SPEED
 	ui.autosave_enabled = true
 	ui.goals_enabled = true
+	ui.session.auto_release = false
 	ui.keys = DEFAULT_KEYS.duplicate()
 	var config := ConfigFile.new()
 	if config.load(ui.settings_path) != OK:
@@ -42,6 +43,8 @@ static func load_state(ui) -> void:
 	ui.autosave_enabled = not (autosave is bool and not autosave)
 	var goals: Variant = config.get_value("play", "goals", true)
 	ui.goals_enabled = not (goals is bool and not goals)
+	var release: Variant = config.get_value("play", "auto_release", false)
+	ui.session.auto_release = release is bool and release
 	var saved: Variant = config.get_value("controls", "keys", {})
 	if saved is Dictionary:
 		var keys: Dictionary = DEFAULT_KEYS.duplicate()
@@ -69,6 +72,7 @@ static func save_state(ui) -> void:
 	config.set_value("text", "speed", ui.text_speed)
 	config.set_value("saves", "autosave", ui.autosave_enabled)
 	config.set_value("play", "goals", ui.goals_enabled)
+	config.set_value("play", "auto_release", ui.session.auto_release)
 	config.set_value("controls", "keys", ui.keys.duplicate())
 	config.save(ui.settings_path)
 
@@ -270,6 +274,14 @@ static func build(ui) -> void:
 	goals.toggled.connect(func(on: bool) -> void: set_goals(ui, on))
 	play.add_child(goals)
 	controls.goals = goals
+	var release := CheckBox.new()
+	release.text = "普通遭遇战获胜后默认放行"
+	release.tooltip_text = "仅对普通无名人形对手生效；悬赏、寻仇和关键剧情仍保留原有处理。可随时关闭。"
+	release.toggled.connect(func(on: bool) -> void:
+		ui.session.auto_release = on
+		save_state(ui))
+	play.add_child(release)
+	controls.auto_release = release
 	var guide_row := HBoxContainer.new()
 	guide_row.add_theme_constant_override("separation", 12)
 	var guide := CheckBox.new()
@@ -302,6 +314,7 @@ static func sync(ui) -> void:
 	controls.speeds.select(TEXT_SPEEDS.keys().find(ui.text_speed))
 	controls.autosave.set_pressed_no_signal(ui.autosave_enabled)
 	controls.goals.set_pressed_no_signal(ui.goals_enabled)
+	controls.auto_release.set_pressed_no_signal(ui.session.auto_release)
 	ui.guide_toggle.set_pressed_no_signal(ui.guide_enabled)
 	for action: String in ACTIONS:
 		var key_button: Button = controls.keys[action]

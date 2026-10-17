@@ -6,7 +6,6 @@ extends RefCounted
 const Calendar = preload("res://scripts/core/calendar.gd")
 const Sources = preload("res://scripts/core/sources.gd")
 const GOALS_PATH := "res://data/goals.json"
-const SHOWN := 3
 # The goals whose situation applies() knows; every goal in the data must be one of them.
 const GOAL_IDS := ["bottleneck", "azhi_return", "auction", "serpent", "tournament", "summit", "foundation_breach", "foundation_pill", "foundation_xp", "core_breach", "azhi_token", "ruin", "sealed", "cultivate", "promotion", "rank"]
 # Upcoming dates are mentioned this long ahead.
@@ -22,7 +21,7 @@ static func goals() -> Array:
 static func known(goal_id: String) -> bool:
 	return goal_id in GOAL_IDS
 
-## The goals that apply now, most important first, at most SHOWN: {"id", "title", "text"}. The guided
+## All goals that apply now, with active story errands first: {"id", "title", "text"}. The guided
 ## start's step comes before everything; other storylines' steps after the goals of data/goals.json.
 static func current(session) -> Array[Dictionary]:
 	var result: Array[Dictionary] = []
@@ -30,17 +29,28 @@ static func current(session) -> Array[Dictionary]:
 	for goal: Dictionary in told:
 		if goal.guide:
 			result.append(goal)
+	if not result.is_empty():
+		return result
+	for goal: Dictionary in told:
+		result.append(goal)
+	for id: String in ["humble_spring", "humble_echo", "humble_temper"]:
+		if str(session.player.get("boons", {}).get(id, "")) == "ready":
+			var places: Array = session.content.rules.fortune[id].get("places", ["sect"])
+			result.append({"id": "fortune:" + id, "title": str(session.content.events[id].title) + "线索", "text": "已记下线索，到%s花十日追寻；暂缓不会失去机会。" % session.content.locations[str(places[0])].name})
 	for goal: Dictionary in goals():
-		if result.size() >= SHOWN:
-			break
 		if applies(session, goal.id):
 			var filled: Dictionary = values(session, goal.id)
 			result.append({"id": goal.id, "title": str(goal.title).format(filled), "text": str(goal.text).format(filled)})
-	for goal: Dictionary in told:
-		if result.size() >= SHOWN:
+	return result
+
+## Tracking changes order only; all goals remain accessible and guidance remains first.
+static func displayed(ui) -> Array[Dictionary]:
+	var result := current(ui.session)
+	for index: int in result.size():
+		if str(result[index].id) == ui.tracked_goal and not result.any(func(g: Dictionary) -> bool: return bool(g.get("guide", false))):
+			var selected: Dictionary = result.pop_at(index)
+			result.push_front(selected)
 			break
-		if not goal.guide:
-			result.append(goal)
 	return result
 
 ## The steps of active storylines that ask something of the player now: {"id", "title", "text", "guide"}.
@@ -55,6 +65,11 @@ static func story_goals(session) -> Array[Dictionary]:
 		var text := str(step.goal)
 		if step.has("place") and str(step.place) != str(session.player.location):
 			text += "（%s）" % session.content.locations[step.place].name
+		var needs: Dictionary = session.Storylines.required_items(session, story_id)
+		for item_id: String in needs:
+			text += "\n%s %d/%d" % [session.content.item(item_id).name, session.item_count(item_id), int(needs[item_id])]
+			if session.item_count(item_id) < int(needs[item_id]):
+				text += " " + Sources.line(session, item_id)
 		result.append({"id": "story:" + story_id, "title": str(definition.title), "text": text, "guide": bool(definition.get("guide", false))})
 	return result
 
@@ -72,7 +87,7 @@ static func applies(session, goal_id: String) -> bool:
 			var invited: bool = session.item_count("auction_invitation") > 0 or session.favor("shen_mo") >= 40
 			return state.is_empty() and invited and day <= _window_end(session, "special_auction")
 		"serpent":
-			return not flags.call("serpent_slain") and not flags.call("serpent_rampage") and day < _window_start(session, "serpent_rampage")
+			return flags.call("intro_done") and not flags.call("serpent_slain") and not flags.call("serpent_rampage") and day < _window_start(session, "serpent_rampage")
 		"tournament":
 			var next := _next_tournament(session)
 			return next >= day and next - day <= TOURNAMENT_NOTICE_DAYS
