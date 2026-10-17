@@ -43,7 +43,15 @@ func _run() -> void:
 	window.size = size
 	window.position = Vector2i(-size.x - 4000, -size.y - 4000)
 	main = load("res://scenes/main.tscn").instantiate()
+	# Saves, teaching cards and settings stay in the copy (inside the project's .tmp), off the system drive.
+	var local := "res://.capture_data"
+	main.manual_store = SaveStore.new(local + "/manual")
+	main.auto_store = SaveStore.new(local + "/auto")
+	main.trial_store = SaveStore.new(local + "/trial")
+	main.guide_path = local + "/guide.cfg"
+	main.settings_path = local + "/settings.cfg"
 	root.add_child(main)
+	main.audio.settings_path = local + "/settings.cfg"
 	window.size = size
 	window.position = Vector2i(-size.x - 4000, -size.y - 4000)
 	main.session.encounters_enabled = false

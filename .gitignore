@@ -7,3 +7,4 @@ PNG/**/*.png
 PNG/**/*.jpg
 PNG/**/*.jpeg
 PNG/**/*.webp
+.tmp/
