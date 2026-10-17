@@ -117,8 +117,17 @@ static func manual_icon(content, item: Dictionary) -> Texture2D:
 	var grade := clampi(int(taught.get("tier", 1)) - 1, 0, 5)
 	return _composed("j:%s:%s:%d" % [kind, element, grade], ["backs/" + element, "arts/%s_%s" % [kind, element], "frames/grade_%d" % grade, "slip"])
 
-## Any item's picture: its own painted art first, then a composed icon (宝物, 玉简), then the category's
-## painted picture. null when none exists.
+## A catalogue item's icon (data/items.json): its own drawing with its back, in the frame of its 品级.
+## null for an item nobody drew yet.
+static func goods_icon(content, item: Dictionary) -> Texture2D:
+	var id := str(item.get("id", ""))
+	if id.is_empty() or id.contains(":"):
+		return null
+	var grade: int = content.rarity_of(item)
+	return _composed("i:%s:%d" % [id, grade], ["items/" + id, "frames/grade_%d" % grade])
+
+## Any item's picture: its own painted art first, then a composed icon (宝物, 玉简, catalogue items), then
+## the category's painted picture. null when none exists.
 static func item_icon(content, item: Dictionary) -> Texture2D:
 	var own := item_icon_path(item, false)
 	if not own.is_empty():
@@ -129,6 +138,8 @@ static func item_icon(content, item: Dictionary) -> Texture2D:
 			composed = gear_icon(item)
 		"manual":
 			composed = manual_icon(content, item)
+		_:
+			composed = goods_icon(content, item)
 	if composed != null:
 		return composed
 	var shared := item_icon_path(item)

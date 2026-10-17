@@ -34,23 +34,30 @@
 
 BiteMe 使用作者提供的循环版本；Tozan 与 Kevin MacLeod 的作品作节选和首尾交叉衔接。全部重采样至 44.1 kHz、调整响度，并作 5 毫秒接缝微淡化；已解码检查响度、峰值、时长和边界跳变。实际音色及长期聆听感仍可随试玩反馈更换。
 
-鸣谢保存在 `data/audio.json` 的 `music_credits`，游戏内可从「人物 · 系统 · 配乐鸣谢」查看作者、修改说明、作品来源与许可。资源目录另附 `CREDITS.txt`、完整许可文本和 `manifest.json`（来源、剪辑参数、文件校验和）。本轮仅补配乐，环境声仍按下列规格等待素材。
+鸣谢保存在 `data/audio.json` 的 `music_credits`，游戏内可从「人物 · 系统 · 配乐鸣谢」查看作者、修改说明、作品来源与许可。资源目录另附 `CREDITS.txt`、完整许可文本和 `manifest.json`（来源、剪辑参数、文件校验和）。环境声见下节。
 
 ## 环境声 `assets/audio/ambience/`
 
-| 文件 | 地点 | 内容 |
-|---|---|---|
-| `mountain_wind_bells.ogg` | 青云山 | 山风、远处檐铃 |
-| `town_street.ogg` | 青石镇 | 远处人声、犬吠、炊事 |
-| `river_egrets.ogg` | 白鹭渡 | 流水、偶尔的鸟鸣 |
-| `market_crowd.ogg` | 云溪坊市 | 人群嘈杂、吆喝（不要可辨识的台词） |
-| `pine_wind.ogg` | 松风岭 | 松涛 |
-| `valley_insects.ogg` | 落霞谷 | 虫鸣、远处兽吼 |
-| `cave_drips.ogg` | 古修洞府 | 滴水、空洞回声 |
+**五段已合成（2026-10-17）**：由 `tools/audio/make_synth_audio.py` 用程序生成，不含任何录音或第三方素材。整段按一个循环周期构造（噪声在频域按周期成形、慢变包络同样周期、事件跨尾部回绕、混响用循环卷积），首尾没有接缝；响度按 BS.1770 门限测量统一到 -24 LUFS。已解码检查接缝跳变、各层相对电平与频谱，但**没有人耳试听过**，音色与音量要在实机里听后再调（改脚本里的参数重新生成即可，种子固定，结果可复现）。文件参数与校验和见 `assets/audio/synth_manifest.json`。天南各地暂借用这几段（`data/audio.json` 的 `ambience`）。
+
+| 文件 | 地点 | 内容 | 状态 |
+|---|---|---|---|
+| `mountain_wind_bells.ogg` | 青云山 | 山风、远处檐铃 | 已合成，60 秒：阵风时三只檐铃更常响，带回响 |
+| `town_street.ogg` | 青石镇 | 远处人声、犬吠、炊事 | 缺，合成不出可信的人声，宜找 CC0 录音 |
+| `river_egrets.ogg` | 白鹭渡 | 流水、偶尔的鸟鸣 | 已合成，50 秒：流水、水泡、拍岸与三次远处鸟鸣 |
+| `market_crowd.ogg` | 云溪坊市 | 人群嘈杂、吆喝（不要可辨识的台词） | 缺，同上 |
+| `pine_wind.ogg` | 松风岭 | 松涛 | 已合成，48 秒：阵风越强越亮，松针沙沙 |
+| `valley_insects.ogg` | 落霞谷 | 虫鸣、远处兽吼 | 已合成，45 秒：六只蟋蟀与远处虫声；没有兽吼 |
+| `cave_drips.ogg` | 古修洞府 | 滴水、空洞回声 | 已合成，45 秒：五处滴水各有音高与节奏，长混响 |
+
+重新生成要 numpy、scipy 与 soundfile（带 Vorbis 的 libsndfile）。装在项目的 `.tmp/` 里，不要装到系统盘：
+`python -m pip install --target .tmp/pylib numpy scipy soundfile`，再以 `PYTHONPATH=.tmp/pylib python tools/audio/make_synth_audio.py .` 运行，之后跑 `check.cmd` 导入。
 
 ## 音效 `assets/audio/sfx/`
 
 **现状（2026-10-13）**：音效已换成 CC0 素材（见下方第三方素材记录），按 `data/audio.json` 的 `sfx` 表挂接。每个挂点列出几个文件，播放时随机取一个（不连着重复同一个），音高在 0.92–1.08 之间随机（可按挂点另设 `pitch`、`volume`）。斗法的出招与命中按元素区分：`release_sword / fire / water / ice / wood / earth / beast`、`impact_` 同上，重击另叠 `impact_heavy`；剑类蓄势用 `prepare_sword`（拔剑声）。下表是原先的规格，作为将来换成定制音效时的方向，文件名不再使用。
+
+**合成的钟磬（2026-10-17）**：下表中按原规格的六个挂点改用 `tools/audio/make_synth_audio.py` 合成的声音（模态合成：钟的分音与拍频、磬的非谐分音、木鱼的短促共鸣），放在 `assets/audio/sfx/synth/`，峰值 -3 dBFS，同样未经人耳试听：抵达 `small_bell.ogg`（-9 dB）、事件出现 `stone_chime.ogg`（-8 dB）、作出抉择 `wooden_fish_1/2.ogg`（-5 dB）、约定提醒 `two_bells.ogg`（-5 dB）、突破 `breakthrough.ogg`（灵气聚拢 1.3 秒后钟声、低鸣与星屑释放）、此生终结 `temple_bell.ogg`（7 秒寺钟）。原来的 Kenney 文件仍在，改回只需改 `data/audio.json`。
 
 
 | 文件 | 挂点 | 方向 |
@@ -75,7 +82,7 @@ BiteMe 使用作者提供的循环版本；Tozan 与 Kevin MacLeod 的作品作�
 
 ## 第三方素材记录
 
-下表音效与粒子素材为 CC0。配乐分别使用 CC0 1.0 或 CC BY 4.0，作品来源与署名另见下文及游戏内「配乐鸣谢」。
+下表音效与粒子素材为 CC0。环境声与 `sfx/synth/` 是为本作程序合成的，不含第三方素材。配乐分别使用 CC0 1.0 或 CC BY 4.0，作品来源与署名另见下文及游戏内「配乐鸣谢」。
 
 | 素材 | 作者与来源 | 位置 |
 |---|---|---|

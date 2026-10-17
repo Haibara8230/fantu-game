@@ -125,6 +125,9 @@ func _icons() -> void:
 				if ArtLibrary.gear_icon(gear) == null:
 					missing.append(gear.id)
 	check(missing.is_empty(), "every technique and 宝物 has its icon (missing %s)" % str(missing.slice(0, 5)))
+	var goods: Array = content.items.keys().filter(func(item_id: String) -> bool: return ArtLibrary.item_icon(content, content.item(item_id)) == null)
+	check(goods.is_empty(), "every catalogue item has its icon (missing %s)" % str(goods.slice(0, 5)))
+	check(ArtLibrary.item_icon_path(content.item("foundation_pill")).is_empty() and content.item("foundation_pill").get("id") == "foundation_pill", "a catalogue item knows its id, so painted art could replace its icon")
 	var icon := ArtLibrary.technique_icon(content.technique("t:bolt:fire:2::0"))
 	check(icon != null and icon.get_width() == 128 and icon == ArtLibrary.technique_icon(content.technique("t:bolt:fire:2:burn:3")), "an icon is 128 pixels and shared by techniques of one kind, element and tier")
 	check(ArtLibrary.technique_kind(content.technique("sword_rain")) == "barrage" and ArtLibrary.technique_kind(content.technique("wood")) == "mend", "a sect's art is drawn by what it does")

@@ -24,7 +24,7 @@ M0–M3 的系统与内容、M4 的界面改版与演出、斗法扩充九个批
 ### 3. 演出与界面细节
 - 新手指导不弹出：用户本轮选择暂时保留记录；静室教学误贴山门已修，其他情况仍待指出是哪张卡、在什么情形下。
 - 分段文字（现有事件文字都只有一两句，等写出较长的剧情再做逐段显示）；为更多事件与人物配插图；人物表情差分。
-- 闭关用的打坐立绘（现借施法姿势）、丹炉插图（现为平涂几何形）、突破成功的专属音效。
+- 闭关用的打坐立绘（现借施法姿势）、丹炉插图（现为平涂几何形）：提示词见 `docs/ART_BRIEF_REMAINING.json`，图到位后要在 `scripts/presentation/rite.gd` 接上。突破的专属音效已合成（2026-10-17），待实机试听。
 - 纸条、按钮与标签栏的专用装饰；挑选物品的赠礼页（需改赠礼规则，目前只赠灵草）。
 
 ### 4. 后台试玩发现的问题（2026-10-17，`tools/playtest.gd` 与离屏截图）
@@ -67,15 +67,15 @@ M0–M3 的系统与内容、M4 的界面改版与演出、斗法扩充九个批
 
 | 素材 | 现状 | 规格 |
 |---|---|---|
-| 物品立绘 | 45 种物品（灵草、丹药、材料、丹方、器具、信物）一张也没有；`tests/content_smoke.gd` 只报告覆盖数。功法、宝物与玉简已有矢量合成图标（2026-10-17，见 `docs/ART_ASSETS.md`），手绘图放好后优先显示 | 提示词见 `docs/ART_BRIEF_ITEMS.json`（45 种物品、8 种宝物底材与 9 类玉简的共用图）。放到 `assets/art/items/` 即在行囊显示（`art_library.gd` 的 `item_icon_path`，`data/art.json` 的 `item_art` 可另指），九成以上后把测试改为必查 |
+| 物品立绘（可选） | 全部 59 种目录物品与功法、宝物、玉简都已有矢量合成图标（2026-10-17，`tools/art/make_item_icons.py`，见 `docs/ART_ASSETS.md`）；手绘立绘一张也没有，`tests/content_smoke.gd` 只报告手绘覆盖数。手绘图放好后优先显示 | 提示词见 `docs/ART_BRIEF_ITEMS.json`（45 种物品、8 种宝物底材与 9 类玉简的共用图）。放到 `assets/art/items/` 即在行囊显示（`art_library.gd` 的 `item_icon_path`，`data/art.json` 的 `item_art` 可另指），九成以上后把测试改为必查 |
 | 天南舆图与三处地点的图 | 天南舆图（`assets/art/map/region_tiannan.png`）、南明坊市、赤枫岭、赤霄门的整屏背景与各场景图一张也没有 | 提示词与规格见 `docs/ART_BRIEF_TIANNAN.json`（舆图、三处整屏、八张场景、两张立绘与火蜥图集）；画好后从 `tests/art_smoke.gd` 的 `PENDING_LOCATIONS` 删去 |
 | 袁赤锋、韩烬立绘 | 资料卡显示首字印章 | 与许清和、顾长庚同规格，登记在 `data/art.json` 的 `portrait_art` |
-| 场景图五张 | 古修洞府「洞府深处」、沉霞古境入口、青云山「山门」、白鹭渡「天河渡口」、青石镇「镇口木栅」都还没有图 | 分别放到 `assets/art/scenes/` 的 `ruin_depths.png`、`wild_chenxia.png`、`sect_gate.png`、`ferry_crossing.png`、`town_palisade.png`（凡人小镇镇口，新旧相间的木栅与望楼，驮货的商队，远处落霞谷的山影），再从 `tests/art_smoke.gd` 的 `PENDING_SPOTS` 删去 |
-| 飞升结局插图 | 尚无 | 登记在 `data/art.json` 的 `event_art` |
-| 斗法图集 | 借用现有图集：铁背熊王、狼群、偷药山魈、火鸦群借妖狼；青鳞蛇、赤练妖蛇借妖蟒；岩甲蜥、熔窟火蜥借影狼；天劫借古修残念（淡蓝）、心魔借主角（暗紫）、赤霄执法弟子借血煞教徒；魔潮魔将借洞府散修 | 放到 `assets/art/battle/<敌人编号>.png`，与所借图集同格式即自动替换（如 `bear_king`、`wolf_pack`、`shan_xiao`、`huo_ya`、`qinglin_snake`、`chilian_snake`、`yanjia_xi`、`huo_xi`、`tribulation`、`chixiao_zhifa`） |
+| 场景图五张 | 古修洞府「洞府深处」、沉霞古境入口、青云山「山门」、白鹭渡「天河渡口」、青石镇「镇口木栅」都还没有图 | 提示词见 `docs/ART_BRIEF_REMAINING.json`。分别放到 `assets/art/scenes/` 的 `ruin_depths.png`、`wild_chenxia.png`、`sect_gate.png`、`ferry_crossing.png`、`town_palisade.png`（凡人小镇镇口，新旧相间的木栅与望楼，驮货的商队，远处落霞谷的山影），再从 `tests/art_smoke.gd` 的 `PENDING_SPOTS` 删去 |
+| 飞升插图 | 尚无 | 提示词见 `docs/ART_BRIEF_REMAINING.json`：画飞升通道开启（事件 `ascension_opens`），放到 `assets/art/events/ascension_opens.png` 并登记在 `data/art.json` 的 `event_art`。结局页目前不显示插图，要用在结局页还需改 `event_view.gd` |
+| 斗法图集 | 借用现有图集：铁背熊王、狼群、偷药山魈、火鸦群借妖狼；青鳞蛇、赤练妖蛇借妖蟒；岩甲蜥、熔窟火蜥借影狼；天劫借古修残念（淡蓝）、心魔借主角（暗紫）、赤霄执法弟子借血煞教徒；魔潮魔将借洞府散修 | 提示词见 `docs/ART_BRIEF_REMAINING.json`（九套）与 `docs/ART_BRIEF_TIANNAN.json`（火蜥）。放到 `assets/art/battle/<敌人编号>.png`，与所借图集同格式即自动替换（如 `bear_king`、`wolf_pack`、`shan_xiao`、`huo_ya`、`qinglin_snake`、`chilian_snake`、`yanjia_xi`、`huo_xi`、`tribulation`、`chixiao_zhifa`） |
 | 可选的独立图集 | 石窟影狼借山谷妖狼；霞锈剑傀、古修残念借外门同门与洞府散修 | 同上 |
-| 环境声 7 段 | 尚无文件，播放时为静音；配乐已用六首作品覆盖十一种情境 | `docs/AUDIO_ASSETS.md` |
-| 音效 | 已有 CC0 素材 95 个（Kenney 与 rubberduck），按元素与轻重随机变化 | 实机试听、调音量；有条件时换成定制的仙侠音效（剑鸣、法诀、钟磬） |
+| 环境声 2 段 | 七段中五段已用程序合成（2026-10-17：松涛、山风檐铃、流水、虫鸣、洞中滴水，天南各地共用），尚未实机试听；镇街（青石镇）与坊市人声（云溪坊市、南明坊市）合成不出可信的人声，仍无文件，播放时静音 | `docs/AUDIO_ASSETS.md`；宜找 CC0 实地录音 |
+| 音效 | 已有 CC0 素材 95 个（Kenney 与 rubberduck），按元素与轻重随机变化；事件（磬）、抉择（木鱼）、抵达（小铃）、提醒（两声铃）、突破与此生终结（寺钟）改用程序合成（2026-10-17，`assets/audio/sfx/synth/`） | 实机试听、调音量；剑鸣、法诀仍用 CC0 素材，有条件时换成定制音效 |
 
 ## 四、发行与工程
 

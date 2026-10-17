@@ -1,0 +1,102 @@
+{
+ "generator": "tools/audio/make_synth_audio.py",
+ "sample_rate": 44100,
+ "files": {
+  "assets/audio/ambience/pine_wind.ogg": {
+   "note": "松涛：分层风声，阵风越强越亮，松针高频沙沙",
+   "seconds": 48.0,
+   "channels": 2,
+   "lufs": -24.0,
+   "peak_dbfs": -8.4,
+   "sha256": "0b57927708dc14c88ba8afd7811b727177e553b09b96c5518060a6240af99bc4"
+  },
+  "assets/audio/ambience/mountain_wind_bells.ogg": {
+   "note": "山风与远处三只檐铃，阵风时铃声多，带回响",
+   "seconds": 60.0,
+   "channels": 2,
+   "lufs": -24.0,
+   "peak_dbfs": -10.5,
+   "sha256": "aa6f4c338672db21b4c7d706695c3c54674676e4e6d7f2dd4a3fd89db0f1462d"
+  },
+  "assets/audio/ambience/river_egrets.ogg": {
+   "note": "流水、细碎水泡与拍岸，三次远处鸟鸣",
+   "seconds": 50.0,
+   "channels": 2,
+   "lufs": -24.0,
+   "peak_dbfs": -9.0,
+   "sha256": "4473b4991162cd66763b3141c2adfc5c13f03676f7c699ae07dce10677d9dc3b"
+  },
+  "assets/audio/ambience/valley_insects.ogg": {
+   "note": "六只蟋蟀各自的鸣唱与一层远处虫声，夜气",
+   "seconds": 45.0,
+   "channels": 2,
+   "lufs": -24.0,
+   "peak_dbfs": -12.5,
+   "sha256": "5dcb530ab79f6db984d3a3d80b1409c6da2f322e9efa156158c52aa0ac54a119"
+  },
+  "assets/audio/ambience/cave_drips.ogg": {
+   "note": "洞中五处滴水各有音高与节奏，长混响，低沉的空洞底噪",
+   "seconds": 45.0,
+   "channels": 2,
+   "lufs": -24.0,
+   "peak_dbfs": -9.8,
+   "sha256": "37816c2c2800439dac8d6e861c5a126cb2d681dd99baa12eeb6e71a6df4ca1e6"
+  },
+  "assets/audio/sfx/synth/temple_bell.ogg": {
+   "note": "寺钟：长鸣，钟声拍频",
+   "seconds": 7.0,
+   "channels": 1,
+   "lufs": -18.5,
+   "peak_dbfs": -3.0,
+   "sha256": "a51cf17332760a80ca43f3af2a47c41af4f7a4afd59187931732d8e6209a95bb"
+  },
+  "assets/audio/sfx/synth/small_bell.ogg": {
+   "note": "小铃一声",
+   "seconds": 2.4,
+   "channels": 1,
+   "lufs": -16.1,
+   "peak_dbfs": -3.0,
+   "sha256": "d85898986448010a2c555f760580104a59b518a4a87d6afda11de4703d98af3b"
+  },
+  "assets/audio/sfx/synth/two_bells.ogg": {
+   "note": "小铃两声",
+   "seconds": 2.82,
+   "channels": 1,
+   "lufs": -16.3,
+   "peak_dbfs": -3.0,
+   "sha256": "63bb7ded6cb3b32c17173fffd1463e91847eed863d7ae8689c971cb6a6cf6fee"
+  },
+  "assets/audio/sfx/synth/stone_chime.ogg": {
+   "note": "磬一声",
+   "seconds": 2.6,
+   "channels": 1,
+   "lufs": -16.0,
+   "peak_dbfs": -3.0,
+   "sha256": "cb9aee0df57b9fa735ee3cecdc3101ab5b7fd202e0f9dc569896e7b86dc6d21e"
+  },
+  "assets/audio/sfx/synth/wooden_fish_1.ogg": {
+   "note": "木鱼",
+   "seconds": 0.32,
+   "channels": 1,
+   "lufs": -21.1,
+   "peak_dbfs": -3.0,
+   "sha256": "aa6aac289a83f80cb2cf70c9371b08d0e52b2dab68d23b4b016fae928d39e583"
+  },
+  "assets/audio/sfx/synth/wooden_fish_2.ogg": {
+   "note": "木鱼（低）",
+   "seconds": 0.32,
+   "channels": 1,
+   "lufs": -20.4,
+   "peak_dbfs": -3.0,
+   "sha256": "af2108c3512cd43a82e76c7805b763e157373253fe731be5bf817b52e5aee0ca"
+  },
+  "assets/audio/sfx/synth/breakthrough.ogg": {
+   "note": "突破：灵气聚拢渐强，钟声、低鸣与星屑释放",
+   "seconds": 4.5,
+   "channels": 1,
+   "lufs": -18.0,
+   "peak_dbfs": -3.0,
+   "sha256": "a71cfdf88086033f7a48526e27730210b856d4639625c19e956bc3b42d84f114"
+  }
+ }
+}
