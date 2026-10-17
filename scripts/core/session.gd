@@ -11,6 +11,8 @@ const Arsenal = preload("res://scripts/core/arsenal.gd")
 const Population = preload("res://scripts/core/population.gd")
 const Inventory = preload("res://scripts/core/inventory.gd")
 const Loadout = preload("res://scripts/core/loadout.gd")
+const Layers = preload("res://scripts/core/layers.gd")
+const Gear = preload("res://scripts/core/gear.gd")
 const Commissions = preload("res://scripts/core/commissions.gd")
 const Rumors = preload("res://scripts/core/rumors.gd")
 const People = preload("res://scripts/core/people.gd")
@@ -119,11 +121,13 @@ func new_game(character_name: String = "无名", seed_value: int = -1, roots: Ar
 		"foundation_grade": 1, "core_grade": 0, "injury_until": 0, "wound_until": 0, "burned_years": 0, "lessons": 0, "boons": {}, "longevity": {}, "forged": 0, "duty": "", "duty_day": -1,
 		"rank": 0, "contribution": 0, "merit": 0, "stipend_day": 0, "exchanged": {}, "donated": {},
 		"recipes": [], "practice": {}, "toxin": 0, "toxin_day": 0, "field": {"grade": 0, "plots": []},
+		"layers": {}, "gear": {}, "gear_serial": 0,
 	}
 	player.stones = maxi(0, int(player.stones) + talent_modifier("stones"))
 	for skill_id: String in content.sects.wanderer.skills:
 		player.learned.append(skill_id)
 		player.arts.append(skill_id)
+		Layers.begin(self, skill_id)
 	refresh_realm_stats()
 	player.hp = player.max_hp
 	player.qi = player.max_qi
@@ -508,6 +512,7 @@ func cultivate(days: int) -> String:
 	record_deed("retreat_days", int(passed.elapsed))
 	var text := log_event("cultivate", {"days": passed.elapsed, "xp": int(done.xp)})
 	var milestones := gain_xp(int(done.xp))
+	milestones.append_array(Layers.after_retreat(self, int(passed.elapsed)))
 	if not milestones.is_empty():
 		text += " " + " ".join(milestones)
 	if passed.interrupted and passed.by == "wake":
@@ -996,6 +1001,26 @@ func active_skills() -> Array[String]:
 
 func learn_block(technique_id: String) -> String:
 	return Loadout.learn_block(self, technique_id)
+
+## A technique as the player holds it, at their layer (layers.gd).
+func held_technique(technique_id: String) -> Dictionary:
+	return Layers.held(self, technique_id)
+
+func comprehend_block(technique_id: String) -> String:
+	return Layers.comprehend_block(self, technique_id)
+
+func comprehend(technique_id: String) -> String:
+	return Layers.comprehend(self, technique_id)
+
+## A 宝物 as the player holds it: plain by type, or an instance with its 祭炼 (gear.gd).
+func gear_item(item_id: String) -> Dictionary:
+	return Gear.item(self, item_id)
+
+func refine_block(item_id: String, slot: String = "") -> String:
+	return Gear.refine_block(self, item_id, slot)
+
+func refine_gear(item_id: String, slot: String = "") -> String:
+	return Gear.refine(self, item_id, slot)
 
 func study_manual(item_id: String) -> String:
 	return Loadout.study_manual(self, item_id)

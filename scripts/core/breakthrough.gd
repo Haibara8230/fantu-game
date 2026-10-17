@@ -326,6 +326,13 @@ static func _ascend(s, grade: int, days: int, texts: Array, passed: Dictionary) 
 	if int(s.player.realm) <= 2:
 		reached.grade = grade
 	texts.append(s.log_event("breakthrough", reached, true))
+	# The realm lifts the techniques' layer caps; practice that waited climbs now.
+	var climbed: Array[String] = s.Layers.after_breakthrough(s)
+	if not climbed.is_empty():
+		texts.append_array(climbed)
+		s.refresh_realm_stats()
+		s.player.hp = s.player.max_hp
+		s.player.qi = s.player.max_qi
 	texts.append_array(s.settle_stage())
 	texts.append_array(s.congratulate(["", "breakthrough", "core", "nascent", "deity"][mini(int(s.player.realm), 4)]))
 	return s.conclude(" ".join(texts), passed)

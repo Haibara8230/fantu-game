@@ -5,6 +5,8 @@ extends RefCounted
 ##   equipment  e:<base>:<tier>:<element|none>:<affix+affix>:<variant>
 ##   manual     j:<technique id>        (a jade slip that teaches the technique)
 ## Every function here is pure: the same id and data always give the same result.
+## A technique is read at a layer (功法层数, layers.gd): 0 means fully cultivated. A lower layer gives a
+## share of the tier's power and only the affixes unlocked by then; the cost stays the same.
 
 static func technique_id(archetype: String, element: String, tier: int, affixes: Array, variant: int) -> String:
 	var sorted := affixes.duplicate()
@@ -16,10 +18,10 @@ static func equipment_id(base: String, tier: int, element: String, affixes: Arra
 	sorted.sort()
 	return "e:%s:%d:%s:%s:%d" % [base, tier, element, "+".join(sorted), variant]
 
-## Normalized technique, or {} when the id is unknown or malformed.
-static func technique(content, id: String) -> Dictionary:
+## Normalized technique at `layer` (0: all of them), or {} when the id is unknown or malformed.
+static func technique(content, id: String, layer: int = 0) -> Dictionary:
 	if content.skills.has(id):
-		return _handwritten(content, id)
+		return _handwritten(content, id, layer)
 	if not id.begins_with("t:"):
 		return {}
 	var parts := id.split(":")
@@ -35,19 +37,29 @@ static func technique(content, id: String) -> Dictionary:
 	if tier < 1 or tier > data.tiers.size() or variant < 0:
 		return {}
 	var affix_ids: Array = Array(parts[4].split("+", false))
-	var effect := {}
-	var affix_names: Array[String] = []
-	var affix_texts: Array[String] = []
 	for affix_id: String in affix_ids:
 		var affix: Variant = data.affixes.get(affix_id)
 		if not affix is Dictionary or not parts[1] in affix.applies or affix_ids.count(affix_id) != 1:
 			return {}
+	# Affixes unlock in the order they are defined in the data, never by their ids' spelling.
+	var ordered: Array = data.affixes.keys().filter(func(key: String) -> bool: return key in affix_ids)
+	var tier_def: Dictionary = data.tiers[tier - 1]
+	var layers := int(tier_def.layers)
+	var at := layers if layer <= 0 else clampi(layer, 1, layers)
+	var effect := {}
+	var affix_names: Array[String] = []
+	var affix_texts: Array[String] = []
+	var affix_unlocks: Array[int] = []
+	for index: int in ordered.size():
+		var affix: Dictionary = data.affixes[ordered[index]]
+		var unlock := unlock_layer(tier_def, index)
 		affix_names.append(affix.name)
 		affix_texts.append(affix.text)
-		for key: String in affix.effect:
-			effect[key] = affix.effect[key]
-	var tier_def: Dictionary = data.tiers[tier - 1]
-	var power := float(tier_def.power)
+		affix_unlocks.append(unlock)
+		if unlock <= at:
+			for key: String in affix.effect:
+				effect[key] = affix.effect[key]
+	var power := float(tier_def.power) * layer_share(content, at, layers)
 	var words: Array = element.words
 	var nouns: Array = archetype.nouns
 	var result := {
@@ -55,7 +67,7 @@ static func technique(content, id: String) -> Dictionary:
 		"name": str(words[variant % words.size()]) + str(nouns[(variant / words.size()) % nouns.size()]),
 		"slot": archetype.slot, "kind": archetype.kind, "affixes": affix_names, "affix_texts": affix_texts,
 		"min_realm": int(tier_def.min_realm), "value": int(tier_def.value) + 20 * affix_ids.size(),
-		"study_days": int(tier_def.study_days),
+		"study_days": int(tier_def.study_days), "layer": at, "layers": layers, "affix_unlocks": affix_unlocks,
 	}
 	if archetype.slot == "art":
 		result.cost = _cost(archetype.cost, parts[2], int(effect.get("thrift", 0)))
@@ -96,27 +108,59 @@ static func technique(content, id: String) -> Dictionary:
 				break
 	return result
 
-static func _handwritten(content, id: String) -> Dictionary:
+## A sect's handwritten art: its own numbers at full layers, the inheritance tier's layers.
+static func _handwritten(content, id: String, layer: int = 0) -> Dictionary:
 	var skill: Dictionary = content.skills[id]
 	var tier := int(content.technique_data.inheritance_tier)
+	var layers := int(content.technique_data.tiers[tier - 1].layers)
+	var at := layers if layer <= 0 else clampi(layer, 1, layers)
+	var share := layer_share(content, at, layers)
 	var result := {
 		"id": id, "generated": false, "element": skill.get("element", "metal"), "tier": tier,
 		"tier_name": content.technique_data.tiers[tier - 1].name, "name": skill.name, "slot": "art", "kind": skill.kind,
-		"affixes": [], "affix_texts": [], "min_realm": 0, "value": int(content.technique_data.tiers[tier - 1].value),
-		"study_days": 0, "cost": skill.cost.duplicate(), "vfx": skill.vfx, "description": str(skill.description) + "耗灵气：%s。" % cost_text(content, skill.cost),
+		"affixes": [], "affix_texts": [], "affix_unlocks": [], "min_realm": 0, "value": int(content.technique_data.tiers[tier - 1].value),
+		"study_days": 0, "cost": skill.cost.duplicate(), "vfx": skill.vfx, "layer": at, "layers": layers,
 	}
 	if skill.has("damage_min"):
-		result.damage_min = int(skill.damage_min)
-		result.damage_max = int(skill.damage_max)
+		result.damage_min = maxi(1, int(round(float(skill.damage_min) * share)))
+		result.damage_max = maxi(1, int(round(float(skill.damage_max) * share)))
 		result.hits = int(skill.get("hits", 1))
 	if skill.has("heal"):
-		result.heal = int(skill.heal)
+		result.heal = int(round(float(skill.heal) * share))
 	if skill.has("shield"):
-		result.shield = int(skill.shield)
+		result.shield = int(round(float(skill.shield) * share))
 	for lingering: String in ["burn", "weaken", "sunder", "slow"]:
 		if skill.has(lingering):
 			result[lingering] = skill[lingering].duplicate()
+	if result.has("burn"):
+		result.burn = [maxi(1, int(round(float(result.burn[0]) * share))), int(result.burn[1])]
+	result.description = str(skill.description) + _layered_numbers(result) + "耗灵气：%s。" % cost_text(content, skill.cost)
 	return result
+
+## The handwritten text names the art's full numbers; below full layers a line says what it does now.
+static func _layered_numbers(t: Dictionary) -> String:
+	if int(t.layer) >= int(t.layers):
+		return ""
+	if t.has("damage_min"):
+		return "眼下第 %d 层，伤害 %d–%d。" % [t.layer, t.damage_min, t.damage_max]
+	if t.has("heal"):
+		return "眼下第 %d 层，恢复 %d 点气血。" % [t.layer, t.heal]
+	if t.has("shield"):
+		return "眼下第 %d 层，护盾 %d 点。" % [t.layer, t.shield]
+	return ""
+
+## The share of the tier's power at a layer: `layer_rule.first_share` at the first, all of it at the last,
+## evenly between.
+static func layer_share(content, layer: int, layers: int) -> float:
+	if layers <= 1:
+		return 1.0
+	var first := float(content.technique_data.layer_rule.first_share)
+	return first + (1.0 - first) * float(clampi(layer, 1, layers) - 1) / float(layers - 1)
+
+## The layer that unlocks the `index`-th affix: the tier's `affix_layers`, else the last layer.
+static func unlock_layer(tier_def: Dictionary, index: int) -> int:
+	var unlocks: Array = tier_def.get("affix_layers", [])
+	return int(unlocks[index]) if index < unlocks.size() else int(tier_def.layers)
 
 ## An archetype's cost for an element: "element" becomes the element; 省灵 drops an "any" orb first,
 ## else one of the element, never below one orb.
@@ -172,8 +216,14 @@ static func describe_technique(content, t: Dictionary) -> String:
 			var value: float = float(t.passive[key])
 			parts.append(names[key] % int(round(value * 100.0 if key in ["cultivation", "element_damage"] else value)))
 		lines.append("心法，常驻生效：" + "，".join(parts) + "。")
-	for text: String in t.get("affix_texts", []):
-		lines.append(text + "。")
+	var unlocks: Array = t.get("affix_unlocks", [])
+	var texts: Array = t.get("affix_texts", [])
+	for index: int in texts.size():
+		var unlock: int = int(unlocks[index]) if index < unlocks.size() else 0
+		if unlock > int(t.get("layer", 0)):
+			lines.append("（第 %d 层解封）%s。" % [unlock, texts[index]])
+		else:
+			lines.append(str(texts[index]) + "。")
 	return "".join(lines)
 
 ## A random technique id of `tier`. Filters: "slot", "element", "archetype".
@@ -265,15 +315,18 @@ static func _sum_stats(base_stats: Dictionary, affix_stats: Array, share: float,
 
 ## 驾驭度 (docs/WORLD_EXPANSION.md 2.3): a piece above its wielder's realm gives only a share of its
 ## stats and some of its affixes (data/equipment.json `mastery`, by how many realms short); three or more
-## realms short it cannot be used at all. {"usable", "share", "affixes", "stats", "short"}.
+## realms short it cannot be used at all. 祭炼 (gear.gd) adds `refine.step` per step taken on the piece
+## (its "refine"), up to the row's `refined` limit. {"usable", "share", "limit", "affixes", "stats", "short"}.
 static func wielded(content, item: Dictionary, realm: int) -> Dictionary:
 	var short := maxi(0, int(item.get("realm", 0)) - realm)
 	var table: Array = content.equipment_data.get("mastery", [{"share": 1.0, "affixes": 99}])
 	if short >= table.size():
-		return {"usable": false, "share": 0.0, "affixes": 0, "stats": {}, "short": short}
+		return {"usable": false, "share": 0.0, "limit": 0.0, "affixes": 0, "stats": {}, "short": short}
 	var step: Dictionary = table[short]
+	var limit := float(step.get("refined", step.share))
+	var share := minf(limit, float(step.share) + float(content.equipment_data.get("refine", {}).get("step", 0.0)) * int(item.get("refine", 0)))
 	var affixes: int = mini(int(step.affixes), item.get("affix_stats", []).size())
-	return {"usable": true, "share": float(step.share), "affixes": affixes, "stats": _sum_stats(item.get("base_stats", item.stats), item.get("affix_stats", []), float(step.share), affixes), "short": short}
+	return {"usable": true, "share": share, "limit": limit, "affixes": affixes, "stats": _sum_stats(item.get("base_stats", item.stats), item.get("affix_stats", []), share, affixes), "short": short}
 
 ## A word on how much of a piece its wielder can draw on, or "" when all of it.
 static func mastery_text(content, item: Dictionary, realm: int) -> String:
@@ -284,7 +337,8 @@ static func mastery_text(content, item: Dictionary, realm: int) -> String:
 	if float(held.share) >= 1.0:
 		return ""
 	var affixes := "词条只生效 %d 条" % int(held.affixes) if int(held.affixes) > 0 else "词条不生效"
-	return "须%s方能全力驾驭：眼下驾驭 %d%%，%s。" % [needed, int(round(float(held.share) * 100.0)), affixes]
+	var further := "，祭炼可至 %d%%" % int(round(float(held.limit) * 100.0)) if float(held.share) < float(held.limit) - 0.0001 else ""
+	return "须%s方能全力驾驭：眼下驾驭 %d%%%s，%s。" % [needed, int(round(float(held.share) * 100.0)), further, affixes]
 
 static func describe_equipment(content, item: Dictionary) -> String:
 	var names := {"attack": "攻击 +%d", "max_hp": "气血上限 +%d", "max_qi": "灵力上限 +%d", "defense": "受伤 -%d%%", "element_damage": "属性伤害 +%d%%", "cultivation": "修炼速度 +%d%%", "orb_first": "斗法开局多抽 %d 颗灵气", "orb_cap": "灵气上限 +%d"}

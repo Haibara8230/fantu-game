@@ -219,7 +219,7 @@ static func _orb_style(ui, chip: Button, color: Color) -> void:
 
 static func _art_button(ui, skill_id: String, index: int) -> Button:
 	var session = ui.session
-	var skill: Dictionary = session.content.technique(skill_id)
+	var skill: Dictionary = session.held_technique(skill_id)
 	var cost_text: String = session.Arsenal.cost_text(session.content, skill.cost)
 	var counter: float = session.Combat.counter_multiplier(session, str(skill.element))
 	var counter_text := ""

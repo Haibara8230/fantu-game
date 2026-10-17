@@ -6,8 +6,12 @@ const Events = preload("res://scripts/core/events.gd")
 const Arsenal = preload("res://scripts/core/arsenal.gd")
 const Talents = preload("res://scripts/core/talents.gd")
 const Alchemy = preload("res://scripts/core/alchemy.gd")
+const Gear = preload("res://scripts/core/gear.gd")
 
+## A 宝物 instance (gear.gd) counts once while carried, not while worn.
 static func item_count(s, item_id: String) -> int:
+	if Gear.is_instance(item_id):
+		return 1 if s.player.get("gear", {}).has(item_id) and not Gear.worn(s, item_id) else 0
 	return int(s.player.get("items", {}).get(item_id, 0))
 
 static func herb_count(s) -> int:
@@ -17,7 +21,7 @@ static func herb_count(s) -> int:
 	return total
 
 static func add_item(s, item_id: String, count: int) -> void:
-	if count <= 0:
+	if count <= 0 or Gear.is_instance(item_id):
 		return
 	s.player.items[item_id] = item_count(s, item_id) + count
 
@@ -27,6 +31,10 @@ static func remove_item(s, item_id: String, count: int) -> bool:
 		return true
 	if item_count(s, item_id) < count:
 		return false
+	# An instance leaves with its 祭炼.
+	if Gear.is_instance(item_id):
+		s.player.gear.erase(item_id)
+		return true
 	var left := item_count(s, item_id) - count
 	if left == 0:
 		s.player.items.erase(item_id)
@@ -79,9 +87,9 @@ static func set_item_count(s, item_id: String, count: int) -> void:
 
 ## What this place pays for one of the item, or 0 when it does not buy it here.
 static func sell_price(s, item_id: String) -> int:
-	if not s.available_here("sell") or s.content.item(item_id).is_empty():
+	var item: Dictionary = s.content.item(Gear.type_of(s, item_id))
+	if not s.available_here("sell") or item.is_empty():
 		return 0
-	var item: Dictionary = s.content.item(item_id)
 	if not item.category in s.content.locations[s.player.location].get("buys", []):
 		return 0
 	return Talents.scaled(int(round(float(item.price) * market_factor(s, item_id))), s.talent_modifier("sell"), 1)
@@ -180,12 +188,14 @@ static func sell(s, item_id: String, count: int = 1) -> String:
 	var price := sell_price(s, item_id)
 	if price <= 0:
 		return "这里不收这件东西。"
+	# Named by its type: an instance is gone once sold.
+	var item_type := Gear.type_of(s, item_id)
 	if count < 1 or not remove_item(s, item_id, count):
 		return "行囊里没有那么多。"
 	s.player.stones += price * count
 	flood(s, item_id, count)
 	s.record_deed("trade")
-	return s.conclude(s.log_event("sell_item", {"item": item_id, "count": count, "revenue": price * count}))
+	return s.conclude(s.log_event("sell_item", {"item": item_type, "count": count, "revenue": price * count}))
 
 static func buy(s, item_id: String) -> String:
 	var blocked: String = s.blocked()

@@ -163,14 +163,14 @@ static func _loadout(ui, parent: VBoxContainer) -> void:
 	_heading(ui, parent, "宝 物")
 	for slot: String in session.content.equipment_data.slots:
 		var item_id := str(p.equipment.get(slot, ""))
-		var gear: Dictionary = session.content.equipment(item_id) if not item_id.is_empty() else {}
+		var gear: Dictionary = session.gear_item(item_id) if not item_id.is_empty() else {}
 		_row(ui, parent, str(session.content.equipment_data.slots[slot]), str(gear.get("name", "未佩戴")), str(gear.get("description", "在「行囊」里佩戴宝物")), ui.MUTED if gear.is_empty() else ui.grade_color(gear))
 	_heading(ui, parent, "神 通 与 心 法")
 	for technique_id: Variant in p.get("arts", []) + p.get("methods", []):
-		var t: Dictionary = session.content.technique(str(technique_id))
+		var t: Dictionary = session.held_technique(str(technique_id))
 		if t.is_empty():
 			continue
-		_row(ui, parent, "心法" if t.slot == "method" else "神通", t.name, "%s\n%s" % [session.Arsenal.technique_tag(session.content, t), t.description], ui.grade_color(t))
+		_row(ui, parent, "心法" if t.slot == "method" else "神通", t.name, "%s · 第 %d / %d 层\n%s" % [session.Arsenal.technique_tag(session.content, t), int(t.layer), int(t.layers), t.description], ui.grade_color(t))
 
 ## The next xp milestone: the next sub-stage, or the breakthrough once at the last stage.
 static func xp_goal(session) -> int:

@@ -6,12 +6,13 @@
     "array": {"name": "阵修", "archetype": "breath", "element": "earth", "min_tier": 2, "orbs": 1, "shield": 8, "text": "布阵：花一回合布下阵法，此后每回合多抽一颗灵气、结 8 点护盾。"}
   },
   "tiers": [
-    {"name": "凡阶", "power": 1.0, "affixes": 0, "min_realm": 0, "value": 20, "study_days": 10},
-    {"name": "黄阶", "power": 1.25, "affixes": 1, "min_realm": 0, "value": 60, "study_days": 20},
-    {"name": "玄阶", "power": 1.55, "affixes": 2, "min_realm": 1, "value": 180, "study_days": 40},
-    {"name": "地阶", "power": 1.9, "affixes": 3, "min_realm": 2, "value": 500, "study_days": 80},
-    {"name": "天阶", "power": 2.4, "affixes": 4, "min_realm": 3, "value": 1500, "study_days": 160}
+    {"name": "凡阶", "power": 1.0, "affixes": 0, "min_realm": 0, "value": 20, "study_days": 10, "layers": 3, "affix_layers": [], "layer_days": 5, "layer_stones": 0},
+    {"name": "黄阶", "power": 1.25, "affixes": 1, "min_realm": 0, "value": 60, "study_days": 20, "layers": 5, "affix_layers": [3], "layer_days": 10, "layer_stones": 0},
+    {"name": "玄阶", "power": 1.55, "affixes": 2, "min_realm": 1, "value": 180, "study_days": 40, "layers": 7, "affix_layers": [3, 6], "layer_days": 20, "layer_stones": 10},
+    {"name": "地阶", "power": 1.9, "affixes": 3, "min_realm": 2, "value": 500, "study_days": 80, "layers": 9, "affix_layers": [3, 6, 9], "layer_days": 40, "layer_stones": 30},
+    {"name": "天阶", "power": 2.4, "affixes": 4, "min_realm": 3, "value": 1500, "study_days": 160, "layers": 9, "affix_layers": [2, 4, 6, 8], "layer_days": 80, "layer_stones": 100}
   ],
+  "layer_rule": {"first_share": 0.8, "blocked_gap": 3, "cast_practice": 20, "retreat_method": 5, "retreat_art": 2},
   "inheritance_tier": 2,
   "root_bonus": 0.1,
   "elements": {

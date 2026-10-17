@@ -41,12 +41,13 @@ static func _page(ui, slot_kind: String, title: String, in_use: Array, limit: in
 			row.add_child(ui.label("空", 15, ui.MUTED))
 			continue
 		var technique_id: String = in_use[index]
-		var t: Dictionary = session.content.technique(technique_id)
-		var name: Label = ui.label(t.name, 15, ui.grade_color(t))
+		var t: Dictionary = session.held_technique(technique_id)
+		var name: Label = ui.label("%s\n%s" % [t.name, session.Layers.progress_text(session, technique_id)], 15, ui.grade_color(t))
 		name.tooltip_text = "%s\n%s" % [session.Arsenal.technique_tag(session.content, t), t.description]
 		name.mouse_filter = Control.MOUSE_FILTER_PASS
 		name.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		row.add_child(name)
+		row.add_child(_comprehend_button(ui, technique_id))
 		var stop: Button = ui.button("停下", func() -> void: ui.run(func() -> String: return session.unequip_technique(technique_id)), "移出栏位")
 		stop.disabled = not session.battle.is_empty()
 		row.add_child(stop)
@@ -74,12 +75,12 @@ static func _page(ui, slot_kind: String, title: String, in_use: Array, limit: in
 	var full := in_use.size() >= limit
 	var shown := 0
 	for technique_id: String in session.player.learned:
-		var t: Dictionary = session.content.technique(technique_id)
+		var t: Dictionary = session.held_technique(technique_id)
 		if t.slot != slot_kind or (ui.arts_filter != "all" and t.element != ui.arts_filter):
 			continue
 		shown += 1
 		var active: bool = technique_id in in_use
-		var card: Button = ui.button("%s%s\n%s · %s" % [t.name, "（运转中）" if active else "", t.tier_name, session.content.technique_data.elements[t.element].name], func() -> void:
+		var card: Button = ui.button("%s%s\n%s · %s · 第 %d / %d 层" % [t.name, "（运转中）" if active else "", t.tier_name, session.content.technique_data.elements[t.element].name, int(t.layer), int(t.layers)], func() -> void:
 			if active:
 				ui.run(func() -> String: return session.unequip_technique(technique_id))
 			else:
@@ -89,6 +90,26 @@ static func _page(ui, slot_kind: String, title: String, in_use: Array, limit: in
 		card.custom_minimum_size.y = 56
 		card.alignment = HORIZONTAL_ALIGNMENT_LEFT
 		card.disabled = (not active and full) or not session.battle.is_empty()
-		grid.add_child(card)
+		var cell := HBoxContainer.new()
+		cell.add_theme_constant_override("separation", 4)
+		cell.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		cell.add_child(card)
+		cell.add_child(_comprehend_button(ui, technique_id))
+		grid.add_child(cell)
 	if shown == 0:
 		library.add_child(ui.paragraph("没有此类已学的功法。"))
+
+## 参悟 of the next layer (layers.gd), its days and stones shown before it is pressed.
+static func _comprehend_button(ui, technique_id: String) -> Button:
+	var session = ui.session
+	var reason: String = session.comprehend_block(technique_id)
+	var cost: Dictionary = session.Layers.comprehend_cost(session, technique_id)
+	var label := "参悟\n%d 日%s" % [int(cost.days), " · %d 灵石" % int(cost.stones) if int(cost.stones) > 0 else ""]
+	var tip := "参悟下一层：耗 %d 日%s；斗法施展与闭关运转也会积累熟练。" % [int(cost.days), "、灵石 %d" % int(cost.stones) if int(cost.stones) > 0 else ""]
+	var held: Dictionary = session.held_technique(technique_id)
+	if int(held.layer) >= int(held.layers):
+		label = "圆满"
+	var button: Button = ui.button(label, func() -> void: ui.run(func() -> String: return session.comprehend(technique_id)), tip if reason.is_empty() else reason)
+	button.disabled = not reason.is_empty()
+	button.custom_minimum_size = Vector2(76, 56)
+	return button

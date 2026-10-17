@@ -4,6 +4,8 @@ extends RefCounted
 ## and player.methods (up to rules.method_slots) are passive 心法. player.equipment holds one item id
 ## per slot; equipped items leave the 行囊 and return to it when taken off.
 const Talents = preload("res://scripts/core/talents.gd")
+const Layers = preload("res://scripts/core/layers.gd")
+const Gear = preload("res://scripts/core/gear.gd")
 
 ## Totals from 心法, equipment and talents: attack, max_hp, max_qi, defense, cultivation, element_damage
 ## {element|"*": x}, and the talents' max_hp_percent and max_qi_percent of the stage's caps.
@@ -15,12 +17,16 @@ static func bonuses(s, holder: Dictionary = {}) -> Dictionary:
 		total[key] = 0
 	_add_talents(s, total, holder.get("talents", []) + holder.get("flaws", []))
 	var sources: Array[Dictionary] = []
+	# 心法 count at the layer held: the player keeps their layers (layers.gd), anyone else holds theirs at
+	# their realm's cap.
+	var layers: Variant = holder.get("layers")
 	for technique_id: Variant in holder.get("methods", []):
-		var method: Dictionary = s.content.technique(str(technique_id))
+		var method: Dictionary = Layers.held_in(s.content, layers, str(technique_id), int(holder.get("realm", 0))) if layers is Dictionary else Layers.at_realm(s.content, str(technique_id), int(holder.get("realm", 0)))
 		if not method.is_empty():
 			sources.append({"stats": method.passive, "element": method.element})
 	for slot: String in holder.get("equipment", {}):
-		var gear: Dictionary = s.content.equipment(str(holder.equipment[slot]))
+		# The player's pieces may be instances with their 祭炼 (gear.gd).
+		var gear: Dictionary = Gear.item_in(s.content, holder.get("gear", {}), str(holder.equipment[slot]))
 		if gear.is_empty():
 			continue
 		# A piece above the holder's realm gives only what they can draw on (驾驭度, arsenal.gd).
@@ -85,8 +91,9 @@ static func learn_block(s, technique_id: String) -> String:
 		return "此法无从参悟。"
 	if technique_id in s.player.learned:
 		return "你已习得此法。"
-	if int(s.player.realm) < int(t.min_realm):
-		return "%s之法，需达到%s方可参悟。" % [t.tier_name, s.content.realm_title(int(t.min_realm), 0)]
+	# A tier up to two realms beyond can be begun, its layers capped (layers.gd); three is too far.
+	if Layers.cap(s.content, t, int(s.player.realm)) < 1:
+		return "%s之法，境界相差太远，需达到%s方可参悟。" % [t.tier_name, s.content.realm_title(int(t.min_realm) - int(Layers.rule(s.content).blocked_gap) + 1, 0)]
 	return s.blocked()
 
 ## Studies a technique for its tier's days; the new technique goes into a free slot if there is one.
@@ -96,6 +103,7 @@ static func _study(s, technique_id: String) -> Dictionary:
 	if not s.ended.is_empty():
 		return passed
 	s.player.learned.append(technique_id)
+	Layers.begin(s, technique_id)
 	var slots: Array = s.player.arts if t.slot == "art" else s.player.methods
 	if slots.size() < int(s.content.rules.art_slots if t.slot == "art" else s.content.rules.method_slots):
 		slots.append(technique_id)
@@ -166,8 +174,10 @@ static func unequip_technique(s, technique_id: String) -> String:
 	s.refresh_realm_stats()
 	return s.finish("停下了%s。" % t.name)
 
+## Wears a piece from the 行囊: a plain one leaves its stack, an instance stays in player.gear and is
+## only marked worn; what was worn goes back the same way.
 static func equip_item(s, item_id: String) -> String:
-	var gear: Dictionary = s.content.equipment(item_id)
+	var gear: Dictionary = Gear.item(s, item_id)
 	if gear.is_empty() or s.item_count(item_id) < 1:
 		return "行囊里没有这件宝物。"
 	if not s.battle.is_empty():
@@ -175,10 +185,11 @@ static func equip_item(s, item_id: String) -> String:
 	if not bool(s.Arsenal.wielded(s.content, gear, int(s.player.realm)).usable):
 		return s.Arsenal.mastery_text(s.content, gear, int(s.player.realm))
 	var worn := str(s.player.equipment.get(gear.slot, ""))
-	s.remove_item(item_id, 1)
+	if not Gear.is_instance(item_id):
+		s.remove_item(item_id, 1)
+	s.player.equipment[gear.slot] = item_id
 	if not worn.is_empty():
 		s.add_item(worn, 1)
-	s.player.equipment[gear.slot] = item_id
 	s.refresh_realm_stats()
 	return s.finish("换上了%s。" % gear.name)
 
@@ -188,10 +199,11 @@ static func unequip_slot(s, slot: String) -> String:
 		return "此处没有佩戴宝物。"
 	if not s.battle.is_empty():
 		return "斗法中无法更换宝物。"
+	var name := str(Gear.item(s, worn).get("name", ""))
 	s.player.equipment[slot] = ""
 	s.add_item(worn, 1)
 	s.refresh_realm_stats()
-	return s.finish("取下了%s。" % s.content.equipment(worn).name)
+	return s.finish("取下了%s。" % name)
 
 static func choose_sect(s, sect_id: String) -> String:
 	if s.player.is_empty() or not s.content.sects.has(sect_id):
@@ -226,4 +238,5 @@ static func take_lineage(s, sect_id: String) -> void:
 	for skill_id: String in s.content.sects[sect_id].skills:
 		if not skill_id in s.player.learned:
 			s.player.learned.append(skill_id)
+		Layers.begin(s, skill_id)
 		s.player.arts.append(skill_id)

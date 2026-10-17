@@ -15,13 +15,16 @@ static func render(ui) -> void:
 	var shop := _column(ui, columns, location + " · 店家")
 
 	var sellable := 0
-	for item_id: String in session.player.items.keys():
+	# Refined 宝物 are offered one by one (gear.gd); 全部摆上 leaves them out.
+	for item_id: String in session.player.items.keys() + session.Gear.carried(session):
 		var price: int = session.sell_price(item_id)
 		var left: int = session.item_count(item_id) - int(ui.trade.sell.get(item_id, 0))
 		if price <= 0:
 			continue
 		sellable += 1
-		var item: Dictionary = session.content.item(item_id)
+		var item: Dictionary = _item(session, item_id)
+		if item.has("instance"):
+			item.description = "%s\n%s" % [item.description, session.Gear.refine_text(item)]
 		# Herbs follow the market (inventory.gd market_factor): this month's rate against the usual.
 		var rate: float = session.Inventory.market_factor(session, item_id)
 		var trend := ""
@@ -63,7 +66,7 @@ static func render(ui) -> void:
 	for item_id: String in ui.trade.sell:
 		var count := int(ui.trade.sell[item_id])
 		income += session.sell_price(item_id) * count
-		table.add_child(ui.button("%s ×%d" % [session.content.item(item_id).name, count], func() -> void: ui.stage_sale(item_id, -1), "撤回一件"))
+		table.add_child(ui.button("%s ×%d" % [_item(session, item_id).name, count], func() -> void: ui.stage_sale(item_id, -1), "撤回一件"))
 	table.add_child(ui.label("购 入", 16, ui.GOLD))
 	var cost := 0
 	for item_id: String in ui.trade.buy:
@@ -95,3 +98,7 @@ static func _price(goods: Array, item_id: String) -> int:
 		if good.item == item_id:
 			return int(good.price)
 	return 0
+
+## An item by its id, or a refined 宝物 by its instance id.
+static func _item(session, item_id: String) -> Dictionary:
+	return session.gear_item(item_id) if session.Gear.is_instance(item_id) else session.content.item(item_id)

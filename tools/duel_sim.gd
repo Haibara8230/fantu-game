@@ -27,6 +27,12 @@ func _initialize() -> void:
 		_summit(int(setup[0]), int(setup[1]))
 	quit(0)
 
+## 功法层数 (layers.gd): a character just begun holds their arts at the first layer; one further on has
+## practised them to the realm's cap (a technique without a record is held at the cap).
+func _seasoned(game) -> void:
+	if int(game.player.realm) > 0 or int(game.player.stage) > 0:
+		game.player.layers = {}
+
 ## Spars with the generated disciples at the sect, who cast their whole loadout from orbs.
 func _spars() -> void:
 	var wins := 0
@@ -46,6 +52,7 @@ func _spars() -> void:
 		stages.append(int(game.person(foe_id).stage))
 		# Matched in cultivation: the fair test of the rules.
 		game.player.stage = int(game.person(foe_id).stage)
+		_seasoned(game)
 		game.refresh_realm_stats()
 		game.player.hp = game.player.max_hp
 		game.begin_spar(foe_id)
@@ -73,6 +80,7 @@ func _report(enemy_id: String, realm: int, stage: int, lineage: Array) -> void:
 		game.player.stage = stage
 		if not lineage.is_empty():
 			game.Loadout.take_lineage(game, str(lineage[0]))
+		_seasoned(game)
 		game.refresh_realm_stats()
 		game.player.hp = game.player.max_hp
 		game.begin_battle(enemy_id, "event")
@@ -100,6 +108,7 @@ func _series(series_id: String, location: String, realm: int, stage: int, lineag
 		game.player.stage = stage
 		if not lineage.is_empty():
 			game.Loadout.take_lineage(game, str(lineage[0]))
+		_seasoned(game)
 		game.refresh_realm_stats()
 		game.player.hp = game.player.max_hp
 		game.player.location = location
@@ -124,6 +133,7 @@ func _trial(trial: String, realm: int, stage: int) -> void:
 		game.player.realm = realm
 		game.player.stage = stage
 		game.Loadout.take_lineage(game, "qingyun")
+		_seasoned(game)
 		game.refresh_realm_stats()
 		game.player.hp = game.player.max_hp
 		if trial == "demon":
@@ -155,6 +165,7 @@ func _summit(realm: int, stage: int) -> void:
 		game.Loadout.take_lineage(game, "qingyun")
 		game.player.realm = realm
 		game.player.stage = stage
+		_seasoned(game)
 		game.refresh_realm_stats()
 		game.player.hp = game.player.max_hp
 		game.Summit.begin(game, 1)

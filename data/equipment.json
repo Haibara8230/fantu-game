@@ -1,9 +1,10 @@
 {
   "mastery": [
-    {"share": 1.0, "affixes": 99},
-    {"share": 0.5, "affixes": 1},
-    {"share": 0.2, "affixes": 0}
+    {"share": 1.0, "affixes": 99, "refined": 1.0},
+    {"share": 0.5, "affixes": 1, "refined": 0.7},
+    {"share": 0.2, "affixes": 0, "refined": 0.3}
   ],
+  "refine": {"step": 0.1, "days": [5, 10, 20, 40, 80], "stones": [10, 30, 80, 200, 500], "growth": 0.5},
   "slots": {"weapon": "兵刃", "robe": "法袍", "accessory": "佩饰"},
   "tiers": [
     {"name": "凡兵", "realm": 0, "power": 1.0, "affixes": 0, "value": 15},

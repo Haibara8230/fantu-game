@@ -10,6 +10,7 @@ extends RefCounted
 ## talents (`shaped`) they shape the life: its pace, its chance of foundation and its years; worlds begun
 ## before keep the lives they had, and the talents only show.
 const Schools = preload("res://scripts/core/schools.gd")
+const Layers = preload("res://scripts/core/layers.gd")
 const Arsenal = preload("res://scripts/core/arsenal.gd")
 const Talents = preload("res://scripts/core/talents.gd")
 const ATTACK_ARCHETYPES := ["bolt", "barrage", "burst"]
@@ -236,7 +237,7 @@ static func foe(content, person_id: String, person: Dictionary) -> Dictionary:
 	var best: Dictionary = {}
 	var arts: Array = []
 	for art_id: String in person.loadout.arts:
-		var art: Dictionary = content.technique(art_id)
+		var art: Dictionary = Layers.at_realm(content, art_id, int(person.realm))
 		if art.is_empty():
 			continue
 		arts.append(art_id)

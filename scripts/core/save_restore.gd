@@ -6,6 +6,10 @@ const Chronicle = preload("res://scripts/core/chronicle.gd")
 const SaveMigration = preload("res://scripts/core/save_migration.gd")
 const Cultivation = preload("res://scripts/core/cultivation.gd")
 const Talents = preload("res://scripts/core/talents.gd")
+const Gear = preload("res://scripts/core/gear.gd")
+const Layers = preload("res://scripts/core/layers.gd")
+# More 祭炼 steps than any piece could use; a save above it is malformed.
+const MAX_REFINE := 20
 const PLAYER_COUNTS := ["realm", "xp", "hp", "qi", "stones", "cultivation_carry", "fatigue", "fatigue_day", "insight"]
 const LIMIT := 1000000000.0
 
@@ -110,7 +114,7 @@ static func restore(s, data: Variant) -> bool:
 	if not content.location_visible(saved_player.location, saved_world.flags):
 		return false
 	for item_id: Variant in items:
-		if not item_id is String or not _whole_nonnegative(items[item_id]) or int(items[item_id]) < 1:
+		if not item_id is String or Gear.is_instance(item_id) or not _whole_nonnegative(items[item_id]) or int(items[item_id]) < 1:
 			return false
 	if int(saved_player.realm) >= content.realms.size():
 		return false
@@ -851,12 +855,39 @@ static func _valid_loadout(content, saved_player: Dictionary) -> Dictionary:
 			if not skill_id in learned:
 				learned.append(skill_id)
 			arts.append(skill_id)
+	# 宝物 instances (optional: journeys before 祭炼 hold none). Retired types are dropped.
+	var saved_gear: Variant = saved_player.get("gear", {})
+	var serial: Variant = saved_player.get("gear_serial", 0)
+	if not saved_gear is Dictionary or not _whole_nonnegative(serial):
+		return {}
+	var gear := {}
+	for item_id: Variant in saved_gear:
+		var held: Variant = saved_gear[item_id]
+		if not item_id is String or not Gear.is_instance(item_id) or not item_id.trim_prefix(Gear.PREFIX).is_valid_int() or int(item_id.trim_prefix(Gear.PREFIX)) > int(serial):
+			return {}
+		if not held is Dictionary or not held.get("type") is String or not _whole_nonnegative(held.get("refine")) or int(held.refine) > MAX_REFINE:
+			return {}
+		if not content.equipment(held.type).is_empty():
+			gear[item_id] = {"type": held.type, "refine": int(held.refine)}
 	var equipment := {}
 	for slot: String in content.equipment_data.slots:
 		var worn: Variant = saved_player.equipment.get(slot, "")
-		var gear: Dictionary = content.equipment(str(worn)) if worn is String else {}
-		equipment[slot] = worn if not gear.is_empty() and gear.slot == slot else ""
-	return {"learned": learned, "arts": arts, "methods": methods, "equipment": equipment}
+		var piece: Dictionary = Gear.item_in(content, gear, str(worn)) if worn is String else {}
+		equipment[slot] = worn if not piece.is_empty() and piece.slot == slot and not worn in equipment.values() else ""
+	# 功法层数 (layers.gd), optional: a technique without a record (journeys before layers were kept) is
+	# held as it always was, at the realm's cap. Records of techniques no longer known are dropped.
+	var layers := {}
+	var saved_layers: Variant = saved_player.get("layers", {})
+	if not saved_layers is Dictionary:
+		return {}
+	for technique_id: Variant in saved_layers:
+		var entry: Variant = saved_layers[technique_id]
+		if not technique_id is String or not entry is Dictionary or not _whole_nonnegative(entry.get("layer")) or int(entry.layer) < 1 or not _whole_nonnegative(entry.get("practice")):
+			return {}
+		if technique_id in learned:
+			# Content may have changed the layers since: clamp rather than lock the journey.
+			layers[technique_id] = {"layer": mini(int(entry.layer), int(content.technique(technique_id).layers)), "practice": int(entry.practice)}
+	return {"learned": learned, "arts": arts, "methods": methods, "equipment": equipment, "gear": gear, "gear_serial": int(serial), "layers": layers}
 
 ## Normalized accepted commissions, or null when malformed. Quests of retired kinds are dropped.
 static func _valid_quests(content, data: Variant) -> Variant:

@@ -409,6 +409,8 @@ func _validate() -> String:
 	if problem.is_empty():
 		problem = _validate_mastery()
 	if problem.is_empty():
+		problem = _validate_layers()
+	if problem.is_empty():
 		problem = _validate_population()
 	if problem.is_empty():
 		problem = _validate_duties()
@@ -646,6 +648,36 @@ func _validate_mastery() -> String:
 	for step: Variant in table:
 		if not step is Dictionary or not (step.get("share") is float or step.get("share") is int) or float(step.share) <= 0.0 or float(step.share) > 1.0 or not _whole(step.get("affixes")):
 			return "驾驭度表无效。"
+		# 祭炼 (gear.gd) raises the share up to `refined`, never below the share or above full.
+		if step.has("refined") and (not (step.refined is float or step.refined is int) or float(step.refined) < float(step.share) or float(step.refined) > 1.0):
+			return "驾驭度表的祭炼上限无效。"
+	var refine: Variant = equipment_data.get("refine")
+	if not refine is Dictionary or not (refine.get("step") is float or refine.get("step") is int) or float(refine.step) <= 0.0 or not (refine.get("growth") is float or refine.get("growth") is int) or float(refine.growth) < 0.0:
+		return "祭炼配置无效。"
+	for key: String in ["days", "stones"]:
+		if not refine.get(key) is Array or refine[key].size() != equipment_data.tiers.size() or refine[key].any(func(value: Variant) -> bool: return not _whole(value) or int(value) < 1):
+			return "祭炼须按品阶给出：" + key
+	return ""
+
+## 功法层数 (layers.gd): each tier's layers, the layers that unlock its affixes in order, and the days and
+## stones a layer asks; the rule's first-layer share and practice.
+func _validate_layers() -> String:
+	for tier: Dictionary in technique_data.tiers:
+		if not _whole(tier.get("layers")) or int(tier.layers) < 1 or not tier.get("affix_layers") is Array or not _whole(tier.get("layer_days")) or int(tier.layer_days) < 1 or not _whole(tier.get("layer_stones")):
+			return "功法层数配置错误：" + str(tier.name)
+		var last := 0
+		for layer: Variant in tier.affix_layers:
+			if not _whole(layer) or int(layer) <= last or int(layer) > int(tier.layers):
+				return "功法词条的解封层数无效：" + str(tier.name)
+			last = int(layer)
+		if tier.affix_layers.size() < int(tier.affixes):
+			return "功法词条缺解封层数：" + str(tier.name)
+	var rule: Variant = technique_data.get("layer_rule")
+	if not rule is Dictionary or not (rule.get("first_share") is float or rule.get("first_share") is int) or float(rule.first_share) <= 0.0 or float(rule.first_share) > 1.0:
+		return "功法层数规则无效。"
+	for key: String in ["blocked_gap", "cast_practice", "retreat_method", "retreat_art"]:
+		if not _whole(rule.get(key)) or int(rule[key]) < 0:
+			return "功法层数规则无效：" + key
 	return ""
 
 func _validate_forge() -> String:

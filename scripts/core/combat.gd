@@ -291,7 +291,7 @@ static func counter_multiplier(s, element: String) -> float:
 
 static func use_skill(s, skill_id: String) -> String:
 	s.combat_events.clear()
-	var t: Dictionary = s.content.technique(skill_id)
+	var t: Dictionary = s.held_technique(skill_id)
 	if s.battle.is_empty() or t.is_empty() or t.slot != "art":
 		return "当前无法施展神通。"
 	if skill_id not in s.active_skills():
@@ -341,6 +341,10 @@ static func use_skill(s, skill_id: String) -> String:
 			for status: String in LINGERING:
 				if t.has(status):
 					_inflict(s.battle.status, status, t[status])
+	# Each cast is practice toward the art's next layer (layers.gd).
+	var reached: Array[String] = s.Layers.after_cast(s, skill_id)
+	if not reached.is_empty():
+		text = " ".join([text] + reached)
 	if t.has("draw"):
 		_gain(s, _draw(s, int(t.draw), player_weights(s)))
 	if t.has("renew"):
@@ -356,6 +360,13 @@ static func use_skill(s, skill_id: String) -> String:
 		return _win(s)
 	s.changed.emit()
 	return text
+
+## An opponent's art as they hold it: at the cap of their realm (layers.gd); the 心魔 holds the player's
+## own layers.
+static func foe_art(s, foe: Dictionary, art_id: String) -> Dictionary:
+	if str(foe.get("name", "")) == "心魔" and art_id in s.player.get("learned", []):
+		return s.held_technique(art_id)
+	return s.Layers.at_realm(s.content, art_id, int(foe.get("realm", s.content.realms.size())))
 
 ## Orbs come into the player's hand during the turn.
 static func _gain(s, orbs: Array) -> void:
@@ -608,14 +619,14 @@ static func begin_demon(s) -> void:
 	var arts: Array = []
 	var best: Dictionary = {}
 	for art_id: String in s.active_skills():
-		var art: Dictionary = s.content.technique(art_id)
+		var art: Dictionary = s.held_technique(art_id)
 		if art.is_empty():
 			continue
 		arts.append(art_id)
 		if str(art.get("kind", "")) == "attack" and (best.is_empty() or int(art.damage_max) > int(best.damage_max)):
 			best = art
 	if best.is_empty():
-		best = s.content.technique(str(arts[0])) if not arts.is_empty() else {"id": "", "name": "心魔一击", "vfx": "water", "tier": 1, "element": "water", "damage_min": 10, "damage_max": 14}
+		best = s.held_technique(str(arts[0])) if not arts.is_empty() else {"id": "", "name": "心魔一击", "vfx": "water", "tier": 1, "element": "water", "damage_min": 10, "damage_max": 14}
 	var power := float(demon.power)
 	var foe := {"name": "心魔", "hp": int(round(float(s.player.max_hp) * float(demon.hp_share))), "damage_min": maxi(1, int(round(float(best.get("damage_min", 10)) * power))), "damage_max": maxi(1, int(round(float(best.get("damage_max", 14)) * power))),
 		"art": str(best.get("id", "")), "art_name": str(best.get("name", "")), "vfx": str(best.get("vfx", "water")), "tier": int(best.get("tier", 1)), "xp": 0, "npc": "", "sect": str(s.player.get("sect", "wanderer")),
@@ -908,8 +919,8 @@ static func release_of(s) -> Dictionary:
 	var weapon := str(s.player.get("equipment", {}).get("weapon", ""))
 	if weapon.is_empty():
 		return {}
-	var gear: Dictionary = s.content.equipment(weapon)
-	var base: Dictionary = s.content.equipment_data.bases.get(weapon.get_slice(":", 1), {})
+	var gear: Dictionary = s.Gear.item(s, weapon)
+	var base: Dictionary = s.content.equipment_data.bases.get(str(gear.get("id", "")).get_slice(":", 1), {})
 	if gear.is_empty() or not base.has("release"):
 		return {}
 	var held: Dictionary = s.Arsenal.wielded(s.content, gear, int(s.player.realm))
@@ -990,7 +1001,7 @@ static func _foe_prepare(s) -> void:
 	for step: int in 3:
 		var pick: Dictionary = {}
 		for art_id: Variant in foe.arts:
-			var art: Dictionary = s.content.technique(str(art_id))
+			var art: Dictionary = foe_art(s, foe, str(art_id))
 			if art.is_empty() or art.slot != "art" or not affordable(left, art.cost):
 				continue
 			if plan.any(func(entry: Dictionary) -> bool: return entry.kind in ["heal", "guard"] and entry.kind == art.kind):
@@ -1234,7 +1245,7 @@ static func _enemy_turn(s, guarding: bool) -> String:
 					if int(s.battle.hp) <= 0:
 						return _win(s)
 			continue
-		var art: Dictionary = s.content.technique(str(planned.art))
+		var art: Dictionary = foe_art(s, foe, str(planned.art))
 		if art.is_empty() or not affordable(s.battle.foe_orbs, art.cost):
 			continue
 		var spent := _pay(s.battle.foe_orbs, art.cost)
@@ -1349,8 +1360,8 @@ static func worn_traits(s) -> Array[Dictionary]:
 		var item_id := str(s.player.equipment[slot])
 		if item_id.is_empty():
 			continue
-		var base: Dictionary = s.content.equipment_data.bases.get(item_id.get_slice(":", 1), {})
-		var gear: Dictionary = s.content.equipment(item_id)
+		var gear: Dictionary = s.Gear.item(s, item_id)
+		var base: Dictionary = s.content.equipment_data.bases.get(str(gear.get("id", "")).get_slice(":", 1), {})
 		if base.has("trait") and not gear.is_empty() and bool(s.Arsenal.wielded(s.content, gear, int(s.player.realm)).usable):
 			traits.append(base["trait"])
 	return traits
@@ -1413,7 +1424,7 @@ static func plain_turn(s) -> String:
 		var best := ""
 		var best_worth := -1
 		for art_id: String in s.active_skills():
-			var t: Dictionary = s.content.technique(art_id)
+			var t: Dictionary = s.held_technique(art_id)
 			if t.is_empty() or not affordable(s.battle.orbs, t.cost):
 				continue
 			var worth := int(t.get("damage_max", 0))
@@ -1447,7 +1458,7 @@ static func quick(s, most: int = 60) -> String:
 
 ## The simplest full turn: casts the art if the orbs allow, then ends the turn (simulations, tests).
 static func duel_turn(s, skill_id: String) -> String:
-	var t: Dictionary = s.content.technique(skill_id)
+	var t: Dictionary = s.held_technique(skill_id)
 	var text := ""
 	if not s.battle.is_empty() and not t.is_empty() and affordable(s.battle.orbs, t.cost):
 		text = use_skill(s, skill_id)
