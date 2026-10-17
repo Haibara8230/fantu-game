@@ -197,39 +197,46 @@ AGENTS.md 的第一条要求就是**规则、数据与表现分开**。
 
 ### 11.8.1 怎样跑
 
-`check.cmd` 先在后台导入资源，然后依次运行十六个测试，每个都用 `--headless`，不打开任何可见的窗口：
+`check.cmd` 先在后台导入资源，然后依次运行二十一个测试，每个都用 `--headless`，不打开任何可见的窗口：
 
 ```
 core_smoke world_smoke events_smoke region_smoke growth_smoke arsenal_smoke
 society_smoke story_smoke talent_smoke bonds_smoke art_smoke ui_smoke
-presentation_smoke sect_smoke alchemy_smoke cave_smoke
+presentation_smoke sect_smoke alchemy_smoke cave_smoke content_smoke
+duel_moves_smoke layers_smoke polish_smoke experience_smoke
 ```
 
+- 日志保存在项目 `.tmp/`，便携 Godot 使用 self-contained 模式；不向 C 盘写临时文件。
 - 每个测试有 180 秒的外层时限（导入 600 秒），超时就杀掉整个进程树并记 `TIMEOUT`。这是因为卡住的 Godot 永远走不到测试自己的计时器。
 - 退出码不为 0、超时、或输出里有 `SCRIPT ERROR`，都算失败——Godot 在脚本出错后还会继续运行，只看退出码会漏掉。
 
 ### 11.8.2 各测试管什么
 
-| 测试 | 管的东西 | 检查数（2026-10-14） |
-|---|---|---|
-| core_smoke | 会话、存读档、基本行为 | 32 |
-| world_smoke | 历法、统一时间、存档迁移、随机流、编年史 | 43 |
-| events_smoke | 调度器、事件状态、打断、寿元、长短一致、长时模拟、内容检查 | 89 |
-| region_smoke | 节点地图、行程、途中遭遇、场景、隐藏的洞府、存档、音频 | 195 |
-| growth_smoke | 灵根、小阶段、突破门槛、静养、按日计时；金丹、元婴、化神；飞升 | 129 |
-| arsenal_smoke | 生成功法与法宝、参悟与栏位、加成、斗法效果、传授、轮换货架、掉落、特效分层 | 91 |
-| society_smoke | 生成人口与配置不重复、切磋、可改变的妖蟒之乱、传闻、委托、外门小比、停留中结识 | 102 |
-| story_smoke | 入门、师门差事、故人剧情、相识求助、主动来往、教学卡 | 91 |
-| talent_smoke | 六级天赋与缺陷、修正项、资质、生成人口的天赋、可见性、存档 | 177 |
-| bonds_smoke | 宗门身份、贡献、月俸、兑换、捐献、巡视、晋升；人情解锁；道侣弟子结拜 | 97 |
-| art_smoke | 美术资源覆盖与实际使用者 | 162 |
-| ui_smoke | 各页面在两种分辨率下的排版、按钮、提示 | 181 |
-| presentation_smoke | 演出、斗法画面、提示位置 | 40 |
-| sect_smoke | 五派传承、斗法规则、灵气、状态、速战、拍卖、论道、职司 | 273 |
-| alchemy_smoke | 炼丹、药引、丹炉、火候、上品、丹毒、灵田、行情、炼器、存档迁移 | 83 |
-| cave_smoke | 神识、洞府深处、沉霞古境、机缘的布置、存档 | 49 |
+| 测试 | 覆盖范围 |
+|---|---|
+| core_smoke | 会话、存读档、基本行为 |
+| world_smoke | 历法、统一时间、迁移、随机流与编年史 |
+| events_smoke | 事件调度、长短时间等价及 500 年性能预算 |
+| region_smoke | 节点、行程、遭遇、隐藏地点与音频配置 |
+| growth_smoke | 灵根、小阶段、突破、寿元与现行飞升 |
+| arsenal_smoke | 功法宝物、学习装备与组合生成 |
+| society_smoke | 生成人口、切磋、传闻、委托与小比 |
+| story_smoke | 入门、故人、支线与剧情条件 |
+| talent_smoke | 天赋、缺陷、随机性与存档 |
+| bonds_smoke | 身份、贡献、俸禄、兑换与人情关系 |
+| art_smoke | 资源覆盖与实际使用者 |
+| ui_smoke | 页面排版、按钮、提示与两种分辨率 |
+| presentation_smoke | 斗法演出、画面与提示位置 |
+| sect_smoke | 五派流派、灵气、状态、速战、拍卖与论道 |
+| alchemy_smoke | 炼丹、上品、丹毒、灵田、行情与炼器 |
+| cave_smoke | 神识、洞府、守卫、古境、机缘与存档 |
+| content_smoke | JSON 重复键、简介命名、剧情审计与故障注入 |
+| duel_moves_smoke | 招式、状态与对手行动规则 |
+| layers_smoke | 功法层数、熟练、宝物实例与祭炼 |
+| polish_smoke | 稀有线索、俸禄、交付保护、默认放行、稳定步骤与谢礼互斥 |
+| experience_smoke | 路线模式、两条日常、三种考校、天南旁证与三结局、旧档及消息反馈 |
 
-合计约一千八百项检查，全部通过才提交。
+检查数随断言与分支变化，不在本表维护另一套固定总数；每次运行看各套件输出与日志。A–D 的 21 组／2562 项是该次历史全量记录；远端合并后另做 6 组相关验证，不能相加作为一轮全量结果。本批专门回归见 `../CONTENT_AUDIT_20261017.md`。
 
 ### 11.8.3 测试的规矩
 
@@ -246,12 +253,12 @@ presentation_smoke sect_smoke alchemy_smoke cave_smoke
 |---|---|
 | `tools/duel_sim.gd` | 在后台按「速战」的简单出法、用五种灵根批量对打，打印各对手的回合数、胜率与剩余气血，以及切磋与五宗论道的结果；用来校准对手数值（第四章 4.8.1 的表就是它跑出来的） |
 | `tools/long_play.gd` | 在后台玩完一整局：闭关、买丹、突破、只在必要时出门，记录存档大小、读档耗时与最慢的一次行动。实测：第 480 年化神圆满飞升，存档 106 KB，读档 15 毫秒，最慢一次行动 77 毫秒 |
-| `tools/story_report.gd` | 剧情检查报告（分析在 `tools/story_check.gd`）：只读数据与脚本文本，列出每条剧情的入口、各步的开始条件与完成方式、奖励、留下的旗标与谁读取它，剧情要用的物品及其来源，全部旗标的设置与读取。找出「错误」（没人能开启的剧情、完成不了的步骤、永远不成立的条件、引用不存在的人物物品剧情步骤、没有来源的物品）与「提醒」（可反复领取的奖励、步骤与推进它的交互各发一份、设置了没人读的旗标）。报告写到 `.tmp/story_report.md`，有错误时退出码为 1；`tests/content_smoke.gd` 也跑这项检查，有错误即失败，并用埋入故障的数据副本验证每一类都能查出 |
+| `tools/story_report.gd` | 剧情检查报告（分析在 `tools/story_check.gd`）：只读数据与脚本文本，列出每条剧情的入口、各步的开始条件与完成方式、奖励、留下的旗标与谁读取它，剧情要用的物品及其来源，全部旗标的设置与读取。找出「错误」（没人能开启的剧情、完成不了的步骤、永远不成立的条件、引用不存在的人物物品剧情步骤、没有来源的物品）与「提醒」（可反复领取的奖励、步骤与推进它的交互各发一份、设置了没人读的旗标）。洞府守卫通过实际房间→敌人→world_flag 引用识别动态读取；仅声明敌人标记不算有读取。共同奖励与选项奖励同时结算仍提示核对合计，不等同于可以重复领取。报告写到 `.tmp/story_report.md`，有错误时退出码为 1；`tests/content_smoke.gd` 也跑这项检查，有错误即失败，并用埋入故障的数据副本验证每一类都能查出 |
 | `tools/capture.ps1` + `capture_screens.gd` | 截取各页面的截图，用来检查排版（只看 1920×1080 与 2560×1440 两种分辨率） |
 
 ### 11.9.1 截图的安全措施
 
-截图必须打开真正的游戏窗口（无头模式没有画面），所以要特别小心不碰玩家的东西：
+下面记录旧截图工具的措施，只能在用户明确要求图形采集或自行启动时使用；当前自动验证仍全部用 --headless。本批不运行截图。旧工具会打开屏幕外的真实窗口，因此须特别小心不碰玩家的东西：
 
 - 截图从项目的临时副本运行，用它自己的用户目录（以 `fantu_capture` 结尾）；
 - 写给 Godot 的 `override.cfg` 不带 BOM（Windows PowerShell 5.1 默认带 BOM，会让 Godot 忽略这个文件，转而写进玩家的用户目录——2026-10-14 出过一次这样的事故，覆盖了玩家的自动存档与教学记录，之后修正）；
@@ -267,7 +274,9 @@ presentation_smoke sect_smoke alchemy_smoke cave_smoke
 |---|---|
 | `AGENTS.md` | 项目的硬性约定 |
 | `docs/DESIGN_BASELINE.md` | 规则与数值框架，改动时同步更新 |
-| `docs/BACKLOG.md` | 待办与状态 |
+| `docs/CURRENT_STATUS.md` | 现行状态、文档权威关系与历史快照边界 |
+| `docs/CONTENT_AUDIT_20261017.md` | 审计提醒逐条核查、证据与剩余事项 |
+| `docs/BACKLOG.md` | 未完成或待体验验收的工作 |
 | `docs/ROADMAP.md` | 路线图与每轮的总结 |
 | `docs/GAME_INTRO.md` | 面向玩家的简短介绍 |
 | `docs/UI_REDESIGN.md` | 界面改版的设计 |

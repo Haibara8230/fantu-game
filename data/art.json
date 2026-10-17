@@ -30,7 +30,8 @@
     "talent_huigen": "res://assets/art/events/talent_huigen.png",
     "talent_bulao": "res://assets/art/events/talent_bulao.png",
     "talent_jiandan": "res://assets/art/events/talent_jiandan.png",
-    "talent_fuze": "res://assets/art/events/talent_fuze.png"
+    "talent_fuze": "res://assets/art/events/talent_fuze.png",
+    "ascension_opens": "res://assets/art/events/ascension_opens.png"
   },
   "person_art": {
     "storyteller": "res://assets/art/events/teahouse_story.png",
@@ -39,7 +40,9 @@
   },
   "ui_art": {
     "alchemy": "res://assets/art/ui/alchemy_vignette.png",
-    "spirit_field": "res://assets/art/ui/spirit_field_vignette.png"
+    "spirit_field": "res://assets/art/ui/spirit_field_vignette.png",
+    "rite_meditation": "res://assets/art/actors/hero_meditate.png",
+    "rite_furnace": "res://assets/art/ui/rite_furnace.png"
   },
   "actors": {
     "hero": {
@@ -182,7 +185,48 @@
         "guard": 5
       },
       "faces_right": true,
-      "height_ratio": 0.85
+      "height_ratio": 0.85,
+      "preferred_layout": {
+        "faces_right": false,
+        "frame_regions": [
+          [
+            0,
+            0,
+            512,
+            512
+          ],
+          [
+            512,
+            0,
+            472,
+            512
+          ],
+          [
+            984,
+            0,
+            552,
+            512
+          ],
+          [
+            0,
+            512,
+            544,
+            512
+          ],
+          [
+            544,
+            512,
+            480,
+            512
+          ],
+          [
+            1024,
+            512,
+            512,
+            512
+          ]
+        ]
+      }
     },
     "mo_xiu": {
       "texture": "res://assets/art/rival_atlas_v2.png",
@@ -278,7 +322,11 @@
       },
       "faces_right": true,
       "height_ratio": 0.85,
-      "tint": "#bcd8ff8c"
+      "tint": "#bcd8ff8c",
+      "preferred_layout": {
+        "tint": "#ffffff",
+        "faces_right": false
+      }
     },
     "tribulation_nascent": {
       "texture": "res://assets/art/rival_atlas_v2.png",
@@ -295,7 +343,11 @@
       },
       "faces_right": true,
       "height_ratio": 0.85,
-      "tint": "#bcd8ff8c"
+      "tint": "#bcd8ff8c",
+      "preferred_layout": {
+        "tint": "#ffffff",
+        "faces_right": false
+      }
     },
     "tribulation_deity": {
       "texture": "res://assets/art/rival_atlas_v2.png",
@@ -312,7 +364,11 @@
       },
       "faces_right": true,
       "height_ratio": 0.85,
-      "tint": "#bcd8ff8c"
+      "tint": "#bcd8ff8c",
+      "preferred_layout": {
+        "tint": "#ffffff",
+        "faces_right": false
+      }
     },
     "xin_mo": {
       "texture": "res://assets/art/cultivator_atlas_v2.png",
@@ -386,7 +442,20 @@
           768,
           552
         ]
-      ]
+      ],
+      "preferred_layout": {
+        "columns": 2,
+        "rows": 2,
+        "frames": {
+          "idle": 0,
+          "prepare": 0,
+          "attack": 1,
+          "cast": 0,
+          "hit": 2,
+          "guard": 3
+        },
+        "frame_regions": null
+      }
     },
     "bear_king": {
       "preferred": "res://assets/art/battle/bear_king.png",
@@ -428,7 +497,20 @@
           768,
           552
         ]
-      ]
+      ],
+      "preferred_layout": {
+        "columns": 2,
+        "rows": 2,
+        "frames": {
+          "idle": 0,
+          "prepare": 0,
+          "attack": 1,
+          "cast": 0,
+          "hit": 2,
+          "guard": 3
+        },
+        "frame_regions": null
+      }
     },
     "shan_xiao": {
       "preferred": "res://assets/art/battle/shan_xiao.png",
@@ -470,7 +552,45 @@
           768,
           552
         ]
-      ]
+      ],
+      "preferred_layout": {
+        "columns": 2,
+        "rows": 2,
+        "frames": {
+          "idle": 0,
+          "prepare": 0,
+          "attack": 1,
+          "cast": 0,
+          "hit": 2,
+          "guard": 3
+        },
+        "frame_regions": [
+          [
+            0,
+            0,
+            720,
+            528
+          ],
+          [
+            720,
+            0,
+            816,
+            528
+          ],
+          [
+            0,
+            528,
+            800,
+            496
+          ],
+          [
+            800,
+            528,
+            736,
+            496
+          ]
+        ]
+      }
     },
     "huo_ya": {
       "preferred": "res://assets/art/battle/huo_ya.png",
@@ -512,7 +632,20 @@
           768,
           552
         ]
-      ]
+      ],
+      "preferred_layout": {
+        "columns": 2,
+        "rows": 2,
+        "frames": {
+          "idle": 0,
+          "prepare": 0,
+          "attack": 1,
+          "cast": 0,
+          "hit": 2,
+          "guard": 3
+        },
+        "frame_regions": null
+      }
     },
     "wolf": {
       "texture": "res://assets/art/beasts_atlas_v1.png",
@@ -595,7 +728,20 @@
           768,
           552
         ]
-      ]
+      ],
+      "preferred_layout": {
+        "columns": 2,
+        "rows": 2,
+        "frames": {
+          "idle": 0,
+          "prepare": 0,
+          "attack": 1,
+          "cast": 0,
+          "hit": 2,
+          "guard": 3
+        },
+        "frame_regions": null
+      }
     },
     "yanjia_xi": {
       "preferred": "res://assets/art/battle/yanjia_xi.png",
@@ -637,7 +783,45 @@
           768,
           552
         ]
-      ]
+      ],
+      "preferred_layout": {
+        "columns": 2,
+        "rows": 2,
+        "frames": {
+          "idle": 0,
+          "prepare": 0,
+          "attack": 1,
+          "cast": 0,
+          "hit": 2,
+          "guard": 3
+        },
+        "frame_regions": [
+          [
+            0,
+            0,
+            736,
+            512
+          ],
+          [
+            736,
+            0,
+            800,
+            512
+          ],
+          [
+            0,
+            512,
+            736,
+            512
+          ],
+          [
+            736,
+            512,
+            800,
+            512
+          ]
+        ]
+      }
     },
     "den_wolf": {
       "texture": "res://assets/art/beasts_atlas_v1.png",
@@ -720,7 +904,20 @@
           768,
           552
         ]
-      ]
+      ],
+      "preferred_layout": {
+        "columns": 2,
+        "rows": 2,
+        "frames": {
+          "idle": 0,
+          "prepare": 0,
+          "attack": 1,
+          "cast": 0,
+          "hit": 2,
+          "guard": 3
+        },
+        "frame_regions": null
+      }
     },
     "chilian_snake": {
       "preferred": "res://assets/art/battle/chilian_snake.png",
@@ -762,7 +959,45 @@
           768,
           552
         ]
-      ]
+      ],
+      "preferred_layout": {
+        "columns": 2,
+        "rows": 2,
+        "frames": {
+          "idle": 0,
+          "prepare": 0,
+          "attack": 1,
+          "cast": 0,
+          "hit": 2,
+          "guard": 3
+        },
+        "frame_regions": [
+          [
+            0,
+            0,
+            730,
+            512
+          ],
+          [
+            730,
+            0,
+            806,
+            512
+          ],
+          [
+            0,
+            512,
+            744,
+            512
+          ],
+          [
+            744,
+            512,
+            792,
+            512
+          ]
+        ]
+      }
     },
     "serpent": {
       "texture": "res://assets/art/beasts_atlas_v1.png",
@@ -850,7 +1085,9 @@
   "portrait_art": {
     "azhi": "res://assets/art/portraits/azhi_unique.png",
     "xu_qinghe": "res://assets/art/portraits/xu_qinghe_unique.png",
-    "gu_changgeng": "res://assets/art/portraits/gu_changgeng_unique.png"
+    "gu_changgeng": "res://assets/art/portraits/gu_changgeng_unique.png",
+    "yuan_chifeng": "res://assets/art/portraits/yuan_chifeng_unique.png",
+    "han_jin": "res://assets/art/portraits/han_jin_unique.png"
   },
   "portrait_placeholders": {
     "xu_qinghe": "dc4ca1bf4d60db3cbd157e408079d37325e3421e22da1edcfa07917c63657551",

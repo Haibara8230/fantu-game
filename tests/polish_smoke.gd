@@ -319,9 +319,16 @@ func aftermath() -> void:
 		check(s.story_at("valley_aftermath", "thanks"), "an early serpent victory opens its own aftermath")
 		s.player.location = "market"
 		var stones := int(s.player.stones)
+		var mind := int(s.player.mind)
+		var merit := int(s.player.merit)
+		var contribution := int(s.player.contribution)
+		var favor := s.favor("shen_mo")
 		s.interact("shen_mo", "valley_donate" if donate else "valley_reward")
 		check(s.story_at("valley_aftermath", "azhi") and int(s.player.stones) == stones + (0 if donate else 60), "aftermath choice has the stated economic result (%s)" % donate)
+		check(int(s.player.mind)==mind+(4 if donate else 2) and s.favor("shen_mo")==favor+(10 if donate else 0), "audited shared and branch rewards have their intended total")
+		check(int(s.player.merit)==merit+20 and int(s.player.contribution)==contribution+20, "shared merit and contribution pay exactly once")
 		s.interact("shen_mo", "valley_reward")
+		check(int(s.player.mind)==mind+(4 if donate else 2) and int(s.player.merit)==merit+20 and int(s.player.contribution)==contribution+20, "rejected repeat cannot pay shared or branch rewards again")
 		check(int(s.player.stones) == stones + (0 if donate else 60), "mutually exclusive rewards cannot be collected again")
 		s.player.location = "ridge"
 		s.interact("azhi", "valley_future")

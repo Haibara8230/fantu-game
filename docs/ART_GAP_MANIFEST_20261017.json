@@ -1,0 +1,741 @@
+{
+  "date": "2026-10-17",
+  "verified_commit": "36c3257",
+  "remote_main_matches_local_head": true,
+  "scope": "Approved 48-target production and integration complete; initial inventory retained for traceability.",
+  "required_count": 42,
+  "required": [
+    {
+      "id": "map_tiannan",
+      "kind": "map",
+      "target": "assets/art/map/region_tiannan.png",
+      "size": [
+        2560,
+        1600
+      ],
+      "subject": "天南舆图：西北是赤霄门（建在火脉上的山门，炉烟不断），中部是赤枫岭（四季火红的枫林，地下有火脉与熔窟口），东南是南明坊市（朱楼长街，坊西头一座传送阵）。北边一条远路翻过群山通回青云山周边。",
+      "prompt": "Top-down illustrated regional map in the same painted style as the existing 青云山周边 map (assets/art/map/region_qingyun.png), 16:10. Place landmarks at these relative positions so code-drawn nodes sit on them: 赤霄门 sect gate at (0.16, 0.24) on a mountain ridge with forge smoke; 赤枫岭 red maple ridge at (0.36, 0.42) with a glowing fissure; 南明坊市 market street at (0.56, 0.66) with a small stone teleport circle on its west side. Leave the right third calm (sky, river, haze) for the route window. No text, no node markers, no roads drawn as UI lines.",
+      "brief": "docs/ART_BRIEF_TIANNAN.json",
+      "description": "天南区域舆图，节点须与现有 map 配置对齐",
+      "status": "integrated_20261017",
+      "brief_status": "existing_prompt",
+      "priority": 1
+    },
+    {
+      "id": "scene_sect_gate",
+      "kind": "scene",
+      "target": "assets/art/scenes/sect_gate.png",
+      "size": [
+        2400,
+        600
+      ],
+      "subject": "青云山·山门：魔潮压在山门之外，护山大阵的光幕时明时暗。",
+      "prompt": "4:1 panorama banner, NO characters. The stone mountain gate of 青云 sect (paifang arch and long stone stairs among pines), a translucent jade-green protective barrier dome flickering over it, dark violet demonic mist and shadowy shapes massing outside the barrier, tense but not gory.",
+      "brief": "docs/ART_BRIEF_REMAINING.json",
+      "description": "魔潮压在山门之外，护山大阵的光幕时明时暗。魔将就在阵外叫阵。",
+      "status": "integrated_20261017",
+      "brief_status": "existing_prompt",
+      "priority": 3
+    },
+    {
+      "id": "scene_town_palisade",
+      "kind": "scene",
+      "target": "assets/art/scenes/town_palisade.png",
+      "size": [
+        2400,
+        600
+      ],
+      "subject": "青石镇·镇口木栅：镇口的木栅新旧相间，补过不止一回；商队在这里雇修士护送。",
+      "prompt": "4:1 panorama banner, NO characters. A mortal town entrance with a wooden palisade of mixed old grey and new pale timbers, a small watchtower, a gate with lanterns, a parked caravan of packhorses and covered carts, distant mountains of the sunset valley on the horizon, daylight.",
+      "brief": "docs/ART_BRIEF_REMAINING.json",
+      "description": "镇口的木栅新旧相间，补过不止一回。商队在这里雇修士护送；落霞谷闹兽潮的年头，镇上也在这里求修士帮忙守镇。",
+      "status": "integrated_20261017",
+      "brief_status": "existing_prompt",
+      "priority": 3
+    },
+    {
+      "id": "scene_ferry_crossing",
+      "kind": "scene",
+      "target": "assets/art/scenes/ferry_crossing.png",
+      "size": [
+        2400,
+        600
+      ],
+      "subject": "白鹭渡·天河渡口：渡口上空裂开一道银白的天河，河上浮着一座看不见对岸的渡桥。",
+      "prompt": "4:1 panorama banner, NO characters. The quiet egret ferry landing by a river at night, above it the sky split by a silver-white celestial river, a pale floating bridge rising from the ferry into the sky and fading into light with no visible far end, egrets asleep in the reeds, awe and stillness.",
+      "brief": "docs/ART_BRIEF_REMAINING.json",
+      "description": "白鹭渡上空裂开一道银白的天河，河上浮着一座看不见对岸的渡桥。传说化神圆满的修士踏上桥去，便再不回来。",
+      "status": "integrated_20261017",
+      "brief_status": "existing_prompt",
+      "priority": 3
+    },
+    {
+      "id": "scene_wild_chenxia",
+      "kind": "scene",
+      "target": "assets/art/scenes/wild_chenxia.png",
+      "size": [
+        2400,
+        600
+      ],
+      "subject": "落霞谷·沉霞古境：晚霞沉进谷底的雾里，雾中现出一道石门。古境一甲子开一回。",
+      "prompt": "4:1 panorama banner, NO characters. Valley floor at dusk filled with layered sunset-colored mist (rose, amber, violet), an ancient weathered stone gate standing in the mist with a soft light inside it, distant valley ridges as silhouettes, a few old pines, quiet and mysterious.",
+      "brief": "docs/ART_BRIEF_REMAINING.json",
+      "description": "晚霞沉进谷底的雾里，雾中现出一道石门。古境一甲子开一回，开一年便合上。",
+      "status": "integrated_20261017",
+      "brief_status": "existing_prompt",
+      "priority": 3
+    },
+    {
+      "id": "scene_ruin_depths",
+      "kind": "scene",
+      "target": "assets/art/scenes/ruin_depths.png",
+      "size": [
+        2400,
+        600
+      ],
+      "subject": "古修洞府·洞府深处：前厅后面的甬道与几间石室，机关、暗格与守洞的东西都还在。",
+      "prompt": "4:1 panorama banner, NO characters. A carved stone corridor deep inside an ancient cultivator's cave dwelling, several dark doorways to side chambers, faint rune lines on the walls, a half-hidden mechanism plate on the floor, dust and a few glowing moss patches, cold teal darkness with one warm lamp glow.",
+      "brief": "docs/ART_BRIEF_REMAINING.json",
+      "description": "前厅后面还有甬道与几间石室，机关、暗格与守洞的东西都还在。每探一间要费些日子；神识越强，看得越清。",
+      "status": "integrated_20261017",
+      "brief_status": "existing_prompt",
+      "priority": 3
+    },
+    {
+      "id": "location_nanming",
+      "kind": "location",
+      "target": "assets/art/locations/nanming_fullscreen.png",
+      "size": [
+        1672,
+        941
+      ],
+      "subject": "南明坊市：地火映街，千炉不熄。天南最热闹的坊市，坐落在赤霄门脚下。万宝楼的分号占了半条街，器铺多半挂着赤霄门的旗；坊市西头的传送阵直通云溪坊市。",
+      "prompt": "Wide landscape 16:9 full-screen environment with generous sky height, foreground and readable architectural focal points. NO characters. Left-center landmarks: a three-storey vermilion 万宝楼 with lanterns, forge shops with red banners and glowing furnace mouths, a stone teleport circle at the far left; quiet right side for menu overlay. No banner framing.",
+      "brief": "docs/ART_BRIEF_TIANNAN.json",
+      "description": "天南最热闹的坊市，坐落在赤霄门脚下。万宝楼的分号占了半条街，器铺多半挂着赤霄门的旗；坊市西头的传送阵直通云溪坊市。",
+      "status": "integrated_20261017",
+      "brief_status": "existing_prompt",
+      "priority": 1
+    },
+    {
+      "id": "scene_nanming_wanbao",
+      "kind": "scene",
+      "target": "assets/art/scenes/nanming_wanbao.png",
+      "size": [
+        2400,
+        600
+      ],
+      "subject": "万宝楼天南分号，三层朱楼，灵器料与丹药明码标价；楼前告示板贴着各家委托。",
+      "prompt": "4:1 panorama banner, NO characters. Vermilion three-storey shop hall, shelves of ore ingots, silk bolts and jade, a notice board with blank paper slips (no writing).",
+      "brief": "docs/ART_BRIEF_TIANNAN.json",
+      "description": "万宝楼天南分号，三层朱楼，灵器料与丹药明码标价，也收各色灵材；楼前的告示板上贴着各家的委托，不问出身。",
+      "status": "integrated_20261017",
+      "brief_status": "existing_prompt",
+      "priority": 1
+    },
+    {
+      "id": "scene_nanming_teahouse",
+      "kind": "scene",
+      "target": "assets/art/scenes/nanming_teahouse.png",
+      "size": [
+        2400,
+        600
+      ],
+      "subject": "听涛茶楼，往来的行商与各宗弟子歇脚的地方。",
+      "prompt": "4:1 panorama banner, NO characters. Open teahouse terrace with low tables and teapots, maple shade, the market street beyond.",
+      "brief": "docs/ART_BRIEF_TIANNAN.json",
+      "description": "往来的行商与各宗弟子都爱在这里歇脚，天南的消息多半从这里传开。",
+      "status": "integrated_20261017",
+      "brief_status": "existing_prompt",
+      "priority": 1
+    },
+    {
+      "id": "scene_nanming_broker",
+      "kind": "scene",
+      "target": "assets/art/scenes/nanming_broker.png",
+      "size": [
+        2400,
+        600
+      ],
+      "subject": "牙行：替人赁屋、作保。",
+      "prompt": "4:1 panorama banner, NO characters. A small broker's office with a wooden counter, rows of hanging keys on a board, a door curtain.",
+      "brief": "docs/ART_BRIEF_TIANNAN.json",
+      "description": "替人赁屋、作保的牙行。坊外赤枫岭脚下有几间石屋，引了一缕地脉灵气，赁下便可闭关静养。",
+      "status": "integrated_20261017",
+      "brief_status": "existing_prompt",
+      "priority": 1
+    },
+    {
+      "id": "scene_nanming_abode",
+      "kind": "scene",
+      "target": "assets/art/scenes/nanming_abode.png",
+      "size": [
+        2400,
+        600
+      ],
+      "subject": "坊外石屋：门前一株老枫，屋里一张蒲团，地上引了一缕温热的地脉灵气。",
+      "prompt": "4:1 panorama banner, NO characters. A modest stone hut under an old red maple at the foot of a ridge, doorway showing a meditation cushion and a faint warm glow from the floor.",
+      "brief": "docs/ART_BRIEF_TIANNAN.json",
+      "description": "赁来的石屋，门前一株老枫，屋里一张蒲团，地上引了一缕温热的地脉灵气。",
+      "status": "integrated_20261017",
+      "brief_status": "existing_prompt",
+      "priority": 1
+    },
+    {
+      "id": "location_chifeng",
+      "kind": "location",
+      "target": "assets/art/locations/chifeng_fullscreen.png",
+      "size": [
+        1672,
+        941
+      ],
+      "subject": "赤枫岭：枫叶如火，地气蒸腾。地下有火脉经过，枫林四季皆红，火性灵草长得比别处旺；枫林深处的山壁裂开一道热风扑面的熔窟口。",
+      "prompt": "Wide landscape 16:9 full-screen environment. NO characters. A ridge of flame-red maples on warm grey rock, faint heat shimmer, small clusters of red flowers in rock cracks; left-center a dark fissure in the cliff breathing orange glow; quiet right side for menu overlay.",
+      "brief": "docs/ART_BRIEF_TIANNAN.json",
+      "description": "南明坊市与赤霄门之间的山岭，地下有火脉经过，枫林四季皆红，火性灵草长得比别处旺。北边有一条远路，翻过群山可回白鹭渡。",
+      "status": "integrated_20261017",
+      "brief_status": "existing_prompt",
+      "priority": 1
+    },
+    {
+      "id": "scene_chifeng_maples",
+      "kind": "scene",
+      "target": "assets/art/scenes/chifeng_maples.png",
+      "size": [
+        2400,
+        600
+      ],
+      "subject": "赤枫林：火红的枫林下，赤炎花一丛丛开在温热的石缝里。",
+      "prompt": "4:1 panorama banner, NO characters. Red maple grove floor, warm rocks with red flower clusters, a few glinting ember-red crystals in cracks.",
+      "brief": "docs/ART_BRIEF_TIANNAN.json",
+      "description": "火红的枫林下，赤炎花一丛丛开在温热的石缝里，运气好时还能在石缝里拾到一颗地火精；林间火鸦成群，岩缝里卧着岩甲蜥。",
+      "status": "integrated_20261017",
+      "brief_status": "existing_prompt",
+      "priority": 1
+    },
+    {
+      "kind": "scene",
+      "target": "assets/art/scenes/chifeng_stage.png",
+      "description": "南明坊市不许斗法，各宗弟子与散修便在坊外赤枫岭上搭了这座斗法台。登台交彩头，连胜越多，台主给的越多；败了不伤和气。",
+      "status": "integrated_20261017",
+      "brief_status": "missing_prompt",
+      "priority": 1
+    },
+    {
+      "id": "scene_chifeng_cavern",
+      "kind": "scene",
+      "target": "assets/art/scenes/chifeng_cavern.png",
+      "size": [
+        2400,
+        600
+      ],
+      "subject": "地火熔窟：枫林深处的山壁裂开一道口子，热风一阵阵涌出来。",
+      "prompt": "4:1 panorama banner, NO characters. A cliff fissure glowing orange from within, scorched rock, falling maple leaves caught in rising heat.",
+      "brief": "docs/ART_BRIEF_TIANNAN.json",
+      "description": "枫林深处的山壁裂开一道口子，热风一阵阵涌出来。据说里头连着火脉，还盘踞着一头火蜥。",
+      "status": "integrated_20261017",
+      "brief_status": "existing_prompt",
+      "priority": 1
+    },
+    {
+      "id": "location_changqing_valley",
+      "kind": "location",
+      "target": "assets/art/locations/changqing_valley_fullscreen.png",
+      "size": [
+        1672,
+        941
+      ],
+      "subject": "长青谷：四时长青，百草成园。天南五宗之一，长于灵植与丹药，丹坊的药香终年不散。",
+      "prompt": "Wide landscape 16:9 full-screen environment. NO characters. A green sheltered valley with terraced herb gardens, a pill hall with drying racks and a gentle furnace smoke; quiet right side for menu overlay.",
+      "brief": "docs/ART_BRIEF_TIANNAN.json",
+      "description": "天南五宗之一，长于灵植与丹药。谷中气候温润，百草园里的灵草一年可收几茬，丹坊的药香终年不散；对外人也开着丹坊，按炉收钱。",
+      "status": "integrated_20261017",
+      "brief_status": "existing_prompt",
+      "priority": 1
+    },
+    {
+      "kind": "scene",
+      "target": "assets/art/scenes/changqing_valley_garden.png",
+      "description": "长青谷开给外人的一角药园，交一份采摘的规矩钱便可进去。偶尔还能在老树根下寻到百年灵芝。",
+      "status": "integrated_20261017",
+      "brief_status": "missing_prompt",
+      "priority": 1
+    },
+    {
+      "kind": "scene",
+      "target": "assets/art/scenes/changqing_valley_pill_hall.png",
+      "description": "长青谷的丹坊，卖丹药与丹方，也收灵草；后院的药炉付钱可借，谷中丹师会在旁提点。",
+      "status": "integrated_20261017",
+      "brief_status": "missing_prompt",
+      "priority": 1
+    },
+    {
+      "id": "location_canglan_pavilion",
+      "kind": "location",
+      "target": "assets/art/locations/canglan_pavilion_fullscreen.png",
+      "size": [
+        1672,
+        941
+      ],
+      "subject": "沧澜阁：阁临沧水，书藏万卷。修水法、善阵图，藏书之富在天南首屈一指。",
+      "prompt": "Wide landscape 16:9 full-screen environment. NO characters. A tall library pavilion on a wide blue river, a stone tide-watching terrace, faint array patterns on the water; quiet right side for menu overlay.",
+      "brief": "docs/ART_BRIEF_TIANNAN.json",
+      "description": "天南五宗之一，修水法、善阵图，阁中藏书之富在天南首屈一指。藏经阁对外抄卖玉简，价钱公道。",
+      "status": "integrated_20261017",
+      "brief_status": "existing_prompt",
+      "priority": 1
+    },
+    {
+      "kind": "scene",
+      "target": "assets/art/scenes/canglan_pavilion_library.png",
+      "description": "沧澜阁对外的藏经阁，抄卖各家流传的黄阶、玄阶玉简，每月换一批；也收玉简。",
+      "status": "integrated_20261017",
+      "brief_status": "missing_prompt",
+      "priority": 1
+    },
+    {
+      "kind": "scene",
+      "target": "assets/art/scenes/canglan_pavilion_tide_terrace.png",
+      "description": "阁前的观潮台，沧澜弟子与往来的修士常在这里论道闲谈。",
+      "status": "integrated_20261017",
+      "brief_status": "missing_prompt",
+      "priority": 1
+    },
+    {
+      "id": "location_xuanyue_gate",
+      "kind": "location",
+      "target": "assets/art/locations/xuanyue_gate_fullscreen.png",
+      "size": [
+        1672,
+        941
+      ],
+      "subject": "玄岳宗：负山而立，以身为岳。修土法与炼体，山门凿在整座石山里。",
+      "prompt": "Wide landscape 16:9 full-screen environment. NO characters. A sect gate carved into a massive stone mountain, a training ground with boulders and rope, heavy ochre and slate tones; quiet right side for menu overlay.",
+      "brief": "docs/ART_BRIEF_TIANNAN.json",
+      "description": "天南五宗之一，修土法与炼体，山门凿在整座石山里。炼体场对外开着，来访的修士可与玄岳弟子过几招。",
+      "status": "integrated_20261017",
+      "brief_status": "existing_prompt",
+      "priority": 1
+    },
+    {
+      "kind": "scene",
+      "target": "assets/art/scenes/xuanyue_gate_training_ground.png",
+      "description": "凿在山腹里的炼体场，玄岳弟子赤膊扛石，见了外人便要过几招。",
+      "status": "integrated_20261017",
+      "brief_status": "missing_prompt",
+      "priority": 1
+    },
+    {
+      "kind": "scene",
+      "target": "assets/art/scenes/xuanyue_gate_stone_hall.png",
+      "description": "山门里的石厅，来客在这里等候，也听得到天南各宗的消息。",
+      "status": "integrated_20261017",
+      "brief_status": "missing_prompt",
+      "priority": 1
+    },
+    {
+      "id": "location_chixiao_gate",
+      "kind": "location",
+      "target": "assets/art/locations/chixiao_gate_fullscreen.png",
+      "size": [
+        1672,
+        941
+      ],
+      "subject": "赤霄门：炉火映天，剑出赤霄。天南五宗之一，以火法与炼器闻名，山门建在一道火脉之上，器坊的炉火据说三百年未曾熄过。",
+      "prompt": "Wide landscape 16:9 full-screen environment. NO characters. A sect gate of dark stone and red lacquer on a mountain spur, a great foundry hall with chimneys and a steady ember glow, a small welcome pavilion by the gate; restrained, dignified; quiet right side for menu overlay.",
+      "brief": "docs/ART_BRIEF_TIANNAN.json",
+      "description": "天南五宗之一，以火法与炼器闻名。山门建在一道火脉之上，器坊的炉火据说三百年未曾熄过。",
+      "status": "integrated_20261017",
+      "brief_status": "existing_prompt",
+      "priority": 1
+    },
+    {
+      "id": "scene_chixiao_gate_foundry",
+      "kind": "scene",
+      "target": "assets/art/scenes/chixiao_gate_foundry.png",
+      "size": [
+        2400,
+        600
+      ],
+      "subject": "赤霄门器坊：引地火入炉，外人付了炉钱也可借用。",
+      "prompt": "4:1 panorama banner, NO characters. A great forge hall with a furnace fed by a red vein in the floor, anvils, racks of unfinished swords.",
+      "brief": "docs/ART_BRIEF_TIANNAN.json",
+      "description": "赤霄门对外的器坊，引地火入炉，外人付了炉钱也可借用。",
+      "status": "integrated_20261017",
+      "brief_status": "existing_prompt",
+      "priority": 1
+    },
+    {
+      "id": "scene_chixiao_gate_pavilion",
+      "kind": "scene",
+      "target": "assets/art/scenes/chixiao_gate_pavilion.png",
+      "size": [
+        2400,
+        600
+      ],
+      "subject": "迎客亭：山门外的迎客亭，来访的修士在这里等候通传。",
+      "prompt": "4:1 panorama banner, NO characters. A small red-pillared pavilion outside a sect gate, stone benches, the gate and smoking chimneys behind.",
+      "brief": "docs/ART_BRIEF_TIANNAN.json",
+      "description": "山门外的迎客亭，来访的修士在这里等候通传，也听得到些门内的事。",
+      "status": "integrated_20261017",
+      "brief_status": "existing_prompt",
+      "priority": 1
+    },
+    {
+      "id": "portrait_yuan_chifeng",
+      "kind": "portrait",
+      "target": "assets/art/portraits/yuan_chifeng_unique.png",
+      "size": [
+        1122,
+        1402
+      ],
+      "subject": "袁赤锋，赤霄门器堂执事，金丹初期，132 岁看去四十许：一双手被炉火烤得黝黑，说起炼器头头是道，看人时总先看对方腰间挂着什么。",
+      "prompt": "Single distinct character half-body portrait, 4:5 vertical canvas. Face turned slightly RIGHT, hands and signature prop visible: a forging hammer and a small ember-red crystal. Strong middle-aged man, soot-darkened forearms, dark red and charcoal sect robe with rolled sleeves, sharp appraising eyes, faint calculating smile. Simple muted teal background. Register in data/art.json portrait_art.",
+      "brief": "docs/ART_BRIEF_TIANNAN.json",
+      "description": "袁赤锋，赤霄门器堂执事，金丹初期，132 岁看去四十许：一双手被炉火烤得黝黑，说起炼器头头是道，看人时总先看对方腰间挂着什么。",
+      "status": "integrated_20261017",
+      "brief_status": "existing_prompt",
+      "priority": 1
+    },
+    {
+      "id": "portrait_han_jin",
+      "kind": "portrait",
+      "target": "assets/art/portraits/han_jin_unique.png",
+      "size": [
+        1122,
+        1402
+      ],
+      "subject": "韩烬，赤霄门弃徒，筑基后期，41 岁：衣衫被地火烧得破烂，怀里抱着一块暗红的古铜，被悬赏追拿，却没有要逃的样子。",
+      "prompt": "Single distinct character half-body portrait, 4:5 vertical canvas. Face turned slightly RIGHT. Lean man in a scorched, torn red-and-grey robe, ash on his face, holding a dark red bronze core to his chest, a singed ledger tucked in his belt, calm resolute eyes. Simple muted teal background. Register in data/art.json portrait_art.",
+      "brief": "docs/ART_BRIEF_TIANNAN.json",
+      "description": "韩烬，赤霄门弃徒，筑基后期，41 岁：衣衫被地火烧得破烂，怀里抱着一块暗红的古铜，被悬赏追拿，却没有要逃的样子。",
+      "status": "integrated_20261017",
+      "brief_status": "existing_prompt",
+      "priority": 1
+    },
+    {
+      "id": "battle_huo_xi",
+      "kind": "battle",
+      "target": "assets/art/battle/huo_xi.png",
+      "size": [
+        1536,
+        1024
+      ],
+      "subject": "熔窟火蜥：盘踞地火熔窟的火属妖兽。",
+      "prompt": "Duel sprite sheet on the same 2x2 grid as assets/art/beasts_atlas_v1.png (cells 768x464 on top, 768x552 below, transparent background): a large crimson-and-charcoal lizard with ember-glowing scales; top-left idle, top-right lunging attack, bottom row two hit/guard poses. Faces LEFT. Same frame regions so data/art.json actors.huo_xi works unchanged.",
+      "brief": "docs/ART_BRIEF_TIANNAN.json",
+      "description": "熔窟火蜥：盘踞地火熔窟的火属妖兽。",
+      "status": "integrated_20261017",
+      "brief_status": "existing_prompt",
+      "priority": 2
+    },
+    {
+      "id": "event_ascension_opens",
+      "kind": "event",
+      "target": "assets/art/events/ascension_opens.png",
+      "size": [
+        1672,
+        941
+      ],
+      "subject": "飞升通道开启：天河渡桥现于白鹭渡上空（事件 ascension_opens；白日飞升结局也用这一景）。",
+      "prompt": "Wide event illustration. A lone cultivator in pale robes seen from behind, small in frame, standing at the foot of a glowing bridge that rises from the river ferry into a silver celestial river across the sky, robes and hair lifted by a gentle wind of light, egrets taking flight. Calm, luminous, final. Register in data/art.json event_art as ascension_opens.",
+      "brief": "docs/ART_BRIEF_REMAINING.json",
+      "description": "飞升通道开启：天河渡桥现于白鹭渡上空（事件 ascension_opens；白日飞升结局也用这一景）。",
+      "status": "integrated_20261017",
+      "brief_status": "existing_prompt",
+      "priority": 3
+    },
+    {
+      "id": "battle_bear_king",
+      "kind": "battle",
+      "target": "assets/art/battle/bear_king.png",
+      "size": [
+        1536,
+        1024
+      ],
+      "subject": "铁背熊王：背生铁鬃的巨熊，会人立拍击、震山吼。",
+      "prompt": "Duel sprite sheet, same 2x2 layout as assets/art/beasts_atlas_v1.png (cells 768x464 on top, 768x552 below, transparent background). Only the TOP row is read: top-left idle (a huge brown bear on all fours, iron-grey bristles along the spine, scarred muzzle), top-right attack (rearing up on hind legs, paw swiping). Bottom row: repeat the idle pose. Faces LEFT.",
+      "brief": "docs/ART_BRIEF_REMAINING.json",
+      "description": "铁背熊王：背生铁鬃的巨熊，会人立拍击、震山吼。",
+      "status": "integrated_20261017",
+      "brief_status": "existing_prompt",
+      "priority": 2
+    },
+    {
+      "id": "battle_wolf_pack",
+      "kind": "battle",
+      "target": "assets/art/battle/wolf_pack.png",
+      "size": [
+        1536,
+        1024
+      ],
+      "subject": "狼群：一头头狼带着三四只妖狼。",
+      "prompt": "Duel sprite sheet, same 2x2 layout as assets/art/beasts_atlas_v1.png, transparent background. Only the TOP row is read: top-left idle (a lead wolf in front with three smaller grey-green demon wolves behind it, overlapping, all facing left), top-right attack (the pack lunging together, the lead wolf leaping). Bottom row: repeat the idle pose. Faces LEFT.",
+      "brief": "docs/ART_BRIEF_REMAINING.json",
+      "description": "狼群：一头头狼带着三四只妖狼。",
+      "status": "integrated_20261017",
+      "brief_status": "existing_prompt",
+      "priority": 2
+    },
+    {
+      "id": "battle_shan_xiao",
+      "kind": "battle",
+      "target": "assets/art/battle/shan_xiao.png",
+      "size": [
+        1536,
+        1024
+      ],
+      "subject": "偷药山魈：偷药的山魈，抓挠、掷石、攀树躲闪。",
+      "prompt": "Duel sprite sheet, same 2x2 layout as assets/art/beasts_atlas_v1.png, transparent background. Only the TOP row is read: top-left idle (a wiry mountain baboon-like spirit beast with a red-and-blue face, shaggy grey-brown fur, a stolen herb bundle in one hand), top-right attack (lunging with claws out, a rock in the other hand). Bottom row: repeat the idle pose. Faces LEFT.",
+      "brief": "docs/ART_BRIEF_REMAINING.json",
+      "description": "偷药山魈：偷药的山魈，抓挠、掷石、攀树躲闪。",
+      "status": "integrated_20261017",
+      "brief_status": "existing_prompt",
+      "priority": 2
+    },
+    {
+      "id": "battle_huo_ya",
+      "kind": "battle",
+      "target": "assets/art/battle/huo_ya.png",
+      "size": [
+        1536,
+        1024
+      ],
+      "subject": "火鸦群：赤枫岭的火鸦，群啄、火羽。",
+      "prompt": "Duel sprite sheet, same 2x2 layout as assets/art/beasts_atlas_v1.png, transparent background. Only the TOP row is read: top-left idle (a flock of five crows with crimson-tipped, ember-glowing feathers, wings half spread, grouped), top-right attack (the flock diving forward, sparks trailing from the feathers). Bottom row: repeat the idle pose. Faces LEFT.",
+      "brief": "docs/ART_BRIEF_REMAINING.json",
+      "description": "火鸦群：赤枫岭的火鸦，群啄、火羽。",
+      "status": "integrated_20261017",
+      "brief_status": "existing_prompt",
+      "priority": 2
+    },
+    {
+      "id": "battle_qinglin_snake",
+      "kind": "battle",
+      "target": "assets/art/battle/qinglin_snake.png",
+      "size": [
+        1536,
+        1024
+      ],
+      "subject": "青鳞蛇：青绿鳞片的毒蛇，会缠绕、蜕皮。",
+      "prompt": "Duel sprite sheet, same 2x2 layout as assets/art/beasts_atlas_v1.png, transparent background. Only the BOTTOM row is read (the serpent cells): bottom-left idle (a coiled green-scaled snake, head raised, about half the size of the existing great serpent), bottom-right attack (striking forward, fangs bared). Top row: repeat the idle pose. Faces LEFT.",
+      "brief": "docs/ART_BRIEF_REMAINING.json",
+      "description": "青鳞蛇：青绿鳞片的毒蛇，会缠绕、蜕皮。",
+      "status": "integrated_20261017",
+      "brief_status": "existing_prompt",
+      "priority": 2
+    },
+    {
+      "id": "battle_chilian_snake",
+      "kind": "battle",
+      "target": "assets/art/battle/chilian_snake.png",
+      "size": [
+        1536,
+        1024
+      ],
+      "subject": "赤练妖蛇：火属的赤红妖蛇，缠身、连咬、喷毒。",
+      "prompt": "Duel sprite sheet, same 2x2 layout as assets/art/beasts_atlas_v1.png, transparent background. Only the BOTTOM row is read: bottom-left idle (a long crimson snake with black bands and a faint heat shimmer, coiled and raised), bottom-right attack (lunging with mouth open, a spray of venom). Top row: repeat the idle pose. Faces LEFT.",
+      "brief": "docs/ART_BRIEF_REMAINING.json",
+      "description": "赤练妖蛇：火属的赤红妖蛇，缠身、连咬、喷毒。",
+      "status": "integrated_20261017",
+      "brief_status": "existing_prompt",
+      "priority": 2
+    },
+    {
+      "id": "battle_yanjia_xi",
+      "kind": "battle",
+      "target": "assets/art/battle/yanjia_xi.png",
+      "size": [
+        1536,
+        1024
+      ],
+      "subject": "岩甲蜥：背负岩甲的巨蜥，甲撞、结岩甲、崩岩。",
+      "prompt": "Duel sprite sheet, same 2x2 layout as assets/art/beasts_atlas_v1.png, transparent background. Only the TOP row is read: top-left idle (a squat heavy lizard whose back is covered in grey-brown stone plates like the item 岩甲片), top-right attack (charging with head lowered, rock fragments flying). Bottom row: repeat the idle pose. Faces LEFT.",
+      "brief": "docs/ART_BRIEF_REMAINING.json",
+      "description": "岩甲蜥：背负岩甲的巨蜥，甲撞、结岩甲、崩岩。",
+      "status": "integrated_20261017",
+      "brief_status": "existing_prompt",
+      "priority": 2
+    },
+    {
+      "id": "battle_tribulation",
+      "kind": "battle",
+      "target": "assets/art/battle/tribulation.png",
+      "size": [
+        1536,
+        1024
+      ],
+      "subject": "雷劫（三九、六九、九九共用）：结丹、成婴、化神时降下的天劫。",
+      "prompt": "Duel sprite sheet on the same 3x2 grid as assets/art/rival_atlas_v2.png (six 512x512 cells, transparent background), read in order idle, prepare, attack, cast, hit, guard. A humanoid figure formed of storm cloud and lightning, faceless, pale blue-white glow, crackling arcs: idle hovering, prepare gathering lightning, attack hurling a bolt, cast raising both arms with a ring of lightning, hit flickering apart, guard folding into a cloud shield. Faces RIGHT like the rival sheet.",
+      "brief": "docs/ART_BRIEF_REMAINING.json",
+      "description": "雷劫（三九、六九、九九共用）：结丹、成婴、化神时降下的天劫。",
+      "status": "integrated_20261017",
+      "brief_status": "existing_prompt",
+      "priority": 2
+    },
+    {
+      "id": "battle_chixiao_zhifa",
+      "kind": "battle",
+      "target": "assets/art/battle/chixiao_zhifa.png",
+      "size": [
+        1536,
+        1024
+      ],
+      "subject": "赤霄执法弟子：赤霄门执法堂的筑基弟子，赤霄连焰、执法火印、火云护体。",
+      "prompt": "Duel sprite sheet on the same 3x2 grid as assets/art/rival_atlas_v2.png (six 512x512 cells, transparent background), in order idle, prepare, attack, cast, hit, guard. A stern young man in a crimson-and-soot-grey sect robe with a black lacquer enforcement token at the waist, holding a fire seal: idle, prepare drawing a flame sigil, attack twin fire streams, cast pressing a burning seal forward, hit recoiling, guard behind a ring of fire cloud. Faces RIGHT.",
+      "brief": "docs/ART_BRIEF_REMAINING.json",
+      "description": "赤霄执法弟子：赤霄门执法堂的筑基弟子，赤霄连焰、执法火印、火云护体。",
+      "status": "integrated_20261017",
+      "brief_status": "existing_prompt",
+      "priority": 2
+    },
+    {
+      "id": "rite_meditation",
+      "kind": "presentation",
+      "target": "assets/art/actors/hero_meditate.png",
+      "size": [
+        512,
+        512
+      ],
+      "subject": "闭关打坐：主角盘膝入定（闭关与突破演出用，现借斗法施法姿势）。",
+      "prompt": "Single pose on a transparent 512x512 canvas, same character design and line weight as the hero in assets/art/cultivator_atlas_v2.png: seated cross-legged in lotus position, eyes closed, hands resting in a meditation mudra on the lap, robe pooled around, front three-quarter view. Hookup: scripts/presentation/rite.gd uses actor_frame(\"hero\", \"cast\") and needs a small change to prefer this file.",
+      "brief": "docs/ART_BRIEF_REMAINING.json",
+      "description": "闭关打坐：主角盘膝入定（闭关与突破演出用，现借斗法施法姿势）。",
+      "status": "integrated_20261017",
+      "brief_status": "existing_prompt",
+      "priority": 2
+    },
+    {
+      "id": "rite_furnace",
+      "kind": "presentation",
+      "target": "assets/art/ui/rite_furnace.png",
+      "size": [
+        768,
+        768
+      ],
+      "subject": "丹炉：炼丹演出里的三足丹炉（现为代码画的平涂几何形）。",
+      "prompt": "Single object on a transparent 768x768 canvas: a bronze three-legged alchemy cauldron (ding) with two upright handles and a domed lid with a knob, cloud pattern band on the belly, a small fire burning between the legs, front view, centered. Hookup: scripts/presentation/rite.gd draws the furnace in _draw_brew and needs a small change to draw this image instead.",
+      "brief": "docs/ART_BRIEF_REMAINING.json",
+      "description": "丹炉：炼丹演出里的三足丹炉（现为代码画的平涂几何形）。",
+      "status": "integrated_20261017",
+      "brief_status": "existing_prompt",
+      "priority": 2
+    }
+  ],
+  "additional_context_backgrounds": [
+    {
+      "kind": "battle_background",
+      "target": "assets/art/battle/nanming.png",
+      "location": "nanming",
+      "name": "南明坊市",
+      "status": "integrated_20261017",
+      "priority": 1
+    },
+    {
+      "kind": "battle_background",
+      "target": "assets/art/battle/chifeng.png",
+      "location": "chifeng",
+      "name": "赤枫岭",
+      "status": "integrated_20261017",
+      "priority": 1
+    },
+    {
+      "kind": "battle_background",
+      "target": "assets/art/battle/changqing_valley.png",
+      "location": "changqing_valley",
+      "name": "长青谷",
+      "status": "integrated_20261017",
+      "priority": 1
+    },
+    {
+      "kind": "battle_background",
+      "target": "assets/art/battle/canglan_pavilion.png",
+      "location": "canglan_pavilion",
+      "name": "沧澜阁",
+      "status": "integrated_20261017",
+      "priority": 1
+    },
+    {
+      "kind": "battle_background",
+      "target": "assets/art/battle/xuanyue_gate.png",
+      "location": "xuanyue_gate",
+      "name": "玄岳宗",
+      "status": "integrated_20261017",
+      "priority": 1
+    },
+    {
+      "kind": "battle_background",
+      "target": "assets/art/battle/chixiao_gate.png",
+      "location": "chixiao_gate",
+      "name": "赤霄门",
+      "status": "integrated_20261017",
+      "priority": 1
+    }
+  ],
+  "optional_handdrawn_items": {
+    "files": 77,
+    "catalogue_items": 59,
+    "family_images": 18,
+    "existing_svg_icons": 59
+  },
+  "map_nodes": {
+    "nanming": {
+      "name": "南明坊市",
+      "position": [
+        0.56,
+        0.66
+      ]
+    },
+    "chifeng": {
+      "name": "赤枫岭",
+      "position": [
+        0.36,
+        0.42
+      ]
+    },
+    "changqing_valley": {
+      "name": "长青谷",
+      "position": [
+        0.28,
+        0.78
+      ]
+    },
+    "canglan_pavilion": {
+      "name": "沧澜阁",
+      "position": [
+        0.6,
+        0.3
+      ]
+    },
+    "xuanyue_gate": {
+      "name": "玄岳宗",
+      "position": [
+        0.44,
+        0.16
+      ]
+    },
+    "chixiao_gate": {
+      "name": "赤霄门",
+      "position": [
+        0.16,
+        0.24
+      ]
+    }
+  },
+  "integration_notes": [
+    "All 48 targets integrated; final prompts, native sizes and SHA-256 in ART_BATCH_20261017.json.",
+    "Preferred layouts are separate from shared fallback layouts; stage and ArtLibrary use the same selection helper.",
+    "Rite uses seated hero and furnace; ascension event and ending use the new illustration.",
+    "Historical subject/descriptions below retain the initial inventory wording, not current missing status."
+  ],
+  "initial_scope": "Art analysis only; no new images, resource imports or gameplay changes. Earlier documentation/audit edits preserved.",
+  "delivery_manifest": "docs/ART_BATCH_20261017.json",
+  "initial_integration_notes": [
+    "Map prompt currently names only 3 of 6 existing Tiannan nodes.",
+    "7 spot targets lack production prompts.",
+    "Meditation and furnace pictures need rite.gd consumers.",
+    "Portraits and ascension event need art.json registration.",
+    "Ascension ending page currently has no image consumer.",
+    "Sprite dimensions, grid, frame_regions, facing and alpha must match the actual actor config; do not treat an isolated concept image as a working atlas."
+  ]
+}

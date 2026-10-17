@@ -163,4 +163,4 @@
 
 回归结果与性能见设计基线最新一节。原始文件：`builds/post_experience_results.json`（首次压力记录）、`builds/post_experience_v6_results.json`（修正策略后最终 80 次）、对应逐次日志、`builds/experience_final_acceptance.json` 与各 `builds/experience_*_smoke.log`。分析材料位于忽略目录，不作为游戏运行依赖。
 
-下一阶段仍为真人自然试玩、战斗准备信息的进一步校准与五小时时长评估。封谷期间扩写、老去继任、更多地区和美术导入继续延期；本轮未提交推送。
+下一阶段仍为真人自然试玩、战斗准备信息的进一步校准与五小时时长评估。封谷期间扩写、老去继任、更多地区和美术导入继续延期。本节 A–D 已随 `7154dd7` 提交，并由 `36c3257` 合并远端更新后推送；上文“不导入”只描述该次内容验证，远端合并阶段另做了后台资源缓存与 6 组相关回归。当前状态见 `CURRENT_STATUS.md`，11 条审计提醒的后续核查见 `CONTENT_AUDIT_20261017.md`。

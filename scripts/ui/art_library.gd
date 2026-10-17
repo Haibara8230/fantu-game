@@ -197,10 +197,30 @@ static func _config() -> Dictionary:
 		_art_config = parsed if parsed is Dictionary else {"event_art": {}, "person_art": {}}
 	return _art_config
 
+## Apply an atlas-specific layout only when that preferred texture was actually selected.
+## Borrowed fallbacks and generated sect looks retain their original frame registration.
+static func selected_actor(definition: Dictionary, path: String) -> Dictionary:
+	var selected := definition.duplicate(true)
+	selected.texture = path
+	if not path.is_empty() and path == str(definition.get("preferred", "")):
+		for key: String in definition.get("preferred_layout", {}):
+			var value: Variant = definition.preferred_layout[key]
+			if value == null:
+				selected.erase(key)
+			else:
+				selected[key] = value
+	return selected
+
+static func actor_definition(actor_id: String) -> Dictionary:
+	var definition: Dictionary = _config().get("actors", {}).get(actor_id, {})
+	var preferred := str(definition.get("preferred", ""))
+	var path := preferred if not preferred.is_empty() and ResourceLoader.exists(preferred) else str(definition.get("texture", ""))
+	return selected_actor(definition, path)
+
 ## One frame of a duel actor's atlas (data/art.json `actors`): {"texture", "region", "faces_right"}, or {}
 ## when the art is missing. The map's traveller is drawn with the hero's.
 static func actor_frame(actor_id: String, frame: String) -> Dictionary:
-	var definition: Dictionary = _config().get("actors", {}).get(actor_id, {})
+	var definition := actor_definition(actor_id)
 	var sheet := texture(str(definition.get("texture", "")))
 	if sheet == null:
 		return {}

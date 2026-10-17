@@ -485,7 +485,9 @@ func _arrange(screen: String) -> void:
 
 ## The illustration of the event or story moment on screen, or "".
 func _telling_art() -> String:
-	if not session.ended.is_empty() or not ceremony.is_empty():
+	if not session.ended.is_empty():
+		return ArtLibrary.event_art("ascension_opens") if session.ended.get("kind", "") == "ascension" else ""
+	if not ceremony.is_empty():
 		return ""
 	if not story.is_empty():
 		return ArtLibrary.event_art(str(story.event))

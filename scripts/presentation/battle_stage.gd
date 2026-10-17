@@ -5,6 +5,7 @@ extends Control
 ## the target squashed and knocked back, afterimages behind fast moves, damage numbers that pop (larger
 ## on a heavy hit), and a health bar that leaves a pale chip behind before it catches up. Textured
 ## particles (sprite_fx.gd) are layered over the vector effects; sounds vary by element and weight.
+const ArtLibrary = preload("res://scripts/ui/art_library.gd")
 const Actor = preload("res://scripts/presentation/actor.gd")
 const Effect = preload("res://scripts/presentation/effect.gd")
 const SpriteFx = preload("res://scripts/presentation/sprite_fx.gd")
@@ -134,7 +135,7 @@ static func art_path(candidates: Array) -> String:
 	return str(candidates.back())
 
 ## The opponent's atlas: a generated person's sect-and-gender look, a named foe's own sprite,
-## else the shared one. Every candidate uses the same grid as the shared atlas.
+## else the shared one. Preferred atlases can carry their own frame registration.
 func _enemy_art(id: String, battle: Dictionary) -> Dictionary:
 	var definition: Dictionary = art.actors[id].duplicate()
 	var foe: Dictionary = battle.get("foe", {})
@@ -144,8 +145,7 @@ func _enemy_art(id: String, battle: Dictionary) -> Dictionary:
 	if definition.has("preferred"):
 		candidates.append(definition.preferred)
 	candidates.append(definition.texture)
-	definition.texture = art_path(candidates)
-	return definition
+	return ArtLibrary.selected_actor(definition, art_path(candidates))
 
 func _layout() -> void:
 	if not is_instance_valid(hero):

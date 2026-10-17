@@ -131,6 +131,8 @@ func _story_check(content) -> void:
 	print("STORY CHECK: %d errors, %d notes (report: tools/story_report.gd)" % [errors.size(), real.problems.size() - errors.size()])
 	check(errors.is_empty(), "no story has a broken path, an impossible condition or a missing source: %s" % [errors.slice(0, 3)])
 	check(real.completion("south_settlement", content.storylines.south_settlement.steps[2]).size()==2, "both manual route choices count as real story completion paths")
+	for flag: String in ["chenxia_puppet_down", "chenxia_remnant_down", "ruin_den_cleared"]:
+		check(real.flag_readers.get(flag, []).any(func(site: Variant) -> bool: return str(site).contains("Caves.guarded")), "actual cave guardian flags have dynamic readers: " + flag)
 	# A copy with one fault of each kind: every one is found.
 	var planted := Content.new()
 	planted.load_data()
@@ -142,6 +144,10 @@ func _story_check(content) -> void:
 	planted.people.xu_qinghe.interactions.append({"id": "planted_gift", "label": "白送灵石", "conditions": [], "effects": [{"stones": 50}], "chronicle": "测试"})
 	for choice: Dictionary in planted.events.south_return_routes.choices:
 		choice.effects = []
+	# Removing a real guardian reference makes that enemy's flag unused again.
+	for room: Dictionary in planted.cave_data.ruin.rooms:
+		if str(room.get("guardian", "")) == "den_wolf":
+			room.erase("guardian")
 	var found := StoryCheck.new()
 	found.run(planted)
 	var said := func(level: String, fragment: String) -> bool: return found.problems.any(func(p: Dictionary) -> bool: return p.level == level and (p.site + p.text).contains(fragment))
@@ -155,4 +161,5 @@ func _story_check(content) -> void:
 	check(said.call("错误", "未知人物 nobody_here"), "an unknown person is found")
 	check(said.call("提醒", "可以反复领取"), "an interaction paying out again and again is noted")
 	check(said.call("错误", "南明落脚"), "a choice event without any advancing effect remains a broken story path")
+	check(said.call("提醒", "ruin_den_cleared"), "an enemy flag without an actual cave reference is still reported")
 	check(not said.call("错误", "初入山门"), "the real storylines stay clean beside the planted one")

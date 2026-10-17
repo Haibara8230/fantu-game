@@ -47,6 +47,7 @@ func run(loaded_content) -> void:
 				_conditions(rumors[index].get("conditions", []), "传闻 %d" % (index + 1))
 	for pair: Array in [["地点", content.locations], ["路线", content.routes], ["敌人", content.enemies], ["规则", content.rules], ["恩怨", content.feuds], ["连战", content.series], ["洞府", content.cave_data], ["宗门", content.sect_data], ["拍卖", content.auction_data], ["论道", content.summit_data], ["人情", content.bonds_data], ["炼器", content.forge_data], ["委托", content.commission_data]]:
 		_walk_section(pair[0], pair[1])
+	_collect_guardian_readers()
 	_check_stories()
 	_check_flags()
 	_check_items()
@@ -359,7 +360,18 @@ func _check_stories() -> void:
 				_problem("错误", site, "这一步无法完成：没有完成条件、等待或推进它的交互")
 			for advancer: Dictionary in advancers.get("%s/%s" % [story_id, step.id], []):
 				if _pays(step.get("effects", [])) and _pays(advancer.effects):
-					_problem("提醒", site, "步骤奖励与推进它的%s各发一份：%s ／ %s" % [advancer.site, effects_text(step.effects), effects_text(advancer.effects)])
+					_problem("提醒", site, "共同奖励与%s的选项奖励会同时结算，请核对合计（不等于可重复领取）：%s ／ %s" % [advancer.site, effects_text(step.effects), effects_text(advancer.effects)])
+
+## Caves.guarded reads the flag through each room's actual enemy reference, not a literal string.
+## Unreferenced enemy flags remain warnings; declaring a world_flag alone is not a reader.
+func _collect_guardian_readers() -> void:
+	for cave_id: String in content.cave_data:
+		var cave: Dictionary = content.cave_data[cave_id]
+		for room: Dictionary in cave.get("rooms", []):
+			var enemy: Dictionary = content.enemies.get(str(room.get("guardian", "")), {})
+			var flag := str(enemy.get("world_flag", ""))
+			if not flag.is_empty():
+				_add(flag_readers, flag, "洞府「%s」·%s（Caves.guarded / reachable）" % [cave.get("name", cave_id), room.get("name", room.id)])
 
 func _check_flags() -> void:
 	for flag: String in flag_readers:

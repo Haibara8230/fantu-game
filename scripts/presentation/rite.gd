@@ -19,6 +19,7 @@ var elapsed := 0.0
 var length := 1.0
 var hurry := false
 var figure: Dictionary = {}
+var furnace_texture: Texture2D
 var title := ""
 var subtitle := ""
 var days := [0, 0]
@@ -31,7 +32,9 @@ func _ready() -> void:
 	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	mouse_filter = Control.MOUSE_FILTER_STOP
 	z_index = 50
-	figure = ArtLibrary.actor_frame("hero", "cast")
+	var meditation := ArtLibrary.texture(ArtLibrary.ui_art("rite_meditation"))
+	figure = {"texture": meditation, "region": Rect2(Vector2.ZERO, meditation.get_size())} if meditation != null else ArtLibrary.actor_frame("hero", "cast")
+	furnace_texture = ArtLibrary.texture(ArtLibrary.ui_art("rite_furnace"))
 	_rng.seed = 7
 	for index: int in MOTES:
 		_motes.append({"angle": _rng.randf() * TAU, "radius": _rng.randf_range(0.55, 1.25), "speed": _rng.randf_range(0.5, 1.2), "size": _rng.randf_range(2.0, 5.0)})
@@ -179,7 +182,7 @@ func _draw_breakthrough(heart: Vector2, t: float, alpha: float) -> void:
 			draw_circle(point, float(mote.size), Color(GOLD, alpha * (1.0 - after)))
 		_centered(font, "冲 关 失 败", Vector2(size.x * 0.5, size.y * 0.16), 72, Color(CRIMSON.lightened(0.2), alpha * minf(1.0, after * 3.0)))
 
-## A tripod furnace with its fire; at the end the lid lifts on the result's glow.
+## A painted tripod with animated fire and result glow; the geometric fallback also lifts its lid.
 func _draw_brew(heart: Vector2, t: float, alpha: float) -> void:
 	var font := get_theme_default_font()
 	var base := heart + Vector2(0.0, size.y * 0.12)
@@ -189,15 +192,20 @@ func _draw_brew(heart: Vector2, t: float, alpha: float) -> void:
 		var x := base.x + (tongue - 2) * w * 0.18
 		var tall := size.y * (0.06 + 0.03 * sin(elapsed * 9.0 + tongue)) * (1.6 if outcome == "burst" and t > 0.6 else 1.0)
 		draw_colored_polygon(PackedVector2Array([Vector2(x - w * 0.08, base.y + w * 0.62), Vector2(x, base.y + w * 0.62 - tall), Vector2(x + w * 0.08, base.y + w * 0.62)]), Color("#e8894a", alpha * (0.6 + 0.4 * flare)))
-	var body := PackedVector2Array([Vector2(base.x - w * 0.6, base.y - w * 0.2), Vector2(base.x + w * 0.6, base.y - w * 0.2), Vector2(base.x + w * 0.48, base.y + w * 0.42), Vector2(base.x - w * 0.48, base.y + w * 0.42)])
-	draw_colored_polygon(body, Color("#3e5a55", alpha))
-	draw_polyline(body + PackedVector2Array([body[0]]), Color("#1c2b29", alpha), 3.0)
-	for leg: int in [-1, 1]:
-		draw_line(Vector2(base.x + leg * w * 0.4, base.y + w * 0.4), Vector2(base.x + leg * w * 0.5, base.y + w * 0.66), Color("#1c2b29", alpha), 6.0)
-	var lift := maxf(0.0, (t - 0.6) / 0.4) * w * 0.35 if outcome != "burst" else 0.0
-	var lid := PackedVector2Array([Vector2(base.x - w * 0.5, base.y - w * 0.2 - lift), Vector2(base.x + w * 0.5, base.y - w * 0.2 - lift), Vector2(base.x + w * 0.2, base.y - w * 0.42 - lift), Vector2(base.x - w * 0.2, base.y - w * 0.42 - lift)])
-	draw_colored_polygon(lid, Color("#4d6f68", alpha))
-	draw_polyline(lid + PackedVector2Array([lid[0]]), Color("#1c2b29", alpha), 3.0)
+	if furnace_texture != null:
+		var height := w * 2.4
+		var width := height * furnace_texture.get_width() / furnace_texture.get_height()
+		draw_texture_rect(furnace_texture, Rect2(base + Vector2(-width * 0.5, w * 0.66 - height), Vector2(width, height)), false, Color(1, 1, 1, alpha))
+	else:
+		var body := PackedVector2Array([Vector2(base.x - w * 0.6, base.y - w * 0.2), Vector2(base.x + w * 0.6, base.y - w * 0.2), Vector2(base.x + w * 0.48, base.y + w * 0.42), Vector2(base.x - w * 0.48, base.y + w * 0.42)])
+		draw_colored_polygon(body, Color("#3e5a55", alpha))
+		draw_polyline(body + PackedVector2Array([body[0]]), Color("#1c2b29", alpha), 3.0)
+		for leg: int in [-1, 1]:
+			draw_line(Vector2(base.x + leg * w * 0.4, base.y + w * 0.4), Vector2(base.x + leg * w * 0.5, base.y + w * 0.66), Color("#1c2b29", alpha), 6.0)
+		var lift := maxf(0.0, (t - 0.6) / 0.4) * w * 0.35 if outcome != "burst" else 0.0
+		var lid := PackedVector2Array([Vector2(base.x - w * 0.5, base.y - w * 0.2 - lift), Vector2(base.x + w * 0.5, base.y - w * 0.2 - lift), Vector2(base.x + w * 0.2, base.y - w * 0.42 - lift), Vector2(base.x - w * 0.2, base.y - w * 0.42 - lift)])
+		draw_colored_polygon(lid, Color("#4d6f68", alpha))
+		draw_polyline(lid + PackedVector2Array([lid[0]]), Color("#1c2b29", alpha), 3.0)
 	_centered(font, "开 炉 炼 丹", Vector2(size.x * 0.5, size.y * 0.14), 40, Color(GOLD, alpha))
 	if t > 0.6:
 		var shown := (t - 0.6) / 0.4

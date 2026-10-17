@@ -1,0 +1,1065 @@
+{
+  "date": "2026-10-17",
+  "mode": "built-in image_gen",
+  "scope": "48 approved art targets; existing artwork preserved",
+  "style": "Use case: illustration-story. Production PNG asset for 凡途, a Chinese cultivation 2D RPG. Clear dark hand-drawn ink outlines, opaque flat colors, restrained two-tone cel shading, simplified Chinese illustrated shapes, dusty jade and teal, warm ivory, muted gold; Tiannan accents of maple red, ember orange and soot grey. Match detailed hand-inked Chinese 2D game art, NOT photorealistic, NOT 3D, no realistic skin or textile texture. No words, writing, labels, UI, logos, watermark, border or contact-sheet captions. ",
+  "jobs": [
+    {
+      "id": "map_tiannan",
+      "kind": "map",
+      "target": "assets/art/map/region_tiannan.png",
+      "prompt": "Use case: illustration-story. Production PNG asset for 凡途, a Chinese cultivation 2D RPG. Clear dark hand-drawn ink outlines, opaque flat colors, restrained two-tone cel shading, simplified Chinese illustrated shapes, dusty jade and teal, warm ivory, muted gold; Tiannan accents of maple red, ember orange and soot grey. Match detailed hand-inked Chinese 2D game art, NOT photorealistic, NOT 3D, no realistic skin or textile texture. No words, writing, labels, UI, logos, watermark, border or contact-sheet captions. Regional map, landscape 16:10, six landmarks aligned to current map nodes: Chixiao forge sect (0.16,0.24), red maple Chifeng ridge (0.36,0.42), Nanming market (0.56,0.66), Changqing herb valley (0.28,0.78), Canglan waterside library (0.60,0.30), Xuanyue stone sect (0.44,0.16). Keep the rightmost 30 percent quiet river haze. No characters or node symbols.",
+      "transparent_background": false,
+      "referenced_image_paths": null,
+      "status": "integrated",
+      "expected_size": [
+        2560,
+        1600
+      ],
+      "actual_size": [
+        1586,
+        992
+      ],
+      "sha256": "9c25177e91df5b3bb50a188c8ef97b52981ae174ac947c4d2616197ae3a73a44",
+      "bytes": 3383583,
+      "prompt_note": "Normalized production specification recorded from the initial map request; six landmark coordinates retained."
+    },
+    {
+      "id": "scene_sect_gate",
+      "kind": "scene",
+      "target": "assets/art/scenes/sect_gate.png",
+      "prompt": "Use case: illustration-story. Production PNG asset for 凡途, a Chinese cultivation 2D RPG. Clear dark hand-drawn ink outlines, opaque flat colors, restrained two-tone cel shading, simplified Chinese illustrated shapes, dusty jade and teal, warm ivory, muted gold; Tiannan accents of maple red, ember orange and soot grey. Match detailed hand-inked Chinese 2D game art, NOT photorealistic, NOT 3D, no realistic skin or textile texture. No words, writing, labels, UI, logos, watermark, border or contact-sheet captions. One coherent VERY WIDE 4:1 panorama banner, target 2400x600. 4:1 panorama banner, NO characters. The stone mountain gate of 青云 sect (paifang arch and long stone stairs among pines), a translucent jade-green protective barrier dome flickering over it, dark violet demonic mist and shadowy shapes massing outside the barrier, tense but not gory. Keep important architecture within the central horizontal band and clear at small sizes. No people, no foreground close-up character, no text. A single panoramic scene, not multiple panels.",
+      "transparent_background": false,
+      "referenced_image_paths": null,
+      "status": "integrated",
+      "expected_size": [
+        2400,
+        600
+      ],
+      "actual_size": [
+        2172,
+        724
+      ],
+      "sha256": "583ee2dbabbc0c3a2094041f546e3c5ce7608d2807e09c379c7f64b6b99fd016",
+      "bytes": 3286042
+    },
+    {
+      "id": "scene_town_palisade",
+      "kind": "scene",
+      "target": "assets/art/scenes/town_palisade.png",
+      "prompt": "Use case: illustration-story. Production PNG asset for 凡途, a Chinese cultivation 2D RPG. Clear dark hand-drawn ink outlines, opaque flat colors, restrained two-tone cel shading, simplified Chinese illustrated shapes, dusty jade and teal, warm ivory, muted gold; Tiannan accents of maple red, ember orange and soot grey. Match detailed hand-inked Chinese 2D game art, NOT photorealistic, NOT 3D, no realistic skin or textile texture. No words, writing, labels, UI, logos, watermark, border or contact-sheet captions. One coherent VERY WIDE 4:1 panorama banner, target 2400x600. 4:1 panorama banner, NO characters. A mortal town entrance with a wooden palisade of mixed old grey and new pale timbers, a small watchtower, a gate with lanterns, a parked caravan of packhorses and covered carts, distant mountains of the sunset valley on the horizon, daylight. Keep important architecture within the central horizontal band and clear at small sizes. No people, no foreground close-up character, no text. A single panoramic scene, not multiple panels.",
+      "transparent_background": false,
+      "referenced_image_paths": null,
+      "status": "integrated",
+      "expected_size": [
+        2400,
+        600
+      ],
+      "actual_size": [
+        2172,
+        724
+      ],
+      "sha256": "231c0e6cb609ebe315595175007903673f70915e4145173f2f4e7209517158cf",
+      "bytes": 3259090
+    },
+    {
+      "id": "scene_ferry_crossing",
+      "kind": "scene",
+      "target": "assets/art/scenes/ferry_crossing.png",
+      "prompt": "Use case: illustration-story. Production PNG asset for 凡途, a Chinese cultivation 2D RPG. Clear dark hand-drawn ink outlines, opaque flat colors, restrained two-tone cel shading, simplified Chinese illustrated shapes, dusty jade and teal, warm ivory, muted gold; Tiannan accents of maple red, ember orange and soot grey. Match detailed hand-inked Chinese 2D game art, NOT photorealistic, NOT 3D, no realistic skin or textile texture. No words, writing, labels, UI, logos, watermark, border or contact-sheet captions. One coherent VERY WIDE 4:1 panorama banner, target 2400x600. 4:1 panorama banner, NO characters. The quiet egret ferry landing by a river at night, above it the sky split by a silver-white celestial river, a pale floating bridge rising from the ferry into the sky and fading into light with no visible far end, egrets asleep in the reeds, awe and stillness. Keep important architecture within the central horizontal band and clear at small sizes. No people, no foreground close-up character, no text. A single panoramic scene, not multiple panels.",
+      "transparent_background": false,
+      "referenced_image_paths": null,
+      "status": "integrated",
+      "expected_size": [
+        2400,
+        600
+      ],
+      "actual_size": [
+        2172,
+        724
+      ],
+      "sha256": "fc1696644a7843eb323ab5d73d3d5244a932b2be67603da0733f6400e093bfd8",
+      "bytes": 3401206
+    },
+    {
+      "id": "scene_wild_chenxia",
+      "kind": "scene",
+      "target": "assets/art/scenes/wild_chenxia.png",
+      "prompt": "Use case: illustration-story. Production PNG asset for 凡途, a Chinese cultivation 2D RPG. Clear dark hand-drawn ink outlines, opaque flat colors, restrained two-tone cel shading, simplified Chinese illustrated shapes, dusty jade and teal, warm ivory, muted gold; Tiannan accents of maple red, ember orange and soot grey. Match detailed hand-inked Chinese 2D game art, NOT photorealistic, NOT 3D, no realistic skin or textile texture. No words, writing, labels, UI, logos, watermark, border or contact-sheet captions. One coherent VERY WIDE 4:1 panorama banner, target 2400x600. 4:1 panorama banner, NO characters. Valley floor at dusk filled with layered sunset-colored mist (rose, amber, violet), an ancient weathered stone gate standing in the mist with a soft light inside it, distant valley ridges as silhouettes, a few old pines, quiet and mysterious. Keep important architecture within the central horizontal band and clear at small sizes. No people, no foreground close-up character, no text. A single panoramic scene, not multiple panels.",
+      "transparent_background": false,
+      "referenced_image_paths": null,
+      "status": "integrated",
+      "expected_size": [
+        2400,
+        600
+      ],
+      "actual_size": [
+        1983,
+        793
+      ],
+      "sha256": "37d8b6e9db2b1d1e488e866d9a9e4340d4e87f36d3a69bd4e8b19ac8ec0f2c46",
+      "bytes": 2441364
+    },
+    {
+      "id": "scene_ruin_depths",
+      "kind": "scene",
+      "target": "assets/art/scenes/ruin_depths.png",
+      "prompt": "Use case: illustration-story. Production PNG asset for 凡途, a Chinese cultivation 2D RPG. Clear dark hand-drawn ink outlines, opaque flat colors, restrained two-tone cel shading, simplified Chinese illustrated shapes, dusty jade and teal, warm ivory, muted gold; Tiannan accents of maple red, ember orange and soot grey. Match detailed hand-inked Chinese 2D game art, NOT photorealistic, NOT 3D, no realistic skin or textile texture. No words, writing, labels, UI, logos, watermark, border or contact-sheet captions. One coherent VERY WIDE 4:1 panorama banner, target 2400x600. 4:1 panorama banner, NO characters. A carved stone corridor deep inside an ancient cultivator's cave dwelling, several dark doorways to side chambers, faint rune lines on the walls, a half-hidden mechanism plate on the floor, dust and a few glowing moss patches, cold teal darkness with one warm lamp glow. Keep important architecture within the central horizontal band and clear at small sizes. No people, no foreground close-up character, no text. A single panoramic scene, not multiple panels.",
+      "transparent_background": false,
+      "referenced_image_paths": null,
+      "status": "integrated",
+      "expected_size": [
+        2400,
+        600
+      ],
+      "actual_size": [
+        2172,
+        724
+      ],
+      "sha256": "8228263b84097bfba6c003513512cdc38a0d640f278dc8db2725a01255c28685",
+      "bytes": 2918177
+    },
+    {
+      "id": "location_nanming",
+      "kind": "location",
+      "target": "assets/art/locations/nanming_fullscreen.png",
+      "prompt": "Use case: illustration-story. Production PNG asset for 凡途, a Chinese cultivation 2D RPG. Clear dark hand-drawn ink outlines, opaque flat colors, restrained two-tone cel shading, simplified Chinese illustrated shapes, dusty jade and teal, warm ivory, muted gold; Tiannan accents of maple red, ember orange and soot grey. Match detailed hand-inked Chinese 2D game art, NOT photorealistic, NOT 3D, no realistic skin or textile texture. No words, writing, labels, UI, logos, watermark, border or contact-sheet captions. One coherent 16:9 full-screen environment. Vermilion merchant pavilions and glowing forge shops along a Chinese cultivation market street, Wanbao tower as the main left-center landmark, a modest stone teleport ring at the far left, ember-gold lanterns, warm but restrained daylight, distant red maple mountains. No people. Main architectural landmarks at left and center; rightmost 28 percent and lower center stay calm enough for menu overlays. Plenty of sky and foreground; no banner crop.",
+      "transparent_background": false,
+      "referenced_image_paths": null,
+      "status": "integrated",
+      "expected_size": [
+        1672,
+        941
+      ],
+      "actual_size": [
+        1672,
+        941
+      ],
+      "sha256": "01833159ef664bb9b5e7963047e194bcb33e7ddad4b4d798f015af320513bdac",
+      "bytes": 3014524
+    },
+    {
+      "id": "scene_nanming_wanbao",
+      "kind": "scene",
+      "target": "assets/art/scenes/nanming_wanbao.png",
+      "prompt": "Use case: illustration-story. Production PNG asset for 凡途, a Chinese cultivation 2D RPG. Clear dark hand-drawn ink outlines, opaque flat colors, restrained two-tone cel shading, simplified Chinese illustrated shapes, dusty jade and teal, warm ivory, muted gold; Tiannan accents of maple red, ember orange and soot grey. Match detailed hand-inked Chinese 2D game art, NOT photorealistic, NOT 3D, no realistic skin or textile texture. No words, writing, labels, UI, logos, watermark, border or contact-sheet captions. One coherent VERY WIDE 4:1 panorama banner, target 2400x600. 4:1 panorama banner, NO characters. Vermilion three-storey shop hall, shelves of ore ingots, silk bolts and jade, a notice board with blank paper slips (no writing). Keep important architecture within the central horizontal band and clear at small sizes. No people, no foreground close-up character, no text. A single panoramic scene, not multiple panels.",
+      "transparent_background": false,
+      "referenced_image_paths": null,
+      "status": "integrated",
+      "expected_size": [
+        2400,
+        600
+      ],
+      "actual_size": [
+        2172,
+        724
+      ],
+      "sha256": "e5d35a4e4b826f2c0da39ba0c6bab3f5bc53e2809bd2e8101cf3060499e36e23",
+      "bytes": 3107207
+    },
+    {
+      "id": "scene_nanming_teahouse",
+      "kind": "scene",
+      "target": "assets/art/scenes/nanming_teahouse.png",
+      "prompt": "Use case: illustration-story. Production PNG asset for 凡途, a Chinese cultivation 2D RPG. Clear dark hand-drawn ink outlines, opaque flat colors, restrained two-tone cel shading, simplified Chinese illustrated shapes, dusty jade and teal, warm ivory, muted gold; Tiannan accents of maple red, ember orange and soot grey. Match detailed hand-inked Chinese 2D game art, NOT photorealistic, NOT 3D, no realistic skin or textile texture. No words, writing, labels, UI, logos, watermark, border or contact-sheet captions. One coherent VERY WIDE 4:1 panorama banner, target 2400x600. 4:1 panorama banner, NO characters. Open teahouse terrace with low tables and teapots, maple shade, the market street beyond. Keep important architecture within the central horizontal band and clear at small sizes. No people, no foreground close-up character, no text. A single panoramic scene, not multiple panels.",
+      "transparent_background": false,
+      "referenced_image_paths": null,
+      "status": "integrated",
+      "expected_size": [
+        2400,
+        600
+      ],
+      "actual_size": [
+        1983,
+        793
+      ],
+      "sha256": "040f8536a440922d197a3f543ed00c3373387fe27d6bfb489533d546a519f12f",
+      "bytes": 2830045
+    },
+    {
+      "id": "scene_nanming_broker",
+      "kind": "scene",
+      "target": "assets/art/scenes/nanming_broker.png",
+      "prompt": "Use case: illustration-story. Production PNG asset for 凡途, a Chinese cultivation 2D RPG. Clear dark hand-drawn ink outlines, opaque flat colors, restrained two-tone cel shading, simplified Chinese illustrated shapes, dusty jade and teal, warm ivory, muted gold; Tiannan accents of maple red, ember orange and soot grey. Match detailed hand-inked Chinese 2D game art, NOT photorealistic, NOT 3D, no realistic skin or textile texture. No words, writing, labels, UI, logos, watermark, border or contact-sheet captions. One coherent VERY WIDE 4:1 panorama banner, target 2400x600. 4:1 panorama banner, NO characters. A small broker's office with a wooden counter, rows of hanging keys on a board, a door curtain. Keep important architecture within the central horizontal band and clear at small sizes. No people, no foreground close-up character, no text. A single panoramic scene, not multiple panels.",
+      "transparent_background": false,
+      "referenced_image_paths": null,
+      "status": "integrated",
+      "expected_size": [
+        2400,
+        600
+      ],
+      "actual_size": [
+        1983,
+        793
+      ],
+      "sha256": "c30cc2d0e3050b334618d54c68b0b5714aa5cdf86fcd47d9f4f5b61c64b5e924",
+      "bytes": 2760017
+    },
+    {
+      "id": "scene_nanming_abode",
+      "kind": "scene",
+      "target": "assets/art/scenes/nanming_abode.png",
+      "prompt": "Use case: illustration-story. Production PNG asset for 凡途, a Chinese cultivation 2D RPG. Clear dark hand-drawn ink outlines, opaque flat colors, restrained two-tone cel shading, simplified Chinese illustrated shapes, dusty jade and teal, warm ivory, muted gold; Tiannan accents of maple red, ember orange and soot grey. Match detailed hand-inked Chinese 2D game art, NOT photorealistic, NOT 3D, no realistic skin or textile texture. No words, writing, labels, UI, logos, watermark, border or contact-sheet captions. One coherent VERY WIDE 4:1 panorama banner, target 2400x600. 4:1 panorama banner, NO characters. A modest stone hut under an old red maple at the foot of a ridge, doorway showing a meditation cushion and a faint warm glow from the floor. Keep important architecture within the central horizontal band and clear at small sizes. No people, no foreground close-up character, no text. A single panoramic scene, not multiple panels.",
+      "transparent_background": false,
+      "referenced_image_paths": null,
+      "status": "integrated",
+      "expected_size": [
+        2400,
+        600
+      ],
+      "actual_size": [
+        2172,
+        724
+      ],
+      "sha256": "42ed080c87545cb2e27aa9ac2c363a529b3f310b68d05a6e06027806cd188951",
+      "bytes": 3167741
+    },
+    {
+      "id": "location_chifeng",
+      "kind": "location",
+      "target": "assets/art/locations/chifeng_fullscreen.png",
+      "prompt": "Use case: illustration-story. Production PNG asset for 凡途, a Chinese cultivation 2D RPG. Clear dark hand-drawn ink outlines, opaque flat colors, restrained two-tone cel shading, simplified Chinese illustrated shapes, dusty jade and teal, warm ivory, muted gold; Tiannan accents of maple red, ember orange and soot grey. Match detailed hand-inked Chinese 2D game art, NOT photorealistic, NOT 3D, no realistic skin or textile texture. No words, writing, labels, UI, logos, watermark, border or contact-sheet captions. One coherent 16:9 full-screen environment. A broad red maple ridge with hot rocky fissures, warm russet forest, red spiritual flowers in stone cracks, a dark volcanic cave opening at left-center, misty jagged mountains, no flowing lava across paths. No people. Main architectural landmarks at left and center; rightmost 28 percent and lower center stay calm enough for menu overlays. Plenty of sky and foreground; no banner crop.",
+      "transparent_background": false,
+      "referenced_image_paths": null,
+      "status": "integrated",
+      "expected_size": [
+        1672,
+        941
+      ],
+      "actual_size": [
+        1672,
+        941
+      ],
+      "sha256": "a3bce82e741a13de1dc702a7307e66450bc3fd2d6d1c4263de12388f845a8043",
+      "bytes": 3204216
+    },
+    {
+      "id": "scene_chifeng_maples",
+      "kind": "scene",
+      "target": "assets/art/scenes/chifeng_maples.png",
+      "prompt": "Use case: illustration-story. Production PNG asset for 凡途, a Chinese cultivation 2D RPG. Clear dark hand-drawn ink outlines, opaque flat colors, restrained two-tone cel shading, simplified Chinese illustrated shapes, dusty jade and teal, warm ivory, muted gold; Tiannan accents of maple red, ember orange and soot grey. Match detailed hand-inked Chinese 2D game art, NOT photorealistic, NOT 3D, no realistic skin or textile texture. No words, writing, labels, UI, logos, watermark, border or contact-sheet captions. One coherent VERY WIDE 4:1 panorama banner, target 2400x600. 4:1 panorama banner, NO characters. Red maple grove floor, warm rocks with red flower clusters, a few glinting ember-red crystals in cracks. Keep important architecture within the central horizontal band and clear at small sizes. No people, no foreground close-up character, no text. A single panoramic scene, not multiple panels.",
+      "transparent_background": false,
+      "referenced_image_paths": null,
+      "status": "integrated",
+      "expected_size": [
+        2400,
+        600
+      ],
+      "actual_size": [
+        2172,
+        724
+      ],
+      "sha256": "6712dfdc92701a0be0d8b8165c2d13b015b4ae3e2c7ae2bf5a87e701a07d460d",
+      "bytes": 3334107
+    },
+    {
+      "id": "chifeng_stage",
+      "kind": "scene",
+      "target": "assets/art/scenes/chifeng_stage.png",
+      "prompt": "Use case: illustration-story. Production PNG asset for 凡途, a Chinese cultivation 2D RPG. Clear dark hand-drawn ink outlines, opaque flat colors, restrained two-tone cel shading, simplified Chinese illustrated shapes, dusty jade and teal, warm ivory, muted gold; Tiannan accents of maple red, ember orange and soot grey. Match detailed hand-inked Chinese 2D game art, NOT photorealistic, NOT 3D, no realistic skin or textile texture. No words, writing, labels, UI, logos, watermark, border or contact-sheet captions. One coherent VERY WIDE 4:1 panorama banner, target 2400x600. A broad level stone dueling platform built among red maple trees outside a mountain market, a simple wooden railing, distant vermilion cliffs, warm daylight. Empty stage, no fighters. Keep important architecture within the central horizontal band and clear at small sizes. No people, no foreground close-up character, no text. A single panoramic scene, not multiple panels.",
+      "transparent_background": false,
+      "referenced_image_paths": null,
+      "status": "integrated",
+      "expected_size": [
+        2400,
+        600
+      ],
+      "actual_size": [
+        2172,
+        724
+      ],
+      "sha256": "a08d01a5c6bb64e26b785d84cd5bd617dc183a8846badc4127814bfa4d82c612",
+      "bytes": 3169500
+    },
+    {
+      "id": "scene_chifeng_cavern",
+      "kind": "scene",
+      "target": "assets/art/scenes/chifeng_cavern.png",
+      "prompt": "Use case: illustration-story. Production PNG asset for 凡途, a Chinese cultivation 2D RPG. Clear dark hand-drawn ink outlines, opaque flat colors, restrained two-tone cel shading, simplified Chinese illustrated shapes, dusty jade and teal, warm ivory, muted gold; Tiannan accents of maple red, ember orange and soot grey. Match detailed hand-inked Chinese 2D game art, NOT photorealistic, NOT 3D, no realistic skin or textile texture. No words, writing, labels, UI, logos, watermark, border or contact-sheet captions. One coherent VERY WIDE 4:1 panorama banner, target 2400x600. 4:1 panorama banner, NO characters. A cliff fissure glowing orange from within, scorched rock, falling maple leaves caught in rising heat. Keep important architecture within the central horizontal band and clear at small sizes. No people, no foreground close-up character, no text. A single panoramic scene, not multiple panels.",
+      "transparent_background": false,
+      "referenced_image_paths": null,
+      "status": "integrated",
+      "expected_size": [
+        2400,
+        600
+      ],
+      "actual_size": [
+        1983,
+        793
+      ],
+      "sha256": "a1516dde7fc3d6ff9c817787dbfc4026613ddf49045efe3fd6b1941966a0b2af",
+      "bytes": 2734605,
+      "scene_edit_prompt": "Edit this landscape game banner to depict the actual 地火熔窟 cave entrance of Red Maple Ridge. Keep the same 2D hand drawn black ink outlines, flat muted colors, red maple leaves framing the edges, black basalt rock and warm ember palette; keep wide panoramic framing and no people. Replace the central open-air lava chasm and ALL temple buildings/bridges with a large dark natural basalt CAVE MOUTH at center-left, with the viewer standing on a safe ash-covered rocky ledge looking INTO a red-orange glowing subterranean tunnel. Small lava seams and glowing fire crystals inside the tunnel, layered stalactites, deep shadow behind the entrance, a few red maple branches visible outside at the left edge. It must unmistakably read as an entrance to an underground volcanic cavern, not an open canyon or a monastery. Leave a continuous dark rocky foreground ledge and keep most visual detail in the central horizontal band so a wide scene window can crop vertically. No characters, no text, no writing, no UI, no watermark. Restrained shading, no cinematic photorealism, no 3D."
+    },
+    {
+      "id": "location_changqing_valley",
+      "kind": "location",
+      "target": "assets/art/locations/changqing_valley_fullscreen.png",
+      "prompt": "Use case: illustration-story. Production PNG asset for 凡途, a Chinese cultivation 2D RPG. Clear dark hand-drawn ink outlines, opaque flat colors, restrained two-tone cel shading, simplified Chinese illustrated shapes, dusty jade and teal, warm ivory, muted gold; Tiannan accents of maple red, ember orange and soot grey. Match detailed hand-inked Chinese 2D game art, NOT photorealistic, NOT 3D, no realistic skin or textile texture. No words, writing, labels, UI, logos, watermark, border or contact-sheet captions. One coherent 16:9 full-screen environment. An emerald Chinese medicinal valley sect with green tiled pavilions, terraced herb gardens, winding stone paths and ancient trees, warm morning mist, distant jade cliffs. No people. Main architectural landmarks at left and center; rightmost 28 percent and lower center stay calm enough for menu overlays. Plenty of sky and foreground; no banner crop.",
+      "transparent_background": false,
+      "referenced_image_paths": null,
+      "status": "integrated",
+      "expected_size": [
+        1672,
+        941
+      ],
+      "actual_size": [
+        1672,
+        941
+      ],
+      "sha256": "32c179745d26f351a216f88ada63557ea8f2b1d8a36430f19886132f33c87743",
+      "bytes": 3417771
+    },
+    {
+      "id": "changqing_valley_garden",
+      "kind": "scene",
+      "target": "assets/art/scenes/changqing_valley_garden.png",
+      "prompt": "Use case: illustration-story. Production PNG asset for 凡途, a Chinese cultivation 2D RPG. Clear dark hand-drawn ink outlines, opaque flat colors, restrained two-tone cel shading, simplified Chinese illustrated shapes, dusty jade and teal, warm ivory, muted gold; Tiannan accents of maple red, ember orange and soot grey. Match detailed hand-inked Chinese 2D game art, NOT photorealistic, NOT 3D, no realistic skin or textile texture. No words, writing, labels, UI, logos, watermark, border or contact-sheet captions. One coherent VERY WIDE 4:1 panorama banner, target 2400x600. A lush terraced Chinese medicinal herb garden at a green-roofed mountain sect, neat herb beds, old gnarled trees, a small wicker gathering basket, bamboo irrigation channels, misty jade hills. No people. Keep important architecture within the central horizontal band and clear at small sizes. No people, no foreground close-up character, no text. A single panoramic scene, not multiple panels.",
+      "transparent_background": false,
+      "referenced_image_paths": null,
+      "status": "integrated",
+      "expected_size": [
+        2400,
+        600
+      ],
+      "actual_size": [
+        2172,
+        724
+      ],
+      "sha256": "26fee7cffb129b324898dcd249b2bfe8ea0fcd6fadd0635a57f6475ca3c347ab",
+      "bytes": 3762476
+    },
+    {
+      "id": "changqing_valley_pill_hall",
+      "kind": "scene",
+      "target": "assets/art/scenes/changqing_valley_pill_hall.png",
+      "prompt": "Use case: illustration-story. Production PNG asset for 凡途, a Chinese cultivation 2D RPG. Clear dark hand-drawn ink outlines, opaque flat colors, restrained two-tone cel shading, simplified Chinese illustrated shapes, dusty jade and teal, warm ivory, muted gold; Tiannan accents of maple red, ember orange and soot grey. Match detailed hand-inked Chinese 2D game art, NOT photorealistic, NOT 3D, no realistic skin or textile texture. No words, writing, labels, UI, logos, watermark, border or contact-sheet captions. One coherent VERY WIDE 4:1 panorama banner, target 2400x600. A traditional medicine and alchemy hall with pale green tiled roofs, rows of ceramic medicine jars, bundles of herbs and a large bronze tripod furnace visible in the rear courtyard. No readable labels, no people. Keep important architecture within the central horizontal band and clear at small sizes. No people, no foreground close-up character, no text. A single panoramic scene, not multiple panels.",
+      "transparent_background": false,
+      "referenced_image_paths": null,
+      "status": "integrated",
+      "expected_size": [
+        2400,
+        600
+      ],
+      "actual_size": [
+        1983,
+        793
+      ],
+      "sha256": "bc31b4bfed50ba1c4753d61b721e8fa55f88da425187ecb535d76a04df1b6e31",
+      "bytes": 3414397
+    },
+    {
+      "id": "location_canglan_pavilion",
+      "kind": "location",
+      "target": "assets/art/locations/canglan_pavilion_fullscreen.png",
+      "prompt": "Use case: illustration-story. Production PNG asset for 凡途, a Chinese cultivation 2D RPG. Clear dark hand-drawn ink outlines, opaque flat colors, restrained two-tone cel shading, simplified Chinese illustrated shapes, dusty jade and teal, warm ivory, muted gold; Tiannan accents of maple red, ember orange and soot grey. Match detailed hand-inked Chinese 2D game art, NOT photorealistic, NOT 3D, no realistic skin or textile texture. No words, writing, labels, UI, logos, watermark, border or contact-sheet captions. One coherent 16:9 full-screen environment. A blue-roofed scholarly Chinese sect above a tranquil broad river, elegant library pavilions, a long stone observation terrace, tiered distant mountains and cool river haze. No people. Main architectural landmarks at left and center; rightmost 28 percent and lower center stay calm enough for menu overlays. Plenty of sky and foreground; no banner crop.",
+      "transparent_background": false,
+      "referenced_image_paths": null,
+      "status": "integrated",
+      "expected_size": [
+        1672,
+        941
+      ],
+      "actual_size": [
+        1672,
+        941
+      ],
+      "sha256": "f7b4cbba5ceb884fe901a9eb5133bc2c59587ef0e192af4722b535e6ba8cd71a",
+      "bytes": 2999645
+    },
+    {
+      "id": "canglan_pavilion_library",
+      "kind": "scene",
+      "target": "assets/art/scenes/canglan_pavilion_library.png",
+      "prompt": "Use case: illustration-story. Production PNG asset for 凡途, a Chinese cultivation 2D RPG. Clear dark hand-drawn ink outlines, opaque flat colors, restrained two-tone cel shading, simplified Chinese illustrated shapes, dusty jade and teal, warm ivory, muted gold; Tiannan accents of maple red, ember orange and soot grey. Match detailed hand-inked Chinese 2D game art, NOT photorealistic, NOT 3D, no realistic skin or textile texture. No words, writing, labels, UI, logos, watermark, border or contact-sheet captions. One coherent VERY WIDE 4:1 panorama banner, target 2400x600. The interior veranda of a blue-roofed waterside Chinese library, bamboo book shelves and jade scroll slips on dark wood tables, open windows looking onto blue river mist, quiet scholarly atmosphere. No people or readable writing. Keep important architecture within the central horizontal band and clear at small sizes. No people, no foreground close-up character, no text. A single panoramic scene, not multiple panels.",
+      "transparent_background": false,
+      "referenced_image_paths": null,
+      "status": "integrated",
+      "expected_size": [
+        2400,
+        600
+      ],
+      "actual_size": [
+        2172,
+        724
+      ],
+      "sha256": "5453af27de51fdcf8a220d128190422738b5318b19b0a8a99087963e458c828f",
+      "bytes": 2814431
+    },
+    {
+      "id": "canglan_pavilion_tide_terrace",
+      "kind": "scene",
+      "target": "assets/art/scenes/canglan_pavilion_tide_terrace.png",
+      "prompt": "Use case: illustration-story. Production PNG asset for 凡途, a Chinese cultivation 2D RPG. Clear dark hand-drawn ink outlines, opaque flat colors, restrained two-tone cel shading, simplified Chinese illustrated shapes, dusty jade and teal, warm ivory, muted gold; Tiannan accents of maple red, ember orange and soot grey. Match detailed hand-inked Chinese 2D game art, NOT photorealistic, NOT 3D, no realistic skin or textile texture. No words, writing, labels, UI, logos, watermark, border or contact-sheet captions. One coherent VERY WIDE 4:1 panorama banner, target 2400x600. A wide stone viewing terrace beside a river at a blue-roofed Chinese cultivation pavilion, carved balustrades, layered flowing water, distant jade mountains and morning haze. Empty terrace, no people. Keep important architecture within the central horizontal band and clear at small sizes. No people, no foreground close-up character, no text. A single panoramic scene, not multiple panels.",
+      "transparent_background": false,
+      "referenced_image_paths": null,
+      "status": "integrated",
+      "expected_size": [
+        2400,
+        600
+      ],
+      "actual_size": [
+        2172,
+        724
+      ],
+      "sha256": "2703123e4a7dea69646e72f9702798208698b63143f53d20ee5daf1621cf534b",
+      "bytes": 3116483
+    },
+    {
+      "id": "location_xuanyue_gate",
+      "kind": "location",
+      "target": "assets/art/locations/xuanyue_gate_fullscreen.png",
+      "prompt": "Use case: illustration-story. Production PNG asset for 凡途, a Chinese cultivation 2D RPG. Clear dark hand-drawn ink outlines, opaque flat colors, restrained two-tone cel shading, simplified Chinese illustrated shapes, dusty jade and teal, warm ivory, muted gold; Tiannan accents of maple red, ember orange and soot grey. Match detailed hand-inked Chinese 2D game art, NOT photorealistic, NOT 3D, no realistic skin or textile texture. No words, writing, labels, UI, logos, watermark, border or contact-sheet captions. One coherent 16:9 full-screen environment. An austere earth-cultivation sect gate carved into a massive ochre rock mountain, monumental square stone pillars, steep stone steps, a broad level foreground court and sparse old pines. No people. Main architectural landmarks at left and center; rightmost 28 percent and lower center stay calm enough for menu overlays. Plenty of sky and foreground; no banner crop.",
+      "transparent_background": false,
+      "referenced_image_paths": null,
+      "status": "integrated",
+      "expected_size": [
+        1672,
+        941
+      ],
+      "actual_size": [
+        1672,
+        941
+      ],
+      "sha256": "2f56dcd292c48c0f699e481271e5c92f23a0695248d17f15d87270a380096a5f",
+      "bytes": 3173027
+    },
+    {
+      "id": "xuanyue_gate_training_ground",
+      "kind": "scene",
+      "target": "assets/art/scenes/xuanyue_gate_training_ground.png",
+      "prompt": "Use case: illustration-story. Production PNG asset for 凡途, a Chinese cultivation 2D RPG. Clear dark hand-drawn ink outlines, opaque flat colors, restrained two-tone cel shading, simplified Chinese illustrated shapes, dusty jade and teal, warm ivory, muted gold; Tiannan accents of maple red, ember orange and soot grey. Match detailed hand-inked Chinese 2D game art, NOT photorealistic, NOT 3D, no realistic skin or textile texture. No words, writing, labels, UI, logos, watermark, border or contact-sheet captions. One coherent VERY WIDE 4:1 panorama banner, target 2400x600. A level stone martial training ground cut into a massive ochre mountain, upright stone weights and training pillars, austere rock walls and red-brown railings, shafts of daylight. No people. Keep important architecture within the central horizontal band and clear at small sizes. No people, no foreground close-up character, no text. A single panoramic scene, not multiple panels.",
+      "transparent_background": false,
+      "referenced_image_paths": null,
+      "status": "integrated",
+      "expected_size": [
+        2400,
+        600
+      ],
+      "actual_size": [
+        2172,
+        724
+      ],
+      "sha256": "0f122ffd5a03274524a39dade6d06d2473d4e0110694fcc4648e43d1596d4953",
+      "bytes": 3249211
+    },
+    {
+      "id": "xuanyue_gate_stone_hall",
+      "kind": "scene",
+      "target": "assets/art/scenes/xuanyue_gate_stone_hall.png",
+      "prompt": "Use case: illustration-story. Production PNG asset for 凡途, a Chinese cultivation 2D RPG. Clear dark hand-drawn ink outlines, opaque flat colors, restrained two-tone cel shading, simplified Chinese illustrated shapes, dusty jade and teal, warm ivory, muted gold; Tiannan accents of maple red, ember orange and soot grey. Match detailed hand-inked Chinese 2D game art, NOT photorealistic, NOT 3D, no realistic skin or textile texture. No words, writing, labels, UI, logos, watermark, border or contact-sheet captions. One coherent VERY WIDE 4:1 panorama banner, target 2400x600. An austere welcoming hall carved into ochre mountain rock, monumental stone pillars, stone seats, a low dark-wood table and warm lanterns, opening onto distant cliffs. No people. Keep important architecture within the central horizontal band and clear at small sizes. No people, no foreground close-up character, no text. A single panoramic scene, not multiple panels.",
+      "transparent_background": false,
+      "referenced_image_paths": null,
+      "status": "integrated",
+      "expected_size": [
+        2400,
+        600
+      ],
+      "actual_size": [
+        2172,
+        724
+      ],
+      "sha256": "afc08f56cdfbb415245b33392fdf2d377ae95ef042ad9a76772a4e261323748f",
+      "bytes": 2785211
+    },
+    {
+      "id": "location_chixiao_gate",
+      "kind": "location",
+      "target": "assets/art/locations/chixiao_gate_fullscreen.png",
+      "prompt": "Use case: illustration-story. Production PNG asset for 凡途, a Chinese cultivation 2D RPG. Clear dark hand-drawn ink outlines, opaque flat colors, restrained two-tone cel shading, simplified Chinese illustrated shapes, dusty jade and teal, warm ivory, muted gold; Tiannan accents of maple red, ember orange and soot grey. Match detailed hand-inked Chinese 2D game art, NOT photorealistic, NOT 3D, no realistic skin or textile texture. No words, writing, labels, UI, logos, watermark, border or contact-sheet captions. One coherent 16:9 full-screen environment. A monumental vermilion and charcoal Chinese forge sect gate on a volcanic ridge, broad steps, tiered dark roofs, thin forge smoke and subtle ember glow from courtyards, distant red maple mountains. No people. Main architectural landmarks at left and center; rightmost 28 percent and lower center stay calm enough for menu overlays. Plenty of sky and foreground; no banner crop.",
+      "transparent_background": false,
+      "referenced_image_paths": null,
+      "status": "integrated",
+      "expected_size": [
+        1672,
+        941
+      ],
+      "actual_size": [
+        1672,
+        941
+      ],
+      "sha256": "6d811e7ed7426a19be9917ff80df0953152dff6a7c8517b85b9a72d29d8e7806",
+      "bytes": 2724812
+    },
+    {
+      "id": "scene_chixiao_gate_foundry",
+      "kind": "scene",
+      "target": "assets/art/scenes/chixiao_gate_foundry.png",
+      "prompt": "Use case: illustration-story. Production PNG asset for 凡途, a Chinese cultivation 2D RPG. Clear dark hand-drawn ink outlines, opaque flat colors, restrained two-tone cel shading, simplified Chinese illustrated shapes, dusty jade and teal, warm ivory, muted gold; Tiannan accents of maple red, ember orange and soot grey. Match detailed hand-inked Chinese 2D game art, NOT photorealistic, NOT 3D, no realistic skin or textile texture. No words, writing, labels, UI, logos, watermark, border or contact-sheet captions. One coherent VERY WIDE 4:1 panorama banner, target 2400x600. 4:1 panorama banner, NO characters. A great forge hall with a furnace fed by a red vein in the floor, anvils, racks of unfinished swords. Keep important architecture within the central horizontal band and clear at small sizes. No people, no foreground close-up character, no text. A single panoramic scene, not multiple panels.",
+      "transparent_background": false,
+      "referenced_image_paths": null,
+      "status": "integrated",
+      "expected_size": [
+        2400,
+        600
+      ],
+      "actual_size": [
+        2172,
+        724
+      ],
+      "sha256": "20ede1c4cc9db4c101d5f0e02e6efdf8e9a8c5f84362035844dfa07412c01093",
+      "bytes": 2835608
+    },
+    {
+      "id": "scene_chixiao_gate_pavilion",
+      "kind": "scene",
+      "target": "assets/art/scenes/chixiao_gate_pavilion.png",
+      "prompt": "Use case: illustration-story. Production PNG asset for 凡途, a Chinese cultivation 2D RPG. Clear dark hand-drawn ink outlines, opaque flat colors, restrained two-tone cel shading, simplified Chinese illustrated shapes, dusty jade and teal, warm ivory, muted gold; Tiannan accents of maple red, ember orange and soot grey. Match detailed hand-inked Chinese 2D game art, NOT photorealistic, NOT 3D, no realistic skin or textile texture. No words, writing, labels, UI, logos, watermark, border or contact-sheet captions. One coherent VERY WIDE 4:1 panorama banner, target 2400x600. 4:1 panorama banner, NO characters. A small red-pillared pavilion outside a sect gate, stone benches, the gate and smoking chimneys behind. Keep important architecture within the central horizontal band and clear at small sizes. No people, no foreground close-up character, no text. A single panoramic scene, not multiple panels.",
+      "transparent_background": false,
+      "referenced_image_paths": null,
+      "status": "integrated",
+      "expected_size": [
+        2400,
+        600
+      ],
+      "actual_size": [
+        1983,
+        793
+      ],
+      "sha256": "8a9deb7b42b63a03199e52153e49f79efff23db42f43e850ebd2259b9ebf83bf",
+      "bytes": 3178057
+    },
+    {
+      "id": "portrait_yuan_chifeng",
+      "kind": "portrait",
+      "target": "assets/art/portraits/yuan_chifeng_unique.png",
+      "prompt": "Use case: illustration-story. Production PNG asset for 凡途, a Chinese cultivation 2D RPG. Clear dark hand-drawn ink outlines, opaque flat colors, restrained two-tone cel shading, simplified Chinese illustrated shapes, dusty jade and teal, warm ivory, muted gold; Tiannan accents of maple red, ember orange and soot grey. Match detailed hand-inked Chinese 2D game art, NOT photorealistic, NOT 3D, no realistic skin or textile texture. No words, writing, labels, UI, logos, watermark, border or contact-sheet captions. One half-body character portrait on a 4:5 vertical canvas, simple muted teal illustrated background. Single distinct character half-body portrait, 4:5 vertical canvas. Face turned slightly RIGHT, hands and signature prop visible: a forging hammer and a small ember-red crystal. Strong middle-aged man, soot-darkened forearms, dark red and charcoal sect robe with rolled sleeves, sharp appraising eyes, faint calculating smile. Simple muted teal background.  Expressive hand-drawn face, crisp outlines, flat clothing colors, restrained cel shadows; no realistic skin. Hands and signature prop fully in frame.",
+      "transparent_background": false,
+      "referenced_image_paths": null,
+      "status": "integrated",
+      "expected_size": [
+        1122,
+        1402
+      ],
+      "actual_size": [
+        1122,
+        1402
+      ],
+      "sha256": "bef32cd2d5eb9b690ae52cbd1c4eb468560af55700b4d79038fe52cf434634e6",
+      "bytes": 2458649
+    },
+    {
+      "id": "portrait_han_jin",
+      "kind": "portrait",
+      "target": "assets/art/portraits/han_jin_unique.png",
+      "prompt": "Use case: illustration-story. Production PNG asset for 凡途, a Chinese cultivation 2D RPG. Clear dark hand-drawn ink outlines, opaque flat colors, restrained two-tone cel shading, simplified Chinese illustrated shapes, dusty jade and teal, warm ivory, muted gold; Tiannan accents of maple red, ember orange and soot grey. Match detailed hand-inked Chinese 2D game art, NOT photorealistic, NOT 3D, no realistic skin or textile texture. No words, writing, labels, UI, logos, watermark, border or contact-sheet captions. One half-body character portrait on a 4:5 vertical canvas, simple muted teal illustrated background. Single distinct character half-body portrait, 4:5 vertical canvas. Face turned slightly RIGHT. Lean man in a scorched, torn red-and-grey robe, ash on his face, holding a dark red bronze core to his chest, a singed ledger tucked in his belt, calm resolute eyes. Simple muted teal background.  Expressive hand-drawn face, crisp outlines, flat clothing colors, restrained cel shadows; no realistic skin. Hands and signature prop fully in frame.",
+      "transparent_background": false,
+      "referenced_image_paths": null,
+      "status": "integrated",
+      "expected_size": [
+        1122,
+        1402
+      ],
+      "actual_size": [
+        1122,
+        1402
+      ],
+      "sha256": "74ac8dd5fe9ec581bb5836b86ec433157660befe51d97e27a825effc898c697e",
+      "bytes": 2888795
+    },
+    {
+      "id": "battle_huo_xi",
+      "kind": "battle",
+      "target": "assets/art/battle/huo_xi.png",
+      "prompt": "Use case: illustration-story. Production PNG asset for 凡途, a Chinese cultivation 2D RPG. Clear dark hand-drawn ink outlines, opaque flat colors, restrained two-tone cel shading, simplified Chinese illustrated shapes, dusty jade and teal, warm ivory, muted gold; Tiannan accents of maple red, ember orange and soot grey. Match detailed hand-inked Chinese 2D game art, NOT photorealistic, NOT 3D, no realistic skin or textile texture. No words, writing, labels, UI, logos, watermark, border or contact-sheet captions. ONE transparent 2-column by 2-row sprite atlas, four equal rectangular cells, landscape 3:2 canvas. Subject: 熔窟火蜥：盘踞地火熔窟的火属妖兽。 Every subject faces LEFT and is fully inside its own cell, matching scale and registration with generous transparent margins. TOP LEFT idle pose; TOP RIGHT lunging attack; BOTTOM LEFT recoiling hit; BOTTOM RIGHT braced guard. Same creature anatomy, colors and details in all four cells. For wolf or crow groups depict a compact consistent pack with the same leader in each frame, never straddling cells. Dark clear outlines, flat colors. No checkerboard, scenery, text or ground shadow.",
+      "transparent_background": true,
+      "referenced_image_paths": null,
+      "status": "integrated",
+      "expected_size": [
+        1536,
+        1024
+      ],
+      "actual_size": [
+        1536,
+        1024
+      ],
+      "sha256": "d2ca64e2e918229f363c5d4449c00675e91fc2c89ebee16ab9f2757282709339",
+      "bytes": 2775669,
+      "alpha_validation": {
+        "corners_transparent": true,
+        "visible_fraction": 0.4539,
+        "solid_fraction": 0.4375,
+        "corner_alpha_u8": [
+          0,
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    {
+      "id": "event_ascension_opens",
+      "kind": "event",
+      "target": "assets/art/events/ascension_opens.png",
+      "prompt": "Use case: illustration-story. Production PNG asset for 凡途, a Chinese cultivation 2D RPG. Clear dark hand-drawn ink outlines, opaque flat colors, restrained two-tone cel shading, simplified Chinese illustrated shapes, dusty jade and teal, warm ivory, muted gold; Tiannan accents of maple red, ember orange and soot grey. Match detailed hand-inked Chinese 2D game art, NOT photorealistic, NOT 3D, no realistic skin or textile texture. No words, writing, labels, UI, logos, watermark, border or contact-sheet captions. One 16:9 story illustration, no characters: an ordinary Chinese river ferry below as a silver celestial river opens across the daytime sky, a pale luminous bridge rises from the ferry landing toward distant light beyond clouds, reeds and resting egrets in foreground, restrained awe and stillness, jade mountains and warm ivory clouds, no writing or symbols.",
+      "transparent_background": false,
+      "referenced_image_paths": null,
+      "status": "integrated",
+      "expected_size": [
+        1672,
+        941
+      ],
+      "actual_size": [
+        1672,
+        941
+      ],
+      "sha256": "d1f3016d252b555463a924e0be249c7e7942e4e67ba7ae86ebad394da6625c87",
+      "bytes": 3151125
+    },
+    {
+      "id": "battle_bear_king",
+      "kind": "battle",
+      "target": "assets/art/battle/bear_king.png",
+      "prompt": "Use case: illustration-story. Production PNG asset for 凡途, a Chinese cultivation 2D RPG. Clear dark hand-drawn ink outlines, opaque flat colors, restrained two-tone cel shading, simplified Chinese illustrated shapes, dusty jade and teal, warm ivory, muted gold; Tiannan accents of maple red, ember orange and soot grey. Match detailed hand-inked Chinese 2D game art, NOT photorealistic, NOT 3D, no realistic skin or textile texture. No words, writing, labels, UI, logos, watermark, border or contact-sheet captions. ONE transparent 2-column by 2-row sprite atlas, four equal rectangular cells, landscape 3:2 canvas. Subject: 铁背熊王：背生铁鬃的巨熊，会人立拍击、震山吼。 Every subject faces LEFT and is fully inside its own cell, matching scale and registration with generous transparent margins. TOP LEFT idle pose; TOP RIGHT lunging attack; BOTTOM LEFT recoiling hit; BOTTOM RIGHT braced guard. Same creature anatomy, colors and details in all four cells. For wolf or crow groups depict a compact consistent pack with the same leader in each frame, never straddling cells. Dark clear outlines, flat colors. No checkerboard, scenery, text or ground shadow.",
+      "transparent_background": true,
+      "referenced_image_paths": null,
+      "status": "integrated",
+      "expected_size": [
+        1536,
+        1024
+      ],
+      "actual_size": [
+        1536,
+        1024
+      ],
+      "sha256": "4c70833c5f5afcc9e581c3dbe317d6485a0e5e3322da114247cc4e3bcb294325",
+      "bytes": 1822059,
+      "layout_edit_prompt": "Production layout correction of this reference sprite atlas. Keep the SAME creature design, number of poses, hand drawn ink lines and flat colors. This is a 2 COLUMN x 2 ROW atlas with FOUR equal cells, row-major idle, attack, hit, guard. CRITICAL: SHRINK EVERY ENTIRE POSE BY 35 PERCENT relative to the reference, do not fill the canvas. Each entire pose (including wings, tongues, tails, flames, shedding skin, particles and armor) must stay strictly within the CENTRAL 60 PERCENT of its 768x512 cell on a 1536x1024 canvas, with at least 100px horizontal and 70px vertical empty TRANSPARENT padding inside EVERY cell. Center each small creature on (384,256),(1152,256),(384,768),(1152,768). Absolutely no overlap between cells, no anatomy touching boundaries. Four miniature sprites with large EMPTY transparent gutters. Same poses and same identity as reference, face LEFT. No grid lines, no labels, no ground shadow, no background decoration. True alpha transparent background. Do not enlarge to use empty space.",
+      "layout_reference": "assets/art/battle/bear_king.png (first generated candidate, archived only in ignored .tmp)",
+      "alpha_validation": {
+        "corners_transparent": true,
+        "visible_fraction": 0.208,
+        "solid_fraction": 0.2017,
+        "corner_alpha_u8": [
+          0,
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    {
+      "id": "battle_wolf_pack",
+      "kind": "battle",
+      "target": "assets/art/battle/wolf_pack.png",
+      "prompt": "Use case: illustration-story. Production PNG asset for 凡途, a Chinese cultivation 2D RPG. Clear dark hand-drawn ink outlines, opaque flat colors, restrained two-tone cel shading, simplified Chinese illustrated shapes, dusty jade and teal, warm ivory, muted gold; Tiannan accents of maple red, ember orange and soot grey. Match detailed hand-inked Chinese 2D game art, NOT photorealistic, NOT 3D, no realistic skin or textile texture. No words, writing, labels, UI, logos, watermark, border or contact-sheet captions. ONE transparent 2-column by 2-row sprite atlas, four equal rectangular cells, landscape 3:2 canvas. Subject: 狼群：一头头狼带着三四只妖狼。 Every subject faces LEFT and is fully inside its own cell, matching scale and registration with generous transparent margins. TOP LEFT idle pose; TOP RIGHT lunging attack; BOTTOM LEFT recoiling hit; BOTTOM RIGHT braced guard. Same creature anatomy, colors and details in all four cells. For wolf or crow groups depict a compact consistent pack with the same leader in each frame, never straddling cells. Dark clear outlines, flat colors. No checkerboard, scenery, text or ground shadow.",
+      "transparent_background": true,
+      "referenced_image_paths": null,
+      "status": "integrated",
+      "expected_size": [
+        1536,
+        1024
+      ],
+      "actual_size": [
+        1536,
+        1024
+      ],
+      "sha256": "c11345344aba6ba00bc87b6809606808560d4660a9a466d3c495cc80c48fca3b",
+      "bytes": 2595239,
+      "alpha_validation": {
+        "corners_transparent": true,
+        "visible_fraction": 0.4307,
+        "solid_fraction": 0.4112,
+        "corner_alpha_u8": [
+          0,
+          0,
+          1,
+          1
+        ]
+      }
+    },
+    {
+      "id": "battle_shan_xiao",
+      "kind": "battle",
+      "target": "assets/art/battle/shan_xiao.png",
+      "prompt": "Use case: illustration-story. Production PNG asset for 凡途, a Chinese cultivation 2D RPG. Clear dark hand-drawn ink outlines, opaque flat colors, restrained two-tone cel shading, simplified Chinese illustrated shapes, dusty jade and teal, warm ivory, muted gold; Tiannan accents of maple red, ember orange and soot grey. Match detailed hand-inked Chinese 2D game art, NOT photorealistic, NOT 3D, no realistic skin or textile texture. No words, writing, labels, UI, logos, watermark, border or contact-sheet captions. ONE transparent 2-column by 2-row sprite atlas, four equal rectangular cells, landscape 3:2 canvas. Subject: 偷药山魈：偷药的山魈，抓挠、掷石、攀树躲闪。 Every subject faces LEFT and is fully inside its own cell, matching scale and registration with generous transparent margins. TOP LEFT idle pose; TOP RIGHT lunging attack; BOTTOM LEFT recoiling hit; BOTTOM RIGHT braced guard. Same creature anatomy, colors and details in all four cells. For wolf or crow groups depict a compact consistent pack with the same leader in each frame, never straddling cells. Dark clear outlines, flat colors. No checkerboard, scenery, text or ground shadow.",
+      "transparent_background": true,
+      "referenced_image_paths": null,
+      "status": "integrated",
+      "expected_size": [
+        1536,
+        1024
+      ],
+      "actual_size": [
+        1536,
+        1024
+      ],
+      "sha256": "b750cfe00717187da6702c32081d1e226aed1429ee9d1682ff775424767d6a88",
+      "bytes": 2592412,
+      "alpha_validation": {
+        "corners_transparent": true,
+        "visible_fraction": 0.3902,
+        "solid_fraction": 0.3702,
+        "corner_alpha_u8": [
+          0,
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    {
+      "id": "battle_huo_ya",
+      "kind": "battle",
+      "target": "assets/art/battle/huo_ya.png",
+      "prompt": "Use case: illustration-story. Production PNG asset for 凡途, a Chinese cultivation 2D RPG. Clear dark hand-drawn ink outlines, opaque flat colors, restrained two-tone cel shading, simplified Chinese illustrated shapes, dusty jade and teal, warm ivory, muted gold; Tiannan accents of maple red, ember orange and soot grey. Match detailed hand-inked Chinese 2D game art, NOT photorealistic, NOT 3D, no realistic skin or textile texture. No words, writing, labels, UI, logos, watermark, border or contact-sheet captions. ONE transparent 2-column by 2-row sprite atlas, four equal rectangular cells, landscape 3:2 canvas. Subject: 火鸦群：赤枫岭的火鸦，群啄、火羽。 Every subject faces LEFT and is fully inside its own cell, matching scale and registration with generous transparent margins. TOP LEFT idle pose; TOP RIGHT lunging attack; BOTTOM LEFT recoiling hit; BOTTOM RIGHT braced guard. Same creature anatomy, colors and details in all four cells. For wolf or crow groups depict a compact consistent pack with the same leader in each frame, never straddling cells. Dark clear outlines, flat colors. No checkerboard, scenery, text or ground shadow.",
+      "transparent_background": true,
+      "referenced_image_paths": null,
+      "status": "integrated",
+      "expected_size": [
+        1536,
+        1024
+      ],
+      "actual_size": [
+        1536,
+        1024
+      ],
+      "sha256": "2416891ce0e5308501fd569d856de5a308c226ac1fe4ea7c91e65aa3b2471dab",
+      "bytes": 2041653,
+      "layout_edit_prompt": "Production layout correction of this reference sprite atlas. Keep the SAME creature design, number of poses, hand drawn ink lines and flat colors. This is a 2 COLUMN x 2 ROW atlas with FOUR equal cells, row-major idle, attack, hit, guard. CRITICAL: SHRINK EVERY ENTIRE POSE BY 35 PERCENT relative to the reference, do not fill the canvas. Each entire pose (including wings, tongues, tails, flames, shedding skin, particles and armor) must stay strictly within the CENTRAL 60 PERCENT of its 768x512 cell on a 1536x1024 canvas, with at least 100px horizontal and 70px vertical empty TRANSPARENT padding inside EVERY cell. Center each small creature on (384,256),(1152,256),(384,768),(1152,768). Absolutely no overlap between cells, no anatomy touching boundaries. Four miniature sprites with large EMPTY transparent gutters. Same poses and same identity as reference, face LEFT. No grid lines, no labels, no ground shadow, no background decoration. True alpha transparent background. Do not enlarge to use empty space.",
+      "layout_reference": "assets/art/battle/huo_ya.png (first generated candidate, archived only in ignored .tmp)",
+      "alpha_validation": {
+        "corners_transparent": true,
+        "visible_fraction": 0.218,
+        "solid_fraction": 0.2024,
+        "corner_alpha_u8": [
+          0,
+          0,
+          0,
+          1
+        ]
+      }
+    },
+    {
+      "id": "battle_qinglin_snake",
+      "kind": "battle",
+      "target": "assets/art/battle/qinglin_snake.png",
+      "prompt": "Use case: illustration-story. Production PNG asset for 凡途, a Chinese cultivation 2D RPG. Clear dark hand-drawn ink outlines, opaque flat colors, restrained two-tone cel shading, simplified Chinese illustrated shapes, dusty jade and teal, warm ivory, muted gold; Tiannan accents of maple red, ember orange and soot grey. Match detailed hand-inked Chinese 2D game art, NOT photorealistic, NOT 3D, no realistic skin or textile texture. No words, writing, labels, UI, logos, watermark, border or contact-sheet captions. ONE transparent 2-column by 2-row sprite atlas, four equal rectangular cells, landscape 3:2 canvas. Subject: 青鳞蛇：青绿鳞片的毒蛇，会缠绕、蜕皮。 Every subject faces LEFT and is fully inside its own cell, matching scale and registration with generous transparent margins. TOP LEFT idle pose; TOP RIGHT lunging attack; BOTTOM LEFT recoiling hit; BOTTOM RIGHT braced guard. Same creature anatomy, colors and details in all four cells. For wolf or crow groups depict a compact consistent pack with the same leader in each frame, never straddling cells. Dark clear outlines, flat colors. No checkerboard, scenery, text or ground shadow.",
+      "transparent_background": true,
+      "referenced_image_paths": null,
+      "status": "integrated",
+      "expected_size": [
+        1536,
+        1024
+      ],
+      "actual_size": [
+        1536,
+        1024
+      ],
+      "sha256": "660a2421acecb3688138bc0052c02f0269e68e7e0246f8b1df1d99384b210822",
+      "bytes": 1898359,
+      "layout_edit_prompt": "Production layout correction of this reference sprite atlas. Keep the SAME creature design, number of poses, hand drawn ink lines and flat colors. This is a 2 COLUMN x 2 ROW atlas with FOUR equal cells, row-major idle, attack, hit, guard. CRITICAL: SHRINK EVERY ENTIRE POSE BY 35 PERCENT relative to the reference, do not fill the canvas. Each entire pose (including wings, tongues, tails, flames, shedding skin, particles and armor) must stay strictly within the CENTRAL 60 PERCENT of its 768x512 cell on a 1536x1024 canvas, with at least 100px horizontal and 70px vertical empty TRANSPARENT padding inside EVERY cell. Center each small creature on (384,256),(1152,256),(384,768),(1152,768). Absolutely no overlap between cells, no anatomy touching boundaries. Four miniature sprites with large EMPTY transparent gutters. Same poses and same identity as reference, face LEFT. No grid lines, no labels, no ground shadow, no background decoration. True alpha transparent background. Do not enlarge to use empty space.",
+      "layout_reference": "assets/art/battle/qinglin_snake.png (first generated candidate, archived only in ignored .tmp)",
+      "alpha_validation": {
+        "corners_transparent": true,
+        "visible_fraction": 0.1822,
+        "solid_fraction": 0.1729,
+        "corner_alpha_u8": [
+          0,
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    {
+      "id": "battle_chilian_snake",
+      "kind": "battle",
+      "target": "assets/art/battle/chilian_snake.png",
+      "prompt": "Use case: illustration-story. Production PNG asset for 凡途, a Chinese cultivation 2D RPG. Clear dark hand-drawn ink outlines, opaque flat colors, restrained two-tone cel shading, simplified Chinese illustrated shapes, dusty jade and teal, warm ivory, muted gold; Tiannan accents of maple red, ember orange and soot grey. Match detailed hand-inked Chinese 2D game art, NOT photorealistic, NOT 3D, no realistic skin or textile texture. No words, writing, labels, UI, logos, watermark, border or contact-sheet captions. ONE transparent 2-column by 2-row sprite atlas, four equal rectangular cells, landscape 3:2 canvas. Subject: 赤练妖蛇：火属的赤红妖蛇，缠身、连咬、喷毒。 Every subject faces LEFT and is fully inside its own cell, matching scale and registration with generous transparent margins. TOP LEFT idle pose; TOP RIGHT lunging attack; BOTTOM LEFT recoiling hit; BOTTOM RIGHT braced guard. Same creature anatomy, colors and details in all four cells. For wolf or crow groups depict a compact consistent pack with the same leader in each frame, never straddling cells. Dark clear outlines, flat colors. No checkerboard, scenery, text or ground shadow.",
+      "transparent_background": true,
+      "referenced_image_paths": null,
+      "status": "integrated",
+      "expected_size": [
+        1536,
+        1024
+      ],
+      "actual_size": [
+        1536,
+        1024
+      ],
+      "sha256": "ec1b6420a1abcc454e99cd946f7acf9e24400d960e0a989ecd9ea257bb562d27",
+      "bytes": 2689549,
+      "alpha_validation": {
+        "corners_transparent": true,
+        "visible_fraction": 0.4454,
+        "solid_fraction": 0.4212,
+        "corner_alpha_u8": [
+          0,
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    {
+      "id": "battle_yanjia_xi",
+      "kind": "battle",
+      "target": "assets/art/battle/yanjia_xi.png",
+      "prompt": "Use case: illustration-story. Production PNG asset for 凡途, a Chinese cultivation 2D RPG. Clear dark hand-drawn ink outlines, opaque flat colors, restrained two-tone cel shading, simplified Chinese illustrated shapes, dusty jade and teal, warm ivory, muted gold; Tiannan accents of maple red, ember orange and soot grey. Match detailed hand-inked Chinese 2D game art, NOT photorealistic, NOT 3D, no realistic skin or textile texture. No words, writing, labels, UI, logos, watermark, border or contact-sheet captions. ONE transparent 2-column by 2-row sprite atlas, four equal rectangular cells, landscape 3:2 canvas. Subject: 岩甲蜥：背负岩甲的巨蜥，甲撞、结岩甲、崩岩。 Every subject faces LEFT and is fully inside its own cell, matching scale and registration with generous transparent margins. TOP LEFT idle pose; TOP RIGHT lunging attack; BOTTOM LEFT recoiling hit; BOTTOM RIGHT braced guard. Same creature anatomy, colors and details in all four cells. For wolf or crow groups depict a compact consistent pack with the same leader in each frame, never straddling cells. Dark clear outlines, flat colors. No checkerboard, scenery, text or ground shadow.",
+      "transparent_background": true,
+      "referenced_image_paths": null,
+      "status": "integrated",
+      "expected_size": [
+        1536,
+        1024
+      ],
+      "actual_size": [
+        1536,
+        1024
+      ],
+      "sha256": "46accc53dc8c6fbbc3ac0288b411cc10080537c5ab1f64f3882b8de9ad0aef1b",
+      "bytes": 2770141,
+      "alpha_validation": {
+        "corners_transparent": true,
+        "visible_fraction": 0.4998,
+        "solid_fraction": 0.4847,
+        "corner_alpha_u8": [
+          0,
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    {
+      "id": "battle_tribulation",
+      "kind": "battle",
+      "target": "assets/art/battle/tribulation.png",
+      "prompt": "Use case: illustration-story. Production PNG asset for 凡途, a Chinese cultivation 2D RPG. Clear dark hand-drawn ink outlines, opaque flat colors, restrained two-tone cel shading, simplified Chinese illustrated shapes, dusty jade and teal, warm ivory, muted gold; Tiannan accents of maple red, ember orange and soot grey. Match detailed hand-inked Chinese 2D game art, NOT photorealistic, NOT 3D, no realistic skin or textile texture. No words, writing, labels, UI, logos, watermark, border or contact-sheet captions. ONE transparent 3-column by 2-row sprite atlas, six equal cells, landscape 3:2 canvas. In each cell a distinct ink-drawn celestial storm cloud and jagged pale-blue lightning core, no human face or body, all lighting effects completely inside its cell with generous transparent margin. Row 1 left-to-right: calm coiled cloud, charged cloud, bolt striking diagonally left. Row 2: spreading arcs, disrupted fading cloud, dense protective cloud. Same cloud identity and center in all six frames. No checkerboard painted into image.",
+      "transparent_background": true,
+      "referenced_image_paths": null,
+      "status": "integrated",
+      "expected_size": [
+        1536,
+        1024
+      ],
+      "actual_size": [
+        1536,
+        1024
+      ],
+      "sha256": "58b6defb18ae05453b84267c85b9783d80d4274f7e30763fc0cc434b10836969",
+      "bytes": 2615866,
+      "alpha_validation": {
+        "corners_transparent": true,
+        "visible_fraction": 0.4282,
+        "solid_fraction": 0.3936,
+        "corner_alpha_u8": [
+          0,
+          0,
+          1,
+          0
+        ]
+      }
+    },
+    {
+      "id": "battle_chixiao_zhifa",
+      "kind": "battle",
+      "target": "assets/art/battle/chixiao_zhifa.png",
+      "prompt": "Use case: illustration-story. Production PNG asset for 凡途, a Chinese cultivation 2D RPG. Clear dark hand-drawn ink outlines, opaque flat colors, restrained two-tone cel shading, simplified Chinese illustrated shapes, dusty jade and teal, warm ivory, muted gold; Tiannan accents of maple red, ember orange and soot grey. Match detailed hand-inked Chinese 2D game art, NOT photorealistic, NOT 3D, no realistic skin or textile texture. No words, writing, labels, UI, logos, watermark, border or contact-sheet captions. ONE transparent 3-column by 2-row sprite atlas, six equal cells, landscape 3:2 canvas. One young Chinese male fire sect enforcement cultivator, red and charcoal robes, tied dark hair, bronze fire seal and sword. Every full-body pose faces LEFT, equal scale, feet aligned near cell bottom, generous padding. Row 1: idle, preparing fire seal, sword attacking left. Row 2: casting flame seal, recoiling hit, guarded sword stance. Same clothing and identity in every cell. No checkerboard or background.",
+      "transparent_background": true,
+      "referenced_image_paths": null,
+      "status": "integrated",
+      "expected_size": [
+        1536,
+        1024
+      ],
+      "actual_size": [
+        1536,
+        1024
+      ],
+      "sha256": "4c73b37a849e64f0bc7c4ab4513048f90e28147448b263918f6276a736e254a8",
+      "bytes": 2327117,
+      "layout_edit_prompt": "Edit the reference game sprite atlas only to correct its layout for production slicing. Preserve the same 2D hand drawn clear ink outlines, flat muted red/charcoal robe, same young male cultivator face, hairstyle, sword, fire seal and six poses. EXACT 3 columns by 2 rows of equally sized SQUARE cells on a landscape canvas, six complete isolated miniatures, row-major idle, prepare, attack, cast, hit, guard. Each entire figure AND every sword/flame/hair/ribbon must fit inside the central 70% of ITS OWN cell with generous empty margins on ALL four sides. In particular shorten/angle the upper right sword attack and lower left fire arc so they never enter adjacent cells. All figures face LEFT. No grid lines, no labels, no ground shadow. Truly transparent empty background with alpha, no gradient or colored matte. Keep the six same poses, just reduce their footprint and recenter each within its own cell; no elements crossing the vertical cuts at 1/3 and 2/3 or the horizontal cut at 1/2.",
+      "layout_reference": "assets/art/battle/chixiao_zhifa.png (first generated candidate, archived only in ignored .tmp)",
+      "alpha_validation": {
+        "corners_transparent": true,
+        "visible_fraction": 0.2842,
+        "solid_fraction": 0.2621,
+        "corner_alpha_u8": [
+          0,
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    {
+      "id": "rite_meditation",
+      "kind": "presentation",
+      "target": "assets/art/actors/hero_meditate.png",
+      "prompt": "Use case: illustration-story. Production PNG asset for 凡途, a Chinese cultivation 2D RPG. Clear dark hand-drawn ink outlines, opaque flat colors, restrained two-tone cel shading, simplified Chinese illustrated shapes, dusty jade and teal, warm ivory, muted gold; Tiannan accents of maple red, ember orange and soot grey. Match detailed hand-inked Chinese 2D game art, NOT photorealistic, NOT 3D, no realistic skin or textile texture. No words, writing, labels, UI, logos, watermark, border or contact-sheet captions. Identity-preserving derivative from the provided hero atlas: produce ONLY ONE full-body seated meditation figure, not a grid. Square transparent canvas. Keep the same young Chinese male hero, long black hair half tied in a gold ornament, long teal ribbons, ivory robe with jade-green borders, green belt and small gold details. Cross-legged calm meditation, hands resting together before dantian, eyes gently closed, full robe and feet within the canvas, generous transparent padding. No sword held aloft, no scenery, no painted checkerboard. Preserve the existing hand-drawn character design.",
+      "transparent_background": true,
+      "referenced_image_paths": [
+        "D:/fqh/flash/assets/art/cultivator_atlas_v2.png"
+      ],
+      "status": "integrated",
+      "expected_size": [
+        512,
+        512
+      ],
+      "actual_size": [
+        1254,
+        1254
+      ],
+      "sha256": "9e8a32da01d522683e60b6cc56e73bf5d6e5b8a0e8f4fe8d3dc4d5b23be6a1f1",
+      "bytes": 1689779,
+      "alpha_validation": {
+        "corners_transparent": true,
+        "visible_fraction": 0.5073,
+        "solid_fraction": 0.5004,
+        "corner_alpha_u8": [
+          0,
+          0,
+          1,
+          0
+        ]
+      }
+    },
+    {
+      "id": "rite_furnace",
+      "kind": "presentation",
+      "target": "assets/art/ui/rite_furnace.png",
+      "prompt": "Use case: illustration-story. Production PNG asset for 凡途, a Chinese cultivation 2D RPG. Clear dark hand-drawn ink outlines, opaque flat colors, restrained two-tone cel shading, simplified Chinese illustrated shapes, dusty jade and teal, warm ivory, muted gold; Tiannan accents of maple red, ember orange and soot grey. Match detailed hand-inked Chinese 2D game art, NOT photorealistic, NOT 3D, no realistic skin or textile texture. No words, writing, labels, UI, logos, watermark, border or contact-sheet captions. One traditional Chinese alchemy tripod furnace, square transparent canvas, three-quarter front view, antique jade-bronze body with dark ink outline, simple engraved cloud shapes, restrained warm copper accents, fitted lid with small knob and two handles. Entire furnace including all legs in frame, centered with generous transparent margins. No fire or smoke baked in, no ground shadow, no text or checkerboard. The lid is closed; animation and fire are added separately by the game.",
+      "transparent_background": true,
+      "referenced_image_paths": null,
+      "status": "integrated",
+      "expected_size": [
+        768,
+        768
+      ],
+      "actual_size": [
+        1254,
+        1254
+      ],
+      "sha256": "c0054f65e74b4d6a4a3ce381212e559b04d137e781ff28d5a2672eb96680432f",
+      "bytes": 1718661,
+      "alpha_validation": {
+        "corners_transparent": true,
+        "visible_fraction": 0.4652,
+        "solid_fraction": 0.4616,
+        "corner_alpha_u8": [
+          0,
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    {
+      "id": "battle_background_nanming",
+      "kind": "battle_background",
+      "target": "assets/art/battle/nanming.png",
+      "prompt": "Use case: illustration-story. Production PNG asset for 凡途, a Chinese cultivation 2D RPG. Clear dark hand-drawn ink outlines, opaque flat colors, restrained two-tone cel shading, simplified Chinese illustrated shapes, dusty jade and teal, warm ivory, muted gold; Tiannan accents of maple red, ember orange and soot grey. Match detailed hand-inked Chinese 2D game art, NOT photorealistic, NOT 3D, no realistic skin or textile texture. No words, writing, labels, UI, logos, watermark, border or contact-sheet captions. One 16:9 SIDE-VIEW 2D turn-based battle arena environment. A quiet open stone courtyard just outside a vermilion merchant market, shops and warm lanterns in the distant background, red maple hills beyond, level stone paving across the entire bottom third. No characters, enemies, weapons or UI. Clear uninterrupted fighting spaces at 24 percent and 76 percent image width, ground line near 90 percent height. Keep the upper fifth uncluttered for health bars. Depth and architecture behind the stage, no foreground object blocking combatants.",
+      "transparent_background": false,
+      "referenced_image_paths": null,
+      "status": "integrated",
+      "expected_size": [
+        1672,
+        941
+      ],
+      "actual_size": [
+        1672,
+        940
+      ],
+      "sha256": "f5468a21f2c09e7f60ea12aa62fdea880e616bbe6bab93841e3bf49cc29732a3",
+      "bytes": 2784752
+    },
+    {
+      "id": "battle_background_chifeng",
+      "kind": "battle_background",
+      "target": "assets/art/battle/chifeng.png",
+      "prompt": "Use case: illustration-story. Production PNG asset for 凡途, a Chinese cultivation 2D RPG. Clear dark hand-drawn ink outlines, opaque flat colors, restrained two-tone cel shading, simplified Chinese illustrated shapes, dusty jade and teal, warm ivory, muted gold; Tiannan accents of maple red, ember orange and soot grey. Match detailed hand-inked Chinese 2D game art, NOT photorealistic, NOT 3D, no realistic skin or textile texture. No words, writing, labels, UI, logos, watermark, border or contact-sheet captions. One 16:9 SIDE-VIEW 2D turn-based battle arena environment. An empty level rocky clearing amid red maple trees, ochre cliffs and a warm dark volcanic cave far in the background, glowing red leaves, flat foreground fighting ground. No characters, enemies, weapons or UI. Clear uninterrupted fighting spaces at 24 percent and 76 percent image width, ground line near 90 percent height. Keep the upper fifth uncluttered for health bars. Depth and architecture behind the stage, no foreground object blocking combatants.",
+      "transparent_background": false,
+      "referenced_image_paths": null,
+      "status": "integrated",
+      "expected_size": [
+        1672,
+        941
+      ],
+      "actual_size": [
+        1672,
+        941
+      ],
+      "sha256": "2b459fa28fe53916e2ddc3150938ae2bdee278b732cdca00909ad5605aaf8078",
+      "bytes": 2931407
+    },
+    {
+      "id": "battle_background_changqing_valley",
+      "kind": "battle_background",
+      "target": "assets/art/battle/changqing_valley.png",
+      "prompt": "Use case: illustration-story. Production PNG asset for 凡途, a Chinese cultivation 2D RPG. Clear dark hand-drawn ink outlines, opaque flat colors, restrained two-tone cel shading, simplified Chinese illustrated shapes, dusty jade and teal, warm ivory, muted gold; Tiannan accents of maple red, ember orange and soot grey. Match detailed hand-inked Chinese 2D game art, NOT photorealistic, NOT 3D, no realistic skin or textile texture. No words, writing, labels, UI, logos, watermark, border or contact-sheet captions. One 16:9 SIDE-VIEW 2D turn-based battle arena environment. An empty level clearing beside terraced medicinal gardens, green roofed pavilions and bamboo in the distance, old trees framing the edges, flat grass and stone foreground. No characters, enemies, weapons or UI. Clear uninterrupted fighting spaces at 24 percent and 76 percent image width, ground line near 90 percent height. Keep the upper fifth uncluttered for health bars. Depth and architecture behind the stage, no foreground object blocking combatants.",
+      "transparent_background": false,
+      "referenced_image_paths": null,
+      "status": "integrated",
+      "expected_size": [
+        1672,
+        941
+      ],
+      "actual_size": [
+        1672,
+        941
+      ],
+      "sha256": "73222a5652b43412c2656e9f951540131a6049778e49c557bd72a2259c5fa535",
+      "bytes": 3168336
+    },
+    {
+      "id": "battle_background_canglan_pavilion",
+      "kind": "battle_background",
+      "target": "assets/art/battle/canglan_pavilion.png",
+      "prompt": "Use case: illustration-story. Production PNG asset for 凡途, a Chinese cultivation 2D RPG. Clear dark hand-drawn ink outlines, opaque flat colors, restrained two-tone cel shading, simplified Chinese illustrated shapes, dusty jade and teal, warm ivory, muted gold; Tiannan accents of maple red, ember orange and soot grey. Match detailed hand-inked Chinese 2D game art, NOT photorealistic, NOT 3D, no realistic skin or textile texture. No words, writing, labels, UI, logos, watermark, border or contact-sheet captions. One 16:9 SIDE-VIEW 2D turn-based battle arena environment. An empty level stone terrace beside a calm blue river, distant blue tiled library pavilions and misty mountains, low balustrade behind the fighting plane. No characters, enemies, weapons or UI. Clear uninterrupted fighting spaces at 24 percent and 76 percent image width, ground line near 90 percent height. Keep the upper fifth uncluttered for health bars. Depth and architecture behind the stage, no foreground object blocking combatants.",
+      "transparent_background": false,
+      "referenced_image_paths": null,
+      "status": "integrated",
+      "expected_size": [
+        1672,
+        941
+      ],
+      "actual_size": [
+        1672,
+        941
+      ],
+      "sha256": "d34da4c12a801b083c40c32349d1dcd68da7befbbd0457d755f84a87d81b0caa",
+      "bytes": 2700574
+    },
+    {
+      "id": "battle_background_xuanyue_gate",
+      "kind": "battle_background",
+      "target": "assets/art/battle/xuanyue_gate.png",
+      "prompt": "Use case: illustration-story. Production PNG asset for 凡途, a Chinese cultivation 2D RPG. Clear dark hand-drawn ink outlines, opaque flat colors, restrained two-tone cel shading, simplified Chinese illustrated shapes, dusty jade and teal, warm ivory, muted gold; Tiannan accents of maple red, ember orange and soot grey. Match detailed hand-inked Chinese 2D game art, NOT photorealistic, NOT 3D, no realistic skin or textile texture. No words, writing, labels, UI, logos, watermark, border or contact-sheet captions. One 16:9 SIDE-VIEW 2D turn-based battle arena environment. An empty spacious stone training courtyard cut into ochre cliffs, monumental pillars and a few stone weights behind the fighting plane, flat unbroken ground in front. No characters, enemies, weapons or UI. Clear uninterrupted fighting spaces at 24 percent and 76 percent image width, ground line near 90 percent height. Keep the upper fifth uncluttered for health bars. Depth and architecture behind the stage, no foreground object blocking combatants.",
+      "transparent_background": false,
+      "referenced_image_paths": null,
+      "status": "integrated",
+      "expected_size": [
+        1672,
+        941
+      ],
+      "actual_size": [
+        1672,
+        941
+      ],
+      "sha256": "192d40959f76dc9c16d5113b8fb5d733369314e6300a3faa480de12c3b4299c5",
+      "bytes": 2756321
+    },
+    {
+      "id": "battle_background_chixiao_gate",
+      "kind": "battle_background",
+      "target": "assets/art/battle/chixiao_gate.png",
+      "prompt": "Use case: illustration-story. Production PNG asset for 凡途, a Chinese cultivation 2D RPG. Clear dark hand-drawn ink outlines, opaque flat colors, restrained two-tone cel shading, simplified Chinese illustrated shapes, dusty jade and teal, warm ivory, muted gold; Tiannan accents of maple red, ember orange and soot grey. Match detailed hand-inked Chinese 2D game art, NOT photorealistic, NOT 3D, no realistic skin or textile texture. No words, writing, labels, UI, logos, watermark, border or contact-sheet captions. One 16:9 SIDE-VIEW 2D turn-based battle arena environment. An empty stone martial courtyard at a red-roofed forge sect, distant bronze furnaces and dark tiled buildings with thin forge smoke, flat dark paving in front. No characters, enemies, weapons or UI. Clear uninterrupted fighting spaces at 24 percent and 76 percent image width, ground line near 90 percent height. Keep the upper fifth uncluttered for health bars. Depth and architecture behind the stage, no foreground object blocking combatants.",
+      "transparent_background": false,
+      "referenced_image_paths": null,
+      "status": "integrated",
+      "expected_size": [
+        1672,
+        941
+      ],
+      "actual_size": [
+        1672,
+        941
+      ],
+      "sha256": "f6507025a69c1b0952afb3d1877cbb16e25adee5ae38490bd6a63c6d6c41c740",
+      "bytes": 2462768
+    }
+  ],
+  "delivery_note": "48 newly generated PNGs saved in project assets; native output dimensions retained. Four atlas layouts and one cavern scene corrected with built-in image edits. No old committed image replaced. Cache move exception authorized by user for this batch; generated C-drive files moved immediately to D drive."
+}
