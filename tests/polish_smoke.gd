@@ -340,6 +340,8 @@ func aftermath() -> void:
 		s.player.location = "sect"
 		s.interact("gu_changgeng", "valley_report")
 		check(s.story_state("valley_aftermath") == "done" and s.has_flag("valley_remembered"), "the aftermath ends in a distinct remembered result")
+		var elder := s.interact("gu_changgeng", "talk")
+		check(elder.contains("药道") or elder.contains("天南"), "Gu Changgeng's daily talk remembers the reopened herb road")
 
 func gifts_and_independent_deadlines() -> void:
 	var s := game()

@@ -180,7 +180,10 @@
             ]
           },
           {
-            "mind": 2
+            "contribution": 20
+          },
+          {
+            "mind": 4
           },
           {
             "story_advance": "valley_aftermath"
@@ -203,6 +206,12 @@
         "effects": [
           {
             "stones": 60
+          },
+          {
+            "contribution": 20
+          },
+          {
+            "mind": 2
           },
           {
             "story_advance": "valley_aftermath"
@@ -1625,6 +1634,22 @@
       }
     ],
     "talk_variants": [
+      {
+        "conditions": [
+          {
+            "flag": "valley_remembered"
+          },
+          {
+            "not": {
+              "flag": "tiannan_known"
+            }
+          }
+        ],
+        "lines": [
+          "“药道通了，谷里的人才算缓过一口气。斩蟒是一时的事，养人是一辈子的事。”",
+          "“天南不比青云。去之前，该还的人情还了，该收的心收了。”"
+        ]
+      },
       {
         "conditions": [
           {
