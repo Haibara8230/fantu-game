@@ -20,6 +20,48 @@ const Talents = preload("res://scripts/core/talents.gd")
 const CARRY_SCALE := 100
 const CARRY_UNIT := Calendar.DAYS_PER_MONTH * CARRY_SCALE
 
+## 客栈静房 (docs/GAME_OUTLINE.md 5.2): a room let by the day where one may retreat, study and break
+## through without a sect — a spot's `lodging` {"rate" (of the retreat's xp), "rent" (stones a month)},
+## paid for the days spent there. {} where a free place to retreat stands open (a sect's chamber).
+static func lodging(s) -> Dictionary:
+	var let: Dictionary = {}
+	for spot: Dictionary in s.content.locations[str(s.player.location)].get("spots", []):
+		if not "cultivate" in spot.actions or not s.spot_open(spot):
+			continue
+		if not spot.has("lodging"):
+			return {}
+		let = spot.lodging
+	return let
+
+## How richly a retreat here goes: the room's rate, else whole.
+static func place_rate(s) -> float:
+	return float(lodging(s).get("rate", 1.0))
+
+## Stones the room asks for `days`, rounded up to whole stones.
+static func rent(s, days: int) -> int:
+	var let := lodging(s)
+	return 0 if let.is_empty() else ceili(float(days) * float(let.rent) / float(Calendar.DAYS_PER_MONTH))
+
+## The days the stones in hand pay for here (no limit where nothing is asked).
+static func paid_days(s) -> int:
+	var let := lodging(s)
+	if let.is_empty() or int(let.rent) <= 0:
+		return 2147483647
+	return int(s.player.stones) * Calendar.DAYS_PER_MONTH / int(let.rent)
+
+## Why `days` in the room cannot be paid for, or "".
+static func rent_block(s, days: int) -> String:
+	var cost := rent(s, days)
+	if cost > int(s.player.stones):
+		return "静房每月 %d 灵石，%s须付 %d 灵石，灵石不足。" % [int(lodging(s).rent), Calendar.duration_text(days), cost]
+	return ""
+
+## Pays the room for the days spent; returns the stones paid.
+static func pay_rent(s, days: int) -> int:
+	var cost := mini(rent(s, days), int(s.player.stones))
+	s.player.stones = int(s.player.stones) - cost
+	return cost
+
 ## Retreat tiredness today, after the days spent since the last retreat.
 static func fatigue(s) -> int:
 	var retreat: Dictionary = s.content.rules.retreat

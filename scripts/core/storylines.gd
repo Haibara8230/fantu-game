@@ -233,9 +233,10 @@ static func complete_step(s, story_id: String) -> Array[String]:
 	saved.since = int(s.world.day)
 	if step.has("after"):
 		texts.append(s.log_event("story", {"story": story_id, "step": str(step.id), "part": "after"}, bool(step.get("major", false))))
-	Events.apply(s, step.get("effects", []))
+	# The last step ends the storyline before its effects, which may begin another (start_story).
 	if int(saved.step) >= definitions(s)[story_id].steps.size():
 		saved.state = "done"
+	Events.apply(s, step.get("effects", []))
 	return texts
 
 ## Advances a storyline whose current step has begun (effect story_advance, from an interaction).

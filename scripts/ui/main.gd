@@ -1002,8 +1002,7 @@ func place_popup_open() -> bool:
 		return false
 	if not selected_npc.is_empty():
 		return true
-	var rank := int(session.player.get("rank", 0))
-	return session.content.locations[session.player.location].spots.any(func(spot: Dictionary) -> bool: return spot.id == selected_spot and session.content.spot_open(spot, session.world.flags, rank))
+	return session.content.locations[session.player.location].spots.any(func(spot: Dictionary) -> bool: return spot.id == selected_spot and session.spot_open(spot))
 
 ## Closes the spot or the person open over the scene.
 func close_spot() -> void:
@@ -1292,8 +1291,8 @@ func notice(message: String) -> void:
 	Hud.notice(self, preload("res://scripts/ui/experience_text.gd").notice(session, message))
 
 func _on_changed() -> void:
-	# Finishing the introduction once (or playing a journey from before it) lets later journeys skip it.
-	if started and not intro_finished_once and session.story_state("intro") == "done":
+	# Finishing the 入世 opening once lets later journeys skip it.
+	if started and not intro_finished_once and session.story_state(str(session.content.rules.opening.story)) == "done":
 		intro_finished_once = true
 		Guide.save_state(self)
 	if not presenting:
@@ -1377,9 +1376,9 @@ func begin() -> void:
 	tip_page = {}
 	var skipped := is_instance_valid(skip_intro) and skip_intro.button_pressed
 	var mark: int = session.chronicle.added
-	session.new_game(character_name, -1, welcome_roots, "skipped" if skipped else "guided", welcome_born)
+	session.new_game(character_name, -1, welcome_roots, "free" if skipped else "rushi", welcome_born)
 	_stage_story(mark)
-	notice("入门已略过：执事堂、传功堂都已开放，右上角的「任务」写着眼下可做的事。" if skipped else "跟着许清和走一遍入门：右上角的「目标」写着眼下该做的事。")
+	notice("入世已略过：你是青石镇客栈里的一个散修，去哪里、做什么都由你定；右上角的「任务」写着眼下可做的事。" if skipped else "你在青石镇客栈落了脚，听说云溪城就要开仙师集会。右上角的「目标」写着眼下可做的事。")
 
 func continue_saved() -> void:
 	# Suppress auto-save while deciding which existing save to restore.

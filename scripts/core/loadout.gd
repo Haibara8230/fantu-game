@@ -116,6 +116,7 @@ static func learn_block(s, technique_id: String) -> String:
 static func _study(s, technique_id: String) -> Dictionary:
 	var t: Dictionary = s.content.technique(technique_id)
 	var passed: Dictionary = s.advance_days(s.study_days(t))
+	Layers.Cultivation.pay_rent(s, int(passed.elapsed))
 	if not s.ended.is_empty():
 		return passed
 	s.player.learned.append(technique_id)
@@ -134,7 +135,7 @@ static func study_manual(s, item_id: String) -> String:
 		return "行囊里没有这枚玉简。"
 	var reason := learn_block(s, manual.teaches)
 	if reason.is_empty():
-		reason = Layers.seclusion_block(s)
+		reason = Layers.seclusion_block(s, s.study_days(s.content.technique(str(manual.teaches))))
 	if not reason.is_empty():
 		return reason
 	s.remove_item(item_id, 1)

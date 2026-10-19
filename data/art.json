@@ -1,11 +1,15 @@
 {
   "background": "res://assets/art/bamboo_arena_v1.png",
   "place_background": "res://assets/art/battle/%s.png",
+  "scene_art": {
+    "sect_recruit": "sect_arena",
+    "market_inn": "town_inn"
+  },
   "event_art": {
-    "special_auction": "res://assets/art/events/yunxi_auction.png",
+    "yunxi_autumn": "res://assets/art/events/yunxi_auction.png",
+    "rushi_auction": "res://assets/art/events/yunxi_auction.png",
     "night_market": "res://assets/art/events/yunxi_night_market.png",
-    "tournament_entry": "res://assets/art/events/outer_tournament.png",
-    "sect_tournament": "res://assets/art/events/outer_tournament.png",
+    "qianlong_entry": "res://assets/art/events/outer_tournament.png",
     "serpent_rampage": "res://assets/art/events/serpent_rampage.png",
     "heart_demon": "res://assets/art/events/heart_demon.png",
     "epiphany": "res://assets/art/events/epiphany.png",

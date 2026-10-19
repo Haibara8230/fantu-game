@@ -76,7 +76,7 @@ static func describe(s, condition: Dictionary) -> String:
 				for effect: Dictionary in event.get("effects", []):
 					if effect.get("flag", "") == str(value):
 						return "需经历「%s」" % event.title
-			return {"intro_done":"需完成入门指引", "found_ruin":"需打听到古修洞府", "azhi_promised":"需答应阿芷的托付", "tiannan_known":"需听顾长庚说起天南", "spirit_eye_found":"需发现谷中灵眼", "hanjin_heard":"需听完韩烬的陈述"}.get(str(value), "需先推进相关剧情，见任务·剧情")
+			return {"rushi_done":"需走完入世经历", "found_ruin":"需打听到古修洞府", "azhi_promised":"需答应阿芷的托付", "tiannan_known":"需听顾长庚说起天南", "spirit_eye_found":"需发现谷中灵眼", "hanjin_heard":"需听完韩烬的陈述"}.get(str(value), "需先推进相关剧情，见任务·剧情")
 		"talent":
 			return "需天赋「%s」" % s.Talents.definition(s.content, str(value)).name
 		"rank_at_least":

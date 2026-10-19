@@ -92,9 +92,10 @@ func _init() -> void:
 	world_rng.randomize()
 
 ## `roots` are the spirit-root elements chosen at creation; when empty they are sensed (rolled) here.
-## `start` is how the journey begins: "guided" plays the introduction (data/storylines.json) and holds
-## the player to it; "skipped" counts it as done and lets the sect's storylines follow; "plain" opens
-## the sect without any storyline (the systems' own tests).
+## `start` is how the journey begins (docs/GAME_OUTLINE.md 4): "rushi" is the real start — a wanderer
+## with no sect at the 青石镇 inn, the 入世 storyline (data/storylines.json) leading to 云溪; "free"
+## starts there the same but without it; "plain" opens as an outer disciple of 青云 at the sect, without
+## any storyline (the systems' own tests).
 ## `born` holds the talents sensed at creation ({"talents", "flaws"}, see roll_talents); without it the
 ## player has none, which keeps the systems' own tests to the plain rules.
 func new_game(character_name: String = "无名", seed_value: int = -1, roots: Array = [], start: String = "plain", born: Dictionary = {}) -> void:
@@ -116,7 +117,7 @@ func new_game(character_name: String = "无名", seed_value: int = -1, roots: Ar
 		"fatigue": 0, "fatigue_day": 0, "insight": 0, "mind": 0,
 		"stones": int(content.rules.starting_stones), "items": {},
 		"journey": {}, "cooldowns": {},
-		"location": "sect", "sect": "wanderer",
+		"location": "sect", "sect": "wanderer", "affiliation": "qingyun",
 		"learned": [], "arts": [], "methods": [], "equipment": {"weapon": "", "robe": "", "accessory": ""}, "quests": [],
 		"deeds": {}, "taught": [],
 		"talents": born.get("talents", []).duplicate(), "flaws": born.get("flaws", []).duplicate(),
@@ -139,15 +140,21 @@ func new_game(character_name: String = "无名", seed_value: int = -1, roots: Ar
 	combat_events.clear()
 	chronicle.clear()
 	log_event("start", {}, true)
-	match start:
-		"guided":
-			Storylines.start(self, "intro")
-		"skipped":
-			world.flags["intro_done"] = true
-			Storylines.mark_done(self, "intro")
-			Storylines.update(self)
-		_:
-			world.flags["intro_done"] = true
+	# A wanderer enters the world at the 青石镇 inn; the systems' tests begin as a disciple of 青云.
+	if start in ["rushi", "free"]:
+		player.location = str(content.rules.opening.location)
+		player.affiliation = ""
+		# The old mirror-back bought from a junk stall: the old city's thread (docs/GAME_OUTLINE.md 4.1).
+		player.items[str(content.rules.opening.keepsake)] = 1
+	# rushi_done: the opening is behind the player; what waits for it may come.
+	if start == "rushi":
+		Storylines.start(self, str(content.rules.opening.story))
+	else:
+		world.flags["rushi_done"] = true
+	# Skipping the opening counts as having lived it: what follows it (a sect's storylines) may begin.
+	if start == "free":
+		Storylines.mark_done(self, str(content.rules.opening.story))
+	Storylines.update(self)
 	Events.check_location(self)
 	changed.emit()
 
@@ -254,8 +261,9 @@ func cultivation_speed() -> float:
 	return float(content.root_grade(player.get("roots", [])).speed) * (1.0 + float(bonuses().cultivation)) * (1.0 + float(grade.get("speed", 0)) / 100.0) * (1.0 + float(Sect.retreat_bonus(self)) / 100.0) * (1.0 + float(Bonds.companion_speed(self)) / 100.0)
 
 ## Xp gained per 30 days of closed-door cultivation with these roots.
+## Xp per 30 days of retreat here: the speed, and the place (a room let by the day yields less).
 func cultivation_rate() -> int:
-	return int(round(float(content.rules.cultivate_xp) * cultivation_speed()))
+	return int(round(float(content.rules.cultivate_xp) * cultivation_speed() * Cultivation.place_rate(self)))
 
 func time_name() -> String:
 	return Calendar.date_text(int(world.get("day", 0)))
@@ -507,7 +515,9 @@ func cultivate(days: int) -> String:
 	if not reason.is_empty():
 		return reason
 	if not available_here("cultivate"):
-		return "此地无法闭关，请回青云山静室。"
+		return "此地无法闭关：客栈静房、宗门静室或洞府里才能闭关。"
+	if Cultivation.paid_days(self) < 1:
+		return Cultivation.rent_block(self, 1)
 	# The longest retreat the realm allows may run past the usual span (化神 sits for over a decade).
 	if days < 1 or days > maxi(MAX_SPAN_DAYS, retreat_most()):
 		return "闭关天数不合常理。"
@@ -533,6 +543,9 @@ func cultivate(days: int) -> String:
 	player.qi = player.max_qi
 	record_deed("retreat_days", int(passed.elapsed))
 	var text := log_event("cultivate", {"days": passed.elapsed, "xp": int(done.xp)})
+	var paid := Cultivation.pay_rent(self, int(passed.elapsed))
+	if paid > 0:
+		text += " " + log_event("rent", {"stones": paid})
 	var milestones := gain_xp(int(done.xp))
 	milestones.append_array(Layers.after_retreat(self, int(passed.elapsed)))
 	if not milestones.is_empty():
@@ -593,7 +606,16 @@ func choose_event(choice_id: String) -> String:
 	return message
 
 func available_here(action: String) -> bool:
-	return action in content.spot_actions(player.location, world.flags, int(player.get("rank", 0)))
+	return action in content.spot_actions(player.location, world.flags, int(player.get("rank", 0)), affiliation())
+
+## Whether a spot is open to the player: its flag, the sect rank and the sect it belongs to.
+func spot_open(spot: Dictionary) -> bool:
+	return content.spot_open(spot, world.flags, int(player.get("rank", 0)), affiliation())
+
+## The sect the player formally belongs to ("" for a wanderer, 散修); apart from the lineage studied
+## (player.sect).
+func affiliation() -> String:
+	return str(player.get("affiliation", ""))
 
 func location_visible(location_id: String) -> bool:
 	return content.location_visible(location_id, world.flags)
@@ -921,7 +943,8 @@ func retreat_cap() -> int:
 
 ## The longest retreat the player may start now: the mind's limit, and the guided start's.
 func retreat_most() -> int:
-	var most := retreat_cap() if retreat_limits else MAX_SPAN_DAYS
+	# A room let by the day holds the retreat to the days the stones pay for.
+	var most := mini(retreat_cap() if retreat_limits else MAX_SPAN_DAYS, Cultivation.paid_days(self))
 	var step := guide_step()
 	if step.has("retreat_days"):
 		most = mini(most, int(step.retreat_days))
@@ -1081,6 +1104,13 @@ func unequip_slot(slot: String) -> String:
 func choose_sect(sect_id: String) -> String:
 	return Loadout.choose_sect(self, sect_id)
 
+## 拜入青云 at the recruiting terrace (sect.gd).
+func join_sect() -> String:
+	return Sect.join(self)
+
+func join_block() -> String:
+	return Sect.join_block(self)
+
 # --- Commissions (commissions.gd) ---------------------------------------------------------------
 
 func board_here() -> String:
@@ -1199,12 +1229,6 @@ func begin_battle(enemy_id: String, context: String = "", opponent_sect: String 
 
 func begin_spar(person_id: String) -> void:
 	Combat.begin_spar(self, person_id)
-
-func tournament_block() -> String:
-	return Combat.tournament_block(self)
-
-func enter_tournament() -> String:
-	return Combat.enter_tournament(self)
 
 func begin_tournament(round: int) -> void:
 	Combat.begin_tournament(self, round)

@@ -182,7 +182,7 @@ func layouts() -> void:
 	# Explicitly active promises must all be available, including the fourth and beyond.
 	main.session.world.flags.azhi_promised = true
 	main.session.world.flags.found_ruin = true
-	main.session.set_item_count("auction_invitation", 1)
+	main.session.world.day = Calendar.to_day(1, 8, 15)
 	main.view = "place"
 	main.render()
 	check(Goals.current(main.session).size() >= 4 and main.goal_label.text.split("\n").size() == Goals.current(main.session).size(), "the HUD retains every current goal")
@@ -207,8 +207,6 @@ func layouts() -> void:
 	main.tracked_goal = "serpent"
 	var displayed := Goals.displayed(main)
 	check(displayed[0].id == "serpent" and displayed.size() == Goals.current(main.session).size(), "tracking promotes one goal without removing the others")
-	main.session.world.storylines["intro"] = {"state":"active", "step":0, "begun":true, "since":int(main.session.world.day), "base":{}}
-	check(bool(Goals.displayed(main)[0].get("guide", false)), "manual tracking cannot override active introduction guidance")
 	main.queue_free()
 	await process_frame
 
@@ -353,10 +351,6 @@ func gifts_and_independent_deadlines() -> void:
 	s.set_item_count("huichun_grass", 1)
 	s.interact("xu_qinghe", "gift")
 	check(s.item_count("huichun_grass") == 0 and s.item_count("ninglu_grass") == 3, "a gift takes the named surplus herb")
-	var intro := game()
-	intro.world.storylines["intro"] = {"state":"active", "step":3, "begun":true, "since":0, "base":{}}
-	intro.set_item_count("huichun_grass", 4)
-	check(int(intro.Inventory.reserved(intro).get("huichun_grass", 0)) == 3, "generic three-herb tutorial delivery is protected")
 	var timed := game()
 	timed.world.people.clear()
 	timed.People.obituaries_changed(timed)

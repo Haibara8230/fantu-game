@@ -15,7 +15,7 @@ static func render(ui) -> void:
 	center.add_child(heading)
 	heading.add_child(ui.label("青云剑宗 · " + str(rank.name), 26, ui.GOLD))
 	heading.add_child(ui.label("贡献 %d　·　累计 %d" % [int(p.get("contribution", 0)), int(p.get("merit", 0))], 18, ui.INK))
-	center.add_child(ui.paragraph("月俸每月自动入账 %d 灵石%s。贡献来自执事堂的委托与巡视、师门差事、捐献、外门小比与为宗门立下的大功；兑换花去的只是贡献，累计贡献只增不减，用来晋升。" % [int(rank.stipend), "，在宗门闭关修炼 +%d%%" % int(rank.retreat) if int(rank.retreat) > 0 else ""]))
+	center.add_child(ui.paragraph("月俸每月自动入账 %d 灵石%s。贡献来自执事堂的委托与巡视、师门差事、捐献、潜龙会与为宗门立下的大功；兑换花去的只是贡献，累计贡献只增不减，用来晋升。" % [int(rank.stipend), "，在宗门闭关修炼 +%d%%" % int(rank.retreat) if int(rank.retreat) > 0 else ""]))
 	if not at_hall:
 		center.add_child(ui.paragraph("晋升、兑换与捐献，须到青云山执事堂办理。月俸会按月自动入账。", Color("#e3c08a")))
 	_promotion(ui, center, at_hall)

@@ -22,6 +22,10 @@ static func render_retreat(ui) -> void:
 	var efficiency: int = session.retreat_efficiency()
 	var mind_percent: int = session.mind_percent()
 	right.add_child(ui.paragraph(limitation(session), ui.GOLD))
+	# A room let by the day: its rate and rent, and the days the stones pay for.
+	var let: Dictionary = session.Cultivation.lodging(session)
+	if not let.is_empty():
+		right.add_child(ui.paragraph("客栈静房：修炼收益 ×%.1f，每月房钱 %d 灵石；手头灵石够住 %s。" % [float(let.rate), int(let.rent), Calendar.duration_text(mini(session.Cultivation.paid_days(session), 36000))], ui.INK))
 	right.add_child(ui.label("每月修为  %d" % int(round(session.cultivation_rate() * mind_percent / 100.0 * efficiency / 100.0)), 26, ui.GOLD))
 	var grade: Dictionary = session.content.root_grade(session.player.get("roots", []))
 	var sources := GridContainer.new()
@@ -284,6 +288,9 @@ static func preview_text(session, days: int) -> String:
 			break
 	var plan: Dictionary = session.retreat_preview(stop)
 	var lines: Array[String] = ["修为约 +%d" % int(plan.xp)]
+	var rent: int = session.Cultivation.rent(session, int(plan.days))
+	if rent > 0:
+		lines.append("房钱 %d 灵石" % rent)
 	if not woken.is_empty() and int(plan.days) >= stop:
 		lines.append("第 %d 日%s开始，届时出关" % [stop, woken])
 	if int(plan.days) < stop:
@@ -313,7 +320,7 @@ static func _columns(ui) -> HBoxContainer:
 	var any := false
 	for goal: Dictionary in Goals.current(session):
 		if goal.id in DEADLINE_GOALS:
-			var fixed := {"serpent": "serpent_rampage", "auction": "special_auction"}
+			var fixed := {"serpent": "serpent_rampage"}
 			if fixed.has(str(goal.id)):
 				var opening := Calendar.to_day(session.content.events[fixed[str(goal.id)]].window.from[0], session.content.events[fixed[str(goal.id)]].window.from[1], session.content.events[fixed[str(goal.id)]].window.from[2])
 				if opening - int(session.world.day) > 360:

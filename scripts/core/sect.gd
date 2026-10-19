@@ -18,6 +18,34 @@ const Arsenal = preload("res://scripts/core/arsenal.gd")
 static func data(s) -> Dictionary:
 	return s.content.sect_data
 
+## Whether the player is one of the sect's own (player.affiliation); a wanderer has no rank, stipend or
+## exchange.
+static func member(s) -> bool:
+	return str(s.player.get("affiliation", "")) == str(s.content.rules.lineage.home)
+
+## Why the player cannot join 青云 here now, or "".
+static func join_block(s) -> String:
+	var reason: String = s.blocked()
+	if not reason.is_empty():
+		return reason
+	if not s.available_here("join_sect"):
+		return "须到青云山接引台。"
+	if not str(s.player.get("affiliation", "")).is_empty():
+		return "你已有宗门。"
+	if int(s.player.realm) > int(data(s).get("join_most_realm", 1)):
+		return "以你如今的修为，青云已收不下你做弟子；日后或可另谈客卿之约。"
+	return ""
+
+## Joins 青云 as an outer disciple: rank, stipend and the sect's places open to the player from today.
+static func join(s) -> String:
+	var reason := join_block(s)
+	if not reason.is_empty():
+		return reason
+	s.player.affiliation = str(s.content.rules.lineage.home)
+	s.player.rank = 0
+	s.player.stipend_day = int(s.world.day)
+	return s.finish(s.log_event("join_sect", {}, true))
+
 static func ranks(s) -> Array:
 	return data(s).ranks
 
@@ -71,7 +99,8 @@ static func take_duty(s, duty_id: String) -> String:
 
 ## Adds contribution (and merit) from the sect; returns the chronicle text, or "" for nothing.
 static func gain(s, amount: int, reason: String = "") -> String:
-	if amount <= 0:
+	# Contribution is the sect's own reckoning: a wanderer earns none.
+	if amount <= 0 or not member(s):
 		return ""
 	s.player["contribution"] = int(s.player.get("contribution", 0)) + amount
 	s.player["merit"] = int(s.player.get("merit", 0)) + amount
@@ -115,6 +144,10 @@ static func promote(s) -> String:
 ## Called before a promotion as well, so an old rank's arrears cannot acquire the new rate.
 static func pay_passive(s, from_day: int) -> String:
 	var rule: Dictionary = data(s).stipend
+	# A wanderer draws no stipend; the reckoning starts on the day one joins.
+	if not member(s):
+		s.player["stipend_day"] = int(s.world.day)
+		return ""
 	var since := int(s.player.get("stipend_day", from_day))
 	var span := int(rule.period_days)
 	var old_months := maxi(0, from_day - since) / span
@@ -123,13 +156,15 @@ static func pay_passive(s, from_day: int) -> String:
 	if total_months == 0:
 		return ""
 	s.player["stipend_day"] = since + total_months * span
-	# player.sect selects a martial lineage; sect membership is represented by rank.
+	# player.sect selects a martial lineage; membership is player.affiliation, standing in it the rank.
 	var stones := paid * int(rank(s).stipend)
 	s.player.stones = int(s.player.stones) + stones
 	return "月俸自动入账：%d 个月，共 %d 灵石。" % [paid, stones] if stones > 0 else ""
 
 ## The stipend waiting to be collected: {"periods", "stones"}.
 static func stipend_due(s) -> Dictionary:
+	if not member(s):
+		return {"periods": 0, "stones": 0}
 	var rule: Dictionary = data(s).stipend
 	var periods := mini(int(rule.most_periods), maxi(0, int(s.world.day) - int(s.player.get("stipend_day", 0))) / int(rule.period_days))
 	return {"periods": periods, "stones": periods * int(rank(s).stipend)}
@@ -262,4 +297,4 @@ static func donate(s, item_id: String, count: int) -> String:
 
 ## How much faster retreats in the sect go for this rank, in percent.
 static func retreat_bonus(s) -> int:
-	return int(rank(s).get("retreat", 0))
+	return int(rank(s).get("retreat", 0)) if member(s) else 0

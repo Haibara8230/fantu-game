@@ -10,6 +10,8 @@ const GOALS_PATH := "res://data/goals.json"
 const GOAL_IDS := ["bottleneck", "azhi_return", "auction", "serpent", "tournament", "summit", "foundation_breach", "foundation_pill", "foundation_xp", "core_breach", "azhi_token", "ruin", "sealed", "cultivate", "promotion", "rank"]
 # Upcoming dates are mentioned this long ahead.
 const TOURNAMENT_NOTICE_DAYS := 360
+## The autumn auction is told this many days ahead.
+const AUCTION_NOTICE_DAYS := 60
 static var _goals: Array = []
 
 static func goals() -> Array:
@@ -84,14 +86,13 @@ static func applies(session, goal_id: String) -> bool:
 		"azhi_return":
 			return session.item_count("azhi_token") > 0
 		"auction":
-			var state := _event_state(session, "special_auction")
-			var invited: bool = session.item_count("auction_invitation") > 0 or session.favor("shen_mo") >= 40
-			return state.is_empty() and invited and day <= _window_end(session, "special_auction")
+			var opening := _next_opening(session, "yunxi_autumn")
+			return opening >= day and opening - day <= AUCTION_NOTICE_DAYS
 		"serpent":
-			return flags.call("intro_done") and not flags.call("serpent_slain") and not flags.call("serpent_rampage") and day < _window_start(session, "serpent_rampage")
+			return flags.call("rushi_done") and not flags.call("serpent_slain") and not flags.call("serpent_rampage") and day < _window_start(session, "serpent_rampage")
 		"tournament":
 			var next := _next_tournament(session)
-			return next >= day and next - day <= TOURNAMENT_NOTICE_DAYS
+			return int(player.realm) == 0 and next >= day and next - day <= TOURNAMENT_NOTICE_DAYS
 		"summit":
 			var opening := _next_opening(session, "five_sects_entry")
 			return int(player.realm) >= 1 and opening >= day and opening - day <= TOURNAMENT_NOTICE_DAYS
@@ -120,11 +121,11 @@ static func applies(session, goal_id: String) -> bool:
 		"cultivate":
 			return int(player.realm) >= 1 and not _next_stage(session).is_empty() and not session.at_bottleneck()
 		"promotion":
-			return flags.call("intro_done") and not session.next_sect_rank().is_empty() and session.promotion_block().is_empty()
+			return flags.call("rushi_done") and not session.next_sect_rank().is_empty() and session.promotion_block().is_empty()
 		"rank":
 			# Mentioned once half the merit is in hand, so a new disciple's goals stay few.
 			var next: Dictionary = session.next_sect_rank()
-			return flags.call("intro_done") and not next.is_empty() and not session.promotion_block().is_empty() and int(player.get("merit", 0)) * 2 >= int(next.merit)
+			return flags.call("rushi_done") and not next.is_empty() and not session.promotion_block().is_empty() and int(player.get("merit", 0)) * 2 >= int(next.merit)
 	return false
 
 ## The numbers and names a goal's text mentions.
@@ -135,9 +136,8 @@ static func values(session, goal_id: String) -> Dictionary:
 		"bottleneck":
 			return {"insight": int(player.insight), "insight_needed": session.insight_needed(), "pozhang_price": _price(session, "pozhang_pill")}
 		"auction":
-			var access := "持请柬入场" if session.item_count("auction_invitation") > 0 else "沈墨愿为你引荐"
-			var start := _window_start(session, "special_auction")
-			return {"date": Calendar.date_text(start), "access": access, "until": _span(start - day)}
+			var start := _next_opening(session, "yunxi_autumn")
+			return {"date": Calendar.date_text(start), "until": _span(start - day)}
 		"serpent":
 			var start := _window_start(session, "serpent_rampage")
 			return {"date": Calendar.date_text(start), "until": _span(start - day)}
@@ -206,7 +206,7 @@ static func _window_end(session, event_id: String) -> int:
 
 ## The first day of the next tournament's sign-up that has not closed yet.
 static func _next_tournament(session) -> int:
-	return _next_opening(session, "tournament_entry")
+	return _next_opening(session, "qianlong_entry")
 
 ## The next day a periodic event opens (today's opening while it is still open).
 static func _next_opening(session, event_id: String) -> int:

@@ -157,7 +157,7 @@ static func _breakthrough_tooltip(session) -> String:
 static func _open_spots(session, location_id: String) -> Array[Dictionary]:
 	var result: Array[Dictionary] = []
 	for spot: Dictionary in session.content.locations[location_id].spots:
-		if session.content.spot_open(spot, session.world.flags, int(session.player.get("rank", 0))):
+		if session.spot_open(spot):
 			result.append(spot)
 	if result.is_empty():
 		result.append({"id": "", "name": "此地", "description": "", "actions": []})
@@ -261,10 +261,6 @@ static func _spot_action(ui, grid: GridContainer, action: String) -> void:
 				deliver.disabled = not reason.is_empty()
 				deliver.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 				grid.add_child(deliver)
-		"tournament":
-			var reason: String = session.tournament_block()
-			var enter: Button = _timed(ui, grid, "报名外门小比", session.enter_tournament, reason if not reason.is_empty() else "三轮斗法，点到为止；头名可得功法玉简")
-			enter.disabled = not reason.is_empty()
 		"alchemy":
 			var known: int = session.known_recipes().size()
 			_open(ui, grid, "开炉炼丹", ui.open_alchemy, "已会 %d 张丹方：按丹方投入主药与药引，择火候开炉" % known if known > 0 else "还不会丹方；坊市丹铺与宗门执事堂可得")
@@ -279,6 +275,10 @@ static func _spot_action(ui, grid: GridContainer, action: String) -> void:
 		"sect":
 			var rank: Dictionary = session.sect_rank()
 			_open(ui, grid, "宗门事务", func() -> void: ui.set_view("sect"), "%s · 贡献 %d：领月俸、申请晋升、兑换与捐献" % [rank.name, int(session.player.get("contribution", 0))])
+		"join_sect":
+			var reason: String = session.join_block()
+			var join: Button = _timed(ui, grid, "拜入青云剑宗", session.join_sect, reason if not reason.is_empty() else "成为外门弟子：静室修行、执事堂差事与月俸、传功堂传承；也要守宗门的规矩")
+			join.disabled = not reason.is_empty()
 		"teach":
 			for technique_id: String in session.teachings():
 				var taught: Dictionary = session.content.technique(technique_id)

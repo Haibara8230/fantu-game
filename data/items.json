@@ -124,13 +124,6 @@
     "fine_of": "foundation_pill",
     "description": "丹纹九转的上品筑基丹，突破筑基时药力更足。"
   },
-  "auction_invitation": {
-    "name": "云溪请柬",
-    "category": "quest",
-    "price": 0,
-    "rarity": 2,
-    "description": "烫金请柬，凭此可入云溪坊市历元五年春的特殊拍卖。"
-  },
   "azhi_token": {
     "name": "刻字竹牌",
     "category": "quest",
@@ -466,5 +459,19 @@
     "price": 240,
     "rarity": 2,
     "description": "一枚冰蓝色的珠子，贴身带着，周身三尺的热浪便退开去。带着它可进地火熔窟最深处的地火之心；没有它，须神识足够，寻出一条凉些的岔道。不会损耗。"
+  },
+  "jingbei_tongpian": {
+    "name": "镜背铜片",
+    "category": "quest",
+    "price": 0,
+    "rarity": 0,
+    "description": "青石镇旧货摊上买来的一片铜镜背，边缘残缺，背面刻着看不懂的纹路。只有在某些时候，它会微微发热。"
+  },
+  "can_jing": {
+    "name": "残镜",
+    "category": "quest",
+    "price": 0,
+    "rarity": 3,
+    "description": "云溪首次拍卖的压轴之物，一面裂了半边的古铜镜。镜面照人时，偶尔会映出一座谁也没见过的城。"
   }
 }

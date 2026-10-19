@@ -67,23 +67,6 @@
         "chronicle": "你交给沈墨五株回春草，得灵石五十，彼此更熟络了些。"
       },
       {
-        "id": "ask_auction",
-        "label": "打听特殊拍卖的门路",
-        "conditions": [
-          {
-            "flag": "heard_auction_rumor"
-          },
-          {
-            "relation_at_least": [
-              "shen_mo",
-              40
-            ]
-          }
-        ],
-        "cooldown_days": 360,
-        "chronicle": "沈墨压低声音：“那场拍卖我有一席。你若信得过我，届时随我入场便是。”"
-      },
-      {
         "id": "ask_redscale",
         "label": "问起赤鳞果的来历",
         "conditions": [
@@ -244,7 +227,7 @@
         "label": "接一份小药单，学着配药周转",
         "conditions": [
           {
-            "flag": "intro_done"
+            "flag": "rushi_done"
           },
           {
             "story_state": [
@@ -585,10 +568,10 @@
     "gift_favor": 2,
     "talk": [
       "“客官，今日讲的是落霞谷的古修洞府——且听下回分解。”",
-      "“青云剑宗的外门小比，十年一回，热闹得很。”"
+      "“云溪的潜龙会，五年一回，年轻人都爱去凑热闹。”"
     ],
     "sound_at": 40,
-    "congrats": {"serpent": "客官，《斩赤鳞》这回书老夫已经写好了，就等你来听！", "champion": "小比头名的段子，老夫明日就开讲。", "core": "结丹的段子老夫也编好了，就差你来听。", "nascent": "元婴老祖！老夫说书几十年，头一回能说自己认得一位。", "deity": "化神！老夫这把年纪，这回书怕是讲不完了，交给徒弟接着讲。", "calamity": "《山门斩魔将》！这回书老夫说到老也说不完！", "summit": "《论道青云》这回书，老夫要连讲三天！"},
+    "congrats": {"serpent": "客官，《斩赤鳞》这回书老夫已经写好了，就等你来听！", "champion": "潜龙会魁首的段子，老夫明日就开讲。", "core": "结丹的段子老夫也编好了，就差你来听。", "nascent": "元婴老祖！老夫说书几十年，头一回能说自己认得一位。", "deity": "化神！老夫这把年纪，这回书怕是讲不完了，交给徒弟接着讲。", "calamity": "《山门斩魔将》！这回书老夫说到老也说不完！", "summit": "《论道青云》这回书，老夫要连讲三天！"},
     "interactions": [
       {
         "id": "story",
@@ -929,7 +912,7 @@
         "label": "请教她辨药与走药路的门道",
         "conditions": [
           {
-            "flag": "intro_done"
+            "flag": "rushi_done"
           },
           {
             "story_state": [
@@ -1197,29 +1180,15 @@
     "spot": "office",
     "talk_favor": 2,
     "gift_favor": 3,
-    "congrats": {"promotion": "听说你晋升了？往后执事堂的差事，给你挑好的。", "breakthrough": "恭喜筑基！外门这一批里，你是头一个。往后该换我向你讨教了。", "serpent": "妖蟒伏诛的消息传回山门，执事堂上上下下都在说你。", "champion": "小比头名！我就知道你行，那卷功法可要好好参悟。", "core": "你结丹了！往后我见了你，是不是该改口叫师叔了？", "summit": "论道夺魁！执事堂上上下下都在说这件事。"},
+    "congrats": {"promotion": "听说你晋升了？往后执事堂的差事，给你挑好的。", "breakthrough": "恭喜筑基！外门这一批里，你是头一个。往后该换我向你讨教了。", "serpent": "妖蟒伏诛的消息传回山门，执事堂上上下下都在说你。", "champion": "潜龙会魁首！我就知道你行，那枚筑基丹可要收好。", "core": "你结丹了！往后我见了你，是不是该改口叫师叔了？", "summit": "论道夺魁！执事堂上上下下都在说这件事。"},
     "talk": [
       "“修为卡在门槛上别硬闷着，出去斗几场、接几件委托，历练够了自然冲得开。”",
       "“心境这东西，闭关是闭不出来的。见的人多了、经的事多了，心自然就定了。”",
       "“炼气时闭关三五个月就得出来透透气；等筑了基，一闭一两年也是常事。”",
       "“执事堂的委托有期限，接了就别拖。”",
-      "“外门小比十年一回，头名能得一卷好功法。”"
+      "“云溪的潜龙会五年一回，咱们外门年轻的都去，夺魁能得一枚筑基丹。”"
     ],
     "interactions": [
-      {
-        "id": "hand_herbs",
-        "label": "交上三株灵草",
-        "conditions": [{"story_at": ["intro", "return"]}, {"herbs_at_least": 3}],
-        "effects": [{"herbs": -3}, {"story_advance": "intro"}],
-        "chronicle": "你把三株灵草交给许清和。"
-      },
-      {
-        "id": "report",
-        "label": "回禀坊市一行",
-        "conditions": [{"story_at": ["intro", "report"]}],
-        "effects": [{"story_advance": "intro"}],
-        "chronicle": "你向许清和说起坊市的见闻。"
-      },
       {
         "id": "hand_dew",
         "label": "交上三株凝露草",
@@ -1379,7 +1348,7 @@
         "label": "请领内门考校（一次一百六十贡献）",
         "conditions": [
           {
-            "flag": "intro_done"
+            "flag": "rushi_done"
           },
           {
             "realm_at_least": 1
@@ -1772,6 +1741,131 @@
         "once": true,
         "chronicle": "你给韩烬指了条往北的远路。他把账册塞进怀里，深深一揖，消失在赤枫林里。袁赤锋后来又贴了一回悬赏，再没有人揭。"
       }
+    ]
+  },
+  "lu_chengzhou": {
+    "name": "陆承舟",
+    "title": "云溪陆家少爷",
+    "attitude": "friendly",
+    "gender": "male",
+    "realm_text": "炼气初期",
+    "affiliation": "云溪陆家",
+    "age": 17,
+    "personality": "爱热闹",
+    "standing": [
+      0,
+      0
+    ],
+    "talents": [
+      "jiling",
+      "nengyan",
+      "haodong"
+    ],
+    "description": "云溪陆家的小少爷，第一次背着家里独自出门。出手阔绰，却常把钱花在不值钱的地方；好面子，也认人情。",
+    "home": "market",
+    "spot": "street",
+    "talk_favor": 3,
+    "gift_favor": 3,
+    "talk": [
+      "“云溪的拍卖楼？我熟——不是，我听人说过。”",
+      "“我家那些生意，我是一点都不想管。修仙多好，想去哪儿去哪儿。”",
+      "“潜龙会五年一回，下一届咱们都去，输了也不丢人。”"
+    ],
+    "congrats": {
+      "breakthrough": "你筑基了？好家伙，我还在炼气里打转。改天我做东，这顿你别跟我抢。"
+    }
+  },
+  "ye_zhiwei": {
+    "name": "叶知微",
+    "title": "游方丹修",
+    "attitude": "friendly",
+    "gender": "female",
+    "realm_text": "炼气中期",
+    "affiliation": "散修",
+    "age": 18,
+    "personality": "较真",
+    "standing": [
+      0,
+      1
+    ],
+    "talents": [
+      "shicao",
+      "xixin",
+      "juejiang"
+    ],
+    "description": "随师父游方行医的年轻丹修。替陌生人治伤从不收钱，却会为一味药的药性和人争到天黑。",
+    "home": "market",
+    "spot": "pharmacy",
+    "talk_favor": 2,
+    "gift_favor": 4,
+    "talk": [
+      "“回春草要晒三成干再入炉，掌柜偏说不必——他错了。”",
+      "“师父说，医者先得认得自己不知道什么。”",
+      "“你受了伤别硬撑，来找我，不收钱。”"
+    ],
+    "congrats": {
+      "breakthrough": "筑基了？恭喜。往后炼丹缺人试药，我先找你。"
+    }
+  },
+  "wenren_zhao": {
+    "name": "闻人照",
+    "title": "爱看古图的阵修",
+    "attitude": "friendly",
+    "gender": "male",
+    "realm_text": "炼气中期",
+    "affiliation": "散修",
+    "age": 19,
+    "personality": "好奇",
+    "standing": [
+      0,
+      1
+    ],
+    "talents": [
+      "haoqi",
+      "jimin",
+      "letian"
+    ],
+    "description": "揣着一摞真真假假的古地图，逢人便拉去合伙寻宝。十回有九回扑空，剩下那一回，他的阵法确实帮得上忙。",
+    "home": "market",
+    "spot": "street",
+    "talk_favor": 2,
+    "gift_favor": 2,
+    "talk": [
+      "“这张图，九成是假的。但万一是那一成呢？”",
+      "“阵法这东西，看得懂的人不多，看得懂又肯下苦功的更少——比如我。”",
+      "“听说海那边有不沉的岛。总有一天我要去看看。”"
+    ],
+    "congrats": {
+      "breakthrough": "筑基了！下回寻宝，你打头阵，我在后面布阵。"
+    }
+  },
+  "wen_zhaoheng": {
+    "name": "温照衡",
+    "title": "渡口垂钓的老修士",
+    "attitude": "neutral",
+    "gender": "male",
+    "realm_text": "看不透",
+    "affiliation": "不详",
+    "age": 481,
+    "personality": "沉默寡言",
+    "standing": [
+      3,
+      3
+    ],
+    "talents": [
+      "chenmo",
+      "haojing",
+      "jimo"
+    ],
+    "description": "常在白鹭渡天河渡口垂钓的老修士，鱼篓总是空的。看人时目光很远，像在看人身后的什么东西。",
+    "home": "ferry",
+    "spot": "crossing",
+    "talk_favor": 1,
+    "gift_favor": 1,
+    "talk": [
+      "“这条河以前不叫这个名字。”",
+      "“铜片收好。不必问我，问水。”",
+      "“有些地方，找到了未必是好事。”"
     ]
   }
 }

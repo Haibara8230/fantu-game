@@ -137,7 +137,7 @@ static func _insight(s, id: String) -> Array[String]:
 ## The boon marker records both success and failure and already has save validation/defaults.
 static func _humble(s, id: String) -> void:
 	var rule: Dictionary = rules(s)[id]
-	if met(s, id) or not s.pending_event.is_empty() or int(s.player.realm) >= int(rule.before_realm) or not s.has_flag("intro_done") or int(s.player.mind) < int(rule.mind):
+	if met(s, id) or not s.pending_event.is_empty() or int(s.player.realm) >= int(rule.before_realm) or not s.has_flag("rushi_done") or int(s.player.mind) < int(rule.mind):
 		return
 	if rule.has("places") and not str(s.player.location) in rule.places:
 		return

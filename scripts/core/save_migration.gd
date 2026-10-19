@@ -144,7 +144,7 @@ static func _v11_to_v12(data: Dictionary) -> Dictionary:
 	var world: Variant = data.get("world")
 	if not player is Dictionary or not world is Dictionary or not world.get("flags") is Dictionary:
 		return {}
-	world.flags["intro_done"] = true
+	world.flags["rushi_done"] = true
 	world["storylines"] = {"intro": {"state": "done", "step": 0, "since": world.get("day", 0), "begun": false, "base": {}}}
 	world["letters"] = []
 	player["deeds"] = {}

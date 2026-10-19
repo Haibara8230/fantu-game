@@ -67,40 +67,33 @@ func _arrival_and_rumor() -> void:
 	var game := _game(1)
 	game.travel("market")
 	check(game.world.people.get("shen_mo", {}).get("met", false), "arriving at the market introduces the shopkeeper")
-	check(not game.has_flag("heard_auction_rumor"), "rumor waits for its window")
-	_jump(game, 4, 1, 1)
-	check(not game.has_flag("heard_auction_rumor"), "time passing elsewhere does not fire location events")
-	game.wait(1)
-	check(game.has_flag("heard_auction_rumor") and _state(game, "auction_rumor") == "completed", "rumor heard on the first action inside the window")
-	var lines := game.journal_lines()
-	check(lines.back().contains("坊间传言"), "event text rendered into the chronicle")
-	check(game.upcoming().size() == 1 and game.upcoming()[0].event == "special_auction", "known auction listed as upcoming")
+	var talk := func() -> bool: return game.Rumors.candidates(game).any(func(rumor: Dictionary) -> bool: return rumor.id == "rumor_auction")
+	check(not talk.call(), "the autumn auction is not talked of out of season")
+	_jump(game, 1, 8, 15)
+	check(talk.call(), "two months before it opens, the teahouses talk of the autumn auction")
+	check(game.upcoming().any(func(entry: Dictionary) -> bool: return entry.event == "yunxi_autumn"), "the autumn auction is listed as upcoming")
 
 func _invitation_path_with_interrupt() -> void:
 	var game := _game(2)
-	_foundation(game)
-	_jump(game, 4, 6, 1)
-	game.travel("market")
-	game.travel("sect")
-	check(int(game.player.items.get("auction_invitation", 0)) == 1, "foundation disciples receive the invitation at the sect")
-	_jump(game, 5, 1, 1)
+	_jump(game, 1, 7, 1)
 	# Only an appointment the player marked ends a retreat (docs/WORLD_EXPANSION.md 7.6, item 42).
-	game.set_wake("sect_tournament", true)
-	check(not game.wakes_for("sect_tournament"), "an occasion not yet on the list (the next 小比 is years away) cannot be marked")
-	game.set_wake("special_auction", true)
-	check(game.wakes_for("special_auction") and int(game.player.wake[0].day) == Calendar.to_day(5, 3, 1), "an appointment ahead is marked for its opening day")
+	game.set_wake("five_sects_entry", true)
+	check(not game.wakes_for("five_sects_entry"), "an occasion not yet on the list (五宗论道 is a century away) cannot be marked")
+	game.set_wake("yunxi_autumn", true)
+	check(game.wakes_for("yunxi_autumn") and int(game.player.wake[0].day) == Calendar.to_day(1, 10, 1), "an appointment ahead is marked for its opening day")
 	var kept := Session.new()
-	check(kept.restore(JSON.parse_string(JSON.stringify(game.snapshot()))) and kept.wakes_for("special_auction"), "the mark survives a save")
+	check(kept.restore(JSON.parse_string(JSON.stringify(game.snapshot()))) and kept.wakes_for("yunxi_autumn"), "the mark survives a save")
+	_without_bottleneck(game)
 	var before := int(game.world.day)
+	var xp_before := int(game.player.xp)
 	var message := game.cultivate(360)
-	check(int(game.world.day) == Calendar.to_day(5, 3, 1), "retreat stops on the day the auction opens")
-	check(message.contains("提前出关") and message.contains("特殊拍卖已经开场"), "interruption explains why")
-	check(not game.wakes_for("special_auction"), "and the mark is spent")
-	check(int(game.player.xp) == (int(game.world.day) - before) * game.cultivation_rate() / 30, "cultivation credited only for elapsed days")
+	check(int(game.world.day) == Calendar.to_day(1, 10, 1), "retreat stops on the day the auction opens")
+	check(message.contains("提前出关"), "interruption explains why")
+	check(not game.wakes_for("yunxi_autumn"), "and the mark is spent")
+	check(int(game.player.xp) - xp_before == (int(game.world.day) - before) * game.cultivation_rate() / 30, "cultivation credited only for elapsed days")
 	game.player.stones = 200
 	game.travel("market")
-	check(game.pending_event.get("id", "") == "special_auction", "arrival inside the window opens the auction")
-	check(not game.player.items.has("auction_invitation"), "invitation handed over at the door")
+	check(game.pending_event.get("id", "") == "yunxi_autumn", "arrival inside the window opens the auction, without invitation or introduction")
 	var insight := int(game.player.insight)
 	game.choose_event("enter")
 	check(game.pending_event.is_empty() and game.auction.lots.size() == 4 and game.auction.bidders.size() == 4, "seated among named bidders, four lots to come")
@@ -112,13 +105,11 @@ func _invitation_path_with_interrupt() -> void:
 			game.auction_bid()
 		else:
 			game.auction_pass()
-	check(game.auction.is_empty() and game.journal_lines().any(func(line: String) -> bool: return line.contains("特殊拍卖落幕")), "the lots are bid for one by one until it closes")
+	check(game.auction.is_empty() and game.journal_lines().any(func(line: String) -> bool: return line.contains("秋拍落幕")), "the lots are bid for one by one until it closes")
 	check(int(game.player.stones) <= 200 and int(game.player.stones) >= 0, "only what was won is paid")
 	check(int(game.player.insight) == insight + 15, "an encounter lived through is insight")
-	check(_state(game, "special_auction") == "completed", "auction completed")
 	game.wait(1)
-	check(game.pending_event.is_empty(), "completed event does not repeat")
-	check(game.upcoming().is_empty(), "completed event leaves the upcoming list")
+	check(game.pending_event.is_empty(), "one visit a year")
 
 ## Bidding: the same world holds the same lots, bidders and ceilings; a raise nobody answers wins; a
 ## lot let go is settled among the bidders and told; leaving settles the rest; a save keeps it.
@@ -183,32 +174,16 @@ func _introduction_path_and_cooldown() -> void:
 	check(game.pending_event.is_empty(), "the shopkeeper never forces a request on the player")
 	game.interact("shen_mo", "request")
 	check(game.favor("shen_mo") == 10 and int(game.herb_count()) == 0, "favor done by choice")
-	_jump(game, 5, 3, 10)
-	game.world.people.shen_mo.relation = 39
-	game.wait(1)
-	check(game.pending_event.is_empty(), "an introduction needs the 相熟 stage")
-	game.world.people.shen_mo.relation = 40
-	game.wait(1)
-	check(game.pending_event.get("id", "") == "special_auction" and int(game.player.realm) == 0, "introduction opens the auction without foundation or invitation")
-	game.choose_event("watch")
 
 func _missed_event() -> void:
 	var game := _game(4)
-	game.player.items["auction_invitation"] = 1
-	_jump(game, 5, 2, 1)
+	_jump(game, 1, 9, 1)
 	_without_bottleneck(game)
 	var start := int(game.world.day)
 	var message := game.cultivate(360)
 	check(int(game.world.day) == start + 360 and not message.contains("提前出关"), "an appointment not marked does not end a retreat")
-	check(message.contains("特殊拍卖已经开场"), "its reminder is still told")
-	check(_state(game, "special_auction") == "expired", "auction expires after its window")
-	check(message.contains("已经落幕"), "player who knew hears how it ended")
 	game.travel("market")
-	check(game.pending_event.is_empty(), "missed event cannot be entered later")
-	var unaware := _game(5)
-	_without_bottleneck(unaware)
-	unaware.cultivate(3600)
-	check(_state(unaware, "special_auction") == "expired" and not unaware.journal_lines().any(func(line: String) -> bool: return line.contains("落幕")), "unknown events expire silently")
+	check(game.pending_event.get("id", "") != "yunxi_autumn", "a missed autumn auction cannot be entered after it closed")
 
 func _periodic_and_cross_year() -> void:
 	var game := _game(6)
@@ -226,10 +201,11 @@ func _periodic_and_cross_year() -> void:
 	check(int(game.world.events.night_market.count) == 2, "occurrences counted")
 	var crossing := _game(7)
 	_without_bottleneck(crossing)
-	_jump(crossing, 9, 11, 1)
+	_jump(crossing, 10, 11, 1)
+	var notices := int(crossing.world.events.get("qianlong_notice", {}).get("count", 0))
 	crossing.cultivate(360)
-	check(int(crossing.world.day) == Calendar.to_day(10, 11, 1), "retreat crosses the year boundary")
-	check(int(crossing.world.events.sect_tournament.count) == 1 and crossing.journal_lines().any(func(line: String) -> bool: return line.begins_with("【10年6月初一】青云剑宗外门小比")), "dated world event fires on its own day inside the span")
+	check(int(crossing.world.day) == Calendar.to_day(11, 11, 1), "retreat crosses the year boundary")
+	check(int(crossing.world.events.qianlong_notice.count) == notices + 1 and crossing.journal_lines().any(func(line: String) -> bool: return line.begins_with("【11年2月初一】云溪斗法台贴出告示")), "dated world event fires on its own day inside the span")
 
 func _lifespan() -> void:
 	var game := _game(8)
@@ -323,7 +299,7 @@ func _equivalence() -> void:
 	for i: int in range(72):
 		pieces.cultivate(30)
 	check(_comparable(once) == _comparable(pieces), "one six-year retreat equals 72 one-month retreats")
-	check(once.has_flag("serpent_rampage") and _state(once, "special_auction") == "expired", "both spans processed the same world events")
+	check(once.has_flag("serpent_rampage") and int(once.world.events.qianlong_notice.count) == 1, "both spans processed the same world events")
 	var town_once := _game(13)
 	var town_pieces := _game(13)
 	for game: Session in [town_once, town_pieces]:
@@ -332,7 +308,7 @@ func _equivalence() -> void:
 	for i: int in range(120):
 		town_pieces.wait(30)
 	check(_comparable(town_once) == _comparable(town_pieces), "ten years at once equals ten years month by month")
-	check(int(town_once.world.events.sect_tournament.count) == 1 and town_once.has_flag("serpent_slain") and not town_once.has_flag("serpent_rampage"), "the tournament and the whole serpent rampage happen in both")
+	check(int(town_once.world.events.qianlong_notice.count) == 1 and town_once.has_flag("serpent_slain") and not town_once.has_flag("serpent_rampage"), "the tournament and the whole serpent rampage happen in both")
 
 func _long_simulation() -> void:
 	var whole := _game(12)
@@ -350,7 +326,7 @@ func _long_simulation() -> void:
 		chunked.wait(mini(30, 500 * 360 - int(chunked.world.day)))
 	var chunked_msec := Time.get_ticks_msec() - started
 	check(_comparable(whole) == _comparable(chunked), "500 years in long spans equals 500 years month by month")
-	check(int(whole.world.events.sect_tournament.count) == 50, "fifty tournaments in five centuries")
+	check(int(whole.world.events.qianlong_notice.count) == 99, "ninety-nine 潜龙会 notices in five centuries")
 	check(whole_msec + chunked_msec < PERFORMANCE_BUDGET_MSEC, "500-year simulations within budget (%d ms + %d ms)" % [whole_msec, chunked_msec])
 	print("EVENTS: 500 years in %d ms (long spans) / %d ms (monthly)" % [whole_msec, chunked_msec])
 

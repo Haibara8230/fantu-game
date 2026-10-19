@@ -17,7 +17,7 @@ func _initialize() -> void:
 	# A script error aborts this function before quit(); the watchdog turns that hang into a failure.
 	create_timer(240.0).timeout.connect(func() -> void: printerr("TIMEOUT: test did not finish (likely a script error)"); quit(1))
 	_content()
-	var game := _guided_start()
+	var game := _opening()
 	_sect_storylines(game)
 	_saves(game)
 	_key_people()
@@ -29,7 +29,7 @@ func _initialize() -> void:
 	print("STORIES: %d checks, %d failures" % [checks, failures])
 	quit(0 if failures == 0 else 1)
 
-func _game(start: String = "guided", seed_value: int = 21) -> Session:
+func _game(start: String = "rushi", seed_value: int = 21) -> Session:
 	var game := Session.new()
 	game.encounters_enabled = false
 	game.new_game("入门", seed_value, ["metal", "wood", "fire"], start)
@@ -54,7 +54,7 @@ func _duel(game: Session, enemy_id: String) -> void:
 func _content() -> void:
 	var game := Session.new()
 	check(game.content.error_message.is_empty(), "content with storylines loads (%s)" % game.content.error_message)
-	check(game.content.storylines.has("intro") and bool(game.content.storylines.intro.guide), "the introduction is the guided storyline")
+	check(game.content.storylines.has("rushi") and not bool(game.content.storylines.rushi.get("guide", false)), "the 入世 opening is a storyline that holds nobody to it")
 	var broken := Session.new()
 	broken.content.storylines.errands.giver = "nobody"
 	check(not broken.content._validate().is_empty(), "a storyline with an unknown giver is rejected")
@@ -62,59 +62,60 @@ func _content() -> void:
 	broken.content.storylines.errands.steps[1].deeds = {"win:dragon": 1}
 	check(not broken.content._validate().is_empty(), "a step counting an unknown deed is rejected")
 	broken = Session.new()
-	broken.content.storylines.intro.steps[0].letter = true
-	broken.content.storylines.intro.steps[0].erase("say")
+	broken.content.storylines.rushi.steps[0].letter = true
+	broken.content.storylines.rushi.steps[0].erase("say")
 	check(not broken.content._validate().is_empty(), "a 传音 step without words is rejected")
 	var plain := _game("plain")
-	check(plain.story_state("intro").is_empty() and plain.has_flag("intro_done") and plain.guide_step().is_empty(), "a plain journey has no storyline and the sect's halls are open")
+	check(plain.story_state("rushi").is_empty() and plain.has_flag("rushi_done") and plain.guide_step().is_empty() and plain.available_here("study"), "a plain journey has no storyline and the sect's halls are open")
 
-## The introduction, step by step: what it allows, what it refuses, and what each step leaves.
-func _guided_start() -> Session:
+## The 入世 opening, step by step (docs/GAME_OUTLINE.md 4): a wanderer at the 青石镇 inn, 云溪 and its
+## gathering, the first auction, 潜龙会 and the banquet; then the old city's first clue and 青云.
+func _opening() -> Session:
 	var game := _game()
-	check(game.story_at("intro", "retreat") and not game.has_flag("intro_done"), "a guided journey begins at the first step")
-	check(_last(game).contains("许清和") and _last(game).contains("闭关一个月"), "the mentor's words open it (%s)" % _last(game))
-	check(not game.available_here("commissions") and not game.available_here("study"), "the commission board and the hall wait until the introduction is done")
-	var day := int(game.world.day)
-	check(game.travel("ridge").contains("嘱咐") and int(game.world.day) == day, "the guided start holds the player at the sect")
-	game.cultivate(90)
-	check(int(game.world.day) == 30 and game.story_at("intro", "spar"), "the first retreat lasts the month the mentor asked for and moves the guide on")
-	check(game.cultivate(30).contains("嘱咐") and int(game.world.day) == 30, "no second retreat before the next step")
-	_duel(game, "disciple")
-	check(game.story_at("intro", "herbs"), "a spar, won or lost, moves the guide on")
-	day = int(game.world.day)
-	check(game.travel("market").contains("嘱咐") and int(game.world.day) == day, "only the step's place can be travelled to")
-	game.travel("ridge")
-	check(game.player.location == "ridge" and game.pending_event.is_empty(), "the road to the step's place is open and quiet")
-	var rounds := 0
-	while game.herb_count() < 3 and rounds < 10:
-		rounds += 1
-		game.act("gather")
-	check(game.story_at("intro", "herbs"), "herbs alone are not the whole step")
-	game.interact("azhi", "talk")
-	check(game.story_at("intro", "return"), "herbs and a word with 阿芷 finish it")
-	game.travel("sect")
-	var stones := int(game.player.stones)
-	var herbs: int = game.herb_count()
-	check(not game.npc_options("xu_qinghe").filter(func(option: Dictionary) -> bool: return option.id == "hand_herbs").is_empty(), "the mentor asks for the herbs")
-	game.interact("xu_qinghe", "hand_herbs")
-	check(game.story_at("intro", "market") and int(game.player.stones) == stones + 30 and game.herb_count() == herbs - 3 and game.item_count("huiqi_pill") == 2, "handing them in pays and sends the player to market")
+	check(game.player.location == "town" and game.affiliation().is_empty() and game.story_at("rushi", "inn") and not game.has_flag("rushi_done"), "a journey begins as a wanderer at the 青石镇 inn")
+	check(game.pending_event.get("id", "") == "rushi_inn", "where someone is paying the rent with a fake ring")
+	check(not game.available_here("commissions") and game.available_here("cultivate"), "a wanderer has no sect board, but the inn lets a room to retreat in")
+	game.choose_event("help")
+	check(game.story_at("rushi", "road") and game.world.people.lu_chengzhou.met, "陆承舟 met, the road to 云溪 lies ahead")
+	check(game.travel("ridge").contains("抵达"), "nothing holds the player to the story")
 	game.travel("market")
-	if not game.pending_event.is_empty():
-		game.choose_event(str(game.pending_definition().choices.back().id))
-	game.buy("huiqi_pill")
-	check(game.story_at("intro", "report"), "one trade at the market is enough")
+	check(game.pending_event.get("id", "") == "rushi_gate", "at the gate of 云溪 a cart has overturned")
+	game.choose_event("help")
+	game.wait(1)
+	check(game.pending_event.get("id", "") == "rushi_fair", "inside, the gathering")
+	game.choose_event("ask")
+	check(game.world.people.ye_zhiwei.met and game.world.people.shen_mo.met, "叶知微 and 沈墨 are met at the gathering")
+	while game.pending_event.is_empty() and int(game.world.day) < 60:
+		game.wait(1)
+	check(game.pending_event.get("id", "") == "rushi_auction" and game.has_flag("mirror_seen") and game.world.people.wen_zhaoheng.met, "the first auction: the broken mirror shows a city, the old cultivator watches")
+	game.choose_event("watch")
+	while game.pending_event.is_empty() and int(game.world.day) < 90:
+		game.wait(1)
+	check(game.pending_event.get("id", "") == "qianlong_entry" and game.world.people.wenren_zhao.met, "三月初 潜龙会 opens; 闻人照 is there")
+	game.choose_event("watch")
+	while game.pending_event.is_empty() and int(game.world.day) < 120:
+		game.wait(1)
+	check(game.pending_event.get("id", "") == "rushi_banquet", "the 陆府 banquet follows")
+	game.choose_event("ye")
+	check(game.story_state("rushi") == "done" and game.has_flag("rushi_done") and game.has_flag("heard_qingyun_recruit"), "the banquet ends the opening, with 青云's recruiting known")
+	check(game.story_at("mirror", "tianhe"), "and the old city's first clue: the 天河 crossing on a full moon")
+	game.travel("ferry")
+	while not game.has_flag("tianhe_seen") and int(game.world.day) < 200:
+		if not game.pending_event.is_empty():
+			game.choose_event(str(game.pending_definition().choices[0].id))
+		else:
+			game.wait(1)
+	check(game.has_flag("tianhe_seen") and game.Calendar.day_of_month(int(game.world.day)) == 15 and game.story_state("mirror") == "done", "on the fifteenth the water shows the city")
+	while not game.pending_event.is_empty():
+		game.choose_event(str(game.pending_definition().choices[0].id))
 	game.travel("sect")
-	game.interact("xu_qinghe", "report")
-	check(game.story_state("intro") == "done" and game.has_flag("intro_done") and game.guide_step().is_empty(), "the report ends the introduction")
-	check(bool(game.world.people.xu_qinghe.get("sound", false)) and game.item_count("pozhang_pill") == 1, "the mentor leaves a 传音符 and a 破障丹")
-	check(game.available_here("commissions") and game.available_here("study"), "the board and the hall are open now")
+	while not game.pending_event.is_empty():
+		game.choose_event(str(game.pending_definition().choices[0].id))
+	check(not game.available_here("cultivate") and game.available_here("join_sect"), "a wanderer at 青云 sees only the recruiting terrace")
+	game.join_sect()
+	check(game.affiliation() == "qingyun" and game.available_here("cultivate") and game.available_here("commissions") and game.available_here("study") and not game.available_here("join_sect"), "joining opens the chamber, the board and the hall")
+	game.wait(1)
 	check(game.story_state("errands") == "active" and game.story_state("lineage") == "active" and game.story_at("lineage", "visit"), "the sect's own storylines follow")
-	check(game.journal_lines().any(func(line: String) -> bool: return line.contains("顾长庚长老")), "and the next one is told at once")
-	day = int(game.world.day)
-	game.travel("town")
-	check(game.player.location == "town", "travel is free after the introduction")
-	game.travel("sect")
-	check(int(game.world.day) > day, "time went by on the road")
 	return game
 
 ## Errands come by 传音 after a while and end a stay; the elder's lessons follow the player's own steps.
@@ -160,15 +161,18 @@ func _saves(game: Session) -> void:
 	retired.world.storylines["forgotten"] = {"state": "active", "step": 0, "since": 0, "begun": true, "base": {}}
 	retired.world.letters.append({"npc": "xu_qinghe", "day": 0, "read": false, "story": "forgotten", "step": "x"})
 	check(copy.restore(retired) and not copy.world.storylines.has("forgotten") and copy.world.letters.size() == game.world.letters.size(), "retired storylines and their letters are dropped, not fatal")
-	var guided := _game()
-	guided.cultivate(10)
+	var opening := _game()
 	var held := Session.new()
-	check(held.restore(JSON.parse_string(JSON.stringify(guided.snapshot()))) and held.story_at("intro", "retreat") and held.travel("ridge").contains("嘱咐"), "a guided journey stays guided after loading")
+	check(held.restore(JSON.parse_string(JSON.stringify(opening.snapshot()))) and held.story_at("rushi", "inn") and held.pending_event.get("id", "") == "rushi_inn", "the opening survives a save")
 
 func _key_people() -> void:
 	# 沈墨 and the 破鳞散: the serpent starts the duel hurt.
-	var game := _game("skipped", 31)
-	check(game.story_state("intro") == "done" and game.story_state("lineage") == "active", "a skipped introduction lets the sect's storylines follow")
+	var game := _game("free", 31)
+	check(game.story_state("rushi") == "done" and game.player.location == "town" and game.affiliation().is_empty(), "a skipped opening leaves a wanderer free at the inn")
+	game.travel("sect")
+	game.join_sect()
+	game.wait(1)
+	check(game.story_state("lineage") == "active", "joining 青云 lets the sect's storylines follow")
 	game.travel("ridge")
 	game.interact("azhi", "talk")
 	game.world.people.shen_mo = {"met": true, "relation": 15, "last": {}, "absent_until": -1, "talks": 0, "met_day": 0, "met_place": "market"}
@@ -403,13 +407,11 @@ func _furnace_bounty() -> void:
 func _older_journeys() -> void:
 	var old := Session.new()
 	check(old.restore(JSON.parse_string(FileAccess.get_file_as_string("res://tests/fixtures/v10_heavenly_midstage.json"))), "an older save loads")
-	check(old.story_state("intro") == "done" and old.has_flag("intro_done") and old.guide_step().is_empty(), "an older journey counts the introduction as done")
+	check(old.has_flag("rushi_done") and old.guide_step().is_empty() and old.affiliation() == "qingyun", "an older journey counts the opening as done and stays a disciple of 青云")
 	check("retreat" in old.player.taught and "arts" in old.player.taught and old.world.letters.is_empty(), "the cards it knew stay dismissed")
-	old.wait(1)
-	check(old.story_state("lineage") == "active" and old.story_state("errands") == "active", "the sect's storylines begin on its next action")
 	var v11 := Session.new()
 	check(v11.restore(JSON.parse_string(FileAccess.get_file_as_string("res://tests/fixtures/v11_after_retreats.json"))), "a version 11 save loads")
-	check(int(v11.player.xp) == 272 and int(v11.player.mind) == 0 and v11.player.deeds.is_empty() and v11.has_flag("intro_done") and v11.available_here("study"), "it keeps its progress and finds the sect's halls open")
+	check(int(v11.player.xp) == 272 and int(v11.player.mind) == 0 and v11.player.deeds.is_empty() and v11.has_flag("rushi_done") and v11.available_here("study"), "it keeps its progress and finds the sect's halls open")
 	check(int(v11.world.people.azhi.relation) == 43 and not bool(v11.world.people.azhi.get("sound", false)), "an old bond keeps its favor; the 传音符 come with the next dealings")
 	Session.Events.apply(v11, [{"relation": ["azhi", 1]}])
 	check(bool(v11.world.people.azhi.get("sound", false)), "and then they do")

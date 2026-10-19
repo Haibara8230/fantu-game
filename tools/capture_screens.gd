@@ -67,8 +67,35 @@ func _run() -> void:
 	main.name_input.text = "青禾"
 	main.welcome_roots = ["metal", "wood", "fire"]
 	main.welcome_born = {"talents": ["danqi", "touyao"], "flaws": []}
-	main.skip_intro.button_pressed = true
 	main.begin()
+	# The 入世 opening: the inn at 青石镇, then the gate of 云溪 and the city with its inn.
+	await _shot("02a_rushi_inn")
+	main.choose("help")
+	main.set_guide_enabled(false)
+	await _shot("02b_town")
+	main.select_spot("inn")
+	await _shot("02c_town_inn")
+	main.close_spot()
+	main.run(func() -> String: return main.session.travel("market"))
+	await _shot("02d_yunxi_gate")
+	main.choose("pass")
+	main.story = {}
+	main.GainsCard.close(main)
+	await _shot("02e_market")
+	while not main.session.pending_event.is_empty():
+		main.choose(str(main.session.pending_definition().choices[0].id))
+	main.story = {}
+	main.set_guide_enabled(true)
+	# The rest is a disciple of 青云: to the sect, where a wanderer sees only the recruiting terrace.
+	main.run(func() -> String: return main.session.travel("sect"))
+	while not main.session.pending_event.is_empty():
+		main.choose(str(main.session.pending_definition().choices[0].id))
+	main.story = {}
+	main.GainsCard.close(main)
+	main.set_guide_enabled(false)
+	await _shot("02f_sect_wanderer")
+	main.set_guide_enabled(true)
+	main.run(main.session.join_sect)
 	await _shot("02_story")
 	main.close_story()
 	await _shot("03_sect_with_card")
@@ -86,7 +113,7 @@ func _run() -> void:
 		main.open_person(str(fellows[0]))
 		await _shot("05c_person_generated")
 	main.close_spot()
-	main.notice("闭关 3 个月，修为增加 360，灵力恢复。青云山执事堂贴出告示：外门小比将于六月一日至十五日在演武坪报名，三轮斗法，点到为止，头名可得宗门赏赐的功法玉简。沈墨传音：药铺新到了一批凝露草，道友若要炼回气丹，可来取用。")
+	main.notice("闭关 3 个月，修为增加 360，灵力恢复。云溪斗法台贴出告示：潜龙会于三月一日至十五日报名，限四十岁以下的炼气修士，三轮斗法，点到为止；魁首得筑基丹一枚与功法玉简。沈墨传音：药铺新到了一批凝露草，道友若要炼回气丹，可来取用。")
 	await _shot("06_long_notice")
 	main.set_view("status")
 	await _shot("07_status")
@@ -107,9 +134,8 @@ func _run() -> void:
 	await _shot("10_goals")
 	main.set_view("messages")
 	await _shot("11_messages")
-	# An appointment ahead to mark on the retreat scroll: the invitation makes the auction known.
-	s.set_item_count("auction_invitation", 1)
-	s.set_wake("special_auction", true)
+	# An appointment ahead to mark on the retreat scroll: the autumn auction at 云溪.
+	s.set_wake("yunxi_autumn", true)
 	main.set_view("retreat")
 	await _shot("12_retreat")
 	s.add_item("j:t:breath:wood:1::0", 1)
@@ -284,7 +310,7 @@ func _run() -> void:
 	main.set_view("place")
 	s.player.location = "sect"
 	main.set_view("place")
-	s.pending_event = {"id": "tournament_entry", "day": int(s.world.day)}
+	s.pending_event = {"id": "qianlong_entry", "day": int(s.world.day)}
 	await _shot("19_event")
 	s.pending_event = {}
 	main.set_view("place")

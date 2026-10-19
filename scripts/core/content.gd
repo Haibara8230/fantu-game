@@ -54,7 +54,7 @@ const FAVOR_MAX := 200
 const FAVOR_STAGES := [[0, "初识"], [40, "相熟"], [80, "友好"], [140, "信赖"], [200, "亲密"]]
 const ATTITUDES := {"friendly": "友善", "neutral": "中立", "hostile": "敌意"}
 const BUILT_IN_INTERACTIONS := ["talk", "gift", "help", "consult", "teach", "invite_spar", "invite_help", "companion", "disciple", "instruct", "sworn"]
-const PLAIN_ACTIONS := ["cultivate", "rest", "breakthrough", "study", "teach", "sell", "shop", "gather", "inn_rest", "search_ruin", "explore_cave", "forge", "ascend", "inquire", "commissions", "sect", "alchemy", "field", "tournament", "lease", "hunt", "arena", "series"]
+const PLAIN_ACTIONS := ["cultivate", "rest", "breakthrough", "study", "teach", "sell", "shop", "gather", "inn_rest", "search_ruin", "explore_cave", "forge", "ascend", "inquire", "commissions", "sect", "alchemy", "field", "lease", "hunt", "arena", "series", "join_sect"]
 const ITEM_CATEGORIES := {"herb": "灵草", "pill": "丹药", "treasure": "天材地宝", "manual": "玉简", "equipment": "宝物", "material": "材料", "recipe": "丹方", "talisman": "符箓", "tool": "器具", "quest": "信物"}
 # Milestones friends send word of, and the deeds the session counts besides victories ("win:<enemy>").
 const CONGRATS := ["breakthrough", "core", "nascent", "deity", "serpent", "champion", "summit", "calamity", "promotion"]
@@ -1435,17 +1435,23 @@ func path_days(path: Array[String]) -> int:
 
 ## Actions offered by the spots at a location; gated spots appear once their flag is set and, for those
 ## kept for a sect rank, to whoever holds it (`rank`, the index of the player's).
-func spot_actions(location_id: String, flags: Dictionary, rank: int = 0) -> Array[String]:
+func spot_actions(location_id: String, flags: Dictionary, rank: int = 0, affiliation: String = "") -> Array[String]:
 	var result: Array[String] = []
 	for spot: Dictionary in locations.get(location_id, {}).get("spots", []):
-		if not spot_open(spot, flags, rank):
+		if not spot_open(spot, flags, rank, affiliation):
 			continue
 		for action: String in spot.actions:
 			result.append(action)
 	return result
 
-func spot_open(spot: Dictionary, flags: Dictionary, rank: int) -> bool:
+## A spot's flag, its sect (`requires_affiliation`: only that sect's own people go in) and the rank in
+## it; `not_affiliation` is a spot for outsiders (the sect's recruiting gate).
+func spot_open(spot: Dictionary, flags: Dictionary, rank: int, affiliation: String = "") -> bool:
 	if spot.has("requires_flag") and not bool(flags.get(spot.requires_flag, false)):
+		return false
+	if spot.has("requires_affiliation") and affiliation != str(spot.requires_affiliation):
+		return false
+	if spot.has("not_affiliation") and affiliation == str(spot.not_affiliation):
 		return false
 	return not spot.has("requires_rank") or rank >= rank_index(str(spot.requires_rank))
 
@@ -1638,6 +1644,10 @@ func _validate_condition(condition: Variant) -> String:
 			return "" if sect_data.get("ranks", []).any(func(rank: Dictionary) -> bool: return rank.id == value) else "未知宗门身份：%s" % value
 		"recipe":
 			return "" if alchemy_data.get("recipes", {}).has(value) else "未知丹方：%s" % value
+		"month_day":
+			return "" if value is Array and value.size() == 2 and _whole(value[0]) and _whole(value[1]) and int(value[0]) >= 1 and int(value[0]) <= int(value[1]) and int(value[1]) <= 30 else "月中日期条件无效"
+		"affiliation":
+			return "" if value is String and (value.is_empty() or (sects.has(value) and value != "wanderer")) else "未知宗门：%s" % value
 	return "未知条件：%s" % key
 
 func _validate_effects(effects: Variant) -> String:

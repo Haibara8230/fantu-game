@@ -44,10 +44,10 @@ func _goals() -> void:
 	game.new_game("目标", 7, ["metal", "wood", "fire"])
 	var ids := func() -> Array: return Goals.current(game).map(func(goal: Dictionary) -> String: return goal.id)
 	var filled := func() -> bool: return Goals.current(game).all(func(goal: Dictionary) -> bool: return not goal.text.contains("{"))
-	check(ids.call() == ["foundation_xp", "serpent"] and filled.call(), "a new life starts with a nearby cultivation goal, before distant threats")
-	game.world.flags.intro_done = true
+	check(ids.call() == ["tournament", "foundation_xp", "serpent"] and filled.call(), "a new life starts with 潜龙会 two months off, a nearby cultivation goal, then the distant serpent")
+	game.world.flags.rushi_done = true
 	game.player.xp = 500
-	check(ids.call() == ["bottleneck", "serpent"], "a bottleneck comes first and hides the plain xp goal")
+	check(ids.call()[0] == "bottleneck" and not "foundation_xp" in ids.call(), "a bottleneck comes first and hides the plain xp goal")
 	game.player.xp = 2000
 	game.player.stage = 3
 	check("foundation_pill" in ids.call() and Goals.current(game)[ids.call().find("foundation_pill")].text.contains("280 灵石"), "enough xp: the pill is next, with its price")
@@ -70,14 +70,17 @@ func _goals() -> void:
 	check(ids.call()[0] == "azhi_return", "carrying the token: take it back")
 	game.set_item_count("azhi_token", 0)
 	game.world.flags.azhi_mourned = true
-	game.set_item_count("auction_invitation", 1)
-	check("auction" in ids.call() and filled.call(), "an invitation points at the auction")
-	game.world.day = Calendar.to_day(5, 5, 1)
-	check(not "auction" in ids.call(), "and is forgotten once the auction has passed")
-	game.world.day = Calendar.to_day(10, 1, 1)
+	game.world.day = Calendar.to_day(1, 8, 15)
+	check("auction" in ids.call() and filled.call(), "two months ahead, the autumn auction is a goal")
+	game.world.day = Calendar.to_day(1, 11, 1)
+	check(not "auction" in ids.call() or Calendar.to_day(2, 10, 1) - int(game.world.day) <= 60, "and is forgotten once it has passed, until the next one draws near")
+	# 潜龙会 is for 炼气 cultivators.
+	game.player.realm = 0
+	game.world.day = Calendar.to_day(5, 6, 1)
 	var soon: Array[Dictionary] = Goals.current(game)
-	check("tournament" in ids.call() and soon[ids.call().find("tournament")].text.contains("历元 10 年 6 月初一至十五"), "the tournament is mentioned within a year of it")
-	game.world.day = Calendar.to_day(10, 6, 16)
+	check("tournament" in ids.call() and soon[ids.call().find("tournament")].text.contains("历元 6 年 3 月初一至十五"), "潜龙会 is mentioned within a year of it")
+	game.player.realm = 1
+	game.world.day = Calendar.to_day(6, 3, 16)
 	check(not "tournament" in ids.call(), "and not again until the next one draws near")
 	check(Goals.current(game).size() == ids.call().size(), "all current goals are available without a three-item cap")
 
@@ -87,7 +90,7 @@ func _goals() -> void:
 func _guided() -> void:
 	main.intro_finished_once = false
 	main._show_welcome()
-	check(main.skip_intro == null, "no skipping before the introduction was finished once")
+	check(main.skip_intro == null, "no skipping before the opening was finished once")
 	var sensed := _texts(main.welcome_layer, "Label")
 	check(sensed.contains("灵根 · ") and sensed.contains("资质 · ") and sensed.contains("先天天赋") and _welcome_button("重新感应（余 5 次）") != null, "the welcome senses roots, talents and aptitude")
 	for i: int in 5:
@@ -97,15 +100,16 @@ func _guided() -> void:
 	main.welcome_roots = ["metal", "wood", "fire"]
 	main.welcome_born = {"talents": [], "flaws": []}
 	main.begin()
-	check(main.current_screen() == "full" and main.story.title == "初入山门" and _texts(main.center, "Label").contains("许清和"), "a guided journey opens with the mentor's words")
-	main.close_story()
-	check(main.goal_label.text == "目标 · 初入山门" and main.goal_label.tooltip_text.contains("闭关修炼一个月"), "the HUD's goal is the step at hand")
+	check(main.session.player.location == "town" and main.current_screen() == "full" and main.session.pending_event.get("id", "") == "rushi_inn" and _texts(main.center, "Label").contains("陆承舟"), "a new journey opens at the 青石镇 inn, where 陆承舟 cannot pay his rent")
+	main.choose("watch")
+	check(main.goal_label.text.begins_with("目标 · 入世") and main.goal_label.tooltip_text.contains("云溪"), "the HUD's goal is the way to 云溪")
+	main.select_spot("inn")
+	check(_button("闭关修炼") != null, "the inn lets a room to retreat in")
 	main.set_view("retreat")
-	var length: HSlider = main.center.find_children("*", "HSlider", true, false)[0]
-	check(int(length.max_value) == 3 and _texts(main.center, "Label").contains("此番至多 1 个月"), "the first retreat is the month the mentor asked for")
+	check(_texts(main.center, "Label").contains("客栈静房") and _texts(main.center, "Label").contains("每月房钱"), "the retreat scroll names the room's rate and rent")
 	main.set_view("map")
 	main.select_map_target("ridge")
-	check(_button("启程前往松风岭").disabled and _texts(main.center, "Label").contains("许清和嘱咐过"), "the map says why the road is closed for now")
+	check(not _button("启程前往松风岭").disabled, "nothing holds the road closed")
 	main.set_view("place")
 	main.session.world.letters.append({"npc": "xu_qinghe", "day": int(main.session.world.day), "read": false, "story": "errands", "step": "dew"})
 	main.render()
@@ -118,7 +122,7 @@ func _guided() -> void:
 	_button("婉拒").pressed.emit()
 	check(main.session.open_invites().is_empty(), "and is answered there")
 	main.set_view("stories")
-	check(_texts(main.center, "Label").contains("初入山门 · 许清和") and _texts(main.center, "Label").contains("闭关修炼一个月"), "剧情 lists the storyline with its step")
+	check(_texts(main.center, "Label").contains("入世 · 陆承舟") and _texts(main.center, "Label").contains("云溪"), "剧情 lists the opening with its step")
 	main.close_overlay()
 
 ## Waits out a journey played on the map: whether the traveller's mark showed, and how many dates passed.
@@ -202,7 +206,14 @@ func _run() -> void:
 	check(main.skip_intro != null, "once finished, a new journey may skip it")
 	main.skip_intro.button_pressed = true
 	main.begin()
-	check(main.session.story_state("intro") == "done" and main.session.has_flag("intro_done") and main.session.story_state("lineage") == "active", "skipping counts the introduction as done and lets the sect's storylines follow")
+	check(main.session.story_state("rushi") == "done" and main.session.has_flag("rushi_done") and main.session.player.location == "town" and main.session.affiliation().is_empty(), "skipping the opening leaves a wanderer free at the 青石镇 inn")
+	# The rest plays a disciple of 青云: to the sect and its recruiting terrace.
+	main.run(func() -> String: return main.session.travel("sect"))
+	while not main.session.pending_event.is_empty():
+		main.choose(str(main.session.pending_definition().choices[0].id))
+	main.story = {}
+	main.run(main.session.join_sect)
+	check(main.session.affiliation() == "qingyun" and main.session.story_state("lineage") == "active", "joining 青云 lets the sect's storylines follow")
 	check(main.current_screen() == "full" and _texts(main.center, "Label").contains("顾长庚长老"), "the next storyline's words are told in a screen of their own")
 	main.close_story()
 	await _capture("sect")
@@ -223,7 +234,7 @@ func _run() -> void:
 		dismissed += 1
 		(_button("知道了") if _button("知道了") != null else _button("下一页")).pressed.emit()
 	var taught: Array = main.session.player.taught
-	check(not _screen("Label").contains("教学 ·") and not "map" in taught and not "battle" in taught and "lineage" in taught and "stories" in taught, "cards for situations not met yet wait their turn")
+	check(not _screen("Label").contains("教学 ·") and not "battle" in taught and "lineage" in taught and "stories" in taught, "cards for situations not met yet wait their turn")
 	var copy = main.Session.new()
 	check(copy.restore(JSON.parse_string(JSON.stringify(main.session.snapshot()))) and "people" in copy.player.taught, "dismissed cards are kept with the journey")
 	main.set_guide_enabled(false)
@@ -270,8 +281,8 @@ func _run() -> void:
 	check(main.status_label.get_global_rect().end.y <= main.get_global_rect().end.y + 1, "status line inside the window")
 	# The world screen: only the HUD's corners stay on screen besides the window.
 	check(main.current_screen() == "place" and main.hud_left.visible and main.hud_right.visible and main.window.get_global_rect().position.x >= main.hud_left.get_global_rect().end.x, "the world screen keeps the window clear of the HUD")
-	check(main.clock_label.text == "历元 1 年 1 月初一" and main.place_label.text == "青云山", "the HUD shows the date and the place")
-	check(main.journal_text.text == "\n".join(main.session.journal_lines().slice(-2)) and main.journal_text.text.contains("【1年1月初一】"), "the latest records show at the corner")
+	check(main.clock_label.text == main.Calendar.date_text(int(main.session.world.day)) and main.place_label.text == "青云山", "the HUD shows the date and the place")
+	check(main.journal_text.text == "\n".join(main.session.journal_lines().slice(-2)) and main.journal_text.text.contains("【1年1月"), "the latest records show at the corner")
 	var hud := _texts(main.hud_status, "Label")
 	check(hud.contains("青禾") and hud.contains("气血") and hud.contains("修为  0 / 500"), "the HUD shows who you are and how you stand")
 	check(_button("闭关修炼") != null and _button("突破境界") != null and _button("停留  ·  1 日") != null, "the chamber offers retreat, breakthrough and waiting")
@@ -286,7 +297,7 @@ func _run() -> void:
 	check(main.goal_label.visible and main.goal_label.text.begins_with("目标 · " + str(Goals.current(main.session)[0].title)) and main.goal_label.text.contains("除去妖蟒"), "the HUD names the first goal")
 	main.hud_icons.goals.pressed.emit()
 	var goals_text := _screen("Label")
-	check(main.current_screen() == "scroll" and goals_text.contains("除去妖蟒") and goals_text.contains("历元 6 年 3 月初一") and goals_text.contains("还有 5 年 2 个月") and goals_text.contains("修为 0 / 2000"), "任务 opens the scroll: the serpent's deadline and breaking through")
+	check(main.current_screen() == "scroll" and goals_text.contains("除去妖蟒") and goals_text.contains("历元 6 年 3 月初一") and goals_text.contains("还有 5 年") and goals_text.contains("修为 0 / 2000"), "任务 opens the scroll: the serpent's deadline and breaking through")
 	var close_key := InputEventKey.new()
 	close_key.keycode = KEY_ESCAPE
 	close_key.pressed = true
@@ -481,7 +492,7 @@ func _run() -> void:
 	# 编年史: the whole record by kind, newest first, a page at a time.
 	main.set_view("chronicle")
 	var record := _texts(main.center, "Label")
-	check(record.contains("编 年 史  ·  %d 条" % main.session.chronicle.entries.size()) and record.contains("历元 1 年") and record.contains("你拜入青云山"), "the chronicle view lists the whole record under years")
+	check(record.contains("编 年 史  ·  %d 条" % main.session.chronicle.entries.size()) and record.contains("历元 1 年") and record.contains("从此踏上仙途"), "the chronicle view lists the whole record under years")
 	var kinds: Array = main.session.content.chronicle.keys() + ["event", "talk", "npc", "story", "letter"]
 	check(kinds.all(func(kind: String) -> bool: return main.ChronicleView.groups().any(func(group: Dictionary) -> bool: return kind in group.get("entries", []) )), "every kind of entry has a filter")
 	_button("大事").pressed.emit()
@@ -709,6 +720,10 @@ func _run() -> void:
 	main.set_view("place")
 	# An auction takes the screen: the lot, the price and who holds it, the bidders, and the raises.
 	main.run(func() -> String: return main.session.travel("market"))
+	# 云溪's own occasions may meet the arrival: watch them first.
+	while not main.session.pending_event.is_empty():
+		main.choose("watch" if main.session.pending_definition().choices.any(func(choice: Dictionary) -> bool: return choice.id == "watch") else str(main.session.pending_definition().choices[0].id))
+	main.story = {}
 	main.session.player.stones = 500
 	main.session.Auctions.open(main.session, "night_market")
 	main.render()

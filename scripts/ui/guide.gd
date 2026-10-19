@@ -10,7 +10,7 @@ const TIPS_PATH := "res://data/guide.json"
 const DEFAULT_PATH := "user://guide.cfg"
 const Settings = preload("res://scripts/ui/settings.gd")
 # The cards whose situation applies() knows; every card in the data must be one of them.
-const TIP_IDS := ["intro", "retreat", "people", "map", "battle", "event", "gather", "trade", "commissions", "lineage", "mind", "fatigue", "bottleneck", "stories", "letters", "breakthrough", "sect", "bonds", "fortune", "talents", "arts", "alchemy", "field", "cave", "sense", "auction", "forge"]
+const TIP_IDS := ["retreat", "people", "map", "battle", "event", "gather", "trade", "commissions", "lineage", "mind", "fatigue", "bottleneck", "stories", "letters", "breakthrough", "sect", "bonds", "fortune", "talents", "arts", "alchemy", "field", "cave", "sense", "auction", "forge"]
 static var _tips: Array = []
 # A card beside its button: its width, the gap to the button and the margin kept from the screen's edge.
 const BUBBLE_WIDTH := 460.0
@@ -30,11 +30,11 @@ static func applies(ui, tip_id: String) -> bool:
 	var session = ui.session
 	var guided: Dictionary = session.guide_step()
 	match tip_id:
-		"intro":
-			return not guided.is_empty()
 		"retreat":
-			var in_chamber: bool = ui.view == "retreat" or (ui.view == "place" and ui.selected_npc.is_empty() and ui.selected_spot == "chamber")
-			return session.player.location == "sect" and in_chamber and (guided.is_empty() or guided.has("retreat_days"))
+			# Any place to retreat: a sect's chamber, an inn's 静房, a dwelling.
+			var spot: Array = session.content.locations[session.player.location].spots.filter(func(candidate: Dictionary) -> bool: return candidate.id == ui.selected_spot)
+			var in_chamber: bool = ui.view == "retreat" or (ui.view == "place" and ui.selected_npc.is_empty() and not spot.is_empty() and "cultivate" in spot[0].actions)
+			return session.available_here("cultivate") and in_chamber and (guided.is_empty() or guided.has("retreat_days"))
 		"people":
 			return not session.present_npcs().is_empty() and (guided.is_empty() or str(guided.id) != "retreat")
 		"map":

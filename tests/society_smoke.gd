@@ -252,15 +252,10 @@ func _rumors() -> void:
 	game.log_event("rumor_lore", {"lore": "tianyan"})
 	check(game.journal_lines().back().contains("天衍宗"), "and lore reads as its own words")
 	game.player.realm = 0
-	_jump(game, 4, 2, 1)
-	check(game.rumor_candidates().any(func(rumor: Dictionary) -> bool: return rumor.key == "auction"), "in the auction year people talk about it")
-	# News is drawn at random among everything worth hearing; enough asking hears of the auction.
-	game.player.stones = 2000
-	for i: int in range(400):
-		if game.has_flag("heard_auction_rumor"):
-			break
-		game.inquire()
-	check(game.has_flag("heard_auction_rumor") and game.upcoming().size() == 1, "hearing of the auction counts as knowing about it")
+	_jump(game, 4, 8, 15)
+	check(game.rumor_candidates().any(func(rumor: Dictionary) -> bool: return str(rumor.key).begins_with("auction")), "before the autumn auction people talk about it")
+	_jump(game, 4, 11, 1)
+	check(not game.rumor_candidates().any(func(rumor: Dictionary) -> bool: return str(rumor.key).begins_with("auction")), "and stop once it is over")
 
 ## The 魔修: a 金丹 disciple's commission, and a foe at the valley's spring.
 func _demon_hunts() -> void:
@@ -385,24 +380,27 @@ func _commissions() -> void:
 	keeper.accept_commission(keeper.commission_offers("sect")[0].key)
 	check(copy.restore(JSON.parse_string(JSON.stringify(keeper.snapshot()))) and copy.player.quests == keeper.player.quests, "commissions survive a save")
 
+## 潜龙会 at 云溪 (docs/GAME_OUTLINE.md 4.5): three rounds against the region's 炼气 cultivators there.
 func _tournament() -> void:
 	var game := _game()
-	_jump(game, 10, 6, 2)
+	game.travel("market")
+	_jump(game, 6, 3, 2)
 	game.wait(1)
-	check(game.pending_event.get("id", "") == "tournament_entry", "the tournament opens at the sect in year ten")
+	check(game.pending_event.get("id", "") == "qianlong_entry", "潜龙会 opens at 云溪 every five years")
 	game.choose_event("enter")
 	check(game.battle.get("context", "") == "tournament" and int(game.battle.round) == 1, "round one begins")
 	var opponents: Array[String] = []
 	var stones := int(game.player.stones)
 	for round: int in range(3):
-		opponents.append(str(game.battle.npc))
+		opponents.append(str(game.battle.get("npc", "")))
 		game.battle.hp = 1
 		_sword(game)
 	check(opponents.size() == 3 and game.battle.is_empty(), "three rounds fought")
-	check(int(game.player.stones) == stones + 100 and game.player.items.keys().any(func(item_id: String) -> bool: return item_id.begins_with("j:")), "the champion wins stones and a slip")
+	check(int(game.player.stones) == stones + 100 and game.item_count("foundation_pill") >= 1 and game.player.items.keys().any(func(item_id: String) -> bool: return item_id.begins_with("j:")), "the champion wins stones, a 筑基丹 and a slip")
 	check(game.chronicle.entries.any(func(entry: Dictionary) -> bool: return entry.major and entry.id == "tournament_champion"), "the victory is a life milestone")
 	var out := _game()
-	_jump(out, 10, 6, 2)
+	out.travel("market")
+	_jump(out, 6, 3, 2)
 	out.wait(1)
 	out.choose_event("enter")
 	var before_loss_stones := int(out.player.stones)
@@ -411,23 +409,15 @@ func _tournament() -> void:
 	for turn: int in 6:
 		if not out.battle.is_empty():
 			out.defend()
-	check(out.battle.is_empty() and out.player.location == "sect" and int(out.player.stones) == before_loss_stones and out.journal_lines().any(func(line: String) -> bool: return line.contains("止步")), "losing a round ends the run without penalty")
-	check(out.tournament_block().contains("报过名"), "one entry a tournament")
-	# Entering at the arena: a retreat through the sign-up no longer misses it, and the 约定 lists it.
-	var arena := _game()
-	_jump(arena, 10, 4, 20)
-	check(arena.tournament_block().contains("开始报名") and arena.upcoming().any(func(entry: Dictionary) -> bool: return entry.event == "tournament_entry"), "the arena tells when sign-up opens, and the 约定 lists it")
-	arena.retreat_limits = false
-	arena.cultivate(30)
-	check(arena.journal_lines().any(func(line: String) -> bool: return line.contains("执事堂贴出告示")), "a notice a month ahead is kept in the record")
-	arena.cultivate(15)
-	check(arena.pending_event.get("id", "") == "tournament_entry", "back from a retreat inside the sign-up, it is offered at once")
-	var later := _game()
-	_jump(later, 10, 6, 3)
-	check(later.tournament_block().is_empty(), "the arena takes the entry while sign-up is open")
-	arena = later
-	arena.enter_tournament()
-	check(arena.battle.get("context", "") == "tournament" and int(arena.battle.round) == 1 and int(arena.world.events.tournament_entry.last_occurrence) == 0, "entering at the arena begins round one and counts as this tournament's entry")
+	check(out.battle.is_empty() and out.player.location == "market" and int(out.player.stones) == before_loss_stones and out.journal_lines().any(func(line: String) -> bool: return line.contains("止步")), "losing a round ends the run without penalty")
+	out.wait(1)
+	check(out.pending_event.is_empty(), "one entry each time it is held")
+	var past := _game()
+	past.player.realm = 1
+	past.travel("market")
+	_jump(past, 6, 3, 2)
+	past.wait(1)
+	check(past.pending_event.get("id", "") != "qianlong_entry", "a foundation cultivator is past 潜龙会")
 
 func _portraits() -> void:
 	var ArtLibrary = load("res://scripts/ui/art_library.gd")

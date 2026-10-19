@@ -53,7 +53,7 @@ func _initialize() -> void:
 	if opening != "random":
 		roots = ["metal", "wood", "water", "fire", "earth"] if opening == "poor" else (["metal", "wood", "water"] if opening == "ordinary" else ["metal"])
 		born = {"talents": [], "flaws": []}
-	s.new_game("试玩", seed_value, roots, "guided", born)
+	s.new_game("试玩", seed_value, roots, "rushi", born)
 	_say("START", "灵根 %s（%s）· 天赋 %s · 缺陷 %s · 资质 %s" % [s.root_title(), ", ".join(roots), ", ".join(s.player.talents), ", ".join(s.player.flaws), str(s.aptitude().get("name", s.aptitude()))])
 	_chronicle_since(0)
 	var guard := 0
@@ -149,6 +149,8 @@ func _step() -> void:
 		_mark("筑基")
 	if s.Storylines.deed_count(s, "win:serpent") > 0:
 		_mark("除蟒")
+	if _opening():
+		return
 	if _story():
 		return
 	if _local_milestone():
@@ -221,6 +223,22 @@ func _go(place: String) -> bool:
 	return true
 
 ## The guided start and the storylines: go where the step is, do what it asks.
+## The 入世 opening: go where its step is and let the days bring its occasions; afterwards join 青云,
+## whose life the strategies below play.
+func _opening() -> bool:
+	var step: Dictionary = s.story_step(str(s.content.rules.opening.story))
+	if not step.is_empty():
+		if _go(str(step.get("place", s.player.location))):
+			return true
+		_do("act", "OPENING", s.wait(1))
+		return true
+	if s.affiliation().is_empty() and s.has_flag("rushi_done"):
+		if _go("sect"):
+			return true
+		_do("act", "JOIN", s.join_sect())
+		return true
+	return false
+
 func _story() -> bool:
 	for goal: Dictionary in Goals.story_goals(s):
 		var story_id := str(goal.id).trim_prefix("story:")
@@ -367,7 +385,7 @@ func _commissions() -> bool:
 
 func _learn() -> bool:
 	# A 心法 from the hall once settled in; and 参悟 of the arts in use when a few days suffice.
-	if s.player.methods.is_empty() and s.has_flag("intro_done") and int(s.world.day) > 100:
+	if s.player.methods.is_empty() and s.has_flag("rushi_done") and int(s.world.day) > 100:
 		if _go("sect"):
 			return true
 		for technique_id: String in s.teachings():

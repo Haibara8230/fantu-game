@@ -99,6 +99,13 @@ static func met(s, condition: Dictionary) -> bool:
 			return int(s.player.realm) > int(value[0]) or (int(s.player.realm) == int(value[0]) and int(s.player.stage) >= int(value[1]))
 		"sect":
 			return str(s.player.get("sect", "")) == value
+		# [from, to] days of the month, both included: the full moon is the fifteenth.
+		"month_day":
+			var today := Calendar.day_of_month(int(s.world.day))
+			return today >= int(value[0]) and today <= int(value[1])
+		# The sect the player formally belongs to ("" for a wanderer).
+		"affiliation":
+			return str(s.player.get("affiliation", "")) == str(value)
 		"talked":
 			return int(s.world.people.get(value, {}).get("talks", 0)) > 0
 		"at_location":
@@ -277,7 +284,7 @@ static func open_for(s, event_id: String, window: Dictionary, day: int) -> bool:
 		return int(progress.last_day) < 0 or day >= int(progress.last_day) + int(definition.repeat.cooldown_days)
 	return not str(progress.state) in STATES
 
-## Counts the event as handled in this window without its own choices (外门小比 entered at the arena).
+## Counts the event as handled in this window without its own choices (an event entered by other means).
 static func mark_fired(s, event_id: String, window: Dictionary, day: int) -> void:
 	_mark_fired(s, event_id, window, day)
 
@@ -546,7 +553,7 @@ static func upcoming(s) -> Array[Dictionary]:
 		if int(fixed.to) < day or not all_met(s, definition.remind.get("conditions", [])):
 			continue
 		result.append({"event": event_id, "from": int(fixed.from), "to": int(fixed.to), "title": definition.title, "location": definition.location})
-	# Recurring occasions the player should plan for (外门小比, 兽潮) and may take part in: the open window
+	# Recurring occasions the player should plan for (潜龙会, 兽潮) and may take part in: the open window
 	# not yet taken part in, or the next one within a year.
 	for event_id: String in s.content.events:
 		var definition: Dictionary = s.content.events[event_id]

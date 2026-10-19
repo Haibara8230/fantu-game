@@ -1,8 +1,8 @@
 extends RefCounted
 ## 拍卖: lots sold one after another to the highest bidder, after 觅长生's auction houses. Operates on a
 ## Session. Definitions live in data/auctions.json; an event's effect {"auction": id} opens one.
-## - The lots are drawn from the auction's pool by the world seed and the year; slips and equipment are
-##   made when it opens. Named generated cultivators of the region sit in as bidders.
+## - The lots are drawn from the auction's pool by the world seed and the year (a lot marked `last`
+##   always closes the sale); slips and equipment are made when it opens. Named generated cultivators of the region sit in as bidders.
 ## - Each bidder's ceiling for a lot follows from the lot's value, their cultivation (wealth), their
 ##   personality (temper) and a spread fixed by the world seed, so reloading changes nothing.
 ## - A lot opens at its starting price; the keenest bidder who will pay it opens the bidding. The player
@@ -23,10 +23,12 @@ static func definition(s, auction_id: String) -> Dictionary:
 static func open(s, auction_id: String) -> String:
 	var auction := definition(s, auction_id)
 	var year := int(s.world.day) / 360
-	var pool: Array = auction.pool.duplicate()
+	# A lot marked `last` is the 压轴: always sold, after the others drawn.
+	var pool: Array = auction.pool.filter(func(entry: Dictionary) -> bool: return not bool(entry.get("last", false)))
+	var closing: Array = auction.pool.filter(func(entry: Dictionary) -> bool: return bool(entry.get("last", false)))
 	pool.sort_custom(func(a: Dictionary, b: Dictionary) -> bool: return _roll(s, "%s:%d:lot:%s" % [auction_id, year, JSON.stringify(a)]) < _roll(s, "%s:%d:lot:%s" % [auction_id, year, JSON.stringify(b)]))
 	var lots: Array = []
-	for entry: Dictionary in pool.slice(0, int(auction.lots)):
+	for entry: Dictionary in pool.slice(0, maxi(0, int(auction.lots) - closing.size())) + closing:
 		var item := ""
 		if entry.has("manual"):
 			item = "j:" + s.Arsenal.generate_technique(s.content, s.world_rng, int(entry.manual))

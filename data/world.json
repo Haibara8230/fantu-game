@@ -19,11 +19,12 @@
       "terrain": "mountain",
       "map": [0.24, 0.24],
       "spots": [{"id": "gate", "tag": [0.5, 0.78], "name": "山门", "description": "魔潮压在山门之外，护山大阵的光幕时明时暗。魔将就在阵外叫阵。", "actions": ["battle:mo_jiang"], "requires_flag": "calamity"}, 
-        {"id": "chamber", "tag": [0.32, 0.29], "name": "静室", "description": "外门弟子的静修之所，灵气清润，可闭关、领悟功法、休整与突破；角落里有一口公用丹炉，也可开炉炼丹。", "actions": ["cultivate", "rest", "breakthrough", "alchemy"]},
-        {"id": "office", "tag": [0.53, 0.35], "name": "执事堂", "description": "执事们在这里张贴宗门的委托，按时完成可得酬劳与贡献；月俸、晋升、兑换与捐献也在这里办理。", "actions": ["commissions", "sect"], "requires_flag": "intro_done"},
-        {"id": "abode", "tag": [0.3, 0.12], "name": "洞府", "description": "内门弟子各有一处洞府，石门后是静修的石室，门外辟出一方灵田，引了山泉浇灌。", "actions": ["field"], "requires_rank": "inner"},
-        {"id": "arena", "tag": [0.42, 0.5], "name": "演武坪", "description": "青石铺就的演武坪，同门常在此切磋。十年一度的外门小比也在这里报名、比斗；平日有人摆擂，连胜榜挂在坪边。", "actions": ["battle:disciple", "tournament", "arena"]},
-        {"id": "hall", "tag": [0.25, 0.42], "name": "传功堂", "description": "堂中供着本门青云剑诀的传承玉简，可回静室研习；执事也发给弟子几门入门功法的玉简，领回静室慢慢参悟。他派神通不在此传授。", "actions": ["study", "teach"], "requires_flag": "intro_done", "teach": ["t:breath:wood:1::0", "t:body:earth:1::5", "t:focus:water:1::10", "t:bolt:metal:1::15"]}
+        {"id": "chamber", "tag": [0.32, 0.29], "name": "静室", "description": "外门弟子的静修之所，灵气清润，可闭关、领悟功法、休整与突破；角落里有一口公用丹炉，也可开炉炼丹。", "actions": ["cultivate", "rest", "breakthrough", "alchemy"], "requires_affiliation": "qingyun"},
+        {"id": "office", "tag": [0.53, 0.35], "name": "执事堂", "description": "执事们在这里张贴宗门的委托，按时完成可得酬劳与贡献；月俸、晋升、兑换与捐献也在这里办理。", "actions": ["commissions", "sect"], "requires_affiliation": "qingyun"},
+        {"id": "abode", "tag": [0.3, 0.12], "name": "洞府", "description": "内门弟子各有一处洞府，石门后是静修的石室，门外辟出一方灵田，引了山泉浇灌。", "actions": ["field"], "requires_affiliation": "qingyun", "requires_rank": "inner"},
+        {"id": "arena", "tag": [0.42, 0.5], "name": "演武坪", "description": "青石铺就的演武坪，同门常在此切磋。平日有人摆擂，连胜榜挂在坪边。", "actions": ["battle:disciple", "arena"], "requires_affiliation": "qingyun"},
+        {"id": "recruit", "tag": [0.62, 0.62], "name": "接引台", "description": "山门外的接引台，执事弟子轮值于此，验看来人的灵根与心性。青云剑宗常年收徒：拜入后可入静室修行、在执事堂领差事与月俸、在传功堂得本门传承，也要守宗门的规矩。", "actions": ["join_sect"], "not_affiliation": "qingyun"},
+        {"id": "hall", "tag": [0.25, 0.42], "name": "传功堂", "description": "堂中供着本门青云剑诀的传承玉简，可回静室研习；执事也发给弟子几门入门功法的玉简，领回静室慢慢参悟。他派神通不在此传授。", "actions": ["study", "teach"], "requires_affiliation": "qingyun", "teach": ["t:breath:wood:1::0", "t:body:earth:1::5", "t:focus:water:1::10", "t:bolt:metal:1::15"]}
       ]
     },
     "town": {
@@ -33,7 +34,7 @@
       "terrain": "town",
       "map": [0.4, 0.42],
       "spots": [
-        {"id": "inn", "tag": [0.11, 0.4], "name": "青石客栈", "description": "掌柜识得修士，备有净室与药膳。花几块灵石便能好好歇上一日。", "actions": ["inn_rest"]},
+        {"id": "inn", "tag": [0.11, 0.4], "name": "青石客栈", "description": "掌柜识得修士，备有药膳与后院静房。歇一日几块灵石；静房按月计钱，可闭关、领悟与突破，只是灵气比不得宗门静室。", "actions": ["inn_rest", "cultivate", "breakthrough"], "lodging": {"rate": 0.8, "rent": 6}},
         {"id": "teahouse", "tag": [0.35, 0.44], "name": "听雨茶馆", "description": "说书先生醒木一拍，南来北往的消息都汇在这里。", "actions": ["inquire"]},
         {"id": "palisade", "tag": [0.66, 0.58], "name": "镇口木栅", "description": "镇口的木栅新旧相间，补过不止一回。商队在这里雇修士护送；落霞谷闹兽潮的年头，镇上也在这里求修士帮忙守镇。", "actions": ["series"]}
       ]
@@ -83,7 +84,8 @@
       },
       "spots": [
         {"id": "street", "tag": [0.46, 0.5], "name": "长街", "description": "丹铺、器铺与散修地摊挤满长街。丹铺明码标价。", "actions": ["shop", "forge", "inquire", "commissions"]},
-        {"id": "pharmacy", "tag": [0.27, 0.38], "name": "云溪药铺", "description": "沈墨的药铺，收购各色灵草，出价公道。后堂有一口药炉，熟客可付些灵石借用，沈墨还会在旁提点。", "actions": ["sell", "alchemy"]}
+        {"id": "pharmacy", "tag": [0.27, 0.38], "name": "云溪药铺", "description": "沈墨的药铺，收购各色灵草，出价公道。后堂有一口药炉，熟客可付些灵石借用，沈墨还会在旁提点。", "actions": ["sell", "alchemy"]},
+        {"id": "inn", "tag": [0.67, 0.6], "name": "云来客栈", "description": "长街尽头的老字号客栈，来赶集会的散修多在这里落脚。后院有几间静房按月出租，可闭关、领悟与突破。", "actions": ["inn_rest", "cultivate", "breakthrough"], "lodging": {"rate": 0.8, "rent": 8}}
       ]
     },
     "ridge": {
@@ -822,6 +824,7 @@
         }, "guard_orbs": 1, "foe_draw": [5, 5, 5, 5, 5], "generates": {"metal": "water", "water": "wood", "wood": "fire", "fire": "earth", "earth": "metal"},
         "starter": {"metal": ["sword", "seal_metal"], "wood": ["vine", "seal_wood"], "water": ["water", "seal_water"], "fire": ["flame_bolt", "seal_fire"], "earth": ["earth", "seal_earth"]}},
     "lineage": {"home": "qingyun", "study_days": 30},
+    "opening": {"location": "town", "story": "rushi", "keepsake": "jingbei_tongpian"},
     "letters": {"kept": 60},
     "requests": {"period_days": 180, "chance": 0.25, "items": ["huichun_grass", "ninglu_grass", "chiyan_flower", "huiqi_pill", "liaoshang_pill"], "count": [1, 3], "favor": 12, "mind": 2, "reward_scale": 1.5},
     "inquire": {"days": 1, "price": 2, "repeat_after_days": 90},
@@ -909,7 +912,7 @@
     "search_ruin": 5,
     "road_recovery": 1
   },
-  "world_flags": ["ascension_open", "calamity", "calamity_turned", "chenxia_open", "chenxia_puppet_down", "chenxia_remnant_down", "ruin_den_cleared", "serpent_slain", "heard_auction_rumor", "found_ruin", "ruin_cleared", "helped_wanderer", "serpent_rampage", "azhi_promised", "azhi_mourned", "intro_done", "peddler_friend", "serpent_weakened", "spirit_eye_found", "tiannan_known", "dihuo_lizard_down", "hanjin_heard", "bounty_turned_in", "bounty_exposed", "bounty_let_go", "nanming_abode", "valley_patron", "azhi_livelihood", "valley_remembered", "azhi_route_ready", "azhi_route_recipe", "medicine_relief", "medicine_order", "exam_patrol", "exam_alchemy", "exam_mediation", "exam_azhi_heard", "exam_shen_heard", "south_gate_known", "south_road_known", "furnace_review_open", "furnace_evidence", "furnace_trace", "furnace_witness"],
+  "world_flags": ["rushi_inn", "lu_owes", "rushi_gate", "rushi_fair", "rushi_auction", "mirror_seen", "rushi_qianlong", "rushi_banquet", "heard_qingyun_recruit", "tianhe_seen", "ascension_open", "calamity", "calamity_turned", "chenxia_open", "chenxia_puppet_down", "chenxia_remnant_down", "ruin_den_cleared", "serpent_slain", "heard_auction_rumor", "found_ruin", "ruin_cleared", "helped_wanderer", "serpent_rampage", "azhi_promised", "azhi_mourned", "rushi_done", "peddler_friend", "serpent_weakened", "spirit_eye_found", "tiannan_known", "dihuo_lizard_down", "hanjin_heard", "bounty_turned_in", "bounty_exposed", "bounty_let_go", "nanming_abode", "valley_patron", "azhi_livelihood", "valley_remembered", "azhi_route_ready", "azhi_route_recipe", "medicine_relief", "medicine_order", "exam_patrol", "exam_alchemy", "exam_mediation", "exam_azhi_heard", "exam_shen_heard", "south_gate_known", "south_road_known", "furnace_review_open", "furnace_evidence", "furnace_trace", "furnace_witness"],
   "sects": {
     "wanderer": {
       "name": "散修",

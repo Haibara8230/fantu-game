@@ -10,17 +10,17 @@ const Events = preload("res://scripts/core/events.gd")
 static func candidates(s) -> Array[Dictionary]:
 	var found: Array[Dictionary] = []
 	var day := int(s.world.day)
-	var auction_from := Calendar.to_day(4, 1, 1)
-	var auction_to := Calendar.to_day(5, 4, 30)
-	if day >= auction_from and day <= auction_to and not s.has_flag("heard_auction_rumor"):
-		found.append({"key": "auction", "id": "rumor_auction", "args": {}})
+	# The autumn auction at 云溪, in the two months before it opens.
+	var autumn: Dictionary = Events.next_window(s.content.events.yunxi_autumn, day)
+	if not autumn.is_empty() and int(autumn.from) - day <= 2 * Calendar.DAYS_PER_MONTH:
+		found.append({"key": "auction:%d" % int(autumn.occurrence), "id": "rumor_auction", "args": {}})
 	if not s.has_flag("found_ruin"):
 		found.append({"key": "ruin", "id": "rumor_ruin", "args": {}})
 	if s.has_flag("serpent_rampage"):
 		found.append({"key": "sealed", "id": "rumor_sealed", "args": {}})
 	elif not s.has_flag("serpent_slain") and day < Calendar.to_day(6, 3, 1):
 		found.append({"key": "serpent", "id": "rumor_serpent", "args": {}})
-	var tournament: Dictionary = Events.next_window(s.content.events.sect_tournament, day)
+	var tournament: Dictionary = Events.next_window(s.content.events.qianlong_entry, day)
 	if not tournament.is_empty() and int(tournament.from) - day <= 2 * Calendar.DAYS_PER_YEAR:
 		found.append({"key": "tournament:%d" % int(tournament.occurrence), "id": "rumor_tournament", "args": {}})
 	for good: Dictionary in s.rotating_stock("market"):
@@ -65,6 +65,4 @@ static func inquire(s) -> String:
 		return s.conclude(s.log_event("rumor_none"), passed)
 	var rumor: Dictionary = heard[s.world_rng.randi_range(0, heard.size() - 1)]
 	s.world.rumors[rumor.key] = int(s.world.day)
-	if rumor.key == "auction":
-		s.world.flags.heard_auction_rumor = true
 	return s.conclude(s.log_event(rumor.id, rumor.args), passed)

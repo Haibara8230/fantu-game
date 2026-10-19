@@ -91,7 +91,10 @@ static func block(s, plan: Dictionary) -> String:
 	if need.is_empty():
 		return "后续境界尚未开放。"
 	if not s.available_here("breakthrough"):
-		return "此地无法闭关突破，请回青云山静室。"
+		return "此地无法闭关突破：客栈静房、宗门静室或洞府里才能冲关。"
+	var rent: String = s.Cultivation.rent_block(s, s.content.action_days("breakthrough"))
+	if not rent.is_empty():
+		return rent
 	var last_stage: int = s.content.realm(int(s.player.realm)).stages.size() - 1
 	if int(s.player.stage) < last_stage or int(s.player.xp) < int(need.xp):
 		return "突破需修至%s，并有 %d 修为。" % [s.content.realm_title(int(s.player.realm), last_stage), int(need.xp)]
@@ -279,6 +282,7 @@ static func resolve(s, told: String) -> String:
 	var attempt_state: Dictionary = s.player.get("attempt", {})
 	s.player.erase("attempt")
 	var passed: Dictionary = s.advance_days(s.content.action_days("breakthrough"))
+	s.Cultivation.pay_rent(s, int(passed.elapsed))
 	if not s.ended.is_empty():
 		return s.conclude(told, passed)
 	var texts: Array[String] = []

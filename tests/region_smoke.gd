@@ -136,7 +136,7 @@ func _tiannan() -> void:
 	check(game.travel("nanming") == "未知地点。", "天南 is unknown at first")
 	game.player.realm = 1
 	game.refresh_realm_stats()
-	game.world.flags.intro_done = true
+	game.world.flags.rushi_done = true
 	game.wait(1)
 	check(game.story_state("south_journey") == "active", "after foundation 顾长庚 has word of the south")
 	var waited := 0
@@ -341,7 +341,11 @@ func _scenes() -> void:
 	var day := int(game.world.day)
 	game.act("inn_rest")
 	check(int(game.player.hp) == int(game.player.max_hp) and int(game.player.stones) == stones - 5 and int(game.world.day) == day + 1, "the inn heals for five stones and a day")
-	check(game.cultivate(30) == "此地无法闭关，请回青云山静室。" and game.choose_sect("chixiao").contains("静室"), "retreat and study need their scenes")
+	# The inn lets its 静房 by the month: one may retreat there, at a lower rate, for the rent.
+	var town_rate: int = game.cultivation_rate()
+	var stayed := game.cultivate(30)
+	check(stayed.contains("房钱 6 灵石") and town_rate < int(round(float(game.content.rules.cultivate_xp) * game.cultivation_speed())), "the inn's 静房 lets one retreat, for its rent and at a lower rate")
+	check(game.choose_sect("chixiao").contains("静室"), "the lineage still needs the sect's chamber")
 
 func _ruin() -> void:
 	var game := _game(9)
@@ -361,8 +365,14 @@ func _ruin() -> void:
 	game.act("search_ruin")
 	check(int(game.player.stones) + int(game.herb_count()) + int(game.item_count("foundation_pill")) > before, "searching the stone room finds something")
 	check(game.act("search_ruin").contains("后再来"), "the stone room needs time before another search")
-	game.wait(90)
-	check(not game.act("search_ruin").contains("后再来"), "searchable again after the cooldown")
+	# A dated event may cut a wait short; wait out the whole cooldown.
+	var searched_day := int(game.world.day)
+	while int(game.world.day) < searched_day + 90:
+		game.wait(searched_day + 90 - int(game.world.day))
+		if not game.pending_event.is_empty():
+			game.choose_event(str(game.pending_definition().choices[0].id))
+	var again: String = game.act("search_ruin")
+	check(not again.contains("后再来"), "searchable again after the cooldown (%s)" % again)
 	var trail := _game(10)
 	trail.player.realm = 1
 	trail.refresh_realm_stats()

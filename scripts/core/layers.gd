@@ -11,6 +11,7 @@ extends RefCounted
 ## Everyone else (generated people, opponents) holds their techniques at the cap of their realm.
 
 const Arsenal = preload("res://scripts/core/arsenal.gd")
+const Cultivation = preload("res://scripts/core/cultivation.gd")
 
 ## Tenths of a day, so practice stays whole and a long retreat equals several short ones.
 const TENTHS := 10
@@ -122,12 +123,13 @@ static func after_breakthrough(s) -> Array[String]:
 		lines.append_array(practise(s, technique_id, 0))
 	return lines
 
-## 领悟 — a layer, a 玉简, the lineage — is done in seclusion: where one can retreat (静室, 洞府, a let
-## dwelling), as in the retreat scroll's 领悟 page. Why not here, or "".
-static func seclusion_block(s) -> String:
+## 领悟 — a layer, a 玉简, the lineage — is done in seclusion: where one can retreat (客栈静房, 静室,
+## 洞府, a let dwelling), as in the retreat scroll's 领悟 page; a room let by the day asks its rent for
+## the `days`. Why not here, or "".
+static func seclusion_block(s, days: int = 0) -> String:
 	if not s.available_here("cultivate"):
-		return "领悟须在静室、洞府等可闭关之处，于闭关卷轴的「领悟」页进行。"
-	return ""
+		return "领悟须在客栈静房、静室、洞府等可闭关之处，于闭关卷轴的「领悟」页进行。"
+	return Cultivation.rent_block(s, days) if days > 0 else ""
 
 ## What 参悟 of the next layer costs now: {"days", "stones"}; the days are those still missing.
 static func comprehend_cost(s, technique_id: String) -> Dictionary:
@@ -149,10 +151,10 @@ static func comprehend_block(s, technique_id: String) -> String:
 		return "以眼下境界只能修到第 %d 层；%s可修满。" % [layer, s.content.realm(int(t.min_realm)).name]
 	if not s.battle.is_empty():
 		return "斗法中无法参悟。"
-	var quiet := seclusion_block(s)
+	var cost := comprehend_cost(s, technique_id)
+	var quiet := seclusion_block(s, int(cost.days))
 	if not quiet.is_empty():
 		return quiet
-	var cost := comprehend_cost(s, technique_id)
 	if int(s.player.stones) < int(cost.stones):
 		return "参悟第 %d 层须耗灵石 %d，灵石不足。" % [layer + 1, int(cost.stones)]
 	return s.blocked()
@@ -165,6 +167,7 @@ static func comprehend(s, technique_id: String) -> String:
 	var cost := comprehend_cost(s, technique_id)
 	s.player.stones = int(s.player.stones) - int(cost.stones)
 	var passed: Dictionary = s.advance_days(int(cost.days))
+	Cultivation.pay_rent(s, int(passed.elapsed))
 	if not s.ended.is_empty():
 		return s.conclude("", passed)
 	var t: Dictionary = s.content.technique(technique_id)

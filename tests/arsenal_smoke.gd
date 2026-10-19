@@ -288,12 +288,17 @@ func _effects() -> void:
 func _teaching_and_stock() -> void:
 	var game := _game()
 	game.encounters_enabled = false
-	game.travel("town")
+	game.travel("ridge")
 	check(game.teachings().is_empty(), "nothing is taught outside the sect")
 	check(game.take_slip("t:breath:wood:1::0") == "这里不传授此法。", "slips come from the hall")
 	game.add_item("j:t:breath:wood:1::0", 1)
 	check(game.study_manual("j:t:breath:wood:1::0").contains("静室") and game.item_count("j:t:breath:wood:1::0") == 1, "a slip is not studied on the road: 领悟 needs seclusion")
 	check(game.comprehend("sword").contains("静室"), "nor is a layer")
+	# A room let by the month at the inn will do, for its rent.
+	game.travel("town")
+	var rent_from := int(game.player.stones)
+	var studied := game.study_manual("j:t:breath:wood:1::0")
+	check("t:breath:wood:1::0" in game.player.learned and int(game.player.stones) < rent_from, "in the inn's 静房 a slip is studied, the room paid for (%s)" % studied.left(30))
 	game.travel("sect")
 	check(game.available_here("teach"), "the sect's 传功堂 teaches")
 	check(game.teachings().size() == 4, "four entry techniques are taught")

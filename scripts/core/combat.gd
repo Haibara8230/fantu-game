@@ -73,41 +73,15 @@ static func begin_spar(s, person_id: String) -> void:
 	open_hand(s)
 	s.log_event("spar_start", {"npc": person_id})
 
-## Why the player cannot enter the 外门小比 at the arena now, or "".
-static func tournament_block(s) -> String:
-	var reason: String = s.blocked()
-	if not reason.is_empty():
-		return reason
-	if not s.available_here("tournament"):
-		return "须到青云山演武坪报名。"
-	var definition: Dictionary = s.content.events.tournament_entry
-	var window: Dictionary = s.Events.window_at(definition, int(s.world.day))
-	if window.is_empty():
-		return "外门小比于%s开始报名。" % s.Calendar.date_text(int(s.Events.next_window(definition, int(s.world.day)).from))
-	if not s.Events.open_for(s, "tournament_entry", window, int(s.world.day)):
-		return "这一届外门小比已经报过名或观过战了。"
-	return ""
-
-## Enters the 外门小比 at the arena: the first round begins at once.
-static func enter_tournament(s) -> String:
-	var reason := tournament_block(s)
-	if not reason.is_empty():
-		return reason
-	var definition: Dictionary = s.content.events.tournament_entry
-	s.Events.mark_fired(s, "tournament_entry", s.Events.window_at(definition, int(s.world.day)), int(s.world.day))
-	var text: String = s.log_event("tournament_enter")
-	begin_tournament(s, 1)
-	return s.finish(text)
-
-## A tournament round against the sect's outer disciples present, weakest first.
+## A round of 潜龙会 against the 炼气 cultivators of the region present, weakest first.
 static func begin_tournament(s, round: int) -> void:
-	var disciples: Array = s.present_npcs().filter(func(person_id: String) -> bool: return s.is_generated(person_id) and s.person(person_id).kind == "disciple")
+	var disciples: Array = s.present_npcs().filter(func(person_id: String) -> bool: return s.is_generated(person_id) and int(s.person(person_id).realm) == 0)
 	disciples.sort_custom(func(a: String, b: String) -> bool:
 		var ra := int(s.person(a).realm) * 10 + int(s.person(a).stage)
 		var rb := int(s.person(b).realm) * 10 + int(s.person(b).stage)
 		return ra < rb or (ra == rb and a < b))
 	if disciples.is_empty():
-		begin_battle(s, "disciple", "event")
+		begin_battle(s, "cultivator", "event")
 		s.battle.context = "tournament"
 		s.battle.round = round
 		return
@@ -1482,9 +1456,12 @@ static func _lose(s) -> String:
 		s.Feuds.fight_over(s, grudge_id, false)
 	var lost := mini(int(s.player.stones), 10)
 	s.player.stones -= lost
-	s.player.location = "sect"
+	# A disciple is carried back to the sect; a wanderer to the nearest inn (rules.opening.location when
+	# the place has none).
+	var member: bool = s.Sect.member(s)
+	s.player.location = "sect" if member else (str(s.player.location) if s.available_here("inn_rest") else str(s.content.rules.opening.location))
 	s.player.journey = {}
-	var message: String = (s.Series.abandon(s) + " " + s.log_event("battle_defeat", {"lost": lost})).strip_edges()
+	var message: String = (s.Series.abandon(s) + " " + s.log_event("battle_defeat" if member else "battle_defeat_wanderer", {"lost": lost, "location": s.player.location})).strip_edges()
 	var passed: Dictionary = s.advance_days(s.content.action_days("battle_defeat"))
 	# The wounds outlast the days spent being carried home.
 	_wound(s, int(rules(s).get("defeat_wound_days", 12)), int(rules(s).get("defeat_injury_days", 10)))
@@ -1574,19 +1551,21 @@ static func _tournament_over(s, won: bool) -> String:
 		var out: String = s.log_event("tournament_out", {"round": round, "npc": npc})
 		return s.conclude(_with_milestones(out, s.gain_insight("spar")), s.advance_days(s.content.action_days("road_recovery")))
 	var message: String = _with_milestones(s.log_event("tournament_round", {"round": round, "npc": npc}), s.gain_insight("spar"))
-	message += " " + s.Sect.gain(s, int(s.content.sect_data.awards.get("tournament_round", 0)), "小比胜了一轮")
+	message += " " + s.Sect.gain(s, int(s.content.sect_data.awards.get("tournament_round", 0)), "潜龙会胜了一轮")
 	if round < 3:
 		s.player.hp = mini(int(s.player.max_hp), int(s.player.hp) + int(s.player.max_hp) * 3 / 10)
 		s.player.qi = mini(int(s.player.max_qi), int(s.player.qi) + int(s.player.max_qi) * 3 / 10)
 		s.begin_tournament(round + 1)
 		s.changed.emit()
 		return message + " 下一轮开始。"
+	# 潜龙会's prize prepares a foundation: a slip, stones and a 筑基丹 (docs/GAME_OUTLINE.md 4.5).
 	var prize: String = "j:" + s.Arsenal.generate_technique(s.content, s.world_rng, 2, {"slot": "art"})
 	s.add_item(prize, 1)
+	s.add_item("foundation_pill", 1)
 	s.player.stones += 100
 	message += " " + s.log_event("tournament_champion", {"stones": 100, "xp": 150, "item": prize}, true)
 	s.record_deed("tournament_champion")
-	message += " " + s.Sect.gain(s, int(s.content.sect_data.awards.get("tournament_champion", 0)), "外门小比夺魁")
+	message += " " + s.Sect.gain(s, int(s.content.sect_data.awards.get("tournament_champion", 0)), "潜龙会夺魁")
 	message = _with_milestones(message, s.gain_xp(150))
 	message = _with_milestones(message, s.congratulate("champion"))
 	return s.conclude(message, s.advance_days(s.content.action_days("road_recovery")))

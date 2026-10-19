@@ -232,7 +232,7 @@ func _saves() -> void:
 	var qi := Session.new()
 	check(qi.restore(JSON.parse_string(FileAccess.get_file_as_string("res://tests/fixtures/v5_qi_market.json"))), "v5 save migrates")
 	_untalented(qi)
-	check(qi.player.roots == ["metal", "wood", "fire"] and qi.player.stage == 0 and qi.cultivation_rate() == 60, "old journeys keep an ordinary three-element root")
+	check(qi.player.roots == ["metal", "wood", "fire"] and qi.player.stage == 0 and int(round(float(qi.content.rules.cultivate_xp) * qi.cultivation_speed())) == 60, "old journeys keep an ordinary three-element root")
 	var base := Session.new()
 	check(base.restore(JSON.parse_string(FileAccess.get_file_as_string("res://tests/fixtures/v5_foundation_ridge.json"))) and base.realm_name() == "筑基初期", "v5 foundation save keeps its realm")
 	_untalented(base)
@@ -286,23 +286,23 @@ func _items() -> void:
 	game.player.items.clear()
 	game.set_item_count("huichun_grass", 3)
 	game.set_item_count("chiyan_flower", 2)
-	game.set_item_count("auction_invitation", 1)
+	game.set_item_count("jingbei_tongpian", 1)
 	var stones := int(game.player.stones)
 	var flower: int = game.sell_price("chiyan_flower")
 	game.sell("chiyan_flower", 1)
 	check(int(game.player.stones) == stones + flower and flower >= 7 and flower <= 11 and game.item_count("chiyan_flower") == 1, "each herb sells at its own price, give or take the month (%d)" % flower)
 	var rest: int = game.sell_price("chiyan_flower") + 3 * game.sell_price("huichun_grass")
 	game.act("sell")
-	check(int(game.player.stones) == stones + flower + rest and game.herb_count() == 0 and game.item_count("auction_invitation") == 1, "selling everything keeps what the shop does not buy")
+	check(int(game.player.stones) == stones + flower + rest and game.herb_count() == 0 and game.item_count("jingbei_tongpian") == 1, "selling everything keeps what the shop does not buy")
 	# 坊市行情: a glut lowers a herb's price, which recovers with time; the month moves it too.
 	var glutted: int = game.sell_price("huichun_grass")
 	game.set_item_count("huichun_grass", 20)
 	game.sell("huichun_grass", 20)
 	check(game.Inventory.glut(game, "huichun_grass") > 20.0 and game.sell_price("huichun_grass") < glutted, "selling a heap lowers the price")
 	var month_start := int(game.world.day)
-	game.wait(10)
-	game.wait(10)
-	game.wait(10)
+	for step: int in 3:
+		game.wait(10)
+		_watch(game)
 	check(game.Inventory.glut(game, "huichun_grass") < 20.0, "and the glut eases with the days")
 	var copy := Session.new()
 	check(copy.restore(JSON.parse_string(JSON.stringify(game.snapshot()))) and copy.sell_price("huichun_grass") == game.sell_price("huichun_grass"), "the market's memory survives a save")
@@ -351,7 +351,7 @@ func _items() -> void:
 	check(Session.Chronicle.loot_text(game.loot_code({slip: 2, bell: 1}), game.content) == "%s×2、%s" % [game.content.item(slip).name, game.content.item(bell).name], "generated loot keeps its name and count")
 	var old := Session.new()
 	check(old.restore(JSON.parse_string(FileAccess.get_file_as_string("res://tests/fixtures/v6_herbs_pills.json"))), "v6 save migrates")
-	check(old.item_count("huichun_grass") >= 9 and old.item_count("foundation_pill") == 2 and old.item_count("auction_invitation") == 1 and not old.player.has("herbs"), "herbs and pills become items")
+	check(old.item_count("huichun_grass") >= 9 and old.item_count("foundation_pill") == 2 and not old.player.has("herbs"), "herbs and pills become items")
 
 func _broken(change: Callable) -> String:
 	var content := Content.new()
@@ -480,3 +480,10 @@ func _sword(game) -> String:
 		game.player.arts.append("sword")
 	game.battle.orbs.append_array(["metal", "metal"])
 	return game.use_skill("sword")
+
+## 云溪's own occasions (潜龙会, the autumn auction) ask a choice of whoever stays there: watch.
+func _watch(game) -> void:
+	while not game.pending_event.is_empty():
+		var choices: Array = game.pending_definition().get("choices", [])
+		var pick: Array = choices.filter(func(choice: Dictionary) -> bool: return choice.id == "watch")
+		game.choose_event(str((pick if not pick.is_empty() else choices)[0].id))

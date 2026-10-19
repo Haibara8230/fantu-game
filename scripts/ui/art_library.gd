@@ -14,8 +14,10 @@ static func fullscreen_location_path(location_id: String) -> String:
 	var path := ROOT + "locations/%s_fullscreen.png" % location_id
 	return path if ResourceLoader.exists(path) else location_path(location_id)
 
+## A spot's picture; data/art.json `scene_art` lends one scene's picture to another until it has its own.
 static func scene_path(location_id: String, spot_id: String) -> String:
-	return ROOT + "scenes/%s_%s.png" % [location_id, spot_id]
+	var key := "%s_%s" % [location_id, spot_id]
+	return ROOT + "scenes/%s.png" % str(_config().get("scene_art", {}).get(key, key))
 
 ## The imported texture at `path`, or null when that art has not been added yet.
 static func texture(path: String) -> Texture2D:

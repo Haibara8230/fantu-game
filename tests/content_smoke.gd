@@ -139,8 +139,8 @@ func _story_check(content) -> void:
 	planted.items["planted_relic"] = {"id": "planted_relic", "name": "无源遗物", "category": "quest", "price": 0, "description": "测试"}
 	planted.storylines["planted"] = {"title": "测试剧情", "giver": "xu_qinghe", "steps": [
 		{"id": "stuck", "goal": "没有完成方式"},
-		{"id": "odd", "requires": [{"flag": "never_set_anywhere"}, {"flag": "intro_done"}, {"not": {"flag": "intro_done"}}],
-			"done": [{"relation_at_least": ["shen_mo", Content.FAVOR_MAX + 1]}, {"item_at_least": ["planted_relic", 1]}, {"story_at": ["intro", "no_such_step"]}, {"met": "nobody_here"}]}]}
+		{"id": "odd", "requires": [{"flag": "never_set_anywhere"}, {"flag": "rushi_done"}, {"not": {"flag": "rushi_done"}}],
+			"done": [{"relation_at_least": ["shen_mo", Content.FAVOR_MAX + 1]}, {"item_at_least": ["planted_relic", 1]}, {"story_at": ["rushi", "no_such_step"]}, {"met": "nobody_here"}]}]}
 	planted.people.xu_qinghe.interactions.append({"id": "planted_gift", "label": "白送灵石", "conditions": [], "effects": [{"stones": 50}], "chronicle": "测试"})
 	for choice: Dictionary in planted.events.south_return_routes.choices:
 		choice.effects = []
@@ -154,7 +154,7 @@ func _story_check(content) -> void:
 	check(said.call("错误", "没有入口"), "a storyline nobody starts is found")
 	check(said.call("错误", "这一步无法完成"), "a step with no way to complete is found")
 	check(said.call("错误", "never_set_anywhere"), "a condition on a flag nothing sets is found")
-	check(said.call("错误", "同时要求有和没有旗标 intro_done"), "a list asking for a flag and its absence is found")
+	check(said.call("错误", "同时要求有和没有旗标 rushi_done"), "a list asking for a flag and its absence is found")
 	check(said.call("错误", "超过上限"), "a favor beyond the maximum is found")
 	check(said.call("错误", "无源遗物"), "an item a story needs with no source is found")
 	check(said.call("错误", "没有步骤 no_such_step"), "a step that does not exist is found")

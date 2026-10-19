@@ -151,6 +151,10 @@ static func restore(s, data: Variant) -> bool:
 	var letters: Variant = _valid_letters(content, saved_world.get("letters", []), day)
 	var deeds: Variant = _valid_counts(saved_player.get("deeds", {}))
 	var taught: Variant = saved_player.get("taught", [])
+	# The sect one belongs to ("" for a wanderer); journeys from before it were all 青云 disciples.
+	var affiliation: Variant = saved_player.get("affiliation", str(content.rules.lineage.home))
+	if not affiliation is String or (not affiliation.is_empty() and (not content.sects.has(affiliation) or affiliation == "wanderer")):
+		return false
 	if storylines == null or letters == null or deeds == null or not taught is Array or taught.any(func(tip: Variant) -> bool: return not tip is String):
 		return false
 	# An attempt waits on 心魔 while its choice is pending or its duel is fought.
@@ -347,6 +351,7 @@ static func restore(s, data: Variant) -> bool:
 	player.quests = quests
 	player["deeds"] = deeds
 	player["taught"] = taught.duplicate()
+	player["affiliation"] = affiliation
 	player["talents"] = born.talents.duplicate()
 	player["flaws"] = born.flaws.duplicate()
 	for key: String in progress:

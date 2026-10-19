@@ -75,6 +75,10 @@ func _scan_code() -> void:
 	var starts := RegEx.create_from_string('(?:Storylines\\.start|start_story)\\([^)]*"([a-z0-9_]+)"')
 	for found: RegExMatch in starts.search_all(code_text):
 		code_starts[found.get_string(1)] = true
+	# The opening storyline a new journey starts with (session.gd new_game, data/world.json rules.opening).
+	var opening := str(content.rules.get("opening", {}).get("story", ""))
+	if not opening.is_empty():
+		code_starts[opening] = true
 
 func _read_scripts(path: String, into: Array[String]) -> void:
 	var dir := DirAccess.open(path)

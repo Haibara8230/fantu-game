@@ -93,63 +93,6 @@
       }
     ]
   },
-  "auction_rumor": {
-    "title": "坊间传言",
-    "trigger": "location",
-    "location": "market",
-    "priority": 5,
-    "window": {"from": [4, 1, 1], "to": [5, 4, 30]},
-    "conditions": [{"not": {"flag": "heard_auction_rumor"}}],
-    "effects": [{"flag": "heard_auction_rumor"}],
-    "chronicle": "坊间传言：明年三四月间，云溪坊市将有一场不对外的拍卖，须持请柬，或经熟人引荐方可入场。"
-  },
-  "sect_invitation": {
-    "title": "宗门请柬",
-    "trigger": "location",
-    "location": "sect",
-    "priority": 10,
-    "window": {"from": [4, 1, 1], "to": [5, 2, 30]},
-    "conditions": [{"realm_at_least": 1}],
-    "effects": [{"item": ["auction_invitation", 1]}],
-    "chronicle": "执事将一封烫金请柬交到你手中：云溪坊市来年春日有一场特殊拍卖，宗门为筑基弟子各留一席。"
-  },
-  "special_auction": {
-    "title": "云溪特殊拍卖",
-    "trigger": "location",
-    "location": "market",
-    "priority": 30,
-    "key": true,
-    "window": {"from": [5, 3, 1], "to": [5, 4, 30]},
-    "conditions": [
-      {"any": [
-        {"all": [{"realm_at_least": 1}, {"item_at_least": ["auction_invitation", 1]}]},
-        {"relation_at_least": ["shen_mo", 40]}
-      ]}
-    ],
-    "effects": [{"take_item": "auction_invitation"}],
-    "text": "朱漆小楼里灯火通明，来客皆以帷帽遮面。今日的拍品挂在帘后，听说有灵药、丹药，也有前人留下的玉简与宝物。",
-    "choices": [
-      {
-        "id": "enter",
-        "label": "入座竞拍",
-        "effects": [{"auction": "yunxi_special"}],
-        "chronicle": "你在云溪特殊拍卖入了座。"
-      },
-      {
-        "id": "watch",
-        "label": "只看不买",
-        "chronicle": "你在云溪特殊拍卖中旁观了一场，见识了各方修士的手笔。"
-      }
-    ],
-    "remind": {
-      "conditions": [{"any": [{"flag": "heard_auction_rumor"}, {"item_at_least": ["auction_invitation", 1]}]}],
-      "chronicle": "云溪坊市的特殊拍卖已经开场，至四月末为止。"
-    },
-    "expire": {
-      "conditions": [{"any": [{"flag": "heard_auction_rumor"}, {"item_at_least": ["auction_invitation", 1]}]}],
-      "chronicle": "云溪特殊拍卖已经落幕。听说压轴的拍品被一位外来散修高价拍走。"
-    }
-  },
   "night_market": {
     "title": "云溪夜市",
     "trigger": "location",
@@ -170,20 +113,6 @@
         "chronicle": "你在云溪夜市闲逛半夜，看尽灯火。"
       }
     ]
-  },
-  "sect_tournament": {
-    "title": "外门小比",
-    "trigger": "date",
-    "priority": 5,
-    "periodic": {"start_year": 10, "every_years": 10, "month": 6, "from_day": 1, "to_day": 1},
-    "chronicle": "青云剑宗外门小比今日开始报名，至六月十五日为止，到青云山演武坪即可报名。"
-  },
-  "tournament_notice": {
-    "title": "小比告示",
-    "trigger": "date",
-    "priority": 5,
-    "periodic": {"start_year": 10, "every_years": 10, "month": 5, "from_day": 1, "to_day": 1},
-    "chronicle": "青云山执事堂贴出告示：外门小比将于六月一日至十五日在演武坪报名，三轮斗法，点到为止，头名可得宗门赏赐的功法玉简。"
   },
   "road_wolf": {
     "title": "山道妖狼",
@@ -533,19 +462,6 @@
       {"id": "watch", "label": "在台下观战", "chronicle": "你在台下看完了这一届五宗论道。"}
     ]
   },
-  "tournament_entry": {
-    "title": "外门小比",
-    "trigger": "location",
-    "location": "sect",
-    "priority": 25,
-    "listed": true,
-    "periodic": {"start_year": 10, "every_years": 10, "month": 6, "from_day": 1, "to_day": 15},
-    "text": "演武坪上旌旗招展，十年一度的外门小比开始报名。三轮斗法，点到为止，头名可得宗门赏赐的功法玉简。",
-    "choices": [
-      {"id": "enter", "label": "报名参赛", "effects": [{"tournament": true}], "chronicle": "你报名参加了外门小比。"},
-      {"id": "watch", "label": "在台下观战", "chronicle": "你在台下观看了这一届外门小比。"}
-    ]
-  },
   "azhi_father": {
     "title": "阿芷的心事",
     "trigger": "location",
@@ -667,13 +583,13 @@
     "chronicle": "何三更说起青云山外门又出了一位筑基修士，醒木一拍：“此人便坐在诸位当中！”茶客们纷纷回头。"
   },
   "tale_champion": {
-    "title": "说书 · 小比夺魁",
+    "title": "说书 · 潜龙夺魁",
     "trigger": "location",
     "location": "town",
     "priority": 7,
     "conditions": [{"met": "storyteller"}, {"deed_at_least": ["tournament_champion", 1]}],
     "effects": [{"relation": ["storyteller", 5]}, {"mind": 2}],
-    "chronicle": "何三更把外门小比连胜三轮的事讲得一波三折，你在台下听着，倒像在听别人的故事。"
+    "chronicle": "何三更把潜龙会连胜三轮的事讲得一波三折，你在台下听着，倒像在听别人的故事。"
   },
   "heart_demon": {
     "title": "心魔",
@@ -717,7 +633,7 @@
   "talent_hunyuan": {"title": "混元灵体", "trigger": "location", "location": "sect", "priority": 5, "major": true, "conditions": [{"talent": "hunyuan"}, {"stage_at_least": [0, 2]}], "effects": [{"xp": 250}], "chronicle": "五行灵气在你丹田里自成循环，生生不息。你只是静坐了一日，修为便涨了一截。"},
   "talent_linglong": {"title": "九窍玲珑心", "trigger": "location", "location": "town", "priority": 5, "major": true, "conditions": [{"talent": "linglong"}, {"met": "storyteller"}], "effects": [{"mind": 6}, {"manual": 2}], "chronicle": "何三更讲了一段古修士的故事，满堂只当听个热闹，你却从中悟出几分道理。散场后他拉住你，送你一枚旧玉简：“这东西在我这儿是废物，在你手里不是。”"},
   "talent_bumie": {"title": "不灭之躯", "trigger": "location", "location": "wild", "priority": 5, "major": true, "conditions": [{"talent": "bumie"}], "effects": [{"item": ["liaoshang_pill", 2]}, {"mind": 3}], "chronicle": "你在谷中失足坠下山崖，爬起来竟毫发无伤。崖底石缝里还生着几株疗伤的灵草，你顺手炼成了两枚疗伤丹。"},
-  "talent_wanfa": {"title": "万法亲和", "trigger": "location", "location": "sect", "priority": 5, "major": true, "conditions": [{"talent": "wanfa"}, {"flag": "intro_done"}], "effects": [{"manual": 2}], "chronicle": "传功堂的执事见你看一遍便会，惊得说不出话，私下又多传了你一门功法。"},
+  "talent_wanfa": {"title": "万法亲和", "trigger": "location", "location": "sect", "priority": 5, "major": true, "conditions": [{"talent": "wanfa"}, {"flag": "rushi_done"}], "effects": [{"manual": 2}], "chronicle": "传功堂的执事见你看一遍便会，惊得说不出话，私下又多传了你一门功法。"},
   "shen_mo_recipe": {"title": "沈墨传方", "trigger": "location", "location": "market", "priority": 8, "major": true, "conditions": [{"met": "shen_mo"}, {"relation_at_least": ["shen_mo", 40]}, {"not": {"recipe": "foundation"}}], "effects": [{"recipe": "foundation"}, {"relation": ["shen_mo", 5]}], "chronicle": "沈墨把你让进后堂，从药柜最底层抽出一卷发黄的方子：“筑基丹的方子。百年灵芝为主药，凝露草、赤炎花各一味调和寒热。老夫炼了半辈子，十炉也只成三四炉——你拿去琢磨，后堂的炉子随时借你。”"},
   "talent_danqi": {"title": "丹道奇才", "trigger": "location", "location": "market", "priority": 5, "major": true, "conditions": [{"talent": "danqi"}, {"met": "shen_mo"}], "effects": [{"item": ["foundation_pill", 1]}, {"relation": ["shen_mo", 10]}], "chronicle": "沈墨随手递来一把药渣考你，你闭眼一嗅，把方子背得一味不差。他愣了半晌，从柜底取出一枚筑基丹：“送你。这一行，几十年也出不了一个你这样的。”"},
   "talent_shouyou": {"title": "灵兽之友", "trigger": "location", "location": "ridge", "priority": 5, "major": true, "conditions": [{"talent": "shouyou"}], "effects": [{"item": ["lingzhi", 1]}], "chronicle": "一只白狐在松林里朝你点点头，一路引你到崖下，那里长着一株年份不浅的灵芝。"},
@@ -728,7 +644,7 @@
   "talent_lingqiao_tian": {"title": "天生灵窍", "trigger": "location", "location": "sect", "priority": 5, "major": true, "conditions": [{"talent": "lingqiao_tian"}, {"stage_at_least": [0, 1]}], "effects": [{"xp": 300}], "chronicle": "你周身灵窍自行开阖，一次吐纳，抵得上旁人数日苦修。"},
   "talent_daqiyun": {"title": "大气运", "trigger": "location", "location": "ferry", "priority": 5, "major": true, "conditions": [{"talent": "daqiyun"}, {"met": "boatman"}], "effects": [{"stones": 100}, {"item": ["ningqi_pill", 1]}, {"relation": ["boatman", 10]}], "chronicle": "老艄公一网下去捞起一只沉箱，打开全是旧时的灵石。他非要分你一半：“这是沾了你的光。”"},
   "talent_yinyang": {"title": "阴阳同体", "trigger": "location", "location": "ferry", "priority": 5, "major": true, "conditions": [{"talent": "yinyang"}], "effects": [{"mind": 5}, {"manual": 2}], "chronicle": "渡口的江水一半结冰、一半翻滚，你在岸边看了半日，体内水火二气竟随之流转。回过神来，袖中多了一枚不知谁遗落的玉简。"},
-  "talent_huigen": {"title": "天生慧根", "trigger": "location", "location": "sect", "priority": 5, "major": true, "conditions": [{"talent": "huigen"}, {"flag": "intro_done"}], "effects": [{"manual": 2}, {"mind": 3}, {"relation": ["gu_changgeng", 10]}], "chronicle": "顾长庚考校新弟子，你答得头头是道，连他都捋着胡子笑了，随手赠你一枚玉简。"},
+  "talent_huigen": {"title": "天生慧根", "trigger": "location", "location": "sect", "priority": 5, "major": true, "conditions": [{"talent": "huigen"}, {"flag": "rushi_done"}], "effects": [{"manual": 2}, {"mind": 3}, {"relation": ["gu_changgeng", 10]}], "chronicle": "顾长庚考校新弟子，你答得头头是道，连他都捋着胡子笑了，随手赠你一枚玉简。"},
   "talent_bulao": {"title": "不老泉体", "trigger": "location", "location": "wild", "priority": 5, "major": true, "conditions": [{"talent": "bulao"}], "effects": [{"xp": 150}, {"mind": 3}], "chronicle": "深谷里一眼清泉，你掬水喝了一口，只觉周身轻灵，像是年轻了好几岁。"},
   "talent_jiandan": {"title": "剑胆琴心", "trigger": "location", "location": "town", "priority": 5, "major": true, "conditions": [{"talent": "jiandan"}, {"met": "storyteller"}], "effects": [{"mind": 6}, {"relation": ["storyteller", 15]}], "chronicle": "茶馆里你随手抚琴一曲，琴声里隐隐藏着剑意。何三更听罢一拍醒木：“这一曲，我要编进书里！”"},
   "talent_fuze": {"title": "福泽深厚", "trigger": "location", "location": "market", "priority": 5, "major": true, "conditions": [{"talent": "fuze"}], "effects": [{"stones": 150}], "chronicle": "坊市里一位老掌柜认出你身上祖传的信物，说是欠了你家祖上一份人情，执意赠你一袋灵石。"},
@@ -841,5 +757,561 @@
         "chronicle": "你记下赤枫岭通往白鹭渡的免费陆路，知道它更慢也更险。"
       }
     ]
+  },
+  "rushi_inn": {
+    "title": "客栈欠账",
+    "trigger": "location",
+    "location": "town",
+    "priority": 2,
+    "conditions": [
+      {
+        "story_at": [
+          "rushi",
+          "inn"
+        ]
+      }
+    ],
+    "text": "你在青石客栈落脚的头一晚，柜台前吵了起来。一个衣着光鲜的少年把一只玉扳指拍在柜上，要抵三个月的房钱；掌柜举着扳指对灯照了半天，脸色越来越难看——那是染过色的石头。少年涨红了脸，嘴还硬：“我陆承舟会赖你这几块灵石？”",
+    "choices": [
+      {
+        "id": "pay",
+        "label": "替他把房钱付了（10 灵石）",
+        "conditions": [
+          {
+            "stones_at_least": 10
+          }
+        ],
+        "effects": [
+          {
+            "stones": -10
+          },
+          {
+            "meet": "lu_chengzhou"
+          },
+          {
+            "relation": [
+              "lu_chengzhou",
+              12
+            ]
+          },
+          {
+            "flag": "lu_owes"
+          },
+          {
+            "flag": "rushi_inn"
+          }
+        ],
+        "chronicle": "你替陆承舟付了房钱。他愣了愣，郑重地抱拳：“这份人情我记下了。你也去云溪赶集会？正好同路。”"
+      },
+      {
+        "id": "help",
+        "label": "点破那是假玉，再帮他想个法子",
+        "effects": [
+          {
+            "meet": "lu_chengzhou"
+          },
+          {
+            "relation": [
+              "lu_chengzhou",
+              8
+            ]
+          },
+          {
+            "mind": 2
+          },
+          {
+            "flag": "rushi_inn"
+          }
+        ],
+        "chronicle": "你点破那扳指是染色的石头，又帮他说动掌柜：先押下他的佩剑，到云溪后托人送钱来。陆承舟臊得满脸通红，却还是认了：“行，算你眼尖。你也去云溪？一道走吧。”"
+      },
+      {
+        "id": "watch",
+        "label": "不掺和，回房歇息",
+        "effects": [
+          {
+            "meet": "lu_chengzhou"
+          },
+          {
+            "flag": "rushi_inn"
+          }
+        ],
+        "chronicle": "你没掺和。第二天一早，听说那少年押下佩剑走了，临走前还打听了去云溪的路。"
+      }
+    ]
+  },
+  "rushi_gate": {
+    "title": "城门外",
+    "trigger": "location",
+    "location": "market",
+    "priority": 2,
+    "conditions": [
+      {
+        "story_at": [
+          "rushi",
+          "road"
+        ]
+      }
+    ],
+    "text": "云溪城门外排着长队，进城的修士、商队、挑夫挤作一团。前头一辆药车翻了，灵草滚了一地，赶车的老汉急得直跺脚；几个看热闹的散修正往怀里揣。",
+    "choices": [
+      {
+        "id": "help",
+        "label": "上前帮老汉护住药材",
+        "effects": [
+          {
+            "mind": 2
+          },
+          {
+            "item": [
+              "huichun_grass",
+              2
+            ]
+          },
+          {
+            "flag": "rushi_gate"
+          }
+        ],
+        "chronicle": "你喝开那几个散修，帮老汉把药材拾回车上。老汉千恩万谢，硬塞给你两株回春草。"
+      },
+      {
+        "id": "fight",
+        "label": "拦下揣药的散修，动手也行",
+        "effects": [
+          {
+            "battle": "cultivator"
+          },
+          {
+            "flag": "rushi_gate"
+          }
+        ],
+        "chronicle": "你拦下了揣药的散修，对方不服，拉开架势要与你过两招。"
+      },
+      {
+        "id": "pass",
+        "label": "排队进城，不多事",
+        "effects": [
+          {
+            "flag": "rushi_gate"
+          }
+        ],
+        "chronicle": "你随着人流进了云溪城。"
+      }
+    ]
+  },
+  "rushi_fair": {
+    "title": "仙师集会",
+    "trigger": "location",
+    "location": "market",
+    "priority": 3,
+    "conditions": [
+      {
+        "story_at": [
+          "rushi",
+          "fair"
+        ]
+      }
+    ],
+    "text": "长街两旁摆满了摊子：玉简、丹药、符箓、灵草，还有一堆来历不明的旧物。药铺门口围着一圈人——一个背药篓的姑娘正蹲着给受伤的挑夫敷药，一边敷一边和药铺掌柜争“回春草该不该晒干”。街角有人吆喝：开春头拍就在后日，压轴的宝贝来头不小；三月初还有潜龙会。陆承舟不知从哪钻出来，一把拉住你：“走，先逛！”",
+    "choices": [
+      {
+        "id": "slip",
+        "label": "在旧书摊挑一枚入门玉简（10 灵石）",
+        "conditions": [
+          {
+            "stones_at_least": 10
+          }
+        ],
+        "effects": [
+          {
+            "stones": -10
+          },
+          {
+            "manual": 1
+          },
+          {
+            "meet": "ye_zhiwei"
+          },
+          {
+            "meet": "shen_mo"
+          },
+          {
+            "flag": "rushi_fair"
+          }
+        ],
+        "chronicle": "你在旧书摊上挑了一枚入门玉简——带回客栈静房，在闭关卷轴的「领悟」页就能参悟。药铺门口那位较真的姑娘叫叶知微，掌柜沈墨被她说得哑口无言。"
+      },
+      {
+        "id": "ask",
+        "label": "去药铺门口看那姑娘治伤，顺便请教",
+        "effects": [
+          {
+            "meet": "ye_zhiwei"
+          },
+          {
+            "meet": "shen_mo"
+          },
+          {
+            "relation": [
+              "ye_zhiwei",
+              8
+            ]
+          },
+          {
+            "mind": 2
+          },
+          {
+            "flag": "rushi_fair"
+          }
+        ],
+        "chronicle": "那姑娘叫叶知微，随师父游方行医。你帮她按住疼得直叫的挑夫，她顺口给你讲了三味常用灵草的药性，讲完又转头和掌柜沈墨争了起来。"
+      },
+      {
+        "id": "stroll",
+        "label": "跟着陆承舟满街乱逛",
+        "effects": [
+          {
+            "meet": "ye_zhiwei"
+          },
+          {
+            "meet": "shen_mo"
+          },
+          {
+            "meet": "peddler"
+          },
+          {
+            "relation": [
+              "lu_chengzhou",
+              5
+            ]
+          },
+          {
+            "flag": "rushi_fair"
+          }
+        ],
+        "chronicle": "陆承舟见什么都想买，被行脚的钱货郎哄着买了一包“百年灵芝粉”。你认出药铺门口那姑娘叫叶知微，掌柜叫沈墨——往后卖灵草、买丹药，都得来这条街。"
+      }
+    ]
+  },
+  "rushi_auction": {
+    "title": "开春头拍",
+    "window": {"from": [1, 1, 8], "to": [1, 2, 30]},
+    "trigger": "location",
+    "location": "market",
+    "priority": 3,
+    "conditions": [
+      {
+        "story_at": [
+          "rushi",
+          "auction"
+        ]
+      }
+    ],
+    "text": "拍卖楼里座无虚席。开场前，掌柜先把压轴之物请上台亮相：一面裂了半边的古铜镜。镜面转过来的一瞬，你看见里头映出一座城——高墙、长桥、河上的灯——地图上从没有过这样一座城。怀里的镜背铜片骤然发烫。你抬头，角落里一位须发皆白的老修士正盯着你，目光很远。陆承舟凑过来小声说：“那位是拍卖楼的老主顾了，从不出价，只来看。”台上掌柜朝陆承舟拱手行礼：“陆少爷也来了。”陆承舟的脸一下红到耳根——原来他是云溪陆家的少爷，“第一次来云溪”是第一次背着家里出门。",
+    "effects": [
+      {
+        "meet": "wen_zhaoheng"
+      },
+      {
+        "flag": "mirror_seen"
+      }
+    ],
+    "choices": [
+      {
+        "id": "bid",
+        "label": "入座竞拍",
+        "effects": [
+          {
+            "auction": "yunxi_first"
+          },
+          {
+            "flag": "rushi_auction"
+          }
+        ],
+        "chronicle": "你在云溪拍卖楼的开春头拍入了座。"
+      },
+      {
+        "id": "watch",
+        "label": "只看不买",
+        "effects": [
+          {
+            "flag": "rushi_auction"
+          }
+        ],
+        "chronicle": "你看完了一整场拍卖。压轴的残镜被一位外来散修高价拍走，那位老修士始终没有出价，散场时人已不见了。"
+      }
+    ]
+  },
+  "qianlong_entry": {
+    "title": "潜龙会",
+    "trigger": "location",
+    "location": "market",
+    "priority": 4,
+    "listed": true,
+    "major": true,
+    "periodic": {
+      "start_year": 1,
+      "every_years": 5,
+      "month": 3,
+      "from_day": 1,
+      "to_day": 15
+    },
+    "conditions": [
+      {
+        "not": {
+          "realm_at_least": 1
+        }
+      }
+    ],
+    "effects": [
+      {
+        "meet": "wenren_zhao"
+      }
+    ],
+    "text": "斗法台四周围满了人，五年一届的潜龙会开锣了：四十岁以下的炼气修士都可报名，三轮斗法，点到为止。台下有个揣着一摞古地图的年轻人挨个拉人押注，自称闻人照；台上有个背着断剑的散修连胜两场，一言不发——有人说他叫柳寒舟。",
+    "choices": [
+      {
+        "id": "enter",
+        "label": "报名参赛",
+        "effects": [
+          {
+            "tournament": true
+          },
+          {
+            "flag": "rushi_qianlong"
+          }
+        ],
+        "chronicle": "你报名参加了潜龙会。"
+      },
+      {
+        "id": "watch",
+        "label": "在台下观战，看各家路数",
+        "effects": [
+          {
+            "mind": 2
+          },
+          {
+            "relation": [
+              "wenren_zhao",
+              6
+            ]
+          },
+          {
+            "flag": "rushi_qianlong"
+          }
+        ],
+        "chronicle": "你在台下看完了这一届潜龙会。闻人照凑在你旁边，把每个人的路数都讲得头头是道——剑修一招接一招不停，体修硬吃对手的招，阵修总要先花一回合布阵。"
+      }
+    ]
+  },
+  "rushi_banquet": {
+    "title": "陆府夜宴",
+    "window": {"from": [1, 3, 16], "to": [999, 12, 30]},
+    "trigger": "location",
+    "location": "market",
+    "priority": 3,
+    "conditions": [
+      {
+        "story_at": [
+          "rushi",
+          "banquet"
+        ]
+      }
+    ],
+    "text": "陆家借集会之名设宴，请的是这几日来云溪的年轻修士。陆承舟被他大哥拎着挨桌敬酒，一脸苦相；席间有人说起陆家的药材生意最近不太顺，大哥的脸色沉了一下。叶知微在角落里研究一盘药膳的配方，闻人照拉着人看他新得的“古海图”。散席前，陆承舟偷偷溜到你这桌，压低声音：“青云剑宗开春招录，在青云山接引台；沈墨的药铺缺人收灵草；松风岭、落霞谷那边有的是机缘。你打算去哪儿？”",
+    "effects": [
+      {
+        "meet": "lu_chengzhou"
+      },
+      {
+        "meet": "ye_zhiwei"
+      },
+      {
+        "meet": "wenren_zhao"
+      },
+      {
+        "flag": "heard_qingyun_recruit"
+      }
+    ],
+    "choices": [
+      {
+        "id": "lu",
+        "label": "陪陆承舟躲酒，听他发牢骚",
+        "effects": [
+          {
+            "relation": [
+              "lu_chengzhou",
+              8
+            ]
+          },
+          {
+            "flag": "rushi_banquet"
+          }
+        ],
+        "chronicle": "你陪陆承舟躲到后院。他说大哥什么都好，就是太像父亲；他自己只想修仙，不想管家里那些账。"
+      },
+      {
+        "id": "ye",
+        "label": "和叶知微一起拆那盘药膳的配方",
+        "effects": [
+          {
+            "relation": [
+              "ye_zhiwei",
+              8
+            ]
+          },
+          {
+            "flag": "rushi_banquet"
+          }
+        ],
+        "chronicle": "你和叶知微拆了半夜药膳的配方，她说里头少了一味，又说多了一味，最后承认这道菜确实好吃。"
+      },
+      {
+        "id": "wenren",
+        "label": "看闻人照的古海图",
+        "effects": [
+          {
+            "relation": [
+              "wenren_zhao",
+              8
+            ]
+          },
+          {
+            "flag": "rushi_banquet"
+          }
+        ],
+        "chronicle": "闻人照的古海图九成是假的——他自己也这么说。但图角有一个城徽，和残镜里那座城的城门上一模一样。"
+      }
+    ]
+  },
+  "tianhe_reflection": {
+    "title": "天河渡口",
+    "trigger": "location",
+    "location": "ferry",
+    "priority": 3,
+    "conditions": [
+      {
+        "story_at": [
+          "mirror",
+          "tianhe"
+        ]
+      },
+      {
+        "month_day": [
+          15,
+          15
+        ]
+      }
+    ],
+    "effects": [
+      {
+        "flag": "tianhe_seen"
+      },
+      {
+        "relation": [
+          "boatman",
+          5
+        ]
+      }
+    ],
+    "text": "月上中天，渡口的水面平得像一面镜子。你低头看水——水里映出来的不是月亮，是一座城：高墙、长桥、河上的灯，和残镜里一模一样。城的倒影只停了几息便散了。对岸的柳树下，那位老修士收起空鱼篓，朝你点了点头，转身走进夜色里。",
+    "choices": [
+      {
+        "id": "look",
+        "label": "记下城的样子",
+        "chronicle": "你把水中那座城的样子默记在心：三重城墙，城门上有一个圆形的徽记。"
+      }
+    ]
+  },
+  "qianlong_y1_over": {
+    "title": "潜龙会落幕",
+    "trigger": "date",
+    "window": {
+      "from": [
+        1,
+        3,
+        16
+      ],
+      "to": [
+        1,
+        3,
+        16
+      ]
+    },
+    "conditions": [{"story_state": ["rushi", "active"]}],
+    "effects": [
+      {
+        "flag": "rushi_qianlong"
+      }
+    ],
+    "chronicle": "首届潜龙会落幕了。听说夺魁的是一个背着断剑的散修，赛后不知去向。"
+  },
+  "rushi_auction_over": {
+    "title": "头拍散场",
+    "trigger": "date",
+    "window": {
+      "from": [
+        1,
+        3,
+        1
+      ],
+      "to": [
+        1,
+        3,
+        1
+      ]
+    },
+    "conditions": [{"story_state": ["rushi", "active"]}],
+    "effects": [
+      {
+        "flag": "rushi_auction"
+      }
+    ],
+    "chronicle": "云溪拍卖楼的开春头拍散场了。听说压轴的是一面裂了半边的古镜，被一位外来散修高价拍走。"
+  },
+  "yunxi_autumn": {
+    "title": "云溪秋拍",
+    "trigger": "location",
+    "location": "market",
+    "priority": 30,
+    "listed": true,
+    "periodic": {
+      "start_year": 1,
+      "every_years": 1,
+      "month": 10,
+      "from_day": 1,
+      "to_day": 30
+    },
+    "text": "云溪拍卖楼一年一度的秋拍开场了，楼里座无虚席。拍品挂在帘后：灵药、丹药，也有前人留下的玉简与宝物。",
+    "choices": [
+      {
+        "id": "enter",
+        "label": "入座竞拍",
+        "effects": [
+          {
+            "auction": "yunxi_special"
+          }
+        ],
+        "chronicle": "你在云溪秋拍入了座。"
+      },
+      {
+        "id": "watch",
+        "label": "只看不买",
+        "chronicle": "你在云溪秋拍中旁观了一场，见识了各方修士的手笔。"
+      }
+    ]
+  },
+  "qianlong_notice": {
+    "title": "潜龙会告示",
+    "trigger": "date",
+    "priority": 5,
+    "periodic": {
+      "start_year": 6,
+      "every_years": 5,
+      "month": 2,
+      "from_day": 1,
+      "to_day": 1
+    },
+    "chronicle": "云溪斗法台贴出告示：潜龙会于三月一日至十五日报名，限四十岁以下的炼气修士，三轮斗法，点到为止；魁首得筑基丹一枚与功法玉简。"
   }
 }

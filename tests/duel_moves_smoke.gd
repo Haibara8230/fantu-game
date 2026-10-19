@@ -555,6 +555,10 @@ func _feuds() -> void:
 	check(not hunter.delivery_block(quest).is_empty(), "nothing to claim before they are taken")
 	hunter.player.location = str(quest.wanted.place)
 	hunter.Events.check_location(hunter)
+	# A place's own occasion (潜龙会, the autumn auction at 云溪) may come first: watch it.
+	while not hunter.pending_event.is_empty() and str(hunter.pending_event.id) != "bounty_found":
+		hunter.choose_event("watch" if hunter.pending_definition().choices.any(func(choice: Dictionary) -> bool: return choice.id == "watch") else str(hunter.pending_definition().choices[0].id))
+		hunter.Events.check_location(hunter)
 	check(str(hunter.pending_event.get("id", "")) == "bounty_found" and str(hunter.pending_event.values.foe) == str(quest.wanted.name), "stopping where they hide finds them")
 	hunter.choose_event("wait")
 	hunter.Events.check_location(hunter)
@@ -579,8 +583,11 @@ func _feuds() -> void:
 	var lie: Dictionary = framed.player.quests.back()
 	lie.wanted.twist = true
 	framed.player.location = str(lie.wanted.place)
-	var mind := int(framed.player.mind)
 	framed.Events.check_location(framed)
+	while not framed.pending_event.is_empty() and str(framed.pending_event.id) != "bounty_twist":
+		framed.choose_event("watch" if framed.pending_definition().choices.any(func(choice: Dictionary) -> bool: return choice.id == "watch") else str(framed.pending_definition().choices[0].id))
+		framed.Events.check_location(framed)
+	var mind := int(framed.player.mind)
 	check(str(framed.pending_event.get("id", "")) == "bounty_twist", "sometimes the poster lied")
 	framed.choose_event("spare")
 	check(framed.player.quests.is_empty() and int(framed.player.mind) >= mind, "letting the framed one go drops the bounty")
