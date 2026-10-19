@@ -1,0 +1,58 @@
+[
+  {
+    "priority": "P0",
+    "filename": "lu_chengzhou.png",
+    "brief": "陆承舟初期身份；已有候选，先复核，不另造一张脸",
+    "status": "planned_or_existing_candidate",
+    "output_path": "D:/fqh/flash/art_sources/refresh_20261019/batches/02_key_portraits/output/lu_chengzhou.png"
+  },
+  {
+    "priority": "P0",
+    "filename": "ye_zhiwei.png",
+    "brief": "叶知微初期医修身份；已有候选",
+    "status": "planned_or_existing_candidate",
+    "output_path": "D:/fqh/flash/art_sources/refresh_20261019/batches/02_key_portraits/output/ye_zhiwei.png"
+  },
+  {
+    "priority": "P0",
+    "filename": "wenren_zhao.png",
+    "brief": "闻人照初期阵法／远行身份；已有候选",
+    "status": "planned_or_existing_candidate",
+    "output_path": "D:/fqh/flash/art_sources/refresh_20261019/batches/02_key_portraits/output/wenren_zhao.png"
+  },
+  {
+    "priority": "P0",
+    "filename": "liu_hanzhou_healthy.png",
+    "brief": "柳寒舟健康状态；已有候选，与原 wounded 身份一致",
+    "status": "planned_or_existing_candidate",
+    "output_path": "D:/fqh/flash/art_sources/refresh_20261019/batches/02_key_portraits/output/liu_hanzhou_healthy.png"
+  },
+  {
+    "priority": "P0",
+    "filename": "auction_elder.png",
+    "brief": "拍卖老修士暂拟身份；已有候选，不公开真相式装饰",
+    "status": "planned_or_existing_candidate",
+    "output_path": "D:/fqh/flash/art_sources/refresh_20261019/batches/02_key_portraits/output/auction_elder.png"
+  },
+  {
+    "priority": "P2",
+    "filename": "lu_chengzhou_heir.png",
+    "brief": "陆承舟接掌生意后的服饰与气质变化，保留同一张脸",
+    "status": "planned_or_existing_candidate",
+    "output_path": "D:/fqh/flash/art_sources/refresh_20261019/batches/02_key_portraits/output/lu_chengzhou_heir.png"
+  },
+  {
+    "priority": "P2",
+    "filename": "ye_zhiwei_physician.png",
+    "brief": "叶知微行医重逢状态，禁药分支待剧情定案后另补",
+    "status": "planned_or_existing_candidate",
+    "output_path": "D:/fqh/flash/art_sources/refresh_20261019/batches/02_key_portraits/output/ye_zhiwei_physician.png"
+  },
+  {
+    "priority": "P2",
+    "filename": "wenren_zhao_navigator.png",
+    "brief": "闻人照可靠领航者状态，身份可辨，不默认失联即死亡",
+    "status": "planned_or_existing_candidate",
+    "output_path": "D:/fqh/flash/art_sources/refresh_20261019/batches/02_key_portraits/output/wenren_zhao_navigator.png"
+  }
+]

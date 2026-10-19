@@ -1,0 +1,19 @@
+[
+  {
+    "id": "04_location",
+    "title": "地点建筑 · 青云山门",
+    "old": "D:/fqh/flash/assets/art/locations/sect_fullscreen.png",
+    "ref": "D:/fqh/flash/.tmp/mcs_style_reference_20261019/originals/steam_00.jpg",
+    "mode": "imagegen",
+    "note": "建筑轮廓和大色块优先，降低电影感与密集碎景",
+    "transparent": false,
+    "spec": "A fullscreen original sect mountain-gate scene. Preserve the target's main arrangement: mountain gate and tiered ivory/teal Chinese sect buildings on the LEFT, a broad stone stair/terrace approaching from lower LEFT, a simple banner and dark pine framing the far-left edge, open cloud valley and distant peaks across the RIGHT. Redraw using the reference game's actual scene vocabulary: stylized clearly outlined architecture, large clean wall/roof planes, grouped rocks and tree silhouettes, mint-jade/ivory palette, pale atmospheric far mountains, a few coherent cloud bands. Far fewer leaves, roof tiles, rock scratches or railing ornaments. Plain graphic depth layers, light game illustration, NOT cinematic realistic Chinese landscape concept art. Keep the composition legible with quiet space on the right. No people, no UI, no text, no icons, no copied original-game buildings. Landscape 16:9.",
+    "new": "D:/fqh/flash/.tmp/style_samples_20261019/new/04_location.png",
+    "referenceOutput": "D:/fqh/flash/.tmp/style_samples_20261019/inputs/04_location_reference.png",
+    "comparison": "D:/fqh/flash/.tmp/style_samples_20261019/compare/04_location.png",
+    "promptPath": "D:/fqh/flash/.tmp/style_samples_20261019/prompts/04_location.txt",
+    "panelHeight": 350,
+    "refNote": "官方宗门场景；不同建筑布局",
+    "packaged_new": "D:/fqh/flash/art_sources/refresh_20261019/approved_samples/04_location.png"
+  }
+]

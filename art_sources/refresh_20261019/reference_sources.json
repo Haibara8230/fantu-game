@@ -1,0 +1,513 @@
+[
+  {
+    "id": 0,
+    "file": "D:\\fqh\\flash\\.tmp\\mcs_style_reference_20261019\\originals\\steam_00.jpg",
+    "image_url": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1189490/ss_71d033954d9c3897a6adba232296aee62faada49.1920x1080.jpg?t=1739615973",
+    "source": "https://store.steampowered.com/app/1189490/",
+    "status": "downloaded",
+    "sha256": "B9C7BB63E8691ED0019C7D349BD769E67ED2C8BD2BF7BE565D4E23BFEA65F4DD",
+    "title": "宗门／仙山建筑",
+    "category": "locations",
+    "observation": "高耸竖向建筑、清楚外轮廓，墙面与屋顶按大色块分区。",
+    "source_type": "official_steam_store_screenshot",
+    "limitation": "多张含 EA 0.9.1.147 版本标识，官方在售页面展示不代表当前 UI 版本",
+    "dimensions": [
+      1920,
+      1080
+    ],
+    "reviewed_on": "2026-10-19",
+    "review_scope": "编号总览及分类参考板；用于画风观察"
+  },
+  {
+    "id": 1,
+    "file": "D:\\fqh\\flash\\.tmp\\mcs_style_reference_20261019\\originals\\steam_01.jpg",
+    "image_url": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1189490/ss_90fffdf6d061d7d138c666df3f56a5e79589e718.1920x1080.jpg?t=1739615973",
+    "source": "https://store.steampowered.com/app/1189490/",
+    "status": "downloaded",
+    "sha256": "0E1298459A980B2207628E2EABEC6BE85444CC5D17DA8A2C13EAA65EFD799309",
+    "title": "竹林斗法／白狐",
+    "category": "battle",
+    "observation": "背景以竹林剪影与雾色分层，人物和妖兽轮廓明显。",
+    "source_type": "official_steam_store_screenshot",
+    "limitation": "多张含 EA 0.9.1.147 版本标识，官方在售页面展示不代表当前 UI 版本",
+    "dimensions": [
+      1920,
+      1080
+    ],
+    "reviewed_on": "2026-10-19",
+    "review_scope": "编号总览及分类参考板；用于画风观察"
+  },
+  {
+    "id": 2,
+    "file": "D:\\fqh\\flash\\.tmp\\mcs_style_reference_20261019\\originals\\steam_02.jpg",
+    "image_url": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1189490/ss_a4134050ae3b1f7a43cf1f5b98c22f8d3d1f9ac9.1920x1080.jpg?t=1739615973",
+    "source": "https://store.steampowered.com/app/1189490/",
+    "status": "downloaded",
+    "sha256": "7F7173698DEC36901F6BB283632A108906A0F763C6EDF14433F94184AD9AB2E2",
+    "title": "宁州陆地地图",
+    "category": "map",
+    "observation": "山林用重复概括形状，河流与大块地色组织路线空间。",
+    "source_type": "official_steam_store_screenshot",
+    "limitation": "多张含 EA 0.9.1.147 版本标识，官方在售页面展示不代表当前 UI 版本",
+    "dimensions": [
+      1920,
+      1080
+    ],
+    "reviewed_on": "2026-10-19",
+    "review_scope": "编号总览及分类参考板；用于画风观察"
+  },
+  {
+    "id": 3,
+    "file": "D:\\fqh\\flash\\.tmp\\mcs_style_reference_20261019\\originals\\steam_03.jpg",
+    "image_url": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1189490/ss_13864d9062928a6782fb7a7bfda7ae413e506939.1920x1080.jpg?t=1739615973",
+    "source": "https://store.steampowered.com/app/1189490/",
+    "status": "downloaded",
+    "sha256": "E51CAD9A6F635DF3B25FE4F627BE1B872423981C3D039364CEAF95DB444121DE",
+    "title": "宗门斗法台",
+    "category": "battle",
+    "observation": "场地宽阔，前景留空；人物较小，背景服从战斗阅读。",
+    "source_type": "official_steam_store_screenshot",
+    "limitation": "多张含 EA 0.9.1.147 版本标识，官方在售页面展示不代表当前 UI 版本",
+    "dimensions": [
+      1920,
+      1080
+    ],
+    "reviewed_on": "2026-10-19",
+    "review_scope": "编号总览及分类参考板；用于画风观察"
+  },
+  {
+    "id": 4,
+    "file": "D:\\fqh\\flash\\.tmp\\mcs_style_reference_20261019\\originals\\steam_04.jpg",
+    "image_url": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1189490/ss_35b6e399dd175b458ef8c4a94e4feb1495578033.1920x1080.jpg?t=1739615973",
+    "source": "https://store.steampowered.com/app/1189490/",
+    "status": "downloaded",
+    "sha256": "0DCDDCC33E1733969A1A732328E8E132DB93DF57C703D67BD50F2CD4DF374036",
+    "title": "海域地图",
+    "category": "map",
+    "observation": "大面积低细节海面、剪影岛屿、局部地标与色区。",
+    "source_type": "official_steam_store_screenshot",
+    "limitation": "多张含 EA 0.9.1.147 版本标识，官方在售页面展示不代表当前 UI 版本",
+    "dimensions": [
+      1920,
+      1080
+    ],
+    "reviewed_on": "2026-10-19",
+    "review_scope": "编号总览及分类参考板；用于画风观察"
+  },
+  {
+    "id": 5,
+    "file": "D:\\fqh\\flash\\.tmp\\mcs_style_reference_20261019\\originals\\steam_05.jpg",
+    "image_url": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1189490/ss_a57f9b8aeb3ec71a62a675ce1cd963f17ac57f04.1920x1080.jpg?t=1739615973",
+    "source": "https://store.steampowered.com/app/1189490/",
+    "status": "downloaded",
+    "sha256": "5B0B3F5CF4BFEF3CA7D199CC498F64824ADD0A3845F0D4AC24B10E0813F1003C",
+    "title": "水下斗法／章鱼妖兽",
+    "category": "battle",
+    "observation": "同色系前后景分层，大体块妖兽，局部鲜色强调轮廓。",
+    "source_type": "official_steam_store_screenshot",
+    "limitation": "多张含 EA 0.9.1.147 版本标识，官方在售页面展示不代表当前 UI 版本",
+    "dimensions": [
+      1920,
+      1080
+    ],
+    "reviewed_on": "2026-10-19",
+    "review_scope": "编号总览及分类参考板；用于画风观察"
+  },
+  {
+    "id": 6,
+    "file": "D:\\fqh\\flash\\.tmp\\mcs_style_reference_20261019\\originals\\steam_06.jpg",
+    "image_url": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1189490/ss_a57c7345c144eafee3cd4d9f935e8e8926550b6b.1920x1080.jpg?t=1739615973",
+    "source": "https://store.steampowered.com/app/1189490/",
+    "status": "downloaded",
+    "sha256": "647BB2A15446715C6694A395E800F5AB4C17B858A0D67B95C4F0BA47B1AEC91C",
+    "title": "城镇俯视总览",
+    "category": "locations",
+    "observation": "固定斜俯视构图；建筑细节有组织地集中，远山低对比。",
+    "source_type": "official_steam_store_screenshot",
+    "limitation": "多张含 EA 0.9.1.147 版本标识，官方在售页面展示不代表当前 UI 版本",
+    "dimensions": [
+      1920,
+      1080
+    ],
+    "reviewed_on": "2026-10-19",
+    "review_scope": "编号总览及分类参考板；用于画风观察"
+  },
+  {
+    "id": 7,
+    "file": "D:\\fqh\\flash\\.tmp\\mcs_style_reference_20261019\\originals\\steam_07.jpg",
+    "image_url": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1189490/ss_30c35d282d3b7d3b76602d1ade08de742e5a5fd6.1920x1080.jpg?t=1739615973",
+    "source": "https://store.steampowered.com/app/1189490/",
+    "status": "downloaded",
+    "sha256": "4CF61A73F43C96F4D6FD88486BC37A7DDDE2A8001DE96BF9C4BC59823519090C",
+    "title": "拍卖界面",
+    "category": "ui",
+    "observation": "暗青背景、木台、中央拍卖物与左右信息栏。",
+    "source_type": "official_steam_store_screenshot",
+    "limitation": "多张含 EA 0.9.1.147 版本标识，官方在售页面展示不代表当前 UI 版本",
+    "dimensions": [
+      1920,
+      1080
+    ],
+    "reviewed_on": "2026-10-19",
+    "review_scope": "编号总览及分类参考板；用于画风观察"
+  },
+  {
+    "id": 8,
+    "file": "D:\\fqh\\flash\\.tmp\\mcs_style_reference_20261019\\originals\\steam_08.jpg",
+    "image_url": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1189490/ss_f4178bc2f57dc83d82114ce7f6b014c41da9e065.1920x1080.jpg?t=1739615973",
+    "source": "https://store.steampowered.com/app/1189490/",
+    "status": "downloaded",
+    "sha256": "5B3E25EBD0A39F7B2EE8CB601ED865027E406ABE9AD1497ADF682B9FDC431795",
+    "title": "筑基突破提示",
+    "category": "events",
+    "observation": "平面题字、环形装饰、留白与云形，不是写实剧情 CG。",
+    "source_type": "official_steam_store_screenshot",
+    "limitation": "多张含 EA 0.9.1.147 版本标识，官方在售页面展示不代表当前 UI 版本",
+    "dimensions": [
+      1920,
+      1080
+    ],
+    "reviewed_on": "2026-10-19",
+    "review_scope": "编号总览及分类参考板；用于画风观察"
+  },
+  {
+    "id": 9,
+    "file": "D:\\fqh\\flash\\.tmp\\mcs_style_reference_20261019\\originals\\steam_09.jpg",
+    "image_url": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1189490/ss_62664a52b2b1d6d18d287af6216c8675b1bd932e.1920x1080.jpg?t=1739615973",
+    "source": "https://store.steampowered.com/app/1189490/",
+    "status": "downloaded",
+    "sha256": "08F2CABBBEF01E740CBCD80713030146E5412D95561FAD0C8F496AA2433E84AC",
+    "title": "炼丹界面／丹炉",
+    "category": "ui",
+    "observation": "丹炉是图形化轮廓与大色块；药材卡保留鲜色和简洁高光。",
+    "source_type": "official_steam_store_screenshot",
+    "limitation": "多张含 EA 0.9.1.147 版本标识，官方在售页面展示不代表当前 UI 版本",
+    "dimensions": [
+      1920,
+      1080
+    ],
+    "reviewed_on": "2026-10-19",
+    "review_scope": "编号总览及分类参考板；用于画风观察"
+  },
+  {
+    "id": 10,
+    "file": "D:\\fqh\\flash\\.tmp\\mcs_style_reference_20261019\\originals\\steam_10.jpg",
+    "image_url": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1189490/ss_d96e7284a74a995164e306f8a560faa30394de9f.1920x1080.jpg?t=1739615973",
+    "source": "https://store.steampowered.com/app/1189490/",
+    "status": "downloaded",
+    "sha256": "771C3069DB6CE6FB6F9035D179C1794CC15D74A57EEFDE0E5E3B236A754A714F",
+    "title": "炼器界面",
+    "category": "ui",
+    "observation": "中央产物、周围材料槽与暖色功能焦点。",
+    "source_type": "official_steam_store_screenshot",
+    "limitation": "多张含 EA 0.9.1.147 版本标识，官方在售页面展示不代表当前 UI 版本",
+    "dimensions": [
+      1920,
+      1080
+    ],
+    "reviewed_on": "2026-10-19",
+    "review_scope": "编号总览及分类参考板；用于画风观察"
+  },
+  {
+    "id": 11,
+    "file": "D:\\fqh\\flash\\.tmp\\mcs_style_reference_20261019\\originals\\steam_11.jpg",
+    "image_url": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1189490/ss_3c1ece698e5007e610f7b07ca69867caf8641890.1920x1080.jpg?t=1739615973",
+    "source": "https://store.steampowered.com/app/1189490/",
+    "status": "downloaded",
+    "sha256": "9D2290B5CA31A43518EA9F8671FA7A9A79A6179726A8EF0A22227C04C7C48D83",
+    "title": "洞府节点地图",
+    "category": "map",
+    "observation": "洞窟以块状岩壁、暗部剪影与少量功能建筑组织空间。",
+    "source_type": "official_steam_store_screenshot",
+    "limitation": "多张含 EA 0.9.1.147 版本标识，官方在售页面展示不代表当前 UI 版本",
+    "dimensions": [
+      1920,
+      1080
+    ],
+    "reviewed_on": "2026-10-19",
+    "review_scope": "编号总览及分类参考板；用于画风观察"
+  },
+  {
+    "id": 12,
+    "file": "D:\\fqh\\flash\\.tmp\\mcs_style_reference_20261019\\originals\\steam_12.jpg",
+    "image_url": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1189490/ss_10243f4734063ba52344388b2467cfc76f56fd4c.1920x1080.jpg?t=1739615973",
+    "source": "https://store.steampowered.com/app/1189490/",
+    "status": "downloaded",
+    "sha256": "8109312C38581CBBA63FA31261DB44893AEB148A42E9F6AABE11282A2269064F",
+    "title": "论道界面",
+    "category": "ui",
+    "observation": "云形背景、卡片与五行颜色分区，信息按中心区域组织。",
+    "source_type": "official_steam_store_screenshot",
+    "limitation": "多张含 EA 0.9.1.147 版本标识，官方在售页面展示不代表当前 UI 版本",
+    "dimensions": [
+      1920,
+      1080
+    ],
+    "reviewed_on": "2026-10-19",
+    "review_scope": "编号总览及分类参考板；用于画风观察"
+  },
+  {
+    "id": 13,
+    "file": "D:\\fqh\\flash\\.tmp\\mcs_style_reference_20261019\\originals\\steam_13.jpg",
+    "image_url": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1189490/ss_0054589a60cec0197a0a1070dceed7c0f351dec7.1920x1080.jpg?t=1739615973",
+    "source": "https://store.steampowered.com/app/1189490/",
+    "status": "downloaded",
+    "sha256": "B7EA801B08C978DD5705ECADAFB2436CBFC3862A60B6DE9377DE9172C669A3F3",
+    "title": "修炼／属性界面",
+    "category": "ui",
+    "observation": "打坐剪影、大块云气和纸色信息区；装饰让位给读数。",
+    "source_type": "official_steam_store_screenshot",
+    "limitation": "多张含 EA 0.9.1.147 版本标识，官方在售页面展示不代表当前 UI 版本",
+    "dimensions": [
+      1920,
+      1080
+    ],
+    "reviewed_on": "2026-10-19",
+    "review_scope": "编号总览及分类参考板；用于画风观察"
+  },
+  {
+    "id": 14,
+    "file": "D:\\fqh\\flash\\.tmp\\mcs_style_reference_20261019\\originals\\steam_14.jpg",
+    "image_url": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1189490/ss_b4d3de4a3f337ae7ee8b6987cf47a042875d7408.1920x1080.jpg?t=1739615973",
+    "source": "https://store.steampowered.com/app/1189490/",
+    "status": "downloaded",
+    "sha256": "99856BF2E97DF03001F741CB134D5A9CBE73B6EB4F27187F69E3FC97B4EB3962",
+    "title": "系统设置弹窗",
+    "category": "ui",
+    "observation": "深青面板、暖金细边，背景压暗后突出当前交互。",
+    "source_type": "official_steam_store_screenshot",
+    "limitation": "多张含 EA 0.9.1.147 版本标识，官方在售页面展示不代表当前 UI 版本",
+    "dimensions": [
+      1920,
+      1080
+    ],
+    "reviewed_on": "2026-10-19",
+    "review_scope": "编号总览及分类参考板；用于画风观察"
+  },
+  {
+    "id": 15,
+    "file": "D:\\fqh\\flash\\.tmp\\mcs_style_reference_20261019\\originals\\steam_15.jpg",
+    "image_url": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1189490/ss_89199ae84fe19f5cced086a5a9412e796655b2cd.1920x1080.jpg?t=1739615973",
+    "source": "https://store.steampowered.com/app/1189490/",
+    "status": "downloaded",
+    "sha256": "41A4E0E94F50C7DE20F8C59696480F22281EC5FA18B71B9DE89A62C99F7B3C6F",
+    "title": "背包／装备／物品图标",
+    "category": "items",
+    "observation": "单物品明确剪影；有材质明暗、色彩和高光，不是纯扁平符号。",
+    "source_type": "official_steam_store_screenshot",
+    "limitation": "多张含 EA 0.9.1.147 版本标识，官方在售页面展示不代表当前 UI 版本",
+    "dimensions": [
+      1920,
+      1080
+    ],
+    "reviewed_on": "2026-10-19",
+    "review_scope": "编号总览及分类参考板；用于画风观察"
+  },
+  {
+    "id": 16,
+    "file": "D:\\fqh\\flash\\.tmp\\mcs_style_reference_20261019\\originals\\steam_16.jpg",
+    "image_url": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1189490/ss_d01d52a12867faccaa8c816bc7b9f3781ec5161a.1920x1080.jpg?t=1739615973",
+    "source": "https://store.steampowered.com/app/1189490/",
+    "status": "downloaded",
+    "sha256": "9E1795148763966A9C27DAF6EBD28BB5D6968265201676D604412DE60950D1AD",
+    "title": "任务卷轴",
+    "category": "ui",
+    "observation": "纸张、卷轴与青色页签构成统一材质语言。",
+    "source_type": "official_steam_store_screenshot",
+    "limitation": "多张含 EA 0.9.1.147 版本标识，官方在售页面展示不代表当前 UI 版本",
+    "dimensions": [
+      1920,
+      1080
+    ],
+    "reviewed_on": "2026-10-19",
+    "review_scope": "编号总览及分类参考板；用于画风观察"
+  },
+  {
+    "id": 17,
+    "file": "D:\\fqh\\flash\\.tmp\\mcs_style_reference_20261019\\originals\\steam_17.jpg",
+    "image_url": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1189490/ss_3db65e1da2d558d9211c001b48ab86e54179de08.1920x1080.jpg?t=1739615973",
+    "source": "https://store.steampowered.com/app/1189490/",
+    "status": "downloaded",
+    "sha256": "1248D579EF9058FEDF566829C12A3A9AB00CB54322154EDE129394481F39C66D",
+    "title": "交互信息列表",
+    "category": "ui",
+    "observation": "木制框、纸色信息、青绿状态按钮，网格间距清楚。",
+    "source_type": "official_steam_store_screenshot",
+    "limitation": "多张含 EA 0.9.1.147 版本标识，官方在售页面展示不代表当前 UI 版本",
+    "dimensions": [
+      1920,
+      1080
+    ],
+    "reviewed_on": "2026-10-19",
+    "review_scope": "编号总览及分类参考板；用于画风观察"
+  },
+  {
+    "id": 18,
+    "file": "D:\\fqh\\flash\\.tmp\\mcs_style_reference_20261019\\originals\\steam_18.jpg",
+    "image_url": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1189490/ss_8f69fd3efff8d2703fd165d08453069d0ce2bee9.1920x1080.jpg?t=1739615973",
+    "source": "https://store.steampowered.com/app/1189490/",
+    "status": "downloaded",
+    "sha256": "815B5E396E0A7BE378B0032BEE16E3A22279407E28FFC6A35E8C9E7A95A93B52",
+    "title": "人物信息弹窗",
+    "category": "portraits",
+    "observation": "人物头像配纸色资料卡；金线分隔，不以复杂背景抢人物。",
+    "source_type": "official_steam_store_screenshot",
+    "limitation": "多张含 EA 0.9.1.147 版本标识，官方在售页面展示不代表当前 UI 版本",
+    "dimensions": [
+      1920,
+      1080
+    ],
+    "reviewed_on": "2026-10-19",
+    "review_scope": "编号总览及分类参考板；用于画风观察"
+  },
+  {
+    "file": "D:\\fqh\\flash\\.tmp\\mcs_style_reference_20261019\\originals\\wiki_pill_xisuidan.png",
+    "title": "洗髓丹",
+    "image_url": "https://patchwiki.biligame.com/images/mcs/4/4e/c61yor4zkrwkmetafsujigl6al7dchs.png",
+    "source": "https://wiki.biligame.com/mcs/洗髓丹",
+    "status": "downloaded",
+    "sha256": "0CFA522DB0A965C79E61E7AD17D5D89BA32FDFE61AD29C08F26ABB8BE9AFDEEC",
+    "dimensions": [
+      128,
+      128
+    ],
+    "reviewed_on": "2026-10-19",
+    "review_scope": "编号总览及分类参考板；用于画风观察"
+  },
+  {
+    "file": "D:\\fqh\\flash\\.tmp\\mcs_style_reference_20261019\\originals\\wiki_herb_xiakucao.png",
+    "title": "夏枯草",
+    "image_url": "https://patchwiki.biligame.com/images/mcs/8/87/6b6n2rufsce6agtkvb95kkyw242y6lq.png",
+    "source": "https://wiki.biligame.com/mcs/夏枯草",
+    "status": "downloaded",
+    "sha256": "87D7BD1ADF63FEFB8494E04336DB441561ED4CB3DB93ACE45988E60840B482F9",
+    "dimensions": [
+      128,
+      128
+    ],
+    "reviewed_on": "2026-10-19",
+    "review_scope": "编号总览及分类参考板；用于画风观察"
+  },
+  {
+    "file": "D:\\fqh\\flash\\.tmp\\mcs_style_reference_20261019\\originals\\wiki_beast_bird.png",
+    "title": "金鹏",
+    "image_url": "https://patchwiki.biligame.com/images/mcs/8/87/rjycx2upjk5586gnet0kyyasbifblc0.png",
+    "source": "https://wiki.biligame.com/mcs/金鹏（元婴期）",
+    "status": "downloaded",
+    "sha256": "CE0B689B0286C9683FBE835370F61B28EF02F6DE2C3F2C7DEE32CE5145B4837F",
+    "dimensions": [
+      365,
+      496
+    ],
+    "reviewed_on": "2026-10-19",
+    "review_scope": "编号总览及分类参考板；用于画风观察"
+  },
+  {
+    "file": "D:\\fqh\\flash\\.tmp\\mcs_style_reference_20261019\\originals\\wiki_beast_dragon.png",
+    "title": "火龙",
+    "image_url": "https://patchwiki.biligame.com/images/mcs/2/2d/b7782iuxtrfgl1pmdm53r1yyfxwbp45.png",
+    "source": "https://wiki.biligame.com/mcs/火龙（元婴期）",
+    "status": "downloaded",
+    "sha256": "61EE3A8254330F076E07639B79C9DDFED301F4301F6DBE42478C4A448CA7EC67",
+    "dimensions": [
+      876,
+      554
+    ],
+    "reviewed_on": "2026-10-19",
+    "review_scope": "编号总览及分类参考板；用于画风观察"
+  },
+  {
+    "file": "D:\\fqh\\flash\\.tmp\\mcs_style_reference_20261019\\originals\\wiki_beast_lizard.png",
+    "title": "裂地蜥龙",
+    "image_url": "https://patchwiki.biligame.com/images/mcs/5/5a/9dcevyv7jvvje4b01cwysa4b7xhzydq.png",
+    "source": "https://wiki.biligame.com/mcs/裂地蜥龙（元婴期）",
+    "status": "downloaded",
+    "sha256": "B7CD471714B756F976AA8C3EFCBF789053E791C6E6F7FB5254782839F7788860",
+    "dimensions": [
+      779,
+      559
+    ],
+    "reviewed_on": "2026-10-19",
+    "review_scope": "编号总览及分类参考板；用于画风观察"
+  },
+  {
+    "file": "D:\\fqh\\flash\\.tmp\\mcs_style_reference_20261019\\originals\\garden_00.jpg",
+    "image_url": "https://exp-picture.cdn.bcebos.com/8b3643dd884ce54a9ddf8a58a3066b0193ddf753.jpg",
+    "source": "https://jingyan.baidu.com/article/14bd256e78a17afa6c261241.html",
+    "title": "灵田教程步骤 1",
+    "source_type": "third_party_game_screenshot",
+    "limitation": "2022年攻略截图，保留原教程箭头和水印；只作画风参考",
+    "sha256": "9266FC513D3937F88DCCCE27A9C71EAEA01C360823EA0E327A2C3BBE28F94B1B",
+    "status": "downloaded",
+    "dimensions": [
+      451,
+      401
+    ],
+    "reviewed_on": "2026-10-19",
+    "review_scope": "编号总览及分类参考板；用于画风观察"
+  },
+  {
+    "file": "D:\\fqh\\flash\\.tmp\\mcs_style_reference_20261019\\originals\\garden_01.jpg",
+    "image_url": "https://exp-picture.cdn.bcebos.com/c6b994775ddd884c54b242906cef28066a01f653.jpg",
+    "source": "https://jingyan.baidu.com/article/14bd256e78a17afa6c261241.html",
+    "title": "灵田教程步骤 2",
+    "source_type": "third_party_game_screenshot",
+    "limitation": "2022年攻略截图，保留原教程箭头和水印；只作画风参考",
+    "sha256": "EC91B642789977476E006966EFE9D3D863BF2B5548659FF0EB6DD2B8DDDE4E97",
+    "status": "downloaded",
+    "dimensions": [
+      451,
+      401
+    ],
+    "reviewed_on": "2026-10-19",
+    "review_scope": "编号总览及分类参考板；用于画风观察"
+  },
+  {
+    "file": "D:\\fqh\\flash\\.tmp\\mcs_style_reference_20261019\\originals\\garden_02.jpg",
+    "image_url": "https://exp-picture.cdn.bcebos.com/9a8fd9f88a775ddd38b488fda427e7ef2906f953.jpg",
+    "source": "https://jingyan.baidu.com/article/14bd256e78a17afa6c261241.html",
+    "title": "灵田教程步骤 3",
+    "source_type": "third_party_game_screenshot",
+    "limitation": "2022年攻略截图，保留原教程箭头和水印；只作画风参考",
+    "sha256": "FBDC5B1434AE3009C915D0B4F23A815A47C326C41DC57696DF8D15F6652D1886",
+    "status": "downloaded",
+    "dimensions": [
+      451,
+      401
+    ],
+    "reviewed_on": "2026-10-19",
+    "review_scope": "编号总览及分类参考板；用于画风观察"
+  },
+  {
+    "file": "D:\\fqh\\flash\\.tmp\\mcs_style_reference_20261019\\originals\\garden_03.jpg",
+    "image_url": "https://exp-picture.cdn.bcebos.com/5c9c964ce54a2f27541745b1e00192dd3240f453.jpg",
+    "source": "https://jingyan.baidu.com/article/14bd256e78a17afa6c261241.html",
+    "title": "灵田教程步骤 4",
+    "source_type": "third_party_game_screenshot",
+    "limitation": "2022年攻略截图，保留原教程箭头和水印；只作画风参考",
+    "sha256": "7657AB1DAE73D6256D11F144B612CB5B7DBCBA536A78CA97F013058B144B86A3",
+    "status": "downloaded",
+    "dimensions": [
+      451,
+      401
+    ],
+    "reviewed_on": "2026-10-19",
+    "review_scope": "编号总览及分类参考板；用于画风观察"
+  },
+  {
+    "file": "D:\\fqh\\flash\\.tmp\\mcs_style_reference_20261019\\originals\\interior_dialogue.jpg",
+    "title": "室内剧情对话",
+    "image_url": "https://www.vgover.com/vg/cover/20220906/47c195fdddb263a543340afc30f6c0a9.jpg",
+    "source": "https://www.vgover.com/topic/85841",
+    "source_type": "third_party_game_screenshot",
+    "limitation": "2022年攻略截图，有水印且下边缘裁切",
+    "status": "copied_existing_reference",
+    "sha256": "D4EF645F0204CC1970BBA36C533BC56C75F97A7B85436B4551F86BA2D1838652",
+    "dimensions": [
+      952,
+      592
+    ],
+    "reviewed_on": "2026-10-19",
+    "review_scope": "编号总览及分类参考板；用于画风观察"
+  }
+]

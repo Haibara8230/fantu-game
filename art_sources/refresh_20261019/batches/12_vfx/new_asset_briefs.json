@@ -1,0 +1,23 @@
+[
+  {
+    "priority": "P1",
+    "filename": "zhaoshui_charge.png",
+    "brief": "照水分光蓄势视觉，机制确认后制作，保留可读剪影",
+    "status": "planned_or_existing_candidate",
+    "output_path": "D:/fqh/flash/art_sources/refresh_20261019/batches/12_vfx/output/zhaoshui_charge.png"
+  },
+  {
+    "priority": "P1",
+    "filename": "zhaoshui_counter.png",
+    "brief": "照水分光反击视觉，与图标／武器形保持一致",
+    "status": "planned_or_existing_candidate",
+    "output_path": "D:/fqh/flash/art_sources/refresh_20261019/batches/12_vfx/output/zhaoshui_counter.png"
+  },
+  {
+    "priority": "P2",
+    "filename": "cangxi_concealment.png",
+    "brief": "藏息轻雾／隐息效果，不改变所有风险的实际规则",
+    "status": "planned_or_existing_candidate",
+    "output_path": "D:/fqh/flash/art_sources/refresh_20261019/batches/12_vfx/output/cangxi_concealment.png"
+  }
+]

@@ -1,0 +1,42 @@
+[
+  {
+    "id": "female_middle",
+    "count": 30,
+    "task": "D:/fqh/flash/art_sources/refresh_20261019/batches/03_portrait_pool/female_middle/TASK.md"
+  },
+  {
+    "id": "female_old",
+    "count": 30,
+    "task": "D:/fqh/flash/art_sources/refresh_20261019/batches/03_portrait_pool/female_old/TASK.md"
+  },
+  {
+    "id": "female_young_01",
+    "count": 32,
+    "task": "D:/fqh/flash/art_sources/refresh_20261019/batches/03_portrait_pool/female_young_01/TASK.md"
+  },
+  {
+    "id": "female_young_02",
+    "count": 31,
+    "task": "D:/fqh/flash/art_sources/refresh_20261019/batches/03_portrait_pool/female_young_02/TASK.md"
+  },
+  {
+    "id": "male_middle",
+    "count": 30,
+    "task": "D:/fqh/flash/art_sources/refresh_20261019/batches/03_portrait_pool/male_middle/TASK.md"
+  },
+  {
+    "id": "male_old",
+    "count": 30,
+    "task": "D:/fqh/flash/art_sources/refresh_20261019/batches/03_portrait_pool/male_old/TASK.md"
+  },
+  {
+    "id": "male_young_01",
+    "count": 32,
+    "task": "D:/fqh/flash/art_sources/refresh_20261019/batches/03_portrait_pool/male_young_01/TASK.md"
+  },
+  {
+    "id": "male_young_02",
+    "count": 31,
+    "task": "D:/fqh/flash/art_sources/refresh_20261019/batches/03_portrait_pool/male_young_02/TASK.md"
+  }
+]

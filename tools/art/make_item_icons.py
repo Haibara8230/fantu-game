@@ -8,9 +8,9 @@ import os, sys, math
 
 ROOT = sys.argv[1]
 OUT = os.path.join(ROOT, 'assets', 'art', 'icons')
-INK = '#0b1a1c'
-O = 'stroke="%s" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"' % INK
-O2 = 'stroke="%s" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"' % INK
+INK = '#26392f'
+O = 'stroke="%s" stroke-width="1.2" stroke-linejoin="round" stroke-linecap="round"' % INK
+O2 = 'stroke="%s" stroke-width="0.85" stroke-linejoin="round" stroke-linecap="round"' % INK
 
 def write(rel, body):
     path = os.path.join(OUT, rel)
@@ -23,19 +23,19 @@ def rot(cx, cy, r, a):
 
 # --- Elements --------------------------------------------------------------------------------------
 EL = {  # light, main, deep
-    'metal': ('#fbf6df', '#e3d9a8', '#9c8f5c'),
-    'wood': ('#d9f7c9', '#8fd98f', '#3f8a4c'),
-    'water': ('#e2f6ff', '#8fd0ef', '#2f739e'),
-    'fire': ('#ffe8b8', '#ffa765', '#b9452a'),
-    'earth': ('#f6e4ba', '#d9b373', '#7f5a2c'),
+    'metal': ('#f4e9be', '#c9ae68', '#8e7341'),
+    'wood': ('#d3dfac', '#89a86b', '#4c7951'),
+    'water': ('#d5e9df', '#8ab9bb', '#4d7c88'),
+    'fire': ('#f2d7a5', '#cc8c5d', '#995741'),
+    'earth': ('#ead9b1', '#bba16b', '#806841'),
 }
 
 # --- Backs: a dark field, the element's glow, a faint pattern of its own ---------------------------
 def back(glow, pattern):
-    return ('<defs><radialGradient id="g" cx="0.5" cy="0.46" r="0.6"><stop offset="0" stop-color="%s" stop-opacity="0.55"/>'
-            '<stop offset="0.55" stop-color="%s" stop-opacity="0.18"/><stop offset="1" stop-color="%s" stop-opacity="0"/></radialGradient></defs>'
-            '<rect x="3" y="3" width="58" height="58" rx="7" fill="#11221f"/><rect x="3" y="3" width="58" height="58" rx="7" fill="url(#g)"/>%s'
-            % (glow, glow, glow, pattern))
+    # Quiet colour planes follow the approved item/skill references. The old
+    # repeated pattern competes with a 64px subject and is intentionally omitted.
+    return ('<rect x="2" y="2" width="60" height="60" rx="3" fill="#303c32"/>'
+            '<path d="M2 40 Q32 29 62 37 V62 H2 Z" fill="%s" fill-opacity="0.12"/>' % glow)
 PATTERN = {
     'metal': ''.join('<path d="M%d 4 L%d 60" stroke="#e3d9a8" stroke-opacity="0.08" stroke-width="1.2"/>' % (x, x - 16) for x in range(12, 80, 9)),
     'wood': '<path d="M6 56 C20 44 30 30 34 8 M14 58 C26 50 40 40 56 30 M34 28 C40 24 48 22 58 22" stroke="#8fd98f" stroke-opacity="0.12" stroke-width="1.4" fill="none"/>',
@@ -68,20 +68,11 @@ def gems(color, r=2.6):
                    for x, y in [(32, 3), (32, 61), (3, 32), (61, 32)])
 def frame(index):
     c = GRADES[index]
-    rim = '<rect x="3" y="3" width="58" height="58" rx="7" fill="none" stroke="%s" stroke-width="3"/>' % INK
-    rim += '<rect x="3.5" y="3.5" width="57" height="57" rx="6.5" fill="none" stroke="%s" stroke-width="%s"/>' % (c, '2' if index < 2 else '2.4')
-    if index >= 1:
-        rim += '<rect x="7" y="7" width="50" height="50" rx="4" fill="none" stroke="%s" stroke-opacity="0.35" stroke-width="1"/>' % c
+    rim = '<rect x="1.5" y="1.5" width="61" height="61" rx="3" fill="none" stroke="%s" stroke-width="1.2"/>' % c
     if index >= 2:
-        rim += corner_brackets(c)
-    if index >= 3:
-        rim += cloud_corners(GOLD)
+        rim += corner_brackets(c, length=6, width=1.2)
     if index >= 4:
-        rim += gems(c)
-        rim += '<path d="M24 3 L32 0 L40 3 M24 61 L32 64 L40 61" stroke="%s" stroke-width="1.8" fill="none"/>' % GOLD
-    if index >= 5:
-        rim += ''.join('<circle cx="%d" cy="%d" r="1.6" fill="%s"/>' % (x, y, '#ffe6a0') for x, y in [(14, 3), (50, 3), (14, 61), (50, 61), (3, 14), (3, 50), (61, 14), (61, 50)])
-        rim += '<rect x="1.5" y="1.5" width="61" height="61" rx="8.5" fill="none" stroke="%s" stroke-opacity="0.6" stroke-width="1"/>' % GOLD
+        rim += '<path d="M28 2 L32 5 L36 2 M28 62 L32 59 L36 62" stroke="%s" stroke-width="1" fill="none"/>' % GOLD
     return rim
 for index in range(6):
     write('frames/grade_%d.svg' % index, frame(index))
@@ -124,16 +115,13 @@ def barrage(e):
 
 def burst(e):
     light, main, deep = EL[e]
-    rays = ''.join('<path d="M%.1f %.1f L%.1f %.1f L%.1f %.1f Z" fill="%s" %s/>' % (
-        *rot(32, 32, 9, a - 12), *rot(32, 32, 25 if i % 2 == 0 else 18, a), *rot(32, 32, 9, a + 12), main if i % 2 == 0 else deep, O2)
-        for i, a in enumerate(range(0, 360, 30)))
-    core = '<circle cx="32" cy="32" r="10" fill="%s" %s/>' % (light, O)
-    sign = {'metal': '<path d="M32 25 L34 30 L39 32 L34 34 L32 39 L30 34 L25 32 L30 30 Z" fill="%s"/>' % deep,
-            'wood': '<path d="M27 37 C26 30 30 26 37 26 C37 33 33 37 27 37 Z" fill="%s"/>' % deep,
-            'water': '<path d="M26 31 C28 29 30 29 32 31 C34 33 36 33 38 31 M26 35 C28 33 30 33 32 35 C34 37 36 37 38 35" stroke="%s" stroke-width="1.8" fill="none" stroke-linecap="round"/>' % deep,
-            'fire': '<path d="M32 25 C35 29 37 31 36 34 C35 37 33 38 32 38 C30 38 28 36 28 34 C28 31 31 30 31 27 C32 29 32 30 33 31 Z" fill="%s"/>' % deep,
-            'earth': '<path d="M25 37 L30 28 L33 33 L35 29 L39 37 Z" fill="%s"/>' % deep}[e]
-    return rays + core + sign
+    # Approved 09_skill: one diagonal impact and broad connected rays. This is
+    # a subject layer only; backs and grade frames are composed by ArtLibrary.
+    return ('<path d="M9 51 L28 31 L54 9 L37 35 Z" fill="%s" %s/>'
+            '<path d="M20 18 L30 28 L31 6 L35 27 L52 21 L39 32 L58 40 L37 37 L42 58 L31 40 L16 55 L25 37 L6 32 L25 29 Z" fill="%s" %s/>'
+            '<path d="M29 30 L32 15 L35 30 L48 27 L38 35 L45 46 L33 39 L24 49 L28 37 L15 33 Z" fill="%s"/>'
+            '<path d="M31 31 L33 25 L35 32 L41 33 L35 36 L33 42 L30 36 L24 34 Z" fill="%s"/>'
+            % (deep, O2, main, O2, light, '#fff4d0'))
 
 def mend(e):
     light, main, deep = EL[e]
@@ -274,7 +262,7 @@ RED = '#c0392b'
 PAPER = '#f1e6c8'
 
 def glow(cx, cy, r, color, opacity=0.18):
-    return '<circle cx="%s" cy="%s" r="%s" fill="%s" fill-opacity="%s"/>' % (cx, cy, r, color, opacity)
+    return ''  # No stacked glow discs behind catalogue subjects.
 
 def shine(x, y, rx, ry, angle=-25, opacity=0.55):
     return '<ellipse cx="%s" cy="%s" rx="%s" ry="%s" fill="#ffffff" fill-opacity="%s" transform="rotate(%d %s %s)"/>' % (x, y, rx, ry, opacity, angle, x, y)
@@ -299,11 +287,16 @@ def ground(color='#2a3a33'):
 
 # Herbs
 def grass_tuft():
-    leaves = ''
-    for tx, ty, w, color in [(14, 26, 4, '#5fae6a'), (50, 24, 4, '#5fae6a'), (22, 14, 4.5, '#8fd98f'), (44, 15, 4.5, '#8fd98f'), (33, 10, 5, '#a6e6a0')]:
-        leaves += leaf(32, 52, tx, ty, w, color, '#3f8a4c')
-    buds = ''.join('<circle cx="%d" cy="%d" r="2.6" fill="#f4f1dc" %s/>' % (x, y, O2) for x, y in [(23, 22), (42, 21), (33, 17)])
-    return ground() + leaves + buds
+    return ('<path d="M31 55 C28 40 30 24 33 10" stroke="#5e6e3e" stroke-width="2" fill="none"/>'
+            '<g stroke="#33553b" stroke-width="0.85" stroke-linejoin="round">'
+            '<path d="M30 48 C20 49 13 44 9 36 C19 35 28 39 30 48 Z" fill="#578353"/>'
+            '<path d="M31 44 C32 34 42 28 53 27 C51 38 42 43 31 44 Z" fill="#89a95f"/>'
+            '<path d="M30 36 C22 37 14 29 13 22 C24 22 29 27 30 36 Z" fill="#91b067"/>'
+            '<path d="M31 29 C31 21 39 15 47 14 C47 23 40 29 31 29 Z" fill="#7caa5c"/>'
+            '<path d="M32 21 C25 21 22 15 23 9 C30 11 33 15 32 21 Z" fill="#a1bc68"/>'
+            '<path d="M31 52 C35 45 45 42 53 44 C48 50 39 54 31 52 Z" fill="#7aa05a"/>'
+            '<path d="M20 22 C18 18 21 17 23 19 C25 15 28 18 25 21 C27 23 24 25 22 23 Z M38 20 C36 17 38 15 41 17 C42 14 45 16 44 19 C46 21 43 23 41 21 Z M32 13 C30 10 32 8 34 10 C35 7 38 9 37 12 C39 14 35 16 34 14 Z" fill="#eee2ba"/>'
+            '</g>')
 
 def fire_flower():
     stem = '<path d="M32 54 C31 46 33 40 32 32" stroke="%s" stroke-width="4" fill="none"/><path d="M32 54 C31 46 33 40 32 32" stroke="#5fae6a" stroke-width="2" fill="none"/>' % INK

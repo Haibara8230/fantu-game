@@ -1,0 +1,514 @@
+[
+  {
+    "path": "assets/art/events/ascension_opens.png",
+    "category": "events",
+    "status": "pending",
+    "baseline": {
+      "sha256": "d1f3016d252b555463a924e0be249c7e7942e4e67ba7ae86ebad394da6625c87",
+      "bytes": 3151125,
+      "size": [
+        1672,
+        941
+      ],
+      "mode": "RGB"
+    },
+    "absolute_path": "D:/fqh/flash/assets/art/events/ascension_opens.png",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/events/epiphany.png",
+    "category": "events",
+    "status": "pending",
+    "baseline": {
+      "sha256": "90457353a5ddd93fd6fdd19ba4330dda82bdc4a490049d5643b0a942017c7070",
+      "bytes": 2834314,
+      "size": [
+        1672,
+        941
+      ],
+      "mode": "RGB"
+    },
+    "absolute_path": "D:/fqh/flash/assets/art/events/epiphany.png",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/events/heart_demon.png",
+    "category": "events",
+    "status": "pending",
+    "baseline": {
+      "sha256": "f77664d85ec2396dd8e31ec0e8d39255e0922476111730e4ecc9515dba96127b",
+      "bytes": 2674665,
+      "size": [
+        1672,
+        941
+      ],
+      "mode": "RGB"
+    },
+    "absolute_path": "D:/fqh/flash/assets/art/events/heart_demon.png",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/events/outer_tournament.png",
+    "category": "events",
+    "status": "pending",
+    "baseline": {
+      "sha256": "8cc911a995c62c0f1272bfda614a9d7267980a69c4df3b2074dbf8fe9f96ab25",
+      "bytes": 1719736,
+      "size": [
+        1600,
+        900
+      ],
+      "mode": "RGB"
+    },
+    "absolute_path": "D:/fqh/flash/assets/art/events/outer_tournament.png",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/events/remnant_soul.png",
+    "category": "events",
+    "status": "pending",
+    "baseline": {
+      "sha256": "d13668056b3c429503d147e335849c837a4279b97cac16173ebf21803682604f",
+      "bytes": 2667511,
+      "size": [
+        1672,
+        941
+      ],
+      "mode": "RGB"
+    },
+    "absolute_path": "D:/fqh/flash/assets/art/events/remnant_soul.png",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/events/rogue_ambush.png",
+    "category": "events",
+    "status": "pending",
+    "baseline": {
+      "sha256": "4c3e949997ba8a9c0b287a0530bc2552c1c4ab62307dc187792b75c8722e4580",
+      "bytes": 1727548,
+      "size": [
+        1600,
+        900
+      ],
+      "mode": "RGB"
+    },
+    "absolute_path": "D:/fqh/flash/assets/art/events/rogue_ambush.png",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/events/serpent_rampage.png",
+    "category": "events",
+    "status": "pending",
+    "baseline": {
+      "sha256": "75046712b6a80d3033b95d2b73fd6b061386dfa3eab3f34ab36a90eee42d44f6",
+      "bytes": 1987189,
+      "size": [
+        1600,
+        900
+      ],
+      "mode": "RGB"
+    },
+    "absolute_path": "D:/fqh/flash/assets/art/events/serpent_rampage.png",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/events/spirit_eye.png",
+    "category": "events",
+    "status": "pending",
+    "baseline": {
+      "sha256": "be844382d7ac4d0fcb7c92becd59c47ee4d806da0da0e4cc9e9abd554215d027",
+      "bytes": 2887286,
+      "size": [
+        1672,
+        941
+      ],
+      "mode": "RGB"
+    },
+    "absolute_path": "D:/fqh/flash/assets/art/events/spirit_eye.png",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/events/talent_bulao.png",
+    "category": "events",
+    "status": "pending",
+    "baseline": {
+      "sha256": "d2193236ee0aad71711b3d212c97fd581f672e67d4a67c2ced8d5689784fddb5",
+      "bytes": 2896494,
+      "size": [
+        1672,
+        941
+      ],
+      "mode": "RGB"
+    },
+    "absolute_path": "D:/fqh/flash/assets/art/events/talent_bulao.png",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/events/talent_bumie.png",
+    "category": "events",
+    "status": "pending",
+    "baseline": {
+      "sha256": "9ec7e1a641cc337509049195c6d77ae90d7b3dcc3b741ac4e447b60751e5e6a5",
+      "bytes": 2355983,
+      "size": [
+        1672,
+        941
+      ],
+      "mode": "RGB"
+    },
+    "absolute_path": "D:/fqh/flash/assets/art/events/talent_bumie.png",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/events/talent_danqi.png",
+    "category": "events",
+    "status": "pending",
+    "baseline": {
+      "sha256": "91aaa410bf20604c0cbcb72c4e15bdc86710248485d5998916c36281c2346699",
+      "bytes": 2380653,
+      "size": [
+        1672,
+        941
+      ],
+      "mode": "RGB"
+    },
+    "absolute_path": "D:/fqh/flash/assets/art/events/talent_danqi.png",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/events/talent_daqiyun.png",
+    "category": "events",
+    "status": "pending",
+    "baseline": {
+      "sha256": "fa9eb2b2f065ef979a84285551d8ddd59645cb3feae02d83ce4c668b9d020f7b",
+      "bytes": 2643699,
+      "size": [
+        1672,
+        941
+      ],
+      "mode": "RGB"
+    },
+    "absolute_path": "D:/fqh/flash/assets/art/events/talent_daqiyun.png",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/events/talent_fuze.png",
+    "category": "events",
+    "status": "pending",
+    "baseline": {
+      "sha256": "3943696bce246693992746c508295c8751894f1c795da9b3c0577aea86fc9ebe",
+      "bytes": 2199281,
+      "size": [
+        1672,
+        941
+      ],
+      "mode": "RGB"
+    },
+    "absolute_path": "D:/fqh/flash/assets/art/events/talent_fuze.png",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/events/talent_huigen.png",
+    "category": "events",
+    "status": "pending",
+    "baseline": {
+      "sha256": "69c193636bdc1bfe7a6e6573f4e805b743e745831d4014bfe0a95abfd443d6f7",
+      "bytes": 2450842,
+      "size": [
+        1672,
+        941
+      ],
+      "mode": "RGB"
+    },
+    "absolute_path": "D:/fqh/flash/assets/art/events/talent_huigen.png",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/events/talent_hunyuan.png",
+    "category": "events",
+    "status": "pending",
+    "baseline": {
+      "sha256": "9b3fd725e53b5d7fc48aa44c1235ef8150e9ca0445a0ca58883a394e8091ed98",
+      "bytes": 2840149,
+      "size": [
+        1672,
+        941
+      ],
+      "mode": "RGB"
+    },
+    "absolute_path": "D:/fqh/flash/assets/art/events/talent_hunyuan.png",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/events/talent_jiandan.png",
+    "category": "events",
+    "status": "pending",
+    "baseline": {
+      "sha256": "74c2e8231894dc9c3569e781f8adc2dec2fdadde43e7618f7d3b9d9ddc7de171",
+      "bytes": 2435530,
+      "size": [
+        1672,
+        941
+      ],
+      "mode": "RGB"
+    },
+    "absolute_path": "D:/fqh/flash/assets/art/events/talent_jiandan.png",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/events/talent_jiangu.png",
+    "category": "events",
+    "status": "pending",
+    "baseline": {
+      "sha256": "59f7ecbdf430a5a4f397a641d34ae8720873b998ef01656b6ae8a119c559ac78",
+      "bytes": 2524557,
+      "size": [
+        1672,
+        941
+      ],
+      "mode": "RGB"
+    },
+    "absolute_path": "D:/fqh/flash/assets/art/events/talent_jiangu.png",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/events/talent_linglong.png",
+    "category": "events",
+    "status": "pending",
+    "baseline": {
+      "sha256": "9f32e8d8137443eb3ef89ad98fbd9dd9b36b8b9b36cbe479ab950aaf3ff5cbab",
+      "bytes": 2186163,
+      "size": [
+        1672,
+        941
+      ],
+      "mode": "RGB"
+    },
+    "absolute_path": "D:/fqh/flash/assets/art/events/talent_linglong.png",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/events/talent_lingqiao_tian.png",
+    "category": "events",
+    "status": "pending",
+    "baseline": {
+      "sha256": "8cefdb9e6ddef0f4fd16915494c7bbb687956eb7dd7675c433278417338b6cf3",
+      "bytes": 2645359,
+      "size": [
+        1672,
+        941
+      ],
+      "mode": "RGB"
+    },
+    "absolute_path": "D:/fqh/flash/assets/art/events/talent_lingqiao_tian.png",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/events/talent_qiyun_zhizi.png",
+    "category": "events",
+    "status": "pending",
+    "baseline": {
+      "sha256": "aa13b56a4ca99fa6ea84d9adc539d70b7ce7d3bff2616663abe214895dc3485e",
+      "bytes": 2396750,
+      "size": [
+        1672,
+        941
+      ],
+      "mode": "RGB"
+    },
+    "absolute_path": "D:/fqh/flash/assets/art/events/talent_qiyun_zhizi.png",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/events/talent_shouxing.png",
+    "category": "events",
+    "status": "pending",
+    "baseline": {
+      "sha256": "5301d5acdbee8ea8da63eef08a82cad87c15f36ad898be62b63ba1cec7f1ba44",
+      "bytes": 2473099,
+      "size": [
+        1672,
+        941
+      ],
+      "mode": "RGB"
+    },
+    "absolute_path": "D:/fqh/flash/assets/art/events/talent_shouxing.png",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/events/talent_shouyou.png",
+    "category": "events",
+    "status": "pending",
+    "baseline": {
+      "sha256": "3c2033c68bfa9c37c85c9859a6903f8052d88edc49fe40c57aeb798694721986",
+      "bytes": 2831097,
+      "size": [
+        1672,
+        941
+      ],
+      "mode": "RGB"
+    },
+    "absolute_path": "D:/fqh/flash/assets/art/events/talent_shouyou.png",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/events/talent_tianyan.png",
+    "category": "events",
+    "status": "pending",
+    "baseline": {
+      "sha256": "8f904166abdef796d0855716a9ceffd1145c0cae63a191719a5baed89b464573",
+      "bytes": 2633473,
+      "size": [
+        1672,
+        941
+      ],
+      "mode": "RGB"
+    },
+    "absolute_path": "D:/fqh/flash/assets/art/events/talent_tianyan.png",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/events/talent_tongming.png",
+    "category": "events",
+    "status": "pending",
+    "baseline": {
+      "sha256": "3f4f2b4cc99fa4b78930cf4dd150bbf7a0ac4b579d623ec064ccbb7ac10d34d1",
+      "bytes": 2741650,
+      "size": [
+        1672,
+        941
+      ],
+      "mode": "RGB"
+    },
+    "absolute_path": "D:/fqh/flash/assets/art/events/talent_tongming.png",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/events/talent_wanfa.png",
+    "category": "events",
+    "status": "pending",
+    "baseline": {
+      "sha256": "ff4dd8bc9840a3d421a710efaf053e1f4b998444be80f66c0a399c8528d81c3f",
+      "bytes": 2262658,
+      "size": [
+        1672,
+        941
+      ],
+      "mode": "RGB"
+    },
+    "absolute_path": "D:/fqh/flash/assets/art/events/talent_wanfa.png",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/events/talent_xiantian_daoti.png",
+    "category": "events",
+    "status": "pending",
+    "baseline": {
+      "sha256": "ecc0e4c751db11d9b8a049776f5a607be36dceddd8da6d8f30c5a45a56383c6f",
+      "bytes": 2359391,
+      "size": [
+        1672,
+        941
+      ],
+      "mode": "RGB"
+    },
+    "absolute_path": "D:/fqh/flash/assets/art/events/talent_xiantian_daoti.png",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/events/talent_yinyang.png",
+    "category": "events",
+    "status": "pending",
+    "baseline": {
+      "sha256": "902b762b0e2d9ba6b3aed555a451a02981f552773aa5419eda2d3beb1f9a68df",
+      "bytes": 2981624,
+      "size": [
+        1672,
+        941
+      ],
+      "mode": "RGB"
+    },
+    "absolute_path": "D:/fqh/flash/assets/art/events/talent_yinyang.png",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/events/talent_zhanti.png",
+    "category": "events",
+    "status": "pending",
+    "baseline": {
+      "sha256": "5bda11e8824242186a5a844209ec4145b3aface3742b5cbf4643c76a612c4dbd",
+      "bytes": 2698676,
+      "size": [
+        1672,
+        941
+      ],
+      "mode": "RGB"
+    },
+    "absolute_path": "D:/fqh/flash/assets/art/events/talent_zhanti.png",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/events/teahouse_story.png",
+    "category": "events",
+    "status": "pending",
+    "baseline": {
+      "sha256": "528f387468f94220a5f8b01ed5064ce07e01a92b0af28a8388757d106ba9ea49",
+      "bytes": 1412458,
+      "size": [
+        1600,
+        900
+      ],
+      "mode": "RGB"
+    },
+    "absolute_path": "D:/fqh/flash/assets/art/events/teahouse_story.png",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/events/wounded_in_pines.png",
+    "category": "events",
+    "status": "pending",
+    "baseline": {
+      "sha256": "bdd657f7a91efd611d15e1600004e9768e50f47ef7a1bf003dd7a752aa891976",
+      "bytes": 1905661,
+      "size": [
+        1600,
+        900
+      ],
+      "mode": "RGB"
+    },
+    "absolute_path": "D:/fqh/flash/assets/art/events/wounded_in_pines.png",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/events/yunxi_auction.png",
+    "category": "events",
+    "status": "pending",
+    "baseline": {
+      "sha256": "35c927dd2e92f05f2cf7d673a9ee03713e1689c63975fdac1a82a31bb4f3744e",
+      "bytes": 1483421,
+      "size": [
+        1600,
+        900
+      ],
+      "mode": "RGB"
+    },
+    "absolute_path": "D:/fqh/flash/assets/art/events/yunxi_auction.png",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/events/yunxi_night_market.png",
+    "category": "events",
+    "status": "pending",
+    "baseline": {
+      "sha256": "7064669b9fe378faa55401991d71fcd45e639737f533fc02bc5d34c65c862430",
+      "bytes": 1577778,
+      "size": [
+        1600,
+        900
+      ],
+      "mode": "RGB"
+    },
+    "absolute_path": "D:/fqh/flash/assets/art/events/yunxi_night_market.png",
+    "actor_layouts": []
+  }
+]

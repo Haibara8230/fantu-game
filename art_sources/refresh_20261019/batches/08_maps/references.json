@@ -1,0 +1,19 @@
+[
+  {
+    "id": "05_map",
+    "title": "区域舆图 · 青云周边",
+    "old": "D:/fqh/flash/assets/art/map/region_qingyun.png",
+    "ref": "D:/fqh/flash/.tmp/mcs_style_reference_20261019/originals/steam_02.jpg",
+    "mode": "imagegen",
+    "note": "改为概括地形地图，保留原有主要地点布局",
+    "transparent": false,
+    "spec": "A high-oblique REGIONAL TRAVEL MAP background, NOT an eye-level landscape. Preserve target topology and large landmark placement: sect mountain upper-left at about (24%,24%), town mid-left (40%,42%), ferry central-right (60%,50%), larger market lower-right (86%,62%), pine ridge lower-left (20%,60%), warm sunset valley near (44%,80%), tiny unobtrusive cave lower-left. River runs from north through centre-right toward southeast. The actual game screenshot is the PRIMARY map style: broad pale ochre/jade land colour areas, MANY SMALL SIMPLIFIED repeated mountain glyph-like silhouettes and grouped trees, gently blended region colour patches, thin clean blue river, tiny highly simplified landmark buildings, soft low-contrast atmospheric separation. The current target is too full of huge detailed crags; substantially flatten the perspective and simplify into a readable overview map. No highly detailed canyon rendering, no realistic tree branches, no ornate cities. Absolutely NO TEXT, road lines, location labels, UI, characters, markers, borders, compass or buttons. Original region content, not copied Ningzhou geography. Landscape 16:10.",
+    "new": "D:/fqh/flash/.tmp/style_samples_20261019/new/05_map.png",
+    "referenceOutput": "D:/fqh/flash/.tmp/style_samples_20261019/inputs/05_map_reference.png",
+    "comparison": "D:/fqh/flash/.tmp/style_samples_20261019/compare/05_map.png",
+    "promptPath": "D:/fqh/flash/.tmp/style_samples_20261019/prompts/05_map.txt",
+    "panelHeight": 410,
+    "refNote": "官方宁州地图；不同地理布局",
+    "packaged_new": "D:/fqh/flash/art_sources/refresh_20261019/approved_samples/05_map.png"
+  }
+]

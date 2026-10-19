@@ -1,0 +1,23 @@
+[
+  {
+    "priority": "P0",
+    "filename": "tiannan_five_city_plan.png",
+    "brief": "五城五宗及河运／海域整体规划候选；不直接覆盖当前可玩地图",
+    "status": "planned_or_existing_candidate",
+    "output_path": "D:/fqh/flash/art_sources/refresh_20261019/batches/08_maps/output/tiannan_five_city_plan.png"
+  },
+  {
+    "priority": "P2",
+    "filename": "near_sea_map.png",
+    "brief": "近海群岛、航线空间和沉船遗址布局；标签与路线独立",
+    "status": "planned_or_existing_candidate",
+    "output_path": "D:/fqh/flash/art_sources/refresh_20261019/batches/08_maps/output/near_sea_map.png"
+  },
+  {
+    "priority": "P2",
+    "filename": "chenxia_interior_map.png",
+    "brief": "古境内部支路／阵室关系；先确定真实房间再画",
+    "status": "planned_or_existing_candidate",
+    "output_path": "D:/fqh/flash/art_sources/refresh_20261019/batches/08_maps/output/chenxia_interior_map.png"
+  }
+]

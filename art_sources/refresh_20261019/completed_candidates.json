@@ -1,0 +1,240 @@
+[
+  {
+    "id": "sect_small",
+    "title": "青云小宗全景",
+    "batch": "05_locations",
+    "status": "candidate",
+    "path": "D:/fqh/flash/art_sources/refresh_20261019/batches/05_locations/candidates/sect_small.png",
+    "prompt": "D:/fqh/flash/art_sources/refresh_20261019/batches/05_locations/prompts/sect_small.txt",
+    "refs": [
+      "D:/fqh/flash/.tmp/style_samples_20261019/new/04_location.png",
+      "D:/fqh/flash/.tmp/mcs_style_reference_20261019/originals/steam_00.jpg"
+    ],
+    "sha256": "2b505e98df65f56eb411893ec64a20943d773e09c3c15a8d9b31273376131b22",
+    "size": [
+      1672,
+      941
+    ],
+    "mode": "RGB"
+  },
+  {
+    "id": "lu_chengzhou",
+    "title": "陆承舟初期头像",
+    "batch": "02_key_portraits",
+    "status": "candidate",
+    "path": "D:/fqh/flash/art_sources/refresh_20261019/batches/02_key_portraits/candidates/lu_chengzhou.png",
+    "prompt": "D:/fqh/flash/art_sources/refresh_20261019/batches/02_key_portraits/prompts/lu_chengzhou.txt",
+    "refs": [
+      "D:/fqh/flash/.tmp/style_samples_20261019/new/02_portrait.png"
+    ],
+    "sha256": "a7d038cc537349073873aa20693c116ce1763530448bfd009e19581d93fce4be",
+    "size": [
+      1122,
+      1402
+    ],
+    "mode": "RGB"
+  },
+  {
+    "id": "ye_zhiwei",
+    "title": "叶知微初期头像",
+    "batch": "02_key_portraits",
+    "status": "candidate",
+    "path": "D:/fqh/flash/art_sources/refresh_20261019/batches/02_key_portraits/candidates/ye_zhiwei.png",
+    "prompt": "D:/fqh/flash/art_sources/refresh_20261019/batches/02_key_portraits/prompts/ye_zhiwei.txt",
+    "refs": [
+      "D:/fqh/flash/.tmp/style_samples_20261019/new/02_portrait.png"
+    ],
+    "sha256": "d844a0a6e01f95777c1014088a033a071b09de0d98630cd8a3ac83812d60e03d",
+    "size": [
+      1122,
+      1402
+    ],
+    "mode": "RGB"
+  },
+  {
+    "id": "wenren_zhao",
+    "title": "闻人照初期头像",
+    "batch": "02_key_portraits",
+    "status": "candidate",
+    "path": "D:/fqh/flash/art_sources/refresh_20261019/batches/02_key_portraits/candidates/wenren_zhao.png",
+    "prompt": "D:/fqh/flash/art_sources/refresh_20261019/batches/02_key_portraits/prompts/wenren_zhao.txt",
+    "refs": [
+      "D:/fqh/flash/.tmp/style_samples_20261019/new/02_portrait.png"
+    ],
+    "sha256": "67b9689ddc3361f4cf97376dc5254d3062028c574bed418e381a217f5f19be14",
+    "size": [
+      1122,
+      1402
+    ],
+    "mode": "RGB"
+  },
+  {
+    "id": "liu_hanzhou_healthy",
+    "title": "柳寒舟健康状态",
+    "batch": "02_key_portraits",
+    "status": "candidate",
+    "path": "D:/fqh/flash/art_sources/refresh_20261019/batches/02_key_portraits/candidates/liu_hanzhou_healthy.png",
+    "prompt": "D:/fqh/flash/art_sources/refresh_20261019/batches/02_key_portraits/prompts/liu_hanzhou_healthy.txt",
+    "refs": [
+      "D:/fqh/flash/assets/art/portraits/wounded.png",
+      "D:/fqh/flash/.tmp/style_samples_20261019/new/02_portrait.png"
+    ],
+    "sha256": "ea67ce6b5d249c4bb5cb49dc138604024dfe9baafc9ddafac5826e77ec19ddfe",
+    "size": [
+      1122,
+      1402
+    ],
+    "mode": "RGB"
+  },
+  {
+    "id": "hero_atlas",
+    "title": "主角六姿态初版",
+    "batch": "01_human_actions",
+    "status": "superseded",
+    "path": "D:/fqh/flash/art_sources/refresh_20261019/batches/01_human_actions/candidates/hero_atlas.png",
+    "prompt": "D:/fqh/flash/art_sources/refresh_20261019/batches/01_human_actions/prompts/hero_atlas.txt",
+    "refs": [
+      "D:/fqh/flash/.tmp/style_samples_20261019/new/01_hero.png",
+      "D:/fqh/flash/assets/art/cultivator_atlas_v2.png"
+    ],
+    "sha256": "20fd563b2e033751b67fcb6ccd42a2833e12cd1ece779794c140bbaa8e21be12",
+    "size": [
+      1536,
+      1024
+    ],
+    "mode": "RGBA",
+    "alpha_extrema": [
+      0,
+      254
+    ],
+    "corner_alpha": 0
+  },
+  {
+    "id": "azhi",
+    "title": "阿芷简化重绘",
+    "batch": "02_key_portraits",
+    "status": "candidate",
+    "path": "D:/fqh/flash/art_sources/refresh_20261019/batches/02_key_portraits/candidates/azhi.png",
+    "prompt": "D:/fqh/flash/art_sources/refresh_20261019/batches/02_key_portraits/prompts/azhi.txt",
+    "refs": [
+      "D:/fqh/flash/assets/art/portraits/azhi_unique.png",
+      "D:/fqh/flash/.tmp/style_samples_20261019/new/02_portrait.png"
+    ],
+    "sha256": "d4d0e67997d6441ed6f4aa517d87a8145bc9de11f13c60178632c8c5917e6175",
+    "size": [
+      1122,
+      1402
+    ],
+    "mode": "RGB"
+  },
+  {
+    "id": "hero_atlas_alpha",
+    "title": "主角六姿态修正版，优先检查此版",
+    "batch": "01_human_actions",
+    "status": "candidate",
+    "path": "D:/fqh/flash/art_sources/refresh_20261019/batches/01_human_actions/candidates/hero_atlas_alpha.png",
+    "prompt": "D:/fqh/flash/art_sources/refresh_20261019/batches/01_human_actions/prompts/hero_atlas_alpha.txt",
+    "refs": [
+      "D:/fqh/flash/.tmp/art_refresh_20261019/hero_atlas.png"
+    ],
+    "sha256": "fec312b80ec41b76f56f5d0da531edb9ca18c3fb35d67bac29b9505db5f41b5b",
+    "size": [
+      1536,
+      1024
+    ],
+    "mode": "RGBA",
+    "alpha_extrema": [
+      0,
+      254
+    ],
+    "corner_alpha": 0
+  },
+  {
+    "id": "auction_elder",
+    "title": "拍卖老修士暂拟形象",
+    "batch": "02_key_portraits",
+    "status": "candidate",
+    "path": "D:/fqh/flash/art_sources/refresh_20261019/batches/02_key_portraits/candidates/auction_elder.png",
+    "prompt": "D:/fqh/flash/art_sources/refresh_20261019/batches/02_key_portraits/prompts/auction_elder.txt",
+    "refs": [
+      "D:/fqh/flash/.tmp/style_samples_20261019/new/02_portrait.png"
+    ],
+    "sha256": "fa589f9d1def83d1511d4b8724dd0c0b3ba1d43181e4aaf4e7325a5144b9ec8a",
+    "size": [
+      1122,
+      1402
+    ],
+    "mode": "RGB"
+  },
+  {
+    "id": "yunxi_city",
+    "title": "云溪城市全景规划",
+    "batch": "05_locations",
+    "status": "candidate",
+    "path": "D:/fqh/flash/art_sources/refresh_20261019/batches/05_locations/candidates/yunxi_city.png",
+    "prompt": "D:/fqh/flash/art_sources/refresh_20261019/batches/05_locations/prompts/yunxi_city.txt",
+    "refs": [
+      "D:/fqh/flash/.tmp/style_samples_20261019/new/04_location.png",
+      "D:/fqh/flash/.tmp/mcs_style_reference_20261019/originals/steam_06.jpg"
+    ],
+    "sha256": "779e5018ba1892f448d0386ddf531c4a59e65c87eefc3c1f6705f39292b7d0ec",
+    "size": [
+      1672,
+      941
+    ],
+    "mode": "RGB"
+  },
+  {
+    "id": "sect_gate_normal",
+    "title": "日常山门，不能直接覆盖魔潮状态",
+    "batch": "06_scenes",
+    "status": "candidate",
+    "path": "D:/fqh/flash/art_sources/refresh_20261019/batches/06_scenes/candidates/sect_gate_normal.png",
+    "prompt": "D:/fqh/flash/art_sources/refresh_20261019/batches/06_scenes/prompts/sect_gate_normal.txt",
+    "refs": [
+      "D:/fqh/flash/.tmp/art_refresh_20261019/sect_small.png",
+      "D:/fqh/flash/.tmp/style_samples_20261019/new/07_interior.png"
+    ],
+    "sha256": "d7490b6621ceae29b5274317357938207f98756aa95fa7370579467d5e502a25",
+    "size": [
+      2164,
+      727
+    ],
+    "mode": "RGB"
+  },
+  {
+    "id": "qianlong_arena",
+    "title": "公共潜龙会背景",
+    "batch": "09_events",
+    "status": "candidate",
+    "path": "D:/fqh/flash/art_sources/refresh_20261019/batches/09_events/candidates/qianlong_arena.png",
+    "prompt": "D:/fqh/flash/art_sources/refresh_20261019/batches/09_events/prompts/qianlong_arena.txt",
+    "refs": [
+      "D:/fqh/flash/.tmp/style_samples_20261019/new/04_location.png",
+      "D:/fqh/flash/.tmp/style_samples_20261019/new/06_battle.png"
+    ],
+    "sha256": "76c5ddfc060e91e680018137f3c7b5e415103d1033ff8b9a2b5c1ec51a764086",
+    "size": [
+      1672,
+      941
+    ],
+    "mode": "RGB"
+  },
+  {
+    "id": "scroll_panel_dark",
+    "title": "与浅色文字兼容的深色卷轴",
+    "batch": "11_ui_rites",
+    "status": "candidate",
+    "path": "D:/fqh/flash/art_sources/refresh_20261019/batches/11_ui_rites/candidates/scroll_panel_dark.png",
+    "prompt": "D:/fqh/flash/art_sources/refresh_20261019/batches/11_ui_rites/prompts/scroll_panel_dark.txt",
+    "refs": [
+      "D:/fqh/flash/.tmp/style_samples_20261019/new/10_panel.png"
+    ],
+    "sha256": "f6d496d0084871fca648a38b8f1f0d5d632a73beb67b74d0515b254676ebb34f",
+    "size": [
+      1671,
+      941
+    ],
+    "mode": "RGB"
+  }
+]

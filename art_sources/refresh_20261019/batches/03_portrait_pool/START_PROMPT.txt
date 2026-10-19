@@ -1,0 +1,1 @@
+请按 D:/fqh/flash/art_sources/refresh_20261019/batches/03_portrait_pool/TASK.md 执行“普通修士头像池”这一批美术工作。先读通用规则和本批 inputs.json、references.json、new_asset_briefs.json，查看原图及已有候选。各类画法以对应参考为准。只在本批 output/ 生成和整理交付，暂不替换正式 assets/，不修改游戏规则、共享配置或其他批次文件。

@@ -1,0 +1,19 @@
+[
+  {
+    "id": "03_beast",
+    "title": "妖兽 · 岩甲蜥",
+    "old": "D:/fqh/flash/.tmp/style_samples_20261019/inputs/yanjia_idle.png",
+    "ref": "D:/fqh/flash/.tmp/mcs_style_reference_20261019/originals/wiki_beast_lizard.png",
+    "mode": "imagegen",
+    "note": "概括岩甲与鳞片，减少碎纹，保留辨识特征",
+    "transparent": true,
+    "spec": "ONE rock-armoured lizard beast, full body, facing LEFT, in its calm idle pose, not an atlas. Preserve its four-legged stocky lizard anatomy, long curled tail, muted blue-grey rock plates, ivory belly, small rusty red crest, amber eyes, and modest ochre/gold shoulder plates from target. Follow the actual Mi Chang Sheng lizard's clear graphic silhouette, grouped flat armour surfaces, restrained modelling and coherent anatomy. Reduce the original's crackle texture, gold veins, floating stone debris, tiny scales and complex filigree. Just a few large rock fins and a handful of structural plate separations. Sparse broad cel shadows, no glossy realistic rock rendering, no 3D. Keep all feet, tail and dorsal plates entirely inside canvas. Genuinely transparent background, no floor or shadow, no extra objects. Landscape 4:3.",
+    "new": "D:/fqh/flash/.tmp/style_samples_20261019/new/03_beast.png",
+    "referenceOutput": "D:/fqh/flash/.tmp/style_samples_20261019/inputs/03_beast_reference.png",
+    "comparison": "D:/fqh/flash/.tmp/style_samples_20261019/compare/03_beast.png",
+    "promptPath": "D:/fqh/flash/.tmp/style_samples_20261019/prompts/03_beast.txt",
+    "panelHeight": 430,
+    "refNote": "Wiki 裂地蜥龙；不同妖兽身份",
+    "packaged_new": "D:/fqh/flash/art_sources/refresh_20261019/approved_samples/03_beast.png"
+  }
+]

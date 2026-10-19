@@ -1,0 +1,19 @@
+[
+  {
+    "id": "06_battle",
+    "title": "斗法背景 · 竹林石坪",
+    "old": "D:/fqh/flash/assets/art/bamboo_arena_v1.png",
+    "ref": "D:/fqh/flash/.tmp/mcs_style_reference_20261019/originals/steam_01.jpg",
+    "mode": "imagegen",
+    "note": "竹林剪影、远近分层，保留宽阔站位地面",
+    "transparent": false,
+    "spec": "A very wide side-view turn-based battle BACKGROUND. Preserve original bamboo valley arena, broad clear pale stone/earth standing terrace spanning the lower half, bamboo framing far edges, a small distant pavilion upper centre-left, distant simplified jade peaks and modest waterfall at right. Follow the reference game's bamboo battle background: grouped dark bamboo silhouettes, midground rocks and lighter mint distant mountains, soft big painted colour planes and restrained broad brush transitions. REMOVE the target's dense individually rendered leaves, intricate stones, scattered grass stippling, hundreds of scratchy texture marks, realistic atmospheric landscape detail. Fewer large shapes; no sharp microtexture on the standing ground. Clear open stage at 25% and 75% horizontal character positions. NO characters, monsters, effects, UI, text, logos, borders or ground cast shadows. Wide panorama, about 21:9.",
+    "new": "D:/fqh/flash/.tmp/style_samples_20261019/new/06_battle.png",
+    "referenceOutput": "D:/fqh/flash/.tmp/style_samples_20261019/inputs/06_battle_reference.png",
+    "comparison": "D:/fqh/flash/.tmp/style_samples_20261019/compare/06_battle.png",
+    "promptPath": "D:/fqh/flash/.tmp/style_samples_20261019/prompts/06_battle.txt",
+    "panelHeight": 310,
+    "refNote": "官方竹林斗法；原截图含 UI",
+    "packaged_new": "D:/fqh/flash/art_sources/refresh_20261019/approved_samples/06_battle.png"
+  }
+]

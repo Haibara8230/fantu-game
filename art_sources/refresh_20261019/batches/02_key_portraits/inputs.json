@@ -1,0 +1,242 @@
+[
+  {
+    "path": "assets/art/portraits/azhi.png",
+    "category": "portraits",
+    "status": "pending",
+    "baseline": {
+      "sha256": "7a3a8811a1d61beb03260905f12a2da552ec326b00e95d87da172daea2dfb0ad",
+      "bytes": 378725,
+      "size": [
+        512,
+        640
+      ],
+      "mode": "RGB"
+    },
+    "absolute_path": "D:/fqh/flash/assets/art/portraits/azhi.png",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/portraits/azhi_unique.png",
+    "category": "portraits",
+    "status": "pending",
+    "baseline": {
+      "sha256": "06ce356a5aa2403bcf10d535d98cfaf3e1db98f1d8411c7148259b1015c423bf",
+      "bytes": 2540403,
+      "size": [
+        1122,
+        1402
+      ],
+      "mode": "RGB"
+    },
+    "absolute_path": "D:/fqh/flash/assets/art/portraits/azhi_unique.png",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/portraits/boatman.png",
+    "category": "portraits",
+    "status": "pending",
+    "baseline": {
+      "sha256": "f20dc2e5e8c5f4223efc6e99a3157a521c365fa9cd33982b46d507940c143f4c",
+      "bytes": 504153,
+      "size": [
+        512,
+        640
+      ],
+      "mode": "RGB"
+    },
+    "absolute_path": "D:/fqh/flash/assets/art/portraits/boatman.png",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/portraits/gu_changgeng_unique.png",
+    "category": "portraits",
+    "status": "pending",
+    "baseline": {
+      "sha256": "373e9c3fd0e631709fbd9b9a6ee12d949057ddae69cbfa9890679e6fc73bd682",
+      "bytes": 2548058,
+      "size": [
+        1122,
+        1402
+      ],
+      "mode": "RGB"
+    },
+    "absolute_path": "D:/fqh/flash/assets/art/portraits/gu_changgeng_unique.png",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/portraits/han_jin_unique.png",
+    "category": "portraits",
+    "status": "pending",
+    "baseline": {
+      "sha256": "74ac8dd5fe9ec581bb5836b86ec433157660befe51d97e27a825effc898c697e",
+      "bytes": 2888795,
+      "size": [
+        1122,
+        1402
+      ],
+      "mode": "RGB"
+    },
+    "absolute_path": "D:/fqh/flash/assets/art/portraits/han_jin_unique.png",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/portraits/peddler.png",
+    "category": "portraits",
+    "status": "pending",
+    "baseline": {
+      "sha256": "e39555ad5d9b24a569c43b81eb4f566665549662d66b5568badeaea4b6a04502",
+      "bytes": 485091,
+      "size": [
+        512,
+        640
+      ],
+      "mode": "RGB"
+    },
+    "absolute_path": "D:/fqh/flash/assets/art/portraits/peddler.png",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/portraits/rogue.png",
+    "category": "portraits",
+    "status": "pending",
+    "baseline": {
+      "sha256": "ff7182364d0748affbbcdb983558a2e725c0cce6810b2943159e23682bcc5214",
+      "bytes": 421332,
+      "size": [
+        512,
+        640
+      ],
+      "mode": "RGB"
+    },
+    "absolute_path": "D:/fqh/flash/assets/art/portraits/rogue.png",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/portraits/shen_mo.png",
+    "category": "portraits",
+    "status": "pending",
+    "baseline": {
+      "sha256": "045e15a4fc9cfd7052b1b720525a28dcb2ea6eb38a1966bd1d9d38821900d252",
+      "bytes": 419001,
+      "size": [
+        512,
+        640
+      ],
+      "mode": "RGB"
+    },
+    "absolute_path": "D:/fqh/flash/assets/art/portraits/shen_mo.png",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/portraits/squatter.png",
+    "category": "portraits",
+    "status": "pending",
+    "baseline": {
+      "sha256": "e54f44a3101ce65050df8fee042341e148738f1edaf77b73768f861a3d9aa3bf",
+      "bytes": 450213,
+      "size": [
+        512,
+        640
+      ],
+      "mode": "RGB"
+    },
+    "absolute_path": "D:/fqh/flash/assets/art/portraits/squatter.png",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/portraits/storyteller.png",
+    "category": "portraits",
+    "status": "pending",
+    "baseline": {
+      "sha256": "f8f746cd88b3b9c2d94f66dd521a5ab0f879e76c6fbc2c17ce502624645d566b",
+      "bytes": 440815,
+      "size": [
+        512,
+        640
+      ],
+      "mode": "RGB"
+    },
+    "absolute_path": "D:/fqh/flash/assets/art/portraits/storyteller.png",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/portraits/wounded.png",
+    "category": "portraits",
+    "status": "pending",
+    "baseline": {
+      "sha256": "4e34ea7fb14f66cef9e887a24fc0972055cf92367adc921cc86a2bd28200c685",
+      "bytes": 473138,
+      "size": [
+        512,
+        640
+      ],
+      "mode": "RGB"
+    },
+    "absolute_path": "D:/fqh/flash/assets/art/portraits/wounded.png",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/portraits/xu_qinghe_unique.png",
+    "category": "portraits",
+    "status": "pending",
+    "baseline": {
+      "sha256": "50bd41fa745f7d2873afaf7ef3ee8708779d0179663cb94e810101c50d9e87f1",
+      "bytes": 2223351,
+      "size": [
+        1122,
+        1402
+      ],
+      "mode": "RGB"
+    },
+    "absolute_path": "D:/fqh/flash/assets/art/portraits/xu_qinghe_unique.png",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/portraits/yuan_chifeng_unique.png",
+    "category": "portraits",
+    "status": "pending",
+    "baseline": {
+      "sha256": "bef32cd2d5eb9b690ae52cbd1c4eb468560af55700b4d79038fe52cf434634e6",
+      "bytes": 2458649,
+      "size": [
+        1122,
+        1402
+      ],
+      "mode": "RGB"
+    },
+    "absolute_path": "D:/fqh/flash/assets/art/portraits/yuan_chifeng_unique.png",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/local/portraits/gu_changgeng.png",
+    "category": "local_portraits",
+    "status": "pending",
+    "baseline": {
+      "sha256": "b4b4f259d18e3cbca45844a7bd73b9ba10e8ae9502ab4fdb8a4a54d0a462eac7",
+      "bytes": 348919,
+      "size": [
+        512,
+        640
+      ],
+      "mode": "RGB"
+    },
+    "absolute_path": "D:/fqh/flash/assets/local/portraits/gu_changgeng.png",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/local/portraits/xu_qinghe.png",
+    "category": "local_portraits",
+    "status": "pending",
+    "baseline": {
+      "sha256": "dc4ca1bf4d60db3cbd157e408079d37325e3421e22da1edcfa07917c63657551",
+      "bytes": 335889,
+      "size": [
+        512,
+        640
+      ],
+      "mode": "RGB"
+    },
+    "absolute_path": "D:/fqh/flash/assets/local/portraits/xu_qinghe.png",
+    "actor_layouts": []
+  }
+]

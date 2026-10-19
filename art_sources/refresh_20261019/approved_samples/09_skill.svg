@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64">
+<defs><radialGradient id="bg"><stop stop-color="#6d652e"/><stop offset="1" stop-color="#302c24"/></radialGradient><linearGradient id="ray" x1="0" y1="1" x2="1" y2="0"><stop stop-color="#927135"/><stop offset="0.5" stop-color="#edd890"/><stop offset="1" stop-color="#fff5c7"/></linearGradient></defs>
+<rect x="1.5" y="1.5" width="61" height="61" rx="3" fill="url(#bg)" stroke="#b5a16e" stroke-width="1"/>
+<path d="M7 49Q22 44 31 32Q43 19 57 10Q47 27 36 36Q22 47 7 49Z" fill="#93783c" stroke="#3c3624" stroke-width="0.8"/>
+<path d="M12 52L28 31L54 9L37 35Z" fill="url(#ray)" stroke="#60512d" stroke-width="0.8"/>
+<path d="M20 18L30 28L31 6L35 27L52 21L39 32L58 40L37 37L42 58L31 40L16 55L25 37L6 32L25 29Z" fill="#c5a34d" stroke="#655230" stroke-width="0.7"/>
+<path d="M29 30L32 15L35 30L48 27L38 35L45 46L33 39L24 49L28 37L15 33Z" fill="#f4dc88"/>
+<path d="M31 31L33 25L35 32L41 33L35 36L33 42L30 36L24 34Z" fill="#fff8cd"/>
+<path d="M9 18L18 22M47 48L54 54M49 7L47 14M9 58L17 51" stroke="#cead57" stroke-width="1.2" stroke-linecap="round"/>
+</svg>

@@ -1,0 +1,44 @@
+[
+  {
+    "priority": "P0",
+    "filename": "qingyun_small_sect.png",
+    "brief": "青云小宗全景；已有候选，复核建筑规模和标签空间",
+    "status": "planned_or_existing_candidate",
+    "output_path": "D:/fqh/flash/art_sources/refresh_20261019/batches/05_locations/output/qingyun_small_sect.png"
+  },
+  {
+    "priority": "P0",
+    "filename": "yunxi_city.png",
+    "brief": "云溪全城总览；已有候选，与旧坊市内部街区区分",
+    "status": "planned_or_existing_candidate",
+    "output_path": "D:/fqh/flash/art_sources/refresh_20261019/batches/05_locations/output/yunxi_city.png"
+  },
+  {
+    "priority": "P1",
+    "filename": "nanming_city.png",
+    "brief": "南明全城：器街、商会、地火产业及旧坊市，不是赤霄宗改名",
+    "status": "planned_or_existing_candidate",
+    "output_path": "D:/fqh/flash/art_sources/refresh_20261019/batches/05_locations/output/nanming_city.png"
+  },
+  {
+    "priority": "P2",
+    "filename": "canglan_city.png",
+    "brief": "沧澜医药城：丹会、药市、水榭；独立于沧澜阁",
+    "status": "planned_or_existing_candidate",
+    "output_path": "D:/fqh/flash/art_sources/refresh_20261019/batches/05_locations/output/canglan_city.png"
+  },
+  {
+    "priority": "P2",
+    "filename": "beiyue_city.png",
+    "brief": "北岳古物阵法城：古物街、阵师会馆、旧档库；独立于玄岳宗",
+    "status": "planned_or_existing_candidate",
+    "output_path": "D:/fqh/flash/art_sources/refresh_20261019/batches/05_locations/output/beiyue_city.png"
+  },
+  {
+    "priority": "P2",
+    "filename": "wanghai_city.png",
+    "brief": "望海海贸城：海港、船坞、海图铺；区分内河白鹭渡",
+    "status": "planned_or_existing_candidate",
+    "output_path": "D:/fqh/flash/art_sources/refresh_20261019/batches/05_locations/output/wanghai_city.png"
+  }
+]

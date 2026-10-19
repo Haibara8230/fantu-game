@@ -1,0 +1,37 @@
+[
+  {
+    "priority": "P0",
+    "filename": "scroll_panel_dark.png",
+    "brief": "深色兼容卷轴已有候选，适配现有浅色文字",
+    "status": "planned_or_existing_candidate",
+    "output_path": "D:/fqh/flash/art_sources/refresh_20261019/batches/11_ui_rites/output/scroll_panel_dark.png"
+  },
+  {
+    "priority": "P1",
+    "filename": "hero_meditate.png",
+    "brief": "主角打坐插画，人物身份与第01批一致，真实透明背景",
+    "status": "planned_or_existing_candidate",
+    "output_path": "D:/fqh/flash/art_sources/refresh_20261019/batches/11_ui_rites/output/hero_meditate.png"
+  },
+  {
+    "priority": "P1",
+    "filename": "breakthrough_ritual_vignette.png",
+    "brief": "突破筹划功能插画，条件、资源和结果由UI独立绘制",
+    "status": "planned_or_existing_candidate",
+    "output_path": "D:/fqh/flash/art_sources/refresh_20261019/batches/11_ui_rites/output/breakthrough_ritual_vignette.png"
+  },
+  {
+    "priority": "P1",
+    "filename": "exploration_states.svg",
+    "brief": "未知／听闻／发现／到访／内部探索状态，交独立可组合矢量而非写死在地图",
+    "status": "planned_or_existing_candidate",
+    "output_path": "D:/fqh/flash/art_sources/refresh_20261019/batches/11_ui_rites/output/exploration_states.svg"
+  },
+  {
+    "priority": "P1",
+    "filename": "city_port_markers.svg",
+    "brief": "城市与海港地图标记，区分旧坊市及内河渡口",
+    "status": "planned_or_existing_candidate",
+    "output_path": "D:/fqh/flash/art_sources/refresh_20261019/batches/11_ui_rites/output/city_port_markers.svg"
+  }
+]

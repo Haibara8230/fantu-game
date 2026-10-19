@@ -1,0 +1,106 @@
+[
+  {
+    "id": "sect_small",
+    "prompt": "Use case: stylized-concept. Production game asset: Qingyun SMALL cultivation sect location overview, a new composition following the approved scene art samples and revised game outline. References: first image approved environment drawing STYLE only, second actual Mi Chang Sheng official screenshot for hand-drawn Chinese RPG architecture and grouped colour planes. Do not copy either building layout. Qingyun is a modest early-game sect whose strongest elder is only Foundation Establishment. Draw 6 to 8 modest connected white plaster dark-jade tile buildings on a single low mountain terrace: small main teaching hall at left-middle, simple office near centre, a compact open training courtyard low-centre, two secluded meditation huts above-left, one small ordinary wooden gateway on the lower approach. Stone steps connect the recognizable facilities, pine groups around edges, pale misty low mountains behind. Elevated three-quarter/isometric location overview suitable for clickable building labels added by engine; keep lower-right relatively open. Buildings stay human-scale; no enormous towers, gilded palaces, sky bridges, floating islands or skyscraper cliffs. STYLE: approved Mi Chang Sheng-inspired scene category, clear economical drawn contours, large muted jade/ochre/ivory colour planes, foliage as grouped shapes, restrained broad painted shading, low detail, very few texture marks, readable architecture. Calm everyday daylight. No people, no text, no UI, no labels, no logos, no border. Landscape 16:9. Save final project output under D:/fqh/flash/.tmp/art_refresh_20261019 if possible; all project copies will be kept on D.",
+    "refs": [
+      "D:/fqh/flash/.tmp/style_samples_20261019/new/04_location.png",
+      "D:/fqh/flash/.tmp/mcs_style_reference_20261019/originals/steam_00.jpg"
+    ]
+  },
+  {
+    "id": "lu_chengzhou",
+    "prompt": "Use case: stylized-concept. ONE production waist-up portrait for original Chinese cultivation RPG, young male peer Lu Chengzhou 陆承舟. The supplied approved Shen Mo C portrait is DRAWING STYLE ONLY: same economical thin ink contour, lean adult anatomy, long angular face, tiny simply drawn facial features, broad flat colour areas, very few long folds, hair grouped into solid shapes, one restrained shadow colour. Do not copy the merchant's beard, age, costume, abacus or face. Lu is an affluent lively young adult man, clean-shaven, black hair tied with a simple warm gold clasp, ivory inner robe and muted ochre-gold short outer robe, jade-green sash. He holds a CLOSED simple ivory folding fan in one hand near chest, relaxed other hand at belt, a confident slightly sheepish smile, personable and clever rather than arrogant. Sparse trim, no brocade or jewelry clutter. Head, shoulders, both hands and waist all visible, modest headroom, 4:5 portrait. Plain flat muted grey-green background matching the style reference, no scenery, no typography, no labels, no frames, no gradients on face, no glossy rendering or realistic modelling. 低细节，大色块，少碎纹，修长造型，漫画化五官，简练衣褶，发束整体化. Create a distinct consistent new identity usable through future expressions. All project copies D:/fqh/flash/.tmp/art_refresh_20261019.",
+    "refs": [
+      "D:/fqh/flash/.tmp/style_samples_20261019/new/02_portrait.png"
+    ]
+  },
+  {
+    "id": "ye_zhiwei",
+    "prompt": "Use case: stylized-concept. ONE production waist-up portrait for original Chinese cultivation RPG: Ye Zhiwei 叶知微, a young adult woman medical/herbal cultivator. Supplied approved Shen Mo C portrait is DRAWING STYLE ONLY: lean old-school 2D Chinese RPG anatomy, clear thin dark hand-drawn outline, simple angular expressive small eyes/nose/mouth, broad flat colours, one quiet shadow tone, grouped dark hair, only 3-5 main garment folds. Do not depict Shen Mo, beard, abacus or male clothing. Design a distinct young physician: black hair half tied in a neat bun with plain wooden hairpin, no elaborate ornaments, muted sage-green robe with ivory collar and pale ochre sash, a small purple cloth knot secures a simple herb pouch at waist; one hand holds a slim closed plain medical notebook against her torso, other hand lightly supporting it. Attentive serious expression, approachable but self-assured, lean adult proportions. Full head, shoulders, both hands and waist in view, headroom, 4:5 portrait. Plain flat muted grey-green backdrop like the reference. No scenery, no text, no label, no frame, no facial gradients, no glossy anime beauty portrait, no realistic shading or embroidered details. 低细节，大色块，少碎纹，简练衣褶，发束整体化. New original character, not a character from Mi Chang Sheng. All project copies D:/fqh/flash/.tmp/art_refresh_20261019.",
+    "refs": [
+      "D:/fqh/flash/.tmp/style_samples_20261019/new/02_portrait.png"
+    ]
+  },
+  {
+    "id": "wenren_zhao",
+    "prompt": "Use case: stylized-concept. ONE waist-up production portrait for original cultivation game: Wenren Zhao 闻人照, a young adult male array scholar and would-be sea explorer. Supplied Shen Mo C is exclusively the approved DRAWING LANGUAGE. Keep thin economical ink outline, lean adult proportions, small stylized eyes/nose/mouth, grouped solid hair, flat muted colour areas with ONE restrained shadow tone, only a few long structural folds. This man must be a distinct face: slightly broader cheekbones than Shen Mo, lively upturned eyebrows, open friendly half smile, clean shaven. Dark hair in a loose half ponytail with a plain blue cloth headband, rather than merchant's topknot. Muted desaturated blue robe and ivory collar, plain warm brown strap over shoulder. He holds one rolled cream map across waist in left hand and a small plain octagonal wooden array compass in right; compass has just one readable central line, no tiny writing. Original fantasy Chinese clothing, no modern equipment. Full head, shoulders, hands, props and waist, 4:5 portrait, plain flat muted grey-green background, no scenery, lettering, label, UI, frame or luminous effects. Avoid realism, glossy anime, fabric grain, embroidered trim, detailed strands, too many angular shadow fragments. 低细节，大色块，少碎纹，简练衣褶，发束整体化.",
+    "refs": [
+      "D:/fqh/flash/.tmp/style_samples_20261019/new/02_portrait.png"
+    ],
+    "alpha": false
+  },
+  {
+    "id": "liu_hanzhou_healthy",
+    "prompt": "Use case: style-transfer and identity-preserve. Edit target image 1: EXISTING Liu Hanzhou 柳寒舟 wounded swordsman portrait. Preserve his identity: long narrow young adult male face, straight dark brows, black high ponytail tied by plain ivory ribbon, grey-green worn outer robe, ivory collar and dark vest, right hand gripping his sheathed sword diagonally upward toward IMAGE RIGHT, dark sword tassel. Reference 2: approved Shen Mo C DRAWING STYLE ONLY. Redraw Liu in that economical flat 2D Chinese cultivation-game character style: simplified small angular facial features, 4-6 grouped hair masses instead of strands, clear thin dark outline, large flat grey-green/ivory clothing areas, 3-5 long essential folds and very restrained single shadow tone. THIS IS THE HEALTHY RECOVERED STATE: remove blood from collar, remove visible bruises, mend torn ribbon and robe edges while keeping plain wanderer clothing, composed watchful expression. Do not change him into Shen Mo or copy beard/abacus/costume. Simplify sword fittings, keep tassel as a recognizable single grouped shape. Head to waist portrait, entire head and both hands/sword grip visible, plain flat desaturated grey-green background, 4:5. No words, UI, frame, scenic background, glossy skin or realistic modelling. 低细节，大色块，少碎纹，修长造型，简练衣褶，发束整体化.",
+    "refs": [
+      "D:/fqh/flash/assets/art/portraits/wounded.png",
+      "D:/fqh/flash/.tmp/style_samples_20261019/new/02_portrait.png"
+    ],
+    "alpha": false
+  },
+  {
+    "id": "hero_atlas",
+    "alpha": true,
+    "refs": [
+      "D:/fqh/flash/.tmp/style_samples_20261019/new/01_hero.png",
+      "D:/fqh/flash/assets/art/cultivator_atlas_v2.png"
+    ],
+    "prompt": "Use case: style-transfer. ONE PRODUCTION GAME SPRITE ATLAS, transparent background, landscape 3:2, exactly THREE EQUAL COLUMNS and TWO EQUAL ROWS, SIX separate full-body poses of the SAME young adult male cultivation swordsman. First reference is APPROVED C HERO IDENTITY AND STYLE; second is existing atlas for POSE ORDER ONLY. Keep first reference's white ivory and muted jade-green robes, slim young clean-shaven face, black long hair and high topknot, jade ribbon, white boots, simple gold sword guard; economical thin hand-drawn outlines, big flat colour blocks, minimal long folds and single restrained shadow. All six face IMAGE RIGHT. Cell order: top-left idle standing sword lowered; top-centre prepare with bent knees and sword ready; top-right attack sword thrust diagonally upward-right (shorten foreshortened weapon enough to fit entirely in cell); bottom-left cast with left hand two-finger seal and sword lowered in right hand; bottom-centre hit leaning back holding chest, sword still in other hand; bottom-right guard sword raised diagonally upward-right across torso. ATLAS REGISTRATION: equal square cells, each figure from head to boots wholly inside its own cell with 5 percent margins; same head-to-foot height, feet baseline at 94 percent of each cell. No limb, hair, sword or ribbon may cross a cell boundary. No visible grid lines. Exactly six characters, no extra heads or separate weapons. Real transparency all around each silhouette; no backdrop, ground, shadow, scene, particle effects, decorative border, labels or text. Low detail flat Chinese RPG illustration, not realism. Keep broad hair masses, no dense strands or ornamental embroidery."
+  },
+  {
+    "id": "azhi",
+    "alpha": false,
+    "refs": [
+      "D:/fqh/flash/assets/art/portraits/azhi_unique.png",
+      "D:/fqh/flash/.tmp/style_samples_20261019/new/02_portrait.png"
+    ],
+    "prompt": "Use case: style-transfer, identity-preserve. Edit TARGET image 1, existing herbalist A Zhi 阿芷 portrait. Preserve her youthful adult female identity, friendly expression, black side braid with small white flower and plain green ribbon, ivory and pale sage-green simple robes, herb basket over her back, one hand holding shoulder strap and other holding a small white-flowered medicinal sprig. Reference 2 Shen Mo C gives DRAWING LANGUAGE ONLY. Redraw A Zhi with the same economical early 2D Chinese RPG hand drawing: thin clear dark contour, lean angular face and small simply drawn facial features, broad flat colours, one quiet flat shadow, braid as 4-5 broad segments, no detailed hair strands. Basket simplified broad woven bands, herbs grouped in several readable masses instead of dozens of thin leaves and tiny flowers. Only a few long clothing folds, no fabric texture or realistic skin. Head to waist, full head and both hands in frame, 4:5 portrait, plain flat muted grey-green background. No scene, UI, text, border, glitter, gloss, face gradients, ornate embroidery or fragmented shadow triangles. Do not copy Shen Mo's male identity/beard/abacus."
+  },
+  {
+    "id": "hero_atlas_alpha",
+    "alpha": true,
+    "refs": [
+      "D:/fqh/flash/.tmp/art_refresh_20261019/hero_atlas.png"
+    ],
+    "prompt": "Use case: background-extraction. EDIT THE SUPPLIED SIX-POSE SPRITE SHEET. Remove ALL smoky grey/green/beige backdrop and background lighting completely; replace it with genuine fully transparent alpha at EVERY empty pixel, including gaps between hair, arms, robes, legs and sword. Preserve all SIX full-body characters, their exact identities, poses, colours, line drawing, six-cell registration and layout. Do NOT draw a flat grey/white/black/checkerboard background: those are not transparency. Output must be RGBA with zero alpha outside the silhouettes. No shadows, ground, scenery or glow. Keep a 3-column by 2-row sheet of equal square cells, landscape 3:2. Every figure head, sword, ribbons and boots must remain inside its own cell with margins. Preserve all 6 unique action poses. Do not alter clothing, faces, props, scale or pose. Background removal only."
+  },
+  {
+    "id": "auction_elder",
+    "alpha": false,
+    "refs": [
+      "D:/fqh/flash/.tmp/style_samples_20261019/new/02_portrait.png"
+    ],
+    "prompt": "Use case: stylized-concept. ONE production waist-up portrait of an original elderly cultivation-game auction visitor, a long-lived former array keeper. Approved Shen Mo C is DRAWING LANGUAGE ONLY: thin economical ink contour, long lean anatomy, simple angular small facial features, big flat muted colour blocks, minimal garment folds and one restrained shadow tone. Distinct elder identity, NOT Shen Mo: narrow weathered face with only 2-3 spare age lines, long white hair tied low behind head by dark cord, short straight white beard, slightly tired observant eyes, calm restrained expression. Plain charcoal-blue outer robe, ivory collar, muted ochre sash, hands loosely folded at waist with one plain old bronze finger ring; no staff, weapon, abacus or flamboyant jewellery. He looks like an unobtrusive traveller, not an emperor or glowing immortal. Full head and both hands inside frame, 4:5 portrait on flat muted grey-green background. No scenery, UI, text, labels, frame, sigils, detailed wrinkles, hair strands, texture, facial gradients or realistic portrait lighting. Low detail old-school Chinese hand-drawn cultivation RPG."
+  },
+  {
+    "id": "yunxi_city",
+    "refs": [
+      "D:/fqh/flash/.tmp/style_samples_20261019/new/04_location.png",
+      "D:/fqh/flash/.tmp/mcs_style_reference_20261019/originals/steam_06.jpg"
+    ],
+    "prompt": "Use case: stylized-concept. ONE production location background for Yunxi 云溪, the entry cultivation CITY of an original Chinese RPG, based on revised five-city story. References are approved SCENE style and actual Mi Chang Sheng city screenshot; do not copy geography or architecture. Elevated three-quarter readable district overview, landscape16:9. A modest prosperous walled river city, grey-jade tiled wooden buildings and ivory plaster, organised into a few clear districts separated by broad streets: old herbal market in lower-left, two-storey auction house at upper-left, open stone public tournament plaza mid-centre, affluent family courtyard at upper-right, small river quay at lower-right; low city gate at bottom-centre, an arched stone bridge connects road beyond. One coherent city rather than hundreds of tiny houses. 12-18 clearly grouped buildings, strong roof colour masses, muted jade/ochre/ivory/terracotta, flat hand-drawn shadows, grouped tree shapes and pale distant hills. More worldly and inhabited in architecture than sect, but NO drawn crowds. Clear contours and economical broad colour areas, low detail, no realistic materials, no individual roof-tile microtexture, no cinematic lighting. ALL shop names, district labels and interaction markers are separate game UI: absolutely no text, no signs with writing, no typography, no interface, no border or logos. No floating palaces or magic circles."
+  },
+  {
+    "id": "sect_gate_normal",
+    "refs": [
+      "D:/fqh/flash/.tmp/art_refresh_20261019/sect_small.png",
+      "D:/fqh/flash/.tmp/style_samples_20261019/new/07_interior.png"
+    ],
+    "prompt": "Use case: stylized-concept. ONE empty original game scene, NORMAL DAYTIME ENTRANCE to modest Qingyun small cultivation sect. Follow first reference's small sect identity: simple human-scale timber gateway with dark jade tiled single roof, white plaster side walls, two low stone pillars and an ordinary weathered stone stair path. Only two modest halls visible beyond, grouped pines at edges, misty low hills. No monumental palace, gilded colossal gate, floating rock, barrier, demonic storm or battle. Reference second image only for economical Chinese game environment drawing: clear organic outlines, broad coherent colours, restrained broad shade, sparse texture. Wide dialogue backdrop about3:1, central gateway readable, lower middle quiet open paving, architecture framed by pine silhouettes. Muted jade roofs, ivory walls, warm grey stone and brown timber, calm daylight. No people, UI, labels, text, signs with writing, frames or logos. Original environment, not a redraw of a Mi Chang Sheng location."
+  },
+  {
+    "id": "qianlong_arena",
+    "refs": [
+      "D:/fqh/flash/.tmp/style_samples_20261019/new/04_location.png",
+      "D:/fqh/flash/.tmp/style_samples_20261019/new/06_battle.png"
+    ],
+    "prompt": "Use case: stylized-concept. ONE original Chinese cultivation RPG PUBLIC TOURNAMENT event background for Qianlong gathering, distinct from a sect training yard. Landscape16:9, slightly elevated view of a modest CITY public square: broad circular pale stone duelling platform in centre taking lower half, a few low wooden spectator benches and two simple judging pavilions around rear arc, market awnings and city rooftops behind, plain muted jade and ochre cloth banners without text. Reference1 approved architecture style, reference2 layered simple battle background drawing. Large readable shapes, clear drawn contours, muted jade/ivory/ochre/terracotta blocks, minimal broad shadows, very sparse texture, distant buildings simplified. Strong focal platform with open space to stage characters later in engine. Early-stage public competition with civilian surroundings; NOT royal colosseum, floating celestial temple, giant stadium, sect fortress or epic magical battle. No characters, crowds, effects, text, logos, writing, UI or frame. A welcoming bustling place conveyed through stalls and seating, not dramatic apocalyptic imagery."
+  },
+  {
+    "id": "scroll_panel_dark",
+    "refs": [
+      "D:/fqh/flash/.tmp/style_samples_20261019/new/10_panel.png"
+    ],
+    "prompt": "Use case: precise-object-edit. Production BLANK reusable Chinese cultivation RPG UI panel. The supplied approved paper scroll defines the scroll ends, restrained cloud ornament and composition. Make its MATCHING DARK READING VARIANT for the existing interface's ivory and gold text: replace the entire central pale parchment reading field with a very dark desaturated blue-green solid field (#142e30 equivalent), almost uniform, NO pale patches in centre. Retain two simplified jade-blue rolled ends on left and right and one slim quiet warm-gold rim; reduce the corner cloud curls to ONLY the outermost corners, a very low contrast teal. Central usable reading area at least85percent, all quiet and dark. Clear economical drawn contours, broad flat colours, almost no material texture, no stains, no wood grain, no shiny metal or gradients that brighten centre. It must visually belong to the approved light scroll family. No writing, no icons, buttons, tabs, symbols, UI screenshot, labels, content or decorative centre medallion. Landscape16:9, full panel fitscanvas, opaque background. Final art will be consumed as a stretchable game panel."
+  }
+]

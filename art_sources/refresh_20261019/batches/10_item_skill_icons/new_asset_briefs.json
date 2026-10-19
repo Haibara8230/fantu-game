@@ -1,0 +1,65 @@
+[
+  {
+    "priority": "P0",
+    "filename": "old_city_seal.svg",
+    "brief": "已生成候选：三拱城门、双水纹与缺口圆环，非已批准设定",
+    "status": "planned_or_existing_candidate",
+    "output_path": "D:/fqh/flash/art_sources/refresh_20261019/batches/10_item_skill_icons/output/old_city_seal.svg"
+  },
+  {
+    "priority": "P0",
+    "filename": "mirror_back_fragment.svg",
+    "brief": "已生成候选：廉价铜片，有可识别的部分阵纹",
+    "status": "planned_or_existing_candidate",
+    "output_path": "D:/fqh/flash/art_sources/refresh_20261019/batches/10_item_skill_icons/output/mirror_back_fragment.svg"
+  },
+  {
+    "priority": "P0",
+    "filename": "remnant_mirror.svg",
+    "brief": "已生成候选：拍卖残镜，与铜片、城徽同一视觉母题",
+    "status": "planned_or_existing_candidate",
+    "output_path": "D:/fqh/flash/art_sources/refresh_20261019/batches/10_item_skill_icons/output/remnant_mirror.svg"
+  },
+  {
+    "priority": "P1",
+    "filename": "old_city_record.svg",
+    "brief": "已生成候选：旧城档案，重复同一城徽而非无关符号",
+    "status": "planned_or_existing_candidate",
+    "output_path": "D:/fqh/flash/art_sources/refresh_20261019/batches/10_item_skill_icons/output/old_city_record.svg"
+  },
+  {
+    "priority": "P0",
+    "filename": "zhaoshui_fenguang.svg",
+    "brief": "已生成候选：《照水分光诀》，分光水剑辨识形",
+    "status": "planned_or_existing_candidate",
+    "output_path": "D:/fqh/flash/art_sources/refresh_20261019/batches/10_item_skill_icons/output/zhaoshui_fenguang.svg"
+  },
+  {
+    "priority": "P1",
+    "filename": "cangxi_lu.svg",
+    "brief": "已生成候选：《藏息录》，隐息主题，区别水剑传承",
+    "status": "planned_or_existing_candidate",
+    "output_path": "D:/fqh/flash/art_sources/refresh_20261019/batches/10_item_skill_icons/output/cangxi_lu.svg"
+  },
+  {
+    "priority": "P1",
+    "filename": "tingchao_broken.svg",
+    "brief": "已生成候选：听潮剑残损形态，和修复版保持同一器型",
+    "status": "planned_or_existing_candidate",
+    "output_path": "D:/fqh/flash/art_sources/refresh_20261019/batches/10_item_skill_icons/output/tingchao_broken.svg"
+  },
+  {
+    "priority": "P1",
+    "filename": "tingchao_repaired.svg",
+    "brief": "已生成候选：听潮剑修复形态，不自动设为本命法宝",
+    "status": "planned_or_existing_candidate",
+    "output_path": "D:/fqh/flash/art_sources/refresh_20261019/batches/10_item_skill_icons/output/tingchao_repaired.svg"
+  },
+  {
+    "priority": "P2",
+    "filename": "wenren_sea_chart.svg",
+    "brief": "已生成候选：闻人照海图，连接远行线索",
+    "status": "planned_or_existing_candidate",
+    "output_path": "D:/fqh/flash/art_sources/refresh_20261019/batches/10_item_skill_icons/output/wenren_sea_chart.svg"
+  }
+]

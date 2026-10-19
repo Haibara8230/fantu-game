@@ -1,0 +1,1 @@
+请按 D:/fqh/flash/art_sources/refresh_20261019/batches/03_portrait_pool/female_old/TASK.md 执行这一批 30 张普通头像，只处理本批 inputs.json，只在本批 output/ 交付，遵守上级风格规范和通用规则。

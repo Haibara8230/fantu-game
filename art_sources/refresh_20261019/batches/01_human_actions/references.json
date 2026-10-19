@@ -1,0 +1,48 @@
+[
+  {
+    "id": "01_hero",
+    "title": "主角立绘",
+    "old": "D:/fqh/flash/.tmp/imagegen/hero_original_idle.png",
+    "ref": "D:/fqh/flash/.tmp/mcs_style_reference_20261019/originals/steam_15.jpg",
+    "refCrop": [
+      380,
+      300,
+      500,
+      620
+    ],
+    "new": "D:/fqh/flash/.tmp/style_samples_20261019/new/01_hero.png",
+    "mode": "approved_c",
+    "note": "沿用已确认主角 C 版；整体发束、简练服饰",
+    "transparent": true,
+    "referenceOutput": "D:/fqh/flash/.tmp/style_samples_20261019/inputs/01_hero_reference.png",
+    "comparison": "D:/fqh/flash/.tmp/style_samples_20261019/compare/01_hero.png",
+    "promptPath": "D:/fqh/flash/.tmp/style_samples_20261019/prompts/01_hero.txt",
+    "panelHeight": 760,
+    "refNote": "官方背包人物；同类人物画法参考",
+    "approvedSource": "D:/fqh/flash/.tmp/imagegen/hero_style_c.png",
+    "packaged_new": "D:/fqh/flash/art_sources/refresh_20261019/approved_samples/01_hero.png"
+  },
+  {
+    "id": "02_portrait",
+    "title": "NPC 半身像",
+    "old": "D:/fqh/flash/assets/art/portraits/shen_mo.png",
+    "ref": "D:/fqh/flash/PNG/人物交互_城市场景_旧版.jpg",
+    "refCrop": [
+      493,
+      212,
+      292,
+      317
+    ],
+    "new": "D:/fqh/flash/.tmp/style_samples_20261019/new/02_portrait.png",
+    "mode": "approved_c",
+    "note": "沿用沈墨 C 版；漫画五官、减少衣褶",
+    "transparent": false,
+    "referenceOutput": "D:/fqh/flash/.tmp/style_samples_20261019/inputs/02_portrait_reference.png",
+    "comparison": "D:/fqh/flash/.tmp/style_samples_20261019/compare/02_portrait.png",
+    "promptPath": "D:/fqh/flash/.tmp/style_samples_20261019/prompts/02_portrait.txt",
+    "panelHeight": 700,
+    "refNote": "青蛇真人原截图；不同人物身份",
+    "approvedSource": "D:/fqh/flash/.tmp/imagegen/shen_mo_style_c_flat.png",
+    "packaged_new": "D:/fqh/flash/art_sources/refresh_20261019/approved_samples/02_portrait.png"
+  }
+]

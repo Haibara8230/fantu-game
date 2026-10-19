@@ -1,0 +1,25 @@
+[
+  {
+    "id": "02_portrait",
+    "title": "NPC 半身像",
+    "old": "D:/fqh/flash/assets/art/portraits/shen_mo.png",
+    "ref": "D:/fqh/flash/PNG/人物交互_城市场景_旧版.jpg",
+    "refCrop": [
+      493,
+      212,
+      292,
+      317
+    ],
+    "new": "D:/fqh/flash/.tmp/style_samples_20261019/new/02_portrait.png",
+    "mode": "approved_c",
+    "note": "沿用沈墨 C 版；漫画五官、减少衣褶",
+    "transparent": false,
+    "referenceOutput": "D:/fqh/flash/.tmp/style_samples_20261019/inputs/02_portrait_reference.png",
+    "comparison": "D:/fqh/flash/.tmp/style_samples_20261019/compare/02_portrait.png",
+    "promptPath": "D:/fqh/flash/.tmp/style_samples_20261019/prompts/02_portrait.txt",
+    "panelHeight": 700,
+    "refNote": "青蛇真人原截图；不同人物身份",
+    "approvedSource": "D:/fqh/flash/.tmp/imagegen/shen_mo_style_c_flat.png",
+    "packaged_new": "D:/fqh/flash/art_sources/refresh_20261019/approved_samples/02_portrait.png"
+  }
+]

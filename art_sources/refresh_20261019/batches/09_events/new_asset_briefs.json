@@ -1,0 +1,86 @@
+[
+  {
+    "priority": "P0",
+    "filename": "yunxi_assembly.png",
+    "brief": "仙师集会事件：交易与结识的繁华，人物身份沿用头像候选",
+    "status": "planned_or_existing_candidate",
+    "output_path": "D:/fqh/flash/art_sources/refresh_20261019/batches/09_events/output/yunxi_assembly.png"
+  },
+  {
+    "priority": "P0",
+    "filename": "auction_mirror_anomaly.png",
+    "brief": "残镜短暂映出地图没有的城，铜片反应；不提前泄露完整真相",
+    "status": "planned_or_existing_candidate",
+    "output_path": "D:/fqh/flash/art_sources/refresh_20261019/batches/09_events/output/auction_mirror_anomaly.png"
+  },
+  {
+    "priority": "P0",
+    "filename": "qianlong_arena.png",
+    "brief": "公共潜龙会场景；已有空背景候选，区别宗门外门比试",
+    "status": "planned_or_existing_candidate",
+    "output_path": "D:/fqh/flash/art_sources/refresh_20261019/batches/09_events/output/qianlong_arena.png"
+  },
+  {
+    "priority": "P0",
+    "filename": "lu_family_night_banquet.png",
+    "brief": "陆府夜宴与同辈相识，人物脸型引用第02批，不擅改身份",
+    "status": "planned_or_existing_candidate",
+    "output_path": "D:/fqh/flash/art_sources/refresh_20261019/batches/09_events/output/lu_family_night_banquet.png"
+  },
+  {
+    "priority": "P1",
+    "filename": "friends_breakthrough_meal.png",
+    "brief": "突破后吃饭等轻松同辈日常，可复用陆府／客栈空间",
+    "status": "planned_or_existing_candidate",
+    "output_path": "D:/fqh/flash/art_sources/refresh_20261019/batches/09_events/output/friends_breakthrough_meal.png"
+  },
+  {
+    "priority": "P1",
+    "filename": "auction_elder_old_painting.png",
+    "brief": "拍卖老修士的旧画像线索，必须是同一身份的历史版本",
+    "status": "planned_or_existing_candidate",
+    "output_path": "D:/fqh/flash/art_sources/refresh_20261019/batches/09_events/output/auction_elder_old_painting.png"
+  },
+  {
+    "priority": "P2",
+    "filename": "chenxia_old_city_record.png",
+    "brief": "古境记录证明旧城真实存在的发现演出",
+    "status": "planned_or_existing_candidate",
+    "output_path": "D:/fqh/flash/art_sources/refresh_20261019/batches/09_events/output/chenxia_old_city_record.png"
+  },
+  {
+    "priority": "P2",
+    "filename": "sea_chart_departure.png",
+    "brief": "闻人照筹船与出海，呼应海图、海船和同一人物",
+    "status": "planned_or_existing_candidate",
+    "output_path": "D:/fqh/flash/art_sources/refresh_20261019/batches/09_events/output/sea_chart_departure.png"
+  },
+  {
+    "priority": "P3",
+    "filename": "old_city_revelation.png",
+    "brief": "旧城封印与遗民历史揭示，不画成任意时间旅行",
+    "status": "planned_or_existing_candidate",
+    "output_path": "D:/fqh/flash/art_sources/refresh_20261019/batches/09_events/output/old_city_revelation.png"
+  },
+  {
+    "priority": "P3",
+    "filename": "ending_reopen_passage.png",
+    "brief": "修复并重新开放通路的结局状态",
+    "status": "planned_or_existing_candidate",
+    "output_path": "D:/fqh/flash/art_sources/refresh_20261019/batches/09_events/output/ending_reopen_passage.png"
+  },
+  {
+    "priority": "P3",
+    "filename": "ending_replace_array.png",
+    "brief": "另立阵法、封存危险区域的结局状态",
+    "status": "planned_or_existing_candidate",
+    "output_path": "D:/fqh/flash/art_sources/refresh_20261019/batches/09_events/output/ending_replace_array.png"
+  },
+  {
+    "priority": "P3",
+    "filename": "ending_personal_passage.png",
+    "brief": "寻找个人通路并交托后续责任的结局状态",
+    "status": "planned_or_existing_candidate",
+    "output_path": "D:/fqh/flash/art_sources/refresh_20261019/batches/09_events/output/ending_personal_passage.png"
+  }
+]

@@ -1,0 +1,142 @@
+[
+  {
+    "priority": "P0",
+    "filename": "sect_gate_normal.png",
+    "brief": "日常青云山门；已有候选，正式旧图当前为魔潮状态",
+    "status": "planned_or_existing_candidate",
+    "output_path": "D:/fqh/flash/art_sources/refresh_20261019/batches/06_scenes/output/sect_gate_normal.png"
+  },
+  {
+    "priority": "P0",
+    "filename": "yunxi_city_gate.png",
+    "brief": "结伴赴云溪的入城背景，门楼人间尺度，无烘焙文字",
+    "status": "planned_or_existing_candidate",
+    "output_path": "D:/fqh/flash/art_sources/refresh_20261019/batches/06_scenes/output/yunxi_city_gate.png"
+  },
+  {
+    "priority": "P0",
+    "filename": "yunxi_assembly_street.png",
+    "brief": "仙师集会街道：摊位、买卖与请教空间，空背景版",
+    "status": "planned_or_existing_candidate",
+    "output_path": "D:/fqh/flash/art_sources/refresh_20261019/batches/06_scenes/output/yunxi_assembly_street.png"
+  },
+  {
+    "priority": "P0",
+    "filename": "yunxi_auction_hall.png",
+    "brief": "日常拍卖楼内景：台面、席位和普通拍品陈设",
+    "status": "planned_or_existing_candidate",
+    "output_path": "D:/fqh/flash/art_sources/refresh_20261019/batches/06_scenes/output/yunxi_auction_hall.png"
+  },
+  {
+    "priority": "P0",
+    "filename": "lu_family_courtyard.png",
+    "brief": "陆府庭院，世家生活与商路气息，避免皇宫规模",
+    "status": "planned_or_existing_candidate",
+    "output_path": "D:/fqh/flash/art_sources/refresh_20261019/batches/06_scenes/output/lu_family_courtyard.png"
+  },
+  {
+    "priority": "P0",
+    "filename": "lu_family_dining_hall.png",
+    "brief": "夜宴室内空背景，便于人物和对话层复用",
+    "status": "planned_or_existing_candidate",
+    "output_path": "D:/fqh/flash/art_sources/refresh_20261019/batches/06_scenes/output/lu_family_dining_hall.png"
+  },
+  {
+    "priority": "P1",
+    "filename": "rogue_rented_abode.png",
+    "brief": "散修租住洞府，简洁住处、修炼与生活陈设",
+    "status": "planned_or_existing_candidate",
+    "output_path": "D:/fqh/flash/art_sources/refresh_20261019/batches/06_scenes/output/rogue_rented_abode.png"
+  },
+  {
+    "priority": "P1",
+    "filename": "nanming_artisan_street.png",
+    "brief": "南明器街与炼器作坊，与现有万宝楼、牙行分工",
+    "status": "planned_or_existing_candidate",
+    "output_path": "D:/fqh/flash/art_sources/refresh_20261019/batches/06_scenes/output/nanming_artisan_street.png"
+  },
+  {
+    "priority": "P2",
+    "filename": "canglan_medical_hall.png",
+    "brief": "沧澜城丹会／医馆代表内景",
+    "status": "planned_or_existing_candidate",
+    "output_path": "D:/fqh/flash/art_sources/refresh_20261019/batches/06_scenes/output/canglan_medical_hall.png"
+  },
+  {
+    "priority": "P2",
+    "filename": "beiyue_old_archive.png",
+    "brief": "北岳旧档库，缺页卷宗线索需与图标批一致",
+    "status": "planned_or_existing_candidate",
+    "output_path": "D:/fqh/flash/art_sources/refresh_20261019/batches/06_scenes/output/beiyue_old_archive.png"
+  },
+  {
+    "priority": "P2",
+    "filename": "wanghai_chart_shop.png",
+    "brief": "望海海图铺，闻人照远行相关",
+    "status": "planned_or_existing_candidate",
+    "output_path": "D:/fqh/flash/art_sources/refresh_20261019/batches/06_scenes/output/wanghai_chart_shop.png"
+  },
+  {
+    "priority": "P2",
+    "filename": "chenxia_branching_path.png",
+    "brief": "沉霞古境可分岔的内部路径，区别现有入口",
+    "status": "planned_or_existing_candidate",
+    "output_path": "D:/fqh/flash/art_sources/refresh_20261019/batches/06_scenes/output/chenxia_branching_path.png"
+  },
+  {
+    "priority": "P2",
+    "filename": "chenxia_array_chamber.png",
+    "brief": "沉霞阵室，体现可研究／合作处理的空间",
+    "status": "planned_or_existing_candidate",
+    "output_path": "D:/fqh/flash/art_sources/refresh_20261019/batches/06_scenes/output/chenxia_array_chamber.png"
+  },
+  {
+    "priority": "P2",
+    "filename": "chenxia_record_room.png",
+    "brief": "古境旧城记录所在房间，线索标记与第10批一致",
+    "status": "planned_or_existing_candidate",
+    "output_path": "D:/fqh/flash/art_sources/refresh_20261019/batches/06_scenes/output/chenxia_record_room.png"
+  },
+  {
+    "priority": "P2",
+    "filename": "sea_ship_deck.png",
+    "brief": "海船甲板，区分内河小舟",
+    "status": "planned_or_existing_candidate",
+    "output_path": "D:/fqh/flash/art_sources/refresh_20261019/batches/06_scenes/output/sea_ship_deck.png"
+  },
+  {
+    "priority": "P2",
+    "filename": "island_landing.png",
+    "brief": "近海岛屿登陆点，清楚可行路线",
+    "status": "planned_or_existing_candidate",
+    "output_path": "D:/fqh/flash/art_sources/refresh_20261019/batches/06_scenes/output/island_landing.png"
+  },
+  {
+    "priority": "P2",
+    "filename": "underwater_ruin_gate.png",
+    "brief": "海底遗址入口，与闻人照海图视觉相连",
+    "status": "planned_or_existing_candidate",
+    "output_path": "D:/fqh/flash/art_sources/refresh_20261019/batches/06_scenes/output/underwater_ruin_gate.png"
+  },
+  {
+    "priority": "P3",
+    "filename": "sealed_old_city_gate.png",
+    "brief": "封存旧城城门，城徽沿用候选母题，最终构图随真相定案",
+    "status": "planned_or_existing_candidate",
+    "output_path": "D:/fqh/flash/art_sources/refresh_20261019/batches/06_scenes/output/sealed_old_city_gate.png"
+  },
+  {
+    "priority": "P3",
+    "filename": "sealed_old_city_street.png",
+    "brief": "旧城生活遗迹，避免只有宏大宫殿",
+    "status": "planned_or_existing_candidate",
+    "output_path": "D:/fqh/flash/art_sources/refresh_20261019/batches/06_scenes/output/sealed_old_city_street.png"
+  },
+  {
+    "priority": "P3",
+    "filename": "old_city_array_core.png",
+    "brief": "旧城阵枢，可共享基础场景并留分支状态层",
+    "status": "planned_or_existing_candidate",
+    "output_path": "D:/fqh/flash/art_sources/refresh_20261019/batches/06_scenes/output/old_city_array_core.png"
+  }
+]

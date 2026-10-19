@@ -5,8 +5,8 @@ import os, sys, math
 
 ROOT = sys.argv[1]
 OUT = os.path.join(ROOT, 'assets', 'art', 'ui')
-INK = '#0b1a1c'          # outline
-BASE = '#10272a'         # badge field
+INK = '#26392f'          # restrained ink outline, matching the approved vector samples
+BASE = '#293f39'         # quiet badge field
 PAPER = '#efe2bf'
 
 def write(rel, body, w=64, h=64):
@@ -22,11 +22,10 @@ def write(rel, body, w=64, h=64):
 HARM, HELP, PLAIN = '#d0745b', '#d9b86c', '#86c7c4'
 
 def badge(rim, glyph):
-    return ('<circle cx="32" cy="32" r="29" fill="%s" stroke="%s" stroke-width="3.5"/>\n'
-            '<circle cx="32" cy="32" r="24.5" fill="none" stroke="%s" stroke-opacity="0.35" stroke-width="1.5"/>\n%s'
-            % (BASE, rim, rim, glyph))
+    return ('<circle cx="32" cy="32" r="29" fill="%s" stroke="%s" stroke-width="1.5"/>\n%s'
+            % (BASE, rim, glyph))
 
-O = 'stroke="%s" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"' % INK
+O = 'stroke="%s" stroke-width="1.2" stroke-linejoin="round" stroke-linecap="round"' % INK
 
 STATUS = {
     # 灼烧: a flame with its hot heart.

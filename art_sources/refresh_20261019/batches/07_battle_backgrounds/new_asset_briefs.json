@@ -1,0 +1,30 @@
+[
+  {
+    "priority": "P1",
+    "filename": "public_tournament_stage.png",
+    "brief": "公共赛场斗法镜头，与第09批潜龙会全景保持空间关系",
+    "status": "planned_or_existing_candidate",
+    "output_path": "D:/fqh/flash/art_sources/refresh_20261019/batches/07_battle_backgrounds/output/public_tournament_stage.png"
+  },
+  {
+    "priority": "P2",
+    "filename": "chenxia_array_arena.png",
+    "brief": "古境阵室斗法场，双方站位明确",
+    "status": "planned_or_existing_candidate",
+    "output_path": "D:/fqh/flash/art_sources/refresh_20261019/batches/07_battle_backgrounds/output/chenxia_array_arena.png"
+  },
+  {
+    "priority": "P2",
+    "filename": "sea_island_arena.png",
+    "brief": "海岛斗法场，海面与岛屿分层",
+    "status": "planned_or_existing_candidate",
+    "output_path": "D:/fqh/flash/art_sources/refresh_20261019/batches/07_battle_backgrounds/output/sea_island_arena.png"
+  },
+  {
+    "priority": "P2",
+    "filename": "underwater_ruin_arena.png",
+    "brief": "水下遗迹斗法场，同色系分层但不吞没角色",
+    "status": "planned_or_existing_candidate",
+    "output_path": "D:/fqh/flash/art_sources/refresh_20261019/batches/07_battle_backgrounds/output/underwater_ruin_arena.png"
+  }
+]

@@ -1,0 +1,34 @@
+[
+  {
+    "path": "assets/art/map/region_qingyun.png",
+    "category": "map",
+    "status": "pending",
+    "baseline": {
+      "sha256": "fb2d843b70c5591e126e3f7e77e72b7edbcafe2d6278a33d2d19fb9accc82971",
+      "bytes": 6371237,
+      "size": [
+        2560,
+        1600
+      ],
+      "mode": "RGB"
+    },
+    "absolute_path": "D:/fqh/flash/assets/art/map/region_qingyun.png",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/map/region_tiannan.png",
+    "category": "map",
+    "status": "pending",
+    "baseline": {
+      "sha256": "9c25177e91df5b3bb50a188c8ef97b52981ae174ac947c4d2616197ae3a73a44",
+      "bytes": 3383583,
+      "size": [
+        1586,
+        992
+      ],
+      "mode": "RGB"
+    },
+    "absolute_path": "D:/fqh/flash/assets/art/map/region_tiannan.png",
+    "actor_layouts": []
+  }
+]

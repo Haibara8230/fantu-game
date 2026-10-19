@@ -1,0 +1,242 @@
+[
+  {
+    "path": "assets/art/bamboo_arena_v1.png",
+    "category": "root_atlases_background",
+    "status": "pending",
+    "baseline": {
+      "sha256": "7e1ad7b9eed2ddca42a106f5ba7d7d1697db17ab737c41b2d15923823f901f2f",
+      "bytes": 3074627,
+      "size": [
+        1916,
+        821
+      ],
+      "mode": "RGB"
+    },
+    "absolute_path": "D:/fqh/flash/assets/art/bamboo_arena_v1.png",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/battle/canglan_pavilion.png",
+    "category": "battle",
+    "status": "pending",
+    "baseline": {
+      "sha256": "d34da4c12a801b083c40c32349d1dcd68da7befbbd0457d755f84a87d81b0caa",
+      "bytes": 2700574,
+      "size": [
+        1672,
+        941
+      ],
+      "mode": "RGB"
+    },
+    "absolute_path": "D:/fqh/flash/assets/art/battle/canglan_pavilion.png",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/battle/changqing_valley.png",
+    "category": "battle",
+    "status": "pending",
+    "baseline": {
+      "sha256": "73222a5652b43412c2656e9f951540131a6049778e49c557bd72a2259c5fa535",
+      "bytes": 3168336,
+      "size": [
+        1672,
+        941
+      ],
+      "mode": "RGB"
+    },
+    "absolute_path": "D:/fqh/flash/assets/art/battle/changqing_valley.png",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/battle/chifeng.png",
+    "category": "battle",
+    "status": "pending",
+    "baseline": {
+      "sha256": "2b459fa28fe53916e2ddc3150938ae2bdee278b732cdca00909ad5605aaf8078",
+      "bytes": 2931407,
+      "size": [
+        1672,
+        941
+      ],
+      "mode": "RGB"
+    },
+    "absolute_path": "D:/fqh/flash/assets/art/battle/chifeng.png",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/battle/chixiao_gate.png",
+    "category": "battle",
+    "status": "pending",
+    "baseline": {
+      "sha256": "f6507025a69c1b0952afb3d1877cbb16e25adee5ae38490bd6a63c6d6c41c740",
+      "bytes": 2462768,
+      "size": [
+        1672,
+        941
+      ],
+      "mode": "RGB"
+    },
+    "absolute_path": "D:/fqh/flash/assets/art/battle/chixiao_gate.png",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/battle/ferry.png",
+    "category": "battle",
+    "status": "pending",
+    "baseline": {
+      "sha256": "705975e736825b19d205e5d807ce525adeccd9897dee8fb89bb523d303a46c16",
+      "bytes": 2179334,
+      "size": [
+        1792,
+        768
+      ],
+      "mode": "RGB"
+    },
+    "absolute_path": "D:/fqh/flash/assets/art/battle/ferry.png",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/battle/market.png",
+    "category": "battle",
+    "status": "pending",
+    "baseline": {
+      "sha256": "274e510fee2488214820b3674dae3a250608c4f7bc67ae3ee027ebb259a338b7",
+      "bytes": 2048727,
+      "size": [
+        1792,
+        768
+      ],
+      "mode": "RGB"
+    },
+    "absolute_path": "D:/fqh/flash/assets/art/battle/market.png",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/battle/nanming.png",
+    "category": "battle",
+    "status": "pending",
+    "baseline": {
+      "sha256": "f5468a21f2c09e7f60ea12aa62fdea880e616bbe6bab93841e3bf49cc29732a3",
+      "bytes": 2784752,
+      "size": [
+        1672,
+        940
+      ],
+      "mode": "RGB"
+    },
+    "absolute_path": "D:/fqh/flash/assets/art/battle/nanming.png",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/battle/ridge.png",
+    "category": "battle",
+    "status": "pending",
+    "baseline": {
+      "sha256": "2533a7f9c36ac925103ab1a18aeba40d074ce238ec5d79a8db8d20f9a9d6c3da",
+      "bytes": 2248562,
+      "size": [
+        1792,
+        768
+      ],
+      "mode": "RGB"
+    },
+    "absolute_path": "D:/fqh/flash/assets/art/battle/ridge.png",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/battle/road.png",
+    "category": "battle",
+    "status": "pending",
+    "baseline": {
+      "sha256": "436be5465b6de6100eb65e8943a2b4d08d1470faff2bd1f70c13fd7ea3357166",
+      "bytes": 2287866,
+      "size": [
+        1792,
+        768
+      ],
+      "mode": "RGB"
+    },
+    "absolute_path": "D:/fqh/flash/assets/art/battle/road.png",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/battle/ruin.png",
+    "category": "battle",
+    "status": "pending",
+    "baseline": {
+      "sha256": "b0ca0c142e40fc9f319008b7e38ef07a64bc57cba2e807e3143478fe6cc77e80",
+      "bytes": 2246686,
+      "size": [
+        1792,
+        768
+      ],
+      "mode": "RGB"
+    },
+    "absolute_path": "D:/fqh/flash/assets/art/battle/ruin.png",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/battle/sect.png",
+    "category": "battle",
+    "status": "pending",
+    "baseline": {
+      "sha256": "cc2fce5ed90a534d646589d0e982e33ec7d6fbb529dff0a4f2d5232aea5964e1",
+      "bytes": 2261715,
+      "size": [
+        1792,
+        768
+      ],
+      "mode": "RGB"
+    },
+    "absolute_path": "D:/fqh/flash/assets/art/battle/sect.png",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/battle/town.png",
+    "category": "battle",
+    "status": "pending",
+    "baseline": {
+      "sha256": "839cea21f853f22355717608889e55d514af9f0b62beff6946acaa6bfa212b0b",
+      "bytes": 2163735,
+      "size": [
+        1792,
+        768
+      ],
+      "mode": "RGB"
+    },
+    "absolute_path": "D:/fqh/flash/assets/art/battle/town.png",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/battle/wild.png",
+    "category": "battle",
+    "status": "pending",
+    "baseline": {
+      "sha256": "4ffc9c46bdce8fd58cf116bf6a1e54629c72d1d32d1ff47984453154a4af54fd",
+      "bytes": 2337758,
+      "size": [
+        1792,
+        768
+      ],
+      "mode": "RGB"
+    },
+    "absolute_path": "D:/fqh/flash/assets/art/battle/wild.png",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/battle/xuanyue_gate.png",
+    "category": "battle",
+    "status": "pending",
+    "baseline": {
+      "sha256": "192d40959f76dc9c16d5113b8fb5d733369314e6300a3faa480de12c3b4299c5",
+      "bytes": 2756321,
+      "size": [
+        1672,
+        941
+      ],
+      "mode": "RGB"
+    },
+    "absolute_path": "D:/fqh/flash/assets/art/battle/xuanyue_gate.png",
+    "actor_layouts": []
+  }
+]

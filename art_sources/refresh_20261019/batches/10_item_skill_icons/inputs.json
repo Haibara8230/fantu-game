@@ -1,0 +1,2923 @@
+[
+  {
+    "path": "assets/art/icons/arts/affinity_earth.svg",
+    "category": "icons",
+    "status": "modified_pending_game_qa",
+    "baseline": {
+      "sha256": "42a72aa8beb2aa8d98bfc29d4d7a673534bb012f905c363fdc1f416bcec7d772",
+      "bytes": 966
+    },
+    "source": "tools/art/make_item_icons.py",
+    "current": {
+      "sha256": "d8d7f3c1bd4bbda31a6a54162f51b3010b3acd4111bb203a3277c685e994d289",
+      "bytes": 965
+    },
+    "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
+    "absolute_path": "D:/fqh/flash/assets/art/icons/arts/affinity_earth.svg",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/icons/arts/affinity_fire.svg",
+    "category": "icons",
+    "status": "modified_pending_game_qa",
+    "baseline": {
+      "sha256": "78905a13beac13e194419fd1434bda59c326035edf650fc2fb05acfa0ba6bb90",
+      "bytes": 966
+    },
+    "source": "tools/art/make_item_icons.py",
+    "current": {
+      "sha256": "a485f668520861f809e1f563889a2d068a1c42a72d30fa61428f17b838c7e03f",
+      "bytes": 965
+    },
+    "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
+    "absolute_path": "D:/fqh/flash/assets/art/icons/arts/affinity_fire.svg",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/icons/arts/affinity_metal.svg",
+    "category": "icons",
+    "status": "modified_pending_game_qa",
+    "baseline": {
+      "sha256": "fc9dd0e433f15c6dc38bd22b77d5a1dbead73b271693815fae2af4bf158c86e5",
+      "bytes": 966
+    },
+    "source": "tools/art/make_item_icons.py",
+    "current": {
+      "sha256": "03e725463214f950a927840acd503529d58a929dad9e536b0619fab2e688136a",
+      "bytes": 965
+    },
+    "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
+    "absolute_path": "D:/fqh/flash/assets/art/icons/arts/affinity_metal.svg",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/icons/arts/affinity_water.svg",
+    "category": "icons",
+    "status": "modified_pending_game_qa",
+    "baseline": {
+      "sha256": "2320338656b9d30533ece6af91d03e6bcc2acccf7ddb8e8983174e36e4f6a54a",
+      "bytes": 966
+    },
+    "source": "tools/art/make_item_icons.py",
+    "current": {
+      "sha256": "d55e276c4e62e49b891f85a82d3226c435dab3eec55fdf1abb4dd6569bc209b5",
+      "bytes": 965
+    },
+    "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
+    "absolute_path": "D:/fqh/flash/assets/art/icons/arts/affinity_water.svg",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/icons/arts/affinity_wood.svg",
+    "category": "icons",
+    "status": "modified_pending_game_qa",
+    "baseline": {
+      "sha256": "a0bd3079d843a3e10e3747a0d8e749081222fe941cb9c79fe32bd0d35cd97149",
+      "bytes": 966
+    },
+    "source": "tools/art/make_item_icons.py",
+    "current": {
+      "sha256": "4ea007e88467090425f7fb92fd86be5e5af2c06b1b58c8d4a3da992fbda4c976",
+      "bytes": 965
+    },
+    "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
+    "absolute_path": "D:/fqh/flash/assets/art/icons/arts/affinity_wood.svg",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/icons/arts/barrage_earth.svg",
+    "category": "icons",
+    "status": "modified_pending_game_qa",
+    "baseline": {
+      "sha256": "ae1cf26fcf3a3cdec241e36bdca94bfd2cb87776dd2a18e0fef1e98d3b3d1a6e",
+      "bytes": 1604
+    },
+    "source": "tools/art/make_item_icons.py",
+    "current": {
+      "sha256": "50f9de2d4213dd694bc83e93a838982b40bb6ae11dc1fbc3e97de10a30b673fe",
+      "bytes": 1604
+    },
+    "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
+    "absolute_path": "D:/fqh/flash/assets/art/icons/arts/barrage_earth.svg",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/icons/arts/barrage_fire.svg",
+    "category": "icons",
+    "status": "modified_pending_game_qa",
+    "baseline": {
+      "sha256": "2b8c0bd87029cd2418f0869344c48ca20277b67c8fff124aed164fb0377ddc07",
+      "bytes": 1781
+    },
+    "source": "tools/art/make_item_icons.py",
+    "current": {
+      "sha256": "5256e3e269ee7230b6698e5f987ae75afc88b98fd777c45a384a476a16b9a915",
+      "bytes": 1784
+    },
+    "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
+    "absolute_path": "D:/fqh/flash/assets/art/icons/arts/barrage_fire.svg",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/icons/arts/barrage_metal.svg",
+    "category": "icons",
+    "status": "modified_pending_game_qa",
+    "baseline": {
+      "sha256": "872cec4543e8e20c3a3690c5696ad8db95697adb219d153834486f6782a4af05",
+      "bytes": 2132
+    },
+    "source": "tools/art/make_item_icons.py",
+    "current": {
+      "sha256": "5943cd22166b76d24b32a0a348bb034f95dba624a6f6a2e4641becf05e443eb5",
+      "bytes": 2132
+    },
+    "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
+    "absolute_path": "D:/fqh/flash/assets/art/icons/arts/barrage_metal.svg",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/icons/arts/barrage_water.svg",
+    "category": "icons",
+    "status": "modified_pending_game_qa",
+    "baseline": {
+      "sha256": "8d5054f85824037c986c27049147cb9e0c75e7fad6b22da027b1b80ace764871",
+      "bytes": 1514
+    },
+    "source": "tools/art/make_item_icons.py",
+    "current": {
+      "sha256": "800f956661c60f09b52a59f54e1ffcf204ea35d43638988ce7f3ff01c335f870",
+      "bytes": 1514
+    },
+    "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
+    "absolute_path": "D:/fqh/flash/assets/art/icons/arts/barrage_water.svg",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/icons/arts/barrage_wood.svg",
+    "category": "icons",
+    "status": "modified_pending_game_qa",
+    "baseline": {
+      "sha256": "6e665d07cbe97d53aa03aa2370bd2fd9d0a10ac91f3cbce1eb1a4e09590990c9",
+      "bytes": 1430
+    },
+    "source": "tools/art/make_item_icons.py",
+    "current": {
+      "sha256": "81576d753d3e6d32e418f6123b2afbc0845b552030631ed278793fe8111982ed",
+      "bytes": 1430
+    },
+    "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
+    "absolute_path": "D:/fqh/flash/assets/art/icons/arts/barrage_wood.svg",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/icons/arts/body_earth.svg",
+    "category": "icons",
+    "status": "modified_pending_game_qa",
+    "baseline": {
+      "sha256": "53217d44531551736bb0a8249fc51b9abcf6e6e4f6b350931cce9356e5026377",
+      "bytes": 1238
+    },
+    "source": "tools/art/make_item_icons.py",
+    "current": {
+      "sha256": "f63065cec44226dc334f817cfd91e601d0a261f4fc10fa915bba06de84935a88",
+      "bytes": 1239
+    },
+    "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
+    "absolute_path": "D:/fqh/flash/assets/art/icons/arts/body_earth.svg",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/icons/arts/body_fire.svg",
+    "category": "icons",
+    "status": "modified_pending_game_qa",
+    "baseline": {
+      "sha256": "117d4eb6e7fa2542e0237462efcebce9e77f1fe80034ef3dd9335ba4e87cc7f1",
+      "bytes": 1238
+    },
+    "source": "tools/art/make_item_icons.py",
+    "current": {
+      "sha256": "f803690e30399234c3d072aa06cf74826b110825b23cfd88f3701db885b6b9eb",
+      "bytes": 1239
+    },
+    "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
+    "absolute_path": "D:/fqh/flash/assets/art/icons/arts/body_fire.svg",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/icons/arts/body_metal.svg",
+    "category": "icons",
+    "status": "modified_pending_game_qa",
+    "baseline": {
+      "sha256": "f5c5c2757cc79585b1e9c9fb600ce83f11f7bb39795ae2222b061b123393e6ef",
+      "bytes": 1238
+    },
+    "source": "tools/art/make_item_icons.py",
+    "current": {
+      "sha256": "f89150970569d2f5e3312c339dd5f6483a8198fc13f1ba8223df016d6b306b16",
+      "bytes": 1239
+    },
+    "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
+    "absolute_path": "D:/fqh/flash/assets/art/icons/arts/body_metal.svg",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/icons/arts/body_water.svg",
+    "category": "icons",
+    "status": "modified_pending_game_qa",
+    "baseline": {
+      "sha256": "baf98529090eddec9b423c60eb03b0ce47a2a1062c6d1a06751cfa24492f01cd",
+      "bytes": 1238
+    },
+    "source": "tools/art/make_item_icons.py",
+    "current": {
+      "sha256": "8a904456cf3d697bddc1b6ac431b85716e40881d0423899e84c5b82c43eba35c",
+      "bytes": 1239
+    },
+    "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
+    "absolute_path": "D:/fqh/flash/assets/art/icons/arts/body_water.svg",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/icons/arts/body_wood.svg",
+    "category": "icons",
+    "status": "modified_pending_game_qa",
+    "baseline": {
+      "sha256": "0af8febbdbf422fe183a75cecca9b2064a5f00428688f565f206b949578ad67a",
+      "bytes": 1238
+    },
+    "source": "tools/art/make_item_icons.py",
+    "current": {
+      "sha256": "988b96073c0cc59f24e5bf5afa0f4d11cef35469e0fd0d1fc5be830a31ef4a28",
+      "bytes": 1239
+    },
+    "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
+    "absolute_path": "D:/fqh/flash/assets/art/icons/arts/body_wood.svg",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/icons/arts/bolt_earth.svg",
+    "category": "icons",
+    "status": "modified_pending_game_qa",
+    "baseline": {
+      "sha256": "8336d6cd397f9f810e54103ffa24372153695c903d2837195ece309256ac49ec",
+      "bytes": 819
+    },
+    "source": "tools/art/make_item_icons.py",
+    "current": {
+      "sha256": "1e5d0c0311d476becfe50dbf5bc2c8c60553254f53443f8058cd45e368aca053",
+      "bytes": 817
+    },
+    "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
+    "absolute_path": "D:/fqh/flash/assets/art/icons/arts/bolt_earth.svg",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/icons/arts/bolt_fire.svg",
+    "category": "icons",
+    "status": "modified_pending_game_qa",
+    "baseline": {
+      "sha256": "aaa2f7ace00a6efdc2145b73213a163fe862b9e6313956371717c686b5e80adc",
+      "bytes": 878
+    },
+    "source": "tools/art/make_item_icons.py",
+    "current": {
+      "sha256": "f95be3c597734faba1316182d41a3e2e9b2cefc456ef7cf1122eeb607b4ea373",
+      "bytes": 877
+    },
+    "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
+    "absolute_path": "D:/fqh/flash/assets/art/icons/arts/bolt_fire.svg",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/icons/arts/bolt_metal.svg",
+    "category": "icons",
+    "status": "modified_pending_game_qa",
+    "baseline": {
+      "sha256": "281417f98961b398b14d09aed8d83398dd1d1b6dbf0b07887344d994334f7305",
+      "bytes": 995
+    },
+    "source": "tools/art/make_item_icons.py",
+    "current": {
+      "sha256": "2760b87f5555df8ebbb98244f9006378f183c8815b66c1b515e416eb947a92bf",
+      "bytes": 993
+    },
+    "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
+    "absolute_path": "D:/fqh/flash/assets/art/icons/arts/bolt_metal.svg",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/icons/arts/bolt_water.svg",
+    "category": "icons",
+    "status": "modified_pending_game_qa",
+    "baseline": {
+      "sha256": "2a40e9cf8741286b938b63ddaa1082c288a19c1b8e7b33106ce96af76fd228f7",
+      "bytes": 789
+    },
+    "source": "tools/art/make_item_icons.py",
+    "current": {
+      "sha256": "29bb4f270f0c2e4ad86398e95bd2484b8d7f405c003cbc062a1fed033791c591",
+      "bytes": 787
+    },
+    "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
+    "absolute_path": "D:/fqh/flash/assets/art/icons/arts/bolt_water.svg",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/icons/arts/bolt_wood.svg",
+    "category": "icons",
+    "status": "modified_pending_game_qa",
+    "baseline": {
+      "sha256": "764b204b70cd936be715e594989c3ed6dd9bd79433d7ce39427fd7395b492747",
+      "bytes": 761
+    },
+    "source": "tools/art/make_item_icons.py",
+    "current": {
+      "sha256": "813421523155a0e15218a451e7dade2c79c965316dbcbd762b1168c3783c1777",
+      "bytes": 759
+    },
+    "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
+    "absolute_path": "D:/fqh/flash/assets/art/icons/arts/bolt_wood.svg",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/icons/arts/breath_earth.svg",
+    "category": "icons",
+    "status": "modified_pending_game_qa",
+    "baseline": {
+      "sha256": "cfde3d3ac3cf0fb788e127ee7b9f900ab1096b9a126857bb9739e1bcaf3967dd",
+      "bytes": 859
+    },
+    "source": "tools/art/make_item_icons.py",
+    "current": {
+      "sha256": "c16119e69c9cab10ee630915b8a4e6454b97ddf919f19549ff438c496f127a37",
+      "bytes": 859
+    },
+    "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
+    "absolute_path": "D:/fqh/flash/assets/art/icons/arts/breath_earth.svg",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/icons/arts/breath_fire.svg",
+    "category": "icons",
+    "status": "modified_pending_game_qa",
+    "baseline": {
+      "sha256": "017695ba0bffadb365ab69465f53b866b88cbd20d22527c9d09d5ccf724c6d8a",
+      "bytes": 859
+    },
+    "source": "tools/art/make_item_icons.py",
+    "current": {
+      "sha256": "3fc367ac354e35681254d82e26007ec70cf9ea857b44a81d2da0fff97dd71d0b",
+      "bytes": 859
+    },
+    "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
+    "absolute_path": "D:/fqh/flash/assets/art/icons/arts/breath_fire.svg",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/icons/arts/breath_metal.svg",
+    "category": "icons",
+    "status": "modified_pending_game_qa",
+    "baseline": {
+      "sha256": "368b62cd331889983e99be3967ad215ba85fca42b0bfb23080b40a6f6a40ded6",
+      "bytes": 859
+    },
+    "source": "tools/art/make_item_icons.py",
+    "current": {
+      "sha256": "e834c824e9b189c46f0ba7062300cb0747c611153269ea1e713be7a219a874b2",
+      "bytes": 859
+    },
+    "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
+    "absolute_path": "D:/fqh/flash/assets/art/icons/arts/breath_metal.svg",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/icons/arts/breath_water.svg",
+    "category": "icons",
+    "status": "modified_pending_game_qa",
+    "baseline": {
+      "sha256": "64076a178780cd69b21b78c4c20b39612f2cc338a3b027a2697afb52a85ad3a0",
+      "bytes": 859
+    },
+    "source": "tools/art/make_item_icons.py",
+    "current": {
+      "sha256": "bc19f8b3437a49321516ef6ea68123441b9d9987410fb420af7a79e4e561ddaf",
+      "bytes": 859
+    },
+    "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
+    "absolute_path": "D:/fqh/flash/assets/art/icons/arts/breath_water.svg",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/icons/arts/breath_wood.svg",
+    "category": "icons",
+    "status": "modified_pending_game_qa",
+    "baseline": {
+      "sha256": "9bf848f33c027e8a62ab30d2e8599fef89b03344fd8dcb50608f1446a1fa67ea",
+      "bytes": 859
+    },
+    "source": "tools/art/make_item_icons.py",
+    "current": {
+      "sha256": "e41db72e5502da7cf5a984dc29d15cfdeece65463695bf7851e31f691282bfba",
+      "bytes": 859
+    },
+    "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
+    "absolute_path": "D:/fqh/flash/assets/art/icons/arts/breath_wood.svg",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/icons/arts/burst_earth.svg",
+    "category": "icons",
+    "status": "modified_pending_game_qa",
+    "baseline": {
+      "sha256": "75679d7a8e277c72bda832007ffe6499f3a1fce87265fcaadf8995e5574ed781",
+      "bytes": 2013
+    },
+    "source": "tools/art/make_item_icons.py",
+    "current": {
+      "sha256": "0a285c728a02c9ef5bd30ea5273d20aa57778fcd3ff559aded79552b2b6529bf",
+      "bytes": 620
+    },
+    "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
+    "absolute_path": "D:/fqh/flash/assets/art/icons/arts/burst_earth.svg",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/icons/arts/burst_fire.svg",
+    "category": "icons",
+    "status": "modified_pending_game_qa",
+    "baseline": {
+      "sha256": "e152b2728da8f58fc55c9ba251f929edf25bad20c5f98869a4790c9fe6a1a561",
+      "bytes": 2080
+    },
+    "source": "tools/art/make_item_icons.py",
+    "current": {
+      "sha256": "354f84c3627e6fa5f2684f7a638e5174609170c5323b598928dd598101d375e7",
+      "bytes": 620
+    },
+    "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
+    "absolute_path": "D:/fqh/flash/assets/art/icons/arts/burst_fire.svg",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/icons/arts/burst_metal.svg",
+    "category": "icons",
+    "status": "modified_pending_game_qa",
+    "baseline": {
+      "sha256": "7d726a8796578e7b8a4f8da56f611e5e6ce499c481e6a68bc3d2129c148ac150",
+      "bytes": 2034
+    },
+    "source": "tools/art/make_item_icons.py",
+    "current": {
+      "sha256": "d1ed475273768a6aeb4be857bcbf25a67ba30690e90322463feb7a04599caaa6",
+      "bytes": 620
+    },
+    "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
+    "absolute_path": "D:/fqh/flash/assets/art/icons/arts/burst_metal.svg",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/icons/arts/burst_water.svg",
+    "category": "icons",
+    "status": "modified_pending_game_qa",
+    "baseline": {
+      "sha256": "aee27b6cda6d25acac83a5bf58e03fa73611538c5e5ad4353c3fa1116b0c402b",
+      "bytes": 2122
+    },
+    "source": "tools/art/make_item_icons.py",
+    "current": {
+      "sha256": "0f8342b0a2e43ce3bd60b56789249f10bf6465c147007c59b11feff1f9e4cf1a",
+      "bytes": 620
+    },
+    "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
+    "absolute_path": "D:/fqh/flash/assets/art/icons/arts/burst_water.svg",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/icons/arts/burst_wood.svg",
+    "category": "icons",
+    "status": "modified_pending_game_qa",
+    "baseline": {
+      "sha256": "3c4e6eff3f8bf1a11b9a49423087506488e166f6ddc7f571b2adaec25ddfed90",
+      "bytes": 2023
+    },
+    "source": "tools/art/make_item_icons.py",
+    "current": {
+      "sha256": "61407b15d7ec257ee399f7259bfa6a240b1038714e2d384eff22a60fb04738d0",
+      "bytes": 620
+    },
+    "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
+    "absolute_path": "D:/fqh/flash/assets/art/icons/arts/burst_wood.svg",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/icons/arts/focus_earth.svg",
+    "category": "icons",
+    "status": "modified_pending_game_qa",
+    "baseline": {
+      "sha256": "5bd3341f8789729c3657a10733b664b459427e6a65608bb4776279d5a9925f86",
+      "bytes": 1840
+    },
+    "source": "tools/art/make_item_icons.py",
+    "current": {
+      "sha256": "3bcf5c8579a71fcac2890627cde87c1b0205b9a24805a2308e276f6c39c63529",
+      "bytes": 1840
+    },
+    "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
+    "absolute_path": "D:/fqh/flash/assets/art/icons/arts/focus_earth.svg",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/icons/arts/focus_fire.svg",
+    "category": "icons",
+    "status": "modified_pending_game_qa",
+    "baseline": {
+      "sha256": "2aaf604761466d86d4e81322262c6f84827b4d43b1e50d136d69c45b1a765640",
+      "bytes": 1840
+    },
+    "source": "tools/art/make_item_icons.py",
+    "current": {
+      "sha256": "fbdb548234fb9969deb01fad398970b3557581a3b73b69283fb12ac6e7850cdc",
+      "bytes": 1840
+    },
+    "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
+    "absolute_path": "D:/fqh/flash/assets/art/icons/arts/focus_fire.svg",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/icons/arts/focus_metal.svg",
+    "category": "icons",
+    "status": "modified_pending_game_qa",
+    "baseline": {
+      "sha256": "599543a02915ff11e2f701ce16cf15c622ca16de206298b53095b625c7e48758",
+      "bytes": 1840
+    },
+    "source": "tools/art/make_item_icons.py",
+    "current": {
+      "sha256": "9aafc4211eb451e235601fb5cf69c3cfb4ba7ae9fee795766e4418439c503d0c",
+      "bytes": 1840
+    },
+    "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
+    "absolute_path": "D:/fqh/flash/assets/art/icons/arts/focus_metal.svg",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/icons/arts/focus_water.svg",
+    "category": "icons",
+    "status": "modified_pending_game_qa",
+    "baseline": {
+      "sha256": "6fe168dfba87161270b63ce5cb0db79fda45bc41dea8f0379d182abef44be427",
+      "bytes": 1840
+    },
+    "source": "tools/art/make_item_icons.py",
+    "current": {
+      "sha256": "7cb664330a9e4bd9952b2938e0c06dbda3e9f9a2e2a8825d7863359de393c804",
+      "bytes": 1840
+    },
+    "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
+    "absolute_path": "D:/fqh/flash/assets/art/icons/arts/focus_water.svg",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/icons/arts/focus_wood.svg",
+    "category": "icons",
+    "status": "modified_pending_game_qa",
+    "baseline": {
+      "sha256": "214895a1dc98ab8e7efa62b581978327dcabf019d6712422e1383777e3e28fa7",
+      "bytes": 1840
+    },
+    "source": "tools/art/make_item_icons.py",
+    "current": {
+      "sha256": "7ea01d429a6563b77aee4d9c25a57a567494f3d3fc2d44e266227d788b661dc4",
+      "bytes": 1840
+    },
+    "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
+    "absolute_path": "D:/fqh/flash/assets/art/icons/arts/focus_wood.svg",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/icons/arts/mend_earth.svg",
+    "category": "icons",
+    "status": "modified_pending_game_qa",
+    "baseline": {
+      "sha256": "63a6911b6d764dfc148ed7b3e919a946337b4b527a2b528169dd37538dc016c4",
+      "bytes": 1450
+    },
+    "source": "tools/art/make_item_icons.py",
+    "current": {
+      "sha256": "60543e39efacf416e24f4de80573b216a938bf30ac29f2eac7188b08409f0630",
+      "bytes": 1452
+    },
+    "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
+    "absolute_path": "D:/fqh/flash/assets/art/icons/arts/mend_earth.svg",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/icons/arts/mend_fire.svg",
+    "category": "icons",
+    "status": "modified_pending_game_qa",
+    "baseline": {
+      "sha256": "a22c0b297ae132000e4d2233298639b825bb3364c23966dd5ca92a7409938ed4",
+      "bytes": 1450
+    },
+    "source": "tools/art/make_item_icons.py",
+    "current": {
+      "sha256": "7613c8baeb1a63ba216c18086ee48c84d17874d35df60d3647d0ceb5868db65f",
+      "bytes": 1452
+    },
+    "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
+    "absolute_path": "D:/fqh/flash/assets/art/icons/arts/mend_fire.svg",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/icons/arts/mend_metal.svg",
+    "category": "icons",
+    "status": "modified_pending_game_qa",
+    "baseline": {
+      "sha256": "2c504424a408b0647f905e907ef87b82ee70931d0bfcc48b582e98b7737e6fd2",
+      "bytes": 1450
+    },
+    "source": "tools/art/make_item_icons.py",
+    "current": {
+      "sha256": "be56373643652d2011aa314d6916f74bc2cc7d224c18b57b973cdd15bbd895e4",
+      "bytes": 1452
+    },
+    "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
+    "absolute_path": "D:/fqh/flash/assets/art/icons/arts/mend_metal.svg",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/icons/arts/mend_water.svg",
+    "category": "icons",
+    "status": "modified_pending_game_qa",
+    "baseline": {
+      "sha256": "90efb483ba89865afd05ab3ca1e1ff8b51a0512458057b60fe7987c6ea4bc15d",
+      "bytes": 1450
+    },
+    "source": "tools/art/make_item_icons.py",
+    "current": {
+      "sha256": "1ecae0d373219227737f92c2233337881190592e356c34f8422ef5541e2c570b",
+      "bytes": 1452
+    },
+    "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
+    "absolute_path": "D:/fqh/flash/assets/art/icons/arts/mend_water.svg",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/icons/arts/mend_wood.svg",
+    "category": "icons",
+    "status": "modified_pending_game_qa",
+    "baseline": {
+      "sha256": "0f98e2143ab697ba65c08816089c5128563af90f53532ddb30c3798b08307ae6",
+      "bytes": 1450
+    },
+    "source": "tools/art/make_item_icons.py",
+    "current": {
+      "sha256": "189b9686daa4d8c1751322d1044ec9ad4f7bd36dca9921b18c28d960c26b8bf2",
+      "bytes": 1452
+    },
+    "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
+    "absolute_path": "D:/fqh/flash/assets/art/icons/arts/mend_wood.svg",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/icons/arts/ward_earth.svg",
+    "category": "icons",
+    "status": "modified_pending_game_qa",
+    "baseline": {
+      "sha256": "837dd76f51f2ff9034ece5c510e7cbd9e1193e3597b1dcc7d0b442f3d400b41b",
+      "bytes": 771
+    },
+    "source": "tools/art/make_item_icons.py",
+    "current": {
+      "sha256": "6d5461fd39cc7d049b2d5e8eba4e301d179be3a0ad867eb5f6567bb4e8dc4d34",
+      "bytes": 771
+    },
+    "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
+    "absolute_path": "D:/fqh/flash/assets/art/icons/arts/ward_earth.svg",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/icons/arts/ward_fire.svg",
+    "category": "icons",
+    "status": "modified_pending_game_qa",
+    "baseline": {
+      "sha256": "8eba4086dfebead868b292bed08b46b171e802e2fcea4c6ffbbe054e5b04b63c",
+      "bytes": 771
+    },
+    "source": "tools/art/make_item_icons.py",
+    "current": {
+      "sha256": "6fadc69ea44869e463ed3226e901c62d9d5455298cf064c09379792ab978d88a",
+      "bytes": 771
+    },
+    "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
+    "absolute_path": "D:/fqh/flash/assets/art/icons/arts/ward_fire.svg",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/icons/arts/ward_metal.svg",
+    "category": "icons",
+    "status": "modified_pending_game_qa",
+    "baseline": {
+      "sha256": "13b6c6dafa304b37ee922c9c98773ca14cf5bc0d0bc948b17b2665f7bdae17cc",
+      "bytes": 771
+    },
+    "source": "tools/art/make_item_icons.py",
+    "current": {
+      "sha256": "84a4712777e0a81fa72759f2802a12e4a2392395084f97f02715faea729f9ada",
+      "bytes": 771
+    },
+    "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
+    "absolute_path": "D:/fqh/flash/assets/art/icons/arts/ward_metal.svg",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/icons/arts/ward_water.svg",
+    "category": "icons",
+    "status": "modified_pending_game_qa",
+    "baseline": {
+      "sha256": "a55a6c45fa8aca03e25afc0eb8dff806bc08f6f30943f7505f1d3dc67a97267b",
+      "bytes": 771
+    },
+    "source": "tools/art/make_item_icons.py",
+    "current": {
+      "sha256": "7d081d9780b4c0574b4c775f324130732de96a794009f2d60ac3127dc63f069b",
+      "bytes": 771
+    },
+    "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
+    "absolute_path": "D:/fqh/flash/assets/art/icons/arts/ward_water.svg",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/icons/arts/ward_wood.svg",
+    "category": "icons",
+    "status": "modified_pending_game_qa",
+    "baseline": {
+      "sha256": "7879faed7c65002811ac6df5ca33fa784dadae6c8cf7b96ed664661ba0872e00",
+      "bytes": 771
+    },
+    "source": "tools/art/make_item_icons.py",
+    "current": {
+      "sha256": "664a16c1af5f9bb609cd8c1151059203da2d6f9bd65f6e6adb1bb2d587d0ca2c",
+      "bytes": 771
+    },
+    "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
+    "absolute_path": "D:/fqh/flash/assets/art/icons/arts/ward_wood.svg",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/icons/backs/earth.svg",
+    "category": "icons",
+    "status": "modified_pending_game_qa",
+    "baseline": {
+      "sha256": "b34f1208e15e7aee6305eaa61cbd3fb0bd4f5c5a24c969a8f040d8f8dc814841",
+      "bytes": 642
+    },
+    "source": "tools/art/make_item_icons.py",
+    "current": {
+      "sha256": "73ea969588218e8e13594b272b7a7712a0fddf154302a5dfec0678b138e991a2",
+      "bytes": 230
+    },
+    "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
+    "absolute_path": "D:/fqh/flash/assets/art/icons/backs/earth.svg",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/icons/backs/fire.svg",
+    "category": "icons",
+    "status": "modified_pending_game_qa",
+    "baseline": {
+      "sha256": "d43c8257fee367f63f0b8af3b368af0a99b091671eadae76a4f9ce8d219accc2",
+      "bytes": 954
+    },
+    "source": "tools/art/make_item_icons.py",
+    "current": {
+      "sha256": "8da1efa6dea2f4a51441fef801e8aa070122f999a6b0de6096f0851e2eb595bd",
+      "bytes": 230
+    },
+    "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
+    "absolute_path": "D:/fqh/flash/assets/art/icons/backs/fire.svg",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/icons/backs/metal.svg",
+    "category": "icons",
+    "status": "modified_pending_game_qa",
+    "baseline": {
+      "sha256": "4935a7adb89cc73eed921300df3b0374a77133ebd81bc1ac86233cb9b41b476c",
+      "bytes": 1135
+    },
+    "source": "tools/art/make_item_icons.py",
+    "current": {
+      "sha256": "b4fe13b58756bdbb03862eb0f03b5b53cbb374ccf3d67f1db4ce69dc11d32c37",
+      "bytes": 230
+    },
+    "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
+    "absolute_path": "D:/fqh/flash/assets/art/icons/backs/metal.svg",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/icons/backs/none.svg",
+    "category": "icons",
+    "status": "modified_pending_game_qa",
+    "baseline": {
+      "sha256": "2a5e4942e3661249ebb63e00f00af2acdbd84c2e0fc9a4a3d9e243715145772d",
+      "bytes": 480
+    },
+    "source": "tools/art/make_item_icons.py",
+    "current": {
+      "sha256": "a0bcbe609e372b72f10ccff20045b5e847d1f2c7c7930153aa5969ec1c80c51d",
+      "bytes": 230
+    },
+    "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
+    "absolute_path": "D:/fqh/flash/assets/art/icons/backs/none.svg",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/icons/backs/water.svg",
+    "category": "icons",
+    "status": "modified_pending_game_qa",
+    "baseline": {
+      "sha256": "cf04ccd8314825b7c1b858eb7bd768244519e4869049f4dfb36a658da75ce87f",
+      "bytes": 1198
+    },
+    "source": "tools/art/make_item_icons.py",
+    "current": {
+      "sha256": "bb1e56233f968d3c290005902535ba8e87d8357e42182824640d6cdcc51ed2ed",
+      "bytes": 230
+    },
+    "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
+    "absolute_path": "D:/fqh/flash/assets/art/icons/backs/water.svg",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/icons/backs/wood.svg",
+    "category": "icons",
+    "status": "modified_pending_game_qa",
+    "baseline": {
+      "sha256": "ce49be93f67454608c6011ca9a3b4b875b0f0e6d182306ffe0410b5fbd1a33b7",
+      "bytes": 637
+    },
+    "source": "tools/art/make_item_icons.py",
+    "current": {
+      "sha256": "774a60956dbf2722317710d205f1aa091a4acfb6f9930eed8e1b2f4b85813783",
+      "bytes": 230
+    },
+    "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
+    "absolute_path": "D:/fqh/flash/assets/art/icons/backs/wood.svg",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/icons/frames/grade_0.svg",
+    "category": "icons",
+    "status": "modified_pending_game_qa",
+    "baseline": {
+      "sha256": "ce99a44a0b5e764289d3876dea342f5a169cd139021f973ad83141f1d3af9ae8",
+      "bytes": 291
+    },
+    "source": "tools/art/make_item_icons.py",
+    "current": {
+      "sha256": "2d05532b622792848dee4312e56784bc3814fb327a2f0430a352960c4b41d286",
+      "bytes": 193
+    },
+    "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
+    "absolute_path": "D:/fqh/flash/assets/art/icons/frames/grade_0.svg",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/icons/frames/grade_1.svg",
+    "category": "icons",
+    "status": "modified_pending_game_qa",
+    "baseline": {
+      "sha256": "e7ca10b2bd7603ff174d511c4ea780700d011b9673797964ea8cc58f50a65404",
+      "bytes": 408
+    },
+    "source": "tools/art/make_item_icons.py",
+    "current": {
+      "sha256": "c56669907fed7b1c10ec09d911138a8be327c98db4c92300ae133541da36fe39",
+      "bytes": 193
+    },
+    "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
+    "absolute_path": "D:/fqh/flash/assets/art/icons/frames/grade_1.svg",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/icons/frames/grade_2.svg",
+    "category": "icons",
+    "status": "modified_pending_game_qa",
+    "baseline": {
+      "sha256": "df7001fa0da930c2aa1155ee0b5fe3119f13032d05b636310a8f511e52105b67",
+      "bytes": 569
+    },
+    "source": "tools/art/make_item_icons.py",
+    "current": {
+      "sha256": "1312f194cd729b77de452c3fc97806eeca120e1825b5fd9d1dd96f65d9f6f7d6",
+      "bytes": 352
+    },
+    "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
+    "absolute_path": "D:/fqh/flash/assets/art/icons/frames/grade_2.svg",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/icons/frames/grade_3.svg",
+    "category": "icons",
+    "status": "modified_pending_game_qa",
+    "baseline": {
+      "sha256": "9587b82fb8ab2d6aebe1eab0f1d52203f5fabff9a2e0145599d3ca9b10b9e49d",
+      "bytes": 1362
+    },
+    "source": "tools/art/make_item_icons.py",
+    "current": {
+      "sha256": "d03df4aeb6745f075df206a6db989e94f5736369265b5366cc25a9eadd1c96d4",
+      "bytes": 352
+    },
+    "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
+    "absolute_path": "D:/fqh/flash/assets/art/icons/frames/grade_3.svg",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/icons/frames/grade_4.svg",
+    "category": "icons",
+    "status": "modified_pending_game_qa",
+    "baseline": {
+      "sha256": "ba2d58c129442e59cfbdd30ae386f694367ad448db5278743231c3121eb1f967",
+      "bytes": 1836
+    },
+    "source": "tools/art/make_item_icons.py",
+    "current": {
+      "sha256": "2fe2dbe2e2384ef4caef446ff44592e24a0db9697beebb79226dec4977be4c83",
+      "bytes": 448
+    },
+    "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
+    "absolute_path": "D:/fqh/flash/assets/art/icons/frames/grade_4.svg",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/icons/frames/grade_5.svg",
+    "category": "icons",
+    "status": "modified_pending_game_qa",
+    "baseline": {
+      "sha256": "d59402474bdbbfe03c5714bd3db3ef57a6d264690b6de2b12ca87b492a635a10",
+      "bytes": 2338
+    },
+    "source": "tools/art/make_item_icons.py",
+    "current": {
+      "sha256": "890d56c0c377b883f0573039ef2c5d14ce309c7f4f163ab5ee2eae6bcf96b2bf",
+      "bytes": 448
+    },
+    "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
+    "absolute_path": "D:/fqh/flash/assets/art/icons/frames/grade_5.svg",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/icons/gear/bell_1.svg",
+    "category": "icons",
+    "status": "modified_pending_game_qa",
+    "baseline": {
+      "sha256": "57987a08467232e10985cd1ccdde3c04216027af87ba8d2ce5d24468feb85465",
+      "bytes": 864
+    },
+    "source": "tools/art/make_item_icons.py",
+    "current": {
+      "sha256": "a02ba7a97699e8d3dbd0c8ad26c4806a062eb73ccab72c51bc745f29b8de3481",
+      "bytes": 864
+    },
+    "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
+    "absolute_path": "D:/fqh/flash/assets/art/icons/gear/bell_1.svg",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/icons/gear/bell_2.svg",
+    "category": "icons",
+    "status": "modified_pending_game_qa",
+    "baseline": {
+      "sha256": "7567de844b0e14e3817aa0f7729e8d552ad91ef45fadd411e1d548ff045675ee",
+      "bytes": 864
+    },
+    "source": "tools/art/make_item_icons.py",
+    "current": {
+      "sha256": "da9d75fd81f8f24097fd05f4566a1a56663419dc62783d03208653c0860a11b2",
+      "bytes": 864
+    },
+    "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
+    "absolute_path": "D:/fqh/flash/assets/art/icons/gear/bell_2.svg",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/icons/gear/bell_3.svg",
+    "category": "icons",
+    "status": "modified_pending_game_qa",
+    "baseline": {
+      "sha256": "fad27de7e7f1fd67a34c79f893db3463633aa8eeede69c1bdf61c7a6c3ec60ea",
+      "bytes": 864
+    },
+    "source": "tools/art/make_item_icons.py",
+    "current": {
+      "sha256": "95822c0afe13b365c58703a65f961f17baa5d2487e94d6c6d9d248b278d55370",
+      "bytes": 864
+    },
+    "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
+    "absolute_path": "D:/fqh/flash/assets/art/icons/gear/bell_3.svg",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/icons/gear/bell_4.svg",
+    "category": "icons",
+    "status": "modified_pending_game_qa",
+    "baseline": {
+      "sha256": "87417ccbd2c9d04cade17c2b4b21c1a3e30f95aba45ad6491529594c47c4124f",
+      "bytes": 864
+    },
+    "source": "tools/art/make_item_icons.py",
+    "current": {
+      "sha256": "dc2e0b6dea0a87b105da43bb215bc34c473df5b3bdc271c6e747e18437cc1003",
+      "bytes": 864
+    },
+    "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
+    "absolute_path": "D:/fqh/flash/assets/art/icons/gear/bell_4.svg",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/icons/gear/bell_5.svg",
+    "category": "icons",
+    "status": "modified_pending_game_qa",
+    "baseline": {
+      "sha256": "c5c41070f4ba05447ee4273ba651b004e03d65209dd1f58a1376275c625bcc64",
+      "bytes": 864
+    },
+    "source": "tools/art/make_item_icons.py",
+    "current": {
+      "sha256": "1765262ac3a43dd88f9cf88fc72d2109cf74c152a53777d82f771296acc6fe44",
+      "bytes": 864
+    },
+    "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
+    "absolute_path": "D:/fqh/flash/assets/art/icons/gear/bell_5.svg",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/icons/gear/fan_1.svg",
+    "category": "icons",
+    "status": "modified_pending_game_qa",
+    "baseline": {
+      "sha256": "c7b2f2acce5abc456d186e276af9c2df17e2f1af6b7b33dd64b10b76a5d917e2",
+      "bytes": 1181
+    },
+    "source": "tools/art/make_item_icons.py",
+    "current": {
+      "sha256": "ae5b34cff7f21e25c34178abf70c1c4d87b445c1d710e3d26f62b6572b52b765",
+      "bytes": 1181
+    },
+    "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
+    "absolute_path": "D:/fqh/flash/assets/art/icons/gear/fan_1.svg",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/icons/gear/fan_2.svg",
+    "category": "icons",
+    "status": "modified_pending_game_qa",
+    "baseline": {
+      "sha256": "14dd66875921b702f5100088100bf5218ad249daf50703f89edbcc25bf3c6c7d",
+      "bytes": 1181
+    },
+    "source": "tools/art/make_item_icons.py",
+    "current": {
+      "sha256": "ef7c14b498a0a24f122236a3be86b36455155d1ea3dfc1e9081ce8ef9c725b69",
+      "bytes": 1181
+    },
+    "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
+    "absolute_path": "D:/fqh/flash/assets/art/icons/gear/fan_2.svg",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/icons/gear/fan_3.svg",
+    "category": "icons",
+    "status": "modified_pending_game_qa",
+    "baseline": {
+      "sha256": "aac2c86186a2e1c17ffeb41b1d4d7d30285d2360a48f56c4c3fc50e87d55f750",
+      "bytes": 1181
+    },
+    "source": "tools/art/make_item_icons.py",
+    "current": {
+      "sha256": "4c7bdec61d9f3100d8a6e9ffacb8ad9d148d23130c2c7cb7e284d1c63fd6cce3",
+      "bytes": 1181
+    },
+    "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
+    "absolute_path": "D:/fqh/flash/assets/art/icons/gear/fan_3.svg",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/icons/gear/fan_4.svg",
+    "category": "icons",
+    "status": "modified_pending_game_qa",
+    "baseline": {
+      "sha256": "36a7403846a0eaae2d6cf03e9ba12810aef421681fe086a21d18461dc873d17c",
+      "bytes": 1181
+    },
+    "source": "tools/art/make_item_icons.py",
+    "current": {
+      "sha256": "f640f7d265bf1ee3503eb24ba6cf375515f7216452340be0fb5f8692cc7a1901",
+      "bytes": 1181
+    },
+    "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
+    "absolute_path": "D:/fqh/flash/assets/art/icons/gear/fan_4.svg",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/icons/gear/fan_5.svg",
+    "category": "icons",
+    "status": "modified_pending_game_qa",
+    "baseline": {
+      "sha256": "9c48269c2f414bd53bf2af0a67bfb6d1374647b88457607e612b3f9f77665d48",
+      "bytes": 1181
+    },
+    "source": "tools/art/make_item_icons.py",
+    "current": {
+      "sha256": "30e755beaafdc2a4fb2f980f04da0166775a90006894fc2700b4a2a926c9c0de",
+      "bytes": 1181
+    },
+    "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
+    "absolute_path": "D:/fqh/flash/assets/art/icons/gear/fan_5.svg",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/icons/gear/mirror_1.svg",
+    "category": "icons",
+    "status": "modified_pending_game_qa",
+    "baseline": {
+      "sha256": "27ec388104af2f1151a779a86a6c1ef57f2f383beda6014bda5ed28649490dbf",
+      "bytes": 644
+    },
+    "source": "tools/art/make_item_icons.py",
+    "current": {
+      "sha256": "77ac6298ca15c1f18bdd2374dfaa215285793cfb4bc451ba450579f03a048d98",
+      "bytes": 644
+    },
+    "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
+    "absolute_path": "D:/fqh/flash/assets/art/icons/gear/mirror_1.svg",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/icons/gear/mirror_2.svg",
+    "category": "icons",
+    "status": "modified_pending_game_qa",
+    "baseline": {
+      "sha256": "7f5baf37db8d6cd3bab373e139d0bc4aa35dd88bbc7b585b7e0cee8a49bd0509",
+      "bytes": 644
+    },
+    "source": "tools/art/make_item_icons.py",
+    "current": {
+      "sha256": "6a0b94bff956fa4fcb6bf3d97349a3b4a1fb83e60420b0b505fd8a42e61b002f",
+      "bytes": 644
+    },
+    "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
+    "absolute_path": "D:/fqh/flash/assets/art/icons/gear/mirror_2.svg",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/icons/gear/mirror_3.svg",
+    "category": "icons",
+    "status": "modified_pending_game_qa",
+    "baseline": {
+      "sha256": "de169fac00d761444a5b2167bafcdee218adcf8cc03fe92819e01752a3b60dfc",
+      "bytes": 644
+    },
+    "source": "tools/art/make_item_icons.py",
+    "current": {
+      "sha256": "2a55424f12fbf6cab4edc574f844472b957b3547e3b68b4ca1a97fa2454424a6",
+      "bytes": 644
+    },
+    "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
+    "absolute_path": "D:/fqh/flash/assets/art/icons/gear/mirror_3.svg",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/icons/gear/mirror_4.svg",
+    "category": "icons",
+    "status": "modified_pending_game_qa",
+    "baseline": {
+      "sha256": "063eb595f2cc26b724ffdf4a94ffc0bbdd4ff6bafbbd86f9d6c9abe9918127fd",
+      "bytes": 644
+    },
+    "source": "tools/art/make_item_icons.py",
+    "current": {
+      "sha256": "1e56c4e05a01b00d492de6242ae10a8f60ded8ac0668cb4a8d60a2aacd67334a",
+      "bytes": 644
+    },
+    "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
+    "absolute_path": "D:/fqh/flash/assets/art/icons/gear/mirror_4.svg",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/icons/gear/mirror_5.svg",
+    "category": "icons",
+    "status": "modified_pending_game_qa",
+    "baseline": {
+      "sha256": "2881e8ea5be7e959f358d0f1e8736c823fd4dabbf2bc18b4c96d81a2c93124ff",
+      "bytes": 644
+    },
+    "source": "tools/art/make_item_icons.py",
+    "current": {
+      "sha256": "7b1d6cbdbbeb09dd5dd2248026c6ccb4be106f8bafb63a8ba3a27bfd17d08d44",
+      "bytes": 644
+    },
+    "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
+    "absolute_path": "D:/fqh/flash/assets/art/icons/gear/mirror_5.svg",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/icons/gear/pendant_1.svg",
+    "category": "icons",
+    "status": "modified_pending_game_qa",
+    "baseline": {
+      "sha256": "ff58a06842543512584b74c89816b2bdd9725982f19c95f5d3fe31df7d46e746",
+      "bytes": 941
+    },
+    "source": "tools/art/make_item_icons.py",
+    "current": {
+      "sha256": "75282e433c5289c434e36f8d0e619b543e6e891f81fe36b6f9c2d27f274cbed2",
+      "bytes": 942
+    },
+    "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
+    "absolute_path": "D:/fqh/flash/assets/art/icons/gear/pendant_1.svg",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/icons/gear/pendant_2.svg",
+    "category": "icons",
+    "status": "modified_pending_game_qa",
+    "baseline": {
+      "sha256": "f8c33296175032eabfb8b45d892582a4c7cc8afd5426b5f1192408d909e520c3",
+      "bytes": 941
+    },
+    "source": "tools/art/make_item_icons.py",
+    "current": {
+      "sha256": "23021ba68ccb3f178254c09ff5d8965de88e89bacadac6ae37dd1ee76906b1cb",
+      "bytes": 942
+    },
+    "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
+    "absolute_path": "D:/fqh/flash/assets/art/icons/gear/pendant_2.svg",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/icons/gear/pendant_3.svg",
+    "category": "icons",
+    "status": "modified_pending_game_qa",
+    "baseline": {
+      "sha256": "3448a936471a3653e1de99f5f4b88d666a2c1129336eff9bda38390647de501a",
+      "bytes": 941
+    },
+    "source": "tools/art/make_item_icons.py",
+    "current": {
+      "sha256": "2c05201feaf8fe3add603f565fcbe6d3e6fc731e89d50dd281eb187fae9d1707",
+      "bytes": 942
+    },
+    "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
+    "absolute_path": "D:/fqh/flash/assets/art/icons/gear/pendant_3.svg",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/icons/gear/pendant_4.svg",
+    "category": "icons",
+    "status": "modified_pending_game_qa",
+    "baseline": {
+      "sha256": "381ec17a78325e40d6dcfbf9db9df1c0fd73b220ad9b6686d3199c91d35c6578",
+      "bytes": 941
+    },
+    "source": "tools/art/make_item_icons.py",
+    "current": {
+      "sha256": "3e02895050b886df7481a02b1b6fe2e9e6cdd3a1144aabe1e3be345890a560a2",
+      "bytes": 942
+    },
+    "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
+    "absolute_path": "D:/fqh/flash/assets/art/icons/gear/pendant_4.svg",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/icons/gear/pendant_5.svg",
+    "category": "icons",
+    "status": "modified_pending_game_qa",
+    "baseline": {
+      "sha256": "2caf9e87fc9611853add3c50138306f1ed88b5eabe881a54b7a6ea442ae7ed4c",
+      "bytes": 941
+    },
+    "source": "tools/art/make_item_icons.py",
+    "current": {
+      "sha256": "11fa4c76cf091de86ef58ca94a864d6266cc529ba42b4ce5a1e29882463a8e88",
+      "bytes": 942
+    },
+    "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
+    "absolute_path": "D:/fqh/flash/assets/art/icons/gear/pendant_5.svg",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/icons/gear/ring_1.svg",
+    "category": "icons",
+    "status": "modified_pending_game_qa",
+    "baseline": {
+      "sha256": "b019a6ac5791aad0176a67bdbb66158720648bedd51a5eda5c095447db8361e1",
+      "bytes": 631
+    },
+    "source": "tools/art/make_item_icons.py",
+    "current": {
+      "sha256": "ca18e77d99f7688262804382104b1afc310845307f53b9d91b49a46f5d4d1996",
+      "bytes": 630
+    },
+    "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
+    "absolute_path": "D:/fqh/flash/assets/art/icons/gear/ring_1.svg",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/icons/gear/ring_2.svg",
+    "category": "icons",
+    "status": "modified_pending_game_qa",
+    "baseline": {
+      "sha256": "4221c1b6e297c5b8316e8abe3c5201210b6ae20dff149eaa7fa6912602551823",
+      "bytes": 631
+    },
+    "source": "tools/art/make_item_icons.py",
+    "current": {
+      "sha256": "d96d671b47e2e79d7ecfa1af1a36e6cd3aff940de0e8d779c6f7c30db651c904",
+      "bytes": 630
+    },
+    "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
+    "absolute_path": "D:/fqh/flash/assets/art/icons/gear/ring_2.svg",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/icons/gear/ring_3.svg",
+    "category": "icons",
+    "status": "modified_pending_game_qa",
+    "baseline": {
+      "sha256": "c9a060588a409014ea3cca921d603a45e9adec6aa65d0c05998dd2e5b3856c34",
+      "bytes": 631
+    },
+    "source": "tools/art/make_item_icons.py",
+    "current": {
+      "sha256": "ad4c2a0e5b647991b868df2823b75904547e7d500ed2e6f831695294a2ca2454",
+      "bytes": 630
+    },
+    "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
+    "absolute_path": "D:/fqh/flash/assets/art/icons/gear/ring_3.svg",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/icons/gear/ring_4.svg",
+    "category": "icons",
+    "status": "modified_pending_game_qa",
+    "baseline": {
+      "sha256": "defa95288ea05715a57796e2c7fdf3d59472b251c089ed484d29c083fee787f1",
+      "bytes": 631
+    },
+    "source": "tools/art/make_item_icons.py",
+    "current": {
+      "sha256": "bb7f648f21ea2957ff86c2500485236a621a5965ff8633ff4ebf43e0b8566475",
+      "bytes": 630
+    },
+    "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
+    "absolute_path": "D:/fqh/flash/assets/art/icons/gear/ring_4.svg",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/icons/gear/ring_5.svg",
+    "category": "icons",
+    "status": "modified_pending_game_qa",
+    "baseline": {
+      "sha256": "2cfe8ed96bfcbdd413e2e4cc96773eaed47901984a27328d7ccef0de19939916",
+      "bytes": 631
+    },
+    "source": "tools/art/make_item_icons.py",
+    "current": {
+      "sha256": "4f1a7bf80c6bdddb661b2bcdaedca62ac7fb010f5f07b5080483517a6150ac79",
+      "bytes": 630
+    },
+    "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
+    "absolute_path": "D:/fqh/flash/assets/art/icons/gear/ring_5.svg",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/icons/gear/robe_1.svg",
+    "category": "icons",
+    "status": "modified_pending_game_qa",
+    "baseline": {
+      "sha256": "020b259ca3d7c54076c9d6954d8eca2f41ab1f3cd1cfb7febcc9a7cb6c18d2a6",
+      "bytes": 540
+    },
+    "source": "tools/art/make_item_icons.py",
+    "current": {
+      "sha256": "43d8f72142d84ff28099c9d9ba83436267b9413ffa60b96ec78272e6c1190c07",
+      "bytes": 539
+    },
+    "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
+    "absolute_path": "D:/fqh/flash/assets/art/icons/gear/robe_1.svg",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/icons/gear/robe_2.svg",
+    "category": "icons",
+    "status": "modified_pending_game_qa",
+    "baseline": {
+      "sha256": "4125b4d59b489cb7fdf33d1a4d5fad3254d9e52d309296343bda5ffefed5c474",
+      "bytes": 540
+    },
+    "source": "tools/art/make_item_icons.py",
+    "current": {
+      "sha256": "fc71361c03abc34cca5c1152fed8e69646d53123c687002b5e39c8a4ed21dccd",
+      "bytes": 539
+    },
+    "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
+    "absolute_path": "D:/fqh/flash/assets/art/icons/gear/robe_2.svg",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/icons/gear/robe_3.svg",
+    "category": "icons",
+    "status": "modified_pending_game_qa",
+    "baseline": {
+      "sha256": "77419f8963c1d44cad0349b9373b17539b6bccf13ea401afb9e359a0f2d92f98",
+      "bytes": 540
+    },
+    "source": "tools/art/make_item_icons.py",
+    "current": {
+      "sha256": "155406f7e90277b6a4ed56d28f830dd875a8068f6fb619afacbcc2f5b524fbbb",
+      "bytes": 539
+    },
+    "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
+    "absolute_path": "D:/fqh/flash/assets/art/icons/gear/robe_3.svg",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/icons/gear/robe_4.svg",
+    "category": "icons",
+    "status": "modified_pending_game_qa",
+    "baseline": {
+      "sha256": "f54eb7ce831b87cc1cdbf726f520231aadfcb3d374b480ad73c7af14ae197935",
+      "bytes": 540
+    },
+    "source": "tools/art/make_item_icons.py",
+    "current": {
+      "sha256": "f9f9e495000779c30c567b2132307aceb8da0c77f10c9607701ed63f9103b72c",
+      "bytes": 539
+    },
+    "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
+    "absolute_path": "D:/fqh/flash/assets/art/icons/gear/robe_4.svg",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/icons/gear/robe_5.svg",
+    "category": "icons",
+    "status": "modified_pending_game_qa",
+    "baseline": {
+      "sha256": "d814131c0d3e26e24271ea5c6363ebfada905bc1e7f09475e316e1fbd939c187",
+      "bytes": 540
+    },
+    "source": "tools/art/make_item_icons.py",
+    "current": {
+      "sha256": "3257713927c33a2212200643c99cbdaab21141f428be5d6ce3136b0388a75175",
+      "bytes": 539
+    },
+    "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
+    "absolute_path": "D:/fqh/flash/assets/art/icons/gear/robe_5.svg",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/icons/gear/saber_1.svg",
+    "category": "icons",
+    "status": "modified_pending_game_qa",
+    "baseline": {
+      "sha256": "317128c3434c554df4a94249b3b801364114216c0dcb886ac844320789647cc5",
+      "bytes": 747
+    },
+    "source": "tools/art/make_item_icons.py",
+    "current": {
+      "sha256": "dbf3bfa911b21c49ae8680b7d9f895bf57a5071618114b48b9f3ae2dbc687e30",
+      "bytes": 747
+    },
+    "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
+    "absolute_path": "D:/fqh/flash/assets/art/icons/gear/saber_1.svg",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/icons/gear/saber_2.svg",
+    "category": "icons",
+    "status": "modified_pending_game_qa",
+    "baseline": {
+      "sha256": "9f3096fdc14a015906254b0e78dbe934951825c787643315626039adc66f8b16",
+      "bytes": 747
+    },
+    "source": "tools/art/make_item_icons.py",
+    "current": {
+      "sha256": "7fd5fdb3b4d8e9907bcb096b5304a4fe2c3b8ba3b4c2d4eabeb1f2af6163b335",
+      "bytes": 747
+    },
+    "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
+    "absolute_path": "D:/fqh/flash/assets/art/icons/gear/saber_2.svg",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/icons/gear/saber_3.svg",
+    "category": "icons",
+    "status": "modified_pending_game_qa",
+    "baseline": {
+      "sha256": "09069da091c67ff6a1ebd1384f9bdb9431c662bc5036819de8c2afc0db842087",
+      "bytes": 747
+    },
+    "source": "tools/art/make_item_icons.py",
+    "current": {
+      "sha256": "8ef954b7c90264da2b4d3a09ce5961c68097f748caee316338bb9cf6b3655616",
+      "bytes": 747
+    },
+    "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
+    "absolute_path": "D:/fqh/flash/assets/art/icons/gear/saber_3.svg",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/icons/gear/saber_4.svg",
+    "category": "icons",
+    "status": "modified_pending_game_qa",
+    "baseline": {
+      "sha256": "f754a8d827fb616754ca8b30e6525b4756053b3a1ac0983cf7f6afe91cd27a2c",
+      "bytes": 747
+    },
+    "source": "tools/art/make_item_icons.py",
+    "current": {
+      "sha256": "cc069cab13705073db31fbd9aa79c08f3f3c36d938ed71f073478195e328aec6",
+      "bytes": 747
+    },
+    "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
+    "absolute_path": "D:/fqh/flash/assets/art/icons/gear/saber_4.svg",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/icons/gear/saber_5.svg",
+    "category": "icons",
+    "status": "modified_pending_game_qa",
+    "baseline": {
+      "sha256": "e18f8004932c768cc6363107bff276a2e1250971ece03d437f5274be71810bc7",
+      "bytes": 747
+    },
+    "source": "tools/art/make_item_icons.py",
+    "current": {
+      "sha256": "4fa2973d0fd6c94b58e68a0508211a3afa519e2710bd776453c3004222a05014",
+      "bytes": 747
+    },
+    "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
+    "absolute_path": "D:/fqh/flash/assets/art/icons/gear/saber_5.svg",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/icons/gear/sword_1.svg",
+    "category": "icons",
+    "status": "modified_pending_game_qa",
+    "baseline": {
+      "sha256": "51a54608eaf4300c4d9d302b4ed440e6fb738f6903f03abfce51e5614d85483a",
+      "bytes": 888
+    },
+    "source": "tools/art/make_item_icons.py",
+    "current": {
+      "sha256": "e78bfa7f2bcdffec505693fe74825c552a92bbb4a8d77f23e71dd9e031caa5a7",
+      "bytes": 888
+    },
+    "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
+    "absolute_path": "D:/fqh/flash/assets/art/icons/gear/sword_1.svg",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/icons/gear/sword_2.svg",
+    "category": "icons",
+    "status": "modified_pending_game_qa",
+    "baseline": {
+      "sha256": "9a3ce877f42d90575dcd419f99e4885dc87b133e695cf5cea660afaf51840c99",
+      "bytes": 888
+    },
+    "source": "tools/art/make_item_icons.py",
+    "current": {
+      "sha256": "94d1acab392395a3dbab493277c253ff59d7d2614c3002ceda96d7ddc33a23c9",
+      "bytes": 888
+    },
+    "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
+    "absolute_path": "D:/fqh/flash/assets/art/icons/gear/sword_2.svg",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/icons/gear/sword_3.svg",
+    "category": "icons",
+    "status": "modified_pending_game_qa",
+    "baseline": {
+      "sha256": "97ff4447519ab8f7eb259099837ed321a58cf0ad8231db708c9fdee272322703",
+      "bytes": 888
+    },
+    "source": "tools/art/make_item_icons.py",
+    "current": {
+      "sha256": "7bee1fd58afa0f17c7e2280077ae66a50653d3d9329a145c7ff4879809d96902",
+      "bytes": 888
+    },
+    "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
+    "absolute_path": "D:/fqh/flash/assets/art/icons/gear/sword_3.svg",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/icons/gear/sword_4.svg",
+    "category": "icons",
+    "status": "modified_pending_game_qa",
+    "baseline": {
+      "sha256": "b3803d60353d11cc5425823964b7ab930efd44f2dddcca33b52c3fddd61477b5",
+      "bytes": 888
+    },
+    "source": "tools/art/make_item_icons.py",
+    "current": {
+      "sha256": "25146a8832540a911c114140206fbcb81e3f09c5d5c6e97763b8767c15eeebf3",
+      "bytes": 888
+    },
+    "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
+    "absolute_path": "D:/fqh/flash/assets/art/icons/gear/sword_4.svg",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/icons/gear/sword_5.svg",
+    "category": "icons",
+    "status": "modified_pending_game_qa",
+    "baseline": {
+      "sha256": "6c918553960d594b9c2f59fa979ceea17cc19e05010fe0dcd59be1792fe5c199",
+      "bytes": 888
+    },
+    "source": "tools/art/make_item_icons.py",
+    "current": {
+      "sha256": "9ad0b974c0aba3e39ee6fa603d8b165c3f1f2e2cb15ac4c370bc728df9d90575",
+      "bytes": 888
+    },
+    "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
+    "absolute_path": "D:/fqh/flash/assets/art/icons/gear/sword_5.svg",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/icons/gear/vest_1.svg",
+    "category": "icons",
+    "status": "modified_pending_game_qa",
+    "baseline": {
+      "sha256": "ceb1b8e4fa96c3d65a3f0c2db1bce25b47742ebe7c3144bd21563461e85db157",
+      "bytes": 754
+    },
+    "source": "tools/art/make_item_icons.py",
+    "current": {
+      "sha256": "e16ceb3a8d781eb5d69da74f718bfe91a921c9c403d65ac555840c02d5d26509",
+      "bytes": 754
+    },
+    "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
+    "absolute_path": "D:/fqh/flash/assets/art/icons/gear/vest_1.svg",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/icons/gear/vest_2.svg",
+    "category": "icons",
+    "status": "modified_pending_game_qa",
+    "baseline": {
+      "sha256": "5f81df9816d27bc9c2bf8e4db36dee198f145f7b3554b1cf31987256430b2ab4",
+      "bytes": 754
+    },
+    "source": "tools/art/make_item_icons.py",
+    "current": {
+      "sha256": "2596442a365c0c1b730f13833496751b8c5dd2e6ee7e279b0a2e352cfd5ffee0",
+      "bytes": 754
+    },
+    "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
+    "absolute_path": "D:/fqh/flash/assets/art/icons/gear/vest_2.svg",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/icons/gear/vest_3.svg",
+    "category": "icons",
+    "status": "modified_pending_game_qa",
+    "baseline": {
+      "sha256": "8417594716bf8bf89120d89e6e7e7485fd4d822b5f6559a72266e02ca1b16bf5",
+      "bytes": 754
+    },
+    "source": "tools/art/make_item_icons.py",
+    "current": {
+      "sha256": "9d5275b3acec9cece757a6c9aa0372de7377f4b5d1069c6f773f6b99f61c5c76",
+      "bytes": 754
+    },
+    "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
+    "absolute_path": "D:/fqh/flash/assets/art/icons/gear/vest_3.svg",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/icons/gear/vest_4.svg",
+    "category": "icons",
+    "status": "modified_pending_game_qa",
+    "baseline": {
+      "sha256": "3d8c9674b901fceb15e7b84956ba47285b29356653d1bbc4f7aa7cc07ce7e534",
+      "bytes": 754
+    },
+    "source": "tools/art/make_item_icons.py",
+    "current": {
+      "sha256": "6755f774bbe4d7445ae6e79372cbad0db1a18d9f0a89d94b1731b07a5c8f9329",
+      "bytes": 754
+    },
+    "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
+    "absolute_path": "D:/fqh/flash/assets/art/icons/gear/vest_4.svg",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/icons/gear/vest_5.svg",
+    "category": "icons",
+    "status": "modified_pending_game_qa",
+    "baseline": {
+      "sha256": "627e3afe921b68503ab2a78dd94ad411c7d1291cdd60eb14a0d262a65df6f290",
+      "bytes": 754
+    },
+    "source": "tools/art/make_item_icons.py",
+    "current": {
+      "sha256": "a89938989001cf09a25e15d737e1439a49d3b020ce98196145cdcc2450418aa0",
+      "bytes": 754
+    },
+    "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
+    "absolute_path": "D:/fqh/flash/assets/art/icons/gear/vest_5.svg",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/icons/items/auction_invitation.svg",
+    "category": "icons",
+    "status": "modified_pending_game_qa",
+    "baseline": {
+      "sha256": "d62e4703c0453d69f5fd17a747452f3b3d763e67dd04351833cf9380ce28502c",
+      "bytes": 1210
+    },
+    "source": "tools/art/make_item_icons.py",
+    "current": {
+      "sha256": "88785a96c12e9dc7196e8aed5c83746b962888a620aef2ff460d7c763a3b812f",
+      "bytes": 963
+    },
+    "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
+    "absolute_path": "D:/fqh/flash/assets/art/icons/items/auction_invitation.svg",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/icons/items/azhi_token.svg",
+    "category": "icons",
+    "status": "modified_pending_game_qa",
+    "baseline": {
+      "sha256": "888c09f340ebe063ae186488ce2d5b917a0572cf1bae4cc4e78384fda38fa028",
+      "bytes": 1101
+    },
+    "source": "tools/art/make_item_icons.py",
+    "current": {
+      "sha256": "5872d89c19f47c29d45906ae37ae0213b6d135f918ab2aa81f6a151b10aaeeb2",
+      "bytes": 853
+    },
+    "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
+    "absolute_path": "D:/fqh/flash/assets/art/icons/items/azhi_token.svg",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/icons/items/bihuo_zhu.svg",
+    "category": "icons",
+    "status": "modified_pending_game_qa",
+    "baseline": {
+      "sha256": "fd9e9e72eddfb7d075046939842f41627ebff5ad1139eeb4c81287e72ef37c90",
+      "bytes": 2493
+    },
+    "source": "tools/art/make_item_icons.py",
+    "current": {
+      "sha256": "a3f96fbe81923eb5ebef02a2010524312139bedb06f297fe24e3824ff0bf9265",
+      "bytes": 1464
+    },
+    "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
+    "absolute_path": "D:/fqh/flash/assets/art/icons/items/bihuo_zhu.svg",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/icons/items/chiyan_flower.svg",
+    "category": "icons",
+    "status": "modified_pending_game_qa",
+    "baseline": {
+      "sha256": "2420c331f482a2169f7159212a258729a36aa052b2607d41aa16d747f222f5d5",
+      "bytes": 3286
+    },
+    "source": "tools/art/make_item_icons.py",
+    "current": {
+      "sha256": "f4402cfb3bbc27aa3a88d9faf8ef356e3b8ade1c4ee8fff8a6da887efc541dac",
+      "bytes": 2505
+    },
+    "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
+    "absolute_path": "D:/fqh/flash/assets/art/icons/items/chiyan_flower.svg",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/icons/items/dihuo_jing.svg",
+    "category": "icons",
+    "status": "modified_pending_game_qa",
+    "baseline": {
+      "sha256": "775c8aa9439d87141fde5ff59e841b64da2d93eb62cd8f263d8180ae894acb1a",
+      "bytes": 2485
+    },
+    "source": "tools/art/make_item_icons.py",
+    "current": {
+      "sha256": "feccc4ddf2f3734762f71f002790e0cec7d8582c52f319ca146539a69d3d6c1d",
+      "bytes": 1701
+    },
+    "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
+    "absolute_path": "D:/fqh/flash/assets/art/icons/items/dihuo_jing.svg",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/icons/items/dingshen_fu.svg",
+    "category": "icons",
+    "status": "modified_pending_game_qa",
+    "baseline": {
+      "sha256": "e48262f69e10f552c4508a1dad40758a6eec2441e735f9d06ee49cdde5937811",
+      "bytes": 1403
+    },
+    "source": "tools/art/make_item_icons.py",
+    "current": {
+      "sha256": "513986997b770579071af87bb3dc2e87a05286dd0507737df52397e6af17fd4a",
+      "bytes": 993
+    },
+    "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
+    "absolute_path": "D:/fqh/flash/assets/art/icons/items/dingshen_fu.svg",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/icons/items/dixin_huolian.svg",
+    "category": "icons",
+    "status": "modified_pending_game_qa",
+    "baseline": {
+      "sha256": "0586e375c9b44b4ed8346db3532d50b7016830f84c3d7fe84efdb17710b61135",
+      "bytes": 3106
+    },
+    "source": "tools/art/make_item_icons.py",
+    "current": {
+      "sha256": "96f6af18c622183e89ffe964ea7e46ac3c1e0b7b48a94a8d78d04ddb73b09faa",
+      "bytes": 2323
+    },
+    "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
+    "absolute_path": "D:/fqh/flash/assets/art/icons/items/dixin_huolian.svg",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/icons/items/dundi_fu.svg",
+    "category": "icons",
+    "status": "modified_pending_game_qa",
+    "baseline": {
+      "sha256": "84cb4b5dfb830fad4bb4dde55a65d04c013f545c89ba65eabcb342ce03bf0214",
+      "bytes": 1386
+    },
+    "source": "tools/art/make_item_icons.py",
+    "current": {
+      "sha256": "e39a36aec868e48e227a4554b6e660e814c55ade9f8834a31d22eed4fd882bf1",
+      "bytes": 976
+    },
+    "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
+    "absolute_path": "D:/fqh/flash/assets/art/icons/items/dundi_fu.svg",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/icons/items/foundation_pill.svg",
+    "category": "icons",
+    "status": "modified_pending_game_qa",
+    "baseline": {
+      "sha256": "4c777e7174e0fe14b19c33a64d35a012c01f30204011da4ac6165f785fcdce97",
+      "bytes": 1326
+    },
+    "source": "tools/art/make_item_icons.py",
+    "current": {
+      "sha256": "1f328a067c398247dff355ac034c515917cc77aa22e08bb8bbaa98291bfe5694",
+      "bytes": 850
+    },
+    "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
+    "absolute_path": "D:/fqh/flash/assets/art/icons/items/foundation_pill.svg",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/icons/items/foundation_pill_fine.svg",
+    "category": "icons",
+    "status": "modified_pending_game_qa",
+    "baseline": {
+      "sha256": "35df48f0eeee186d02eca485d870d42213a1d767c8a8a77ac3822dd25901daa0",
+      "bytes": 1752
+    },
+    "source": "tools/art/make_item_icons.py",
+    "current": {
+      "sha256": "5dcaef6db434ee6de1953cb10c53f974beb264c9c11cdcf75be7afa28210f405",
+      "bytes": 1276
+    },
+    "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
+    "absolute_path": "D:/fqh/flash/assets/art/icons/items/foundation_pill_fine.svg",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/icons/items/furnace_bronze.svg",
+    "category": "icons",
+    "status": "modified_pending_game_qa",
+    "baseline": {
+      "sha256": "370cbd360e5814a197544d538bf81d2c8cb4f9dcbe4ffa3356ec0a266ca226f1",
+      "bytes": 2643
+    },
+    "source": "tools/art/make_item_icons.py",
+    "current": {
+      "sha256": "72bfd33bdccebc14eade9f8598d682dd8302a8d10e3959039ce6a6d09a6a24d8",
+      "bytes": 1859
+    },
+    "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
+    "absolute_path": "D:/fqh/flash/assets/art/icons/items/furnace_bronze.svg",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/icons/items/furnace_purple.svg",
+    "category": "icons",
+    "status": "modified_pending_game_qa",
+    "baseline": {
+      "sha256": "2275e578aa683981cb9562827dfacdecb32bdc3081ed9de5bfc69db57af3341d",
+      "bytes": 2643
+    },
+    "source": "tools/art/make_item_icons.py",
+    "current": {
+      "sha256": "edd4f091a15acdde2f135ba2296fa81b80b587a3c535c6bf70ee235375223b2b",
+      "bytes": 1859
+    },
+    "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
+    "absolute_path": "D:/fqh/flash/assets/art/icons/items/furnace_purple.svg",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/icons/items/furnace_xuantie.svg",
+    "category": "icons",
+    "status": "modified_pending_game_qa",
+    "baseline": {
+      "sha256": "948061e9f2042f222061d5300a161fb2f4cde3805106c1773f8ba552ad481348",
+      "bytes": 2818
+    },
+    "source": "tools/art/make_item_icons.py",
+    "current": {
+      "sha256": "66220be204165203c4c1275ffe79754dfeff434146e78e7e04bfcdfda1719be8",
+      "bytes": 2034
+    },
+    "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
+    "absolute_path": "D:/fqh/flash/assets/art/icons/items/furnace_xuantie.svg",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/icons/items/huichun_grass.svg",
+    "category": "icons",
+    "status": "modified_pending_game_qa",
+    "baseline": {
+      "sha256": "c127ce9b18d40deae85a51f03a592e62a51ec8ac31af308c9865da21d935a075",
+      "bytes": 2431
+    },
+    "source": "tools/art/make_item_icons.py",
+    "current": {
+      "sha256": "325213728d0a3bffda4ef3a9441bdc61366a89b19c781458d174761bc9f7950d",
+      "bytes": 1038
+    },
+    "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
+    "absolute_path": "D:/fqh/flash/assets/art/icons/items/huichun_grass.svg",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/icons/items/huiqi_pill.svg",
+    "category": "icons",
+    "status": "modified_pending_game_qa",
+    "baseline": {
+      "sha256": "fb7d8bdde12d6088d0dea3af81592411a04035592aac0c0b0da9e929414d47d3",
+      "bytes": 1795
+    },
+    "source": "tools/art/make_item_icons.py",
+    "current": {
+      "sha256": "9fb57dd78c3c8443d21326a974a6c57c3d6b03a68fc00423edfd5d506bc27f7a",
+      "bytes": 763
+    },
+    "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
+    "absolute_path": "D:/fqh/flash/assets/art/icons/items/huiqi_pill.svg",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/icons/items/huiqi_pill_fine.svg",
+    "category": "icons",
+    "status": "modified_pending_game_qa",
+    "baseline": {
+      "sha256": "dd5d886e202df700e80ed766d6efbb2e866d70093e2341593c55513d090f0040",
+      "bytes": 2221
+    },
+    "source": "tools/art/make_item_icons.py",
+    "current": {
+      "sha256": "35ef30368303637968d17b6b45bf1b7b16c79216790663a82edf25bb5422b11d",
+      "bytes": 1189
+    },
+    "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
+    "absolute_path": "D:/fqh/flash/assets/art/icons/items/huiqi_pill_fine.svg",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/icons/items/huoya_feather.svg",
+    "category": "icons",
+    "status": "modified_pending_game_qa",
+    "baseline": {
+      "sha256": "be27311269b873f41d6ea45995f568d84213dde96ea4768c51f8589a039a3dd2",
+      "bytes": 1671
+    },
+    "source": "tools/art/make_item_icons.py",
+    "current": {
+      "sha256": "cae43b7151244c29ba290aff16c788e76acc2f45445092a807125b563ba6b873",
+      "bytes": 883
+    },
+    "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
+    "absolute_path": "D:/fqh/flash/assets/art/icons/items/huoya_feather.svg",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/icons/items/jade_han.svg",
+    "category": "icons",
+    "status": "modified_pending_game_qa",
+    "baseline": {
+      "sha256": "950f034b1603067b9e200a8af957a45af08d643d97b179d4c3d61a2f466b5e10",
+      "bytes": 1913
+    },
+    "source": "tools/art/make_item_icons.py",
+    "current": {
+      "sha256": "337b47c7703d8d6fe8f2d51516c38bfaf1c568460da3653f2e3ff231f4fa3f6b",
+      "bytes": 948
+    },
+    "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
+    "absolute_path": "D:/fqh/flash/assets/art/icons/items/jade_han.svg",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/icons/items/jade_mo.svg",
+    "category": "icons",
+    "status": "modified_pending_game_qa",
+    "baseline": {
+      "sha256": "5ec343a5a9343fda0c0b3b25ff9f9f47a5819536f79969f917f89a4f356bdc06",
+      "bytes": 1195
+    },
+    "source": "tools/art/make_item_icons.py",
+    "current": {
+      "sha256": "6b34e993aa3de031462525e341948c5e611667ae35e8b2161bb6298497f7ce9c",
+      "bytes": 948
+    },
+    "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
+    "absolute_path": "D:/fqh/flash/assets/art/icons/items/jade_mo.svg",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/icons/items/jade_qing.svg",
+    "category": "icons",
+    "status": "modified_pending_game_qa",
+    "baseline": {
+      "sha256": "d61dd195a5dab5b7c824848476df548af3fb9decc1b5824ed597f42cb79074b9",
+      "bytes": 1352
+    },
+    "source": "tools/art/make_item_icons.py",
+    "current": {
+      "sha256": "ce00eabf68ccb5fc365ac442097c0721f64201ca76cd6fdb1bcc232ecfc9b065",
+      "bytes": 948
+    },
+    "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
+    "absolute_path": "D:/fqh/flash/assets/art/icons/items/jade_qing.svg",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/icons/items/jinguang_fu.svg",
+    "category": "icons",
+    "status": "modified_pending_game_qa",
+    "baseline": {
+      "sha256": "9864ff103a9b8a394bb440efc5bbedc1ea54fd66c96ed285185fc8934f686717",
+      "bytes": 2523
+    },
+    "source": "tools/art/make_item_icons.py",
+    "current": {
+      "sha256": "693363f633d9295a4e11bb12730557d77bf362cb427a64118434632a91fa251f",
+      "bytes": 1620
+    },
+    "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
+    "absolute_path": "D:/fqh/flash/assets/art/icons/items/jinguang_fu.svg",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/icons/items/jiuqu_lingshen.svg",
+    "category": "icons",
+    "status": "modified_pending_game_qa",
+    "baseline": {
+      "sha256": "e89ceed618dc83a65f29b08acb4e9ed30f75e17c6edceba697927b3207f0e79a",
+      "bytes": 2471
+    },
+    "source": "tools/art/make_item_icons.py",
+    "current": {
+      "sha256": "4381217694228cf3492bc682365d643d6b9ef93dff49138707b08b7601ea4894",
+      "bytes": 2065
+    },
+    "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
+    "absolute_path": "D:/fqh/flash/assets/art/icons/items/jiuqu_lingshen.svg",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/icons/items/kongho_fu.svg",
+    "category": "icons",
+    "status": "modified_pending_game_qa",
+    "baseline": {
+      "sha256": "0fdb2ca692d7471bf6bfb4bf64b40b7479d195119b61d7e7547eb8241c1ecd9f",
+      "bytes": 1738
+    },
+    "source": "tools/art/make_item_icons.py",
+    "current": {
+      "sha256": "3a784e40b94a0673636aba317e56ed86a974f3d1eb3abfcbc525fbec9ca275fd",
+      "bytes": 1016
+    },
+    "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
+    "absolute_path": "D:/fqh/flash/assets/art/icons/items/kongho_fu.svg",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/icons/items/lei_fu.svg",
+    "category": "icons",
+    "status": "modified_pending_game_qa",
+    "baseline": {
+      "sha256": "5ead3c3938a4d57c7f4a3083681b42cd6217fef11b8033eedc5e657dbe1b0629",
+      "bytes": 1760
+    },
+    "source": "tools/art/make_item_icons.py",
+    "current": {
+      "sha256": "a10a50b2efa4d966af522b4d2c07fa63a3cdab5483d9141c56f6c3f13cf7f76d",
+      "bytes": 857
+    },
+    "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
+    "absolute_path": "D:/fqh/flash/assets/art/icons/items/lei_fu.svg",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/icons/items/liaoshang_pill.svg",
+    "category": "icons",
+    "status": "modified_pending_game_qa",
+    "baseline": {
+      "sha256": "7c6ff64d153478dd9348f570b35c04fe5a751bc77ea3a0fe6da5f9a2202df602",
+      "bytes": 1551
+    },
+    "source": "tools/art/make_item_icons.py",
+    "current": {
+      "sha256": "2b95bdebd17f60d37c378ea1c7735c8878e21ec53fd1d659d49bf31c5f617267",
+      "bytes": 763
+    },
+    "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
+    "absolute_path": "D:/fqh/flash/assets/art/icons/items/liaoshang_pill.svg",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/icons/items/liaoshang_pill_fine.svg",
+    "category": "icons",
+    "status": "modified_pending_game_qa",
+    "baseline": {
+      "sha256": "60a8a39dfdd7b5ced57229727e33dbfe2d60f6264ff7a7fc89f965890aa0610f",
+      "bytes": 1977
+    },
+    "source": "tools/art/make_item_icons.py",
+    "current": {
+      "sha256": "c6e238dfd58892d781749364adbbb027d2d55897ceb48086824eaf568b9b52a7",
+      "bytes": 1189
+    },
+    "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
+    "absolute_path": "D:/fqh/flash/assets/art/icons/items/liaoshang_pill_fine.svg",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/icons/items/lingzhi.svg",
+    "category": "icons",
+    "status": "modified_pending_game_qa",
+    "baseline": {
+      "sha256": "d1845e44c03d53b7d069c7d23fedfe3fae79f6703d3eea126e59c825d879ac75",
+      "bytes": 1854
+    },
+    "source": "tools/art/make_item_icons.py",
+    "current": {
+      "sha256": "4de93db507969645159cbccfff0dadfa32500649a4f427e7d63c53ec934df7b6",
+      "bytes": 1385
+    },
+    "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
+    "absolute_path": "D:/fqh/flash/assets/art/icons/items/lingzhi.svg",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/icons/items/ninglu_grass.svg",
+    "category": "icons",
+    "status": "modified_pending_game_qa",
+    "baseline": {
+      "sha256": "7fbd1e2b91ed3f05d60dfa20cc05b9164aa005a229f843b4c10d045ee26f8285",
+      "bytes": 3333
+    },
+    "source": "tools/art/make_item_icons.py",
+    "current": {
+      "sha256": "0054fcdd80ace952ce86b67f9f3a2940b71cac058a15ab0c7cc890e3645271c8",
+      "bytes": 2374
+    },
+    "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
+    "absolute_path": "D:/fqh/flash/assets/art/icons/items/ninglu_grass.svg",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/icons/items/ningqi_pill.svg",
+    "category": "icons",
+    "status": "modified_pending_game_qa",
+    "baseline": {
+      "sha256": "73b9311833a6a11f30ffe7e5db7519521592437e7c484e8aef0ded946a41fe0d",
+      "bytes": 1077
+    },
+    "source": "tools/art/make_item_icons.py",
+    "current": {
+      "sha256": "e73d1e7b0785d3b2fdaf654e715f8797765ff9efd1090c0b5b08fd65bfe197fc",
+      "bytes": 763
+    },
+    "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
+    "absolute_path": "D:/fqh/flash/assets/art/icons/items/ningqi_pill.svg",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/icons/items/ningqi_pill_fine.svg",
+    "category": "icons",
+    "status": "modified_pending_game_qa",
+    "baseline": {
+      "sha256": "48f0ceb88e4aedcb36e6f317e60039ef06d236f4929b9a3b11558b200a57f23a",
+      "bytes": 1503
+    },
+    "source": "tools/art/make_item_icons.py",
+    "current": {
+      "sha256": "4bf8eb9c271a991277b7c75dd7edc77e2eec40cce177dd574e6a31ced66162c1",
+      "bytes": 1189
+    },
+    "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
+    "absolute_path": "D:/fqh/flash/assets/art/icons/items/ningqi_pill_fine.svg",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/icons/items/ore_hantie.svg",
+    "category": "icons",
+    "status": "modified_pending_game_qa",
+    "baseline": {
+      "sha256": "1aa83a4919d53cfbea66d188e018699be7aa0e47a93d4493da1efbecdc8b2cd9",
+      "bytes": 2729
+    },
+    "source": "tools/art/make_item_icons.py",
+    "current": {
+      "sha256": "0bd81db9ab803866ae1aba254dd61c9a9465f0e27e4728752ba831e51dd5191b",
+      "bytes": 1701
+    },
+    "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
+    "absolute_path": "D:/fqh/flash/assets/art/icons/items/ore_hantie.svg",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/icons/items/ore_qinggang.svg",
+    "category": "icons",
+    "status": "modified_pending_game_qa",
+    "baseline": {
+      "sha256": "85360fdeef18421c230213a229c6af5bcaf9c3dc995d48e7c85bbe4fd8842d1c",
+      "bytes": 2181
+    },
+    "source": "tools/art/make_item_icons.py",
+    "current": {
+      "sha256": "fb1b968009dfa6cdd3f6984975f37d36b06f452a6c33320738ca7f7cd4ce99ee",
+      "bytes": 1282
+    },
+    "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
+    "absolute_path": "D:/fqh/flash/assets/art/icons/items/ore_qinggang.svg",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/icons/items/ore_xuantie.svg",
+    "category": "icons",
+    "status": "modified_pending_game_qa",
+    "baseline": {
+      "sha256": "1efae88e5670314ffd09e8d773b09dac4f7f0139f69a3c3096940bb741ac8c16",
+      "bytes": 2181
+    },
+    "source": "tools/art/make_item_icons.py",
+    "current": {
+      "sha256": "e28aa4d56ba1403b68efa6da0e2999a6b7fcfb64ad5cc007e0333e23e0096165",
+      "bytes": 1282
+    },
+    "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
+    "absolute_path": "D:/fqh/flash/assets/art/icons/items/ore_xuantie.svg",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/icons/items/peddler_pack.svg",
+    "category": "icons",
+    "status": "modified_pending_game_qa",
+    "baseline": {
+      "sha256": "f9f5130d4b58725fa979934bd80b8255a65c36464d6a9870bafa18eeb69ac437",
+      "bytes": 1641
+    },
+    "source": "tools/art/make_item_icons.py",
+    "current": {
+      "sha256": "cdced0939d6004cd153fcf69704f0875bd1edbcda2526ac8e07506db4354f0dc",
+      "bytes": 1397
+    },
+    "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
+    "absolute_path": "D:/fqh/flash/assets/art/icons/items/peddler_pack.svg",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/icons/items/polin_powder.svg",
+    "category": "icons",
+    "status": "modified_pending_game_qa",
+    "baseline": {
+      "sha256": "85f2c7a76f9886744a4e50a0daa700d55d4818a89924b8d1f37e58dc0e5af1aa",
+      "bytes": 1469
+    },
+    "source": "tools/art/make_item_icons.py",
+    "current": {
+      "sha256": "713d9e753668d37dfa69df52ffccec6175e7b24d5759494f31fbfe2d688dff6d",
+      "bytes": 1000
+    },
+    "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
+    "absolute_path": "D:/fqh/flash/assets/art/icons/items/polin_powder.svg",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/icons/items/pozhang_pill.svg",
+    "category": "icons",
+    "status": "modified_pending_game_qa",
+    "baseline": {
+      "sha256": "8c82bfc100a1ab9b16f622d90f4928d060bbdb9c27c87a107b557544c1afa8de",
+      "bytes": 1685
+    },
+    "source": "tools/art/make_item_icons.py",
+    "current": {
+      "sha256": "d0dd00171e51d3436d32de5bb022ef6153092388632b4c15129de8acb3777894",
+      "bytes": 897
+    },
+    "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
+    "absolute_path": "D:/fqh/flash/assets/art/icons/items/pozhang_pill.svg",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/icons/items/pozhang_pill_fine.svg",
+    "category": "icons",
+    "status": "modified_pending_game_qa",
+    "baseline": {
+      "sha256": "7f7b13249a494329d5e1517758af96aa3de5d6f51eec8977dd02044d4c2b29dc",
+      "bytes": 2111
+    },
+    "source": "tools/art/make_item_icons.py",
+    "current": {
+      "sha256": "696401d2f9b7b7aab6005d4e1bec1edb7c46c83f46a8a1e50057e269fd5ae455",
+      "bytes": 1323
+    },
+    "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
+    "absolute_path": "D:/fqh/flash/assets/art/icons/items/pozhang_pill_fine.svg",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/icons/items/qiannian_shiru.svg",
+    "category": "icons",
+    "status": "modified_pending_game_qa",
+    "baseline": {
+      "sha256": "f597575a6c628566e1e7c0f296e69f880d02c8be8db3d66b0291e1d4a9b8e884",
+      "bytes": 1918
+    },
+    "source": "tools/art/make_item_icons.py",
+    "current": {
+      "sha256": "54e2b33698a1cfb1ae4eec8ce0ae83ba17afc94ea77372951e65e5c792762110",
+      "bytes": 951
+    },
+    "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
+    "absolute_path": "D:/fqh/flash/assets/art/icons/items/qiannian_shiru.svg",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/icons/items/qiannian_zhuguo.svg",
+    "category": "icons",
+    "status": "modified_pending_game_qa",
+    "baseline": {
+      "sha256": "170afca03b0ed3448ffe989acbd4f99e78d2bdd9fc4dbcb37fbd60ee7c660426",
+      "bytes": 2688
+    },
+    "source": "tools/art/make_item_icons.py",
+    "current": {
+      "sha256": "0c63ce44b40a05a7d247aa8147cdd374bd8190dcacda21b4aa6ebf31eaafdce6",
+      "bytes": 1905
+    },
+    "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
+    "absolute_path": "D:/fqh/flash/assets/art/icons/items/qiannian_zhuguo.svg",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/icons/items/recipe_foundation.svg",
+    "category": "icons",
+    "status": "modified_pending_game_qa",
+    "baseline": {
+      "sha256": "50d0a5b6b57c6c5ab9ddb3f18902aacb4383861876132d4ed514ec9e35c22008",
+      "bytes": 1802
+    },
+    "source": "tools/art/make_item_icons.py",
+    "current": {
+      "sha256": "b7aec266678a19e35cc1c228e55e5e43ebde05e1f3d8ae5ad09f7f574870c71d",
+      "bytes": 1395
+    },
+    "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
+    "absolute_path": "D:/fqh/flash/assets/art/icons/items/recipe_foundation.svg",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/icons/items/recipe_huiqi.svg",
+    "category": "icons",
+    "status": "modified_pending_game_qa",
+    "baseline": {
+      "sha256": "a63596342563aac829d3f653bd5dd984a79509716f31df73ccb48b1b6a5ff725",
+      "bytes": 1640
+    },
+    "source": "tools/art/make_item_icons.py",
+    "current": {
+      "sha256": "9fae71bd0ec8b9b67e7c57305a5211261724f22b560e904ae4eead0bdb2e7df1",
+      "bytes": 1395
+    },
+    "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
+    "absolute_path": "D:/fqh/flash/assets/art/icons/items/recipe_huiqi.svg",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/icons/items/recipe_liaoshang.svg",
+    "category": "icons",
+    "status": "modified_pending_game_qa",
+    "baseline": {
+      "sha256": "9c256468933634b8b35fb34044953cb69ead2789141a2965203e0939494af941",
+      "bytes": 1640
+    },
+    "source": "tools/art/make_item_icons.py",
+    "current": {
+      "sha256": "55823ad52c9358ab194cfa959f0d41107044da62935482f62ac7573b415c1f2b",
+      "bytes": 1395
+    },
+    "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
+    "absolute_path": "D:/fqh/flash/assets/art/icons/items/recipe_liaoshang.svg",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/icons/items/recipe_ningqi.svg",
+    "category": "icons",
+    "status": "modified_pending_game_qa",
+    "baseline": {
+      "sha256": "0a1062c8c337f960664d8ac9bc48ea0bfda649b482b96728cdc7fea056d96fff",
+      "bytes": 1640
+    },
+    "source": "tools/art/make_item_icons.py",
+    "current": {
+      "sha256": "19ce825cb98a324aa6d83e926af52120ed584939935e24524381c53dc4e87bb1",
+      "bytes": 1395
+    },
+    "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
+    "absolute_path": "D:/fqh/flash/assets/art/icons/items/recipe_ningqi.svg",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/icons/items/recipe_pozhang.svg",
+    "category": "icons",
+    "status": "modified_pending_game_qa",
+    "baseline": {
+      "sha256": "672be91d5728613d7f02a0f88455d2964d521c23d612b71f4e008ee7ae36f7d2",
+      "bytes": 1640
+    },
+    "source": "tools/art/make_item_icons.py",
+    "current": {
+      "sha256": "3c68ded41a4fac7514c26d9d48af8847ce5d118c93ce3abab41eaec481c2e7db",
+      "bytes": 1395
+    },
+    "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
+    "absolute_path": "D:/fqh/flash/assets/art/icons/items/recipe_pozhang.svg",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/icons/items/shanxiao_pelt.svg",
+    "category": "icons",
+    "status": "modified_pending_game_qa",
+    "baseline": {
+      "sha256": "333a75236ff24e8c86223adcab03411e1a4fae5d53c91530350ca0669ede226c",
+      "bytes": 1495
+    },
+    "source": "tools/art/make_item_icons.py",
+    "current": {
+      "sha256": "336bcd28ffa2ed2697a067fe3247ba2978291edec2ca886f2853777431decdf7",
+      "bytes": 1086
+    },
+    "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
+    "absolute_path": "D:/fqh/flash/assets/art/icons/items/shanxiao_pelt.svg",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/icons/items/shouyuan_guo.svg",
+    "category": "icons",
+    "status": "modified_pending_game_qa",
+    "baseline": {
+      "sha256": "49de275ca0fa6fae93deeb6adf2fa384225d6537e74c0086650dd3c598e09796",
+      "bytes": 1699
+    },
+    "source": "tools/art/make_item_icons.py",
+    "current": {
+      "sha256": "4213c3dad1a43f5ca17e602624e1b85c7264ba87d66ee479f0e65a99e040cab9",
+      "bytes": 1229
+    },
+    "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
+    "absolute_path": "D:/fqh/flash/assets/art/icons/items/shouyuan_guo.svg",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/icons/items/silk_qing.svg",
+    "category": "icons",
+    "status": "modified_pending_game_qa",
+    "baseline": {
+      "sha256": "f60a647bc0b0226930221c7c3d27d3743ec999b23d87616db5af271110322d20",
+      "bytes": 1477
+    },
+    "source": "tools/art/make_item_icons.py",
+    "current": {
+      "sha256": "bc2129215c1bc4e4fd65f3bf1c1cb32d5f2ec61c14366f28f8b2f908b39fca0c",
+      "bytes": 1075
+    },
+    "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
+    "absolute_path": "D:/fqh/flash/assets/art/icons/items/silk_qing.svg",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/icons/items/silk_xuancan.svg",
+    "category": "icons",
+    "status": "modified_pending_game_qa",
+    "baseline": {
+      "sha256": "22eacdcd3d4e668b8fd0a1f5dd337c0fd472cca92ebe245513de5d95ce100095",
+      "bytes": 1320
+    },
+    "source": "tools/art/make_item_icons.py",
+    "current": {
+      "sha256": "0d84bb9b0e49aa6a1ec94d4e05ec046d834f2b9bc28972511e58ae0308da248b",
+      "bytes": 1075
+    },
+    "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
+    "absolute_path": "D:/fqh/flash/assets/art/icons/items/silk_xuancan.svg",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/icons/items/silk_yunjin.svg",
+    "category": "icons",
+    "status": "modified_pending_game_qa",
+    "baseline": {
+      "sha256": "99c3832db1fc3c76cd22e9e729e06f2043fbed9d9251747f28210a33ed2905b9",
+      "bytes": 2124
+    },
+    "source": "tools/art/make_item_icons.py",
+    "current": {
+      "sha256": "0fd7add63daf7d9dff499ec70db33b92c125fa225379816cc58725ae7ad83012",
+      "bytes": 1224
+    },
+    "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
+    "absolute_path": "D:/fqh/flash/assets/art/icons/items/silk_yunjin.svg",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/icons/items/snake_gall.svg",
+    "category": "icons",
+    "status": "modified_pending_game_qa",
+    "baseline": {
+      "sha256": "280d7e3675f21ffdcedc18bed6d62f22be8a840e14aea2f4d6541b230bd748c3",
+      "bytes": 1968
+    },
+    "source": "tools/art/make_item_icons.py",
+    "current": {
+      "sha256": "9a3305c786172141daf23a1d26c25bea898c4d46926fe131b2c118d881713682",
+      "bytes": 935
+    },
+    "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
+    "absolute_path": "D:/fqh/flash/assets/art/icons/items/snake_gall.svg",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/icons/items/spirit_stones.svg",
+    "category": "icons",
+    "status": "audited_reuse",
+    "baseline": {
+      "sha256": "34b4b168d9705a3f60275d362a7f7df5650cf1444e71568dec1d4709fa747333",
+      "bytes": 1216
+    },
+    "source": "tools/art/make_item_icons.py",
+    "current": {
+      "sha256": "34b4b168d9705a3f60275d362a7f7df5650cf1444e71568dec1d4709fa747333",
+      "bytes": 1216
+    },
+    "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
+    "absolute_path": "D:/fqh/flash/assets/art/icons/items/spirit_stones.svg",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/icons/items/tianxin_lianzi.svg",
+    "category": "icons",
+    "status": "modified_pending_game_qa",
+    "baseline": {
+      "sha256": "1c09470d741d4a024213ba01d781ce51637c15a8f1f6c4a4edd324dda80fa4c9",
+      "bytes": 2451
+    },
+    "source": "tools/art/make_item_icons.py",
+    "current": {
+      "sha256": "7381d61fa3177ae9e7e1c894c39d2bc07b02c0df289ebd2f5e387c9c473edd63",
+      "bytes": 1421
+    },
+    "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
+    "absolute_path": "D:/fqh/flash/assets/art/icons/items/tianxin_lianzi.svg",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/icons/items/wolf_fang.svg",
+    "category": "icons",
+    "status": "modified_pending_game_qa",
+    "baseline": {
+      "sha256": "010b7fb7c4f316d2de0f8501ebb8bdb2111ce092754b6cef1c30bf382c95c1fa",
+      "bytes": 1194
+    },
+    "source": "tools/art/make_item_icons.py",
+    "current": {
+      "sha256": "d98b2518b985f095f8a39097105760736bc1949d86a779547257aea419564513",
+      "bytes": 882
+    },
+    "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
+    "absolute_path": "D:/fqh/flash/assets/art/icons/items/wolf_fang.svg",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/icons/items/xiaguang_lingsui.svg",
+    "category": "icons",
+    "status": "modified_pending_game_qa",
+    "baseline": {
+      "sha256": "ee748e922d81ccf354282f28e388244a7772d70abca1d4b890f927bd28849b2e",
+      "bytes": 1852
+    },
+    "source": "tools/art/make_item_icons.py",
+    "current": {
+      "sha256": "0081370c112505fb3df56d62aad2921658b0e179ed8ac3bfe208e749ac971155",
+      "bytes": 1064
+    },
+    "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
+    "absolute_path": "D:/fqh/flash/assets/art/icons/items/xiaguang_lingsui.svg",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/icons/items/xiong_dan.svg",
+    "category": "icons",
+    "status": "modified_pending_game_qa",
+    "baseline": {
+      "sha256": "f5360fda4f2f2056639f4534c81718757daa70a45b4a2e2c338345a02c873c6f",
+      "bytes": 1250
+    },
+    "source": "tools/art/make_item_icons.py",
+    "current": {
+      "sha256": "20c22ea9c8def186bd52a766bd58354fe16ce8a928faf6f7bff338113c260a47",
+      "bytes": 935
+    },
+    "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
+    "absolute_path": "D:/fqh/flash/assets/art/icons/items/xiong_dan.svg",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/icons/items/yanghun_mu.svg",
+    "category": "icons",
+    "status": "modified_pending_game_qa",
+    "baseline": {
+      "sha256": "438b081760e3f5355739b46285f1d3d0fcedbf545b206d045bc3c334b0d5bdba",
+      "bytes": 1964
+    },
+    "source": "tools/art/make_item_icons.py",
+    "current": {
+      "sha256": "43b30249c4e3b2554c4de855a242f9fd7c9b2281dcc2c705b62abd129fe3f0db",
+      "bytes": 932
+    },
+    "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
+    "absolute_path": "D:/fqh/flash/assets/art/icons/items/yanghun_mu.svg",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/icons/items/yanjia_scale.svg",
+    "category": "icons",
+    "status": "modified_pending_game_qa",
+    "baseline": {
+      "sha256": "12ee30299c9adf6d64bb7ab5798ba97f27e266f5edf279a877c0f32eb11c4424",
+      "bytes": 1329
+    },
+    "source": "tools/art/make_item_icons.py",
+    "current": {
+      "sha256": "0e8a275ec73651cd2e1bade1e5a58c9cf20ed930f6495310ec772c2be5be254d",
+      "bytes": 923
+    },
+    "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
+    "absolute_path": "D:/fqh/flash/assets/art/icons/items/yanjia_scale.svg",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/icons/items/yanshou_dan.svg",
+    "category": "icons",
+    "status": "modified_pending_game_qa",
+    "baseline": {
+      "sha256": "d3beaf1e24a7b3a5340fb8672dda33c271058eca44fb7f806dcf41fe413ae6d9",
+      "bytes": 1822
+    },
+    "source": "tools/art/make_item_icons.py",
+    "current": {
+      "sha256": "da9216ef3066e0ec3749d81a0d7b732b53757c3177a4e41fa9ba01462ad1a358",
+      "bytes": 1354
+    },
+    "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
+    "absolute_path": "D:/fqh/flash/assets/art/icons/items/yanshou_dan.svg",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/icons/items/yaodan.svg",
+    "category": "icons",
+    "status": "modified_pending_game_qa",
+    "baseline": {
+      "sha256": "82dfd2ff2d06cbd005dc70ed9ba0b23fead91a5bff7d0d11a0b35af45c8ef415",
+      "bytes": 1483
+    },
+    "source": "tools/art/make_item_icons.py",
+    "current": {
+      "sha256": "71dc50dd0ebd6bc55e478388c0f4b70a2e965163d9b7e05e7af32327e92580d3",
+      "bytes": 627
+    },
+    "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
+    "absolute_path": "D:/fqh/flash/assets/art/icons/items/yaodan.svg",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/icons/items/yaodan_small.svg",
+    "category": "icons",
+    "status": "modified_pending_game_qa",
+    "baseline": {
+      "sha256": "df7017baaac348e39bad7b3fcd585d4ace442a94dea165e52dae17fea5095b5e",
+      "bytes": 1167
+    },
+    "source": "tools/art/make_item_icons.py",
+    "current": {
+      "sha256": "41a4399407ec0ebe8223536739cfdc9eb2f06010f3d0681ac52d7296f5e30956",
+      "bytes": 623
+    },
+    "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
+    "absolute_path": "D:/fqh/flash/assets/art/icons/items/yaodan_small.svg",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/icons/slip.svg",
+    "category": "icons",
+    "status": "modified_pending_game_qa",
+    "baseline": {
+      "sha256": "8d90d245d5ef659750c60245803c5f62fe46ff6d022ba448d375481ba7fc90cf",
+      "bytes": 422
+    },
+    "source": "tools/art/make_item_icons.py",
+    "current": {
+      "sha256": "f8cb3b3137ed4eda5b0ca05a31b016728fcbfaf353f8d67fae697e3d3d627028",
+      "bytes": 419
+    },
+    "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
+    "absolute_path": "D:/fqh/flash/assets/art/icons/slip.svg",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/story/icons/cangxi_lu.svg",
+    "category": "story/icons",
+    "status": "ready_for_content",
+    "source": "tools/art/make_story_icons.py",
+    "current": {
+      "sha256": "db4ca515c2759e4b5e989e8d55a226b8604663d1961ed7fb5e51b74f99141b64",
+      "bytes": 839
+    },
+    "note": "New outline art only; not registered as playable items",
+    "absolute_path": "D:/fqh/flash/assets/art/story/icons/cangxi_lu.svg",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/story/icons/mirror_back_fragment.svg",
+    "category": "story/icons",
+    "status": "ready_for_content",
+    "source": "tools/art/make_story_icons.py",
+    "current": {
+      "sha256": "c624c48123d0c33bd413ee9bcb2c57660a459306bff762e4ff0c5db6a9ce2d3b",
+      "bytes": 837
+    },
+    "note": "New outline art only; not registered as playable items",
+    "absolute_path": "D:/fqh/flash/assets/art/story/icons/mirror_back_fragment.svg",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/story/icons/old_city_record.svg",
+    "category": "story/icons",
+    "status": "ready_for_content",
+    "source": "tools/art/make_story_icons.py",
+    "current": {
+      "sha256": "236f32800a70d85239329b2ce55bde93762ad105b8f53051150603874e59f229",
+      "bytes": 817
+    },
+    "note": "New outline art only; not registered as playable items",
+    "absolute_path": "D:/fqh/flash/assets/art/story/icons/old_city_record.svg",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/story/icons/old_city_seal.svg",
+    "category": "story/icons",
+    "status": "ready_for_content",
+    "source": "tools/art/make_story_icons.py",
+    "current": {
+      "sha256": "72b7cd6e5119ae7cc2d66a5ddd0d478f1c3ff7352a46b53b9f013b1016ae6381",
+      "bytes": 539
+    },
+    "note": "New outline art only; not registered as playable items",
+    "absolute_path": "D:/fqh/flash/assets/art/story/icons/old_city_seal.svg",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/story/icons/remnant_mirror.svg",
+    "category": "story/icons",
+    "status": "ready_for_content",
+    "source": "tools/art/make_story_icons.py",
+    "current": {
+      "sha256": "10893db74c8277d6c2d9daad2281b26d8f9c6b4640cecf814cb2024c002718d5",
+      "bytes": 878
+    },
+    "note": "New outline art only; not registered as playable items",
+    "absolute_path": "D:/fqh/flash/assets/art/story/icons/remnant_mirror.svg",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/story/icons/tingchao_broken.svg",
+    "category": "story/icons",
+    "status": "ready_for_content",
+    "source": "tools/art/make_story_icons.py",
+    "current": {
+      "sha256": "f5a40b1e47eb489a72297f8093a31c57692af19146acbd46f3abb478b8c4a804",
+      "bytes": 908
+    },
+    "note": "New outline art only; not registered as playable items",
+    "absolute_path": "D:/fqh/flash/assets/art/story/icons/tingchao_broken.svg",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/story/icons/tingchao_repaired.svg",
+    "category": "story/icons",
+    "status": "ready_for_content",
+    "source": "tools/art/make_story_icons.py",
+    "current": {
+      "sha256": "ebd659817c961abbbe20ec1ad79192d250a2e89518a6fe98d8131c0c3fd109ac",
+      "bytes": 879
+    },
+    "note": "New outline art only; not registered as playable items",
+    "absolute_path": "D:/fqh/flash/assets/art/story/icons/tingchao_repaired.svg",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/story/icons/wenren_sea_chart.svg",
+    "category": "story/icons",
+    "status": "ready_for_content",
+    "source": "tools/art/make_story_icons.py",
+    "current": {
+      "sha256": "183b125e64b3577167342a667c1e3943296e754461dfead603d27f23aa110e5d",
+      "bytes": 619
+    },
+    "note": "New outline art only; not registered as playable items",
+    "absolute_path": "D:/fqh/flash/assets/art/story/icons/wenren_sea_chart.svg",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/story/icons/zhaoshui_fenguang.svg",
+    "category": "story/icons",
+    "status": "ready_for_content",
+    "source": "tools/art/make_story_icons.py",
+    "current": {
+      "sha256": "96e43ef5866ff6fde9bdf190425fc4735a344a978f040efdd73aa40e5675da1f",
+      "bytes": 780
+    },
+    "note": "New outline art only; not registered as playable items",
+    "absolute_path": "D:/fqh/flash/assets/art/story/icons/zhaoshui_fenguang.svg",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/icons/arts/bolt_none.svg",
+    "category": "upstream_addition",
+    "status": "pending",
+    "baseline": {
+      "sha256": "bdc268a97d1a83bf36fdf15c1dfa362617825a54dbe865587ab48ec6702b401a",
+      "bytes": 948
+    },
+    "absolute_path": "D:/fqh/flash/assets/art/icons/arts/bolt_none.svg",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/icons/arts/focus_none.svg",
+    "category": "upstream_addition",
+    "status": "pending",
+    "baseline": {
+      "sha256": "0059346901019127645470cde9b41bab5370e7affb2336b821612b2b31e5957e",
+      "bytes": 968
+    },
+    "absolute_path": "D:/fqh/flash/assets/art/icons/arts/focus_none.svg",
+    "actor_layouts": []
+  },
+  {
+    "path": "assets/art/icons/arts/ward_none.svg",
+    "category": "upstream_addition",
+    "status": "pending",
+    "baseline": {
+      "sha256": "7df08813e14499a83e30b688e7c520372b5c5f79fbc4cf1b3ab96cff4560dd49",
+      "bytes": 768
+    },
+    "absolute_path": "D:/fqh/flash/assets/art/icons/arts/ward_none.svg",
+    "actor_layouts": []
+  }
+]
