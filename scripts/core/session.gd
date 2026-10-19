@@ -126,7 +126,7 @@ func new_game(character_name: String = "无名", seed_value: int = -1, roots: Ar
 		"layers": {}, "gear": {}, "gear_serial": 0,
 	}
 	player.stones = maxi(0, int(player.stones) + talent_modifier("stones"))
-	for skill_id: String in content.sects.wanderer.skills:
+	for skill_id: String in Loadout.starter_skills(self):
 		player.learned.append(skill_id)
 		player.arts.append(skill_id)
 		Layers.begin(self, skill_id)
@@ -1212,16 +1212,17 @@ func begin_tournament(round: int) -> void:
 func use_skill(skill_id: String) -> String:
 	return Combat.use_skill(self, skill_id)
 
-func defend() -> String:
-	return Combat.defend(self)
+## 守御; `let_go` lets the orbs over the cap go on their own (the interface asks the player instead).
+func defend(let_go: bool = true) -> String:
+	return Combat.defend(self, let_go)
 
-## 结束回合.
-func end_turn() -> String:
-	return Combat.end_turn(self)
+## 结束回合; `let_go` as for defend.
+func end_turn(let_go: bool = true) -> String:
+	return Combat.end_turn(self, false, let_go)
 
-## 相生: two orbs of an element into one of the element it gives rise to.
-func convert_qi(element: String) -> String:
-	return Combat.convert_qi(self, element)
+## 散去 one orb of an element, without taking the turn.
+func discard_orb(element: String) -> String:
+	return Combat.discard_orb(self, element)
 
 func duel_pill_block(item_id: String) -> String:
 	return Combat.pill_block(self, item_id)

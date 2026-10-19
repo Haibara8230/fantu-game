@@ -629,6 +629,20 @@ func _validate_moves(enemy: Dictionary) -> String:
 					return "%s 的状态须是 [数值, 回合]" % move.id
 	return ""
 
+## 连击: {"after": an element (or, for archetypes, "source" — the one that gives rise to theirs — or
+## "same"), and "bonus" (a share more of the effect) and/or "absorb" (more orbs drawn in)}.
+func _valid_combo(combo: Variant, afters: Array) -> bool:
+	if not combo is Dictionary or not combo.get("after") in afters or not (combo.has("bonus") or combo.has("absorb")):
+		return false
+	return (not combo.has("bonus") or float(combo.bonus) > 0.0) and (not combo.has("absorb") or (_whole(combo.absorb) and int(combo.absorb) >= 1))
+
+## An element's entry ({"name", "color", ...}) among the five, or the neutral 气 of arts that take any
+## element's qi; {} when unknown.
+func element_info(element: String) -> Dictionary:
+	if technique_data.elements.has(element):
+		return technique_data.elements[element]
+	return technique_data.get("neutral", {}).get(element, {})
+
 func _valid_cost(cost: Variant, keys: Array) -> bool:
 	if not cost is Dictionary or cost.is_empty():
 		return false
@@ -1971,7 +1985,7 @@ func _validate_arsenal() -> String:
 		if not archetype.get("slot") in ["art", "method"] or archetype.get("nouns", []).is_empty():
 			return "功法原型配置错误：" + archetype_id
 		if archetype.slot == "art":
-			if not archetype.get("kind") in ["attack", "heal", "guard"] or not _valid_cost(archetype.get("cost"), ["element", "any"]):
+			if not archetype.get("kind") in ["attack", "heal", "guard"] or not _valid_cost(archetype.get("cost"), ["element", "same", "any"]) or (archetype.has("combo") and not _valid_combo(archetype.combo, ["source", "same"])):
 				return "神通原型配置错误：" + archetype_id
 			for element: String in data.elements:
 				if not vfx_styles.has(archetype.get("vfx", {}).get(element, "")):
@@ -1986,20 +2000,37 @@ func _validate_arsenal() -> String:
 			if not data.archetypes.has(archetype_id):
 				return "功法词条引用了未知原型：" + affix_id
 	for skill_id: String in skills:
-		if not data.elements.has(skills[skill_id].get("element", "")):
+		var skill: Dictionary = skills[skill_id]
+		if not data.elements.has(skill.get("element", "")) and not data.get("neutral", {}).has(skill.get("element", "")):
 			return "传承神通缺少属性：" + skill_id
-		if not _valid_cost(skills[skill_id].get("cost"), data.elements.keys() + ["any"]):
+		if not _valid_cost(skill.get("cost"), data.elements.keys() + ["same", "any"]):
 			return "传承神通的灵气消耗无效：" + skill_id
+		if not skill.get("kind") in ["attack", "heal", "guard", "spirit"]:
+			return "传承神通的种类无效：" + skill_id
+		if skill.has("combo") and not _valid_combo(skill.combo, data.elements.keys()):
+			return "传承神通的连击无效：" + skill_id
+		if skill.has("absorb") and (not skill.absorb is Array or skill.absorb.size() != 2 or not data.elements.has(skill.absorb[0]) or not _whole(skill.absorb[1]) or int(skill.absorb[1]) < 1):
+			return "传承神通的吸收灵气无效：" + skill_id
+		if skill.has("gather") and (not _whole(skill.gather) or int(skill.gather) < 1):
+			return "传承神通的聚气无效：" + skill_id
 	var duel: Variant = rules.get("duel")
-	if not duel is Dictionary or ["first_extra", "root_weight", "other_weight", "qi_per_orb", "hand_least", "convert", "pills", "guard_orbs"].any(func(key: String) -> bool: return not _whole(duel.get(key))):
+	if not duel is Dictionary or ["first_extra", "root_weight", "other_weight", "hand_least", "pills", "guard_orbs"].any(func(key: String) -> bool: return not _whole(duel.get(key))):
 		return "斗法规则配置无效。"
-	for key: String in ["draw", "foe_draw"]:
+	for key: String in ["draw", "foe_draw", "speed"]:
 		if not duel.get(key) is Array or duel[key].size() != realms.size() or duel[key].any(func(value: Variant) -> bool: return not _whole(value) or int(value) < 1):
 			return "斗法抽灵气数须按境界逐一给出：" + key
-	for key: String in ["generates", "overcomes"]:
-		var cycle: Variant = duel.get(key)
-		if not cycle is Dictionary or cycle.size() != data.elements.size() or cycle.keys().any(func(element: Variant) -> bool: return not data.elements.has(element) or not data.elements.has(cycle[element]) or cycle[element] == element):
-			return "五行%s配置无效。" % ("相生" if key == "generates" else "相克")
+	var foe_weights: Variant = duel.get("foe_weights")
+	if not foe_weights is Array or foe_weights.size() != 2 or foe_weights.any(func(value: Variant) -> bool: return not _whole(value)):
+		return "对手抽灵气的权重无效。"
+	var power: Variant = duel.get("realm_power")
+	if not power is Array or power.size() != realms.size() or power.any(func(value: Variant) -> bool: return not (value is float or value is int) or float(value) <= 0.0):
+		return "斗法境界威力须按境界逐一给出。"
+	var cycle: Variant = duel.get("generates")
+	if not cycle is Dictionary or cycle.size() != data.elements.size() or cycle.keys().any(func(element: Variant) -> bool: return not data.elements.has(element) or not data.elements.has(cycle[element]) or cycle[element] == element):
+		return "五行相生配置无效。"
+	var starter: Variant = duel.get("starter")
+	if not starter is Dictionary or data.elements.keys().any(func(element: String) -> bool: return not starter.get(element) is Array or starter[element].any(func(id: Variant) -> bool: return not skills.has(id))):
+		return "散修本命神通须按五行逐一给出。"
 	for enemy_id: String in enemies:
 		if not data.elements.has(enemies[enemy_id].get("element", "")):
 			return "对手缺少五行属性：" + enemy_id

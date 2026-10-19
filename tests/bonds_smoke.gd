@@ -337,7 +337,7 @@ func _appointments() -> void:
 	game.interact(friend, "invite_spar")
 	check(not game.battle.is_empty() and game.battle.get("invite", "") == "spar:0:" + friend, "keeping it starts the spar")
 	game.battle.hp = 1
-	game.use_skill("sword")
+	_sword(game)
 	check(game.battle.is_empty() and game.favor(friend) >= favor + 15 and game.open_invites().is_empty(), "a kept appointment is worth more than a plain spar")
 	game.world.invites.append({"id": "spar:1:" + friend, "npc": friend, "kind": "spar", "made": int(game.world.day), "deadline": int(game.world.day) + 30})
 	favor = game.favor(friend)
@@ -404,3 +404,12 @@ func _aid() -> void:
 	if not game.battle.is_empty():
 		check(game.duel_allies().is_empty() and game.call_aid(friend).contains("无人"), "once a duel")
 	check(game.journal_lines().any(func(line: String) -> bool: return line.contains("应声而至")), "and is written down")
+
+## Casts 御剑诀 with the orbs it asks (金×1、任意×1): a journey begins with it only on a metal root.
+func _sword(game) -> String:
+	if not "sword" in game.player.learned:
+		game.player.learned.append("sword")
+	if not "sword" in game.player.arts:
+		game.player.arts.append("sword")
+	game.battle.orbs.append_array(["metal", "metal"])
+	return game.use_skill("sword")

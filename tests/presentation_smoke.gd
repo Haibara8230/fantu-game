@@ -118,6 +118,10 @@ func _run() -> void:
 	main.run(func() -> String: return main.session.travel("wild"))
 	main.run(func() -> String: return main.session.start_battle("wolf"))
 	_step("wolf duel: fire, heal, guard")
+	for art: String in ["fire", "wood"]:
+		if not art in main.session.player.learned:
+			main.session.player.learned.append(art)
+	main.session.player.arts = ["qi_strike", "fire", "wood"]
 	main.session.battle.orbs = ["fire", "fire", "wood", "wood"]
 	_watch_stage("art_fire")
 	await main.skill("fire")

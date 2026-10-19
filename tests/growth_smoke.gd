@@ -106,12 +106,15 @@ func _stages() -> void:
 	stronger.player.stage = 3
 	stronger.refresh_realm_stats()
 	stronger.start_battle("disciple")
-	stronger.use_skill("sword")
+	_sword(stronger)
 	var hit: int = stronger.combat_events[0].amount
 	var boost: float = stronger.element_multiplier(stronger.content.technique("sword"))
-	# The stage's attack bonus counts half for the one orb a 剑诀 spends.
-	var factor: float = boost * stronger.Combat.counter_multiplier(stronger, "metal")
-	check(is_equal_approx(boost, 1.1) and hit >= int(round((6 + 3) * factor)) and hit <= int(round((8 + 3) * factor)), "a higher stage hits harder, and a matching root a little more (%d)" % hit)
+	# The stage's attack bonus counts half for each of the two orbs a 剑诀 spends.
+	var held: Dictionary = stronger.held_technique("sword")
+	var bonus := int(stronger.attack_bonus())
+	# Arts grow with the realm (combat.gd realm_power).
+	var power: float = stronger.Combat.realm_power(stronger, int(stronger.player.realm))
+	check(is_equal_approx(boost, 1.1) and bonus == 6 and hit >= int(round((int(held.damage_min) + bonus) * boost * power)) and hit <= int(round((int(held.damage_max) + bonus) * boost * power)), "a higher stage hits harder, and a matching root a little more (%d)" % hit)
 
 ## Retreat fatigue: a fresh mind for the first half year in a row, then less each day down to half;
 ## two days of anything else ease one day of it. 炼气圆满 keeps the bottlenecks out of the way.
@@ -468,3 +471,12 @@ func _weather(game) -> void:
 		bolts += 1
 		game.player.hp = game.player.max_hp
 		game.defend()
+
+## Casts 御剑诀 with the orbs it asks (金×1、任意×1): a journey begins with it only on a metal root.
+func _sword(game) -> String:
+	if not "sword" in game.player.learned:
+		game.player.learned.append("sword")
+	if not "sword" in game.player.arts:
+		game.player.arts.append("sword")
+	game.battle.orbs.append_array(["metal", "metal"])
+	return game.use_skill("sword")

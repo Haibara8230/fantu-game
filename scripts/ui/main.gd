@@ -1142,14 +1142,15 @@ func battle_action(action: String) -> void:
 	_lock_buttons(self)
 	var held := GainsCard.snapshot(session)
 	var message: String
+	# The player chooses what qi to let go (散去) before the turn ends; quick duels let it go themselves.
 	if action == "guard":
-		message = session.defend()
+		message = session.defend(false)
 	elif action == "end_turn":
-		message = session.end_turn()
+		message = session.end_turn(false)
 	elif action == "quick":
 		message = session.quick_duel()
-	elif action.begins_with("convert:"):
-		message = session.convert_qi(action.trim_prefix("convert:"))
+	elif action.begins_with("discard:"):
+		message = session.discard_orb(action.trim_prefix("discard:"))
 	elif action.begins_with("pill:"):
 		message = session.take_duel_pill(action.trim_prefix("pill:"))
 	elif action.begins_with("aid:"):
@@ -1267,10 +1268,25 @@ func _cue_changes(before: Dictionary) -> void:
 		audio.cue("event")
 	elif after.battle and not before.battle:
 		audio.cue("prepare")
+		# A quicker opponent has already struck (遁速): its opening plays on the stage once it is up.
+		if bool(session.battle.get("foe_led", false)):
+			_play_opening.call_deferred()
 	elif after.location != before.location:
 		audio.cue("arrive")
 	elif not before.pending.is_empty() and after.pending.is_empty():
 		audio.cue("choice")
+
+## The opening of a duel the opponent led, played on the stage with input locked.
+func _play_opening() -> void:
+	var events: Array[Dictionary] = session.combat_events.duplicate(true)
+	if presenting or events.is_empty() or not is_instance_valid(battle_stage):
+		return
+	presenting = true
+	_lock_buttons(self)
+	await battle_stage.play(events)
+	presenting = false
+	_unlock_buttons()
+	render()
 
 func notice(message: String) -> void:
 	Hud.notice(self, preload("res://scripts/ui/experience_text.gd").notice(session, message))
@@ -1407,7 +1423,7 @@ func _unhandled_key_input(event: InputEvent) -> void:
 			_save_manual()
 		"load":
 			_load_manual()
-		"skill_1", "skill_2", "skill_3", "skill_4":
+		"skill_1", "skill_2", "skill_3", "skill_4", "skill_5", "skill_6":
 			if not session.battle.is_empty():
 				var ids := session.active_skills()
 				var index := int(action.right(1)) - 1

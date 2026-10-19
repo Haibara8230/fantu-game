@@ -54,6 +54,7 @@
   "route_fee": "付 {fee} 灵石，经{by}前往{location_name}。",
   "choose_sect": "开始研习{sect_name}传承，神通已更换。",
   "skill_shield": "施展{skill_name}，结成 {amount} 点护盾。",
+  "skill_spirit": "施展{skill_name}，调运灵气。",
   "guard_turn": "凝神守御，结束这一回合：对手的出手减半，下回合多抽 {amount} 颗灵气。",
   "duel_pill": "斗法间隙服下{item_name}。",
   "tournament_enter": "你在演武坪报名参加了外门小比。",

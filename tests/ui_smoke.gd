@@ -259,7 +259,7 @@ func _run() -> void:
 	main.set_view("arts")
 	await _capture("arts")
 	var arts_text := _screen("Label") + _texts(main.center, "Button")
-	check(arts_text.contains("主动神通  3 / 4") and arts_text.contains("[1]") and arts_text.contains("御剑诀"), "the 神通 page: slots with their keys, the arts learned")
+	check(arts_text.contains("主动神通  5 / 6") and arts_text.contains("[1]") and arts_text.contains("御剑诀"), "the 神通 page: slots with their keys, the arts learned")
 	main.set_view("methods")
 	check(_screen("Label").contains("心法  0 / 2"), "the 功法 page: the 心法 slots")
 	main.set_arts_filter("fire")
@@ -363,9 +363,14 @@ func _run() -> void:
 	await _capture("wild")
 	check(main.clock_label.text == main.Calendar.date_text(travel_from + 7), "travel advances the calendar by route days")
 	check(main.audio.music_key == "wild" and main.audio.ambience_key == "wild", "music and ambience follow the location")
+	# The dock below reads 御剑诀, 离火术 and 回春诀 in its first three slots.
+	for art: String in ["sword", "fire", "wood"]:
+		if not art in main.session.player.learned:
+			main.session.player.learned.append(art)
+	main.session.player.arts = ["sword", "fire", "wood"]
 	main.set_guide_enabled(true)
 	main.run(func() -> String: return main.session.start_battle("wolf"))
-	check(_screen("Label").contains("教学 · 斗法  1 / 3") and _screen("Label").contains("按 1 / 2 / 3 / 4 或点按钮") and _button("[1] ") != null, "the first duel explains the controls with the bound keys")
+	check(_screen("Label").contains("教学 · 斗法  1 / 3") and _screen("Label").contains("按 1 / 2 / 3 / 4 / 5 / 6 或点按钮") and _button("[1] ") != null, "the first duel explains the controls with the bound keys")
 	check(_button("结束回合") != null and _button("结束回合").has_theme_stylebox_override("normal") and not _button("守御").has_theme_stylebox_override("normal"), "and points at the button it speaks of")
 	for frame: int in 3:
 		await process_frame
@@ -379,13 +384,19 @@ func _run() -> void:
 	check(_button("速战") != null, "the dock offers to finish the duel quickly")
 	_button("记录").pressed.emit()
 	check(main.battle_record_open and _texts(main.center, "Label").contains("展开斗法"), "记录 shows the duel's latest entries")
-	check(_button("结束回合") != null and _texts(main.center, "Label").contains("对手下一回合：") and _button("[2] ").text.contains("火×2"), "the dock shows 结束回合, the arts' orb costs, and the stage the opponent's intent")
+	check(_button("结束回合") != null and _texts(main.center, "Label").contains("对手下一回合：") and _button("[2] ").text.contains("火2"), "the dock shows 结束回合, the arts' orb costs, and the stage the opponent's intent")
 	main.toggle_battle_record()
 	main.session.battle.orbs = ["fire", "fire", "wood", "wood"]
 	main.render()
 	check(_orb_chip("木", 2) != null and not _orb_chip("木", 2).disabled and _button("[2] ") != null and not _button("[2] ").disabled, "the hand shows each element's orbs; an affordable art is ready")
-	await main.battle_action("convert:wood")
-	check(main.session.battle.orbs.count("fire") == 3 and _orb_chip("火", 3) != null, "clicking an element 相生s two of its orbs (木生火)")
+	await main.battle_action("discard:wood")
+	check(main.session.battle.orbs.count("wood") == 1 and _orb_chip("木", 1) != null, "clicking an element lets one of its orbs go")
+	main.session.battle.orbs = ["fire", "fire", "wood", "wood", "fire"]
+	main.render()
+	await main.battle_action("end_turn")
+	check(int(main.session.battle.turn) == 1 and _button("结束回合").text.contains("先散去 1 颗"), "over the cap the turn does not end until the player lets an orb go")
+	await main.battle_action("discard:fire")
+	check(main.session.battle.orbs.size() == 4 and _button("结束回合").text.contains(main.Settings.key_name(main, "end_turn")), "within the cap it can end")
 	# 地利 in the foe's corner, and 神识探查 in the record's place (batch eight).
 	check(_texts(main.center, "Label").contains("地利 · 山谷"), "the valley's favour for wood is shown")
 	_button("神识探查").pressed.emit()

@@ -1,7 +1,7 @@
 {
   "schools": {
     "sword": {"name": "剑修", "archetype": "affinity", "element": "metal", "min_tier": 2, "stack": 0.15, "most": 3, "text": "剑意：同一回合里每多出一道金行神通，伤害再 +15%，至多 +45%。"},
-    "body": {"name": "体修", "archetype": "body", "min_tier": 2, "counter_back": 0.25, "heavy": 0.1, "countered": 0.9, "text": "反震：挨了一记重过气血一成的打，下一道神通 +25%；被五行克制时只减一成。"},
+    "body": {"name": "体修", "archetype": "body", "min_tier": 2, "counter_back": 0.25, "heavy": 0.1, "countered": 0.9, "text": "反震：挨了一记重过气血一成的打，下一道神通 +25%；肉身坚韧，所受伤害减一成。"},
     "soul": {"name": "魂修", "archetype": "focus", "min_tier": 2, "weaken": 0.1, "text": "神识冲击：每回合第一道神通震散对手一颗灵气；对手若是妖兽，则削弱它下一击一成。"},
     "array": {"name": "阵修", "archetype": "breath", "element": "earth", "min_tier": 2, "orbs": 1, "shield": 8, "text": "布阵：花一回合布下阵法，此后每回合多抽一颗灵气、结 8 点护盾。"}
   },
@@ -22,30 +22,31 @@
     "fire": {"name": "火", "color": "#ffb579", "words": ["赤焰", "离火", "焚天", "炎阳", "丙火"]},
     "earth": {"name": "土", "color": "#e1bf81", "words": ["厚土", "玄岳", "磐石", "地脉", "戊土"]}
   },
+  "neutral": {"none": {"name": "气", "color": "#cfd8d3"}},
   "archetypes": {
     "bolt": {
       "slot": "art", "kind": "attack", "label": "法术", "nouns": ["诀", "术", "指", "掌"],
-      "damage": [6, 8], "cost": {"any": 1},
+      "damage": [9, 11], "cost": {"element": 1, "any": 1}, "combo": {"after": "source", "bonus": 0.3},
       "vfx": {"metal": "sword", "wood": "vine", "water": "water", "fire": "flame_bolt", "earth": "earth"}
     },
     "barrage": {
       "slot": "art", "kind": "attack", "label": "连击", "nouns": ["剑阵", "千刃", "流星", "飞雨"],
-      "damage": [24, 30], "hits": 3, "cost": {"element": 2, "any": 1},
+      "damage": [24, 30], "hits": 3, "cost": {"element": 2, "any": 1}, "combo": {"after": "same", "bonus": 0.25},
       "vfx": {"metal": "sword_rain", "wood": "leaf_blade", "water": "ice_lance", "fire": "fire", "earth": "rock_spire"}
     },
     "burst": {
       "slot": "art", "kind": "attack", "label": "重击", "nouns": ["印", "斩", "破", "冲"],
-      "damage": [28, 34], "cost": {"element": 3},
+      "damage": [28, 34], "cost": {"element": 3}, "combo": {"after": "source", "bonus": 0.4},
       "vfx": {"metal": "sword_arc", "wood": "leaf_blade", "water": "ice_lance", "fire": "fire_burst", "earth": "rock_spire"}
     },
     "mend": {
       "slot": "art", "kind": "heal", "label": "疗愈", "nouns": ["回春诀", "养元法", "生生诀", "复脉术"],
-      "heal": 20, "cost": {"element": 2},
+      "heal": 20, "cost": {"element": 2}, "combo": {"after": "source", "bonus": 0.5},
       "vfx": {"metal": "heal", "wood": "heal", "water": "water_heal", "fire": "heal", "earth": "heal"}
     },
     "ward": {
       "slot": "art", "kind": "guard", "label": "护体", "nouns": ["护体", "金钟罩", "玄甲", "宝光"],
-      "shield": 18, "cost": {"element": 1, "any": 1},
+      "shield": 18, "cost": {"element": 1, "any": 1}, "combo": {"after": "same", "bonus": 0.3},
       "vfx": {"metal": "earth_guard", "wood": "earth_guard", "water": "earth_guard", "fire": "earth_guard", "earth": "earth_guard"}
     },
     "breath": {"slot": "method", "kind": "passive", "label": "吐纳", "nouns": ["吐纳法", "养气篇", "周天诀"], "passive": {"cultivation": 0.1}},

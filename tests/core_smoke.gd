@@ -90,16 +90,39 @@ func _initialize() -> void:
 	game.start_battle("serpent")
 	check(game.battle.orbs.size() == game.Combat.draw_count(game) + int(game.content.rules.duel.first_extra) and not game.battle.intent.is_empty(), "a duel opens with a hand of qi orbs and the opponent's intent")
 	var hand: Array = game.battle.orbs.duplicate()
-	game.battle.orbs = ["wood", "wood", "fire", "fire", "metal"]
+	for art: String in ["wood", "fire", "seal_wood"]:
+		if not art in game.player.learned:
+			game.player.learned.append(art)
+	game.player.arts = ["qi_strike", "wood", "fire", "seal_wood"]
+	game.battle.orbs = ["water", "wood", "wood", "fire", "fire", "metal"]
+	game.battle.last = ""
 	game.use_skill("wood")
 	game.use_skill("fire")
-	check(game.battle.orbs == ["metal", "earth"] and game.battle.chain == "fire", "arts spend the orbs their costs name; 木生火 turns the cycle and brings an earth orb")
+	check(game.battle.orbs == ["water", "metal"] and game.battle.last == "fire" and game.combat_events.any(func(event: Dictionary) -> bool: return event.type == "combo"), "arts spend the orbs their costs name; 离火术 after a wood art is a 连击")
 	unchanged = game.snapshot()
 	game.use_skill("fire")
 	check(game.snapshot() == unchanged, "blocked skill has no side effects")
 	game.battle.orbs = ["water", "water", "metal"]
-	game.convert_qi("water")
-	check(game.battle.orbs == ["metal", "wood"], "two water orbs 相生 into one of wood")
+	game.use_skill("qi_strike")
+	check(game.battle.orbs == ["metal"], "驱物术 takes two orbs of one element, whichever (同×2)")
+	game.battle.orbs = ["metal", "earth"]
+	check(not game.Combat.affordable(game.battle.orbs, game.held_technique("qi_strike").cost), "and two of different elements will not do")
+	game.battle.orbs = ["wood", "metal"]
+	game.battle.last = "water"
+	game.use_skill("seal_wood")
+	check(game.battle.orbs == ["fire", "fire"], "上清印 turns wood qi into fire, one more on a 连击 after a water art")
+	# Five qi a turn from the spirit roots alone; four kept, the player choosing what goes.
+	check(game.Combat.draw_count(game) == 5 and game.Combat.hand_cap(game) == 4 + int(game.orb_bonus("orb_cap")), "five qi a turn, four kept")
+	check(game.Combat.player_weights(game).keys().all(func(element: String) -> bool: return int(game.Combat.player_weights(game)[element]) > 0 == (element in game.player.roots or int(game.orb_bonus("orb_" + element)) > 0)), "qi comes only from the spirit roots")
+	game.battle.orbs = ["metal", "metal", "metal", "metal", "metal", "earth"]
+	var waiting := int(game.battle.turn)
+	check(game.end_turn(false).contains("散去") and int(game.battle.turn) == waiting, "over the cap the turn does not end until the player lets orbs go")
+	game.discard_orb("earth")
+	check(game.battle.orbs.size() == 5 and not "earth" in game.battle.orbs, "an orb of the chosen element goes")
+	game.player.arts = ["qi_strike", "qi_gather", "wood", "fire"]
+	game.battle.orbs = ["metal", "metal"]
+	game.use_skill("qi_gather")
+	check(int(game.battle.get("next_draw", 0)) == 2 and game.battle.orbs.is_empty(), "聚气 brings two more orbs next turn")
 	game.battle.orbs = hand
 	var copy = Session.new()
 	check(copy.restore(JSON.parse_string(JSON.stringify(game.snapshot()))), "active battle JSON round trip")

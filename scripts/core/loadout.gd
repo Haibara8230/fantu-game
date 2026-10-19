@@ -81,6 +81,19 @@ static func element_multiplier(s, t: Dictionary) -> float:
 		multiplier += float(s.content.technique_data.root_bonus)
 	return multiplier
 
+## What a journey begins with: the wanderer's three 气 arts, which any element's qi casts, and for the
+## first spirit root its small art and its 印 (rules.duel.starter).
+static func starter_skills(s) -> Array[String]:
+	var result: Array[String] = []
+	for skill_id: Variant in s.content.sects.wanderer.skills:
+		result.append(str(skill_id))
+	var roots: Array = s.player.get("roots", [])
+	if not roots.is_empty():
+		for skill_id: Variant in s.content.rules.duel.starter.get(str(roots[0]), []):
+			if not str(skill_id) in result:
+				result.append(str(skill_id))
+	return result
+
 static func active_skills(s) -> Array[String]:
 	var result: Array[String] = []
 	for id: Variant in s.player.get("arts", []):
@@ -254,14 +267,19 @@ static func home_lineage(s) -> String:
 
 ## Takes up a lineage at once: teaches its three arts and puts them in the art slots. The 传功堂 goes
 ## through choose_sect; the sect preview and tests use this directly.
+## The lineage's arts go first in the slots; what else was in use follows while slots remain.
 static func take_lineage(s, sect_id: String) -> void:
 	s.player.sect = sect_id
+	var kept: Array = s.player.arts.duplicate()
 	s.player.arts = []
 	for skill_id: String in s.content.sects[sect_id].skills:
 		if not skill_id in s.player.learned:
 			s.player.learned.append(skill_id)
 		Layers.begin(s, skill_id)
 		s.player.arts.append(skill_id)
+	for skill_id: Variant in kept:
+		if not skill_id in s.player.arts and s.player.arts.size() < int(s.content.rules.art_slots):
+			s.player.arts.append(skill_id)
 
 ## Effective changes if this carried piece replaced the same slot; never mutates player state.
 static func equipment_comparison(s, item_id: String) -> Dictionary:

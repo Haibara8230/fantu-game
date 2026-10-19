@@ -193,7 +193,7 @@ func _key_people() -> void:
 	check(bool(game.world.people.azhi.get("sound", false)) and _last(game).contains("传音符"), "a close enough bond exchanges 传音符")
 	game.battle.hp = 1
 	var letters: int = game.world.letters.size()
-	game.use_skill("sword")
+	_sword(game)
 	check(game.has_flag("serpent_slain") and game.story_state("shen_redscale") == "done", "slaying it ends 沈墨's story")
 	check(game.world.letters.size() > letters and game.world.letters.any(func(letter: Dictionary) -> bool: return letter.npc == "azhi" and letter.get("kind", "") == "serpent"), "friends send word of the serpent")
 	# 柳寒舟 and 石寒: persuading opens the cave without a fight.
@@ -415,3 +415,12 @@ func _older_journeys() -> void:
 	check(bool(v11.world.people.azhi.get("sound", false)), "and then they do")
 	var round_trip := Session.new()
 	check(round_trip.restore(JSON.parse_string(JSON.stringify(v11.snapshot()))) and round_trip.snapshot() == v11.snapshot(), "the upgraded journey saves and loads as version 12")
+
+## Casts 御剑诀 with the orbs it asks (金×1、任意×1): a journey begins with it only on a metal root.
+func _sword(game) -> String:
+	if not "sword" in game.player.learned:
+		game.player.learned.append("sword")
+	if not "sword" in game.player.arts:
+		game.player.arts.append("sword")
+	game.battle.orbs.append_array(["metal", "metal"])
+	return game.use_skill("sword")

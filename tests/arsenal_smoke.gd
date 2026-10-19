@@ -121,7 +121,7 @@ func _seeded(value: int) -> RandomNumberGenerator:
 
 func _learning() -> void:
 	var game := _game()
-	check(game.active_skills() == ["sword", "fire", "wood"], "a journey starts with the wanderer's three arts")
+	check(game.active_skills() == ["qi_strike", "qi_shield", "qi_gather", "sword", "seal_metal"], "a journey starts with the wanderer's three 气 arts, and the first root's small art and 印")
 	var low := "j:t:breath:wood:1::0"
 	game.add_item(low, 1)
 	var day := int(game.world.day)
@@ -132,13 +132,13 @@ func _learning() -> void:
 	check(game.study_manual("j:t:burst:fire:5::0").contains("筑基初期"), "a 天阶 art is three realms beyond 炼气: it waits for 筑基")
 	game.add_item("j:t:bolt:water:1::0", 1)
 	game.study_manual("j:t:bolt:water:1::0")
-	check(game.active_skills().size() == 4, "the fourth art slot fills")
+	check(game.active_skills().size() == 6, "the sixth art slot fills")
 	game.add_item("j:t:bolt:earth:1::0", 1)
 	game.study_manual("j:t:bolt:earth:1::0")
-	check(game.active_skills().size() == 4 and "t:bolt:earth:1::0" in game.player.learned, "a fifth art is learned but waits outside the slots")
+	check(game.active_skills().size() == 6 and "t:bolt:earth:1::0" in game.player.learned, "a seventh art is learned but waits outside the slots")
 	check(game.equip_technique("t:bolt:earth:1::0").contains("栏位已满"), "a full row needs a choice")
-	game.equip_technique("t:bolt:earth:1::0", "wood")
-	check("t:bolt:earth:1::0" in game.active_skills() and not "wood" in game.active_skills(), "swapping an art")
+	game.equip_technique("t:bolt:earth:1::0", "seal_metal")
+	check("t:bolt:earth:1::0" in game.active_skills() and not "seal_metal" in game.active_skills(), "swapping an art")
 	for art: String in game.active_skills().duplicate():
 		game.unequip_technique(art)
 	check(game.active_skills().size() == 1, "at least one art always stays")
@@ -146,7 +146,7 @@ func _learning() -> void:
 	check(game.choose_sect("chixiao").contains("只传本门") and game.player.learned.size() == learned and str(game.player.sect) == "wanderer", "the hall teaches no other sect's lineage")
 	var study_from := int(game.world.day)
 	game.choose_sect("qingyun")
-	check(game.active_skills() == ["sword", "sword_rain", "sword_arc"] and "sword_arc" in game.player.learned and int(game.world.day) == study_from + 30, "studying the home lineage takes a month, then teaches and slots its arts")
+	check(game.active_skills().slice(0, 3) == ["sword", "sword_rain", "sword_arc"] and "sword_arc" in game.player.learned and int(game.world.day) == study_from + 30, "studying the home lineage takes a month, then teaches and slots its arts first")
 	check(game.choose_sect("qingyun").contains("已在研习"), "and is studied once")
 
 func _bonuses() -> void:
@@ -230,7 +230,7 @@ func _effects() -> void:
 	check(disciple.combat_events[0].get("legacy", "") == "qingyun", "a sect's own art cast by its disciple carries the lineage's layer")
 	var wanderer := _game(["metal"])
 	wanderer.start_battle("disciple")
-	wanderer.use_skill("sword")
+	_sword(wanderer)
 	check(not wanderer.combat_events[0].has("legacy"), "a wanderer's arts have no lineage")
 	var chill := _fight("t:bolt:water:2:chill:0")
 	chill.use_skill("t:bolt:water:2:chill:0")
@@ -272,7 +272,7 @@ func _effects() -> void:
 	check(renew.battle.orbs.count("wood") == wood_before - 2 + 1 and int(renew.player.hp) > 20, "a renewing heal brings back an orb of its element")
 	var guarded := _fight("t:ward:earth:1::0")
 	guarded.use_skill("t:ward:earth:1::0")
-	check(guarded.combat_events[0].type == "guard" and int(guarded.battle.shield) == int(guarded.content.technique("t:ward:earth:1::0").shield), "a ward raises a shield")
+	check(guarded.combat_events[0].type == "guard" and int(guarded.battle.shield) == int(round(float(guarded.content.technique("t:ward:earth:1::0").shield) * guarded.Combat.realm_power(guarded, 0) * (1.3 if guarded.combat_events.any(func(event: Dictionary) -> bool: return event.type == "combo") else 1.0))), "a ward raises a shield")
 	var hp_before := int(guarded.player.hp)
 	guarded.end_turn()
 	var soaked: int = guarded.combat_events.filter(func(event: Dictionary) -> bool: return event.get("actor", "") == "enemy").reduce(func(sum: int, event: Dictionary) -> int: return sum + int(event.get("absorbed", 0)), 0)
@@ -281,8 +281,8 @@ func _effects() -> void:
 	var bolt: Dictionary = plain.content.technique("t:bolt:metal:1::0")
 	plain.use_skill("t:bolt:metal:1::0")
 	var plain_damage: int = plain.combat_events[0].amount
-	var share := int(round(float(plain.attack_bonus()) / 2.0))
-	var factor: float = plain.element_multiplier(bolt) * plain.Combat.counter_multiplier(plain, "metal")
+	var share := int(round(float(plain.attack_bonus()) * 2.0 / 2.0))
+	var factor: float = plain.element_multiplier(bolt)
 	check(plain_damage >= int(round((int(bolt.damage_min) + share) * factor)) and plain_damage <= int(round((int(bolt.damage_max) + share) * factor)), "a 凡品 bolt hits for its base damage (%d)" % plain_damage)
 
 func _teaching_and_stock() -> void:
@@ -327,7 +327,7 @@ func _drops() -> void:
 	game.travel("ruin")
 	game.interact("squatter", "fight")
 	game.battle.hp = 1
-	game.use_skill("sword")
+	_sword(game)
 	var loot: Array = game.player.items.keys().filter(func(item_id: String) -> bool: return item_id.begins_with("j:") or item_id.begins_with("e:"))
 	check(loot.size() == 1 and game.journal_lines().any(func(line: String) -> bool: return line.contains("缴获")), "a defeated cultivator drops a slip or a piece of equipment")
 	check(int(game.content.item(loot[0]).tier) == 2, "the drop has the enemy's tier")
@@ -335,7 +335,7 @@ func _drops() -> void:
 func _saves() -> void:
 	var lineage := Session.new()
 	check(lineage.restore(JSON.parse_string(FileAccess.get_file_as_string("res://tests/fixtures/v7_chixiao.json"))), "v7 save migrates")
-	check(lineage.active_skills() == ["flame_bolt", "fire", "fire_burst"] and lineage.player.methods.is_empty() and int(lineage.world.seed) > 0, "an old 赤霄门 journey keeps its lineage arts")
+	check(lineage.active_skills() == ["flame_bolt", "fire", "fire_burst", "qi_strike", "qi_shield", "qi_gather"] and lineage.player.methods.is_empty() and int(lineage.world.seed) > 0, "an old 赤霄门 journey keeps its lineage arts, and learns the 气 arts into its free slots")
 	var fighting := Session.new()
 	check(fighting.restore(JSON.parse_string(FileAccess.get_file_as_string("res://tests/fixtures/v7_battle.json"))) and fighting.battle.status.is_empty() and fighting.battle.orbs.size() > 0 and not fighting.battle.intent.is_empty(), "a v7 duel resumes with a fresh hand of qi orbs")
 	var game := _game()
@@ -368,3 +368,12 @@ func _static_checks() -> void:
 	check(_broken(func(c) -> void: c.technique_data.tiers[3].power = 1.2).contains("品阶配置错误"), "tiers must grow in power")
 	check(_broken(func(c) -> void: c.locations.sect.spots.filter(func(spot: Dictionary) -> bool: return spot.id == "hall")[0].teach.append("t:comet:fire:1::0")).contains("无效的功法"), "teaching an invalid technique is reported")
 	check(_broken(func(c) -> void: c.enemies.rogue.drops = {"chance": 0.5}).contains("掉落配置"), "malformed drops reported")
+
+## Casts 御剑诀 with the orbs it asks (金×1、任意×1): a journey begins with it only on a metal root.
+func _sword(game) -> String:
+	if not "sword" in game.player.learned:
+		game.player.learned.append("sword")
+	if not "sword" in game.player.arts:
+		game.player.arts.append("sword")
+	game.battle.orbs.append_array(["metal", "metal"])
+	return game.use_skill("sword")

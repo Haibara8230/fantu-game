@@ -123,17 +123,19 @@ static func _battle_place(s) -> String:
 	return str(s.player.location)
 
 # --- Qi orbs (灵气) ---------------------------------------------------------------------------------
-# After Mi Chang Sheng: each turn the player draws qi orbs of the five elements, weighted toward the
-# spirit roots; an art is cast by spending the orbs its cost names (an element, or "any"), several arts
-# in a turn while orbs last, and 结束回合 hands the turn over. Two orbs of an element 相生 into one of
-# the element it gives rise to (金生水、水生木、木生火、火生土、土生金) at no cost of a turn; an art whose
-# element the last art of the turn gave rise to keeps the cycle turning (五行轮转) and brings one more
-# orb. An art that overcomes the opponent's element strikes harder, one it is overcome by softer. At the
-# end of a turn the orbs held beyond the cap (from the 灵力上限) are let go.
+# As in Mi Chang Sheng: each turn the player absorbs five qi orbs, drawn by the weight of the spirit
+# roots alone (an element without a root never comes, unless a talent, an art or a piece of gear draws
+# it in). An art is cast by spending the orbs its cost names — an element, 同 (that many of one
+# element, whichever) or 任意 (any) — several arts a turn while orbs last, and 结束回合 hands the turn
+# over. At most four orbs (hand_least, and what holds more) stay at the end of a turn: the player
+# chooses which to let go. There is no conversion of its own and no 克制: qi is turned into another
+# element only by arts that do it (the 印, `absorb`), and each art has its own 连击 (`combo`): when the
+# art cast before it was of the element it names, it does more. 聚气 (`gather`) brings more orbs next
+# turn. 遁速 decides who moves first and how readily one gets away.
 # The opponent shows what it means to do next (intent). Generated cultivators draw orbs of their own
 # and cast their whole loadout from them; beasts and the handwritten foes strike once a turn.
-# battle: orbs (the player's), chain (the element last cast this turn), shield, player_status, pills;
-# foe_orbs, foe_shield, intent [{"art"?, "kind", "name", "min", "max" | "amount"}].
+# battle: orbs (the player's), last (the element of the art cast last), next_draw, shield,
+# player_status, pills; foe_orbs, foe_shield, intent [{"art"?, "kind", "name", "min", "max" | "amount"}].
 
 ## Lingering effects either side may carry: 灼烧 (burn: damage each turn), 寒蚀 (weaken: deals less),
 ## 破甲 (sunder: takes more), 冰封 (slow: draws fewer orbs, or strikes weaker without orbs), 流血 (bleed:
@@ -174,35 +176,42 @@ static func rules(s) -> Dictionary:
 static func elements(s) -> Array:
 	return s.content.technique_data.elements.keys()
 
-## How many orbs the player keeps at the end of a turn: from the qi cap (灵力上限), and talents, arts
-## and equipment that hold more (orb_cap).
+## How many orbs the player keeps at the end of a turn: four, and what talents, arts and equipment
+## hold more (orb_cap).
 static func hand_cap(s) -> int:
-	return maxi(int(rules(s).hand_least), int(s.player.max_qi) / int(rules(s).qi_per_orb)) + int(s.orb_bonus("orb_cap"))
+	return int(rules(s).hand_least) + int(s.orb_bonus("orb_cap"))
 
 ## Orbs the player draws each turn: the realm's, and what talents, arts and equipment add (orb_draw).
 static func draw_count(s) -> int:
 	return _by_realm(s, "draw", int(s.player.realm)) + int(s.orb_bonus("orb_draw"))
 
+## With five orbs a turn in every realm, an art's strength grows with the realm instead (realm_power):
+## the player's arts and a generated opponent's alike.
+static func realm_power(s, realm: int) -> float:
+	var power: Array = rules(s).realm_power
+	return float(power[clampi(realm, 0, power.size() - 1)])
+
 static func _by_realm(s, key: String, realm: int) -> int:
 	var counts: Array = rules(s)[key]
 	return int(counts[clampi(realm, 0, counts.size() - 1)])
 
-## Draw weights for the player: the spirit roots' elements heavier, and an element favoured by talents,
-## arts or equipment (orb_<element>) heavier still.
+## Draw weights for the player: the spirit roots' elements alone (other_weight is none), and an element
+## favoured by talents, arts or equipment (orb_<element>) heavier, even without its root.
 static func player_weights(s) -> Dictionary:
 	var weights := {}
 	for element: String in elements(s):
 		weights[element] = (int(rules(s).root_weight) if element in s.player.get("roots", []) else int(rules(s).other_weight)) + int(s.orb_bonus("orb_" + element))
 	return weights
 
-## Draw weights for a generated opponent: the elements of its arts heavier.
+## Draw weights for a generated opponent, whose roots nobody knows: the elements of its arts heavier,
+## the others still coming now and then (foe_weights), as they would from mixed roots.
 static func _foe_weights(s) -> Dictionary:
 	var weights := {}
 	var favoured: Array = [foe_element(s)]
 	for art_id: Variant in s.battle.get("foe", {}).get("arts", []):
 		favoured.append(str(s.content.technique(str(art_id)).get("element", "")))
 	for element: String in elements(s):
-		weights[element] = int(rules(s).root_weight) if element in favoured else int(rules(s).other_weight)
+		weights[element] = int(rules(s).foe_weights[0]) if element in favoured else int(rules(s).foe_weights[1])
 	return weights
 
 static func _draw(s, count: int, weights: Dictionary) -> Array:
@@ -219,19 +228,33 @@ static func _draw(s, count: int, weights: Dictionary) -> Array:
 				break
 	return drawn
 
-## The first turn of a duel: the player's first hand, and the opponent's orbs and intent.
+## The first turn of a duel: the player's first hand, and the opponent's orbs and intent. A quicker
+## opponent (遁速, foe_leads) moves first: its opening lands before the player's first hand is drawn.
 static func open_hand(s) -> void:
 	if wounded(s):
 		s.player.hp = mini(int(s.player.hp), int(round(float(s.player.max_hp) * float(rules(s).get("wound_hp", 0.75)))))
-	var drawn := _draw(s, draw_count(s) + int(rules(s).first_extra) + int(s.orb_bonus("orb_first")), player_weights(s))
-	s.battle.orbs = drawn
-	s.battle.chain = ""
+	s.battle.orbs = []
+	s.battle.last = ""
 	s.battle.shield = 0
 	s.battle.foe_shield = 0
 	s.battle.foe_orbs = []
 	s.battle.player_status = {}
 	s.battle.pills = 0
 	s.battle.cooldowns = {}
+	var extra := int(rules(s).first_extra) + int(s.orb_bonus("orb_first"))
+	if foe_leads(s):
+		s.battle.foe_led = true
+		s.battle.next_draw = extra
+		_foe_prepare(s)
+		s.combat_events.append({"type": "lead", "actor": "enemy", "speed": foe_speed(s), "player_speed": speed(s)})
+		# The opening cannot fell the player: whoever starts a duel finds it still open after it.
+		s.battle.leading = true
+		_enemy_turn(s, false)
+		s.battle.erase("leading")
+		s.battle.turn = 1
+		return
+	var drawn := _draw(s, draw_count(s) + extra, player_weights(s))
+	s.battle.orbs = drawn
 	s.combat_events.append({"type": "draw", "actor": "player", "orbs": drawn.duplicate()})
 	_foe_prepare(s)
 
@@ -239,25 +262,44 @@ static func open_hand(s) -> void:
 static func affordable(orbs: Array, cost: Dictionary) -> bool:
 	var left := orbs.duplicate()
 	for key: String in cost:
-		if key == "any":
+		if key in ["any", "same"]:
 			continue
 		for count: int in int(cost[key]):
 			var at := left.find(key)
 			if at < 0:
 				return false
 			left.remove_at(at)
+	if cost.has("same"):
+		var kind := _same_kind(left, int(cost.same))
+		if kind.is_empty():
+			return false
+		for count: int in int(cost.same):
+			left.remove_at(left.find(kind))
 	return left.size() >= int(cost.get("any", 0))
 
-## Takes `cost` out of `orbs`: the named elements first, then "any" from the most plentiful element.
-## Returns the orbs spent.
+## The element 同×`count` is paid in: the most plentiful one that has enough, or "".
+static func _same_kind(orbs: Array, count: int) -> String:
+	var best := ""
+	for element: String in orbs:
+		if orbs.count(element) >= count and (best.is_empty() or orbs.count(element) > orbs.count(best)):
+			best = element
+	return best
+
+## Takes `cost` out of `orbs`: the named elements first, then 同 from the most plentiful element that
+## has enough, then "any" from the most plentiful. Returns the orbs spent.
 static func _pay(orbs: Array, cost: Dictionary) -> Array:
 	var spent: Array = []
 	for key: String in cost:
-		if key == "any":
+		if key in ["any", "same"]:
 			continue
 		for count: int in int(cost[key]):
 			orbs.remove_at(orbs.find(key))
 			spent.append(key)
+	if cost.has("same"):
+		var kind := _same_kind(orbs, int(cost.same))
+		for count: int in int(cost.same):
+			orbs.remove_at(orbs.find(kind))
+			spent.append(kind)
 	for count: int in int(cost.get("any", 0)):
 		var most := ""
 		for element: String in orbs:
@@ -280,17 +322,9 @@ static func foe_element(s) -> String:
 		return str(foe.element)
 	return str(s.content.enemies[s.battle.enemy_id].get("element", "metal"))
 
-## 克制: an art that overcomes the opponent's element strikes harder, one it is overcome by softer.
-static func counter_multiplier(s, element: String) -> float:
-	var foe := foe_element(s)
-	if str(rules(s).overcomes.get(element, "")) == foe:
-		# A 体修 opponent takes being overcome half as hard.
-		var counter := float(rules(s).counter)
-		return 1.0 + (counter - 1.0) / 2.0 if s.Schools.foe(s) == "body" else counter
-	if str(rules(s).overcomes.get(foe, "")) == element:
-		# A 体修 loses less to being overcome.
-		return s.Schools.value(s, "body", "countered") if s.Schools.player(s) == "body" else float(rules(s).countered)
-	return 1.0
+## 连击: whether `t`'s combo holds — the art cast before it was of the element its combo names.
+static func combo_holds(s, t: Dictionary) -> bool:
+	return t.has("combo") and str(s.battle.get("last", "")) == str(t.combo.after)
 
 static func use_skill(s, skill_id: String) -> String:
 	s.combat_events.clear()
@@ -302,7 +336,10 @@ static func use_skill(s, skill_id: String) -> String:
 	if not affordable(s.battle.orbs, t.cost):
 		return "灵气不足：%s需要%s。" % [t.name, s.Arsenal.cost_text(s.content, t.cost)]
 	var spent := _pay(s.battle.orbs, t.cost)
-	var look := {"style": skill_id, "name": t.name, "vfx": t.vfx, "tier": int(t.tier), "element": t.element, "spent": spent}
+	# 连击: the art before it was of the element its combo names.
+	var combo := combo_holds(s, t)
+	var boost := (1.0 + (float(t.combo.get("bonus", 0.0)) if combo else 0.0)) * realm_power(s, int(s.player.realm))
+	var look := {"style": skill_id, "name": t.name, "vfx": t.vfx, "tier": int(t.tier), "element": t.element, "spent": spent, "combo": combo}
 	_soul_strike(s)
 	# A sect's own art cast by its disciple carries the lineage's signature layer.
 	var lineage: String = s.content.legacy_sect(skill_id, str(s.player.get("sect", "wanderer")))
@@ -311,20 +348,26 @@ static func use_skill(s, skill_id: String) -> String:
 	var text := ""
 	match str(t.kind):
 		"heal":
-			var recovered := mini(_healed(s.battle.get("player_status", {}), int(t.heal)), int(s.player.max_hp) - int(s.player.hp))
+			var recovered := mini(_healed(s.battle.get("player_status", {}), int(round(float(t.heal) * boost))), int(s.player.max_hp) - int(s.player.hp))
 			s.player.hp += recovered
 			s.combat_events.append(_event({"type": "heal", "amount": recovered, "hp_after": int(s.player.hp)}, look))
 			text = s.log_event("skill_heal", {"skill": skill_id, "amount": recovered})
 		"guard":
-			s.battle.shield = int(s.battle.get("shield", 0)) + int(t.shield)
+			var shield := int(round(float(t.shield) * boost))
+			s.battle.shield = int(s.battle.get("shield", 0)) + shield
 			s.combat_events.append(_event({"type": "guard", "amount": 0, "shield": int(s.battle.shield)}, look))
-			text = s.log_event("skill_shield", {"skill": skill_id, "amount": int(t.shield)})
+			text = s.log_event("skill_shield", {"skill": skill_id, "amount": shield})
+		"spirit":
+			# 印 and 聚气 deal nothing: they turn qi (absorb, below) or bring more of it next turn.
+			if t.has("gather"):
+				s.battle.next_draw = int(s.battle.get("next_draw", 0)) + int(t.gather)
+			s.combat_events.append(_event({"type": "spirit", "amount": int(t.get("gather", 0))}, look))
+			text = s.log_event("skill_spirit", {"skill": skill_id})
 		_:
 			# The realm's attack bonus counts half for each orb spent, so many small arts gain no more
 			# from it than one great one.
 			var roll: int = s.combat_rng.randi_range(int(t.damage_min), int(t.damage_max)) + int(round(float(s.attack_bonus()) * spent.size() / 2.0))
-			var counter := counter_multiplier(s, t.element)
-			var factor: float = s.element_multiplier(t) * counter * ground(s, str(t.element), false) * _school_force(s, str(t.element))
+			var factor: float = s.element_multiplier(t) * boost * ground(s, str(t.element), false) * _school_force(s, str(t.element))
 			if s.battle.get("player_status", {}).has("fervor"):
 				factor *= 1.0 + float(s.battle.player_status.fervor[0])
 			if s.battle.get("player_status", {}).has("weaken"):
@@ -334,7 +377,7 @@ static func use_skill(s, skill_id: String) -> String:
 			var dealt := _strike_foe(s, maxi(1, int(round(float(roll) * factor))))
 			if int(t.hits) > 1:
 				_sweep(s, int(round(float(roll) * factor * PACK_SPLASH)))
-			s.combat_events.append(_event({"type": "attack", "actor": "player", "hits": int(t.hits), "amount": dealt, "hp_after": int(s.battle.hp), "counter": "克" if counter > 1.0 else ("被克" if counter < 1.0 else "")}, look))
+			s.combat_events.append(_event({"type": "attack", "actor": "player", "hits": int(t.hits), "amount": dealt, "hp_after": int(s.battle.hp)}, look))
 			text = s.log_event("skill_attack", {"skill": skill_id, "amount": dealt})
 			if t.has("lifesteal"):
 				var healed := mini(int(round(dealt * float(t.lifesteal))), int(s.player.max_hp) - int(s.player.hp))
@@ -344,6 +387,8 @@ static func use_skill(s, skill_id: String) -> String:
 			for status: String in LINGERING:
 				if t.has(status):
 					_inflict(s.battle.status, status, t[status])
+	if combo:
+		s.combat_events.append({"type": "combo", "name": t.name, "after": str(t.combo.after), "element": str(t.element)})
 	# Each cast is practice toward the art's next layer (layers.gd).
 	var reached: Array[String] = s.Layers.after_cast(s, skill_id)
 	if not reached.is_empty():
@@ -352,13 +397,13 @@ static func use_skill(s, skill_id: String) -> String:
 		_gain(s, _draw(s, int(t.draw), player_weights(s)))
 	if t.has("renew"):
 		_gain(s, [str(t.element)])
-	# 五行轮转: an art whose element the last one gave rise to brings an orb of the next element.
-	var last := str(s.battle.get("chain", ""))
-	if not last.is_empty() and str(rules(s).generates[last]) == str(t.element):
-		var next := str(rules(s).generates[t.element])
-		s.battle.orbs.append(next)
-		s.combat_events.append({"type": "chain", "from": last, "to": str(t.element), "orbs": [next]})
-	s.battle.chain = str(t.element)
+	# 印: qi of another element drawn in, more of it on a 连击.
+	if t.has("absorb"):
+		var absorbed: Array = []
+		for count: int in int(t.absorb[1]) + (int(t.combo.get("absorb", 0)) if combo else 0):
+			absorbed.append(str(t.absorb[0]))
+		_gain(s, absorbed)
+	s.battle.last = str(t.element)
 	if int(s.battle.hp) <= 0:
 		return _win(s)
 	s.changed.emit()
@@ -499,11 +544,7 @@ static func scout(s) -> Dictionary:
 		return {"seen": false, "lines": lines}
 	lines.append("神识压过对手（%d / %d）：" % [s.sense(), foe_sense])
 	if names.has(element):
-		var weak := ""
-		for other: String in rules(s).overcomes:
-			if str(rules(s).overcomes[other]) == element:
-				weak = other
-		lines.append("五行属%s，畏%s。" % [names[element].name, names[weak].name if names.has(weak) else "—"])
+		lines.append("五行属%s，遁速 %d（你 %d）。" % [names[element].name, foe_speed(s), speed(s)])
 	if not foe.is_empty():
 		var arts: Array[String] = []
 		for art_id: String in foe.get("arts", []):
@@ -734,29 +775,30 @@ static func _pack_strikes(s, guarding: bool) -> bool:
 			return true
 	return false
 
-## 相生: two orbs of an element become one of the element it gives rise to; it takes no turn.
-static func convert_qi(s, element: String) -> String:
+## 散去: the player lets one orb of `element` go, in their own turn (what is over the cap must go before
+## the turn can end). It takes no turn.
+static func discard_orb(s, element: String) -> String:
 	s.combat_events.clear()
-	if s.battle.is_empty() or not element in elements(s):
-		return "当前无法催生灵气。"
-	var need := int(rules(s).convert)
-	var names: Dictionary = s.content.technique_data.elements
-	if s.battle.orbs.count(element) < need:
-		return "%s灵气不足 %d 颗。" % [names[element].name, need]
-	for count: int in need:
-		s.battle.orbs.remove_at(s.battle.orbs.find(element))
-	var made := str(rules(s).generates[element])
-	s.battle.orbs.append(made)
-	s.combat_events.append({"type": "convert", "from": element, "to": made, "count": need})
+	if s.battle.is_empty() or not element in s.battle.get("orbs", []):
+		return "手中没有这种灵气。"
+	s.battle.orbs.remove_at(s.battle.orbs.find(element))
+	s.combat_events.append({"type": "discard", "orbs": [element]})
 	s.changed.emit()
-	return "%s生%s。" % [names[element].name, names[made].name]
+	return "散去一颗%s灵气。" % s.content.technique_data.elements[element].name
 
-## 结束回合: the orbs beyond the cap are let go, then the opponent acts.
-static func end_turn(s, guarding: bool = false) -> String:
+## How many orbs must go before the turn can end.
+static func over_cap(s) -> int:
+	return maxi(0, s.battle.get("orbs", []).size() - hand_cap(s))
+
+## 结束回合: with more orbs than the cap, the player first chooses which to let go (discard_orb); when
+## `auto_release` (the plain policy, quick duels, tests) the most plentiful go. Then the opponent acts.
+static func end_turn(s, guarding: bool = false, auto_release: bool = true) -> String:
 	if not guarding:
 		s.combat_events.clear()
 	if s.battle.is_empty():
 		return "当前没有对手。"
+	if not auto_release and over_cap(s) > 0:
+		return "灵气只能留 %d 颗：先点选要散去的 %d 颗灵气，再结束回合。" % [hand_cap(s), over_cap(s)]
 	var cap := hand_cap(s)
 	var released: Array = []
 	while s.battle.orbs.size() > cap:
@@ -774,11 +816,14 @@ static func end_turn(s, guarding: bool = false) -> String:
 			_count_down(lingering, status)
 	return _enemy_turn(s, guarding)
 
-## 守御: the turn ends at once, the next blows are halved and one more orb comes next turn.
-static func defend(s) -> String:
+## 守御: the turn ends at once, the next blows are halved and one more orb comes next turn. Orbs over the
+## cap must be let go first, as for any end of turn.
+static func defend(s, auto_release: bool = true) -> String:
 	s.combat_events.clear()
 	if s.battle.is_empty():
 		return "当前没有对手。"
+	if not auto_release and over_cap(s) > 0:
+		return "灵气只能留 %d 颗：先点选要散去的 %d 颗灵气，再守御。" % [hand_cap(s), over_cap(s)]
 	s.combat_events.append({"type": "guard", "amount": 0, "sect": str(s.player.get("sect", "wanderer"))})
 	s.battle.guarded_turns = int(s.battle.get("guarded_turns", 0)) + 1
 	s.log_event("guard_turn", {"amount": int(rules(s).guard_orbs)})
@@ -870,16 +915,37 @@ static func _use_talisman(s, item_id: String, item: Dictionary) -> String:
 	s.changed.emit()
 	return text
 
-## How likely the player gets away (遁逃): four in five against a foe of their own realm, a quarter less
-## for each realm the foe stands above them, surely from a lesser one; badly hurt (under three tenths of
-## health) or wounded (重创), harder; never below a fifth.
+## 遁速 (as in Mi Chang Sheng): the realm's (rules.duel.speed), quickened by talents that shorten the
+## road (travel). It decides who moves first and how readily one gets away.
+static func speed(s) -> int:
+	return maxi(1, int(round(float(_by_realm(s, "speed", int(s.player.realm))) * float(100 - int(s.talent_modifier("travel"))) / 100.0)))
+
+## The opponent's 遁速: its own (`speed` in its data), else its realm's.
+static func foe_speed(s) -> int:
+	if s.battle.is_empty():
+		return 1
+	var foe: Dictionary = s.battle.get("foe", {})
+	if not foe.is_empty():
+		return _by_realm(s, "speed", int(foe.get("realm", 0)))
+	var enemy: Dictionary = s.content.enemies[s.battle.enemy_id]
+	return int(enemy.get("speed", _by_realm(s, "speed", int(enemy.get("min_realm", 0)))))
+
+## Whether the opponent moves first: only when it is the quicker (a tie goes to the player); 天劫 and
+## 心魔 do not race.
+static func foe_leads(s) -> bool:
+	return not s.battle.get("context", "") in ["tribulation", "demon"] and foe_speed(s) > speed(s)
+
+## How likely the player gets away (遁逃): four in five at an even 遁速, more or less by how much quicker
+## either side is (seven tenths of the difference of their 遁速, as a share of the foe's), surely from a lesser
+## realm's foe; badly hurt (under three tenths of health) or wounded (重创), harder; never below a fifth.
 static func flee_chance(s) -> float:
 	var foe: Dictionary = s.battle.get("foe", {})
 	var foe_realm := int(foe.get("realm", 0)) if not foe.is_empty() else int(s.content.enemies[s.battle.enemy_id].min_realm)
 	var hurt := 0.15 if int(s.player.hp) * 10 < int(s.player.max_hp) * 3 else 0.0
 	if s.battle.get("player_status", {}).has("wound"):
 		hurt += 0.1
-	return clampf(float(rules(s).get("flee", 0.8)) - 0.25 * float(foe_realm - int(s.player.realm)) + (1.0 if foe_realm < int(s.player.realm) else 0.0) - hurt, 0.2, 1.0)
+	var quicker := 0.7 * float(speed(s) - foe_speed(s)) / float(maxi(1, foe_speed(s)))
+	return clampf(float(rules(s).get("flee", 0.8)) + quicker + (1.0 if foe_realm < int(s.player.realm) else 0.0) - hurt, 0.2, 1.0)
 
 static func flee(s) -> String:
 	s.combat_events.clear()
@@ -953,10 +1019,9 @@ static func release(s) -> String:
 	var gear: Dictionary = release.gear
 	s.battle.released = int(s.battle.get("released", 0)) + 1
 	var element := str(gear.element)
-	var counter := 1.0 if element == "none" else counter_multiplier(s, element)
-	var dealt := _strike_foe(s, maxi(1, int(round(float(release.damage) * counter * ground(s, element, false)))))
+	var dealt := _strike_foe(s, maxi(1, int(round(float(release.damage) * ground(s, element, false)))))
 	var look := {"style": "release", "name": str(release.name), "vfx": str(release.move.get("vfx", "sword")), "tier": int(gear.tier), "element": "metal" if element == "none" else element}
-	s.combat_events.append(_event({"type": "attack", "actor": "player", "hits": 1, "amount": dealt, "hp_after": int(s.battle.hp), "counter": "克" if counter > 1.0 else ("被克" if counter < 1.0 else "")}, look))
+	s.combat_events.append(_event({"type": "attack", "actor": "player", "hits": 1, "amount": dealt, "hp_after": int(s.battle.hp)}, look))
 	for lingering: String in LINGERING:
 		if release.move.get("inflict", {}).has(lingering):
 			_inflict(s.battle.status, lingering, release.move.inflict[lingering])
@@ -996,7 +1061,8 @@ static func _foe_prepare(s) -> void:
 	var orbs: Array = s.battle.get("foe_orbs", [])
 	var short := int(s.battle.status.slow[0]) if s.battle.get("status", {}).has("slow") else 0
 	orbs.append_array(_draw(s, maxi(1, _by_realm(s, "foe_draw", int(foe.get("realm", 0))) - short), _foe_weights(s)))
-	while orbs.size() > int(rules(s).hand_least) + 2 * int(foe.get("realm", 0)) + 1:
+	# As for the player: what it kept (at most hand_least) and what it just drew.
+	while orbs.size() > int(rules(s).hand_least) + _by_realm(s, "foe_draw", int(foe.get("realm", 0))):
 		orbs.remove_at(0)
 	s.battle.foe_orbs = orbs
 	var left := orbs.duplicate()
@@ -1006,7 +1072,7 @@ static func _foe_prepare(s) -> void:
 		var pick: Dictionary = {}
 		for art_id: Variant in foe.arts:
 			var art: Dictionary = foe_art(s, foe, str(art_id))
-			if art.is_empty() or art.slot != "art" or not affordable(left, art.cost):
+			if art.is_empty() or art.slot != "art" or art.kind == "spirit" or not affordable(left, art.cost):
 				continue
 			if plan.any(func(entry: Dictionary) -> bool: return entry.kind in ["heal", "guard"] and entry.kind == art.kind):
 				continue
@@ -1025,16 +1091,17 @@ static func _foe_prepare(s) -> void:
 		var chosen: Dictionary = pick.art
 		_pay(left, chosen.cost)
 		var entry := {"art": str(chosen.id), "kind": str(chosen.kind), "name": str(chosen.name)}
+		var grown := realm_power(s, int(foe.get("realm", 0)))
 		match str(chosen.kind):
 			"heal":
-				entry.amount = int(chosen.heal)
+				entry.amount = int(round(float(chosen.heal) * grown))
 			"guard":
-				entry.amount = int(chosen.shield)
+				entry.amount = int(round(float(chosen.shield) * grown))
 			_:
 				# The realm's bonus counts half per orb, as for the player.
 				var share := int(round(float(foe.bonus) * _orbs_in(chosen.cost) / 2.0))
-				entry.min = maxi(1, int(round(float(chosen.damage_min) * float(foe.power))) + share)
-				entry.max = maxi(1, int(round(float(chosen.damage_max) * float(foe.power))) + share)
+				entry.min = maxi(1, int(round(float(chosen.damage_min) * float(foe.power) * grown)) + share)
+				entry.max = maxi(1, int(round(float(chosen.damage_max) * float(foe.power) * grown)) + share)
 		plan.append(entry)
 	if plan.is_empty():
 		plan.append({"kind": "gather", "name": "凝神聚气"})
@@ -1265,11 +1332,11 @@ static func _enemy_turn(s, guarding: bool) -> String:
 			foe_swords += 1
 		match str(art.kind):
 			"heal":
-				var recovered := mini(_healed(status, int(art.heal)), int(foe.hp) - int(s.battle.hp))
+				var recovered := mini(_healed(status, int(planned.get("amount", art.heal))), int(foe.hp) - int(s.battle.hp))
 				s.battle.hp = int(s.battle.hp) + recovered
 				s.combat_events.append(_event({"type": "heal", "actor": "enemy", "amount": recovered, "hp_after": int(s.battle.hp)}, look))
 			"guard":
-				s.battle.foe_shield = int(s.battle.get("foe_shield", 0)) + int(art.shield)
+				s.battle.foe_shield = int(s.battle.get("foe_shield", 0)) + int(planned.get("amount", art.shield))
 				s.combat_events.append(_event({"type": "guard", "actor": "enemy", "amount": 0, "shield": int(s.battle.foe_shield)}, look))
 			_:
 				for lingering: String in LINGERING:
@@ -1283,7 +1350,6 @@ static func _enemy_turn(s, guarding: bool) -> String:
 	# shows its next intent.
 	s.battle.shield = 0
 	s.battle.turn += 1
-	s.battle.chain = ""
 	s.battle.erase("sword_streak")
 	var formation := 0
 	if bool(s.battle.get("array", false)):
@@ -1301,7 +1367,9 @@ static func _enemy_turn(s, guarding: bool) -> String:
 	if burning.has("fervor"):
 		_count_down(burning, "fervor")
 	var short := (int(burning.slow[0]) if burning.has("slow") else 0) + (int(burning.entangle[0]) if burning.has("entangle") else 0)
-	_gain(s, _draw(s, maxi(1, draw_count(s) - short + formation + (int(rules(s).guard_orbs) if guarding else 0)), player_weights(s)))
+	var gathered := int(s.battle.get("next_draw", 0))
+	s.battle.erase("next_draw")
+	_gain(s, _draw(s, maxi(1, draw_count(s) - short + formation + gathered + (int(rules(s).guard_orbs) if guarding else 0)), player_weights(s)))
 	_foe_prepare(s)
 	# The opponent's sunder, slow, entangle, wound and focus last through its turns.
 	for lingering: String in ["sunder", "slow", "entangle", "wound", "focus"]:
@@ -1315,6 +1383,9 @@ static func _hurt_player(s, roll: int, factor: float, guarding: bool, look: Dict
 	var sundered: Dictionary = s.battle.get("player_status", {})
 	if sundered.has("sunder"):
 		factor *= 1.0 + float(sundered.sunder[0])
+	# A 体修's body takes every blow a little lighter.
+	if s.Schools.player(s) == "body":
+		factor *= s.Schools.value(s, "body", "countered")
 	var damage := maxi(1, int(round(float(roll) * factor)))
 	if guarding:
 		damage = maxi(1, damage / 2)
@@ -1322,6 +1393,8 @@ static func _hurt_player(s, roll: int, factor: float, guarding: bool, look: Dict
 	var absorbed := mini(int(s.battle.get("shield", 0)), damage)
 	s.battle.shield = int(s.battle.get("shield", 0)) - absorbed
 	damage -= absorbed
+	if bool(s.battle.get("leading", false)):
+		damage = mini(damage, int(s.player.hp) - 1)
 	s.player.hp = maxi(0, int(s.player.hp) - damage)
 	if s.Schools.player(s) == "body" and float(damage) >= float(s.player.max_hp) * s.Schools.value(s, "body", "heavy"):
 		s.battle.body_ready = true
@@ -1433,20 +1506,16 @@ static func plain_turn(s) -> String:
 			var t: Dictionary = s.held_technique(art_id)
 			if t.is_empty() or not affordable(s.battle.orbs, t.cost):
 				continue
-			var worth := int(t.get("damage_max", 0))
+			var worth := int(t.get("damage_max", 0)) * (2 if combo_holds(s, t) else 1)
 			if t.kind == "heal":
 				worth = 500 if int(s.player.hp) * 5 < int(s.player.max_hp) * 2 else -1
-			elif t.kind == "guard":
+			elif t.kind in ["guard", "spirit"]:
 				worth = 0
 			if worth > best_worth:
 				best_worth = worth
 				best = art_id
 		if best.is_empty():
-			var idle: Array = elements(s).filter(func(element: String) -> bool: return s.battle.orbs.count(element) >= 3)
-			if idle.is_empty():
-				break
-			convert_qi(s, str(idle[0]))
-			continue
+			break
 		text = use_skill(s, best)
 	if s.battle.is_empty():
 		return text

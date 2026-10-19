@@ -69,7 +69,7 @@ func _summit() -> void:
 		foes.append(str(game.battle.foe.sect))
 		game.battle.hp = 1
 		game.battle.orbs = ["metal"]
-		game.use_skill("sword")
+		_sword(game)
 	check(foes == ["chixiao", "changqing", "canglan", "xuanyue"] and game.battle.is_empty(), "four rounds, one for each of the other sects")
 	check(int(game.player.stones) >= stones + 4 * 50 + 500 and int(game.player.get("contribution", 0)) > merit and game.player.items.keys().any(func(item_id: String) -> bool: return item_id.begins_with("j:") and int(game.content.item(item_id).tier) == 4), "the champion takes stones, contribution and a 地阶 slip")
 	check(game.chronicle.entries.any(func(entry: Dictionary) -> bool: return entry.major and entry.id == "summit_champion"), "and a milestone")
@@ -194,14 +194,14 @@ func _sparring() -> void:
 		var bad: Dictionary = saved.duplicate(true)
 		broken.call(bad.battle)
 		check(not _game().restore(bad), "a duel with a broken place or look is rejected")
-	game.use_skill("sword")
+	_sword(game)
 	game.end_turn()
 	var counter: Dictionary = game.combat_events.filter(func(event: Dictionary) -> bool: return event.get("actor", "") == "enemy")[0]
 	check(counter.style in game.battle.foe.arts and counter.has("vfx"), "they answer with their own arts")
 	game.battle.hp = 1
 	var xp := int(game.player.xp)
 	var insight := int(game.player.insight)
-	game.use_skill("sword")
+	_sword(game)
 	check(game.battle.is_empty() and game.favor(rival) == 5 and int(game.player.xp) > xp and int(game.player.stones) == stones, "winning a spar earns respect and insight, not money")
 	check(int(game.player.insight) == insight + 10, "a spar is insight toward the next bottleneck")
 	check(rival in game.present_npcs() and game.npc_options(rival).filter(func(option: Dictionary) -> bool: return option.id == "spar")[0].reason.contains("后再来"), "the rival stays, and spars wait a month")
@@ -317,7 +317,7 @@ func _calamity() -> void:
 	game.start_battle("mo_jiang")
 	game.battle.hp = 1
 	game.battle.orbs = ["metal"]
-	game.use_skill("sword")
+	_sword(game)
 	check(game.has_flag("calamity_turned") and int(game.player.get("contribution", 0)) >= merit + 500 and game.player.items.keys().any(func(item_id: String) -> bool: return game.content.item(item_id).get("tier", 0) == 5), "the general slain: the sect's thanks and a 天阶 treasure")
 	game.world.day = Calendar.to_day(302, 2, 30)
 	game.wait(1)
@@ -367,7 +367,7 @@ func _commissions() -> void:
 	for kill: int in int(hunt.count):
 		game.Combat.begin_battle(game, str(hunt.enemy), "event")
 		game.battle.hp = 1
-		game.use_skill("sword")
+		_sword(game)
 	check(int(game.player.quests[0].progress) == int(hunt.count), "slain beasts count toward the hunt (%s)" % hunt.enemy)
 	check(int(game.player.insight) == mini(insight + 20 * int(hunt.count), game.insight_needed()), "each won duel is insight")
 	check(game.delivery_block(game.player.quests[0]).contains("执事堂告示"), "the hunt is reported back at the board")
@@ -397,7 +397,7 @@ func _tournament() -> void:
 	for round: int in range(3):
 		opponents.append(str(game.battle.npc))
 		game.battle.hp = 1
-		game.use_skill("sword")
+		_sword(game)
 	check(opponents.size() == 3 and game.battle.is_empty(), "three rounds fought")
 	check(int(game.player.stones) == stones + 100 and game.player.items.keys().any(func(item_id: String) -> bool: return item_id.begins_with("j:")), "the champion wins stones and a slip")
 	check(game.chronicle.entries.any(func(entry: Dictionary) -> bool: return entry.major and entry.id == "tournament_champion"), "the victory is a life milestone")
@@ -511,3 +511,12 @@ func _meetings_and_saves() -> void:
 	twin.restore(JSON.parse_string(JSON.stringify(old.snapshot())))
 	var someone: String = old.living_people().filter(func(person_id: String) -> bool: return old.is_generated(person_id))[0]
 	check(twin.person(someone).name == old.person(someone).name, "the same world regenerates the same people after loading")
+
+## Casts 御剑诀 with the orbs it asks (金×1、任意×1): a journey begins with it only on a metal root.
+func _sword(game) -> String:
+	if not "sword" in game.player.learned:
+		game.player.learned.append("sword")
+	if not "sword" in game.player.arts:
+		game.player.arts.append("sword")
+	game.battle.orbs.append_array(["metal", "metal"])
+	return game.use_skill("sword")

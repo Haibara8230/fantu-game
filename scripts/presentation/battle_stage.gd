@@ -24,8 +24,6 @@ signal sound(kind: String)
 signal hit_resolved(enemy_target: bool, amount: int, hp_after: int)
 var art: Dictionary = {}
 var skills: Dictionary = {}
-# The five elements (data/techniques.json), for 五行轮转's banner.
-var elements: Dictionary = {}
 var sects: Dictionary = {}
 var profiles: Dictionary = {}
 var recoil_handle: Tween
@@ -89,7 +87,6 @@ func configure(snapshot: Dictionary, enemy_definition: Dictionary) -> void:
 	for id: String in definitions.enemies:
 		enemy_names[id] = str(definitions.enemies[id].name)
 		enemy_max_hps[id] = int(definitions.enemies[id].hp)
-	elements = JSON.parse_string(FileAccess.get_file_as_string("res://data/techniques.json")).elements
 	sects = definitions.sects
 	profiles = JSON.parse_string(FileAccess.get_file_as_string("res://data/vfx.json"))
 	hero_sect = snapshot.player.get("sect", "wanderer")
@@ -376,11 +373,20 @@ func play(events: Array[Dictionary]) -> void:
 				var back := create_tween()
 				back.tween_property(enemy, "modulate:a", 1.0, 0.25)
 				await _pause(0.5)
-			"chain":
-				# 五行轮转: the art just cast was born of the last one, and an orb comes of it.
-				banner = "五行轮转 · %s生%s" % [elements.get(str(event.from), {}).get("name", ""), elements.get(str(event.to), {}).get("name", "")]
+			"combo":
+				# 连击: the art followed one of the element its combo names.
+				banner = "连击 · %s" % str(event.name)
 				_emit_cue("chain")
-				await _pause(0.45)
+				await _pause(0.4)
+			"lead":
+				# 遁速: the quicker opponent moves first.
+				banner = "对手遁速更快，抢先出手"
+				await _pause(0.6)
+			"spirit":
+				# 印 and 聚气: qi turned or gathered, no blow.
+				hero.set_pose("cast")
+				banner = str(event.get("name", ""))
+				await _pause(0.35)
 			"end":
 				banner = {"win": "斗法获胜", "lose": "斗法落败", "flee": "收势撤离"}.get(event.result, "")
 				if event.result == "win":

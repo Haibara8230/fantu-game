@@ -260,10 +260,12 @@ static func restore(s, data: Variant) -> bool:
 			var orbs: Variant = saved_battle.get(orbs_key, [])
 			if not orbs is Array or orbs.size() > 60 or orbs.any(func(orb: Variant) -> bool: return not content.technique_data.elements.has(orb)):
 				return false
-		var chain: Variant = saved_battle.get("chain", "")
-		if not chain is String or (not chain.is_empty() and not content.technique_data.elements.has(chain)):
-			return false
-		for count_key: String in ["shield", "foe_shield", "pills", "talismans", "released", "target", "sword_streak", "soul_turn", "dispel", "opening_percent", "guarded_turns"]:
+		# The element of the art cast last, for 连击 ("chain" in duels saved before it, read the same way).
+		for last_key: String in ["last", "chain"]:
+			var last: Variant = saved_battle.get(last_key, "")
+			if not last is String or (not last.is_empty() and content.element_info(last).is_empty()):
+				return false
+		for count_key: String in ["shield", "foe_shield", "pills", "talismans", "released", "target", "sword_streak", "soul_turn", "dispel", "opening_percent", "guarded_turns", "next_draw"]:
 			if not _whole_nonnegative(saved_battle.get(count_key, 0)):
 				return false
 		if int(saved_battle.get("opening_percent", 100)) > 100:
@@ -271,7 +273,7 @@ static func restore(s, data: Variant) -> bool:
 		var intent: Variant = saved_battle.get("intent", [])
 		if not intent is Array or intent.any(func(entry: Variant) -> bool: return not entry is Dictionary or not entry.get("kind") is String or not entry.get("name") is String or (entry.has("art") and content.technique(str(entry.art)).is_empty()) or (entry.has("move") and not entry.move in move_ids) or (entry.has("landing") and not entry.landing is bool) or ["min", "max", "amount", "hits"].any(func(key: String) -> bool: return entry.has(key) and not _whole_nonnegative(entry[key]))):
 			return false
-		if foe.has("arts") and (not foe.arts is Array or foe.arts.any(func(art: Variant) -> bool: return not art is String or content.technique(art).is_empty()) or not (foe.get("power") is float or foe.get("power") is int) or not _whole_signed(foe.get("bonus")) or not content.technique_data.elements.has(foe.get("element", ""))):
+		if foe.has("arts") and (not foe.arts is Array or foe.arts.any(func(art: Variant) -> bool: return not art is String or content.technique(art).is_empty()) or not (foe.get("power") is float or foe.get("power") is int) or not _whole_signed(foe.get("bonus")) or content.element_info(str(foe.get("element", ""))).is_empty()):
 			return false
 		if saved_battle.has("npc") and (not saved_battle.npc is String or not s.is_person(saved_battle.npc)):
 			return false
@@ -404,7 +406,11 @@ static func restore(s, data: Variant) -> bool:
 		fresh_hand = not battle.has("orbs")
 		for member: Dictionary in battle.get("pack", []):
 			member.hp = int(member.hp)
-		for count_key: String in ["shield", "foe_shield", "pills", "talismans", "released", "target", "sword_streak", "soul_turn", "dispel", "opening_percent", "guarded_turns"]:
+		# 连击 reads the art cast last; a duel saved before kept it as "chain".
+		if battle.has("chain"):
+			battle.last = str(battle.get("last", battle.chain))
+			battle.erase("chain")
+		for count_key: String in ["shield", "foe_shield", "pills", "talismans", "released", "target", "sword_streak", "soul_turn", "dispel", "opening_percent", "guarded_turns", "next_draw"]:
 			if battle.has(count_key):
 				battle[count_key] = int(battle[count_key])
 		# JSON brings every number back as a float; the whole ones are whole again.
@@ -889,6 +895,13 @@ static func _valid_loadout(content, saved_player: Dictionary) -> Dictionary:
 			if not skill_id in learned:
 				learned.append(skill_id)
 			arts.append(skill_id)
+	# Journeys from before the 气 arts know them too: they cast from any element's qi, so a hand drawn
+	# from one spirit root alone is never left without an art. They take free slots.
+	for skill_id: String in content.sects.wanderer.skills:
+		if not skill_id in learned:
+			learned.append(skill_id)
+			if arts.size() < int(content.rules.art_slots):
+				arts.append(skill_id)
 	# 宝物 instances (optional: journeys before 祭炼 hold none). Retired types are dropped.
 	var saved_gear: Variant = saved_player.get("gear", {})
 	var serial: Variant = saved_player.get("gear_serial", 0)

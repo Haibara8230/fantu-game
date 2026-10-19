@@ -155,8 +155,8 @@ func _random_streams() -> void:
 	var a: Array = []
 	var b: Array = []
 	for i: int in range(3):
-		gatherer.use_skill("sword")
-		fighter.use_skill("sword")
+		_sword(gatherer)
+		_sword(fighter)
 		a.append(gatherer.combat_events.map(func(event: Dictionary) -> int: return int(event.get("amount", 0))))
 		b.append(fighter.combat_events.map(func(event: Dictionary) -> int: return int(event.get("amount", 0))))
 	check(a == b, "world-side draws do not change duel results")
@@ -193,3 +193,12 @@ func _time_writes_are_centralized() -> void:
 	var body := session_text.substr(start, session_text.find("\nfunc ", start + 1) - start)
 	var inside := pattern.search_all(body).size()
 	check(offenders.is_empty() and inside > 0 and pattern.search_all(session_text).size() == inside, "world time changes only through advance_days: %s" % ", ".join(offenders))
+
+## Casts 御剑诀 with the orbs it asks (金×1、任意×1): a journey begins with it only on a metal root.
+func _sword(game) -> String:
+	if not "sword" in game.player.learned:
+		game.player.learned.append("sword")
+	if not "sword" in game.player.arts:
+		game.player.arts.append("sword")
+	game.battle.orbs.append_array(["metal", "metal"])
+	return game.use_skill("sword")

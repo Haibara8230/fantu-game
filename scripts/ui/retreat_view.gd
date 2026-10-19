@@ -95,7 +95,7 @@ static func render_insight(ui) -> void:
 		var taught: Dictionary = session.content.technique(str(manual.teaches))
 		var reason: String = session.learn_block(str(manual.teaches))
 		var days: int = session.study_days(taught)
-		var about := "%s · %s · %s" % [taught.tier_name, "心法" if taught.slot == "method" else "神通", session.content.technique_data.elements[taught.element].name]
+		var about := "%s · %s · %s" % [taught.tier_name, "心法" if taught.slot == "method" else "神通", session.content.element_info(str(taught.element)).get("name", "")]
 		_insight_row(ui, right, ArtLibrary.item_icon(session.content, manual), "%s\n%s" % [manual.name, about], ui.grade_color(taught), "领悟 · %d 日" % days, reason, str(taught.description),
 			func() -> void: ui.start_insight(func() -> String: return session.study_manual(item_id), str(taught.name)))
 	var home: String = session.Loadout.home_lineage(session)

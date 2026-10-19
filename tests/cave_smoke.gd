@@ -62,7 +62,7 @@ func _dihuo() -> void:
 	game.enter_room("dihuo", "nest")
 	check(game.battle.get("enemy_id", "") == "huo_xi", "a 火蜥 guards its nest")
 	game.battle.hp = 1
-	game.battle.orbs = ["water"]
+	game.battle.orbs = ["water", "water", "water"]
 	for skill_id: String in game.player.arts:
 		if game.battle.is_empty():
 			break
@@ -224,7 +224,7 @@ func _guardian() -> void:
 	check(game.challenge_guardian("ruin", "armory").contains("斗法") and game.battle.get("enemy_id", "") == "den_wolf", "it can be faced again")
 	game.battle.hp = 1
 	game.battle.orbs = ["metal"]
-	game.use_skill("sword")
+	_sword(game)
 	check(game.battle.is_empty() and game.has_flag("ruin_den_cleared"), "beaten, it falls for good")
 	check(game.Caves.reachable(game, "ruin", "sealed") and game.Caves.loot_waits(game, "ruin", "armory"), "the way on opens and its room's things wait")
 	var items: int = game.player.items.size()
@@ -274,7 +274,7 @@ func _chenxia() -> void:
 	check(game.battle.get("enemy_id", "") == "jian_kui", "a sword puppet guards the tomb")
 	game.battle.hp = 1
 	game.battle.orbs = ["metal"]
-	game.use_skill("sword")
+	_sword(game)
 	check(game.has_flag("chenxia_puppet_down") and game.Caves.reachable(game, "chenxia", "library"), "fallen, the way to the library opens")
 	game.world.day = calendar.to_day(151, 2, 30)
 	# A storyline's 传音 (南行) may end a stay on its first day; stay on until the day has passed.
@@ -325,3 +325,12 @@ func _button(text_part: String) -> Button:
 		if button.text.contains(text_part):
 			return button
 	return null
+
+## Casts 御剑诀 with the orbs it asks (金×1、任意×1): a journey begins with it only on a metal root.
+func _sword(game) -> String:
+	if not "sword" in game.player.learned:
+		game.player.learned.append("sword")
+	if not "sword" in game.player.arts:
+		game.player.arts.append("sword")
+	game.battle.orbs.append_array(["metal", "metal"])
+	return game.use_skill("sword")

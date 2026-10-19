@@ -1,8 +1,9 @@
 extends RefCounted
 ## Duel screen: the stage fills the screen, with the opponent's intent and both sides' shields and
 ## lingering effects laid over its top corners. Along the bottom a dock: the turn, the hand of qi orbs
-## (click an element to 相生 two of its orbs into one of the next) and the pills that may be taken; below,
-## the active arts with their keys, orb costs and 克制, 结束回合, 守御, retreat and the duel's record.
+## (click an element to let one of its orbs go; over the cap, that must be done before the turn ends) and
+## the pills that may be taken; below, the active arts with their keys, orb costs and 连击, 结束回合, 守御,
+## retreat and the duel's record.
 const BattleStage = preload("res://scripts/presentation/battle_stage.gd")
 const PlaceView = preload("res://scripts/ui/place_view.gd")
 const Settings = preload("res://scripts/ui/settings.gd")
@@ -61,14 +62,15 @@ static func render(ui) -> void:
 	for skill_id: String in session.active_skills():
 		arts.add_child(_art_button(ui, skill_id, index))
 		index += 1
-	var end: Button = ui.button("结束回合\n" + Settings.key_name(ui, "end_turn"), func() -> void: ui.battle_action("end_turn"), "把回合交给对手。回合末手中灵气超过 %d 颗的部分会散去。" % session.Combat.hand_cap(session))
+	var over: int = session.Combat.over_cap(session)
+	var end: Button = ui.button(("结束回合\n" + Settings.key_name(ui, "end_turn")) if over == 0 else "结束回合\n先散去 %d 颗" % over, func() -> void: ui.battle_action("end_turn"), "把回合交给对手。回合末手中灵气最多留 %d 颗，多的要先点选散去。" % session.Combat.hand_cap(session))
 	ui.tint(end, ui.GOLD)
 	end.custom_minimum_size = Vector2(104, 62)
 	row.add_child(end)
 	var guard: Button = ui.button("守御\n" + Settings.key_name(ui, "guard"), func() -> void: ui.battle_action("guard"), "凝神守御并结束回合：对手这一回合的出手减半，下回合多抽 %d 颗灵气。" % int(session.content.rules.duel.guard_orbs))
 	guard.custom_minimum_size = Vector2(84, 62)
 	row.add_child(guard)
-	var quick: Button = ui.button("速战", func() -> void: ui.battle_action("quick"), "按简单的出法自动打完这一场：气血低时疗伤，否则出最强的神通，灵气闲着便相生。对付弱敌省事，强敌还是亲手来。")
+	var quick: Button = ui.button("速战", func() -> void: ui.battle_action("quick"), "按简单的出法自动打完这一场：气血低时疗伤，否则出最强的神通（能连击的优先），回合末多余的灵气自动散去。对付弱敌省事，强敌还是亲手来。")
 	quick.custom_minimum_size = Vector2(72, 62)
 	row.add_child(quick)
 	# The lesser controls (撤离, 祭出, targets, 求援, 记录, 探查) two abreast, so the dock stays low.
@@ -155,7 +157,7 @@ static func _small(target: Button) -> void:
 	target.add_theme_font_size_override("font_size", 14)
 	target.size_flags_vertical = Control.SIZE_EXPAND_FILL
 
-## The turn, the qi orbs in hand by element (each a 相生 button) and the pills for the duel.
+## The turn, the qi orbs in hand by element (each lets one orb go) and the pills for the duel.
 static func _hand_row(ui) -> HBoxContainer:
 	var session = ui.session
 	var b: Dictionary = session.battle
@@ -167,22 +169,23 @@ static func _hand_row(ui) -> HBoxContainer:
 	var orbs: Array = b.get("orbs", [])
 	var cap: int = session.Combat.hand_cap(session)
 	var count: Label = ui.label("灵气 %d / %d" % [orbs.size(), cap], 15, Color("#ffb08a") if orbs.size() > cap else Color("#8fd0d2"))
-	count.tooltip_text = "回合末最多留 %d 颗，多的散去（由灵力上限而定）。" % cap
+	count.tooltip_text = "每回合吸收 %d 颗灵气，按灵根而来；回合末最多留 %d 颗，多的须点选散去。" % [session.Combat.draw_count(session), cap]
 	count.mouse_filter = Control.MOUSE_FILTER_PASS
 	row.add_child(count)
 	var elements: Dictionary = session.content.technique_data.elements
 	var duel: Dictionary = session.content.rules.duel
-	var need := int(duel.convert)
+	var over: int = session.Combat.over_cap(session)
 	for element: String in elements:
 		var held := orbs.count(element)
 		if held == 0:
 			continue
-		var made := str(duel.generates[element])
-		var chip: Button = ui.button("×%d" % held, func() -> void: ui.battle_action("convert:" + element), "%s灵气 %d 颗。点击以两颗相生为一颗%s灵气（%s生%s，不占回合）。" % [elements[element].name, held, elements[made].name, elements[element].name, elements[made].name])
+		var chip: Button = ui.button("×%d" % held, func() -> void: ui.battle_action("discard:" + element), "%s灵气 %d 颗。%s" % [elements[element].name, held, "超出上限：点击散去一颗。" if over > 0 else "点击散去一颗（不占回合）。"])
 		_orb_style(ui, chip, Color(elements[element].color))
 		# The element's own orb (assets/art/ui/orbs) says which it is; its name is in the tooltip.
 		ui.with_icon(chip, ArtLibrary.ui_icon("orbs/" + element), 24)
-		chip.disabled = held < need
+		# Over the cap the hand glows: choosing what to let go comes first.
+		if over > 0:
+			chip.add_theme_stylebox_override("normal", ui.style(Color(elements[element].color).darkened(0.5), Color("#ffb08a"), 4))
 		row.add_child(chip)
 	if orbs.is_empty():
 		row.add_child(ui.label("手中无灵气", 14, ui.MUTED))
@@ -218,27 +221,26 @@ static func _orb_style(ui, chip: Button, color: Color) -> void:
 	chip.add_theme_stylebox_override("pressed", ui.style(color.darkened(0.3), color.lightened(0.3), 4))
 	chip.add_theme_stylebox_override("disabled", ui.style(color.darkened(0.62), color.darkened(0.2), 4))
 	ui.tint(chip, color.lightened(0.15))
-	# Short of a pair the chip still reads clearly: it only cannot 相生 yet.
 	chip.add_theme_color_override("font_disabled_color", color)
 
 static func _art_button(ui, skill_id: String, index: int) -> Button:
 	var session = ui.session
 	var skill: Dictionary = session.held_technique(skill_id)
-	var cost_text: String = session.Arsenal.cost_text(session.content, skill.cost)
-	var counter: float = session.Combat.counter_multiplier(session, str(skill.element))
-	var counter_text := ""
-	if skill.kind == "attack" and counter > 1.0:
-		counter_text = " · 克 ×%s" % _number(counter)
-	elif skill.kind == "attack" and counter < 1.0:
-		counter_text = " · 被克 ×%s" % _number(counter)
-	var tooltip := "%s · %s\n%s%s" % [skill.tier_name, session.content.technique_data.elements[skill.element].name, skill.description, _realm_bonus_text(session)]
-	if not counter_text.is_empty():
-		tooltip += "\n对手属%s：%s伤害 ×%s。" % [session.content.technique_data.elements[session.Combat.foe_element(session)].name, "克制，" if counter > 1.0 else "被克，", _number(counter)]
-	var cast: Button = ui.button("[%s] %s\n%s%s" % [Settings.key_name(ui, "skill_%d" % index), skill.name, cost_text, counter_text], func() -> void: ui.skill(skill_id), tooltip)
+	var cost_text: String = session.Arsenal.cost_short(session.content, skill.cost)
+	# 连击 ready: the art cast last was of the element this one's combo names.
+	var combo: bool = session.Combat.combo_holds(session, skill)
+	var tooltip := "%s · %s\n耗灵气：%s\n%s%s" % [skill.tier_name, session.content.element_info(str(skill.element)).get("name", ""), session.Arsenal.cost_text(session.content, skill.cost), skill.description, _realm_bonus_text(session)]
+	if combo:
+		tooltip += "\n连击已就绪。"
+	var cast: Button = ui.button("[%s] %s\n%s%s" % [Settings.key_name(ui, "skill_%d" % index), skill.name, cost_text, " · 连击" if combo else ""], func() -> void: ui.skill(skill_id), tooltip)
 	ui.tint(cast, ui.grade_color(skill))
 	ui.with_icon(cast, ArtLibrary.technique_icon(skill), 44)
 	cast.disabled = not session.Combat.affordable(session.battle.get("orbs", []), skill.cost)
-	cast.custom_minimum_size = Vector2(124, 62)
+	# Six arts share the dock: a long name is cut short on the button and read whole in the tooltip.
+	cast.custom_minimum_size = Vector2(96, 62)
+	cast.clip_text = true
+	cast.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	cast.add_theme_font_size_override("font_size", 15)
 	cast.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	return cast
 
@@ -256,6 +258,8 @@ static func _corners(ui, stage: Control) -> void:
 		left.set_anchors_and_offsets_preset(Control.PRESET_TOP_LEFT)
 		left.position = Vector2(16, 60)
 	var lines: Array[String] = ["对手下一回合：" + intent_text(session)]
+	# 遁速: the quicker moves first and gets away more readily.
+	lines.append("遁速 · 你 %d / 对手 %d%s" % [session.Combat.speed(session), session.Combat.foe_speed(session), "（对手抢得先手）" if bool(b.get("foe_led", false)) and int(b.turn) == 1 else ""])
 	# 死斗: lost, the life ends (a save from its start is kept).
 	if bool(b.get("deadly", false)):
 		lines.append("死斗：落败即身死（已留劫前存档）")

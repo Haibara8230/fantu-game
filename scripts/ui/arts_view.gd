@@ -81,7 +81,7 @@ static func _page(ui, slot_kind: String, title: String, in_use: Array, limit: in
 			continue
 		shown += 1
 		var active: bool = technique_id in in_use
-		var card: Button = ui.button("%s%s\n%s · %s · 第 %d / %d 层" % [t.name, "（运转中）" if active else "", t.tier_name, session.content.technique_data.elements[t.element].name, int(t.layer), int(t.layers)], func() -> void:
+		var card: Button = ui.button("%s%s\n%s · %s · 第 %d / %d 层" % [t.name, "（运转中）" if active else "", t.tier_name, session.content.element_info(str(t.element)).get("name", ""), int(t.layer), int(t.layers)], func() -> void:
 			if active:
 				ui.run(func() -> String: return session.unequip_technique(technique_id))
 			else:

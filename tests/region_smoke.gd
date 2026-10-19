@@ -354,7 +354,7 @@ func _ruin() -> void:
 	game.interact("squatter", "fight")
 	check(game.battle.get("npc", "") == "squatter", "the duel remembers who it is with")
 	game.battle.hp = 1
-	game.use_skill("sword")
+	_sword(game)
 	check(game.has_flag("ruin_cleared") and _texts(game).contains("石室从此归于寂静"), "defeating the occupant clears the ruin")
 	check(not "squatter" in game.present_npcs(), "the occupant is gone")
 	var before := int(game.player.stones) + int(game.herb_count()) + int(game.item_count("foundation_pill"))
@@ -466,7 +466,7 @@ func _people() -> void:
 	road.interact("rogue", "fight")
 	check(road.battle.get("npc", "") == "rogue" and road.battle.opponent_sect == "chixiao", "fighting the rogue uses his own arts")
 	road.battle.hp = 1
-	road.use_skill("sword")
+	_sword(road)
 	check(road.battle.is_empty() and road.npc_location("rogue") == "", "a defeated rogue leaves")
 	# The wounded cultivator appears in his window and leaves once healed.
 	var forest := _game(16)
@@ -547,3 +547,12 @@ func _art() -> void:
 	check(ArtLibrary.texture(ArtLibrary.map_path()) == null or ArtLibrary.texture(ArtLibrary.map_path()) is Texture2D, "map art optional")
 	check(ArtLibrary.texture("res://assets/art/locations/__missing__.png") == null, "missing art falls back to placeholders")
 	check(ArtLibrary.scene_path("sect", "chamber") == "res://assets/art/scenes/sect_chamber.png", "scene art path convention")
+
+## Casts 御剑诀 with the orbs it asks (金×1、任意×1): a journey begins with it only on a metal root.
+func _sword(game) -> String:
+	if not "sword" in game.player.learned:
+		game.player.learned.append("sword")
+	if not "sword" in game.player.arts:
+		game.player.arts.append("sword")
+	game.battle.orbs.append_array(["metal", "metal"])
+	return game.use_skill("sword")

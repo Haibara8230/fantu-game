@@ -81,6 +81,9 @@ static func technique_kind(t: Dictionary) -> String:
 			return "mend"
 		"guard":
 			return "ward"
+		# 印 and 聚气 turn and gather qi: the 凝神 figure.
+		"spirit":
+			return "focus"
 	if int(t.get("hits", 1)) > 1:
 		return "barrage"
 	var orbs := 0

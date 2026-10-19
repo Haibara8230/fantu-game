@@ -35,6 +35,7 @@ func _initialize() -> void:
 	_terms_and_schools()
 	_demon_and_tribulation()
 	_deadly_and_secrets()
+	_speed()
 	print("DUEL MOVES: %d checks, %d failures" % [checks, failures])
 	quit(0 if failures == 0 else 1)
 
@@ -711,11 +712,10 @@ func _terms_and_schools() -> void:
 	Combat._hurt_player(body, int(body.player.max_hp) / 5, 1.0, false, {"style": "enemy"})
 	check(bool(body.battle.get("body_ready", false)) and is_equal_approx(Combat._school_force(body, "fire"), 1.25) and not body.battle.has("body_ready"), "a heavy blow taken readies 反震, once")
 	body.battle.enemy_id = "wolf"
-	var overcome := ""
-	for element: String in body.content.technique_data.elements:
-		if str(body.Combat.rules(body).overcomes.get("metal", "")) == element:
-			overcome = element
-	check(is_equal_approx(Combat.counter_multiplier(body, overcome), 0.9), "being overcome costs a 体修 less")
+	body.battle.shield = 0
+	var sturdy_from := int(body.player.hp)
+	Combat._hurt_player(body, 50, 1.0, false, {"style": "enemy"})
+	check(sturdy_from - int(body.player.hp) == 45, "a 体修's body takes every blow a tenth lighter")
 	var soul := _duel("wolf", "bite", 1)
 	soul.player.methods = [soul.Arsenal.technique_id("focus", "water", 2, [], 0)]
 	soul.battle.orbs = ["metal", "metal", "wood", "wood", "fire", "fire", "water", "earth"]
@@ -876,3 +876,16 @@ func _saves() -> void:
 	var broken: Dictionary = game.snapshot()
 	broken.battle.charged = "dragon_breath"
 	check(not Session.new().restore(JSON.parse_string(JSON.stringify(broken))), "a wound-up move the opponent does not know is refused")
+
+## 遁速: the quicker side moves first, and the readier one gets away; a lead strike never fells the
+## player, so whoever starts a duel finds it still open.
+func _speed() -> void:
+	var even := _duel("wolf", "", 0)
+	check(even.Combat.speed(even) == even.Combat.foe_speed(even) and not bool(even.battle.get("foe_led", false)) and even.battle.orbs.size() == 5, "at an even 遁速 the player moves first, with a hand of five")
+	check(is_equal_approx(even.Combat.flee_chance(even), float(even.content.rules.duel.flee)), "and gets away four times in five")
+	var slow := _duel("wolf", "", 0)
+	slow.battle.clear()
+	slow.player.hp = 1
+	slow.Combat.begin_battle(slow, "mo_xiu", "event")
+	check(bool(slow.battle.get("foe_led", false)) and not slow.battle.is_empty() and int(slow.player.hp) == 1 and int(slow.battle.turn) == 1, "a quicker foe strikes first, but its opening cannot fell the player")
+	check(slow.battle.orbs.size() >= 5 and slow.Combat.flee_chance(slow) < float(slow.content.rules.duel.flee), "the hand comes after its move; getting away is harder")

@@ -84,6 +84,8 @@ static func technique(content, id: String, layer: int = 0) -> Dictionary:
 		for key: String in ["pierce", "lifesteal", "draw", "renew"]:
 			if effect.has(key):
 				result[key] = effect[key]
+		if archetype.has("combo"):
+			result.combo = _combo(content, archetype.combo, parts[2])
 		if effect.has("burn"):
 			result.burn = [int(round(float(effect.burn[0]) * power)), int(effect.burn[1])]
 		for lingering: String in ["weaken", "sunder", "slow"]:
@@ -132,9 +134,14 @@ static func _handwritten(content, id: String, layer: int = 0) -> Dictionary:
 	for lingering: String in ["burn", "weaken", "sunder", "slow"]:
 		if skill.has(lingering):
 			result[lingering] = skill[lingering].duplicate()
+	for key: String in ["combo", "absorb"]:
+		if skill.has(key):
+			result[key] = skill[key].duplicate()
+	if skill.has("gather"):
+		result.gather = int(skill.gather)
 	if result.has("burn"):
 		result.burn = [maxi(1, int(round(float(result.burn[0]) * share))), int(result.burn[1])]
-	result.description = str(skill.description) + _layered_numbers(result) + "耗灵气：%s。" % cost_text(content, skill.cost)
+	result.description = str(skill.description) + _layered_numbers(result) + "耗灵气：%s。" % cost_text(content, skill.cost) + combo_text(content, result)
 	return result
 
 ## The handwritten text names the art's full numbers; below full layers a line says what it does now.
@@ -174,32 +181,71 @@ static func _cost(template: Dictionary, element: String, thrift: int) -> Diction
 			total += int(cost[key])
 		if total <= 1:
 			break
-		var dropped := "any" if cost.has("any") else element
+		var dropped := "any" if cost.has("any") else ("same" if cost.has("same") else element)
 		cost[dropped] = int(cost[dropped]) - 1
 		if int(cost[dropped]) <= 0:
 			cost.erase(dropped)
 	return cost
 
-## "金×2、任意×1".
+## "金×2、同×2、任意×1": 同 is that many orbs of one element, whichever; 任意 any orbs at all.
 static func cost_text(content, cost: Dictionary) -> String:
 	var parts: Array[String] = []
 	for key: String in content.technique_data.elements:
 		if cost.has(key):
 			parts.append("%s×%d" % [content.technique_data.elements[key].name, int(cost[key])])
+	if cost.has("same"):
+		parts.append("同×%d" % int(cost.same))
 	if cost.has("any"):
 		parts.append("任意×%d" % int(cost.any))
 	return "、".join(parts)
+
+## The same, short enough for a duel button: "金1·同2·任1".
+static func cost_short(content, cost: Dictionary) -> String:
+	var parts: Array[String] = []
+	for key: String in content.technique_data.elements:
+		if cost.has(key):
+			parts.append("%s%d" % [content.technique_data.elements[key].name, int(cost[key])])
+	if cost.has("same"):
+		parts.append("同%d" % int(cost.same))
+	if cost.has("any"):
+		parts.append("任%d" % int(cost.any))
+	return "·".join(parts)
+
+## An archetype's 连击 for an element: "source" becomes the element that gives rise to it (土生金: a
+## metal art follows an earth one), "same" the element itself.
+static func _combo(content, template: Dictionary, element: String) -> Dictionary:
+	var combo := template.duplicate()
+	if str(template.after) == "same":
+		combo.after = element
+	elif str(template.after) == "source":
+		for source: String in content.rules.duel.generates:
+			if str(content.rules.duel.generates[source]) == element:
+				combo.after = source
+	return combo
+
+## "连击：上一道神通为土系时，伤害 +30%。"
+static func combo_text(content, t: Dictionary) -> String:
+	if not t.has("combo"):
+		return ""
+	var combo: Dictionary = t.combo
+	var effects: Array[String] = []
+	if combo.has("bonus"):
+		var word: String = {"heal": "回复", "guard": "护盾", "spirit": "效果"}.get(str(t.get("kind", "attack")), "伤害")
+		effects.append("%s +%d%%" % [word, int(round(float(combo.bonus) * 100.0))])
+	if combo.has("absorb"):
+		effects.append("多吸收 %d 颗灵气" % int(combo.absorb))
+	return "连击：上一道神通为%s系时，%s。" % [content.element_info(str(combo.after)).get("name", ""), "，".join(effects)]
 
 static func _scaled(key: String, value: float) -> Variant:
 	return int(round(value)) if key in ["max_hp", "max_qi", "attack", "orb_weight"] else snappedf(value, 0.001)
 
 ## The attribute line shown beside a technique's name, never inside it: "黄阶 · 金 · 神通".
 static func technique_tag(content, t: Dictionary) -> String:
-	return "%s · %s · %s" % [t.tier_name, content.technique_data.elements[t.element].name, "心法" if t.slot == "method" else "神通"]
+	return "%s · %s · %s" % [t.tier_name, content.element_info(str(t.element)).get("name", ""), "心法" if t.slot == "method" else "神通"]
 
 static func describe_technique(content, t: Dictionary) -> String:
 	var lines: Array[String] = []
-	var element_name: String = content.technique_data.elements[t.element].name
+	var element_name: String = content.element_info(str(t.element)).get("name", "")
 	if t.slot == "art":
 		match str(t.kind):
 			"attack":
@@ -209,6 +255,7 @@ static func describe_technique(content, t: Dictionary) -> String:
 			"guard":
 				lines.append("结成 %d 点护盾，先替你挡下伤害，至对手下一回合结束。" % t.shield)
 		lines.append("耗灵气：%s。" % cost_text(content, t.cost))
+		lines.append(combo_text(content, t))
 	else:
 		var names := {"cultivation": "修炼速度 +%d%%", "max_hp": "气血上限 +%d", "max_qi": "灵力上限 +%d", "element_damage": element_name + "属性伤害 +%d%%", "orb_weight": "斗法中" + element_name + "灵气更易抽到 +%d"}
 		var parts: Array[String] = []

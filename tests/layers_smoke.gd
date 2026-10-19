@@ -35,6 +35,10 @@ func _game(roots: Array = ["metal", "wood", "fire"]) -> Session:
 	var game := Session.new()
 	game.encounters_enabled = false
 	game.new_game("层数", 7, roots)
+	# 回春诀 is the art these tests study and practise; a journey no longer begins with it.
+	game.player.learned.append("wood")
+	game.player.arts.append("wood")
+	Layers.begin(game, "wood")
 	return game
 
 func _shares(content: Content) -> void:
@@ -42,7 +46,7 @@ func _shares(content: Content) -> void:
 	var full := Arsenal.technique(content, id)
 	var first := Arsenal.technique(content, id, 1)
 	check(int(full.layer) == 5 and int(full.layers) == 5 and int(first.layer) == 1, "a 黄阶 art has five layers; 0 reads it fully cultivated")
-	check(int(first.damage_max) < int(full.damage_max) and int(first.damage_max) == int(round(8.0 * 1.25 * 0.8)), "the first layer gives four fifths of the tier's power")
+	check(int(first.damage_max) < int(full.damage_max) and int(first.damage_max) == int(round(11.0 * 1.25 * 0.8)), "the first layer gives four fifths of the tier's power")
 	check(int(Arsenal.technique(content, "t:bolt:fire:1::0").damage_max) == int(first.damage_max), "the first layer of a 黄阶 art matches a 凡阶 art fully cultivated")
 	check(not first.has("burn") and Arsenal.technique(content, id, 3).has("burn"), "the 黄阶 affix unlocks at the third layer")
 	check(first.description.contains("第 3 层解封") and not full.description.contains("解封"), "a locked affix says where it unlocks")
@@ -101,6 +105,8 @@ func _practice() -> void:
 	# Casting in a duel and retreating are practice.
 	var fighter := _game()
 	fighter.start_battle("disciple")
+	fighter.player.learned.append("wood")
+	fighter.player.arts.append("wood")
 	fighter.battle.orbs = ["wood", "wood", "wood", "metal", "metal", "fire"]
 	fighter.use_skill("wood")
 	check(int(fighter.player.layers.wood.practice) == int(fighter.content.technique_data.layer_rule.cast_practice), "casting an art is practice toward its next layer")

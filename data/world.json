@@ -274,12 +274,13 @@
     "sword": {
       "name": "御剑诀",
       "element": "metal",
-      "cost": {"any": 1},
-      "description": "造成 6–8 点伤害。",
-      "damage_min": 6,
-      "damage_max": 8,
+      "cost": {"metal": 1, "any": 1},
+      "description": "造成 9–11 点伤害。",
+      "damage_min": 9,
+      "damage_max": 11,
       "kind": "attack",
-      "vfx": "sword"
+      "vfx": "sword",
+      "combo": {"after": "earth", "bonus": 0.3}
     },
     "fire": {
       "name": "离火术",
@@ -289,7 +290,8 @@
       "damage_min": 15,
       "damage_max": 19,
       "kind": "attack",
-      "vfx": "fire"
+      "vfx": "fire",
+      "combo": {"after": "wood", "bonus": 0.3}
     },
     "wood": {
       "name": "回春诀",
@@ -298,7 +300,8 @@
       "description": "恢复 20 点气血。",
       "kind": "heal",
       "vfx": "heal",
-      "heal": 20
+      "heal": 20,
+      "combo": {"after": "water", "bonus": 0.5}
     },
     "sword_rain": {
       "name": "三才剑阵",
@@ -309,7 +312,8 @@
       "damage_max": 30,
       "kind": "attack",
       "vfx": "sword_rain",
-      "hits": 3
+      "hits": 3,
+      "combo": {"after": "earth", "bonus": 0.3}
     },
     "sword_arc": {
       "name": "断月斩",
@@ -319,17 +323,19 @@
       "damage_min": 28,
       "damage_max": 34,
       "kind": "attack",
-      "vfx": "sword_arc"
+      "vfx": "sword_arc",
+      "combo": {"after": "earth", "bonus": 0.3}
     },
     "flame_bolt": {
       "name": "火萤诀",
       "element": "fire",
-      "cost": {"any": 1},
-      "description": "造成 6–8 点伤害。",
-      "damage_min": 6,
-      "damage_max": 8,
+      "cost": {"fire": 1, "any": 1},
+      "description": "造成 9–11 点伤害。",
+      "damage_min": 9,
+      "damage_max": 11,
       "kind": "attack",
-      "vfx": "flame_bolt"
+      "vfx": "flame_bolt",
+      "combo": {"after": "wood", "bonus": 0.3}
     },
     "fire_burst": {
       "name": "焚天印",
@@ -339,17 +345,19 @@
       "damage_min": 29,
       "damage_max": 35,
       "kind": "attack",
-      "vfx": "fire_burst"
+      "vfx": "fire_burst",
+      "combo": {"after": "wood", "bonus": 0.3}
     },
     "vine": {
       "name": "青藤刺",
       "element": "wood",
-      "cost": {"any": 1},
-      "description": "造成 6–8 点伤害。",
-      "damage_min": 6,
-      "damage_max": 8,
+      "cost": {"wood": 1, "any": 1},
+      "description": "造成 9–11 点伤害。",
+      "damage_min": 9,
+      "damage_max": 11,
       "kind": "attack",
-      "vfx": "vine"
+      "vfx": "vine",
+      "combo": {"after": "water", "bonus": 0.3}
     },
     "leaf_blade": {
       "name": "飞叶千刃",
@@ -360,17 +368,19 @@
       "damage_max": 30,
       "kind": "attack",
       "vfx": "leaf_blade",
-      "hits": 3
+      "hits": 3,
+      "combo": {"after": "water", "bonus": 0.3}
     },
     "water": {
       "name": "沧浪诀",
       "element": "water",
-      "cost": {"any": 1},
-      "description": "造成 6–8 点伤害。",
-      "damage_min": 6,
-      "damage_max": 8,
+      "cost": {"water": 1, "any": 1},
+      "description": "造成 9–11 点伤害。",
+      "damage_min": 9,
+      "damage_max": 11,
       "kind": "attack",
-      "vfx": "water"
+      "vfx": "water",
+      "combo": {"after": "metal", "bonus": 0.3}
     },
     "ice_lance": {
       "name": "寒霜刺",
@@ -381,7 +391,8 @@
       "damage_max": 30,
       "slow": [1, 2],
       "kind": "attack",
-      "vfx": "ice_lance"
+      "vfx": "ice_lance",
+      "combo": {"after": "metal", "bonus": 0.3}
     },
     "water_heal": {
       "name": "灵泉引",
@@ -390,17 +401,19 @@
       "description": "恢复 20 点气血。",
       "kind": "heal",
       "vfx": "water_heal",
-      "heal": 20
+      "heal": 20,
+      "combo": {"after": "metal", "bonus": 0.5}
     },
     "earth": {
       "name": "碎岩掌",
       "element": "earth",
-      "cost": {"any": 1},
-      "description": "造成 7–9 点伤害。",
-      "damage_min": 7,
-      "damage_max": 9,
+      "cost": {"earth": 1, "any": 1},
+      "description": "造成 10–12 点伤害。",
+      "damage_min": 10,
+      "damage_max": 12,
       "kind": "attack",
-      "vfx": "earth"
+      "vfx": "earth",
+      "combo": {"after": "fire", "bonus": 0.3}
     },
     "rock_spire": {
       "name": "地脉冲",
@@ -411,7 +424,8 @@
       "damage_max": 33,
       "sunder": [0.2, 2],
       "kind": "attack",
-      "vfx": "rock_spire"
+      "vfx": "rock_spire",
+      "combo": {"after": "fire", "bonus": 0.3}
     },
     "earth_guard": {
       "name": "玄岩护体",
@@ -420,7 +434,86 @@
       "description": "结成 20 点护盾，先替你挡下伤害，至对手下一回合结束。",
       "kind": "guard",
       "vfx": "earth_guard",
-      "shield": 20
+      "shield": 20,
+      "combo": {"after": "fire", "bonus": 0.3}
+    },
+    "qi_strike": {
+      "name": "驱物术",
+      "element": "none",
+      "cost": {"same": 2},
+      "description": "以灵力驱动外物击敌，造成 9–11 点伤害。两颗同属灵气即可施展，不拘五行。",
+      "damage_min": 9,
+      "damage_max": 11,
+      "kind": "attack",
+      "vfx": "sword"
+    },
+    "qi_shield": {
+      "name": "灵力护罩",
+      "element": "none",
+      "cost": {"same": 2},
+      "description": "结成 14 点护盾，至对手下一回合结束。两颗同属灵气即可施展。",
+      "kind": "guard",
+      "vfx": "earth_guard",
+      "shield": 14
+    },
+    "qi_gather": {
+      "name": "聚气",
+      "element": "none",
+      "cost": {"same": 2},
+      "description": "凝神聚气：下一回合多吸收 2 颗灵气。",
+      "kind": "spirit",
+      "vfx": "heal",
+      "gather": 2
+    },
+    "seal_metal": {
+      "name": "紫微印",
+      "element": "metal",
+      "cost": {"metal": 1, "any": 1},
+      "description": "金生水：吸收 1 颗水灵气。",
+      "kind": "spirit",
+      "vfx": "heal",
+      "absorb": ["water", 1],
+      "combo": {"after": "earth", "absorb": 1}
+    },
+    "seal_water": {
+      "name": "善水印",
+      "element": "water",
+      "cost": {"water": 1, "any": 1},
+      "description": "水生木：吸收 1 颗木灵气。",
+      "kind": "spirit",
+      "vfx": "heal",
+      "absorb": ["wood", 1],
+      "combo": {"after": "metal", "absorb": 1}
+    },
+    "seal_wood": {
+      "name": "上清印",
+      "element": "wood",
+      "cost": {"wood": 1, "any": 1},
+      "description": "木生火：吸收 1 颗火灵气。",
+      "kind": "spirit",
+      "vfx": "heal",
+      "absorb": ["fire", 1],
+      "combo": {"after": "water", "absorb": 1}
+    },
+    "seal_fire": {
+      "name": "火铃印",
+      "element": "fire",
+      "cost": {"fire": 1, "any": 1},
+      "description": "火生土：吸收 1 颗土灵气。",
+      "kind": "spirit",
+      "vfx": "heal",
+      "absorb": ["earth", 1],
+      "combo": {"after": "wood", "absorb": 1}
+    },
+    "seal_earth": {
+      "name": "三山印",
+      "element": "earth",
+      "cost": {"earth": 1, "any": 1},
+      "description": "土生金：吸收 1 颗金灵气。",
+      "kind": "spirit",
+      "vfx": "heal",
+      "absorb": ["metal", 1],
+      "combo": {"after": "fire", "absorb": 1}
     }
   },
   "enemies": {
@@ -716,17 +809,18 @@
     "market": {"categories": ["herb"], "spread": 0.15, "drop": 0.02, "floor": 0.7, "recover_per_day": 0.2},
     "flight": {"realm": 2, "days_percent": 50},
     "longevity": {"defy_chance": 0.35, "defy_mind_step": 0.01, "defy_least": 0.1, "defy_most": 0.6, "defy_years": 10, "defy_injury_days": 360},
-    "art_slots": 4,
+    "art_slots": 6,
     "method_slots": 2,
     "cultivate_options": [30, 90, 360],
     "wait_options": [1, 10],
     "inn_price": 5,
-    "duel": {"draw": [3, 4, 5, 6, 7], "first_extra": 1, "root_weight": 3, "other_weight": 1, "qi_per_orb": 5, "hand_least": 5, "convert": 2, "counter": 1.3, "countered": 0.75, "pills": 3, "talismans": 3, "flee": 0.8, "wound_hp": 0.75, "defeat_wound_days": 12, "defeat_injury_days": 10, "narrow_wound_days": 6,
+    "duel": {"draw": [5, 5, 5, 5, 5], "first_extra": 0, "root_weight": 1, "other_weight": 0, "foe_weights": [3, 1], "hand_least": 4, "speed": [10, 18, 28, 40, 54], "realm_power": [0.85, 0.95, 1.15, 1.3, 1.45], "pills": 3, "talismans": 3, "flee": 0.8, "wound_hp": 0.75, "defeat_wound_days": 12, "defeat_injury_days": 10, "narrow_wound_days": 6,
         "secret_arts": {
           "burn_blood": {"name": "燃血术", "min_realm": 1, "years": 3, "fervor": [0.5, 3], "text": "燃烧精血：折寿 3 年，此后三回合神通威力 +50%。"},
           "shatter": {"name": "解体术", "min_realm": 1, "injury_days": 60, "wound_days": 30, "orbs": 4, "fervor": [0.3, 2], "text": "自损经脉：落下内伤 60 日、外伤 30 日，立得 4 颗灵气，两回合神通威力 +30%。"},
           "offer_core": {"name": "祭丹术", "min_realm": 1, "items": ["yaodan_small", "yaodan"], "heal": 0.35, "shield": 30, "text": "以一枚妖丹为祭：回复三成半气血，结 30 点护盾。"}
-        }, "guard_orbs": 1, "foe_draw": [3, 4, 5, 6, 7], "generates": {"metal": "water", "water": "wood", "wood": "fire", "fire": "earth", "earth": "metal"}, "overcomes": {"metal": "wood", "wood": "earth", "earth": "water", "water": "fire", "fire": "metal"}},
+        }, "guard_orbs": 1, "foe_draw": [5, 5, 5, 5, 5], "generates": {"metal": "water", "water": "wood", "wood": "fire", "fire": "earth", "earth": "metal"},
+        "starter": {"metal": ["sword", "seal_metal"], "wood": ["vine", "seal_wood"], "water": ["water", "seal_water"], "fire": ["flame_bolt", "seal_fire"], "earth": ["earth", "seal_earth"]}},
     "lineage": {"home": "qingyun", "study_days": 30},
     "letters": {"kept": 60},
     "requests": {"period_days": 180, "chance": 0.25, "items": ["huichun_grass", "ninglu_grass", "chiyan_flower", "huiqi_pill", "liaoshang_pill"], "count": [1, 3], "favor": 12, "mind": 2, "reward_scale": 1.5},
@@ -821,11 +915,11 @@
       "name": "散修",
       "element": "mixed",
       "color": "#b6d8c9",
-      "description": "兼修御剑、离火与回春，保留初始传承。",
+      "description": "散修的根基功夫：驱物术、灵力护罩与聚气不拘五行，两颗同属灵气即可施展；另随本命灵根，会一门五行小术与一枚化灵之印。",
       "skills": [
-        "sword",
-        "fire",
-        "wood"
+        "qi_strike",
+        "qi_shield",
+        "qi_gather"
       ],
       "guard_vfx": "guard"
     },
