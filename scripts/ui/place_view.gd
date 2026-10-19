@@ -282,9 +282,10 @@ static func _spot_action(ui, grid: GridContainer, action: String) -> void:
 		"teach":
 			for technique_id: String in session.teachings():
 				var taught: Dictionary = session.content.technique(technique_id)
-				var reason: String = session.learn_block(technique_id)
+				var reason: String = session.slip_block(technique_id)
 				var learned_id := technique_id
-				var study: Button = ui.button("参悟%s  ·  %d 日" % [taught.name, session.study_days(taught)], func() -> void: ui.run(func() -> String: return session.learn_here(learned_id)), "%s\n%s" % [session.Arsenal.technique_tag(session.content, taught), reason if not reason.is_empty() else taught.description])
+				var about := "%s\n领回静室，在闭关卷轴的「领悟」页参悟（约 %d 日）。" % [taught.description, session.study_days(taught)]
+				var study: Button = ui.button("领取《%s》玉简" % taught.name, func() -> void: ui.run(func() -> String: return session.take_slip(learned_id)), "%s\n%s" % [session.Arsenal.technique_tag(session.content, taught), reason if not reason.is_empty() else about])
 				ui.tint(study, ui.grade_color(taught))
 				study.disabled = not reason.is_empty()
 				study.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -359,6 +360,5 @@ static func _home_lineage(ui, parent: VBoxContainer) -> void:
 	if str(session.player.get("sect", "wanderer")) == home:
 		row.add_child(ui.label("已研习：%s" % "、".join(arts), 15, ui.INK))
 	else:
-		var days := int(session.content.rules.lineage.study_days)
-		row.add_child(ui.button("研习本门传承 · %d 日" % days, func() -> void: ui.run(func() -> String: return session.choose_sect(home)), "换上%s三门神通" % "、".join(arts)))
+		row.add_child(ui.label("回本山静室，在闭关卷轴的「领悟」页研习（%d 日）" % int(session.content.rules.lineage.study_days), 15, ui.INK))
 	parent.add_child(ui.paragraph(str(sect.description)))

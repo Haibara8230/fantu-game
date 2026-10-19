@@ -163,7 +163,7 @@ static func _roots(ui, parent: VBoxContainer) -> void:
 	_heading(ui, parent, "根 骨")
 	_row(ui, parent, "灵根", session.root_title(), "灵根越少越纯，修炼越快；与灵根相合的心法利于突破")
 	var aptitude: Dictionary = session.aptitude()
-	_row(ui, parent, "资质", str(aptitude.name), "灵根与天赋合成资质，决定筑基的难易", Color(str(aptitude.color)))
+	_row(ui, parent, "资质", str(aptitude.name), "灵根与天赋合成资质，决定每一次突破的难易", Color(str(aptitude.color)))
 	parent.add_child(ui.label("先天天赋（鼠标停留可看效果）", 14, ui.MUTED))
 	parent.add_child(TalentCards.row(ui, session.content, session.talents_of()))
 

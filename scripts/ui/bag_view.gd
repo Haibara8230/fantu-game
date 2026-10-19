@@ -114,10 +114,9 @@ static func _item_row(ui, parent: VBoxContainer, item_id: String) -> void:
 		use_button.disabled = not reason.is_empty()
 		row.add_child(use_button)
 	if item.get("category", "") == "manual":
+		# 玉简 are studied in seclusion, on the retreat scroll's 领悟 page (retreat_view.gd).
 		var block: String = session.learn_block(item.teaches)
-		var study: Button = ui.button("参悟 · %d 日" % session.study_days(session.content.technique(item.teaches)), func() -> void: ui.run(func() -> String: return session.study_manual(item_id)), block)
-		study.disabled = not block.is_empty()
-		row.add_child(study)
+		row.add_child(ui.label("已习得" if item.teaches in session.player.learned else "回静室领悟 · %d 日" % session.study_days(session.content.technique(item.teaches)), 14, ui.MUTED if not block.is_empty() else ui.INK))
 	if item.get("category", "") == "equipment":
 		var usable: bool = session.Arsenal.wielded(session.content, item, int(session.player.realm)).usable
 		var wear: Button = ui.button("装备", func() -> void: ui.run(func() -> String: return session.equip_item(item_id)), "换上这件宝物" if usable else mastery)
@@ -128,7 +127,7 @@ static func _item_row(ui, parent: VBoxContainer, item_id: String) -> void:
 			row.add_child(refine)
 	var price: int = session.sell_price(item_id)
 	if price > 0:
-		row.add_child(ui.button("出售 · %d" % price, func() -> void: ui.run(func() -> String: return session.sell(item_id, 1)), "在此地出售一件"))
+		row.add_child(ui.button("出售 · %d" % price, func() -> void: ui.run(func() -> String: return session.sell(item_id, 1), false), "在此地出售一件"))
 
 	# Wrapped manual descriptions must not stretch the buttons or centre the item name vertically.
 	for child: Control in row.get_children():

@@ -108,6 +108,23 @@ func _rolls() -> void:
 	var b := RandomNumberGenerator.new()
 	b.seed = 99
 	check(session.roll_talents(a) == session.roll_talents(b), "the same draw gives the same talents")
+	# A talent bound to an element comes only with that spirit root: no 离火之体 on a 水灵根.
+	check(Talents.elements_of(content, "body_fire") == ["fire"] and Talents.elements_of(content, "yinyang").size() == 2 and Talents.elements_of(content, "qicai").is_empty(), "a talent is bound to the elements its effects name")
+	var mismatched := 0
+	var bound := 0
+	var draw := RandomNumberGenerator.new()
+	draw.seed = 5
+	for i: int in 6000:
+		var roots: Array = session.roll_roots(draw)
+		var born := session.roll_talents(draw, roots)
+		for id: String in born.talents + born.flaws:
+			if not Talents.elements_of(content, id).is_empty():
+				bound += 1
+			if not Talents.suits(content, id, roots):
+				mismatched += 1
+	check(bound > 50 and mismatched == 0, "of %d element talents born, none against the roots" % bound)
+	# Flat bonuses grow with the realm, so a talent counts for the whole life.
+	check(Talents.flat(content, 20, 0) == 20 and Talents.flat(content, 20, 4) > 40, "a flat bonus counts for more in each realm")
 	# The generated people of the region follow the local table.
 	var game := _game()
 	var best := {}

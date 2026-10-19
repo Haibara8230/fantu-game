@@ -166,6 +166,7 @@
    12
   ]
  ],
+ "realm_scale": [1, 1.5, 2, 2.5, 3],
  "aptitude": [
   {
    "name": "下等",
@@ -969,7 +970,7 @@
   "hongyun": {
    "name": "鸿运当头",
    "tier": "purple",
-   "description": "鸿运加身，连筑基也更易圆满。",
+   "description": "鸿运加身，每逢破境，根基与金丹都更易圆满。",
    "mods": {
     "boon": 180,
     "grade": 30
@@ -995,9 +996,9 @@
    "group": "bone"
   },
   "zhuji_zi": {
-   "name": "筑基之资",
+   "name": "破境之资",
    "tier": "blue",
-   "description": "天生就是筑基的料子。",
+   "description": "天生就是破境的料子，每一次突破都多几分把握。",
    "mods": {
     "breakthrough": 12,
     "grade": 20
@@ -2730,7 +2731,9 @@
    "mods": {
     "boon": 500,
     "encounter": -100,
-    "grade": 50
+    "grade": 50,
+    "cultivation": 60,
+    "breakthrough": 30
    }
   },
   "jiangu": {
@@ -2762,7 +2765,8 @@
     "insight": 300,
     "study": -200,
     "mind_need": -100,
-    "sense": 12
+    "sense": 12,
+    "breakthrough": 25
    }
   },
   "bumie": {
@@ -2772,7 +2776,8 @@
    "mods": {
     "max_hp": 200,
     "rest": -250,
-    "defense": 40
+    "defense": 40,
+    "lifespan": 120
    }
   },
   "wanfa": {
@@ -2791,9 +2796,10 @@
    "description": "天生的炼丹奇才，嗅一嗅便知药性。",
    "mods": {
     "pill": 300,
-    "pill_cooldown": -250,
+    "pill_cooldown": -100,
     "gather": 150,
-    "alchemy": 30
+    "alchemy": 30,
+    "cultivation": 40
    }
   },
   "shouyou": {
@@ -2801,9 +2807,11 @@
    "tier": "orange",
    "description": "灵兽都愿意亲近你。",
    "mods": {
-    "encounter": -250,
+    "encounter": -100,
     "favor": 100,
-    "boon": 100
+    "boon": 100,
+    "cultivation": 50,
+    "max_hp": 50
    }
   },
   "tianyan": {
@@ -2813,8 +2821,10 @@
    "mods": {
     "boon": 300,
     "gather": 200,
-    "encounter": -150,
-    "sense": 20
+    "encounter": -100,
+    "sense": 20,
+    "damage_all": 40,
+    "breakthrough": 20
    }
   },
   "shouxing": {
@@ -2824,7 +2834,9 @@
    "mods": {
     "lifespan": 300,
     "rest": -150,
-    "mind_gain": 100
+    "mind_gain": 100,
+    "cultivation": 50,
+    "mind_need": -50
    }
   },
   "zhanti": {
@@ -2863,7 +2875,9 @@
    "mods": {
     "boon": 400,
     "grade": 100,
-    "favor": 75
+    "favor": 75,
+    "breakthrough": 30,
+    "cultivation": 40
    }
   },
   "yinyang": {
@@ -2895,7 +2909,8 @@
    "mods": {
     "lifespan": 200,
     "max_qi": 100,
-    "rest": -150
+    "rest": -150,
+    "cultivation": 50
    }
   },
   "jiandan": {
@@ -2905,7 +2920,9 @@
    "mods": {
     "damage_metal": 100,
     "mind_gain": 200,
-    "favor": 100
+    "favor": 100,
+    "attack": 15,
+    "max_qi": 50
    }
   },
   "fuze": {
@@ -2916,7 +2933,9 @@
     "boon": 250,
     "stones": 1000,
     "buy": -75,
-    "favor": 100
+    "favor": 100,
+    "cultivation": 40,
+    "grade": 60
    }
   },
   "xianren_zhuanshi": {
@@ -2940,7 +2959,8 @@
     "grade": 240,
     "breakthrough": 80,
     "demon": 400,
-    "favor": 240
+    "favor": 240,
+    "cultivation": 150
    }
   },
   "hundun": {
@@ -2985,7 +3005,9 @@
    "mods": {
     "lifespan": 960,
     "rest": -480,
-    "max_hp": 240
+    "max_hp": 240,
+    "cultivation": 120,
+    "defense": 30
    }
   },
   "daogu": {

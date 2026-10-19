@@ -6,6 +6,7 @@ extends RefCounted
 const Calendar = preload("res://scripts/core/calendar.gd")
 const Cultivation = preload("res://scripts/core/cultivation.gd")
 const Goals = preload("res://scripts/ui/goals.gd")
+const ArtLibrary = preload("res://scripts/ui/art_library.gd")
 # Goals that are dates to keep in mind while in seclusion.
 const DEADLINE_GOALS := ["serpent", "auction", "tournament", "sealed"]
 
@@ -70,6 +71,79 @@ static func render_retreat(ui) -> void:
 		preview.text = preview_text(session, ui.retreat_days)
 	slider.value_changed.connect(refresh)
 	refresh.call(slider.value)
+
+## 领悟, after Mi Chang Sheng's: everything studied in seclusion in one place — the 玉简 in the 行囊,
+## the lineage (in the sect's own chamber) and the next layer of what is already learned. Each takes its
+## days here, and the scroll plays the study back (main.gd start_insight).
+static func render_insight(ui) -> void:
+	var session = ui.session
+	var columns := _columns(ui)
+	var right: VBoxContainer = columns.get_child(1)
+	if not ui.retreat_playback.is_empty():
+		_playback(ui, right)
+		return
+	if not ui.retreat_result.is_empty():
+		right.add_child(ui.paragraph(ui.retreat_result, ui.INK))
+	right.add_child(ui.paragraph("悟性与灵根决定领悟的快慢：功法与灵根同属，耗时更少。闭关时运转的心法与神通也会慢慢积累熟练。", ui.MUTED))
+	right.add_child(ui.label("研读玉简", 20, ui.GOLD))
+	var manuals: Array = session.player.items.keys().filter(func(item_id: String) -> bool: return str(session.content.item(item_id).get("category", "")) == "manual")
+	manuals.sort()
+	if manuals.is_empty():
+		right.add_child(ui.paragraph("行囊里没有玉简。传功堂可领入门功法的玉简；坊市、拍卖、斗法缴获，或请交情深的人传授，也能得到。"))
+	for item_id: String in manuals:
+		var manual: Dictionary = session.content.item(item_id)
+		var taught: Dictionary = session.content.technique(str(manual.teaches))
+		var reason: String = session.learn_block(str(manual.teaches))
+		var days: int = session.study_days(taught)
+		var about := "%s · %s · %s" % [taught.tier_name, "心法" if taught.slot == "method" else "神通", session.content.technique_data.elements[taught.element].name]
+		_insight_row(ui, right, ArtLibrary.item_icon(session.content, manual), "%s\n%s" % [manual.name, about], ui.grade_color(taught), "领悟 · %d 日" % days, reason, str(taught.description),
+			func() -> void: ui.start_insight(func() -> String: return session.study_manual(item_id), str(taught.name)))
+	var home: String = session.Loadout.home_lineage(session)
+	if session.available_here("study") and str(session.player.get("sect", "wanderer")) != home:
+		var sect: Dictionary = session.content.sects[home]
+		var arts: Array[String] = []
+		for skill_id: String in sect.skills:
+			arts.append(str(session.content.technique(skill_id).name))
+		right.add_child(ui.label("本门传承", 20, ui.GOLD))
+		var reason: String = session.Loadout.lineage_block(session, home)
+		_insight_row(ui, right, null, "%s\n%s" % [sect.name, "、".join(arts)], ui.INK, "研习传承 · %d 日" % int(session.content.rules.lineage.study_days), reason, "换上%s三门神通" % "、".join(arts),
+			func() -> void: ui.start_insight(func() -> String: return session.choose_sect(home), str(sect.name)))
+	right.add_child(ui.label("参悟功法", 20, ui.GOLD))
+	for technique_id: String in session.player.learned:
+		var held: Dictionary = session.held_technique(technique_id)
+		if held.is_empty():
+			continue
+		var reason: String = session.comprehend_block(technique_id)
+		var cost: Dictionary = session.Layers.comprehend_cost(session, technique_id)
+		var action := "圆满" if int(held.layer) >= int(held.layers) else "参悟 · %d 日%s" % [int(cost.days), " · %d 灵石" % int(cost.stones) if int(cost.stones) > 0 else ""]
+		var kind := "心法" if held.slot == "method" else "神通"
+		_insight_row(ui, right, ArtLibrary.technique_icon(held), "%s · %s\n%s" % [held.name, kind, session.Layers.progress_text(session, technique_id)], ui.grade_color(held), action, reason, "补足所差的熟练，即刻修至下一层",
+			func() -> void: ui.start_insight(func() -> String: return session.comprehend(technique_id), str(held.name)))
+
+## One line of the 领悟 page: a picture, the name with a line under it, and the button that studies it.
+## `block` is why it cannot be studied now ("" when it can), shown in place of `tip`.
+static func _insight_row(ui, parent: VBoxContainer, picture: Texture2D, text: String, color: Color, action: String, block: String, tip: String, callback: Callable) -> void:
+	if not block.is_empty():
+		tip = block
+	var row := HBoxContainer.new()
+	row.add_theme_constant_override("separation", 10)
+	parent.add_child(row)
+	var icon := TextureRect.new()
+	icon.texture = picture
+	icon.custom_minimum_size = Vector2(44, 44)
+	icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	icon.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS
+	row.add_child(icon)
+	var name: Label = ui.label(text, 15, color)
+	name.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	name.tooltip_text = tip
+	name.mouse_filter = Control.MOUSE_FILTER_PASS
+	row.add_child(name)
+	var go: Button = ui.button(action, callback, tip)
+	go.custom_minimum_size.x = 170
+	go.disabled = not block.is_empty() or not ui.settled()
+	row.add_child(go)
 
 static func render_breakthrough(ui) -> void:
 	var session = ui.session

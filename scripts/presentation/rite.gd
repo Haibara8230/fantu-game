@@ -25,6 +25,10 @@ var subtitle := ""
 var days := [0, 0]
 var xp := [0, 0, 1]
 var tint := JADE
+## The place's picture, dimmed behind a retreat or a study (set before the rite is added); and the colours
+## of the spirit roots, which the gathering qi takes on.
+var scene: Texture2D
+var colors: Array[Color] = []
 var _motes: Array[Dictionary] = []
 var _rng := RandomNumberGenerator.new()
 
@@ -37,7 +41,7 @@ func _ready() -> void:
 	furnace_texture = ArtLibrary.texture(ArtLibrary.ui_art("rite_furnace"))
 	_rng.seed = 7
 	for index: int in MOTES:
-		_motes.append({"angle": _rng.randf() * TAU, "radius": _rng.randf_range(0.55, 1.25), "speed": _rng.randf_range(0.5, 1.2), "size": _rng.randf_range(2.0, 5.0)})
+		_motes.append({"angle": _rng.randf() * TAU, "radius": _rng.randf_range(0.55, 1.25), "speed": _rng.randf_range(0.5, 1.2), "size": _rng.randf_range(2.0, 5.0), "hue": index})
 
 static func skipped() -> bool:
 	return DisplayServer.get_name() == "headless"
@@ -50,11 +54,21 @@ func _gui_input(event: InputEvent) -> void:
 ## A retreat: the figure meditates while the date and the xp run from their old to their new values.
 func play_retreat(from_day: int, to_day: int, from_xp: int, to_xp: int, xp_goal: int) -> void:
 	kind = "retreat"
-	title = "闭 关"
+	title = "闭 关 中"
 	days = [from_day, to_day]
 	xp = [from_xp, to_xp, maxi(1, xp_goal)]
 	tint = JADE
-	await _run(clampf((to_day - from_day) * 0.006, 1.6, 3.2))
+	await _run(clampf((to_day - from_day) * 0.012, 2.6, 4.8))
+
+## 领悟: the figure sits with a jade slip glowing over it, the words of `studied` rising from it into the
+## dantian while the days go by.
+func play_insight(from_day: int, to_day: int, studied: String) -> void:
+	kind = "insight"
+	title = "领 悟"
+	subtitle = studied
+	days = [from_day, to_day]
+	tint = Color("#a8e6cf")
+	await _run(clampf((to_day - from_day) * 0.03, 2.2, 3.8))
 
 ## A breakthrough: "success" with the realm reached and its grade, "failure", or "demon" (心魔 rises and
 ## the moment stops there for the choice).
@@ -96,9 +110,18 @@ func _draw() -> void:
 	var heart := Vector2(size.x * 0.5, size.y * 0.52)
 	match kind:
 		"retreat":
-			_draw_figure(heart, 0.62, fade)
+			_draw_scene(fade)
+			_draw_aura(heart, fade)
+			_draw_streams(heart, fade)
+			_draw_figure(heart, 0.62, fade, Vector2(0.0, sin(elapsed * 1.6) * size.y * 0.003))
 			_draw_gathering(heart, t, fade, 1.0)
 			_draw_retreat_text(t, fade)
+		"insight":
+			_draw_scene(fade)
+			_draw_aura(heart, fade)
+			_draw_figure(heart, 0.62, fade, Vector2(0.0, sin(elapsed * 1.6) * size.y * 0.003))
+			_draw_slip(heart, t, fade)
+			_draw_insight_text(t, fade)
 		"breakthrough":
 			_draw_breakthrough(heart, t, fade)
 		"brew":
@@ -121,21 +144,96 @@ func _draw_gathering(heart: Vector2, t: float, alpha: float, pace: float) -> voi
 		var phase := fposmod(float(mote.radius) - elapsed * 0.35 * float(mote.speed) * pace, 1.25)
 		var angle := float(mote.angle) + elapsed * 0.9 * float(mote.speed) * pace
 		var point := heart + Vector2(cos(angle), sin(angle) * 0.7) * reach * phase
-		draw_circle(point, float(mote.size), Color(tint, alpha * clampf(phase * 1.4, 0.0, 0.85)))
+		draw_circle(point, float(mote.size), Color(_mote_color(mote), alpha * clampf(phase * 1.4, 0.0, 0.85)))
 	var breath := 0.5 + 0.5 * sin(elapsed * 3.0 * pace)
 	draw_arc(heart, size.y * (0.05 + 0.02 * breath), 0.0, TAU, 48, Color(tint, alpha * 0.6), 3.0)
 	draw_circle(heart, size.y * 0.018, Color(tint, alpha * (0.4 + 0.4 * breath)))
+
+## A mote's colour: one of the spirit roots', or the moment's tint when there are none.
+func _mote_color(mote: Dictionary) -> Color:
+	return colors[int(mote.get("hue", 0)) % colors.size()] if not colors.is_empty() else tint
+
+## The place's own picture behind the figure, dimmed, so the retreat is seen in the chamber.
+func _draw_scene(alpha: float) -> void:
+	if scene == null:
+		return
+	var picture := Vector2(scene.get_size())
+	var zoom := maxf(size.x / picture.x, size.y / picture.y)
+	var shown := picture * zoom
+	draw_texture_rect(scene, Rect2((size - shown) * 0.5, shown), false, Color(1, 1, 1, alpha * 0.85))
+	draw_rect(Rect2(Vector2.ZERO, size), Color(0.02, 0.05, 0.06, 0.62 * alpha))
+
+## A soft halo breathing behind the seated figure.
+func _draw_aura(heart: Vector2, alpha: float) -> void:
+	var breath := 0.5 + 0.5 * sin(elapsed * 1.6)
+	for ring: int in 5:
+		var radius := size.y * (0.12 + ring * 0.045 + breath * 0.012)
+		draw_circle(heart - Vector2(0.0, size.y * 0.04), radius, Color(tint, alpha * 0.05 * (5 - ring) / 5.0))
+	for ring: int in 2:
+		var grow := fposmod(elapsed * 0.25 + ring * 0.5, 1.0)
+		draw_arc(heart - Vector2(0.0, size.y * 0.04), size.y * (0.16 + grow * 0.22), 0.0, TAU, 72, Color(tint, alpha * 0.3 * (1.0 - grow)), 2.0)
+
+## Ribbons of qi in the roots' colours drawn from the edges of the screen into the dantian.
+func _draw_streams(heart: Vector2, alpha: float) -> void:
+	var count := 5
+	for stream: int in count:
+		var color: Color = colors[stream % colors.size()] if not colors.is_empty() else tint
+		var start := stream * TAU / count + elapsed * 0.12
+		var points := PackedVector2Array()
+		for step: int in 24:
+			var along := step / 23.0
+			var angle := start + along * 2.4
+			var reach := size.y * 0.62 * (1.0 - along) + size.y * 0.02
+			points.append(heart + Vector2(cos(angle), sin(angle) * 0.62) * reach)
+		var flow := fposmod(elapsed * 0.45 + stream * 0.2, 1.0)
+		for step: int in points.size() - 1:
+			var along := step / float(points.size() - 1)
+			var lit := clampf(1.0 - absf(along - flow) * 4.0, 0.0, 1.0)
+			draw_line(points[step], points[step + 1], Color(color, alpha * (0.2 + 0.6 * lit) * minf(1.0, along * 1.6)), 2.5 + 3.5 * lit)
 
 func _draw_retreat_text(t: float, alpha: float) -> void:
 	var font := get_theme_default_font()
 	var day := int(lerpf(float(days[0]), float(days[1]), t))
 	var gained := int(lerpf(float(xp[0]), float(xp[1]), t))
 	_centered(font, title, Vector2(size.x * 0.5, size.y * 0.12), 46, Color(GOLD, alpha))
+	_centered(font, "已闭关 %s" % Calendar.duration_text(maxi(0, day - int(days[0]))) if day > int(days[0]) else "入定", Vector2(size.x * 0.5, size.y * 0.17), 22, Color(INK, alpha * 0.85))
 	_centered(font, Calendar.date_text(day), Vector2(size.x * 0.5, size.y * 0.82), 24, Color(INK, alpha))
 	var bar := Rect2(size.x * 0.32, size.y * 0.86, size.x * 0.36, 8.0)
 	draw_rect(bar, Color(0.11, 0.21, 0.22, alpha))
 	draw_rect(Rect2(bar.position, Vector2(bar.size.x * clampf(float(gained) / float(xp[2]), 0.0, 1.0), bar.size.y)), Color(GOLD, alpha))
-	_centered(font, "修为  %d" % gained, Vector2(size.x * 0.5, size.y * 0.92), 20, Color(INK, alpha))
+	_centered(font, "修为  %d    +%d" % [gained, gained - int(xp[0])], Vector2(size.x * 0.5, size.y * 0.92), 20, Color(INK, alpha))
+
+## A jade slip hanging over the figure, its words drifting down into the dantian.
+func _draw_slip(heart: Vector2, t: float, alpha: float) -> void:
+	var font := get_theme_default_font()
+	# The slip floats over the folded hands; its words rise from it to the brow.
+	var middle := heart + Vector2(0.0, size.y * (0.005 + 0.008 * sin(elapsed * 2.0)))
+	var slip := Rect2(middle - Vector2(size.y * 0.075, size.y * 0.022), Vector2(size.y * 0.15, size.y * 0.044))
+	draw_circle(slip.get_center(), size.y * 0.09, Color(tint, alpha * (0.2 + 0.1 * sin(elapsed * 3.0))))
+	draw_rect(slip, Color("#5f9c86", alpha))
+	draw_rect(slip.grow(-size.y * 0.005), Color("#9fd8bd", alpha))
+	draw_rect(slip, Color("#1c2b29", alpha), false, 3.0)
+	for line: int in 4:
+		var x := slip.position.x + slip.size.x * (0.2 + line * 0.2)
+		draw_line(Vector2(x, slip.position.y + slip.size.y * 0.2), Vector2(x, slip.end.y - slip.size.y * 0.2), Color("#2f5c4f", alpha * 0.8), 2.0)
+	var crown := heart - Vector2(0.0, size.y * 0.42)
+	var glyphs: PackedStringArray = subtitle.split("") if not subtitle.is_empty() else PackedStringArray(["道"])
+	for index: int in 9:
+		var rise := fposmod(elapsed * 0.4 + index / 9.0, 1.0)
+		var side := -1.0 if index % 2 == 0 else 1.0
+		var sway := side * size.y * (0.16 + 0.03 * sin(elapsed * 2.0 + index)) * sin(rise * PI)
+		var point := slip.get_center().lerp(crown, rise) + Vector2(sway, 0.0)
+		_centered(font, glyphs[index % glyphs.size()], point, int(lerpf(28.0, 16.0, rise)), Color(tint, alpha * sin(rise * PI) * minf(1.0, t * 4.0)))
+
+func _draw_insight_text(t: float, alpha: float) -> void:
+	var font := get_theme_default_font()
+	var day := int(lerpf(float(days[0]), float(days[1]), t))
+	_centered(font, title, Vector2(size.x * 0.5, size.y * 0.12), 46, Color(GOLD, alpha))
+	_centered(font, "《%s》" % subtitle, Vector2(size.x * 0.5, size.y * 0.17), 26, Color(INK, alpha))
+	_centered(font, Calendar.date_text(day), Vector2(size.x * 0.5, size.y * 0.86), 24, Color(INK, alpha))
+	var bar := Rect2(size.x * 0.36, size.y * 0.89, size.x * 0.28, 6.0)
+	draw_rect(bar, Color(0.11, 0.21, 0.22, alpha))
+	draw_rect(Rect2(bar.position, Vector2(bar.size.x * t, bar.size.y)), Color(tint, alpha))
 
 ## Gathering for the first half, harder and with the figure trembling; then the burst or the crack.
 func _draw_breakthrough(heart: Vector2, t: float, alpha: float) -> void:

@@ -242,8 +242,9 @@ func roll_roots(rng: RandomNumberGenerator) -> Array:
 	return ordered
 
 ## Talents for a new character, from the protagonist's birth table.
-func roll_talents(rng: RandomNumberGenerator) -> Dictionary:
-	return Talents.roll(content, rng, str(content.talent_data.player.table))
+## Talents bound to an element come only with that spirit root.
+func roll_talents(rng: RandomNumberGenerator, roots: Array = []) -> Dictionary:
+	return Talents.roll(content, rng, str(content.talent_data.player.table), roots)
 
 func root_title() -> String:
 	return content.root_title(player.get("roots", []))
@@ -812,14 +813,14 @@ func talents_visible(person_id: String) -> bool:
 ## 神识: the stage's, plus the talents' (`sense`, flat). It sees through people (their talents), the
 ## traps and hidden things of the old cave (caves.gd), the riverbed at the ferry and the 灵眼.
 func sense() -> int:
-	return maxi(0, int(stage_stats().sense) + talent_modifier("sense"))
+	return maxi(0, int(stage_stats().sense) + Talents.flat(content, talent_modifier("sense"), int(player.realm)))
 
 ## A generated person's 神识, by the same rule.
 func person_sense(person_id: String) -> int:
 	var someone := person(person_id)
 	var born := talents_of(person_id)
 	var mods := Talents.sum(content, born.get("talents", []) + born.get("flaws", []))
-	return maxi(0, int(content.stage(int(someone.get("realm", 0)), int(someone.get("stage", 0))).sense) + int(mods.get("sense", 0)))
+	return maxi(0, int(content.stage(int(someone.get("realm", 0)), int(someone.get("stage", 0))).sense) + Talents.flat(content, int(mods.get("sense", 0)), int(someone.get("realm", 0))))
 
 ## Days to study a technique, after talents.
 ## Days to study a technique: talents for study, and an element the spirit roots share quickens it
@@ -1055,8 +1056,15 @@ func study_manual(item_id: String) -> String:
 func teachings() -> Array[String]:
 	return Loadout.teachings(self)
 
-func learn_here(technique_id: String) -> String:
-	return Loadout.learn_here(self, technique_id)
+func slip_block(technique_id: String) -> String:
+	return Loadout.slip_block(self, technique_id)
+
+func take_slip(technique_id: String) -> String:
+	return Loadout.take_slip(self, technique_id)
+
+## Why 领悟 cannot be done here (not a place of seclusion), or "".
+func seclusion_block() -> String:
+	return Layers.seclusion_block(self)
 
 func equip_technique(technique_id: String, replace: String = "") -> String:
 	return Loadout.equip_technique(self, technique_id, replace)

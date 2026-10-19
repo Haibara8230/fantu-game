@@ -151,6 +151,7 @@
   "donate": "你向宗门捐献{loot_text}，记贡献 {amount}。",
   "consult": "你向{npc_name}请教了 {duration}，颇有所得。",
   "taught_by": "{npc_name}把自己的{technique_name}传给了你，写成一枚玉简。",
+  "hall_slip": "传功堂执事交给你一枚{technique_name}的玉简，嘱你回静室慢慢领悟。",
   "invite_kept": "你如约去找{npc_name}切磋。",
   "invite_spar_done": "这场约好的切磋，让你与{npc_name}更亲近了些（好感 +{favor}）。",
   "invite_missed": "你没有赴{npc_name}的约，对方有些不快。",

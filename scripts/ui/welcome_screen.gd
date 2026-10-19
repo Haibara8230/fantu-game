@@ -48,7 +48,7 @@ static func build(ui) -> void:
 	box.add_child(sensed)
 	var sense := func() -> void:
 		ui.welcome_roots = session.roll_roots(sense_rng)
-		ui.welcome_born = session.roll_talents(sense_rng)
+		ui.welcome_born = session.roll_talents(sense_rng, ui.welcome_roots)
 		_show_sensed(ui, sensed)
 	ui.welcome_resense = func() -> void:
 		if ui.welcome_senses <= 0:

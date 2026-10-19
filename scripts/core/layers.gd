@@ -122,6 +122,13 @@ static func after_breakthrough(s) -> Array[String]:
 		lines.append_array(practise(s, technique_id, 0))
 	return lines
 
+## 领悟 — a layer, a 玉简, the lineage — is done in seclusion: where one can retreat (静室, 洞府, a let
+## dwelling), as in the retreat scroll's 领悟 page. Why not here, or "".
+static func seclusion_block(s) -> String:
+	if not s.available_here("cultivate"):
+		return "领悟须在静室、洞府等可闭关之处，于闭关卷轴的「领悟」页进行。"
+	return ""
+
 ## What 参悟 of the next layer costs now: {"days", "stones"}; the days are those still missing.
 static func comprehend_cost(s, technique_id: String) -> Dictionary:
 	var t: Dictionary = s.content.technique(technique_id)
@@ -142,6 +149,9 @@ static func comprehend_block(s, technique_id: String) -> String:
 		return "以眼下境界只能修到第 %d 层；%s可修满。" % [layer, s.content.realm(int(t.min_realm)).name]
 	if not s.battle.is_empty():
 		return "斗法中无法参悟。"
+	var quiet := seclusion_block(s)
+	if not quiet.is_empty():
+		return quiet
 	var cost := comprehend_cost(s, technique_id)
 	if int(s.player.stones) < int(cost.stones):
 		return "参悟第 %d 层须耗灵石 %d，灵石不足。" % [layer + 1, int(cost.stones)]

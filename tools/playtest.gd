@@ -39,7 +39,7 @@ func _initialize() -> void:
 	var rng := RandomNumberGenerator.new()
 	rng.seed = seed_value
 	var roots: Array = s.roll_roots(rng)
-	var born: Dictionary = s.roll_talents(rng)
+	var born: Dictionary = s.roll_talents(rng, roots)
 	var opening := str(args[2]) if args.size() > 2 else "random"
 	strategy = str(args[3]) if args.size() > 3 else "cultivate"
 	if not strategy in ["cultivate", "social", "explore"]:
@@ -375,7 +375,9 @@ func _learn() -> bool:
 			if t.slot == "method" and s.learn_block(technique_id).is_empty():
 				_charge("study")
 				_mark("first 心法")
-				_say("LEARN", s.learn_here(technique_id))
+				# The hall hands out the slip; it is studied in the chamber next door.
+				_say("SLIP", s.take_slip(technique_id))
+				_say("LEARN", s.study_manual("j:" + technique_id))
 				return true
 	for art_id: String in s.active_skills():
 		if s.comprehend_block(art_id).is_empty() and int(s.Layers.comprehend_cost(s, art_id).days) <= 12 and int(s.Layers.comprehend_cost(s, art_id).stones) == 0:

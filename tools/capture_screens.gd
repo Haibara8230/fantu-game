@@ -112,8 +112,22 @@ func _run() -> void:
 	s.set_wake("special_auction", true)
 	main.set_view("retreat")
 	await _shot("12_retreat")
+	s.add_item("j:t:breath:wood:1::0", 1)
+	s.take_slip("t:body:earth:1::5")
+	main.set_view("insight")
+	await _shot("12b_insight")
 	main.set_view("breakthrough")
 	await _shot("13_breakthrough")
+	# The 获得 card over the place, as after a commission or a duel.
+	main.set_view("place")
+	main.run(func() -> String:
+		s.add_item("huichun_grass", 3)
+		s.add_item("foundation_pill", 1)
+		s.add_item("j:t:bolt:fire:2::0", 1)
+		s.player.stones = int(s.player.stones) + 60
+		return "")
+	await _shot("13b_gains")
+	main.GainsCard.close(main)
 	s.Events.apply(s, [{"recipe": "liaoshang"}, {"recipe": "huiqi"}])
 	main.set_view("place")
 	main.select_spot("chamber")
@@ -275,13 +289,15 @@ func _run() -> void:
 	s.pending_event = {}
 	main.set_view("place")
 	# Frames from the middle of the staged moments.
-	for moment: Array in [["20_rite_retreat", "retreat", "", 1.2, 2.4], ["21_rite_gather", "breakthrough", "success", 1.2, 3.4], ["22_rite_success", "breakthrough", "success", 2.7, 3.4], ["23_rite_failure", "breakthrough", "failure", 2.6, 3.4], ["24_rite_brew", "brew", "fine", 1.8, 2.2]]:
+	for moment: Array in [["20_rite_retreat", "retreat", "", 1.6, 3.6], ["20b_rite_insight", "insight", "", 1.4, 3.0], ["21_rite_gather", "breakthrough", "success", 1.2, 3.4], ["22_rite_success", "breakthrough", "success", 2.7, 3.4], ["23_rite_failure", "breakthrough", "failure", 2.6, 3.4], ["24_rite_brew", "brew", "fine", 1.8, 2.2]]:
 		var rite = main.Rite.new()
+		rite.scene = main.backdrop.texture
+		rite.colors.assign([Color("#e8e2c4"), Color("#a4e9a6"), Color("#ffb579")])
 		main.add_child(rite)
 		rite.kind = moment[1]
 		rite.outcome = moment[2]
-		rite.title = "闭 关" if moment[1] == "retreat" else ("筑基" if moment[1] == "breakthrough" else "回气丹")
-		rite.subtitle = "根基 · 上品"
+		rite.title = {"retreat": "闭 关 中", "insight": "领 悟", "breakthrough": "筑基"}.get(moment[1], "回气丹")
+		rite.subtitle = "长春功" if moment[1] == "insight" else "根基 · 上品"
 		rite.tint = Color("#d5b777") if moment[2] != "" else Color("#8fd0c4")
 		rite.days = [0, 90]
 		rite.xp = [0, 180, 500]

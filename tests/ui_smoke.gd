@@ -244,7 +244,7 @@ func _run() -> void:
 	check(_texts(main.scene_layer, "Label").contains("青云山") and _texts(main.scene_layer, "Label").contains("此地人物"), "the scene shows the place's name and the people drawer")
 	_tag("传功堂").pressed.emit()
 	check(_screen("Label").contains("本门传承") and _button("闭关修炼") == null, "a tag opens its spot, with only that spot's actions")
-	check(_button("参悟吐纳法") != null or _button("参悟") != null, "the hall offers techniques to study")
+	check(_button("领取《") != null and _button("参悟") == null, "the hall hands out slips; studying is done in the chamber")
 	_tag("执事堂").pressed.emit()
 	check(_button("接下：") != null, "the 执事堂 board lists commissions")
 	main.toggle_drawer()
@@ -326,13 +326,42 @@ func _run() -> void:
 	while main.presenting:
 		await process_frame
 	check(main.session.player.xp > 0 and not _screen("Label").contains("闭 关 中") and _screen("Label").contains("每月修为"), "and comes back to the scroll")
+	# 领悟: the slips in the 行囊, the lineage and the layers, all studied here in the chamber.
+	main.set_view("insight")
+	check(main.current_screen() == "retreat" and _screen("Label").contains("研读玉简") and _screen("Label").contains("参悟功法") and _button("参悟 ·") != null, "the 领悟 page lists the slips and the layers of what is learned")
+	main.session.add_item("j:t:breath:wood:1::0", 1)
+	main.render()
+	var study_from := int(main.session.world.day)
+	_button("领悟 ·").pressed.emit()
+	await process_frame
+	while main.presenting:
+		await process_frame
+	check("t:breath:wood:1::0" in main.session.player.learned and int(main.session.world.day) > study_from and _screen("Label").contains("上次领悟"), "a slip is studied on the 领悟 page and takes its days")
+	# Whatever an action brings is shown in the 获得 card until it is taken.
+	check(main.gains_card != null and _texts(main.gains_card, "Label").contains("获  得") and _texts(main.gains_card, "Label").contains("习得心法"), "the 获得 card shows what was learned")
+	main.GainsCard.close(main)
+	main.run(func() -> String:
+		main.session.add_item("huichun_grass", 3)
+		main.session.player.stones = int(main.session.player.stones) + 12
+		return "")
+	var shown := _texts(main.gains_card, "Label") if main.gains_card != null else ""
+	check(shown.contains("回春草") and shown.contains("×3") and shown.contains("灵石") and shown.contains("×12"), "items and stones gained show with their counts")
+	main.run(func() -> String:
+		main.session.add_item("huichun_grass", 2)
+		return "")
+	check(_texts(main.gains_card, "Label").contains("×5"), "gains while the card is open add up in it")
+	main.run(func() -> String: return main.session.sell("huichun_grass", 1), false)
+	main.GainsCard.close(main)
+	main.run(func() -> String: return main.session.sell("huichun_grass", 1), false)
+	check(main.gains_card == null, "a sale is not announced")
 	main.close_overlay()
 	main.session.player.xp = 0
 	main.render()
 	main._save_manual()
+	var travel_from := int(main.session.world.day)
 	main.run(func() -> String: return main.session.travel("wild"))
 	await _capture("wild")
-	check(main.clock_label.text == main.Calendar.date_text(retreat_from + 30 + 7), "travel advances the calendar by route days")
+	check(main.clock_label.text == main.Calendar.date_text(travel_from + 7), "travel advances the calendar by route days")
 	check(main.audio.music_key == "wild" and main.audio.ambience_key == "wild", "music and ambience follow the location")
 	main.set_guide_enabled(true)
 	main.run(func() -> String: return main.session.start_battle("wolf"))

@@ -6,6 +6,8 @@ extends RefCounted
 const Talents = preload("res://scripts/core/talents.gd")
 const Layers = preload("res://scripts/core/layers.gd")
 const Gear = preload("res://scripts/core/gear.gd")
+## world.flags key (+ technique id) of a 玉简 the hall has handed out.
+const SLIP_FLAG := "hall_slip:"
 
 ## Totals from 心法, equipment and talents: attack, max_hp, max_qi, defense, cultivation, element_damage
 ## {element|"*": x}, and the talents' max_hp_percent and max_qi_percent of the stage's caps.
@@ -15,7 +17,7 @@ static func bonuses(s, holder: Dictionary = {}) -> Dictionary:
 	var total := {"attack": 0, "max_hp": 0, "max_qi": 0, "defense": 0.0, "cultivation": 0.0, "element_damage": {}, "max_hp_percent": 0, "max_qi_percent": 0}
 	for key: String in Talents.ORB_KEYS:
 		total[key] = 0
-	_add_talents(s, total, holder.get("talents", []) + holder.get("flaws", []))
+	_add_talents(s, total, holder.get("talents", []) + holder.get("flaws", []), int(holder.get("realm", 0)))
 	var sources: Array[Dictionary] = []
 	# 心法 count at the layer held: the player keeps their layers (layers.gd), anyone else holds theirs at
 	# their realm's cap.
@@ -49,9 +51,10 @@ static func bonuses(s, holder: Dictionary = {}) -> Dictionary:
 
 ## Talents' share of the totals: percentages become fractions; health and qi stay percentages of the
 ## stage's caps (refresh_realm_stats).
-static func _add_talents(s, total: Dictionary, ids: Array) -> void:
+## The flat 攻击 of talents grows with the realm (talents.gd realm_scale).
+static func _add_talents(s, total: Dictionary, ids: Array, realm: int) -> void:
 	var mods: Dictionary = Talents.sum(s.content, ids)
-	total.attack = int(total.attack) + int(mods.get("attack", 0))
+	total.attack = int(total.attack) + Talents.flat(s.content, int(mods.get("attack", 0)), realm)
 	total.defense = float(total.defense) + float(mods.get("defense", 0)) / 100.0
 	total.cultivation = float(total.cultivation) + float(mods.get("cultivation", 0)) / 100.0
 	total.max_hp_percent = int(mods.get("max_hp", 0))
@@ -117,6 +120,8 @@ static func study_manual(s, item_id: String) -> String:
 	if manual.get("category", "") != "manual" or s.item_count(item_id) < 1:
 		return "行囊里没有这枚玉简。"
 	var reason := learn_block(s, manual.teaches)
+	if reason.is_empty():
+		reason = Layers.seclusion_block(s)
 	if not reason.is_empty():
 		return reason
 	s.remove_item(item_id, 1)
@@ -133,14 +138,23 @@ static func teachings(s) -> Array[String]:
 			result.append(technique_id)
 	return result
 
-static func learn_here(s, technique_id: String) -> String:
+## The hall hands out the 玉简 of what it teaches, once each; it is studied in seclusion (study_manual).
+static func slip_block(s, technique_id: String) -> String:
 	if not technique_id in teachings(s):
 		return "这里不传授此法。"
-	var reason := learn_block(s, technique_id)
+	if technique_id in s.player.learned:
+		return "你已习得此法。"
+	if bool(s.world.flags.get(SLIP_FLAG + technique_id, false)):
+		return "此法的玉简已领过；%s" % ("在行囊里，回静室领悟即可。" if s.item_count("j:" + technique_id) > 0 else "传功堂每门只发一枚。")
+	return s.blocked()
+
+static func take_slip(s, technique_id: String) -> String:
+	var reason := slip_block(s, technique_id)
 	if not reason.is_empty():
 		return reason
-	var passed := _study(s, technique_id)
-	return s.conclude(str(passed.get("text", "")), passed)
+	s.world.flags[SLIP_FLAG + technique_id] = true
+	s.add_item("j:" + technique_id, 1)
+	return s.finish(s.log_event("hall_slip", {"technique": technique_id}))
 
 ## Puts a learned technique into its slots, replacing `replace` when the slots are full.
 static func equip_technique(s, technique_id: String, replace: String = "") -> String:
@@ -205,7 +219,8 @@ static func unequip_slot(s, slot: String) -> String:
 	s.refresh_realm_stats()
 	return s.finish("取下了%s。" % name)
 
-static func choose_sect(s, sect_id: String) -> String:
+## Why the lineage `sect_id` cannot be studied now, or "".
+static func lineage_block(s, sect_id: String) -> String:
 	if s.player.is_empty() or not s.content.sects.has(sect_id):
 		return "未知门派。"
 	if not s.battle.is_empty():
@@ -213,12 +228,19 @@ static func choose_sect(s, sect_id: String) -> String:
 	var blocked: String = s.blocked()
 	if not blocked.is_empty():
 		return blocked
-	if not s.available_here("study"):
-		return "请回青云山传功堂研习门派传承。"
+	# The lineage is studied in seclusion at the sect that keeps it: a chamber where the hall stands.
+	if not s.available_here("study") or not Layers.seclusion_block(s).is_empty():
+		return "请回青云山静室，在闭关卷轴的「领悟」页研习门派传承。"
 	if s.player.get("sect", "wanderer") == sect_id:
 		return "你已在研习此传承。"
 	if sect_id != home_lineage(s):
 		return "传功堂只传本门传承；他派神通须得其玉简，或请人传授。"
+	return ""
+
+static func choose_sect(s, sect_id: String) -> String:
+	var reason := lineage_block(s, sect_id)
+	if not reason.is_empty():
+		return reason
 	# Studying the lineage takes its days, like any technique.
 	var passed: Dictionary = s.advance_days(int(s.content.rules.lineage.study_days))
 	if not s.ended.is_empty():

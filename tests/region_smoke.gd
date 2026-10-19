@@ -341,7 +341,7 @@ func _scenes() -> void:
 	var day := int(game.world.day)
 	game.act("inn_rest")
 	check(int(game.player.hp) == int(game.player.max_hp) and int(game.player.stones) == stones - 5 and int(game.world.day) == day + 1, "the inn heals for five stones and a day")
-	check(game.cultivate(30) == "此地无法闭关，请回青云山静室。" and game.choose_sect("chixiao").contains("传功堂"), "retreat and study need their scenes")
+	check(game.cultivate(30) == "此地无法闭关，请回青云山静室。" and game.choose_sect("chixiao").contains("静室"), "retreat and study need their scenes")
 
 func _ruin() -> void:
 	var game := _game(9)

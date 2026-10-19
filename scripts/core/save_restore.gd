@@ -167,7 +167,7 @@ static func restore(s, data: Variant) -> bool:
 	if awakened:
 		var rng := RandomNumberGenerator.new()
 		rng.seed = hash([int(saved_world.get("seed", 0)), "awaken"])
-		born = Talents.roll(content, rng, str(content.talent_data.player.table))
+		born = Talents.roll(content, rng, str(content.talent_data.player.table), saved_player.get("roots", []) if saved_player.get("roots") is Array else [])
 	# Health and qi within the caps the save was made with (before any talents awakened).
 	var holder: Dictionary = loadout.duplicate()
 	holder.merge({"realm": int(saved_player.realm), "stage": saved_stage, "talents": [] if awakened else born.talents, "flaws": [] if awakened else born.flaws, "foundation_grade": int(progress.foundation_grade), "core_grade": int(progress.core_grade)}, true)

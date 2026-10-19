@@ -74,8 +74,9 @@ static func _pools(content) -> Dictionary:
 
 ## Draws someone's talents from a birth table (data/talents.json `tables`): how many, each one's tier by
 ## weight (tiers the table leaves out are never born from it), no two from one group, and perhaps one
-## flaw that clashes with none of them: {"talents": [...], "flaws": [...]}.
-static func roll(content, rng: RandomNumberGenerator, table_id: String) -> Dictionary:
+## flaw that clashes with none of them: {"talents": [...], "flaws": [...]}. With `roots` known (the
+## player's), a talent or flaw bound to elements is born only with all of those roots (suits).
+static func roll(content, rng: RandomNumberGenerator, table_id: String, roots: Array = []) -> Dictionary:
 	var pools := _pools(content)
 	var table: Dictionary = data(content).tables.get(table_id, data(content).tables.default)
 	var count := int(_weighted(rng, table.counts.map(func(entry: Array) -> Array: return [int(entry[0]), float(entry[1])])))
@@ -86,12 +87,12 @@ static func roll(content, rng: RandomNumberGenerator, table_id: String) -> Dicti
 	var chosen: Array = []
 	var groups := {}
 	for slot: int in count:
-		var id := _draw(content, rng, pools[str(_weighted(rng, tiers))], chosen, groups)
+		var id := _draw(content, rng, pools[str(_weighted(rng, tiers))], chosen, groups, roots)
 		if not id.is_empty():
 			chosen.append(id)
 	var flaws: Array = []
 	if rng.randf() < float(table.flaw_chance):
-		var flaw := _draw(content, rng, pools._flaw, chosen, groups)
+		var flaw := _draw(content, rng, pools._flaw, chosen, groups, roots)
 		if not flaw.is_empty():
 			flaws.append(flaw)
 	return {"talents": chosen, "flaws": flaws}
@@ -108,14 +109,44 @@ static func _weighted(rng: RandomNumberGenerator, entries: Array) -> Variant:
 			return entry[0]
 	return entries.back()[0]
 
-static func _draw(content, rng: RandomNumberGenerator, pool: Array, chosen: Array, groups: Dictionary) -> String:
+static func _draw(content, rng: RandomNumberGenerator, pool: Array, chosen: Array, groups: Dictionary, roots: Array = []) -> String:
 	var open := pool.filter(func(id: String) -> bool:
-		return not id in chosen and not groups.has(str(definition(content, id).get("group", "#" + id))))
+		return not id in chosen and not groups.has(str(definition(content, id).get("group", "#" + id))) and suits(content, id, roots))
 	if open.is_empty():
 		return ""
 	var id: String = open[rng.randi_range(0, open.size() - 1)]
 	groups[str(definition(content, id).get("group", "#" + id))] = true
 	return id
+
+## The elements a talent or flaw is bound to: those its modifiers name (damage_<element>, orb_<element>).
+static func elements_of(content, id: String) -> Array[String]:
+	var bound: Array[String] = []
+	for key: String in definition(content, id).get("mods", {}):
+		for prefix: String in ["damage_", "orb_"]:
+			var element := key.trim_prefix(prefix)
+			if key.begins_with(prefix) and element in content.technique_data.elements and not element in bound:
+				bound.append(element)
+	return bound
+
+## Whether someone with `roots` can be born with `id`: a 水灵根 has no 离火之体. Unknown roots (empty, as
+## for generated people) suit anything.
+static func suits(content, id: String, roots: Array) -> bool:
+	if roots.is_empty():
+		return true
+	for element: String in elements_of(content, id):
+		if not element in roots:
+			return false
+	return true
+
+## Talents grow with their bearer: a flat bonus (攻击, 神识) counts for more in each realm, so what
+## stood out in 炼气 still does in 化神 (data/talents.json `realm_scale`).
+static func realm_scale(content, realm: int) -> float:
+	var scale: Array = data(content).get("realm_scale", [1])
+	return float(scale[clampi(realm, 0, scale.size() - 1)])
+
+## A flat modifier at `realm`.
+static func flat(content, value: int, realm: int) -> int:
+	return int(round(float(value) * realm_scale(content, realm)))
 
 ## Whether `id` may join `owned` (it is not owned and shares no group with what is).
 static func fits(content, owned: Array, id: String) -> bool:

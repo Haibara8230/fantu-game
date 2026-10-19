@@ -92,29 +92,11 @@ static func _page(ui, slot_kind: String, title: String, in_use: Array, limit: in
 		card.custom_minimum_size.y = 56
 		card.alignment = HORIZONTAL_ALIGNMENT_LEFT
 		card.disabled = (not active and full) or not session.battle.is_empty()
-		var cell := HBoxContainer.new()
-		cell.add_theme_constant_override("separation", 4)
-		cell.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		cell.add_child(card)
-		cell.add_child(_comprehend_button(ui, technique_id))
-		grid.add_child(cell)
+		grid.add_child(card)
 	if shown == 0:
 		library.add_child(ui.paragraph("没有此类已学的功法。"))
-
-## 参悟 of the next layer (layers.gd), its days and stones shown before it is pressed.
-static func _comprehend_button(ui, technique_id: String) -> Button:
-	var session = ui.session
-	var reason: String = session.comprehend_block(technique_id)
-	var cost: Dictionary = session.Layers.comprehend_cost(session, technique_id)
-	var label := "参悟\n%d 日%s" % [int(cost.days), " · %d 灵石" % int(cost.stones) if int(cost.stones) > 0 else ""]
-	var tip := "参悟下一层：耗 %d 日%s；斗法施展与闭关运转也会积累熟练。" % [int(cost.days), "、灵石 %d" % int(cost.stones) if int(cost.stones) > 0 else ""]
-	var held: Dictionary = session.held_technique(technique_id)
-	if int(held.layer) >= int(held.layers):
-		label = "圆满"
-	var button: Button = ui.button(label, func() -> void: ui.run(func() -> String: return session.comprehend(technique_id)), tip if reason.is_empty() else reason)
-	button.disabled = not reason.is_empty()
-	button.custom_minimum_size = Vector2(76, 56)
-	return button
+	# Layers are studied in seclusion, on the retreat scroll's 领悟 page (retreat_view.gd).
+	library.add_child(ui.paragraph("功法层数在静室或洞府参悟：打开「闭关修炼」，在「领悟」页进行。斗法施展与闭关运转也会积累熟练。"))
 
 ## A technique's composed icon (art_library.gd technique_icon) at `side` pixels square.
 static func _technique_picture(t: Dictionary, side: float) -> TextureRect:

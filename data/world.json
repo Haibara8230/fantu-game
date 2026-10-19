@@ -19,11 +19,11 @@
       "terrain": "mountain",
       "map": [0.24, 0.24],
       "spots": [{"id": "gate", "tag": [0.5, 0.78], "name": "山门", "description": "魔潮压在山门之外，护山大阵的光幕时明时暗。魔将就在阵外叫阵。", "actions": ["battle:mo_jiang"], "requires_flag": "calamity"}, 
-        {"id": "chamber", "tag": [0.32, 0.29], "name": "静室", "description": "外门弟子的静修之所，灵气清润，可闭关、休整与突破；角落里有一口公用丹炉，也可开炉炼丹。", "actions": ["cultivate", "rest", "breakthrough", "alchemy"]},
+        {"id": "chamber", "tag": [0.32, 0.29], "name": "静室", "description": "外门弟子的静修之所，灵气清润，可闭关、领悟功法、休整与突破；角落里有一口公用丹炉，也可开炉炼丹。", "actions": ["cultivate", "rest", "breakthrough", "alchemy"]},
         {"id": "office", "tag": [0.53, 0.35], "name": "执事堂", "description": "执事们在这里张贴宗门的委托，按时完成可得酬劳与贡献；月俸、晋升、兑换与捐献也在这里办理。", "actions": ["commissions", "sect"], "requires_flag": "intro_done"},
         {"id": "abode", "tag": [0.3, 0.12], "name": "洞府", "description": "内门弟子各有一处洞府，石门后是静修的石室，门外辟出一方灵田，引了山泉浇灌。", "actions": ["field"], "requires_rank": "inner"},
         {"id": "arena", "tag": [0.42, 0.5], "name": "演武坪", "description": "青石铺就的演武坪，同门常在此切磋。十年一度的外门小比也在这里报名、比斗；平日有人摆擂，连胜榜挂在坪边。", "actions": ["battle:disciple", "tournament", "arena"]},
-        {"id": "hall", "tag": [0.25, 0.42], "name": "传功堂", "description": "堂中供着本门青云剑诀的传承玉简，弟子可在此研习；执事也传授几门入门功法，参悟需要时日。他派神通不在此传授。", "actions": ["study", "teach"], "requires_flag": "intro_done", "teach": ["t:breath:wood:1::0", "t:body:earth:1::5", "t:focus:water:1::10", "t:bolt:metal:1::15"]}
+        {"id": "hall", "tag": [0.25, 0.42], "name": "传功堂", "description": "堂中供着本门青云剑诀的传承玉简，可回静室研习；执事也发给弟子几门入门功法的玉简，领回静室慢慢参悟。他派神通不在此传授。", "actions": ["study", "teach"], "requires_flag": "intro_done", "teach": ["t:breath:wood:1::0", "t:body:earth:1::5", "t:focus:water:1::10", "t:bolt:metal:1::15"]}
       ]
     },
     "town": {

@@ -38,13 +38,14 @@ const WelcomeScreen = preload("res://scripts/ui/welcome_screen.gd")
 const ChronicleView = preload("res://scripts/ui/chronicle_view.gd")
 const Guide = preload("res://scripts/ui/guide.gd")
 const Settings = preload("res://scripts/ui/settings.gd")
+const GainsCard = preload("res://scripts/ui/gains_card.gd")
 const GOLD := Color("#d5b777")
 const INK := Color("#e3e8dc")
 const MUTED := Color("#97aaa4")
 # The scrolls laid over the world and their tabs: the view each tab shows, and its name.
 const PANEL_TABS := [["status", "属性"], ["sect", "宗门"], ["arts", "神通"], ["methods", "功法"], ["bag", "行囊"], ["people", "相识"], ["chronicle", "编年史"], ["system", "系统"]]
 const SCROLL_TABS := [["goals", "当前目标"], ["stories", "剧情"], ["quests", "委托"], ["letters", "传音"], ["upcoming", "约定"], ["messages", "消息"]]
-const RETREAT_TABS := [["retreat", "修炼"], ["breakthrough", "突破"]]
+const RETREAT_TABS := [["retreat", "修炼"], ["insight", "领悟"], ["breakthrough", "突破"]]
 const TAB_GROUPS := {"panel": PANEL_TABS, "scroll": SCROLL_TABS, "retreat": RETREAT_TABS, "trade": [["trade", "交易"]], "alchemy": [["alchemy", "炼丹"]], "field": [["field", "灵田"]], "forge": [["forge", "炼器"]]}
 var session = Session.new()
 var manual_store = SaveStore.new("user://saves/manual")
@@ -165,6 +166,9 @@ var intro_finished_once := false
 var tip_page: Dictionary = {}
 # The card on screen, if any, so it can be turned into a bubble beside its button (guide.gd).
 var tip_card: Control = null
+# The 获得 card on screen (gains_card.gd) and the gains it lists.
+var gains: Array[Dictionary] = []
+var gains_card: Control = null
 var guide_toggle: CheckBox
 # The welcome screen's choice to skip the introduction (shown once it has been finished before).
 var skip_intro: CheckBox
@@ -582,6 +586,8 @@ func render() -> void:
 				ArtsView.render_methods(self)
 			"retreat":
 				RetreatView.render_retreat(self)
+			"insight":
+				RetreatView.render_insight(self)
 			"breakthrough":
 				RetreatView.render_breakthrough(self)
 			"trade":
@@ -845,7 +851,7 @@ func confirm_trade() -> void:
 			messages.append(session.sell(item_id, int(sales[item_id])))
 		for item_id: String in purchases:
 			messages.append(session.buy(item_id))
-		return " ".join(messages))
+		return " ".join(messages), false)
 
 # --- Retreat and breakthrough (retreat_view.gd) ----------------------------------------------------
 
@@ -860,6 +866,7 @@ func start_retreat(days: int) -> void:
 	var from_xp := int(session.player.xp)
 	var from_stones := int(session.player.stones)
 	var from_letters: int = session.unread_letters()
+	var held := GainsCard.snapshot(session)
 	presenting = true
 	var message: String = session.cultivate(days)
 	if int(session.world.day) > from_day:
@@ -880,6 +887,35 @@ func start_retreat(days: int) -> void:
 	_cue_changes(before)
 	render()
 	notice(message + (" 自动存档失败：" + autosave_error if not autosave_error.is_empty() else ""))
+	GainsCard.show(self, GainsCard.gains(session, held))
+
+## 领悟 on the retreat scroll (a 玉简, a layer, the lineage): the rules study it at once; the figure then
+## sits with the slip glowing while the days go by, input locked meanwhile.
+func start_insight(study: Callable, studied: String) -> void:
+	if presenting or not settled():
+		return
+	var before := _cue_state()
+	var mark: int = session.chronicle.added
+	var from_day := int(session.world.day)
+	var from_xp := int(session.player.xp)
+	var held := GainsCard.snapshot(session)
+	presenting = true
+	var message: String = study.call()
+	var to_day := int(session.world.day)
+	if to_day > from_day:
+		retreat_result = "上次领悟 · %s\n%s" % [session.time_name(), message]
+		retreat_playback = {"from_day": from_day, "to_day": to_day, "from_xp": from_xp, "to_xp": int(session.player.xp)}
+		render()
+		_lock_buttons(self)
+		await _rite(func(rite) -> void: await rite.play_insight(from_day, to_day, studied))
+		retreat_playback = {}
+	presenting = false
+	_unlock_buttons()
+	_stage_story(mark)
+	_cue_changes(before)
+	render()
+	notice(message + (" 自动存档失败：" + autosave_error if not autosave_error.is_empty() else ""))
+	GainsCard.show(self, GainsCard.gains(session, held))
 
 ## Breaking through: the rules decide; the outcome — a realm reached with its grade, or a failure — is
 ## shown in its own screen until 确定. Should 心魔 come first, the event screen takes its choice and the
@@ -921,6 +957,10 @@ func _rite(play: Callable) -> void:
 	if not was_presenting:
 		_lock_buttons(self)
 	var rite = Rite.new()
+	# The retreat is seen in the place itself, and the qi takes the colours of the spirit roots.
+	rite.scene = backdrop.texture if backdrop.visible else null
+	for element: Variant in session.player.get("roots", []):
+		rite.colors.append(Color(str(session.content.technique_data.elements.get(str(element), {}).get("color", "#8fd0c4"))))
 	add_child(rite)
 	await play.call(rite)
 	rite.queue_free()
@@ -1025,6 +1065,7 @@ func _travel(action: Callable) -> void:
 	var mark: int = session.chronicle.added
 	var start: String = session.player.location
 	var day := int(session.world.day)
+	var held := GainsCard.snapshot(session)
 	presenting = true
 	_lock_buttons(self)
 	audio.cue("depart")
@@ -1050,6 +1091,7 @@ func _travel(action: Callable) -> void:
 	_cue_changes(before)
 	render()
 	notice(message + (" 自动存档失败：" + autosave_error if not autosave_error.is_empty() else ""))
+	GainsCard.show(self, GainsCard.gains(session, held))
 
 ## True when nothing (a duel, an event or the end of a life) holds the player in place.
 func settled() -> bool:
@@ -1098,6 +1140,7 @@ func battle_action(action: String) -> void:
 		return
 	presenting = true
 	_lock_buttons(self)
+	var held := GainsCard.snapshot(session)
 	var message: String
 	if action == "guard":
 		message = session.defend()
@@ -1133,6 +1176,9 @@ func battle_action(action: String) -> void:
 	_unlock_buttons()
 	render()
 	notice(message + (" 自动存档失败：" + autosave_error if not autosave_error.is_empty() else ""))
+	# The spoils, once the duel is over (a pill taken mid-duel is no gain).
+	if session.battle.is_empty():
+		GainsCard.show(self, GainsCard.gains(session, held))
 
 func _unlock_buttons() -> void:
 	for entry: Dictionary in locked_buttons:
@@ -1148,15 +1194,20 @@ func _lock_buttons(node: Node) -> void:
 		_lock_buttons(child)
 
 ## Runs a session action (ignored while a duel turn is playing) and shows its text.
-func run(callback: Callable) -> void:
+## `announce` shows what the action brought in the 获得 card; trades and sales, chosen item by item,
+## leave it out.
+func run(callback: Callable, announce: bool = true) -> void:
 	if presenting:
 		return
 	var before := _cue_state()
+	var held := GainsCard.snapshot(session)
 	var mark: int = session.chronicle.added
 	var message: String = callback.call()
 	_stage_story(mark)
 	_cue_changes(before)
 	notice(message + (" 自动存档失败：" + autosave_error if not autosave_error.is_empty() else ""))
+	if announce:
+		GainsCard.show(self, GainsCard.gains(session, held))
 
 ## Picks out of an action's new chronicle entries what the centre panel should stage: an illustrated
 ## moment that needed no choice (the serpent breaking out), a storyline's words or a 传音 (told in a
@@ -1337,6 +1388,10 @@ func _unhandled_key_input(event: InputEvent) -> void:
 	if not event is InputEventKey or not event.pressed or event.echo:
 		return
 	if presenting or is_instance_valid(welcome_layer) or new_game_dialog.visible or settings_dialog.visible:
+		return
+	if event.keycode == KEY_ESCAPE and gains_card != null and is_instance_valid(gains_card):
+		GainsCard.close(self)
+		get_viewport().set_input_as_handled()
 		return
 	if event.keycode == KEY_ESCAPE and not _tab_group(view).is_empty():
 		close_overlay()
