@@ -5,10 +5,11 @@
   "boards": {
     "sect": {"name": "执事堂告示", "location": "sect"},
     "market": {"name": "坊市告示", "location": "market"},
-    "nanming": {"name": "万宝楼告示", "location": "nanming"}
+    "nanming": {"name": "万宝楼告示", "location": "nanming"},
+    "beiyue": {"name": "古物街告示", "location": "beiyue"}
   },
   "templates": {
-    "wanted": {"weight": 2, "boards": ["sect", "market", "nanming"], "wanted": [
+    "wanted": {"weight": 2, "boards": ["sect", "market", "nanming", "beiyue"], "wanted": [
       {"enemy": "rogue", "min_realm": 0, "places": ["ridge", "wild", "ferry"]},
       {"enemy": "zhui_bing", "min_realm": 0, "places": ["ridge", "town", "ferry"]},
       {"enemy": "shui_fei", "min_realm": 1, "places": ["ferry"]},
@@ -114,6 +115,11 @@
       "reward_scale": 2.2,
       "title": "求购{item_name}",
       "text": "急需 {count} 枚{item_name}，{days} 日内送到{board_name}。"
-    }
+    },
+    "north_hunt": {"weight": 2, "boards": ["beiyue"], "min_realm": 1, "enemies": ["jian_ling"], "count": [1, 2], "days": 90, "reward_stones": 40, "reward_xp": 40, "title": "清剿{enemy_name}", "text": "断剑峡乱石滩上的{enemy_name}伤了进峡寻铁的匠人，{days} 日内斩杀 {count} 头。"},
+    "relic_mats": {"weight": 2, "boards": ["beiyue"], "min_realm": 1, "items": ["ore_xuantie", "jade_mo"], "count": [1, 2], "days": 90, "reward_scale": 1.8, "title": "求购{item_name}", "text": "修古物的匠人要 {count} 份{item_name}，{days} 日内送到{board_name}。"},
+    "lilian_hunt": {"weight": 1, "boards": ["market", "nanming", "beiyue"], "min_realm": 1, "years": [15, 10], "lilian": true, "enemies": ["jian_ling", "huo_ya", "yanjia_xi"], "count": [2, 3], "days": 120, "reward_stones": 40, "reward_xp": 80, "title": "历练帖 · 清剿{enemy_name}", "text": "悬赏会的历练帖：到断剑峡或赤枫岭一带斩杀 {count} 头{enemy_name}，{days} 日内回{board_name}交帖。交一帖记一功。"},
+    "lilian_find": {"weight": 1, "boards": ["market", "nanming", "beiyue"], "min_realm": 1, "years": [15, 10], "lilian": true, "items": ["dihuo_jing", "ore_xuantie"], "count": [1, 2], "days": 120, "reward_scale": 1.6, "title": "历练帖 · 寻{item_name}", "text": "悬赏会的历练帖：寻来 {count} 份{item_name}，{days} 日内交到{board_name}。交一帖记一功。"},
+    "lilian_scout": {"weight": 1, "boards": ["market", "nanming", "beiyue"], "min_realm": 1, "years": [15, 10], "lilian": true, "places": ["duanjian", "chifeng", "changqing_valley"], "count": [1, 1], "days": 120, "reward_stones": 60, "reward_xp": 120, "title": "历练帖 · 探{place_name}", "text": "悬赏会的历练帖：去{place_name}走一趟，把路况、妖兽与人事记下来，{days} 日内回{board_name}交帖。交一帖记一功。"}
   }
 }

@@ -4,7 +4,21 @@
   "scene_art": {
     "sect_recruit": "sect_arena",
     "market_inn": "town_inn",
-    "market_abode": "nanming_abode"
+    "market_abode": "nanming_abode",
+    "nanming_inn": "town_inn",
+    "beiyue_antiques": "market_street",
+    "beiyue_guild": "canglan_pavilion_library",
+    "beiyue_inn": "town_inn",
+    "beiyue_archive": "ruin_stone_room",
+    "duanjian_shoal": "wild_entrance",
+    "duanjian_gorge": "ruin_depths",
+    "wild_veins": "wild_spring",
+    "sect_cliff": "sect_arena",
+    "chifeng_old_mine": "chifeng_cavern"
+  },
+  "location_art": {
+    "beiyue": "nanming",
+    "duanjian": "chifeng"
   },
   "event_art": {
     "yunxi_autumn": "res://assets/art/events/yunxi_auction.png",
@@ -1085,6 +1099,128 @@
           552
         ]
       ]
+    },
+    "jian_ling": {
+      "texture": "res://assets/art/rival_atlas_v2.png",
+      "columns": 3,
+      "rows": 2,
+      "frames": {
+        "idle": 0,
+        "prepare": 1,
+        "attack": 2,
+        "cast": 3,
+        "hit": 4,
+        "guard": 5
+      },
+      "faces_right": true,
+      "height_ratio": 0.85
+    },
+    "jianling_head": {
+      "texture": "res://assets/art/rival_atlas_v2.png",
+      "columns": 3,
+      "rows": 2,
+      "frames": {
+        "idle": 0,
+        "prepare": 1,
+        "attack": 2,
+        "cast": 3,
+        "hit": 4,
+        "guard": 5
+      },
+      "faces_right": true,
+      "height_ratio": 0.85
+    },
+    "jianya_bronze": {
+      "texture": "res://assets/art/rival_atlas_v2.png",
+      "columns": 3,
+      "rows": 2,
+      "frames": {
+        "idle": 0,
+        "prepare": 1,
+        "attack": 2,
+        "cast": 3,
+        "hit": 4,
+        "guard": 5
+      },
+      "faces_right": true,
+      "height_ratio": 0.85
+    },
+    "jianya_silver": {
+      "texture": "res://assets/art/rival_atlas_v2.png",
+      "columns": 3,
+      "rows": 2,
+      "frames": {
+        "idle": 0,
+        "prepare": 1,
+        "attack": 2,
+        "cast": 3,
+        "hit": 4,
+        "guard": 5
+      },
+      "faces_right": true,
+      "height_ratio": 0.85
+    },
+    "jianya_gold": {
+      "texture": "res://assets/art/rival_atlas_v2.png",
+      "columns": 3,
+      "rows": 2,
+      "frames": {
+        "idle": 0,
+        "prepare": 1,
+        "attack": 2,
+        "cast": 3,
+        "hit": 4,
+        "guard": 5
+      },
+      "faces_right": true,
+      "height_ratio": 0.85
+    },
+    "jianya_spirit": {
+      "texture": "res://assets/art/rival_atlas_v2.png",
+      "columns": 3,
+      "rows": 2,
+      "frames": {
+        "idle": 0,
+        "prepare": 1,
+        "attack": 2,
+        "cast": 3,
+        "hit": 4,
+        "guard": 5
+      },
+      "faces_right": true,
+      "height_ratio": 0.85
+    },
+    "shouchuan_wei": {
+      "texture": "res://assets/art/rival_atlas_v2.png",
+      "columns": 3,
+      "rows": 2,
+      "frames": {
+        "idle": 0,
+        "prepare": 1,
+        "attack": 2,
+        "cast": 3,
+        "hit": 4,
+        "guard": 5
+      },
+      "faces_right": true,
+      "height_ratio": 0.85,
+      "preferred": "res://assets/art/actors/cultivator_canglan_male.png"
+    },
+    "kuang_hu": {
+      "texture": "res://assets/art/rival_atlas_v2.png",
+      "columns": 3,
+      "rows": 2,
+      "frames": {
+        "idle": 0,
+        "prepare": 1,
+        "attack": 2,
+        "cast": 3,
+        "hit": 4,
+        "guard": 5
+      },
+      "faces_right": true,
+      "height_ratio": 0.85,
+      "preferred": "res://assets/art/actors/rogue.png"
     }
   },
   "portrait_art": {

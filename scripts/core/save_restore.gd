@@ -45,7 +45,9 @@ static func restore(s, data: Variant) -> bool:
 	var people: Variant = _valid_people(content, saved_world.people, day)
 	var caves: Variant = _valid_caves(content, saved_world.get("caves", {}))
 	var supply: Variant = _valid_supply(content, saved_world.get("market_supply", {}), day)
-	if events == null or people == null or caves == null or supply == null:
+	# Places' shortages filled lately (optional: inventory.gd demand), keyed "place:item".
+	var demand: Variant = _valid_demand(content, saved_world.get("demand_supply", {}), day)
+	if events == null or people == null or caves == null or supply == null or demand == null:
 		return false
 	var companion: Variant = saved_world.get("companion", "")
 	var disciples: Variant = saved_world.get("disciples", [])
@@ -84,6 +86,10 @@ static func restore(s, data: Variant) -> bool:
 	# A series of fights under way and when each was last taken (optional).
 	var underway: Variant = saved_player.get("series", {})
 	if not underway is Dictionary or (not underway.is_empty() and (not content.series.has(underway.get("id", "")) or not _whole_nonnegative(underway.get("wave")) or int(underway.wave) >= content.series[underway.id].waves.size())):
+		return false
+	# What each sitting of a recurring trial came to (optional: trials.gd).
+	var trials: Variant = saved_player.get("trials", {})
+	if not trials is Dictionary or trials.keys().any(func(trial_id: Variant) -> bool: return not trial_id in s.Trials.TRIALS or not trials[trial_id] is Dictionary or trials[trial_id].keys().any(func(year: Variant) -> bool: return not year is String or not year.is_valid_int() or not _whole_nonnegative(trials[trial_id][year]))):
 		return false
 	var series_last: Variant = saved_player.get("series_last", {})
 	if not series_last is Dictionary or series_last.keys().any(func(series_id: Variant) -> bool: return not content.series.has(series_id) or not _whole_nonnegative(series_last[series_id])):
@@ -214,6 +220,11 @@ static func restore(s, data: Variant) -> bool:
 				return false
 		if saved_battle.has("context") and not saved_battle.context in ["event", "spar", "tournament", "summit", "arena", "demon", "tribulation"]:
 			return false
+		# A contest's round (summit.gd): which contest (五宗论道 by default) and a round it has.
+		if saved_battle.get("context", "") == "summit":
+			var contest: Variant = content.summit_data.get(str(saved_battle.get("contest", "wuzong")))
+			if not contest is Dictionary or not _whole_nonnegative(saved_battle.get("round")) or int(saved_battle.round) < 1 or int(saved_battle.round) > contest.champions.size():
+				return false
 		for status_key: String in ["status", "player_status"]:
 			var status: Variant = saved_battle.get(status_key, {})
 			if not status is Dictionary:
@@ -323,7 +334,7 @@ static func restore(s, data: Variant) -> bool:
 	var grudge_seeds: Variant = saved_world.get("grudge_seeds", {})
 	if not grudge_seeds is Dictionary or grudge_seeds.values().any(func(seen: Variant) -> bool: return not _whole_nonnegative(seen)) or not _whole_nonnegative(saved_world.get("grudge_serial", 0)):
 		return false
-	s.world = {"day": day, "flags": saved_world.flags.duplicate(), "events": events, "people": people, "seed": int(seed_value) if _whole_nonnegative(seed_value) else 0, "stock_sold": sold, "rumors": rumors, "quests_taken": taken, "storylines": storylines, "letters": letters, "talent_lives": shaped, "invites": bonds.invites, "loans": bonds.loans, "visit_period": bonds.visit_period, "caves": caves, "market_supply": supply, "companion": companion, "disciples": disciples.duplicate(), "sworn": sworn.duplicate()}
+	s.world = {"day": day, "flags": saved_world.flags.duplicate(), "events": events, "people": people, "seed": int(seed_value) if _whole_nonnegative(seed_value) else 0, "stock_sold": sold, "rumors": rumors, "quests_taken": taken, "storylines": storylines, "letters": letters, "talent_lives": shaped, "invites": bonds.invites, "loans": bonds.loans, "visit_period": bonds.visit_period, "caves": caves, "market_supply": supply, "demand_supply": demand, "companion": companion, "disciples": disciples.duplicate(), "sworn": sworn.duplicate()}
 	var kept_grudges: Array = []
 	for grudge: Dictionary in grudges:
 		kept_grudges.append({"id": str(grudge.id), "name": str(grudge.name), "enemy": str(grudge.enemy), "cause": str(grudge.cause), "since": int(grudge.since), "region": str(grudge.region)})
@@ -371,6 +382,12 @@ static func restore(s, data: Variant) -> bool:
 		player["tribulation"] = {"grade": int(trial.grade), "days": int(trial.days), "xp": int(trial.xp)}
 	if not underway.is_empty():
 		player["series"] = {"id": str(underway.id), "wave": int(underway.wave)}
+	var sittings := {}
+	for trial_id: String in trials:
+		sittings[trial_id] = {}
+		for year: String in trials[trial_id]:
+			sittings[trial_id][year] = int(trials[trial_id][year])
+	player["trials"] = sittings
 	var last_taken := {}
 	for series_id: String in series_last:
 		last_taken[series_id] = int(series_last[series_id])
@@ -598,6 +615,22 @@ static func _valid_supply(content, saved: Variant, day: int) -> Variant:
 			return null
 		if not content.item(item_id).is_empty():
 			result[item_id] = {"count": snappedf(float(sold.count), 0.01), "day": int(sold.day)}
+	return result
+
+## Shortages filled at places (`place:item` → {"count", "day"}), or null when malformed. Entries the
+## content no longer names are dropped.
+static func _valid_demand(content, saved: Variant, day: int) -> Variant:
+	if not saved is Dictionary:
+		return null
+	var result := {}
+	for key: Variant in saved:
+		var sold: Variant = saved[key]
+		if not key is String or key.count(":") != 1 or not sold is Dictionary or not (sold.get("count") is float or sold.get("count") is int) or float(sold.count) < 0.0 or float(sold.count) > LIMIT or not _whole_nonnegative(sold.get("day")) or int(sold.day) > day:
+			return null
+		var place: String = key.get_slice(":", 0)
+		var item_id: String = key.get_slice(":", 1)
+		if content.locations.has(place) and content.locations[place].get("demand", []).any(func(entry: Dictionary) -> bool: return str(entry.item) == item_id):
+			result[key] = {"count": snappedf(float(sold.count), 0.01), "day": int(sold.day)}
 	return result
 
 ## The old cave's rooms (optional: saves before it have none), or null when malformed. Caves and rooms
@@ -963,9 +996,14 @@ static func _valid_quests(content, data: Variant) -> Variant:
 		var wanted: Variant = quest.get("wanted", {})
 		if not wanted is Dictionary or (quest.has("wanted") and (not wanted.get("name") is String or not content.enemies.has(wanted.get("enemy", "")) or not content.locations.has(wanted.get("place", "")) or not wanted.get("twist") is bool or not _whole_nonnegative(wanted.get("wait_until", 0)))):
 			continue
+		# A 历练帖 keeps the season it counts toward (optional).
+		if quest.has("season") and not _whole_nonnegative(quest.season):
+			continue
 		var normalized: Dictionary = quest.duplicate(true)
 		for key: String in ["count", "days", "deadline", "progress"]:
 			normalized[key] = int(normalized[key])
+		if normalized.has("season"):
+			normalized.season = int(normalized.season)
 		if normalized.has("wanted") and normalized.wanted.has("wait_until"):
 			normalized.wanted.wait_until = int(normalized.wanted.wait_until)
 		# Commissions from before contribution pay none.

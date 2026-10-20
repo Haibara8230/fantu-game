@@ -16,7 +16,7 @@ class Passages extends Control:
 
 static func render(ui, center: VBoxContainer) -> void:
 	var session = ui.session
-	var cave_id: String = session.cave_here()
+	var cave_id: String = session.cave_here(ui.selected_spot)
 	if cave_id.is_empty():
 		return
 	var cave: Dictionary = session.Caves.definition(session, cave_id)

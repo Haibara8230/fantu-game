@@ -113,6 +113,8 @@ static func technique(content, id: String, layer: int = 0) -> Dictionary:
 ## A sect's handwritten art: its own numbers at full layers, the inheritance tier's layers.
 static func _handwritten(content, id: String, layer: int = 0) -> Dictionary:
 	var skill: Dictionary = content.skills[id]
+	if str(skill.get("slot", "art")) == "method":
+		return _handwritten_method(content, id, layer)
 	var tier := int(content.technique_data.inheritance_tier)
 	var layers := int(content.technique_data.tiers[tier - 1].layers)
 	var at := layers if layer <= 0 else clampi(layer, 1, layers)
@@ -142,6 +144,27 @@ static func _handwritten(content, id: String, layer: int = 0) -> Dictionary:
 	if result.has("burn"):
 		result.burn = [maxi(1, int(round(float(result.burn[0]) * share))), int(result.burn[1])]
 	result.description = str(skill.description) + _layered_numbers(result) + "耗灵气：%s。" % cost_text(content, skill.cost) + combo_text(content, result)
+	return result
+
+## A named 心法 written by hand (《藏息录》): its own tier and passive, growing with its layers like any
+## other; its words say where it falls short.
+static func _handwritten_method(content, id: String, layer: int) -> Dictionary:
+	var skill: Dictionary = content.skills[id]
+	var tier := int(skill.get("tier", content.technique_data.inheritance_tier))
+	var tier_def: Dictionary = content.technique_data.tiers[tier - 1]
+	var layers := int(tier_def.layers)
+	var at := layers if layer <= 0 else clampi(layer, 1, layers)
+	var share := layer_share(content, at, layers)
+	var passive := {}
+	for key: String in skill.passive:
+		passive[key] = _scaled(key, float(skill.passive[key]) * share)
+	var result := {
+		"id": id, "generated": false, "named": true, "element": skill.get("element", "none"), "tier": tier, "tier_name": tier_def.name,
+		"name": skill.name, "slot": "method", "kind": "passive", "affixes": [], "affix_texts": [], "affix_unlocks": [],
+		"min_realm": int(tier_def.min_realm), "value": int(tier_def.value), "study_days": int(tier_def.study_days),
+		"layer": at, "layers": layers, "passive": passive,
+	}
+	result.description = str(skill.description) + describe_technique(content, result)
 	return result
 
 ## The handwritten text names the art's full numbers; below full layers a line says what it does now.
@@ -257,11 +280,11 @@ static func describe_technique(content, t: Dictionary) -> String:
 		lines.append("耗灵气：%s。" % cost_text(content, t.cost))
 		lines.append(combo_text(content, t))
 	else:
-		var names := {"cultivation": "修炼速度 +%d%%", "max_hp": "气血上限 +%d", "max_qi": "灵力上限 +%d", "element_damage": element_name + "属性伤害 +%d%%", "orb_weight": "斗法中" + element_name + "灵气更易抽到 +%d"}
+		var names := {"cultivation": "修炼速度 +%d%%", "max_hp": "气血上限 +%d", "max_qi": "灵力上限 +%d", "element_damage": element_name + "属性伤害 +%d%%", "orb_weight": "斗法中" + element_name + "灵气更易抽到 +%d", "dun_speed": "遁速 +%d%%", "encounter": "野外遇险 %d%%"}
 		var parts: Array[String] = []
 		for key: String in t.passive:
 			var value: float = float(t.passive[key])
-			parts.append(names[key] % int(round(value * 100.0 if key in ["cultivation", "element_damage"] else value)))
+			parts.append(names[key] % int(round(value * 100.0 if key in ["cultivation", "element_damage", "dun_speed", "encounter"] else value)))
 		lines.append("心法，常驻生效：" + "，".join(parts) + "。")
 	var unlocks: Array = t.get("affix_unlocks", [])
 	var texts: Array = t.get("affix_texts", [])

@@ -11,7 +11,7 @@ static func render(ui) -> void:
 	center.add_child(ui.label("炼 器", 26, ui.GOLD))
 	var held: Array[String] = forge.materials_held(session)
 	if held.is_empty():
-		center.add_child(ui.paragraph("行囊里没有炼器的材料。长街器铺卖青钢锭、青丝与青玉料；更好的玄铁、玄蚕丝与墨玉可到青云山执事堂以贡献兑换，或到天南南明坊市的万宝楼买，古修洞府、沉霞古境与拍卖里也有。每炉要同一种材料 %d 份。" % int(forge.data(session).count)))
+		center.add_child(ui.paragraph("行囊里没有炼器的材料。长街器铺卖青钢锭、青丝与青玉料；更好的玄铁、玄蚕丝与墨玉可到青云山执事堂以贡献兑换，或到天南南明城的万宝楼买，古修洞府、沉霞古境与拍卖里也有。每炉要同一种材料 %d 份。" % int(forge.data(session).count)))
 		return
 	var plan: Dictionary = ui.forge_plan
 	if not str(plan.get("material", "")) in held:

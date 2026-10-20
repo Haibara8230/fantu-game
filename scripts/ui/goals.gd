@@ -7,7 +7,7 @@ const Calendar = preload("res://scripts/core/calendar.gd")
 const Sources = preload("res://scripts/core/sources.gd")
 const GOALS_PATH := "res://data/goals.json"
 # The goals whose situation applies() knows; every goal in the data must be one of them.
-const GOAL_IDS := ["bottleneck", "azhi_return", "auction", "serpent", "tournament", "summit", "foundation_breach", "foundation_pill", "foundation_xp", "core_breach", "azhi_token", "ruin", "sealed", "cultivate", "promotion", "rank"]
+const GOAL_IDS := ["bottleneck", "azhi_return", "auction", "serpent", "tournament", "summit", "contest", "foundation_breach", "foundation_pill", "foundation_xp", "core_breach", "azhi_token", "ruin", "sealed", "cultivate", "promotion", "rank"]
 # Upcoming dates are mentioned this long ahead.
 const TOURNAMENT_NOTICE_DAYS := 360
 ## The autumn auction is told this many days ahead.
@@ -95,7 +95,10 @@ static func applies(session, goal_id: String) -> bool:
 			return int(player.realm) == 0 and next >= day and next - day <= TOURNAMENT_NOTICE_DAYS
 		"summit":
 			var opening := _next_opening(session, "five_sects_entry")
-			return int(player.realm) >= 1 and opening >= day and opening - day <= TOURNAMENT_NOTICE_DAYS
+			return int(player.realm) >= 2 and opening >= day and opening - day <= TOURNAMENT_NOTICE_DAYS
+		"contest":
+			var contest := _next_contest(session)
+			return int(player.realm) == 1 and not contest.is_empty() and int(contest.day) - day <= TOURNAMENT_NOTICE_DAYS
 		"foundation_breach", "foundation_pill", "foundation_xp":
 			var breakthrough: Dictionary = session.next_breakthrough()
 			if int(player.realm) != 0 or breakthrough.is_empty():
@@ -150,6 +153,12 @@ static func values(session, goal_id: String) -> Dictionary:
 		"summit":
 			var opening := _next_opening(session, "five_sects_entry")
 			return {"date": Calendar.date_text(opening), "until": _span(opening - day)}
+		"contest":
+			var contest := _next_contest(session)
+			var ways: Array[String] = []
+			ways.append("青云弟子须近二十年试剑崖登上三层（最好一回 %d 层）" % session.Trials.best(session, "jianya", 20) if session.affiliation() == "qingyun" else "散修须近二十年历练帖三功（最好一届 %d 功）" % session.Trials.best(session, "lilian", 20))
+			ways.append("或请沈墨、秦砚、袁赤锋之一作保（交情到友好）")
+			return {"date": Calendar.date_text(int(contest.day)), "until": _span(int(contest.day) - day), "host": session.content.locations[str(contest.location)].name, "qualify": "，".join(ways)}
 		"foundation_pill":
 			return {"pill_price": _price(session, "foundation_pill"), "sources": _sources(session, "foundation_pill")}
 		"foundation_breach":
@@ -217,6 +226,17 @@ static func _next_opening(session, event_id: String) -> int:
 	if Calendar.to_day(year, int(periodic.month), int(periodic.to_day)) < day:
 		year += int(periodic.every_years)
 	return Calendar.to_day(year, int(periodic.month), int(periodic.from_day))
+
+## The next 天南大比 (whichever city hosts it): {"day", "location"} of the soonest opening not yet past.
+static func _next_contest(session) -> Dictionary:
+	var best := {}
+	for event_id: String in session.content.events:
+		if not event_id.begins_with("tiannan_contest_"):
+			continue
+		var opening := _next_opening(session, event_id)
+		if best.is_empty() or opening < int(best.day):
+			best = {"day": opening, "location": str(session.content.events[event_id].location)}
+	return best
 
 ## The next sub-stage of the current realm, or {} at its last.
 static func _next_stage(session) -> Dictionary:

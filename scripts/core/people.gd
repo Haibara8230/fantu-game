@@ -91,7 +91,7 @@ static func life_at(s, seat: int, day: int) -> Dictionary:
 ## A person's profile today: handwritten as written, generated as derived for the current day.
 static func person(s, person_id: String) -> Dictionary:
 	if s.content.people.has(person_id):
-		return s.content.people[person_id]
+		return view_on(s, person_id, int(s.world.day))
 	if not is_generated(s, person_id):
 		return {}
 	var day := int(s.world.day)
@@ -107,6 +107,31 @@ static func person(s, person_id: String) -> Dictionary:
 	s._views[person_id] = {"day": day, "view": view}
 	return view
 
+## A handwritten person as they are on `day`: the data, with the latest phase of their 年表 begun by then
+## (its year come, its `if` met) laid over it. A phase is a later life: the opening `window` no longer
+## holds, and only the phase's own `present_if` does.
+static func view_on(s, person_id: String, day: int) -> Dictionary:
+	var someone: Dictionary = s.content.people[person_id]
+	if not someone.has("phases"):
+		return someone
+	var current: Dictionary = {}
+	for phase: Dictionary in someone.phases:
+		if Calendar.year(day) >= int(phase.year) and Events.all_met(s, phase.get("if", [])):
+			current = phase
+	if current.is_empty():
+		return someone
+	var shown: Dictionary = someone.duplicate()
+	shown.erase("window")
+	shown.erase("present_if")
+	for key: String in current:
+		if key in s.content.PHASE_KEYS:
+			shown[key] = current[key]
+	if current.has("home"):
+		shown.erase("schedule")
+	elif current.has("schedule"):
+		shown.erase("home")
+	return shown
+
 ## Where a person is on a day (today by default), or "" when absent, dead, away or somewhere undiscovered.
 static func npc_location(s, person_id: String, on_day: int = -1) -> String:
 	var day := int(s.world.day) if on_day < 0 else on_day
@@ -115,7 +140,7 @@ static func npc_location(s, person_id: String, on_day: int = -1) -> String:
 	if is_generated(s, person_id):
 		var place := _detoured(s, Population.location_on(life_by_id(s, person_id), day))
 		return place if not place.is_empty() and s.location_visible(place) else ""
-	var someone: Dictionary = s.content.people[person_id]
+	var someone := view_on(s, person_id, day)
 	if someone.has("window"):
 		var from: Array = someone.window.from
 		var to: Array = someone.window.to
@@ -123,7 +148,7 @@ static func npc_location(s, person_id: String, on_day: int = -1) -> String:
 			return ""
 	if not Events.all_met(s, someone.get("present_if", [])):
 		return ""
-	var location: String = s.content.person_base_location(person_id, day)
+	var location: String = s.content.person_base_location(person_id, day, someone)
 	return location if s.location_visible(location) else ""
 
 ## Where someone goes instead while their place is sealed (落霞谷 during the serpent's rampage): the
@@ -154,8 +179,7 @@ static func _build_people_index(s, day: int) -> Dictionary:
 	var map := {}
 	var until := 2147483647
 	for person_id: String in s.content.people:
-		var someone: Dictionary = s.content.people[person_id]
-		for place: String in ([someone.home] if someone.has("home") else someone.schedule.map(func(stop: Dictionary) -> String: return stop.location)):
+		for place: String in s.content.person_places(person_id):
 			_index_add(map, place, person_id)
 	for seat: int in s._local_seats:
 		var lives := seat_lives(s, seat, day)
@@ -205,9 +229,7 @@ static func meet_during(s, first_day: int, last_day: int) -> void:
 	for person_id: String in s.content.people:
 		if bool(s.world.people.get(person_id, {}).get("met", false)):
 			continue
-		var someone: Dictionary = s.content.people[person_id]
-		var places: Array = [someone.home] if someone.has("home") else someone.schedule.map(func(stop: Dictionary) -> String: return stop.location)
-		if not here in places:
+		if not here in s.content.person_places(person_id):
 			continue
 		for day: int in range(first_day, last_day + 1):
 			if npc_location(s, person_id, day) == here:

@@ -744,26 +744,165 @@
     "affiliation": "散修",
     "age": 27,
     "personality": "沉默",
-    "standing": [0, 1],
-    "talents": ["jianxin", "bunao", "jiushang"],
+    "standing": [
+      0,
+      1
+    ],
+    "talents": [
+      "jianxin",
+      "bunao",
+      "jiushang"
+    ],
     "description": "倚在路旁的年轻散修，衣襟染血，像是刚从一场恶斗中逃出来。",
     "home": "ridge",
     "spot": "pines",
-    "window": {"from": [1, 2, 1], "to": [2, 12, 30]},
-    "present_if": [{"not": {"flag": "helped_wanderer"}}],
+    "window": {
+      "from": [
+        1,
+        2,
+        1
+      ],
+      "to": [
+        2,
+        12,
+        30
+      ]
+    },
+    "present_if": [
+      {
+        "not": {
+          "flag": "helped_wanderer"
+        }
+      }
+    ],
     "talk_favor": 1,
     "gift_favor": 0,
     "talk": [
       "“……不碍事。只是被妖狼抓了一下。”"
     ],
-    "congrats": {"breakthrough": "听说你筑基了。当年松林里那两株回春草，我记一辈子。"},
+    "congrats": {
+      "breakthrough": "听说你筑基了。当年松林里那两株回春草，我记一辈子。"
+    },
     "interactions": [
       {
         "id": "heal",
         "label": "以两株回春草为他疗伤",
-        "conditions": [{"item_at_least": ["huichun_grass", 2]}],
-        "effects": [{"item": ["huichun_grass", -2]}, {"flag": "helped_wanderer"}, {"relation": ["wounded", 30]}, {"leave": true}],
+        "conditions": [
+          {
+            "item_at_least": [
+              "huichun_grass",
+              2
+            ]
+          }
+        ],
+        "effects": [
+          {
+            "item": [
+              "huichun_grass",
+              -2
+            ]
+          },
+          {
+            "flag": "helped_wanderer"
+          },
+          {
+            "relation": [
+              "wounded",
+              30
+            ]
+          },
+          {
+            "leave": true
+          }
+        ],
         "chronicle": "你以两株回春草为柳寒舟疗伤，他道谢后蹒跚离去。"
+      }
+    ],
+    "phases": [
+      {
+        "year": 3,
+        "home": "beiyue",
+        "spot": "inn",
+        "standing": [
+          0,
+          2
+        ],
+        "realm_text": "炼气后期",
+        "title": "北岳的散修剑客",
+        "description": "背着一柄断剑的散修，常年在北岳与断剑峡之间来回，像在等什么人。",
+        "talk": [
+          "“……我在等一个人。”"
+        ]
+      },
+      {
+        "year": 17,
+        "standing": [
+          1,
+          0
+        ],
+        "realm_text": "筑基初期"
+      },
+      {
+        "year": 35,
+        "standing": [
+          1,
+          1
+        ],
+        "realm_text": "筑基中期"
+      },
+      {
+        "year": 35,
+        "if": [
+          {
+            "flag": "liu_public"
+          }
+        ],
+        "title": "断剑门传人",
+        "description": "替师门洗清了冤屈，在北岳收了几个弟子，断剑门的旗子又挂了起来。",
+        "talk": [
+          "“师父的剑，总算有人接着练了。”"
+        ]
+      },
+      {
+        "year": 35,
+        "if": [
+          {
+            "flag": "liu_private"
+          }
+        ],
+        "home": "duanjian",
+        "spot": "shoal",
+        "title": "断剑峡口的守剑人",
+        "description": "了结了旧案，却没有回北岳。一个人守在断剑峡口，话比从前更少。",
+        "talk": [
+          "“……这样就够了。”"
+        ]
+      },
+      {
+        "year": 35,
+        "if": [
+          {
+            "flag": "liu_redress"
+          }
+        ],
+        "title": "北岳的剑修",
+        "description": "师门的弟子们被正了名，他便在北岳住了下来，替会馆护送进峡的人。",
+        "talk": [
+          "“名字划掉了。师父要的，大概就是这个。”"
+        ]
+      },
+      {
+        "year": 35,
+        "if": [
+          {
+            "flag": "liu_quit"
+          }
+        ],
+        "title": "疏远的故人",
+        "description": "旧案的事，他一个人去办了。再见面时，只远远点个头。",
+        "talk": [
+          "“……嗯。”"
+        ]
       }
     ]
   },
@@ -1838,7 +1977,86 @@
     ],
     "congrats": {
       "breakthrough": "你筑基了？好家伙，我还在炼气里打转。改天我做东，这顿你别跟我抢。"
-    }
+    },
+    "phases": [
+      {
+        "year": 18,
+        "standing": [
+          1,
+          0
+        ],
+        "realm_text": "筑基初期",
+        "description": "云溪陆家的小少爷，靠家里堆的丹药筑了基。出手阔绰，好面子，也认人情；天南大比上总在台下摆桌子收押注。"
+      },
+      {
+        "year": 30,
+        "if": [
+          {
+            "flag": "lu_head"
+          }
+        ],
+        "title": "陆家当家",
+        "description": "兄长身故后接手了陆家的生意，账本看得越来越熟，笑得越来越少。",
+        "talk": [
+          "“账本这东西，看懂了反倒睡不着。”"
+        ]
+      },
+      {
+        "year": 30,
+        "if": [
+          {
+            "flag": "lu_public"
+          }
+        ],
+        "title": "担责的陆家家主",
+        "description": "当众认了陆家的账。家里的生意少了一半，来往的人却比从前信得过他。",
+        "talk": [
+          "“该的。陆家欠的，陆家还。”"
+        ]
+      },
+      {
+        "year": 30,
+        "if": [
+          {
+            "flag": "lu_quiet"
+          }
+        ],
+        "title": "陆家家主",
+        "description": "陆家的体面保住了，生意也照旧。只是酒喝得比从前多，提起旧矿道就岔开话。",
+        "talk": [
+          "“过去的事，不提了。喝酒。”"
+        ]
+      },
+      {
+        "year": 30,
+        "if": [
+          {
+            "flag": "lu_leave"
+          }
+        ],
+        "home": "ferry",
+        "spot": "dock",
+        "affiliation": "散修",
+        "title": "离家修行的散修",
+        "description": "把家主的印信交还族里，做了个散修，常在白鹭渡搭船来去。想去哪儿去哪儿，跟十七岁那年说的一样。",
+        "talk": [
+          "“我从小就不想管那些。现在想去哪儿去哪儿。”"
+        ]
+      },
+      {
+        "year": 30,
+        "if": [
+          {
+            "flag": "lu_ignore"
+          }
+        ],
+        "title": "疏远的故人",
+        "description": "陆家的当家。你们很多年没再说过话。",
+        "talk": [
+          "“……是你啊。”"
+        ]
+      }
+    ]
   },
   "ye_zhiwei": {
     "name": "叶知微",
@@ -1870,7 +2088,32 @@
     ],
     "congrats": {
       "breakthrough": "筑基了？恭喜。往后炼丹缺人试药，我先找你。"
-    }
+    },
+    "phases": [
+      {
+        "year": 16,
+        "standing": [
+          1,
+          0
+        ],
+        "realm_text": "筑基初期"
+      },
+      {
+        "year": 30,
+        "standing": [
+          1,
+          1
+        ],
+        "realm_text": "筑基中期",
+        "home": "canglan_pavilion",
+        "spot": "library",
+        "title": "随师行医的丹修",
+        "description": "随师父在沧澜阁落脚，替人看病、配药，夜里在藏书阁抄药方。师父年纪大了，她说话越来越少。",
+        "talk": [
+          "“师父说药能医病，医不了命。我不信。”"
+        ]
+      }
+    ]
   },
   "wenren_zhao": {
     "name": "闻人照",
@@ -1902,7 +2145,24 @@
     ],
     "congrats": {
       "breakthrough": "筑基了！下回寻宝，你打头阵，我在后面布阵。"
-    }
+    },
+    "phases": [
+      {
+        "year": 19,
+        "standing": [
+          1,
+          0
+        ],
+        "realm_text": "筑基初期",
+        "home": "ferry",
+        "spot": "dock",
+        "title": "白鹭渡修船看图的阵修",
+        "description": "筑基以后在白鹭渡租了间船坞，白天替人修船上的阵盘，夜里对着一摞古图发呆。十回寻宝九回扑空，他说剩下那一回快了。",
+        "talk": [
+          "“这张图是真的，我敢拿脑袋担保——上回那张不算。”"
+        ]
+      }
+    ]
   },
   "wen_zhaoheng": {
     "name": "温照衡",
@@ -2029,6 +2289,39 @@
           }
         ],
         "chronicle": "秦砚用凝露草调了一砚阵墨，在纸上画了半天：翻板、落石、暗弩，都从哪里起机，又从哪里能绕过去。往后进洞府，机关好认多了。"
+      },
+      {
+        "id": "letter",
+        "label": "说起要去北岳旧档库，请他指条门路",
+        "once": true,
+        "conditions": [
+          {
+            "story_at": [
+              "mirror",
+              "archive"
+            ]
+          },
+          {
+            "flag": "crest_qin"
+          },
+          {
+            "not": {
+              "flag": "qin_letter"
+            }
+          }
+        ],
+        "effects": [
+          {
+            "flag": "qin_letter"
+          },
+          {
+            "relation": [
+              "qin_yan",
+              5
+            ]
+          }
+        ],
+        "chronicle": "秦砚听你说要去北岳旧档库，提笔写了封信：“会馆的庞老是我师父的师兄，拿这个去，比押钱强。”"
       }
     ]
   },
@@ -2099,6 +2392,267 @@
           }
         ],
         "chronicle": "樊九掂了掂狼牙，带你在岭上走了一整天，指给你看爪印、粪迹和蹭在树皮上的毛。往后路上撞见妖狼，你多半能先一步看出它在哪儿，绕过去。"
+      }
+    ]
+  },
+  "yan_wujiu": {
+    "name": "晏无咎",
+    "title": "守川司主事",
+    "attitude": "neutral",
+    "gender": "male",
+    "realm_text": "元婴中期",
+    "affiliation": "天衍宗 · 守川司",
+    "age": 389,
+    "personality": "冷静克制",
+    "standing": [
+      3,
+      1
+    ],
+    "talents": [
+      "chenzhuo",
+      "xixin",
+      "jixing"
+    ],
+    "description": "守川司的主事，白发，面容却年轻。说话不急不缓，像是什么都事先算过一遍。守川司名义上看守天下与天河相关的古物，防止裂隙再开。",
+    "home": "beiyue",
+    "spot": "archive",
+    "window": {
+      "from": [
+        1,
+        1,
+        1
+      ],
+      "to": [
+        1,
+        1,
+        2
+      ]
+    },
+    "talk": [
+      "“旧物有旧物的去处。”"
+    ]
+  },
+  "pang_shouzhuo": {
+    "name": "庞守拙",
+    "title": "阵师会馆管事",
+    "attitude": "neutral",
+    "gender": "male",
+    "realm_text": "金丹初期",
+    "affiliation": "北岳阵师会馆",
+    "age": 211,
+    "personality": "严谨",
+    "standing": [
+      2,
+      0
+    ],
+    "talents": [
+      "chenzhuo",
+      "xixin",
+      "jixing"
+    ],
+    "description": "北岳阵师会馆的管事，一辈子在旧档库里查卷宗、修旧阵。生人进库，都要经他写条子。",
+    "home": "beiyue",
+    "spot": "guild",
+    "talk_favor": 2,
+    "gift_favor": 2,
+    "talk": [
+      "“北岳的古物，十件里三件是假的；剩下七件，有五件来历说不清。”",
+      "“进库可以，卷宗少一页，押金不退。”",
+      "“看阵和看人一样，先看哪里缺了一块。”"
+    ],
+    "interactions": [
+      {
+        "id": "letter",
+        "label": "递上秦砚的荐书",
+        "conditions": [
+          {
+            "flag": "qin_letter"
+          },
+          {
+            "not": {
+              "flag": "archive_pass"
+            }
+          }
+        ],
+        "effects": [
+          {
+            "flag": "archive_pass"
+          },
+          {
+            "relation": [
+              "pang_shouzhuo",
+              10
+            ]
+          }
+        ],
+        "chronicle": "庞守拙拆开秦砚的信看了两遍，笑了：“秦小子的阵谱，当年是我教的。”他写了张条子递给你，“拿去给库里的老吏。”"
+      },
+      {
+        "id": "deposit",
+        "label": "按会馆的规矩，押两百灵石作保进库",
+        "conditions": [
+          {
+            "stones_at_least": 200
+          },
+          {
+            "not": {
+              "flag": "archive_pass"
+            }
+          }
+        ],
+        "effects": [
+          {
+            "stones": -200
+          },
+          {
+            "flag": "archive_pass"
+          }
+        ],
+        "chronicle": "庞守拙收了灵石，写了张条子：“生人进库，押两百灵石。出来时卷宗少一页，这钱就不还了。”"
+      },
+      {
+        "id": "crest",
+        "label": "请他鉴一鉴你描下的城徽",
+        "conditions": [
+          {
+            "story_at": [
+              "mirror",
+              "archive"
+            ]
+          },
+          {
+            "not": {
+              "flag": "crest_pang"
+            }
+          }
+        ],
+        "effects": [
+          {
+            "flag": "crest_pang"
+          },
+          {
+            "relation": [
+              "pang_shouzhuo",
+              5
+            ]
+          }
+        ],
+        "chronicle": "庞守拙看了很久：“这纹样，四十年前我在库里见过一回，后来那几架卷宗就被人调走了。调走的人……你进了库，自己看吧。”"
+      }
+    ]
+  },
+  "mo_ci": {
+    "name": "莫辞",
+    "title": "断剑峡的散修",
+    "attitude": "neutral",
+    "gender": "male",
+    "realm_text": "筑基初期",
+    "affiliation": "散修",
+    "age": 58,
+    "personality": "寡言",
+    "standing": [
+      1,
+      0
+    ],
+    "talents": [
+      "chenzhuo",
+      "xixin",
+      "jixing"
+    ],
+    "description": "在断剑峡口住了二十年的散修，靠捡峡壁上崩下来的玄铁过活。修为不高，走过剑灵游荡的乱石滩却像走自家院子。",
+    "home": "duanjian",
+    "spot": "shoal",
+    "talk_favor": 2,
+    "gift_favor": 3,
+    "talk": [
+      "“收着气走。剑灵认的是灵力，不是人。”",
+      "“别憋气，越憋越显眼。”",
+      "“峡里那间草庐？早没人住了。”"
+    ],
+    "interactions": [
+      {
+        "id": "cangxi",
+        "label": "以三枚疗伤丹相换，请他传授藏身之法",
+        "once": true,
+        "conditions": [
+          {
+            "relation_at_least": [
+              "mo_ci",
+              80
+            ]
+          },
+          {
+            "item_at_least": [
+              "liaoshang_pill",
+              3
+            ]
+          },
+          {
+            "not": {
+              "flag": "cangxi_taught"
+            }
+          }
+        ],
+        "effects": [
+          {
+            "item": [
+              "liaoshang_pill",
+              -3
+            ]
+          },
+          {
+            "flag": "cangxi_taught"
+          },
+          {
+            "slip": "cangxi_lu"
+          },
+          {
+            "relation": [
+              "mo_ci",
+              10
+            ]
+          }
+        ],
+        "chronicle": "莫辞收了疗伤丹，从竹篓底下摸出一册翻烂了的手抄本：“《藏息录》。不是我写的，也不是什么好东西——专门教人躲。可人活着，总有要躲的时候。”"
+      },
+      {
+        "id": "trade_lore",
+        "label": "拿秦砚的机关阵谱心得同他交换",
+        "once": true,
+        "conditions": [
+          {
+            "relation_at_least": [
+              "mo_ci",
+              80
+            ]
+          },
+          {
+            "flag": "trap_lore"
+          },
+          {
+            "not": {
+              "flag": "cangxi_taught"
+            }
+          }
+        ],
+        "effects": [
+          {
+            "flag": "cangxi_taught"
+          },
+          {
+            "slip": "cangxi_lu"
+          },
+          {
+            "relation": [
+              "mo_ci",
+              10
+            ]
+          },
+          {
+            "mind": 2
+          }
+        ],
+        "chronicle": "你把秦砚讲的翻板、落石、暗弩一样样画给他看。莫辞看得很仔细，末了把一册手抄本推过来：“《藏息录》。你教我看阵，我教你躲阵，两清。”"
       }
     ]
   }

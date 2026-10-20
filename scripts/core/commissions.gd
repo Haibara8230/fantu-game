@@ -21,11 +21,12 @@ static func offers(s, board: String) -> Array[Dictionary]:
 	var period := int(s.world.day) / int(data.period_days)
 	var rng := RandomNumberGenerator.new()
 	rng.seed = hash([int(s.world.get("seed", 0)), "commission", board, period])
-	var kinds: Array = data.templates.keys().filter(func(kind: String) -> bool: return board in data.templates[kind].boards and int(s.player.realm) >= int(data.templates[kind].get("min_realm", 0)))
+	var kinds: Array = data.templates.keys().filter(func(kind: String) -> bool: return board in data.templates[kind].boards and int(s.player.realm) >= int(data.templates[kind].get("min_realm", 0)) and not data.templates[kind].has("years"))
 	kinds.sort()
 	var total := 0
 	for kind: String in kinds:
 		total += int(data.templates[kind].weight)
+	var picks: Array[String] = []
 	for index: int in int(data.offers):
 		var roll := rng.randi_range(1, total)
 		var kind: String = kinds[0]
@@ -34,8 +35,17 @@ static func offers(s, board: String) -> Array[Dictionary]:
 			if roll <= 0:
 				kind = candidate
 				break
+		picks.append(kind)
+	# A season's 历练帖 (`years`: [first, every], the whole of that year) are posted besides, one of each.
+	var seasonal: Array = data.templates.keys().filter(func(kind: String) -> bool: return board in data.templates[kind].boards and int(s.player.realm) >= int(data.templates[kind].get("min_realm", 0)) and in_season(s, data.templates[kind]))
+	seasonal.sort()
+	picks.append_array(seasonal)
+	for index: int in picks.size():
+		var kind: String = picks[index]
 		var template: Dictionary = data.templates[kind]
 		var offer := {"key": "%s:%d:%d" % [board, period, index], "kind": kind, "board": board, "count": rng.randi_range(int(template.count[0]), int(template.count[1])), "days": int(template.days)}
+		if bool(template.get("lilian", false)):
+			offer.season = s.Calendar.year(int(s.world.day))
 		if template.has("wanted"):
 			# 悬赏: an outlaw of the board's region the player's realm can take, hiding at one of its places.
 			var region: String = s.content.region_of(str(data.boards[board].location))
@@ -60,6 +70,13 @@ static func offers(s, board: String) -> Array[Dictionary]:
 		if not s.world.quests_taken.has(offer.key):
 			result.append(offer)
 	return result
+
+## Whether a seasonal template's year has come round (`years`: [first, every]).
+static func in_season(s, template: Dictionary) -> bool:
+	if not template.has("years"):
+		return false
+	var year: int = s.Calendar.year(int(s.world.day))
+	return year >= int(template.years[0]) and (year - int(template.years[0])) % int(template.years[1]) == 0
 
 ## Title and description of an offer or an accepted commission.
 static func text(s, quest: Dictionary) -> Dictionary:
@@ -129,6 +146,10 @@ static func deliver(s, key: String) -> String:
 		var merit: int = int(quest.reward.get("contribution", 0)) * (100 + int(s.Sect.duty_value(s, "contribution_percent"))) / 100
 		if merit > 0:
 			done += " " + s.Sect.gain(s, merit, "宗门差事办妥")
+		# A 历练帖 counts one merit toward its season (trials.gd).
+		if quest.has("season"):
+			s.Trials.record(s, "lilian", 1, true, int(quest.season))
+			done += " " + s.log_event("lilian_merit", {"count": s.Trials.score(s, "lilian", int(quest.season))})
 		var milestones: Array[String] = s.gain_insight("commission")
 		milestones.append_array(s.gain_xp(int(quest.reward.xp)))
 		if not milestones.is_empty():

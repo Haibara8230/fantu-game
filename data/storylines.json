@@ -235,11 +235,11 @@
   "south_journey": {
     "title": "南行",
     "giver": "gu_changgeng",
-    "begin_if": [{"realm_at_least": 1}, {"flag": "rushi_done"}],
+    "begin_if": [{"realm_at_least": 1}, {"flag": "rushi_done"}, {"affiliation": "qingyun"}],
     "steps": [
       {"id": "wait", "wait_days": 90},
-      {"id": "summon", "letter": true, "goal": "回传功堂见顾长庚，听他说说天南。", "place": "sect", "done": [{"at_location": "sect"}], "say": "筑基也有些日子了。青云山小，天南却大，回传功堂一趟，老夫同你说说外头。", "after": "顾长庚：“天南五宗，青云最小。云溪坊市有座传送阵，直通南明坊市，赤霄门就在那边——炼器的炉火三百年没熄过。去走一走，见见别家的炉子与剑，回来再说你的路。”", "effects": [{"flag": "tiannan_known"}, {"stones": 80}, {"mind": 3}]},
-      {"id": "visit", "goal": "经云溪坊市的传送阵，去南明坊市看看。", "place": "nanming", "done": [{"at_location": "nanming"}], "after": "传送阵的光一收，热风便扑面而来。南明坊市的长街被千百座炉火映得通红，万宝楼的伙计一眼认出你腰间青云的玉牌，笑着迎了上来。", "effects": [{"mind": 4}], "major": true}
+      {"id": "summon", "letter": true, "goal": "回传功堂见顾长庚，听他说说天南。", "place": "sect", "done": [{"at_location": "sect"}], "say": "筑基也有些日子了。青云山小，天南却大，回传功堂一趟，老夫同你说说外头。", "after": "顾长庚：“天南五宗，青云最小。云溪坊市有座传送阵，直通南明城，赤霄门就在那边——炼器的炉火三百年没熄过。去走一走，见见别家的炉子与剑，回来再说你的路。”", "effects": [{"flag": "tiannan_known"}, {"stones": 80}, {"mind": 3}]},
+      {"id": "visit", "goal": "经云溪坊市的传送阵，去南明城看看。", "place": "nanming", "done": [{"at_location": "nanming"}], "after": "传送阵的光一收，热风便扑面而来。南明城的长街被千百座炉火映得通红，万宝楼的伙计一眼认出你腰间青云的玉牌，笑着迎了上来。", "effects": [{"mind": 4}], "major": true}
     ]
   },
   "talent_xianren": {"title": "前世残忆", "giver": "boatman", "begin_if": [{"talent": "xianren_zhuanshi"}], "steps": [{"id": "dream", "requires": [{"stage_at_least": [0, 1]}], "say": "你又做了那个梦：立于云端，脚下是翻涌的雷海。醒来时，掌心多了一道看不懂的纹路，一闪便隐去了。", "effects": [{"mind": 5}], "auto": true}, {"id": "eye", "requires": [{"stage_at_least": [0, 3]}], "say": "残缺的记忆又浮上来一片：落霞谷深处，山壁裂隙之后，有一眼灵眼——前世的你，曾在那里破境。", "effects": [{"flag": "spirit_eye_found"}, {"mind": 3}], "major": true, "auto": true}, {"id": "boatman", "goal": "筑基之后，去白鹭渡见见那位老艄公。", "place": "ferry", "requires": [{"realm_at_least": 1}], "done": [{"at_location": "ferry"}], "after": "老艄公盯着你看了许久，手里的竹篙都忘了撑：“……是你？三百年了。”他从船底摸出一只木匣，“你当年托我保管的，如今物归原主。”", "effects": [{"manual": 4}, {"relation": ["boatman", 30]}, {"mind": 5}], "major": true}]},
@@ -647,7 +647,7 @@
     "steps": [
       {
         "id": "contact",
-        "goal": "到南明坊市，拿引介信认一认万宝楼。",
+        "goal": "到南明城，拿引介信认一认万宝楼。",
         "place": "nanming",
         "done": [
           {
@@ -659,7 +659,7 @@
       },
       {
         "id": "supplies",
-        "goal": "带回春草、凝露草各两株到南明坊市交小药单（六十灵石）。",
+        "goal": "带回春草、凝露草各两株到南明城交小药单（六十灵石）。",
         "place": "nanming",
         "done": [
           {
@@ -699,7 +699,7 @@
       },
       {
         "id": "route",
-        "goal": "在南明坊市记下返程方式，留好盘缠或认清免费陆路。",
+        "goal": "在南明城记下返程方式，留好盘缠或认清免费陆路。",
         "place": "nanming",
         "choice_event": "south_return_routes"
       },
@@ -924,7 +924,8 @@
             "mind": 3
           }
         ]
-      }
+      },
+      {"id": "archive", "goal": "带着描下的城徽去北岳城：阵师会馆能引荐进旧档库，那里或许留着那座城的卷宗。", "place": "beiyue", "requires": [{"realm_at_least": 1}, {"flag": "crest_puzzled"}, {"flag": "tiannan_known"}], "done": [{"any": [{"flag": "archive_done"}, {"flag": "archive_seized"}]}], "after": "缺页是守川司撤走的；温照衡与那幅古画像是同一个人——几百年前的守阵名录上就有他。一个活了几百年、天天在渡口钓鱼的人，和一群专门撤卷宗的人。他们到底在藏什么？", "effects": [{"mind": 4}], "major": true}
     ]
   },
   "zhuji_plan": {
@@ -1081,5 +1082,8 @@
         "after": "炼气圆满了。顾长老那边，传功堂里自会有话。"
       }
     ]
-  }
+  },
+  "south_wander": {"title": "南行", "giver": "shen_mo", "begin_if": [{"realm_at_least": 1}, {"flag": "rushi_done"}, {"affiliation": ""}], "steps": [{"id": "wait", "wait_days": 60}, {"id": "letter", "letter": true, "skip_if": [{"flag": "tiannan_known"}], "say": "沈墨传音：“筑基了？云溪困不住你了。来药铺一趟，同你说说天南。”", "goal": "回云溪药铺，听沈墨说说天南。", "place": "market", "done": [{"at_location": "market"}], "after": "沈墨摊开一张旧舆图：“天南五城，云溪最小。坊市东头的传送阵通南明，四十灵石一趟；南明再往北是北岳，古物多，骗子也多。散修在天南，靠的是客栈的静房、告示板上的委托，还有各城的门路。”", "effects": [{"flag": "tiannan_known"}, {"mind": 3}]}, {"id": "visit", "goal": "经云溪的传送阵，去南明城看看。", "place": "nanming", "done": [{"at_location": "nanming"}], "after": "热风扑面。南明城的长街被千百座炉火映得通红；城西的火塘客栈挂着「静房按月」的木牌，告示板上的委托比云溪多出两倍。", "effects": [{"mind": 3}], "major": true}]},
+  "liu_case": {"title": "断剑旧案", "giver": "wounded", "steps": [{"id": "tale", "goal": "柳寒舟在北岳城落脚：去北岳客栈找他，听他把话说完。", "place": "beiyue", "requires": [{"realm_at_least": 1}, {"flag": "tiannan_known"}], "done": [{"at_location": "beiyue"}], "after": "柳寒舟把断剑横在桌上：“我师门叫断剑门，三十年前一夜之间死在断剑峡里。玄岳宗的卷宗上写：私通魔修，自取其祸。我不信。”他没求你帮忙，只说他会在北岳等，等一个当年的人。", "effects": [{"relation": ["wounded", 10]}]}, {"id": "witness", "letter": true, "requires": [{"year_at_least": 40}], "say": "柳寒舟传音，只有三个字：“他来了。”", "goal": "柳寒舟等的人到了北岳：去听那位证人怎么说。", "place": "beiyue", "done": [{"at_location": "beiyue"}], "after": "证人是个老脚夫，叫卢七，当年给断剑门送粮。他说出事那夜，进峡的不是魔修，是玄岳宗的执法弟子——断剑门挖开了峡底的剑冢，玄岳说那底下镇着不该动的东西。第二天玄岳的人进峡收尸，卷宗上却一个字都没提剑冢。", "effects": [{"mind": 3}]}, {"id": "evidence", "goal": "两相对照：拿到进北岳旧档库的门路调出断剑门的卷宗，再去断剑峡的断剑林找当年的实物。", "place": "duanjian", "done": [{"flag": "archive_pass"}, {"flag": "duanjian_ling_down"}], "after": "卷宗上「私通魔修」四个字是后来补的，墨色比前后都新；断剑林里，你在剑灵首散落的碎剑间翻出一块玄岳执法令牌，背面刻着三十年前的年号。证人、卷宗、令牌，三样对得上。"}, {"id": "decide", "goal": "把证据交到柳寒舟手里，一起定下怎么了结。", "place": "beiyue", "choice_event": "liu_choice"}]},
+  "lu_heir": {"title": "陆家", "giver": "lu_chengzhou", "steps": [{"id": "funeral", "letter": true, "say": "陆承舟传音，声音哑得厉害：“我哥没了。你……能来一趟吗？”", "goal": "去云溪陆府吊唁陆承岳。", "place": "market", "done": [{"at_location": "market"}], "after": "灵堂里，陆承舟穿着孝服，跪得笔直。散了客，他坐在台阶上说：“家里的生意，以后归我管了。我连账本都看不懂。”他笑了一下，比哭还难看。", "effects": [{"flag": "lu_head"}, {"relation": ["lu_chengzhou", 10]}]}, {"id": "wait", "wait_days": 1800}, {"id": "ledger", "letter": true, "say": "陆承舟传音：“有笔账我看不明白——每月都有一批延寿药胚，从南明发往赤枫岭的旧矿道。矿道早不出矿了。你帮我去南明万宝楼对一对？”", "goal": "去南明城，替陆承舟对一笔发往赤枫岭旧矿道的账。", "place": "nanming", "done": [{"at_location": "nanming"}], "after": "万宝楼的掌柜翻出底单：药胚是陆家二房的人经手的，收货的是旧矿道的护院。一批药胚，够几十个人吃一年。矿道里要这么多延寿药做什么？", "effects": [{"flag": "lu_mine_known"}]}, {"id": "mine", "goal": "去赤枫岭旧矿道看个究竟：护院不让生人进去——硬闯、收着气息摸进去，或拿陆家的名头叫门。", "place": "chifeng", "done": [{"flag": "lu_mine_cleared"}], "after": "石屋里锁着十几个矿工，手臂上全是针眼，有两个已经起不来了。墙上挂着一本册子，记着每人每天服了几钱药胚、气血涨落几分——陆家的延寿药，是拿活人试出来的。", "effects": [{"mind": 2}]}, {"id": "decide", "goal": "陆承舟赶来了。同他商量，这件事怎么了结。", "place": "chifeng", "choice_event": "lu_choice"}]}
 }

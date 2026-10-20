@@ -9,10 +9,16 @@ static func map_path(region: String = "qingyun") -> String:
 static func location_path(location_id: String) -> String:
 	return ROOT + "locations/%s.png" % location_id
 
-## Full-screen compositions stay separate from spot-window banners.
+## Full-screen compositions stay separate from spot-window banners. data/art.json `location_art` lends
+## one place's composition to another until it has its own (北岳 borrows 南明's).
 static func fullscreen_location_path(location_id: String) -> String:
 	var path := ROOT + "locations/%s_fullscreen.png" % location_id
-	return path if ResourceLoader.exists(path) else location_path(location_id)
+	if ResourceLoader.exists(path):
+		return path
+	var lent := str(_config().get("location_art", {}).get(location_id, ""))
+	if not lent.is_empty() and ResourceLoader.exists(ROOT + "locations/%s_fullscreen.png" % lent):
+		return ROOT + "locations/%s_fullscreen.png" % lent
+	return location_path(location_id)
 
 ## A spot's picture; data/art.json `scene_art` lends one scene's picture to another until it has its own.
 static func scene_path(location_id: String, spot_id: String) -> String:
@@ -83,8 +89,8 @@ static func technique_kind(t: Dictionary) -> String:
 			return "mend"
 		"guard":
 			return "ward"
-		# 印 and 聚气 turn and gather qi: the 凝神 figure.
-		"spirit":
+		# 印 and 聚气 turn and gather qi, and a named 心法 (《藏息录》) settles the breath: the 凝神 figure.
+		"spirit", "passive":
 			return "focus"
 	if int(t.get("hits", 1)) > 1:
 		return "barrage"

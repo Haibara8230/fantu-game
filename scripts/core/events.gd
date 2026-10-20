@@ -85,6 +85,11 @@ static func met(s, condition: Dictionary) -> bool:
 			return s.pill_count(value[0]) >= int(value[1])
 		"stones_at_least":
 			return int(s.player.stones) >= int(value)
+		"year_at_least":
+			return Calendar.year(int(s.world.day)) >= int(value)
+		# [trial, score, within years]: a good enough sitting lately (trials.gd).
+		"trial_at_least":
+			return s.Trials.best(s, str(value[0]), int(value[2])) >= int(value[1])
 		"herbs_at_least":
 			return s.herb_count() >= int(value)
 		"met":
@@ -155,6 +160,9 @@ static func apply(s, effects: Array) -> void:
 				s.exchange_sound(value)
 			"manual":
 				s.add_item("j:" + s.Arsenal.generate_technique(s.content, s.world_rng, int(value)), 1)
+			# A named slip (a handwritten technique: 《藏息录》).
+			"slip":
+				s.add_item("j:" + str(value), 1)
 			"talent":
 				s.gain_talent(value)
 			"demon":
@@ -247,6 +255,8 @@ static func apply(s, effects: Array) -> void:
 				s.Auctions.open(s, value)
 			"summit":
 				s.Summit.begin(s, 1)
+			"contest":
+				s.Summit.begin(s, 1, str(value))
 			"reset_cave":
 				s.Caves.reset(s, value)
 
@@ -483,7 +493,7 @@ static func effective_danger(s, route: Dictionary) -> int:
 	return maxi(0, int(route.danger) - int(s.player.realm))
 
 static func encounter_chance(s, route: Dictionary) -> float:
-	return s.Talents.chance(float(s.content.rules.encounter_chance[effective_danger(s, route)]), s.talent_modifier("encounter"))
+	return s.Talents.chance(float(s.content.rules.encounter_chance[effective_danger(s, route)]), s.talent_modifier("encounter") + int(round(float(s.bonuses().encounter) * 100.0)))
 
 ## Rolls for something on the road just travelled. Uses only the world random stream.
 ## Returns the chronicle text of a plain encounter, or "" (a choice encounter becomes pending).

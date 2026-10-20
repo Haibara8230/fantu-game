@@ -53,6 +53,11 @@ static func describe(s, condition: Dictionary) -> String:
 			return "需心境 %d（当前 %d）" % [int(value), int(s.player.mind)]
 		"sense_at_least":
 			return "需神识 %d（当前 %d）" % [int(value), s.sense()]
+		"year_at_least":
+			return "须到历元 %d 年（今为 %d 年）" % [int(value), s.Calendar.year(int(s.world.day))]
+		"trial_at_least":
+			var trial: Array = {"jianya": ["试剑崖", "登上第 %d 层"], "lilian": ["历练帖", "记 %d 功"]}[str(value[0])]
+			return "需近 %d 年内%s%s（最好一回 %d）" % [int(value[2]), trial[0], trial[1] % int(value[1]), s.Trials.best(s, str(value[0]), int(value[2]))]
 		"met", "talked":
 			return "需%s%s" % ["结识" if key == "met" else "交谈过", s.person(str(value)).name]
 		"relation_at_least":
@@ -76,7 +81,7 @@ static func describe(s, condition: Dictionary) -> String:
 				for effect: Dictionary in event.get("effects", []):
 					if effect.get("flag", "") == str(value):
 						return "需经历「%s」" % event.title
-			return {"rushi_done":"需走完入世经历", "found_ruin":"需打听到古修洞府", "azhi_promised":"需答应阿芷的托付", "tiannan_known":"需听顾长庚说起天南", "spirit_eye_found":"需发现谷中灵眼", "hanjin_heard":"需听完韩烬的陈述"}.get(str(value), "需先推进相关剧情，见任务·剧情")
+			return {"rushi_done":"需走完入世经历", "found_ruin":"需打听到古修洞府", "azhi_promised":"需答应阿芷的托付", "tiannan_known":"需听顾长庚说起天南", "spirit_eye_found":"需发现谷中灵眼", "hanjin_heard":"需听完韩烬的陈述", "archive_pass":"需拿到进北岳旧档库的门路（阵师会馆）"}.get(str(value), "需先推进相关剧情，见任务·剧情")
 		"talent":
 			return "需天赋「%s」" % s.Talents.definition(s.content, str(value)).name
 		"rank_at_least":

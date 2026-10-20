@@ -71,8 +71,12 @@ func _dihuo() -> void:
 		game.battle.hp = 0
 		game.use_skill(game.player.arts[0])
 	check(game.has_flag("dihuo_lizard_down") and game.Caves.reachable(game, "dihuo", "core"), "fallen, the way to the 地火之心 opens")
+	var roots: Array = game.player.roots
+	check(game.Caves.enter_block(game, "dihuo", "core").is_empty(), "a fire root finds its own way through the heat")
+	game.player.roots = ["metal", "wood", "water"]
 	var blocked: String = game.Caves.enter_block(game, "dihuo", "core")
-	check(blocked.contains("避火珠") and blocked.contains("神识 45"), "the heat asks a 避火珠, or 神识 45 to find a cooler way (%s)" % blocked)
+	check(blocked.contains("避火珠") and blocked.contains("神识 45"), "without one, the heat asks a 避火珠, or 神识 45 to find a cooler way (%s)" % blocked)
+	game.player.roots = roots
 	game.set_item_count("bihuo_zhu", 1)
 	check(game.Caves.enter_block(game, "dihuo", "core").is_empty(), "with a 避火珠 the heat gives way")
 	var keen := _game(0)

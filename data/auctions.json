@@ -32,6 +32,7 @@
         {"item": "can_jing", "start": 120, "step": 10, "value": 360, "last": true}
       ]
     },
+    "tiannan_yibao": {"name": "天南大比 · 易宝会", "lots": 5, "bidders": 4, "pool": [{"manual": 3, "start": 160, "step": 20, "value": 340}, {"equipment": 3, "start": 140, "step": 20, "value": 300}, {"item": "xiaguang_lingsui", "start": 360, "step": 40, "value": 820}, {"item": "dixin_huolian", "start": 360, "step": 40, "value": 820}, {"item": "jade_mo", "count": 3, "start": 150, "step": 10, "value": 260}, {"item": "ore_xuantie", "count": 3, "start": 150, "step": 10, "value": 260}, {"item": "yanshou_dan", "start": 70, "step": 10, "value": 140}, {"item": "bihuo_zhu", "start": 160, "step": 20, "value": 300}]},
     "night_market": {
       "name": "云溪夜市拍卖摊",
       "lots": 3,

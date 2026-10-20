@@ -891,8 +891,12 @@ static func _use_talisman(s, item_id: String, item: Dictionary) -> String:
 
 ## 遁速 (as in Mi Chang Sheng): the realm's (rules.duel.speed), quickened by talents that shorten the
 ## road (travel). It decides who moves first and how readily one gets away.
+## A 心法 of hiding (《藏息录》) quickens it, except before those whose trade is finding people (`seeker`).
 static func speed(s) -> int:
-	return maxi(1, int(round(float(_by_realm(s, "speed", int(s.player.realm))) * float(100 - int(s.talent_modifier("travel"))) / 100.0)))
+	var hidden := float(s.bonuses().dun_speed)
+	if not s.battle.is_empty() and bool(s.content.enemies.get(str(s.battle.get("enemy_id", "")), {}).get("seeker", false)):
+		hidden = 0.0
+	return maxi(1, int(round(float(_by_realm(s, "speed", int(s.player.realm))) * float(100 - int(s.talent_modifier("travel"))) / 100.0 * (1.0 + hidden))))
 
 ## The opponent's 遁速: its own (`speed` in its data), else its realm's.
 static func foe_speed(s) -> int:

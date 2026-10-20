@@ -476,7 +476,8 @@ func _qi_years() -> void:
 		check(game.has_flag(str(asked[1])), "%s tells their account" % asked[0])
 	game.wait(1)
 	_settle(game)
-	check(game.story_state("mirror") == "done" and game.has_flag("crest_puzzled"), "three accounts that disagree: why does nobody remember?")
+	check(game.has_flag("crest_puzzled") and not game.story_at("mirror", "accounts"), "three accounts that disagree: why does nobody remember?")
+	check(game.story_step("mirror").id == "archive" and not game.Storylines.at_step(game, "mirror", "archive"), "the next step, 北岳's archive, waits for 筑基 and 天南")
 	# Two ordinary cultivators trade a craft for what they need.
 	_visit(game, "qin_yan")
 	game.add_item("ninglu_grass", 3)

@@ -152,7 +152,7 @@ func _tiannan() -> void:
 	var day := int(game.world.day)
 	game.travel("nanming")
 	check(game.player.location == "nanming" and int(game.world.day) == day + 1 and int(game.player.stones) == 60, "one day and 40 stones through the gate")
-	check(_texts(game).contains("经传送阵前往南明坊市"), "the fee is in the chronicle")
+	check(_texts(game).contains("经传送阵前往南明城"), "the fee is in the chronicle")
 	check(game.story_state("south_journey") == "done", "arriving ends 南行")
 	check(game.available_here("shop") and game.available_here("sell") and game.available_here("forge") and game.available_here("inquire"), "the market trades, forges and has news")
 	check(not game.Inventory.shop_goods(game).filter(func(good: Dictionary) -> bool: return good.item == "ore_xuantie").is_empty(), "天南 sells what 灵器 are forged from")
@@ -204,7 +204,7 @@ func _tiannan_sects() -> void:
 	game.start_battle("yue_disciple")
 	check(game.battle.get("enemy_id", "") == "yue_disciple" and str(game.battle.get("opponent_sect", "")) == "xuanyue", "who fight with 玄岳's earth arts")
 
-## Batch E: 南明坊市's rule against duels, a stone house let by the year for retreats far from home,
+## Batch E: 南明城's rule against duels, a stone house let by the year for retreats far from home,
 ## and 万宝楼's board, open to anyone.
 func _tiannan_market() -> void:
 	var game := _game(84)
@@ -213,14 +213,14 @@ func _tiannan_market() -> void:
 	game.player.stones = 600
 	game.world.flags.tiannan_known = true
 	game.travel("nanming")
-	check(_texts(game).contains("坊内不许斗法切磋"), "arriving, the market's rule is told")
+	check(_texts(game).contains("城内不许斗法切磋"), "arriving, the city's rule is told")
 	var local: Array = game.present_npcs().filter(func(person_id: String) -> bool: return game.is_generated(person_id))
 	var spar := _option(game, str(local[0]), "spar")
 	check(not spar.is_empty() and not bool(spar.available) and str(spar.reason).contains("不许斗法"), "no spar inside the market, and the rule says why (%s)" % spar.get("reason", ""))
-	check(not game.available_here("cultivate"), "no retreat at the market before a house is let")
+	check(int(game.Cultivation.rent(game, 30)) == 10 and is_equal_approx(game.Cultivation.place_rate(game), 0.8), "before a house is let, only the inn's room by the month")
 	var stones := int(game.player.stones)
 	game.take_lease()
-	check(game.available_here("cultivate") and game.available_here("breakthrough") and int(game.player.stones) == stones - 150, "150 stones let the stone house for a year: retreat, rest and breakthrough")
+	check(game.available_here("rest") and game.Cultivation.rent(game, 30) == 0 and int(game.player.stones) == stones - 150, "150 stones let the stone house for a year: retreat with no rent, rest and breakthrough")
 	var until: int = game.Leases.until(game, "nanming_abode")
 	check(until == int(game.world.day) + 359, "the term runs a year from today")
 	game.take_lease()
@@ -229,12 +229,12 @@ func _tiannan_market() -> void:
 	check(kept.restore(JSON.parse_string(JSON.stringify(game.snapshot()))) and kept.Leases.until(kept, "nanming_abode") == until + 360 and kept.available_here("cultivate"), "the term survives a save")
 	var held := int(game.item_count("huichun_grass"))
 	game.advance_days(until + 361 - int(game.world.day))
-	check(not game.available_here("cultivate") and game.Leases.until(game, "nanming_abode") == -1 and _texts(game).contains("租期满了"), "when the term ends the house closes and the chronicle says so")
+	check(int(game.Cultivation.rent(game, 30)) == 10 and game.Leases.until(game, "nanming_abode") == -1 and _texts(game).contains("租期满了"), "when the term ends the house closes and the chronicle says so")
 	check(int(game.item_count("huichun_grass")) == held, "and nothing of the player's is lost with it")
 	check(not game.commission_offers("nanming").is_empty() and game.available_here("commissions"), "万宝楼's board offers work to anyone")
 	# 「此地」 recall: each record remembers where the player was, and a save keeps it.
 	var here: Array = game.chronicle.entries.filter(func(entry: Dictionary) -> bool: return str(entry.get("at", "")) == "nanming").map(func(entry: Dictionary) -> String: return str(entry.id))
-	check("lease_taken" in here and "event" in here and not "start" in here, "what happened at 南明坊市 is recalled there (%s)" % [here])
+	check("lease_taken" in here and "event" in here and not "start" in here, "what happened at 南明城 is recalled there (%s)" % [here])
 	var reloaded := Session.new()
 	reloaded.restore(JSON.parse_string(JSON.stringify(game.snapshot())))
 	check(reloaded.chronicle.entries.filter(func(entry: Dictionary) -> bool: return str(entry.get("at", "")) == "nanming").size() == here.size(), "and a save remembers where")
@@ -268,7 +268,7 @@ func _tiannan_screens() -> void:
 	check(main.world_map.region == "tiannan" and main.world_map.visible_ids().has("nanming") and not main.world_map.visible_ids().has("sect"), "and turns to 天南")
 	main.select_map_target("nanming")
 	var told := "\n".join(main.center.find_children("*", "Label", true, false).map(func(label: Label) -> String: return label.text))
-	check(told.contains("传送阵共 40 灵石") and told.contains("云溪坊市 → 南明坊市"), "the route tells the gate's fee (%s)" % told)
+	check(told.contains("传送阵共 40 灵石") and told.contains("云溪坊市 → 南明城"), "the route tells the gate's fee (%s)" % told)
 	main.session.player.realm = 0
 	main.render()
 	told = "\n".join(main.center.find_children("*", "Label", true, false).map(func(label: Label) -> String: return label.text))

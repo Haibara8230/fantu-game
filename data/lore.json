@@ -9,6 +9,10 @@
     {"id": "due", "text": "中州大觉寺供着一块天外坠下的石碑，渡厄神僧守着它，从不许外人近前。", "conditions": [{"realm_at_least": 2}]},
     {"id": "four_deities", "text": "都说如今人界确知在世的化神不过四位，元婴老祖们多半也只听过名号。另有一位剑修，下落至今成谜。", "conditions": [{"realm_at_least": 2}]},
     {"id": "beast_tide", "text": "茶客说落霞谷每隔五六年便闹一回兽潮，秋天里狼群下山；到那时青石镇镇口总有人求修士帮忙守镇，上回压阵的是一头铁背熊王。", "conditions": [{"realm_at_least": 1}]},
-    {"id": "grudge", "text": "邻桌的人压低了声音：前些日子有人在打听你的行踪，说要替谁讨个公道。路上多留个心眼。", "conditions": [{"grudge": true}]}
+    {"id": "grudge", "text": "邻桌的人压低了声音：前些日子有人在打听你的行踪，说要替谁讨个公道。路上多留个心眼。", "conditions": [{"grudge": true}]},
+    {"id": "tiannan_contest", "text": "茶客说天南大比二十年一届，五城轮着办，只许筑基修士上台。宗门弟子凭试剑、凭门里遣送；散修就得在历练帖上攒功，或者找个有名望的人作保。", "conditions": [{"realm_at_least": 1}]},
+    {"id": "nanming_mines", "text": "南明来的行商说，赤枫岭的矿区三天两头有人受伤，南明城里的疗伤丹收得比别处贵一倍还多。", "conditions": [{"flag": "tiannan_known"}]},
+    {"id": "beiyue_archive", "text": "北岳城北的旧档库收着上千年的卷宗，可这些年总有一伙穿青灰长衫的人去调卷宗，调走的再没还回来。会馆的老阵师提起他们就摇头。", "conditions": [{"flag": "tiannan_known"}, {"not": {"flag": "archive_done"}}, {"not": {"flag": "archive_seized"}}]},
+    {"id": "duanjian_hermit", "text": "断剑峡口住着个灰衣散修，剑灵满滩游荡，就是不碰他。有人说他懂一门收气的法子，也有人说他只是命大。", "conditions": [{"flag": "tiannan_known"}, {"not": {"flag": "cangxi_taught"}}]}
   ]
 }

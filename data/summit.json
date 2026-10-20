@@ -1,14 +1,31 @@
 {
-  "event": "five_sects_entry",
-  "champions": [
-    {"sect": "chixiao", "name": "炎千秋", "title": "赤霄首徒", "gender": "male"},
-    {"sect": "changqing", "name": "林晚照", "title": "长青首徒", "gender": "female"},
-    {"sect": "canglan", "name": "白听澜", "title": "沧澜首徒", "gender": "female"},
-    {"sect": "xuanyue", "name": "石镇岳", "title": "玄岳首徒", "gender": "male"}
-  ],
-  "levels": [[1, 2], [1, 3], [2, 0], [2, 1]],
-  "power": [0.9, 0.95, 0.9, 0.95],
-  "recover_percent": 40,
-  "round": {"stones": 50, "contribution": 40, "xp": 600},
-  "champion": {"stones": 500, "contribution": 300, "xp": 4000, "manual": 4}
+  "wuzong": {
+    "event": "five_sects_entry",
+    "champions": [
+      {"sect": "chixiao", "name": "炎千秋", "title": "赤霄首徒", "gender": "male"},
+      {"sect": "changqing", "name": "林晚照", "title": "长青首徒", "gender": "female"},
+      {"sect": "canglan", "name": "白听澜", "title": "沧澜首徒", "gender": "female"},
+      {"sect": "xuanyue", "name": "石镇岳", "title": "玄岳首徒", "gender": "male"}
+    ],
+    "levels": [[2, 0], [2, 1], [2, 2], [2, 3]],
+    "power": [0.9, 0.95, 0.95, 1.0],
+    "recover_percent": 40,
+    "round": {"stones": 50, "contribution": 40, "xp": 600},
+    "champion": {"stones": 500, "contribution": 300, "xp": 4000, "manual": 4},
+    "name": "五宗论道"
+  },
+  "tiannan": {
+    "name": "天南大比",
+    "champions": [
+      {"sect": "xuanyue", "name": "岳山青", "title": "玄岳内门", "gender": "male", "stage": "预选"},
+      {"sect": "changqing", "name": "苏采薇", "title": "长青内门", "gender": "female", "stage": "分组"},
+      {"sect": "canglan", "name": "沈听潮", "title": "沧澜内门", "gender": "male", "stage": "分组"},
+      {"sect": "chixiao", "name": "炎烈", "title": "赤霄首席", "gender": "male", "stage": "决赛"}
+    ],
+    "levels": [[1, 0], [1, 1], [1, 1], [1, 2]],
+    "power": [0.85, 0.9, 0.95, 1.0],
+    "recover_percent": 40,
+    "round": {"stones": 80, "contribution": 30, "xp": 1500},
+    "champion": {"stones": 600, "contribution": 200, "xp": 3000, "manual": 3}
+  }
 }

@@ -38,6 +38,14 @@ static func render(ui) -> void:
 			mine.add_child(ui.label("交付预留 · %s ×%d" % [item.name, mini(held_for_delivery, session.item_count(item_id))], 14, ui.GOLD))
 		var tip := str(item.description) + ("
 本月行情：收价为常价的 %d%%（各月有涨落，同一种卖得多了会压价，过些日子回升）" % int(round(rate * 100.0)) if not is_equal_approx(rate, 1.0) else "")
+		# A place short of it (inventory.gd demand) pays a premium until the shortage is filled.
+		var shortage: Dictionary = session.Inventory.demand_entry(session, item_id)
+		if not shortage.is_empty():
+			var premium: float = session.Inventory.demand_factor(session, item_id)
+			if premium > 1.01:
+				trend = " ↑"
+				tip += "
+%s：眼下收价为常价的 %d%%，卖得越多越不缺，约 %d 日缺回来。" % [shortage.text, int(round(premium * 100.0)), int(shortage.days)]
 		var offer: Button = ui.button("%s ×%d · 售 %d%s" % [item.name, left, price, trend], func() -> void: ui.stage_sale(item_id), tip)
 		ui.tint(offer, ui.grade_color(item))
 		_set_icon(ui, offer, item)
@@ -73,7 +81,7 @@ static func render(ui) -> void:
 	var income := 0
 	for item_id: String in ui.trade.sell:
 		var count := int(ui.trade.sell[item_id])
-		income += session.sell_price(item_id) * count
+		income += session.Inventory.sale_value(session, item_id, count)
 		table.add_child(ui.button("%s ×%d" % [_item(session, item_id).name, count], func() -> void: ui.stage_sale(item_id, -1), "撤回一件"))
 	table.add_child(ui.label("购 入", 16, ui.GOLD))
 	var cost := 0

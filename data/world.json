@@ -23,6 +23,7 @@
         {"id": "office", "tag": [0.53, 0.35], "name": "执事堂", "description": "执事们在这里张贴宗门的委托，按时完成可得酬劳与贡献；月俸、晋升、兑换与捐献也在这里办理。", "actions": ["commissions", "sect"], "requires_affiliation": "qingyun"},
         {"id": "abode", "tag": [0.3, 0.12], "name": "洞府", "description": "内门弟子各有一处洞府，石门后是静修的石室，门外辟出一方灵田，引了山泉浇灌。", "actions": ["field"], "requires_affiliation": "qingyun", "requires_rank": "inner"},
         {"id": "arena", "tag": [0.42, 0.5], "name": "演武坪", "description": "青石铺就的演武坪，同门常在此切磋。平日有人摆擂，连胜榜挂在坪边。", "actions": ["battle:disciple", "arena"], "requires_affiliation": "qingyun"},
+        {"id": "cliff", "tag": [0.66, 0.18], "name": "试剑崖", "description": "后山的一面绝壁，五层石台沿崖凿上去，每层都有试剑傀把守。十年开一次崖，只许本门筑基弟子登临；登到第几层，宗门都记在册上。", "actions": ["series"], "requires_affiliation": "qingyun"},
         {"id": "recruit", "tag": [0.62, 0.62], "name": "接引台", "description": "山门外的接引台，执事弟子轮值于此，验看来人的灵根与心性。青云剑宗常年收徒：拜入后可入静室修行、在执事堂领差事与月俸、在传功堂得本门传承，也要守宗门的规矩。", "actions": ["join_sect"], "not_affiliation": "qingyun"},
         {"id": "hall", "tag": [0.25, 0.42], "name": "传功堂", "description": "堂中供着本门青云剑诀的传承玉简，可回静室研习；执事也发给弟子几门入门功法的玉简，领回静室慢慢参悟。他派神通不在此传授。", "actions": ["study", "teach"], "requires_affiliation": "qingyun", "teach": ["t:breath:wood:1::0", "t:body:earth:1::5", "t:focus:water:1::10", "t:bolt:metal:1::15"]}
       ]
@@ -118,6 +119,7 @@
         {"id": "entrance", "tag": [0.3, 0.6], "name": "谷口", "description": "乱石嶙峋，常有妖狼出没；再往里去，狼群与蛇妖更多。", "actions": ["battle:wolf", "hunt"]},
         {"id": "slope", "tag": [0.54, 0.56], "name": "灵草坡", "description": "向阳的缓坡上灵草丛生。", "actions": ["gather"]},
         {"id": "spring", "tag": [0.37, 0.36], "name": "深谷灵泉", "description": "谷底的灵泉被赤鳞妖蟒盘踞。", "actions": ["battle:serpent", "battle:mo_xiu"]}, {"id": "chenxia", "tag": [0.55, 0.3], "name": "沉霞古境", "description": "晚霞沉进谷底的雾里，雾中现出一道石门。古境一甲子开一回，开一年便合上。", "actions": ["explore_cave"], "requires_flag": "chenxia_open"},
+        {"id": "veins", "tag": [0.3, 0.2], "name": "深谷泉脉", "description": "妖蟒死后，灵泉底下露出一条往地下去的泉脉，热气顺着石缝往外冒。筑基修士顺着泉脉往里探，或许能弄明白这眼泉为什么会烫。", "actions": ["explore_cave"], "requires_flag": "spring_open"},
         {"id": "eye", "tag": [0.12, 0.36], "name": "灵眼", "description": "山壁裂隙后藏着一眼灵泉，天地灵气在此汇聚成漩。在这里闭关突破，把握更大。", "actions": ["breakthrough"], "requires_flag": "spirit_eye_found"}
       ]
     },
@@ -133,10 +135,10 @@
       ]
     },
     "nanming": {
-      "name": "南明坊市",
+      "name": "南明城",
       "region": "tiannan",
       "subtitle": "地火映街，千炉不熄。",
-      "description": "天南最热闹的坊市，坐落在赤霄门脚下。万宝楼的分号占了半条街，器铺多半挂着赤霄门的旗；坊市西头的传送阵直通云溪坊市。",
+      "description": "天南最热闹的商城，坐落在赤霄门脚下，由当年的南明坊市扩建而成。万宝楼的分号占了半条街，器铺多半挂着赤霄门的旗；城西的传送阵直通云溪坊市，城北的商路翻山通往北岳。赤枫岭的矿区缺伤药，城里疗伤丹收得比别处贵。",
       "terrain": "market",
       "map": [0.56, 0.66],
       "hidden_until": "tiannan_known",
@@ -166,13 +168,15 @@
           {"kind": "equipment", "count": 3, "tiers": [2, 3]}
         ]
       },
-      "rules": [{"forbid": "duel", "text": "南明坊市的规矩：坊内不许斗法切磋，违者罚灵石、逐出坊市。要比划，出坊去赤枫岭。"}],
+      "rules": [{"forbid": "duel", "text": "南明城的规矩：城内不许斗法切磋，违者罚灵石、逐出城去。要比划，出城去赤枫岭。"}],
       "lease": {"flag": "nanming_abode", "name": "坊外石屋", "days": 360, "price": 150},
+      "demand": [{"item": "liaoshang_pill", "factor": 3.0, "need": 8, "days": 60, "text": "矿区缺伤药"}],
       "spots": [
         {"id": "wanbao", "tag": [0.42, 0.42], "name": "万宝楼", "description": "万宝楼天南分号，三层朱楼，灵器料与丹药明码标价，也收各色灵材；楼前的告示板上贴着各家的委托，不问出身。", "actions": ["shop", "sell", "forge", "commissions", "series"]},
         {"id": "teahouse", "tag": [0.6, 0.36], "name": "听涛茶楼", "description": "往来的行商与各宗弟子都爱在这里歇脚，天南的消息多半从这里传开。", "actions": ["inquire"]},
         {"id": "broker", "tag": [0.66, 0.6], "name": "牙行", "description": "替人赁屋、作保的牙行。坊外赤枫岭脚下有几间石屋，引了一缕地脉灵气，赁下便可闭关静养。", "actions": ["lease"]},
-        {"id": "abode", "tag": [0.82, 0.3], "name": "坊外石屋", "description": "赁来的石屋，门前一株老枫，屋里一张蒲团，地上引了一缕温热的地脉灵气。", "actions": ["cultivate", "rest", "breakthrough"], "requires_flag": "nanming_abode", "breakthrough_bonus": 5}
+        {"id": "abode", "tag": [0.82, 0.3], "name": "坊外石屋", "description": "赁来的石屋，门前一株老枫，屋里一张蒲团，地上引了一缕温热的地脉灵气。", "actions": ["cultivate", "rest", "breakthrough"], "requires_flag": "nanming_abode", "breakthrough_bonus": 5},
+        {"id": "inn", "tag": [0.24, 0.62], "name": "火塘客栈", "description": "城西传送阵边的客栈，堂里一口火塘终年不熄。后院几间静房按日出租，地火烘得屋里干燥，可闭关、领悟与突破。", "actions": ["inn_rest", "cultivate", "breakthrough"], "lodging": {"rate": 0.8, "rent": 10}}
       ]
     },
     "chifeng": {
@@ -180,7 +184,7 @@
       "field": {"name": "赤枫燥热", "mods": {"fire": 0.1, "water": -0.1}},
       "region": "tiannan",
       "subtitle": "枫叶如火，地气蒸腾。",
-      "description": "南明坊市与赤霄门之间的山岭，地下有火脉经过，枫林四季皆红，火性灵草长得比别处旺。北边有一条远路，翻过群山可回白鹭渡。",
+      "description": "南明城与赤霄门之间的山岭，地下有火脉经过，枫林四季皆红，火性灵草长得比别处旺。北边有一条远路，翻过群山可回白鹭渡。",
       "terrain": "ridge",
       "map": [0.36, 0.42],
       "hidden_until": "tiannan_known",
@@ -189,8 +193,8 @@
       "hunt": {"days": 2, "table": [{"enemy": "huo_ya", "weight": 3}, {"enemy": "yanjia_xi", "weight": 2}, {"enemy": "wolf_pack", "weight": 1}]},
       "spots": [
         {"id": "maples", "tag": [0.45, 0.5], "name": "赤枫林", "description": "火红的枫林下，赤炎花一丛丛开在温热的石缝里，运气好时还能在石缝里拾到一颗地火精；林间火鸦成群，岩缝里卧着岩甲蜥。", "actions": ["gather", "hunt"]},
-        {"id": "stage", "tag": [0.3, 0.34], "name": "斗法台", "description": "南明坊市不许斗法，各宗弟子与散修便在坊外赤枫岭上搭了这座斗法台。登台交彩头，连胜越多，台主给的越多；败了不伤和气。", "actions": ["arena"]},
-        {"id": "cavern", "tag": [0.72, 0.36], "name": "地火熔窟", "description": "枫林深处的山壁裂开一道口子，热风一阵阵涌出来。据说里头连着火脉，还盘踞着一头火蜥。", "actions": ["explore_cave"]}
+        {"id": "stage", "tag": [0.3, 0.34], "name": "斗法台", "description": "南明城里不许斗法，各宗弟子与散修便在城外赤枫岭上搭了这座斗法台。登台交彩头，连胜越多，台主给的越多；败了不伤和气。", "actions": ["arena"]},
+        {"id": "old_mine", "tag": [0.18, 0.66], "name": "旧矿道", "description": "赤枫岭西坡早已废弃的矿道，洞口却有人守着，夜里还亮着灯。", "actions": ["battle:kuang_hu"], "requires_flag": "lu_mine_known"}, {"id": "cavern", "tag": [0.72, 0.36], "name": "地火熔窟", "description": "枫林深处的山壁裂开一道口子，热风一阵阵涌出来。据说里头连着火脉，还盘踞着一头火蜥。", "actions": ["explore_cave"]}
       ]
     },
     "changqing_valley": {
@@ -272,9 +276,12 @@
         {"id": "foundry", "tag": [0.55, 0.45], "name": "器坊", "description": "赤霄门对外的器坊，引地火入炉，外人付了炉钱也可借用。", "actions": ["forge"]},
         {"id": "pavilion", "tag": [0.36, 0.62], "name": "迎客亭", "description": "山门外的迎客亭，来访的修士在这里等候通传，也听得到些门内的事。", "actions": ["inquire"]}
       ]
-    }
+    },
+    "beiyue": {"name": "北岳城", "region": "tiannan", "subtitle": "石城负岳，古物满街。", "description": "玄岳宗南麓的石城，城墙是从山岩里凿出来的。天南的古物、旧阵与真假传承大半在这里过手；城北的旧档库收着上千年的卷宗，没有门路进不去。修复古物的匠人缺玄铁与墨玉，收得比别处贵。", "terrain": "market", "map": [0.66, 0.1], "hidden_until": "tiannan_known", "shop": [{"item": "liaoshang_pill", "price": 22}, {"item": "huiqi_pill", "price": 16}, {"item": "ningqi_pill", "price": 62}, {"item": "pozhang_pill", "price": 42}, {"item": "kongho_fu", "price": 22}, {"item": "dingshen_fu", "price": 36}, {"item": "dundi_fu", "price": 40}, {"item": "bihuo_zhu", "price": 400}], "buys": ["herb", "pill", "manual", "equipment", "treasure", "material"], "demand": [{"item": "ore_xuantie", "factor": 1.5, "need": 6, "days": 90, "text": "修复古物缺料"}, {"item": "jade_mo", "factor": 1.5, "need": 6, "days": 90, "text": "修复古物缺料"}], "stock": {"restock_days": 30, "lines": [{"kind": "manual", "count": 2, "tiers": [2, 3]}, {"kind": "equipment", "count": 2, "tiers": [2, 3]}]}, "spots": [{"id": "antiques", "tag": [0.42, 0.46], "name": "古物街", "description": "一条石板长街，两旁的铺子摆满了锈剑、残碑、旧阵盘与说不清来历的玉简，十件里有三件是假的。街口的告示板上贴着各家的委托。", "actions": ["shop", "sell", "commissions"]}, {"id": "guild", "tag": [0.66, 0.34], "name": "阵师会馆", "description": "北岳阵师们的会馆，替人鉴阵、修阵、拆阵。馆里的老阵师都在旧档库里查过卷宗，引荐生人进库也得经他们的手。", "actions": ["inquire"]}, {"id": "inn", "tag": [0.22, 0.64], "name": "北岳客栈", "description": "城门边的石砌客栈，屋子小却严实。后院静房按日出租，墙里嵌着玄岳宗淘汰下来的聚灵石，可闭关、领悟与突破。", "actions": ["inn_rest", "cultivate", "breakthrough"], "lodging": {"rate": 0.8, "rent": 10}}, {"id": "archive", "tag": [0.82, 0.2], "name": "旧档库", "description": "城北山腹里的旧档库，一排排石架上堆着千年来天南各宗的卷宗与地志。守库的老吏只认会馆的荐书。", "actions": ["inquire"], "requires_flag": "archive_pass"}]},
+    "duanjian": {"name": "断剑峡", "field": {"name": "剑气", "mods": {"metal": 0.15}}, "region": "tiannan", "subtitle": "万剑埋骨，风过有声。", "description": "北岳东北的一道深峡，两壁插满锈蚀的断剑，风从峡里穿过，呜呜作响。外围有剑灵游荡、商队残营与一间草庐；再往里是剑冢，金丹以下进去的人没有出来过。", "terrain": "ridge", "map": [0.86, 0.14], "hidden_until": "tiannan_known", "gather": {"picks": [1, 2], "table": [{"item": "ninglu_grass", "weight": 55}, {"item": "huichun_grass", "weight": 40}, {"item": "ore_xuantie", "weight": 5}]}, "hunt": {"days": 2, "table": [{"enemy": "jian_ling", "weight": 3}, {"enemy": "yanjia_xi", "weight": 1}]}, "spots": [{"id": "shoal", "tag": [0.34, 0.6], "name": "乱石滩", "description": "峡口的乱石滩，石缝里长着凝露草，偶尔能捡到一块从峡壁上崩下来的玄铁。剑灵在滩上游荡，碰上了躲不开。", "actions": ["gather", "hunt"]}, {"id": "gorge", "tag": [0.62, 0.36], "name": "峡道", "description": "往峡里去的窄道，两壁的断剑越来越密。要走进去，得一步一步探。", "actions": ["explore_cave"]}]}
   },
   "skills": {
+    "cangxi_lu": {"name": "藏息录", "slot": "method", "tier": 3, "element": "none", "passive": {"dun_speed": 0.2, "encounter": -0.4}, "description": "不知何人所著的散修秘本，教人收敛气息、借地势藏身：走过险地时少惹是非，斗法中脱身也快。只是瞒得过妖兽与寻常修士，瞒不过守川司那样专门找人的眼睛。"},
     "sword": {
       "name": "御剑诀",
       "element": "metal",
@@ -521,6 +528,14 @@
     }
   },
   "enemies": {
+    "jianling_head": {"moves": [{"id": "slash", "name": "万剑归一", "weight": 3}, {"id": "storm", "name": "剑气风暴", "hits": 3, "power": 0.5, "weight": 2}, {"id": "rust", "name": "锈蚀剑意", "power": 0.7, "inflict": {"sunder": [0.2, 2]}, "weight": 1}], "phases": [{"below": 0.3, "name": "剑鸣", "text": "满林断剑同时嗡鸣，剑灵首的身形暴涨一倍，剑光扑面而来！", "power": 1.25}], "name": "剑灵首", "element": "metal", "hp": 440, "damage_min": 24, "damage_max": 31, "reward_stones": 80, "reward_xp": 320, "reward_herbs": 0, "locations": [], "min_realm": 1, "world_flag": "duanjian_ling_down", "flag_event": "duanjian_ling_down", "parts": [{"item": "ore_xuantie", "chance": 1.0, "count": [1, 2]}]},
+    "jian_ling": {"moves": [{"id": "slash", "name": "残剑斩", "weight": 3}, {"id": "swarm", "name": "万剑齐鸣", "hits": 3, "power": 0.45, "weight": 1}, {"id": "rust", "name": "锈气侵体", "power": 0.6, "inflict": {"weaken": [0.2, 2]}, "weight": 1}], "name": "游荡剑灵", "element": "metal", "hp": 260, "damage_min": 17, "damage_max": 23, "reward_stones": 30, "reward_xp": 60, "reward_herbs": 0, "locations": [], "min_realm": 1, "parts": [{"item": "ore_xuantie", "chance": 0.15, "count": [1, 1]}]},
+    "jianya_bronze": {"moves": [{"id": "cut", "name": "试剑", "weight": 3}, {"id": "array", "name": "剑阵连斩", "hits": 3, "power": 0.5, "every": 3}, {"id": "pierce", "name": "破甲剑", "power": 0.8, "inflict": {"sunder": [0.2, 2]}, "weight": 1}], "name": "铜甲试剑傀", "element": "metal", "hp": 230, "damage_min": 15, "damage_max": 20, "reward_stones": 0, "reward_xp": 120, "reward_herbs": 0, "locations": [], "min_realm": 1, "human": true, "sect": "qingyun"},
+    "jianya_silver": {"moves": [{"id": "cut", "name": "试剑", "weight": 3}, {"id": "array", "name": "剑阵连斩", "hits": 3, "power": 0.5, "every": 3}, {"id": "pierce", "name": "破甲剑", "power": 0.8, "inflict": {"sunder": [0.2, 2]}, "weight": 1}], "name": "银甲试剑傀", "element": "metal", "hp": 290, "damage_min": 18, "damage_max": 24, "reward_stones": 0, "reward_xp": 160, "reward_herbs": 0, "locations": [], "min_realm": 1, "human": true, "sect": "qingyun"},
+    "jianya_gold": {"moves": [{"id": "cut", "name": "试剑", "weight": 3}, {"id": "array", "name": "剑阵连斩", "hits": 3, "power": 0.5, "every": 3}, {"id": "pierce", "name": "破甲剑", "power": 0.8, "inflict": {"sunder": [0.2, 2]}, "weight": 1}], "name": "金甲试剑傀", "element": "metal", "hp": 350, "damage_min": 21, "damage_max": 28, "reward_stones": 0, "reward_xp": 200, "reward_herbs": 0, "locations": [], "min_realm": 1, "human": true, "sect": "qingyun"},
+    "jianya_spirit": {"moves": [{"id": "edge", "name": "崖风剑气", "weight": 3}, {"id": "rain", "name": "剑雨", "hits": 3, "power": 0.5, "weight": 2}, {"id": "still", "name": "凝剑意", "kind": "focus", "focus": [0.5, 2], "weight": 1}], "phases": [{"below": 0.3, "name": "剑意凌霄", "text": "守崖剑灵长啸一声，崖上千百道剑痕同时亮起，剑气倒卷而来！", "power": 1.25}], "name": "守崖剑灵", "element": "metal", "hp": 420, "damage_min": 24, "damage_max": 31, "reward_stones": 0, "reward_xp": 300, "reward_herbs": 0, "locations": [], "min_realm": 1, "human": true, "sect": "qingyun"},
+    "shouchuan_wei": {"moves": [{"id": "tide", "name": "镇川掌", "weight": 3}, {"id": "seal", "name": "锁灵符", "power": 0.6, "inflict": {"entangle": [1, 1]}, "weight": 2}, {"id": "mirror", "name": "照影诀", "power": 0.9, "inflict": {"weaken": [0.2, 2]}, "weight": 1}], "name": "守川司巡使", "element": "water", "hp": 380, "damage_min": 22, "damage_max": 29, "reward_stones": 0, "reward_xp": 240, "reward_herbs": 0, "locations": [], "min_realm": 1, "human": true, "sect": "canglan", "seeker": true, "world_flag": "archive_seized", "flag_event": "archive_seized"},
+    "kuang_hu": {"moves": [{"id": "club", "name": "铁棍", "weight": 3}, {"id": "dust", "name": "扬矿灰", "power": 0.5, "inflict": {"weaken": [0.3, 2]}, "weight": 1}, {"id": "rush", "name": "合身猛撞", "kind": "charge", "power": 1.5, "weight": 1}], "name": "矿道护院", "element": "earth", "hp": 300, "damage_min": 17, "damage_max": 23, "reward_stones": 40, "reward_xp": 120, "reward_herbs": 0, "locations": [], "min_realm": 1, "human": true, "sect": "xuanyue", "world_flag": "lu_mine_cleared", "flag_event": "lu_mine_cleared"},
     "xin_mo": {"name": "心魔", "element": "water", "hp": 100, "damage_min": 10, "damage_max": 14, "reward_stones": 0, "reward_xp": 0, "reward_herbs": 0, "locations": [], "min_realm": 0, "human": true},
     "tribulation_core": {"name": "三九雷劫", "element": "metal", "hp": 3, "damage_min": 70, "damage_max": 90, "reward_stones": 0, "reward_xp": 0, "reward_herbs": 0, "locations": [], "min_realm": 1, "tribulation": true},
     "tribulation_nascent": {"name": "六九雷劫", "element": "metal", "hp": 4, "damage_min": 96, "damage_max": 118, "reward_stones": 0, "reward_xp": 0, "reward_herbs": 0, "locations": [], "min_realm": 2, "tribulation": true},
@@ -737,12 +752,13 @@
       {"foes": ["qinglin_snake", "shan_xiao"], "text": "第二波：青鳞蛇与山魈趁乱从田埂里钻出，翻过了木栅。"},
       {"foes": ["bear_king"], "text": "第三波：地面一阵阵发颤，铁背熊王撞断两根木桩，闯到镇口。"}
     ], "reward": {"stones": 150, "contribution": 30}, "done_text": "兽潮退回落霞谷，镇上的人提着灯笼出来，把凑来的谢礼塞到你手里。"},
+    "jianya": {"name": "试剑崖", "location": "sect", "event": "jianya_open", "affiliation": "qingyun", "min_realm": 1, "min_stage": 0, "breather": 0.3, "ranked": true, "per_wave": {"contribution": 40}, "wait_text": "%s十年一开，下一回在%s。", "waves": [{"foes": ["jianya_bronze"], "text": "第一层：崖口的铜甲试剑傀抬起锈剑，剑尖指着你的眉心。"}, {"foes": ["jianya_silver"], "text": "第二层：石阶转过一道弯，银甲试剑傀从崖壁的凹龛里走了出来。"}, {"foes": ["jianya_silver", "jianya_bronze"], "text": "第三层：平台上一银一铜两具试剑傀，一前一后封住了去路。登过这一层，便能代青云去天南大比。"}, {"foes": ["jianya_gold"], "text": "第四层：崖风骤紧，金甲试剑傀立在悬空的石梁上，剑上缠着细细的雷光。"}, {"foes": ["jianya_spirit"], "text": "第五层：崖顶空无一物，只有满壁剑痕。一道剑影从剑痕里站起来——守崖剑灵。"}], "reward": {"stones": 0, "manual": {"tier": 3, "slot": "art", "element": "metal"}}, "done_text": "你站上了崖顶。山风从脚下吹过，崖壁上千百道前人的剑痕都在低鸣。崖顶石匣里放着一枚剑诀玉简，是给登顶之人的。"},
     "escort_qingshi": {"name": "护送商队", "location": "town", "to": "market", "days": 5, "cooldown_days": 90, "min_realm": 0, "min_stage": 2, "breather": 0.5, "waves": [
       {"foes": ["rogue"], "text": "商队过了青石镇不远，一个劫修从林子里跳出来，要商队留下货物。"},
       {"foes": ["zhui_bing", "rogue"], "text": "白鹭渡前的河滩上，劫修叫来了同伙，两个人一前一后堵住了商队。"}
     ], "reward": {"stones": 70}, "done_text": "商队平安到了云溪坊市，掌柜点清货物，付了护送的酬金。"},
     "escort_nanming": {"name": "护送药商", "location": "nanming", "to": "chifeng", "days": 3, "cooldown_days": 90, "min_realm": 1, "min_stage": 2, "breather": 0.5, "waves": [
-      {"foes": ["mo_tan"], "text": "出了南明坊市第二日，一个魔修探子拦在山道上，盯着药商的驮子。"},
+      {"foes": ["mo_tan"], "text": "出了南明城第二日，一个魔修探子拦在山道上，盯着药商的驮子。"},
       {"foes": ["xuesha_tu", "zhui_bing"], "text": "赤枫岭脚下，血煞教徒带着个打手追来，要连人带货一并劫走。"}
     ], "reward": {"stones": 220, "items": {"chiyan_flower": 3}}, "done_text": "药商平安到了赤枫岭，除了酬金，另送了几株赤焰花。"}
   },
@@ -898,7 +914,12 @@
     {"between": ["chifeng", "changqing_valley"], "days": 3, "danger": 1},
     {"between": ["nanming", "canglan_pavilion"], "days": 3, "danger": 0},
     {"between": ["chixiao_gate", "xuanyue_gate"], "days": 3, "danger": 1},
-    {"between": ["canglan_pavilion", "xuanyue_gate"], "days": 3, "danger": 1}
+    {"between": ["canglan_pavilion", "xuanyue_gate"], "days": 3, "danger": 1},
+    {"between": ["xuanyue_gate", "beiyue"], "days": 2, "danger": 0},
+    {"between": ["canglan_pavilion", "beiyue"], "days": 4, "danger": 1},
+    {"between": ["nanming", "beiyue"], "days": 6, "danger": 1, "by": "北上商路"},
+    {"between": ["beiyue", "duanjian"], "days": 3, "danger": 2},
+    {"between": ["xuanyue_gate", "duanjian"], "days": 2, "danger": 2, "by": "御剑近路", "realm": 1}
   ],
   "actions": {
     "cultivate": 30,
@@ -915,7 +936,7 @@
     "search_ruin": 5,
     "road_recovery": 1
   },
-  "world_flags": ["slope_settled", "herb_helped", "herb_asked", "slope_common", "slope_leased", "spring_warned", "spring_seen", "crest_boatman", "crest_storyteller", "crest_qin", "crest_puzzled", "yunxi_abode", "trap_lore", "beast_lore", "storm_shrine_seen", "river_steps_seen", "rushi_inn", "lu_owes", "rushi_gate", "rushi_fair", "rushi_auction", "mirror_seen", "rushi_qianlong", "rushi_banquet", "heard_qingyun_recruit", "tianhe_seen", "ascension_open", "calamity", "calamity_turned", "chenxia_open", "chenxia_puppet_down", "chenxia_remnant_down", "ruin_den_cleared", "serpent_slain", "heard_auction_rumor", "found_ruin", "ruin_cleared", "helped_wanderer", "serpent_rampage", "azhi_promised", "azhi_mourned", "rushi_done", "peddler_friend", "serpent_weakened", "spirit_eye_found", "tiannan_known", "dihuo_lizard_down", "hanjin_heard", "bounty_turned_in", "bounty_exposed", "bounty_let_go", "nanming_abode", "valley_patron", "azhi_livelihood", "valley_remembered", "azhi_route_ready", "azhi_route_recipe", "medicine_relief", "medicine_order", "exam_patrol", "exam_alchemy", "exam_mediation", "exam_azhi_heard", "exam_shen_heard", "south_gate_known", "south_road_known", "furnace_review_open", "furnace_evidence", "furnace_trace", "furnace_witness"],
+  "world_flags": ["slope_settled", "herb_helped", "herb_asked", "slope_common", "slope_leased", "spring_warned", "spring_seen", "crest_boatman", "crest_storyteller", "crest_qin", "crest_puzzled", "yunxi_abode", "trap_lore", "beast_lore", "storm_shrine_seen", "river_steps_seen", "rushi_inn", "lu_owes", "rushi_gate", "rushi_fair", "rushi_auction", "mirror_seen", "rushi_qianlong", "rushi_banquet", "heard_qingyun_recruit", "tianhe_seen", "ascension_open", "calamity", "calamity_turned", "chenxia_open", "chenxia_puppet_down", "chenxia_remnant_down", "ruin_den_cleared", "serpent_slain", "heard_auction_rumor", "found_ruin", "ruin_cleared", "helped_wanderer", "serpent_rampage", "azhi_promised", "azhi_mourned", "rushi_done", "peddler_friend", "serpent_weakened", "spirit_eye_found", "tiannan_known", "dihuo_lizard_down", "hanjin_heard", "bounty_turned_in", "bounty_exposed", "bounty_let_go", "nanming_abode", "valley_patron", "azhi_livelihood", "valley_remembered", "azhi_route_ready", "azhi_route_recipe", "medicine_relief", "medicine_order", "exam_patrol", "exam_alchemy", "exam_mediation", "exam_azhi_heard", "exam_shen_heard", "south_gate_known", "south_road_known", "furnace_review_open", "furnace_evidence", "furnace_trace", "furnace_witness", "spring_open", "duanjian_ling_down", "archive_pass", "archive_seized", "lu_mine_cleared", "tiannan_seen", "tiannan_champion", "archive_done", "shouchuan_wary", "shouchuan_favor", "shouchuan_hostile", "qin_letter", "crest_pang", "liu_public", "liu_private", "liu_redress", "liu_quit", "lu_head", "lu_mine_known", "lu_public", "lu_quiet", "lu_leave", "lu_ignore", "cangxi_taught", "mo_ci_seen"],
   "sects": {
     "wanderer": {
       "name": "散修",

@@ -74,16 +74,18 @@
         "loot": [[{"equipment": 2}], [{"item": ["ore_xuantie", 3]}]]
       },
       {
-        "id": "sealed", "name": "封禁石室", "links": ["armory"], "map": [0.9, 0.6], "requires_sense": 14,
+        "id": "sealed", "name": "封禁石室", "links": ["armory", "warded"], "map": [0.9, 0.6], "requires_sense": 14,
         "text": "门上的禁制已经残破，门后静得出奇，连自己的心跳都听得见。",
         "fortune": "remnant",
         "loot": [[{"manual": 3}], [{"stones": 120}, {"item": ["huiqi_pill_fine", 1]}], [{"item": ["shouyuan_guo", 1]}]]
-      }
+      },
+      {"id": "warded", "name": "阵护内室", "links": ["sealed"], "map": [0.88, 0.22], "requires_realm": 1, "realm_text": "门内一座护洞阵还在转，炼气修士的护体一碰就散", "text": "封禁石室后头还有一道窄门，门里一座护洞阵残了一半，余下的阵纹仍在缓缓流转。阵心的石台上摆着旧主没来得及带走的东西。", "trap": {"names": ["残阵绞杀", "阵纹反噬"], "sense": 34, "damage": [30, 45]}, "loot": [[{"manual": 3}, {"item": ["jade_mo", 3]}], [{"equipment": 3}, {"item": ["ore_xuantie", 3]}], [{"manual": 3}, {"stones": 240}]]}
     ]
   },
   "chenxia": {
     "name": "沉霞古境",
     "location": "wild",
+    "spot": "chenxia",
     "requires_flag": "chenxia_open",
     "step_days": 3,
     "rooms": [
@@ -125,5 +127,7 @@
         "loot": [[{"manual": 4}, {"equipment": 4}, {"item": ["shouyuan_guo", 1]}], [{"manual": 5}, {"item": ["yanghun_mu", 1]}], [{"manual": 4}, {"item": ["tianxin_lianzi", 1]}]]
       }
     ]
-  }
+  },
+  "spring_depths": {"name": "深谷泉脉", "location": "wild", "spot": "veins", "requires_flag": "spring_open", "requires_realm": 1, "step_days": 2, "rooms": [{"id": "rim", "name": "泉畔", "start": true, "links": ["vent", "nest"], "map": [0.1, 0.5], "text": "妖蟒死后，深谷的灵泉仍旧冒着白汽，只是不再翻白鱼了。泉边的石头温温的，往下摸，越摸越烫。"}, {"id": "vent", "name": "泉眼", "links": ["rim", "channel"], "map": [0.38, 0.3], "text": "泉底裂开一道新石缝，热气从地底往上顶，带着一股硫火气——和赤枫岭熔窟里的一模一样。是地下的火脉改了道，烧热了这眼泉，才把泉底沉睡的赤鳞蟒烫醒了。", "trap": {"names": ["热泉喷涌", "沸汽冲顶"], "sense": 30, "damage": [20, 30]}, "loot": [[{"item": ["dihuo_jing", 1]}, {"item": ["ninglu_grass", 3]}], [{"item": ["chiyan_flower", 4]}]]}, {"id": "nest", "name": "蟒巢", "links": ["rim"], "map": [0.4, 0.75], "text": "泉侧的石洞是妖蟒盘踞过的地方，地上一圈圈蜕下的赤鳞，洞壁被它磨得溜光。角落里堆着它从谷里拖来的东西。", "loot": [[{"stones": 120}, {"item": ["chiyan_flower", 3]}], [{"equipment": 2}, {"stones": 60}]], "hidden": {"name": "鳞堆下的骨匣", "sense": 32, "qi": 12, "loot": [[{"manual": 2}, {"stones": 80}], [{"item": ["yaodan", 1]}]]}}, {"id": "channel", "name": "地脉暗渠", "links": ["vent", "eye"], "map": [0.66, 0.4], "text": "顺着热气往里，是一条被泉水冲出来的暗渠，渠壁上嵌着一层薄薄的火晶。再往前，灵气浓得像雾。", "trap": {"names": ["渠顶塌石"], "sense": 28, "damage": [16, 24]}}, {"id": "eye", "name": "泉脉灵眼", "links": ["channel"], "map": [0.9, 0.55], "flag": "spirit_eye_found", "text": "暗渠尽头，火脉与泉脉在这里交汇，天地灵气绕成一个缓缓转动的漩。在这里闭关突破，把握更大——落霞谷的灵眼，原来就在泉脉底下。"}]},
+  "duanjian": {"name": "断剑峡", "location": "duanjian", "spot": "gorge", "requires_flag": "tiannan_known", "requires_realm": 1, "step_days": 2, "rooms": [{"id": "mouth", "name": "峡口", "start": true, "links": ["camp", "swords"], "map": [0.08, 0.5], "text": "峡口两侧的石壁上插着成排的断剑，剑柄朝外，像有人一柄一柄钉进去的。风一过，满壁的剑都在嗡嗡地响。"}, {"id": "camp", "name": "商队残营", "links": ["mouth"], "map": [0.3, 0.2], "text": "一处被弃的营地，车辕断了，货箱撬开了一半，旗子上的「南明·周记」褪得只剩个影。看样子是一支北上的商队，抄近路进了峡，没能出去。", "loot": [[{"stones": 150}, {"item": ["liaoshang_pill", 3]}], [{"item": ["jade_mo", 2]}, {"stones": 60}]], "hidden": {"name": "车底的账匣", "sense": 32, "qi": 10, "loot": [[{"stones": 200}], [{"manual": 2}, {"stones": 80}]]}}, {"id": "swords", "name": "断剑林", "links": ["mouth", "hut", "tomb"], "map": [0.42, 0.6], "text": "峡道两边的断剑密得像一片铁林，剑气在林里乱窜，割得衣角簌簌作响。林子当中立着一道比别的都亮的剑影。", "trap": {"names": ["剑气乱流", "断剑落阵"], "sense": 32, "damage": [22, 32]}, "guardian": "jianling_head", "loot": [[{"item": ["ore_xuantie", 3]}], [{"equipment": 3}]]}, {"id": "hut", "name": "隐居者草庐", "links": ["swords"], "map": [0.66, 0.28], "text": "剑林背后竟有一间草庐，门没上锁，屋里一床、一桌、一只缺口的茶碗，碗底还有半口没干的茶。主人不在，像是刚出门。", "hidden": {"name": "墙缝里的旧册", "sense": 36, "qi": 20, "loot": [[{"slip": "cangxi_lu"}]]}}, {"id": "tomb", "name": "剑冢", "links": ["swords"], "map": [0.88, 0.62], "requires_realm": 2, "realm_text": "剑冢里剑气如潮，筑基修士进去只会被绞碎", "text": "峡底的剑冢，千百柄古剑插在一座石丘上，剑意凝成实质，在冢前来回冲刷。", "loot": [[{"manual": 4}], [{"equipment": 4}]]}]}
 }

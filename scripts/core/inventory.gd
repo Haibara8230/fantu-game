@@ -87,12 +87,56 @@ static func set_item_count(s, item_id: String, count: int) -> void:
 
 ## What this place pays for one of the item, or 0 when it does not buy it here.
 static func sell_price(s, item_id: String) -> int:
+	return _price_at(s, item_id, demand_factor(s, item_id))
+
+## What `count` of the item fetch here together. A place short of something (its `demand`) pays the
+## premium only until the shortage is filled, one at a time; anything else sells at its one price.
+static func sale_value(s, item_id: String, count: int) -> int:
+	var entry := demand_entry(s, item_id)
+	if entry.is_empty():
+		return sell_price(s, item_id) * count
+	var filled := demand_filled(s, item_id)
+	var total := 0
+	for index: int in count:
+		total += _price_at(s, item_id, _demand_rate(entry, filled + float(index)))
+	return total
+
+static func _price_at(s, item_id: String, factor: float) -> int:
 	var item: Dictionary = s.content.item(Gear.type_of(s, item_id))
 	if not s.available_here("sell") or item.is_empty():
 		return 0
 	if not item.category in s.content.locations[s.player.location].get("buys", []):
 		return 0
-	return Talents.scaled(int(round(float(item.price) * market_factor(s, item_id))), s.talent_modifier("sell"), 1)
+	return Talents.scaled(int(round(float(item.price) * market_factor(s, item_id) * factor)), s.talent_modifier("sell"), 1)
+
+## 跨城需求 (docs/GAME_OUTLINE.md 19.10): a place short of something (location `demand`: the item, the
+## premium `factor`, how many it `need`s and the `days` the shortage takes to come back) pays more for
+## it. Each one sold fills the need a little; the premium shrinks evenly to nothing as it fills, and the
+## need returns over its days. world.demand_supply: {"place:item": {"count", "day"}}.
+static func demand_entry(s, item_id: String) -> Dictionary:
+	var type := str(Gear.type_of(s, item_id))
+	for entry: Dictionary in s.content.locations[s.player.location].get("demand", []):
+		if str(entry.item) == type:
+			return entry
+	return {}
+
+## How much of the place's need for the item is filled now.
+static func demand_filled(s, item_id: String) -> float:
+	var entry := demand_entry(s, item_id)
+	if entry.is_empty():
+		return 0.0
+	var sold: Dictionary = s.world.get("demand_supply", {}).get("%s:%s" % [s.player.location, entry.item], {})
+	if sold.is_empty():
+		return 0.0
+	return maxf(0.0, float(sold.count) - float(int(s.world.day) - int(sold.day)) * float(entry.need) / float(entry.days))
+
+## The premium on the next one sold here (1.0 when the place is not short of it).
+static func demand_factor(s, item_id: String) -> float:
+	var entry := demand_entry(s, item_id)
+	return 1.0 if entry.is_empty() else _demand_rate(entry, demand_filled(s, item_id))
+
+static func _demand_rate(entry: Dictionary, filled: float) -> float:
+	return 1.0 + (float(entry.factor) - 1.0) * maxf(0.0, 1.0 - filled / float(entry.need))
 
 ## 坊市行情 (`rules.market`): what herbs fetch moves from month to month (a spread fixed by the world
 ## seed, the item and the month, so a reload changes nothing), and selling much of one herb lowers its
@@ -114,8 +158,13 @@ static func glut(s, item_id: String) -> float:
 		return 0.0
 	return maxf(0.0, float(sold.count) - float(int(s.world.day) - int(sold.day)) * float(s.content.rules.market.recover_per_day))
 
-## Records herbs sold, so the next sale fetches less.
+## Records goods sold: a place's shortage fills, and herbs flood the market, so the next sale fetches less.
 static func flood(s, item_id: String, count: int) -> void:
+	var entry := demand_entry(s, item_id)
+	if not entry.is_empty():
+		if not s.world.has("demand_supply"):
+			s.world["demand_supply"] = {}
+		s.world.demand_supply["%s:%s" % [s.player.location, entry.item]] = {"count": snappedf(minf(float(entry.need), demand_filled(s, item_id) + float(count)), 0.01), "day": int(s.world.day)}
 	if not str(s.content.item(item_id).get("category", "")) in s.content.rules.market.categories:
 		return
 	if not s.world.has("market_supply"):
@@ -190,12 +239,13 @@ static func sell(s, item_id: String, count: int = 1) -> String:
 		return "这里不收这件东西。"
 	# Named by its type: an instance is gone once sold.
 	var item_type := Gear.type_of(s, item_id)
+	var revenue := sale_value(s, item_id, maxi(count, 0))
 	if count < 1 or not remove_item(s, item_id, count):
 		return "行囊里没有那么多。"
-	s.player.stones += price * count
-	flood(s, item_id, count)
+	s.player.stones += revenue
+	flood(s, item_type, count)
 	s.record_deed("trade")
-	return s.conclude(s.log_event("sell_item", {"item": item_type, "count": count, "revenue": price * count}))
+	return s.conclude(s.log_event("sell_item", {"item": item_type, "count": count, "revenue": revenue}))
 
 static func buy(s, item_id: String) -> String:
 	var blocked: String = s.blocked()

@@ -27,6 +27,7 @@ const Forge = preload("res://scripts/core/forge.gd")
 const Leases = preload("res://scripts/core/leases.gd")
 const Arena = preload("res://scripts/core/arena.gd")
 const Series = preload("res://scripts/core/series.gd")
+const Trials = preload("res://scripts/core/trials.gd")
 const Feuds = preload("res://scripts/core/feuds.gd")
 const Schools = preload("res://scripts/core/schools.gd")
 const Breakthrough = preload("res://scripts/core/breakthrough.gd")
@@ -109,11 +110,11 @@ func new_game(character_name: String = "无名", seed_value: int = -1, roots: Ar
 		chosen_name = "无名"
 	# talent_lives: the generated population's talents shape their lives (journeys begun before talents
 	# keep the lives they had).
-	world = {"day": 0, "flags": {}, "events": {}, "people": {}, "seed": seed_value if seed_value >= 0 else absi(int(world_rng.randi())), "stock_sold": {}, "rumors": {}, "quests_taken": {}, "storylines": {}, "letters": [], "talent_lives": true, "invites": [], "loans": [], "visit_period": 0, "caves": {}, "market_supply": {}, "companion": "", "disciples": [], "sworn": [], "grudges": [], "grudge_seeds": {}, "grudge_serial": 0, "stashes": []}
+	world = {"day": 0, "flags": {}, "events": {}, "people": {}, "seed": seed_value if seed_value >= 0 else absi(int(world_rng.randi())), "stock_sold": {}, "rumors": {}, "quests_taken": {}, "storylines": {}, "letters": [], "talent_lives": true, "invites": [], "loans": [], "visit_period": 0, "caves": {}, "market_supply": {}, "demand_supply": {}, "companion": "", "disciples": [], "sworn": [], "grudges": [], "grudge_seeds": {}, "grudge_serial": 0, "stashes": []}
 	populate()
 	player = {
 		"name": chosen_name, "birth_day": -int(content.rules.starting_age) * Calendar.DAYS_PER_YEAR,
-		"realm": 0, "stage": 0, "xp": 0, "hp": 0, "qi": 0, "cultivation_carry": 0, "warned_for": -1, "wake": [], "leases": {}, "arena_best": {}, "series_last": {}, "roots": roots.duplicate(),
+		"realm": 0, "stage": 0, "xp": 0, "hp": 0, "qi": 0, "cultivation_carry": 0, "warned_for": -1, "wake": [], "leases": {}, "arena_best": {}, "series_last": {}, "trials": {}, "roots": roots.duplicate(),
 		"fatigue": 0, "fatigue_day": 0, "insight": 0, "mind": 0,
 		"stones": int(content.rules.starting_stones), "items": {},
 		"journey": {}, "cooldowns": {},
@@ -482,7 +483,7 @@ func act(action: String) -> String:
 				return "行囊里没有这里收购的东西。" if kept.is_empty() else "行囊里只剩委托与差事要交的%s，没有可卖的。" % "、".join(kept)
 			var revenue := 0
 			for item_id: String in sold:
-				revenue += sell_price(item_id) * int(sold[item_id])
+				revenue += Inventory.sale_value(self, item_id, int(sold[item_id]))
 				remove_item(item_id, int(sold[item_id]))
 				Inventory.flood(self, item_id, int(sold[item_id]))
 			player.stones += revenue
@@ -1304,8 +1305,8 @@ func auction_leave() -> String:
 
 ## --- The old cave's rooms (caves.gd) ---
 
-func cave_here() -> String:
-	return Caves.here(self)
+func cave_here(spot_id: String = "") -> String:
+	return Caves.here(self, spot_id)
 
 func enter_room(cave_id: String, room_id: String) -> String:
 	return Caves.enter(self, cave_id, room_id)

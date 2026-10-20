@@ -37,17 +37,17 @@ func _game(seed_value: int = 5) -> Session:
 	game.new_game("入世", seed_value, ["metal", "wood", "fire"])
 	return game
 
-## 五宗论道: offered at 青云山 every sixty years to those of foundation or above; four rounds against
+## 五宗论道: offered at 青云山 every sixty years from 历元 120 to those of 金丹 or above; four rounds against
 ## the other sects' senior disciples; the champion's reward; a loss costs nothing; a save keeps it.
 func _summit_game(seed_value: int) -> Session:
 	var game := _game(seed_value)
-	game.player.realm = 1
+	game.player.realm = 2
 	game.player.stage = 1
-	game.player.xp = 1500
-	game.player.mind = 60
+	game.player.xp = 20000
+	game.player.mind = 140
 	game.refresh_realm_stats()
 	game.player.hp = game.player.max_hp
-	_jump(game, 60, 8, 29)
+	_jump(game, 120, 8, 29)
 	game.travel("sect")
 	game.wait(1)
 	game.wait(1)
@@ -55,7 +55,7 @@ func _summit_game(seed_value: int) -> Session:
 
 func _summit() -> void:
 	var game := _summit_game(5)
-	check(game.pending_event.get("id", "") == "five_sects_entry", "the five sects' summit opens at 青云山 in year sixty")
+	check(game.pending_event.get("id", "") == "five_sects_entry", "the five sects' summit opens at 青云山 in year one hundred and twenty")
 	game.choose_event("enter")
 	check(game.battle.get("context", "") == "summit" and int(game.battle.round) == 1 and str(game.battle.foe.name).contains("赤霄") and game.battle.foe.arts == game.content.sects.chixiao.skills, "round one: 赤霄's senior disciple with 赤霄's own arts")
 	var copy := Session.new()

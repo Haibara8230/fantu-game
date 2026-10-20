@@ -14,7 +14,7 @@ const SLIP_FLAG := "hall_slip:"
 static func bonuses(s, holder: Dictionary = {}) -> Dictionary:
 	if holder.is_empty():
 		holder = s.player
-	var total := {"attack": 0, "max_hp": 0, "max_qi": 0, "defense": 0.0, "cultivation": 0.0, "element_damage": {}, "max_hp_percent": 0, "max_qi_percent": 0}
+	var total := {"attack": 0, "max_hp": 0, "max_qi": 0, "defense": 0.0, "cultivation": 0.0, "element_damage": {}, "max_hp_percent": 0, "max_qi_percent": 0, "dun_speed": 0.0, "encounter": 0.0}
 	for key: String in Talents.ORB_KEYS:
 		total[key] = 0
 	_add_talents(s, total, holder.get("talents", []) + holder.get("flaws", []), int(holder.get("realm", 0)))
@@ -43,7 +43,7 @@ static func bonuses(s, holder: Dictionary = {}) -> Dictionary:
 				# An element drawn more often: the 心法's or the 法宝's own element (none for plain gear).
 				if total.has("orb_" + str(source.element)):
 					total["orb_" + str(source.element)] = int(total["orb_" + str(source.element)]) + int(source.stats[key])
-			elif key in ["defense", "cultivation"]:
+			elif key in ["defense", "cultivation", "dun_speed", "encounter"]:
 				total[key] = float(total[key]) + float(source.stats[key])
 			else:
 				total[key] = int(total[key]) + int(source.stats[key])

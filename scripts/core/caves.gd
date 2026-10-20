@@ -9,8 +9,12 @@ extends RefCounted
 ## - a guardian, a duel on entering; the rooms beyond it stay shut and its room's things wait until it
 ##   falls (its enemy's world flag);
 ## - a seal (`requires_sense`) that only 神识 enough opens;
-## - heat (`heat`): a protective thing in the pack (避火珠), or 神识 enough to find a cooler way round;
-## - the remnant soul (fortune "remnant"), which offers its blessing before foundation.
+## - heat (`heat`): a protective thing in the pack (避火珠), 神识 enough to find a cooler way round, or a
+##   fire root;
+## - a depth (`requires_realm`) the realm must reach first, said in its own words (`realm_text`);
+## - the remnant soul (fortune "remnant"), which offers its blessing before foundation;
+## - a finding (`flag`) marked in the world on entering.
+## A named slip (`slip`: a handwritten technique) may lie among a room's things.
 ## Whether the 千年石乳 and the remnant soul are there is decided once, when the cave is first entered
 ## (fortune.gd's chance, after the talents for fortune). Which of a room's `loot` choices lies there
 ## follows from the world seed. Everything else is in world.caves[cave]: explored rooms, rooms whose
@@ -27,13 +31,21 @@ static func room(s, cave_id: String, room_id: String) -> Dictionary:
 			return candidate
 	return {}
 
-## The cave that can be explored where the player stands, or "".
-static func here(s) -> String:
+## The cave that can be explored where the player stands, or "". A place may hold more than one, each
+## entered from its own spot (`spot`); with `spot_id` the one entered from there.
+static func here(s, spot_id: String = "") -> String:
 	for cave_id: String in s.content.cave_data:
 		var cave: Dictionary = s.content.cave_data[cave_id]
-		if str(cave.location) == str(s.player.location) and s.has_flag(str(cave.requires_flag)):
+		if not spot_id.is_empty() and cave.has("spot") and str(cave.spot) != spot_id:
+			continue
+		if open_here(s, cave_id):
 			return cave_id
 	return ""
+
+## Whether the cave is open where the player stands.
+static func open_here(s, cave_id: String) -> bool:
+	var cave := definition(s, cave_id)
+	return not cave.is_empty() and str(cave.location) == str(s.player.location) and s.has_flag(str(cave.requires_flag)) and (not cave.has("requires_realm") or int(s.player.realm) >= int(cave.requires_realm))
 
 ## A cave's state as saved, or an untouched one.
 static func state(s, cave_id: String) -> Dictionary:
@@ -90,7 +102,7 @@ static func enter_block(s, cave_id: String, room_id: String) -> String:
 	var reason: String = s.blocked()
 	if not reason.is_empty():
 		return reason
-	if here(s) != cave_id:
+	if not open_here(s, cave_id):
 		return "此地无法如此行事。"
 	var target := room(s, cave_id, room_id)
 	if target.is_empty():
@@ -101,10 +113,13 @@ static func enter_block(s, cave_id: String, room_id: String) -> String:
 		return "还找不到通往这里的路。"
 	if s.sense() < int(target.get("requires_sense", 0)):
 		return "门上的禁制须神识 %d 方能破开（你的神识 %d）。" % [int(target.requires_sense), s.sense()]
-	# Heat (地火之心): a 避火珠 in the pack, or 神识 enough to find a cooler way round.
+	# Heat (地火之心): a 避火珠 in the pack, 神识 enough to find a cooler way round, or a fire root at home in it.
 	var heat: Dictionary = target.get("heat", {})
-	if not heat.is_empty() and s.item_count(str(heat.item)) < 1 and s.sense() < int(heat.sense):
-		return "%s：须带%s，或神识 %d 寻出一条凉些的岔道（你的神识 %d）。" % [heat.text, s.content.item(str(heat.item)).name, int(heat.sense), s.sense()]
+	if not heat.is_empty() and s.item_count(str(heat.item)) < 1 and s.sense() < int(heat.sense) and not "fire" in s.player.get("roots", []):
+		return "%s：须带%s，或神识 %d 寻出一条凉些的岔道，或身具火灵根（你的神识 %d）。" % [heat.text, s.content.item(str(heat.item)).name, int(heat.sense), s.sense()]
+	# A room deeper than the realm (断剑峡的剑冢): told, not barred without a word.
+	if int(s.player.realm) < int(target.get("requires_realm", 0)):
+		return "%s：须%s方能深入。" % [target.get("realm_text", "再往里去凶险莫测"), s.content.realm_title(int(target.requires_realm), 0)]
 	return ""
 
 ## Enters a room: the days pass, then its trap, things, guardian or remnant soul.
@@ -119,6 +134,9 @@ static func enter(s, cave_id: String, room_id: String) -> String:
 	if not s.ended.is_empty():
 		return s.conclude("", passed)
 	visit.explored.append(room_id)
+	# A room that is itself a finding (the 灵眼 behind the spring's channel) marks the world.
+	if target.has("flag"):
+		s.world.flags[str(target.flag)] = true
 	var args := {"cave": cave_id, "room": room_id}
 	var texts: Array[String] = [s.log_event("cave_enter", args.merged({"days": passed.elapsed}))]
 	if target.has("trap"):
@@ -154,7 +172,7 @@ static func challenge(s, cave_id: String, room_id: String) -> String:
 	var reason: String = s.blocked()
 	if not reason.is_empty():
 		return reason
-	if here(s) != cave_id or not explored(s, cave_id, room_id) or not guarded(s, cave_id, room_id):
+	if not open_here(s, cave_id) or not explored(s, cave_id, room_id) or not guarded(s, cave_id, room_id):
 		return "这里没有对手。"
 	var text: String = s.begin_battle(str(room(s, cave_id, room_id).guardian), "event")
 	s.battle.cave = cave_id
@@ -167,7 +185,7 @@ static func loot_waits(s, cave_id: String, room_id: String) -> bool:
 
 ## Takes the things a fallen guardian kept. Takes no time.
 static func collect(s, cave_id: String, room_id: String) -> String:
-	if here(s) != cave_id or not loot_waits(s, cave_id, room_id) or not s.blocked().is_empty():
+	if not open_here(s, cave_id) or not loot_waits(s, cave_id, room_id) or not s.blocked().is_empty():
 		return "这里没有可取的东西。"
 	_visit(s, cave_id)
 	return s.finish(_take(s, cave_id, room_id, room_id, room(s, cave_id, room_id).loot))
@@ -183,7 +201,7 @@ static func hidden_block(s, cave_id: String, room_id: String) -> String:
 	if not reason.is_empty():
 		return reason
 	var target := room(s, cave_id, room_id)
-	if here(s) != cave_id or not target.has("hidden") or not explored(s, cave_id, room_id):
+	if not open_here(s, cave_id) or not target.has("hidden") or not explored(s, cave_id, room_id):
 		return "此地无法如此行事。"
 	if room_id + ":hidden" in state(s, cave_id).taken:
 		return "暗处已经取空。"
@@ -237,6 +255,8 @@ static func _take(s, cave_id: String, room_id: String, key: String, choices: Arr
 				found["j:" + s.Arsenal.generate_technique(s.content, s.world_rng, int(value))] = 1
 			"equipment":
 				found[s.Arsenal.generate_equipment(s.content, s.world_rng, int(value))] = 1
+			"slip":
+				found["j:" + str(value)] = 1
 	var texts: Array[String] = []
 	for item_id: String in found:
 		s.add_item(item_id, int(found[item_id]))
