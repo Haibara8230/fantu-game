@@ -161,10 +161,19 @@ static func odds(s, plan: Dictionary) -> Dictionary:
 		var bonus := int(r.guard.mentor_bonus) if guard == str(r.guard.mentor) else int(r.guard.bonus)
 		parts.append(["护法 · %s" % s.person(guard).name, bonus])
 	if at_eye(s):
-		parts.append(["灵眼", int(r.eye.bonus)])
+		# The fire drawn back from the spring (赤霄's 引泉脉之火) leaves the eye less steady.
+		var dimmed: bool = s.has_flag(str(r.eye.get("dimmed_by", "")))
+		parts.append(["灵眼" + ("（泉脉不稳）" if dimmed else ""), int(r.eye.dimmed_bonus) if dimmed else int(r.eye.bonus)])
 	var ground := settled_ground(s)
 	if not ground.is_empty():
 		parts.append([str(ground.name), int(ground.breakthrough_bonus)])
+	# 凝丹之法 and the like: knowledge for one realm's breakthrough (`lore`: {"flag", "realm", "bonus",
+	# "grade"}), learned once and counted every time that realm is attempted.
+	for lore: Dictionary in r.get("lore", []):
+		if int(lore.realm) == int(s.player.realm) + 1 and s.has_flag(str(lore.flag)):
+			parts.append([str(lore.name), int(lore.bonus)])
+			if int(lore.get("grade", 0)) > 0:
+				steps.append(str(lore.name))
 	for boon: Dictionary in r.boons:
 		if _ready_boon(s, str(boon.id)):
 			parts.append([str(boon.name), int(boon.bonus)])

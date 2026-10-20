@@ -42,6 +42,7 @@ var cave_data: Dictionary = {}
 var auction_data: Dictionary = {}
 # The contests' champions and rewards, 五宗论道 and 天南大比 (summit.gd).
 var summit_data: Dictionary = {}
+var guest_data: Dictionary = {}
 # 炼器's materials and costs (forge.gd).
 var forge_data: Dictionary = {}
 # Lore heard in teahouses about the wider world (rumors.gd).
@@ -54,7 +55,7 @@ const FAVOR_MAX := 200
 const FAVOR_STAGES := [[0, "初识"], [40, "相熟"], [80, "友好"], [140, "信赖"], [200, "亲密"]]
 const ATTITUDES := {"friendly": "友善", "neutral": "中立", "hostile": "敌意"}
 const BUILT_IN_INTERACTIONS := ["talk", "gift", "help", "consult", "teach", "invite_spar", "invite_help", "companion", "disciple", "instruct", "sworn"]
-const PLAIN_ACTIONS := ["cultivate", "rest", "breakthrough", "study", "teach", "sell", "shop", "gather", "inn_rest", "search_ruin", "explore_cave", "forge", "ascend", "inquire", "commissions", "sect", "alchemy", "field", "lease", "hunt", "arena", "series", "join_sect"]
+const PLAIN_ACTIONS := ["cultivate", "rest", "breakthrough", "study", "teach", "sell", "shop", "gather", "inn_rest", "search_ruin", "explore_cave", "forge", "ascend", "inquire", "commissions", "sect", "alchemy", "field", "lease", "hunt", "arena", "series", "join_sect", "guest"]
 const ITEM_CATEGORIES := {"herb": "灵草", "pill": "丹药", "treasure": "天材地宝", "manual": "玉简", "equipment": "宝物", "material": "材料", "recipe": "丹方", "talisman": "符箓", "tool": "器具", "quest": "信物"}
 # Milestones friends send word of, and the deeds the session counts besides victories ("win:<enemy>").
 const CONGRATS := ["breakthrough", "core", "nascent", "deity", "serpent", "champion", "summit", "calamity", "promotion"]
@@ -100,7 +101,7 @@ func load_data() -> bool:
 	for item_id: String in items:
 		if items[item_id] is Dictionary:
 			items[item_id].id = item_id
-	for pair: Array in [["techniques", "res://data/techniques.json"], ["equipment", "res://data/equipment.json"], ["vfx_tiers", "res://data/vfx_tiers.json"], ["vfx", "res://data/vfx.json"], ["population", "res://data/population.json"], ["commissions", "res://data/commissions.json"], ["storylines", "res://data/storylines.json"], ["talents", "res://data/talents.json"], ["sect", "res://data/sect.json"], ["bonds", "res://data/bonds.json"], ["alchemy", "res://data/alchemy.json"], ["caves", "res://data/caves.json"], ["auctions", "res://data/auctions.json"], ["summit", "res://data/summit.json"], ["forge", "res://data/forge.json"], ["lore", "res://data/lore.json"]]:
+	for pair: Array in [["techniques", "res://data/techniques.json"], ["equipment", "res://data/equipment.json"], ["vfx_tiers", "res://data/vfx_tiers.json"], ["vfx", "res://data/vfx.json"], ["population", "res://data/population.json"], ["commissions", "res://data/commissions.json"], ["storylines", "res://data/storylines.json"], ["talents", "res://data/talents.json"], ["sect", "res://data/sect.json"], ["bonds", "res://data/bonds.json"], ["alchemy", "res://data/alchemy.json"], ["caves", "res://data/caves.json"], ["auctions", "res://data/auctions.json"], ["summit", "res://data/summit.json"], ["forge", "res://data/forge.json"], ["lore", "res://data/lore.json"], ["guests", "res://data/guests.json"]]:
 		var loaded: Variant = _read_json(pair[1])
 		if not loaded is Dictionary:
 			error_message = "配置格式错误：" + pair[1]
@@ -141,6 +142,8 @@ func load_data() -> bool:
 				forge_data = loaded
 			"lore":
 				lore_data = loaded
+			"guests":
+				guest_data = loaded
 	map = parsed.map
 	regions = parsed.get("regions", {})
 	locations = parsed.locations
@@ -416,6 +419,8 @@ func _validate() -> String:
 	if problem.is_empty():
 		problem = _validate_summit()
 	if problem.is_empty():
+		problem = _validate_guests()
+	if problem.is_empty():
 		problem = _validate_forge()
 	if problem.is_empty():
 		problem = _validate_lore()
@@ -468,8 +473,11 @@ func _validate_breakthrough() -> String:
 	if not guard is Dictionary or not people.has(guard.get("mentor", "")) or not storylines.has(guard.get("mentor_story", "")) or not storylines[guard.mentor_story].steps.any(func(step: Dictionary) -> bool: return step.id == guard.get("mentor_step", "")) or not _whole(guard.get("favor")) or not _whole(guard.get("bonus")) or not _whole(guard.get("mentor_bonus")):
 		return "护法配置无效。"
 	var eye: Variant = r.get("eye")
-	if not eye is Dictionary or not locations.has(eye.get("location", "")) or not eye.get("flag") in world_flags or not _whole(eye.get("bonus")):
+	if not eye is Dictionary or not locations.has(eye.get("location", "")) or not eye.get("flag") in world_flags or not _whole(eye.get("bonus")) or (eye.has("dimmed_by") and (not eye.dimmed_by in world_flags or not _whole(eye.get("dimmed_bonus")))):
 		return "灵眼配置无效。"
+	for lore: Variant in r.get("lore", []):
+		if not lore is Dictionary or not lore.get("flag") in world_flags or not lore.get("name") is String or not _whole(lore.get("realm")) or int(lore.realm) < 1 or int(lore.realm) >= realms.size() or not _whole(lore.get("bonus")) or not _whole(lore.get("grade", 0)):
+			return "突破所需见识配置无效。"
 	if not r.get("boons") is Array:
 		return "突破机缘配置无效。"
 	for boon: Variant in r.boons:
@@ -780,6 +788,39 @@ func _validate_lore() -> String:
 			return "传闻条件无效：%s（%s）" % [rumor.id, problem]
 	return ""
 
+# --- 客卿 ------------------------------------------------------------------------------------------
+
+func _validate_guests() -> String:
+	var data := guest_data
+	if not data.get("sects") is Dictionary or data.sects.is_empty():
+		return "客卿缺少宗门配置。"
+	for key: String in ["min_realm", "invite_favor", "call_years", "call_days", "missed_most", "served_favor"]:
+		if not _whole(data.get(key)) or int(data[key]) < 1 and key != "min_realm":
+			return "客卿配置无效：" + key
+	if not data.get("stipend") is Array or data.stipend.size() != realms.size() or data.stipend.any(func(value: Variant) -> bool: return not _whole(value)):
+		return "客卿月俸须按境界逐一给出。"
+	for sect: String in data.sects:
+		var terms: Variant = data.sects[sect]
+		if not sects.has(sect) or sect == str(rules.lineage.home) or not terms is Dictionary or not locations.has(terms.get("location", "")):
+			return "客卿宗门配置无效：" + sect
+		if not terms.get("perk") in ["forge_free", "alchemy_free", "discount", "archive"] or not terms.get("perk_text") is String:
+			return "客卿专长无效：" + sect
+		if terms.has("person") and not people.has(terms.person):
+			return "客卿宗门的首徒不存在：" + sect
+		if terms.has("flag") and not terms.flag in world_flags:
+			return "客卿专长的标记未登记：" + sect
+		if terms.get("places", []).any(func(place: Variant) -> bool: return not locations.has(place)):
+			return "客卿专长的地点无效：" + sect
+		for flag: String in ["guest_" + sect, "guest_invite_" + sect, "guest_ended_" + sect]:
+			if not flag in world_flags:
+				return "客卿标记未登记：" + flag
+		var board: Variant = commission_data.get("boards", {}).get("guest_" + sect)
+		if not board is Dictionary or board.get("location") != terms.location:
+			return "客卿差遣告示无效：" + sect
+		if not commission_data.templates.values().any(func(template: Dictionary) -> bool: return "guest_" + sect in template.boards):
+			return "客卿没有差遣：" + sect
+	return ""
+
 # --- 五宗论道 --------------------------------------------------------------------------------------
 
 func _validate_summit() -> String:
@@ -802,6 +843,12 @@ func _validate_summit() -> String:
 				return "%s须按轮次给出：%s" % [data.name, key]
 		if data.levels.any(func(level: Variant) -> bool: return not level is Array or level.size() != 2 or not _whole(level[0]) or int(level[0]) >= realms.size() or not _whole(level[1]) or int(level[1]) >= realms[int(level[0])].stages.size()):
 			return "%s的对手修为无效。" % data.name
+		for realm_key: Variant in data.get("groups", {}):
+			var group: Variant = data.groups[realm_key]
+			if not str(realm_key).is_valid_int() or int(str(realm_key)) >= realms.size() or not group is Dictionary or not group.get("levels") is Array or group.levels.size() != champions.size() or group.levels.any(func(level: Variant) -> bool: return not level is Array or level.size() != 2 or not _whole(level[0]) or int(level[0]) >= realms.size() or not _whole(level[1]) or int(level[1]) >= realms[int(level[0])].stages.size()):
+				return "%s的分组无效。" % data.name
+		if data.has("world_flag") and not data.world_flag in world_flags:
+			return "%s的魁首标记未登记。" % data.name
 		if not _whole(data.get("recover_percent")) or not data.get("round") is Dictionary or not data.get("champion") is Dictionary:
 			return "%s的奖赏配置无效。" % data.name
 	return ""
@@ -912,7 +959,7 @@ func _valid_cave_loot(choices: Variant) -> bool:
 					if not _whole(value) or int(value) < 1:
 						return false
 				"item":
-					if not value is Array or value.size() != 2 or not items.has(value[0]) or not _whole(value[1]) or int(value[1]) < 1:
+					if not value is Array or value.size() != 2 or item(str(value[0])).is_empty() or not _whole(value[1]) or int(value[1]) < 1:
 						return false
 				"manual", "equipment":
 					if not _whole(value) or int(value) < 1 or int(value) > technique_data.tiers.size():
@@ -1239,7 +1286,7 @@ func _validate_map() -> String:
 				if not entry is Dictionary or not items.has(entry.get("item", "")) or not _whole(entry.get("weight")) or int(entry.weight) < 1:
 					return "采集表条目错误：" + location_id
 		for good: Variant in location.get("shop", []):
-			if not good is Dictionary or not items.has(good.get("item", "")) or not _whole(good.get("price")) or int(good.price) < 1:
+			if not good is Dictionary or item(str(good.get("item", ""))).is_empty() or not _whole(good.get("price")) or int(good.price) < 1:
 				return "商店货品错误：" + location_id
 		for category: Variant in location.get("buys", []):
 			if not ITEM_CATEGORIES.has(category):
@@ -1365,6 +1412,9 @@ func _validate_reveals() -> String:
 	for location: Dictionary in locations.values():
 		if location.has("lease"):
 			settable[location.lease.flag] = true
+	# A 客卿's room opens while the bond lasts (guest.gd).
+	for sect: String in guest_data.get("sects", {}):
+		settable["guest_" + sect] = true
 	for location_id: String in locations:
 		var location: Dictionary = locations[location_id]
 		if location.has("hidden_until") and not settable.has(location.hidden_until):
@@ -1506,6 +1556,9 @@ func _validate_event(event_id: String, definition: Variant) -> String:
 	if trigger == "location":
 		if not locations.has(definition.get("location", "")):
 			return "未知地点"
+		var venues: Variant = definition.get("periodic", {}).get("venues", [])
+		if not venues is Array or venues.any(func(place: Variant) -> bool: return not locations.has(place)):
+			return "轮办地点无效"
 	elif trigger == "date":
 		if not definition.has("window") and not definition.has("periodic"):
 			return "日期事件必须有时间窗口或周期"
@@ -1640,7 +1693,7 @@ func _validate_condition(condition: Variant) -> String:
 		"stones_at_least", "herbs_at_least", "mind_at_least", "sense_at_least", "year_at_least":
 			return "" if _whole(value) else "%s 数值无效" % key
 		"trial_at_least":
-			return "" if value is Array and value.size() == 3 and value[0] in ["jianya", "lilian"] and _whole(value[1]) and _whole(value[2]) and int(value[2]) >= 1 else "试炼条件无效"
+			return "" if value is Array and value.size() == 3 and value[0] in ["jianya", "lilian", "tiannan", "wuzong"] and _whole(value[1]) and _whole(value[2]) and int(value[2]) >= 1 else "试炼条件无效"
 		"met":
 			return "" if people.has(value) else "未知人物：%s" % value
 		"relation_at_least":
@@ -1679,6 +1732,12 @@ func _validate_condition(condition: Variant) -> String:
 			return "" if value is Array and value.size() == 2 and _whole(value[0]) and _whole(value[1]) and int(value[0]) >= 1 and int(value[0]) <= int(value[1]) and int(value[1]) <= 30 else "月中日期条件无效"
 		"affiliation":
 			return "" if value is String and (value.is_empty() or (sects.has(value) and value != "wanderer")) else "未知宗门：%s" % value
+		"holds_gear":
+			return "" if value is String and not equipment(value).is_empty() else "宝物条件无效"
+		"work_at_least":
+			return "" if _whole(value) and int(value) >= 1 and int(value) <= technique_data.tiers.size() else "作品品阶条件无效"
+		"guest":
+			return "" if value is String and (value.is_empty() or guest_data.get("sects", {}).has(value)) else "客卿条件无效"
 	return "未知条件：%s" % key
 
 func _validate_effects(effects: Variant) -> String:
@@ -1743,6 +1802,10 @@ func _validate_effects(effects: Variant) -> String:
 				ok = value is String and summit_data.has(value) and value != "wuzong"
 			"reset_cave":
 				ok = cave_data.has(value)
+			"reforge":
+				ok = value is Array and value.size() == 2 and not equipment(str(value[0])).is_empty() and not equipment(str(value[1])).is_empty()
+			"guest_invite":
+				ok = guest_data.get("sects", {}).has(value)
 			"longevity":
 				ok = value is Array and value.size() == 2 and value[0] is String and _whole(value[1]) and int(value[1]) >= 1
 		if not ok:
@@ -1803,7 +1866,12 @@ func _valid_standing(standing: Variant) -> bool:
 	return standing is Array and standing.size() == 2 and _whole(standing[0]) and int(standing[0]) < realms.size() and _whole(standing[1])
 
 ## Every place a handwritten person may live or pass through, over all their phases.
+## Every place a handwritten person may be found, over all their phases (kept once worked out).
+var _places_cache := {}
+
 func person_places(person_id: String) -> Array:
+	if _places_cache.has(person_id):
+		return _places_cache[person_id]
 	var person: Dictionary = people[person_id]
 	var places := []
 	for shape: Dictionary in [person] + person.get("phases", []):
@@ -1811,6 +1879,7 @@ func person_places(person_id: String) -> Array:
 			places.append(shape.home)
 		for stop: Dictionary in shape.get("schedule", []):
 			places.append(stop.location)
+	_places_cache[person_id] = places
 	return places
 
 func _validate_person(person: Variant) -> String:
@@ -2105,8 +2174,12 @@ func _validate_arsenal() -> String:
 		if str(skill.get("slot", "art")) == "method":
 			if not _whole(skill.get("tier")) or int(skill.tier) < 1 or int(skill.tier) > data.tiers.size() or not skill.get("name") is String or not skill.get("description") is String:
 				return "手写心法的品阶或文字无效：" + skill_id
-			if not skill.get("passive") is Dictionary or skill.passive.is_empty() or skill.passive.keys().any(func(key: Variant) -> bool: return not key in ["cultivation", "max_hp", "max_qi", "dun_speed", "encounter"]) or skill.passive.values().any(func(value: Variant) -> bool: return not (value is float or value is int)):
+			if not skill.get("passive") is Dictionary or skill.passive.is_empty() or skill.passive.keys().any(func(key: Variant) -> bool: return not key in ["cultivation", "max_hp", "max_qi", "dun_speed", "encounter", "element_damage", "orb_weight"]) or skill.passive.values().any(func(value: Variant) -> bool: return not (value is float or value is int)):
 				return "手写心法的常驻效果无效：" + skill_id
+			# 《照水分光诀》: two elements that answer each other as a 连击 (combat.gd linked_combo).
+			var link: Variant = skill.get("link", {})
+			if not link is Dictionary or (not link.is_empty() and (not link.get("elements") is Array or link.elements.size() != 2 or link.elements.any(func(element: Variant) -> bool: return not data.elements.has(element)) or not (link.get("bonus") is float or link.get("bonus") is int) or not _whole(link.get("absorb", 0)))):
+				return "手写心法的连击相合无效：" + skill_id
 			continue
 		if not _valid_cost(skill.get("cost"), data.elements.keys() + ["same", "any"]):
 			return "传承神通的灵气消耗无效：" + skill_id
@@ -2148,6 +2221,8 @@ func _validate_arsenal() -> String:
 			return "装备底材配置错误：" + base_id
 		if base.has("release") and (not base.release is Dictionary or not base.release.get("name") is String or not (base.release.get("power") is float or base.release.get("power") is int) or float(base.release.power) <= 0.0 or base.get("slot") != "weapon"):
 			return "兵刃祭出配置错误：" + base_id
+		if base.has("named") and (not base.named is Dictionary or base.named.is_empty() or base.named.keys().any(func(key: Variant) -> bool: return not str(key).is_valid_int() or int(str(key)) < 1 or int(str(key)) > gear.tiers.size() or not base.named[key] is String)):
+			return "有名宝物的阶段配置错误：" + base_id
 		if base.has("trait") and (not base["trait"] is Dictionary or not base["trait"].get("kind") in ["heart_guard", "mirror"] or not base["trait"].get("name") is String or not base["trait"].get("text") is String):
 			return "宝物特性配置错误：" + base_id
 	# Tier effects must escalate on every measure, so a stronger art never looks weaker. Layers that
@@ -2180,7 +2255,7 @@ func location_events(location_id: String) -> Array[String]:
 	if not _by_location.has(location_id):
 		var ids: Array[String] = []
 		for event_id: String in ordered:
-			if events[event_id].trigger == "location" and events[event_id].location == location_id:
+			if events[event_id].trigger == "location" and (events[event_id].location == location_id or location_id in events[event_id].get("periodic", {}).get("venues", [])):
 				ids.append(event_id)
 		_by_location[location_id] = ids
 	return _by_location[location_id]

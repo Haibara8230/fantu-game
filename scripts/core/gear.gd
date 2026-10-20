@@ -114,3 +114,31 @@ static func refine_text(piece: Dictionary) -> String:
 	if int(piece.get("refine", 0)) <= 0:
 		return ""
 	return "已祭炼 %d 次（契合随主人，转手即失）。" % int(piece.refine)
+
+## Whether the player holds a piece of `type_id` anywhere: carried, worn, or as an instance.
+static func holds(s, type_id: String) -> bool:
+	if s.item_count(type_id) > 0 or s.player.get("equipment", {}).values().has(type_id):
+		return true
+	for held: Variant in s.player.get("gear", {}).values():
+		if held is Dictionary and str(held.get("type", "")) == type_id:
+			return true
+	return false
+
+## Mends a piece into the next stage of itself (听潮剑): the one held of `from_type` becomes `to_type`
+## where it lies — an instance keeps its id and its 祭炼, a worn piece stays worn. False when none is held.
+static func reforge(s, from_type: String, to_type: String) -> bool:
+	for item_id: String in s.player.get("gear", {}):
+		if str(s.player.gear[item_id].type) == from_type:
+			s.player.gear[item_id].type = to_type
+			s.refresh_realm_stats()
+			return true
+	for slot: String in s.player.get("equipment", {}):
+		if str(s.player.equipment[slot]) == from_type:
+			s.player.equipment[slot] = to_type
+			s.refresh_realm_stats()
+			return true
+	if s.item_count(from_type) > 0:
+		s.remove_item(from_type, 1)
+		s.add_item(to_type, 1)
+		return true
+	return false

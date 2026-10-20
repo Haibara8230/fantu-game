@@ -88,10 +88,15 @@ static func default_plan(s, recipe_id: String) -> Dictionary:
 	return {"recipe": recipe_id, "guide": guide, "fire": "gentle", "aid": ""}
 
 ## The place's furnace and help here ({"name", "success", "fee", ...}), or {} where nobody brews.
+## 长青's 丹坊 lends its furnace free to its 客卿 (guest.gd).
 static func place(s) -> Dictionary:
 	if not s.available_here("alchemy"):
 		return {}
-	return data(s).places.get(str(s.player.location), {})
+	var here: Dictionary = data(s).places.get(str(s.player.location), {})
+	if s.Guest.perk_here(s, "alchemy_free") and int(here.get("fee", 0)) > 0:
+		here = here.duplicate()
+		here.fee = 0
+	return here
 
 ## The furnace a brew uses: the best one carried, else the place's own.
 ## {"name", "item" ("" for the place's), "success", "fine", "yield"}.

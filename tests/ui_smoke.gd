@@ -773,10 +773,20 @@ func _run() -> void:
 	check(main.current_screen() == "full" and _texts(main.center, "Label").contains("筑基") and _texts(main.center, "Label").contains("寿元 120 → 220 年") and _texts(main.center, "Label").contains("根基 · "), "a realm reached is shown on its own screen, with its grade")
 	_button("确定").pressed.emit()
 	check(main.ceremony.is_empty() and main.view == "place" and main.session.player.realm == 1, "确定 returns to the place")
+	# 客卿 at a sect's gate (guest.gd): offered there, closed to one already sworn to 青云.
+	main.session.world.flags["tiannan_known"] = true
+	main.session.world.flags["guest_invite_chixiao"] = true
+	main.session.player.location = "chixiao_gate"
+	main.set_view("place")
+	main.select_spot("pavilion")
+	var guest_button: Button = _button("应邀做赤霄门客卿")
+	check(guest_button != null and guest_button.disabled and guest_button.tooltip_text.contains("宗门弟子"), "赤霄's 迎客亭 offers the guest's place, closed to a 青云 disciple")
 	# 护送 at 青石镇's 镇口木栅 (series.gd), fought as a pack with a target to pick (群敌).
 	main.session.player.location = "town"
 	var stage_was := int(main.session.player.stage)
 	main.session.player.stage = maxi(stage_was, 2)
+	# 筑基后期 brings 顾长庚's word on the 金丹 (结丹之备); let it come before the escort is taken.
+	main.session.Storylines.update(main.session)
 	main.set_view("place")
 	main.select_spot("palisade")
 	check(_button("接下 · 护送商队") != null and not _button("接下 · 护送商队").disabled and _button("接下 · 护送商队").tooltip_text.contains("云溪坊市"), "the 镇口 offers the caravan escort and says where it goes")

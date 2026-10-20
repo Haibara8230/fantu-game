@@ -19,6 +19,7 @@
     "jade": ["顽石", "青玉", "墨玉", "寒玉", "星辰"]
   },
   "bases": {
+    "tingchao": {"slot": "weapon", "material": "metal", "nouns": ["听潮剑"], "stats": {"attack": 3, "orb_tide": 1}, "named": {"2": "锈蚀的听潮剑", "3": "听潮剑·初复", "4": "听潮剑"}, "release": {"name": "听潮一剑", "power": 1.0, "vfx": "water"}, "lore": "一百年前沧澜阁一位长老的佩剑，随船沉在近海；修复要海里的东西与南明、赤霄的炉火。"},
     "sword": {"slot": "weapon", "material": "metal", "nouns": ["剑", "长剑"], "stats": {"attack": 3}, "release": {"name": "飞剑", "power": 1.0, "vfx": "sword"}},
     "saber": {"slot": "weapon", "material": "metal", "nouns": ["刀", "雁翎刀"], "stats": {"attack": 4}, "release": {"name": "刀芒", "power": 0.8, "vfx": "sword_arc", "inflict": {"sunder": [0.2, 2]}}},
     "fan": {"slot": "weapon", "material": "jade", "nouns": ["扇", "折扇"], "stats": {"attack": 2, "element_damage": 0.05}, "release": {"name": "扇风", "power": 0.8, "vfx": "leaf_blade", "inflict": {"weaken": [0.2, 2]}}},

@@ -119,6 +119,9 @@ func _icons() -> void:
 		for tier: int in range(1, content.equipment_data.tiers.size() + 1):
 			for element: String in ["none"] + content.technique_data.elements.keys():
 				var gear: Dictionary = content.equipment(game.Arsenal.equipment_id(base, tier, element, [], 0))
+				# A named piece (听潮剑) exists only at its own stages.
+				if gear.is_empty() and content.equipment_data.bases[base].has("named"):
+					continue
 				if ArtLibrary.gear_icon(gear) == null:
 					missing.append(gear.id)
 	check(missing.is_empty(), "every technique and 宝物 has its icon (missing %s)" % str(missing.slice(0, 5)))

@@ -18,7 +18,11 @@
     "map": "res://assets/audio/music/asian_oriental_1.ogg",
     "event": "res://assets/audio/music/eastern_thought.ogg",
     "battle": "res://assets/audio/music/dragon_dance.ogg",
-    "ending": "res://assets/audio/music/river_flute_ending.ogg"
+    "ending": "res://assets/audio/music/river_flute_ending.ogg",
+    "canglan": "res://assets/audio/music/river_flute.ogg",
+    "wanghai": "res://assets/audio/music/river_flute.ogg",
+    "jinhai": "res://assets/audio/music/eastern_thought.ogg",
+    "duze": "res://assets/audio/music/eastern_thought.ogg"
   },
   "music_credits": [
     {
@@ -85,7 +89,11 @@
     "chixiao_gate": "res://assets/audio/ambience/mountain_wind_bells.ogg",
     "changqing_valley": "res://assets/audio/ambience/valley_insects.ogg",
     "canglan_pavilion": "res://assets/audio/ambience/river_egrets.ogg",
-    "xuanyue_gate": "res://assets/audio/ambience/mountain_wind_bells.ogg"
+    "xuanyue_gate": "res://assets/audio/ambience/mountain_wind_bells.ogg",
+    "canglan": "res://assets/audio/ambience/river_egrets.ogg",
+    "wanghai": "res://assets/audio/ambience/market_crowd.ogg",
+    "jinhai": "res://assets/audio/ambience/river_egrets.ogg",
+    "duze": "res://assets/audio/ambience/valley_insects.ogg"
   },
   "sfx": {
     "click": {

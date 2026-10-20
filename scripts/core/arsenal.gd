@@ -335,6 +335,9 @@ static func equipment(content, id: String) -> Dictionary:
 		return {}
 	if element != "none" and not content.technique_data.elements.has(element):
 		return {}
+	# A named piece (听潮剑) exists only at the stages it is mended to, by its own name.
+	if base.has("named") and not base.named.has(str(tier)):
+		return {}
 	var tier_def: Dictionary = data.tiers[tier - 1]
 	var power := float(tier_def.power)
 	var base_stats := {}
@@ -361,9 +364,10 @@ static func equipment(content, id: String) -> Dictionary:
 	if element != "none":
 		var words: Array = content.technique_data.elements[element].words
 		prefix = str(words[variant % words.size()])
+	var piece_name: String = str(base.named[str(tier)]) if base.has("named") else prefix + material + str(nouns[variant % nouns.size()])
 	var result := {
 		"id": id, "category": "equipment", "slot": base.slot, "tier": tier, "tier_name": tier_def.name, "element": element,
-		"name": prefix + material + str(nouns[variant % nouns.size()]), "stats": stats, "affixes": affix_names,
+		"name": piece_name, "stats": stats, "affixes": affix_names,
 		"price": int(tier_def.value) + 10 * affix_ids.size(),
 		"realm": int(tier_def.get("realm", 0)), "base_stats": base_stats, "affix_stats": affix_stats,
 	}
@@ -411,7 +415,7 @@ static func mastery_text(content, item: Dictionary, realm: int) -> String:
 	return "须%s方能全力驾驭：眼下驾驭 %d%%%s，%s。" % [needed, int(round(float(held.share) * 100.0)), further, affixes]
 
 static func describe_equipment(content, item: Dictionary) -> String:
-	var names := {"attack": "攻击 +%d", "max_hp": "气血上限 +%d", "max_qi": "灵力上限 +%d", "defense": "受伤 -%d%%", "element_damage": "属性伤害 +%d%%", "cultivation": "修炼速度 +%d%%", "orb_first": "斗法开局多抽 %d 颗灵气", "orb_cap": "灵气上限 +%d"}
+	var names := {"attack": "攻击 +%d", "max_hp": "气血上限 +%d", "max_qi": "灵力上限 +%d", "defense": "受伤 -%d%%", "element_damage": "属性伤害 +%d%%", "cultivation": "修炼速度 +%d%%", "orb_first": "斗法开局多抽 %d 颗灵气", "orb_cap": "灵气上限 +%d", "orb_tide": "在临水、临海之地斗法，开局多吸 %d 颗水灵气"}
 	var parts: Array[String] = []
 	var keys: Array = item.stats.keys()
 	keys.sort()
@@ -430,11 +434,13 @@ static func describe_equipment(content, item: Dictionary) -> String:
 		text += "可祭出「%s」（斗法中每场%s，不占回合）。" % [base.release.name, "两次" if int(item.tier) >= 4 else "一次"]
 	if base.has("trait"):
 		text += "特性「%s」：%s" % [base["trait"].name, base["trait"].text]
+	if base.has("lore"):
+		text += str(base.lore)
 	return text
 
 static func generate_equipment(content, rng: RandomNumberGenerator, tier: int, slot: String = "") -> String:
 	var data: Dictionary = content.equipment_data
-	var bases: Array = data.bases.keys().filter(func(key: String) -> bool: return slot.is_empty() or data.bases[key].slot == slot)
+	var bases: Array = data.bases.keys().filter(func(key: String) -> bool: return (slot.is_empty() or data.bases[key].slot == slot) and not data.bases[key].has("named"))
 	bases.sort()
 	var base: String = bases[rng.randi_range(0, bases.size() - 1)]
 	var elements: Array = content.technique_data.elements.keys()

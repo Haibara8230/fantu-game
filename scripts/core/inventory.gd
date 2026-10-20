@@ -178,8 +178,10 @@ static func shop_goods(s) -> Array:
 	var goods: Array = s.content.locations[s.player.location].get("shop", []).duplicate(true)
 	goods.append_array(rotating_stock(s, s.player.location))
 	var percent: int = s.talent_modifier("buy")
+	# 沧澜's 客卿 buy at the sect's own price (guest.gd).
+	var share: float = s.Guest.discount(s)
 	for good: Dictionary in goods:
-		good.price = Talents.scaled(int(good.price), percent, 1)
+		good.price = maxi(1, int(round(float(Talents.scaled(int(good.price), percent, 1)) * share)))
 	return goods
 
 ## A place's stock that changes every restock period: deterministic per world, place and period.

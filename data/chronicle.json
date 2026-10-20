@@ -85,7 +85,7 @@
   "summit_start": "{contest}第 {round} 轮，对手是{foe}。",
   "summit_round": "{contest}第 {round} 轮，你胜了{foe}，得灵石 {stones}。",
   "summit_out": "{contest}第 {round} 轮，你败给了{foe}，就此下台。",
-  "summit_champion": "五宗论道，你四战四胜，替青云夺得魁首！得灵石 {stones} 与{item_name}。",
+  "summit_champion": "五宗论道，你四战四胜，夺得魁首！得灵石 {stones} 与{item_name}。",
   "lilian_merit": "悬赏会在你的历练帖上盖了印，记下一功：这一季已记 {count} 功。",
   "contest_champion": "{contest}，你四战四胜，夺得魁首！得灵石 {stones} 与{item_name}。四宗的长老都记住了你的名字，席散时各递来一张客卿的帖子。",
   "forged": "在器铺炼器 {duration}，打出{item_name}。",
@@ -191,5 +191,16 @@
   "story_gather_help": "{npc_name}同行指草，额外找到{item_name}×{count}；这次认药相助已用过。",
   "duanjian_ling_down": "剑灵首散成一地碎剑，断剑林里的剑气平息下来，往草庐与剑冢的路露了出来。",
   "archive_seized": "守川司巡使败退，被你夺下的半卷残页上，赫然是那枚城徽，旁边是一幅古画像。",
-  "lu_mine_cleared": "矿道护院散了，旧矿道深处那几间锁着的石屋，门开了。"
+  "lu_mine_cleared": "矿道护院散了，旧矿道深处那几间锁着的石屋，门开了。",
+  "guest_join": "你应邀做了{sect_name}的客卿：月俸按境界照付，本宗客舍可闭关突破，另有{perk}。每隔三年，宗门会有一件差遣。",
+  "guest_leave": "你辞去了{sect_name}的客卿。邀约仍在，日后可以再应。",
+  "guest_dismissed": "{sect_name}来信解约：差遣一误再误，客卿牌收回了。往后{sect_name}不会再请你。",
+  "guest_stipend": "{sect_name}送来客卿月俸 {stones} 灵石（{months} 个月）。",
+  "guest_call": "{sect_name}传来客卿差遣「{quest_title}」，{days} 日内回客舍复命。",
+  "guest_served": "差遣办妥，{sect_name}记下了你的情分。",
+  "guest_lapsed": "{sect_name}的差遣误了期。再误 {left} 次，客卿之约便要作罢。",
+  "garden_cleared": "瘴蟒沉进了毒潭，泽心的雾淡了些，潭后的药庐露了出来。",
+  "fire_eye_seen": "熔岩火灵散成一地火星，火眼前的路通了。",
+  "wreck_cleared": "水鬼散成一团黑水，货舱里的箱子再没有东西守着了。",
+  "tomb_reached": "剑冢剑意退回了石丘底下，冢前露出一块残碑。"
 }

@@ -96,6 +96,9 @@ func _descriptions(content) -> void:
 				bare.append(id)
 	for tier: int in range(1, content.equipment_data.tiers.size() + 1):
 		for base: String in content.equipment_data.bases:
+			# A named piece (听潮剑) exists only at its own stages.
+			if content.equipment_data.bases[base].has("named") and not content.equipment_data.bases[base].named.has(str(tier)):
+				continue
 			var id := Arsenal.equipment_id(base, tier, "none", [], 0)
 			if str(content.equipment(id).get("description", "")).is_empty():
 				bare.append(id)

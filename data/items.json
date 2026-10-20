@@ -473,5 +473,10 @@
     "price": 0,
     "rarity": 3,
     "description": "云溪首次拍卖的压轴之物，一面裂了半边的古铜镜。镜面照人时，偶尔会映出一座谁也没见过的城。"
-  }
+  },
+  "hai_lingbei": {"name": "海灵贝", "category": "material", "price": 40, "rarity": 1, "description": "近海礁石下的灵贝，贝壳里凝着一汪水灵气。沧澜丹会拿它入药，南明器坊拿它淬水系灵器，望海满街都是，出了望海就贵。"},
+  "chaoxin_shi": {"name": "潮心石", "category": "material", "price": 300, "rarity": 3, "description": "在海底压了上百年的石头，一面温一面凉，贴在耳边能听见潮声。修复水系古剑少不了它。"},
+  "huitian_cao": {"name": "回天草", "category": "treasure", "price": 400, "rarity": 3, "description": "只长在瘴气最浓处的灵草，叶背有一圈金线。配长青丹法炼成续元丹，能替寿元将尽的人续上十年——只能续一次，也只能续十年。"},
+  "zhaoshui_canpian": {"name": "《照水分光诀》残篇", "category": "quest", "price": 800, "rarity": 3, "description": "沧澜阁水剑一脉心法的上半部抄本，讲以水映金，后半部讲以金分水的地方被人撕去了。只有上半部练不成，得找人补全。"},
+  "ningdan_yaolue": {"name": "《凝丹要略》", "category": "tool", "price": 900, "rarity": 3, "description": "一位金丹前辈写给后人的凝丹手记：灵液怎样收拢、几时封炉、心念怎样不散。读过之后结丹多几分把握，金丹也更凝实。", "use": [{"flag": "ningdan_known"}, {"mind": 2}]}
 }

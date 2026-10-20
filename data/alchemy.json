@@ -10,7 +10,7 @@
   "places": {
     "sect": {"name": "静室的公用丹炉", "success": 0, "fee": 0},
     "changqing_valley": {"name": "借长青谷丹坊的药炉", "success": 12, "fee": 15, "help": "谷中丹师提点"},
-    "market": {"name": "借沈墨的药炉", "success": 10, "fee": 10, "needs_met": "shen_mo", "help": "沈墨提点"}
+    "market": {"name": "借沈墨的药炉", "success": 10, "fee": 10, "needs_met": "shen_mo", "help": "沈墨提点"}, "canglan": {"name": "借丹会的药炉", "success": 12, "fee": 15, "help": "丹会丹师提点"}
   },
   "fires": {
     "gentle": {"name": "文火", "success": 0, "fine": 0, "text": "火势平稳，不易失手"},

@@ -435,22 +435,155 @@
     "title": "论道告示",
     "trigger": "date",
     "priority": 5,
-    "periodic": {"start_year": 119, "every_years": 60, "month": 9, "from_day": 1, "to_day": 1},
-    "chronicle": "青云剑宗传书四方：明年九月，五宗论道在青云山开坛。各宗遣首徒登台，金丹以上的本门弟子可代青云出战。"
+    "periodic": {
+      "start_year": 119,
+      "every_years": 60,
+      "month": 9,
+      "from_day": 1,
+      "to_day": 1
+    },
+    "chronicle": "五宗同时传书四方：明年十月，五宗论道开坛，会址照例轮到五城之一（日程上写着）。登台斗法要金丹，宗门弟子、各宗客卿、天南大比的魁首可以登台，散修也可请一位首徒作保；不登台的，可观战论道、指点后辈，或去论道易宝会。",
+    "effects": [
+      {
+        "flag": "wuzong_notice"
+      }
+    ]
   },
   "five_sects_entry": {
     "title": "五宗论道",
     "trigger": "location",
-    "location": "sect",
+    "location": "canglan",
     "priority": 26,
     "listed": true,
     "major": true,
-    "periodic": {"start_year": 120, "every_years": 60, "month": 9, "from_day": 1, "to_day": 30},
-    "conditions": [{"realm_at_least": 2}],
-    "text": "演武坪上搭起五座高台，赤霄、长青、沧澜、玄岳的首徒依次落座。一甲子一回的五宗论道开坛，青云要派人登台。",
+    "periodic": {
+      "start_year": 120,
+      "every_years": 60,
+      "month": 10,
+      "from_day": 1,
+      "to_day": 30,
+      "venues": [
+        "canglan",
+        "nanming",
+        "beiyue",
+        "wanghai",
+        "market"
+      ]
+    },
+    "conditions": [
+      {
+        "realm_at_least": 1
+      }
+    ],
+    "text": "城中最大的一片空地上搭起五座高台，赤霄、长青、沧澜、玄岳的首徒依次落座，青云的人坐在第五座台上。一甲子一回的五宗论道开坛了：台上斗法，台下论道，后辈们挤在台边，眼睛一眨不眨。",
     "choices": [
-      {"id": "enter", "label": "代青云登台（四轮，点到为止）", "effects": [{"summit": true}], "chronicle": "你代青云登上了五宗论道的高台。"},
-      {"id": "watch", "label": "在台下观战", "chronicle": "你在台下看完了这一届五宗论道。"}
+      {
+        "id": "enter",
+        "label": "登台斗法（金丹组四轮，点到为止）",
+        "conditions": [
+          {
+            "realm_at_least": 2
+          },
+          {
+            "any": [
+              {
+                "affiliation": "qingyun"
+              },
+              {
+                "guest": ""
+              },
+              {
+                "flag": "tiannan_champion"
+              },
+              {
+                "relation_at_least": [
+                  "yan_qianqiu",
+                  140
+                ]
+              },
+              {
+                "relation_at_least": [
+                  "lin_wanzhao",
+                  140
+                ]
+              },
+              {
+                "relation_at_least": [
+                  "bai_tinglan",
+                  140
+                ]
+              },
+              {
+                "relation_at_least": [
+                  "shi_zhenyue",
+                  140
+                ]
+              }
+            ]
+          }
+        ],
+        "effects": [
+          {
+            "flag": "wuzong_seen"
+          },
+          {
+            "summit": true
+          }
+        ],
+        "chronicle": "你登上了五宗论道的高台。"
+      },
+      {
+        "id": "watch",
+        "label": "坐在台下观战论道",
+        "effects": [
+          {
+            "flag": "wuzong_seen"
+          },
+          {
+            "mind": 6
+          },
+          {
+            "meet": "yan_qianqiu"
+          },
+          {
+            "meet": "lin_wanzhao"
+          },
+          {
+            "meet": "bai_tinglan"
+          },
+          {
+            "meet": "shi_zhenyue"
+          }
+        ],
+        "chronicle": "你在台下看完了这一届五宗论道。四宗首徒的路数各不相同：炎千秋一口气连出三道火法，林晚照开局便把疗伤的神通用上，白听澜的水剑接着金光，石镇岳硬吃三招不退。散场后，你在席间同他们说了几句话，各自的门道记了满满一本。"
+      },
+      {
+        "id": "mentor",
+        "label": "在论道席上指点后辈（十日）",
+        "conditions": [
+          {
+            "realm_at_least": 2
+          }
+        ],
+        "effects": [
+          {
+            "flag": "wuzong_seen"
+          },
+          {
+            "flag": "wuzong_mentor"
+          },
+          {
+            "mind": 4
+          },
+          {
+            "xp": 3000
+          },
+          {
+            "contribution": 200
+          }
+        ],
+        "chronicle": "论道的十日里，你在台边给后辈们讲斗法、讲闭关、讲当年自己在哪里吃过亏。有个筑基的少年问得最多，临走前给你磕了个头，说他叫什么、从哪里来，你记下了。"
+      }
     ]
   },
   "azhi_father": {
@@ -1810,9 +1943,9 @@
   "tiannan_notice_nanming": {"title": "天南大比告示", "trigger": "date", "priority": 5, "periodic": {"start_year": 39, "every_years": 100, "month": 9, "from_day": 1, "to_day": 1}, "conditions": [{"realm_at_least": 1}], "effects": [{"flag": "tiannan_known"}], "chronicle": "天南各城的悬赏会同时贴出告示：明年九月，天南大比在南明开擂。凡筑基修士都可报名——宗门弟子由宗门遣送，散修凭历练帖名次，或请城中有名望的人作保。"},
   "tiannan_contest_nanming": {"title": "天南大比", "trigger": "location", "location": "nanming", "priority": 22, "listed": true, "major": true, "periodic": {"start_year": 40, "every_years": 100, "month": 9, "from_day": 1, "to_day": 30}, "conditions": [{"realm_at_least": 1}], "effects": [{"meet": "wounded"}, {"start_story": "liu_case"}], "text": "南明万宝楼前的广场上搭起四座擂台，二十年一届的天南大比开擂了。四宗的筑基弟子各占一角，散修们挤在台下看名册。台下有不少旧面孔，也有更多新面孔；当年一起在潜龙会台下挤着看的人，如今有的坐上了评判席。报名须宗门遣送、近年历练帖三功，或城中有名望的人作保；不报名的，可以坐论道席观战。", "choices": [{"id": "enter", "label": "报名参赛（预选、分组、决赛，点到为止）", "conditions": [{"not": {"realm_at_least": 2}}, {"any": [{"trial_at_least": ["jianya", 3, 20]}, {"trial_at_least": ["lilian", 3, 20]}, {"relation_at_least": ["shen_mo", 80]}, {"relation_at_least": ["qin_yan", 80]}, {"relation_at_least": ["yuan_chifeng", 80]}]}], "effects": [{"flag": "tiannan_seen"}, {"contest": "tiannan"}], "chronicle": "你报了名，领到一块木牌：南明天南大比，筑基组。"}, {"id": "watch", "label": "坐论道席观战", "effects": [{"flag": "tiannan_seen"}, {"mind": 4}], "chronicle": "你在论道席上看完了这一届天南大比。玄岳的体修硬吃对手三招不退，长青的弟子把疗伤的神通用在开局，沧澜的阵修先花一回合布阵、往后越打越稳，赤霄的火法一口气连出三道。散场后，几位参赛的弟子在席间讲各自的路数，你记了满满一本。"}]},
   "tiannan_trade_nanming": {"title": "易宝会", "trigger": "location", "location": "nanming", "priority": 21, "periodic": {"start_year": 40, "every_years": 100, "month": 9, "from_day": 1, "to_day": 30}, "conditions": [{"realm_at_least": 1}], "text": "大比期间，南明另开了一场易宝会：四宗弟子与散修把压箱底的传本、材料拿出来换、拿出来拍，听说还有一样结丹用得上的天材地宝。", "choices": [{"id": "bid", "label": "去易宝会看看", "effects": [{"auction": "tiannan_yibao"}], "chronicle": "你进了易宝会的场子。"}, {"id": "skip", "label": "不去了", "chronicle": "你没有去易宝会。"}]},
-  "tiannan_notice_canglan": {"title": "天南大比告示", "trigger": "date", "priority": 5, "periodic": {"start_year": 59, "every_years": 100, "month": 9, "from_day": 1, "to_day": 1}, "conditions": [{"realm_at_least": 1}], "effects": [{"flag": "tiannan_known"}], "chronicle": "天南各城的悬赏会同时贴出告示：明年九月，天南大比在沧澜阁开擂。凡筑基修士都可报名——宗门弟子由宗门遣送，散修凭历练帖名次，或请城中有名望的人作保。"},
-  "tiannan_contest_canglan": {"title": "天南大比", "trigger": "location", "location": "canglan_pavilion", "priority": 22, "listed": true, "major": true, "periodic": {"start_year": 60, "every_years": 100, "month": 9, "from_day": 1, "to_day": 30}, "conditions": [{"realm_at_least": 1}], "effects": [{"meet": "wounded"}, {"start_story": "liu_case"}], "text": "沧澜阁观潮台上搭起四座擂台，二十年一届的天南大比开擂了。四宗的筑基弟子各占一角，散修们挤在台下看名册。台下有不少旧面孔，也有更多新面孔；当年一起在潜龙会台下挤着看的人，如今有的坐上了评判席。报名须宗门遣送、近年历练帖三功，或城中有名望的人作保；不报名的，可以坐论道席观战。", "choices": [{"id": "enter", "label": "报名参赛（预选、分组、决赛，点到为止）", "conditions": [{"not": {"realm_at_least": 2}}, {"any": [{"trial_at_least": ["jianya", 3, 20]}, {"trial_at_least": ["lilian", 3, 20]}, {"relation_at_least": ["shen_mo", 80]}, {"relation_at_least": ["qin_yan", 80]}, {"relation_at_least": ["yuan_chifeng", 80]}]}], "effects": [{"flag": "tiannan_seen"}, {"contest": "tiannan"}], "chronicle": "你报了名，领到一块木牌：沧澜阁天南大比，筑基组。"}, {"id": "watch", "label": "坐论道席观战", "effects": [{"flag": "tiannan_seen"}, {"mind": 4}], "chronicle": "你在论道席上看完了这一届天南大比。玄岳的体修硬吃对手三招不退，长青的弟子把疗伤的神通用在开局，沧澜的阵修先花一回合布阵、往后越打越稳，赤霄的火法一口气连出三道。散场后，几位参赛的弟子在席间讲各自的路数，你记了满满一本。"}]},
-  "tiannan_trade_canglan": {"title": "易宝会", "trigger": "location", "location": "canglan_pavilion", "priority": 21, "periodic": {"start_year": 60, "every_years": 100, "month": 9, "from_day": 1, "to_day": 30}, "conditions": [{"realm_at_least": 1}], "text": "大比期间，沧澜阁另开了一场易宝会：四宗弟子与散修把压箱底的传本、材料拿出来换、拿出来拍，听说还有一样结丹用得上的天材地宝。", "choices": [{"id": "bid", "label": "去易宝会看看", "effects": [{"auction": "tiannan_yibao"}], "chronicle": "你进了易宝会的场子。"}, {"id": "skip", "label": "不去了", "chronicle": "你没有去易宝会。"}]},
+  "tiannan_notice_canglan": {"title": "天南大比告示", "trigger": "date", "priority": 5, "periodic": {"start_year": 59, "every_years": 100, "month": 9, "from_day": 1, "to_day": 1}, "conditions": [{"realm_at_least": 1}], "effects": [{"flag": "tiannan_known"}], "chronicle": "天南各城的悬赏会同时贴出告示：明年九月，天南大比在沧澜城开擂。凡筑基修士都可报名——宗门弟子由宗门遣送，散修凭历练帖名次，或请城中有名望的人作保。"},
+  "tiannan_contest_canglan": {"title": "天南大比", "trigger": "location", "location": "canglan", "priority": 22, "listed": true, "major": true, "periodic": {"start_year": 60, "every_years": 100, "month": 9, "from_day": 1, "to_day": 30}, "conditions": [{"realm_at_least": 1}], "effects": [{"meet": "wounded"}, {"start_story": "liu_case"}], "text": "沧澜城的水榭前，河面上用船搭起四座擂台，二十年一届的天南大比开擂了。四宗的筑基弟子各占一角，散修们挤在台下看名册。台下有不少旧面孔，也有更多新面孔；当年一起在潜龙会台下挤着看的人，如今有的坐上了评判席。报名须宗门遣送、近年历练帖三功，或城中有名望的人作保；不报名的，可以坐论道席观战。", "choices": [{"id": "enter", "label": "报名参赛（预选、分组、决赛，点到为止）", "conditions": [{"not": {"realm_at_least": 2}}, {"any": [{"trial_at_least": ["jianya", 3, 20]}, {"trial_at_least": ["lilian", 3, 20]}, {"relation_at_least": ["shen_mo", 80]}, {"relation_at_least": ["qin_yan", 80]}, {"relation_at_least": ["yuan_chifeng", 80]}]}], "effects": [{"flag": "tiannan_seen"}, {"contest": "tiannan"}], "chronicle": "你报了名，领到一块木牌：沧澜城天南大比，筑基组。"}, {"id": "watch", "label": "坐论道席观战", "effects": [{"flag": "tiannan_seen"}, {"mind": 4}], "chronicle": "你在论道席上看完了这一届天南大比。玄岳的体修硬吃对手三招不退，长青的弟子把疗伤的神通用在开局，沧澜的阵修先花一回合布阵、往后越打越稳，赤霄的火法一口气连出三道。散场后，几位参赛的弟子在席间讲各自的路数，你记了满满一本。"}]},
+  "tiannan_trade_canglan": {"title": "易宝会", "trigger": "location", "location": "canglan", "priority": 21, "periodic": {"start_year": 60, "every_years": 100, "month": 9, "from_day": 1, "to_day": 30}, "conditions": [{"realm_at_least": 1}], "text": "大比期间，沧澜城藏书院另开了一场易宝会：四宗弟子与散修把压箱底的传本、材料拿出来换、拿出来拍，听说还有一样结丹用得上的天材地宝。", "choices": [{"id": "bid", "label": "去易宝会看看", "effects": [{"auction": "tiannan_yibao"}], "chronicle": "你进了易宝会的场子。"}, {"id": "skip", "label": "不去了", "chronicle": "你没有去易宝会。"}]},
   "tiannan_notice_beiyue": {"title": "天南大比告示", "trigger": "date", "priority": 5, "periodic": {"start_year": 79, "every_years": 100, "month": 9, "from_day": 1, "to_day": 1}, "conditions": [{"realm_at_least": 1}], "effects": [{"flag": "tiannan_known"}], "chronicle": "天南各城的悬赏会同时贴出告示：明年九月，天南大比在北岳开擂。凡筑基修士都可报名——宗门弟子由宗门遣送，散修凭历练帖名次，或请城中有名望的人作保。"},
   "tiannan_contest_beiyue": {"title": "天南大比", "trigger": "location", "location": "beiyue", "priority": 22, "listed": true, "major": true, "periodic": {"start_year": 80, "every_years": 100, "month": 9, "from_day": 1, "to_day": 30}, "conditions": [{"realm_at_least": 1}], "effects": [{"meet": "wounded"}, {"start_story": "liu_case"}], "text": "北岳古物街尽头的石坪上搭起四座擂台，二十年一届的天南大比开擂了。四宗的筑基弟子各占一角，散修们挤在台下看名册。台下有不少旧面孔，也有更多新面孔；当年一起在潜龙会台下挤着看的人，如今有的坐上了评判席。报名须宗门遣送、近年历练帖三功，或城中有名望的人作保；不报名的，可以坐论道席观战。", "choices": [{"id": "enter", "label": "报名参赛（预选、分组、决赛，点到为止）", "conditions": [{"not": {"realm_at_least": 2}}, {"any": [{"trial_at_least": ["jianya", 3, 20]}, {"trial_at_least": ["lilian", 3, 20]}, {"relation_at_least": ["shen_mo", 80]}, {"relation_at_least": ["qin_yan", 80]}, {"relation_at_least": ["yuan_chifeng", 80]}]}], "effects": [{"flag": "tiannan_seen"}, {"contest": "tiannan"}], "chronicle": "你报了名，领到一块木牌：北岳天南大比，筑基组。"}, {"id": "watch", "label": "坐论道席观战", "effects": [{"flag": "tiannan_seen"}, {"mind": 4}], "chronicle": "你在论道席上看完了这一届天南大比。玄岳的体修硬吃对手三招不退，长青的弟子把疗伤的神通用在开局，沧澜的阵修先花一回合布阵、往后越打越稳，赤霄的火法一口气连出三道。散场后，几位参赛的弟子在席间讲各自的路数，你记了满满一本。"}]},
   "tiannan_trade_beiyue": {"title": "易宝会", "trigger": "location", "location": "beiyue", "priority": 21, "periodic": {"start_year": 80, "every_years": 100, "month": 9, "from_day": 1, "to_day": 30}, "conditions": [{"realm_at_least": 1}], "text": "大比期间，北岳另开了一场易宝会：四宗弟子与散修把压箱底的传本、材料拿出来换、拿出来拍，听说还有一样结丹用得上的天材地宝。", "choices": [{"id": "bid", "label": "去易宝会看看", "effects": [{"auction": "tiannan_yibao"}], "chronicle": "你进了易宝会的场子。"}, {"id": "skip", "label": "不去了", "chronicle": "你没有去易宝会。"}]},
@@ -1824,5 +1957,24 @@
   "lu_choice": {"title": "矿道里的人", "trigger": "manual", "conditions": [{"story_at": ["lu_heir", "decide"]}], "text": "陆承舟赶到旧矿道，看着那些矿工，脸白得像纸。“是二叔……还是我爹那时候就有了？”他转过头问你，“你说，我该怎么办？”", "choices": [{"id": "public", "label": "公开查办：把册子交给南明商会，陆家认账", "effects": [{"flag": "lu_public"}, {"relation": ["lu_chengzhou", 10]}, {"mind": 3}, {"story_advance": "lu_heir"}], "chronicle": "陆承舟把册子交了出去。陆家的名声一夜之间臭了半条街，二房的人被商会扣下，药铺关了三间。那些矿工被送去长青谷医治，活下来十一个。陆承舟说：“该的。”"}, {"id": "quiet", "label": "暗中清理：放人、赔钱、掐断这条线，不声张", "effects": [{"flag": "lu_quiet"}, {"relation": ["lu_chengzhou", 15]}, {"story_advance": "lu_heir"}], "chronicle": "你们连夜放了人，陆承舟拿出一大笔钱分给矿工家里，矿道封死，二房的人被打发去了外地。陆家的体面保住了。只是从那以后，他喝酒喝得比从前多。"}, {"id": "leave", "label": "劝他放下家业，离开陆家", "effects": [{"flag": "lu_leave"}, {"relation": ["lu_chengzhou", 12]}, {"story_advance": "lu_heir"}], "chronicle": "陆承舟在矿道口站了很久，第二天先放了人，把家主的印信交给族里的长辈，连夜去了白鹭渡。“我从小就不想管这些，现在更不想了。”他说要去做个散修，想去哪儿去哪儿——跟十七岁那年说的一样。"}, {"id": "ignore", "label": "这是陆家的家事，你不插手", "effects": [{"flag": "lu_ignore"}, {"relation": ["lu_chengzhou", -15]}, {"story_advance": "lu_heir"}], "chronicle": "你说这是陆家的家事。陆承舟愣了一下，点点头：“也是。”后来矿道还开着没有，你没再问。他也没再找过你。"}]},
   "liu_choice": {"title": "断剑旧案", "trigger": "manual", "conditions": [{"story_at": ["liu_case", "decide"]}], "text": "证人、卷宗、令牌，三样都在你手里。柳寒舟看着那块玄岳执法令牌，很久没有说话。“你说，该怎么办？”", "choices": [{"id": "public", "label": "把证据交给北岳阵师会馆，当众公开", "effects": [{"flag": "liu_public"}, {"relation": ["wounded", 15]}, {"story_advance": "liu_case"}], "chronicle": "证据在会馆当众摊开。玄岳宗派人来北岳对质，最后认下了「处置失当」四个字。断剑门的名字从叛门录上划掉了。柳寒舟在会馆门口站了一夜，第二天开始收徒。"}, {"id": "private", "label": "陪他私下去找当年的执法长老", "effects": [{"flag": "liu_private"}, {"relation": ["wounded", 10]}, {"story_advance": "liu_case"}], "chronicle": "当年的执法长老已经老得下不了床。柳寒舟拔剑，又收了回去：“这样就够了。”可从那以后他话更少了，一个人守在断剑峡口。"}, {"id": "redress", "label": "只替被牵连的弟子正名，不追凶", "effects": [{"flag": "liu_redress"}, {"relation": ["wounded", 12]}, {"mind": 3}, {"story_advance": "liu_case"}], "chronicle": "你们把证据交给玄岳宗，只要一件事：把断剑门三十七个弟子的名字从叛门录上划掉。玄岳宗答应了，也没有再提别的。柳寒舟说，他师父要的大概就是这个。"}, {"id": "quit", "label": "这件事你不再插手", "effects": [{"flag": "liu_quit"}, {"relation": ["wounded", -10]}, {"story_advance": "liu_case"}], "chronicle": "你把令牌还给了柳寒舟，说这件事你不再插手。他点点头，收起令牌走了。之后很多年，你们只在大比上远远点个头。"}]},
   "lu_mine_gate": {"title": "旧矿道口", "trigger": "location", "location": "chifeng", "priority": 13, "repeat": {"cooldown_days": 10}, "conditions": [{"flag": "lu_mine_known"}, {"not": {"flag": "lu_mine_cleared"}}, {"story_at": ["lu_heir", "mine"]}], "text": "赤枫岭西坡的旧矿道口挂着一盏灯，两个护院抱着铁棍守在洞口，眼皮直打架。洞里隐约有人咳嗽，咳得很深。", "choices": [{"id": "force", "label": "硬闯进去", "effects": [{"battle": "kuang_hu"}], "chronicle": "你从石后走出来。护院一激灵，抄起铁棍拦在洞口。"}, {"id": "sneak", "label": "收着气息，贴着矿壁摸进去", "conditions": [{"any": [{"flag": "cangxi_taught"}, {"sense_at_least": 36}]}], "effects": [{"flag": "lu_mine_cleared"}], "chronicle": "你把气息收得像一块石头，贴着矿壁一寸寸挪进去。护院的灯从你头顶晃过去，没有停。矿道深处几间石屋挂着老式的铜锁，你拧开了最里头那一间。"}, {"id": "name", "label": "亮出陆承舟的名头，叫护院开门", "conditions": [{"relation_at_least": ["lu_chengzhou", 80]}], "effects": [{"flag": "lu_mine_cleared"}], "chronicle": "你报出陆家当家的名字，又说出几句只有陆家人才知道的旧事。护院面面相觑，终究不敢拦，把钥匙串扔了过来。"}, {"id": "later", "label": "先退回去，从长计议", "chronicle": "你退回了枫林。洞口的灯一夜没灭。"}]},
-  "liu_in_beiyue": {"title": "背断剑的人", "trigger": "location", "location": "beiyue", "priority": 12, "conditions": [{"realm_at_least": 1}, {"year_at_least": 21}, {"story_state": ["liu_case", "none"]}], "effects": [{"meet": "wounded"}, {"start_story": "liu_case"}], "chronicle": "北岳客栈的掌柜说，后院住着个背断剑的散修，一住就是好些年，逢人便打听三十年前断剑峡的事。你认出了那柄断剑——是柳寒舟。"}
+  "liu_in_beiyue": {"title": "背断剑的人", "trigger": "location", "location": "beiyue", "priority": 12, "conditions": [{"realm_at_least": 1}, {"year_at_least": 21}, {"story_state": ["liu_case", "none"]}], "effects": [{"meet": "wounded"}, {"start_story": "liu_case"}], "chronicle": "北岳客栈的掌柜说，后院住着个背断剑的散修，一住就是好些年，逢人便打听三十年前断剑峡的事。你认出了那柄断剑——是柳寒舟。"},
+  "tiannan_notice_wanghai": {"title": "天南大比告示", "trigger": "date", "priority": 5, "periodic": {"start_year": 99, "every_years": 100, "month": 9, "from_day": 1, "to_day": 1}, "conditions": [{"realm_at_least": 1}], "effects": [{"flag": "tiannan_known"}], "chronicle": "天南各城的悬赏会同时贴出告示：明年九月，天南大比在望海开擂。凡筑基修士都可报名——宗门弟子由宗门遣送，散修凭历练帖名次，或请城中有名望的人作保。"},
+  "tiannan_contest_wanghai": {"title": "天南大比", "trigger": "location", "location": "wanghai", "priority": 22, "listed": true, "major": true, "periodic": {"start_year": 100, "every_years": 100, "month": 9, "from_day": 1, "to_day": 30}, "conditions": [{"realm_at_least": 1}], "effects": [], "text": "望海港口泊着四条大船，船与船之间铺了木板，就是擂台，二十年一届的天南大比开擂了。四宗的筑基弟子各占一角，散修们挤在台下看名册。台下有不少旧面孔，也有更多新面孔；当年一起在潜龙会台下挤着看的人，如今有的坐上了评判席。报名须宗门遣送、近年历练帖三功，或城中有名望的人作保；不报名的，可以坐论道席观战。", "choices": [{"id": "enter", "label": "报名参赛（预选、分组、决赛，点到为止）", "conditions": [{"not": {"realm_at_least": 2}}, {"any": [{"trial_at_least": ["jianya", 3, 20]}, {"trial_at_least": ["lilian", 3, 20]}, {"relation_at_least": ["shen_mo", 80]}, {"relation_at_least": ["qin_yan", 80]}, {"relation_at_least": ["yuan_chifeng", 80]}]}], "effects": [{"flag": "tiannan_seen"}, {"contest": "tiannan"}], "chronicle": "你报了名，领到一块木牌：望海天南大比，筑基组。"}, {"id": "watch", "label": "坐论道席观战", "effects": [{"flag": "tiannan_seen"}, {"mind": 4}], "chronicle": "你在论道席上看完了这一届天南大比。玄岳的体修硬吃对手三招不退，长青的弟子把疗伤的神通用在开局，沧澜的阵修先花一回合布阵、往后越打越稳，赤霄的火法一口气连出三道。散场后，几位参赛的弟子在席间讲各自的路数，你记了满满一本。"}]},
+  "tiannan_trade_wanghai": {"title": "易宝会", "trigger": "location", "location": "wanghai", "priority": 21, "periodic": {"start_year": 100, "every_years": 100, "month": 9, "from_day": 1, "to_day": 30}, "conditions": [{"realm_at_least": 1}], "text": "大比期间，望海海市另开了一场易宝会：四宗弟子、散修和远道来的海商把压箱底的传本、材料、海货拿出来换、拿出来拍，听说还有一样结丹用得上的天材地宝。", "choices": [{"id": "bid", "label": "去易宝会看看", "effects": [{"auction": "tiannan_yibao"}], "chronicle": "你进了易宝会的场子。"}, {"id": "skip", "label": "不去了", "chronicle": "你没有去易宝会。"}]},
+  "wuzong_trade": {"title": "论道易宝会", "trigger": "location", "location": "canglan", "priority": 25, "periodic": {"start_year": 120, "every_years": 60, "month": 10, "from_day": 1, "to_day": 30, "venues": ["canglan", "nanming", "beiyue", "wanghai", "market"]}, "conditions": [{"realm_at_least": 1}], "text": "论道期间，城里另开一场易宝会：五宗的长老与各地来的金丹修士把压箱底的东西拿出来，有金丹、元婴用得上的天材地宝，也有地阶传本。会场一角留着展台，谁有拿得出手的宝物、功法，都可以上去亮一亮。", "choices": [{"id": "bid", "label": "去易宝会看看", "effects": [{"auction": "wuzong_yibao"}], "chronicle": "你进了论道易宝会的场子。"}, {"id": "show", "label": "把自己的作品摆上展台（法宝或地阶功法以上）", "conditions": [{"work_at_least": 4}], "effects": [{"flag": "wuzong_shown"}, {"stones": 300}, {"relation": ["yan_qianqiu", 5]}, {"relation": ["lin_wanzhao", 5]}, {"relation": ["bai_tinglan", 5]}, {"relation": ["shi_zhenyue", 5]}], "chronicle": "你把东西摆上展台，围上来的人一圈又一圈。四宗的首徒都来看过，有人出价，有人只是看。散场时，展台的箱子里多了三百灵石的定钱和几张求见的帖子。"}, {"id": "skip", "label": "不去了", "chronicle": "你没有去论道易宝会。"}]},
+  "zhaoshui_glimpse": {"title": "水榭练剑", "trigger": "location", "location": "canglan", "priority": 9, "conditions": [{"realm_at_least": 1}, {"not": {"flag": "zhaoshui_seen"}}], "effects": [{"flag": "zhaoshui_seen"}, {"meet": "bai_tinglan"}, {"start_story": "zhaoshui"}], "chronicle": "清晨的水榭栈桥上，一个白衣女修独自练剑。她一剑挑起河水，水幕里忽然劈出一道金光；金光未散，水又裹了上去——水接金，金分水，一招连着一招，像是永远停不下来。旁人说那是沧澜阁的首徒白听澜，阁里练全这一脉水剑的，只剩她一个。剑诀叫《照水分光诀》，城里藏书院抄卖过残篇。"},
+  "chixiao_fire_news": {"title": "地火将熄", "trigger": "location", "location": "chixiao_gate", "priority": 9, "conditions": [{"realm_at_least": 1}, {"year_at_least": 25}, {"story_state": ["chixiao_fire", "none"]}], "effects": [{"meet": "yan_qianqiu"}, {"start_story": "chixiao_fire"}], "chronicle": "器坊的炉火矮了一截。赤霄首徒炎千秋蹲在炉口，脸被映得通红：“地火弱了三成，三百年头一回。门里吵成两派，一派要从落霞谷那头把火脉引回来，一派要往熔窟深处挖。我想先下去看看火眼——你肯同去？”"},
+  "chixiao_choice": {"title": "火眼", "trigger": "manual", "conditions": [{"story_at": ["chixiao_fire", "decide"]}], "text": "炎千秋听你说完火眼里的寒气，半晌没出声：“落霞谷的泉，熔窟的火，原来是一根脉上的两头。”门里的两派都等着他拿主意，他转头问你。", "choices": [{"id": "deep", "label": "重开火眼：往深处挖，把寒气压回去", "effects": [{"flag": "chixiao_deep"}, {"relation": ["yan_qianqiu", 10]}, {"stones": 300}, {"guest_invite": "chixiao"}, {"story_advance": "chixiao_fire"}], "chronicle": "赤霄门的弟子轮班下熔窟，挖了三个月，硬是在火眼底下又凿开一层，把倒灌的寒气压了回去。器坊的炉火重新蹿高，炎千秋说：“赤霄欠你一个人情——不，一个客卿的位子。”"}, {"id": "divert", "label": "引泉脉之火：从落霞谷那头把火脉引回来", "effects": [{"flag": "chixiao_divert"}, {"relation": ["yan_qianqiu", 5]}, {"stones": 500}, {"guest_invite": "chixiao"}, {"story_advance": "chixiao_fire"}], "chronicle": "赤霄门从落霞谷那头动了火脉，器坊的炉火当月就旺了。只是没过多久，落霞谷的泉水又烫了起来，泉底的灵眼也不如从前稳当。炎千秋送来五百灵石和一块客卿牌，没多说什么。"}, {"id": "array", "label": "以阵导火：照秦砚的阵谱布一道导火阵，两头都保住", "conditions": [{"flag": "trap_lore"}], "effects": [{"flag": "chixiao_array"}, {"relation": ["yan_qianqiu", 15]}, {"mind": 3}, {"guest_invite": "chixiao"}, {"story_advance": "chixiao_fire"}], "chronicle": "你照秦砚讲过的阵谱，在火眼与寒脉之间布了一道导火阵：寒气绕开火眼，顺着旧矿道散进山里。器坊的炉火回来了，落霞谷的泉也没受惊动。炎千秋盯着阵盘看了一夜，第二天把客卿牌塞进你手里。"}, {"id": "later", "label": "再想想", "chronicle": "你说再想想。炎千秋点点头，炉火又矮了一截。"}]},
+  "garden_news": {"title": "泽心旧园", "trigger": "location", "location": "changqing_valley", "priority": 9, "conditions": [{"realm_at_least": 1}, {"year_at_least": 50}, {"story_state": ["changqing_garden", "none"]}], "effects": [{"meet": "lin_wanzhao"}, {"start_story": "changqing_garden"}], "chronicle": "百草园里，长青首徒林晚照正对着一张旧图出神：“毒泽的瘴雾退了三里，泽心那块地露出来了——两百年前，那里是长青谷的老药园，瘴气一夜吞了它。园里该有一只药种匣，谷里的老药种都在里头。”她顿了顿，“我走不开。你若去毒泽，替我看一眼。”"},
+  "garden_choice": {"title": "药种匣", "trigger": "manual", "conditions": [{"story_at": ["changqing_garden", "decide"]}], "text": "林晚照打开药种匣，一格一格地看，手指有些发抖。看到匣底那页「借命方」，她的脸沉了下来：“这一页，谷里的老人说早烧了。”她抬头看你。", "choices": [{"id": "return_burn", "label": "交还药种匣，当着她的面烧掉借命方", "effects": [{"flag": "garden_returned"}, {"flag": "recipe_burned"}, {"relation": ["lin_wanzhao", 12]}, {"stones": 200}, {"guest_invite": "changqing"}, {"story_advance": "changqing_garden"}], "chronicle": "借命方在药炉里烧成了一缕青烟。林晚照把药种匣抱回谷里，第二年开春，泽心的老药园重新种上了长青谷的老药种。她托人送来一块客卿牌：“长青谷的丹坊，往后你随时来。”"}, {"id": "return_keep", "label": "交还药种匣，借命方自己收着", "effects": [{"flag": "garden_returned"}, {"flag": "recipe_taken"}, {"relation": ["lin_wanzhao", 6]}, {"guest_invite": "changqing"}, {"story_advance": "changqing_garden"}], "chronicle": "你把药种匣交了出去，那页借命方却折好收进了怀里。林晚照看见了，没说什么，只是送客卿牌来的时候，多看了你一眼。"}, {"id": "keep", "label": "药种匣自己留着，卖个好价", "effects": [{"flag": "garden_kept"}, {"flag": "recipe_taken"}, {"relation": ["lin_wanzhao", -15]}, {"stones": 600}, {"story_advance": "changqing_garden"}], "chronicle": "南明的药商出了六百灵石收走了药种匣。林晚照听说以后，再见到你，只是点点头。"}, {"id": "later", "label": "再想想", "chronicle": "你说再想想。林晚照把药种匣推回你面前，没有催。"}]},
+  "tomb_news": {"title": "剑冢外溢", "trigger": "location", "location": "xuanyue_gate", "priority": 9, "conditions": [{"realm_at_least": 2}, {"any": [{"story_state": ["liu_case", "done"]}, {"year_at_least": 60}]}, {"story_state": ["xuanyue_tomb", "none"]}], "effects": [{"meet": "shi_zhenyue"}, {"start_story": "xuanyue_tomb"}], "chronicle": "迎客石厅里，玄岳首徒石镇岳站得像一截石柱：“断剑峡的剑冢，剑意往外溢了。三十年前断剑门挖开它，玄岳封了一回；如今封不住了。门里有人说再封，有人说该交出去。”他看着你，“你是金丹了。剑冢里头的东西，我想请个外人去看一眼。”"},
+  "xuanyue_choice": {"title": "剑冢归属", "trigger": "manual", "conditions": [{"story_at": ["xuanyue_tomb", "decide"]}], "text": "石镇岳听你说完残碑上的八个字，沉默了很久：“剑下有门，门后有城……玄岳守了它几百年，原来自己也不知道守的是什么。”他问你：剑冢往后该怎么办？", "choices": [{"id": "seal", "label": "助玄岳重封剑冢", "effects": [{"flag": "tomb_sealed"}, {"relation": ["shi_zhenyue", 12]}, {"stones": 300}, {"guest_invite": "xuanyue"}, {"story_advance": "xuanyue_tomb"}], "chronicle": "你与玄岳的长老们在剑冢外布了三重封阵，剑意退回了石丘底下。石镇岳送你出峡，把一块客卿牌放在你手里：“封着的东西，就该封着。至少等弄清楚门后是什么。”"}, {"id": "liu", "label": "交给断剑门的后人看守", "conditions": [{"any": [{"flag": "liu_public"}, {"flag": "liu_redress"}]}], "effects": [{"flag": "tomb_liu"}, {"relation": ["wounded", 15]}, {"relation": ["shi_zhenyue", 3]}, {"guest_invite": "xuanyue"}, {"story_advance": "xuanyue_tomb"}], "chronicle": "旧案已经了结，玄岳没有理由再拦。柳寒舟在剑冢前结了一间草庐，说断剑门守了这座冢一百年，往后接着守。石镇岳去看过他一回，两人坐了半日，没吵起来。"}, {"id": "open", "label": "开冢取剑", "effects": [{"flag": "tomb_opened"}, {"relation": ["shi_zhenyue", -20]}, {"manual": 4}, {"stones": 800}, {"story_advance": "xuanyue_tomb"}], "chronicle": "你趁剑意退去的间隙拔走了冢顶的几柄古剑，剑鞘里藏着一卷地阶剑诀。剑冢塌了一角，剑意再不受约束，在峡里乱窜了好几年。玄岳的人再见到你，脸色都不好看。"}, {"id": "later", "label": "再想想", "chronicle": "你说再想想。石镇岳点点头：“剑冢等得起。”"}]},
+  "ye_choice": {"title": "师父的寿", "trigger": "manual", "conditions": [{"story_at": ["ye_master", "decide"]}], "text": "丹会后院，叶知微把一张泛黄的方子摊在桌上：“借命方。毒泽的采药人，三个就够了。”她说得很平静，手却按着方子不放。“回天草也行，长青的丹法我会，能续十年。可回天草只长在泽心，我走不开。”葛青囊在前堂咳嗽，一声比一声重。", "choices": [{"id": "cure", "label": "交出回天草，陪她炼续元丹", "conditions": [{"item_at_least": ["huitian_cao", 1]}], "effects": [{"item": ["huitian_cao", -1]}, {"flag": "ye_cure"}, {"relation": ["ye_zhiwei", 15]}, {"mind": 3}, {"story_advance": "ye_master"}], "chronicle": "续元丹出炉那天，叶知微守着丹炉坐了一夜。葛青囊服下丹药，咳嗽停了，笑着骂她：“傻丫头，十年也是捡来的。”她把那张借命方当着你的面撕了。"}, {"id": "forbid", "label": "默许她用借命方", "effects": [{"flag": "ye_forbidden"}, {"relation": ["ye_zhiwei", 5]}, {"mind": -3}, {"story_advance": "ye_master"}], "chronicle": "你没有拦她。一个月后，毒泽边上三个采药人病倒了，再没起来。葛青囊的气色一天天好了，叶知微却很少再坐堂。她说：“你别问。”"}, {"id": "letgo", "label": "劝她陪师父走完最后一程", "effects": [{"flag": "ye_letgo"}, {"relation": ["ye_zhiwei", 10]}, {"mind": 3}, {"story_advance": "ye_master"}], "chronicle": "叶知微哭了一场，把借命方收进了药箱底。那一年她天天陪着师父坐堂、抄方子、晒药。年底葛青囊在丹会安然坐化，走前拉着她的手说：“药医不了命，你现在信了吧。”她点头。"}, {"id": "ignore", "label": "这是她们师徒的事，你不插手", "effects": [{"flag": "ye_ignore"}, {"flag": "ye_late"}, {"relation": ["ye_zhiwei", -10]}, {"story_advance": "ye_master"}], "chronicle": "你说这是她们师徒的事。叶知微愣了愣，把方子收了起来：“也是。”后来那张方子她没用；葛青囊第二年开春坐化，她一个人整理了一箱药方。"}, {"id": "later", "label": "先去找找别的法子", "chronicle": "你说再去找找别的法子。叶知微点点头：“明年年底以前。再往后，就来不及了。”"}]},
+  "ye_master_passes": {"title": "葛青囊坐化", "trigger": "date", "priority": 6, "window": {"from": [72, 1, 1], "to": [72, 1, 30]}, "conditions": [{"met": "ye_zhiwei"}, {"not": {"any": [{"flag": "ye_cure"}, {"flag": "ye_forbidden"}, {"flag": "ye_letgo"}, {"flag": "ye_ignore"}]}}], "effects": [{"flag": "ye_late"}], "chronicle": "沧澜城传来消息：老丹师葛青囊在丹会坐化了。叶知微没有用那张借命方，她把师父留下的一箱药方搬回自己屋里，一张一张地抄。"},
+  "wenren_ship": {"title": "出海之约", "trigger": "manual", "conditions": [{"story_at": ["wenren_chart", "ship"]}], "text": "船坞里，闻人照把海图钉在墙上，用炭条在石门的位置画了个圈：“开春潮平，历元一百三十年开春，我就出海。船我自己修，可人手、物资都还缺。”他眼睛亮亮地看着你。", "choices": [{"id": "together", "label": "答应与他同船出海", "effects": [{"flag": "wenren_together"}, {"relation": ["wenren_zhao", 15]}, {"story_advance": "wenren_chart"}], "chronicle": "你答应了。闻人照高兴得把炭条都捏断了：“一百三十年开春，港口见！你可别闭关闭过了头。”"}, {"id": "supplies", "label": "替他备齐物资（500 灵石）", "conditions": [{"stones_at_least": 500}], "effects": [{"stones": -500}, {"flag": "wenren_supplied"}, {"relation": ["wenren_zhao", 10]}, {"story_advance": "wenren_chart"}], "chronicle": "你替他备齐了淡水、干粮、避水符和三箱疗伤丹。闻人照一样一样点过，说这回不像寻宝，倒像搬家。"}, {"id": "crew", "label": "引荐卫三娘的船队", "conditions": [{"relation_at_least": ["wei_sanniang", 80]}], "effects": [{"flag": "wenren_crew"}, {"relation": ["wenren_zhao", 10]}, {"relation": ["wei_sanniang", 5]}, {"story_advance": "wenren_chart"}], "chronicle": "卫三娘看了海图，又看了闻人照，抽了半袋烟：“去可以。我的人，我的规矩——该回头的时候就回头。”闻人照一口答应。"}, {"id": "decline", "label": "这趟你不掺和", "effects": [{"flag": "wenren_alone"}, {"story_advance": "wenren_chart"}], "chronicle": "你说这趟不掺和。闻人照挠挠头：“也好。等我回来，给你带海那边的东西。”"}, {"id": "later", "label": "再想想", "chronicle": "你说再想想。闻人照把海图卷起来：“不急，离开春还早。”"}]},
+  "wenren_sail": {"title": "开船", "trigger": "manual", "conditions": [{"story_at": ["wenren_chart", "sail"]}], "text": "港口的晨雾还没散，闻人照的船已经升了帆。他站在船头冲你招手，海图揣在怀里，鼓鼓囊囊的。", "choices": [{"id": "board", "label": "依约登船", "conditions": [{"flag": "wenren_together"}, {"realm_at_least": 2}], "effects": [{"flag": "wenren_sailed"}, {"flag": "wenren_storm"}, {"relation": ["wenren_zhao", 10]}, {"story_advance": "wenren_chart"}, {"battle": "hai_jiao"}], "chronicle": "船出近海的第七天，风暴压了上来，浪里翻出一条海蛟。你在船头挡住了它，船却被浪拍散了。你抱着一截桅杆漂了两天，被望海的渔船捞了回来。闻人照和他的船，没有回来。"}, {"id": "see_off", "label": "在码头送他启航", "effects": [{"flag": "wenren_sailed"}, {"relation": ["wenren_zhao", 5]}, {"story_advance": "wenren_chart"}], "chronicle": "你在码头上看着他的船驶出港口，越变越小。闻人照最后喊了一句什么，被海风吹散了。"}]},
+  "wenren_lost_news": {"title": "船没回来", "trigger": "date", "priority": 6, "window": {"from": [130, 6, 1], "to": [130, 6, 30]}, "conditions": [{"met": "wenren_zhao"}], "effects": [{"flag": "wenren_lost"}], "chronicle": "望海传来消息：闻人照的船开春出海，春末以后再没有音讯。船坞里他的床头还压着半摞海图。"},
+  "tingchao_mend1": {"title": "初修听潮", "trigger": "manual", "conditions": [{"story_at": ["tingchao", "mend1"]}], "text": "万宝楼的老器师把锈剑横在膝上，用指甲刮了刮剑脊：“好剑。要修，先得剔锈、补刃：玄铁两份、海灵贝两枚、二百灵石的炉火钱。”", "choices": [{"id": "mend", "label": "请他修（玄铁 2、海灵贝 2、200 灵石）", "conditions": [{"holds_gear": "e:tingchao:2:water::0"}, {"item_at_least": ["ore_xuantie", 2]}, {"item_at_least": ["hai_lingbei", 2]}, {"stones_at_least": 200}], "effects": [{"item": ["ore_xuantie", -2]}, {"item": ["hai_lingbei", -2]}, {"stones": -200}, {"reforge": ["e:tingchao:2:water::0", "e:tingchao:3:water::0"]}, {"story_advance": "tingchao"}], "chronicle": "老器师剔了三天锈，又用海灵贝的贝粉淬了一夜。锈剑褪去一层黑壳，剑身泛出一点水光，凑近了能听见很轻的潮声。"}, {"id": "later", "label": "改日再来", "chronicle": "你把锈剑收了回去。"}]},
+  "tingchao_mend2": {"title": "听潮复原", "trigger": "manual", "conditions": [{"story_at": ["tingchao", "mend2"]}], "text": "赤霄器坊的老师傅摸着听潮剑：“剑身补好了，剑心还空着。要潮心石压住剑心，地火精两枚开炉，八百灵石。剑认主人的修为，筑基后期以下压不住它。”", "choices": [{"id": "mend", "label": "开炉复原（潮心石 1、地火精 2、800 灵石，须筑基后期）", "conditions": [{"holds_gear": "e:tingchao:3:water::0"}, {"item_at_least": ["chaoxin_shi", 1]}, {"item_at_least": ["dihuo_jing", 2]}, {"stones_at_least": 800}, {"stage_at_least": [1, 2]}], "effects": [{"item": ["chaoxin_shi", -1]}, {"item": ["dihuo_jing", -2]}, {"stones": -800}, {"reforge": ["e:tingchao:3:water::0", "e:tingchao:4:water::0"]}, {"story_advance": "tingchao"}], "chronicle": "地火烧了七天七夜，潮心石化进剑心。出炉那一刻，器坊里所有的水缸都泛起了波纹。听潮剑，复原了。"}, {"id": "later", "label": "改日再来", "chronicle": "你把听潮剑收了回去。"}]},
+  "tingchao_found": {"title": "锈剑", "trigger": "location", "location": "canglan", "priority": 8, "conditions": [{"any": [{"holds_gear": "e:tingchao:2:water::0"}, {"holds_gear": "e:tingchao:3:water::0"}, {"holds_gear": "e:tingchao:4:water::0"}]}, {"story_state": ["tingchao", "none"]}], "effects": [{"start_story": "tingchao"}], "chronicle": "沧澜城的河面上起了一阵涟漪。你背上的锈剑嗡嗡作响，像在应和水声。"}
 }

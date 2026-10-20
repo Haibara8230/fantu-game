@@ -16,11 +16,20 @@ static func data(s, contest: String = "") -> Dictionary:
 		contest = str(s.battle.get("contest", "wuzong"))
 	return s.content.summit_data.get(contest, {})
 
+## The cultivation each round's champion fights at: the contest's own, or its group for the player's
+## realm (`groups`: 五宗论道's 元婴组 for a 元婴 or above).
+static func levels(s, rules: Dictionary) -> Array:
+	var group: Dictionary = {}
+	for realm_key: String in rules.get("groups", {}):
+		if int(s.player.realm) >= int(realm_key) and (group.is_empty() or int(realm_key) > int(group.realm)):
+			group = rules.groups[realm_key].merged({"realm": realm_key})
+	return group.get("levels", rules.levels)
+
 ## Starts round `round` (from 1) of `contest` against that round's champion.
 static func begin(s, round: int, contest: String = "wuzong") -> void:
 	var rules := data(s, contest)
 	var champion: Dictionary = rules.champions[round - 1]
-	var level: Array = rules.levels[round - 1]
+	var level: Array = levels(s, rules)[round - 1]
 	var realm := clampi(int(level[0]), 0, s.content.realms.size() - 1)
 	var stage := clampi(int(level[1]), 0, s.content.realm(realm).stages.size() - 1)
 	var caps: Dictionary = s.content.stage(realm, stage)
@@ -54,6 +63,8 @@ static func over(s, won: bool) -> String:
 	var args := {"round": round, "foe": foe_name, "contest": str(rules.name)}
 	s.battle.clear()
 	s.record_deed("duel")
+	# The rounds won are the sitting's score (trials.gd).
+	s.Trials.record(s, contest, round if won else round - 1)
 	if not won:
 		s.player.hp = maxi(int(s.player.hp), 1)
 		var out: String = s.log_event("summit_out", args)
@@ -77,8 +88,9 @@ static func over(s, won: bool) -> String:
 	message += " " + s.log_event("summit_champion" if contest == "wuzong" else "contest_champion", {"stones": int(prize.stones), "item": slip, "contest": str(rules.name)}, true)
 	if contest == "wuzong":
 		s.record_deed("summit_champion")
-	else:
-		s.world.flags[contest + "_champion"] = true
+	# The crown is remembered in the world (`world_flag`: 天南大比's opens the four sects' doors, guest.gd).
+	if rules.has("world_flag"):
+		s.world.flags[str(rules.world_flag)] = true
 	message += " " + s.Sect.gain(s, int(prize.contribution), "%s夺魁" % rules.name)
 	message = _join(message, s.gain_xp(int(prize.xp)))
 	if contest == "wuzong":

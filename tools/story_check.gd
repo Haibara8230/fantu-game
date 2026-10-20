@@ -48,6 +48,7 @@ func run(loaded_content) -> void:
 	for pair: Array in [["地点", content.locations], ["路线", content.routes], ["敌人", content.enemies], ["规则", content.rules], ["恩怨", content.feuds], ["连战", content.series], ["洞府", content.cave_data], ["宗门", content.sect_data], ["拍卖", content.auction_data], ["论道", content.summit_data], ["人情", content.bonds_data], ["炼器", content.forge_data], ["委托", content.commission_data]]:
 		_walk_section(pair[0], pair[1])
 	_collect_guardian_readers()
+	_collect_guest_flags()
 	_check_stories()
 	_check_flags()
 	_check_items()
@@ -184,7 +185,8 @@ func _walk_other(value: Variant, parent: String, site: String) -> void:
 			elif key == "world_flag" and inner is String:
 				_add(flag_writers, inner, site)
 			elif key == "flag" and inner is String:
-				_add(flag_writers if parent == "lease" else flag_readers, inner, site)
+				# A lease and a cave room (its finding) set their flag; elsewhere a flag is read.
+				_add(flag_writers if parent in ["lease", "rooms"] else flag_readers, inner, site)
 			else:
 				_walk_other(inner, str(key), site)
 	elif value is Array:
@@ -252,6 +254,8 @@ func _effects(effects: Array, site: String) -> void:
 		match key:
 			"flag":
 				_add(flag_writers, str(value), site)
+			"guest_invite":
+				_add(flag_writers, "guest_invite_" + str(value), site)
 			"start_story":
 				_known_story(str(value), site)
 				_add(starters, str(value), site)
@@ -365,6 +369,18 @@ func _check_stories() -> void:
 			for advancer: Dictionary in advancers.get("%s/%s" % [story_id, step.id], []):
 				if _pays(step.get("effects", [])) and _pays(advancer.effects):
 					_problem("提醒", site, "共同奖励与%s的选项奖励会同时结算，请核对合计（不等于可重复领取）：%s ／ %s" % [advancer.site, effects_text(step.effects), effects_text(advancer.effects)])
+
+## 客卿 (guest.gd) sets and reads its flags by the sect's id: guest_<sect> while it lasts, the
+## invitation and the broken bond, and the perk's own flag.
+func _collect_guest_flags() -> void:
+	for sect: String in content.guest_data.get("sects", {}):
+		_add(flag_writers, "guest_" + sect, "客卿（Guest.accept）")
+		_add(flag_writers, "guest_ended_" + sect, "客卿（Guest.leave）")
+		_add(flag_readers, "guest_invite_" + sect, "客卿（Guest.invited）")
+		_add(flag_readers, "guest_ended_" + sect, "客卿（Guest.invited）")
+		var perk := str(content.guest_data.sects[sect].get("flag", ""))
+		if not perk.is_empty():
+			_add(flag_writers, perk, "客卿（Guest.accept）")
 
 ## Caves.guarded reads the flag through each room's actual enemy reference, not a literal string.
 ## Unreferenced enemy flags remain warnings; declaring a world_flag alone is not a reader.

@@ -38,6 +38,14 @@ static func next_window(definition: Dictionary, day: int) -> Dictionary:
 			occurrence += 1
 	return {}
 
+## Where a location event is held in `window`: a periodic event may move round its `venues` (五宗论道,
+## one city after another); otherwise its `location`.
+static func venue(definition: Dictionary, window: Dictionary) -> String:
+	var venues: Array = definition.get("periodic", {}).get("venues", [])
+	if venues.is_empty():
+		return str(definition.get("location", ""))
+	return str(venues[int(window.get("occurrence", 0)) % venues.size()])
+
 static func _fixed_window(definition: Dictionary) -> Dictionary:
 	var from: Array = definition.window.from
 	var to: Array = definition.window.to
@@ -52,6 +60,19 @@ static func _periodic_window(periodic: Dictionary, occurrence: int) -> Dictionar
 	}
 
 # --- Conditions and effects --------------------------------------------------
+
+## A work worth showing (五宗论道's 展示): a piece of at least `tier` carried or worn, or an art or
+## 心法 of at least `tier` learned.
+static func _work_at_least(s, tier: int) -> bool:
+	var pieces: Array = s.player.get("items", {}).keys() + s.player.get("equipment", {}).values() + s.player.get("gear", {}).keys()
+	for item_id: Variant in pieces:
+		var piece: Dictionary = s.Gear.item(s, str(item_id))
+		if str(piece.get("category", "")) == "equipment" and int(piece.get("tier", 0)) >= tier:
+			return true
+	for technique_id: Variant in s.player.get("learned", []):
+		if int(s.content.technique(str(technique_id)).get("tier", 0)) >= tier:
+			return true
+	return false
 
 static func all_met(s, conditions: Array) -> bool:
 	for condition: Dictionary in conditions:
@@ -83,6 +104,12 @@ static func met(s, condition: Dictionary) -> bool:
 		"item_at_least":
 			# A fine pill counts as the pill it is made beside.
 			return s.pill_count(value[0]) >= int(value[1])
+		"guest":
+			return s.Guest.of(s) == str(value) if not str(value).is_empty() else not s.Guest.of(s).is_empty()
+		"holds_gear":
+			return s.Gear.holds(s, str(value))
+		"work_at_least":
+			return _work_at_least(s, int(value))
 		"stones_at_least":
 			return int(s.player.stones) >= int(value)
 		"year_at_least":
@@ -163,6 +190,10 @@ static func apply(s, effects: Array) -> void:
 			# A named slip (a handwritten technique: 《藏息录》).
 			"slip":
 				s.add_item("j:" + str(value), 1)
+			"reforge":
+				s.Gear.reforge(s, str(value[0]), str(value[1]))
+			"guest_invite":
+				s.world.flags["guest_invite_" + str(value)] = true
 			"talent":
 				s.gain_talent(value)
 			"demon":
@@ -442,7 +473,7 @@ static func check_location(s, passing: bool = false) -> Array[String]:
 		if not group.is_empty() and used_groups.has(group):
 			continue
 		var window := window_at(definition, day)
-		if window.is_empty() or not open_for(s, event_id, window, day) or not all_met(s, definition.get("conditions", [])):
+		if window.is_empty() or venue(definition, window) != str(s.player.location) or not open_for(s, event_id, window, day) or not all_met(s, definition.get("conditions", [])):
 			continue
 		if definition.has("choices") and not s.pending_event.is_empty():
 			continue
@@ -574,6 +605,6 @@ static func upcoming(s) -> Array[Dictionary]:
 			window = next_window(definition, day + 1)
 		if window.is_empty() or int(window.from) - day > Calendar.DAYS_PER_YEAR:
 			continue
-		result.append({"event": event_id, "from": int(window.from), "to": int(window.to), "title": definition.title, "location": definition.location})
+		result.append({"event": event_id, "from": int(window.from), "to": int(window.to), "title": definition.title, "location": venue(definition, window)})
 	result.sort_custom(func(a: Dictionary, b: Dictionary) -> bool: return a.from < b.from)
 	return result

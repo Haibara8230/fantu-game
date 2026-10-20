@@ -163,7 +163,10 @@ static func update(s) -> Array[String]:
 					texts.append_array(_begin(s, story_id))
 					moved = true
 				continue
-			if step.has("choice_event") and s.pending_event.is_empty() and s.battle.is_empty():
+			# A step decided by a choice asks it at the step's place, once a day: put off ("later"), it
+			# asks again on another day there.
+			if step.has("choice_event") and s.pending_event.is_empty() and s.battle.is_empty() and (not step.has("place") or str(step.place) == str(s.player.location)) and int(saved.get("asked", -1)) != int(s.world.day):
+				saved.asked = int(s.world.day)
 				s.pending_event = {"id": str(step.choice_event), "day": int(s.world.day)}
 			if _finished(s, story_id, step):
 				texts.append_array(complete_step(s, story_id))

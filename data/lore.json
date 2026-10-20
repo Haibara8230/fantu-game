@@ -13,6 +13,12 @@
     {"id": "tiannan_contest", "text": "茶客说天南大比二十年一届，五城轮着办，只许筑基修士上台。宗门弟子凭试剑、凭门里遣送；散修就得在历练帖上攒功，或者找个有名望的人作保。", "conditions": [{"realm_at_least": 1}]},
     {"id": "nanming_mines", "text": "南明来的行商说，赤枫岭的矿区三天两头有人受伤，南明城里的疗伤丹收得比别处贵一倍还多。", "conditions": [{"flag": "tiannan_known"}]},
     {"id": "beiyue_archive", "text": "北岳城北的旧档库收着上千年的卷宗，可这些年总有一伙穿青灰长衫的人去调卷宗，调走的再没还回来。会馆的老阵师提起他们就摇头。", "conditions": [{"flag": "tiannan_known"}, {"not": {"flag": "archive_done"}}, {"not": {"flag": "archive_seized"}}]},
-    {"id": "duanjian_hermit", "text": "断剑峡口住着个灰衣散修，剑灵满滩游荡，就是不碰他。有人说他懂一门收气的法子，也有人说他只是命大。", "conditions": [{"flag": "tiannan_known"}, {"not": {"flag": "cangxi_taught"}}]}
+    {"id": "duanjian_hermit", "text": "断剑峡口住着个灰衣散修，剑灵满滩游荡，就是不碰他。有人说他懂一门收气的法子，也有人说他只是命大。", "conditions": [{"flag": "tiannan_known"}, {"not": {"flag": "cangxi_taught"}}]},
+    {"id": "canglan_city", "text": "沧澜来的药商说，沧澜城的丹会缺海灵贝入药，收得比望海贵一倍；城东水榭后头还有几间临水的小筑出租，结丹的人爱去。", "conditions": [{"flag": "tiannan_known"}]},
+    {"id": "wanghai_port", "text": "望海的水手说，出海的船队一年到头缺伤药，港里的疗伤丹卖得比内陆贵一倍；海市角落里还堆着几柄从海里捞上来的锈剑。", "conditions": [{"flag": "tiannan_known"}]},
+    {"id": "duze_garden", "text": "毒泽的瘴雾这些年退了几里，采药人说泽心露出了一片老药园的石碑，碑上刻着长青谷的字号。", "conditions": [{"flag": "tiannan_known"}, {"not": {"flag": "garden_seeds_found"}}]},
+    {"id": "jinhai_wreck", "text": "望海的老水手说，近海沉船湾里最大的那条船叫「观潮」，一百年前沧澜阁的长老坐着它出海测潮，再没回来。", "conditions": [{"flag": "tiannan_known"}, {"not": {"flag": "wreck_cleared"}}]},
+    {"id": "guest_elders", "text": "茶客说四宗都请客卿：月俸不多，客舍能闭关，赤霄的炉、长青的丹坊、沧澜的藏经阁、玄岳的旧档库各有门路；只是隔几年宗门就要差遣一回，误多了便要解约。", "conditions": [{"realm_at_least": 1}, {"affiliation": ""}]},
+    {"id": "wuzong_rotation", "text": "老修士说五宗论道一甲子一回，五城轮着办，只许金丹以上登台；可台下论道、指点后辈、上展台亮宝物，谁都可以去。", "conditions": [{"realm_at_least": 2}]}
   ]
 }

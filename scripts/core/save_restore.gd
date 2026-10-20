@@ -91,6 +91,10 @@ static func restore(s, data: Variant) -> bool:
 	var trials: Variant = saved_player.get("trials", {})
 	if not trials is Dictionary or trials.keys().any(func(trial_id: Variant) -> bool: return not trial_id in s.Trials.TRIALS or not trials[trial_id] is Dictionary or trials[trial_id].keys().any(func(year: Variant) -> bool: return not year is String or not year.is_valid_int() or not _whole_nonnegative(trials[trial_id][year]))):
 		return false
+	# Standing as a sect's 客卿 (optional: guest.gd).
+	var guest: Variant = saved_player.get("guest", {})
+	if not guest is Dictionary or (not guest.is_empty() and (not content.guest_data.get("sects", {}).has(guest.get("sect", "")) or ["since", "pay_day", "next_call", "missed"].any(func(key: String) -> bool: return not _whole_nonnegative(guest.get(key))))):
+		return false
 	var series_last: Variant = saved_player.get("series_last", {})
 	if not series_last is Dictionary or series_last.keys().any(func(series_id: Variant) -> bool: return not content.series.has(series_id) or not _whole_nonnegative(series_last[series_id])):
 		return false
@@ -388,6 +392,7 @@ static func restore(s, data: Variant) -> bool:
 		for year: String in trials[trial_id]:
 			sittings[trial_id][year] = int(trials[trial_id][year])
 	player["trials"] = sittings
+	player["guest"] = {} if guest.is_empty() else {"sect": str(guest.sect), "since": int(guest.since), "pay_day": int(guest.pay_day), "next_call": int(guest.next_call), "missed": int(guest.missed)}
 	var last_taken := {}
 	for series_id: String in series_last:
 		last_taken[series_id] = int(series_last[series_id])
@@ -998,6 +1003,9 @@ static func _valid_quests(content, data: Variant) -> Variant:
 			continue
 		# A 历练帖 keeps the season it counts toward (optional).
 		if quest.has("season") and not _whole_nonnegative(quest.season):
+			continue
+		# A 客卿's 差遣 names its sect (optional).
+		if quest.has("guest") and not content.guest_data.get("sects", {}).has(quest.guest):
 			continue
 		var normalized: Dictionary = quest.duplicate(true)
 		for key: String in ["count", "days", "deadline", "progress"]:

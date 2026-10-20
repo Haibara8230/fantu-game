@@ -216,9 +216,12 @@ static func open_hand(s) -> void:
 	s.battle.pills = 0
 	s.battle.cooldowns = {}
 	var extra := int(rules(s).first_extra) + int(s.orb_bonus("orb_first"))
+	var tide := tide_orbs(s)
 	if foe_leads(s):
 		s.battle.foe_led = true
 		s.battle.next_draw = extra
+		if tide > 0:
+			s.battle.tide = tide
 		_foe_prepare(s)
 		s.combat_events.append({"type": "lead", "actor": "enemy", "speed": foe_speed(s), "player_speed": speed(s)})
 		# The opening cannot fell the player: whoever starts a duel finds it still open after it.
@@ -228,9 +231,18 @@ static func open_hand(s) -> void:
 		s.battle.turn = 1
 		return
 	var drawn := _draw(s, draw_count(s) + extra, player_weights(s))
+	for count: int in tide:
+		drawn.append("water")
 	s.battle.orbs = drawn
 	s.combat_events.append({"type": "draw", "actor": "player", "orbs": drawn.duplicate()})
 	_foe_prepare(s)
+
+## 听潮 (orb_tide on a piece): on ground that carries water (a 临水 or 临海 field), the duel opens with
+## that many more water orbs; elsewhere none.
+static func tide_orbs(s) -> int:
+	if float(field(s).get("mods", {}).get("water", 0.0)) <= 0.0:
+		return 0
+	return int(s.orb_bonus("orb_tide"))
 
 ## Whether `orbs` cover `cost`.
 static func affordable(orbs: Array, cost: Dictionary) -> bool:
@@ -296,9 +308,23 @@ static func foe_element(s) -> String:
 		return str(foe.element)
 	return str(s.content.enemies[s.battle.enemy_id].get("element", "metal"))
 
-## 连击: whether `t`'s combo holds — the art cast before it was of the element its combo names.
+## 连击: whether `t`'s combo holds — the art cast before it was of the element its combo names, or a
+## 心法 the player runs links the two elements (linked_combo).
 static func combo_holds(s, t: Dictionary) -> bool:
-	return t.has("combo") and str(s.battle.get("last", "")) == str(t.combo.after)
+	return (t.has("combo") and str(s.battle.get("last", "")) == str(t.combo.after)) or not linked_combo(s, t).is_empty()
+
+## A 心法 that links two elements (《照水分光诀》, its `link`: {"elements", "bonus", "absorb"}): an art of
+## one cast right after an art of the other counts as a 连击 even where its own combo names something
+## else. The link's terms when it carries `t` now, else {}; never when the art's own combo holds.
+static func linked_combo(s, t: Dictionary) -> Dictionary:
+	var last := str(s.battle.get("last", ""))
+	if last.is_empty() or last == str(t.get("element", "")) or (t.has("combo") and last == str(t.combo.after)):
+		return {}
+	for method_id: Variant in s.player.get("methods", []):
+		var link: Dictionary = s.content.skills.get(str(method_id), {}).get("link", {})
+		if not link.is_empty() and str(t.get("element", "")) in link.elements and last in link.elements:
+			return link
+	return {}
 
 static func use_skill(s, skill_id: String) -> String:
 	s.combat_events.clear()
@@ -310,9 +336,12 @@ static func use_skill(s, skill_id: String) -> String:
 	if not affordable(s.battle.orbs, t.cost):
 		return "灵气不足：%s需要%s。" % [t.name, s.Arsenal.cost_text(s.content, t.cost)]
 	var spent := _pay(s.battle.orbs, t.cost)
-	# 连击: the art before it was of the element its combo names.
+	# 连击: the art before it was of the element its combo names, or a linked one (linked_combo).
+	var link := linked_combo(s, t)
+	var partner := str(s.battle.get("last", ""))
 	var combo := combo_holds(s, t)
-	var boost := (1.0 + (float(t.combo.get("bonus", 0.0)) if combo else 0.0)) * realm_power(s, int(s.player.realm))
+	var bonus := float(link.get("bonus", 0.0)) if not link.is_empty() else (float(t.combo.get("bonus", 0.0)) if combo else 0.0)
+	var boost := (1.0 + bonus) * realm_power(s, int(s.player.realm))
 	var look := {"style": skill_id, "name": t.name, "vfx": t.vfx, "tier": int(t.tier), "element": t.element, "spent": spent, "combo": combo}
 	_soul_strike(s)
 	# A sect's own art cast by its disciple carries the lineage's signature layer.
@@ -362,7 +391,7 @@ static func use_skill(s, skill_id: String) -> String:
 				if t.has(status):
 					_inflict(s.battle.status, status, t[status])
 	if combo:
-		s.combat_events.append({"type": "combo", "name": t.name, "after": str(t.combo.after), "element": str(t.element)})
+		s.combat_events.append({"type": "combo", "name": t.name, "after": partner if not link.is_empty() else str(t.combo.after), "element": str(t.element)})
 	# Each cast is practice toward the art's next layer (layers.gd).
 	var reached: Array[String] = s.Layers.after_cast(s, skill_id)
 	if not reached.is_empty():
@@ -374,9 +403,15 @@ static func use_skill(s, skill_id: String) -> String:
 	# 印: qi of another element drawn in, more of it on a 连击.
 	if t.has("absorb"):
 		var absorbed: Array = []
-		for count: int in int(t.absorb[1]) + (int(t.combo.get("absorb", 0)) if combo else 0):
+		for count: int in int(t.absorb[1]) + (int(t.combo.get("absorb", 0)) if combo and link.is_empty() else 0):
 			absorbed.append(str(t.absorb[0]))
 		_gain(s, absorbed)
+	# A linked 连击 draws in qi of the element it came after, so the two can keep answering each other.
+	if int(link.get("absorb", 0)) > 0:
+		var drawn: Array = []
+		for count: int in int(link.absorb):
+			drawn.append(partner)
+		_gain(s, drawn)
 	s.battle.last = str(t.element)
 	if int(s.battle.hp) <= 0:
 		return _win(s)
@@ -1347,7 +1382,12 @@ static func _enemy_turn(s, guarding: bool) -> String:
 	var short := (int(burning.slow[0]) if burning.has("slow") else 0) + (int(burning.entangle[0]) if burning.has("entangle") else 0)
 	var gathered := int(s.battle.get("next_draw", 0))
 	s.battle.erase("next_draw")
-	_gain(s, _draw(s, maxi(1, draw_count(s) - short + formation + gathered + (int(rules(s).guard_orbs) if guarding else 0)), player_weights(s)))
+	var hand := _draw(s, maxi(1, draw_count(s) - short + formation + gathered + (int(rules(s).guard_orbs) if guarding else 0)), player_weights(s))
+	# The tide's orbs held back when the opponent moved first (open_hand).
+	for count: int in int(s.battle.get("tide", 0)):
+		hand.append("water")
+	s.battle.erase("tide")
+	_gain(s, hand)
 	_foe_prepare(s)
 	# The opponent's sunder, slow, entangle, wound and focus last through its turns.
 	for lingering: String in ["sunder", "slow", "entangle", "wound", "focus"]:

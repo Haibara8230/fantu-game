@@ -2112,6 +2112,106 @@
         "talk": [
           "“师父说药能医病，医不了命。我不信。”"
         ]
+      },
+      {
+        "year": 55,
+        "standing": [
+          1,
+          2
+        ],
+        "realm_text": "筑基后期"
+      },
+      {
+        "year": 60,
+        "home": "canglan",
+        "spot": "danhui",
+        "title": "沧澜丹会的丹修",
+        "description": "随师父在沧澜城丹会落脚，白天坐堂，夜里在藏书院抄药方。师父的咳嗽一年比一年重，她说话越来越少。",
+        "talk": [
+          "“师父说药能医病，医不了命。我不信。”"
+        ]
+      },
+      {
+        "year": 72,
+        "if": [
+          {
+            "flag": "ye_cure"
+          }
+        ],
+        "title": "守底线的丹师",
+        "description": "沧澜丹会里最较真的丹师，替师父续了十年寿，从此只开自己信得过的方子。谁拿禁方来问她，她当面撕掉。",
+        "talk": [
+          "“续命的方子有的是，看你肯不肯走远路去找药。”"
+        ]
+      },
+      {
+        "year": 72,
+        "if": [
+          {
+            "flag": "ye_forbidden"
+          }
+        ],
+        "title": "深居简出的丹修",
+        "description": "很少再坐堂了。丹会里有人说她手里有张能续命的方子，也有人说那方子用的药引是毒泽的采药人。她不辩解。",
+        "talk": [
+          "“你要是来问那张方子的，就请回吧。”"
+        ]
+      },
+      {
+        "year": 72,
+        "if": [
+          {
+            "flag": "ye_letgo"
+          }
+        ],
+        "home": "market",
+        "spot": "pharmacy",
+        "title": "游方行医的医者",
+        "description": "送走师父以后，背着师父的药箱游方行医，走到哪里治到哪里，常回云溪的药铺歇脚。",
+        "talk": [
+          "“师父走得很安心。我现在信了，药医不了命。”"
+        ]
+      },
+      {
+        "year": 72,
+        "if": [
+          {
+            "flag": "ye_late"
+          }
+        ],
+        "title": "整理遗方的丹师",
+        "description": "师父坐化以后，她把自己关在丹会里整理师父留下的一箱药方。那张禁方，她终究没有用。",
+        "talk": [
+          "“师父的方子，我抄了三遍。有几张，我现在才看懂。”"
+        ]
+      },
+      {
+        "year": 78,
+        "if": [
+          {
+            "flag": "ye_forbidden"
+          }
+        ],
+        "standing": [
+          2,
+          0
+        ],
+        "realm_text": "金丹初期"
+      },
+      {
+        "year": 85,
+        "if": [
+          {
+            "not": {
+              "flag": "ye_forbidden"
+            }
+          }
+        ],
+        "standing": [
+          2,
+          0
+        ],
+        "realm_text": "金丹初期"
       }
     ]
   },
@@ -2160,6 +2260,60 @@
         "description": "筑基以后在白鹭渡租了间船坞，白天替人修船上的阵盘，夜里对着一摞古图发呆。十回寻宝九回扑空，他说剩下那一回快了。",
         "talk": [
           "“这张图是真的，我敢拿脑袋担保——上回那张不算。”"
+        ]
+      },
+      {
+        "year": 60,
+        "standing": [
+          1,
+          2
+        ],
+        "realm_text": "筑基后期"
+      },
+      {
+        "year": 100,
+        "home": "wanghai",
+        "spot": "dock",
+        "title": "望海船坞的阵师",
+        "description": "搬到了望海城，在船坞里替人修船上的避水阵、定风阵，一摞古海图堆在床头。他说海那边的东西，比陆上的多。",
+        "talk": [
+          "“陆上的图我看腻了。海图，才有意思。”"
+        ]
+      },
+      {
+        "year": 104,
+        "standing": [
+          2,
+          0
+        ],
+        "realm_text": "金丹初期"
+      },
+      {
+        "year": 110,
+        "if": [
+          {
+            "flag": "wenren_chart"
+          }
+        ],
+        "title": "握着真海图的阵师",
+        "description": "终于拿到一张真海图，整个人都亮了。白天筹船，夜里算潮，见人就说开春出海。",
+        "talk": [
+          "“这回是真的。我拿脑袋担保——上回那颗不算。”"
+        ]
+      },
+      {
+        "year": 130,
+        "if": [
+          {
+            "flag": "wenren_lost"
+          }
+        ],
+        "title": "出海未归",
+        "description": "历元一百三十年开春驾船出海，春末以后再没有消息。望海船坞里，他的床头还压着半摞海图。",
+        "present_if": [
+          {
+            "year_at_least": 99999
+          }
         ]
       }
     ]
@@ -2654,6 +2808,622 @@
         ],
         "chronicle": "你把秦砚讲的翻板、落石、暗弩一样样画给他看。莫辞看得很仔细，末了把一册手抄本推过来：“《藏息录》。你教我看阵，我教你躲阵，两清。”"
       }
+    ]
+  },
+  "yan_qianqiu": {
+    "name": "炎千秋",
+    "title": "赤霄首徒",
+    "attitude": "neutral",
+    "gender": "male",
+    "realm_text": "筑基后期",
+    "affiliation": "赤霄门",
+    "age": 41,
+    "personality": "直率",
+    "standing": [
+      1,
+      2
+    ],
+    "talents": [
+      "chenzhuo",
+      "jixing",
+      "juejiang"
+    ],
+    "description": "赤霄门这一辈的首徒，炼器与火法都是门里拔尖的。脾气像炉火，来得快去得也快；器坊的地火弱了，他比谁都急。",
+    "home": "chixiao_gate",
+    "spot": "foundry",
+    "talk_favor": 2,
+    "gift_favor": 3,
+    "talk": [
+      "“炉火弱一分，打出来的东西就差一成。你说急不急？”",
+      "“比斗？好啊，打完了来器坊喝酒。”",
+      "“师父说火要养，不能催。我偏想催一催。”"
+    ],
+    "congrats": {
+      "breakthrough": "筑基了？下回来器坊，我请你看开炉。"
+    },
+    "interactions": [
+      {
+        "id": "ningdan",
+        "label": "说起结丹，请教凝丹的门道",
+        "once": true,
+        "conditions": [
+          {
+            "realm_at_least": 1
+          },
+          {
+            "relation_at_least": [
+              "yan_qianqiu",
+              140
+            ]
+          },
+          {
+            "not": {
+              "flag": "ningdan_known"
+            }
+          }
+        ],
+        "effects": [
+          {
+            "item": [
+              "ningdan_yaolue",
+              1
+            ]
+          },
+          {
+            "relation": [
+              "yan_qianqiu",
+              5
+            ]
+          }
+        ],
+        "chronicle": "炎千秋想了想，从袖里取出一册旧手记：“《凝丹要略》，我结丹前读了三遍。你拿去，读完了再还我——不还也行。”"
+      }
+    ],
+    "phases": [
+      {
+        "year": 50,
+        "standing": [
+          2,
+          0
+        ],
+        "realm_text": "金丹初期",
+        "description": "赤霄门的首徒，结丹以后接了器坊的一半事务，火气收了些，炉火却旺了。"
+      },
+      {
+        "year": 110,
+        "standing": [
+          2,
+          2
+        ],
+        "realm_text": "金丹后期"
+      }
+    ]
+  },
+  "lin_wanzhao": {
+    "name": "林晚照",
+    "title": "长青首徒",
+    "attitude": "friendly",
+    "gender": "female",
+    "realm_text": "筑基后期",
+    "affiliation": "长青谷",
+    "age": 44,
+    "personality": "温和",
+    "standing": [
+      1,
+      2
+    ],
+    "talents": [
+      "shicao",
+      "xixin",
+      "wenxiang"
+    ],
+    "description": "长青谷这一辈的首徒，管着谷里的百草园。说话轻声细语，可谁要动药园里一株草，她第一个不答应。",
+    "home": "changqing_valley",
+    "spot": "garden",
+    "talk_favor": 2,
+    "gift_favor": 3,
+    "talk": [
+      "“这株回春草长了三年，你看它的叶脉，比外头的密。”",
+      "“谷里的老人说，泽心原先也是药园。可惜了。”",
+      "“救人的方子和害人的方子，有时候只差一味药。”"
+    ],
+    "congrats": {
+      "breakthrough": "筑基了，恭喜。根基稳了，药也吃得少些。"
+    },
+    "interactions": [
+      {
+        "id": "ningdan",
+        "label": "说起结丹，请教凝丹的门道",
+        "once": true,
+        "conditions": [
+          {
+            "realm_at_least": 1
+          },
+          {
+            "relation_at_least": [
+              "lin_wanzhao",
+              140
+            ]
+          },
+          {
+            "not": {
+              "flag": "ningdan_known"
+            }
+          }
+        ],
+        "effects": [
+          {
+            "item": [
+              "ningdan_yaolue",
+              1
+            ]
+          },
+          {
+            "relation": [
+              "lin_wanzhao",
+              5
+            ]
+          }
+        ],
+        "chronicle": "林晚照想了想，从袖里取出一册旧手记：“《凝丹要略》，我结丹前读了三遍。你拿去，读完了再还我——不还也行。”"
+      }
+    ],
+    "phases": [
+      {
+        "year": 55,
+        "standing": [
+          2,
+          0
+        ],
+        "realm_text": "金丹初期",
+        "description": "长青谷的首徒，结丹以后接了谷主的药园，一年到头泡在园子里。"
+      },
+      {
+        "year": 115,
+        "standing": [
+          2,
+          2
+        ],
+        "realm_text": "金丹后期"
+      }
+    ]
+  },
+  "bai_tinglan": {
+    "name": "白听澜",
+    "title": "沧澜首徒",
+    "attitude": "neutral",
+    "gender": "female",
+    "realm_text": "筑基后期",
+    "affiliation": "沧澜阁",
+    "age": 39,
+    "personality": "清冷",
+    "standing": [
+      1,
+      2
+    ],
+    "talents": [
+      "xixin",
+      "jixing",
+      "shuixing"
+    ],
+    "description": "沧澜阁这一辈的首徒，阁里练水剑的人越来越少，练全的只剩她一个。话少，剑快；常在城里的水榭、阁前的观潮台练剑。",
+    "home": "canglan_pavilion",
+    "spot": "tide_terrace",
+    "talk_favor": 2,
+    "gift_favor": 2,
+    "talk": [
+      "“水接金，金分水。说来容易。”",
+      "“阁里不外传的东西太多了。有些该传，有些不该。”",
+      "“海上的事，少问。”"
+    ],
+    "congrats": {
+      "breakthrough": "筑基了。剑练得怎样？"
+    },
+    "interactions": [
+      {
+        "id": "zhaoshui_teach",
+        "label": "带一块潮心石，请她补全《照水分光诀》",
+        "once": true,
+        "conditions": [
+          {
+            "item_at_least": [
+              "zhaoshui_canpian",
+              1
+            ]
+          },
+          {
+            "item_at_least": [
+              "chaoxin_shi",
+              1
+            ]
+          },
+          {
+            "relation_at_least": [
+              "bai_tinglan",
+              80
+            ]
+          },
+          {
+            "not": {
+              "flag": "zhaoshui_taught"
+            }
+          },
+          {
+            "not": {
+              "flag": "zhaoshui_found"
+            }
+          }
+        ],
+        "effects": [
+          {
+            "item": [
+              "chaoxin_shi",
+              -1
+            ]
+          },
+          {
+            "flag": "zhaoshui_taught"
+          },
+          {
+            "relation": [
+              "bai_tinglan",
+              10
+            ]
+          }
+        ],
+        "chronicle": "白听澜把潮心石贴在耳边听了半晌，才接过残篇，提笔把后半部一个字一个字补上：“以金分水，要先分得开自己。阁里的规矩是不外传。可这一脉，再不传就断了。”"
+      },
+      {
+        "id": "zhaoshui_guest",
+        "label": "以沧澜客卿的身份，请她补全《照水分光诀》",
+        "once": true,
+        "conditions": [
+          {
+            "item_at_least": [
+              "zhaoshui_canpian",
+              1
+            ]
+          },
+          {
+            "guest": "canglan"
+          },
+          {
+            "not": {
+              "flag": "zhaoshui_taught"
+            }
+          },
+          {
+            "not": {
+              "flag": "zhaoshui_found"
+            }
+          }
+        ],
+        "effects": [
+          {
+            "flag": "zhaoshui_taught"
+          },
+          {
+            "relation": [
+              "bai_tinglan",
+              10
+            ]
+          }
+        ],
+        "chronicle": "白听澜看了看你腰间的客卿牌：“自家人，不算外传。”她把残篇的后半部补全，又在页边添了一行小字：金在前，水在后，不可颠倒。"
+      },
+      {
+        "id": "ningdan",
+        "label": "说起结丹，请教凝丹的门道",
+        "once": true,
+        "conditions": [
+          {
+            "realm_at_least": 1
+          },
+          {
+            "relation_at_least": [
+              "bai_tinglan",
+              140
+            ]
+          },
+          {
+            "not": {
+              "flag": "ningdan_known"
+            }
+          }
+        ],
+        "effects": [
+          {
+            "item": [
+              "ningdan_yaolue",
+              1
+            ]
+          },
+          {
+            "relation": [
+              "bai_tinglan",
+              5
+            ]
+          }
+        ],
+        "chronicle": "白听澜想了想，从袖里取出一册旧手记：“《凝丹要略》，我结丹前读了三遍。你拿去，读完了再还我——不还也行。”"
+      }
+    ],
+    "phases": [
+      {
+        "year": 45,
+        "standing": [
+          2,
+          0
+        ],
+        "realm_text": "金丹初期",
+        "description": "沧澜阁的首徒，结丹以后常替阁里出海测潮，回来便在水榭练剑。水剑一脉，阁里练全的仍只有她。"
+      },
+      {
+        "year": 105,
+        "standing": [
+          2,
+          2
+        ],
+        "realm_text": "金丹后期"
+      }
+    ]
+  },
+  "shi_zhenyue": {
+    "name": "石镇岳",
+    "title": "玄岳首徒",
+    "attitude": "neutral",
+    "gender": "male",
+    "realm_text": "筑基后期",
+    "affiliation": "玄岳宗",
+    "age": 46,
+    "personality": "持重",
+    "standing": [
+      1,
+      2
+    ],
+    "talents": [
+      "chenzhuo",
+      "jinshen",
+      "juejiang"
+    ],
+    "description": "玄岳宗这一辈的首徒，体修，站着像一截石柱。玄岳世代替天南镇着几样不该动的东西，他说这是玄岳的命，也是玄岳的债。",
+    "home": "xuanyue_gate",
+    "spot": "training_ground",
+    "talk_favor": 2,
+    "gift_favor": 2,
+    "talk": [
+      "“封着的东西，就该封着。”",
+      "“玄岳欠下的，玄岳自己还。”",
+      "“来，过两招。”"
+    ],
+    "congrats": {
+      "breakthrough": "筑基了？好。来炼体场，过两招。"
+    },
+    "interactions": [
+      {
+        "id": "ningdan",
+        "label": "说起结丹，请教凝丹的门道",
+        "once": true,
+        "conditions": [
+          {
+            "realm_at_least": 1
+          },
+          {
+            "relation_at_least": [
+              "shi_zhenyue",
+              140
+            ]
+          },
+          {
+            "not": {
+              "flag": "ningdan_known"
+            }
+          }
+        ],
+        "effects": [
+          {
+            "item": [
+              "ningdan_yaolue",
+              1
+            ]
+          },
+          {
+            "relation": [
+              "shi_zhenyue",
+              5
+            ]
+          }
+        ],
+        "chronicle": "石镇岳想了想，从袖里取出一册旧手记：“《凝丹要略》，我结丹前读了三遍。你拿去，读完了再还我——不还也行。”"
+      }
+    ],
+    "phases": [
+      {
+        "year": 52,
+        "standing": [
+          2,
+          0
+        ],
+        "realm_text": "金丹初期",
+        "description": "玄岳宗的首徒，结丹以后接了镇守断剑峡的差事，常年在峡口与北岳之间来回。"
+      },
+      {
+        "year": 112,
+        "standing": [
+          2,
+          2
+        ],
+        "realm_text": "金丹后期"
+      }
+    ]
+  },
+  "ge_qingnang": {
+    "name": "葛青囊",
+    "title": "游方老丹师",
+    "attitude": "friendly",
+    "gender": "male",
+    "realm_text": "金丹后期",
+    "affiliation": "散修",
+    "age": 341,
+    "personality": "豁达",
+    "standing": [
+      2,
+      2
+    ],
+    "talents": [
+      "danshi",
+      "wenxiang",
+      "shicao"
+    ],
+    "description": "叶知微的师父，游方行医三百年，见过的病人比天南的修士还多。如今腿脚慢了，在沧澜阁的藏书阁里替人抄药方，一抄就是一整天。",
+    "home": "canglan_pavilion",
+    "spot": "library",
+    "talk_favor": 2,
+    "gift_favor": 2,
+    "talk": [
+      "“药能医病，医不了命。这话我说了三百年，她一句也不信。”",
+      "“丫头脾气倔，像我年轻时。”",
+      "“抄药方好，抄着抄着，就知道前人哪里错了。”"
+    ],
+    "phases": [
+      {
+        "year": 60,
+        "home": "canglan",
+        "spot": "danhui",
+        "description": "叶知微的师父，游方行医三百年，如今随她在沧澜城丹会落脚，替人看病、配药，咳嗽一年比一年重。"
+      },
+      {
+        "year": 70,
+        "description": "叶知微的师父，寿元只剩一年多了。他自己清楚，每天照旧坐堂看病，好像什么事都没有。",
+        "talk": [
+          "“人到这把年纪，该走就走。丫头那边，你替我劝劝。”"
+        ]
+      },
+      {
+        "year": 71,
+        "if": [
+          {
+            "flag": "ye_letgo"
+          }
+        ],
+        "realm_text": "已坐化",
+        "description": "叶知微的师父。历元七十一年在沧澜城丹会安然坐化，走前把一箱药方都留给了她。",
+        "present_if": [
+          {
+            "year_at_least": 99999
+          }
+        ]
+      },
+      {
+        "year": 72,
+        "if": [
+          {
+            "not": {
+              "any": [
+                {
+                  "flag": "ye_cure"
+                },
+                {
+                  "flag": "ye_forbidden"
+                },
+                {
+                  "flag": "ye_letgo"
+                }
+              ]
+            }
+          }
+        ],
+        "realm_text": "已坐化",
+        "description": "叶知微的师父。历元七十二年初在沧澜城丹会坐化，留下一箱没抄完的药方。",
+        "present_if": [
+          {
+            "year_at_least": 99999
+          }
+        ]
+      },
+      {
+        "year": 72,
+        "if": [
+          {
+            "flag": "ye_cure"
+          }
+        ],
+        "description": "叶知微的师父。服了徒弟炼的续元丹，又多了十年。照旧坐堂看病，说这十年是捡来的，一天也不能浪费。",
+        "talk": [
+          "“捡来的十年，一天也不能浪费。”"
+        ]
+      },
+      {
+        "year": 72,
+        "if": [
+          {
+            "flag": "ye_forbidden"
+          }
+        ],
+        "description": "叶知微的师父。靠一张禁方续了命，自己却不知道药引是什么。气色好了，话却少了，像是隐约猜到了些什么。",
+        "talk": [
+          "“丫头这些天不大敢看我。”"
+        ]
+      },
+      {
+        "year": 82,
+        "if": [
+          {
+            "flag": "ye_cure"
+          }
+        ],
+        "realm_text": "已坐化",
+        "description": "叶知微的师父。续来的十年里看了上万个病人，历元八十二年坐化，走得很安静。",
+        "present_if": [
+          {
+            "year_at_least": 99999
+          }
+        ]
+      },
+      {
+        "year": 85,
+        "if": [
+          {
+            "flag": "ye_forbidden"
+          }
+        ],
+        "realm_text": "已坐化",
+        "description": "叶知微的师父。靠禁方多活了十四年，历元八十五年坐化。临走前问徒弟，那药引究竟是什么。",
+        "present_if": [
+          {
+            "year_at_least": 99999
+          }
+        ]
+      }
+    ]
+  },
+  "wei_sanniang": {
+    "name": "卫三娘",
+    "title": "望海船主",
+    "attitude": "neutral",
+    "gender": "female",
+    "realm_text": "筑基中期",
+    "affiliation": "散修",
+    "age": 63,
+    "personality": "爽利",
+    "standing": [
+      1,
+      1
+    ],
+    "talents": [
+      "jianghu",
+      "jixing",
+      "chenzhuo"
+    ],
+    "description": "望海城有名的船主，手下三条船、四十个水手，跑近海从没折过一条船。不收来历不明的客，也不接说不清去处的活。",
+    "home": "wanghai",
+    "spot": "port",
+    "talk_favor": 2,
+    "gift_favor": 3,
+    "talk": [
+      "“海图？十张里九张是骗子画的，剩下一张是死人画的。”",
+      "“出海靠三样：船好、人齐、知道什么时候该回头。”",
+      "“想坐我的船，先说清楚去哪儿。”"
     ]
   }
 }

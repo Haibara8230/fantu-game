@@ -14,7 +14,7 @@ const SLIP_FLAG := "hall_slip:"
 static func bonuses(s, holder: Dictionary = {}) -> Dictionary:
 	if holder.is_empty():
 		holder = s.player
-	var total := {"attack": 0, "max_hp": 0, "max_qi": 0, "defense": 0.0, "cultivation": 0.0, "element_damage": {}, "max_hp_percent": 0, "max_qi_percent": 0, "dun_speed": 0.0, "encounter": 0.0}
+	var total := {"attack": 0, "max_hp": 0, "max_qi": 0, "defense": 0.0, "cultivation": 0.0, "element_damage": {}, "max_hp_percent": 0, "max_qi_percent": 0, "dun_speed": 0.0, "encounter": 0.0, "orb_tide": 0}
 	for key: String in Talents.ORB_KEYS:
 		total[key] = 0
 	_add_talents(s, total, holder.get("talents", []) + holder.get("flaws", []), int(holder.get("realm", 0)))

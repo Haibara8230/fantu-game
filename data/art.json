@@ -14,11 +14,35 @@
     "duanjian_gorge": "ruin_depths",
     "wild_veins": "wild_spring",
     "sect_cliff": "sect_arena",
-    "chifeng_old_mine": "chifeng_cavern"
+    "chifeng_old_mine": "chifeng_cavern",
+    "canglan_yaoshi": "market_street",
+    "canglan_danhui": "changqing_valley_pill_hall",
+    "canglan_shuyuan": "canglan_pavilion_library",
+    "canglan_shuixie": "canglan_pavilion_tide_terrace",
+    "canglan_inn": "town_inn",
+    "canglan_broker": "nanming_broker",
+    "canglan_abode": "nanming_abode",
+    "wanghai_haishi": "market_street",
+    "wanghai_port": "ferry_dock",
+    "wanghai_dock": "ferry_dock",
+    "wanghai_chart": "canglan_pavilion_library",
+    "wanghai_inn": "town_inn",
+    "jinhai_reef": "ferry_dock",
+    "jinhai_wreck": "ruin_depths",
+    "duze_marsh": "wild_entrance",
+    "duze_heart": "wild_spring",
+    "chixiao_gate_guest_house": "chixiao_gate_foundry",
+    "changqing_valley_guest_house": "changqing_valley_garden",
+    "canglan_pavilion_guest_house": "canglan_pavilion_library",
+    "xuanyue_gate_guest_house": "xuanyue_gate_stone_hall"
   },
   "location_art": {
     "beiyue": "nanming",
-    "duanjian": "chifeng"
+    "duanjian": "chifeng",
+    "canglan": "canglan_pavilion",
+    "wanghai": "ferry",
+    "jinhai": "ferry",
+    "duze": "changqing_valley"
   },
   "event_art": {
     "yunxi_autumn": "res://assets/art/events/yunxi_auction.png",
@@ -1221,6 +1245,364 @@
       "faces_right": true,
       "height_ratio": 0.85,
       "preferred": "res://assets/art/actors/rogue.png"
+    },
+    "reef_crab": {
+      "preferred": "res://assets/art/battle/yanjia_xi.png",
+      "texture": "res://assets/art/beasts_atlas_v1.png",
+      "columns": 2,
+      "rows": 2,
+      "frames": {
+        "idle": 0,
+        "prepare": 0,
+        "attack": 1,
+        "cast": 0,
+        "hit": 0,
+        "guard": 0
+      },
+      "faces_right": false,
+      "height_ratio": 0.64,
+      "frame_regions": [
+        [
+          0,
+          0,
+          768,
+          464
+        ],
+        [
+          768,
+          0,
+          768,
+          464
+        ],
+        [
+          0,
+          472,
+          768,
+          552
+        ],
+        [
+          768,
+          472,
+          768,
+          552
+        ]
+      ],
+      "preferred_layout": {
+        "columns": 2,
+        "rows": 2,
+        "frames": {
+          "idle": 0,
+          "prepare": 0,
+          "attack": 1,
+          "cast": 0,
+          "hit": 2,
+          "guard": 3
+        },
+        "frame_regions": [
+          [
+            0,
+            0,
+            736,
+            512
+          ],
+          [
+            736,
+            0,
+            800,
+            512
+          ],
+          [
+            0,
+            512,
+            736,
+            512
+          ],
+          [
+            736,
+            512,
+            800,
+            512
+          ]
+        ]
+      }
+    },
+    "sha_yao": {
+      "preferred": "res://assets/art/battle/qinglin_snake.png",
+      "texture": "res://assets/art/beasts_atlas_v1.png",
+      "columns": 2,
+      "rows": 2,
+      "frames": {
+        "idle": 2,
+        "prepare": 2,
+        "attack": 3,
+        "cast": 2,
+        "hit": 2,
+        "guard": 2
+      },
+      "faces_right": false,
+      "height_ratio": 0.83,
+      "frame_regions": [
+        [
+          0,
+          0,
+          768,
+          464
+        ],
+        [
+          768,
+          0,
+          768,
+          464
+        ],
+        [
+          0,
+          472,
+          768,
+          552
+        ],
+        [
+          768,
+          472,
+          768,
+          552
+        ]
+      ],
+      "preferred_layout": {
+        "columns": 2,
+        "rows": 2,
+        "frames": {
+          "idle": 0,
+          "prepare": 0,
+          "attack": 1,
+          "cast": 0,
+          "hit": 2,
+          "guard": 3
+        },
+        "frame_regions": null
+      }
+    },
+    "du_chan": {
+      "preferred": "res://assets/art/battle/qinglin_snake.png",
+      "texture": "res://assets/art/beasts_atlas_v1.png",
+      "columns": 2,
+      "rows": 2,
+      "frames": {
+        "idle": 2,
+        "prepare": 2,
+        "attack": 3,
+        "cast": 2,
+        "hit": 2,
+        "guard": 2
+      },
+      "faces_right": false,
+      "height_ratio": 0.83,
+      "frame_regions": [
+        [
+          0,
+          0,
+          768,
+          464
+        ],
+        [
+          768,
+          0,
+          768,
+          464
+        ],
+        [
+          0,
+          472,
+          768,
+          552
+        ],
+        [
+          768,
+          472,
+          768,
+          552
+        ]
+      ],
+      "preferred_layout": {
+        "columns": 2,
+        "rows": 2,
+        "frames": {
+          "idle": 0,
+          "prepare": 0,
+          "attack": 1,
+          "cast": 0,
+          "hit": 2,
+          "guard": 3
+        },
+        "frame_regions": null
+      }
+    },
+    "zhang_mang": {
+      "texture": "res://assets/art/beasts_atlas_v1.png",
+      "columns": 2,
+      "rows": 2,
+      "frames": {
+        "idle": 2,
+        "prepare": 2,
+        "attack": 3,
+        "cast": 2,
+        "hit": 2,
+        "guard": 2
+      },
+      "faces_right": false,
+      "height_ratio": 0.83,
+      "frame_regions": [
+        [
+          0,
+          0,
+          768,
+          464
+        ],
+        [
+          768,
+          0,
+          768,
+          464
+        ],
+        [
+          0,
+          472,
+          768,
+          552
+        ],
+        [
+          768,
+          472,
+          768,
+          552
+        ]
+      ]
+    },
+    "rong_ling": {
+      "preferred": "res://assets/art/battle/huo_xi.png",
+      "texture": "res://assets/art/beasts_atlas_v1.png",
+      "columns": 2,
+      "rows": 2,
+      "frames": {
+        "idle": 0,
+        "prepare": 0,
+        "attack": 1,
+        "cast": 0,
+        "hit": 0,
+        "guard": 0
+      },
+      "faces_right": false,
+      "height_ratio": 0.64,
+      "frame_regions": [
+        [
+          0,
+          0,
+          768,
+          464
+        ],
+        [
+          768,
+          0,
+          768,
+          464
+        ],
+        [
+          0,
+          472,
+          768,
+          552
+        ],
+        [
+          768,
+          472,
+          768,
+          552
+        ]
+      ],
+      "preferred_layout": {
+        "columns": 2,
+        "rows": 2,
+        "frames": {
+          "idle": 0,
+          "prepare": 0,
+          "attack": 1,
+          "cast": 0,
+          "hit": 2,
+          "guard": 3
+        },
+        "frame_regions": null
+      }
+    },
+    "shui_gui": {
+      "texture": "res://assets/art/rival_atlas_v2.png",
+      "preferred": "res://assets/art/actors/ruin_rogue.png",
+      "columns": 3,
+      "rows": 2,
+      "frames": {
+        "idle": 0,
+        "prepare": 1,
+        "attack": 2,
+        "cast": 3,
+        "hit": 4,
+        "guard": 5
+      },
+      "faces_right": true,
+      "height_ratio": 0.85
+    },
+    "hai_jiao": {
+      "texture": "res://assets/art/beasts_atlas_v1.png",
+      "columns": 2,
+      "rows": 2,
+      "frames": {
+        "idle": 2,
+        "prepare": 2,
+        "attack": 3,
+        "cast": 2,
+        "hit": 2,
+        "guard": 2
+      },
+      "faces_right": false,
+      "height_ratio": 0.83,
+      "frame_regions": [
+        [
+          0,
+          0,
+          768,
+          464
+        ],
+        [
+          768,
+          0,
+          768,
+          464
+        ],
+        [
+          0,
+          472,
+          768,
+          552
+        ],
+        [
+          768,
+          472,
+          768,
+          552
+        ]
+      ]
+    },
+    "jianzhong_yi": {
+      "texture": "res://assets/art/rival_atlas_v2.png",
+      "columns": 3,
+      "rows": 2,
+      "frames": {
+        "idle": 0,
+        "prepare": 1,
+        "attack": 2,
+        "cast": 3,
+        "hit": 4,
+        "guard": 5
+      },
+      "faces_right": true,
+      "height_ratio": 0.85
     }
   },
   "portrait_art": {

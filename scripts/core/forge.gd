@@ -17,7 +17,7 @@ static func bases_for(s, material_id: String) -> Array[String]:
 	var found: Array[String] = []
 	var family := str(data(s).materials.get(material_id, {}).get("family", ""))
 	for base_id: String in s.content.equipment_data.bases:
-		if str(s.content.equipment_data.bases[base_id].material) == family:
+		if str(s.content.equipment_data.bases[base_id].material) == family and not s.content.equipment_data.bases[base_id].has("named"):
 			found.append(base_id)
 	found.sort()
 	return found
@@ -34,7 +34,10 @@ static func materials_held(s) -> Array[String]:
 static func tier_of(s, material_id: String) -> int:
 	return int(data(s).materials.get(material_id, {}).get("tier", 1))
 
+## The furnace's fee; nothing at 赤霄's own furnace for its 客卿 (guest.gd).
 static func fee(s, material_id: String) -> int:
+	if s.Guest.perk_here(s, "forge_free"):
+		return 0
 	return int(data(s).fee[tier_of(s, material_id) - 1])
 
 static func days(s, material_id: String) -> int:

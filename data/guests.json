@@ -1,0 +1,47 @@
+{
+  "min_realm": 1,
+  "invite_favor": 140,
+  "call_years": 3,
+  "call_days": 360,
+  "missed_most": 2,
+  "served_favor": 5,
+  "stipend": [
+    0,
+    20,
+    60,
+    150,
+    150
+  ],
+  "sects": {
+    "chixiao": {
+      "location": "chixiao_gate",
+      "person": "yan_qianqiu",
+      "perk": "forge_free",
+      "perk_text": "赤霄器坊炼器免炉钱"
+    },
+    "changqing": {
+      "location": "changqing_valley",
+      "person": "lin_wanzhao",
+      "perk": "alchemy_free",
+      "perk_text": "长青丹坊借炉不收钱"
+    },
+    "canglan": {
+      "location": "canglan_pavilion",
+      "person": "bai_tinglan",
+      "perk": "discount",
+      "discount": 0.8,
+      "places": [
+        "canglan_pavilion",
+        "canglan"
+      ],
+      "perk_text": "沧澜藏经阁与沧澜城药市八折"
+    },
+    "xuanyue": {
+      "location": "xuanyue_gate",
+      "person": "shi_zhenyue",
+      "perk": "archive",
+      "flag": "archive_pass",
+      "perk_text": "北岳旧档库的门路"
+    }
+  }
+}

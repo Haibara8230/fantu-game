@@ -41,10 +41,14 @@ static func join(s) -> String:
 	var reason := join_block(s)
 	if not reason.is_empty():
 		return reason
+	# A 客卿 elsewhere lays the bond down on joining (guest.gd).
+	var left := ""
+	if not s.Guest.of(s).is_empty():
+		left = s.Guest.leave(s)
 	s.player.affiliation = str(s.content.rules.lineage.home)
 	s.player.rank = 0
 	s.player.stipend_day = int(s.world.day)
-	return s.finish(s.log_event("join_sect", {}, true))
+	return s.finish(("%s " % left if not left.is_empty() else "") + s.log_event("join_sect", {}, true))
 
 static func ranks(s) -> Array:
 	return data(s).ranks

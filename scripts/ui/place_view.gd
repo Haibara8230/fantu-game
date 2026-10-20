@@ -275,6 +275,20 @@ static func _spot_action(ui, grid: GridContainer, action: String) -> void:
 		"sect":
 			var rank: Dictionary = session.sect_rank()
 			_open(ui, grid, "宗门事务", func() -> void: ui.set_view("sect"), "%s · 贡献 %d：领月俸、申请晋升、兑换与捐献" % [rank.name, int(session.player.get("contribution", 0))])
+		"guest":
+			var sect: String = session.Guest.sect_here(session)
+			if sect.is_empty():
+				return
+			var terms: Dictionary = session.Guest.terms(session, sect)
+			var sect_name: String = session.content.sects[sect].name
+			if session.Guest.of(session) == sect:
+				var guest: Dictionary = session.player.guest
+				_timed(ui, grid, "辞去%s客卿" % sect_name, session.guest_leave, "月俸 %d 灵石；%s。差遣误了 %d 次（%d 次即解约）。辞去后邀约仍在，日后可再应。" % [session.Guest.stipend(session), terms.perk_text, int(guest.get("missed", 0)), int(session.Guest.data(session).missed_most)])
+			else:
+				var reason: String = session.Guest.block(session, sect)
+				var about := "客卿：月俸 %d 灵石，本宗客舍可闭关突破，%s；每 %d 年一次差遣，一年内回客舍复命。" % [session.Guest.stipend(session), terms.perk_text, int(session.Guest.data(session).call_years)]
+				var take: Button = _timed(ui, grid, "应邀做%s客卿" % sect_name, session.guest_accept, reason if not reason.is_empty() else about)
+				take.disabled = not reason.is_empty()
 		"join_sect":
 			var reason: String = session.join_block()
 			var join: Button = _timed(ui, grid, "拜入青云剑宗", session.join_sect, reason if not reason.is_empty() else "成为外门弟子：静室修行、执事堂差事与月俸、传功堂传承；也要守宗门的规矩")

@@ -1,10 +1,11 @@
 extends RefCounted
 ## 试炼 (docs/GAME_OUTLINE.md 19.4–19.5): what the player made of each sitting of a recurring trial —
 ## the floors climbed on 青云试剑崖 (series.gd, a `ranked` series), the 历练帖 merits earned in a season
-## (commissions.gd, a `lilian` template). 天南大比 asks for a good showing in a recent sitting (events.gd
-## `trial_at_least`). Operates on a Session. player.trials: {trial id: {year (a String): score}}.
+## (commissions.gd, a `lilian` template), the rounds won at 天南大比 and 五宗论道 (summit.gd). 天南大比
+## asks for a good showing in a recent sitting (events.gd `trial_at_least`). Operates on a Session.
+## player.trials: {trial id: {year (a String): score}}.
 const Calendar = preload("res://scripts/core/calendar.gd")
-const TRIALS := ["jianya", "lilian"]
+const TRIALS := ["jianya", "lilian", "tiannan", "wuzong"]
 
 ## Sets a sitting's score for the trial to `score` when it is better (a climb), or adds to it (merits).
 ## The sitting is this year's, or the season `year` named (a 历练帖 handed in after its year ends).

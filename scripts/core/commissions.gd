@@ -21,13 +21,14 @@ static func offers(s, board: String) -> Array[Dictionary]:
 	var period := int(s.world.day) / int(data.period_days)
 	var rng := RandomNumberGenerator.new()
 	rng.seed = hash([int(s.world.get("seed", 0)), "commission", board, period])
-	var kinds: Array = data.templates.keys().filter(func(kind: String) -> bool: return board in data.templates[kind].boards and int(s.player.realm) >= int(data.templates[kind].get("min_realm", 0)) and not data.templates[kind].has("years"))
+	var kinds: Array = data.templates.keys().filter(func(kind: String) -> bool: return board in data.templates[kind].boards and int(s.player.realm) >= int(data.templates[kind].get("min_realm", 0)) and not data.templates[kind].has("years") and not board.begins_with("guest_"))
 	kinds.sort()
 	var total := 0
 	for kind: String in kinds:
 		total += int(data.templates[kind].weight)
 	var picks: Array[String] = []
-	for index: int in int(data.offers):
+	# A 客卿's board posts nothing of its own; its 差遣 come by summons (guest.gd).
+	for index: int in (int(data.offers) if total > 0 else 0):
 		var roll := rng.randi_range(1, total)
 		var kind: String = kinds[0]
 		for candidate: String in kinds:
@@ -41,35 +42,43 @@ static func offers(s, board: String) -> Array[Dictionary]:
 	seasonal.sort()
 	picks.append_array(seasonal)
 	for index: int in picks.size():
-		var kind: String = picks[index]
-		var template: Dictionary = data.templates[kind]
-		var offer := {"key": "%s:%d:%d" % [board, period, index], "kind": kind, "board": board, "count": rng.randi_range(int(template.count[0]), int(template.count[1])), "days": int(template.days)}
-		if bool(template.get("lilian", false)):
-			offer.season = s.Calendar.year(int(s.world.day))
-		if template.has("wanted"):
-			# 悬赏: an outlaw of the board's region the player's realm can take, hiding at one of its places.
-			var region: String = s.content.region_of(str(data.boards[board].location))
-			var fitting: Array = template.wanted.filter(func(entry: Dictionary) -> bool: return int(entry.min_realm) <= int(s.player.realm) and entry.places.any(func(place: String) -> bool: return s.content.region_of(place) == region))
-			if fitting.is_empty():
-				continue
-			var entry: Dictionary = fitting[rng.randi_range(0, fitting.size() - 1)]
-			var places: Array = entry.places.filter(func(place: String) -> bool: return s.content.region_of(place) == region)
-			var enemy: Dictionary = s.content.enemies[str(entry.enemy)]
-			offer.wanted = {"name": s.Feuds.outlaw_name(s, rng), "enemy": str(entry.enemy), "place": str(places[rng.randi_range(0, places.size() - 1)]), "twist": rng.randf() < float(template.twist)}
-			offer.reward = {"stones": int(enemy.reward_stones) * int(template.reward_scale), "xp": int(enemy.reward_xp) * 2}
-		elif template.has("items"):
-			offer.item = template.items[rng.randi_range(0, template.items.size() - 1)]
-			offer.reward = {"stones": int(round(float(s.content.item(offer.item).price) * float(offer.count) * float(template.reward_scale))), "xp": 0}
-		elif template.has("places"):
-			offer.place = template.places[rng.randi_range(0, template.places.size() - 1)]
-			offer.reward = {"stones": int(template.reward_stones), "xp": int(template.reward_xp)}
-		else:
-			offer.enemy = template.enemies[rng.randi_range(0, template.enemies.size() - 1)]
-			offer.reward = {"stones": int(template.reward_stones) * int(offer.count), "xp": int(template.reward_xp) * int(offer.count)}
-		offer.reward.contribution = int(template.get("contribution", 0)) * int(offer.count) if board == str(s.content.sect_data.get("board", "")) else 0
+		var offer := make_offer(s, picks[index], board, "%s:%d:%d" % [board, period, index], rng)
+		if offer.is_empty():
+			continue
 		if not s.world.quests_taken.has(offer.key):
 			result.append(offer)
 	return result
+
+## One offer of `kind` on `board` under `key`, drawn from `rng`; {} when the board's region has no
+## outlaw for it.
+static func make_offer(s, kind: String, board: String, key: String, rng: RandomNumberGenerator) -> Dictionary:
+	var data: Dictionary = s.content.commission_data
+	var template: Dictionary = data.templates[kind]
+	var offer := {"key": key, "kind": kind, "board": board, "count": rng.randi_range(int(template.count[0]), int(template.count[1])), "days": int(template.days)}
+	if bool(template.get("lilian", false)):
+		offer.season = s.Calendar.year(int(s.world.day))
+	if template.has("wanted"):
+		# 悬赏: an outlaw of the board's region the player's realm can take, hiding at one of its places.
+		var region: String = s.content.region_of(str(data.boards[board].location))
+		var fitting: Array = template.wanted.filter(func(entry: Dictionary) -> bool: return int(entry.min_realm) <= int(s.player.realm) and entry.places.any(func(place: String) -> bool: return s.content.region_of(place) == region))
+		if fitting.is_empty():
+			return {}
+		var entry: Dictionary = fitting[rng.randi_range(0, fitting.size() - 1)]
+		var places: Array = entry.places.filter(func(place: String) -> bool: return s.content.region_of(place) == region)
+		var enemy: Dictionary = s.content.enemies[str(entry.enemy)]
+		offer.wanted = {"name": s.Feuds.outlaw_name(s, rng), "enemy": str(entry.enemy), "place": str(places[rng.randi_range(0, places.size() - 1)]), "twist": rng.randf() < float(template.twist)}
+		offer.reward = {"stones": int(enemy.reward_stones) * int(template.reward_scale), "xp": int(enemy.reward_xp) * 2}
+	elif template.has("items"):
+		offer.item = template.items[rng.randi_range(0, template.items.size() - 1)]
+		offer.reward = {"stones": int(round(float(s.content.item(offer.item).price) * float(offer.count) * float(template.reward_scale))), "xp": 0}
+	elif template.has("places"):
+		offer.place = template.places[rng.randi_range(0, template.places.size() - 1)]
+		offer.reward = {"stones": int(template.reward_stones), "xp": int(template.reward_xp)}
+	else:
+		offer.enemy = template.enemies[rng.randi_range(0, template.enemies.size() - 1)]
+		offer.reward = {"stones": int(template.reward_stones) * int(offer.count), "xp": int(template.reward_xp) * int(offer.count)}
+	offer.reward.contribution = int(template.get("contribution", 0)) * int(offer.count) if board == str(s.content.sect_data.get("board", "")) else 0
+	return offer
 
 ## Whether a seasonal template's year has come round (`years`: [first, every]).
 static func in_season(s, template: Dictionary) -> bool:
@@ -146,6 +155,9 @@ static func deliver(s, key: String) -> String:
 		var merit: int = int(quest.reward.get("contribution", 0)) * (100 + int(s.Sect.duty_value(s, "contribution_percent"))) / 100
 		if merit > 0:
 			done += " " + s.Sect.gain(s, merit, "宗门差事办妥")
+		# A 客卿's 差遣 reported (guest.gd).
+		if quest.has("guest"):
+			done += " " + s.Guest.served(s, quest)
 		# A 历练帖 counts one merit toward its season (trials.gd).
 		if quest.has("season"):
 			s.Trials.record(s, "lilian", 1, true, int(quest.season))
@@ -176,4 +188,6 @@ static func expire(s) -> Array[String]:
 		if int(s.world.day) > int(quest.deadline):
 			s.player.quests.erase(quest)
 			texts.append(s.log_event("quest_expired", {"quest_title": text(s, quest).title}))
+			if quest.has("guest"):
+				texts.append(s.Guest.lapsed(s, quest))
 	return texts

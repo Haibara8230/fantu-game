@@ -107,30 +107,31 @@ static func person(s, person_id: String) -> Dictionary:
 	s._views[person_id] = {"day": day, "view": view}
 	return view
 
-## A handwritten person as they are on `day`: the data, with the latest phase of their 年表 begun by then
-## (its year come, its `if` met) laid over it. A phase is a later life: the opening `window` no longer
-## holds, and only the phase's own `present_if` does.
+## A handwritten person as they are on `day`: the data, with every phase of their 年表 begun by then
+## (its year come, its `if` met) laid over it in order, each changing only what it names. A phase is a
+## later life: the opening `window` no longer holds, and only a phase's own `present_if` does.
 static func view_on(s, person_id: String, day: int) -> Dictionary:
 	var someone: Dictionary = s.content.people[person_id]
 	if not someone.has("phases"):
 		return someone
-	var current: Dictionary = {}
+	# The phases reached build on one another in order: a later one changes only what it names.
+	var shown: Dictionary = {}
+	var year := Calendar.year(day)
 	for phase: Dictionary in someone.phases:
-		if Calendar.year(day) >= int(phase.year) and Events.all_met(s, phase.get("if", [])):
-			current = phase
-	if current.is_empty():
-		return someone
-	var shown: Dictionary = someone.duplicate()
-	shown.erase("window")
-	shown.erase("present_if")
-	for key: String in current:
-		if key in s.content.PHASE_KEYS:
-			shown[key] = current[key]
-	if current.has("home"):
-		shown.erase("schedule")
-	elif current.has("schedule"):
-		shown.erase("home")
-	return shown
+		if year < int(phase.year) or not Events.all_met(s, phase.get("if", [])):
+			continue
+		if shown.is_empty():
+			shown = someone.duplicate()
+			shown.erase("window")
+			shown.erase("present_if")
+		for key: String in phase:
+			if key in s.content.PHASE_KEYS:
+				shown[key] = phase[key]
+		if phase.has("home"):
+			shown.erase("schedule")
+		elif phase.has("schedule"):
+			shown.erase("home")
+	return someone if shown.is_empty() else shown
 
 ## Where a person is on a day (today by default), or "" when absent, dead, away or somewhere undiscovered.
 static func npc_location(s, person_id: String, on_day: int = -1) -> String:
@@ -273,7 +274,7 @@ static func meet_present(s) -> void:
 	var covered: bool = s._met_through.get("location", "") == s.player.location and int(s._met_through.get("day", -1)) == int(s.world.day)
 	if covered:
 		for person_id: String in s.content.people:
-			if not bool(s.world.people.get(person_id, {}).get("met", false)) and npc_location(s, person_id) == s.player.location:
+			if not bool(s.world.people.get(person_id, {}).get("met", false)) and s.player.location in s.content.person_places(person_id) and npc_location(s, person_id) == s.player.location:
 				mark_met(s, person_id)
 		return
 	for person_id: String in present_npcs(s):

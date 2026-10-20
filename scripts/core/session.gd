@@ -28,6 +28,7 @@ const Leases = preload("res://scripts/core/leases.gd")
 const Arena = preload("res://scripts/core/arena.gd")
 const Series = preload("res://scripts/core/series.gd")
 const Trials = preload("res://scripts/core/trials.gd")
+const Guest = preload("res://scripts/core/guest.gd")
 const Feuds = preload("res://scripts/core/feuds.gd")
 const Schools = preload("res://scripts/core/schools.gd")
 const Breakthrough = preload("res://scripts/core/breakthrough.gd")
@@ -114,7 +115,7 @@ func new_game(character_name: String = "无名", seed_value: int = -1, roots: Ar
 	populate()
 	player = {
 		"name": chosen_name, "birth_day": -int(content.rules.starting_age) * Calendar.DAYS_PER_YEAR,
-		"realm": 0, "stage": 0, "xp": 0, "hp": 0, "qi": 0, "cultivation_carry": 0, "warned_for": -1, "wake": [], "leases": {}, "arena_best": {}, "series_last": {}, "trials": {}, "roots": roots.duplicate(),
+		"realm": 0, "stage": 0, "xp": 0, "hp": 0, "qi": 0, "cultivation_carry": 0, "warned_for": -1, "wake": [], "leases": {}, "arena_best": {}, "series_last": {}, "trials": {}, "guest": {}, "roots": roots.duplicate(),
 		"fatigue": 0, "fatigue_day": 0, "insight": 0, "mind": 0,
 		"stones": int(content.rules.starting_stones), "items": {},
 		"journey": {}, "cooldowns": {},
@@ -195,6 +196,9 @@ func advance_days(days: int, interruptible: bool = false, retreat: bool = false)
 	var stipend := Sect.pay_passive(self, start)
 	if not stipend.is_empty():
 		messages.append(stipend)
+	var guest := Guest.pay_passive(self)
+	if not guest.is_empty():
+		messages.append(guest)
 	return {"elapsed": int(world.day) - start, "interrupted": interrupted, "by": by, "messages": messages}
 
 ## Joins an action's text with what happened meanwhile, fires location events, and notifies listeners.
@@ -618,6 +622,13 @@ func spot_open(spot: Dictionary) -> bool:
 
 ## The sect the player formally belongs to ("" for a wanderer, 散修); apart from the lineage studied
 ## (player.sect).
+## 客卿 (guest.gd): standing as the guest of the sect whose gate this is, or laying it down.
+func guest_accept() -> String:
+	return Guest.accept(self, Guest.sect_here(self))
+
+func guest_leave() -> String:
+	return Guest.leave(self)
+
 func affiliation() -> String:
 	return str(player.get("affiliation", ""))
 

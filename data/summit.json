@@ -10,12 +10,15 @@
     "levels": [[2, 0], [2, 1], [2, 2], [2, 3]],
     "power": [0.9, 0.95, 0.95, 1.0],
     "recover_percent": 40,
-    "round": {"stones": 50, "contribution": 40, "xp": 600},
-    "champion": {"stones": 500, "contribution": 300, "xp": 4000, "manual": 4},
-    "name": "五宗论道"
+    "round": {"stones": 100, "contribution": 40, "xp": 6000},
+    "champion": {"stones": 1000, "contribution": 300, "xp": 6000, "manual": 4},
+    "name": "五宗论道",
+    "world_flag": "wuzong_champion",
+    "groups": {"3": {"levels": [[3, 0], [3, 1], [3, 1], [3, 2]]}}
   },
   "tiannan": {
     "name": "天南大比",
+    "world_flag": "tiannan_champion",
     "champions": [
       {"sect": "xuanyue", "name": "岳山青", "title": "玄岳内门", "gender": "male", "stage": "预选"},
       {"sect": "changqing", "name": "苏采薇", "title": "长青内门", "gender": "female", "stage": "分组"},
