@@ -123,6 +123,13 @@
     "repeat": {"cooldown_days": 20},
     "text": "山道转角，一头妖狼伏在乱石后，眼冒绿光，喉中低吼。",
     "choices": [
+      {
+        "id": "track",
+        "label": "循着兽踪绕开（樊九所授）",
+        "conditions": [{"flag": "beast_lore"}],
+        "effects": [],
+        "chronicle": "你先一步认出了乱石后的爪印，绕到下风处，悄无声息地过去了。"
+      },
       {"id": "fight", "label": "迎战", "effects": [{"battle": "wolf"}], "chronicle": "你在山道上与妖狼斗法。"},
       {"id": "lure", "label": "抛出一株灵草引开它", "conditions": [{"herbs_at_least": 1}], "effects": [{"herbs": -1}], "chronicle": "你抛出一株灵草引开妖狼，绕路而行。"},
       {"id": "awe", "label": "放出威压吓退它（筑基）", "conditions": [{"realm_at_least": 1}], "effects": [], "chronicle": "你放出一丝筑基修士的威压，妖狼夹着尾巴逃进了林子。"}
@@ -285,16 +292,8 @@
     "title": "妖蟒之乱",
     "trigger": "date",
     "window": {
-      "from": [
-        6,
-        3,
-        1
-      ],
-      "to": [
-        6,
-        3,
-        1
-      ]
+      "from": [12, 3, 1],
+      "to": [12, 3, 1]
     },
     "major": true,
     "conditions": [
@@ -314,26 +313,18 @@
   "serpent_averted": {
     "title": "落霞谷安然",
     "trigger": "date",
-    "window": {"from": [6, 3, 1], "to": [6, 3, 1]},
+    "window": {"from": [12, 3, 1], "to": [12, 3, 1]},
     "major": true,
     "conditions": [{"flag": "serpent_slain"}],
     "effects": [{"relation": ["shen_mo", 10]}],
-    "chronicle": "历元六年春，人们本以为妖蟒将出谷作乱，落霞谷却安然无恙。坊间传开了是谁早早除了这一害。"
+    "chronicle": "历元十二年春，人们本以为妖蟒将出谷作乱，落霞谷却安然无恙。坊间传开了是谁早早除了这一害。"
   },
   "serpent_rampage_ends": {
     "title": "长老出手",
     "trigger": "date",
     "window": {
-      "from": [
-        9,
-        3,
-        1
-      ],
-      "to": [
-        9,
-        3,
-        1
-      ]
+      "from": [15, 3, 1],
+      "to": [15, 3, 1]
     },
     "major": true,
     "conditions": [
@@ -627,10 +618,10 @@
       {"id": "refuse", "label": "婉拒，请前辈指点一二", "effects": [{"manual": 3}, {"mind": 2}], "chronicle": "你婉言谢绝。残魂沉默良久，叹了一声，从石壁中推出一枚玉简，随即消散。"}
     ]
   },
-  "talent_xiantian_daoti": {"title": "先天道体", "trigger": "location", "location": "sect", "priority": 5, "major": true, "conditions": [{"talent": "xiantian_daoti"}, {"stage_at_least": [0, 1]}], "effects": [{"xp": 200}, {"mind": 3}], "chronicle": "静室中，你周身毛孔竟自行吞吐灵气，一夜之间修为大进。同门路过，只当是哪位长老在此闭关。"},
+  "talent_xiantian_daoti": {"title": "先天道体", "trigger": "location", "location": "sect", "priority": 5, "major": true, "conditions": [{"talent": "xiantian_daoti"}, {"stage_at_least": [0, 1]}], "effects": [{"xp": 1000}, {"mind": 3}], "chronicle": "静室中，你周身毛孔竟自行吞吐灵气，一夜之间修为大进。同门路过，只当是哪位长老在此闭关。"},
   "talent_qiyun_zhizi": {"title": "气运之子", "trigger": "location", "location": "town", "priority": 5, "major": true, "conditions": [{"talent": "qiyun_zhizi"}], "effects": [{"item": ["pozhang_pill", 2]}, {"stones": 60}], "chronicle": "青石镇街角，一个醉汉把布包往你怀里一塞便跑没了影。打开一看，是两枚破障丹和几十块灵石。"},
   "talent_jiangu": {"title": "剑骨", "trigger": "location", "location": "ruin", "priority": 5, "major": true, "conditions": [{"talent": "jiangu"}, {"flag": "ruin_cleared"}], "effects": [{"manual": 3}, {"mind": 3}], "chronicle": "石室角落一柄锈剑忽然铮然长鸣，像是认出了你的骨头。剑身裂开，露出藏在里面的一枚玉简。"},
-  "talent_hunyuan": {"title": "混元灵体", "trigger": "location", "location": "sect", "priority": 5, "major": true, "conditions": [{"talent": "hunyuan"}, {"stage_at_least": [0, 2]}], "effects": [{"xp": 250}], "chronicle": "五行灵气在你丹田里自成循环，生生不息。你只是静坐了一日，修为便涨了一截。"},
+  "talent_hunyuan": {"title": "混元灵体", "trigger": "location", "location": "sect", "priority": 5, "major": true, "conditions": [{"talent": "hunyuan"}, {"stage_at_least": [0, 2]}], "effects": [{"xp": 1250}], "chronicle": "五行灵气在你丹田里自成循环，生生不息。你只是静坐了一日，修为便涨了一截。"},
   "talent_linglong": {"title": "九窍玲珑心", "trigger": "location", "location": "town", "priority": 5, "major": true, "conditions": [{"talent": "linglong"}, {"met": "storyteller"}], "effects": [{"mind": 6}, {"manual": 2}], "chronicle": "何三更讲了一段古修士的故事，满堂只当听个热闹，你却从中悟出几分道理。散场后他拉住你，送你一枚旧玉简：“这东西在我这儿是废物，在你手里不是。”"},
   "talent_bumie": {"title": "不灭之躯", "trigger": "location", "location": "wild", "priority": 5, "major": true, "conditions": [{"talent": "bumie"}], "effects": [{"item": ["liaoshang_pill", 2]}, {"mind": 3}], "chronicle": "你在谷中失足坠下山崖，爬起来竟毫发无伤。崖底石缝里还生着几株疗伤的灵草，你顺手炼成了两枚疗伤丹。"},
   "talent_wanfa": {"title": "万法亲和", "trigger": "location", "location": "sect", "priority": 5, "major": true, "conditions": [{"talent": "wanfa"}, {"flag": "rushi_done"}], "effects": [{"manual": 2}], "chronicle": "传功堂的执事见你看一遍便会，惊得说不出话，私下又多传了你一门功法。"},
@@ -639,13 +630,13 @@
   "talent_shouyou": {"title": "灵兽之友", "trigger": "location", "location": "ridge", "priority": 5, "major": true, "conditions": [{"talent": "shouyou"}], "effects": [{"item": ["lingzhi", 1]}], "chronicle": "一只白狐在松林里朝你点点头，一路引你到崖下，那里长着一株年份不浅的灵芝。"},
   "talent_tianyan": {"title": "天眼", "trigger": "location", "location": "wild", "priority": 5, "major": true, "conditions": [{"talent": "tianyan"}], "effects": [{"stones": 120}], "chronicle": "谷中的雾气在你眼里不过是一层薄纱。你一眼看破前人布下的幻阵，阵心埋着一坛灵石。"},
   "talent_shouxing": {"title": "寿星临凡", "trigger": "location", "location": "town", "priority": 5, "major": true, "conditions": [{"talent": "shouxing"}], "effects": [{"mind": 6}, {"item": ["ningqi_pill", 1]}], "chronicle": "街边的老道拉住你端详半晌，连声说“好一副寿星骨相”，硬塞给你一枚凝气丹，说是结个善缘。"},
-  "talent_zhanti": {"title": "天生战体", "trigger": "location", "location": "sect", "priority": 5, "major": true, "conditions": [{"talent": "zhanti"}, {"stage_at_least": [0, 1]}], "effects": [{"xp": 150}, {"mind": 4}], "chronicle": "演武坪上你一时兴起，连挑三名师兄，满场喝彩。越打越觉得浑身的血都热了起来。"},
+  "talent_zhanti": {"title": "天生战体", "trigger": "location", "location": "sect", "priority": 5, "major": true, "conditions": [{"talent": "zhanti"}, {"stage_at_least": [0, 1]}], "effects": [{"xp": 750}, {"mind": 4}], "chronicle": "演武坪上你一时兴起，连挑三名师兄，满场喝彩。越打越觉得浑身的血都热了起来。"},
   "talent_tongming": {"title": "道心通明", "trigger": "location", "location": "sect", "priority": 5, "major": true, "conditions": [{"talent": "tongming"}, {"stage_at_least": [0, 1]}], "effects": [{"mind": 10}], "chronicle": "静坐时，你心中忽然一片通明，仿佛远远看见了自己要走的那条路。"},
-  "talent_lingqiao_tian": {"title": "天生灵窍", "trigger": "location", "location": "sect", "priority": 5, "major": true, "conditions": [{"talent": "lingqiao_tian"}, {"stage_at_least": [0, 1]}], "effects": [{"xp": 300}], "chronicle": "你周身灵窍自行开阖，一次吐纳，抵得上旁人数日苦修。"},
+  "talent_lingqiao_tian": {"title": "天生灵窍", "trigger": "location", "location": "sect", "priority": 5, "major": true, "conditions": [{"talent": "lingqiao_tian"}, {"stage_at_least": [0, 1]}], "effects": [{"xp": 1500}], "chronicle": "你周身灵窍自行开阖，一次吐纳，抵得上旁人数日苦修。"},
   "talent_daqiyun": {"title": "大气运", "trigger": "location", "location": "ferry", "priority": 5, "major": true, "conditions": [{"talent": "daqiyun"}, {"met": "boatman"}], "effects": [{"stones": 100}, {"item": ["ningqi_pill", 1]}, {"relation": ["boatman", 10]}], "chronicle": "老艄公一网下去捞起一只沉箱，打开全是旧时的灵石。他非要分你一半：“这是沾了你的光。”"},
   "talent_yinyang": {"title": "阴阳同体", "trigger": "location", "location": "ferry", "priority": 5, "major": true, "conditions": [{"talent": "yinyang"}], "effects": [{"mind": 5}, {"manual": 2}], "chronicle": "渡口的江水一半结冰、一半翻滚，你在岸边看了半日，体内水火二气竟随之流转。回过神来，袖中多了一枚不知谁遗落的玉简。"},
   "talent_huigen": {"title": "天生慧根", "trigger": "location", "location": "sect", "priority": 5, "major": true, "conditions": [{"talent": "huigen"}, {"flag": "rushi_done"}], "effects": [{"manual": 2}, {"mind": 3}, {"relation": ["gu_changgeng", 10]}], "chronicle": "顾长庚考校新弟子，你答得头头是道，连他都捋着胡子笑了，随手赠你一枚玉简。"},
-  "talent_bulao": {"title": "不老泉体", "trigger": "location", "location": "wild", "priority": 5, "major": true, "conditions": [{"talent": "bulao"}], "effects": [{"xp": 150}, {"mind": 3}], "chronicle": "深谷里一眼清泉，你掬水喝了一口，只觉周身轻灵，像是年轻了好几岁。"},
+  "talent_bulao": {"title": "不老泉体", "trigger": "location", "location": "wild", "priority": 5, "major": true, "conditions": [{"talent": "bulao"}], "effects": [{"xp": 750}, {"mind": 3}], "chronicle": "深谷里一眼清泉，你掬水喝了一口，只觉周身轻灵，像是年轻了好几岁。"},
   "talent_jiandan": {"title": "剑胆琴心", "trigger": "location", "location": "town", "priority": 5, "major": true, "conditions": [{"talent": "jiandan"}, {"met": "storyteller"}], "effects": [{"mind": 6}, {"relation": ["storyteller", 15]}], "chronicle": "茶馆里你随手抚琴一曲，琴声里隐隐藏着剑意。何三更听罢一拍醒木：“这一曲，我要编进书里！”"},
   "talent_fuze": {"title": "福泽深厚", "trigger": "location", "location": "market", "priority": 5, "major": true, "conditions": [{"talent": "fuze"}], "effects": [{"stones": 150}], "chronicle": "坊市里一位老掌柜认出你身上祖传的信物，说是欠了你家祖上一份人情，执意赠你一袋灵石。"},
   "humble_spring": {
@@ -1313,5 +1304,503 @@
       "to_day": 1
     },
     "chronicle": "云溪斗法台贴出告示：潜龙会于三月一日至十五日报名，限四十岁以下的炼气修士，三轮斗法，点到为止；魁首得筑基丹一枚与功法玉简。"
+  },
+  "storm_shrine": {
+    "title": "雷雨废庙",
+    "trigger": "location",
+    "location": "ridge",
+    "priority": 12,
+    "periodic": {
+      "start_year": 1,
+      "every_years": 1,
+      "month": 6,
+      "from_day": 1,
+      "to_day": 30
+    },
+    "conditions": [
+      {
+        "not": {
+          "flag": "storm_shrine_seen"
+        }
+      },
+      {
+        "stage_at_least": [0, 1]
+      }
+    ],
+    "text": "六月的雷雨说来就来。你躲雨时看见半山腰的废庙里透出一道道白光，像有人在屋里接雷——破屋顶下，地上的焦痕还冒着烟。",
+    "choices": [
+      {
+        "id": "look",
+        "label": "冒雨过去看看",
+        "effects": [
+          {
+            "flag": "storm_shrine_seen"
+          },
+          {
+            "item": ["lei_fu", 2]
+          },
+          {
+            "mind": 2
+          }
+        ],
+        "chronicle": "庙里是个借雷火淬剑的器修，见你淋成落汤鸡，笑着让你烤火，临走塞给你两张他亲手画的掌心雷符：“雨天画的，比铺子里的灵。”"
+      },
+      {
+        "id": "later",
+        "label": "雨太大，改日再来",
+        "chronicle": "你记下了那座废庙的位置。雷雨季过去，庙里的白光也不见了。"
+      }
+    ]
+  },
+  "river_steps": {
+    "title": "河底石阶",
+    "trigger": "location",
+    "location": "wild",
+    "priority": 12,
+    "periodic": {
+      "start_year": 1,
+      "every_years": 1,
+      "month": 11,
+      "from_day": 1,
+      "to_day": 30
+    },
+    "conditions": [
+      {
+        "not": {
+          "flag": "river_steps_seen"
+        }
+      },
+      {
+        "stage_at_least": [0, 1]
+      },
+      {
+        "not": {
+          "flag": "serpent_rampage"
+        }
+      }
+    ],
+    "text": "入冬枯水，谷口那条溪浅得能看见底。水底下竟有一级级石阶，往谷里斜斜地伸进去，阶上长满青苔。",
+    "choices": [
+      {
+        "id": "wade",
+        "label": "踩着石阶走下去",
+        "effects": [
+          {
+            "flag": "river_steps_seen"
+          },
+          {
+            "stones": 40
+          },
+          {
+            "manual": 1
+          },
+          {
+            "mind": 2
+          }
+        ],
+        "chronicle": "石阶尽头是一间被淤泥埋了一半的石龛，龛里供着一只空香炉，炉底压着几块灵石和一枚褪了色的玉简——不知是谁、多少年前留在这里的。"
+      },
+      {
+        "id": "leave",
+        "label": "记下这里，明年再说",
+        "chronicle": "你记下了石阶的位置。开春涨水，它又沉回了水底。"
+      }
+    ]
+  },
+  "herb_shortage": {
+    "title": "药价",
+    "trigger": "location",
+    "location": "market",
+    "priority": 8,
+    "window": {
+      "from": [
+        8,
+        9,
+        1
+      ],
+      "to": [
+        8,
+        12,
+        30
+      ]
+    },
+    "conditions": [
+      {
+        "not": {
+          "flag": "serpent_slain"
+        }
+      },
+      {
+        "flag": "rushi_done"
+      }
+    ],
+    "text": "药铺门口吵成一团。采药人说落霞谷的回春草一年不如一年，沈墨只好提价；买药的散修骂他趁火打劫。沈墨抱着胳膊站在柜台后，一声不吭。",
+    "choices": [
+      {
+        "id": "help",
+        "label": "匀给沈墨五株回春草，按原价算",
+        "conditions": [
+          {
+            "item_at_least": [
+              "huichun_grass",
+              5
+            ]
+          }
+        ],
+        "effects": [
+          {
+            "item": [
+              "huichun_grass",
+              -5
+            ]
+          },
+          {
+            "stones": 25
+          },
+          {
+            "relation": [
+              "shen_mo",
+              10
+            ]
+          },
+          {
+            "flag": "herb_helped"
+          },
+          {
+            "mind": 2
+          }
+        ],
+        "chronicle": "沈墨把药价压回了原价，门口的人散了。他私下对你说：“不是我要涨。谷里的泉水这两年发烫，草根都烧坏了。”"
+      },
+      {
+        "id": "ask",
+        "label": "等人散了，问沈墨为什么减产",
+        "effects": [
+          {
+            "flag": "herb_asked"
+          },
+          {
+            "mind": 1
+          }
+        ],
+        "chronicle": "沈墨叹了口气：“落霞谷的灵泉这两年发烫，靠泉边的回春草根都烧坏了。采药人说是地气变了，我看没那么简单。”"
+      },
+      {
+        "id": "leave",
+        "label": "不掺和，买完就走",
+        "chronicle": "你买完药就走了。身后还在吵。"
+      }
+    ]
+  },
+  "slope_caravan": {
+    "title": "药坡",
+    "trigger": "location",
+    "location": "ridge",
+    "priority": 8,
+    "window": {
+      "from": [
+        10,
+        4,
+        1
+      ],
+      "to": [
+        10,
+        8,
+        30
+      ]
+    },
+    "conditions": [
+      {
+        "not": {
+          "flag": "serpent_slain"
+        }
+      },
+      {
+        "flag": "rushi_done"
+      }
+    ],
+    "text": "松风岭下来一支外地商队，领头的管事拿着地契模样的文书，说要把落霞谷的药坡包下来十年，往后只许商队的人采。阿芷和几个采药人堵在路口，脸涨得通红。管事看见你，笑着拱手：“道友若肯替我们带路进谷，酬劳好说。”",
+    "choices": [
+      {
+        "id": "common",
+        "label": "站到采药人一边：药坡是大家的",
+        "effects": [
+          {
+            "flag": "slope_common"
+          },
+          {
+            "relation": [
+              "azhi",
+              10
+            ]
+          },
+          {
+            "mind": 2
+          }
+        ],
+        "chronicle": "你站到了阿芷身边。管事掂量了一下，收起文书走了，临走撂下一句：“谷里迟早要出事，到时候你们求我们来收。”"
+      },
+      {
+        "id": "guide",
+        "label": "收下酬劳，替商队带路",
+        "effects": [
+          {
+            "flag": "slope_leased"
+          },
+          {
+            "stones": 80
+          },
+          {
+            "relation": [
+              "azhi",
+              -10
+            ]
+          }
+        ],
+        "chronicle": "你替商队带了路。他们在药坡上插了木牌，牌上写着“宝丰号”。阿芷再见到你时，没有说话。"
+      },
+      {
+        "id": "away",
+        "label": "不管闲事，绕路走",
+        "chronicle": "你绕开了路口。后来听说，商队和采药人在谷口僵了一个夏天。"
+      }
+    ]
+  },
+  "spring_omen": {
+    "title": "泉热",
+    "trigger": "location",
+    "location": "wild",
+    "priority": 8,
+    "window": {
+      "from": [
+        11,
+        9,
+        1
+      ],
+      "to": [
+        12,
+        2,
+        30
+      ]
+    },
+    "conditions": [
+      {
+        "not": {
+          "flag": "serpent_slain"
+        }
+      },
+      {
+        "not": {
+          "flag": "serpent_rampage"
+        }
+      }
+    ],
+    "text": "深谷里的灵泉冒着白汽，泉边的石头烫手，水面浮着一层翻白的鱼。泉眼深处，有什么东西在慢慢地翻身，水声沉得像擂鼓。",
+    "choices": [
+      {
+        "id": "warn",
+        "label": "赶回云溪，告诉沈墨",
+        "effects": [
+          {
+            "flag": "spring_warned"
+          },
+          {
+            "relation": [
+              "shen_mo",
+              5
+            ]
+          },
+          {
+            "start_story": "shen_redscale"
+          },
+          {
+            "mind": 2
+          }
+        ],
+        "chronicle": "沈墨听完脸色发白：“是赤鳞蟒，要醒了。凭你眼下的修为斗不过它——可破鳞散能削它的鳞甲，筑基修士拿着便有胜算。”他连夜去通知谷口的采药人搬走。"
+      },
+      {
+        "id": "watch",
+        "label": "伏在石后多看一会儿",
+        "effects": [
+          {
+            "flag": "spring_seen"
+          },
+          {
+            "mind": 1
+          }
+        ],
+        "chronicle": "泉水猛地一涌，一截赤红的鳞背露出水面，又沉了下去。你屏着气退出了深谷。"
+      }
+    ]
+  },
+  "spring_warning_heeded": {
+    "title": "早走一步",
+    "trigger": "date",
+    "priority": 6,
+    "window": {
+      "from": [
+        12,
+        3,
+        2
+      ],
+      "to": [
+        12,
+        3,
+        2
+      ]
+    },
+    "conditions": [
+      {
+        "flag": "serpent_rampage"
+      },
+      {
+        "flag": "spring_warned"
+      }
+    ],
+    "effects": [
+      {
+        "relation": [
+          "shen_mo",
+          5
+        ]
+      },
+      {
+        "relation": [
+          "azhi",
+          5
+        ]
+      },
+      {
+        "mind": 2
+      }
+    ],
+    "chronicle": "妖蟒出谷那夜，谷口的采药人早已照沈墨的话搬到了松风岭下。屋子毁了几间，人一个没少。阿芷托人捎话：是你先看见的。"
+  },
+  "slope_common_return": {
+    "title": "药坡",
+    "trigger": "location",
+    "location": "wild",
+    "priority": 8,
+    "window": {
+      "from": [
+        15,
+        3,
+        1
+      ],
+      "to": [
+        25,
+        12,
+        30
+      ]
+    },
+    "conditions": [
+      {
+        "flag": "slope_common"
+      },
+      {
+        "not": {
+          "flag": "slope_settled"
+        }
+      },
+      {
+        "not": {
+          "flag": "serpent_rampage"
+        }
+      }
+    ],
+    "text": "封谷三年，药坡上的草长得比人还高。采药人们陆续回来了，阿芷在坡上插了几根竹竿，把地分成一块一块。",
+    "choices": [
+      {
+        "id": "help",
+        "label": "帮着把地分好",
+        "effects": [
+          {
+            "flag": "slope_settled"
+          },
+          {
+            "item": [
+              "huichun_grass",
+              4
+            ]
+          },
+          {
+            "relation": [
+              "azhi",
+              5
+            ]
+          }
+        ],
+        "chronicle": "地分好了，没有谁多占一分。阿芷把最靠泉边的一块指给你：“这块留给你。当年你站在我们这边。”"
+      }
+    ]
+  },
+  "slope_leased_return": {
+    "title": "药坡",
+    "trigger": "location",
+    "location": "wild",
+    "priority": 8,
+    "window": {
+      "from": [
+        15,
+        3,
+        1
+      ],
+      "to": [
+        25,
+        12,
+        30
+      ]
+    },
+    "conditions": [
+      {
+        "flag": "slope_leased"
+      },
+      {
+        "not": {
+          "flag": "slope_settled"
+        }
+      },
+      {
+        "not": {
+          "flag": "serpent_rampage"
+        }
+      }
+    ],
+    "text": "封谷一解，宝丰号的人就回来了，把烧倒的木牌重新插上，向回来采药的人收份子钱。几个老药农蹲在坡下，不敢上去。",
+    "choices": [
+      {
+        "id": "pull",
+        "label": "当着管事的面拔了木牌",
+        "effects": [
+          {
+            "flag": "slope_settled"
+          },
+          {
+            "flag": "slope_common"
+          },
+          {
+            "relation": [
+              "azhi",
+              10
+            ]
+          },
+          {
+            "mind": 2
+          }
+        ],
+        "chronicle": "管事脸色铁青，到底没敢动手。木牌被扔进了溪里，药农们又上了坡。阿芷看了你很久，说了句：“这回算你还上了。”"
+      },
+      {
+        "id": "leave",
+        "label": "这是当年自己答应的，不好反悔",
+        "effects": [
+          {
+            "flag": "slope_settled"
+          }
+        ],
+        "chronicle": "你没有说话。宝丰号的份子钱一年比一年高，药铺里的回春草也跟着涨了价。"
+      }
+    ]
   }
 }

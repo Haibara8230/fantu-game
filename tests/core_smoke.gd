@@ -1,6 +1,7 @@
 extends SceneTree
 const Session = preload("res://scripts/core/session.gd")
 const SaveStore = preload("res://scripts/core/save_store.gd")
+const Calendar = preload("res://scripts/core/calendar.gd")
 var checks := 0
 var failures := 0
 
@@ -53,14 +54,13 @@ func _initialize() -> void:
 	check(game.player.realm == 0, "breakthrough needs the last sub-stage")
 	# Mixed legal play: retreat while the mind is fresh; otherwise spar with fellow disciples (which
 	# tempers the mind), gather in the valley, sell the herbs and buy a 破障丹 when a bottleneck holds.
-	# Fast enough to meet the serpent.
 	var trips := 0
-	while game.player.xp < 2000 and trips < 300:
+	while game.player.xp < 8000 and trips < 600:
 		trips += 1
 		if game.at_bottleneck() and game.item_count("pozhang_pill") > 0:
 			game.use_item("pozhang_pill")
 		elif not game.at_bottleneck() and game.retreat_efficiency() >= 100 and game.mind_percent() >= 100:
-			game.cultivate(90)
+			game.cultivate(game.retreat_most())
 		else:
 			for bout: int in 2:
 				game.start_battle("disciple")
@@ -79,13 +79,16 @@ func _initialize() -> void:
 				game.buy("pozhang_pill")
 			game.travel("sect")
 			_settle(game)
-	check(not game.has_flag("serpent_rampage") and game.item_count("foundation_pill") == 1, "mixed play reaches 炼气圆满 before the serpent breaks out")
+	check(int(game.world.day) < Calendar.to_day(26, 1, 1) and game.item_count("foundation_pill") == 1, "mixed play reaches 炼气圆满 within the outline's 15–25 years (历元 %d 年)" % (int(game.world.day) / Calendar.DAYS_PER_YEAR + 1))
+	# The serpent's duel below wants it alive: the valley as before its outbreak.
+	for flag: String in ["serpent_rampage", "serpent_slain"]:
+		game.world.flags.erase(flag)
 	check(game.player.stage == 3 and game.player.max_hp == 120 and game.realm_name() == "炼气圆满", "sub-stages reached by cultivation raise the caps")
 	check(game.chronicle.entries.any(func(entry: Dictionary) -> bool: return entry.id == "stage_up" and int(entry.args.stage) == 1 and entry.major), "each sub-stage is a recorded milestone")
 	var before_breakthrough: int = game.player.xp
 	_steady(game)
 	game.act("breakthrough")
-	check(game.player.realm == 1 and game.player.stage == 0 and game.player.hp == 140 and game.item_count("foundation_pill") == 0 and game.player.xp == before_breakthrough - 2000, "breakthrough consumes resources and upgrades stats")
+	check(game.player.realm == 1 and game.player.stage == 0 and game.player.hp == 140 and game.item_count("foundation_pill") == 0 and game.player.xp == before_breakthrough - 8000, "breakthrough consumes resources and upgrades stats")
 	game.travel("wild")
 	game.start_battle("serpent")
 	check(game.battle.orbs.size() == game.Combat.draw_count(game) + int(game.content.rules.duel.first_extra) and not game.battle.intent.is_empty(), "a duel opens with a hand of qi orbs and the opponent's intent")

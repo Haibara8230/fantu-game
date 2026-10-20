@@ -205,7 +205,7 @@
         "say": "落霞谷灵泉每隔几年灵潮涌动，筑基修士在泉边吐纳一回，胜过闭关半年。这一回的灵潮就在眼下，莫要错过。",
         "done": [{"at_location": "wild"}],
         "after": "灵泉上白雾翻涌，你盘坐泉边吐纳了一整夜，周身经脉被灵潮冲刷得通透。",
-        "effects": [{"xp": 360}, {"mind": 3}, {"contribution": 40}]
+        "effects": [{"xp": 1800}, {"mind": 3}, {"contribution": 40}]
       },
       {"id": "wait_trial", "wait_days": 1080},
       {
@@ -244,9 +244,9 @@
   },
   "talent_xianren": {"title": "前世残忆", "giver": "boatman", "begin_if": [{"talent": "xianren_zhuanshi"}], "steps": [{"id": "dream", "requires": [{"stage_at_least": [0, 1]}], "say": "你又做了那个梦：立于云端，脚下是翻涌的雷海。醒来时，掌心多了一道看不懂的纹路，一闪便隐去了。", "effects": [{"mind": 5}], "auto": true}, {"id": "eye", "requires": [{"stage_at_least": [0, 3]}], "say": "残缺的记忆又浮上来一片：落霞谷深处，山壁裂隙之后，有一眼灵眼——前世的你，曾在那里破境。", "effects": [{"flag": "spirit_eye_found"}, {"mind": 3}], "major": true, "auto": true}, {"id": "boatman", "goal": "筑基之后，去白鹭渡见见那位老艄公。", "place": "ferry", "requires": [{"realm_at_least": 1}], "done": [{"at_location": "ferry"}], "after": "老艄公盯着你看了许久，手里的竹篙都忘了撑：“……是你？三百年了。”他从船底摸出一只木匣，“你当年托我保管的，如今物归原主。”", "effects": [{"manual": 4}, {"relation": ["boatman", 30]}, {"mind": 5}], "major": true}]},
   "talent_tianming": {"title": "天命", "giver": "storyteller", "begin_if": [{"talent": "tianming"}], "steps": [{"id": "omen", "goal": "去青石镇听雨茶馆，见一见说书的何三更。", "place": "town", "requires": [{"flag": "rushi_done"}], "done": [{"at_location": "town"}], "after": "何三更一见你便停了醒木，半晌才道：“小友的命格，老朽说了一辈子书也没见过——福也大，劫也大。”他塞给你一枚破障丹，“路上用得着。”", "effects": [{"item": ["pozhang_pill", 1]}, {"mind": 5}]}, {"id": "verse", "goal": "筑基之后，再去听雨茶馆找何三更。", "place": "town", "requires": [{"realm_at_least": 1}], "done": [{"at_location": "town"}], "after": "何三更把一本旧书推到你面前：“这是我年轻时从一位前辈手里得来的，写的是天命之人的事。如今看来，书里说的就是你。”书页里夹着几张灵石票。", "effects": [{"stones": 200}, {"item": ["ningqi_pill", 2]}, {"relation": ["storyteller", 20]}], "major": true}]},
-  "talent_hundun": {"title": "混沌之体", "giver": "gu_changgeng", "begin_if": [{"talent": "hundun"}], "steps": [{"id": "notice", "goal": "去青云山传功堂，见一见传功长老顾长庚。", "place": "sect", "requires": [{"flag": "rushi_done"}], "done": [{"talked": "gu_changgeng"}, {"at_location": "sect"}], "after": "顾长庚一把扣住你的脉门，脸色变了又变：“五行俱全，混沌未分……混沌灵体！老夫活了一百多年，只在典籍里见过。”他取出一枚珍藏的玉简，“你的路，宗门的功法怕是不够用。”", "effects": [{"manual": 3}, {"mind": 5}, {"relation": ["gu_changgeng", 20]}], "major": true}, {"id": "trial", "goal": "筑基之后，回传功堂见顾长庚。", "place": "sect", "requires": [{"realm_at_least": 1}], "done": [{"at_location": "sect"}], "after": "顾长庚领你到后山一处灵脉，亲自为你护持了三日：“混沌灵体筑基之后，便该引五行之气淬体了。”", "effects": [{"xp": 500}, {"mind": 5}]}]},
+  "talent_hundun": {"title": "混沌之体", "giver": "gu_changgeng", "begin_if": [{"talent": "hundun"}], "steps": [{"id": "notice", "goal": "去青云山传功堂，见一见传功长老顾长庚。", "place": "sect", "requires": [{"flag": "rushi_done"}], "done": [{"talked": "gu_changgeng"}, {"at_location": "sect"}], "after": "顾长庚一把扣住你的脉门，脸色变了又变：“五行俱全，混沌未分……混沌灵体！老夫活了一百多年，只在典籍里见过。”他取出一枚珍藏的玉简，“你的路，宗门的功法怕是不够用。”", "effects": [{"manual": 3}, {"mind": 5}, {"relation": ["gu_changgeng", 20]}], "major": true}, {"id": "trial", "goal": "筑基之后，回传功堂见顾长庚。", "place": "sect", "requires": [{"realm_at_least": 1}], "done": [{"at_location": "sect"}], "after": "顾长庚领你到后山一处灵脉，亲自为你护持了三日：“混沌灵体筑基之后，便该引五行之气淬体了。”", "effects": [{"xp": 2500}, {"mind": 5}]}]},
   "talent_jianti": {"title": "万剑朝宗", "giver": "boatman", "begin_if": [{"talent": "xiantian_jianti"}], "steps": [{"id": "river", "goal": "去白鹭渡，看一看河底的剑痕。", "place": "ferry", "requires": [{"stage_at_least": [0, 1]}], "done": [{"at_location": "ferry"}], "after": "你刚走到渡口，河底万千剑痕同时嗡鸣，江面上浮起一层细碎的剑光。老艄公看得呆了：“几十年了，它们头一回这样。”", "effects": [{"manual": 3}, {"mind": 5}, {"relation": ["boatman", 15]}], "major": true}, {"id": "cave", "goal": "筑基之后，去古修洞府看看那里的剑意。", "place": "ruin", "requires": [{"realm_at_least": 1}, {"flag": "ruin_cleared"}], "done": [{"at_location": "ruin"}], "after": "洞府石壁上的剑痕随你的呼吸明灭，最后汇成一道剑光没入你的眉心——是前人留在这里的一门剑诀。", "effects": [{"manual": 4}], "major": true}]},
-  "talent_wangqing": {"title": "太上忘情", "giver": "shen_mo", "begin_if": [{"talent": "wangqing"}], "steps": [{"id": "pulse", "goal": "去云溪药铺，让沈墨看一看。", "place": "market", "requires": [{"flag": "rushi_done"}], "done": [{"at_location": "market"}], "after": "沈墨替你把了脉，收回手时神色古怪：“心如古井，七情不动……太上忘情。这样的人修行快，可也容易走着走着，就忘了自己为什么修行。”", "effects": [{"mind": 10}]}, {"id": "after", "goal": "筑基之后，再去云溪药铺见沈墨。", "place": "market", "requires": [{"realm_at_least": 1}], "done": [{"at_location": "market"}], "after": "沈墨递给你一壶酒：“筑基了？喝一口。忘情不是无情，你记着这句话就够了。”", "effects": [{"mind": 15}, {"xp": 300}, {"relation": ["shen_mo", 15]}], "major": true}]},
+  "talent_wangqing": {"title": "太上忘情", "giver": "shen_mo", "begin_if": [{"talent": "wangqing"}], "steps": [{"id": "pulse", "goal": "去云溪药铺，让沈墨看一看。", "place": "market", "requires": [{"flag": "rushi_done"}], "done": [{"at_location": "market"}], "after": "沈墨替你把了脉，收回手时神色古怪：“心如古井，七情不动……太上忘情。这样的人修行快，可也容易走着走着，就忘了自己为什么修行。”", "effects": [{"mind": 10}]}, {"id": "after", "goal": "筑基之后，再去云溪药铺见沈墨。", "place": "market", "requires": [{"realm_at_least": 1}], "done": [{"at_location": "market"}], "after": "沈墨递给你一壶酒：“筑基了？喝一口。忘情不是无情，你记着这句话就够了。”", "effects": [{"mind": 15}, {"xp": 1500}, {"relation": ["shen_mo", 15]}], "major": true}]},
   "talent_wangu": {"title": "万古长青", "giver": "azhi", "begin_if": [{"talent": "wangu"}], "steps": [{"id": "pines", "goal": "去松风岭走一走。", "place": "ridge", "requires": [{"flag": "rushi_done"}], "done": [{"at_location": "ridge"}], "after": "你一踏进松林，满山老松的枝叶都朝你这边倾了倾。阿芷瞪大了眼睛：“它们……在跟你打招呼？”她领你到一处只有她知道的崖下，那里长着两株灵芝。", "effects": [{"item": ["lingzhi", 2]}, {"relation": ["azhi", 15]}]}, {"id": "grove", "goal": "筑基之后，再去松风岭。", "place": "ridge", "requires": [{"realm_at_least": 1}], "done": [{"at_location": "ridge"}], "after": "松风岭深处的老树林为你让开了一条路，路的尽头是一片长满灵草的空地，像是等了你很久。", "effects": [{"item": ["lingzhi", 3]}, {"mind": 5}], "major": true}]},
   "talent_daogu": {"title": "道骨天成", "giver": "gu_changgeng", "begin_if": [{"talent": "daogu"}], "steps": [{"id": "bones", "goal": "修到炼气圆满，去传功堂见顾长庚。", "place": "sect", "requires": [{"stage_at_least": [0, 3]}], "done": [{"at_location": "sect"}], "after": "顾长庚摸过你的骨相，长叹一声：“道骨天成。旁人筑基是闯关，你是推门。”他取出一枚筑基丹，“老夫当年留着没舍得用，给你吧。”", "effects": [{"item": ["foundation_pill", 1]}, {"relation": ["gu_changgeng", 15]}], "major": true}, {"id": "after", "goal": "筑基之后，回传功堂。", "place": "sect", "requires": [{"realm_at_least": 1}], "done": [{"at_location": "sect"}], "after": "顾长庚看着你，笑得像个孩子：“老夫没看走眼。”他把压箱底的一枚玉简交到你手里。", "effects": [{"manual": 3}, {"mind": 5}]}]},
   "talent_ziqi": {"title": "紫气东来", "giver": "peddler", "begin_if": [{"talent": "ziqi"}], "steps": [{"id": "luck", "goal": "去云溪坊市逛一逛。", "place": "market", "requires": [{"flag": "rushi_done"}], "done": [{"at_location": "market"}], "after": "你在坊市里随手买的一块旧砚台，掌柜刚找完零钱，砚台就裂开了——里面藏着一叠灵石票。路过的行脚药贩钱货郎看得直咂嘴：“紫气东来，紫气东来啊！”", "effects": [{"stones": 300}, {"meet": "peddler"}]}, {"id": "fortune", "goal": "筑基之后，再去云溪坊市。", "place": "market", "requires": [{"realm_at_least": 1}], "done": [{"at_location": "market"}], "after": "坊市里的掌柜们像是约好了一样，纷纷把压箱底的好东西拿出来，只收你本钱价。你满载而归。", "effects": [{"stones": 500}, {"item": ["ningqi_pill", 2]}], "major": true}]},
@@ -893,12 +893,192 @@
             "flag": "tianhe_seen"
           }
         ],
-        "after": "铜片在你掌心发烫，烫得像要化开。老艄公收起竹篙，说这渡口的名字比青云山还老，至于为什么叫天河，没人记得了。那座城还会在别处露面——带着同样城徽的古物与传闻，你都记在心上。",
+        "after": "铜片在你掌心发烫，烫得像要化开。老艄公收起竹篙，说这渡口的名字比青云山还老，至于为什么叫天河，没人记得了。渡口那块风化的石碑上，刻着一枚和水中城影门楣上一样的城徽。你描了下来：这纹样，你在别处好像也见过。",
         "effects": [
           {
             "mind": 3
           }
         ]
+      },
+      {
+        "id": "accounts",
+        "goal": "拿着描下的城徽去问：渡口的老艄公、青石镇的说书人、云溪长街摆阵图的秦砚。",
+        "place": "ferry",
+        "done": [
+          {
+            "flag": "crest_boatman"
+          },
+          {
+            "flag": "crest_storyteller"
+          },
+          {
+            "flag": "crest_qin"
+          }
+        ],
+        "after": "三个人，三种说法：渡口的旧名、一出没人信的书、一页被裁掉的阵谱。可那座城若真存在过，为什么没有一个人记得它？",
+        "effects": [
+          {
+            "flag": "crest_puzzled"
+          },
+          {
+            "mind": 3
+          }
+        ]
+      }
+    ]
+  },
+  "zhuji_plan": {
+    "title": "筑基之备",
+    "giver": "shen_mo",
+    "begin_if": [
+      {
+        "flag": "rushi_done"
+      },
+      {
+        "affiliation": ""
+      },
+      {
+        "stage_at_least": [
+          0,
+          2
+        ]
+      }
+    ],
+    "close_if": [
+      {
+        "any": [
+          {
+            "realm_at_least": 1
+          },
+          {
+            "not": {
+              "affiliation": ""
+            }
+          }
+        ]
+      }
+    ],
+    "closed": "筑基之备不必再提。",
+    "steps": [
+      {
+        "id": "ask",
+        "goal": "修到炼气后期，筑基该早作打算了：去云溪药铺向沈墨请教。",
+        "place": "market"
+      },
+      {
+        "id": "pill",
+        "goal": "备一枚筑基丹：云溪药铺、十月秋拍、潜龙会魁首，或行脚的钱货郎。",
+        "place": "market",
+        "done": [
+          {
+            "item_at_least": [
+              "foundation_pill",
+              1
+            ]
+          }
+        ],
+        "after": "筑基丹到手了。沈墨说的另外两样——护法的人、闭关的地方——也该想想了。"
+      },
+      {
+        "id": "place",
+        "goal": "找一处好地方冲关：溪畔竹舍、落霞谷的灵眼，或就在客栈静房；交情深的人可请来护法。",
+        "place": "market",
+        "done": [
+          {
+            "any": [
+              {
+                "flag": "yunxi_abode"
+              },
+              {
+                "flag": "nanming_abode"
+              },
+              {
+                "flag": "spirit_eye_found"
+              },
+              {
+                "stage_at_least": [
+                  0,
+                  3
+                ]
+              }
+            ]
+          }
+        ],
+        "after": "丹、人、地都有了着落。剩下的，只看你自己。"
+      }
+    ]
+  },
+  "zhuji_sect": {
+    "title": "筑基之备",
+    "giver": "xu_qinghe",
+    "begin_if": [
+      {
+        "affiliation": "qingyun"
+      },
+      {
+        "stage_at_least": [
+          0,
+          2
+        ]
+      }
+    ],
+    "close_if": [
+      {
+        "any": [
+          {
+            "realm_at_least": 1
+          },
+          {
+            "not": {
+              "affiliation": "qingyun"
+            }
+          }
+        ]
+      }
+    ],
+    "closed": "筑基之备不必再提。",
+    "steps": [
+      {
+        "id": "hall",
+        "letter": true,
+        "goal": "修到炼气后期，筑基该早作打算了：回青云山执事堂，问许清和本门怎样筹备。",
+        "place": "sect",
+        "speaker": "xu_qinghe",
+        "say": "许清和传音：“修到炼气后期了？回执事堂一趟，筑基的事得早作打算。”",
+        "done": [
+          {
+            "at_location": "sect"
+          }
+        ],
+        "after": "许清和翻出一本簿子：“本门的筑基丹，外门精英每两年可用一百五十贡献换一枚，比坊市便宜一半；潜龙会夺魁另有赏赐。护法请顾长老，他只给本脉弟子护法，等你炼气圆满再去拜见。闭关就用宗门静室，不收房钱。”"
+      },
+      {
+        "id": "pill",
+        "goal": "备一枚筑基丹：执事堂兑换（须外门精英）、潜龙会魁首，或云溪药铺与行脚的钱货郎。",
+        "place": "sect",
+        "done": [
+          {
+            "item_at_least": [
+              "foundation_pill",
+              1
+            ]
+          }
+        ],
+        "after": "筑基丹到手了。剩下的是修到炼气圆满，再请顾长老护法。"
+      },
+      {
+        "id": "mentor",
+        "goal": "修到炼气圆满，听顾长庚讲筑基之道，请他护法。",
+        "place": "sect",
+        "done": [
+          {
+            "stage_at_least": [
+              0,
+              3
+            ]
+          }
+        ],
+        "after": "炼气圆满了。顾长老那边，传功堂里自会有话。"
       }
     ]
   }

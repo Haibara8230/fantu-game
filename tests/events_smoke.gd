@@ -55,10 +55,13 @@ func _foundation(game: Session) -> void:
 ## realm's xp cap is lifted, so retreats run their whole span.
 func _without_bottleneck(game: Session) -> void:
 	game.player.stage = 3
-	game.player.xp = 1500
+	game.player.xp = 6000
 	game.player.mind = 24
 	game.content.realms[0].breakthrough = {"xp": 1000000, "pills": 1}
 	game.refresh_realm_stats()
+	# 炼气圆满 here only keeps bottlenecks away; the hall's 筑基 plan, which starts on coming out of
+	# seclusion, is not what these spans compare.
+	Session.Storylines.mark_done(game, "zhuji_sect")
 
 func _state(game: Session, event_id: String) -> String:
 	return str(game.world.events.get(event_id, {}).get("state", ""))
@@ -285,6 +288,11 @@ func _comparable(game: Session) -> Dictionary:
 	# so coming out of seclusion every month meets the sect's newcomers sooner than one long retreat.
 	for progress: Dictionary in data.world.people.values():
 		progress.erase("met_day")
+	# Over many years some newcomers come and go between two monthly outings: met only by one span.
+	for person_id: String in data.world.people.keys():
+		var progress: Dictionary = data.world.people[person_id]
+		if person_id.begins_with("g:") and int(progress.get("relation", 0)) == 0 and int(progress.get("talks", 0)) == 0:
+			data.world.people.erase(person_id)
 	return data
 
 func _equivalence() -> void:
@@ -292,23 +300,26 @@ func _equivalence() -> void:
 	# let the world run for ten years at a place without choice events.
 	var once := _game(11)
 	var pieces := _game(11)
-	# Without a bottleneck ahead the six years also run the whole fatigue curve down to its floor.
+	# Without a bottleneck ahead the thirteen years also run the whole fatigue curve down to its floor.
 	for game: Session in [once, pieces]:
 		_without_bottleneck(game)
-	once.cultivate(2160)
-	for i: int in range(72):
+	# The longest single retreat is ten years.
+	once.cultivate(3600)
+	once.cultivate(1080)
+	for i: int in range(156):
 		pieces.cultivate(30)
-	check(_comparable(once) == _comparable(pieces), "one six-year retreat equals 72 one-month retreats")
-	check(once.has_flag("serpent_rampage") and int(once.world.events.qianlong_notice.count) == 1, "both spans processed the same world events")
+	check(_comparable(once) == _comparable(pieces), "thirteen years in two retreats equal 156 one-month retreats")
+	check(once.has_flag("serpent_rampage") and int(once.world.events.qianlong_notice.count) == 2, "both spans processed the same world events")
 	var town_once := _game(13)
 	var town_pieces := _game(13)
 	for game: Session in [town_once, town_pieces]:
 		game.travel("town")
 	town_once.wait(3600)
-	for i: int in range(120):
+	town_once.wait(3600)
+	for i: int in range(240):
 		town_pieces.wait(30)
-	check(_comparable(town_once) == _comparable(town_pieces), "ten years at once equals ten years month by month")
-	check(int(town_once.world.events.qianlong_notice.count) == 1 and town_once.has_flag("serpent_slain") and not town_once.has_flag("serpent_rampage"), "the tournament and the whole serpent rampage happen in both")
+	check(_comparable(town_once) == _comparable(town_pieces), "twenty years in two spans equal twenty years month by month")
+	check(int(town_once.world.events.qianlong_notice.count) == 3 and town_once.has_flag("serpent_slain") and not town_once.has_flag("serpent_rampage"), "the tournament and the whole serpent rampage happen in both")
 
 func _long_simulation() -> void:
 	var whole := _game(12)

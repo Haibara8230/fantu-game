@@ -174,7 +174,7 @@ func _modifiers() -> void:
 	var sturdy := _game(_born(["kunyuan"]))
 	check(sturdy.player.max_hp == 117 and is_equal_approx(sturdy.defense(), 0.3) and is_equal_approx(sturdy.element_multiplier({"element": "earth"}), 1.75), "坤元土体 hardens the body and the earth arts")
 	var hermit := _game(_born(["kuzuo"]))
-	check(hermit.retreat_cap() == 153 and hermit.mind_needed() == 0, "枯坐如石 can stay in retreat longer")
+	check(hermit.retreat_cap() == 306 and hermit.mind_needed() == 0, "枯坐如石 can stay in retreat longer")
 	var settled := _game(_born(["chengming"]))
 	settled.player.stage = 1
 	check(settled.mind_needed() == 5, "道心澄明 lowers the mind a stage asks")
@@ -266,11 +266,11 @@ func _saves() -> void:
 	var round_trip := Session.new()
 	check(round_trip.restore(JSON.parse_string(JSON.stringify(old.snapshot()))) and round_trip.player.talents == old.player.talents and round_trip.chronicle.entries.size() == old.chronicle.entries.size(), "they awaken once, not on every load")
 
-## A character at 炼气圆满 with 2000 xp and the mind the stage asks, ready to break through.
+## A character at 炼气圆满 with 8000 xp and the mind the stage asks, ready to break through.
 func _ripe(born: Dictionary = {}, pills: int = 1) -> Session:
 	var game := _game(born)
 	game.player.stage = 3
-	game.player.xp = 2000
+	game.player.xp = 8000
 	game.player.mind = 24
 	game.set_item_count("foundation_pill", pills)
 	game.refresh_realm_stats()
@@ -339,14 +339,14 @@ func _breakthrough() -> void:
 	failing.fortune = {"demon": 0.99, "breakthrough": 0.99}
 	var day := int(failing.world.day)
 	var text := failing.act("breakthrough")
-	check(failing.player.realm == 0 and int(failing.player.xp) == 1700 and failing.item_count("foundation_pill") == 1 and text.contains("冲关失败"), "a failure spends the pill and sets xp back")
+	check(failing.player.realm == 0 and int(failing.player.xp) == 6800 and failing.item_count("foundation_pill") == 1 and text.contains("冲关失败"), "a failure spends the pill and sets xp back")
 	check(int(failing.world.day) == day + 90 and failing.injured() and int(failing.player.lessons) == 1 and int(failing.player.mind) == 28 and int(failing.player.hp) > 0, "and costs months of injury, never the life, and teaches")
 	var hurt := failing.retreat_preview(30)
 	var healed_at := int(failing.player.injury_until)
 	failing.player.injury_until = 0
 	check(int(hurt.xp) * 2 == int(failing.retreat_preview(30).xp), "an injury halves what a retreat brings")
 	failing.player.injury_until = healed_at
-	failing.player.xp = 2000
+	failing.player.xp = 8000
 	check(_part(failing, failing.breakthrough_plan(), "前车之鉴") == 5, "the next attempt is a little surer")
 	failing.fortune = {"demon": 0.99, "breakthrough": 0.0}
 	failing.act("breakthrough")
@@ -418,7 +418,7 @@ func _breakthrough_saves() -> void:
 	game.act("breakthrough")
 	var copy := Session.new()
 	check(copy.restore(JSON.parse_string(JSON.stringify(game.snapshot()))) and copy.injured() and int(copy.player.lessons) == 1, "an injury and a lesson survive a save")
-	for broken: Array in [["foundation_grade", 9], ["lessons", 7], ["injury_until", -1], ["boons", {"nonsense": "ready"}], ["boons", {"epiphany": "maybe"}], ["attempt", {"odds": 50, "certain": false, "steps": 0, "xp": 2000, "guard": ""}]]:
+	for broken: Array in [["foundation_grade", 9], ["lessons", 7], ["injury_until", -1], ["boons", {"nonsense": "ready"}], ["boons", {"epiphany": "maybe"}], ["attempt", {"odds": 50, "certain": false, "steps": 0, "xp": 8000, "guard": ""}]]:
 		var data: Dictionary = game.snapshot()
 		data.player[broken[0]] = broken[1]
 		check(not copy.restore(data), "malformed %s rejected" % broken[0])
@@ -462,11 +462,11 @@ func _fortune() -> void:
 	moved.player.location = "ferry"
 	moved.fortune = {"epiphany": 0.0}
 	moved.player.stage = 0
-	moved.player.xp = 1500
+	moved.player.xp = 6000
 	moved.wait(10)
 	check(moved.pending_event.is_empty(), "and never comes twice in a life")
 	var blocked := _game()
-	blocked.player.xp = 500
+	blocked.player.xp = 2000
 	blocked.player.location = "ridge"
 	blocked.fortune = {"epiphany": 0.0, "epiphany:talent": 0.0}
 	blocked.wait(10)
@@ -569,7 +569,7 @@ func _talent_stories() -> void:
 	reborn.new_game("转世", 31, ["metal", "wood", "fire"], "skipped", _born(["xianren_zhuanshi"]))
 	check(reborn.story_state("talent_xianren") == "active", "仙人转世 begins a storyline of its own")
 	reborn.player.stage = 3
-	reborn.player.xp = 1500
+	reborn.player.xp = 6000
 	reborn.player.mind = 24
 	reborn.cultivate(10)
 	check(reborn.has_flag("spirit_eye_found") and reborn.journal_lines().any(func(line: String) -> bool: return line.contains("灵眼")), "and its memories tell where the 灵眼 is")

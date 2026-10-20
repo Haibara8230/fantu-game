@@ -749,7 +749,7 @@ func _ready_to_found(seed_value: int, mind: int) -> Session:
 	game.encounters_enabled = false
 	game.new_game("渡劫", seed_value, ["metal", "wood", "fire"])
 	game.player.stage = 3
-	game.player.xp = 2000
+	game.player.xp = 8000
 	game.player.mind = mind
 	game.refresh_realm_stats()
 	game.set_item_count("foundation_pill", 1)
@@ -788,7 +788,7 @@ func _demon_and_tribulation() -> void:
 	core.new_game("渡劫", 66, ["metal", "wood", "fire"])
 	core.player.realm = 1
 	core.player.stage = 3
-	core.player.xp = 6000
+	core.player.xp = 30000
 	core.player.mind = 200
 	core.refresh_realm_stats()
 	core.player.hp = core.player.max_hp
@@ -817,7 +817,7 @@ func _demon_and_tribulation() -> void:
 	struck.new_game("渡劫", 67, ["metal", "wood", "fire"])
 	struck.player.realm = 1
 	struck.player.stage = 3
-	struck.player.xp = 6000
+	struck.player.xp = 30000
 	struck.player.mind = 200
 	struck.refresh_realm_stats()
 	struck.fortune = {"demon": 0.99, "breakthrough": 0.0}

@@ -36,6 +36,13 @@
     },
     "interactions": [
       {
+        "id": "ask_foundation",
+        "label": "请教筑基的门道",
+        "conditions": [{"story_at": ["zhuji_plan", "ask"]}],
+        "effects": [{"story_advance": "zhuji_plan"}],
+        "chronicle": "沈墨把药杵一搁：“筑基三样：丹、人、地。丹，我这里二百八十灵石一枚，秋拍、潜龙会、钱货郎手里也有，便宜些；人，冲关时得有个信得过的人守着；地，客栈静房凑合，溪畔竹舍清净，落霞谷深处传说有处灵眼——最好。”"
+      },
+      {
         "id": "request",
         "label": "代他收五株回春草（灵石 +50）",
         "conditions": [
@@ -536,6 +543,35 @@
     "congrats": {"breakthrough": "老汉就说你是块料子！哪天得闲，来渡口喝碗粗茶。"},
     "interactions": [
       {
+        "id": "crest",
+        "label": "问渡口石碑上那枚城徽",
+        "conditions": [
+          {
+            "story_at": [
+              "mirror",
+              "accounts"
+            ]
+          },
+          {
+            "not": {
+              "flag": "crest_boatman"
+            }
+          }
+        ],
+        "effects": [
+          {
+            "flag": "crest_boatman"
+          },
+          {
+            "relation": [
+              "boatman",
+              3
+            ]
+          }
+        ],
+        "chronicle": "老艄公眯着眼看了半天石碑：“我师父撑船那会儿，这渡口还不叫白鹭渡，叫‘照川渡’。照的哪条川？他也说不上来，只说是从天上流下来的。”"
+      },
+      {
         "id": "ask_sword",
         "label": "问起那位劈冰的剑修",
         "conditions": [{"relation_at_least": ["boatman", 10]}, {"story_state": ["boatman_sword", "none"]}],
@@ -573,6 +609,35 @@
     "sound_at": 40,
     "congrats": {"serpent": "客官，《斩赤鳞》这回书老夫已经写好了，就等你来听！", "champion": "潜龙会魁首的段子，老夫明日就开讲。", "core": "结丹的段子老夫也编好了，就差你来听。", "nascent": "元婴老祖！老夫说书几十年，头一回能说自己认得一位。", "deity": "化神！老夫这把年纪，这回书怕是讲不完了，交给徒弟接着讲。", "calamity": "《山门斩魔将》！这回书老夫说到老也说不完！", "summit": "《论道青云》这回书，老夫要连讲三天！"},
     "interactions": [
+      {
+        "id": "crest",
+        "label": "问他听没听过一座照在水里的城",
+        "conditions": [
+          {
+            "story_at": [
+              "mirror",
+              "accounts"
+            ]
+          },
+          {
+            "not": {
+              "flag": "crest_storyteller"
+            }
+          }
+        ],
+        "effects": [
+          {
+            "flag": "crest_storyteller"
+          },
+          {
+            "relation": [
+              "storyteller",
+              3
+            ]
+          }
+        ],
+        "chronicle": "说书人一拍醒木：“有！有一出《沉城记》，说天上有条河，河边一座城，一夜之间连人带城沉到了天底下。没人爱听——这出戏没有结尾。”他压低声音，“我师父说，这戏原先是有结尾的，后来被人改了。”"
+      },
       {
         "id": "story",
         "label": "添一壶好茶，听他讲完古修洞府（5 灵石）",
@@ -1866,6 +1931,175 @@
       "“这条河以前不叫这个名字。”",
       "“铜片收好。不必问我，问水。”",
       "“有些地方，找到了未必是好事。”"
+    ]
+  },
+  "qin_yan": {
+    "name": "秦砚",
+    "title": "茶摊边摆阵图的阵修",
+    "attitude": "friendly",
+    "gender": "male",
+    "realm_text": "炼气后期",
+    "affiliation": "散修",
+    "age": 34,
+    "personality": "沉稳",
+    "standing": [
+      0,
+      2
+    ],
+    "talents": [
+      "chenzhuo",
+      "xixin",
+      "jixing"
+    ],
+    "description": "在云溪长街支个茶摊，摊上摆的却是阵图。替人看洞府的禁制、拆旧阵，收费公道。调阵墨缺凝露草时，会托熟人去松风岭采。",
+    "home": "market",
+    "spot": "street",
+    "talk_favor": 3,
+    "gift_favor": 3,
+    "talk": [
+      "“古修洞府里的机关，十个有八个是照着同一本阵谱布的。看懂了，就是一条路。”",
+      "“阵墨要凝露草调，松风岭的最好。”",
+      "“别信那些说‘一眼看破’的人，看阵靠的是一步一步数。”"
+    ],
+    "interactions": [
+      {
+        "id": "crest",
+        "label": "请他看看你描下的城徽",
+        "conditions": [
+          {
+            "story_at": [
+              "mirror",
+              "accounts"
+            ]
+          },
+          {
+            "not": {
+              "flag": "crest_qin"
+            }
+          }
+        ],
+        "effects": [
+          {
+            "flag": "crest_qin"
+          },
+          {
+            "relation": [
+              "qin_yan",
+              3
+            ]
+          }
+        ],
+        "chronicle": "秦砚盯着那枚城徽，从箱底翻出一本旧阵谱：“这纹样是个阵枢的记号，管的是极大的阵。可你看——”那一页之后，被人齐齐裁去了十几页，“我买来时就是这样。卖书的说，北边旧档里，这样的书多得是。”"
+      },
+      {
+        "id": "trap_lore",
+        "label": "送上三株凝露草，请他讲讲机关阵谱",
+        "once": true,
+        "conditions": [
+          {
+            "item_at_least": [
+              "ninglu_grass",
+              3
+            ]
+          },
+          {
+            "not": {
+              "flag": "trap_lore"
+            }
+          }
+        ],
+        "effects": [
+          {
+            "item": [
+              "ninglu_grass",
+              -3
+            ]
+          },
+          {
+            "flag": "trap_lore"
+          },
+          {
+            "relation": [
+              "qin_yan",
+              12
+            ]
+          },
+          {
+            "mind": 2
+          }
+        ],
+        "chronicle": "秦砚用凝露草调了一砚阵墨，在纸上画了半天：翻板、落石、暗弩，都从哪里起机，又从哪里能绕过去。往后进洞府，机关好认多了。"
+      }
+    ]
+  },
+  "fan_jiu": {
+    "name": "樊九",
+    "title": "松风岭的老猎户",
+    "attitude": "neutral",
+    "gender": "male",
+    "realm_text": "炼气中期",
+    "affiliation": "散修",
+    "age": 52,
+    "personality": "沉默寡言",
+    "standing": [
+      0,
+      1
+    ],
+    "talents": [
+      "liehu",
+      "jianbu",
+      "jinshen"
+    ],
+    "description": "在松风岭打了半辈子猎，修为平平，认兽踪却比谁都准。妖狼什么时候下山、走哪条沟，他看一眼地上的爪印就知道。",
+    "home": "ridge",
+    "spot": "pines",
+    "talk_favor": 2,
+    "gift_favor": 3,
+    "talk": [
+      "“狼走沟，蛇走坡。”",
+      "“爪印新不新，摸一摸泥就知道。”",
+      "“打不过的，就绕开。猎户活得久，靠的是这个。”"
+    ],
+    "interactions": [
+      {
+        "id": "beast_lore",
+        "label": "带上两枚狼牙，请他教认兽踪",
+        "once": true,
+        "conditions": [
+          {
+            "item_at_least": [
+              "wolf_fang",
+              2
+            ]
+          },
+          {
+            "not": {
+              "flag": "beast_lore"
+            }
+          }
+        ],
+        "effects": [
+          {
+            "item": [
+              "wolf_fang",
+              -2
+            ]
+          },
+          {
+            "flag": "beast_lore"
+          },
+          {
+            "relation": [
+              "fan_jiu",
+              12
+            ]
+          },
+          {
+            "mind": 2
+          }
+        ],
+        "chronicle": "樊九掂了掂狼牙，带你在岭上走了一整天，指给你看爪印、粪迹和蹭在树皮上的毛。往后路上撞见妖狼，你多半能先一步看出它在哪儿，绕过去。"
+      }
     ]
   }
 }

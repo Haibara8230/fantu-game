@@ -215,16 +215,16 @@ func _sparring() -> void:
 func _rampage() -> void:
 	var game := _game()
 	game.travel("wild")
-	_jump(game, 6, 3, 2)
-	check(game.has_flag("serpent_rampage") and game.journal_lines().any(func(line: String) -> bool: return line.contains("下令封谷")), "the serpent breaks out in the spring of year six")
+	_jump(game, 12, 3, 2)
+	check(game.has_flag("serpent_rampage") and game.journal_lines().any(func(line: String) -> bool: return line.contains("下令封谷")), "the serpent breaks out in the spring of year twelve")
 	game.travel("ridge")
 	check(game.player.location == "ridge", "people inside the sealed valley can still leave")
 	check(game.travel("wild").contains("已被封锁") and game.path_to("wild").is_empty() and game.content.find_path("sect", "ruin", {"found_ruin": true, "serpent_rampage": true}).is_empty(), "nobody can enter, nor pass through to the ruin")
-	_jump(game, 9, 3, 2)
+	_jump(game, 15, 3, 2)
 	check(not game.has_flag("serpent_rampage") and game.has_flag("serpent_slain") and not game.path_to("wild").is_empty(), "three years later the elders end it and the valley reopens")
 	var hero := _game()
 	hero.world.flags.serpent_slain = true
-	_jump(hero, 6, 3, 2)
+	_jump(hero, 12, 3, 2)
 	check(not hero.has_flag("serpent_rampage") and hero.favor("shen_mo") == 10 and hero.journal_lines().any(func(line: String) -> bool: return line.contains("安然无恙")), "slaying the serpent beforehand changes history")
 
 func _rumors() -> void:

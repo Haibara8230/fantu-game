@@ -18,7 +18,7 @@ static func candidates(s) -> Array[Dictionary]:
 		found.append({"key": "ruin", "id": "rumor_ruin", "args": {}})
 	if s.has_flag("serpent_rampage"):
 		found.append({"key": "sealed", "id": "rumor_sealed", "args": {}})
-	elif not s.has_flag("serpent_slain") and day < Calendar.to_day(6, 3, 1):
+	elif not s.has_flag("serpent_slain") and day < Calendar.to_day(12, 3, 1):
 		found.append({"key": "serpent", "id": "rumor_serpent", "args": {}})
 	var tournament: Dictionary = Events.next_window(s.content.events.qianlong_entry, day)
 	if not tournament.is_empty() and int(tournament.from) - day <= 2 * Calendar.DAYS_PER_YEAR:

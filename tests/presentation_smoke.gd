@@ -138,15 +138,15 @@ func _run() -> void:
 	_step("progressing to foundation")
 	main.run(func() -> String: return main.session.travel("sect"))
 	# Retreat while the mind is fresh; otherwise spar (which tempers the mind), gather, which eases it,
-	# and buy a 破障丹 for a bottleneck (as in core_smoke), so the serpent is met before it breaks out.
+	# and buy a 破障丹 for a bottleneck (as in core_smoke).
 	var game = main.session
 	var rounds := 0
-	while game.player.xp < 2000 and rounds < 300:
+	while game.player.xp < 8000 and rounds < 600:
 		rounds += 1
 		if game.at_bottleneck() and game.item_count("pozhang_pill") > 0:
 			main.run(func() -> String: return game.use_item("pozhang_pill"))
 		elif not game.at_bottleneck() and game.retreat_efficiency() >= 100 and game.mind_percent() >= 100:
-			main.run(func() -> String: return game.cultivate(90))
+			main.run(func() -> String: return game.cultivate(game.retreat_most()))
 		else:
 			for bout: int in 2:
 				main.run(func() -> String: return game.start_battle("disciple"))
@@ -178,6 +178,12 @@ func _run() -> void:
 	# The breakthrough's rolls are fixed: no 心魔, and well under the odds.
 	main.session.fortune = {"demon": 0.99, "breakthrough": 0.0}
 	main.run(func() -> String: return main.session.act("breakthrough"))
+	# Twenty years on the serpent has had its day; the boss is staged as if it still waited at the spring.
+	for flag: String in ["serpent_rampage", "serpent_slain"]:
+		main.session.world.flags.erase(flag)
+	# Words from the years of the climb (the hall's 筑基之备) are read first.
+	while not main.story.is_empty():
+		main.close_story()
 	main.run(func() -> String: return main.session.travel("wild"))
 	main.run(func() -> String: return main.session.start_battle("serpent"))
 	_step("serpent duel started")

@@ -154,6 +154,9 @@ func new_game(character_name: String = "无名", seed_value: int = -1, roots: Ar
 	# Skipping the opening counts as having lived it: what follows it (a sect's storylines) may begin.
 	if start == "free":
 		Storylines.mark_done(self, str(content.rules.opening.story))
+		# ...and leaves what the opening hands on (温照衡's note): rules.opening.follow.
+		for story_id: Variant in content.rules.opening.get("follow", []):
+			Storylines.start(self, str(story_id))
 	Storylines.update(self)
 	Events.check_location(self)
 	changed.emit()

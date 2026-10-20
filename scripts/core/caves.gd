@@ -124,7 +124,8 @@ static func enter(s, cave_id: String, room_id: String) -> String:
 	if target.has("trap"):
 		var trap: Dictionary = target.trap
 		var name := str(_pick(s, cave_id, room_id + ":trap", trap.names))
-		if s.sense() >= int(trap.sense):
+		# 秦砚's 阵谱 (trap_lore) reads a trap as a sharper 神识 would.
+		if s.sense() + (int(s.content.rules.get("trap_lore", 0)) if s.has_flag("trap_lore") else 0) >= int(trap.sense):
 			texts.append(s.log_event("cave_trap_seen", args.merged({"trap": name})))
 		else:
 			var hurt: int = s.world_rng.randi_range(int(trap.damage[0]), int(trap.damage[1]))

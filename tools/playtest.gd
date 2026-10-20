@@ -4,7 +4,8 @@ extends SceneTree
 ## retreats, the 筑基丹 and the breakthrough, and some years after. Everything the player would read is
 ## printed with the date, and each action is charged the seconds a player would spend on it, to judge
 ## pacing. Only rules are used; no window is opened.
-## Usage: godot --headless --path . --script res://tools/playtest.gd [-- <seed> <years> [random|poor|ordinary|good] [cultivate|social|explore]]
+## Usage: godot --headless --path . --script res://tools/playtest.gd [-- <seed> <years> [random|poor|ordinary|good] [cultivate|social|explore] [sect|wanderer]]
+## The route: join 青云 after the opening (sect), or stay a 散修 who lives by 云溪's inn and rents a lodge (wanderer).
 const Session = preload("res://scripts/core/session.gd")
 const Goals = preload("res://scripts/ui/goals.gd")
 const Calendar = preload("res://scripts/core/calendar.gd")
@@ -21,6 +22,7 @@ var marks := {}
 var reported_year := -1
 var log_lines := 0
 var strategy := "cultivate"
+var route := "sect"
 var decisions := 0
 var milestone_days := {}
 var losses := 0
@@ -42,6 +44,11 @@ func _initialize() -> void:
 	var born: Dictionary = s.roll_talents(rng, roots)
 	var opening := str(args[2]) if args.size() > 2 else "random"
 	strategy = str(args[3]) if args.size() > 3 else "cultivate"
+	route = str(args[4]) if args.size() > 4 else "sect"
+	if not route in ["sect", "wanderer"]:
+		printerr("Route must be sect or wanderer")
+		quit(1)
+		return
 	if not strategy in ["cultivate", "social", "explore"]:
 		printerr("Strategy must be cultivate, social or explore")
 		quit(1)
@@ -57,7 +64,7 @@ func _initialize() -> void:
 	_say("START", "灵根 %s（%s）· 天赋 %s · 缺陷 %s · 资质 %s" % [s.root_title(), ", ".join(roots), ", ".join(s.player.talents), ", ".join(s.player.flaws), str(s.aptitude().get("name", s.aptitude()))])
 	_chronicle_since(0)
 	var guard := 0
-	while s.ended.is_empty() and int(s.world.day) < years * Calendar.DAYS_PER_YEAR and guard < 4000:
+	while s.ended.is_empty() and int(s.world.day) < years * Calendar.DAYS_PER_YEAR and guard < 20000:
 		guard += 1
 		decisions = guard
 		_goals()
@@ -68,7 +75,7 @@ func _initialize() -> void:
 	_say("END", "%s · %s · 灵石 %d · 现实约 %d 分钟、%d 次点击、%d 场斗法 · 结局 %s" % [s.time_name(), s.realm_name(), int(s.player.stones), seconds / 60, clicks, duels, str(s.ended.get("kind", "无"))])
 	for key: String in marks:
 		print("MARK %s: %s" % [key, marks[key]])
-	print("PLAYTEST_RESULT ", JSON.stringify({"seed":seed_value,"opening":opening,"strategy":strategy,"day":int(s.world.day),"realm":int(s.player.realm),"stones":int(s.player.stones),"estimated_minutes":float(seconds)/60.0,"clicks":clicks,"duels":duels,"steps":guard,"guard_exhausted":guard>=4000,"milestone_days":milestone_days,"losses":losses,"breakthrough_failures":breakthrough_failures,"early_serpent":s.Storylines.deed_count(s,"win:serpent")>0,"aftermath":s.story_state("valley_aftermath"),"recovery":s.story_state("valley_recovery")}))
+	print("PLAYTEST_RESULT ", JSON.stringify({"seed":seed_value,"opening":opening,"strategy":strategy,"route":route,"day":int(s.world.day),"realm":int(s.player.realm),"stones":int(s.player.stones),"estimated_minutes":float(seconds)/60.0,"clicks":clicks,"duels":duels,"steps":guard,"guard_exhausted":guard>=4000,"milestone_days":milestone_days,"losses":losses,"breakthrough_failures":breakthrough_failures,"early_serpent":s.Storylines.deed_count(s,"win:serpent")>0,"aftermath":s.story_state("valley_aftermath"),"recovery":s.story_state("valley_recovery")}))
 	quit(0)
 
 # --- Reporting ------------------------------------------------------------------------------------
@@ -145,8 +152,9 @@ func _step() -> void:
 		if not _bottleneck():
 			_outing()
 		return
-	if int(s.player.realm) >= 1:
-		_mark("筑基")
+	for realm: int in range(1, s.content.realms.size()):
+		if int(s.player.realm) >= realm:
+			_mark(str(s.content.realm(realm).name))
 	if s.Storylines.deed_count(s, "win:serpent") > 0:
 		_mark("除蟒")
 	if _opening():
@@ -162,6 +170,10 @@ func _step() -> void:
 	if _bottleneck():
 		return
 	if _learn():
+		return
+	if _settle():
+		return
+	if _earn():
 		return
 	if decisions % 7 == 0 and _preferred_outing():
 		return
@@ -208,12 +220,21 @@ func _duel() -> void:
 
 ## Hurt: a quiet room or an inn where there is one, else sitting still to 调息 where the player stands.
 func _rest() -> void:
-	if s.available_here("rest") or s.available_here("inn_rest"):
+	# An inn the purse cannot pay for: 调息 where one stands.
+	var broke := not s.available_here("rest") and s.available_here("inn_rest") and int(s.player.stones) < int(s.content.rules.inn_price)
+	if (s.available_here("rest") or s.available_here("inn_rest")) and not broke:
 		_do("act", "REST", s.act("rest" if s.available_here("rest") else "inn_rest"))
 	elif float(s.content.rules.get("field_rest", 0.0)) > 0.0:
 		_do("act", "WAIT", s.wait(10))
 	else:
-		_go("sect")
+		_go(_home())
+
+## Where one retreats and breaks through: the sect's chamber, or 云溪's inn and lodge for a 散修.
+func _home() -> String:
+	return "sect" if s.Sect.member(s) else "market"
+
+func _sealed(place: String) -> bool:
+	return s.content.location_sealed(place, s.world.flags)
 
 func _go(place: String) -> bool:
 	if str(s.player.location) == place:
@@ -232,7 +253,7 @@ func _opening() -> bool:
 			return true
 		_do("act", "OPENING", s.wait(1))
 		return true
-	if s.affiliation().is_empty() and s.has_flag("rushi_done"):
+	if route == "sect" and s.affiliation().is_empty() and s.has_flag("rushi_done"):
 		if _go("sect"):
 			return true
 		_do("act", "JOIN", s.join_sect())
@@ -240,14 +261,23 @@ func _opening() -> bool:
 	return false
 
 func _story() -> bool:
+	if _ask_here():
+		return true
 	for goal: Dictionary in Goals.story_goals(s):
 		var story_id := str(goal.id).trim_prefix("story:")
 		var step: Dictionary = s.story_step(story_id)
+		# 温照衡's note: be at the ferry on a full moon (the 15th) and wait for the night.
+		if story_id == "mirror" and str(step.get("id", "")) == "tianhe" and Calendar.day_of_month(int(s.world.day)) >= 10:
+			if _go("ferry"):
+				return true
+			_do("act", "WAIT", s.wait(1))
+			return true
 		var place := str(step.get("place", s.player.location))
 		var requires_person := false
 		for person_id: String in s.content.people:
 			for interaction: Dictionary in s.content.people[person_id].get("interactions", []):
-				if interaction.get("conditions", []).any(func(c: Dictionary) -> bool: return c.has("story_at") and c.story_at == [story_id, str(step.id)]):
+				# Only someone whose part can be played now: what they ask is carried, not done before.
+				if interaction.get("conditions", []).any(func(c: Dictionary) -> bool: return c.has("story_at") and c.story_at == [story_id, str(step.id)]) and interaction.get("conditions", []).all(func(c: Dictionary) -> bool: return s.Events.met(s, c)):
 					requires_person = true
 					var whereabouts: String = s.npc_location(person_id)
 					if not whereabouts.is_empty():
@@ -258,6 +288,9 @@ func _story() -> bool:
 				var grounds: Array = foe.get("locations", [])
 				if not grounds.is_empty() and not place in grounds:
 					place = str(grounds[0])
+		# A sealed place (落霞谷 while the serpent is loose) waits for its reopening.
+		if _sealed(place):
+			continue
 		var needs: Dictionary = s.Storylines.required_items(s, story_id)
 		for item_id: String in needs:
 			if s.item_count(item_id) < int(needs[item_id]) and str(s.content.item(item_id).get("category", "")) == "herb":
@@ -316,6 +349,23 @@ func _story() -> bool:
 				return true
 	return false
 
+## Something a storyline asks of a person present: asked at once.
+func _ask_here() -> bool:
+	for person_id: String in s.present_npcs():
+		for option: Dictionary in s.npc_options(person_id):
+			if option.get("reason", "").is_empty() and not str(option.id) in EVERYDAY and _story_option(option) and _advances_story(person_id, str(option.id)):
+				_charge("talk")
+				_say("ASK", "%s · %s → %s" % [s.person(person_id).name, option.label, s.interact(person_id, str(option.id))])
+				return true
+	return false
+
+## Whether an interaction is a storyline's step (its conditions name an active step).
+func _advances_story(person_id: String, option_id: String) -> bool:
+	for interaction: Dictionary in s.content.people[person_id].get("interactions", []):
+		if str(interaction.id) == option_id:
+			return interaction.get("conditions", []).any(func(c: Dictionary) -> bool: return c.has("story_at") and s.story_at(str(c.story_at[0]), str(c.story_at[1])))
+	return false
+
 ## Whether the things a step's hand-in asks are carried (the 凝露草 for 许清和).
 func _carrying_for(story_id: String, step: Dictionary) -> bool:
 	var needs: Dictionary = s.Storylines.required_items(s, story_id)
@@ -324,7 +374,8 @@ func _carrying_for(story_id: String, step: Dictionary) -> bool:
 			if s.item_count(item_id) < int(needs[item_id]):
 				return false
 		return true
-	return step.get("done", []).any(func(c: Dictionary) -> bool: return c.has("at_location"))
+	var done: Array = step.get("done", [])
+	return done.any(func(c: Dictionary) -> bool: return c.has("at_location")) and done.all(func(c: Dictionary) -> bool: return not c.has("item_at_least") or s.item_count(str(c.item_at_least[0])) >= int(c.item_at_least[1]))
 
 ## An interaction a storyline step offers (not a duel picked for its own sake).
 func _story_option(option: Dictionary) -> bool:
@@ -368,14 +419,14 @@ func _commissions() -> bool:
 		match str(quest.kind):
 			"gather", "beast_parts":
 				if str(quest.kind) == "beast_parts":
-					if _go("wild"):
+					if _go("ridge" if _sealed("wild") else "wild"):
 						return true
 					_do("act", "HUNT", s.act("hunt"))
 					return true
 				_gather()
 				return true
 			"hunt":
-				if _go("wild"):
+				if _go("ridge" if _sealed("wild") else "wild"):
 					return true
 				_do("act", "HUNT", s.act("hunt"))
 				return true
@@ -385,7 +436,7 @@ func _commissions() -> bool:
 
 func _learn() -> bool:
 	# A 心法 from the hall once settled in; and 参悟 of the arts in use when a few days suffice.
-	if s.player.methods.is_empty() and s.has_flag("rushi_done") and int(s.world.day) > 100:
+	if s.player.methods.is_empty() and s.Sect.member(s) and int(s.world.day) > 100:
 		if _go("sect"):
 			return true
 		for technique_id: String in s.teachings():
@@ -404,6 +455,34 @@ func _learn() -> bool:
 			return true
 	return false
 
+## A 散修 whose purse would not pay two months of the inn goes out to earn: a commission from the
+## board, else herbs gathered and sold.
+func _earn() -> bool:
+	if s.Sect.member(s) or not s.has_flag("rushi_done") or s.has_flag("yunxi_abode"):
+		return false
+	var inn: Dictionary = {}
+	for spot: Dictionary in s.content.locations[_home()].spots:
+		if spot.has("lodging"):
+			inn = spot.lodging
+	if inn.is_empty() or int(s.player.stones) >= int(inn.rent) * 2:
+		return false
+	if _commissions():
+		return true
+	_outing()
+	return true
+
+## A 散修 with stones to spare leases 云溪's 溪畔竹舍: no rent by the month, a whole retreat's yield.
+func _settle() -> bool:
+	if s.Sect.member(s) or not s.has_flag("rushi_done"):
+		return false
+	var lease: Dictionary = s.content.locations.market.get("lease", {})
+	if lease.is_empty() or s.has_flag(str(lease.flag)) or int(s.player.stones) < int(lease.price) + 60:
+		return false
+	if _go("market"):
+		return true
+	_do("act", "LEASE", s.take_lease())
+	return true
+
 ## Out of the room for a while: gather and sell, spar, take a commission — the mind and fatigue recover.
 func _outing() -> void:
 	if s.herb_count() >= 8:
@@ -413,11 +492,12 @@ func _outing() -> void:
 
 func _retreat() -> void:
 	if not s.available_here("cultivate"):
-		_go("sect")
+		_go(_home())
 		return
 	if s.at_xp_cap():
 		_outing()
 		return
+	# A room paid by the month: out to earn when the purse covers less than a month.
 	_charge("retreat")
 	_say("RETREAT", s.cultivate(s.retreat_most()))
 
@@ -444,7 +524,14 @@ func _breakthrough() -> bool:
 	var pill: String = s.Breakthrough.pill_of(s)
 	var has_pill: bool = pill.is_empty() or s.pill_count(pill) >= int(next.get("pills", 1)) or not s.breakthrough_treasures().is_empty()
 	if has_pill:
-		if _go("sect"):
+		if _go(_home()):
+			return true
+		# The room for the days of the attempt is paid first: out to earn when the purse falls short.
+		var blocked: String = s.breakthrough_block(plan)
+		if not blocked.is_empty():
+			_say("SHORT", blocked)
+			if not _commissions():
+				_outing()
 			return true
 		_charge("breakthrough")
 		var odds: Dictionary = s.breakthrough_odds(plan)

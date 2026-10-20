@@ -82,10 +82,12 @@
           {"kind": "equipment", "count": 2, "tiers": [1, 2]}
         ]
       },
+      "lease": {"flag": "yunxi_abode", "name": "溪畔竹舍", "days": 360, "price": 120},
       "spots": [
         {"id": "street", "tag": [0.46, 0.5], "name": "长街", "description": "丹铺、器铺与散修地摊挤满长街。丹铺明码标价。", "actions": ["shop", "forge", "inquire", "commissions"]},
         {"id": "pharmacy", "tag": [0.27, 0.38], "name": "云溪药铺", "description": "沈墨的药铺，收购各色灵草，出价公道。后堂有一口药炉，熟客可付些灵石借用，沈墨还会在旁提点。", "actions": ["sell", "alchemy"]},
-        {"id": "inn", "tag": [0.67, 0.6], "name": "云来客栈", "description": "长街尽头的老字号客栈，来赶集会的散修多在这里落脚。后院有几间静房按月出租，可闭关、领悟与突破。", "actions": ["inn_rest", "cultivate", "breakthrough"], "lodging": {"rate": 0.8, "rent": 8}}
+        {"id": "inn", "tag": [0.67, 0.6], "name": "云来客栈", "description": "长街尽头的老字号客栈，来赶集会的散修多在这里落脚。后院有几间静房按月出租，可闭关、领悟与突破。", "actions": ["inn_rest", "cultivate", "breakthrough", "lease"], "lodging": {"rate": 0.8, "rent": 8}},
+        {"id": "abode", "tag": [0.87, 0.63], "name": "溪畔竹舍", "description": "云来客栈后头临溪的几间竹舍，掌柜按年出租。溪水底下有一缕灵脉，比客栈静房清净得多，可闭关、领悟、静养与突破。", "actions": ["cultivate", "rest", "breakthrough"], "requires_flag": "yunxi_abode", "breakthrough_bonus": 5}
       ]
     },
     "ridge": {
@@ -170,7 +172,7 @@
         {"id": "wanbao", "tag": [0.42, 0.42], "name": "万宝楼", "description": "万宝楼天南分号，三层朱楼，灵器料与丹药明码标价，也收各色灵材；楼前的告示板上贴着各家的委托，不问出身。", "actions": ["shop", "sell", "forge", "commissions", "series"]},
         {"id": "teahouse", "tag": [0.6, 0.36], "name": "听涛茶楼", "description": "往来的行商与各宗弟子都爱在这里歇脚，天南的消息多半从这里传开。", "actions": ["inquire"]},
         {"id": "broker", "tag": [0.66, 0.6], "name": "牙行", "description": "替人赁屋、作保的牙行。坊外赤枫岭脚下有几间石屋，引了一缕地脉灵气，赁下便可闭关静养。", "actions": ["lease"]},
-        {"id": "abode", "tag": [0.82, 0.3], "name": "坊外石屋", "description": "赁来的石屋，门前一株老枫，屋里一张蒲团，地上引了一缕温热的地脉灵气。", "actions": ["cultivate", "rest", "breakthrough"], "requires_flag": "nanming_abode"}
+        {"id": "abode", "tag": [0.82, 0.3], "name": "坊外石屋", "description": "赁来的石屋，门前一株老枫，屋里一张蒲团，地上引了一缕温热的地脉灵气。", "actions": ["cultivate", "rest", "breakthrough"], "requires_flag": "nanming_abode", "breakthrough_bonus": 5}
       ]
     },
     "chifeng": {
@@ -824,7 +826,8 @@
         }, "guard_orbs": 1, "foe_draw": [5, 5, 5, 5, 5], "generates": {"metal": "water", "water": "wood", "wood": "fire", "fire": "earth", "earth": "metal"},
         "starter": {"metal": ["sword", "seal_metal"], "wood": ["vine", "seal_wood"], "water": ["water", "seal_water"], "fire": ["flame_bolt", "seal_fire"], "earth": ["earth", "seal_earth"]}},
     "lineage": {"home": "qingyun", "study_days": 30},
-    "opening": {"location": "town", "story": "rushi", "keepsake": "jingbei_tongpian"},
+    "opening": {"location": "town", "story": "rushi", "keepsake": "jingbei_tongpian", "follow": ["mirror"]},
+    "trap_lore": 10,
     "letters": {"kept": 60},
     "requests": {"period_days": 180, "chance": 0.25, "items": ["huichun_grass", "ninglu_grass", "chiyan_flower", "huiqi_pill", "liaoshang_pill"], "count": [1, 3], "favor": 12, "mind": 2, "reward_scale": 1.5},
     "inquire": {"days": 1, "price": 2, "repeat_after_days": 90},
@@ -847,14 +850,14 @@
       "lifespan_years": 120,
       "retreat_step_days": 10,
       "wait_options": [1, 10],
-      "fresh_days": 180,
+      "fresh_days": 360,
       "stages": [
-        {"name": "初期", "xp": 0, "max_hp": 90, "max_qi": 30, "attack_bonus": 0, "sense": 10, "mind": 0, "retreat_days": 90},
-        {"name": "中期", "xp": 500, "max_hp": 100, "max_qi": 34, "attack_bonus": 2, "sense": 12, "mind": 6, "retreat_days": 120},
-        {"name": "后期", "xp": 1000, "max_hp": 110, "max_qi": 38, "attack_bonus": 4, "sense": 14, "mind": 14, "retreat_days": 150},
-        {"name": "圆满", "xp": 1500, "max_hp": 120, "max_qi": 42, "attack_bonus": 6, "sense": 16, "mind": 24, "retreat_days": 180}
+        {"name": "初期", "xp": 0, "max_hp": 90, "max_qi": 30, "attack_bonus": 0, "sense": 10, "mind": 0, "retreat_days": 180},
+        {"name": "中期", "xp": 2000, "max_hp": 100, "max_qi": 34, "attack_bonus": 2, "sense": 12, "mind": 6, "retreat_days": 240},
+        {"name": "后期", "xp": 4000, "max_hp": 110, "max_qi": 38, "attack_bonus": 4, "sense": 14, "mind": 14, "retreat_days": 300},
+        {"name": "圆满", "xp": 6000, "max_hp": 120, "max_qi": 42, "attack_bonus": 6, "sense": 16, "mind": 24, "retreat_days": 360}
       ],
-      "breakthrough": {"xp": 2000, "pills": 1, "pill": "foundation_pill"}
+      "breakthrough": {"xp": 8000, "pills": 1, "pill": "foundation_pill"}
     },
     {
       "id": "foundation",
@@ -863,19 +866,19 @@
       "lifespan_years": 220,
       "retreat_step_days": 30,
       "wait_options": [1, 10, 30, 90],
-      "fresh_days": 540,
+      "fresh_days": 1080,
       "stages": [
-        {"name": "初期", "xp": 0, "max_hp": 140, "max_qi": 50, "attack_bonus": 8, "sense": 30, "mind": 36, "retreat_days": 360},
-        {"name": "中期", "xp": 1500, "max_hp": 155, "max_qi": 55, "attack_bonus": 10, "sense": 33, "mind": 50, "retreat_days": 540},
-        {"name": "后期", "xp": 3000, "max_hp": 170, "max_qi": 60, "attack_bonus": 12, "sense": 36, "mind": 66, "retreat_days": 720},
-        {"name": "圆满", "xp": 4500, "max_hp": 185, "max_qi": 65, "attack_bonus": 14, "sense": 40, "mind": 84, "retreat_days": 900}
+        {"name": "初期", "xp": 0, "max_hp": 140, "max_qi": 50, "attack_bonus": 8, "sense": 30, "mind": 36, "retreat_days": 720},
+        {"name": "中期", "xp": 7500, "max_hp": 155, "max_qi": 55, "attack_bonus": 10, "sense": 33, "mind": 50, "retreat_days": 1080},
+        {"name": "后期", "xp": 15000, "max_hp": 170, "max_qi": 60, "attack_bonus": 12, "sense": 36, "mind": 66, "retreat_days": 1440},
+        {"name": "圆满", "xp": 22500, "max_hp": 185, "max_qi": 65, "attack_bonus": 14, "sense": 40, "mind": 84, "retreat_days": 1800}
       ],
-      "xp_cap": 6000,
-      "breakthrough": {"xp": 6000, "odds": 10}
+      "xp_cap": 30000,
+      "breakthrough": {"xp": 30000, "odds": 10}
     },
-    {"id": "golden_core", "name": "金丹", "breakthrough_text": "丹田里的灵液一圈圈收拢、压实，最后凝成一枚浑圆的金丹，缓缓转动。周身灵力随之一变，再不是从前那般散漫，而是如臂使指。", "lifespan_years": 400, "retreat_step_days": 30, "wait_options": [1, 10, 30, 90], "fresh_days": 720, "stages": [{"name": "初期", "xp": 0, "max_hp": 230, "max_qi": 80, "attack_bonus": 18, "sense": 60, "mind": 110, "retreat_days": 1080}, {"name": "中期", "xp": 4000, "max_hp": 250, "max_qi": 88, "attack_bonus": 21, "sense": 66, "mind": 135, "retreat_days": 1440}, {"name": "后期", "xp": 8000, "max_hp": 270, "max_qi": 96, "attack_bonus": 24, "sense": 72, "mind": 160, "retreat_days": 1800}, {"name": "圆满", "xp": 12000, "max_hp": 290, "max_qi": 104, "attack_bonus": 27, "sense": 80, "mind": 190, "retreat_days": 2160}], "xp_cap": 16000, "breakthrough": {"xp": 16000, "odds": 0}},
-    {"id": "nascent_soul", "name": "元婴", "breakthrough_text": "金丹轰然一震，裂开一道细纹，纹中透出一点灵光。灵光渐渐长成一个寸许的小人，眉眼与你一般无二，盘坐在丹田里，睁开了眼。", "lifespan_years": 700, "retreat_step_days": 90, "wait_options": [1, 10, 30, 90, 360], "fresh_days": 1080, "stages": [{"name": "初期", "xp": 0, "max_hp": 360, "max_qi": 130, "attack_bonus": 32, "sense": 120, "mind": 230, "retreat_days": 2520}, {"name": "中期", "xp": 10000, "max_hp": 390, "max_qi": 142, "attack_bonus": 36, "sense": 132, "mind": 270, "retreat_days": 2880}, {"name": "后期", "xp": 20000, "max_hp": 420, "max_qi": 154, "attack_bonus": 40, "sense": 144, "mind": 310, "retreat_days": 3240}, {"name": "圆满", "xp": 30000, "max_hp": 450, "max_qi": 166, "attack_bonus": 44, "sense": 160, "mind": 360, "retreat_days": 3600}], "xp_cap": 40000, "breakthrough": {"xp": 40000, "odds": -10}},
-    {"id": "deity", "name": "化神", "breakthrough_text": "元婴睁眼的那一刻，你忽然能感到百里之外的一片落叶。神识不再拘于一身，天地间的灵气像潮水一样，随你的呼吸起落。", "lifespan_years": 1200, "retreat_step_days": 90, "wait_options": [1, 10, 30, 90, 360], "fresh_days": 1440, "stages": [{"name": "初期", "xp": 0, "max_hp": 560, "max_qi": 200, "attack_bonus": 50, "sense": 200, "mind": 420, "retreat_days": 3960}, {"name": "中期", "xp": 25000, "max_hp": 600, "max_qi": 214, "attack_bonus": 54, "sense": 220, "mind": 470, "retreat_days": 4320}, {"name": "后期", "xp": 50000, "max_hp": 640, "max_qi": 228, "attack_bonus": 58, "sense": 240, "mind": 520, "retreat_days": 4680}, {"name": "圆满", "xp": 75000, "max_hp": 680, "max_qi": 242, "attack_bonus": 62, "sense": 260, "mind": 580, "retreat_days": 5040}], "xp_cap": 100000}
+    {"id": "golden_core", "name": "金丹", "breakthrough_text": "丹田里的灵液一圈圈收拢、压实，最后凝成一枚浑圆的金丹，缓缓转动。周身灵力随之一变，再不是从前那般散漫，而是如臂使指。", "lifespan_years": 400, "retreat_step_days": 30, "wait_options": [1, 10, 30, 90], "fresh_days": 1440, "stages": [{"name": "初期", "xp": 0, "max_hp": 230, "max_qi": 80, "attack_bonus": 18, "sense": 60, "mind": 110, "retreat_days": 2160}, {"name": "中期", "xp": 20000, "max_hp": 250, "max_qi": 88, "attack_bonus": 21, "sense": 66, "mind": 135, "retreat_days": 2880}, {"name": "后期", "xp": 40000, "max_hp": 270, "max_qi": 96, "attack_bonus": 24, "sense": 72, "mind": 160, "retreat_days": 3600}, {"name": "圆满", "xp": 60000, "max_hp": 290, "max_qi": 104, "attack_bonus": 27, "sense": 80, "mind": 190, "retreat_days": 4320}], "xp_cap": 80000, "breakthrough": {"xp": 80000, "odds": 0}},
+    {"id": "nascent_soul", "name": "元婴", "breakthrough_text": "金丹轰然一震，裂开一道细纹，纹中透出一点灵光。灵光渐渐长成一个寸许的小人，眉眼与你一般无二，盘坐在丹田里，睁开了眼。", "lifespan_years": 700, "retreat_step_days": 90, "wait_options": [1, 10, 30, 90, 360], "fresh_days": 2160, "stages": [{"name": "初期", "xp": 0, "max_hp": 360, "max_qi": 130, "attack_bonus": 32, "sense": 120, "mind": 230, "retreat_days": 5040}, {"name": "中期", "xp": 50000, "max_hp": 390, "max_qi": 142, "attack_bonus": 36, "sense": 132, "mind": 270, "retreat_days": 5760}, {"name": "后期", "xp": 100000, "max_hp": 420, "max_qi": 154, "attack_bonus": 40, "sense": 144, "mind": 310, "retreat_days": 6480}, {"name": "圆满", "xp": 150000, "max_hp": 450, "max_qi": 166, "attack_bonus": 44, "sense": 160, "mind": 360, "retreat_days": 7200}], "xp_cap": 200000, "breakthrough": {"xp": 200000, "odds": -10}},
+    {"id": "deity", "name": "化神", "breakthrough_text": "元婴睁眼的那一刻，你忽然能感到百里之外的一片落叶。神识不再拘于一身，天地间的灵气像潮水一样，随你的呼吸起落。", "lifespan_years": 1200, "retreat_step_days": 90, "wait_options": [1, 10, 30, 90, 360], "fresh_days": 2880, "stages": [{"name": "初期", "xp": 0, "max_hp": 560, "max_qi": 200, "attack_bonus": 50, "sense": 200, "mind": 420, "retreat_days": 7920}, {"name": "中期", "xp": 125000, "max_hp": 600, "max_qi": 214, "attack_bonus": 54, "sense": 220, "mind": 470, "retreat_days": 8640}, {"name": "后期", "xp": 250000, "max_hp": 640, "max_qi": 228, "attack_bonus": 58, "sense": 240, "mind": 520, "retreat_days": 9360}, {"name": "圆满", "xp": 375000, "max_hp": 680, "max_qi": 242, "attack_bonus": 62, "sense": 260, "mind": 580, "retreat_days": 10080}], "xp_cap": 500000}
   ],
   "routes": [
     {"between": ["sect", "town"], "days": 2, "danger": 0},
@@ -912,7 +915,7 @@
     "search_ruin": 5,
     "road_recovery": 1
   },
-  "world_flags": ["rushi_inn", "lu_owes", "rushi_gate", "rushi_fair", "rushi_auction", "mirror_seen", "rushi_qianlong", "rushi_banquet", "heard_qingyun_recruit", "tianhe_seen", "ascension_open", "calamity", "calamity_turned", "chenxia_open", "chenxia_puppet_down", "chenxia_remnant_down", "ruin_den_cleared", "serpent_slain", "heard_auction_rumor", "found_ruin", "ruin_cleared", "helped_wanderer", "serpent_rampage", "azhi_promised", "azhi_mourned", "rushi_done", "peddler_friend", "serpent_weakened", "spirit_eye_found", "tiannan_known", "dihuo_lizard_down", "hanjin_heard", "bounty_turned_in", "bounty_exposed", "bounty_let_go", "nanming_abode", "valley_patron", "azhi_livelihood", "valley_remembered", "azhi_route_ready", "azhi_route_recipe", "medicine_relief", "medicine_order", "exam_patrol", "exam_alchemy", "exam_mediation", "exam_azhi_heard", "exam_shen_heard", "south_gate_known", "south_road_known", "furnace_review_open", "furnace_evidence", "furnace_trace", "furnace_witness"],
+  "world_flags": ["slope_settled", "herb_helped", "herb_asked", "slope_common", "slope_leased", "spring_warned", "spring_seen", "crest_boatman", "crest_storyteller", "crest_qin", "crest_puzzled", "yunxi_abode", "trap_lore", "beast_lore", "storm_shrine_seen", "river_steps_seen", "rushi_inn", "lu_owes", "rushi_gate", "rushi_fair", "rushi_auction", "mirror_seen", "rushi_qianlong", "rushi_banquet", "heard_qingyun_recruit", "tianhe_seen", "ascension_open", "calamity", "calamity_turned", "chenxia_open", "chenxia_puppet_down", "chenxia_remnant_down", "ruin_den_cleared", "serpent_slain", "heard_auction_rumor", "found_ruin", "ruin_cleared", "helped_wanderer", "serpent_rampage", "azhi_promised", "azhi_mourned", "rushi_done", "peddler_friend", "serpent_weakened", "spirit_eye_found", "tiannan_known", "dihuo_lizard_down", "hanjin_heard", "bounty_turned_in", "bounty_exposed", "bounty_let_go", "nanming_abode", "valley_patron", "azhi_livelihood", "valley_remembered", "azhi_route_ready", "azhi_route_recipe", "medicine_relief", "medicine_order", "exam_patrol", "exam_alchemy", "exam_mediation", "exam_azhi_heard", "exam_shen_heard", "south_gate_known", "south_road_known", "furnace_review_open", "furnace_evidence", "furnace_trace", "furnace_witness"],
   "sects": {
     "wanderer": {
       "name": "散修",

@@ -46,9 +46,9 @@ func _goals() -> void:
 	var filled := func() -> bool: return Goals.current(game).all(func(goal: Dictionary) -> bool: return not goal.text.contains("{"))
 	check(ids.call() == ["tournament", "foundation_xp", "serpent"] and filled.call(), "a new life starts with 潜龙会 two months off, a nearby cultivation goal, then the distant serpent")
 	game.world.flags.rushi_done = true
-	game.player.xp = 500
-	check(ids.call()[0] == "bottleneck" and not "foundation_xp" in ids.call(), "a bottleneck comes first and hides the plain xp goal")
 	game.player.xp = 2000
+	check(ids.call()[0] == "bottleneck" and not "foundation_xp" in ids.call(), "a bottleneck comes first and hides the plain xp goal")
+	game.player.xp = 8000
 	game.player.stage = 3
 	check("foundation_pill" in ids.call() and Goals.current(game)[ids.call().find("foundation_pill")].text.contains("280 灵石"), "enough xp: the pill is next, with its price")
 	game.set_item_count("foundation_pill", 1)
@@ -284,20 +284,20 @@ func _run() -> void:
 	check(main.clock_label.text == main.Calendar.date_text(int(main.session.world.day)) and main.place_label.text == "青云山", "the HUD shows the date and the place")
 	check(main.journal_text.text == "\n".join(main.session.journal_lines().slice(-2)) and main.journal_text.text.contains("【1年1月"), "the latest records show at the corner")
 	var hud := _texts(main.hud_status, "Label")
-	check(hud.contains("青禾") and hud.contains("气血") and hud.contains("修为  0 / 500"), "the HUD shows who you are and how you stand")
+	check(hud.contains("青禾") and hud.contains("气血") and hud.contains("修为  0 / 2000"), "the HUD shows who you are and how you stand")
 	check(_button("闭关修炼") != null and _button("突破境界") != null and _button("停留  ·  1 日") != null, "the chamber offers retreat, breakthrough and waiting")
 	main.hud_icons.status.pressed.emit()
 	check(main.current_screen() == "panel" and not main.hud_left.visible and main.tab_row.visible, "人物 opens the character panel over the world")
 	var status := _screen("Label")
 	check(status.contains("16 岁 · 寿元 120 · 尽于历元 105 年"), "age and lifespan shown")
-	check(status.contains("0 / 0 · 闭关收益 100%") and status.contains("平和 · 闭关收益 100%") and status.contains("3 个月") and status.contains("历练") and status.contains("0 / 100"), "a fresh mind and no insight yet")
+	check(status.contains("0 / 0 · 闭关收益 100%") and status.contains("平和 · 闭关收益 100%") and status.contains("6 个月") and status.contains("历练") and status.contains("0 / 100"), "a fresh mind and no insight yet")
 	check(status.contains("攻击加成") and status.contains("减伤") and status.contains("丹毒") and status.contains("资质") and status.contains("兵刃") and main.center.find_children("*", "TextureRect", true, false).size() > 0, "the character page shows the figure, the attributes in groups and the loadout")
 	main.hud_icons.status.pressed.emit()
 	check(main.view == "place" and main.hud_left.visible, "the same button closes the panel")
 	check(main.goal_label.visible and main.goal_label.text.begins_with("目标 · " + str(Goals.current(main.session)[0].title)) and main.goal_label.text.contains("除去妖蟒"), "the HUD names the first goal")
 	main.hud_icons.goals.pressed.emit()
 	var goals_text := _screen("Label")
-	check(main.current_screen() == "scroll" and goals_text.contains("除去妖蟒") and goals_text.contains("历元 6 年 3 月初一") and goals_text.contains("还有 5 年") and goals_text.contains("修为 0 / 2000"), "任务 opens the scroll: the serpent's deadline and breaking through")
+	check(main.current_screen() == "scroll" and goals_text.contains("除去妖蟒") and goals_text.contains("历元 12 年 3 月初一") and goals_text.contains("还有 11 年") and goals_text.contains("修为 0 / 8000"), "任务 opens the scroll: the serpent's deadline and breaking through")
 	var close_key := InputEventKey.new()
 	close_key.keycode = KEY_ESCAPE
 	close_key.pressed = true
@@ -311,15 +311,15 @@ func _run() -> void:
 	_button("闭关修炼").pressed.emit()
 	var scroll := _screen("Label")
 	check(main.current_screen() == "retreat" and scroll.contains("每月修为") and scroll.contains("灵根 ·") and scroll.contains("近 期 大 事") and not scroll.contains("除去妖蟒 · 还有") and scroll.contains("远期约定"), "闭关修炼 names current constraints and keeps distant deadlines in the task calendar")
-	check(scroll.contains("此番至多 3 个月") and scroll.contains("此阶段无心境门槛") and scroll.contains("当前修为  0 / 2000"), "the scroll names the longest retreat allowed and the mind")
+	check(scroll.contains("此番至多 6 个月") and scroll.contains("此阶段无心境门槛") and scroll.contains("当前修为  0 / 8000"), "the scroll names the longest retreat allowed and the mind")
 	var length: HSlider = main.center.find_children("*", "HSlider", true, false)[0]
-	check(int(length.max_value) == 9, "炼气初期 retreats run in ten-day steps up to ninety days")
-	main.session.player.xp = 400
+	check(int(length.max_value) == 18, "炼气初期 retreats run in ten-day steps up to half a year")
+	main.session.player.xp = 1900
 	length.value = 1
-	length.value = 9
-	check(_screen("Label").contains("3 个月") and _screen("Label").contains("触及瓶颈"), "a long retreat previews stopping at the bottleneck")
+	length.value = 18
+	check(_screen("Label").contains("6 个月") and _screen("Label").contains("触及瓶颈"), "a long retreat previews stopping at the bottleneck")
 	main.close_overlay()
-	main.session.player.xp = 500
+	main.session.player.xp = 2000
 	main.set_view("retreat")
 	check(_screen("Label").contains("修为卡在瓶颈") and _button("开始闭关") == null, "a bottleneck closes the retreat")
 	main.set_view("status")
@@ -572,7 +572,7 @@ func _run() -> void:
 	check(_has_art("yunxi_night_market") and _button("随意逛逛") != null and main.window.get_global_rect().position.y > 360, "an event fills the screen with its illustration, its words and choices in a box along the bottom")
 	main.session.pending_event = {}
 	main.render()
-	var rampage_day: int = main.Calendar.to_day(6, 3, 1)
+	var rampage_day: int = main.Calendar.to_day(12, 3, 1)
 	main.run(func() -> String:
 		main.session.advance_days(rampage_day - int(main.session.world.day))
 		return "")
@@ -743,12 +743,12 @@ func _run() -> void:
 	# Breaking through: the rules decide, and a realm reached has its own screen until 确定.
 	main.run(func() -> String: return main.session.travel("sect"))
 	main.session.player.stage = 3
-	main.session.player.xp = 2000
+	main.session.player.xp = 8000
 	main.session.set_item_count("foundation_pill", 1)
 	main.session.refresh_realm_stats()
 	main.set_view("breakthrough")
 	var plan_text := _texts(main.center, "Label")
-	check(plan_text.contains("✓  修为  2000 / 2000") and plan_text.contains("服筑基丹 1 枚") and plan_text.contains("成功率  ") and plan_text.contains("资质 · ") and not _button("开始突破").disabled, "the 突破 tab lays out the plan and its odds")
+	check(plan_text.contains("✓  修为  8000 / 8000") and plan_text.contains("服筑基丹 1 枚") and plan_text.contains("成功率  ") and plan_text.contains("资质 · ") and not _button("开始突破").disabled, "the 突破 tab lays out the plan and its odds")
 	check(plan_text.contains("若失败") and plan_text.contains("性命无碍"), "and what failing would cost")
 	main.session.set_item_count("foundation_pill", 2)
 	main.render()
@@ -759,10 +759,10 @@ func _run() -> void:
 	# A failed attempt: the pill is spent, xp falls back, and the outcome has its own screen.
 	main.session.fortune = {"demon": 0.99, "breakthrough": 0.99}
 	_button("开始突破").pressed.emit()
-	check(main.current_screen() == "full" and _texts(main.center, "Label").contains("冲 关 失 败") and int(main.session.player.xp) == 1700 and main.session.injured() and main.session.player.realm == 0, "a failed breakthrough is shown on its own screen")
+	check(main.current_screen() == "full" and _texts(main.center, "Label").contains("冲 关 失 败") and int(main.session.player.xp) == 6800 and main.session.injured() and main.session.player.realm == 0, "a failed breakthrough is shown on its own screen")
 	_button("确定").pressed.emit()
 	# 心魔 first, then success.
-	main.session.player.xp = 2000
+	main.session.player.xp = 8000
 	main.session.player.mind = 10
 	main.session.fortune = {"demon": 0.0, "breakthrough": 0.0}
 	main.set_view("breakthrough")

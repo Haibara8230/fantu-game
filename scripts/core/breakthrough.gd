@@ -85,6 +85,14 @@ static func at_eye(s) -> bool:
 	var eye: Dictionary = rules(s).eye
 	return str(s.player.location) == str(eye.location) and s.has_flag(str(eye.flag))
 
+## A quiet place of one's own to break through at (a leased abode): the open spot here whose
+## `breakthrough_bonus` adds to the odds, or {}.
+static func settled_ground(s) -> Dictionary:
+	for spot: Dictionary in s.content.locations[str(s.player.location)].get("spots", []):
+		if "breakthrough" in spot.actions and spot.has("breakthrough_bonus") and s.spot_open(spot):
+			return spot
+	return {}
+
 ## Why the plan cannot be attempted now, or "".
 static func block(s, plan: Dictionary) -> String:
 	var need: Dictionary = s.next_breakthrough()
@@ -154,6 +162,9 @@ static func odds(s, plan: Dictionary) -> Dictionary:
 		parts.append(["护法 · %s" % s.person(guard).name, bonus])
 	if at_eye(s):
 		parts.append(["灵眼", int(r.eye.bonus)])
+	var ground := settled_ground(s)
+	if not ground.is_empty():
+		parts.append([str(ground.name), int(ground.breakthrough_bonus)])
 	for boon: Dictionary in r.boons:
 		if _ready_boon(s, str(boon.id)):
 			parts.append([str(boon.name), int(boon.bonus)])

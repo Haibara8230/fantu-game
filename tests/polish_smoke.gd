@@ -118,7 +118,7 @@ func payments() -> void:
 
 func recovery() -> void:
 	var s := game()
-	s.advance_days(Calendar.to_day(9, 3, 1))
+	s.advance_days(Calendar.to_day(15, 3, 1))
 	s.Storylines.update(s)
 	check(s.has_flag("serpent_slain") and not s.has_flag("serpent_rampage"), "the original fixed-date world events remain intact")
 	check(s.story_state("valley_recovery") == "active" and s.story_at("valley_recovery", "medicine"), "a player who missed the serpent can help after reopening, even in qi cultivation")
@@ -143,7 +143,7 @@ func recovery() -> void:
 	var hero := game()
 	hero.record_deed("win:serpent")
 	hero.world.flags.serpent_slain = true
-	hero.advance_days(Calendar.to_day(9, 3, 1))
+	hero.advance_days(Calendar.to_day(15, 3, 1))
 	hero.Storylines.update(hero)
 	check(hero.story_state("valley_recovery").is_empty(), "an early serpent slayer does not receive the missed-event route")
 
@@ -239,7 +239,7 @@ func economy_and_deliveries() -> void:
 	s.interact("peddler", "buy_pill_friend")
 	check(s.item_count("foundation_pill") == count + 1, "shared stock restocks in a new calendar month")
 	var q := game()
-	q.advance_days(Calendar.to_day(9, 3, 1))
+	q.advance_days(Calendar.to_day(15, 3, 1))
 	q.Storylines.update(q)
 	q.player.location = "sect"
 	q.set_item_count("huichun_grass", 5)
@@ -364,11 +364,11 @@ func gifts_and_independent_deadlines() -> void:
 func history_and_comparisons() -> void:
 	var old_hero := game()
 	old_hero.world.flags.serpent_slain = true
-	old_hero.advance_days(Calendar.to_day(9, 3, 1))
+	old_hero.advance_days(Calendar.to_day(15, 3, 1))
 	old_hero.Storylines.update(old_hero)
 	check(not old_hero.Events.applied(old_hero, "serpent_rampage_ends") and old_hero.story_state("valley_recovery").is_empty(), "a skipped dated event does not misclassify an older hero with no deed counters")
 	var old := game()
-	old.advance_days(Calendar.to_day(9, 3, 1))
+	old.advance_days(Calendar.to_day(15, 3, 1))
 	var saved: Dictionary = old.snapshot()
 	saved.world.events.serpent_rampage_ends.erase("applied")
 	saved.world.storylines.erase("valley_recovery")

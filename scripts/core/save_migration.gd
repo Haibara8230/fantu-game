@@ -1,6 +1,6 @@
 extends RefCounted
 ## Upgrades saved sessions one version at a time. Output still goes through Session validation.
-const CURRENT_VERSION := 15
+const CURRENT_VERSION := 16
 # Frozen order for saves made before stable step IDs were written. Never change the historical step lists.
 const LEGACY_STORY_STEPS := {
 	"intro": ["retreat", "spar", "herbs", "return", "market", "report"],
@@ -78,7 +78,26 @@ static func migrate(data: Dictionary) -> Dictionary:
 		result = _v13_to_v14(result)
 	if not result.is_empty() and int(result.version) == 14:
 		result = _v14_to_v15(result)
+	if not result.is_empty() and int(result.version) == 15:
+		result = _v15_to_v16(result)
 	return result
+
+## Version 16 slows cultivation to the outline's pace (docs/GAME_OUTLINE.md 6.1): 炼气 asks four times
+## the xp, the realms after it five times. A journey keeps its stage and its share of the way through
+## it; an attempt under way keeps the requirement it was begun against, scaled the same.
+const V15_XP_SCALE := [4, 5]
+
+static func _v15_to_v16(data: Dictionary) -> Dictionary:
+	var player: Variant = data.get("player")
+	if not player is Dictionary or not (player.get("xp") is int or player.get("xp") is float):
+		return {}
+	var scale: int = V15_XP_SCALE[0] if int(player.get("realm", 0)) == 0 else V15_XP_SCALE[1]
+	player["xp"] = int(player.xp) * scale
+	var attempt: Variant = player.get("attempt")
+	if attempt is Dictionary and (attempt.get("xp") is int or attempt.get("xp") is float):
+		attempt["xp"] = int(attempt.xp) * scale
+	data["version"] = 16
+	return data
 
 ## Version 15 adds alchemy, 丹毒 and the 灵田. A pill's waiting days become the 丹毒 that keeps the next
 ## pill waiting as long; journeys know no recipe yet and have an empty field.

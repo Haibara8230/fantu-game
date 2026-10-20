@@ -60,21 +60,21 @@ func _roots() -> void:
 	var pieces := _game(["fire"])
 	once.retreat_limits = false
 	pieces.retreat_limits = false
-	once.cultivate(360)
-	for i: int in range(12):
+	once.cultivate(1080)
+	for i: int in range(36):
 		pieces.cultivate(30)
-	check(once.player.xp == pieces.player.xp and once.player.xp == 500 and once.world.day == pieces.world.day and once.world.day == 139, "faster roots keep one long retreat equal to many short ones, both stopping at the first bottleneck")
+	check(once.player.xp == pieces.player.xp and once.player.xp == 2000 and once.world.day == pieces.world.day and once.world.day < 1080, "faster roots keep one long retreat equal to many short ones, both stopping at the first bottleneck")
 	check(once.player.cultivation_carry == pieces.player.cultivation_carry and once.player.fatigue == pieces.player.fatigue, "and leave the same remainder and fatigue")
 
 func _stages() -> void:
 	var game := _game()
 	check(game.realm_name() == "炼气初期" and game.player.max_hp == 90, "a journey starts at 炼气初期")
-	game.player.xp = 499
+	game.player.xp = 1999
 	game.player.hp = 50
 	Session.Events.apply(game, [{"xp": 1}])
-	check(game.player.stage == 0 and game.player.xp == 500 and game.at_bottleneck() and game.realm_name() == "炼气初期", "500 xp waits at the bottleneck before 炼气中期")
+	check(game.player.stage == 0 and game.player.xp == 2000 and game.at_bottleneck() and game.realm_name() == "炼气初期", "2000 xp waits at the bottleneck before 炼气中期")
 	Session.Events.apply(game, [{"xp": 50}])
-	check(game.player.xp == 500, "xp does not pile up behind a bottleneck")
+	check(game.player.xp == 2000, "xp does not pile up behind a bottleneck")
 	check(game.journal_lines().back().contains("其中 50 点未能化入"), "and the chronicle says what was held back")
 	check(game.cultivate(30).contains("瓶颈") and game.world.day == 0, "a retreat at a bottleneck is refused without passing time")
 	game.set_item_count("pozhang_pill", 1)
@@ -84,25 +84,25 @@ func _stages() -> void:
 	check(game.journal_lines().back().contains("你已至炼气中期"), "the stage is recorded")
 	for i: int in range(4):
 		game.gain_insight("battle_win")
-	Session.Events.apply(game, [{"xp": 600}])
-	check(game.player.stage == 1 and game.player.xp == 1000 and game.player.insight == 80, "eighty insight is not yet enough")
+	Session.Events.apply(game, [{"xp": 2100}])
+	check(game.player.stage == 1 and game.player.xp == 4000 and game.player.insight == 80, "eighty insight is not yet enough")
 	game.gain_insight("battle_win")
 	check(game.player.stage == 2 and game.player.insight == 0, "the next duel's insight breaks through at once and is spent")
 	for i: int in range(5):
 		game.gain_insight("commission")
 	check(game.player.insight == game.insight_needed(), "insight is capped at what a bottleneck needs")
-	Session.Events.apply(game, [{"xp": 700}])
-	check(game.player.stage == 3 and game.player.xp == 1700, "insight gathered beforehand carries xp straight through the bottleneck")
+	Session.Events.apply(game, [{"xp": 2800}])
+	check(game.player.stage == 3 and game.player.xp == 6800, "insight gathered beforehand carries xp straight through the bottleneck")
 	check(game.journal_lines().filter(func(line: String) -> bool: return line.contains("修为精进")).size() == 3, "each stage entered is recorded")
 	game.set_item_count("foundation_pill", 1)
-	check(game.act("breakthrough").contains("2000 修为"), "breakthrough needs the full requirement")
-	Session.Events.apply(game, [{"xp": 300}])
+	check(game.act("breakthrough").contains("8000 修为"), "breakthrough needs the full requirement")
+	Session.Events.apply(game, [{"xp": 1200}])
 	_steady(game)
 	game.act("breakthrough")
 	_weather(game)
 	check(game.player.realm == 1 and game.player.stage == 0 and game.realm_name() == "筑基初期" and game.lifespan() == 220, "breakthrough from 炼气圆满 into 筑基初期")
 	var stronger := _game()
-	stronger.player.xp = 1500
+	stronger.player.xp = 6000
 	stronger.player.stage = 3
 	stronger.refresh_realm_stats()
 	stronger.start_battle("disciple")
@@ -116,7 +116,7 @@ func _stages() -> void:
 	var power: float = stronger.Combat.realm_power(stronger, int(stronger.player.realm))
 	check(is_equal_approx(boost, 1.1) and bonus == 6 and hit >= int(round((int(held.damage_min) + bonus) * boost * power)) and hit <= int(round((int(held.damage_max) + bonus) * boost * power)), "a higher stage hits harder, and a matching root a little more (%d)" % hit)
 
-## Retreat fatigue: a fresh mind for the first half year in a row, then less each day down to half;
+## Retreat fatigue: a fresh mind for the first year in a row (炼气), then less each day down to half;
 ## two days of anything else ease one day of it. 炼气圆满 keeps the bottlenecks out of the way.
 ## Test setup only: the single-retreat limit is off and the realm's xp cap lifted, to run the curve.
 func _retreat() -> void:
@@ -124,73 +124,73 @@ func _retreat() -> void:
 	game.retreat_limits = false
 	game.content.realms[0].breakthrough = {"xp": 1000000, "pills": 1}
 	game.player.stage = 3
-	game.player.xp = 1500
+	game.player.xp = 6000
 	game.player.mind = 24
 	game.refresh_realm_stats()
+	game.cultivate(360)
+	check(game.player.xp == 6720 and game.retreat_efficiency() == 100, "the first year in a row yields fully")
 	game.cultivate(180)
-	check(game.player.xp == 1860 and game.retreat_efficiency() == 100, "the first half year in a row yields fully")
-	game.cultivate(180)
-	var tired_gain: int = int(game.player.xp) - 1860
+	var tired_gain: int = int(game.player.xp) - 6720
 	check(tired_gain < 360 and tired_gain > 270 and game.retreat_efficiency() == 75, "the next half year yields less (%d) and leaves the mind at 75%%" % tired_gain)
 	game.wait(90)
-	check(game.retreat_fatigue() == 180 and game.retreat_efficiency() == 100, "ninety days of other things ease half a year of fatigue")
+	check(game.retreat_fatigue() == 360 and game.retreat_efficiency() == 100, "ninety days of other things ease half a year of fatigue")
 	game.cultivate(360)
 	game.cultivate(360)
-	check(game.retreat_efficiency() == 50 and game.player.fatigue == 540, "a long unbroken retreat bottoms out at half")
-	game.wait(270)
+	check(game.retreat_efficiency() == 50 and game.player.fatigue == 720, "a long unbroken retreat bottoms out at half")
+	game.wait(360)
 	check(game.retreat_fatigue() == 0, "and the mind recovers fully")
 	var fresh := _game()
 	fresh.retreat_limits = false
-	var preview: Dictionary = fresh.retreat_preview(360)
-	var message := fresh.cultivate(360)
-	check(fresh.player.xp == 500 and fresh.world.day < 360 and message.contains("触及瓶颈"), "a retreat ends on the day it reaches a bottleneck (day %d)" % fresh.world.day)
-	check(int(preview.days) == fresh.world.day and int(preview.xp) == 500, "the retreat buttons' preview foresees it")
+	var preview: Dictionary = fresh.retreat_preview(3600)
+	var message := fresh.cultivate(3600)
+	check(fresh.player.xp == 2000 and fresh.world.day < 3600 and message.contains("触及瓶颈"), "a retreat ends on the day it reaches a bottleneck (day %d)" % fresh.world.day)
+	check(int(preview.days) == fresh.world.day and int(preview.xp) == 2000, "the retreat buttons' preview foresees it")
 
 ## The three limits on seclusion: one retreat lasts at most the stage's span; the mind (心境) must keep
 ## up with the stage or retreats yield half and last half as long; xp stops at what the realm holds.
 func _limits() -> void:
 	var game := _game()
-	check(game.retreat_cap() == 90 and game.mind_percent() == 100, "炼气初期 allows ninety days at a time")
-	var message := game.cultivate(360)
-	check(int(game.world.day) == 90 and int(game.player.xp) == 180 and message.contains("闭关 3 个月"), "a longer retreat ends at the limit (%s)" % message)
+	check(game.retreat_cap() == 180 and game.mind_percent() == 100, "炼气初期 allows half a year at a time")
+	var message := game.cultivate(720)
+	check(int(game.world.day) == 180 and int(game.player.xp) == 360 and message.contains("闭关 6 个月"), "a longer retreat ends at the limit (%s)" % message)
 	game.set_item_count("pozhang_pill", 1)
-	Session.Events.apply(game, [{"xp": 400}])
+	Session.Events.apply(game, [{"xp": 1640}])
 	game.use_item("pozhang_pill")
 	check(game.player.stage == 1 and int(game.player.mind) == 0 and game.mind_needed() == 6, "炼气中期 asks for a mind of six")
-	check(game.mind_percent() == 50 and game.retreat_cap() == 60, "short of it, retreats yield half and last half as long")
+	check(game.mind_percent() == 50 and game.retreat_cap() == 120, "short of it, retreats yield half and last half as long")
 	var day := int(game.world.day)
 	var xp := int(game.player.xp)
 	game.cultivate(360)
-	check(int(game.world.day) == day + 60 and int(game.player.xp) == xp + 60, "so a hasty disciple gains little (%d)" % (int(game.player.xp) - xp))
+	check(int(game.world.day) == day + 120 and int(game.player.xp) == xp + 120, "so a hasty disciple gains little (%d)" % (int(game.player.xp) - xp))
 	for i: int in 3:
 		game.gain_insight("battle_win")
-	check(int(game.player.mind) == 6 and game.mind_percent() == 100 and game.retreat_cap() == 120, "duels temper the mind up to the stage's need")
+	check(int(game.player.mind) == 6 and game.mind_percent() == 100 and game.retreat_cap() == 240, "duels temper the mind up to the stage's need")
 	Session.Events.apply(game, [{"mind": 10}])
 	check(game.mind_percent() == 120, "a mind well above the need yields a fifth more")
 	var ripe := _game()
 	ripe.player.stage = 3
-	ripe.player.xp = 1990
+	ripe.player.xp = 7990
 	ripe.player.mind = 24
 	ripe.refresh_realm_stats()
 	ripe.cultivate(180)
-	check(int(ripe.player.xp) == 2000 and int(ripe.world.day) == 5 and ripe.at_xp_cap(), "炼气圆满 stops at the breakthrough's 2000 (day %d)" % ripe.world.day)
+	check(int(ripe.player.xp) == 8000 and int(ripe.world.day) == 5 and ripe.at_xp_cap(), "炼气圆满 stops at the breakthrough's 8000 (day %d)" % ripe.world.day)
 	day = int(ripe.world.day)
 	check(ripe.cultivate(90).contains("之极") and int(ripe.world.day) == day, "and a retreat at the cap is refused without passing time")
 	Session.Events.apply(ripe, [{"xp": 50}])
-	check(int(ripe.player.xp) == 2000 and ripe.journal_lines().back().contains("50 点未能化入"), "rewards do not pile xp above it either")
+	check(int(ripe.player.xp) == 8000 and ripe.journal_lines().back().contains("50 点未能化入"), "rewards do not pile xp above it either")
 	ripe.set_item_count("foundation_pill", 1)
 	_steady(ripe)
 	ripe.act("breakthrough")
 	_weather(ripe)
-	check(ripe.player.realm == 1 and int(ripe.player.xp) == 0 and ripe.retreat_cap() == 180 and ripe.mind_percent() == 50, "筑基 asks more of the mind (36) and allows a year at a time once it is there")
+	check(ripe.player.realm == 1 and int(ripe.player.xp) == 0 and ripe.retreat_cap() == 360 and ripe.mind_percent() == 50, "筑基 asks more of the mind (36) and allows two years at a time once it is there")
 	ripe.player.mind = 36
-	check(ripe.retreat_cap() == 360, "a year in seclusion is nothing to a foundation cultivator")
+	check(ripe.retreat_cap() == 720, "two years in seclusion are nothing to a foundation cultivator")
 	ripe.player.stage = 3
-	ripe.player.xp = 5990
+	ripe.player.xp = 29990
 	ripe.player.mind = 84
 	ripe.refresh_realm_stats()
-	ripe.cultivate(900)
-	check(int(ripe.player.xp) == 6000 and ripe.cultivate(30).contains("便可突破"), "foundation holds 6000 at most; the core is formed from there")
+	ripe.cultivate(1800)
+	check(int(ripe.player.xp) == 30000 and ripe.cultivate(30).contains("便可突破"), "foundation holds 30000 at most; the core is formed from there")
 	var old := Session.new()
 	check(old.restore(JSON.parse_string(FileAccess.get_file_as_string("res://tests/fixtures/v10_heavenly_midstage.json"))) and int(old.player.mind) == 6 and old.mind_percent() == 100, "older journeys start with the mind their stage asks for")
 	var copy := Session.new()
@@ -238,14 +238,14 @@ func _saves() -> void:
 	_untalented(base)
 	check(base.player.max_hp == 140, "its stats follow the realm")
 	var game := _game(["water", "earth"])
-	Session.Events.apply(game, [{"xp": 1000}])
+	Session.Events.apply(game, [{"xp": 2000}])
 	game.gain_insight("event")
 	game.cultivate(30)
 	game.player.fatigue = 200
 	var copy := Session.new()
 	check(copy.restore(JSON.parse_string(JSON.stringify(game.snapshot()))) and copy.player.stage == 0 and copy.at_bottleneck() and copy.player.roots == ["water", "earth"], "a bottleneck and the roots survive a save")
 	check(copy.player.insight == 15 and copy.retreat_fatigue() == 200 and copy.player.fatigue_day == game.player.fatigue_day, "insight and retreat fatigue survive a save")
-	for field: Array in [["stage", 4], ["xp", 501], ["insight", 101], ["fatigue_day", 999999], ["mind", -2], ["cultivation_carry", 3000]]:
+	for field: Array in [["stage", 4], ["xp", 2001], ["insight", 101], ["fatigue_day", 999999], ["mind", -2], ["cultivation_carry", 3000]]:
 		var broken: Dictionary = game.snapshot()
 		broken.player[field[0]] = field[1]
 		check(not copy.restore(broken), "%s %d rejected" % field)
@@ -255,9 +255,9 @@ func _saves() -> void:
 	var v10 := Session.new()
 	check(v10.restore(JSON.parse_string(FileAccess.get_file_as_string("res://tests/fixtures/v10_heavenly_midstage.json"))), "v10 save migrates")
 	_untalented(v10)
-	check(v10.player.stage == 1 and v10.player.xp == 903 and v10.player.cultivation_carry == 1800 and v10.player.insight == 0 and v10.retreat_fatigue() == 0, "v10 keeps its stage and its finer remainder, with a fresh mind and no insight")
+	check(v10.player.stage == 1 and v10.player.xp == 3612 and v10.player.cultivation_carry == 1800 and v10.player.insight == 0 and v10.retreat_fatigue() == 0, "v10 keeps its stage and its finer remainder, with a fresh mind and no insight")
 	v10.cultivate(1)
-	check(v10.player.xp == 907 and v10.player.cultivation_carry == 600, "the migrated remainder carries into the next retreat day")
+	check(v10.player.xp == 3616 and v10.player.cultivation_carry == 600, "the migrated remainder carries into the next retreat day")
 	var bad: Dictionary = game.snapshot()
 	bad.player.roots = ["fire", "fire"]
 	check(not copy.restore(bad), "duplicate root elements rejected")
@@ -325,9 +325,9 @@ func _items() -> void:
 	game.wait(30)
 	check(game.use_block("ningqi_pill").is_empty(), "and can be taken again afterwards")
 	game.set_item_count("lingzhi", 1)
-	game.player.xp = 400
+	game.player.xp = 1900
 	game.use_item("lingzhi")
-	check(int(game.player.xp) == 500 and game.player.stage == 0 and game.at_bottleneck(), "a hundred-year lingzhi fills cultivation only up to the bottleneck")
+	check(int(game.player.xp) == 2000 and game.player.stage == 0 and game.at_bottleneck(), "a hundred-year lingzhi fills cultivation only up to the bottleneck")
 	check(game.journal_lines().any(func(line: String) -> bool: return line.contains("其中 200 点未能化入")), "the rest of the lingzhi is recorded as held back")
 	game.set_item_count("lingzhi", 1)
 	check(game.use_block("lingzhi").contains("瓶颈") and game.item_count("lingzhi") == 1, "pills that give xp wait until the bottleneck is broken")
@@ -380,7 +380,7 @@ func _golden_core() -> void:
 	var game := _game()
 	game.player.realm = 1
 	game.player.stage = 3
-	game.player.xp = 6000
+	game.player.xp = 30000
 	game.player.mind = 200
 	game.player.foundation_grade = 2
 	game.refresh_realm_stats()
@@ -413,7 +413,7 @@ func _golden_core() -> void:
 	# 元婴: the core keeps its grade; 天阶 arts can be studied.
 	var core_before: int = int(game.player.core_grade)
 	game.player.stage = 3
-	game.player.xp = 16000
+	game.player.xp = 80000
 	game.player.mind = 400
 	game.refresh_realm_stats()
 	game.fortune = {"demon": 0.99, "breakthrough": 0.0, "grade": 0.99}
@@ -423,7 +423,7 @@ func _golden_core() -> void:
 	check(game.journal_lines().any(func(line: String) -> bool: return line.contains("元婴初期")) and not game.journal_lines().back().contains("金丹品级"), "the record names the realm without regrading the core")
 	# 化神, then the crossing at the ferry from 480.
 	game.player.stage = 3
-	game.player.xp = 40000
+	game.player.xp = 200000
 	game.player.mind = 600
 	game.refresh_realm_stats()
 	game.fortune = {"demon": 0.99, "breakthrough": 0.0, "grade": 0.99}
@@ -441,7 +441,7 @@ func _golden_core() -> void:
 	check(game.has_flag("ascension_open") and game.available_here("ascend"), "in 480 the heavenly crossing opens over the ferry")
 	check(game.act("ascend").contains("化神圆满"), "only 化神圆满 may cross")
 	game.player.stage = 3
-	game.player.xp = 75000
+	game.player.xp = 375000
 	game.refresh_realm_stats()
 	game.act("ascend")
 	check(game.ended.get("kind", "") == "ascension" and game.chronicle.entries.back().id == "ascended", "化神圆满 ascends: the life ends in the way of the Dao")
@@ -450,7 +450,7 @@ func _golden_core() -> void:
 	var plain := _game()
 	plain.player.realm = 1
 	plain.player.stage = 3
-	plain.player.xp = 6000
+	plain.player.xp = 30000
 	plain.player.mind = 200
 	plain.player.foundation_grade = 0
 	plain.refresh_realm_stats()

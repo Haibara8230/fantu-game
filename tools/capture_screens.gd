@@ -82,6 +82,12 @@ func _run() -> void:
 	main.story = {}
 	main.GainsCard.close(main)
 	await _shot("02e_market")
+	# The lodge by the stream, let by the year, beside the inn.
+	main.session.world.flags["yunxi_abode"] = true
+	main.render()
+	await _shot("02g_market_abode")
+	main.session.world.flags.erase("yunxi_abode")
+	main.render()
 	while not main.session.pending_event.is_empty():
 		main.choose(str(main.session.pending_definition().choices[0].id))
 	main.story = {}
@@ -334,7 +340,7 @@ func _run() -> void:
 	# High realms: the breakthrough scroll toward 元婴, then the ascension's ending.
 	s.player.realm = 2
 	s.player.stage = 3
-	s.player.xp = 16000
+	s.player.xp = 80000
 	s.player.mind = 300
 	s.player.core_grade = 5
 	s.refresh_realm_stats()

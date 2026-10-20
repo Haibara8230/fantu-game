@@ -26,6 +26,7 @@ func _initialize() -> void:
 	_true_disciple()
 	_furnace_bounty()
 	_older_journeys()
+	_qi_years()
 	print("STORIES: %d checks, %d failures" % [checks, failures])
 	quit(0 if failures == 0 else 1)
 
@@ -105,7 +106,7 @@ func _opening() -> Session:
 			game.choose_event(str(game.pending_definition().choices[0].id))
 		else:
 			game.wait(1)
-	check(game.has_flag("tianhe_seen") and game.Calendar.day_of_month(int(game.world.day)) == 15 and game.story_state("mirror") == "done", "on the fifteenth the water shows the city")
+	check(game.has_flag("tianhe_seen") and game.Calendar.day_of_month(int(game.world.day)) == 15 and game.story_at("mirror", "accounts"), "on the fifteenth the water shows the city, and its crest is to be asked about")
 	while not game.pending_event.is_empty():
 		game.choose_event(str(game.pending_definition().choices[0].id))
 	game.travel("sect")
@@ -135,10 +136,10 @@ func _sect_storylines(game: Session) -> void:
 	game.choose_sect("qingyun")
 	check(game.story_step("lineage").id == "foundation" and not game.story_at("lineage", "foundation") and bool(game.world.people.gu_changgeng.get("sound", false)), "choosing a lineage pleases him; the next lesson waits for 炼气圆满")
 	game.player.stage = 3
-	game.player.xp = 1500
+	game.player.xp = 6000
 	game.refresh_realm_stats()
 	game.wait(1)
-	check(game.story_at("lineage", "foundation") and game.world.letters.back().story == "lineage", "reaching 圆满 brings his 传音")
+	check(game.story_at("lineage", "foundation") and game.world.letters.any(func(letter: Dictionary) -> bool: return letter.story == "lineage" and letter.step == "foundation"), "reaching 圆满 brings his 传音")
 	game.interact("gu_changgeng", "ask_foundation")
 	check(game.story_step("lineage").id == "ruin" and game.item_count("ningqi_pill") == 1, "his lesson comes with a 凝气丹")
 
@@ -323,7 +324,7 @@ func _foundation_pace() -> void:
 	check(game.story_at("inner_court", "tide") and letters[1] == 720, "two years later the spirit tide (%d)" % letters[1])
 	var xp := int(game.player.xp)
 	game.travel("wild")
-	check(game.story_step("inner_court").id == "wait_trial" and int(game.player.xp) == xp + 360, "reaching the spring takes in the tide")
+	check(game.story_step("inner_court").id == "wait_trial" and int(game.player.xp) == xp + 1800, "reaching the spring takes in the tide")
 	start = int(game.world.storylines.inner_court.since)
 	stays = 0
 	while not game.story_at("inner_court", "trial") and stays < 10:
@@ -404,6 +405,151 @@ func _furnace_bounty() -> void:
 				check(game.has_flag("bounty_let_go") and int(game.player.stones) == stones, "let go: no bounty paid")
 
 ## Journeys from before the storylines are past the introduction, and the sect's storylines begin.
+## Settles whatever the day brought, with the named choice where it is offered, else the last one.
+func _settle(game: Session, prefer: String = "") -> void:
+	var guard := 0
+	while not game.pending_event.is_empty() and guard < 10:
+		guard += 1
+		var choices: Array = game.pending_definition().get("choices", [])
+		var pick := str(choices.back().id) if not choices.is_empty() else ""
+		for choice: Dictionary in choices:
+			if str(choice.id) == prefer and game.choice_available(choice):
+				pick = prefer
+		game.choose_event(pick)
+
+## Goes to where someone is today and settles what the road brought.
+func _visit(game: Session, person_id: String) -> void:
+	var place: String = game.npc_location(person_id)
+	if not place.is_empty() and place != str(game.player.location):
+		game.travel(place)
+		_settle(game)
+
+## 炼气篇 (docs/GAME_OUTLINE.md, batch 2): the 散修's and the disciple's 筑基 plans, the lodge by the
+## stream, the crest's three accounts, two ordinary cultivators' crafts, and the herb road before the
+## serpent.
+func _qi_years() -> void:
+	var game := _game("free", 71)
+	check(game.story_state("mirror") == "active", "a skipped opening still leaves 温照衡's note")
+	check(int(game.content.realm(0).breakthrough.xp) == 8000 and int(game.content.realm(1).breakthrough.xp) == 30000, "炼气 asks 8000 xp and 筑基 30000: the slower pace of the outline")
+	# 筑基之备 for a 散修: at 炼气后期, 沈墨 tells of pill, guard and ground.
+	game.player.stage = 2
+	game.player.xp = 4000
+	game.player.mind = 40
+	game.refresh_realm_stats()
+	game.wait(1)
+	_settle(game)
+	check(game.story_at("zhuji_plan", "ask") and game.story_state("zhuji_sect") == "", "炼气后期 opens the 散修's 筑基 plan, not the sect's")
+	_visit(game, "shen_mo")
+	check(_option(game, "shen_mo", "ask_foundation").get("available", false), "沈墨 can be asked about 筑基")
+	game.interact("shen_mo", "ask_foundation")
+	check(game.story_at("zhuji_plan", "pill"), "then the pill is the first thing to find")
+	game.add_item("foundation_pill", 1)
+	game.wait(1)
+	_settle(game)
+	check(game.story_at("zhuji_plan", "place"), "with the pill in hand, the place to break through")
+	# 溪畔竹舍: a lodge let by the year beside the inn; no rent by the month, a whole retreat's yield.
+	if str(game.player.location) != "market":
+		game.travel("market")
+		_settle(game)
+	game.player.stones = 300
+	var inn_rate: int = game.cultivation_rate()
+	check(int(game.Cultivation.rent(game, 30)) == 8, "云来客栈's room asks 8 stones a month")
+	check(game.take_lease().contains("溪畔竹舍") and game.has_flag("yunxi_abode") and int(game.player.stones) == 180, "the lodge is let for a year at 120 stones")
+	check(game.cultivation_rate() > inn_rate and int(game.Cultivation.rent(game, 30)) == 0, "a retreat in the lodge yields in full and asks no rent (%d > %d)" % [game.cultivation_rate(), inn_rate])
+	game.wait(1)
+	_settle(game)
+	check(game.story_state("zhuji_plan") == "done", "a place of one's own ends the plan")
+	game.player.stage = 3
+	game.player.xp = 8000
+	game.refresh_realm_stats()
+	var parts: Array = game.breakthrough_odds(game.breakthrough_plan()).parts
+	check(parts.any(func(part: Array) -> bool: return str(part[0]) == "溪畔竹舍" and int(part[1]) == 5), "breaking through in the lodge adds to the odds")
+	# The crest: the full moon's ending sends the player to three people who tell it three ways.
+	game.world.flags["tianhe_seen"] = true
+	game.wait(1)
+	_settle(game)
+	check(game.story_at("mirror", "accounts"), "after the full moon, the crest's accounts")
+	for asked: Array in [["boatman", "crest_boatman"], ["storyteller", "crest_storyteller"], ["qin_yan", "crest_qin"]]:
+		_visit(game, str(asked[0]))
+		check(_option(game, str(asked[0]), "crest").get("available", false), "%s can be asked about the crest" % asked[0])
+		game.interact(str(asked[0]), "crest")
+		check(game.has_flag(str(asked[1])), "%s tells their account" % asked[0])
+	game.wait(1)
+	_settle(game)
+	check(game.story_state("mirror") == "done" and game.has_flag("crest_puzzled"), "three accounts that disagree: why does nobody remember?")
+	# Two ordinary cultivators trade a craft for what they need.
+	_visit(game, "qin_yan")
+	game.add_item("ninglu_grass", 3)
+	game.interact("qin_yan", "trap_lore")
+	check(game.has_flag("trap_lore") and game.item_count("ninglu_grass") == 0, "秦砚 teaches the 阵谱 for three 凝露草")
+	_visit(game, "fan_jiu")
+	game.add_item("wolf_fang", 2)
+	game.interact("fan_jiu", "beast_lore")
+	check(game.has_flag("beast_lore") and game.item_count("wolf_fang") == 0, "樊九 teaches the tracks for two 狼牙")
+	var wolf: Dictionary = game.content.events.road_wolf
+	check(wolf.choices.any(func(choice: Dictionary) -> bool: return str(choice.id) == "track" and game.choice_available(choice)), "his tracks let one slip past the road's wolves")
+	# The sect's plan: 许清和 sends word at 炼气后期.
+	var disciple := _game("plain", 72)
+	disciple.player.stage = 2
+	disciple.player.xp = 4000
+	disciple.player.mind = 40
+	disciple.refresh_realm_stats()
+	disciple.wait(1)
+	_settle(disciple)
+	check(disciple.story_state("zhuji_sect") == "active" and disciple.story_state("zhuji_plan") == "", "a disciple's 筑基 plan comes from the hall")
+	disciple.add_item("foundation_pill", 1)
+	disciple.player.stage = 3
+	disciple.player.xp = 6000
+	disciple.refresh_realm_stats()
+	for i: int in 3:
+		disciple.wait(1)
+		_settle(disciple)
+	check(disciple.story_state("zhuji_sect") == "done", "pill and 炼气圆满 complete it")
+	# The herb road: prices quarrel in 历元 8 年, and in 11 the spring stirs before the serpent wakes.
+	var road := _game("free", 73)
+	road.world.day = Calendar.to_day(8, 9, 1)
+	road.travel("market")
+	var met := ""
+	for i: int in 5:
+		if road.pending_event.get("id", "") == "herb_shortage":
+			met = "herb_shortage"
+			road.choose_event("ask")
+		_settle(road)
+		if met.is_empty():
+			road.wait(1)
+	check(met == "herb_shortage" and road.has_flag("herb_asked"), "历元 8 年: the herb prices quarrel at 沈墨's shop")
+	road.world.day = Calendar.to_day(11, 9, 1)
+	road.travel("wild")
+	met = ""
+	for i: int in 5:
+		if road.pending_event.get("id", "") == "spring_omen":
+			met = "spring_omen"
+			road.choose_event("warn")
+		_settle(road)
+		if met.is_empty():
+			road.wait(1)
+	check(met == "spring_omen" and road.story_state("shen_redscale") == "active", "历元 11 年: the hot spring; warning 沈墨 starts his 破鳞散")
+	check(road.content.events.serpent_rampage.window.from.map(func(part: Variant) -> int: return int(part)) == [12, 3, 1], "the serpent breaks out in 历元 12 年 spring")
+	# The warning is remembered when the serpent comes: the gatherers had gone.
+	var azhi := road.favor("azhi")
+	road.advance_days(Calendar.to_day(12, 3, 3) - int(road.world.day))
+	_settle(road)
+	check(road.has_flag("serpent_rampage") and road.favor("azhi") > azhi and road.journal_lines().any(func(line: String) -> bool: return line.contains("人一个没少")), "the warning heeded: nobody at the valley's mouth was lost")
+	# The slope after the seal lifts: whoever guided the caravan meets its posts again.
+	var slope := _game("free", 74)
+	slope.world.flags["slope_leased"] = true
+	slope.world.day = Calendar.to_day(15, 6, 1)
+	slope.travel("wild")
+	met = ""
+	for i: int in 5:
+		if slope.pending_event.get("id", "") == "slope_leased_return":
+			met = "slope_leased_return"
+			slope.choose_event("pull")
+		_settle(slope)
+		if met.is_empty():
+			slope.wait(1)
+	check(met == "slope_leased_return" and slope.has_flag("slope_common") and slope.has_flag("slope_settled"), "the caravan's posts come back after the seal; pulling them returns the slope to the gatherers")
+
 func _older_journeys() -> void:
 	var old := Session.new()
 	check(old.restore(JSON.parse_string(FileAccess.get_file_as_string("res://tests/fixtures/v10_heavenly_midstage.json"))), "an older save loads")
@@ -411,7 +557,7 @@ func _older_journeys() -> void:
 	check("retreat" in old.player.taught and "arts" in old.player.taught and old.world.letters.is_empty(), "the cards it knew stay dismissed")
 	var v11 := Session.new()
 	check(v11.restore(JSON.parse_string(FileAccess.get_file_as_string("res://tests/fixtures/v11_after_retreats.json"))), "a version 11 save loads")
-	check(int(v11.player.xp) == 272 and int(v11.player.mind) == 0 and v11.player.deeds.is_empty() and v11.has_flag("rushi_done") and v11.available_here("study"), "it keeps its progress and finds the sect's halls open")
+	check(int(v11.player.xp) == 1088 and int(v11.player.mind) == 0 and v11.player.deeds.is_empty() and v11.has_flag("rushi_done") and v11.available_here("study"), "it keeps its progress and finds the sect's halls open")
 	check(int(v11.world.people.azhi.relation) == 43 and not bool(v11.world.people.azhi.get("sound", false)), "an old bond keeps its favor; the 传音符 come with the next dealings")
 	Session.Events.apply(v11, [{"relation": ["azhi", 1]}])
 	check(bool(v11.world.people.azhi.get("sound", false)), "and then they do")

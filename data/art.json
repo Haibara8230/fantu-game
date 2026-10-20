@@ -3,7 +3,8 @@
   "place_background": "res://assets/art/battle/%s.png",
   "scene_art": {
     "sect_recruit": "sect_arena",
-    "market_inn": "town_inn"
+    "market_inn": "town_inn",
+    "market_abode": "nanming_abode"
   },
   "event_art": {
     "yunxi_autumn": "res://assets/art/events/yunxi_auction.png",
