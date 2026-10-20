@@ -1,7 +1,9 @@
 extends SceneTree
 ## A first journey played headless the way a new player would: the guided start, then the current goals
 ## (data/goals.json, goals.gd) and the storylines, commissions, gathering and selling for stones, duels,
-## retreats, the 筑基丹 and the breakthrough, and some years after. Everything the player would read is
+## retreats, the 筑基丹 and the breakthrough, and some years after. Over a long life it ticks the 出关
+## reminders a player would and keeps those appointments, explores the caves a storyline's finding lies
+## in, takes up the once-only things people offer, and gathers what 照川城's 阵枢 asks. Everything the player would read is
 ## printed with the date, and each action is charged the seconds a player would spend on it, to judge
 ## pacing. Only rules are used; no window is opened.
 ## Usage: godot --headless --path . --script res://tools/playtest.gd [-- <seed> <years> [random|poor|ordinary|good] [cultivate|social|explore] [sect|wanderer]]
@@ -31,6 +33,18 @@ var breakthrough_failures := 0
 const EVERYDAY := ["talk", "gift", "help", "companion", "consult", "disciple", "instruct", "invite_help", "invite_spar", "sworn", "teach"]
 var stuck := 0
 var last_result := ""
+# Appointments already kept ("event:day" of the window's opening).
+var kept := {}
+# Story steps found idle on arrival, not travelled for again until a day ("story:step" -> day).
+var idle := {}
+# Caves given up on until a day (cave id -> day), when a room barred the way.
+var barred := {}
+# Where each storyline finding lies: flag -> [cave, room] (a room's own finding or its guardian's flag).
+var findings := {}
+# The occasions a player plans a life around and ticks before a long retreat (the rest are left to chance).
+const APPOINTMENTS := ["tiannan_contest_", "five_sects_entry", "jianya_open", "chenxia_gathering", "wenren_sail_day", "ye_deadline"]
+# The world flags worth reporting at the end of a long life (batches 4–6).
+const REPORTED := ["guest_chixiao", "guest_changqing", "guest_canglan", "guest_xuanyue", "ye_cure", "ye_forbidden", "ye_letgo", "ye_late", "wenren_found_alive", "wenren_found_dead", "zhaochuan_seen", "guzhan_cleared", "pillar_cleared", "shouchuan_joined", "shouchuan_refused", "shouchuan_pact", "wen_testimony", "wen_diary", "zhaochuan_entered", "rift_seen", "truth_public", "truth_kept", "path_reopen", "path_replace", "path_self", "wuzong_champion", "tiannan_champion"]
 
 func _initialize() -> void:
 	var args := OS.get_cmdline_user_args()
@@ -61,6 +75,14 @@ func _initialize() -> void:
 		roots = ["metal", "wood", "water", "fire", "earth"] if opening == "poor" else (["metal", "wood", "water"] if opening == "ordinary" else ["metal"])
 		born = {"talents": [], "flaws": []}
 	s.new_game("试玩", seed_value, roots, "rushi", born)
+	for cave_id: String in s.content.cave_data:
+		for room: Dictionary in s.content.cave_data[cave_id].rooms:
+			if room.has("flag"):
+				findings[str(room.flag)] = [cave_id, str(room.id)]
+			if room.has("guardian"):
+				var guarded: String = str(s.content.enemies[str(room.guardian)].get("world_flag", ""))
+				if not guarded.is_empty():
+					findings[guarded] = [cave_id, str(room.id)]
 	_say("START", "灵根 %s（%s）· 天赋 %s · 缺陷 %s · 资质 %s" % [s.root_title(), ", ".join(roots), ", ".join(s.player.talents), ", ".join(s.player.flaws), str(s.aptitude().get("name", s.aptitude()))])
 	_chronicle_since(0)
 	var guard := 0
@@ -75,7 +97,7 @@ func _initialize() -> void:
 	_say("END", "%s · %s · 灵石 %d · 现实约 %d 分钟、%d 次点击、%d 场斗法 · 结局 %s" % [s.time_name(), s.realm_name(), int(s.player.stones), seconds / 60, clicks, duels, str(s.ended.get("kind", "无"))])
 	for key: String in marks:
 		print("MARK %s: %s" % [key, marks[key]])
-	print("PLAYTEST_RESULT ", JSON.stringify({"seed":seed_value,"opening":opening,"strategy":strategy,"route":route,"day":int(s.world.day),"realm":int(s.player.realm),"stones":int(s.player.stones),"estimated_minutes":float(seconds)/60.0,"clicks":clicks,"duels":duels,"steps":guard,"guard_exhausted":guard>=4000,"milestone_days":milestone_days,"losses":losses,"breakthrough_failures":breakthrough_failures,"early_serpent":s.Storylines.deed_count(s,"win:serpent")>0,"aftermath":s.story_state("valley_aftermath"),"recovery":s.story_state("valley_recovery")}))
+	print("PLAYTEST_RESULT ", JSON.stringify({"seed":seed_value,"opening":opening,"strategy":strategy,"route":route,"day":int(s.world.day),"realm":int(s.player.realm),"stones":int(s.player.stones),"estimated_minutes":float(seconds)/60.0,"clicks":clicks,"duels":duels,"steps":guard,"guard_exhausted":guard>=4000,"milestone_days":milestone_days,"losses":losses,"breakthrough_failures":breakthrough_failures,"early_serpent":s.Storylines.deed_count(s,"win:serpent")>0,"aftermath":s.story_state("valley_aftermath"),"recovery":s.story_state("valley_recovery"),"flags":REPORTED.filter(func(flag: String) -> bool: return s.has_flag(flag)),"mirror":str(s.Storylines.current_step(s, "mirror").get("id", s.story_state("mirror")))}))
 	quit(0)
 
 # --- Reporting ------------------------------------------------------------------------------------
@@ -159,6 +181,10 @@ func _step() -> void:
 		_mark("除蟒")
 	if _opening():
 		return
+	if _ascend():
+		return
+	if _appointment():
+		return
 	if _story():
 		return
 	if _local_milestone():
@@ -191,11 +217,18 @@ func _event() -> void:
 	var choices: Array = definition.get("choices", [])
 	var shown: Array[String] = []
 	var pick := ""
+	var fallback := ""
 	for choice: Dictionary in choices:
 		var open := s.choice_available(choice)
 		shown.append("%s%s" % [str(choice.get("text", choice.get("label", choice.id))), "" if open else "（不可选）"])
-		if open and pick.is_empty():
+		# A fight to the death only when nothing else is open (a player keeps their life).
+		var deadly: bool = choice.get("effects", []).any(func(effect: Dictionary) -> bool: return effect.has("deadly"))
+		if open and deadly and fallback.is_empty():
+			fallback = str(choice.id)
+		elif open and pick.is_empty():
 			pick = str(choice.id)
+	if pick.is_empty():
+		pick = fallback
 	_say("EVENT", "%s：%s ｜ 选项：%s" % [str(definition.get("title", s.pending_event.id)), str(definition.get("text", "")), "、".join(shown)])
 	_do("event", "CHOSE", s.choose_event(pick))
 	if not s.pending_event.is_empty() and s.pending_event.get("id", "") == definition.get("id", "?"):
@@ -273,6 +306,7 @@ func _story() -> bool:
 			_do("act", "WAIT", s.wait(1))
 			return true
 		var place := str(step.get("place", s.player.location))
+		var idle_key := "%s:%s" % [story_id, str(step.get("id", ""))]
 		var requires_person := false
 		for person_id: String in s.content.people:
 			for interaction: Dictionary in s.content.people[person_id].get("interactions", []):
@@ -301,7 +335,20 @@ func _story() -> bool:
 		# Travel for a step only when it can be done on arrival (a talk, a deed); an errand that needs
 		# things gathered first waits until they are carried.
 		var doable: bool = requires_person or bool(goal.guide) or step.has("deeds") or step.has("retreat_days") or step.get("done", []).any(func(done: Dictionary) -> bool: return done.has("talked")) or _carrying_for(story_id, step)
+		# A finding inside a cave: explore toward it.
+		if _explore_for(step):
+			return true
+		# Stones a step's offer asks (a reckoning paid for, a ship stocked): out to earn them.
+		if _short_for(story_id, step):
+			return true
+		if story_id == "mirror" and str(step.id) == "choice" and _gather_for_choice():
+			return true
+		# A choice asked at the place, an occasion that happens there, or someone there with something
+		# to offer only once: worth the journey.
+		doable = doable or step.has("choice_event") or _happens_at(story_id, step, place) or _once_at(place)
 		if not doable and place != str(s.player.location):
+			continue
+		if place != str(s.player.location) and int(idle.get(idle_key, -1)) > int(s.world.day):
 			continue
 		if _go(place):
 			return true
@@ -321,6 +368,9 @@ func _story() -> bool:
 			return true
 		if deeds.has("trade"):
 			_sell_all()
+			return true
+		if deeds.has("gather") and s.available_here("gather"):
+			_do("act", "GATHER", s.act("gather"))
 			return true
 		for deed: String in deeds:
 			if deed.begins_with("win:"):
@@ -347,13 +397,16 @@ func _story() -> bool:
 				_charge("study")
 				_say("LINEAGE", s.choose_sect(s.Loadout.home_lineage(s)))
 				return true
+		# Here for the step and nothing came of it: not worth the journey again for a month.
+		if place == str(s.player.location):
+			idle[idle_key] = int(s.world.day) + Calendar.DAYS_PER_MONTH
 	return false
 
-## Something a storyline asks of a person present: asked at once.
+## Something a storyline asks of a person present, or something they offer only once: asked at once.
 func _ask_here() -> bool:
 	for person_id: String in s.present_npcs():
 		for option: Dictionary in s.npc_options(person_id):
-			if option.get("reason", "").is_empty() and not str(option.id) in EVERYDAY and _story_option(option) and _advances_story(person_id, str(option.id)):
+			if option.get("reason", "").is_empty() and not str(option.id) in EVERYDAY and _story_option(option) and (_advances_story(person_id, str(option.id)) or _once(person_id, str(option.id))):
 				_charge("talk")
 				_say("ASK", "%s · %s → %s" % [s.person(person_id).name, option.label, s.interact(person_id, str(option.id))])
 				return true
@@ -377,9 +430,12 @@ func _carrying_for(story_id: String, step: Dictionary) -> bool:
 	var done: Array = step.get("done", [])
 	return done.any(func(c: Dictionary) -> bool: return c.has("at_location")) and done.all(func(c: Dictionary) -> bool: return not c.has("item_at_least") or s.item_count(str(c.item_at_least[0])) >= int(c.item_at_least[1]))
 
-## An interaction a storyline step offers (not a duel picked for its own sake).
+## An interaction a storyline step offers (not a duel picked for its own sake, nor a 筑基丹 bought past
+## foundation).
 func _story_option(option: Dictionary) -> bool:
 	var label := str(option.get("label", ""))
+	if label.contains("筑基丹") and int(s.player.realm) >= 1:
+		return false
 	return not (label.begins_with("约斗") or label.begins_with("切磋"))
 
 func _gather() -> void:
@@ -494,9 +550,20 @@ func _retreat() -> void:
 	if not s.available_here("cultivate"):
 		_go(_home())
 		return
+	# A room the purse cannot pay for: home to the sect's chamber, or out to earn.
+	if not s.Cultivation.rent_block(s, 30).is_empty():
+		if s.Sect.member(s) and _go("sect"):
+			return
+		if not _commissions():
+			_outing()
+		return
 	if s.at_xp_cap():
 		_outing()
 		return
+	# A player ticks the appointments ahead before shutting the door (出关提醒).
+	for entry: Dictionary in s.Events.upcoming(s):
+		if _planned(str(entry.event)) and not s.wakes_for(str(entry.event)) and int(entry.from) > int(s.world.day):
+			s.set_wake(str(entry.event), true)
 	# A room paid by the month: out to earn when the purse covers less than a month.
 	_charge("retreat")
 	_say("RETREAT", s.cultivate(s.retreat_most()))
@@ -582,3 +649,199 @@ func _preferred_outing() -> bool:
 			_do("act", "EXPLORE", s.act("hunt"))
 			return true
 	return false
+
+## Whether a handwritten person's interaction is a once-only offer that costs no stones and starts no
+## fight (told what was found, taught a secret).
+func _once(person_id: String, option_id: String) -> bool:
+	if not s.content.people.has(person_id):
+		return false
+	for interaction: Dictionary in s.content.people[person_id].get("interactions", []):
+		if str(interaction.id) == option_id:
+			var effects: Array = interaction.get("effects", [])
+			return bool(interaction.get("once", false)) and not effects.any(func(effect: Dictionary) -> bool: return effect.has("battle") or (effect.has("stones") and int(effect.stones) < 0))
+	return false
+
+## Whether the bot plans around an occasion (APPOINTMENTS).
+func _planned(event_id: String) -> bool:
+	return APPOINTMENTS.any(func(prefix: String) -> bool: return event_id.begins_with(prefix))
+
+## Whether someone found at `place` has a once-only offer open now.
+func _once_at(place: String) -> bool:
+	for person_id: String in s.content.people:
+		if s.npc_location(person_id) != place:
+			continue
+		for interaction: Dictionary in s.content.people[person_id].get("interactions", []):
+			if _once(person_id, str(interaction.id)) and _option_open(person_id, str(interaction.id)):
+				return true
+	return false
+
+func _option_open(person_id: String, option_id: String) -> bool:
+	for option: Dictionary in s.npc_options(person_id):
+		if str(option.id) == option_id:
+			return str(option.get("reason", "")).is_empty()
+	return false
+
+## Whether a choice asked by a step has something other than putting it off.
+func _choice_open(event_id: String) -> bool:
+	for choice: Dictionary in s.content.events.get(event_id, {}).get("choices", []):
+		if str(choice.id) != "later" and s.choice_available(choice):
+			return true
+	return false
+
+## Whether something happens at `place` for this step (a location event that names it).
+func _happens_at(story_id: String, step: Dictionary, place: String) -> bool:
+	var named := JSON.stringify({"story_at": [story_id, str(step.id)]})
+	for event_id: String in s.content.location_events(place):
+		var definition: Dictionary = s.content.events[event_id]
+		var window: Dictionary = s.Events.window_at(definition, int(s.world.day))
+		if window.is_empty() or s.Events.venue(definition, window) != place or not s.Events.open_for(s, event_id, window, int(s.world.day)):
+			continue
+		if JSON.stringify(definition.get("conditions", [])).contains(named.trim_prefix("{").trim_suffix("}")) and s.Events.all_met(s, definition.get("conditions", [])):
+			return true
+	return false
+
+## The flags a step waits for (its `done`, through any/all).
+func _wanted_flags(conditions: Array, into: Array) -> void:
+	for condition: Dictionary in conditions:
+		if condition.has("flag"):
+			into.append(str(condition.flag))
+		for key: String in ["any", "all"]:
+			if condition.has(key):
+				_wanted_flags(condition[key], into)
+
+## Explores toward a finding the step waits for, in a cave that can be entered now. True when it acted.
+func _explore_for(step: Dictionary) -> bool:
+	var wanted: Array = []
+	_wanted_flags(step.get("done", []), wanted)
+	for flag: String in wanted:
+		if s.has_flag(flag) or not findings.has(flag):
+			continue
+		var cave_id: String = findings[flag][0]
+		var target: String = findings[flag][1]
+		var cave: Dictionary = s.content.cave_data[cave_id]
+		if int(barred.get(cave_id, -1)) > int(s.world.day) or not s.has_flag(str(cave.requires_flag)) or int(s.player.realm) < int(cave.get("requires_realm", 0)) or not s.location_visible(str(cave.location)):
+			continue
+		if _go(str(cave.location)):
+			return true
+		if not s.Caves.open_here(s, cave_id):
+			continue
+		if _explore_toward(cave_id, target):
+			return true
+	return false
+
+## One step through a cave toward `target`: the next room on the way, a guardian faced again, things
+## left behind taken. A room that bars the way sets the cave aside for a year.
+func _explore_toward(cave_id: String, target: String) -> bool:
+	for room_id: String in _cave_route(cave_id, target):
+		if not s.Caves.explored(s, cave_id, room_id):
+			var reason: String = s.Caves.enter_block(s, cave_id, room_id)
+			if not reason.is_empty():
+				_say("CAVE", "%s：%s" % [s.content.cave_data[cave_id].name, reason])
+				barred[cave_id] = int(s.world.day) + Calendar.DAYS_PER_YEAR
+				return false
+			_do("act", "CAVE", s.enter_room(cave_id, room_id))
+			return true
+		if s.Caves.guarded(s, cave_id, room_id):
+			_do("act", "CAVE", s.Caves.challenge(s, cave_id, room_id))
+			return true
+		if s.Caves.loot_waits(s, cave_id, room_id):
+			_do("act", "CAVE", s.collect_room(cave_id, room_id))
+			return true
+	return false
+
+## The rooms from an opening room to `target` (breadth first over the links).
+func _cave_route(cave_id: String, target: String) -> Array[String]:
+	var rooms := {}
+	var queue: Array = []
+	var came := {}
+	for room: Dictionary in s.content.cave_data[cave_id].rooms:
+		rooms[str(room.id)] = room
+		if bool(room.get("start", false)):
+			queue.append(str(room.id))
+			came[str(room.id)] = ""
+	while not queue.is_empty():
+		var at: String = queue.pop_front()
+		if at == target:
+			break
+		for link: Variant in rooms[at].get("links", []):
+			if not came.has(str(link)):
+				came[str(link)] = at
+				queue.append(str(link))
+	var path: Array[String] = []
+	var walk := target
+	while came.has(walk) and not walk.is_empty():
+		path.push_front(walk)
+		walk = str(came[walk])
+	return path
+
+## The things 照川城's 阵枢 asks for a way over the river: 潮心石 and 寒铁 gathered where they lie.
+func _gather_for_choice() -> bool:
+	if _choice_open("zhenshu_choice"):
+		return false
+	for need: Array in [["chaoxin_shi", 3, "waihai"], ["ore_hantie", 5, "guzhanchang"]]:
+		if s.item_count(str(need[0])) < int(need[1]):
+			if _go(str(need[2])):
+				return true
+			_do("act", "GATHER", s.act("gather"))
+			return true
+	return false
+
+## An appointment open now (a listed occasion that applies, or one ticked): go there for it once.
+func _appointment() -> bool:
+	for entry: Dictionary in s.Events.upcoming(s):
+		var key := "%s:%d" % [str(entry.event), int(entry.from)]
+		if not _planned(str(entry.event)) or kept.has(key) or int(entry.from) > int(s.world.day) or int(entry.to) < int(s.world.day):
+			continue
+		var place := str(entry.location)
+		if place.is_empty() or not s.location_visible(place) or _sealed(place):
+			kept[key] = true
+			continue
+		if _go(place):
+			return true
+		kept[key] = true
+		_do("act", "WAIT", s.wait(1))
+		return true
+	return false
+
+## Whether someone's offer for this step waits only on stones: if so, earns toward it and is true.
+func _short_for(story_id: String, step: Dictionary) -> bool:
+	var needed := 0
+	for person_id: String in s.content.people:
+		for interaction: Dictionary in s.content.people[person_id].get("interactions", []):
+			var conditions: Array = interaction.get("conditions", [])
+			if not conditions.any(func(c: Dictionary) -> bool: return c.has("story_at") and c.story_at == [story_id, str(step.id)]):
+				continue
+			var rest: Array = conditions.filter(func(c: Dictionary) -> bool: return not c.has("stones_at_least"))
+			for condition: Dictionary in conditions:
+				if condition.has("stones_at_least") and s.Events.all_met(s, rest):
+					needed = maxi(needed, int(condition.stones_at_least))
+	if needed <= int(s.player.stones):
+		return false
+	# Beast cores sell well in 南明: hunt where the realm allows, sell when the pack fills.
+	if s.item_count("yaodan") + s.item_count("yaodan_small") >= 6:
+		if _go("nanming"):
+			return true
+		for core: String in ["yaodan", "yaodan_small"]:
+			if s.item_count(core) > 0:
+				_do("act", "SELL", s.sell(core, s.item_count(core)))
+				return true
+		return true
+	var ground := "waihai" if int(s.player.realm) >= 2 and s.location_visible("waihai") else "chifeng"
+	if _go(ground):
+		return true
+	_do("act", "HUNT", s.act("hunt"))
+	return true
+
+## A way over the river settled (ascension.gd): to the crossing, and onto the bridge.
+func _ascend() -> bool:
+	if s.Ascension.route(s).is_empty() or int(s.player.realm) < s.content.realms.size() - 1 or s.Breakthrough.injured(s):
+		return false
+	if _go("ferry"):
+		return true
+	var reason: String = s.ascend_block()
+	if not reason.is_empty():
+		return false
+	_mark("飞升天劫")
+	_do("act", "ASCEND", s.act("ascend"))
+	return true
+

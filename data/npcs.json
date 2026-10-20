@@ -3133,6 +3133,12 @@
         "once": true,
         "conditions": [
           {
+            "story_at": [
+              "mirror",
+              "fengcun"
+            ]
+          },
+          {
             "realm_at_least": 3
           },
           {

@@ -333,6 +333,10 @@ static func reserved(s) -> Dictionary:
 		var costs: Dictionary = s.Storylines.required_items(s, story_id)
 		for item_id: String in costs:
 			keep[item_id] = int(keep.get(item_id, 0)) + int(costs[item_id])
+		# A choice the step waits on (照川城's 阵枢): whatever any of its ways would take, kept for it.
+		var choices: Dictionary = s.Storylines.choice_items(s, story_id)
+		for item_id: String in choices:
+			keep[item_id] = maxi(int(keep.get(item_id, 0)), int(choices[item_id]))
 	for item_id: String in keep.keys():
 		var fine: String = s.content.fine_pill(item_id)
 		if not fine.is_empty():

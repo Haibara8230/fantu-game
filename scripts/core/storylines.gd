@@ -86,6 +86,19 @@ static func _cost_option_known(s, interaction: Dictionary) -> bool:
 	var known: Array = interaction.get("conditions", []).filter(func(c: Dictionary) -> bool: return not c.has("item_at_least") and not c.has("herbs_at_least") and not c.has("stones_at_least") and not c.has("at_location") and not c.has("deed_at_least"))
 	return Events.all_met(s, known)
 
+## What the choices of the current step's `choice_event` would take, each item at the most any one
+## choice asks (kept from 一键卖出, inventory.gd reserved); {} without such a step.
+static func choice_items(s, story_id: String) -> Dictionary:
+	var step := current_step(s, story_id)
+	if step.is_empty() or not step.has("choice_event") or state(s, story_id) != "active":
+		return {}
+	var result := {}
+	for choice: Dictionary in s.content.events.get(str(step.choice_event), {}).get("choices", []):
+		var costs := _consumed(choice.get("effects", []))
+		for item_id: String in costs:
+			result[item_id] = maxi(int(result.get(item_id, 0)), int(costs[item_id]))
+	return result
+
 static func _consumed(effects: Array) -> Dictionary:
 	var result := {}
 	for effect: Dictionary in effects:

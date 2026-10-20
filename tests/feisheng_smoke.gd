@@ -201,6 +201,10 @@ func _routes() -> void:
 				check(game.item_count("dai_zhenshu") == 1, "the replacement made")
 			"self_yimin":
 				game.add_item("tianxin_lianzi", 1)
+		if way == "reopen":
+			game.player.location = "market"
+			game.act("sell")
+			check(game.item_count("chaoxin_shi") == 3 and game.item_count("ore_hantie") == 5, "一键卖出 keeps what the 阵枢 would take")
 		_stop(game, "zhaochuan")
 		# Never dealt with 守川司: 晏无咎 offers his bargain first; turned down, the choice comes.
 		if str(game.pending_event.get("id", "")) == "yan_trade":
