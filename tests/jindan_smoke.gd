@@ -227,7 +227,7 @@ func _wen() -> void:
 	game.interact("wen_zhaoheng", "testimony")
 	game.wait(1)
 	check(game.has_flag("wen_testimony") and game.item_count("zhaochuan_zhentu") == 1 and game.has_flag("ningying_known"), "his account, the array map, and the way to 元婴")
-	check(game.story_state("mirror") == "done", "the fifth step of the mirror's story")
+	check(str(game.Storylines.current_step(game, "mirror").get("id", "")) == "fengcun", "the fifth step of the mirror's story")
 	_at(game, 199, 12, 25)
 	game.wait(10)
 	check(game.has_flag("wen_gone") and game.npc_location("wen_zhaoheng").is_empty() and game.person("wen_zhaoheng").realm_text == "已坐化", "历元二百年 he dies at the crossing")
@@ -240,7 +240,7 @@ func _wen() -> void:
 	_stop(late, "ferry")
 	check(late.has_flag("wen_diary") and late.item_count("wen_diary") == 1 and not late.has_flag("ningying_known"), "too late for his account: the boatman hands over his diary")
 	late.wait(1)
-	check(late.story_state("mirror") == "done", "the diary also closes the fifth step")
+	check(str(late.Storylines.current_step(late, "mirror").get("id", "")) == "fengcun", "the diary also closes the fifth step")
 	var copy := _reload(late)
 	check(copy.has_flag("wen_diary"), "and the diary survives a save")
 

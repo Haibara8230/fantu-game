@@ -105,6 +105,10 @@ func _collect_sources() -> void:
 	for good: Dictionary in content.sect_data.get("exchange", []):
 		if good.has("item"):
 			_add(item_sources, str(good.item), "宗门兑换")
+	# The keepsake every journey begins with (rules.opening, the 镜背铜片).
+	var keepsake := str(content.rules.get("opening", {}).get("keepsake", ""))
+	if not keepsake.is_empty():
+		_add(item_sources, keepsake, "开局随身")
 	for recipe_id: String in content.alchemy_data.get("recipes", {}):
 		var recipe: Dictionary = content.alchemy_data.recipes[recipe_id]
 		_add(item_sources, str(recipe.pill), "炼丹")

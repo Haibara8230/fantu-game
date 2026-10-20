@@ -313,7 +313,7 @@ static func restore(s, data: Variant) -> bool:
 		if not values is Dictionary or values.keys().any(func(key: Variant) -> bool: return not key is String or not values[key] is String):
 			return false
 	if not saved_ended.is_empty():
-		if not saved_ended.get("kind") in ["lifespan", "ascension", "fallen"] or not _whole_nonnegative(saved_ended.get("day")) or int(saved_ended.day) > day or not saved_ended.get("choice", false) is bool:
+		if not saved_ended.get("kind") in ["lifespan", "ascension", "fallen"] or not _whole_nonnegative(saved_ended.get("day")) or int(saved_ended.day) > day or not saved_ended.get("choice", false) is bool or not saved_ended.get("route", "") is String:
 			return false
 	for stream: String in ["combat", "world"]:
 		if not saved_rng.get(stream) is String or not saved_rng[stream].is_valid_int():
@@ -465,6 +465,9 @@ static func restore(s, data: Variant) -> bool:
 	if not saved_pending.get("values", {}).is_empty():
 		s.pending_event["values"] = saved_pending.values.duplicate()
 	s.ended = {} if saved_ended.is_empty() else {"kind": saved_ended.kind, "day": int(saved_ended.day)}
+	# The way an ascension went (ascension.gd).
+	if not str(saved_ended.get("route", "")).is_empty():
+		s.ended.route = str(saved_ended.route)
 	if bool(saved_ended.get("choice", false)):
 		s.ended["choice"] = true
 	s.chronicle.entries = saved_chronicle

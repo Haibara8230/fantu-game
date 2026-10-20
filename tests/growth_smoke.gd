@@ -438,13 +438,15 @@ func _golden_core() -> void:
 	game.travel("ferry")
 	game.world.day = game.Calendar.to_day(480, 5, 30)
 	game.wait(1)
-	check(game.has_flag("ascension_open") and game.available_here("ascend"), "in 480 the heavenly crossing opens over the ferry")
-	check(game.act("ascend").contains("化神圆满"), "only 化神圆满 may cross")
-	game.player.stage = 3
-	game.player.xp = 375000
-	game.refresh_realm_stats()
+	check(not game.has_flag("ascension_open") and not game.available_here("ascend"), "no fixed year opens the crossing any more (batch 6)")
+	# The way settled at 照川城's 阵枢 opens it (ascension.gd); any stage of 化神 may cross.
+	game.world.flags["ascension_open"] = true
+	check(game.act("ascend").contains("阵枢"), "a 化神 with no way settled finds no path over the river")
+	game.world.flags["path_self"] = true
 	game.act("ascend")
-	check(game.ended.get("kind", "") == "ascension" and game.chronicle.entries.back().id == "ascended", "化神圆满 ascends: the life ends in the way of the Dao")
+	check(str(game.battle.get("context", "")) == "tribulation" and str(game.battle.get("ascension", "")) == "self", "the 飞升天劫 comes down")
+	_weather(game)
+	check(game.ended.get("kind", "") == "ascension" and str(game.ended.get("route", "")) == "self" and game.chronicle.entries.back().id == "ascended", "weathered, the life ends in the way of the Dao")
 	var risen := Session.new()
 	check(risen.restore(JSON.parse_string(JSON.stringify(game.snapshot()))) and risen.ended.kind == "ascension", "an ascension survives a save")
 	var plain := _game()

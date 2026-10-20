@@ -953,6 +953,16 @@
           2
         ],
         "realm_text": "金丹后期"
+      },
+      {
+        "year": 380,
+        "realm_text": "已坐化",
+        "description": "柳寒舟，历元三百八十年在断剑峡坐化。断剑横在膝上，剑穗还系着当年那个承诺。",
+        "present_if": [
+          {
+            "year_at_least": 99999
+          }
+        ]
       }
     ]
   },
@@ -2134,6 +2144,38 @@
           0
         ],
         "realm_text": "金丹初期"
+      },
+      {
+        "year": 203,
+        "if": [
+          {
+            "not": {
+              "flag": "boon_lu_chengzhou"
+            }
+          }
+        ],
+        "realm_text": "已坐化",
+        "description": "陆承舟，筑基寿尽，历元二百零三年在云溪坐化。临走前把陆家的账本一本本烧了，只留下一本，上面记着当年在青石镇客栈欠下的房钱。",
+        "present_if": [
+          {
+            "year_at_least": 99999
+          }
+        ]
+      },
+      {
+        "year": 383,
+        "if": [
+          {
+            "flag": "boon_lu_chengzhou"
+          }
+        ],
+        "realm_text": "已坐化",
+        "description": "陆承舟，靠古境里那份机缘结了丹，多活了一百八十年，历元三百八十三年坐化。他说这辈子最值的一笔买卖，是那年跟着进了古境。",
+        "present_if": [
+          {
+            "year_at_least": 99999
+          }
+        ]
       }
     ]
   },
@@ -2320,6 +2362,51 @@
           2
         ],
         "realm_text": "金丹后期"
+      },
+      {
+        "year": 280,
+        "if": [
+          {
+            "flag": "boon_ye_zhiwei"
+          }
+        ],
+        "standing": [
+          3,
+          0
+        ],
+        "realm_text": "元婴初期"
+      },
+      {
+        "year": 382,
+        "if": [
+          {
+            "not": {
+              "flag": "boon_ye_zhiwei"
+            }
+          }
+        ],
+        "realm_text": "已坐化",
+        "description": "叶知微，历元三百八十二年在沧澜城丹会坐化，留下一箱自己的药方，箱底压着师父那箱。",
+        "present_if": [
+          {
+            "year_at_least": 99999
+          }
+        ]
+      },
+      {
+        "year": 680,
+        "if": [
+          {
+            "flag": "boon_ye_zhiwei"
+          }
+        ],
+        "realm_text": "已坐化",
+        "description": "叶知微，元婴寿尽，历元六百八十年坐化。沧澜的丹师们说，天南一半的医方出自她手。",
+        "present_if": [
+          {
+            "year_at_least": 99999
+          }
+        ]
       }
     ]
   },
@@ -2470,6 +2557,21 @@
           2
         ],
         "realm_text": "金丹后期"
+      },
+      {
+        "year": 381,
+        "if": [
+          {
+            "flag": "wenren_found_alive"
+          }
+        ],
+        "realm_text": "已坐化",
+        "description": "闻人照，历元三百八十一年在望海坐化。走前最后一张海图，画的是天河。",
+        "present_if": [
+          {
+            "year_at_least": 99999
+          }
+        ]
       }
     ]
   },
@@ -3024,6 +3126,61 @@
           }
         ],
         "chronicle": "庞守拙看了很久：“这纹样，四十年前我在库里见过一回，后来那几架卷宗就被人调走了。调走的人……你进了库，自己看吧。”"
+      },
+      {
+        "id": "seal_study",
+        "label": "请他推演照川城的门（二千灵石）",
+        "once": true,
+        "conditions": [
+          {
+            "realm_at_least": 3
+          },
+          {
+            "any": [
+              {
+                "item_at_least": [
+                  "wen_diary",
+                  1
+                ]
+              },
+              {
+                "item_at_least": [
+                  "zhaochuan_zhentu",
+                  1
+                ]
+              }
+            ]
+          },
+          {
+            "item_at_least": [
+              "jingbei_tongpian",
+              1
+            ]
+          },
+          {
+            "stones_at_least": 2000
+          },
+          {
+            "not": {
+              "flag": "seal_studied"
+            }
+          }
+        ],
+        "effects": [
+          {
+            "stones": -2000
+          },
+          {
+            "flag": "seal_studied"
+          },
+          {
+            "relation": [
+              "pang_shouzhuo",
+              10
+            ]
+          }
+        ],
+        "chronicle": "庞守拙把日记、铜片和自己半辈子的阵谱摊了一桌子，推了三个月。“铜片是镜背，镜子是阵枢的影子。拿着它，在渡口照着这个阵式走一遍——门就开了。”"
       }
     ]
   },
@@ -3228,6 +3385,15 @@
           2
         ],
         "realm_text": "金丹后期"
+      },
+      {
+        "year": 300,
+        "standing": [
+          3,
+          0
+        ],
+        "realm_text": "元婴初期",
+        "title": "赤霄门主"
       }
     ]
   },
@@ -3317,6 +3483,15 @@
           2
         ],
         "realm_text": "金丹后期"
+      },
+      {
+        "year": 300,
+        "standing": [
+          3,
+          0
+        ],
+        "realm_text": "元婴初期",
+        "title": "长青谷主"
       }
     ]
   },
@@ -3497,6 +3672,15 @@
           2
         ],
         "realm_text": "金丹后期"
+      },
+      {
+        "year": 300,
+        "standing": [
+          3,
+          0
+        ],
+        "realm_text": "元婴初期",
+        "title": "沧澜阁主"
       }
     ]
   },
@@ -3586,6 +3770,15 @@
           2
         ],
         "realm_text": "金丹后期"
+      },
+      {
+        "year": 300,
+        "standing": [
+          3,
+          0
+        ],
+        "realm_text": "元婴初期",
+        "title": "玄岳宗主"
       }
     ]
   },
@@ -3756,6 +3949,176 @@
       "“海图？十张里九张是骗子画的，剩下一张是死人画的。”",
       "“出海靠三样：船好、人齐、知道什么时候该回头。”",
       "“想坐我的船，先说清楚去哪儿。”"
+    ]
+  },
+  "wen_zhaoxue": {
+    "name": "温照雪",
+    "title": "照川遗民之首",
+    "attitude": "neutral",
+    "gender": "female",
+    "realm_text": "元婴后期",
+    "affiliation": "照川城",
+    "age": 472,
+    "personality": "沉静",
+    "standing": [
+      3,
+      2
+    ],
+    "talents": [
+      "chenzhuo",
+      "xixin",
+      "jinshen"
+    ],
+    "description": "照川城遗民的首领，温照衡的妹妹。封城那天她在城里，哥哥在城外，亲手合上了阵。四百五十年来，她守着城里的三百多人，也守着那座阵。",
+    "home": "zhaochuan",
+    "spot": "yuan",
+    "talk_favor": 1,
+    "gift_favor": 2,
+    "talk": [
+      "“外面的史书上，有没有我们？”",
+      "“阵引不是刑罚。是活下去的价钱。”",
+      "“哥哥还在渡口钓鱼吗？”"
+    ],
+    "interactions": [
+      {
+        "id": "hear",
+        "label": "请她说说城里这四百五十年",
+        "once": true,
+        "conditions": [],
+        "effects": [
+          {
+            "flag": "zhaoxue_heard"
+          },
+          {
+            "relation": [
+              "wen_zhaoxue",
+              30
+            ]
+          }
+        ],
+        "chronicle": "温照雪说，封城那年，城里的人以为过几个月就能出去。后来才知道，大阵要靠活人的灵力撑着，能修行的人都成了阵引。史书上说照川城毁于天灾，城里的人说：我们是被留下来挡灾的。“挡灾，我们认。被忘了，我们不认。”"
+      },
+      {
+        "id": "tell_brother",
+        "label": "把温照衡的事告诉她",
+        "once": true,
+        "conditions": [
+          {
+            "any": [
+              {
+                "flag": "wen_testimony"
+              },
+              {
+                "flag": "wen_diary"
+              }
+            ]
+          }
+        ],
+        "effects": [
+          {
+            "flag": "zhaoxue_told"
+          },
+          {
+            "relation": [
+              "wen_zhaoxue",
+              30
+            ]
+          }
+        ],
+        "chronicle": "你说他在渡口钓了四百五十年的鱼，鱼篓总是空的。温照雪背过身去，很久才说：“他看的是水里的城。”"
+      },
+      {
+        "id": "medicine",
+        "label": "送上十枚疗伤丹，给阵引们补一补元气",
+        "once": true,
+        "conditions": [
+          {
+            "item_at_least": [
+              "liaoshang_pill",
+              10
+            ]
+          }
+        ],
+        "effects": [
+          {
+            "item": [
+              "liaoshang_pill",
+              -10
+            ]
+          },
+          {
+            "flag": "zhaoxue_medicine"
+          },
+          {
+            "relation": [
+              "wen_zhaoxue",
+              20
+            ]
+          }
+        ],
+        "chronicle": "温照雪把丹药分给了阵引廊里最老的几个人。“外面的丹药，”她说，“四百五十年没尝过了。”"
+      },
+      {
+        "id": "ye",
+        "label": "请叶知微进城替遗民看病",
+        "once": true,
+        "conditions": [
+          {
+            "met": "ye_zhiwei"
+          },
+          {
+            "present": "ye_zhiwei"
+          },
+          {
+            "relation_at_least": [
+              "ye_zhiwei",
+              80
+            ]
+          }
+        ],
+        "effects": [
+          {
+            "flag": "zhaoxue_ye"
+          },
+          {
+            "relation": [
+              "wen_zhaoxue",
+              20
+            ]
+          },
+          {
+            "relation": [
+              "ye_zhiwei",
+              5
+            ]
+          }
+        ],
+        "chronicle": "叶知微在照川城住了一个月，挨家挨户地看。走的时候她说：“他们的病不是病，是被抽空了。药治不好，阵能。”"
+      }
+    ],
+    "phases": [
+      {
+        "year": 1,
+        "if": [
+          {
+            "flag": "path_reopen"
+          }
+        ],
+        "title": "照川城主",
+        "description": "照川城重开以后，她做了城主，与守川司、五宗一道看守天河渡桥。城里的灯，一年比一年多。"
+      },
+      {
+        "year": 1,
+        "if": [
+          {
+            "flag": "survivors_moved"
+          }
+        ],
+        "home": "ferry",
+        "spot": "dock",
+        "title": "白鹭渡遗民之首",
+        "description": "旧城永远封闭以后，她带着三百多个遗民在白鹭渡另起了屋。每天傍晚，她都去渡口看一会儿水。"
+      }
     ]
   }
 }

@@ -421,6 +421,8 @@ func _validate() -> String:
 	if problem.is_empty():
 		problem = _validate_guests()
 	if problem.is_empty():
+		problem = _validate_ascension()
+	if problem.is_empty():
 		problem = _validate_forge()
 	if problem.is_empty():
 		problem = _validate_lore()
@@ -786,6 +788,22 @@ func _validate_lore() -> String:
 		var problem := _validate_conditions(rumor.get("conditions", []))
 		if not problem.is_empty():
 			return "传闻条件无效：%s（%s）" % [rumor.id, problem]
+	return ""
+
+# --- 飞升 ------------------------------------------------------------------------------------------
+
+func _validate_ascension() -> String:
+	var data: Variant = rules.get("ascension")
+	if not data is Dictionary or not enemies.has(data.get("tribulation", "")) or not bool(enemies[data.tribulation].get("tribulation", false)) or not _whole(data.get("injury_days")):
+		return "飞升配置无效。"
+	if not data.get("routes") is Dictionary or data.routes.is_empty():
+		return "飞升须有通路。"
+	for route_id: String in data.routes:
+		var route: Variant = data.routes[route_id]
+		if not route is Dictionary or not route.get("flag") in world_flags or not route.get("name") is String or not route.get("ending") is String:
+			return "飞升通路配置无效：" + route_id
+	if not data.get("truth") is Dictionary or data.truth.keys().any(func(flag: Variant) -> bool: return not flag in world_flags or not data.truth[flag] is String):
+		return "飞升结语配置无效。"
 	return ""
 
 # --- 客卿 ------------------------------------------------------------------------------------------

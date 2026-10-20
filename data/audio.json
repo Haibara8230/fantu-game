@@ -24,7 +24,8 @@
     "jinhai": "res://assets/audio/music/eastern_thought.ogg",
     "duze": "res://assets/audio/music/eastern_thought.ogg",
     "waihai": "res://assets/audio/music/eastern_thought.ogg",
-    "guzhanchang": "res://assets/audio/music/eastern_thought.ogg"
+    "guzhanchang": "res://assets/audio/music/eastern_thought.ogg",
+    "zhaochuan": "res://assets/audio/music/eastern_thought.ogg"
   },
   "music_credits": [
     {
@@ -97,7 +98,8 @@
     "jinhai": "res://assets/audio/ambience/river_egrets.ogg",
     "duze": "res://assets/audio/ambience/valley_insects.ogg",
     "waihai": "res://assets/audio/ambience/river_egrets.ogg",
-    "guzhanchang": "res://assets/audio/ambience/mountain_wind_bells.ogg"
+    "guzhanchang": "res://assets/audio/ambience/mountain_wind_bells.ogg",
+    "zhaochuan": "res://assets/audio/ambience/cave_drips.ogg"
   },
   "sfx": {
     "click": {

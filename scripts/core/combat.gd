@@ -1464,7 +1464,12 @@ static func worn_traits(s) -> Array[Dictionary]:
 ## The end of a 心魔 or 天劫 duel: the breakthrough it stood in goes on (breakthrough.gd).
 static func _trial_over(s, outcome: String) -> String:
 	var context := str(s.battle.context)
+	# The 飞升天劫 (ascension.gd) ends a life or wounds it, apart from any breakthrough.
+	var ascension := str(s.battle.get("ascension", ""))
 	s.battle.clear()
+	if not ascension.is_empty():
+		s.player.hp = maxi(int(s.player.hp), 1)
+		return s.Ascension.over(s, ascension, outcome == "won")
 	s.player.hp = maxi(int(s.player.hp), 1)
 	if context == "demon":
 		return s.Breakthrough.demon_over(s, outcome)

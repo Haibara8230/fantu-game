@@ -39,7 +39,10 @@
     "waihai_deep": "ruin_depths",
     "guzhanchang_field": "wild_entrance",
     "guzhanchang_altar": "ruin_stone_room",
-    "wild_mirror": "wild_chenxia"
+    "wild_mirror": "wild_chenxia",
+    "zhaochuan_gate": "town_palisade",
+    "zhaochuan_yuan": "sect_hall",
+    "zhaochuan_shu": "ruin_depths"
   },
   "location_art": {
     "beiyue": "nanming",
@@ -49,7 +52,8 @@
     "jinhai": "ferry",
     "duze": "changqing_valley",
     "waihai": "ferry",
-    "guzhanchang": "chifeng"
+    "guzhanchang": "chifeng",
+    "zhaochuan": "ruin"
   },
   "event_art": {
     "yunxi_autumn": "res://assets/art/events/yunxi_auction.png",
@@ -81,7 +85,7 @@
     "talent_bulao": "res://assets/art/events/talent_bulao.png",
     "talent_jiandan": "res://assets/art/events/talent_jiandan.png",
     "talent_fuze": "res://assets/art/events/talent_fuze.png",
-    "ascension_opens": "res://assets/art/events/ascension_opens.png"
+    "zhenshu_choice": "res://assets/art/events/ascension_opens.png"
   },
   "person_art": {
     "storyteller": "res://assets/art/events/teahouse_story.png",
@@ -1671,6 +1675,59 @@
       },
       "faces_right": true,
       "height_ratio": 0.85
+    },
+    "zhenshu_ling": {
+      "texture": "res://assets/art/rival_atlas_v2.png",
+      "preferred": "res://assets/art/actors/ruin_rogue.png",
+      "columns": 3,
+      "rows": 2,
+      "frames": {
+        "idle": 0,
+        "prepare": 1,
+        "attack": 2,
+        "cast": 3,
+        "hit": 4,
+        "guard": 5
+      },
+      "faces_right": true,
+      "height_ratio": 0.85
+    },
+    "yan_wujiu_boss": {
+      "texture": "res://assets/art/rival_atlas_v2.png",
+      "columns": 3,
+      "rows": 2,
+      "frames": {
+        "idle": 0,
+        "prepare": 1,
+        "attack": 2,
+        "cast": 3,
+        "hit": 4,
+        "guard": 5
+      },
+      "faces_right": true,
+      "height_ratio": 0.85,
+      "preferred": "res://assets/art/actors/cultivator_canglan_male.png"
+    },
+    "tribulation_ascend": {
+      "texture": "res://assets/art/rival_atlas_v2.png",
+      "preferred": "res://assets/art/battle/tribulation.png",
+      "columns": 3,
+      "rows": 2,
+      "frames": {
+        "idle": 0,
+        "prepare": 1,
+        "attack": 2,
+        "cast": 3,
+        "hit": 4,
+        "guard": 5
+      },
+      "faces_right": true,
+      "height_ratio": 0.85,
+      "tint": "#bcd8ff8c",
+      "preferred_layout": {
+        "tint": "#ffffff",
+        "faces_right": false
+      }
     }
   },
   "portrait_art": {

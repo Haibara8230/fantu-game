@@ -142,7 +142,7 @@ static func render_ending(ui) -> void:
 		row.add_child(rest)
 		return
 	if str(session.ended.get("kind", "")) == "ascension":
-		_ending_head(ui, center, "白 日 飞 升", "%s，%s，享年 %d 岁，踏天河而去，大道得成。" % [session.player.name, session.realm_name(), session.age()])
+		_ending_head(ui, center, "白 日 飞 升", "%s，%s，享年 %d 岁，踏天河而去，大道得成。%s" % [session.player.name, session.realm_name(), session.age(), session.Ascension.ending_text(session)])
 	elif str(session.ended.get("kind", "")) == "fallen":
 		_ending_head(ui, center, "斗 法 陨 落", "%s，%s，在一场死斗中落败，陨落时 %d 岁。" % [session.player.name, session.realm_name(), session.age()])
 		if ui.trial_store.has_save():

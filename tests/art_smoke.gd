@@ -64,7 +64,7 @@ func _run() -> void:
 		main.session.ended = {"kind": "ascension", "day": 0}
 		main.render()
 		await process_frame
-		check(main.backdrop.visible and main.backdrop.texture.resource_path == ArtLibrary.event_art("ascension_opens"), "ascension ending displays its illustration in " + str(viewport))
+		check(main.backdrop.visible and main.backdrop.texture.resource_path == ArtLibrary.event_art("zhenshu_choice"), "ascension ending displays its illustration in " + str(viewport))
 		main.session.ended = {"kind": "lifespan", "day": 0}
 		main.render()
 		check(main._telling_art().is_empty() and not main.backdrop.visible, "other endings do not inherit the ascension picture")

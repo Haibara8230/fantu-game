@@ -29,6 +29,7 @@ const Arena = preload("res://scripts/core/arena.gd")
 const Series = preload("res://scripts/core/series.gd")
 const Trials = preload("res://scripts/core/trials.gd")
 const Guest = preload("res://scripts/core/guest.gd")
+const Ascension = preload("res://scripts/core/ascension.gd")
 const Feuds = preload("res://scripts/core/feuds.gd")
 const Schools = preload("res://scripts/core/schools.gd")
 const Breakthrough = preload("res://scripts/core/breakthrough.gd")
@@ -499,21 +500,12 @@ func act(action: String) -> String:
 		"breakthrough":
 			return Breakthrough.attempt(self, Breakthrough.default_plan(self))
 		"ascend":
-			var barred := ascend_block()
-			if not barred.is_empty():
-				return barred
-			ended = {"kind": "ascension", "day": int(world.day)}
-			var text := log_event("ascended", {"age": age()}, true)
-			changed.emit()
-			return text
+			return Ascension.attempt(self)
 	return "未知操作。"
 
-## Why the player cannot ascend at the crossing now, or "": only at 化神圆满, the highest realm's last stage.
+## Why the player cannot ascend at the crossing now, or "" (ascension.gd).
 func ascend_block() -> String:
-	var top: int = content.realms.size() - 1
-	if int(player.realm) < top or int(player.stage) < content.realm(top).stages.size() - 1:
-		return "唯有%s方能踏上天河渡桥。" % content.realm_title(top, content.realm(top).stages.size() - 1)
-	return ""
+	return Ascension.block(self)
 
 ## Closed-door cultivation for a chosen number of days. Reminders and lifespan warnings can end it early,
 ## and so does reaching a bottleneck. Cultivation is credited per elapsed day with the day's efficiency
