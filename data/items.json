@@ -478,5 +478,9 @@
   "chaoxin_shi": {"name": "潮心石", "category": "material", "price": 300, "rarity": 3, "description": "在海底压了上百年的石头，一面温一面凉，贴在耳边能听见潮声。修复水系古剑少不了它。"},
   "huitian_cao": {"name": "回天草", "category": "treasure", "price": 400, "rarity": 3, "description": "只长在瘴气最浓处的灵草，叶背有一圈金线。配长青丹法炼成续元丹，能替寿元将尽的人续上十年——只能续一次，也只能续十年。"},
   "zhaoshui_canpian": {"name": "《照水分光诀》残篇", "category": "quest", "price": 800, "rarity": 3, "description": "沧澜阁水剑一脉心法的上半部抄本，讲以水映金，后半部讲以金分水的地方被人撕去了。只有上半部练不成，得找人补全。"},
-  "ningdan_yaolue": {"name": "《凝丹要略》", "category": "tool", "price": 900, "rarity": 3, "description": "一位金丹前辈写给后人的凝丹手记：灵液怎样收拢、几时封炉、心念怎样不散。读过之后结丹多几分把握，金丹也更凝实。", "use": [{"flag": "ningdan_known"}, {"mind": 2}]}
+  "ningdan_yaolue": {"name": "《凝丹要略》", "category": "tool", "price": 900, "rarity": 3, "description": "一位金丹前辈写给后人的凝丹手记：灵液怎样收拢、几时封炉、心念怎样不散。读过之后结丹多几分把握，金丹也更凝实。", "use": [{"flag": "ningdan_known"}, {"mind": 2}]},
+  "ningying_jue": {"name": "《凝婴诀》", "category": "tool", "price": 2400, "rarity": 4, "description": "一位元婴前辈的手记：碎丹成婴时神魂怎样守、元婴怎样养。读过之后，冲击元婴多几分把握。", "use": [{"flag": "ningying_known"}, {"mind": 3}]},
+  "zhaochuan_zhentu": {"name": "照川阵图", "category": "quest", "price": 0, "rarity": 5, "description": "温照衡亲手交出的阵图，画的是照川城的大阵与天河封印的走向。阵枢的位置，用朱笔圈了出来。"},
+  "wen_diary": {"name": "温照衡的日记", "category": "quest", "price": 0, "rarity": 4, "description": "老艄公转交的一只木匣，里面是温照衡几百年的日记。最早的一页写着：照川城封存之日，城里还有三千七百人。"},
+  "wenren_log": {"name": "闻人照的航海日志", "category": "quest", "price": 0, "rarity": 3, "description": "雾岛礁缝里找到的航海日志，最后几页的字越写越乱，最后一行是：门后有风。"}
 }

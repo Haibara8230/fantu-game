@@ -255,7 +255,7 @@ func _saves() -> void:
 	check(kept.restore(gone) and not kept.world.caves.has("moon_cave") and not "moon_room" in kept.world.caves.ruin.explored, "caves and rooms no longer known are dropped")
 
 ## 沉霞古境: opens in spring of 150 and every sixty years for one year, in the valley; its stairs ask
-## 神识 40; its guardians fall; it closes; the next opening starts afresh.
+## 金丹 and 神识 40; its guardians fall; it closes; the next opening starts afresh.
 func _chenxia() -> void:
 	var game := _game(0)
 	game.player.realm = 1
@@ -266,12 +266,16 @@ func _chenxia() -> void:
 	game.world.day = calendar.to_day(150, 2, 30)
 	game.wait(1)
 	check(game.has_flag("chenxia_open") and game.cave_here() == "chenxia" and game.journal_lines().any(func(line: String) -> bool: return line.contains("沉霞古境开了")), "in the spring of 150 the 沉霞古境 opens in the valley")
-	check(game.enter_room("chenxia", "stairs").contains("神识 40"), "its stairs ask 神识 40")
+	check(game.enter_room("chenxia", "stairs").contains("金丹"), "its stairs ask 金丹")
 	check(game.Caves.fortunes_in(game, "chenxia").is_empty() and game.Caves.fortunes_in(game, "ruin").size() == 2, "the old cave's fortunes stay in the old cave")
 	game.player.realm = 2
 	game.player.stage = 1
 	game.refresh_realm_stats()
 	game.player.hp = game.player.max_hp
+	# A 金丹 at the gate may ask a friend along (batch 5); this one goes alone.
+	game.wait(1)
+	if str(game.pending_event.get("id", "")) == "chenxia_party":
+		game.choose_event("alone")
 	game.enter_room("chenxia", "stairs")
 	check(game.Caves.explored(game, "chenxia", "stairs") and game.journal_lines().any(func(line: String) -> bool: return line.contains("识破")), "a 金丹 sees through the stairs' array")
 	game.enter_room("chenxia", "tomb")
@@ -321,6 +325,19 @@ func _scroll() -> void:
 	_button("丹房 ？").pressed.emit()
 	await process_frame
 	check(_button("探入丹房") != null, "choosing a doorway offers to enter it")
+	# 沉霞古境 with a friend along (batch 5): the scroll says who and what they bring.
+	var game = main.session
+	game.world.flags["chenxia_open"] = true
+	game.player.realm = 2
+	game.refresh_realm_stats()
+	game.player.location = "wild"
+	game.world["party"] = {"chenxia": "wounded"}
+	main.set_view("place")
+	main.select_spot("chenxia")
+	await process_frame
+	var labels := "
+".join(main.center.find_children("*", "Label", true, false).map(func(label: Label) -> String: return label.text))
+	check(labels.contains("同行 · 柳寒舟"), "the 古境's scroll names the friend along")
 	main.queue_free()
 	await process_frame
 

@@ -903,6 +903,56 @@
         "talk": [
           "“……嗯。”"
         ]
+      },
+      {
+        "year": 70,
+        "standing": [
+          1,
+          2
+        ],
+        "realm_text": "筑基后期"
+      },
+      {
+        "year": 110,
+        "standing": [
+          2,
+          0
+        ],
+        "realm_text": "金丹初期"
+      },
+      {
+        "year": 155,
+        "if": [
+          {
+            "flag": "boon_wounded"
+          }
+        ],
+        "standing": [
+          2,
+          1
+        ],
+        "realm_text": "金丹中期"
+      },
+      {
+        "year": 190,
+        "standing": [
+          2,
+          1
+        ],
+        "realm_text": "金丹中期"
+      },
+      {
+        "year": 210,
+        "if": [
+          {
+            "flag": "boon_wounded"
+          }
+        ],
+        "standing": [
+          2,
+          2
+        ],
+        "realm_text": "金丹后期"
       }
     ]
   },
@@ -2055,6 +2105,35 @@
         "talk": [
           "“……是你啊。”"
         ]
+      },
+      {
+        "year": 60,
+        "standing": [
+          1,
+          1
+        ],
+        "realm_text": "筑基中期"
+      },
+      {
+        "year": 100,
+        "standing": [
+          1,
+          2
+        ],
+        "realm_text": "筑基后期"
+      },
+      {
+        "year": 155,
+        "if": [
+          {
+            "flag": "boon_lu_chengzhou"
+          }
+        ],
+        "standing": [
+          2,
+          0
+        ],
+        "realm_text": "金丹初期"
       }
     ]
   },
@@ -2212,6 +2291,35 @@
           0
         ],
         "realm_text": "金丹初期"
+      },
+      {
+        "year": 140,
+        "standing": [
+          2,
+          1
+        ],
+        "realm_text": "金丹中期"
+      },
+      {
+        "year": 155,
+        "if": [
+          {
+            "flag": "boon_ye_zhiwei"
+          }
+        ],
+        "standing": [
+          2,
+          2
+        ],
+        "realm_text": "金丹后期"
+      },
+      {
+        "year": 220,
+        "standing": [
+          2,
+          2
+        ],
+        "realm_text": "金丹后期"
       }
     ]
   },
@@ -2315,6 +2423,53 @@
             "year_at_least": 99999
           }
         ]
+      },
+      {
+        "year": 131,
+        "if": [
+          {
+            "flag": "wenren_found_alive"
+          }
+        ],
+        "present_if": [],
+        "home": "wanghai",
+        "spot": "dock",
+        "standing": [
+          2,
+          1
+        ],
+        "realm_text": "金丹中期",
+        "title": "可靠的领航者",
+        "description": "在外海雾岛困了几年，被人找了回来。如今在望海船坞带船，出海前把潮、风、退路一样样算清楚，再没扑空过。",
+        "talk": [
+          "“门后有风。下回，我带够人、带够船。”"
+        ]
+      },
+      {
+        "year": 131,
+        "if": [
+          {
+            "flag": "wenren_found_dead"
+          }
+        ],
+        "realm_text": "已故",
+        "description": "出海寻那座门，困死在外海雾岛。航海日志的最后一行写着：门后有风。"
+      },
+      {
+        "year": 160,
+        "if": [
+          {
+            "flag": "boon_wenren_zhao"
+          },
+          {
+            "flag": "wenren_found_alive"
+          }
+        ],
+        "standing": [
+          2,
+          2
+        ],
+        "realm_text": "金丹后期"
       }
     ]
   },
@@ -2345,6 +2500,183 @@
       "“这条河以前不叫这个名字。”",
       "“铜片收好。不必问我，问水。”",
       "“有些地方，找到了未必是好事。”"
+    ],
+    "interactions": [
+      {
+        "id": "tell_mirror",
+        "label": "把沉霞古境镜壁上的城说给他听",
+        "once": true,
+        "conditions": [
+          {
+            "flag": "zhaochuan_seen"
+          }
+        ],
+        "effects": [
+          {
+            "flag": "wen_told_mirror"
+          },
+          {
+            "relation": [
+              "wen_zhaoheng",
+              30
+            ]
+          }
+        ],
+        "chronicle": "温照衡听你说到城门下回头的人，手里的鱼竿抖了一下。他很久没有说话。"
+      },
+      {
+        "id": "tell_map",
+        "label": "拿古战场的照川残图给他看",
+        "once": true,
+        "conditions": [
+          {
+            "flag": "guzhan_cleared"
+          }
+        ],
+        "effects": [
+          {
+            "flag": "wen_told_map"
+          },
+          {
+            "relation": [
+              "wen_zhaoheng",
+              30
+            ]
+          }
+        ],
+        "chronicle": "温照衡看着残图上的批注，「城不可开，开则河倒」。“这是我师兄的字。”"
+      },
+      {
+        "id": "tell_pillar",
+        "label": "说起外海雾岛下的阵基",
+        "once": true,
+        "conditions": [
+          {
+            "flag": "pillar_cleared"
+          }
+        ],
+        "effects": [
+          {
+            "flag": "wen_told_pillar"
+          },
+          {
+            "relation": [
+              "wen_zhaoheng",
+              30
+            ]
+          }
+        ],
+        "chronicle": "“东阵基还立着？”温照衡第一次正眼看你，“那就好。阵还没倒。”"
+      },
+      {
+        "id": "tell_chart",
+        "label": "说起闻人照的海图和礁下石门",
+        "once": true,
+        "conditions": [
+          {
+            "flag": "chart_verified"
+          }
+        ],
+        "effects": [
+          {
+            "flag": "wen_told_chart"
+          },
+          {
+            "relation": [
+              "wen_zhaoheng",
+              20
+            ]
+          }
+        ],
+        "chronicle": "温照衡听完石门的事，只说了一句：“门后有风，是因为城还活着。”"
+      },
+      {
+        "id": "tell_archive",
+        "label": "说起北岳旧档库的缺页和守川司",
+        "once": true,
+        "conditions": [
+          {
+            "any": [
+              {
+                "flag": "archive_done"
+              },
+              {
+                "flag": "archive_seized"
+              }
+            ]
+          }
+        ],
+        "effects": [
+          {
+            "flag": "wen_told_archive"
+          },
+          {
+            "relation": [
+              "wen_zhaoheng",
+              20
+            ]
+          }
+        ],
+        "chronicle": "“晏无咎是个守规矩的人。”温照衡说，“规矩是我们这些人定的。”"
+      },
+      {
+        "id": "testimony",
+        "label": "请他说说当年的事",
+        "once": true,
+        "conditions": [
+          {
+            "story_at": [
+              "mirror",
+              "zhaoheng"
+            ]
+          },
+          {
+            "relation_at_least": [
+              "wen_zhaoheng",
+              100
+            ]
+          },
+          {
+            "not": {
+              "flag": "wen_gone"
+            }
+          }
+        ],
+        "effects": [
+          {
+            "flag": "wen_testimony"
+          },
+          {
+            "flag": "ningying_known"
+          },
+          {
+            "item": [
+              "zhaochuan_zhentu",
+              1
+            ]
+          },
+          {
+            "relation": [
+              "wen_zhaoheng",
+              20
+            ]
+          }
+        ],
+        "chronicle": "温照衡收起鱼竿，说了一整夜。四百五十年前，天河的口子在照川城下裂开，他和师兄们把城和裂隙一起封了进去——封阵合上的时候，城里还有三千七百人。“我们说是救了天下。也是。”天亮时，他把一张阵图和一册凝婴的手记交给你：“阵枢在这里。别急着去开它。”"
+      }
+    ],
+    "phases": [
+      {
+        "year": 200,
+        "realm_text": "已坐化",
+        "title": "坐化的守阵人",
+        "description": "常在白鹭渡天河渡口垂钓的老修士，照川城当年的守阵人之一。历元二百年在渡口坐化，鱼竿还握在手里。",
+        "present_if": [
+          {
+            "year_at_least": 99999
+          }
+        ]
+      }
     ]
   },
   "qin_yan": {

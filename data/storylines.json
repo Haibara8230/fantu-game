@@ -925,7 +925,97 @@
           }
         ]
       },
-      {"id": "archive", "goal": "带着描下的城徽去北岳城：阵师会馆能引荐进旧档库，那里或许留着那座城的卷宗。", "place": "beiyue", "requires": [{"realm_at_least": 1}, {"flag": "crest_puzzled"}, {"flag": "tiannan_known"}], "done": [{"any": [{"flag": "archive_done"}, {"flag": "archive_seized"}]}], "after": "缺页是守川司撤走的；温照衡与那幅古画像是同一个人——几百年前的守阵名录上就有他。一个活了几百年、天天在渡口钓鱼的人，和一群专门撤卷宗的人。他们到底在藏什么？", "effects": [{"mind": 4}], "major": true}
+      {
+        "id": "archive",
+        "goal": "带着描下的城徽去北岳城：阵师会馆能引荐进旧档库，那里或许留着那座城的卷宗。",
+        "place": "beiyue",
+        "requires": [
+          {
+            "realm_at_least": 1
+          },
+          {
+            "flag": "crest_puzzled"
+          },
+          {
+            "flag": "tiannan_known"
+          }
+        ],
+        "done": [
+          {
+            "any": [
+              {
+                "flag": "archive_done"
+              },
+              {
+                "flag": "archive_seized"
+              }
+            ]
+          }
+        ],
+        "after": "缺页是守川司撤走的；温照衡与那幅古画像是同一个人——几百年前的守阵名录上就有他。一个活了几百年、天天在渡口钓鱼的人，和一群专门撤卷宗的人。他们到底在藏什么？",
+        "effects": [
+          {
+            "mind": 4
+          }
+        ],
+        "major": true
+      },
+      {
+        "id": "zhaochuan",
+        "goal": "金丹以后，去找照川城真实存在过的证据：沉霞古境深处（历元一百五十年起每六十年开一年）、北岳北面的古战场、外海雾岛下的阵基，三处任一。",
+        "place": "wild",
+        "requires": [
+          {
+            "realm_at_least": 2
+          }
+        ],
+        "done": [
+          {
+            "any": [
+              {
+                "flag": "zhaochuan_seen"
+              },
+              {
+                "flag": "guzhan_cleared"
+              },
+              {
+                "flag": "pillar_cleared"
+              }
+            ]
+          }
+        ],
+        "after": "照川城真实存在过。镜壁、残图、阵基说的是同一件事：天河的封印就是照川城的大阵，城和裂隙一起被封了进去。可公开的史书上，从来没有这座城；城里的人回头望着的，又是什么？",
+        "effects": [
+          {
+            "mind": 4
+          }
+        ],
+        "major": true
+      },
+      {
+        "id": "zhaoheng",
+        "goal": "去白鹭渡天河渡口找温照衡，把你看到的一样样讲给他听——他坐化之前，也许肯说当年的事。",
+        "place": "ferry",
+        "done": [
+          {
+            "any": [
+              {
+                "flag": "wen_testimony"
+              },
+              {
+                "flag": "wen_diary"
+              }
+            ]
+          }
+        ],
+        "after": "当年封城的人里，有一个就是温照衡。城封上的那天，城里还有三千七百人，没能出来。几百年来他天天在渡口看水，看的是那座城。被留在城里的人，如今怎样了？",
+        "effects": [
+          {
+            "mind": 5
+          }
+        ],
+        "major": true
+      }
     ]
   },
   "zhuji_plan": {
@@ -1095,5 +1185,6 @@
   "wenren_chart": {"title": "古海图", "giver": "wenren_zhao", "begin_if": [{"year_at_least": 110}, {"met": "wenren_zhao"}, {"realm_at_least": 1}], "steps": [{"id": "letter", "letter": true, "say": "“这回是真的！来望海船坞，给你看样东西。”", "goal": "去望海城船坞找闻人照。", "place": "wanghai", "done": [{"at_location": "wanghai"}], "after": "闻人照摊开一张羊皮海图，墨色旧得发褐。近海群岛的沉船湾底下画着一道门，门楣上的纹样，正是镜中那座城的城徽。“图上说，门后还有路。”", "effects": [{"flag": "wenren_chart"}, {"relation": ["wenren_zhao", 5]}]}, {"id": "verify", "goal": "同闻人照去近海群岛，到沉船湾深处的礁下石门验图（海船两日；货舱里有水鬼）。", "place": "jinhai", "done": [{"flag": "chart_verified"}], "after": "石门就在那里，城徽一笔不差。闻人照摸着门楣，半天才说出话来：“十回寻宝九回扑空……这回，是那一成。”", "effects": [{"mind": 3}, {"relation": ["wenren_zhao", 10]}], "major": true}, {"id": "ship", "goal": "回望海船坞，跟闻人照商量出海的事。", "place": "wanghai", "choice_event": "wenren_ship"}, {"id": "sail", "letter": true, "requires": [{"year_at_least": 130}], "say": "“船明早开。来不来？”", "goal": "历元一百三十年开春，去望海港口：依约登船，或给闻人照送行。", "place": "wanghai", "choice_event": "wenren_sail"}], "close_if": [{"flag": "wenren_lost"}], "closed": "闻人照的船已经开走了。"},
   "jindan_plan": {"title": "结丹之备", "giver": "shen_mo", "begin_if": [{"affiliation": ""}, {"stage_at_least": [1, 2]}, {"flag": "tiannan_known"}], "close_if": [{"any": [{"realm_at_least": 2}, {"not": {"affiliation": ""}}]}], "closed": "结丹之备不必再提。", "steps": [{"id": "ask", "letter": true, "say": "“筑基后期了？结丹的事，云溪帮不上你。去沧澜城藏书院坐坐，那里的老先生懂。”", "goal": "去沧澜城藏书院打听结丹的门道。", "place": "canglan", "done": [{"at_location": "canglan"}], "after": "藏书院的老先生说：结丹不用丹药，靠自己。值得争取的有四样——凝丹之法（药市寄卖的《凝丹要略》，或请一位交情深的首徒相赠）、金丹用的天材地宝（霞光灵髓、地心火莲）、一处好地方（灵眼，或城东的水榭小筑）、一个靠得住的护法。四样都不是非有不可。"}, {"id": "prep", "goal": "结丹的准备，能备几样备几样：读《凝丹要略》、寻一样金丹天材地宝、找一处好地方、请人护法。都不是非有不可。", "place": "canglan", "done": [{"any": [{"flag": "ningdan_known"}, {"item_at_least": ["xiaguang_lingsui", 1]}, {"item_at_least": ["dixin_huolian", 1]}, {"flag": "canglan_abode"}, {"stage_at_least": [1, 3]}]}], "after": "该备的备了一些。剩下的，只看你自己。"}]},
   "jindan_sect": {"title": "结丹之备", "giver": "gu_changgeng", "begin_if": [{"affiliation": "qingyun"}, {"stage_at_least": [1, 2]}], "close_if": [{"any": [{"realm_at_least": 2}, {"not": {"affiliation": "qingyun"}}]}], "closed": "结丹之备不必再提。", "steps": [{"id": "ask", "letter": true, "speaker": "gu_changgeng", "say": "“筑基后期了。回传功堂一趟，说说结丹。”", "goal": "回青云山传功堂，听顾长庚说结丹。", "place": "sect", "done": [{"at_location": "sect"}], "after": "顾长庚说：结丹不用丹药，靠自己。本门执事堂有一部《凝丹要略》，内门弟子四百贡献可换；金丹用的天材地宝要自己去寻；静室就在山上，护法仍请他。“不必样样齐全。准备得越久，寿元也走得越远。”"}, {"id": "prep", "goal": "结丹的准备，能备几样备几样：换一部《凝丹要略》、寻一样金丹天材地宝、修到筑基圆满再请顾长老护法。", "place": "sect", "done": [{"any": [{"flag": "ningdan_known"}, {"item_at_least": ["xiaguang_lingsui", 1]}, {"item_at_least": ["dixin_huolian", 1]}, {"stage_at_least": [1, 3]}]}], "after": "该备的备了一些。剩下的，只看你自己。"}]},
-  "wuzong_prep": {"title": "论道之备", "giver": "storyteller", "begin_if": [{"realm_at_least": 2}, {"flag": "wuzong_notice"}], "steps": [{"id": "aim", "goal": "五宗论道十月开坛（会址看日程）。想好去做什么：登台斗法要有资格（青云弟子、某宗客卿、天南大比魁首，或一位首徒交情「信赖」）；展示要一件法宝以上的宝物或一部地阶功法；观战论道、指点后辈，谁都可以。", "done": [{"flag": "wuzong_seen"}], "after": "论道散了。台上的胜负、台下的交谈、展台前的人，各自记在心里。下一回，又是一甲子以后。"}]}
+  "wuzong_prep": {"title": "论道之备", "giver": "storyteller", "begin_if": [{"realm_at_least": 2}, {"flag": "wuzong_notice"}], "steps": [{"id": "aim", "goal": "五宗论道十月开坛（会址看日程）。想好去做什么：登台斗法要有资格（青云弟子、某宗客卿、天南大比魁首，或一位首徒交情「信赖」）；展示要一件法宝以上的宝物或一部地阶功法；观战论道、指点后辈，谁都可以。", "done": [{"flag": "wuzong_seen"}], "after": "论道散了。台上的胜负、台下的交谈、展台前的人，各自记在心里。下一回，又是一甲子以后。"}]},
+  "wenren_search": {"title": "寻人", "giver": "wei_sanniang", "begin_if": [{"flag": "wenren_lost"}, {"met": "wenren_zhao"}], "steps": [{"id": "ask", "goal": "闻人照的船没回来：去望海港口问问卫三娘，船往哪边去了。", "place": "wanghai", "done": [{"at_location": "wanghai"}], "after": "卫三娘抽着烟：“东南，雾岛那边。那片海，船进去多半出不来——要去，得会御剑渡海，金丹才行。”她把一张画着雾岛的草图推过来，“找到了，替我骂他一句。”", "effects": [{"meet": "wei_sanniang"}, {"flag": "wenren_heard"}]}, {"id": "island", "goal": "去外海雾岛找闻人照（近海群岛东南，金丹御剑渡海 4 日）。", "place": "waihai", "done": [{"any": [{"flag": "wenren_found_alive"}, {"flag": "wenren_found_dead"}]}], "major": true}]}
 }

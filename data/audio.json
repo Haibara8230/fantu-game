@@ -22,7 +22,9 @@
     "canglan": "res://assets/audio/music/river_flute.ogg",
     "wanghai": "res://assets/audio/music/river_flute.ogg",
     "jinhai": "res://assets/audio/music/eastern_thought.ogg",
-    "duze": "res://assets/audio/music/eastern_thought.ogg"
+    "duze": "res://assets/audio/music/eastern_thought.ogg",
+    "waihai": "res://assets/audio/music/eastern_thought.ogg",
+    "guzhanchang": "res://assets/audio/music/eastern_thought.ogg"
   },
   "music_credits": [
     {
@@ -93,7 +95,9 @@
     "canglan": "res://assets/audio/ambience/river_egrets.ogg",
     "wanghai": "res://assets/audio/ambience/market_crowd.ogg",
     "jinhai": "res://assets/audio/ambience/river_egrets.ogg",
-    "duze": "res://assets/audio/ambience/valley_insects.ogg"
+    "duze": "res://assets/audio/ambience/valley_insects.ogg",
+    "waihai": "res://assets/audio/ambience/river_egrets.ogg",
+    "guzhanchang": "res://assets/audio/ambience/mountain_wind_bells.ogg"
   },
   "sfx": {
     "click": {

@@ -15,6 +15,10 @@ extends RefCounted
 ## - the remnant soul (fortune "remnant"), which offers its blessing before foundation;
 ## - a finding (`flag`) marked in the world on entering.
 ## A named slip (`slip`: a handwritten technique) may lie among a room's things.
+## Someone may go in along (同行, world.party[cave]: a person the cave's `companions` names), each
+## with a gift of their own: `sense` (神识 for seals, traps and hidden places), `hidden` (神识 for hidden
+## places only), `heal` (a share of health back after each room, in hundredths) and `guardian` (the
+## guardians met with only that share of their health).
 ## Whether the 千年石乳 and the remnant soul are there is decided once, when the cave is first entered
 ## (fortune.gd's chance, after the talents for fortune). Which of a room's `loot` choices lies there
 ## follows from the world seed. Everything else is in world.caves[cave]: explored rooms, rooms whose
@@ -75,9 +79,25 @@ static func fortunes_in(s, cave_id: String) -> Array:
 				found.append(str(id))
 	return found
 
-## A cave that opens again (沉霞古境) starts afresh: its rooms unexplored, its guardians standing.
+## Who went in along, or "" (the cave's `companions` names them and their gifts).
+static func party(s, cave_id: String) -> String:
+	var person := str(s.world.get("party", {}).get(cave_id, ""))
+	return person if definition(s, cave_id).get("companions", {}).has(person) else ""
+
+## The companion's gift of `key` in this cave, 0 without one.
+static func perk(s, cave_id: String, key: String) -> float:
+	var person := party(s, cave_id)
+	return 0.0 if person.is_empty() else float(definition(s, cave_id).companions[person].get(key, 0))
+
+## The 神识 that counts in this cave: one's own, and a companion's gift (`hidden` too for hidden places).
+static func sense_in(s, cave_id: String, hidden: bool = false) -> int:
+	return int(s.sense()) + int(perk(s, cave_id, "sense")) + (int(perk(s, cave_id, "hidden")) if hidden else 0)
+
+## A cave that opens again (沉霞古境) starts afresh: its rooms unexplored, its guardians standing, nobody
+## along yet.
 static func reset(s, cave_id: String) -> void:
 	s.world.get("caves", {}).erase(cave_id)
+	s.world.get("party", {}).erase(cave_id)
 	for candidate: Dictionary in definition(s, cave_id).get("rooms", []):
 		if candidate.has("guardian"):
 			s.world.flags.erase(str(s.content.enemies[str(candidate.guardian)].world_flag))
@@ -111,15 +131,15 @@ static func enter_block(s, cave_id: String, room_id: String) -> String:
 		return "这间石室已经探过。"
 	if not reachable(s, cave_id, room_id):
 		return "还找不到通往这里的路。"
-	if s.sense() < int(target.get("requires_sense", 0)):
-		return "门上的禁制须神识 %d 方能破开（你的神识 %d）。" % [int(target.requires_sense), s.sense()]
+	# A room deeper than the realm (断剑峡的剑冢): told, not barred without a word.
+	if int(s.player.realm) < int(target.get("requires_realm", 0)):
+		return "%s：须%s方能深入。" % [target.get("realm_text", "再往里去凶险莫测"), s.content.realm_title(int(target.requires_realm), 0)]
+	if sense_in(s, cave_id) < int(target.get("requires_sense", 0)):
+		return "门上的禁制须神识 %d 方能破开（你的神识 %d）。" % [int(target.requires_sense), sense_in(s, cave_id)]
 	# Heat (地火之心): a 避火珠 in the pack, 神识 enough to find a cooler way round, or a fire root at home in it.
 	var heat: Dictionary = target.get("heat", {})
 	if not heat.is_empty() and s.item_count(str(heat.item)) < 1 and s.sense() < int(heat.sense) and not "fire" in s.player.get("roots", []):
 		return "%s：须带%s，或神识 %d 寻出一条凉些的岔道，或身具火灵根（你的神识 %d）。" % [heat.text, s.content.item(str(heat.item)).name, int(heat.sense), s.sense()]
-	# A room deeper than the realm (断剑峡的剑冢): told, not barred without a word.
-	if int(s.player.realm) < int(target.get("requires_realm", 0)):
-		return "%s：须%s方能深入。" % [target.get("realm_text", "再往里去凶险莫测"), s.content.realm_title(int(target.requires_realm), 0)]
 	return ""
 
 ## Enters a room: the days pass, then its trap, things, guardian or remnant soul.
@@ -143,7 +163,7 @@ static func enter(s, cave_id: String, room_id: String) -> String:
 		var trap: Dictionary = target.trap
 		var name := str(_pick(s, cave_id, room_id + ":trap", trap.names))
 		# 秦砚's 阵谱 (trap_lore) reads a trap as a sharper 神识 would.
-		if s.sense() + (int(s.content.rules.get("trap_lore", 0)) if s.has_flag("trap_lore") else 0) >= int(trap.sense):
+		if sense_in(s, cave_id) + (int(s.content.rules.get("trap_lore", 0)) if s.has_flag("trap_lore") else 0) >= int(trap.sense):
 			texts.append(s.log_event("cave_trap_seen", args.merged({"trap": name})))
 		else:
 			var hurt: int = s.world_rng.randi_range(int(trap.damage[0]), int(trap.damage[1]))
@@ -151,9 +171,12 @@ static func enter(s, cave_id: String, room_id: String) -> String:
 			s.player.hp = int(s.player.hp) - hurt
 			# One already hanging by a thread is spared the telling of a wound of nothing.
 			texts.append(s.log_event("cave_trap_sprung" if hurt > 0 else "cave_trap_grazed", args.merged({"trap": name, "amount": hurt})))
+	# A companion who heals (叶知微) mends the wounds of the way between rooms.
+	var heal := perk(s, cave_id, "heal")
+	if heal > 0.0 and int(s.player.hp) < int(s.player.max_hp):
+		s.player.hp = mini(int(s.player.max_hp), int(s.player.hp) + int(float(s.player.max_hp) * heal / 100.0))
 	if guarded(s, cave_id, room_id):
-		texts.append(s.begin_battle(str(target.guardian), "event"))
-		s.battle.cave = cave_id
+		texts.append(_face(s, cave_id, str(target.guardian)))
 	elif str(target.get("fortune", "")) == "remnant" and _remnant_waits(s, cave_id):
 		visit.fortune.remnant = false
 		visit.taken.append(room_id)
@@ -174,9 +197,18 @@ static func challenge(s, cave_id: String, room_id: String) -> String:
 		return reason
 	if not open_here(s, cave_id) or not explored(s, cave_id, room_id) or not guarded(s, cave_id, room_id):
 		return "这里没有对手。"
-	var text: String = s.begin_battle(str(room(s, cave_id, room_id).guardian), "event")
+	return s.finish(_face(s, cave_id, str(room(s, cave_id, room_id).guardian)))
+
+## A guardian's duel in the cave; a companion's blade (柳寒舟) has worn it down first.
+static func _face(s, cave_id: String, guardian: String) -> String:
+	var text: String = s.begin_battle(guardian, "event")
+	if s.battle.is_empty():
+		return text
 	s.battle.cave = cave_id
-	return s.finish(text)
+	var share := perk(s, cave_id, "guardian")
+	if share > 0.0:
+		s.battle.hp = maxi(1, int(float(s.battle.hp) * share))
+	return text
 
 ## Whether a room's things still wait (left behind a guardian that has fallen since).
 static func loot_waits(s, cave_id: String, room_id: String) -> bool:
@@ -193,7 +225,7 @@ static func collect(s, cave_id: String, room_id: String) -> String:
 ## Whether the 神识 sees a room's hidden place.
 static func hidden_seen(s, cave_id: String, room_id: String) -> bool:
 	var target := room(s, cave_id, room_id)
-	return target.has("hidden") and explored(s, cave_id, room_id) and s.sense() >= int(target.hidden.sense)
+	return target.has("hidden") and explored(s, cave_id, room_id) and sense_in(s, cave_id, true) >= int(target.hidden.sense)
 
 ## Why a room's hidden place cannot be opened now, or "".
 static func hidden_block(s, cave_id: String, room_id: String) -> String:
@@ -206,7 +238,7 @@ static func hidden_block(s, cave_id: String, room_id: String) -> String:
 	if room_id + ":hidden" in state(s, cave_id).taken:
 		return "暗处已经取空。"
 	if not hidden_seen(s, cave_id, room_id):
-		return "神识不足以看清（须 %d，你的神识 %d）。" % [int(target.hidden.sense), s.sense()]
+		return "神识不足以看清（须 %d，你的神识 %d）。" % [int(target.hidden.sense), sense_in(s, cave_id, true)]
 	if int(s.player.qi) < int(target.hidden.qi):
 		return "灵力不足：破开禁制需要 %d 灵力。" % int(target.hidden.qi)
 	return ""

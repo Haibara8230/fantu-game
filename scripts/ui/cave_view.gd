@@ -21,6 +21,10 @@ static func render(ui, center: VBoxContainer) -> void:
 		return
 	var cave: Dictionary = session.Caves.definition(session, cave_id)
 	center.add_child(ui.label("神识 %d  ·  灵力 %d / %d  ·  每探一间 %d 日" % [session.sense(), int(session.player.qi), int(session.player.max_qi), int(cave.step_days)], 15, ui.MUTED))
+	# Who went in along, and what they bring (caves.gd party).
+	var along: String = session.Caves.party(session, cave_id)
+	if not along.is_empty():
+		center.add_child(ui.label("同行 · %s：%s" % [session.person(along).name, cave.companions[along].text], 15, ui.MUTED))
 	var known: Array[String] = []
 	for room: Dictionary in cave.rooms:
 		if session.Caves.explored(session, cave_id, room.id) or session.Caves.reachable(session, cave_id, room.id):

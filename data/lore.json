@@ -19,6 +19,9 @@
     {"id": "duze_garden", "text": "毒泽的瘴雾这些年退了几里，采药人说泽心露出了一片老药园的石碑，碑上刻着长青谷的字号。", "conditions": [{"flag": "tiannan_known"}, {"not": {"flag": "garden_seeds_found"}}]},
     {"id": "jinhai_wreck", "text": "望海的老水手说，近海沉船湾里最大的那条船叫「观潮」，一百年前沧澜阁的长老坐着它出海测潮，再没回来。", "conditions": [{"flag": "tiannan_known"}, {"not": {"flag": "wreck_cleared"}}]},
     {"id": "guest_elders", "text": "茶客说四宗都请客卿：月俸不多，客舍能闭关，赤霄的炉、长青的丹坊、沧澜的藏经阁、玄岳的旧档库各有门路；只是隔几年宗门就要差遣一回，误多了便要解约。", "conditions": [{"realm_at_least": 1}, {"affiliation": ""}]},
-    {"id": "wuzong_rotation", "text": "老修士说五宗论道一甲子一回，五城轮着办，只许金丹以上登台；可台下论道、指点后辈、上展台亮宝物，谁都可以去。", "conditions": [{"realm_at_least": 2}]}
+    {"id": "wuzong_rotation", "text": "老修士说五宗论道一甲子一回，五城轮着办，只许金丹以上登台；可台下论道、指点后辈、上展台亮宝物，谁都可以去。", "conditions": [{"realm_at_least": 2}]},
+    {"id": "chenxia_companions", "text": "老修士说沉霞古境里的禁制、守卫一个人吃不消，上回进去的人多半是结伴：一个读阵，一个治伤，一个出剑。", "conditions": [{"realm_at_least": 2}]},
+    {"id": "guzhan_field", "text": "北岳来的人说，城北的古战场夜里有阴兵列阵走过，荒原深处那半截石台底下，玄岳宗的人都不肯去。", "conditions": [{"flag": "tiannan_known"}, {"not": {"flag": "guzhan_cleared"}}]},
+    {"id": "waihai_fog", "text": "望海的老水手说，近海群岛东南有一片终年不散的雾，雾里一座孤岛，岛下的海里立着一根比山还粗的石柱。", "conditions": [{"flag": "tiannan_known"}, {"not": {"flag": "pillar_cleared"}}]}
   ]
 }

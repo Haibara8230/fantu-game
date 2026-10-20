@@ -61,6 +61,10 @@ static func _periodic_window(periodic: Dictionary, occurrence: int) -> Dictionar
 
 # --- Conditions and effects --------------------------------------------------
 
+## A handwritten person still in the world: their 年表's `present_if` holds today.
+static func _present_in_world(s, person_id: String) -> bool:
+	return s.content.people.has(person_id) and all_met(s, s.People.view_on(s, person_id, int(s.world.day)).get("present_if", []))
+
 ## A work worth showing (五宗论道's 展示): a piece of at least `tier` carried or worn, or an art or
 ## 心法 of at least `tier` learned.
 static func _work_at_least(s, tier: int) -> bool:
@@ -108,6 +112,11 @@ static func met(s, condition: Dictionary) -> bool:
 			return s.Guest.of(s) == str(value) if not str(value).is_empty() else not s.Guest.of(s).is_empty()
 		"holds_gear":
 			return s.Gear.holds(s, str(value))
+		"present":
+			# A handwritten person still in the world (not gone by their 年表's `present_if`).
+			return _present_in_world(s, str(value))
+		"party":
+			return s.Caves.party(s, str(value[0])) == str(value[1])
 		"work_at_least":
 			return _work_at_least(s, int(value))
 		"stones_at_least":
@@ -290,6 +299,10 @@ static func apply(s, effects: Array) -> void:
 				s.Summit.begin(s, 1, str(value))
 			"reset_cave":
 				s.Caves.reset(s, value)
+			"party":
+				if not s.world.has("party"):
+					s.world["party"] = {}
+				s.world.party[str(value[0])] = str(value[1])
 
 static func _person(s, person_id: String) -> Dictionary:
 	if not s.world.people.has(person_id):

@@ -49,6 +49,10 @@ static func restore(s, data: Variant) -> bool:
 	var demand: Variant = _valid_demand(content, saved_world.get("demand_supply", {}), day)
 	if events == null or people == null or caves == null or supply == null or demand == null:
 		return false
+	# Who went into a cave along (optional: caves.gd).
+	var party: Variant = saved_world.get("party", {})
+	if not party is Dictionary or party.keys().any(func(cave_id: Variant) -> bool: return not content.cave_data.has(cave_id) or not party[cave_id] is String):
+		return false
 	var companion: Variant = saved_world.get("companion", "")
 	var disciples: Variant = saved_world.get("disciples", [])
 	var sworn: Variant = saved_world.get("sworn", [])
@@ -338,7 +342,7 @@ static func restore(s, data: Variant) -> bool:
 	var grudge_seeds: Variant = saved_world.get("grudge_seeds", {})
 	if not grudge_seeds is Dictionary or grudge_seeds.values().any(func(seen: Variant) -> bool: return not _whole_nonnegative(seen)) or not _whole_nonnegative(saved_world.get("grudge_serial", 0)):
 		return false
-	s.world = {"day": day, "flags": saved_world.flags.duplicate(), "events": events, "people": people, "seed": int(seed_value) if _whole_nonnegative(seed_value) else 0, "stock_sold": sold, "rumors": rumors, "quests_taken": taken, "storylines": storylines, "letters": letters, "talent_lives": shaped, "invites": bonds.invites, "loans": bonds.loans, "visit_period": bonds.visit_period, "caves": caves, "market_supply": supply, "demand_supply": demand, "companion": companion, "disciples": disciples.duplicate(), "sworn": sworn.duplicate()}
+	s.world = {"day": day, "flags": saved_world.flags.duplicate(), "events": events, "people": people, "seed": int(seed_value) if _whole_nonnegative(seed_value) else 0, "stock_sold": sold, "rumors": rumors, "quests_taken": taken, "storylines": storylines, "letters": letters, "talent_lives": shaped, "invites": bonds.invites, "loans": bonds.loans, "visit_period": bonds.visit_period, "caves": caves, "market_supply": supply, "demand_supply": demand, "companion": companion, "party": party.duplicate(), "disciples": disciples.duplicate(), "sworn": sworn.duplicate()}
 	var kept_grudges: Array = []
 	for grudge: Dictionary in grudges:
 		kept_grudges.append({"id": str(grudge.id), "name": str(grudge.name), "enemy": str(grudge.enemy), "cause": str(grudge.cause), "since": int(grudge.since), "region": str(grudge.region)})

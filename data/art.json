@@ -34,7 +34,12 @@
     "chixiao_gate_guest_house": "chixiao_gate_foundry",
     "changqing_valley_guest_house": "changqing_valley_garden",
     "canglan_pavilion_guest_house": "canglan_pavilion_library",
-    "xuanyue_gate_guest_house": "xuanyue_gate_stone_hall"
+    "xuanyue_gate_guest_house": "xuanyue_gate_stone_hall",
+    "waihai_shore": "ferry_dock",
+    "waihai_deep": "ruin_depths",
+    "guzhanchang_field": "wild_entrance",
+    "guzhanchang_altar": "ruin_stone_room",
+    "wild_mirror": "wild_chenxia"
   },
   "location_art": {
     "beiyue": "nanming",
@@ -42,7 +47,9 @@
     "canglan": "canglan_pavilion",
     "wanghai": "ferry",
     "jinhai": "ferry",
-    "duze": "changqing_valley"
+    "duze": "changqing_valley",
+    "waihai": "ferry",
+    "guzhanchang": "chifeng"
   },
   "event_art": {
     "yunxi_autumn": "res://assets/art/events/yunxi_auction.png",
@@ -1590,6 +1597,67 @@
       ]
     },
     "jianzhong_yi": {
+      "texture": "res://assets/art/rival_atlas_v2.png",
+      "columns": 3,
+      "rows": 2,
+      "frames": {
+        "idle": 0,
+        "prepare": 1,
+        "attack": 2,
+        "cast": 3,
+        "hit": 4,
+        "guard": 5
+      },
+      "faces_right": true,
+      "height_ratio": 0.85
+    },
+    "shouchuan_lead": {
+      "texture": "res://assets/art/rival_atlas_v2.png",
+      "columns": 3,
+      "rows": 2,
+      "frames": {
+        "idle": 0,
+        "prepare": 1,
+        "attack": 2,
+        "cast": 3,
+        "hit": 4,
+        "guard": 5
+      },
+      "faces_right": true,
+      "height_ratio": 0.85,
+      "preferred": "res://assets/art/actors/cultivator_canglan_male.png"
+    },
+    "gu_jiangling": {
+      "texture": "res://assets/art/rival_atlas_v2.png",
+      "columns": 3,
+      "rows": 2,
+      "frames": {
+        "idle": 0,
+        "prepare": 1,
+        "attack": 2,
+        "cast": 3,
+        "hit": 4,
+        "guard": 5
+      },
+      "faces_right": true,
+      "height_ratio": 0.85
+    },
+    "zhenji_kui": {
+      "texture": "res://assets/art/rival_atlas_v2.png",
+      "columns": 3,
+      "rows": 2,
+      "frames": {
+        "idle": 0,
+        "prepare": 1,
+        "attack": 2,
+        "cast": 3,
+        "hit": 4,
+        "guard": 5
+      },
+      "faces_right": true,
+      "height_ratio": 0.85
+    },
+    "yin_bing": {
       "texture": "res://assets/art/rival_atlas_v2.png",
       "columns": 3,
       "rows": 2,

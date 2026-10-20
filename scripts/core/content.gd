@@ -1738,6 +1738,10 @@ func _validate_condition(condition: Variant) -> String:
 			return "" if _whole(value) and int(value) >= 1 and int(value) <= technique_data.tiers.size() else "作品品阶条件无效"
 		"guest":
 			return "" if value is String and (value.is_empty() or guest_data.get("sects", {}).has(value)) else "客卿条件无效"
+		"present":
+			return "" if people.has(value) else "未知人物：%s" % value
+		"party":
+			return "" if value is Array and value.size() == 2 and cave_data.get(str(value[0]), {}).get("companions", {}).has(str(value[1])) else "同行条件无效"
 	return "未知条件：%s" % key
 
 func _validate_effects(effects: Variant) -> String:
@@ -1806,6 +1810,8 @@ func _validate_effects(effects: Variant) -> String:
 				ok = value is Array and value.size() == 2 and not equipment(str(value[0])).is_empty() and not equipment(str(value[1])).is_empty()
 			"guest_invite":
 				ok = guest_data.get("sects", {}).has(value)
+			"party":
+				ok = value is Array and value.size() == 2 and cave_data.get(str(value[0]), {}).get("companions", {}).has(str(value[1]))
 			"longevity":
 				ok = value is Array and value.size() == 2 and value[0] is String and _whole(value[1]) and int(value[1]) >= 1
 		if not ok:

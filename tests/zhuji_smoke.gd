@@ -307,7 +307,7 @@ func _archive() -> void:
 		game.choose_event(way)
 		_win(game)
 		_settle(game)
-		check(game.story_state("mirror") == "done" and game.world.people.yan_wujiu.met, "%s: the missing pages are 守川司's work; 晏无咎 has seen the player" % way)
+		check(str(game.Storylines.current_step(game, "mirror").get("id", "")) == "zhaochuan" and game.world.people.yan_wujiu.met, "%s: the missing pages are 守川司's work; 晏无咎 has seen the player" % way)
 		check(game.has_flag("shouchuan_wary" if way == "parley" else "shouchuan_hostile"), "and 守川司 remembers how (%s)" % way)
 
 ## 陆家: the funeral in 历元三十年, the ledger, the mine, and what is done about it.
