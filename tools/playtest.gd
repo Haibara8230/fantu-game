@@ -37,6 +37,8 @@ var last_result := ""
 var kept := {}
 # Story steps found idle on arrival, not travelled for again until a day ("story:step" -> day).
 var idle := {}
+# Guardians faced again in a row, by cave.
+var tries := {}
 # Caves given up on until a day (cave id -> day), when a room barred the way.
 var barred := {}
 # Where each storyline finding lies: flag -> [cave, room] (a room's own finding or its guardian's flag).
@@ -273,6 +275,9 @@ func _go(place: String) -> bool:
 	if str(s.player.location) == place:
 		return false
 	var path: Array = s.path_to(place)
+	# No road the realm can take there yet (the sea to 外海雾岛 before 金丹): not a journey.
+	if path.is_empty():
+		return false
 	_do("travel", "TRAVEL", "→ %s：%s" % [s.content.locations[place].name, s.travel(place)])
 	return true
 
@@ -348,7 +353,7 @@ func _story() -> bool:
 		doable = doable or step.has("choice_event") or _happens_at(story_id, step, place) or _once_at(place)
 		if not doable and place != str(s.player.location):
 			continue
-		if place != str(s.player.location) and int(idle.get(idle_key, -1)) > int(s.world.day):
+		if place != str(s.player.location) and (int(idle.get(idle_key, -1)) > int(s.world.day) or s.path_to(place).is_empty()):
 			continue
 		if _go(place):
 			return true
@@ -742,6 +747,12 @@ func _explore_toward(cave_id: String, target: String) -> bool:
 			_do("act", "CAVE", s.enter_room(cave_id, room_id))
 			return true
 		if s.Caves.guarded(s, cave_id, room_id):
+			# Beaten three times running: set the cave aside for a few years and grow stronger first.
+			tries[cave_id] = int(tries.get(cave_id, 0)) + 1
+			if int(tries[cave_id]) > 3:
+				tries[cave_id] = 0
+				barred[cave_id] = int(s.world.day) + 5 * Calendar.DAYS_PER_YEAR
+				return false
 			_do("act", "CAVE", s.Caves.challenge(s, cave_id, room_id))
 			return true
 		if s.Caves.loot_waits(s, cave_id, room_id):

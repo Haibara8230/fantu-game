@@ -168,7 +168,7 @@
   "aid": "你以传音符求援，{npc_name}应声而至，一击打出 {amount} 点伤害。",
   "breakthrough_grade": "根基品质：{grade_name}。",
   "breakthrough_core_grade": "金丹品级：{grade_name}。",
-  "breakthrough_failed": "闭关 {duration}，冲关失败：药力散尽，修为跌回 {xp}，经脉受创，需将养 {injury} 日。所幸性命无碍，有了这番前车之鉴，下次把握更大。",
+  "breakthrough_failed": "闭关 {duration}，冲关失败：{lost}修为退回 {xp}，经脉受创，需将养 {injury} 日。所幸性命无碍，有了这番前车之鉴，下次把握更大。",
   "heart_demon": "突破关头，心魔丛生。",
   "demon_slain": "你斩尽心魔，道心更坚，心境 +{mind}。",
   "demon_lingers": "心魔未能斩尽，萦绕不去，此番突破的把握少了 {points} 分。",

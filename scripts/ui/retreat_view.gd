@@ -182,7 +182,7 @@ static func render_breakthrough(ui) -> void:
 	if bool(chances.demon):
 		right.add_child(ui.paragraph("心境 %d，%s需 %d：心境不足，突破关头可能心魔丛生（约 %d%%），可与它斗法、以心境硬压或避而不战。请人护法可保无虞。" % [int(session.player.mind), session.content.realm(int(session.player.realm) + 1).name, session.Breakthrough.demon_mind(session), int(round(session.Breakthrough.demon_chance(session) * 100.0))], Color("#e3c08a")))
 	var failure: Dictionary = session.content.rules.breakthrough.failure
-	right.add_child(ui.paragraph("闭关 %s。若失败：所服之物药力散尽，修为跌回 %d，内伤 %d 日（其间闭关收益减半），但性命无碍，且下次把握更大。" % [ui.duration("breakthrough"), int(need.xp) * int(failure.xp_percent) / 100, int(failure.injury_days)]))
+	right.add_child(ui.paragraph("闭关 %s。若失败：这次投入的丹药、天材地宝与机缘随之散尽，修为只退回 %d，内伤 %d 日（其间闭关收益减半），但性命无碍，且下次把握更大。" % [ui.duration("breakthrough"), int(need.xp) * int(failure.xp_percent) / 100, int(failure.injury_days)]))
 	var block: String = session.breakthrough_block(plan)
 	var go: Button = ui.button("开始突破", ui.start_breakthrough, block if not block.is_empty() else "成败只在此一举")
 	go.custom_minimum_size.x = 200

@@ -85,7 +85,9 @@ static func restore(s, data: Variant) -> bool:
 		return false
 	# A 天劫 under way: the grade the attempt earned waits on it (optional; only with its duel).
 	var trial: Variant = saved_player.get("tribulation", {})
-	if not trial is Dictionary or (trial.is_empty() != (str(saved_battle.get("context", "")) != "tribulation")) or (not trial.is_empty() and (not _whole_nonnegative(trial.get("grade")) or not _whole_nonnegative(trial.get("days")) or not _whole_nonnegative(trial.get("xp")))):
+	# The 飞升天劫 (battle.ascension) is a 天劫 that waits on no breakthrough.
+	var breakthrough_trial: bool = str(saved_battle.get("context", "")) == "tribulation" and str(saved_battle.get("ascension", "")).is_empty()
+	if not trial is Dictionary or trial.is_empty() == breakthrough_trial or (not trial.is_empty() and (not _whole_nonnegative(trial.get("grade")) or not _whole_nonnegative(trial.get("days")) or not _whole_nonnegative(trial.get("xp")) or not trial.get("staked", "") is String)):
 		return false
 	# A series of fights under way and when each was last taken (optional).
 	var underway: Variant = saved_player.get("series", {})
@@ -387,7 +389,7 @@ static func restore(s, data: Variant) -> bool:
 	player.warned_for = int(warned)
 	player["wake"] = wake
 	if not trial.is_empty():
-		player["tribulation"] = {"grade": int(trial.grade), "days": int(trial.days), "xp": int(trial.xp)}
+		player["tribulation"] = {"grade": int(trial.grade), "days": int(trial.days), "xp": int(trial.xp), "staked": str(trial.get("staked", ""))}
 	if not underway.is_empty():
 		player["series"] = {"id": str(underway.id), "wave": int(underway.wave)}
 	var sittings := {}
@@ -539,9 +541,9 @@ static func _valid_breakthrough(content, saved_player: Dictionary, saved_pending
 	if waiting != (attempt != null):
 		return null
 	if attempt != null:
-		if not attempt is Dictionary or not _whole_nonnegative(attempt.get("odds")) or int(attempt.odds) > 100 or not attempt.get("certain") is bool or not _whole_nonnegative(attempt.get("steps")) or not _whole_nonnegative(attempt.get("xp")) or not attempt.get("guard") is String:
+		if not attempt is Dictionary or not _whole_nonnegative(attempt.get("odds")) or int(attempt.odds) > 100 or not attempt.get("certain") is bool or not _whole_nonnegative(attempt.get("steps")) or not _whole_nonnegative(attempt.get("xp")) or not attempt.get("guard") is String or not attempt.get("staked", "") is String:
 			return null
-		result["attempt"] = {"odds": int(attempt.odds), "certain": attempt.certain, "steps": int(attempt.steps), "xp": int(attempt.xp), "guard": attempt.guard}
+		result["attempt"] = {"odds": int(attempt.odds), "certain": attempt.certain, "steps": int(attempt.steps), "xp": int(attempt.xp), "guard": attempt.guard, "staked": str(attempt.get("staked", ""))}
 	return result
 
 ## Friends' open appointments and requests, silver lent, and the last period letters were written in

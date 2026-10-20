@@ -238,6 +238,8 @@ func _failed_trial() -> void:
 	game.world.flags["ascension_open"] = true
 	game.player.location = "ferry"
 	game.act("ascend")
+	var held := Session.new()
+	check(held.restore(JSON.parse_string(JSON.stringify(game.snapshot()))) and str(held.battle.get("ascension", "")) == "self", "the 飞升天劫 under way survives a save")
 	var guard := 0
 	while not game.battle.is_empty() and guard < 30:
 		guard += 1

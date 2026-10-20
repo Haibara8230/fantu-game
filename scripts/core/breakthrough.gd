@@ -230,11 +230,20 @@ static func attempt(s, plan: Dictionary) -> String:
 		return reason
 	var need: Dictionary = s.next_breakthrough()
 	var chances := odds(s, plan)
+	# What the attempt stakes: lost with it if it fails (the pills, a treasure, fortune met).
+	var staked: Array[String] = []
+	if int(plan.get("pills", 0)) > 0:
+		staked.append("%s×%d" % [s.content.item(pill_of(s)).name, int(plan.pills)])
+	if not str(plan.get("treasure", "")).is_empty():
+		staked.append(str(s.content.item(str(plan.treasure)).name))
+	for boon: Dictionary in rules(s).boons:
+		if _ready_boon(s, str(boon.id)):
+			staked.append(str(boon.name))
 	s.Inventory.remove_family(s, pill_of(s), int(plan.get("pills", 0)), true)
 	if not str(plan.get("treasure", "")).is_empty():
 		s.remove_item(str(plan.treasure), 1)
 	s.player.xp = int(s.player.xp) - int(need.xp)
-	s.player["attempt"] = {"odds": int(chances.total), "certain": bool(chances.certain), "steps": chances.steps.size(), "xp": int(need.xp), "guard": str(plan.get("guard", ""))}
+	s.player["attempt"] = {"odds": int(chances.total), "certain": bool(chances.certain), "steps": chances.steps.size(), "xp": int(need.xp), "guard": str(plan.get("guard", "")), "staked": "、".join(staked)}
 	if bool(chances.demon) and not chances.certain and s.fortune_roll("demon") < demon_chance(s):
 		s.pending_event = {"id": DEMON_EVENT, "day": int(s.world.day)}
 		return s.finish(s.log_event("heart_demon", {}, true))
@@ -295,7 +304,7 @@ static func tribulation_over(s, won: bool) -> String:
 	s.player.erase("tribulation")
 	if won:
 		return _ascend(s, int(state.grade), int(state.days), [s.log_event("tribulation_passed", {"realm": int(s.player.realm) + 1}, true)], {})
-	return _fail(s, int(state.xp), [s.log_event("tribulation_failed", {}, true)], {}, int(rules(s).tribulation.injury_factor))
+	return _fail(s, int(state.xp), [s.log_event("tribulation_failed", {}, true)], {}, int(rules(s).tribulation.injury_factor), str(state.get("staked", "")))
 
 ## The retreat of the attempt and its outcome. `told` leads the texts.
 static func resolve(s, told: String) -> String:
@@ -326,12 +335,12 @@ static func resolve(s, told: String) -> String:
 			# The months of the attempt's retreat leave body and qi full for the trial.
 			s.player.hp = s.player.max_hp
 			s.player.qi = s.player.max_qi
-			s.player["tribulation"] = {"grade": grade, "days": int(passed.elapsed), "xp": int(attempt_state.xp)}
+			s.player["tribulation"] = {"grade": grade, "days": int(passed.elapsed), "xp": int(attempt_state.xp), "staked": str(attempt_state.get("staked", ""))}
 			s.Combat.begin_tribulation(s, trial)
 			texts.append(s.log_event("tribulation_start", {"enemy": trial, "rounds": int(s.content.enemies[trial].hp)}, true))
 			return s.conclude(" ".join(texts), passed)
 		return _ascend(s, grade, int(passed.elapsed), texts, passed)
-	return _fail(s, int(attempt_state.xp), texts, passed, 1)
+	return _fail(s, int(attempt_state.xp), texts, passed, 1, str(attempt_state.get("staked", "")))
 
 ## The realm entered: its grade kept, health and qi made whole, the news sent.
 static func _ascend(s, grade: int, days: int, texts: Array, passed: Dictionary) -> String:
@@ -363,7 +372,10 @@ static func _ascend(s, grade: int, days: int, texts: Array, passed: Dictionary) 
 	return s.conclude(" ".join(texts), passed)
 
 ## The attempt failed: some xp back, an injury (heavier after a 天劫), a lesson learned.
-static func _fail(s, xp: int, texts: Array, passed: Dictionary, injury_factor: int) -> String:
+## A failure costs above all what was staked on the attempt (gone with it); the cultivation falls back
+## only a little (`failure.xp_percent` of the threshold kept), the body is hurt for a while, and the
+## lesson counts toward the next attempt.
+static func _fail(s, xp: int, texts: Array, passed: Dictionary, injury_factor: int, staked: String = "") -> String:
 	var failure: Dictionary = rules(s).failure
 	var injury := int(failure.injury_days) * injury_factor
 	s.player.xp = xp * int(failure.xp_percent) / 100
@@ -371,7 +383,8 @@ static func _fail(s, xp: int, texts: Array, passed: Dictionary, injury_factor: i
 	s.player["lessons"] = mini(int(rules(s).lesson.most), int(s.player.get("lessons", 0)) + 1)
 	s.gain_mind(int(failure.mind))
 	s.player.hp = maxi(1, int(s.player.max_hp) / 3)
-	texts.append(s.log_event("breakthrough_failed", {"days": int(passed.get("elapsed", 0)), "xp": int(s.player.xp), "injury": injury}, true))
+	var lost := "%s随之散尽，" % staked if not staked.is_empty() else ""
+	texts.append(s.log_event("breakthrough_failed", {"days": int(passed.get("elapsed", 0)), "xp": int(s.player.xp), "injury": injury, "lost": lost}, true))
 	return s.conclude(" ".join(texts), passed)
 
 ## The grade from the margin under the odds (up to 上品), raised by fortune's steps and by talents, at

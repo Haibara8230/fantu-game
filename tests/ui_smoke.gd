@@ -759,7 +759,7 @@ func _run() -> void:
 	# A failed attempt: the pill is spent, xp falls back, and the outcome has its own screen.
 	main.session.fortune = {"demon": 0.99, "breakthrough": 0.99}
 	_button("开始突破").pressed.emit()
-	check(main.current_screen() == "full" and _texts(main.center, "Label").contains("冲 关 失 败") and int(main.session.player.xp) == 6800 and main.session.injured() and main.session.player.realm == 0, "a failed breakthrough is shown on its own screen")
+	check(main.current_screen() == "full" and _texts(main.center, "Label").contains("冲 关 失 败") and int(main.session.player.xp) == 7840 and main.session.injured() and main.session.player.realm == 0, "a failed breakthrough is shown on its own screen")
 	_button("确定").pressed.emit()
 	# 心魔 first, then success.
 	main.session.player.xp = 8000

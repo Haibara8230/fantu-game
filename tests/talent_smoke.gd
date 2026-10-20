@@ -339,7 +339,8 @@ func _breakthrough() -> void:
 	failing.fortune = {"demon": 0.99, "breakthrough": 0.99}
 	var day := int(failing.world.day)
 	var text := failing.act("breakthrough")
-	check(failing.player.realm == 0 and int(failing.player.xp) == 6800 and failing.item_count("foundation_pill") == 1 and text.contains("冲关失败"), "a failure spends the pill and sets xp back")
+	check(failing.player.realm == 0 and int(failing.player.xp) == 7840 and failing.item_count("foundation_pill") == 1 and text.contains("冲关失败"), "a failure spends the pill and sets xp back a little")
+	check(text.contains("筑基丹×1随之散尽"), "the failure tells what was staked and lost")
 	check(int(failing.world.day) == day + 90 and failing.injured() and int(failing.player.lessons) == 1 and int(failing.player.mind) == 28 and int(failing.player.hp) > 0, "and costs months of injury, never the life, and teaches")
 	var hurt := failing.retreat_preview(30)
 	var healed_at := int(failing.player.injury_until)
