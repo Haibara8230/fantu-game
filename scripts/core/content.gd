@@ -2561,6 +2561,10 @@ func _validate_arsenal() -> String:
 			return "传承神通的吸收灵气无效：" + skill_id
 		if skill.has("gather") and (not _whole(skill.gather) or int(skill.gather) < 1):
 			return "传承神通的聚气无效：" + skill_id
+		if ["through", "shatter"].any(func(key: String) -> bool: return skill.has(key) and not skill[key] is bool):
+			return "传承神通的破盾配置无效：" + skill_id
+		if skill.has("weapon") and str(equipment_data.get("bases", {}).get(str(skill.weapon), {}).get("art", "")) != skill_id:
+			return "兵刃神通须由那种兵刃带出：" + skill_id
 	var duel: Variant = rules.get("duel")
 	if not duel is Dictionary or ["first_extra", "root_weight", "other_weight", "hand_least", "pills", "guard_orbs"].any(func(key: String) -> bool: return not _whole(duel.get(key))):
 		return "斗法规则配置无效。"
@@ -2593,6 +2597,13 @@ func _validate_arsenal() -> String:
 			return "兵刃祭出配置错误：" + base_id
 		if base.has("named") and (not base.named is Dictionary or base.named.is_empty() or base.named.keys().any(func(key: Variant) -> bool: return not str(key).is_valid_int() or int(str(key)) < 1 or int(str(key)) > gear.tiers.size() or not base.named[key] is String)):
 			return "有名宝物的阶段配置错误：" + base_id
+		# A weapon's own art (枪、锤、鞭) names it back, and its 祭出 may go past or break a shield.
+		if base.has("art") and (base.get("slot") != "weapon" or not skills.has(str(base.art)) or str(skills[str(base.art)].get("weapon", "")) != base_id):
+			return "兵刃的本门神通须是只认这种兵刃的神通：" + base_id
+		if base.has("lead") and (not base.lead is bool or base.get("slot") != "weapon"):
+			return "兵刃先手配置错误：" + base_id
+		if base.has("release") and (["through", "shatter", "interrupt"].any(func(key: String) -> bool: return base.release.has(key) and not base.release[key] is bool) or (base.release.has("hits") and (not _whole(base.release.hits) or int(base.release.hits) < 1))):
+			return "兵刃祭出配置错误：" + base_id
 		if base.has("trait") and (not base["trait"] is Dictionary or not base["trait"].get("kind") in ["heart_guard", "mirror"] or not base["trait"].get("name") is String or not base["trait"].get("text") is String):
 			return "宝物特性配置错误：" + base_id
 	# Tier effects must escalate on every measure, so a stronger art never looks weaker. Layers that

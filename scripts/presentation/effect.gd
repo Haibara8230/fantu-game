@@ -138,6 +138,68 @@ func _draw() -> void:
 			for i: int in range(8):
 				var p := point - direction * (i * 11 + 20) + normal * sin(i * 2.5) * 13
 				draw_circle(p, 2, Color(tint, fade * 0.6))
+		"spear":
+			# 枪: a straight thrust, shaft behind a steel tip, the red tassel streaming.
+			var reach := 1.0 - pow(1.0 - t, 3.0)
+			var point := start.lerp(finish, reach)
+			draw_line(point - direction * 150, point - direction * 18, Color("#2a1d14", fade), 8, true)
+			draw_line(point - direction * 150, point - direction * 18, Color("#7a5434", fade), 5, true)
+			draw_colored_polygon(PackedVector2Array([point + direction * 26, point - direction * 18 + normal * 7, point - direction * 18 - normal * 7]), Color("#eef4ff", fade))
+			draw_line(point - direction * 16, point + direction * 22, Color(tint, fade), 2, true)
+			for i: int in range(5):
+				var sway := sin(t * 18.0 + i) * 6.0
+				draw_line(point - direction * 22, point - direction * (40 + i * 5) + normal * (sway + (i - 2) * 4), Color("#c8342c", fade), 2.5, true)
+			for i: int in range(4):
+				draw_line(point - direction * (60 + i * 22) + normal * (i * 7 - 10), point - direction * (110 + i * 22) + normal * (i * 7 - 10), Color(tint, fade * 0.35), 2, true)
+		"hammer":
+			# 锤: the head swung up and brought down onto the target, a ring of dust where it lands.
+			var swing := clampf(t * 1.25, 0.0, 1.0)
+			var angle := lerpf(-2.2, 0.2, swing * swing)
+			var pivot := finish + Vector2(-direction.x * 70.0, -20.0)
+			var head := pivot + Vector2.from_angle(angle) * Vector2(direction.x if direction.x != 0.0 else 1.0, 1.0) * 96.0
+			draw_line(pivot, head, Color("#3a2a1c", fade), 7, true)
+			draw_line(pivot, head, Color("#8a6440", fade), 4, true)
+			var axis := (head - pivot).normalized()
+			var side := axis.orthogonal()
+			var block := PackedVector2Array([head + side * 22 - axis * 12, head + side * 22 + axis * 14, head - side * 22 + axis * 14, head - side * 22 - axis * 12])
+			draw_colored_polygon(block, Color("#b89a6a", fade))
+			draw_polyline(PackedVector2Array([block[0], block[1], block[2], block[3], block[0]]), Color("#2a2018", fade), 2, true)
+			if t > 0.75:
+				var spread := (t - 0.75) / 0.25
+				draw_arc(finish + Vector2(0, 60), 30 + spread * 90, PI, TAU, 32, Color(tint, 1.0 - spread), 4, true)
+				draw_arc(finish + Vector2(0, 60), 18 + spread * 60, PI, TAU, 32, Color("#fff2d0", 1.0 - spread), 2, true)
+		"whip":
+			# 鞭: a lash that snakes out and cracks at its tip.
+			var tip := start.lerp(finish, minf(1.0, t * 1.3))
+			var points := PackedVector2Array()
+			for i: int in range(30):
+				var ratio := i / 29.0
+				points.append(start.lerp(tip, ratio) + normal * sin(ratio * 12.0 - t * 14.0) * 18.0 * ratio * (1.0 - ratio * 0.5))
+			draw_polyline(points, Color("#2c3a24", fade), 6, true)
+			draw_polyline(points, Color(tint, fade), 3, true)
+			if t > 0.7:
+				for i: int in range(6):
+					var spark := Vector2.from_angle(i * TAU / 6 + t * 3.0)
+					draw_line(tip + spark * 6, tip + spark * (14 + (t - 0.7) * 50), Color("#f4ffe0", fade), 2, true)
+		"pierce_hit":
+			# Through and out the far side.
+			draw_line(finish - direction * 30, finish + direction * (40 + t * 60), Color("#ffffff", 1.0 - t), 3, true)
+			draw_arc(finish, 10 + t * 30, 0, TAU, 32, Color(tint, 1.0 - t), 2, true)
+			for side: float in [-1.0, 1.0]:
+				draw_line(finish + direction * 20 + normal * side * 6, finish + direction * (60 + t * 50) + normal * side * (12 + t * 20), Color(tint, (1.0 - t) * 0.6), 2, true)
+		"quake_hit":
+			var ground := finish + Vector2(0, 56)
+			for i: int in range(3):
+				var spread := clampf(t * 1.4 - i * 0.18, 0.0, 1.0)
+				draw_arc(ground, 20 + spread * 110, PI, TAU, 40, Color(tint, (1.0 - spread) * 0.9), 4 - i, true)
+			for i: int in range(10):
+				var shard := ground + Vector2(cos(i * 1.9) * t * 90, -sin(t * PI) * (20 + i * 6))
+				draw_colored_polygon(PackedVector2Array([shard + Vector2(-4, -3), shard + Vector2(5, -4), shard + Vector2(2, 5)]), Color("#9f835d", 1.0 - t))
+		"lash_hit":
+			# Coils closing round the target: bound.
+			for i: int in range(3):
+				var radius := 46.0 - t * 18.0 + i * 8.0
+				draw_arc(finish + Vector2(0, i * 14 - 14), radius, t * 4.0 + i, t * 4.0 + i + PI * 1.4, 28, Color(tint, (1.0 - t * 0.6) * fade), 3, true)
 		"earth", "rock_spire":
 			var base := finish + Vector2(0, 62)
 			var rise := sin(t * PI * 0.5)

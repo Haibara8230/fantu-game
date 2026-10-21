@@ -94,10 +94,14 @@ static func starter_skills(s) -> Array[String]:
 				result.append(str(skill_id))
 	return result
 
+## The arts in the duel: those slotted, and the worn weapon's own (破阵枪 with a spear) after them.
 static func active_skills(s) -> Array[String]:
 	var result: Array[String] = []
 	for id: Variant in s.player.get("arts", []):
 		result.append(str(id))
+	var own := str(s.Combat.weapon_base(s).get("art", ""))
+	if not own.is_empty() and not own in result:
+		result.append(own)
 	return result
 
 ## Why the player cannot learn this technique now, or "".
@@ -218,6 +222,10 @@ static func equip_item(s, item_id: String) -> String:
 	s.player.equipment[gear.slot] = item_id
 	if not worn.is_empty():
 		s.add_item(worn, 1)
+	# A weapon's own art is practised from its first layer once it is first taken up (layers.gd).
+	var own := str(s.content.equipment_data.bases.get(str(gear.get("id", "")).get_slice(":", 1), {}).get("art", ""))
+	if not own.is_empty():
+		Layers.begin(s, own)
 	s.refresh_realm_stats()
 	return s.finish("换上了%s。" % gear.name)
 

@@ -129,6 +129,8 @@ const BLEED_MOST := 12
 const MOVE_KINDS := ["attack", "charge", "heal", "guard", "focus", "summon"]
 ## How much weaker a slowed opponent without orbs strikes.
 const SLOW_BLOW := 0.8
+## The share of its 遁速 an opponent bound by a whip keeps.
+const ENTANGLED_SPEED := 0.7
 
 ## A lingering effect as it is kept: a share (weaken, sunder) or a whole amount, and whole turns, the
 ## same whether it came from the data or from a save.
@@ -381,7 +383,10 @@ static func use_skill(s, skill_id: String) -> String:
 				factor *= 1.0 - float(s.battle.player_status.weaken[0])
 			if s.battle.status.has("sunder"):
 				factor *= 1.0 + float(s.battle.status.sunder[0])
-			var dealt := _strike_foe(s, maxi(1, int(round(float(roll) * factor))))
+			# A hammer's blow breaks the opponent's shield before it lands.
+			if bool(t.get("shatter", false)):
+				s.battle.foe_shield = 0
+			var dealt := _strike_foe(s, maxi(1, int(round(float(roll) * factor))), bool(t.get("through", false)))
 			if int(t.hits) > 1:
 				_sweep(s, int(round(float(roll) * factor * PACK_SPLASH)))
 			s.combat_events.append(_event({"type": "attack", "actor": "player", "hits": int(t.hits), "amount": dealt, "hp_after": int(s.battle.hp)}, look))
@@ -434,8 +439,8 @@ static func _gain(s, orbs: Array) -> void:
 	s.battle.orbs.append_array(orbs)
 	s.combat_events.append({"type": "draw", "actor": "player", "orbs": orbs.duplicate()})
 
-## Damage to the opponent through its shield; returns what reached it.
-static func _strike_foe(s, damage: int) -> int:
+## Damage to the opponent through its shield (past it, `through`: a spear's thrust); returns what reached it.
+static func _strike_foe(s, damage: int, through: bool = false) -> int:
 	# Against 天劫, a blow disperses the coming bolt instead.
 	if s.battle.get("context", "") == "tribulation":
 		s.battle.dispel = int(s.battle.get("dispel", 0)) + damage
@@ -443,7 +448,7 @@ static func _strike_foe(s, damage: int) -> int:
 	var target := int(s.battle.get("target", 0))
 	if target > 0 and target <= s.battle.get("pack", []).size():
 		return _strike_member(s, target - 1, damage)
-	var absorbed := mini(int(s.battle.get("foe_shield", 0)), damage)
+	var absorbed := 0 if through else mini(int(s.battle.get("foe_shield", 0)), damage)
 	s.battle.foe_shield = int(s.battle.get("foe_shield", 0)) - absorbed
 	var dealt := damage - absorbed
 	s.battle.hp = maxi(0, int(s.battle.hp) - dealt)
@@ -942,15 +947,35 @@ static func foe_speed(s) -> int:
 	if s.battle.is_empty():
 		return 1
 	var foe: Dictionary = s.battle.get("foe", {})
+	var own := 0
 	if not foe.is_empty():
-		return _by_realm(s, "speed", int(foe.get("realm", 0)))
-	var enemy: Dictionary = s.content.enemies[s.battle.enemy_id]
-	return int(enemy.get("speed", _by_realm(s, "speed", int(enemy.get("min_realm", 0)))))
+		own = _by_realm(s, "speed", int(foe.get("realm", 0)))
+	else:
+		var enemy: Dictionary = s.content.enemies[s.battle.enemy_id]
+		own = int(enemy.get("speed", _by_realm(s, "speed", int(enemy.get("min_realm", 0)))))
+	# Bound by a whip (缠绕), it is slower.
+	if s.battle.get("status", {}).has("entangle"):
+		own = maxi(1, int(round(float(own) * ENTANGLED_SPEED)))
+	return own
 
 ## Whether the opponent moves first: only when it is the quicker (a tie goes to the player); 天劫 and
 ## 心魔 do not race.
 static func foe_leads(s) -> bool:
-	return not s.battle.get("context", "") in ["tribulation", "demon"] and foe_speed(s) > speed(s)
+	return not s.battle.get("context", "") in ["tribulation", "demon"] and not leads(s) and foe_speed(s) > speed(s)
+
+## Whether the worn weapon always strikes first (a spear's 先手, data/equipment.json bases' `lead`).
+static func leads(s) -> bool:
+	return bool(weapon_base(s).get("lead", false))
+
+## The base of the weapon worn and wielded (驾驭 enough to use at all), or {}.
+static func weapon_base(s) -> Dictionary:
+	var weapon := str(s.player.get("equipment", {}).get("weapon", ""))
+	if weapon.is_empty():
+		return {}
+	var gear: Dictionary = s.Gear.item(s, weapon)
+	if gear.is_empty() or not bool(s.Arsenal.wielded(s.content, gear, int(s.player.realm)).usable):
+		return {}
+	return s.content.equipment_data.bases.get(str(gear.get("id", "")).get_slice(":", 1), {})
 
 ## How likely the player gets away (遁逃): four in five at an even 遁速, more or less by how much quicker
 ## either side is (seven tenths of the difference of their 遁速, as a share of the foe's), surely from a lesser
@@ -1044,9 +1069,12 @@ static func release(s) -> String:
 	var gear: Dictionary = release.gear
 	s.battle.released = int(s.battle.get("released", 0)) + 1
 	var element := str(gear.element)
-	var dealt := _strike_foe(s, maxi(1, int(round(float(release.damage) * ground(s, element, false)))))
+	# 开山一锤 breaks the shield first; 穿云一枪 goes past it.
+	if bool(release.move.get("shatter", false)):
+		s.battle.foe_shield = 0
+	var dealt := _strike_foe(s, maxi(1, int(round(float(release.damage) * ground(s, element, false)))), bool(release.move.get("through", false)))
 	var look := {"style": "release", "name": str(release.name), "vfx": str(release.move.get("vfx", "sword")), "tier": int(gear.tier), "element": "metal" if element == "none" else element}
-	s.combat_events.append(_event({"type": "attack", "actor": "player", "hits": 1, "amount": dealt, "hp_after": int(s.battle.hp)}, look))
+	s.combat_events.append(_event({"type": "attack", "actor": "player", "hits": int(release.move.get("hits", 1)), "amount": dealt, "hp_after": int(s.battle.hp)}, look))
 	for lingering: String in LINGERING:
 		if release.move.get("inflict", {}).has(lingering):
 			_inflict(s.battle.status, lingering, release.move.inflict[lingering])

@@ -222,5 +222,47 @@
     "release_pose": "attack",
     "charge": "",
     "delivery": "melee"
+  },
+  "spear": {
+    "color": "#e8f0ff",
+    "kind": "spear",
+    "impact": "pierce_hit",
+    "prepare": 0.2,
+    "travel": 0.18,
+    "shake": 2.8,
+    "hit_stop": 0.07,
+    "recoil": 16,
+    "prepare_pose": "prepare",
+    "release_pose": "attack",
+    "charge": "sword_guard",
+    "delivery": "melee"
+  },
+  "hammer": {
+    "color": "#f2d29a",
+    "kind": "hammer",
+    "impact": "quake_hit",
+    "prepare": 0.36,
+    "travel": 0.26,
+    "shake": 6.4,
+    "hit_stop": 0.11,
+    "recoil": 26,
+    "prepare_pose": "prepare",
+    "release_pose": "attack",
+    "charge": "earth_guard",
+    "delivery": "melee"
+  },
+  "whip": {
+    "color": "#c8f0a8",
+    "kind": "whip",
+    "impact": "lash_hit",
+    "prepare": 0.22,
+    "travel": 0.3,
+    "shake": 1.8,
+    "hit_stop": 0.05,
+    "recoil": 10,
+    "prepare_pose": "prepare",
+    "release_pose": "attack",
+    "charge": "wood_guard",
+    "delivery": "ranged"
   }
 }

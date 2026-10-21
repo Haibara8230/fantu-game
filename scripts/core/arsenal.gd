@@ -133,9 +133,13 @@ static func _handwritten(content, id: String, layer: int = 0) -> Dictionary:
 		result.heal = int(round(float(skill.heal) * share))
 	if skill.has("shield"):
 		result.shield = int(round(float(skill.shield) * share))
-	for lingering: String in ["burn", "weaken", "sunder", "slow"]:
+	for lingering: String in ["burn", "weaken", "sunder", "slow", "entangle", "bleed"]:
 		if skill.has(lingering):
 			result[lingering] = skill[lingering].duplicate()
+	# A weapon's own art (破阵枪): through the shield, or breaking it first; cast only with that weapon.
+	for key: String in ["through", "shatter", "weapon"]:
+		if skill.has(key):
+			result[key] = skill[key]
 	for key: String in ["combo", "absorb"]:
 		if skill.has(key):
 			result[key] = skill[key].duplicate()
@@ -432,6 +436,10 @@ static func describe_equipment(content, item: Dictionary) -> String:
 	var base: Dictionary = content.equipment_data.bases.get(str(item.get("id", "")).get_slice(":", 1), {})
 	if base.has("release"):
 		text += "可祭出「%s」（斗法中每场%s，不占回合）。" % [base.release.name, "两次" if int(item.tier) >= 4 else "一次"]
+	if base.has("art") and content.skills.has(str(base.art)):
+		text += "持之可施展「%s」。" % content.skills[str(base.art)].name
+	if bool(base.get("lead", false)):
+		text += "持之斗法总是先出手。"
 	if base.has("trait"):
 		text += "特性「%s」：%s" % [base["trait"].name, base["trait"].text]
 	if base.has("lore"):

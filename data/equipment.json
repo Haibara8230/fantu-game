@@ -29,7 +29,10 @@
     "pendant": {"slot": "accessory", "material": "jade", "nouns": ["佩", "玉佩"], "stats": {"max_qi": 5}},
     "ring": {"slot": "accessory", "material": "jade", "nouns": ["戒", "指环"], "stats": {"attack": 1, "cultivation": 0.04}},
     "mirror": {"slot": "accessory", "material": "jade", "nouns": ["镜", "照影镜"], "stats": {"max_qi": 3, "defense": 0.02}, "trait": {"kind": "mirror", "name": "反照", "reflect": 0.5, "text": "每场一次：对手的法术或蓄力的一击，镜面反照其半数伤害回去，你只受另一半。"}},
-    "queguang": {"slot": "weapon", "material": "metal", "nouns": ["阙光剑"], "stats": {"attack": 4}, "named": {"4": "阙光剑"}, "release": {"name": "阙光一剑", "power": 1.3, "vfx": "sword"}, "lore": "天阙剑宗开山祖师的佩剑，埋在万剑冢心几百年，剑灵只认打得服它的人。"}
+    "queguang": {"slot": "weapon", "material": "metal", "nouns": ["阙光剑"], "stats": {"attack": 4}, "named": {"4": "阙光剑"}, "release": {"name": "阙光一剑", "power": 1.3, "vfx": "sword"}, "lore": "天阙剑宗开山祖师的佩剑，埋在万剑冢心几百年，剑灵只认打得服它的人。"},
+    "spear": {"slot": "weapon", "material": "metal", "nouns": ["枪", "长枪"], "stats": {"attack": 3}, "art": "spear_thrust", "lead": true, "release": {"name": "穿云一枪", "power": 1.0, "vfx": "spear", "through": true, "inflict": {"sunder": [0.15, 2]}}},
+    "hammer": {"slot": "weapon", "material": "metal", "nouns": ["锤", "铜锤"], "stats": {"attack": 5}, "art": "hammer_smash", "release": {"name": "开山一锤", "power": 1.3, "vfx": "hammer", "shatter": true, "inflict": {"slow": [1, 1]}}},
+    "whip": {"slot": "weapon", "material": "cloth", "nouns": ["鞭", "软鞭"], "stats": {"attack": 3}, "art": "whip_lash", "release": {"name": "缚灵鞭", "power": 0.9, "vfx": "whip", "hits": 3, "inflict": {"entangle": [1, 2]}}}
   },
   "affixes": {
     "sharp": {"name": "锋锐", "stats": {"attack": 2}},

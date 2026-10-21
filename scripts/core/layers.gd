@@ -73,7 +73,8 @@ static func begin(s, technique_id: String) -> void:
 
 ## The record for a technique, made at the layer it is held at when it has none yet.
 static func _entry(s, technique_id: String) -> Variant:
-	if not technique_id in s.player.get("learned", []):
+	# A weapon's own art is never learned; its record begins when the weapon is first taken up.
+	if not technique_id in s.player.get("learned", []) and not s.player.get("layers", {}).has(technique_id):
 		return null
 	if not s.player.has("layers"):
 		s.player.layers = {}

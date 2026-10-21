@@ -16,7 +16,7 @@ if "%errorlevel%"=="124" (
   echo Resource import timed out
   exit /b 1
 )
-for %%T in (core_smoke world_smoke events_smoke region_smoke growth_smoke arsenal_smoke society_smoke story_smoke talent_smoke bonds_smoke art_smoke ui_smoke presentation_smoke sect_smoke alchemy_smoke cave_smoke content_smoke duel_moves_smoke layers_smoke polish_smoke experience_smoke zhuji_smoke wucheng_smoke jindan_smoke feisheng_smoke zongmen_smoke sanxiu_smoke tianji_smoke mijing_smoke) do (
+for %%T in (core_smoke world_smoke events_smoke region_smoke growth_smoke arsenal_smoke society_smoke story_smoke talent_smoke bonds_smoke art_smoke ui_smoke presentation_smoke sect_smoke alchemy_smoke cave_smoke content_smoke duel_moves_smoke layers_smoke polish_smoke experience_smoke zhuji_smoke wucheng_smoke jindan_smoke feisheng_smoke zongmen_smoke sanxiu_smoke tianji_smoke mijing_smoke weapons_smoke) do (
   call :run %%T || exit /b 1
 )
 exit /b 0

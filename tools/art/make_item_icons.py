@@ -246,8 +246,30 @@ def mirror(m, t):
             '<path d="M24 22 L30 18 M22 30 L34 18" stroke="#ffffff" stroke-opacity="0.6" stroke-width="2" stroke-linecap="round"/>'
             '<path d="M28 49 L36 49 L38 56 L26 56 Z" fill="%s" %s/><path d="M22 58 L42 58" stroke="%s" stroke-width="3" stroke-linecap="round"/>' % (TRIM[t], O, main, deep, TRIM[t], O2, INK))
 
+def spear(m, t):
+    main, deep = m
+    return ('<path d="M10 58 L46 18" stroke="%s" stroke-width="5" stroke-linecap="round"/><path d="M10 58 L46 18" stroke="#7a5434" stroke-width="2.6" stroke-linecap="round"/>'
+            '<path d="M44 20 L52 8 L56 12 Z" fill="%s" %s/><path d="M47 17 L53 11" stroke="%s" stroke-width="1.1"/>'
+            '<path d="M42 22 L48 16" stroke="%s" stroke-width="4" stroke-linecap="round"/>'
+            '<path d="M42 23 C38 26 36 31 37 35 M44 24 C41 29 41 33 43 37 M40 21 C35 22 32 26 32 30" stroke="#c8342c" stroke-width="2" fill="none" stroke-linecap="round"/>'
+            '<circle cx="10" cy="58" r="2.6" fill="%s" %s/>' % (INK, main, O, deep, TRIM[t], TRIM[t], O2))
+def hammer(m, t):
+    main, deep = m
+    return ('<path d="M14 56 L38 26" stroke="%s" stroke-width="5" stroke-linecap="round"/><path d="M14 56 L38 26" stroke="#7a5434" stroke-width="2.6" stroke-linecap="round"/>'
+            '<path d="M30 14 L50 30 L42 40 L22 24 Z" fill="%s" %s/><path d="M27 20 L46 35" stroke="%s" stroke-width="1.4"/>'
+            '<path d="M30 14 L22 24 M50 30 L42 40" stroke="%s" stroke-width="3" stroke-linecap="round"/>'
+            '<circle cx="13" cy="57" r="3" fill="%s" %s/>' % (INK, main, O, deep, TRIM[t], TRIM[t], O2))
+def whip(m, t):
+    main, deep = m
+    return ('<path d="M12 54 L20 44" stroke="%s" stroke-width="6" stroke-linecap="round"/><path d="M12 54 L20 44" stroke="%s" stroke-width="3.4" stroke-linecap="round"/>'
+            '<path d="M20 44 C34 30 54 34 50 20 C47 10 34 14 38 22 C41 28 50 26 54 18" stroke="%s" stroke-width="4.4" fill="none" stroke-linecap="round"/>'
+            '<path d="M20 44 C34 30 54 34 50 20 C47 10 34 14 38 22 C41 28 50 26 54 18" stroke="%s" stroke-width="2.4" fill="none" stroke-linecap="round"/>'
+            '<path d="M54 18 L58 14 M54 18 L59 19" stroke="%s" stroke-width="1.6" stroke-linecap="round"/>'
+            '<circle cx="11" cy="55" r="2.8" fill="%s" %s/>' % (INK, TRIM[t], INK, main, deep, TRIM[t], O2))
+
 BASES = {'sword': ('metal', sword), 'saber': ('metal', saber), 'fan': ('jade', fan), 'bell': ('metal', bell), 'robe': ('cloth', robe),
-         'vest': ('metal', vest), 'pendant': ('jade', pendant), 'ring': ('jade', ring), 'mirror': ('jade', mirror)}
+         'vest': ('metal', vest), 'pendant': ('jade', pendant), 'ring': ('jade', ring), 'mirror': ('jade', mirror),
+         'spear': ('metal', spear), 'hammer': ('metal', hammer), 'whip': ('cloth', whip)}
 for base, (family, draw) in BASES.items():
     for tier in range(5):
         write('gear/%s_%d.svg' % (base, tier + 1), draw(MATERIAL[family][tier], tier))

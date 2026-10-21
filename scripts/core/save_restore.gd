@@ -1174,7 +1174,8 @@ static func _valid_loadout(content, saved_player: Dictionary) -> Dictionary:
 		var entry: Variant = saved_layers[technique_id]
 		if not technique_id is String or not entry is Dictionary or not _whole_nonnegative(entry.get("layer")) or int(entry.layer) < 1 or not _whole_nonnegative(entry.get("practice")):
 			return {}
-		if technique_id in learned:
+		# A weapon's own art is kept by its record alone, never learned (loadout.gd).
+		if technique_id in learned or not str(content.skills.get(technique_id, {}).get("weapon", "")).is_empty():
 			# Content may have changed the layers since: clamp rather than lock the journey.
 			layers[technique_id] = {"layer": mini(int(entry.layer), int(content.technique(technique_id).layers)), "practice": int(entry.practice)}
 	return {"learned": learned, "arts": arts, "methods": methods, "equipment": equipment, "gear": gear, "gear_serial": int(serial), "layers": layers}

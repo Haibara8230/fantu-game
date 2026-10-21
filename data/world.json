@@ -570,6 +570,47 @@
       "vfx": "heal",
       "absorb": ["metal", 1],
       "combo": {"after": "fire", "absorb": 1}
+    },
+    "spear_thrust": {
+      "name": "破阵枪",
+      "element": "metal",
+      "cost": {"metal": 1, "any": 1},
+      "description": "持枪方能施展。造成 10–12 点伤害，穿透对手的护盾。",
+      "damage_min": 10,
+      "damage_max": 12,
+      "kind": "attack",
+      "vfx": "spear",
+      "through": true,
+      "weapon": "spear",
+      "combo": {"after": "earth", "bonus": 0.3}
+    },
+    "hammer_smash": {
+      "name": "撼岳锤",
+      "element": "earth",
+      "cost": {"earth": 2, "any": 1},
+      "description": "持锤方能施展。先砸碎对手的护盾，再造成 24–30 点伤害；对手下一回合少吸一颗灵气（妖兽则出手变弱）。",
+      "damage_min": 24,
+      "damage_max": 30,
+      "kind": "attack",
+      "vfx": "hammer",
+      "shatter": true,
+      "slow": [1, 1],
+      "weapon": "hammer",
+      "combo": {"after": "fire", "bonus": 0.3}
+    },
+    "whip_lash": {
+      "name": "缠龙鞭",
+      "element": "wood",
+      "cost": {"wood": 1, "any": 1},
+      "description": "持鞭方能施展。造成 8–10 点伤害，分 3 段命中；缠住对手两回合：少吸一颗灵气、遁速下降、难以抢先。",
+      "damage_min": 8,
+      "damage_max": 10,
+      "kind": "attack",
+      "vfx": "whip",
+      "hits": 3,
+      "entangle": [1, 2],
+      "weapon": "whip",
+      "combo": {"after": "water", "bonus": 0.3}
     }
   },
   "enemies": {

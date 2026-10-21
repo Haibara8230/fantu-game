@@ -17,7 +17,7 @@ const TRAUMA_DECAY := 1.8
 const HIT_STOP := Vector2(0.04, 0.18)
 const HEAVY_SHARE := 0.15
 # Sounds by the visual of an art: which element's release and impact it plays.
-const SOUND_ELEMENTS := {"sword": "sword", "sword_rain": "sword", "sword_arc": "sword", "flame_bolt": "fire", "fire": "fire", "fire_burst": "fire", "vine": "wood", "leaf_blade": "wood", "water": "water", "ice_lance": "ice", "earth": "earth", "rock_spire": "earth", "enemy": "beast"}
+const SOUND_ELEMENTS := {"sword": "sword", "sword_rain": "sword", "sword_arc": "sword", "flame_bolt": "fire", "fire": "fire", "fire_burst": "fire", "vine": "wood", "leaf_blade": "wood", "water": "water", "ice_lance": "ice", "earth": "earth", "rock_spire": "earth", "spear": "sword", "hammer": "earth", "whip": "wood", "enemy": "beast"}
 signal cue(kind: String)
 ## What to play on the sound bus: the cue, or a cue of its element and weight ("impact_fire").
 signal sound(kind: String)
