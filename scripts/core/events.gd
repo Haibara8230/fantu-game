@@ -109,7 +109,7 @@ static func met(s, condition: Dictionary) -> bool:
 			# A fine pill counts as the pill it is made beside.
 			return s.pill_count(value[0]) >= int(value[1])
 		"guest":
-			return s.Guest.of(s) == str(value) if not str(value).is_empty() else not s.Guest.of(s).is_empty()
+			return s.Guest.is_guest(s, str(value))
 		"holds_gear":
 			return s.Gear.holds(s, str(value))
 		"present":
@@ -203,6 +203,14 @@ static func apply(s, effects: Array) -> void:
 				s.Gear.reforge(s, str(value[0]), str(value[1]))
 			"guest_invite":
 				s.world.flags["guest_invite_" + str(value)] = true
+			# A choice that ends the life (`final`): the ending's words.
+			"end_life":
+				s.ended = {"kind": "story", "day": int(s.world.day), "text": str(value)}
+			# A sect's story: its seat given (门主), or the sect merged into another ("" disbands it).
+			"sect_rank":
+				s.Sect.raise_to(s, str(value))
+			"close_sect":
+				s.Sect.close(s, str(value[0]), str(value[1]))
 			"talent":
 				s.gain_talent(value)
 			"demon":
@@ -506,6 +514,13 @@ static func check_location(s, passing: bool = false) -> Array[String]:
 		s.Feuds.collect_stash(s)
 		s.Feuds.check_bounties(s)
 	return messages
+
+## Whether the pending event offers a choice that would end the life (`final`), so the interface writes
+## a 抉择前 save before it is made.
+static func final_pending(s) -> bool:
+	if s.pending_event.is_empty():
+		return false
+	return s.content.events.get(str(s.pending_event.id), {}).get("choices", []).any(func(choice: Dictionary) -> bool: return bool(choice.get("final", false)))
 
 static func choose(s, choice_id: String) -> String:
 	if s.pending_event.is_empty():

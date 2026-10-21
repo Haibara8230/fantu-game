@@ -1236,5 +1236,20 @@
   "jindan_plan": {"title": "结丹之备", "giver": "shen_mo", "begin_if": [{"affiliation": ""}, {"stage_at_least": [1, 2]}, {"flag": "tiannan_known"}], "close_if": [{"any": [{"realm_at_least": 2}, {"not": {"affiliation": ""}}]}], "closed": "结丹之备不必再提。", "steps": [{"id": "ask", "letter": true, "say": "“筑基后期了？结丹的事，云溪帮不上你。去沧澜城藏书院坐坐，那里的老先生懂。”", "goal": "去沧澜城藏书院打听结丹的门道。", "place": "canglan", "done": [{"at_location": "canglan"}], "after": "藏书院的老先生说：结丹不用丹药，靠自己。值得争取的有四样——凝丹之法（药市寄卖的《凝丹要略》，或请一位交情深的首徒相赠）、金丹用的天材地宝（霞光灵髓、地心火莲）、一处好地方（灵眼，或城东的水榭小筑）、一个靠得住的护法。四样都不是非有不可。"}, {"id": "prep", "goal": "结丹的准备，能备几样备几样：读《凝丹要略》、寻一样金丹天材地宝、找一处好地方、请人护法。都不是非有不可。", "place": "canglan", "done": [{"any": [{"flag": "ningdan_known"}, {"item_at_least": ["xiaguang_lingsui", 1]}, {"item_at_least": ["dixin_huolian", 1]}, {"flag": "canglan_abode"}, {"stage_at_least": [1, 3]}]}], "after": "该备的备了一些。剩下的，只看你自己。"}]},
   "jindan_sect": {"title": "结丹之备", "giver": "gu_changgeng", "begin_if": [{"affiliation": "qingyun"}, {"stage_at_least": [1, 2]}], "close_if": [{"any": [{"realm_at_least": 2}, {"not": {"affiliation": "qingyun"}}]}], "closed": "结丹之备不必再提。", "steps": [{"id": "ask", "letter": true, "speaker": "gu_changgeng", "say": "“筑基后期了。回传功堂一趟，说说结丹。”", "goal": "回青云山传功堂，听顾长庚说结丹。", "place": "sect", "done": [{"at_location": "sect"}], "after": "顾长庚说：结丹不用丹药，靠自己。本门执事堂有一部《凝丹要略》，内门弟子四百贡献可换；金丹用的天材地宝要自己去寻；静室就在山上，护法仍请他。“不必样样齐全。准备得越久，寿元也走得越远。”"}, {"id": "prep", "goal": "结丹的准备，能备几样备几样：换一部《凝丹要略》、寻一样金丹天材地宝、修到筑基圆满再请顾长老护法。", "place": "sect", "done": [{"any": [{"flag": "ningdan_known"}, {"item_at_least": ["xiaguang_lingsui", 1]}, {"item_at_least": ["dixin_huolian", 1]}, {"stage_at_least": [1, 3]}]}], "after": "该备的备了一些。剩下的，只看你自己。"}]},
   "wuzong_prep": {"title": "论道之备", "giver": "storyteller", "begin_if": [{"realm_at_least": 2}, {"flag": "wuzong_notice"}], "steps": [{"id": "aim", "goal": "五宗论道十月开坛（会址看日程）。想好去做什么：登台斗法要有资格（青云弟子、某宗客卿、天南大比魁首，或一位首徒交情「信赖」）；展示要一件法宝以上的宝物或一部地阶功法；观战论道、指点后辈，谁都可以。", "done": [{"flag": "wuzong_seen"}], "after": "论道散了。台上的胜负、台下的交谈、展台前的人，各自记在心里。下一回，又是一甲子以后。"}]},
-  "wenren_search": {"title": "寻人", "giver": "wei_sanniang", "begin_if": [{"flag": "wenren_lost"}, {"met": "wenren_zhao"}], "steps": [{"id": "ask", "goal": "闻人照的船没回来：去望海港口问问卫三娘，船往哪边去了。", "place": "wanghai", "done": [{"at_location": "wanghai"}], "after": "卫三娘抽着烟：“东南，雾岛那边。那片海，船进去多半出不来——要去，得会御剑渡海，金丹才行。”她把一张画着雾岛的草图推过来，“找到了，替我骂他一句。”", "effects": [{"meet": "wei_sanniang"}, {"flag": "wenren_heard"}]}, {"id": "island", "goal": "去外海雾岛找闻人照（近海群岛东南，金丹御剑渡海 4 日）。", "place": "waihai", "done": [{"any": [{"flag": "wenren_found_alive"}, {"flag": "wenren_found_dead"}]}], "major": true}]}
+  "wenren_search": {"title": "寻人", "giver": "wei_sanniang", "begin_if": [{"flag": "wenren_lost"}, {"met": "wenren_zhao"}], "steps": [{"id": "ask", "goal": "闻人照的船没回来：去望海港口问问卫三娘，船往哪边去了。", "place": "wanghai", "done": [{"at_location": "wanghai"}], "after": "卫三娘抽着烟：“东南，雾岛那边。那片海，船进去多半出不来——要去，得会御剑渡海，金丹才行。”她把一张画着雾岛的草图推过来，“找到了，替我骂他一句。”", "effects": [{"meet": "wei_sanniang"}, {"flag": "wenren_heard"}]}, {"id": "island", "goal": "去外海雾岛找闻人照（近海群岛东南，金丹御剑渡海 4 日）。", "place": "waihai", "done": [{"any": [{"flag": "wenren_found_alive"}, {"flag": "wenren_found_dead"}]}], "major": true}]},
+  "baicao_seven": {
+    "title": "七人门",
+    "giver": "song_weng",
+    "begin_if": [
+      {"story_state": ["rushi", "done"]},
+      {"at_location": "ridge"},
+      {"not": {"realm_at_least": 2}}
+    ],
+    "steps": [
+      {"id": "visit", "goal": "松林深处有座掉了漆的旧道观，去看看。", "place": "ridge", "done": [{"talked": "song_weng"}], "after": "观里的老人咳了好一阵才缓过来，自称松翁，是百草门第八代门主。“门里连我在内，只剩七个人了。”他指着窗外的药坡，“青云的执事来过三回，想把这片山头收作药场。我这把老骨头，怕是撑不了几年。”", "effects": [{"relation": ["song_weng", 5]}]},
+      {"id": "wait", "wait_days": 360},
+      {"id": "call", "letter": true, "say": "（字迹抖得厉害）“入冬以来咳得更凶了。门里的事，想同你商量。”", "goal": "回松风岭百草门旧观见松翁。", "place": "ridge", "done": [{"at_location": "ridge"}], "after": "松翁的六个弟子都挤在偏殿里。大弟子想带大家投青云，好歹有口饭吃；二弟子说百草门的匾不能在她手里摘下；几个年纪小的，偷偷在打听云溪坊市招不招伙计。松翁看着他们，叹了口气，转头看你。"},
+      {"id": "decide", "goal": "松翁要你拿个主意：百草门往后怎么办。", "place": "ridge", "choice_event": "baicao_choice"}
+    ]
+  }
 }

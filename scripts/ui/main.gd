@@ -52,6 +52,9 @@ var manual_store = SaveStore.new("user://saves/manual")
 var auto_store = SaveStore.new("user://saves/auto")
 ## 劫前存档: written as a 死斗 begins (combat.gd), read from the 斗法陨落 ending.
 var trial_store = SaveStore.new("user://saves/trial")
+## 抉择前存档: written as a choice that would end the life comes up (events.gd `final`), read from the
+## ending it leads to.
+var choice_store = SaveStore.new("user://saves/choice")
 var started := false
 var autosave_error := ""
 # The content of the current screen; every view builds into it.
@@ -78,6 +81,8 @@ var battle_scout_open := false
 var battle_secret_open := false
 ## The 死斗 last saved before (day and foe), so the 劫前 save is written once per fight.
 var trial_saved_for := ""
+## The life-ending choice last saved before (day and event), so the 抉择前 save is written once.
+var choice_saved_for := ""
 var retreat_days := 90
 var retreat_playback: Dictionary = {}
 var retreat_result := ""
@@ -208,6 +213,7 @@ func _ready() -> void:
 		manual_store = SaveStore.new("user://art_preview/manual")
 		auto_store = SaveStore.new("user://art_preview/auto")
 		trial_store = SaveStore.new("user://art_preview/trial")
+		choice_store = SaveStore.new("user://art_preview/choice")
 		guide_enabled = false
 		started = true
 		reset_preview()
@@ -1304,6 +1310,13 @@ func _on_changed() -> void:
 			trial_saved_for = key
 			if not trial_store.save_game(session):
 				notice(trial_store.last_error)
+	# A choice that would end the life: its 抉择前 save, once, before it is made.
+	if started and session.Events.final_pending(session):
+		var choice_key := "%d:%s" % [int(session.world.day), str(session.pending_event.id)]
+		if choice_key != choice_saved_for:
+			choice_saved_for = choice_key
+			if not choice_store.save_game(session):
+				notice(choice_store.last_error)
 	if started and autosave_enabled:
 		autosave_error = "" if auto_store.save_game(session) else auto_store.last_error
 	else:
@@ -1345,6 +1358,19 @@ func load_trial() -> void:
 		notice("已读取劫前存档：回到这场死斗开打之时。")
 	else:
 		notice(trial_store.last_error)
+
+## Back to just before the choice that ended the life.
+func load_choice() -> void:
+	if not started or presenting:
+		return
+	story = {}
+	dialogue = {}
+	if choice_store.load_game(session):
+		retreat_result = ""
+		tracked_goal = ""
+		notice("已读取抉择前存档：回到这个抉择之前。")
+	else:
+		notice(choice_store.last_error)
 
 func _ask_new_game() -> void:
 	if presenting:

@@ -5,14 +5,21 @@ extends RefCounted
 ## Kinds: deliver items, hunt beasts, (on the sect's board) patrol a place and report back, and 悬赏 an
 ## outlaw by name (`wanted`: found where they hide, feuds.gd; sometimes the poster lied).
 ## A kind may wait for a realm (`min_realm`: the 魔修 for 金丹 disciples).
-## The sect's own board (data/sect.json `board`) also pays contribution (`contribution` per count).
+## A sect's own board (`affiliation`: data/sect.json `board`) also pays contribution (`contribution`
+## per count), and only its disciples read it; a 客卿's board (guest_<sect>) is for its guests.
 
 static func board_here(s) -> String:
 	if not s.available_here("commissions"):
 		return ""
 	for board: String in s.content.commission_data.boards:
-		if s.content.commission_data.boards[board].location == s.player.location:
-			return board
+		var posted: Dictionary = s.content.commission_data.boards[board]
+		if posted.location != s.player.location:
+			continue
+		if posted.has("affiliation") and str(posted.affiliation) != s.affiliation():
+			continue
+		if board.begins_with("guest_") and not s.Guest.is_guest(s, board.trim_prefix("guest_")):
+			continue
+		return board
 	return ""
 
 static func offers(s, board: String) -> Array[Dictionary]:
@@ -77,7 +84,7 @@ static func make_offer(s, kind: String, board: String, key: String, rng: RandomN
 	else:
 		offer.enemy = template.enemies[rng.randi_range(0, template.enemies.size() - 1)]
 		offer.reward = {"stones": int(template.reward_stones) * int(offer.count), "xp": int(template.reward_xp) * int(offer.count)}
-	offer.reward.contribution = int(template.get("contribution", 0)) * int(offer.count) if board == str(s.content.sect_data.get("board", "")) else 0
+	offer.reward.contribution = int(template.get("contribution", 0)) * int(offer.count) if data.boards[board].has("affiliation") else 0
 	return offer
 
 ## Whether a seasonal template's year has come round (`years`: [first, every]).

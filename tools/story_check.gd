@@ -260,6 +260,8 @@ func _effects(effects: Array, site: String) -> void:
 				_add(flag_writers, str(value), site)
 			"guest_invite":
 				_add(flag_writers, "guest_invite_" + str(value), site)
+			"close_sect":
+				_add(flag_writers, "sect_closed_" + str(value[0]), site)
 			"start_story":
 				_known_story(str(value), site)
 				_add(starters, str(value), site)
@@ -385,6 +387,11 @@ func _collect_guest_flags() -> void:
 		var perk := str(content.guest_data.sects[sect].get("flag", ""))
 		if not perk.is_empty():
 			_add(flag_writers, perk, "客卿（Guest.accept）")
+	# A sect ended by its story (close_sect) is marked sect_closed_<id>, read when someone would join it.
+	# Only sects a story can end register the flag (world_flags).
+	for sect: String in content.sect_data.get("sects", {}):
+		if ("sect_closed_" + sect) in content.world_flags:
+			_add(flag_readers, "sect_closed_" + sect, "宗门（Sect.closed）")
 
 ## Caves.guarded reads the flag through each room's actual enemy reference, not a literal string.
 ## Unreferenced enemy flags remain warnings; declaring a world_flag alone is not a reader.
@@ -502,7 +509,8 @@ func condition_text(condition: Dictionary) -> String:
 		"talent":
 			return "天赋「%s」" % Talents.definition(content, str(value)).get("name", str(value))
 		"rank_at_least":
-			for rank: Dictionary in content.sect_data.get("ranks", []):
+			# Rank ids are shared by every sect; name the home sect's rank.
+			for rank: Dictionary in content.sect_data.sects[str(content.rules.lineage.home)].ranks:
 				if str(rank.id) == str(value):
 					return "宗门身份≥%s" % rank.name
 			return "宗门身份≥%s" % value

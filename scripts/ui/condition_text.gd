@@ -85,9 +85,11 @@ static func describe(s, condition: Dictionary) -> String:
 		"talent":
 			return "需天赋「%s」" % s.Talents.definition(s.content, str(value)).name
 		"rank_at_least":
-			for rank: Dictionary in s.content.sect_data.ranks:
+			for rank: Dictionary in s.Sect.ranks(s):
 				if rank.id == value:
 					return "需宗门身份「%s」" % rank.name
+		"affiliation":
+			return "需是%s弟子" % s.Sect.name_of(s, str(value)) if not str(value).is_empty() else "需是散修"
 		"sect":
 			return "需修习%s传承" % s.content.sects[str(value)].name
 		"recipe":

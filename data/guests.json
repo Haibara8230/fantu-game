@@ -1,5 +1,6 @@
 {
   "min_realm": 1,
+  "most": 2,
   "invite_favor": 140,
   "call_years": 3,
   "call_days": 360,

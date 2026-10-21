@@ -12,6 +12,20 @@ func _initialize() -> void:
 	create_timer(20.0).timeout.connect(func() -> void: printerr("UI test timed out" ); quit(1))
 	call_deferred("_run")
 
+## A store that reads back what it wrote without checking it against freshly loaded content: the
+## life-ending choice below lives only in this session's content.
+class TrustingStore extends "res://scripts/core/save_store.gd":
+	func _candidates() -> Array[Dictionary]:
+		var found: Array[Dictionary] = []
+		for slot: int in [0, 1]:
+			var path := directory.path_join("journey_%d.json" % slot)
+			if FileAccess.file_exists(path):
+				var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string(path))
+				if parsed is Dictionary:
+					found.append(parsed)
+		found.sort_custom(func(a: Dictionary, b: Dictionary) -> bool: return int(a.generation) > int(b.generation))
+		return found
+
 # Counted checks instead of assert(): a failed assert halts a headless run instead of failing it.
 func check(condition: bool, message: String) -> void:
 	checks += 1
@@ -178,6 +192,7 @@ func _run() -> void:
 	main.manual_store = SaveStore.new(test_path + "/manual")
 	main.auto_store = SaveStore.new(test_path + "/auto")
 	main.trial_store = SaveStore.new(test_path + "/trial")
+	main.choice_store = SaveStore.new(test_path + "/choice")
 	# Isolate preferences before _ready builds the welcome from the guide state.
 	main.guide_path = test_path + "/guide.cfg"
 	main.settings_path = test_path + "/settings.cfg"
@@ -773,14 +788,14 @@ func _run() -> void:
 	check(main.current_screen() == "full" and _texts(main.center, "Label").contains("筑基") and _texts(main.center, "Label").contains("寿元 120 → 220 年") and _texts(main.center, "Label").contains("根基 · "), "a realm reached is shown on its own screen, with its grade")
 	_button("确定").pressed.emit()
 	check(main.ceremony.is_empty() and main.view == "place" and main.session.player.realm == 1, "确定 returns to the place")
-	# 客卿 at a sect's gate (guest.gd): offered there, closed to one already sworn to 青云.
+	# 客卿 at a sect's gate (guest.gd): offered there, open to a 青云 disciple too (the sects do not clash).
 	main.session.world.flags["tiannan_known"] = true
 	main.session.world.flags["guest_invite_chixiao"] = true
 	main.session.player.location = "chixiao_gate"
 	main.set_view("place")
 	main.select_spot("pavilion")
 	var guest_button: Button = _button("应邀做赤霄门客卿")
-	check(guest_button != null and guest_button.disabled and guest_button.tooltip_text.contains("宗门弟子"), "赤霄's 迎客亭 offers the guest's place, closed to a 青云 disciple")
+	check(guest_button != null and not guest_button.disabled and guest_button.tooltip_text.contains("客卿"), "赤霄's 迎客亭 offers the guest's place, open to a 青云 disciple")
 	# 护送 at 青石镇's 镇口木栅 (series.gd), fought as a pack with a target to pick (群敌).
 	main.session.player.location = "town"
 	var stage_was := int(main.session.player.stage)
@@ -845,6 +860,24 @@ func _run() -> void:
 	_button("读取劫前存档").pressed.emit()
 	check(main.session.ended.is_empty() and not main.session.battle.is_empty() and bool(main.session.battle.get("deadly", false)), "and reading it returns to the fight's start")
 	main.session.battle.clear()
+	# A choice that would end the life (events.gd `final`): marked, saved before, and read back from the end.
+	main.session.content.events["test_final"] = {"title": "终局", "trigger": "manual", "text": "此去再无回头路。", "choices": [
+		{"id": "stay", "label": "留下", "chronicle": "你留了下来。"},
+		{"id": "go", "label": "随他而去", "final": true, "effects": [{"end_life": "从此人间再无此人。"}], "chronicle": "你随他去了。"}]}
+	var real_choice_store = main.choice_store
+	main.choice_store = TrustingStore.new(real_choice_store.directory)
+	main.story = {}
+	main.session.pending_event = {"id": "test_final", "day": int(main.session.world.day)}
+	main.session.changed.emit()
+	main.render()
+	check(main.choice_store.has_save() and _button("随他而去（此选将结束这一生）") != null and _button("留下") != null, "a life-ending choice says so and leaves a 抉择前 save before it is made")
+	_button("随他而去").pressed.emit()
+	check(str(main.session.ended.get("kind", "")) == "story" and _texts(main.center, "Label").contains("此 生 已 了") and _texts(main.center, "Label").contains("人间再无此人") and _button("读取抉择前存档") != null, "made, the life ends with its words; the 抉择前 save is offered")
+	_button("读取抉择前存档").pressed.emit()
+	check(main.session.ended.is_empty() and main.session.pending_event.get("id", "") == "test_final", "and reading it returns to the choice")
+	main.session.pending_event = {}
+	main.session.content.events.erase("test_final")
+	main.choice_store = real_choice_store
 	main.session.player.realm = realm_was
 	main.session.refresh_realm_stats()
 	main.render()

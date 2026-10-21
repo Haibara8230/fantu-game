@@ -280,9 +280,9 @@ static func _spot_action(ui, grid: GridContainer, action: String) -> void:
 			if sect.is_empty():
 				return
 			var terms: Dictionary = session.Guest.terms(session, sect)
-			var sect_name: String = session.content.sects[sect].name
-			if session.Guest.of(session) == sect:
-				var guest: Dictionary = session.player.guest
+			var sect_name: String = session.Sect.name_of(session, sect)
+			if session.Guest.is_guest(session, sect):
+				var guest: Dictionary = session.Guest.bond(session, sect)
 				_timed(ui, grid, "辞去%s客卿" % sect_name, session.guest_leave, "月俸 %d 灵石；%s。差遣误了 %d 次（%d 次即解约）。辞去后邀约仍在，日后可再应。" % [session.Guest.stipend(session), terms.perk_text, int(guest.get("missed", 0)), int(session.Guest.data(session).missed_most)])
 			else:
 				var reason: String = session.Guest.block(session, sect)
@@ -290,8 +290,15 @@ static func _spot_action(ui, grid: GridContainer, action: String) -> void:
 				var take: Button = _timed(ui, grid, "应邀做%s客卿" % sect_name, session.guest_accept, reason if not reason.is_empty() else about)
 				take.disabled = not reason.is_empty()
 		"join_sect":
+			var sect: String = session.Sect.here(session)
 			var reason: String = session.join_block()
-			var join: Button = _timed(ui, grid, "拜入青云剑宗", session.join_sect, reason if not reason.is_empty() else "成为外门弟子：静室修行、执事堂差事与月俸、传功堂传承；也要守宗门的规矩")
+			var table: Dictionary = session.Sect.info(session, sect)
+			var about := "%s（%s）：静室修行、%s的差事与月俸%s；也要守宗门的规矩" % [table.name, session.Sect.tier_name(session, sect), table.office, "、本门传承" if session.content.sects.has(sect) else ""]
+			# Leaving a sect for this one: a move up, or a betrayal the old sect remembers.
+			if session.Sect.member(session) and reason.is_empty():
+				var old: String = session.Sect.name_of(session, session.Sect.own_id(session))
+				about += "\n" + ("叛出：%s不比%s高，改投便是背弃师门，%s从此视你为叛徒、再不收你。" % [table.name, old, old] if session.Sect.betrays(session, sect) else "改投：%s的档次在%s之上，%s会放你走，身份与贡献在新宗门从头算起。" % [table.name, old, old])
+			var join: Button = _timed(ui, grid, ("改投" if session.Sect.member(session) else "拜入") + str(table.name), session.join_sect, reason if not reason.is_empty() else about)
 			join.disabled = not reason.is_empty()
 		"teach":
 			for technique_id: String in session.teachings():
@@ -363,6 +370,8 @@ static func sect_choices(ui, parent: VBoxContainer, is_preview: bool) -> void:
 static func _home_lineage(ui, parent: VBoxContainer) -> void:
 	var session = ui.session
 	var home: String = session.Loadout.home_lineage(session)
+	if home.is_empty():
+		return
 	var sect: Dictionary = session.content.sects[home]
 	var arts: Array[String] = []
 	for skill_id: String in sect.skills:

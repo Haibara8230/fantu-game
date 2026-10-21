@@ -1505,10 +1505,10 @@ static func _lose(s) -> String:
 		s.Feuds.fight_over(s, grudge_id, false)
 	var lost := mini(int(s.player.stones), 10)
 	s.player.stones -= lost
-	# A disciple is carried back to the sect; a wanderer to the nearest inn (rules.opening.location when
-	# the place has none).
+	# A disciple is carried back to their sect's gate; a wanderer to the nearest inn
+	# (rules.opening.location when the place has none).
 	var member: bool = s.Sect.member(s)
-	s.player.location = "sect" if member else (str(s.player.location) if s.available_here("inn_rest") else str(s.content.rules.opening.location))
+	s.player.location = str(s.Sect.own(s).place) if member else (str(s.player.location) if s.available_here("inn_rest") else str(s.content.rules.opening.location))
 	s.player.journey = {}
 	var message: String = (s.Series.abandon(s) + " " + s.log_event("battle_defeat" if member else "battle_defeat_wanderer", {"lost": lost, "location": s.player.location})).strip_edges()
 	var passed: Dictionary = s.advance_days(s.content.action_days("battle_defeat"))

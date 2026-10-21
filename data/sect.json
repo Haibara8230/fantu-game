@@ -1,36 +1,322 @@
 {
-  "board": "sect",
-  "ranks": [
-    {"id": "outer", "name": "外门弟子", "merit": 0, "stage": [0, 0], "stipend": 3, "retreat": 0},
-    {"id": "elite", "name": "外门精英", "merit": 120, "stage": [0, 1], "stipend": 8, "retreat": 5, "host": "xu_qinghe",
-      "words": "许清和把一枚青玉腰牌递到你手里：“外门精英。往后每月多领几块灵石，宗门的筑基丹也能拿贡献来换了——一年里能换到的人，外门不过十来个。”"},
-    {"id": "inner", "name": "内门弟子", "merit": 400, "stage": [1, 0], "stipend": 20, "retreat": 10, "host": "gu_changgeng",
-      "words": "顾长庚亲手为你系上内门的白玉腰牌：“入了内门，你便有了自己的静室，灵气比外门浓上一成。宗门的大事，往后也要算你一份。”"},
-    {"id": "true", "name": "真传弟子", "merit": 1200, "stage": [1, 2], "stipend": 50, "retreat": 15, "host": "gu_changgeng",
-      "words": "顾长庚把一枚紫玉令牌按进你掌心：“筑基后期，又有这一身功劳，便是本门真传。青云山门小，典籍、丹房与灵脉却都向你敞开；宗门有事，你也得站在前头。”"}
-  ],
-  "stipend": {"period_days": 30, "most_periods": 12},
-  "duties": {"rank": "inner", "change_days": 360, "list": {
-    "alchemy": {"name": "丹房执事", "text": "管着宗门丹房：炼丹成功率 +10。", "alchemy": 10},
-    "patrol": {"name": "巡山执事", "text": "领着巡山与委托：交付委托所得贡献多五成。", "contribution_percent": 50},
-    "lore": {"name": "传功执事", "text": "协理传功堂：参悟功法耗时少两成。", "study": -20}
-  }},
-  "donation": {"rate": 0.5, "period_days": 30, "most": 40, "categories": ["herb", "material"]},
-  "awards": {"tournament_round": 10, "tournament_champion": 80},
-  "exchange": [
-    {"id": "huiqi", "item": "huiqi_pill", "price": 8, "limit": 3, "per_days": 30},
-    {"id": "liaoshang", "item": "liaoshang_pill", "price": 10, "limit": 3, "per_days": 30},
-    {"id": "pozhang", "item": "pozhang_pill", "price": 30, "limit": 2, "per_days": 360},
-    {"id": "ningqi", "item": "ningqi_pill", "price": 35, "limit": 2, "per_days": 360},
-    {"id": "foundation", "item": "foundation_pill", "price": 150, "limit": 1, "per_days": 720, "rank": "elite"},
-    {"id": "recipe_ningqi", "item": "recipe_ningqi", "price": 40, "limit": 1, "per_days": 360}, {"id": "ningdan", "item": "ningdan_yaolue", "price": 400, "limit": 1, "per_days": 720, "rank": "inner"},
-    {"id": "recipe_pozhang", "item": "recipe_pozhang", "price": 40, "limit": 1, "per_days": 360},
-    {"id": "recipe_foundation", "item": "recipe_foundation", "price": 120, "limit": 1, "per_days": 360, "rank": "elite"},
-    {"id": "furnace_purple", "item": "furnace_purple", "price": 150, "limit": 1, "per_days": 360, "rank": "elite"},
-    {"id": "furnace_xuantie", "item": "furnace_xuantie", "price": 400, "limit": 1, "per_days": 720, "rank": "inner"},
-    {"id": "xuantie", "item": "ore_xuantie", "price": 50, "limit": 3, "per_days": 180, "rank": "inner"},
-    {"id": "xuancan", "item": "silk_xuancan", "price": 50, "limit": 3, "per_days": 180, "rank": "inner"},
-    {"id": "mojade", "item": "jade_mo", "price": 50, "limit": 3, "per_days": 180, "rank": "inner"},
-    {"id": "yellow", "manual": 2, "count": 2, "price": 50, "limit": 1, "per_days": 90}
-  ]
+  "rank_ids": ["outer", "elite", "inner", "true", "head"],
+  "tiers": {
+    "entry": {"name": "入流", "order": 0},
+    "clan": {"name": "世家", "order": 1},
+    "minor": {"name": "小宗", "order": 2},
+    "middle": {"name": "中宗", "order": 3},
+    "major": {"name": "大宗", "order": 4},
+    "upper": {"name": "上宗", "order": 5}
+  },
+  "sides": {
+    "righteous": "正道",
+    "neutral": "中立",
+    "demonic": "魔道"
+  },
+  "betray_favor": -30,
+  "stipend": {
+    "period_days": 30,
+    "most_periods": 12
+  },
+  "donation": {
+    "rate": 0.5,
+    "period_days": 30,
+    "most": 40,
+    "categories": ["herb", "material"]
+  },
+  "awards": {
+    "tournament_round": 10,
+    "tournament_champion": 80
+  },
+  "sects": {
+    "qingyun": {
+      "name": "青云剑宗",
+      "tier": "minor",
+      "side": "righteous",
+      "element": "metal",
+      "place": "sect",
+      "office": "执事堂",
+      "board": "sect",
+      "join": {"realm_most": 1},
+      "joined": "你在接引台验过灵根，拜入青云剑宗，成了外门弟子。",
+      "people": ["xu_qinghe", "gu_changgeng"],
+      "ranks": [
+        {"id": "outer", "name": "外门弟子", "merit": 0, "stage": [0, 0], "stipend": 3, "retreat": 0},
+        {"id": "elite", "name": "外门精英", "merit": 120, "stage": [0, 1], "stipend": 8, "retreat": 5, "host": "xu_qinghe", "words": "许清和把一枚青玉腰牌递到你手里：“外门精英。往后每月多领几块灵石，宗门的筑基丹也能拿贡献来换了——一年里能换到的人，外门不过十来个。”"},
+        {"id": "inner", "name": "内门弟子", "merit": 400, "stage": [1, 0], "stipend": 20, "retreat": 10, "host": "gu_changgeng", "words": "顾长庚亲手为你系上内门的白玉腰牌：“入了内门，你便有了自己的静室，灵气比外门浓上一成。宗门的大事，往后也要算你一份。”"},
+        {"id": "true", "name": "真传弟子", "merit": 1200, "stage": [1, 2], "stipend": 50, "retreat": 15, "host": "gu_changgeng", "words": "顾长庚把一枚紫玉令牌按进你掌心：“筑基后期，又有这一身功劳，便是本门真传。青云山门小，典籍、丹房与灵脉却都向你敞开；宗门有事，你也得站在前头。”"}
+      ],
+      "duties": {
+        "rank": "inner",
+        "change_days": 360,
+        "list": {
+          "alchemy": {"name": "丹房执事", "text": "管着宗门丹房：炼丹成功率 +10。", "alchemy": 10},
+          "patrol": {"name": "巡山执事", "text": "领着巡山与委托：交付委托所得贡献多五成。", "contribution_percent": 50},
+          "lore": {"name": "传功执事", "text": "协理传功堂：参悟功法耗时少两成。", "study": -20}
+        }
+      },
+      "exchange": [
+        {"id": "huiqi", "item": "huiqi_pill", "price": 8, "limit": 3, "per_days": 30},
+        {"id": "liaoshang", "item": "liaoshang_pill", "price": 10, "limit": 3, "per_days": 30},
+        {"id": "pozhang", "item": "pozhang_pill", "price": 30, "limit": 2, "per_days": 360},
+        {"id": "ningqi", "item": "ningqi_pill", "price": 35, "limit": 2, "per_days": 360},
+        {"id": "foundation", "item": "foundation_pill", "price": 150, "limit": 1, "per_days": 720, "rank": "elite"},
+        {"id": "recipe_ningqi", "item": "recipe_ningqi", "price": 40, "limit": 1, "per_days": 360},
+        {"id": "ningdan", "item": "ningdan_yaolue", "price": 400, "limit": 1, "per_days": 720, "rank": "inner"},
+        {"id": "recipe_pozhang", "item": "recipe_pozhang", "price": 40, "limit": 1, "per_days": 360},
+        {"id": "recipe_foundation", "item": "recipe_foundation", "price": 120, "limit": 1, "per_days": 360, "rank": "elite"},
+        {"id": "furnace_purple", "item": "furnace_purple", "price": 150, "limit": 1, "per_days": 360, "rank": "elite"},
+        {"id": "furnace_xuantie", "item": "furnace_xuantie", "price": 400, "limit": 1, "per_days": 720, "rank": "inner"},
+        {"id": "xuantie", "item": "ore_xuantie", "price": 50, "limit": 3, "per_days": 180, "rank": "inner"},
+        {"id": "xuancan", "item": "silk_xuancan", "price": 50, "limit": 3, "per_days": 180, "rank": "inner"},
+        {"id": "mojade", "item": "jade_mo", "price": 50, "limit": 3, "per_days": 180, "rank": "inner"},
+        {"id": "yellow", "manual": 2, "count": 2, "price": 50, "limit": 1, "per_days": 90}
+      ]
+    },
+    "chixiao": {
+      "name": "赤霄门",
+      "tier": "middle",
+      "side": "righteous",
+      "element": "fire",
+      "place": "chixiao_gate",
+      "office": "器堂",
+      "board": "sect_chixiao",
+      "join": {"realm_most": 1, "root": "fire", "every_years": 3},
+      "joined": "开炉台上，你掌心的火灵根引动了炉火。赤霄门收你做了学徒。",
+      "people": ["yan_qianqiu"],
+      "ranks": [
+        {"id": "outer", "name": "学徒", "merit": 0, "stage": [0, 0], "stipend": 5, "retreat": 0},
+        {"id": "elite", "name": "炉工", "merit": 150, "stage": [0, 1], "stipend": 12, "retreat": 5, "words": "器堂执事把一块烧得发黑的炉牌丢给你：“炉工。往后炉位有你一个。”"},
+        {"id": "inner", "name": "炉头", "merit": 500, "stage": [1, 0], "stipend": 30, "retreat": 10, "words": "你领到了自己的一座炉。炉头的牌子是赤铜打的，烫手。"},
+        {"id": "true", "name": "器师", "merit": 1500, "stage": [1, 2], "stipend": 70, "retreat": 15, "words": "器师的名字刻进了器坊的石壁。赤霄门的炉火，从此有一炉听你的。"}
+      ],
+      "duties": {
+        "rank": "inner",
+        "change_days": 360,
+        "list": {
+          "patrol": {"name": "矿监", "text": "看着赤枫岭的矿路：交付委托所得贡献多五成。", "contribution_percent": 50},
+          "lore": {"name": "器堂执事", "text": "协理器堂典籍：参悟功法耗时少两成。", "study": -20}
+        }
+      },
+      "exchange": [
+        {"id": "huiqi", "item": "huiqi_pill", "price": 8, "limit": 3, "per_days": 30},
+        {"id": "liaoshang", "item": "liaoshang_pill", "price": 10, "limit": 3, "per_days": 30},
+        {"id": "kongho", "item": "kongho_fu", "price": 8, "limit": 3, "per_days": 90},
+        {"id": "qinggang", "item": "ore_qinggang", "price": 20, "limit": 3, "per_days": 90},
+        {"id": "xuantie", "item": "ore_xuantie", "price": 50, "limit": 3, "per_days": 180, "rank": "elite"},
+        {"id": "dihuo", "item": "dihuo_jing", "price": 45, "limit": 2, "per_days": 180, "rank": "inner"},
+        {"id": "bihuo", "item": "bihuo_zhu", "price": 160, "limit": 1, "per_days": 720, "rank": "inner"},
+        {"id": "hantie", "item": "ore_hantie", "price": 150, "limit": 1, "per_days": 360, "rank": "true"},
+        {"id": "yellow", "manual": 2, "count": 2, "price": 50, "limit": 1, "per_days": 90}
+      ]
+    },
+    "changqing": {
+      "name": "长青谷",
+      "tier": "middle",
+      "side": "righteous",
+      "element": "wood",
+      "place": "changqing_valley",
+      "office": "执事院",
+      "board": "sect_changqing",
+      "join": {"realm_most": 0},
+      "joined": "长青谷收下了你，却先发给你一把药锄：做满一年药园杂役，才算谷中弟子。",
+      "people": ["lin_wanzhao"],
+      "ranks": [
+        {"id": "outer", "name": "药童", "merit": 0, "stage": [0, 0], "stipend": 5, "retreat": 0},
+        {"id": "elite", "name": "药师", "merit": 150, "stage": [0, 1], "stipend": 12, "retreat": 5, "words": "药园的管事收回了你的药锄，换给你一只药篓：“一年杂役做满了。往后是药师。”", "days": 360},
+        {"id": "inner", "name": "丹师", "merit": 500, "stage": [1, 0], "stipend": 30, "retreat": 10, "words": "丹房里有了你的一口炉。"},
+        {"id": "true", "name": "谷主亲传", "merit": 1500, "stage": [1, 2], "stipend": 70, "retreat": 15, "words": "谷主亲手替你在药园辟了一畦地：“往后你是我的亲传。”"}
+      ],
+      "duties": {
+        "rank": "inner",
+        "change_days": 360,
+        "list": {
+          "alchemy": {"name": "丹房执事", "text": "管着谷中丹房：炼丹成功率 +10。", "alchemy": 10},
+          "patrol": {"name": "巡医", "text": "随医队行走各城：交付委托所得贡献多五成。", "contribution_percent": 50}
+        }
+      },
+      "exchange": [
+        {"id": "huiqi", "item": "huiqi_pill", "price": 7, "limit": 3, "per_days": 30},
+        {"id": "liaoshang", "item": "liaoshang_pill", "price": 8, "limit": 4, "per_days": 30},
+        {"id": "huichun", "item": "huichun_grass", "price": 3, "limit": 6, "per_days": 30},
+        {"id": "ninglu", "item": "ninglu_grass", "price": 5, "limit": 6, "per_days": 30},
+        {"id": "recipe_liaoshang", "item": "recipe_liaoshang", "price": 12, "limit": 1, "per_days": 360},
+        {"id": "recipe_huiqi", "item": "recipe_huiqi", "price": 12, "limit": 1, "per_days": 360},
+        {"id": "recipe_ningqi", "item": "recipe_ningqi", "price": 35, "limit": 1, "per_days": 360},
+        {"id": "recipe_pozhang", "item": "recipe_pozhang", "price": 30, "limit": 1, "per_days": 360},
+        {"id": "recipe_foundation", "item": "recipe_foundation", "price": 100, "limit": 1, "per_days": 360, "rank": "elite"},
+        {"id": "furnace_purple", "item": "furnace_purple", "price": 130, "limit": 1, "per_days": 360, "rank": "elite"},
+        {"id": "lingzhi", "item": "lingzhi", "price": 50, "limit": 1, "per_days": 180, "rank": "inner"},
+        {"id": "yanshou", "item": "yanshou_dan", "price": 120, "limit": 1, "per_days": 720, "rank": "true"}
+      ]
+    },
+    "canglan": {
+      "name": "沧澜阁",
+      "tier": "middle",
+      "side": "righteous",
+      "element": "water",
+      "place": "canglan_pavilion",
+      "office": "阵堂",
+      "board": "sect_canglan",
+      "join": {"realm_most": 1, "every_years": 10, "sense": 14},
+      "joined": "十年一考的阵图，你看出了其中的门道。沧澜阁收你做了抄经弟子。",
+      "people": ["bai_tinglan"],
+      "ranks": [
+        {"id": "outer", "name": "抄经弟子", "merit": 0, "stage": [0, 0], "stipend": 5, "retreat": 0},
+        {"id": "elite", "name": "阵生", "merit": 150, "stage": [0, 1], "stipend": 12, "retreat": 5, "words": "阵堂发给你一只阵盘：“阵生。藏书阁二层往后对你开着。”"},
+        {"id": "inner", "name": "阵师", "merit": 500, "stage": [1, 0], "stipend": 30, "retreat": 10, "words": "你的名字进了阵师的册子。"},
+        {"id": "true", "name": "观潮使", "merit": 1500, "stage": [1, 2], "stipend": 70, "retreat": 15, "words": "观潮使的令牌是一枚潮心石。测海那天，你站在阁主身边。"}
+      ],
+      "duties": {
+        "rank": "inner",
+        "change_days": 360,
+        "list": {
+          "lore": {"name": "守阁", "text": "看守藏书阁：参悟功法耗时少两成半。", "study": -25},
+          "patrol": {"name": "测潮", "text": "随测潮船出海：交付委托所得贡献多五成。", "contribution_percent": 50}
+        }
+      },
+      "exchange": [
+        {"id": "huiqi", "item": "huiqi_pill", "price": 8, "limit": 3, "per_days": 30},
+        {"id": "liaoshang", "item": "liaoshang_pill", "price": 10, "limit": 3, "per_days": 30},
+        {"id": "lingbei", "item": "hai_lingbei", "price": 25, "limit": 2, "per_days": 90},
+        {"id": "qingjade", "item": "jade_qing", "price": 20, "limit": 3, "per_days": 90},
+        {"id": "mojade", "item": "jade_mo", "price": 50, "limit": 3, "per_days": 180, "rank": "elite"},
+        {"id": "chaoxin", "item": "chaoxin_shi", "price": 200, "limit": 1, "per_days": 360, "rank": "true"},
+        {"id": "yellow", "manual": 2, "count": 3, "price": 45, "limit": 1, "per_days": 90},
+        {"id": "mystic", "manual": 3, "count": 1, "price": 180, "limit": 1, "per_days": 360, "rank": "inner"}
+      ]
+    },
+    "xuanyue": {
+      "name": "玄岳宗",
+      "tier": "middle",
+      "side": "righteous",
+      "element": "earth",
+      "place": "xuanyue_gate",
+      "office": "石殿",
+      "board": "sect_xuanyue",
+      "join": {"realm_most": 2, "hp": 150},
+      "joined": "你背着负山石走完了试炼场，没有倒下。玄岳宗收你做了担石弟子。",
+      "people": ["shi_zhenyue"],
+      "ranks": [
+        {"id": "outer", "name": "担石弟子", "merit": 0, "stage": [0, 0], "stipend": 5, "retreat": 0},
+        {"id": "elite", "name": "负山弟子", "merit": 150, "stage": [0, 1], "stipend": 12, "retreat": 5, "words": "肩上的石头换了一块更大的。负山弟子。"},
+        {"id": "inner", "name": "镇岳弟子", "merit": 500, "stage": [1, 0], "stipend": 30, "retreat": 10, "words": "镇岳弟子的玄铁腰牌压在腰间，沉甸甸的。"},
+        {"id": "true", "name": "岳卫", "merit": 1500, "stage": [1, 2], "stipend": 70, "retreat": 15, "words": "你成了岳卫。古物库的门，从此有一把钥匙在你手里。"}
+      ],
+      "duties": {
+        "rank": "inner",
+        "change_days": 360,
+        "list": {
+          "patrol": {"name": "巡峡", "text": "巡守断剑峡：交付委托所得贡献多五成。", "contribution_percent": 50},
+          "lore": {"name": "守库", "text": "看守古物库：参悟功法耗时少两成。", "study": -20}
+        }
+      },
+      "exchange": [
+        {"id": "huiqi", "item": "huiqi_pill", "price": 8, "limit": 3, "per_days": 30},
+        {"id": "liaoshang", "item": "liaoshang_pill", "price": 8, "limit": 4, "per_days": 30},
+        {"id": "liaoshang_fine", "item": "liaoshang_pill_fine", "price": 18, "limit": 2, "per_days": 90, "rank": "elite"},
+        {"id": "yanjia", "item": "yanjia_scale", "price": 15, "limit": 3, "per_days": 90},
+        {"id": "xuantie", "item": "ore_xuantie", "price": 50, "limit": 3, "per_days": 180, "rank": "elite"},
+        {"id": "xiong", "item": "xiong_dan", "price": 40, "limit": 1, "per_days": 180, "rank": "inner"},
+        {"id": "hantie", "item": "ore_hantie", "price": 150, "limit": 1, "per_days": 360, "rank": "true"},
+        {"id": "yellow", "manual": 2, "count": 2, "price": 50, "limit": 1, "per_days": 90}
+      ]
+    },
+    "baicao": {
+      "name": "百草门",
+      "tier": "entry",
+      "side": "righteous",
+      "element": "wood",
+      "place": "ridge",
+      "office": "观中偏殿",
+      "board": "sect_baicao",
+      "join": {"realm_most": 1},
+      "joined": "松翁领你在观后认了一棵松，百草门就算多了一个弟子。门里连你在内，八个人。",
+      "people": [],
+      "ranks": [
+        {"id": "outer", "name": "采药弟子", "merit": 0, "stage": [0, 0], "stipend": 2, "retreat": 0},
+        {"id": "elite", "name": "药圃弟子", "merit": 80, "stage": [0, 1], "stipend": 5, "retreat": 3},
+        {"id": "inner", "name": "入室弟子", "merit": 250, "stage": [0, 3], "stipend": 12, "retreat": 6},
+        {"id": "true", "name": "亲传弟子", "merit": 800, "stage": [1, 0], "stipend": 30, "retreat": 10},
+        {"id": "head", "name": "门主", "merit": 800, "stage": [1, 0], "stipend": 40, "retreat": 15, "story": true}
+      ],
+      "duties": {
+        "rank": "inner",
+        "change_days": 360,
+        "list": {
+          "patrol": {"name": "看山", "text": "看守松风岭的药坡：交付委托所得贡献多五成。", "contribution_percent": 50}
+        }
+      },
+      "exchange": [
+        {"id": "huichun", "item": "huichun_grass", "price": 3, "limit": 4, "per_days": 30},
+        {"id": "ninglu", "item": "ninglu_grass", "price": 5, "limit": 4, "per_days": 30},
+        {"id": "liaoshang", "item": "liaoshang_pill", "price": 10, "limit": 2, "per_days": 30},
+        {"id": "recipe_liaoshang", "item": "recipe_liaoshang", "price": 12, "limit": 1, "per_days": 360},
+        {"id": "lingzhi", "item": "lingzhi", "price": 60, "limit": 1, "per_days": 360, "rank": "inner"}
+      ]
+    },
+    "baihua": {
+      "name": "百花谷",
+      "tier": "entry",
+      "side": "righteous",
+      "element": "wood",
+      "place": "baihua",
+      "office": "香堂",
+      "board": "sect_baihua",
+      "join": {"realm_most": 1},
+      "joined": "梅三娘点了一炉静心香，看你坐到香尽也没动，便留下了你。",
+      "people": [],
+      "ranks": [
+        {"id": "outer", "name": "拣花弟子", "merit": 0, "stage": [0, 0], "stipend": 2, "retreat": 0},
+        {"id": "elite", "name": "制香弟子", "merit": 80, "stage": [0, 1], "stipend": 5, "retreat": 3},
+        {"id": "inner", "name": "入室弟子", "merit": 250, "stage": [0, 3], "stipend": 12, "retreat": 6},
+        {"id": "true", "name": "亲传弟子", "merit": 800, "stage": [1, 0], "stipend": 30, "retreat": 10}
+      ],
+      "duties": {
+        "rank": "inner",
+        "change_days": 360,
+        "list": {
+          "alchemy": {"name": "香房执事", "text": "管着谷中香房与药炉：炼丹成功率 +8。", "alchemy": 8}
+        }
+      },
+      "exchange": [
+        {"id": "huiqi", "item": "huiqi_pill", "price": 8, "limit": 2, "per_days": 30},
+        {"id": "chiyan", "item": "chiyan_flower", "price": 6, "limit": 4, "per_days": 30},
+        {"id": "snake", "item": "snake_gall", "price": 9, "limit": 2, "per_days": 60},
+        {"id": "recipe_huiqi", "item": "recipe_huiqi", "price": 12, "limit": 1, "per_days": 360},
+        {"id": "dingshen", "item": "dingshen_fu", "price": 25, "limit": 1, "per_days": 90, "rank": "elite"}
+      ]
+    },
+    "feiyu": {
+      "name": "飞鱼帮",
+      "tier": "entry",
+      "side": "neutral",
+      "element": "water",
+      "place": "ferry",
+      "office": "帮务船",
+      "board": "sect_feiyu",
+      "join": {"realm_most": 1},
+      "joined": "老鳖问了你两句来历，听你答得含糊，也没再追问，丢给你一块刻着飞鱼的木牌。",
+      "people": [],
+      "ranks": [
+        {"id": "outer", "name": "船工", "merit": 0, "stage": [0, 0], "stipend": 2, "retreat": 0},
+        {"id": "elite", "name": "舵手", "merit": 80, "stage": [0, 1], "stipend": 5, "retreat": 3},
+        {"id": "inner", "name": "头目", "merit": 250, "stage": [0, 3], "stipend": 12, "retreat": 6},
+        {"id": "true", "name": "帮中元老", "merit": 800, "stage": [1, 0], "stipend": 30, "retreat": 10}
+      ],
+      "duties": {
+        "rank": "inner",
+        "change_days": 360,
+        "list": {
+          "patrol": {"name": "押船", "text": "押送帮里的渡船：交付委托所得贡献多五成。", "contribution_percent": 50}
+        }
+      },
+      "exchange": [
+        {"id": "liaoshang", "item": "liaoshang_pill", "price": 10, "limit": 3, "per_days": 30},
+        {"id": "dundi", "item": "dundi_fu", "price": 30, "limit": 1, "per_days": 90},
+        {"id": "lei", "item": "lei_fu", "price": 22, "limit": 2, "per_days": 90},
+        {"id": "jinguang", "item": "jinguang_fu", "price": 18, "limit": 2, "per_days": 90, "rank": "elite"}
+      ]
+    }
+  }
 }

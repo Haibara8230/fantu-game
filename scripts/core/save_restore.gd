@@ -97,9 +97,10 @@ static func restore(s, data: Variant) -> bool:
 	var trials: Variant = saved_player.get("trials", {})
 	if not trials is Dictionary or trials.keys().any(func(trial_id: Variant) -> bool: return not trial_id in s.Trials.TRIALS or not trials[trial_id] is Dictionary or trials[trial_id].keys().any(func(year: Variant) -> bool: return not year is String or not year.is_valid_int() or not _whole_nonnegative(trials[trial_id][year]))):
 		return false
-	# Standing as a sect's 客卿 (optional: guest.gd).
-	var guest: Variant = saved_player.get("guest", {})
-	if not guest is Dictionary or (not guest.is_empty() and (not content.guest_data.get("sects", {}).has(guest.get("sect", "")) or ["since", "pay_day", "next_call", "missed"].any(func(key: String) -> bool: return not _whole_nonnegative(guest.get(key))))):
+	# Standing as sects' 客卿 (optional: guest.gd); journeys from before there could be two kept one bond
+	# as player.guest.
+	var guests: Variant = _valid_guests(content, saved_player)
+	if guests == null:
 		return false
 	var series_last: Variant = saved_player.get("series_last", {})
 	if not series_last is Dictionary or series_last.keys().any(func(series_id: Variant) -> bool: return not content.series.has(series_id) or not _whole_nonnegative(series_last[series_id])):
@@ -169,7 +170,7 @@ static func restore(s, data: Variant) -> bool:
 	var taught: Variant = saved_player.get("taught", [])
 	# The sect one belongs to ("" for a wanderer); journeys from before it were all 青云 disciples.
 	var affiliation: Variant = saved_player.get("affiliation", str(content.rules.lineage.home))
-	if not affiliation is String or (not affiliation.is_empty() and (not content.sects.has(affiliation) or affiliation == "wanderer")):
+	if not affiliation is String or (not affiliation.is_empty() and not content.sect_data.sects.has(affiliation)):
 		return false
 	if storylines == null or letters == null or deeds == null or not taught is Array or taught.any(func(tip: Variant) -> bool: return not tip is String):
 		return false
@@ -315,7 +316,7 @@ static func restore(s, data: Variant) -> bool:
 		if not values is Dictionary or values.keys().any(func(key: Variant) -> bool: return not key is String or not values[key] is String):
 			return false
 	if not saved_ended.is_empty():
-		if not saved_ended.get("kind") in ["lifespan", "ascension", "fallen"] or not _whole_nonnegative(saved_ended.get("day")) or int(saved_ended.day) > day or not saved_ended.get("choice", false) is bool or not saved_ended.get("route", "") is String:
+		if not saved_ended.get("kind") in ["lifespan", "ascension", "fallen", "story"] or not _whole_nonnegative(saved_ended.get("day")) or int(saved_ended.day) > day or not saved_ended.get("choice", false) is bool or not saved_ended.get("route", "") is String or not saved_ended.get("text", "") is String:
 			return false
 	for stream: String in ["combat", "world"]:
 		if not saved_rng.get(stream) is String or not saved_rng[stream].is_valid_int():
@@ -398,7 +399,7 @@ static func restore(s, data: Variant) -> bool:
 		for year: String in trials[trial_id]:
 			sittings[trial_id][year] = int(trials[trial_id][year])
 	player["trials"] = sittings
-	player["guest"] = {} if guest.is_empty() else {"sect": str(guest.sect), "since": int(guest.since), "pay_day": int(guest.pay_day), "next_call": int(guest.next_call), "missed": int(guest.missed)}
+	player["guests"] = guests
 	var last_taken := {}
 	for series_id: String in series_last:
 		last_taken[series_id] = int(series_last[series_id])
@@ -472,6 +473,9 @@ static func restore(s, data: Variant) -> bool:
 		s.ended.route = str(saved_ended.route)
 	if bool(saved_ended.get("choice", false)):
 		s.ended["choice"] = true
+	# The words of a life ended by a choice (events.gd end_life).
+	if not str(saved_ended.get("text", "")).is_empty():
+		s.ended["text"] = str(saved_ended.text)
 	s.chronicle.entries = saved_chronicle
 	s.combat_rng.state = int(saved_rng.combat)
 	s.world_rng.state = int(saved_rng.world)
@@ -695,10 +699,23 @@ static func _valid_wake(content, saved: Variant) -> Variant:
 ## nothing yet), or null when malformed.
 static func _valid_standing(content, saved_player: Dictionary, day: int) -> Variant:
 	var result := {}
+	# Each sect has its own ranks and duties; a wanderer's standing is read against the home sect's.
+	var sects: Dictionary = content.sect_data.sects
+	var own: Dictionary = sects.get(str(saved_player.get("affiliation", "")), sects[str(content.rules.lineage.home)])
 	var rank: Variant = saved_player.get("rank", 0)
-	if not _whole_nonnegative(rank) or int(rank) >= content.sect_data.ranks.size():
+	if not _whole_nonnegative(rank) or int(rank) >= own.ranks.size():
 		return null
 	result["rank"] = int(rank)
+	# The day the sect was joined (optional: older journeys count as long served) and the sects
+	# betrayed (optional: none).
+	var sect_day: Variant = saved_player.get("sect_day", 0)
+	if not _whole_signed(sect_day) or int(sect_day) > day:
+		return null
+	result["sect_day"] = int(sect_day)
+	var betrayed: Variant = saved_player.get("betrayed", [])
+	if not betrayed is Array or betrayed.any(func(sect: Variant) -> bool: return not sect is String or not sects.has(sect)):
+		return null
+	result["betrayed"] = betrayed.duplicate()
 	for key: String in ["contribution", "merit"]:
 		var value: Variant = saved_player.get(key, 0)
 		if not _whole_nonnegative(value):
@@ -721,9 +738,29 @@ static func _valid_standing(content, saved_player: Dictionary, day: int) -> Vari
 	var held_day: Variant = saved_player.get("duty_day", -1)
 	if not held is String or not _whole_signed(held_day) or int(held_day) > day:
 		return null
-	result["duty"] = held if content.sect_data.duties.list.has(held) else ""
+	result["duty"] = held if own.duties.list.has(held) else ""
 	result["duty_day"] = int(held_day)
 	return result
+
+## The 客卿 bonds, normalized: player.guests, or the single player.guest of older journeys; null when
+## malformed (an unknown sect, a sect twice, a bad day or count).
+static func _valid_guests(content, saved_player: Dictionary) -> Variant:
+	var saved: Variant = saved_player.get("guests", null)
+	if saved == null:
+		var old: Variant = saved_player.get("guest", {})
+		if not old is Dictionary:
+			return null
+		saved = [] if old.is_empty() else [old]
+	if not saved is Array:
+		return null
+	var result: Array = []
+	var seen := {}
+	for held: Variant in saved:
+		if not held is Dictionary or not content.guest_data.get("sects", {}).has(held.get("sect", "")) or seen.has(held.sect) or ["since", "pay_day", "next_call", "missed"].any(func(key: String) -> bool: return not _whole_nonnegative(held.get(key))):
+			return null
+		seen[held.sect] = true
+		result.append({"sect": str(held.sect), "since": int(held.since), "pay_day": int(held.pay_day), "next_call": int(held.next_call), "missed": int(held.missed)})
+	return result if result.size() <= int(content.guest_data.most) else null
 
 ## Recipes known, brews made, 丹毒 and the 灵田, normalized (optional: journeys before them know no
 ## recipe and have no field yet), or null when malformed. Recipes no longer in the content are dropped;

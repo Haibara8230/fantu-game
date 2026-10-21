@@ -134,28 +134,28 @@ func _guest() -> void:
 	check(game.Guest.sect_here(game) == "chixiao" and game.Guest.block(game, "chixiao").contains("邀"), "without an invitation 赤霄 has no place for a guest")
 	game.world.flags["guest_invite_chixiao"] = true
 	game.guest_accept()
-	check(game.Guest.of(game) == "chixiao" and game.has_flag("guest_chixiao"), "invited, the player stands as 赤霄's 客卿")
+	check(game.Guest.is_guest(game, "chixiao") and game.has_flag("guest_chixiao"), "invited, the player stands as 赤霄's 客卿")
 	check(game.available_here("cultivate") and game.available_here("breakthrough"), "and may retreat in its guest house")
 	check(game.Forge.fee(game, "ore_xuantie") == 0, "赤霄's furnace asks its guest no fee")
 	game.player.location = "nanming"
 	check(game.Forge.fee(game, "ore_xuantie") > 0, "elsewhere the fee stands")
 	game.player.location = "chixiao_gate"
-	check(not game.Guest.block(game, "xuanyue").is_empty(), "one sect at a time")
+	check(game.Guest.block(game, "xuanyue").contains("尚未"), "a sect that has not asked has no place for a guest")
 	var stones := int(game.player.stones)
 	game.wait(65)
 	check(int(game.player.stones) - stones == 40, "two months pay forty stones (%d)" % (int(game.player.stones) - stones))
-	game.world.day = int(game.player.guest.next_call) - 1
+	game.world.day = int(game.Guest.bond(game, "chixiao").next_call) - 1
 	game.wait(2)
 	var errands: Array = game.player.quests.filter(func(quest: Dictionary) -> bool: return str(quest.get("guest", "")) == "chixiao")
-	check(errands.size() == 1 and int(errands[0].deadline) - int(game.player.guest.next_call) < 0, "three years on, a 差遣 comes with a year to report")
+	check(errands.size() == 1 and int(errands[0].deadline) - int(game.Guest.bond(game, "chixiao").next_call) < 0, "three years on, a 差遣 comes with a year to report")
 	var copy := _reload(game)
-	check(copy.Guest.of(copy) == "chixiao" and copy.player.quests.any(func(quest: Dictionary) -> bool: return quest.has("guest")), "the bond and its errand survive a save")
+	check(copy.Guest.is_guest(copy, "chixiao") and copy.player.quests.any(func(quest: Dictionary) -> bool: return quest.has("guest")), "the bond and its errand survive a save")
 	game.world.day = int(errands[0].deadline) + 1
 	game.wait(1)
-	check(game.Guest.of(game) == "chixiao" and int(game.player.guest.missed) == 1, "a lapsed errand is counted")
-	game.world.day = int(game.player.guest.next_call) + 400
+	check(game.Guest.is_guest(game, "chixiao") and int(game.Guest.bond(game, "chixiao").missed) == 1, "a lapsed errand is counted")
+	game.world.day = int(game.Guest.bond(game, "chixiao").next_call) + 400
 	game.wait(1)
-	check(game.Guest.of(game).is_empty() and game.has_flag("guest_ended_chixiao") and not game.has_flag("guest_chixiao"), "a second lapse breaks the bond")
+	check(not game.Guest.is_guest(game, "chixiao") and game.has_flag("guest_ended_chixiao") and not game.has_flag("guest_chixiao"), "a second lapse breaks the bond")
 	check(not game.Guest.invited(game, "chixiao"), "and 赤霄 asks no more")
 	# 沧澜's shops sell to their guest for less; 玄岳 opens the archive.
 	var water := _game()
@@ -169,7 +169,7 @@ func _guest() -> void:
 	var less: int = water.Inventory.shop_goods(water).filter(func(good: Dictionary) -> bool: return str(good.item) == "ningdan_yaolue")[0].price
 	check(less == int(round(full * 0.8)), "沧澜's guest buys at eight tenths (%d of %d)" % [less, full])
 	water.guest_leave()
-	check(water.Guest.of(water).is_empty() and water.Guest.invited(water, "canglan"), "laid down, the invitation stays")
+	check(not water.Guest.is_guest(water, "canglan") and water.Guest.invited(water, "canglan"), "laid down, the invitation stays")
 	var stone := _game()
 	_found(stone)
 	stone.world.flags["tiannan_champion"] = true
@@ -181,7 +181,7 @@ func _guest() -> void:
 	_found(disciple)
 	disciple.world.flags["guest_invite_xuanyue"] = true
 	disciple.player.location = "xuanyue_gate"
-	check(disciple.Guest.block(disciple, "xuanyue").contains("宗门弟子"), "a 青云 disciple cannot be another sect's guest")
+	check(disciple.Guest.block(disciple, "xuanyue").is_empty(), "a 青云 disciple may stand as the guest of a sect that does not clash with 青云")
 
 ## 《照水分光诀》: seen on the water, the first half bought, the second taught; water and metal answer.
 func _zhaoshui() -> void:
@@ -429,7 +429,7 @@ func _wuzong() -> void:
 	var enter: Dictionary = game.pending_definition().choices[0]
 	check(not game.choice_available(enter), "a wanderer with nobody to vouch only watches")
 	game.world.flags["guest_invite_canglan"] = true
-	game.player.guest = {"sect": "canglan", "since": 0, "pay_day": int(game.world.day), "next_call": int(game.world.day) + 1000, "missed": 0}
+	game.player.guests = [{"sect": "canglan", "since": 0, "pay_day": int(game.world.day), "next_call": int(game.world.day) + 1000, "missed": 0}]
 	check(game.choice_available(enter), "沧澜's guest may stand for it")
 	game.choose_event("enter")
 	check(str(game.battle.get("contest", "")) == "wuzong" and str(game.battle.foe.name).contains("炎千秋"), "the first round: 赤霄's 炎千秋")
@@ -484,7 +484,7 @@ func _jindan() -> void:
 	low.player.stage = 3
 	check(not low.Breakthrough.odds(low, {"pills": 1, "treasure": "", "guard": ""}).parts.any(func(part: Array) -> bool: return str(part[0]) == "凝丹之法"), "it counts for nothing at 筑基")
 	var disciple := _game("plain", 41)
-	check(disciple.content.sect_data.exchange.any(func(good: Dictionary) -> bool: return str(good.item) == "ningdan_yaolue"), "青云's hall trades the book for contribution")
+	check(disciple.content.sect_data.sects.qingyun.exchange.any(func(good: Dictionary) -> bool: return str(good.item) == "ningdan_yaolue"), "青云's hall trades the book for contribution")
 	_found(disciple, 2)
 	disciple.player.location = "sect"
 	disciple.wait(1)

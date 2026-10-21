@@ -103,7 +103,7 @@ static func render_insight(ui) -> void:
 		_insight_row(ui, right, ArtLibrary.item_icon(session.content, manual), "%s\n%s" % [manual.name, about], ui.grade_color(taught), "领悟 · %d 日" % days, reason, str(taught.description),
 			func() -> void: ui.start_insight(func() -> String: return session.study_manual(item_id), str(taught.name)))
 	var home: String = session.Loadout.home_lineage(session)
-	if session.available_here("study") and str(session.player.get("sect", "wanderer")) != home:
+	if session.available_here("study") and not home.is_empty() and str(session.player.get("sect", "wanderer")) != home:
 		var sect: Dictionary = session.content.sects[home]
 		var arts: Array[String] = []
 		for skill_id: String in sect.skills:

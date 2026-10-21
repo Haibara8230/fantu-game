@@ -8,16 +8,22 @@ static func render(ui) -> void:
 	var session = ui.session
 	var center: VBoxContainer = ui.center
 	var p: Dictionary = session.player
+	if not session.Sect.member(session):
+		_wanderer(ui, center)
+		return
 	var rank: Dictionary = session.sect_rank()
 	var at_hall: bool = session.available_here("sect")
+	var own: Dictionary = session.Sect.own(session)
+	var office: String = session.Sect.office_text(session)
 	var heading := HBoxContainer.new()
 	heading.add_theme_constant_override("separation", 16)
 	center.add_child(heading)
-	heading.add_child(ui.label("青云剑宗 · " + str(rank.name), 26, ui.GOLD))
+	heading.add_child(ui.label("%s · %s" % [own.name, rank.name], 26, ui.GOLD))
+	heading.add_child(ui.label(session.Sect.tier_name(session, session.Sect.own_id(session)), 18, ui.MUTED))
 	heading.add_child(ui.label("贡献 %d　·　累计 %d" % [int(p.get("contribution", 0)), int(p.get("merit", 0))], 18, ui.INK))
-	center.add_child(ui.paragraph("月俸每月自动入账 %d 灵石%s。贡献来自执事堂的委托与巡视、师门差事、捐献、潜龙会与为宗门立下的大功；兑换花去的只是贡献，累计贡献只增不减，用来晋升。" % [int(rank.stipend), "，在宗门闭关修炼 +%d%%" % int(rank.retreat) if int(rank.retreat) > 0 else ""]))
+	center.add_child(ui.paragraph("月俸每月自动入账 %d 灵石%s。贡献来自%s的委托与巡视、师门差事、捐献、潜龙会与为宗门立下的大功；兑换花去的只是贡献，累计贡献只增不减，用来晋升。" % [int(rank.stipend), "，在宗门闭关修炼 +%d%%" % int(rank.retreat) if int(rank.retreat) > 0 else "", own.office]))
 	if not at_hall:
-		center.add_child(ui.paragraph("晋升、兑换与捐献，须到青云山执事堂办理。月俸会按月自动入账。", Color("#e3c08a")))
+		center.add_child(ui.paragraph("晋升、兑换与捐献，须到%s办理。月俸会按月自动入账。" % office, Color("#e3c08a")))
 	_promotion(ui, center, at_hall)
 	center.add_child(HSeparator.new())
 	var due: Dictionary = session.stipend_due()
@@ -25,7 +31,7 @@ static func render(ui) -> void:
 	row.add_theme_constant_override("separation", 12)
 	center.add_child(row)
 	row.add_child(ui.label("待结月俸：%d 个月，共 %d 灵石" % [int(due.periods), int(due.stones)], 16))
-	var collect: Button = ui.button("领取月俸", func() -> void: ui.run(session.collect_stipend), "回执事堂一并领取")
+	var collect: Button = ui.button("领取月俸", func() -> void: ui.run(session.collect_stipend), "回%s一并领取" % own.office)
 	collect.disabled = not at_hall or int(due.periods) < 1
 	row.add_child(collect)
 	_duties(ui, center)
@@ -39,7 +45,7 @@ static func render(ui) -> void:
 	for good: Dictionary in session.sect_goods():
 		var item: Dictionary = session.content.item(str(good.item))
 		var key: String = good.key
-		var reason: String = "须到执事堂兑换。" if not at_hall else str(good.block)
+		var reason: String = "须到%s兑换。" % own.office if not at_hall else str(good.block)
 		var take: Button = ui.button("%s · %d 贡献（本期余 %d）" % [item.get("name", good.item), int(good.price), int(good.left)], func() -> void: ui.run(func() -> String: return session.sect_exchange(key)), reason if not reason.is_empty() else str(item.get("description", "")))
 		ui.tint(take, ui.grade_color(item))
 		take.disabled = not reason.is_empty()
@@ -47,6 +53,7 @@ static func render(ui) -> void:
 		grid.add_child(take)
 	center.add_child(HSeparator.new())
 	_donations(ui, center, at_hall)
+	_bonds(ui, center)
 
 ## The next rank: what it asks, what it gives, and the request for it.
 static func _promotion(ui, center: VBoxContainer, at_hall: bool) -> void:
@@ -62,7 +69,7 @@ static func _promotion(ui, center: VBoxContainer, at_hall: bool) -> void:
 	row.add_child(ui.label("晋升%s：累计贡献 %d，修为%s。月俸 %d，闭关 +%d%%" % [next.name, int(next.merit), session.content.realm_title(int(stage[0]), int(stage[1])), int(next.stipend), int(next.retreat)], 16, ui.INK))
 	var reason: String = session.promotion_block()
 	if reason.is_empty() and not at_hall:
-		reason = "须到执事堂申请。"
+		reason = "须到%s申请。" % session.Sect.own(session).office
 	var go: Button = ui.button("申请晋升", func() -> void: ui.run(session.promote), reason if not reason.is_empty() else "条件已齐")
 	go.disabled = not reason.is_empty()
 	row.add_child(go)
@@ -97,7 +104,7 @@ static func _donations(ui, center: VBoxContainer, at_hall: bool) -> void:
 ## The duties of the inner court: the one held, and the others to take (once a year).
 static func _duties(ui, center: VBoxContainer) -> void:
 	var session = ui.session
-	var duties: Dictionary = session.content.sect_data.duties
+	var duties: Dictionary = session.Sect.duties(session)
 	var held: Dictionary = session.Sect.duty(session)
 	center.add_child(HSeparator.new())
 	center.add_child(ui.label("职司 · " + (str(held.name) if not held.is_empty() else "未任"), 18, ui.GOLD))
@@ -113,3 +120,22 @@ static func _duties(ui, center: VBoxContainer) -> void:
 		if str(session.player.get("duty", "")) == duty_id:
 			ui.tint(take, ui.GOLD)
 		row.add_child(take)
+
+## A wanderer's page: no sect, the 客卿 bonds held, and the sects once betrayed.
+static func _wanderer(ui, center: VBoxContainer) -> void:
+	var session = ui.session
+	center.add_child(ui.label("散修", 26, ui.GOLD))
+	center.add_child(ui.paragraph("你不属于任何宗门。各宗山门的收徒之处可以拜入；筑基以后，受邀的宗门也可以请你做客卿（至多同时 %d 宗）。" % int(session.Guest.data(session).most)))
+	_bonds(ui, center)
+
+## The 客卿 bonds held and the sects betrayed, on either page.
+static func _bonds(ui, center: VBoxContainer) -> void:
+	var session = ui.session
+	for held: Dictionary in session.Guest.bonds(session):
+		center.add_child(ui.paragraph("%s客卿 · 差遣误了 %d 次（%d 次即解约）" % [session.Sect.name_of(session, str(held.sect)), int(held.get("missed", 0)), int(session.Guest.data(session).missed_most)], ui.INK))
+	var betrayed: Array = session.player.get("betrayed", [])
+	if not betrayed.is_empty():
+		var names: Array[String] = []
+		for sect: String in betrayed:
+			names.append(session.Sect.name_of(session, sect))
+		center.add_child(ui.paragraph("叛出的宗门：%s。那里视你为叛徒。" % "、".join(names), Color("#e39a8a")))

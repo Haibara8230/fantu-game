@@ -107,8 +107,16 @@ func format(entry: Dictionary, content) -> String:
 			grades = content.rules.breakthrough.core.grades
 		var grade := int(values.grade)
 		values["grade_name"] = str(grades[grade].name) if grade >= 0 and grade < grades.size() else str(values.grade)
+	# A sect's business names the sect (`faction`, `old`); entries from before there were many sects
+	# were 青云's.
+	var sects: Dictionary = content.sect_data.get("sects", {})
+	var faction: Dictionary = sects.get(str(values.get("faction", content.rules.lineage.home)), {})
+	values["faction_name"] = str(faction.get("name", ""))
+	values["join_text"] = str(faction.get("joined", ""))
+	if values.has("old"):
+		values["old_name"] = str(sects.get(str(values.old), {}).get("name", values.old))
 	if values.has("rank"):
-		var ranks: Array = content.sect_data.get("ranks", [])
+		var ranks: Array = faction.get("ranks", [])
 		var rank := int(values.rank)
 		values["rank_name"] = str(ranks[rank].name) if rank >= 0 and rank < ranks.size() else str(values.rank)
 		values["rank_words"] = str(ranks[rank].get("words", "")) if rank >= 0 and rank < ranks.size() else ""

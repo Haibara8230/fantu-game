@@ -33,7 +33,8 @@ static func render_event(ui) -> void:
 	center.add_child(choices)
 	for choice: Dictionary in definition.choices:
 		var choice_id: String = choice.id
-		var option: Button = ui.button(str(choice.label).format(values), func() -> void: ui.choose(choice_id), ConditionText.missing(session, choice.get("conditions", [])))
+		var label := str(choice.label).format(values) + ("（此选将结束这一生）" if bool(choice.get("final", false)) else "")
+		var option: Button = ui.button(label, func() -> void: ui.choose(choice_id), ConditionText.missing(session, choice.get("conditions", [])))
 		option.disabled = not session.choice_available(choice)
 		choices.add_child(option)
 		if option.disabled:
@@ -143,6 +144,10 @@ static func render_ending(ui) -> void:
 		return
 	if str(session.ended.get("kind", "")) == "ascension":
 		_ending_head(ui, center, "白 日 飞 升", "%s，%s，享年 %d 岁，踏天河而去，大道得成。%s" % [session.player.name, session.realm_name(), session.age(), session.Ascension.ending_text(session)])
+	elif str(session.ended.get("kind", "")) == "story":
+		_ending_head(ui, center, "此 生 已 了", "%s，%s，%d 岁。%s" % [session.player.name, session.realm_name(), session.age(), str(session.ended.get("text", ""))])
+		if ui.choice_store.has_save():
+			center.add_child(ui.button("读取抉择前存档", ui.load_choice, "回到做这个抉择之前"))
 	elif str(session.ended.get("kind", "")) == "fallen":
 		_ending_head(ui, center, "斗 法 陨 落", "%s，%s，在一场死斗中落败，陨落时 %d 岁。" % [session.player.name, session.realm_name(), session.age()])
 		if ui.trial_store.has_save():

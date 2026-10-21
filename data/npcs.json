@@ -4126,5 +4126,45 @@
         "description": "旧城永远封闭以后，她带着三百多个遗民在白鹭渡另起了屋。每天傍晚，她都去渡口看一会儿水。"
       }
     ]
+  },
+  "song_weng": {
+    "name": "松翁",
+    "title": "百草门第八代门主",
+    "attitude": "friendly",
+    "gender": "male",
+    "realm_text": "筑基圆满",
+    "affiliation": "百草门",
+    "age": 196,
+    "personality": "温厚",
+    "standing": [
+      1,
+      3
+    ],
+    "talents": [
+      "xixin",
+      "chenmo"
+    ],
+    "description": "松风岭旧观里的老人，百草门第八代门主。百年前门里出过金丹，如今连他只剩七个人，靠替云溪的药铺采药过活。说话慢，咳得厉害，药坡上每一株草却都记得。",
+    "home": "ridge",
+    "spot": "baicao_gate",
+    "talk_favor": 3,
+    "gift_favor": 3,
+    "talk": [
+      "“松风岭的药坡，阳面长回春草，阴面长凝露草。采的时候留三成，明年还有。”",
+      "“百草门最风光的时候，观里住过六十几个人。那会儿这松树，才这么高。”",
+      "“青云的执事又来过了。人是客气的，话说得也好听。”他咳了两声，“可这块匾一摘，就挂不回去了。”"
+    ],
+    "phases": [
+      {
+        "year": 1,
+        "present_if": [
+          {
+            "not": {
+              "flag": "song_weng_gone"
+            }
+          }
+        ]
+      }
+    ]
   }
 }

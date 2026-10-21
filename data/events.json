@@ -1977,5 +1977,56 @@
   "passes_wenren_zhao_381": {"title": "故人坐化", "trigger": "date", "priority": 6, "major": true, "window": {"from": [381, 1, 1], "to": [381, 1, 30]}, "conditions": [{"met": "wenren_zhao"}, {"flag": "wenren_found_alive"}], "chronicle": "望海传来消息：闻人照坐化了。他最后一张海图，画的是天河。"},
   "chenxia_gathering": {"title": "古境开门", "trigger": "location", "location": "wild", "priority": 7, "listed": true, "periodic": {"start_year": 150, "every_years": 60, "month": 3, "from_day": 1, "to_day": 30}, "conditions": [{"realm_at_least": 2}], "chronicle": "古境开门的那个月，落霞谷底聚了不少人：各宗的金丹、结伴的散修，还有几个你认得的面孔。谁跟谁同行，多半在这几天定下。"},
   "wenren_sail_day": {"title": "同船之约", "trigger": "location", "location": "wanghai", "priority": 7, "window": {"from": [130, 1, 1], "to": [130, 5, 30]}, "remind": {"chronicle": "开春了：答应过闻人照，要去望海港口同船出海。", "conditions": [{"flag": "wenren_together"}]}, "conditions": [{"flag": "wenren_together"}], "chronicle": "开春了。望海港口泊着闻人照的船，帆已经升了一半。"},
-  "ye_deadline": {"title": "叶知微的期限", "trigger": "location", "location": "canglan", "priority": 7, "window": {"from": [71, 10, 1], "to": [71, 12, 30]}, "remind": {"chronicle": "年底前要回沧澜城丹会，同叶知微定下她师父的事。", "conditions": [{"flag": "ye_crisis"}, {"not": {"any": [{"flag": "ye_cure"}, {"flag": "ye_forbidden"}, {"flag": "ye_letgo"}, {"flag": "ye_ignore"}]}}]}, "conditions": [{"flag": "ye_crisis"}, {"not": {"any": [{"flag": "ye_cure"}, {"flag": "ye_forbidden"}, {"flag": "ye_letgo"}, {"flag": "ye_ignore"}]}}], "chronicle": "叶知微在丹会门口等你。年底就是期限了，她没说话，只是把药箱的带子攥得很紧。"}
+  "ye_deadline": {"title": "叶知微的期限", "trigger": "location", "location": "canglan", "priority": 7, "window": {"from": [71, 10, 1], "to": [71, 12, 30]}, "remind": {"chronicle": "年底前要回沧澜城丹会，同叶知微定下她师父的事。", "conditions": [{"flag": "ye_crisis"}, {"not": {"any": [{"flag": "ye_cure"}, {"flag": "ye_forbidden"}, {"flag": "ye_letgo"}, {"flag": "ye_ignore"}]}}]}, "conditions": [{"flag": "ye_crisis"}, {"not": {"any": [{"flag": "ye_cure"}, {"flag": "ye_forbidden"}, {"flag": "ye_letgo"}, {"flag": "ye_ignore"}]}}], "chronicle": "叶知微在丹会门口等你。年底就是期限了，她没说话，只是把药箱的带子攥得很紧。"},
+  "baicao_choice": {
+    "title": "七人门",
+    "trigger": "manual",
+    "conditions": [
+      {"story_at": ["baicao_seven", "decide"]}
+    ],
+    "text": "松翁靠在榻上，一字一顿：“百草门传到我手里，是第八代。往后是接下去、托给青云，还是就此散了——你替我拿个主意。”",
+    "choices": [
+      {
+        "id": "take",
+        "label": "接下百草门，做第九代门主",
+        "conditions": [
+          {"affiliation": "baicao"},
+          {"realm_at_least": 1}
+        ],
+        "effects": [
+          {"flag": "baicao_head"},
+          {"sect_rank": "head"},
+          {"flag": "song_weng_gone"},
+          {"mind": 4},
+          {"story_advance": "baicao_seven"}
+        ],
+        "chronicle": "松翁把一枚磨得发亮的木印放进你手里，当夜便坐化了。第二天一早，六个师兄弟姐妹在观前站成一排，叫了你一声“门主”。山头还是那片山头，往后青云再来要地，得同你说话。"
+      },
+      {
+        "id": "merge",
+        "label": "托给青云：山头作青云的药场，门人都入青云",
+        "effects": [
+          {"flag": "baicao_merged"},
+          {"close_sect": ["baicao", "qingyun"]},
+          {"flag": "song_weng_gone"},
+          {"stones": 120},
+          {"story_advance": "baicao_seven"}
+        ],
+        "chronicle": "你陪松翁的大弟子去了一趟青云执事堂。青云收下山头，给了一笔安置的灵石，六个门人都成了青云外门弟子。松翁听完说了声“也好”，开春前坐化了。旧观那块匾，后来收进了青云药场的库房。"
+      },
+      {
+        "id": "disband",
+        "label": "由它去：让门人各奔前程",
+        "effects": [
+          {"flag": "baicao_gone"},
+          {"close_sect": ["baicao", ""]},
+          {"flag": "song_weng_gone"},
+          {"item": ["lingzhi", 1]},
+          {"mind": 3},
+          {"story_advance": "baicao_seven"}
+        ],
+        "chronicle": "松翁沉默了很久，最后点了点头。门人各自散去，二弟子走得最晚，临走把门口的匾擦了一遍。松翁坐化前，把观后那株养了四十年的灵芝留给了你：“药坡没人看了，你得空来采吧。”"
+      }
+    ]
+  }
 }

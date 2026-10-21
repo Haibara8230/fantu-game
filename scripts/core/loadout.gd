@@ -244,7 +244,7 @@ static func lineage_block(s, sect_id: String) -> String:
 		return blocked
 	# The lineage is studied in seclusion at the sect that keeps it: a chamber where the hall stands.
 	if not s.available_here("study") or not Layers.seclusion_block(s).is_empty():
-		return "请回青云山静室，在闭关卷轴的「领悟」页研习门派传承。"
+		return "请回%s的静室，在闭关卷轴的「领悟」页研习门派传承。" % s.content.locations[str(s.Sect.own(s).place)].name if s.Sect.member(s) else "须是宗门弟子，回本门静室研习门派传承。"
 	if s.player.get("sect", "wanderer") == sect_id:
 		return "你已在研习此传承。"
 	if sect_id != home_lineage(s):
@@ -263,8 +263,11 @@ static func choose_sect(s, sect_id: String) -> String:
 	return s.conclude(s.log_event("study_lineage", {"sect": sect_id, "days": passed.elapsed}, true), passed)
 
 ## The lineage the sect's 传功堂 teaches.
+## The lineage the player's sect keeps in its hall: the sect's own, "" for a wanderer or a sect without one
+## (the 入流 teach slips only).
 static func home_lineage(s) -> String:
-	return str(s.content.rules.lineage.home)
+	var sect: String = s.affiliation()
+	return sect if s.content.sects.has(sect) and sect != "wanderer" else ""
 
 ## Takes up a lineage at once: teaches its three arts and puts them in the art slots. The 传功堂 goes
 ## through choose_sect; the sect preview and tests use this directly.

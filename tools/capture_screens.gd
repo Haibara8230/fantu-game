@@ -48,6 +48,7 @@ func _run() -> void:
 	main.manual_store = SaveStore.new(local + "/manual")
 	main.auto_store = SaveStore.new(local + "/auto")
 	main.trial_store = SaveStore.new(local + "/trial")
+	main.choice_store = SaveStore.new(local + "/choice")
 	main.guide_path = local + "/guide.cfg"
 	main.settings_path = local + "/settings.cfg"
 	root.add_child(main)

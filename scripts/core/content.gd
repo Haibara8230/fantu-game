@@ -432,8 +432,6 @@ func _validate() -> String:
 		problem = _validate_layers()
 	if problem.is_empty():
 		problem = _validate_population()
-	if problem.is_empty():
-		problem = _validate_duties()
 	if not problem.is_empty():
 		return problem
 	problem = _validate_storylines()
@@ -554,22 +552,14 @@ func _validate_fortune() -> String:
 
 func _validate_sect() -> String:
 	var data := sect_data
-	if not commission_data.get("boards", {}).has(data.get("board", "")):
-		return "宗门告示配置无效。"
-	if not data.get("ranks") is Array or data.ranks.is_empty():
-		return "宗门身份配置无效。"
-	var previous := -1
-	for rank: Variant in data.ranks:
-		if not rank is Dictionary or not rank.get("id") is String or not rank.get("name") is String or not _whole(rank.get("merit")) or int(rank.merit) < previous:
-			return "宗门身份配置无效。"
-		previous = int(rank.merit)
-		if not rank.get("stage") is Array or rank.stage.size() != 2 or not _whole(rank.stage[0]) or int(rank.stage[0]) >= realms.size() or not _whole(rank.stage[1]):
-			return "宗门身份的修为要求无效：%s" % rank.id
-		for key: String in ["stipend", "retreat"]:
-			if not _whole(rank.get(key)):
-				return "宗门身份缺少：%s.%s" % [rank.id, key]
-		if rank.has("host") and (not people.has(rank.host) or not rank.get("words") is String):
-			return "宗门身份的主持人无效：%s" % rank.id
+	var rank_ids: Variant = data.get("rank_ids")
+	if not rank_ids is Array or rank_ids.is_empty() or rank_ids.any(func(id: Variant) -> bool: return not id is String):
+		return "宗门身份编号配置无效。"
+	var tiers: Variant = data.get("tiers")
+	if not tiers is Dictionary or tiers.is_empty() or tiers.values().any(func(tier: Variant) -> bool: return not tier is Dictionary or not tier.get("name") is String or not _whole(tier.get("order"))):
+		return "宗门档次配置无效。"
+	if not data.get("sides") is Dictionary or not data.sides.has("righteous") or not data.sides.has("demonic") or not _signed(data.get("betray_favor")):
+		return "宗门正魔或叛出配置无效。"
 	var stipend: Variant = data.get("stipend")
 	if not stipend is Dictionary or not _whole(stipend.get("period_days")) or int(stipend.period_days) < 1 or not _whole(stipend.get("most_periods")):
 		return "月俸配置无效。"
@@ -581,8 +571,64 @@ func _validate_sect() -> String:
 			return "捐献品类未知：%s" % category
 	if not data.get("awards") is Dictionary:
 		return "宗门奖赏配置无效。"
+	if not data.get("sects") is Dictionary or not data.sects.has(str(rules.lineage.home)):
+		return "宗门配置缺少本门。"
+	for sect_id: String in data.sects:
+		var problem := _validate_one_sect(sect_id, data.sects[sect_id])
+		if not problem.is_empty():
+			return "宗门 %s：%s" % [sect_id, problem]
+	return ""
+
+## One sect's table: its tier, side, place and office, board, way of taking disciples, ranks, duties and
+## exchange.
+func _validate_one_sect(sect_id: String, table: Variant) -> String:
+	var data := sect_data
+	if not table is Dictionary or not table.get("name") is String or not data.tiers.has(table.get("tier", "")) or not data.sides.has(table.get("side", "")):
+		return "名称、档次或正魔无效"
+	if not table.get("element") in technique_data.elements or not locations.has(table.get("place", "")) or not table.get("office") is String or not table.get("joined") is String:
+		return "传承、山门或执事处无效"
+	var board: Dictionary = commission_data.get("boards", {}).get(table.get("board", ""), {})
+	if board.is_empty() or str(board.get("affiliation", "")) != sect_id or str(board.location) != str(table.place):
+		return "告示须在山门，且归本宗"
+	if not locations[table.place].spots.any(func(spot: Dictionary) -> bool: return "join_sect" in spot.actions and str(spot.get("not_affiliation", "")) == sect_id):
+		return "山门缺少收徒之处"
+	if not locations[table.place].spots.any(func(spot: Dictionary) -> bool: return "sect" in spot.actions and str(spot.get("requires_affiliation", "")) == sect_id):
+		return "山门缺少办事之处"
+	var join: Variant = table.get("join")
+	if not join is Dictionary or not _whole(join.get("realm_most")) or int(join.realm_most) >= realms.size():
+		return "收徒条件无效"
+	for key: String in join:
+		if not key in ["realm_most", "root", "every_years", "sense", "hp"]:
+			return "收徒条件未知：" + key
+	if join.has("root") and not join.root in technique_data.elements:
+		return "收徒的灵根无效"
+	for key: String in ["every_years", "sense", "hp"]:
+		if join.has(key) and (not _whole(join[key]) or int(join[key]) < 1):
+			return "收徒条件无效：" + key
+	if not table.get("people", []) is Array or table.get("people", []).any(func(person: Variant) -> bool: return not people.has(person)):
+		return "宗门人物无效"
+	if not table.get("ranks") is Array or table.ranks.is_empty() or table.ranks.size() > data.rank_ids.size():
+		return "宗门身份配置无效"
+	var previous := -1
+	for index: int in table.ranks.size():
+		var rank: Variant = table.ranks[index]
+		if not rank is Dictionary or rank.get("id") != data.rank_ids[index] or not rank.get("name") is String or not _whole(rank.get("merit")) or int(rank.merit) < previous:
+			return "宗门身份须按编号次序，贡献递增"
+		previous = int(rank.merit)
+		if not rank.get("stage") is Array or rank.stage.size() != 2 or not _whole(rank.stage[0]) or int(rank.stage[0]) >= realms.size() or not _whole(rank.stage[1]):
+			return "宗门身份的修为要求无效：%s" % rank.id
+		for key: String in ["stipend", "retreat"]:
+			if not _whole(rank.get(key)):
+				return "宗门身份缺少：%s.%s" % [rank.id, key]
+		if rank.has("host") and (not people.has(rank.host) or not rank.get("words") is String):
+			return "宗门身份的主持人无效：%s" % rank.id
+		if rank.has("words") and not rank.words is String or rank.has("days") and not _whole(rank.days) or rank.has("story") and not rank.story is bool:
+			return "宗门身份配置无效：%s" % rank.id
+	var problem := _validate_duties(table.get("duties"), table.ranks)
+	if not problem.is_empty():
+		return problem
 	var ids := {}
-	for good: Variant in data.get("exchange", []):
+	for good: Variant in table.get("exchange", []):
 		if not good is Dictionary or not good.get("id") is String or ids.has(good.id) or str(good.id).contains(":"):
 			return "宗门兑换缺少唯一 ID。"
 		ids[good.id] = true
@@ -595,7 +641,7 @@ func _validate_sect() -> String:
 		for key: String in ["price", "limit", "per_days"]:
 			if not _whole(good.get(key)) or int(good[key]) < 1:
 				return "宗门兑换缺少：%s.%s" % [good.id, key]
-		if good.has("rank") and not data.ranks.any(func(rank: Dictionary) -> bool: return rank.id == good.rank):
+		if good.has("rank") and not table.ranks.any(func(rank: Dictionary) -> bool: return rank.id == good.rank):
 			return "宗门兑换引用了未知身份：%s" % good.id
 	return ""
 
@@ -669,10 +715,10 @@ func _valid_cost(cost: Variant, keys: Array) -> bool:
 		total += int(cost[key])
 	return total >= 1
 
-## The duties of the inner court (sect.gd).
-func _validate_duties() -> String:
-	var duties: Variant = sect_data.get("duties")
-	if not duties is Dictionary or rank_index(str(duties.get("rank", ""))) < 0 or not _whole(duties.get("change_days")) or not duties.get("list") is Dictionary or duties.list.is_empty():
+## A sect's duties of the inner court (sect.gd): the rank that may hold one, the days between changes and
+## each duty's name, text and known bonuses.
+func _validate_duties(duties: Variant, ranks: Array) -> String:
+	if not duties is Dictionary or not ranks.any(func(rank: Dictionary) -> bool: return rank.id == duties.get("rank", "")) or not _whole(duties.get("change_days")) or not duties.get("list") is Dictionary or duties.list.is_empty():
 		return "宗门职司配置无效。"
 	for duty_id: String in duties.list:
 		var duty: Variant = duties.list[duty_id]
@@ -812,7 +858,7 @@ func _validate_guests() -> String:
 	var data := guest_data
 	if not data.get("sects") is Dictionary or data.sects.is_empty():
 		return "客卿缺少宗门配置。"
-	for key: String in ["min_realm", "invite_favor", "call_years", "call_days", "missed_most", "served_favor"]:
+	for key: String in ["min_realm", "most", "invite_favor", "call_years", "call_days", "missed_most", "served_favor"]:
 		if not _whole(data.get(key)) or int(data[key]) < 1 and key != "min_realm":
 			return "客卿配置无效：" + key
 	if not data.get("stipend") is Array or data.stipend.size() != realms.size() or data.stipend.any(func(value: Variant) -> bool: return not _whole(value)):
@@ -1552,13 +1598,9 @@ func spot_open(spot: Dictionary, flags: Dictionary, rank: int, affiliation: Stri
 		return false
 	return not spot.has("requires_rank") or rank >= rank_index(str(spot.requires_rank))
 
-## A sect rank's index by id, or -1.
+## A sect rank's index by id (ids are shared by every sect), or -1.
 func rank_index(rank_id: String) -> int:
-	var ranks: Array = sect_data.get("ranks", [])
-	for index: int in ranks.size():
-		if ranks[index].id == rank_id:
-			return index
-	return -1
+	return sect_data.get("rank_ids", []).find(rank_id)
 
 # --- Event static checks -----------------------------------------------------
 
@@ -1645,6 +1687,10 @@ func _validate_event(event_id: String, definition: Variant) -> String:
 			ids[choice.id] = true
 			if not choice.get("label") is String or not choice.get("chronicle") is String:
 				return "选项 %s 缺少文字" % choice.id
+			# A choice that ends the life says so (`final`), and only such a choice ends it.
+			var ends: bool = choice.get("effects", []).any(func(effect: Variant) -> bool: return effect is Dictionary and effect.has("end_life"))
+			if ends != bool(choice.get("final", false)) or not choice.get("final", false) is bool:
+				return "选项 %s：结束一生的选项须标明 final，标明 final 的须有 end_life" % choice.id
 			problem = _validate_conditions(choice.get("conditions", []))
 			if problem.is_empty():
 				problem = _validate_effects(choice.get("effects", []))
@@ -1743,13 +1789,13 @@ func _validate_condition(condition: Variant) -> String:
 		"talent":
 			return "" if is_talent(value) else "未知天赋：%s" % value
 		"rank_at_least":
-			return "" if sect_data.get("ranks", []).any(func(rank: Dictionary) -> bool: return rank.id == value) else "未知宗门身份：%s" % value
+			return "" if value in sect_data.get("rank_ids", []) else "未知宗门身份：%s" % value
 		"recipe":
 			return "" if alchemy_data.get("recipes", {}).has(value) else "未知丹方：%s" % value
 		"month_day":
 			return "" if value is Array and value.size() == 2 and _whole(value[0]) and _whole(value[1]) and int(value[0]) >= 1 and int(value[0]) <= int(value[1]) and int(value[1]) <= 30 else "月中日期条件无效"
 		"affiliation":
-			return "" if value is String and (value.is_empty() or (sects.has(value) and value != "wanderer")) else "未知宗门：%s" % value
+			return "" if value is String and (value.is_empty() or sect_data.get("sects", {}).has(value)) else "未知宗门：%s" % value
 		"holds_gear":
 			return "" if value is String and not equipment(value).is_empty() else "宝物条件无效"
 		"work_at_least":
@@ -1828,6 +1874,12 @@ func _validate_effects(effects: Variant) -> String:
 				ok = value is Array and value.size() == 2 and not equipment(str(value[0])).is_empty() and not equipment(str(value[1])).is_empty()
 			"guest_invite":
 				ok = guest_data.get("sects", {}).has(value)
+			"end_life":
+				ok = value is String and not value.is_empty()
+			"sect_rank":
+				ok = value in sect_data.get("rank_ids", [])
+			"close_sect":
+				ok = value is Array and value.size() == 2 and sect_data.get("sects", {}).has(value[0]) and str(value[0]) != str(rules.lineage.home) and (str(value[1]).is_empty() or sect_data.sects.has(value[1])) and value[0] != value[1] and ("sect_closed_" + str(value[0])) in world_flags
 			"party":
 				ok = value is Array and value.size() == 2 and cave_data.get(str(value[0]), {}).get("companions", {}).has(str(value[1]))
 			"longevity":

@@ -116,7 +116,7 @@ func new_game(character_name: String = "无名", seed_value: int = -1, roots: Ar
 	populate()
 	player = {
 		"name": chosen_name, "birth_day": -int(content.rules.starting_age) * Calendar.DAYS_PER_YEAR,
-		"realm": 0, "stage": 0, "xp": 0, "hp": 0, "qi": 0, "cultivation_carry": 0, "warned_for": -1, "wake": [], "leases": {}, "arena_best": {}, "series_last": {}, "trials": {}, "guest": {}, "roots": roots.duplicate(),
+		"realm": 0, "stage": 0, "xp": 0, "hp": 0, "qi": 0, "cultivation_carry": 0, "warned_for": -1, "wake": [], "leases": {}, "arena_best": {}, "series_last": {}, "trials": {}, "guests": [], "betrayed": [], "sect_day": 0, "roots": roots.duplicate(),
 		"fatigue": 0, "fatigue_day": 0, "insight": 0, "mind": 0,
 		"stones": int(content.rules.starting_stones), "items": {},
 		"journey": {}, "cooldowns": {},
@@ -618,8 +618,13 @@ func spot_open(spot: Dictionary) -> bool:
 func guest_accept() -> String:
 	return Guest.accept(self, Guest.sect_here(self))
 
-func guest_leave() -> String:
-	return Guest.leave(self)
+## Lays down the bond with `sect`: by default the sect whose gate this is, or the only bond held.
+func guest_leave(sect: String = "") -> String:
+	if sect.is_empty():
+		sect = Guest.sect_here(self)
+		if (sect.is_empty() or not Guest.is_guest(self, sect)) and Guest.bonds(self).size() == 1:
+			sect = str(Guest.bonds(self)[0].sect)
+	return Guest.leave(self, sect)
 
 func affiliation() -> String:
 	return str(player.get("affiliation", ""))
@@ -1111,12 +1116,12 @@ func unequip_slot(slot: String) -> String:
 func choose_sect(sect_id: String) -> String:
 	return Loadout.choose_sect(self, sect_id)
 
-## 拜入青云 at the recruiting terrace (sect.gd).
+## 拜入 the sect whose gate this is (sect.gd): 青云's terrace, 赤霄's furnace, 百草门's old temple...
 func join_sect() -> String:
-	return Sect.join(self)
+	return Sect.join(self, Sect.here(self))
 
 func join_block() -> String:
-	return Sect.join_block(self)
+	return Sect.join_block(self, Sect.here(self))
 
 # --- Commissions (commissions.gd) ---------------------------------------------------------------
 
