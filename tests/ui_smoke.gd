@@ -120,7 +120,7 @@ func _guided() -> void:
 	main.select_spot("inn")
 	check(_button("闭关修炼") != null, "the inn lets a room to retreat in")
 	main.set_view("retreat")
-	check(_texts(main.center, "Label").contains("客栈静房") and _texts(main.center, "Label").contains("每月房钱"), "the retreat scroll names the room's rate and rent")
+	check(_texts(main.center, "Label").contains("青石客栈：修炼收益") and _texts(main.center, "Label").contains("每月房钱"), "the retreat scroll names the room's rate and rent")
 	main.set_view("map")
 	main.select_map_target("ridge")
 	check(not _button("启程前往松风岭").disabled, "nothing holds the road closed")
@@ -796,6 +796,19 @@ func _run() -> void:
 	main.select_spot("pavilion")
 	var guest_button: Button = _button("应邀做赤霄门客卿")
 	check(guest_button != null and not guest_button.disabled and guest_button.tooltip_text.contains("客卿"), "赤霄's 迎客亭 offers the guest's place, open to a 青云 disciple")
+	# 天南散修盟 (league.gd): 云溪's lamp is closed to a disciple; a wanderer's page shows the membership.
+	main.session.player.location = "market"
+	main.set_view("place")
+	main.select_spot("lamp")
+	var lamp: Button = _button("加入天南散修盟")
+	check(lamp != null and lamp.disabled and lamp.tooltip_text.contains("宗门"), "云溪's 青灯茶舍 offers the alliance, closed to a disciple")
+	var sect_was: String = main.session.affiliation()
+	main.session.player.affiliation = ""
+	main.session.league_join()
+	main.set_view("sect")
+	check(_texts(main.center, "Label").contains("天南散修盟 · 云溪分舵入盟 · 声望 0"), "a member's 散修 page shows the branch and the standing")
+	main.session.league_leave()
+	main.session.player.affiliation = sect_was
 	# 护送 at 青石镇's 镇口木栅 (series.gd), fought as a pack with a target to pick (群敌).
 	main.session.player.location = "town"
 	var stage_was := int(main.session.player.stage)

@@ -2028,5 +2028,42 @@
         "chronicle": "松翁沉默了很久，最后点了点头。门人各自散去，二弟子走得最晚，临走把门口的匾擦了一遍。松翁坐化前，把观后那株养了四十年的灵芝留给了你：“药坡没人看了，你得空来采吧。”"
       }
     ]
+  },
+  "qingdeng_choice": {
+    "title": "青灯账",
+    "trigger": "manual",
+    "conditions": [
+      {"story_at": ["qingdeng", "confront"]}
+    ],
+    "text": "钱三省正在灯下拨算盘。看见那块木牌，他的手停了一停，又把这一行拨完，才抬起头：“焦长老一个人头给八十灵石。十一个人，八百八十，我一块没花，都在这儿。”他把一只布袋推过来，“你拿去给盟主，我认；你收下一半，往后云溪分舵的账，还是我来记。”",
+    "choices": [
+      {
+        "id": "expose",
+        "label": "把木牌和账一起交给何不归",
+        "effects": [
+          {"story_advance": "qingdeng"},
+          {"flag": "qingdeng_exposed"},
+          {"flag": "qian_gone"},
+          {"league": "deputy"},
+          {"league_standing": 300},
+          {"relation": ["he_bugui", 20]},
+          {"mind": 3}
+        ],
+        "chronicle": "何不归当着各分舵掌灯的面念完了那本账。钱三省一个字也没辩，当夜被废去修为，逐出天南。何不归亲自上赤霄门讨说法，焦长老推说不知情，那辆挂炉牌的车却再没来过云溪。半月后，各分舵的青灯底下都挂上了你的名牌——天南散修盟副盟主。“不算拜入，”何不归笑道，“只是往后哪一盏灯下的静室，都不收你的钱。”"
+      },
+      {
+        "id": "share",
+        "label": "收下一半，这事就此打住",
+        "effects": [
+          {"story_advance": "qingdeng"},
+          {"stones": 440},
+          {"flag": "qingdeng_shared"},
+          {"flag": "qian_gone"},
+          {"flag": "xiongren_qingdeng"},
+          {"league": "ban"}
+        ],
+        "chronicle": "你收下了四百四十灵石。不到两个月，钱三省的事还是漏了，他在何不归面前供出了你。何不归没有来找你算账，只让人把你的名字从各分舵的青灯簿上划了去。天机阁的凶人榜上，后来多了一行小字。"
+      }
+    ]
   }
 }

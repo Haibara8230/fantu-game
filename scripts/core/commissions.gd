@@ -7,6 +7,8 @@ extends RefCounted
 ## A kind may wait for a realm (`min_realm`: the 魔修 for 金丹 disciples).
 ## A sect's own board (`affiliation`: data/sect.json `board`) also pays contribution (`contribution`
 ## per count), and only its disciples read it; a 客卿's board (guest_<sect>) is for its guests.
+## A branch of 天南散修盟 keeps a board of its own (`league`) beside the city's: its offers show among the
+## city board's to members only, pay 声望 (`standing` per count, league.gd) and are handed in there.
 
 static func board_here(s) -> String:
 	if not s.available_here("commissions"):
@@ -19,8 +21,25 @@ static func board_here(s) -> String:
 			continue
 		if board.begins_with("guest_") and not s.Guest.is_guest(s, board.trim_prefix("guest_")):
 			continue
+		if posted.has("league"):
+			continue
 		return board
 	return ""
+
+## The 天南散修盟 board of the branch here when the player is a member, or "".
+static func league_board(s) -> String:
+	if not s.League.member(s):
+		return ""
+	for board: String in s.content.commission_data.boards:
+		var posted: Dictionary = s.content.commission_data.boards[board]
+		if posted.has("league") and posted.location == s.player.location:
+			return board
+	return ""
+
+## Whether commissions of `board` are read and handed in here: the board here, or the branch's beside it.
+static func readable(s, board: String) -> bool:
+	var here := board_here(s)
+	return not here.is_empty() and (board == here or board == league_board(s))
 
 static func offers(s, board: String) -> Array[Dictionary]:
 	var result: Array[Dictionary] = []
@@ -35,7 +54,7 @@ static func offers(s, board: String) -> Array[Dictionary]:
 		total += int(data.templates[kind].weight)
 	var picks: Array[String] = []
 	# A 客卿's board posts nothing of its own; its 差遣 come by summons (guest.gd).
-	for index: int in (int(data.offers) if total > 0 else 0):
+	for index: int in (int(data.boards[board].get("offers", data.offers)) if total > 0 else 0):
 		var roll := rng.randi_range(1, total)
 		var kind: String = kinds[0]
 		for candidate: String in kinds:
@@ -54,6 +73,10 @@ static func offers(s, board: String) -> Array[Dictionary]:
 			continue
 		if not s.world.quests_taken.has(offer.key):
 			result.append(offer)
+	# A member reads the branch's 青灯簿 beside the city's board.
+	var league := league_board(s)
+	if not league.is_empty() and board == board_here(s) and not data.boards[board].has("affiliation"):
+		result.append_array(offers(s, league))
 	return result
 
 ## One offer of `kind` on `board` under `key`, drawn from `rng`; {} when the board's region has no
@@ -85,6 +108,8 @@ static func make_offer(s, kind: String, board: String, key: String, rng: RandomN
 		offer.enemy = template.enemies[rng.randi_range(0, template.enemies.size() - 1)]
 		offer.reward = {"stones": int(template.reward_stones) * int(offer.count), "xp": int(template.reward_xp) * int(offer.count)}
 	offer.reward.contribution = int(template.get("contribution", 0)) * int(offer.count) if data.boards[board].has("affiliation") else 0
+	if data.boards[board].has("league"):
+		offer.reward.standing = int(template.get("standing", 0)) * int(offer.count)
 	return offer
 
 ## Whether a seasonal template's year has come round (`years`: [first, every]).
@@ -134,7 +159,7 @@ static func delivery_block(s, quest: Dictionary) -> String:
 	var blocked: String = s.blocked()
 	if not blocked.is_empty():
 		return blocked
-	if board_here(s) != quest.board:
+	if not readable(s, quest.board):
 		return "须回%s交付。" % s.content.commission_data.boards[quest.board].name
 	if quest.has("item") and s.pill_count(quest.item) < int(quest.count):
 		return "%s还不够 %d。" % [s.content.item(quest.item).name, int(quest.count)]
@@ -162,6 +187,9 @@ static func deliver(s, key: String) -> String:
 		var merit: int = int(quest.reward.get("contribution", 0)) * (100 + int(s.Sect.duty_value(s, "contribution_percent"))) / 100
 		if merit > 0:
 			done += " " + s.Sect.gain(s, merit, "宗门差事办妥")
+		var standing := int(quest.reward.get("standing", 0))
+		if standing > 0:
+			done += " " + s.League.gain(s, standing)
 		# A 客卿's 差遣 reported (guest.gd).
 		if quest.has("guest"):
 			done += " " + s.Guest.served(s, quest)

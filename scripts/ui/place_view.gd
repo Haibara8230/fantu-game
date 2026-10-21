@@ -251,9 +251,10 @@ static func _spot_action(ui, grid: GridContainer, action: String) -> void:
 				var shown: Dictionary = session.commission_text(offer)
 				var key: String = offer.key
 				var merit := int(offer.reward.get("contribution", 0))
-				_timed(ui, grid, "接下：%s（灵石 %d%s%s）" % [shown.title, int(offer.reward.stones), "、修为 %d" % int(offer.reward.xp) if int(offer.reward.xp) > 0 else "", "、贡献 %d" % merit if merit > 0 else ""], func() -> String: return session.accept_commission(key), shown.text)
+				var standing := int(offer.reward.get("standing", 0))
+				_timed(ui, grid, "接下：%s（灵石 %d%s%s%s）" % [shown.title, int(offer.reward.stones), "、修为 %d" % int(offer.reward.xp) if int(offer.reward.xp) > 0 else "", "、贡献 %d" % merit if merit > 0 else "", "、声望 %d" % standing if standing > 0 else ""], func() -> String: return session.accept_commission(key), shown.text)
 			for quest: Dictionary in session.player.quests:
-				if quest.board != board:
+				if not session.Commissions.readable(session, str(quest.board)):
 					continue
 				var reason: String = session.delivery_block(quest)
 				var handed: String = quest.key
@@ -288,6 +289,17 @@ static func _spot_action(ui, grid: GridContainer, action: String) -> void:
 				var reason: String = session.Guest.block(session, sect)
 				var about := "客卿：月俸 %d 灵石，本宗客舍可闭关突破，%s；每 %d 年一次差遣，一年内回客舍复命。" % [session.Guest.stipend(session), terms.perk_text, int(session.Guest.data(session).call_years)]
 				var take: Button = _timed(ui, grid, "应邀做%s客卿" % sect_name, session.guest_accept, reason if not reason.is_empty() else about)
+				take.disabled = not reason.is_empty()
+		"league":
+			var league: Dictionary = session.League.data(session)
+			var branch: String = session.League.branch_name(session, str(session.player.location))
+			if session.League.member(session):
+				var about := "%s · 声望 %d%s。分舵静室按月付钱（副盟主免租），青灯簿的差事记声望；金丹以上、声望够了可租灵地。退盟不算背弃，日后可再入。" % [branch, session.League.standing(session), "（副盟主）" if session.League.deputy(session) else ""]
+				_timed(ui, grid, "退出%s" % league.name, session.league_leave, about)
+			else:
+				var reason: String = session.League.block(session)
+				var about := "%s是散修自己结的盟，不算拜入：随时可入可退。入盟后可在各城分舵静室闭关、接青灯簿的差事；在野外落败，盟中人会把你抬回%s，不收药钱。拜入宗门即自动退盟。" % [league.name, branch]
+				var take: Button = _timed(ui, grid, "加入%s" % league.name, session.league_join, reason if not reason.is_empty() else about)
 				take.disabled = not reason.is_empty()
 		"join_sect":
 			var sect: String = session.Sect.here(session)

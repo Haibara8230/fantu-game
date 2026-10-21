@@ -387,6 +387,8 @@ func _collect_guest_flags() -> void:
 		var perk := str(content.guest_data.sects[sect].get("flag", ""))
 		if not perk.is_empty():
 			_add(flag_writers, perk, "客卿（Guest.accept）")
+	# 天南散修盟 (league.gd) marks its members, whose branch rooms open by it.
+	_add(flag_writers, "league_member", "天南散修盟（League.join）")
 	# A sect ended by its story (close_sect) is marked sect_closed_<id>, read when someone would join it.
 	# Only sects a story can end register the flag (world_flags).
 	for sect: String in content.sect_data.get("sects", {}):

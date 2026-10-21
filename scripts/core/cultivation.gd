@@ -22,20 +22,41 @@ const CARRY_UNIT := Calendar.DAYS_PER_MONTH * CARRY_SCALE
 
 ## 客栈静房 (docs/GAME_OUTLINE.md 5.2): a room let by the day where one may retreat, study and break
 ## through without a sect — a spot's `lodging` {"rate" (of the retreat's xp), "rent" (stones a month)},
-## paid for the days spent there. {} where a free place to retreat stands open (a sect's chamber).
-static func lodging(s) -> Dictionary:
-	var let: Dictionary = {}
+## paid for the days spent there. A free place (a sect's chamber, a house let by the term) yields whole
+## and asks nothing. The rooms of 天南散修盟 (`league`) ask no rent of its 副盟主, and a 灵地 takes only
+## the realm and standing it asks (`realm`, `standing`; league.gd).
+## Of the places open here the retreat takes the richest whose month the purse can pay, else the
+## cheapest: {"name", "rate", "rent"}, or {} where there is no place to retreat.
+static func room(s) -> Dictionary:
+	var rooms: Array[Dictionary] = []
 	for spot: Dictionary in s.content.locations[str(s.player.location)].get("spots", []):
-		if not "cultivate" in spot.actions or not s.spot_open(spot):
+		if not "cultivate" in spot.actions or not usable(s, spot):
 			continue
-		if not spot.has("lodging"):
-			return {}
-		let = spot.lodging
-	return let
+		var let: Dictionary = spot.get("lodging", {})
+		var rent := 0 if bool(let.get("league", false)) and s.League.deputy(s) else int(let.get("rent", 0))
+		rooms.append({"name": str(spot.name), "rate": float(let.get("rate", 1.0)), "rent": rent})
+	rooms.sort_custom(func(a: Dictionary, b: Dictionary) -> bool: return a.rate > b.rate or (a.rate == b.rate and a.rent < b.rent))
+	for kept: Dictionary in rooms:
+		if int(kept.rent) <= int(s.player.stones):
+			return kept
+	var cheapest: Dictionary = {}
+	for kept: Dictionary in rooms:
+		if cheapest.is_empty() or int(kept.rent) < int(cheapest.rent):
+			cheapest = kept
+	return cheapest
+
+## Whether a spot to retreat in takes the player: open to them, and for a 灵地 their realm and standing.
+static func usable(s, spot: Dictionary) -> bool:
+	return s.spot_open(spot) and (not spot.has("lodging") or s.League.room_open(s, spot.lodging))
+
+## The room here when it asks rent, else {}.
+static func lodging(s) -> Dictionary:
+	var kept := room(s)
+	return kept if int(kept.get("rent", 0)) > 0 else {}
 
 ## How richly a retreat here goes: the room's rate, else whole.
 static func place_rate(s) -> float:
-	return float(lodging(s).get("rate", 1.0))
+	return float(room(s).get("rate", 1.0))
 
 ## Stones the room asks for `days`, rounded up to whole stones.
 static func rent(s, days: int) -> int:

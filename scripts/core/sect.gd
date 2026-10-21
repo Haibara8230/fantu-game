@@ -143,6 +143,9 @@ static func join(s, sect_id: String = "") -> String:
 			texts.append(s.log_event("sect_betrayed", {"old": old, "faction": sect_id}, true))
 		else:
 			texts.append(s.log_event("sect_moved", {"old": old, "faction": sect_id}, true))
+	# A sect's disciple is no 散修: 天南散修盟 lets them go.
+	if s.League.member(s):
+		texts.append(s.League.leave(s, true))
 	texts.append_array(_enter(s, sect_id))
 	texts.append(s.log_event("join_sect", {"faction": sect_id}, true))
 	return s.finish(" ".join(texts.filter(func(text: String) -> bool: return not text.is_empty())))

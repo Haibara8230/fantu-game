@@ -121,11 +121,18 @@ static func _duties(ui, center: VBoxContainer) -> void:
 			ui.tint(take, ui.GOLD)
 		row.add_child(take)
 
-## A wanderer's page: no sect, the 客卿 bonds held, and the sects once betrayed.
+## A wanderer's page: no sect, 天南散修盟, the 客卿 bonds held, and the sects once betrayed.
 static func _wanderer(ui, center: VBoxContainer) -> void:
 	var session = ui.session
 	center.add_child(ui.label("散修", 26, ui.GOLD))
 	center.add_child(ui.paragraph("你不属于任何宗门。各宗山门的收徒之处可以拜入；筑基以后，受邀的宗门也可以请你做客卿（至多同时 %d 宗）。" % int(session.Guest.data(session).most)))
+	var league: String = str(session.League.data(session).name)
+	if session.League.member(session):
+		center.add_child(ui.paragraph("%s%s · %s入盟 · 声望 %d。各城分舵静室可闭关静养，城中告示旁有青灯簿的差事。" % [league, " · 副盟主" if session.League.deputy(session) else "", session.League.branch_name(session, session.League.home(session)), session.League.standing(session)], ui.INK))
+	elif session.League.banned(session):
+		center.add_child(ui.paragraph("%s已将你除名，各城分舵不再认你。" % league, Color("#e39a8a")))
+	else:
+		center.add_child(ui.paragraph("各城茶楼挂青灯的地方是%s的分舵，散修可随时入盟，不算拜入。" % league))
 	_bonds(ui, center)
 
 ## The 客卿 bonds held and the sects betrayed, on either page.

@@ -22,10 +22,12 @@ static func render_retreat(ui) -> void:
 	var efficiency: int = session.retreat_efficiency()
 	var mind_percent: int = session.mind_percent()
 	right.add_child(ui.paragraph(limitation(session), ui.GOLD))
-	# A room let by the day: its rate and rent, and the days the stones pay for.
-	var let: Dictionary = session.Cultivation.lodging(session)
-	if not let.is_empty():
-		right.add_child(ui.paragraph("客栈静房：修炼收益 ×%.1f，每月房钱 %d 灵石；手头灵石够住 %s。" % [float(let.rate), int(let.rent), Calendar.duration_text(mini(session.Cultivation.paid_days(session), 36000))], ui.INK))
+	# The room the retreat is spent in: its rate and rent, and the days the stones pay for.
+	var room: Dictionary = session.Cultivation.room(session)
+	if int(room.get("rent", 0)) > 0:
+		right.add_child(ui.paragraph("%s：修炼收益 ×%.1f，每月房钱 %d 灵石；手头灵石够住 %s。" % [room.name, float(room.rate), int(room.rent), Calendar.duration_text(mini(session.Cultivation.paid_days(session), 36000))], ui.INK))
+	elif not room.is_empty() and not is_equal_approx(float(room.rate), 1.0):
+		right.add_child(ui.paragraph("%s：修炼收益 ×%.1f，不收房钱。" % [room.name, float(room.rate)], ui.INK))
 	right.add_child(ui.label("每月修为  %d" % int(round(session.cultivation_rate() * mind_percent / 100.0 * efficiency / 100.0)), 26, ui.GOLD))
 	var grade: Dictionary = session.content.root_grade(session.player.get("roots", []))
 	var sources := GridContainer.new()

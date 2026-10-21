@@ -1503,14 +1503,22 @@ static func _lose(s) -> String:
 		return fall
 	if not grudge_id.is_empty():
 		s.Feuds.fight_over(s, grudge_id, false)
-	var lost := mini(int(s.player.stones), 10)
-	s.player.stones -= lost
 	# A disciple is carried back to their sect's gate; a wanderer to the nearest inn
-	# (rules.opening.location when the place has none).
+	# (rules.opening.location when the place has none) — or, one of 天南散修盟 far from any inn, by its
+	# people to the branch they joined at, who take nothing from the purse.
 	var member: bool = s.Sect.member(s)
-	s.player.location = str(s.Sect.own(s).place) if member else (str(s.player.location) if s.available_here("inn_rest") else str(s.content.rules.opening.location))
+	var sheltered: bool = not member and not s.available_here("inn_rest") and s.League.member(s)
+	var lost := 0 if sheltered else mini(int(s.player.stones), 10)
+	s.player.stones -= lost
+	if member:
+		s.player.location = str(s.Sect.own(s).place)
+	elif sheltered:
+		s.player.location = s.League.home(s)
+	elif not s.available_here("inn_rest"):
+		s.player.location = str(s.content.rules.opening.location)
 	s.player.journey = {}
-	var message: String = (s.Series.abandon(s) + " " + s.log_event("battle_defeat" if member else "battle_defeat_wanderer", {"lost": lost, "location": s.player.location})).strip_edges()
+	var defeat := "battle_defeat" if member else ("battle_defeat_league" if sheltered else "battle_defeat_wanderer")
+	var message: String = (s.Series.abandon(s) + " " + s.log_event(defeat, {"lost": lost, "location": s.player.location})).strip_edges()
 	var passed: Dictionary = s.advance_days(s.content.action_days("battle_defeat"))
 	# The wounds outlast the days spent being carried home.
 	_wound(s, int(rules(s).get("defeat_wound_days", 12)), int(rules(s).get("defeat_injury_days", 10)))

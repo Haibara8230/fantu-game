@@ -68,7 +68,18 @@
     "baihua_garden": "changqing_valley_garden",
     "baihua_gate": "changqing_valley_pill_hall",
     "baihua_chamber": "sect_chamber",
-    "baihua_office": "town_teahouse"
+    "baihua_office": "town_teahouse",
+    "market_lamp": "town_teahouse",
+    "beiyue_lamp": "town_teahouse",
+    "canglan_lamp": "nanming_teahouse",
+    "wanghai_lamp": "nanming_teahouse",
+    "market_lamp_room": "sect_chamber",
+    "nanming_lamp_room": "sect_chamber",
+    "beiyue_lamp_room": "sect_chamber",
+    "canglan_lamp_room": "sect_chamber",
+    "wanghai_lamp_room": "sect_chamber",
+    "beiyue_land": "ruin_stone_room",
+    "wanghai_land": "wild_eye"
   },
   "location_art": {
     "beiyue": "nanming",

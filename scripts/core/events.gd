@@ -110,6 +110,16 @@ static func met(s, condition: Dictionary) -> bool:
 			return s.pill_count(value[0]) >= int(value[1])
 		"guest":
 			return s.Guest.is_guest(s, str(value))
+		# 天南散修盟 (league.gd): a member, its 副盟主, or one it cast out.
+		"league":
+			match str(value):
+				"member":
+					return s.League.member(s)
+				"deputy":
+					return s.League.deputy(s)
+				"banned":
+					return s.League.banned(s)
+			return false
 		"holds_gear":
 			return s.Gear.holds(s, str(value))
 		"present":
@@ -211,6 +221,11 @@ static func apply(s, effects: Array) -> void:
 				s.Sect.raise_to(s, str(value))
 			"close_sect":
 				s.Sect.close(s, str(value[0]), str(value[1]))
+			# 天南散修盟's word: 副盟主 ("deputy") or cast out ("ban"), and standing gained.
+			"league":
+				s.League.apply(s, str(value))
+			"league_standing":
+				s.League.gain(s, int(value))
 			"talent":
 				s.gain_talent(value)
 			"demon":

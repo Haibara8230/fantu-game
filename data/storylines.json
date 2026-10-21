@@ -1251,5 +1251,25 @@
       {"id": "call", "letter": true, "say": "（字迹抖得厉害）“入冬以来咳得更凶了。门里的事，想同你商量。”", "goal": "回松风岭百草门旧观见松翁。", "place": "ridge", "done": [{"at_location": "ridge"}], "after": "松翁的六个弟子都挤在偏殿里。大弟子想带大家投青云，好歹有口饭吃；二弟子说百草门的匾不能在她手里摘下；几个年纪小的，偷偷在打听云溪坊市招不招伙计。松翁看着他们，叹了口气，转头看你。"},
       {"id": "decide", "goal": "松翁要你拿个主意：百草门往后怎么办。", "place": "ridge", "choice_event": "baicao_choice"}
     ]
+  },
+  "qingdeng": {
+    "title": "青灯账",
+    "giver": "he_bugui",
+    "begin_if": [
+      {"story_state": ["rushi", "done"]},
+      {"league": "member"},
+      {"realm_at_least": 1},
+      {"not": {"realm_at_least": 3}},
+      {"at_location": "market"}
+    ],
+    "close_if": [
+      {"not": {"league": "member"}}
+    ],
+    "steps": [
+      {"id": "ask", "goal": "何不归在云溪分舵的青灯底下等你，说有件盟里的事要托你。", "place": "market", "done": [{"talked": "he_bugui"}], "after": "何不归把一本青皮账簿推到你面前：“这五年，云溪分舵荐出去十一个弟兄替人‘顶名’干活，说是跟船出海，一个也没回来。账是钱三省记的，干干净净——干净得过了头。”他压低了声音，“我是盟主，查自家长老，满天南都会知道。你替我去望海城港口问问，船簿上有没有这些名字。”", "effects": [{"relation": ["he_bugui", 5]}]},
+      {"id": "port", "goal": "到望海城港口，查那十一个名字有没有上过船。", "place": "wanghai", "done": [{"at_location": "wanghai"}], "after": "港口的船簿翻了三遍，十一个名字一个也没有。补网的老水手想了半天：“散修？倒是见过几个，被一辆车接走的，车辕上挂着赤红的炉牌，往赤枫岭那边去了。”"},
+      {"id": "trail", "goal": "顺着炉牌车的去向，到赤枫岭打听。", "place": "chifeng", "done": [{"at_location": "chifeng"}], "after": "赤枫岭脚下茶棚的老板认得那辆车：“赤霄门焦长老的车，隔几年来一趟，拉几个散修上山，说是去采什么‘霞血芝’。上山的人多，下山的少。”他从柜底摸出一块烧焦了半边的青灯木牌——散修盟弟兄随身带的那种，背面刻着名字，正是账上的第七个。", "effects": [{"flag": "qingdeng_token"}]},
+      {"id": "confront", "goal": "带着木牌回云溪分舵，找钱三省问个明白。", "place": "market", "choice_event": "qingdeng_choice"}
+    ]
   }
 }

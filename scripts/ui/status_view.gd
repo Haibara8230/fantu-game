@@ -56,7 +56,7 @@ static func _figure(ui, parent: HBoxContainer) -> void:
 	var realm: Label = ui.label(session.realm_name(), 19, ui.INK)
 	realm.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	column.add_child(realm)
-	var standing: Label = ui.label("%s · %s传承" % [session.Sect.name_of(session, session.affiliation()) + str(session.sect_rank().name) if session.Sect.member(session) else "散修", session.content.sects[p.get("sect", "wanderer")].name], 15, ui.MUTED)
+	var standing: Label = ui.label("%s · %s传承" % [session.Sect.name_of(session, session.affiliation()) + str(session.sect_rank().name) if session.Sect.member(session) else ("散修 · %s" % ("副盟主" if session.League.deputy(session) else "散修盟") if session.League.member(session) else "散修"), session.content.sects[p.get("sect", "wanderer")].name], 15, ui.MUTED)
 	standing.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	column.add_child(standing)
 	var purse: Label = ui.label("灵石 %d · 贡献 %d" % [int(p.stones), int(p.get("contribution", 0))], 15, ui.GOLD)

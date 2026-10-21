@@ -13,7 +13,12 @@
     "sect_xuanyue": {"name": "石殿告示", "location": "xuanyue_gate", "affiliation": "xuanyue"},
     "sect_baicao": {"name": "百草门偏殿", "location": "ridge", "affiliation": "baicao"},
     "sect_baihua": {"name": "百花谷香堂", "location": "baihua", "affiliation": "baihua"},
-    "sect_feiyu": {"name": "飞鱼帮帮务船", "location": "ferry", "affiliation": "feiyu"}
+    "sect_feiyu": {"name": "飞鱼帮帮务船", "location": "ferry", "affiliation": "feiyu"},
+    "league_market": {"name": "云溪分舵青灯簿", "location": "market", "league": true, "offers": 2},
+    "league_nanming": {"name": "南明分舵青灯簿", "location": "nanming", "league": true, "offers": 2},
+    "league_beiyue": {"name": "北岳分舵青灯簿", "location": "beiyue", "league": true, "offers": 2},
+    "league_canglan": {"name": "沧澜分舵青灯簿", "location": "canglan", "league": true, "offers": 2},
+    "league_wanghai": {"name": "望海分舵青灯簿", "location": "wanghai", "league": true, "offers": 2}
   },
   "templates": {
     "wanted": {"weight": 2, "boards": ["sect", "market", "nanming", "beiyue"], "wanted": [
@@ -162,6 +167,12 @@
     "baihua_patrol": {"weight": 2, "boards": ["sect_baihua"], "places": ["market", "town", "ferry"], "count": [1, 1], "days": 45, "reward_stones": 8, "reward_xp": 16, "title": "送香{place_name}", "text": "谷中差事：把一匣香送到{place_name}的老主顾手里，{days} 日内回{board_name}复命。", "contribution": 20},
     "feiyu_hunt": {"weight": 2, "boards": ["sect_feiyu"], "enemies": ["shui_fei", "wolf"], "count": [1, 2], "days": 60, "reward_stones": 16, "reward_xp": 12, "title": "清剿{enemy_name}", "text": "河道上的{enemy_name}截了帮里的船，{days} 日内斩杀 {count} 头。", "contribution": 10},
     "feiyu_goods": {"weight": 3, "boards": ["sect_feiyu"], "items": ["liaoshang_pill", "wolf_fang", "shanxiao_pelt"], "count": [2, 4], "days": 60, "reward_scale": 2.0, "title": "船上缺{item_name}", "text": "跑船的弟兄缺 {count} 份{item_name}，{days} 日内送到{board_name}。", "contribution": 4},
-    "feiyu_patrol": {"weight": 2, "boards": ["sect_feiyu"], "places": ["ferry", "town", "market"], "count": [1, 1], "days": 45, "reward_stones": 8, "reward_xp": 16, "title": "押船去{place_name}", "text": "帮中差事：押一船货去{place_name}，{days} 日内回{board_name}复命。", "contribution": 20}
+    "feiyu_patrol": {"weight": 2, "boards": ["sect_feiyu"], "places": ["ferry", "town", "market"], "count": [1, 1], "days": 45, "reward_stones": 8, "reward_xp": 16, "title": "押船去{place_name}", "text": "帮中差事：押一船货去{place_name}，{days} 日内回{board_name}复命。", "contribution": 20},
+    "league_fetch": {"weight": 2, "boards": ["league_market"], "places": ["ridge", "wild", "ferry"], "count": [1, 1], "days": 45, "reward_stones": 12, "reward_xp": 16, "standing": 12, "title": "接回{place_name}的弟兄", "text": "盟里一位弟兄在{place_name}采药扭了脚，{days} 日内去把人接回来，到{board_name}销账。"},
+    "league_fetch_south": {"weight": 2, "boards": ["league_nanming", "league_beiyue", "league_canglan", "league_wanghai"], "min_realm": 1, "places": ["chifeng", "duanjian", "jinhai", "duze"], "count": [1, 1], "days": 90, "reward_stones": 40, "reward_xp": 60, "standing": 20, "title": "接回{place_name}的弟兄", "text": "盟里一位弟兄在{place_name}受了伤，传信回来求援，{days} 日内去把人接回来，到{board_name}销账。"},
+    "league_salve": {"weight": 2, "boards": ["league_market", "league_nanming", "league_beiyue", "league_canglan", "league_wanghai"], "items": ["liaoshang_pill", "huiqi_pill"], "count": [1, 3], "days": 60, "reward_scale": 1.6, "standing": 4, "title": "替弟兄凑{item_name}", "text": "分舵静室里养着几个受伤的弟兄，缺 {count} 枚{item_name}，{days} 日内送到{board_name}。"},
+    "league_wolves": {"weight": 2, "boards": ["league_market"], "enemies": ["wolf", "shan_xiao"], "count": [1, 2], "days": 60, "reward_stones": 14, "reward_xp": 12, "standing": 5, "title": "替弟兄出头：{enemy_name}", "text": "松风岭、落霞谷一带的{enemy_name}伤了盟里采药的弟兄，{days} 日内斩杀 {count} 头。"},
+    "league_beasts": {"weight": 2, "boards": ["league_nanming", "league_beiyue", "league_canglan", "league_wanghai"], "min_realm": 1, "enemies": ["huo_ya", "jian_ling", "reef_crab", "du_chan"], "count": [1, 2], "days": 90, "reward_stones": 30, "reward_xp": 36, "standing": 8, "title": "替弟兄出头：{enemy_name}", "text": "{enemy_name}伤了盟里跑腿的弟兄，{days} 日内斩杀 {count} 头，回{board_name}说一声。"},
+    "league_escort": {"weight": 1, "boards": ["league_nanming", "league_beiyue", "league_canglan", "league_wanghai"], "min_realm": 2, "places": ["guzhanchang", "waihai", "duze"], "count": [1, 1], "days": 120, "reward_stones": 120, "reward_xp": 160, "standing": 30, "title": "护弟兄走一趟{place_name}", "text": "几个筑基的弟兄要去{place_name}寻机缘，求一位金丹同行压阵，{days} 日内走一趟回来，到{board_name}销账。"}
   }
 }

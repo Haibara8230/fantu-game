@@ -85,13 +85,14 @@ static func at_eye(s) -> bool:
 	var eye: Dictionary = rules(s).eye
 	return str(s.player.location) == str(eye.location) and s.has_flag(str(eye.flag))
 
-## A quiet place of one's own to break through at (a leased abode): the open spot here whose
-## `breakthrough_bonus` adds to the odds, or {}.
+## A quiet place of one's own to break through at (a leased abode, a 灵地): of the spots here open to
+## the player, the one whose `breakthrough_bonus` adds most to the odds, or {}.
 static func settled_ground(s) -> Dictionary:
+	var best: Dictionary = {}
 	for spot: Dictionary in s.content.locations[str(s.player.location)].get("spots", []):
-		if "breakthrough" in spot.actions and spot.has("breakthrough_bonus") and s.spot_open(spot):
-			return spot
-	return {}
+		if "breakthrough" in spot.actions and spot.has("breakthrough_bonus") and s.Cultivation.usable(s, spot) and (best.is_empty() or int(spot.breakthrough_bonus) > int(best.breakthrough_bonus)):
+			best = spot
+	return best
 
 ## Why the plan cannot be attempted now, or "".
 static func block(s, plan: Dictionary) -> String:

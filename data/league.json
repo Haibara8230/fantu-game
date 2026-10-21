@@ -1,0 +1,11 @@
+{
+  "name": "天南散修盟",
+  "head": "he_bugui",
+  "branches": {
+    "market": "云溪分舵",
+    "nanming": "南明分舵",
+    "beiyue": "北岳分舵",
+    "canglan": "沧澜分舵",
+    "wanghai": "望海分舵"
+  }
+}

@@ -102,6 +102,10 @@ static func restore(s, data: Variant) -> bool:
 	var guests: Variant = _valid_guests(content, saved_player)
 	if guests == null:
 		return false
+	# 天南散修盟 (optional: league.gd); its world flag stands exactly while a member.
+	var league: Variant = _valid_league(content, saved_player, saved_world)
+	if league == null:
+		return false
 	var series_last: Variant = saved_player.get("series_last", {})
 	if not series_last is Dictionary or series_last.keys().any(func(series_id: Variant) -> bool: return not content.series.has(series_id) or not _whole_nonnegative(series_last[series_id])):
 		return false
@@ -400,6 +404,7 @@ static func restore(s, data: Variant) -> bool:
 			sittings[trial_id][year] = int(trials[trial_id][year])
 	player["trials"] = sittings
 	player["guests"] = guests
+	player["league"] = league
 	var last_taken := {}
 	for series_id: String in series_last:
 		last_taken[series_id] = int(series_last[series_id])
@@ -761,6 +766,25 @@ static func _valid_guests(content, saved_player: Dictionary) -> Variant:
 		seen[held.sect] = true
 		result.append({"sect": str(held.sect), "since": int(held.since), "pay_day": int(held.pay_day), "next_call": int(held.next_call), "missed": int(held.missed)})
 	return result if result.size() <= int(content.guest_data.most) else null
+
+## The standing with 天南散修盟, normalized ({} for none), or null when malformed.
+static func _valid_league(content, saved_player: Dictionary, saved_world: Dictionary) -> Variant:
+	var saved: Variant = saved_player.get("league", {})
+	if not saved is Dictionary:
+		return null
+	var member := bool(saved.get("member", false))
+	if member != bool(saved_world.get("flags", {}).get("league_member", false)):
+		return null
+	if saved.is_empty():
+		return {}
+	if ["member", "deputy", "banned"].any(func(key: String) -> bool: return not saved.get(key, false) is bool) or not _whole_nonnegative(saved.get("standing", 0)) or not _whole_nonnegative(saved.get("since", 0)):
+		return null
+	var branch := str(saved.get("branch", ""))
+	if (member or not branch.is_empty()) and not content.league_data.get("branches", {}).has(branch):
+		return null
+	if member and bool(saved.get("banned", false)):
+		return null
+	return {"member": member, "branch": branch, "since": int(saved.get("since", 0)), "standing": int(saved.get("standing", 0)), "deputy": bool(saved.get("deputy", false)), "banned": bool(saved.get("banned", false))}
 
 ## Recipes known, brews made, 丹毒 and the 灵田, normalized (optional: journeys before them know no
 ## recipe and have no field yet), or null when malformed. Recipes no longer in the content are dropped;

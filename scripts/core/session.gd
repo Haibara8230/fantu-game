@@ -29,6 +29,7 @@ const Arena = preload("res://scripts/core/arena.gd")
 const Series = preload("res://scripts/core/series.gd")
 const Trials = preload("res://scripts/core/trials.gd")
 const Guest = preload("res://scripts/core/guest.gd")
+const League = preload("res://scripts/core/league.gd")
 const Ascension = preload("res://scripts/core/ascension.gd")
 const Feuds = preload("res://scripts/core/feuds.gd")
 const Schools = preload("res://scripts/core/schools.gd")
@@ -116,7 +117,7 @@ func new_game(character_name: String = "无名", seed_value: int = -1, roots: Ar
 	populate()
 	player = {
 		"name": chosen_name, "birth_day": -int(content.rules.starting_age) * Calendar.DAYS_PER_YEAR,
-		"realm": 0, "stage": 0, "xp": 0, "hp": 0, "qi": 0, "cultivation_carry": 0, "warned_for": -1, "wake": [], "leases": {}, "arena_best": {}, "series_last": {}, "trials": {}, "guests": [], "betrayed": [], "sect_day": 0, "roots": roots.duplicate(),
+		"realm": 0, "stage": 0, "xp": 0, "hp": 0, "qi": 0, "cultivation_carry": 0, "warned_for": -1, "wake": [], "leases": {}, "arena_best": {}, "series_last": {}, "trials": {}, "guests": [], "betrayed": [], "sect_day": 0, "league": {}, "roots": roots.duplicate(),
 		"fatigue": 0, "fatigue_day": 0, "insight": 0, "mind": 0,
 		"stones": int(content.rules.starting_stones), "items": {},
 		"journey": {}, "cooldowns": {},
@@ -1297,6 +1298,13 @@ func arena_leave() -> String:
 	return Arena.leave(self)
 
 ## Takes the dwelling let out here for a term (leases.gd).
+## 天南散修盟 (league.gd): joining at a branch, or leaving.
+func league_join() -> String:
+	return League.join(self)
+
+func league_leave() -> String:
+	return League.leave(self)
+
 func take_lease() -> String:
 	return Leases.take(self)
 

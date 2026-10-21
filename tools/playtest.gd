@@ -7,7 +7,8 @@ extends SceneTree
 ## printed with the date, and each action is charged the seconds a player would spend on it, to judge
 ## pacing. Only rules are used; no window is opened.
 ## Usage: godot --headless --path . --script res://tools/playtest.gd [-- <seed> <years> [random|poor|ordinary|good] [cultivate|social|explore] [sect|wanderer]]
-## The route: join 青云 after the opening (sect), or stay a 散修 who lives by 云溪's inn and rents a lodge (wanderer).
+## The route: join 青云 after the opening (sect), or stay a 散修 who joins 天南散修盟, lives by 云溪's branch room
+## and rents a lodge, and at 金丹 with standing retreats in 北岳's 灵窟 (wanderer).
 const Session = preload("res://scripts/core/session.gd")
 const Goals = preload("res://scripts/ui/goals.gd")
 const Calendar = preload("res://scripts/core/calendar.gd")
@@ -264,9 +265,19 @@ func _rest() -> void:
 	else:
 		_go(_home())
 
-## Where one retreats and breaks through: the sect's chamber, or 云溪's inn and lodge for a 散修.
+## Where one retreats and breaks through: the sect's chamber, or for a 散修 云溪's branch room, inn and
+## lodge — until a 灵地 of 天南散修盟 takes them (金丹 and standing).
 func _home() -> String:
-	return "sect" if s.Sect.member(s) else "market"
+	if s.Sect.member(s):
+		return "sect"
+	if s.League.member(s):
+		for place: String in ["beiyue", "wanghai"]:
+			if not s.location_visible(place):
+				continue
+			for spot: Dictionary in s.content.locations[place].spots:
+				if spot.get("lodging", {}).has("realm") and s.League.room_open(s, spot.lodging) and int(s.player.stones) >= int(spot.lodging.rent) * 2:
+					return place
+	return "market"
 
 func _sealed(place: String) -> bool:
 	return s.content.location_sealed(place, s.world.flags)
@@ -471,7 +482,7 @@ func _commissions() -> bool:
 		if board.is_empty():
 			return false
 		for offer: Dictionary in s.commission_offers(board):
-			if offer.kind in ["gather", "hunt", "patrol", "beast_parts"] and not s.world.quests_taken.has(offer.key):
+			if offer.kind in ["gather", "hunt", "patrol", "beast_parts", "league_fetch", "league_wolves"] and not s.world.quests_taken.has(offer.key):
 				_charge("menu")
 				_say("ACCEPT", "%s：%s" % [s.commission_text(offer).title, s.accept_commission(str(offer.key))])
 				return true
@@ -486,12 +497,12 @@ func _commissions() -> bool:
 					return true
 				_gather()
 				return true
-			"hunt":
+			"hunt", "league_wolves":
 				if _go("ridge" if _sealed("wild") else "wild"):
 					return true
 				_do("act", "HUNT", s.act("hunt"))
 				return true
-			"patrol":
+			"patrol", "league_fetch":
 				return _go(str(quest.get("place", "town")))
 	return false
 
@@ -532,10 +543,17 @@ func _earn() -> bool:
 	_outing()
 	return true
 
-## A 散修 with stones to spare leases 云溪's 溪畔竹舍: no rent by the month, a whole retreat's yield.
+## A 散修 joins 天南散修盟 at 云溪's lamp once out in the world; with stones to spare they lease 云溪's
+## 溪畔竹舍: no rent by the month, a whole retreat's yield.
 func _settle() -> bool:
 	if s.Sect.member(s) or not s.has_flag("rushi_done"):
 		return false
+	if not s.League.member(s) and not s.League.banned(s):
+		if str(s.player.location) != "market" and _go("market"):
+			return true
+		if str(s.player.location) == "market" and s.League.block(s).is_empty():
+			_do("act", "LEAGUE", s.league_join())
+			return true
 	var lease: Dictionary = s.content.locations.market.get("lease", {})
 	if lease.is_empty() or s.has_flag(str(lease.flag)) or int(s.player.stones) < int(lease.price) + 60:
 		return false

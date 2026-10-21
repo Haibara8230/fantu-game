@@ -92,6 +92,8 @@ static func describe(s, condition: Dictionary) -> String:
 			return "需是%s弟子" % s.Sect.name_of(s, str(value)) if not str(value).is_empty() else "需是散修"
 		"sect":
 			return "需修习%s传承" % s.content.sects[str(value)].name
+		"league":
+			return {"member": "需是%s中人", "deputy": "需是%s副盟主", "banned": "需已被%s除名"}.get(str(value), "需与%s有关") % s.League.data(s).name
 		"recipe":
 			return "需掌握%s丹方" % s.content.alchemy_data.recipes[str(value)].name
 		"grudge_pay":

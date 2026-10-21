@@ -43,6 +43,7 @@ var auction_data: Dictionary = {}
 # The contests' champions and rewards, 五宗论道 and 天南大比 (summit.gd).
 var summit_data: Dictionary = {}
 var guest_data: Dictionary = {}
+var league_data: Dictionary = {}
 # 炼器's materials and costs (forge.gd).
 var forge_data: Dictionary = {}
 # Lore heard in teahouses about the wider world (rumors.gd).
@@ -55,7 +56,7 @@ const FAVOR_MAX := 200
 const FAVOR_STAGES := [[0, "初识"], [40, "相熟"], [80, "友好"], [140, "信赖"], [200, "亲密"]]
 const ATTITUDES := {"friendly": "友善", "neutral": "中立", "hostile": "敌意"}
 const BUILT_IN_INTERACTIONS := ["talk", "gift", "help", "consult", "teach", "invite_spar", "invite_help", "companion", "disciple", "instruct", "sworn"]
-const PLAIN_ACTIONS := ["cultivate", "rest", "breakthrough", "study", "teach", "sell", "shop", "gather", "inn_rest", "search_ruin", "explore_cave", "forge", "ascend", "inquire", "commissions", "sect", "alchemy", "field", "lease", "hunt", "arena", "series", "join_sect", "guest"]
+const PLAIN_ACTIONS := ["cultivate", "rest", "breakthrough", "study", "teach", "sell", "shop", "gather", "inn_rest", "search_ruin", "explore_cave", "forge", "ascend", "inquire", "commissions", "sect", "alchemy", "field", "lease", "hunt", "arena", "series", "join_sect", "guest", "league"]
 const ITEM_CATEGORIES := {"herb": "灵草", "pill": "丹药", "treasure": "天材地宝", "manual": "玉简", "equipment": "宝物", "material": "材料", "recipe": "丹方", "talisman": "符箓", "tool": "器具", "quest": "信物"}
 # Milestones friends send word of, and the deeds the session counts besides victories ("win:<enemy>").
 const CONGRATS := ["breakthrough", "core", "nascent", "deity", "serpent", "champion", "summit", "calamity", "promotion"]
@@ -101,7 +102,7 @@ func load_data() -> bool:
 	for item_id: String in items:
 		if items[item_id] is Dictionary:
 			items[item_id].id = item_id
-	for pair: Array in [["techniques", "res://data/techniques.json"], ["equipment", "res://data/equipment.json"], ["vfx_tiers", "res://data/vfx_tiers.json"], ["vfx", "res://data/vfx.json"], ["population", "res://data/population.json"], ["commissions", "res://data/commissions.json"], ["storylines", "res://data/storylines.json"], ["talents", "res://data/talents.json"], ["sect", "res://data/sect.json"], ["bonds", "res://data/bonds.json"], ["alchemy", "res://data/alchemy.json"], ["caves", "res://data/caves.json"], ["auctions", "res://data/auctions.json"], ["summit", "res://data/summit.json"], ["forge", "res://data/forge.json"], ["lore", "res://data/lore.json"], ["guests", "res://data/guests.json"]]:
+	for pair: Array in [["techniques", "res://data/techniques.json"], ["equipment", "res://data/equipment.json"], ["vfx_tiers", "res://data/vfx_tiers.json"], ["vfx", "res://data/vfx.json"], ["population", "res://data/population.json"], ["commissions", "res://data/commissions.json"], ["storylines", "res://data/storylines.json"], ["talents", "res://data/talents.json"], ["sect", "res://data/sect.json"], ["bonds", "res://data/bonds.json"], ["alchemy", "res://data/alchemy.json"], ["caves", "res://data/caves.json"], ["auctions", "res://data/auctions.json"], ["summit", "res://data/summit.json"], ["forge", "res://data/forge.json"], ["lore", "res://data/lore.json"], ["guests", "res://data/guests.json"], ["league", "res://data/league.json"]]:
 		var loaded: Variant = _read_json(pair[1])
 		if not loaded is Dictionary:
 			error_message = "配置格式错误：" + pair[1]
@@ -144,6 +145,8 @@ func load_data() -> bool:
 				lore_data = loaded
 			"guests":
 				guest_data = loaded
+			"league":
+				league_data = loaded
 	map = parsed.map
 	regions = parsed.get("regions", {})
 	locations = parsed.locations
@@ -420,6 +423,8 @@ func _validate() -> String:
 		problem = _validate_summit()
 	if problem.is_empty():
 		problem = _validate_guests()
+	if problem.is_empty():
+		problem = _validate_league()
 	if problem.is_empty():
 		problem = _validate_ascension()
 	if problem.is_empty():
@@ -850,6 +855,27 @@ func _validate_ascension() -> String:
 			return "飞升通路配置无效：" + route_id
 	if not data.get("truth") is Dictionary or data.truth.keys().any(func(flag: Variant) -> bool: return not flag in world_flags or not data.truth[flag] is String):
 		return "飞升结语配置无效。"
+	return ""
+
+# --- 天南散修盟 ------------------------------------------------------------------------------------
+
+func _validate_league() -> String:
+	var data := league_data
+	if not data.get("name") is String or not people.has(data.get("head", "")) or not data.get("branches") is Dictionary or data.branches.is_empty():
+		return "散修盟配置无效。"
+	if not "league_member" in world_flags:
+		return "散修盟标记未登记：league_member"
+	for location_id: String in data.branches:
+		if not locations.has(location_id) or not data.branches[location_id] is String:
+			return "散修盟分舵无效：" + location_id
+		if not locations[location_id].spots.any(func(spot: Dictionary) -> bool: return "league" in spot.actions):
+			return "散修盟分舵缺少入盟之处：" + location_id
+	for board_id: String in commission_data.get("boards", {}):
+		var board: Dictionary = commission_data.boards[board_id]
+		if board.has("league") and (not data.branches.has(board.location) or board.has("affiliation") or not commission_data.boards.values().any(func(other: Dictionary) -> bool: return other.location == board.location and not other.has("league") and not other.has("affiliation"))):
+			return "散修盟的青灯簿须设在有公共告示的分舵：" + board_id
+		if board.has("league") and not commission_data.templates.values().any(func(template: Dictionary) -> bool: return board_id in template.boards and _whole(template.get("standing")) and int(template.standing) >= 1):
+			return "散修盟的青灯簿须有记声望的差事：" + board_id
 	return ""
 
 # --- 客卿 ------------------------------------------------------------------------------------------
@@ -1382,6 +1408,14 @@ func _validate_map() -> String:
 			for taught: Variant in spot.get("teach", []):
 				if not taught is String or technique(taught).is_empty():
 					return "场景传授了无效的功法：%s" % taught
+			if spot.has("lodging"):
+				var let: Variant = spot.lodging
+				if not "cultivate" in spot.actions or not let is Dictionary or not (let.get("rate") is float or let.get("rate") is int) or float(let.rate) <= 0.0 or not _whole(let.get("rent")) or let.keys().any(func(key: Variant) -> bool: return not key in ["rate", "rent", "league", "realm", "standing"]):
+					return "静房配置无效：%s.%s" % [location_id, spot.id]
+				if let.has("league") and (not let.league is bool or str(spot.get("requires_flag", "")) != "league_member"):
+					return "散修盟的静房须只对盟中人开放：%s.%s" % [location_id, spot.id]
+				if (let.has("realm") and (not _whole(let.realm) or int(let.realm) >= realms.size())) or (let.has("standing") and not _whole(let.standing)):
+					return "静房的境界或声望门槛无效：%s.%s" % [location_id, spot.id]
 			if spot.has("teach") != ("teach" in spot.actions):
 				return "传授功法的场景须有 teach 行为与传授列表：%s.%s" % [location_id, spot.id]
 			for action: Variant in spot.actions:
@@ -1402,6 +1436,8 @@ func _validate_map() -> String:
 					return "可炼丹的地点缺少丹炉配置：" + location_id
 				if action == "lease" and not location.has("lease"):
 					return "出赁住处的地点缺少租约配置：" + location_id
+				if action == "league" and not league_data.get("branches", {}).has(location_id):
+					return "散修盟分舵未登记：" + location_id
 				if action == "hunt" and not location.has("hunt"):
 					return "可历练的地点缺少妖兽表：" + location_id
 				if action == "arena" and not location.has("arena"):
@@ -1479,6 +1515,8 @@ func _validate_reveals() -> String:
 	# A 客卿's room opens while the bond lasts (guest.gd).
 	for sect: String in guest_data.get("sects", {}):
 		settable["guest_" + sect] = true
+	# 天南散修盟's rooms open to its members (league.gd).
+	settable["league_member"] = true
 	for location_id: String in locations:
 		var location: Dictionary = locations[location_id]
 		if location.has("hidden_until") and not settable.has(location.hidden_until):
@@ -1802,6 +1840,8 @@ func _validate_condition(condition: Variant) -> String:
 			return "" if _whole(value) and int(value) >= 1 and int(value) <= technique_data.tiers.size() else "作品品阶条件无效"
 		"guest":
 			return "" if value is String and (value.is_empty() or guest_data.get("sects", {}).has(value)) else "客卿条件无效"
+		"league":
+			return "" if value in ["member", "deputy", "banned"] else "散修盟条件无效"
 		"present":
 			return "" if people.has(value) else "未知人物：%s" % value
 		"party":
@@ -1878,6 +1918,10 @@ func _validate_effects(effects: Variant) -> String:
 				ok = value is String and not value.is_empty()
 			"sect_rank":
 				ok = value in sect_data.get("rank_ids", [])
+			"league":
+				ok = value in ["deputy", "ban"]
+			"league_standing":
+				ok = _whole(value) and int(value) >= 1
 			"close_sect":
 				ok = value is Array and value.size() == 2 and sect_data.get("sects", {}).has(value[0]) and str(value[0]) != str(rules.lineage.home) and (str(value[1]).is_empty() or sect_data.sects.has(value[1])) and value[0] != value[1] and ("sect_closed_" + str(value[0])) in world_flags
 			"party":
