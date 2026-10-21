@@ -94,6 +94,10 @@ static func describe(s, condition: Dictionary) -> String:
 			return "需修习%s传承" % s.content.sects[str(value)].name
 		"league":
 			return {"member": "需是%s中人", "deputy": "需是%s副盟主", "banned": "需已被%s除名"}.get(str(value), "需与%s有关") % s.League.data(s).name
+		"tianji":
+			return "需在%s前 %d 名" % [s.Tianji.scroll(s, str(value[0])).name, int(value[1])]
+		"rival":
+			return {"friend": "需三番胜过萧凌云、每回都给他留了脸", "beaten": "需从未胜过萧凌云", "elder_known": "需听说过萧家的供奉（茶馆打听），或神识足够"}.get(str(value), "需与萧凌云有关")
 		"recipe":
 			return "需掌握%s丹方" % s.content.alchemy_data.recipes[str(value)].name
 		"grudge_pay":

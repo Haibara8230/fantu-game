@@ -28,47 +28,65 @@ static func levels(s, rules: Dictionary) -> Array:
 ## Starts round `round` (from 1) of `contest` against that round's champion.
 static func begin(s, round: int, contest: String = "wuzong") -> void:
 	var rules := data(s, contest)
-	var champion: Dictionary = rules.champions[round - 1]
+	var champion := champion_of(s, rules, round, contest)
 	var level: Array = levels(s, rules)[round - 1]
 	var realm := clampi(int(level[0]), 0, s.content.realms.size() - 1)
 	var stage := clampi(int(level[1]), 0, s.content.realm(realm).stages.size() - 1)
+	# A rigged draw (萧家麒麟子, rival.gd) makes every round a little harder.
+	var power: float = float(rules.power[round - 1]) + s.Rival.contest_power(s, contest)
+	var built := foe(s, "%s · %s" % [champion.title, champion.name], str(champion.sect), str(champion.gender), realm, stage, power, int(rules.round.xp))
+	s.battle = {"enemy_id": "cultivator", "hp": int(built.hp), "turn": 1, "cooldowns": {}, "opponent_sect": str(champion.sect), "status": {}, "context": "summit", "contest": contest, "round": round, "foe": built, "place": s.Combat._battle_place(s)}
+	s.combat_events.clear()
+	s.Combat.open_hand(s)
+	s.log_event("summit_start", {"round": round, "foe": "%s%s" % [champion.title, champion.name], "contest": str(rules.name), "stage": str(champion.get("stage", ""))})
+
+## The champion of a round: the contest's own, or a rival who has taken the last round (rival.gd).
+static func champion_of(s, rules: Dictionary, round: int, contest: String) -> Dictionary:
+	if round == rules.champions.size():
+		var rival: Dictionary = s.Rival.contest_champion(s, contest)
+		if not rival.is_empty():
+			return rival
+	return rules.champions[round - 1]
+
+## A champion's duel numbers: their lineage's arts at a fixed cultivation, scaled by `power` (also the
+## 天骄榜's duels, tianji.gd, and 萧凌云's, rival.gd).
+static func foe(s, foe_name: String, lineage: String, gender: String, realm: int, stage: int, power: float, xp: int) -> Dictionary:
 	var caps: Dictionary = s.content.stage(realm, stage)
-	var power := float(rules.power[round - 1])
-	var arts: Array = s.content.sects[str(champion.sect)].skills.duplicate()
+	var arts: Array = s.content.sects[lineage].skills.duplicate()
 	var best: Dictionary = {}
 	for art_id: Variant in arts:
 		var art: Dictionary = s.content.technique(str(art_id))
 		if art.get("kind", "") == "attack" and (best.is_empty() or int(art.damage_max) > int(best.damage_max)):
 			best = art
 	var bonus := int(caps.attack_bonus)
-	var foe := {
-		"name": "%s · %s" % [champion.title, champion.name], "hp": int(round(float(caps.max_hp) * power)),
+	return {
+		"name": foe_name, "hp": int(round(float(caps.max_hp) * power)),
 		"damage_min": maxi(1, int(round(float(best.damage_min) * power)) + bonus), "damage_max": maxi(1, int(round(float(best.damage_max) * power)) + bonus),
-		"art": str(best.id), "art_name": str(best.name), "vfx": str(best.vfx), "tier": int(best.tier), "xp": int(rules.round.xp),
-		"sect": str(champion.sect), "gender": str(champion.gender), "arts": arts, "power": snappedf(power, 0.01), "bonus": bonus,
+		"art": str(best.id), "art_name": str(best.name), "vfx": str(best.vfx), "tier": int(best.tier), "xp": xp,
+		"sect": lineage, "gender": gender, "arts": arts, "power": snappedf(power, 0.01), "bonus": bonus,
 		"element": str(best.element), "realm": realm,
 	}
-	s.battle = {"enemy_id": "cultivator", "hp": int(foe.hp), "turn": 1, "cooldowns": {}, "opponent_sect": str(champion.sect), "status": {}, "context": "summit", "contest": contest, "round": round, "foe": foe, "place": s.Combat._battle_place(s)}
-	s.combat_events.clear()
-	s.Combat.open_hand(s)
-	s.log_event("summit_start", {"round": round, "foe": "%s%s" % [champion.title, champion.name], "contest": str(rules.name), "stage": str(champion.get("stage", ""))})
 
 ## A round ends: a win leads on (or crowns the player), a loss ends the run.
 static func over(s, won: bool) -> String:
 	var round := int(s.battle.get("round", 1))
 	var contest := str(s.battle.get("contest", "wuzong"))
 	var rules := data(s, contest)
-	var champion: Dictionary = rules.champions[round - 1]
+	var champion := champion_of(s, rules, round, contest)
 	var foe_name := "%s%s" % [champion.title, champion.name]
 	var args := {"round": round, "foe": foe_name, "contest": str(rules.name)}
 	s.battle.clear()
 	s.record_deed("duel")
 	# The rounds won are the sitting's score (trials.gd).
 	s.Trials.record(s, contest, round if won else round - 1)
+	# 萧凌云's bout at 天南大比 (rival.gd) is decided with the round that ends it.
+	var rival: String = s.Rival.contest_over(s, contest, won, round == rules.champions.size())
 	if not won:
 		s.player.hp = maxi(int(s.player.hp), 1)
 		var out: String = s.log_event("summit_out", args)
-		return s.conclude(_join(out, s.gain_insight("spar")), s.advance_days(s.content.action_days("road_recovery")))
+		var more: Array[String] = s.gain_insight("spar")
+		more.append_array(_said(rival))
+		return s.conclude(_join(out, more), s.advance_days(s.content.action_days("road_recovery")))
 	var reward: Dictionary = rules.round
 	s.player.stones = int(s.player.stones) + int(reward.stones)
 	var message: String = _join(s.log_event("summit_round", args.merged({"stones": int(reward.stones)}), round == rules.champions.size()), s.gain_insight("spar"))
@@ -91,11 +109,21 @@ static func over(s, won: bool) -> String:
 	# The crown is remembered in the world (`world_flag`: 天南大比's opens the four sects' doors, guest.gd).
 	if rules.has("world_flag"):
 		s.world.flags[str(rules.world_flag)] = true
+	# The 天机阁 writes the crown beside the champion's name (`tianji`: [scroll, seat, words]).
+	if rules.has("tianji"):
+		message += " " + s.Tianji.annotate(s, str(rules.tianji[0]), int(rules.tianji[1]), str(rules.tianji[2]))
+	message = _join(message, _said(rival))
 	message += " " + s.Sect.gain(s, int(prize.contribution), "%s夺魁" % rules.name)
 	message = _join(message, s.gain_xp(int(prize.xp)))
 	if contest == "wuzong":
 		message = _join(message, s.congratulate("summit"))
 	return s.conclude(message, s.advance_days(s.content.action_days("road_recovery")))
+
+static func _said(text: String) -> Array[String]:
+	var said: Array[String] = []
+	if not text.is_empty():
+		said.append(text)
+	return said
 
 static func _join(message: String, more: Array[String]) -> String:
 	return message if more.is_empty() else message + " " + " ".join(more)

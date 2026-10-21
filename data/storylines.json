@@ -1271,5 +1271,67 @@
       {"id": "trail", "goal": "顺着炉牌车的去向，到赤枫岭打听。", "place": "chifeng", "done": [{"at_location": "chifeng"}], "after": "赤枫岭脚下茶棚的老板认得那辆车：“赤霄门焦长老的车，隔几年来一趟，拉几个散修上山，说是去采什么‘霞血芝’。上山的人多，下山的少。”他从柜底摸出一块烧焦了半边的青灯木牌——散修盟弟兄随身带的那种，背面刻着名字，正是账上的第七个。", "effects": [{"flag": "qingdeng_token"}]},
       {"id": "confront", "goal": "带着木牌回云溪分舵，找钱三省问个明白。", "place": "market", "choice_event": "qingdeng_choice"}
     ]
+  },
+  "xiao_rival": {
+    "title": "萧家麒麟子",
+    "giver": "xiao_lingyun",
+    "begin_if": [
+      {"story_state": ["rushi", "done"]},
+      {"at_location": "market"}
+    ],
+    "steps": [
+      {
+        "id": "qianlong",
+        "goal": "萧家嫡子萧凌云在长街上拦住你，笑你出身寒微，说潜龙会上让你三招。五年一届的潜龙会在云溪斗法台，四十岁以下的炼气修士都能报名。",
+        "place": "market",
+        "say": "长街上，一个锦衣少年拦住了你的路，身后跟着两个萧家的家仆。“听说你也想报潜龙会？”他上下打量你，笑了，“小门小户出来的人，也配上潜龙台？到时候，我让你三招。”旁人小声说，这是萧家的嫡子萧凌云，二十岁前就要筑基的“麒麟子”。",
+        "done": [
+          {
+            "any": [
+              {"flag": "xiao_bout1"},
+              {"realm_at_least": 1},
+              {"year_at_least": 15}
+            ]
+          }
+        ],
+        "after": "没过多久，萧凌云便闭关筑基了。萧家摆了三天流水席，说麒麟子二十岁前筑基，天南没有第二个；天机阁下一回张榜，筑基卷第三便是他。"
+      },
+      {
+        "id": "dabi",
+        "goal": "萧凌云坐上了天骄榜筑基卷。二十年一届的天南大比，他必定要去；你也该去。",
+        "requires": [
+          {"realm_at_least": 1}
+        ],
+        "done": [
+          {
+            "any": [
+              {"flag": "xiao_bout2"},
+              {"realm_at_least": 2},
+              {"year_at_least": 69}
+            ]
+          }
+        ],
+        "after": "萧凌云结了金丹。天骄榜金丹卷上，他的名字排在第二；萧家为他请了一位金丹后期的供奉，寸步不离。"
+      },
+      {
+        "id": "bang",
+        "goal": "萧凌云坐在天骄榜金丹卷第二。到任意一城的天机榜亭，一路挑上去，把战帖递到他面前。",
+        "requires": [
+          {"realm_at_least": 2}
+        ],
+        "done": [
+          {
+            "any": [
+              {"flag": "xiao_bout3"},
+              {"flag": "xiao_ambush"},
+              {"year_at_least": 150}
+            ]
+          }
+        ],
+        "after": "萧凌云闭了死关，说是要冲元婴。云溪城里都在等：萧家出元婴的那天，萧家便不再是“新起的世家”了。"
+      },
+      {"id": "house", "goal": "萧凌云结婴，做了萧家家主。回云溪，与他做个了断。", "place": "market", "requires": [{"realm_at_least": 3}, {"year_at_least": 150}], "choice_event": "xiao_house", "done": [{"flag": "xiao_house_won"}]},
+      {"id": "fate", "goal": "萧凌云败了。如何处置他，在你一念之间。", "place": "market", "skip_if": [{"flag": "xiao_friend"}, {"flag": "xiao_trampled"}], "choice_event": "xiao_fate"}
+    ]
   }
 }

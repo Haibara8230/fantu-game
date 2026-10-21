@@ -14,16 +14,24 @@ extends RefCounted
 ## - a depth (`requires_realm`) the realm must reach first, said in its own words (`realm_text`);
 ## - the remnant soul (fortune "remnant"), which offers its blessing before foundation;
 ## - a finding (`flag`) marked in the world on entering.
+## - a flag the way waits for (`requires_flag`: 赤霞谷's mist lifts on the tenth day);
+## - an event of its own on entering (`event`, while that event's conditions hold), in place of its things;
+## - its guardian and things gone for good once a flag is set (`gone_if`: the sword that chose its owner).
+## A 秘境's rooms (mijing.gd) also have a `layer` (外圈, 中圈, 内圈) and may ask wins inside first
+## (`requires_wins`); someone may be after a room's things as the player comes in, and what is found
+## there counts as gathered inside.
 ## A named slip (`slip`: a handwritten technique) may lie among a room's things.
 ## Someone may go in along (同行, world.party[cave]: a person the cave's `companions` names), each
 ## with a gift of their own: `sense` (神识 for seals, traps and hidden places), `hidden` (神识 for hidden
-## places only), `heal` (a share of health back after each room, in hundredths) and `guardian` (the
-## guardians met with only that share of their health).
+## places only), `heal` (a share of health back after each room, in hundredths), `guardian` (the
+## guardians met with only that share of their health) and `extra` (one more of a 秘境's prize wherever
+## it is found); in a 秘境 one may turn on a day of their own (`betray`, mijing.gd).
 ## Whether the 千年石乳 and the remnant soul are there is decided once, when the cave is first entered
 ## (fortune.gd's chance, after the talents for fortune). Which of a room's `loot` choices lies there
 ## follows from the world seed. Everything else is in world.caves[cave]: explored rooms, rooms whose
 ## things or hidden place are taken ("room" / "room:hidden"), and the placed fortunes.
 const Fortune = preload("res://scripts/core/fortune.gd")
+const Events = preload("res://scripts/core/events.gd")
 const FORTUNES := ["shiru", "remnant"]
 
 static func definition(s, cave_id: String) -> Dictionary:
@@ -108,7 +116,12 @@ static func explored(s, cave_id: String, room_id: String) -> bool:
 ## Whether a room's guardian still stands.
 static func guarded(s, cave_id: String, room_id: String) -> bool:
 	var guardian := str(room(s, cave_id, room_id).get("guardian", ""))
-	return not guardian.is_empty() and not s.has_flag(str(s.content.enemies[guardian].world_flag))
+	return not guardian.is_empty() and not gone(s, cave_id, room_id) and not s.has_flag(str(s.content.enemies[guardian].world_flag))
+
+## Whether a room's guardian and things are gone for good (`gone_if`).
+static func gone(s, cave_id: String, room_id: String) -> bool:
+	var flag := str(room(s, cave_id, room_id).get("gone_if", ""))
+	return not flag.is_empty() and s.has_flag(flag)
 
 ## Whether a room can be reached: linked to an explored room that no guardian bars.
 static func reachable(s, cave_id: String, room_id: String) -> bool:
@@ -134,6 +147,11 @@ static func enter_block(s, cave_id: String, room_id: String) -> String:
 	# A room deeper than the realm (断剑峡的剑冢): told, not barred without a word.
 	if int(s.player.realm) < int(target.get("requires_realm", 0)):
 		return "%s：须%s方能深入。" % [target.get("realm_text", "再往里去凶险莫测"), s.content.realm_title(int(target.requires_realm), 0)]
+	if target.has("requires_flag") and not s.has_flag(str(target.requires_flag)):
+		return str(target.get("flag_text", "还找不到通往这里的路。"))
+	var wins: String = s.Mijing.room_block(s, cave_id, target)
+	if not wins.is_empty():
+		return wins
 	if sense_in(s, cave_id) < int(target.get("requires_sense", 0)):
 		return "门上的禁制须神识 %d 方能破开（你的神识 %d）。" % [int(target.requires_sense), sense_in(s, cave_id)]
 	# Heat (地火之心): a 避火珠 in the pack, 神识 enough to find a cooler way round, or a fire root at home in it.
@@ -181,7 +199,9 @@ static func enter(s, cave_id: String, room_id: String) -> String:
 		visit.fortune.remnant = false
 		visit.taken.append(room_id)
 		s.pending_event = {"id": str(Fortune.rules(s).remnant.event), "day": int(s.world.day)}
-	elif target.has("loot"):
+	elif target.has("event") and Events.all_met(s, s.content.events[str(target.event)].get("conditions", [])):
+		s.pending_event = {"id": str(target.event), "day": int(s.world.day)}
+	elif target.has("loot") and not gone(s, cave_id, room_id) and not s.Mijing.meets(s, cave_id, target):
 		texts.append(_take(s, cave_id, room_id, room_id, target.loot))
 	return s.conclude(" ".join(texts.filter(func(text: String) -> bool: return not text.is_empty())), passed)
 
@@ -213,7 +233,7 @@ static func _face(s, cave_id: String, guardian: String) -> String:
 ## Whether a room's things still wait (left behind a guardian that has fallen since).
 static func loot_waits(s, cave_id: String, room_id: String) -> bool:
 	var target := room(s, cave_id, room_id)
-	return target.has("loot") and explored(s, cave_id, room_id) and not guarded(s, cave_id, room_id) and not room_id in state(s, cave_id).taken
+	return target.has("loot") and explored(s, cave_id, room_id) and not guarded(s, cave_id, room_id) and not gone(s, cave_id, room_id) and not room_id in state(s, cave_id).taken
 
 ## Takes the things a fallen guardian kept. Takes no time.
 static func collect(s, cave_id: String, room_id: String) -> String:
@@ -289,9 +309,16 @@ static func _take(s, cave_id: String, room_id: String, key: String, choices: Arr
 				found[s.Arsenal.generate_equipment(s.content, s.world_rng, int(value))] = 1
 			"slip":
 				found["j:" + str(value)] = 1
+	# A companion who knows the ground (雷三) finds one more of a 秘境's prize wherever it grows.
+	var extra := int(perk(s, cave_id, "extra"))
+	for item_id: Variant in s.Mijing.realm(s, s.Mijing.of_cave(s, cave_id)).get("prize", []):
+		if extra > 0 and found.has(item_id):
+			found[item_id] = int(found[item_id]) + extra
 	var texts: Array[String] = []
 	for item_id: String in found:
 		s.add_item(item_id, int(found[item_id]))
+	if s.Mijing.of_cave(s, cave_id) == s.Mijing.inside(s):
+		s.Mijing.record(s, found)
 	if not found.is_empty():
 		texts.append(s.log_event("cave_loot", {"cave": cave_id, "room": room_id, "loot": s.loot_code(found)}))
 	if stones > 0:

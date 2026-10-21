@@ -35,6 +35,12 @@ static func travel(s, location_id: String, mode: String = "fast") -> String:
 		return "斗法中无法离开。" if not s.battle.is_empty() else blocked
 	if not s.content.locations.has(location_id) or not s.location_visible(location_id):
 		return "未知地点。"
+	# A 秘境 is gone into only by a way in while it is open, and left only by its door (mijing.gd).
+	var inside: String = s.Mijing.inside(s)
+	if not inside.is_empty():
+		return "身在%s之中，须从出口出去。" % s.Mijing.realm(s, inside).name
+	if not s.Mijing.at(s, location_id).is_empty():
+		return "%s没有路可走，只有开启时随人进去。" % s.content.locations[location_id].name
 	if s.player.location != location_id and s.content.location_sealed(location_id, s.world.flags):
 		return "%s已被封锁，暂时无法进入。" % s.content.locations[location_id].name
 	if s.player.location == location_id:

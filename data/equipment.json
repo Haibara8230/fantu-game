@@ -28,7 +28,8 @@
     "vest": {"slot": "robe", "material": "metal", "nouns": ["软甲", "护心甲"], "stats": {"max_hp": 8, "defense": 0.05}, "trait": {"kind": "heart_guard", "name": "护心", "heavy": 0.15, "cut": 0.5, "text": "每场一次：一击重过气血上限一成半时，替你挡下一半。"}},
     "pendant": {"slot": "accessory", "material": "jade", "nouns": ["佩", "玉佩"], "stats": {"max_qi": 5}},
     "ring": {"slot": "accessory", "material": "jade", "nouns": ["戒", "指环"], "stats": {"attack": 1, "cultivation": 0.04}},
-    "mirror": {"slot": "accessory", "material": "jade", "nouns": ["镜", "照影镜"], "stats": {"max_qi": 3, "defense": 0.02}, "trait": {"kind": "mirror", "name": "反照", "reflect": 0.5, "text": "每场一次：对手的法术或蓄力的一击，镜面反照其半数伤害回去，你只受另一半。"}}
+    "mirror": {"slot": "accessory", "material": "jade", "nouns": ["镜", "照影镜"], "stats": {"max_qi": 3, "defense": 0.02}, "trait": {"kind": "mirror", "name": "反照", "reflect": 0.5, "text": "每场一次：对手的法术或蓄力的一击，镜面反照其半数伤害回去，你只受另一半。"}},
+    "queguang": {"slot": "weapon", "material": "metal", "nouns": ["阙光剑"], "stats": {"attack": 4}, "named": {"4": "阙光剑"}, "release": {"name": "阙光一剑", "power": 1.3, "vfx": "sword"}, "lore": "天阙剑宗开山祖师的佩剑，埋在万剑冢心几百年，剑灵只认打得服它的人。"}
   },
   "affixes": {
     "sharp": {"name": "锋锐", "stats": {"attack": 2}},

@@ -23,6 +23,17 @@ static func candidates(s) -> Array[Dictionary]:
 	var tournament: Dictionary = Events.next_window(s.content.events.qianlong_entry, day)
 	if not tournament.is_empty() and int(tournament.from) - day <= 2 * Calendar.DAYS_PER_YEAR:
 		found.append({"key": "tournament:%d" % int(tournament.occurrence), "id": "rumor_tournament", "args": {}})
+	# The 天骄榜 (tianji.gd): a revision near, the player among a scroll's ten highest, and 萧家's 供奉
+	# while the third bout is due (heard, it opens a way past him: rival.gd).
+	var revision: int = s.Tianji.next_revision(s)
+	if Calendar.year(day) + 1 >= revision:
+		found.append({"key": "tianji_revise:%d" % revision, "id": "rumor_tianji_revise", "args": {}})
+	var scroll_id: String = s.Tianji.own_scroll(s)
+	var held: int = 0 if scroll_id.is_empty() else s.Tianji.rank(s, scroll_id)
+	if held >= 1 and held <= 10:
+		found.append({"key": "tianji:%s:%d" % [scroll_id, held], "id": "rumor_tianji", "args": {"scroll": str(s.Tianji.scroll(s, scroll_id).name), "rank": held}})
+	if s.Rival.at_step(s, "bang") and not s.world.rumors.has("xiao_elder"):
+		found.append({"key": "xiao_elder", "id": "rumor_xiao_elder", "args": {}})
 	for good: Dictionary in s.rotating_stock("market"):
 		if str(good.item).begins_with("j:"):
 			found.append({"key": "stock:" + str(good.key), "id": "rumor_stock", "args": {"item": good.item}})

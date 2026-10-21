@@ -483,5 +483,39 @@
   "zhaochuan_zhentu": {"name": "照川阵图", "category": "quest", "price": 0, "rarity": 5, "description": "温照衡亲手交出的阵图，画的是照川城的大阵与天河封印的走向。阵枢的位置，用朱笔圈了出来。"},
   "wen_diary": {"name": "温照衡的日记", "category": "quest", "price": 0, "rarity": 4, "description": "老艄公转交的一只木匣，里面是温照衡几百年的日记。最早的一页写着：照川城封存之日，城里还有三千七百人。"},
   "wenren_log": {"name": "闻人照的航海日志", "category": "quest", "price": 0, "rarity": 3, "description": "雾岛礁缝里找到的航海日志，最后几页的字越写越乱，最后一行是：门后有风。"},
-  "dai_zhenshu": {"name": "替代阵枢", "category": "quest", "price": 0, "rarity": 5, "description": "照着东阵基的阵纹打出来的一块阵盘，能替下照川城的旧阵枢——旧城从此封死，遗民不必再做阵引，天河另从渡口修一条路。"}
+  "dai_zhenshu": {"name": "替代阵枢", "category": "quest", "price": 0, "rarity": 5, "description": "照着东阵基的阵纹打出来的一块阵盘，能替下照川城的旧阵枢——旧城从此封死，遗民不必再做阵引，天河另从渡口修一条路。"},
+  "jiedu_dan": {
+    "name": "解毒丹",
+    "category": "pill",
+    "price": 30,
+    "rarity": 1,
+    "description": "长青谷的解毒丹，化得开寻常丹毒，也化得开暗下在饮食丹药里的散功药。斗法前先服一枚，防人做手脚。"
+  },
+  "xiaxue_zhi": {
+    "name": "霞血芝",
+    "category": "treasure",
+    "price": 220,
+    "rarity": 3,
+    "description": "赤霞谷里长的灵芝，菌盖霞红，十五年才得一采。突破筑基时服下可代替筑基丹，药力比筑基丹更足。",
+    "breakthrough": {
+      "bonus": 30,
+      "grade": 1,
+      "realm": 1
+    }
+  },
+  "xueyuan_dan": {
+    "name": "血元丹",
+    "category": "treasure",
+    "price": 2000,
+    "rarity": 5,
+    "description": "赤霞谷血池底下凝成的丹丸，拿三十个人的精血养成。服下可延寿百年；同种延寿之物一生只见效一次。",
+    "use": [
+      {
+        "longevity": [
+          "xueyuan_dan",
+          100
+        ]
+      }
+    ]
+  }
 }

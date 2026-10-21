@@ -19,6 +19,7 @@
   "tiannan": {
     "name": "天南大比",
     "world_flag": "tiannan_champion",
+    "tianji": ["zhuji", 3, "天南大比夺魁。"],
     "champions": [
       {"sect": "xuanyue", "name": "岳山青", "title": "玄岳内门", "gender": "male", "stage": "预选"},
       {"sect": "changqing", "name": "苏采薇", "title": "长青内门", "gender": "female", "stage": "分组"},

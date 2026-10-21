@@ -73,8 +73,12 @@ static func begin_spar(s, person_id: String) -> void:
 	open_hand(s)
 	s.log_event("spar_start", {"npc": person_id})
 
-## A round of 潜龙会 against the 炼气 cultivators of the region present, weakest first.
+## A round of 潜龙会 against the 炼气 cultivators of the region present, weakest first; the last against
+## 萧凌云 while his bout is due (rival.gd).
 static func begin_tournament(s, round: int) -> void:
+	if round == 3 and s.Rival.qianlong_due(s):
+		s.Rival.begin_qianlong(s, round)
+		return
 	var disciples: Array = s.present_npcs().filter(func(person_id: String) -> bool: return s.is_generated(person_id) and int(s.person(person_id).realm) == 0)
 	disciples.sort_custom(func(a: String, b: String) -> bool:
 		var ra := int(s.person(a).realm) * 10 + int(s.person(a).stage)
@@ -621,7 +625,7 @@ static func secret_block(s, art_id: String) -> String:
 		return "没有这门秘术。"
 	if int(s.player.realm) < int(art.min_realm):
 		return "须%s方能催动禁忌秘术。" % s.content.realm(int(art.min_realm)).name
-	if s.battle.get("context", "") in ["spar", "tournament", "summit", "arena"]:
+	if s.battle.get("context", "") in ["spar", "tournament", "summit", "arena", "tianji"]:
 		return "比斗点到为止，用不着搏命的秘术。"
 	if art_id in s.battle.get("secrets", []):
 		return "这一场已用过%s。" % art.name
@@ -851,7 +855,7 @@ static func pill_block(s, item_id: String) -> String:
 	if str(item.get("category", "")) == "talisman":
 		if int(s.battle.get("talismans", 0)) >= int(rules(s).get("talismans", 3)):
 			return "这一场已祭了 %d 张符箓，手上的灵力催不动更多了。" % int(rules(s).get("talismans", 3))
-		if bool(item.duel.get("escape", false)) and s.battle.get("context", "") in ["spar", "tournament", "summit", "arena", "tribulation"]:
+		if bool(item.duel.get("escape", false)) and s.battle.get("context", "") in ["spar", "tournament", "summit", "arena", "tianji", "tribulation"]:
 			return "比斗之中遁走，与认输无异；不必用符。"
 		return ""
 	if int(s.battle.get("pills", 0)) >= int(rules(s).pills):
@@ -977,7 +981,7 @@ static func flee(s) -> String:
 		s.combat_events.append({"type": "end", "result": "flee"})
 		return _trial_over(s, "fled")
 	# A bout among fellows can always be conceded; a real fight may not let go (遁逃 by the odds).
-	if not s.battle.get("context", "") in ["spar", "tournament", "summit"] and s.combat_rng.randf() >= flee_chance(s):
+	if not s.battle.get("context", "") in ["spar", "tournament", "summit", "tianji"] and s.combat_rng.randf() >= flee_chance(s):
 		var failed: String = s.log_event("flee_failed", {"enemy": str(s.battle.enemy_id)})
 		return failed + " " + end_turn(s)
 	return _escape(s, "")
@@ -987,6 +991,14 @@ static func _escape(s, text: String) -> String:
 	if s.battle.get("context", "") == "arena":
 		s.combat_events.append({"type": "end", "result": "flee"})
 		return s.Arena.over(s, false)
+	# Conceding a 天骄榜 duel is losing it.
+	if s.battle.get("context", "") == "tianji":
+		s.combat_events.append({"type": "end", "result": "flee"})
+		return s.Tianji.over(s, false)
+	# Getting away from someone met in a 秘境 leaves them the room.
+	if s.battle.get("context", "") == "mijing":
+		s.combat_events.append({"type": "end", "result": "flee"})
+		return s.Mijing.over(s, false, true)
 	s.combat_events.append({"type": "end", "result": "flee"})
 	var days := _recovery_days(s, "flee")
 	s.battle.clear()
@@ -1487,7 +1499,12 @@ static func _lose(s) -> String:
 		return _tournament_over(s, false)
 	if s.battle.get("context", "") == "summit":
 		return s.Summit.over(s, false)
+	if s.battle.get("context", "") == "tianji":
+		return s.Tianji.over(s, false)
+	if s.battle.get("context", "") == "mijing":
+		return s.Mijing.over(s, false)
 	var grudge_id := str(s.battle.get("grudge", ""))
+	var robbery := str(s.battle.get("robbery", ""))
 	var deadly := bool(s.battle.get("deadly", false))
 	var killer := str(s.battle.get("title", s.content.enemies[str(s.battle.enemy_id)].name))
 	var review := {"enemy":str(s.battle.enemy_id), "turns":int(s.battle.turn), "guards":int(s.battle.get("guarded_turns", 0)), "opening_percent":int(s.battle.get("opening_percent", 100)), "old_wound":bool(s.battle.get("old_wound", false))}
@@ -1503,6 +1520,12 @@ static func _lose(s) -> String:
 		return fall
 	if not grudge_id.is_empty():
 		s.Feuds.fight_over(s, grudge_id, false)
+	# Beaten in a 秘境, or by those waiting at its door (mijing.gd): out, and half of what was gathered gone.
+	var behind := ""
+	if not robbery.is_empty():
+		behind = s.Mijing.robbed_in_battle(s)
+	elif not s.Mijing.inside(s).is_empty():
+		behind = s.Mijing.carried_out(s)
 	# A disciple is carried back to their sect's gate; a wanderer to the nearest inn
 	# (rules.opening.location when the place has none) — or, one of 天南散修盟 far from any inn, by its
 	# people to the branch they joined at, who take nothing from the purse.
@@ -1518,7 +1541,7 @@ static func _lose(s) -> String:
 		s.player.location = str(s.content.rules.opening.location)
 	s.player.journey = {}
 	var defeat := "battle_defeat" if member else ("battle_defeat_league" if sheltered else "battle_defeat_wanderer")
-	var message: String = (s.Series.abandon(s) + " " + s.log_event(defeat, {"lost": lost, "location": s.player.location})).strip_edges()
+	var message: String = (s.Series.abandon(s) + " " + behind + " " + s.log_event(defeat, {"lost": lost, "location": s.player.location})).strip_edges()
 	var passed: Dictionary = s.advance_days(s.content.action_days("battle_defeat"))
 	# The wounds outlast the days spent being carried home.
 	_wound(s, int(rules(s).get("defeat_wound_days", 12)), int(rules(s).get("defeat_injury_days", 10)))
@@ -1601,11 +1624,16 @@ static func _with_milestones(message: String, milestones: Array[String]) -> Stri
 static func _tournament_over(s, won: bool) -> String:
 	var round: int = int(s.battle.get("round", 1))
 	var npc: String = s.battle.get("npc", "")
+	var against_rival := bool(s.battle.get("rival", false))
 	s.battle.clear()
 	s.record_deed("duel")
+	# 萧凌云's bout (rival.gd) is decided with the round that ends it.
+	var rival: String = s.Rival.tournament_over(s, won, against_rival)
 	if not won:
 		s.player.hp = maxi(int(s.player.hp), 1)
 		var out: String = s.log_event("tournament_out", {"round": round, "npc": npc})
+		if not rival.is_empty():
+			out += " " + rival
 		return s.conclude(_with_milestones(out, s.gain_insight("spar")), s.advance_days(s.content.action_days("road_recovery")))
 	var message: String = _with_milestones(s.log_event("tournament_round", {"round": round, "npc": npc}), s.gain_insight("spar"))
 	message += " " + s.Sect.gain(s, int(s.content.sect_data.awards.get("tournament_round", 0)), "潜龙会胜了一轮")
@@ -1625,6 +1653,8 @@ static func _tournament_over(s, won: bool) -> String:
 	message += " " + s.Sect.gain(s, int(s.content.sect_data.awards.get("tournament_champion", 0)), "潜龙会夺魁")
 	message = _with_milestones(message, s.gain_xp(150))
 	message = _with_milestones(message, s.congratulate("champion"))
+	if not rival.is_empty():
+		message += " " + rival
 	return s.conclude(message, s.advance_days(s.content.action_days("road_recovery")))
 
 static func _count_down(status: Dictionary, key: String) -> void:
@@ -1659,6 +1689,10 @@ static func _win(s) -> String:
 		return _tournament_over(s, true)
 	if s.battle.get("context", "") == "summit":
 		return s.Summit.over(s, true)
+	if s.battle.get("context", "") == "tianji":
+		return s.Tianji.over(s, true)
+	if s.battle.get("context", "") == "mijing":
+		return s.Mijing.over(s, true)
 	var enemy_id: String = s.battle.enemy_id
 	var enemy: Dictionary = s.content.enemies[enemy_id]
 	var days := _recovery_days(s, "battle_victory")

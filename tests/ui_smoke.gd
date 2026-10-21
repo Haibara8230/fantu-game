@@ -472,6 +472,9 @@ func _run() -> void:
 	check(main.session.player.location == "sect" and main.session.battle.is_empty(), "manual load restores the sect")
 	# People where the player stops: listed and opened on demand, never forced.
 	main.run(func() -> String: return main.session.travel("market"))
+	# The first stop at 云溪 after the opening is 萧凌云's (萧家麒麟子, rival.gd): his words, then the street.
+	check(str(main.story.get("text", "")).contains("萧凌云"), "萧凌云 stops the player in 云溪's street")
+	main.close_story()
 	check(main.session.pending_event.is_empty() and _button("沈墨 · 云溪药铺掌柜") != null, "people here listed without forcing anything")
 	main.set_view("people")
 	check(_texts(main.center, "Button").contains("沈墨 · 云溪坊市"), "the 相识 tab lists acquaintances with their whereabouts")
@@ -809,6 +812,25 @@ func _run() -> void:
 	check(_texts(main.center, "Label").contains("天南散修盟 · 云溪分舵入盟 · 声望 0"), "a member's 散修 page shows the branch and the standing")
 	main.session.league_leave()
 	main.session.player.affiliation = sect_was
+	# 天骄榜 (tianji.gd): 云溪's 榜亭 opens the scrolls; a 筑基 sees the last five within reach.
+	main.set_view("place")
+	main.select_spot("tianji_board")
+	var board_button: Button = _button("观天骄榜")
+	check(board_button != null and not board_button.disabled, "云溪's 榜亭 shows the 天骄榜")
+	var board_realm_was := int(main.session.player.realm)
+	main.session.player.realm = 1
+	main.set_view("tianji")
+	var board_texts: String = _texts(main.center, "Label")
+	check(board_texts.contains("天骄榜") and board_texts.contains("第 30") and board_texts.contains("榜上还没有你的名字"), "the 筑基卷 lists thirty names, the player not among them")
+	var sends: Array = main.center.find_children("*", "Button", true, false).filter(func(button: Button) -> bool: return button.text == "递战帖")
+	check(sends.size() == 5, "five names within reach of an unranked 筑基")
+	main.session.Tianji.place(main.session, "zhuji", 12)
+	main.set_view("tianji")
+	check(_texts(main.center, "Label").contains("你在天骄榜·筑基卷第 12"), "the player's seat on the scroll")
+	main.session.world.tianji.zhuji.order.erase("player")
+	main.session.world.tianji.zhuji.order.append("f99")
+	main.session.player.realm = board_realm_was
+	main.set_view("place")
 	# 护送 at 青石镇's 镇口木栅 (series.gd), fought as a pack with a target to pick (群敌).
 	main.session.player.location = "town"
 	var stage_was := int(main.session.player.stage)

@@ -2,7 +2,8 @@ extends RefCounted
 ## The old cave's rooms inside the 洞府深处 scroll (caves.gd): a small map of the rooms explored and
 ## the doorways seen from them, linked by passages; below it the chosen room — its words, what the
 ## 神识 tells of it, and what can be done there (enter, open a hidden place, take what a fallen
-## guardian kept, face the guardian again).
+## guardian kept, face the guardian again). In a 秘境 (mijing.gd) a line above tells the days left, what
+## was gathered and wins inside, with the way out; each room tells its circle (外圈, 中圈, 内圈).
 const WARN := Color("#e0b26b")
 const DONE := Color("#7f9690")
 
@@ -20,11 +21,13 @@ static func render(ui, center: VBoxContainer) -> void:
 	if cave_id.is_empty():
 		return
 	var cave: Dictionary = session.Caves.definition(session, cave_id)
+	_realm(ui, center, cave_id)
 	center.add_child(ui.label("神识 %d  ·  灵力 %d / %d  ·  每探一间 %d 日" % [session.sense(), int(session.player.qi), int(session.player.max_qi), int(cave.step_days)], 15, ui.MUTED))
-	# Who went in along, and what they bring (caves.gd party).
+	# Who went in along, and what they bring (caves.gd party); a 秘境's own companions name themselves.
 	var along: String = session.Caves.party(session, cave_id)
 	if not along.is_empty():
-		center.add_child(ui.label("同行 · %s：%s" % [session.person(along).name, cave.companions[along].text], 15, ui.MUTED))
+		var who: String = str(cave.companions[along].get("name", "")) if cave.companions[along].has("name") else str(session.person(along).name)
+		center.add_child(ui.label("同行 · %s：%s" % [who, cave.companions[along].text], 15, ui.MUTED))
 	var known: Array[String] = []
 	for room: Dictionary in cave.rooms:
 		if session.Caves.explored(session, cave_id, room.id) or session.Caves.reachable(session, cave_id, room.id):
@@ -66,13 +69,36 @@ static func render(ui, center: VBoxContainer) -> void:
 		map.resized.connect(func() -> void: chip.position = at * map.size - chip.size / 2.0)
 	_details(ui, center, cave_id, session.Caves.room(session, cave_id, ui.cave_room))
 
+## A 秘境's line: days before it shuts, what was gathered, wins inside, and the way out.
+static func _realm(ui, center: VBoxContainer, cave_id: String) -> void:
+	var session = ui.session
+	var mijing = session.Mijing
+	var realm_id: String = mijing.of_cave(session, cave_id)
+	if realm_id.is_empty() or mijing.inside(session) != realm_id:
+		return
+	var info: Dictionary = mijing.realm(session, realm_id)
+	var haul: Dictionary = mijing.carried(session, mijing.state(session).haul)
+	var row := HBoxContainer.new()
+	row.add_theme_constant_override("separation", 12)
+	center.add_child(row)
+	var days: int = mijing.days_left(session, realm_id)
+	var line: Label = ui.label("%s · 还有 %d 日合上  ·  已采：%s  ·  胜 %d 人" % [info.name, days, session.Chronicle.loot_text(session.loot_code(haul), session.content) if not haul.is_empty() else "无", int(mijing.state(session).get("wins", 0))], 15, WARN if days <= 5 else ui.INK)
+	line.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	line.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	row.add_child(line)
+	var out: Button = ui.button("出%s" % str(info.name).right(1), func() -> void: ui.run(func() -> String: return session.mijing_exit()), mijing.leave_block(session))
+	out.disabled = not mijing.leave_block(session).is_empty()
+	row.add_child(out)
+
 ## The chosen room: its words, what the 神识 tells, and its actions.
 static func _details(ui, center: VBoxContainer, cave_id: String, room: Dictionary) -> void:
 	var session = ui.session
 	var caves = session.Caves
 	var room_id: String = room.id
 	var entered: bool = caves.explored(session, cave_id, room_id)
-	center.add_child(ui.label(room.name, 19, ui.GOLD))
+	var layers: Array = session.content.mijing_data.get("layers", [])
+	var circle: String = " · " + str(layers[int(room.layer) - 1]) if room.has("layer") and not session.Mijing.of_cave(session, cave_id).is_empty() else ""
+	center.add_child(ui.label(room.name + circle, 19, ui.GOLD))
 	var notes: Array[String] = []
 	if entered:
 		center.add_child(ui.paragraph(room.text, ui.INK))
@@ -82,6 +108,8 @@ static func _details(ui, center: VBoxContainer, cave_id: String, room: Dictionar
 			notes.append("神识察觉门内有机关，进去时可以避开。" if session.sense() >= int(room.trap.sense) else "门内虚实难辨，神识再强些或能看出端倪。")
 		if room.has("requires_sense"):
 			notes.append("门上有禁制，须神识 %d 方能破开。" % int(room.requires_sense))
+		if room.has("requires_wins"):
+			notes.append("%s。" % str(room.wins_text))
 		if room.has("guardian"):
 			notes.append("里面隐隐有妖气。")
 	if room.has("hidden") and entered:

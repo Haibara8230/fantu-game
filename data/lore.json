@@ -22,6 +22,8 @@
     {"id": "wuzong_rotation", "text": "老修士说五宗论道一甲子一回，五城轮着办，只许金丹以上登台；可台下论道、指点后辈、上展台亮宝物，谁都可以去。", "conditions": [{"realm_at_least": 2}]},
     {"id": "chenxia_companions", "text": "老修士说沉霞古境里的禁制、守卫一个人吃不消，上回进去的人多半是结伴：一个读阵，一个治伤，一个出剑。", "conditions": [{"realm_at_least": 2}]},
     {"id": "guzhan_field", "text": "北岳来的人说，城北的古战场夜里有阴兵列阵走过，荒原深处那半截石台底下，玄岳宗的人都不肯去。", "conditions": [{"flag": "tiannan_known"}, {"not": {"flag": "guzhan_cleared"}}]},
-    {"id": "waihai_fog", "text": "望海的老水手说，近海群岛东南有一片终年不散的雾，雾里一座孤岛，岛下的海里立着一根比山还粗的石柱。", "conditions": [{"flag": "tiannan_known"}, {"not": {"flag": "pillar_cleared"}}]}
+    {"id": "waihai_fog", "text": "望海的老水手说，近海群岛东南有一片终年不散的雾，雾里一座孤岛，岛下的海里立着一根比山还粗的石柱。", "conditions": [{"flag": "tiannan_known"}, {"not": {"flag": "pillar_cleared"}}]},
+    {"id": "chixia_rumor", "text": "南明来的人说，城西的赤霞谷十五年开一回，谷里的霞血芝能替筑基丹；可赤霄门招去顶名的散修，回来的没几个。", "conditions": [{"stage_at_least": [0, 3]}, {"not": {"flag": "chixia_done"}}, {"not": {"realm_at_least": 2}}]},
+    {"id": "wanjian_rumor", "text": "断剑峡的老脚夫说，峡底的万剑冢三十年才露一回，天阙剑宗的人守着冢口卖剑令；冢心那柄剑，几百年没人拔得动。", "conditions": [{"flag": "tiannan_known"}, {"not": {"flag": "wanjian_done"}}]}
   ]
 }

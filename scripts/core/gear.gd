@@ -124,6 +124,25 @@ static func holds(s, type_id: String) -> bool:
 			return true
 	return false
 
+## Gives up one piece of `type_id` held anywhere (a sword handed back to its sect): one in the 行囊
+## first, else a worn one taken off, an instance with its 祭炼. False when none is held.
+static func give_up(s, type_id: String) -> bool:
+	if s.item_count(type_id) > 0:
+		s.remove_item(type_id, 1)
+		return true
+	var equipment: Dictionary = s.player.get("equipment", {})
+	for item_id: String in [type_id] + s.player.get("gear", {}).keys().filter(func(id: String) -> bool: return str(s.player.gear[id].type) == type_id):
+		for slot: String in equipment.keys():
+			if str(equipment[slot]) == item_id:
+				equipment.erase(slot)
+				s.player.get("gear", {}).erase(item_id)
+				s.refresh_realm_stats()
+				return true
+		if s.player.get("gear", {}).has(item_id):
+			s.player.gear.erase(item_id)
+			return true
+	return false
+
 ## Mends a piece into the next stage of itself (听潮剑): the one held of `from_type` becomes `to_type`
 ## where it lies — an instance keeps its id and its 祭炼, a worn piece stays worn. False when none is held.
 static func reforge(s, from_type: String, to_type: String) -> bool:

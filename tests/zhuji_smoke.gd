@@ -272,6 +272,8 @@ func _contest() -> void:
 	game.world.people.shen_mo.relation = 90
 	check(game.choice_available(enter), "沈墨's word is enough")
 	check(game.story_state("liu_case") == "active", "柳寒舟 is in the crowd: his old case begins")
+	# 萧凌云's bout at the contest (rival.gd, tianji_smoke) is set aside here: the contest as it stands.
+	game.world.storylines["xiao_rival"] = {"state": "closed", "step": 0, "since": 0, "begun": true, "base": {}}
 	game.choose_event("enter")
 	check(str(game.battle.get("contest", "")) == "tiannan" and str(game.battle.foe.name).contains("玄岳"), "round one: a 玄岳 disciple")
 	var copy := _reload(game)
@@ -320,6 +322,9 @@ func _lu() -> void:
 	game.wait(20)
 	check(game.story_state("lu_heir") == "active", "历元三十年春 陆承岳 dies on the northern road")
 	game.wait(1)
+	# 赤霞谷 opens that spring and calls at 云溪 (mijing.gd): not this time.
+	if game.pending_event.get("id", "") == "chixia_gate":
+		game.choose_event("decline")
 	check(game.has_flag("lu_head") and game.person("lu_chengzhou").title == "陆家当家", "at 云溪 the funeral; 陆承舟 heads the house")
 	var waited := 0
 	while not game.story_at("lu_heir", "ledger") and waited < 10:

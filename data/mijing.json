@@ -1,0 +1,186 @@
+{
+  "layers": ["外圈", "中圈", "内圈"],
+  "realms": {
+    "chixia": {
+      "name": "赤霞谷",
+      "cave": "chixia",
+      "location": "chixia",
+      "outside": "nanming",
+      "open_flag": "chixia_open",
+      "days": 30,
+      "exit_days": 2,
+      "duel_days": 1,
+      "min": [0, 3],
+      "max_realm": 1,
+      "call_at": ["market", "nanming", "sect", "chixiao_gate", "changqing_valley", "canglan_pavilion", "xuanyue_gate"],
+      "gate": "chixia_gate",
+      "ways": {
+        "sect": {"tithe": 0.5, "contribution": 30, "to": "宗门的领队"},
+        "proxy": {
+          "tithe": 0.7,
+          "to": "赤霄门",
+          "unless": [
+            {
+              "any": [
+                {"flag": "chixia_exposed"},
+                {"flag": "chixia_jiao_down"},
+                {"flag": "chixia_jiao_beaten"}
+              ]
+            }
+          ]
+        },
+        "bought": {}
+      },
+      "prize": ["xiaxue_zhi"],
+      "meet": {
+        "event": "chixia_meet",
+        "chance": [0.0, 0.3, 0.4, 0.5],
+        "factions": [
+          {"sect": "qingyun", "title": "青云弟子"},
+          {"sect": "chixiao", "title": "赤霄弟子"},
+          {"sect": "changqing", "title": "长青弟子"},
+          {"sect": "canglan", "title": "沧澜弟子"},
+          {"sect": "xuanyue", "title": "玄岳弟子"},
+          {"sect": "wanderer", "title": "顶名散修"}
+        ],
+        "prodigy": 0.3,
+        "power": 0.9,
+        "prize_chance": 0.6,
+        "loss": 0.34,
+        "stones": [15, 40],
+        "xp": [80, 400, 2000, 5000]
+      },
+      "beats": [
+        {"day": 0, "event": "chixia_pair"},
+        {"day": 0, "event": "chixia_bribe"},
+        {"day": 10, "event": "chixia_vanish"}
+      ],
+      "exit_event": "chixia_exit",
+      "outcomes": [
+        {
+          "if": [
+            {"not": {"flag": "chixia_done"}},
+            {
+              "any": [
+                {"flag": "chixia_jiao_down"},
+                {"flag": "chixia_exposed"},
+                {"flag": "chixia_jiao_beaten"}
+              ]
+            }
+          ],
+          "effects": [
+            {"flag": "chixia_done"},
+            {"flag": "chixia_free"},
+            {"flag": "chixia_abode"},
+            {"item": ["xiaxue_zhi", 3]},
+            {"mind": 5},
+            {"tianji": ["zhuji", 20, "赤霞谷中破焦长老血池，救出顶名散修。"]}
+          ],
+          "text": "焦长老被押回赤霄门问罪，废去了修为。赤霄门向散修赔了礼：往后赤霞谷开谷，散修凭天机阁的木牌就能进。被救出来的散修凑了三株霞血芝塞给你；赤霄门又把赤枫岭上一处别院拨给了你，算是谢礼，也是封口。"
+        },
+        {"if": [{"not": {"flag": "chixia_done"}}, {"flag": "chixia_dan"}], "effects": [{"flag": "chixia_done"}, {"mind": -10}], "text": "你揣着血元丹出了谷。焦长老没有当场发作，只远远看了你一眼。那一眼，你记了很多年——丹里是三十个人的精血。"},
+        {
+          "if": [
+            {"not": {"flag": "chixia_done"}},
+            {"party": ["chixia", "su_heng"]},
+            {"flag": "chixia_mist"},
+            {"not": {"flag": "chixia_rescued"}}
+          ],
+          "effects": [
+            {"flag": "chixia_done"},
+            {"flag": "chixia_suheng"},
+            {"item": ["xiaxue_zhi", 2]}
+          ],
+          "text": "苏蘅跟着你走出谷口，回头看了一眼那片赤雾，眼圈红了。她把自己采的两株霞血芝塞进你手里，说长青谷的门往后为你开着——丹坊见了你，让一成价。"
+        },
+        {
+          "if": [
+            {"not": {"flag": "chixia_done"}},
+            {"flag": "chixia_rescued"}
+          ],
+          "effects": [
+            {"flag": "chixia_done"},
+            {"mind": 2}
+          ],
+          "text": "被你救出来的散修出了谷就各自散了，没人敢再提血池的事。焦长老还是赤霄的执事，满脸和气。"
+        },
+        {"if": [{"not": {"flag": "chixia_done"}}, {"flag": "chixia_mist"}], "effects": [{"flag": "chixia_done"}, {"mind": -5}], "text": "谷口合上了。失踪的顶名散修，再没有一个出来。"}
+      ],
+      "ambush": {"event": "chixia_ambush", "enemy": "chixia_robber", "base": 0.1, "per_value": 0.0006, "max": 0.75, "ally": 0.5, "bribe_flag": "chixia_bribed"},
+      "trapped": {"item": "dundi_fu", "wound_days": 120},
+      "reset_flags": ["chixia_bribed", "chixia_bao_down"]
+    },
+    "wanjian": {
+      "name": "万剑冢",
+      "cave": "wanjian",
+      "location": "wanjian",
+      "outside": "duanjian",
+      "open_flag": "wanjian_open",
+      "days": 90,
+      "exit_days": 1,
+      "duel_days": 1,
+      "min": [1, 0],
+      "max_realm": 2,
+      "call_at": ["duanjian", "sect"],
+      "gate": "wanjian_gate",
+      "ways": {"sect": {}, "token": {}, "forced": {}},
+      "prize": ["ore_xuantie"],
+      "keep": ["e:queguang:4:metal:sharp+spirit+attune:0"],
+      "meet": {
+        "event": "wanjian_meet",
+        "chance": [0.0, 0.35, 0.5, 0.6],
+        "factions": [
+          {"sect": "qingyun", "title": "天阙剑宗弟子"},
+          {"sect": "qingyun", "title": "青云剑修"},
+          {"sect": "chixiao", "title": "欧阳家子弟"},
+          {"sect": "wanderer", "title": "散修剑客"}
+        ],
+        "prodigy": 0.3,
+        "power": 0.95,
+        "prize_chance": 0.5,
+        "loss": 0.34,
+        "stones": [30, 60],
+        "xp": [100, 600, 2500, 6000]
+      },
+      "exit_event": "wanjian_exit",
+      "outcomes": [
+        {
+          "if": [
+            {"not": {"flag": "wanjian_done"}},
+            {"flag": "tianque_friend"}
+          ],
+          "effects": [
+            {"flag": "wanjian_done"},
+            {"mind": 3}
+          ],
+          "text": "天阙剑宗在断剑峡口为你立了一块剑碑，碑上只刻一行字：还剑者。往后天阙的剑修见了你，都要行一礼。"
+        },
+        {
+          "if": [
+            {"not": {"flag": "wanjian_done"}},
+            {"flag": "tianque_qingyun"}
+          ],
+          "effects": [
+            {"flag": "wanjian_done"}
+          ],
+          "text": "青云剑宗传出话来：阙光归青云，开山祖师出走天阙的旧债，一笔勾销。天阙剑宗没有回话。"
+        },
+        {
+          "if": [
+            {"not": {"flag": "wanjian_done"}},
+            {"holds_gear": "e:queguang:4:metal:sharp+spirit+attune:0"}
+          ],
+          "effects": [
+            {"flag": "wanjian_done"},
+            {"flag": "tianque_feud"},
+            {"mind": 3}
+          ],
+          "text": "你带着阙光出了断剑峡。天阙剑宗没有再派人当面来要——可从那天起，天南的剑修见了你，都要多看一眼你腰间的剑。"
+        }
+      ],
+      "ambush": {"event": "wanjian_ambush", "enemy": "wanjian_robber", "base": 0.15, "per_value": 0.0003, "max": 0.7, "ally": 0.5},
+      "trapped": {"item": "dundi_fu", "wound_days": 180},
+      "reset_flags": ["wanjian_guard_down"]
+    }
+  }
+}

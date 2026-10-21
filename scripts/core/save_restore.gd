@@ -106,6 +106,13 @@ static func restore(s, data: Variant) -> bool:
 	var league: Variant = _valid_league(content, saved_player, saved_world)
 	if league == null:
 		return false
+	# 天骄榜 (optional: tianji.gd): the scrolls' orders and the player's notes and dates.
+	var tianji: Variant = _valid_tianji(content, saved_player, saved_world)
+	if tianji == null:
+		return false
+	var mijing: Variant = _valid_mijing(content, saved_world.get("mijing", {}))
+	if mijing == null:
+		return false
 	var series_last: Variant = saved_player.get("series_last", {})
 	if not series_last is Dictionary or series_last.keys().any(func(series_id: Variant) -> bool: return not content.series.has(series_id) or not _whole_nonnegative(series_last[series_id])):
 		return false
@@ -233,8 +240,18 @@ static func restore(s, data: Variant) -> bool:
 		for skill_id: Variant in saved_battle.cooldowns:
 			if not skill_id is String or content.technique(skill_id).is_empty() or not _whole_nonnegative(saved_battle.cooldowns[skill_id]):
 				return false
-		if saved_battle.has("context") and not saved_battle.context in ["event", "spar", "tournament", "summit", "arena", "demon", "tribulation"]:
+		if saved_battle.has("context") and not saved_battle.context in ["event", "spar", "tournament", "summit", "arena", "demon", "tribulation", "tianji", "mijing"]:
 			return false
+		# A duel with someone met in a 秘境 (mijing.gd), and robbers at its door.
+		if saved_battle.get("context", "") == "mijing" and (not content.mijing_data.realms.has(str(saved_battle.get("mijing", ""))) or not saved_battle.get("foe") is Dictionary):
+			return false
+		if saved_battle.has("robbery") and not content.mijing_data.realms.has(str(saved_battle.robbery)):
+			return false
+		# A 天骄榜 duel (tianji.gd): the scroll, whom and what for.
+		if saved_battle.get("context", "") == "tianji":
+			var bout: Variant = saved_battle.get("tianji")
+			if not bout is Dictionary or not content.tianji_data.scrolls.has(str(bout.get("scroll", ""))) or not bout.get("target") is String or not bout.get("kind") in ["challenge", "defend"]:
+				return false
 		# A contest's round (summit.gd): which contest (五宗论道 by default) and a round it has.
 		if saved_battle.get("context", "") == "summit":
 			var contest: Variant = content.summit_data.get(str(saved_battle.get("contest", "wuzong")))
@@ -363,6 +380,8 @@ static func restore(s, data: Variant) -> bool:
 	for stash: Dictionary in stashes:
 		kept_stashes.append({"place": str(stash.place), "stones": int(stash.stones)})
 	s.world["stashes"] = kept_stashes
+	s.world["tianji"] = tianji.world
+	s.world["mijing"] = mijing
 	s.populate()
 	var player: Dictionary = saved_player.duplicate(true)
 	for key: String in PLAYER_COUNTS:
@@ -405,6 +424,7 @@ static func restore(s, data: Variant) -> bool:
 	player["trials"] = sittings
 	player["guests"] = guests
 	player["league"] = league
+	player["tianji"] = tianji.player
 	var last_taken := {}
 	for series_id: String in series_last:
 		last_taken[series_id] = int(series_last[series_id])
@@ -785,6 +805,116 @@ static func _valid_league(content, saved_player: Dictionary, saved_world: Dictio
 	if member and bool(saved.get("banned", false)):
 		return null
 	return {"member": member, "branch": branch, "since": int(saved.get("since", 0)), "standing": int(saved.get("standing", 0)), "deputy": bool(saved.get("deputy", false)), "banned": bool(saved.get("banned", false))}
+
+## The 天骄榜 (tianji.gd), normalized: {"world": scrolls' orders, "player": notes and dates}, or null when
+## malformed. A scroll no longer in the content is dropped; its order is revised again when next read.
+static func _valid_tianji(content, saved_player: Dictionary, saved_world: Dictionary) -> Variant:
+	var boards: Variant = saved_world.get("tianji", {})
+	var saved: Variant = saved_player.get("tianji", {})
+	if not boards is Dictionary or not saved is Dictionary:
+		return null
+	var kept_boards := {}
+	for scroll_id: Variant in boards:
+		var board: Variant = boards[scroll_id]
+		if not scroll_id is String or not board is Dictionary or not _whole_nonnegative(board.get("period")) or not board.get("order") is Array:
+			return null
+		if board.order.any(func(id: Variant) -> bool: return not id is String) or board.order.count("player") > 1:
+			return null
+		if content.tianji_data.scrolls.has(scroll_id):
+			kept_boards[scroll_id] = {"period": int(board.period), "order": board.order.duplicate()}
+	var held := {}
+	var best: Variant = saved.get("best", {})
+	if not best is Dictionary or best.keys().any(func(scroll_id: Variant) -> bool: return not scroll_id is String or not _whole_nonnegative(best[scroll_id])):
+		return null
+	held["best"] = {}
+	for scroll_id: String in best:
+		if content.tianji_data.scrolls.has(scroll_id):
+			held.best[scroll_id] = int(best[scroll_id])
+	var notes: Variant = saved.get("notes", [])
+	if not notes is Array or notes.any(func(entry: Variant) -> bool: return not entry is Dictionary or not _whole_nonnegative(entry.get("day")) or not entry.get("text") is String):
+		return null
+	held["notes"] = []
+	for entry: Dictionary in notes:
+		held.notes.append({"day": int(entry.day), "text": str(entry.text)})
+	for key: String in ["next_challenge", "defend_day", "gift_year"]:
+		if saved.has(key):
+			if not _whole_nonnegative(saved[key]):
+				return null
+			held[key] = int(saved[key])
+	return {"world": kept_boards, "player": held if not saved.is_empty() else {}}
+
+## A 秘境's state (mijing.gd), normalized (optional: journeys before them have none), or null when
+## malformed. One inside a realm no longer in the content cannot be restored.
+static func _valid_mijing(content, saved: Variant) -> Variant:
+	if not saved is Dictionary:
+		return null
+	var realms: Dictionary = content.mijing_data.realms
+	var inside: Variant = saved.get("inside", "")
+	if not inside is String or (not inside.is_empty() and not realms.has(inside)):
+		return null
+	var held := {}
+	for key: String in ["inside", "from", "way", "room"]:
+		if not saved.get(key, "") is String:
+			return null
+		if saved.has(key):
+			held[key] = str(saved[key])
+	if not inside.is_empty() and not content.locations.has(str(saved.get("from", ""))):
+		return null
+	for key: String in ["day", "wins"]:
+		if not _whole_nonnegative(saved.get(key, 0)):
+			return null
+		if saved.has(key):
+			held[key] = int(saved[key])
+	if not saved.get("ally", false) is bool:
+		return null
+	if saved.has("ally"):
+		held["ally"] = bool(saved.ally)
+	var beats: Variant = saved.get("beats", [])
+	if not beats is Array or beats.any(func(event_id: Variant) -> bool: return not event_id is String):
+		return null
+	if saved.has("beats"):
+		held["beats"] = beats.duplicate()
+	var haul: Variant = _valid_haul(content, saved.get("haul", {}))
+	if haul == null:
+		return null
+	if saved.has("haul"):
+		held["haul"] = haul
+	for key: String in ["opened", "offered"]:
+		var days: Variant = saved.get(key, {})
+		if not days is Dictionary or days.keys().any(func(realm_id: Variant) -> bool: return not realm_id is String or not _whole_nonnegative(days[realm_id])):
+			return null
+		if saved.has(key):
+			held[key] = {}
+			for realm_id: String in days:
+				if realms.has(realm_id):
+					held[key][realm_id] = int(days[realm_id])
+	var meet: Variant = saved.get("meet", {})
+	if not meet is Dictionary or (not meet.is_empty() and (not meet.get("name") is String or not meet.get("title") is String or not content.sects.has(str(meet.get("sect", ""))) or not _whole_nonnegative(meet.get("stage")) or int(meet.stage) > 3 or not (meet.get("power") is float or meet.get("power") is int))):
+		return null
+	if saved.has("meet"):
+		held["meet"] = meet.duplicate()
+		if not meet.is_empty():
+			held.meet.stage = int(meet.stage)
+			held.meet.power = float(meet.power)
+	var out: Variant = saved.get("out", {})
+	if not out is Dictionary or (not out.is_empty() and not realms.has(str(out.get("realm", "")))):
+		return null
+	var out_haul: Variant = _valid_haul(content, out.get("haul", {}))
+	if out_haul == null:
+		return null
+	if saved.has("out"):
+		held["out"] = {} if out.is_empty() else {"realm": str(out.realm), "haul": out_haul}
+	return held
+
+## Things gathered in a 秘境: {item: count}, unknown items dropped; null when malformed.
+static func _valid_haul(content, haul: Variant) -> Variant:
+	if not haul is Dictionary or haul.keys().any(func(item_id: Variant) -> bool: return not item_id is String or not _whole_nonnegative(haul[item_id])):
+		return null
+	var kept := {}
+	for item_id: String in haul:
+		if not content.item(item_id).is_empty() and int(haul[item_id]) > 0:
+			kept[item_id] = int(haul[item_id])
+	return kept
 
 ## Recipes known, brews made, 丹毒 and the 灵田, normalized (optional: journeys before them know no
 ## recipe and have no field yet), or null when malformed. Recipes no longer in the content are dropped;

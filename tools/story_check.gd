@@ -389,6 +389,38 @@ func _collect_guest_flags() -> void:
 			_add(flag_writers, perk, "客卿（Guest.accept）")
 	# 天南散修盟 (league.gd) marks its members, whose branch rooms open by it.
 	_add(flag_writers, "league_member", "天南散修盟（League.join）")
+	# 萧家麒麟子 (rival.gd) marks how the 潜龙会 and 天南大比 bouts went, and 萧家's smile after two wins;
+	# the 金丹卷 bout's marks are the prodigy's `bout` (tianji.json), its 拦路 condition read there too.
+	for flag: String in ["xiao_bout1", "xiao_win1", "xiao_loss1", "xiao_bout2", "xiao_win2", "xiao_loss2", "xiao_face"]:
+		_add(flag_writers, flag, "萧家麒麟子（Rival）")
+	for prodigy_id: String in content.tianji_data.get("prodigies", {}):
+		var prodigy: Dictionary = content.tianji_data.prodigies[prodigy_id]
+		for effect: Dictionary in prodigy.get("bout", {}).get("won", []) + prodigy.get("bout", {}).get("lost", []):
+			if effect.has("flag"):
+				_add(flag_writers, str(effect.flag), "天骄榜（%s）" % prodigy_id)
+		for flag: String in ["xiao_ambush", "xiao_slain", "xiao_elder_beaten"]:
+			if JSON.stringify(prodigy).contains('"%s"' % flag):
+				_add(flag_readers, flag, "天骄榜（%s）" % prodigy_id)
+	# 天机阁's favors open a shop's better price by a flag.
+	for favor: Dictionary in content.tianji_data.get("favors", []):
+		_add(flag_readers, str(favor.flag), "天骄榜（favors）")
+	# 秘境 (mijing.gd): opened by their dated events, closed in by their outcomes on the way out; a way's
+	# share waived by a flag, a bribe read at the door, rooms waiting for a flag or gone by one.
+	for realm_id: String in content.mijing_data.get("realms", {}):
+		var info: Dictionary = content.mijing_data.realms[realm_id]
+		var site := "秘境「%s」" % info.name
+		_add(flag_writers, str(info.open_flag), site + "（开启）")
+		for outcome: Dictionary in info.get("outcomes", []):
+			_conditions(outcome.get("if", []), site + "（结局）")
+			_effects(outcome.get("effects", []), site + "（结局）")
+		for way_id: String in info.get("ways", {}):
+			_conditions(info.ways[way_id].get("unless", []), site + "（%s）" % way_id)
+		if info.get("ambush", {}).has("bribe_flag"):
+			_add(flag_readers, str(info.ambush.bribe_flag), site + "（截道）")
+		for room: Dictionary in content.cave_data.get(str(info.cave), {}).get("rooms", []):
+			for key: String in ["requires_flag", "gone_if"]:
+				if room.has(key):
+					_add(flag_readers, str(room[key]), site + "（%s）" % room.name)
 	# A sect ended by its story (close_sect) is marked sect_closed_<id>, read when someone would join it.
 	# Only sects a story can end register the flag (world_flags).
 	for sect: String in content.sect_data.get("sects", {}):

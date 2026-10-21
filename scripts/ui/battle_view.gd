@@ -79,7 +79,7 @@ static func render(ui) -> void:
 	side.add_theme_constant_override("h_separation", 4)
 	side.add_theme_constant_override("v_separation", 4)
 	row.add_child(side)
-	var odds := "比斗中随时可认输" if session.battle.get("context", "") in ["spar", "tournament", "summit", "arena"] else "约 %d%% 能脱身，脱不了身便挨对手一回合" % int(round(session.Combat.flee_chance(session) * 100.0))
+	var odds := "比斗中随时可认输" if session.battle.get("context", "") in ["spar", "tournament", "summit", "arena", "tianji"] else "约 %d%% 能脱身，脱不了身便挨对手一回合" % int(round(session.Combat.flee_chance(session) * 100.0))
 	var flee: Button = ui.button("撤离 · " + ui.duration("flee"), func() -> void: ui.battle_action("flee"), "保留资源，耗时 %s；%s；被缠住时走不了" % [ui.duration("flee"), odds])
 	# 天劫 cannot be fled; turning from 心魔 is evading it.
 	if session.battle.get("context", "") == "tribulation":
@@ -127,7 +127,7 @@ static func render(ui) -> void:
 	_small(record_toggle)
 	side.add_child(record_toggle)
 	var seen: bool = session.Combat.scout(session).seen
-	if int(session.player.realm) >= 1 and not session.battle.get("context", "") in ["spar", "tournament", "summit", "arena"]:
+	if int(session.player.realm) >= 1 and not session.battle.get("context", "") in ["spar", "tournament", "summit", "arena", "tianji"]:
 		var secret_toggle: Button = ui.button("收起秘术" if ui.battle_secret_open else "禁忌秘术", ui.toggle_battle_secret, "以寿元、重伤或妖丹换一时爆发，每门每场一次")
 		_small(secret_toggle)
 		side.add_child(secret_toggle)

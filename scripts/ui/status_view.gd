@@ -59,6 +59,20 @@ static func _figure(ui, parent: HBoxContainer) -> void:
 	var standing: Label = ui.label("%s · %s传承" % [session.Sect.name_of(session, session.affiliation()) + str(session.sect_rank().name) if session.Sect.member(session) else ("散修 · %s" % ("副盟主" if session.League.deputy(session) else "散修盟") if session.League.member(session) else "散修"), session.content.sects[p.get("sect", "wanderer")].name], 15, ui.MUTED)
 	standing.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	column.add_child(standing)
+	# 天骄榜 (tianji.gd): the seat on the scroll of the player's realm, else the best ever held.
+	var scroll_id: String = session.Tianji.own_scroll(session)
+	var seat: int = 0 if scroll_id.is_empty() else session.Tianji.rank(session, scroll_id)
+	var fame := ""
+	if seat > 0:
+		fame = "%s第 %d" % [session.Tianji.scroll(session, scroll_id).name, seat]
+	else:
+		for held_id: String in session.Tianji.data(session).scrolls:
+			if session.Tianji.best(session, held_id) > 0:
+				fame = "曾列%s第 %d" % [session.Tianji.scroll(session, held_id).name, session.Tianji.best(session, held_id)]
+	if not fame.is_empty():
+		var ranked: Label = ui.label(fame, 15, ui.GOLD)
+		ranked.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		column.add_child(ranked)
 	var purse: Label = ui.label("灵石 %d · 贡献 %d" % [int(p.stones), int(p.get("contribution", 0))], 15, ui.GOLD)
 	purse.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	column.add_child(purse)

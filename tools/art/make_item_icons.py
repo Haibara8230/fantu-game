@@ -324,6 +324,9 @@ def lingzhi():
     stem = '<path d="M26 35 C27 43 25 49 21 54 L32 54 C32 48 33 42 33 35 Z" fill="#8a3f22" %s/>' % O
     return glow(30, 30, 22, '#ffd59a', 0.12) + ground() + small + stem + cap
 
+def xiaxue():
+    return lingzhi().replace('#b5552f', '#d8443a').replace('#e08a52', '#ff9a7a').replace('#a04a2a', '#c23a32').replace('#ffd59a', '#ff9a8a')
+
 def gall(main, deep, light):
     return ('<path d="M33 14 C33 18 30 20 30 22" stroke="%s" stroke-width="4" fill="none" stroke-linecap="round"/><path d="M33 14 C33 18 30 20 30 22" stroke="%s" stroke-width="2" fill="none" stroke-linecap="round"/>'
             '<path d="M30 21 C34 26 46 30 46 41 C46 49 40 54 32 54 C24 54 18 49 18 41 C18 31 26 26 30 21 Z" fill="%s" %s/>'
@@ -589,6 +592,8 @@ PILLS = {  # main, deep, light
     'liaoshang': ('#ef7a6a', '#a8392e', '#ffd0c0'),
     'ningqi': ('#a996e0', '#5e4ca0', '#e4dcff'),
     'pozhang': ('#ffa765', '#b9452a', '#ffe8b8'),
+    'jiedu': ('#7fcf8a', '#3f8a4c', '#d8f5d0'),
+    'xueyuan': ('#c8303c', '#7a1420', '#f4a8a8'),
 }
 
 def p(kind, fine=False, extra=''):
@@ -617,6 +622,9 @@ GOODS = {  # item id: (back, subject)
     'foundation_pill_fine': ('earth', p('foundation', True)),
     'polin_powder': ('wood', powder_packet()),
     'yanshou_dan': ('wood', peach_pill()),
+    'jiedu_dan': ('wood', p('jiedu')),
+    'xiaxue_zhi': ('fire', xiaxue()),
+    'xueyuan_dan': ('fire', p('xueyuan')),
     'auction_invitation': ('none', invitation()),
     'azhi_token': ('none', bamboo_tag()),
     'peddler_pack': ('none', peddler_pack()),

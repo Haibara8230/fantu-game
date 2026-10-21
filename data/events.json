@@ -2065,5 +2065,541 @@
         "chronicle": "你收下了四百四十灵石。不到两个月，钱三省的事还是漏了，他在何不归面前供出了你。何不归没有来找你算账，只让人把你的名字从各分舵的青灯簿上划了去。天机阁的凶人榜上，后来多了一行小字。"
       }
     ]
+  },
+  "tianji_challenged": {
+    "title": "天骄榜 · 战帖",
+    "trigger": "manual",
+    "text": "天机阁的执笔领来一人：{foe_title}{foe}，{scroll}上排在你后头，递上一封战帖，要挑你的第 {rank} 位。按天机阁的规矩，点到为止，就在榜亭前比。",
+    "choices": [
+      {"id": "fight", "label": "应战（点到为止；败了让出位子，退后一名）", "effects": [{"tianji_defend": "fight"}], "chronicle": "你应下了{foe}的战帖。"},
+      {"id": "refuse", "label": "不应（与{foe}对换名次）", "effects": [{"tianji_defend": "refuse"}], "chronicle": "你把{foe}的战帖原样退了回去。榜亭前看热闹的人散了，第二天天机阁的执笔改了榜。"}
+    ]
+  },
+  "xiao_after1": {
+    "title": "萧家麒麟子 · 潜龙台",
+    "trigger": "manual",
+    "text": "第三轮的对手是萧凌云。开擂前他当着满场的人笑你：“小门小户出来的人，也配上潜龙台？我让你三招。”——三招过后，他再没笑过。最后一合，你的手停在他喉前三寸，他按在家传玉尺上的手指还在发抖。台下先是一静，随即哗然，萧家的几位长辈沉着脸起身离席。",
+    "choices": [
+      {"id": "press", "label": "当着满场的人，等他亲口认输", "effects": [], "chronicle": "萧凌云咬着牙说了“我输了”三个字，声音不大，满场都听见了。他下台时没有回头。"},
+      {"id": "spare", "label": "收手，拱手道一声承让", "effects": [{"flag": "xiao_spare1"}], "chronicle": "你收了手，拱手道一声承让。萧凌云愣了一愣，一言不发地下了台；走到台边，他回头看了你一眼。"}
+    ]
+  },
+  "xiao_poison": {
+    "title": "萧家麒麟子 · 大比前夜",
+    "trigger": "manual",
+    "text": "开擂前一夜，一个自称大比执事的人往客栈送来一瓶回气丹，说各家选手人人有份。瓶塞拔开，丹香里似乎混着一丝极淡的苦味。下午出的签你也看过了：预选、分组都排进了最难的一组，决赛若走得到，对面多半是萧凌云。",
+    "choices": [
+      {"id": "sense", "label": "以神识细查这瓶丹", "conditions": [{"sense_at_least": 36}], "effects": [{"flag": "xiao_poison_found"}, {"rival": "enter"}], "chronicle": "神识探进丹里，苦味底下藏着一缕软筋散。你连夜拿着丹瓶去了评判席；那位“执事”第二天一早便不见了，你的签也重抽了一回。"},
+      {"id": "ye", "label": "请叶知微看一眼", "conditions": [{"relation_at_least": ["ye_zhiwei", 60]}], "effects": [{"flag": "xiao_poison_found"}, {"rival": "enter"}], "chronicle": "叶知微把丹倒在掌心闻了闻，脸色就变了：“软筋散。吃下去，明天你连兵刃都提不稳。”她陪你去了评判席；那位“执事”第二天一早便不见了，你的签也重抽了一回。"},
+      {"id": "antidote", "label": "先服一枚长青谷的解毒丹", "conditions": [{"item_at_least": ["jiedu_dan", 1]}], "effects": [{"item": ["jiedu_dan", -1]}, {"rival": "enter"}], "chronicle": "你没去碰那瓶丹，先服了一枚解毒丹才睡。第二天上台，手脚轻快——可签还是那张签。"},
+      {"id": "swallow", "label": "照常服下，早些歇息", "effects": [{"rival": "poisoned"}, {"rival": "enter"}], "chronicle": "你服了一枚，早早睡下。第二天醒来，手脚发沉，丹田里的灵力像被什么缠住了。"}
+    ]
+  },
+  "xiao_after2": {
+    "title": "萧家麒麟子 · 天南大比",
+    "trigger": "manual",
+    "text": "决赛最后一合，萧凌云的玉尺脱手飞出，钉在擂台的木柱上，嗡嗡直响。他半跪在台上，半晌没有起身。评判席上有人在擦汗。",
+    "choices": [
+      {"id": "expose", "label": "当众说出那瓶丹和死签的事", "conditions": [{"flag": "xiao_poison_found"}], "effects": [], "chronicle": "你把丹瓶放在评判席上。天机阁的执笔当场提笔，在筑基卷萧凌云的名字旁批了一行小字。萧家在云溪的名声，从那天起变了味。"},
+      {"id": "press", "label": "要他当着全场认输", "effects": [], "chronicle": "萧凌云认了输，下台时脸色铁青。"},
+      {"id": "spare", "label": "不提旧事，伸手拉他起来", "effects": [{"flag": "xiao_spare2"}], "chronicle": "你伸手拉他起来。萧凌云盯着你的手看了好一会儿，才握住。他什么也没说；可那天之后，萧家再没人在背后说你的闲话。"}
+    ]
+  },
+  "xiao_elder": {
+    "title": "萧家麒麟子 · 拦帖",
+    "trigger": "manual",
+    "text": "战帖递出去的第二天，你在{place}的街口被一位灰袍老者拦住。他是萧家的供奉长老萧鹤年，金丹后期的威压一点也不掩饰：“二公子不想在榜亭见你。撤了帖子，这事就当没有过。”",
+    "choices": [
+      {"id": "fight", "label": "与萧鹤年动手", "effects": [{"battle": "xiao_elder"}], "chronicle": "你没有撤帖。萧鹤年叹了口气，袖中飞出一道赤红的丹火。"},
+      {
+        "id": "slip",
+        "label": "绕开他，另走一条路去榜亭",
+        "conditions": [
+          {"any": [{"sense_at_least": 72}, {"rival": "elder_known"}]}
+        ],
+        "effects": [
+          {"tianji_duel": "xiao_lingyun"}
+        ],
+        "chronicle": "你早听说萧家养着这么一位供奉，拱了拱手，转身从另一条巷子绕去了榜亭。萧凌云看见你时，脸色变了。"
+      },
+      {"id": "ambush", "label": "不去榜亭，到城外截住萧凌云", "effects": [{"battle": "xiao_ambush"}], "chronicle": "你撤了帖子，却没有走。当晚萧凌云出城回萧家别院，在城外的官道上撞见了你。"},
+      {"id": "withdraw", "label": "撤回战帖", "effects": [], "chronicle": "你撤回了战帖。萧鹤年拱了拱手，让开了路。"}
+    ]
+  },
+  "xiao_after3": {
+    "title": "萧家麒麟子 · 金丹卷",
+    "trigger": "manual",
+    "text": "榜亭前围了半城的人。萧凌云从地上爬起来，拍了拍衣上的土，看着天机阁的执笔把你的名字挪到他前头。",
+    "choices": [
+      {"id": "expose", "label": "当众说出萧家供奉拦路的事", "effects": [], "chronicle": "你当着满街的人说了萧鹤年拦路的事。天机阁的执笔在金丹卷上批了一句：“萧氏以供奉阻帖，不武。”萧家在天南丢尽了脸。"},
+      {"id": "spare", "label": "只收下名次，不提旁的", "effects": [{"flag": "xiao_spare3"}], "chronicle": "你只向萧凌云拱了拱手。他沉默了很久，说：“下回，我自己来。”"}
+    ]
+  },
+  "xiao_house": {
+    "title": "萧家麒麟子 · 萧家",
+    "trigger": "manual",
+    "text": "萧凌云结了元婴，接掌了萧家。家主大典那天，萧家的管事送来一张帖子：家主请你去萧家后园。云溪城里另有一种说法——萧家在天机阁挂了一道赏格，要的正是你的人头。",
+    "choices": [
+      {
+        "id": "talk",
+        "label": "赴萧凌云的约",
+        "conditions": [
+          {"rival": "friend"}
+        ],
+        "effects": [
+          {"story_advance": "xiao_rival"},
+          {"flag": "xiao_friend"},
+          {"relation": ["xiao_lingyun", 40]},
+          {"mind": 4}
+        ],
+        "chronicle": "萧家后园只摆了一张石桌、一壶酒。萧凌云亲手替你斟满：“赏格是族老们挂的，我已经撤了。”他自己先干了一杯，“每一回都是你赢，每一回你都给我留了脸。这辈子赢不了你，但我服。”那天你们喝到天亮。"
+      },
+      {"id": "fight", "label": "打上萧家", "effects": [{"battle": "xiao_house"}], "chronicle": "你没有去后园，提着兵刃从萧家的正门走了进去。"},
+      {
+        "id": "bow",
+        "label": "去萧家后园，低头认了",
+        "conditions": [
+          {"rival": "beaten"}
+        ],
+        "effects": [
+          {"story_advance": "xiao_rival"},
+          {"flag": "xiao_trampled"}
+        ],
+        "chronicle": "萧凌云在后园等你。他没有为难你，只是天机阁后来张榜，金丹卷旧名册上萧凌云的名字一直压在你上头。“萧家主的手下败将”——这句话从此跟了你一辈子。他飞升前若来看你一眼，你大概也只能说一句恭喜。"
+      },
+      {"id": "avoid", "label": "不去，也不理会", "effects": [{"flag": "xiao_bounty"}], "chronicle": "你没有去。没过多久，天机阁的赏格榜上果真多了你的名字，八千灵石。"}
+    ]
+  },
+  "xiao_fate": {
+    "title": "萧家麒麟子 · 了断",
+    "trigger": "manual",
+    "text": "萧家的护山阵碎了一地。萧凌云拄着断成两截的玉尺，单膝跪在萧家祠堂前，抬头看你：“动手吧。萧家的人，没有求饶的。”",
+    "choices": [
+      {"id": "slay", "label": "斩了他", "effects": [{"story_advance": "xiao_rival"}, {"flag": "xiao_slain"}], "chronicle": "你斩了萧凌云。萧家一夜之间散了，丹坊易了主。萧家的人没有死绝，你知道，他们迟早会来。"},
+      {
+        "id": "yield",
+        "label": "留他一命，要萧家从此认你",
+        "effects": [
+          {"story_advance": "xiao_rival"},
+          {"flag": "xiao_yield"},
+          {"relation": ["xiao_lingyun", 10]}
+        ],
+        "chronicle": "你收起兵刃。萧凌云跪了很久，终于低下了头。此后他做了你的护法；萧家的丹坊在云溪替你挂了一块牌子，见你便让两成价。"
+      }
+    ]
+  },
+  "tale_xiao_qianlong": {
+    "title": "说书 · 潜龙台上折麒麟",
+    "trigger": "location",
+    "location": "market",
+    "priority": 7,
+    "conditions": [
+      {"flag": "xiao_win1"}
+    ],
+    "effects": [
+      {"mind": 2}
+    ],
+    "chronicle": "云溪长街的茶摊上，说书人新编了一回《潜龙台上折麒麟》，说到萧家嫡子当众认输，满座叫好。有人认出你来，硬要请你喝茶；萧家丹坊的伙计在一旁听着，脸色难看。"
+  },
+  "tale_xiao_dabi": {
+    "title": "说书 · 大比破毒签",
+    "trigger": "location",
+    "location": "market",
+    "priority": 7,
+    "conditions": [
+      {"flag": "xiao_win2"}
+    ],
+    "effects": [
+      {"mind": 2}
+    ],
+    "chronicle": "说书人又添了一回《大比台前破死签》。萧家丹坊的掌柜远远看见你，竟堆起笑脸迎出门来。"
+  },
+  "tale_xiao_bang": {
+    "title": "说书 · 榜亭夺座",
+    "trigger": "location",
+    "location": "market",
+    "priority": 7,
+    "conditions": [
+      {"any": [{"flag": "xiao_win3"}, {"flag": "xiao_ambush"}]}
+    ],
+    "effects": [
+      {"mind": 2}
+    ],
+    "chronicle": "金丹卷换座的事传遍了云溪，说书人连说三天。原先跟着萧家的几家药商，托人给你送来了拜帖。"
+  },
+  "chixia_notice": {
+    "title": "赤霞谷将开",
+    "trigger": "date",
+    "priority": 6,
+    "periodic": {"start_year": 14, "every_years": 15, "month": 9, "from_day": 1, "to_day": 1},
+    "conditions": [
+      {"not": {"realm_at_least": 2}}
+    ],
+    "chronicle": "赤霄门在南明、云溪都贴出了告示：明年三月赤霞谷开谷一月，五宗各派弟子入谷采霞血芝；另招顶名散修，七三分成，先付五十灵石。"
+  },
+  "chixia_open": {
+    "title": "赤霞谷开谷",
+    "trigger": "date",
+    "priority": 6,
+    "major": true,
+    "periodic": {"start_year": 15, "every_years": 15, "month": 3, "from_day": 1, "to_day": 1},
+    "effects": [
+      {"mijing_open": "chixia"}
+    ],
+    "chronicle": "南明城西的赤雾散了，赤霞谷开了——一个月后合上。"
+  },
+  "chixia_close": {
+    "title": "赤霞谷合谷",
+    "trigger": "date",
+    "priority": 6,
+    "periodic": {"start_year": 15, "every_years": 15, "month": 4, "from_day": 1, "to_day": 1},
+    "effects": [
+      {"mijing_close": "chixia"}
+    ],
+    "chronicle": "赤霞谷口的赤雾又合上了，要再等十五年。"
+  },
+  "chixia_season": {
+    "title": "赤霞谷开谷",
+    "trigger": "location",
+    "location": "market",
+    "priority": 7,
+    "listed": true,
+    "periodic": {"start_year": 15, "every_years": 15, "month": 3, "from_day": 1, "to_day": 30},
+    "conditions": [
+      {"stage_at_least": [0, 3]},
+      {"not": {"realm_at_least": 2}}
+    ],
+    "chronicle": "云溪长街上到处在说赤霞谷开谷的事。赤霄门的焦长老在茶馆里招顶名的散修，五宗的领队、卖名额的牙人也都动身往南明城西去了。"
+  },
+  "chixia_gate": {
+    "title": "赤霞谷开谷",
+    "trigger": "manual",
+    "text": "赤霞谷开了，还有 {days} 日合上。十五年一开的药谷，谷里长满霞血芝——能替筑基丹，药力还更足。五宗各派十名弟子进谷，散修要进，得替宗门「顶名」，或者花钱买一个名额。都说进去的人，出来少一半。",
+    "choices": [
+      {
+        "id": "sect",
+        "label": "随宗门领队入谷（霞血芝交一半给宗门，记功）",
+        "conditions": [
+          {
+            "any": [
+              {"affiliation": "qingyun"},
+              {"affiliation": "chixiao"},
+              {"affiliation": "changqing"},
+              {"affiliation": "canglan"},
+              {"affiliation": "xuanyue"}
+            ]
+          }
+        ],
+        "effects": [
+          {"mijing_enter": ["chixia", "sect"]}
+        ],
+        "chronicle": "你跟着宗门的领队进了谷。领队只交代一句：“别贪，活着出来。”"
+      },
+      {"id": "free", "label": "凭天机阁的木牌入谷", "conditions": [{"flag": "chixia_free"}], "effects": [{"mijing_enter": ["chixia", "bought"]}], "chronicle": "谷口的赤霄弟子看了一眼你的木牌，侧身让开了。"},
+      {"id": "proxy", "label": "应焦长老的招，替赤霄门顶名（先得五十灵石，霞血芝七成归赤霄）", "conditions": [{"affiliation": ""}, {"not": {"flag": "chixia_free"}}], "effects": [{"stones": 50}, {"mijing_enter": ["chixia", "proxy"]}], "chronicle": "焦长老满脸和气，亲手把一块赤红的木牌挂到你腰上：“谷里采到的，七成归赤霄，三成归你。好好干。”"},
+      {
+        "id": "buy",
+        "label": "向谷口的牙人买一个名额（300 灵石）",
+        "conditions": [
+          {"stones_at_least": 300},
+          {"not": {"flag": "chixia_free"}}
+        ],
+        "effects": [
+          {"stones": -300},
+          {"mijing_enter": ["chixia", "bought"]}
+        ],
+        "chronicle": "牙人掂了掂灵石，塞给你一块别家宗门的木牌：“进去别说是我卖的。”"
+      },
+      {"id": "decline", "label": "这一回不去", "effects": [{"mijing": "decline"}], "chronicle": "你没有进谷。"}
+    ]
+  },
+  "chixia_pair": {
+    "title": "赤霞谷 · 入谷",
+    "trigger": "manual",
+    "conditions": [
+      {"not": {"flag": "chixia_done"}}
+    ],
+    "text": "五宗弟子在谷口集合，各宗领队交代规矩：谷里不许互相残杀——没人当真。一个叫雷三的散修凑上来，说他也是顶名进来的，这谷他来过一回，路熟；长青谷的苏蘅抱着药篓站在远处，看了你好几眼，没敢开口。",
+    "choices": [
+      {"id": "lei", "label": "和雷三结伴（他路熟，每处霞血芝多采一株）", "effects": [{"party": ["chixia", "lei_san"]}], "chronicle": "雷三一拍大腿：“够意思！跟着我，保你多采几株。”"},
+      {"id": "su", "label": "去和苏蘅结伴（她认药，也会裹伤，只是胆小）", "effects": [{"party": ["chixia", "su_heng"]}], "chronicle": "苏蘅红着脸点了点头，把药篓往背上紧了紧：“我、我认得霞血芝长在哪儿。”"},
+      {"id": "alone", "label": "独行", "effects": [], "chronicle": "你谁也没理，独自往谷里去了。"}
+    ]
+  },
+  "chixia_bribe": {
+    "title": "赤霞谷 · 谷口",
+    "trigger": "manual",
+    "text": "谷口外的乱石后头蹲着几个劫修，每回开谷都在。有人悄悄告诉你：给他们的头子塞些灵石，出谷时便不找你。",
+    "choices": [
+      {"id": "pay", "label": "塞给劫修头子八十灵石", "conditions": [{"stones_at_least": 80}], "effects": [{"stones": -80}, {"flag": "chixia_bribed"}], "chronicle": "劫修头子掂了掂灵石，冲你咧嘴一笑：“出来时报个名号。”"},
+      {"id": "no", "label": "不理会", "effects": [], "chronicle": "你没理会他们。"}
+    ]
+  },
+  "chixia_vanish": {
+    "title": "赤霞谷 · 第十日",
+    "trigger": "manual",
+    "conditions": [
+      {"not": {"flag": "chixia_done"}}
+    ],
+    "text": "第十天起，顶名进谷的散修一个接一个不见了。昨夜还在药圃边歇脚的两个人，早上只剩一堆冷灰。内圈的赤雾散开了一道口子，雾里飘出一股甜腥气。",
+    "choices": [
+      {"id": "su", "label": "听苏蘅说", "conditions": [{"party": ["chixia", "su_heng"]}], "effects": [{"flag": "chixia_mist"}, {"flag": "chixia_suheng_saw"}], "chronicle": "苏蘅拉住你的袖子，声音发颤：“我看见了——雷三领着那两个人，往内圈的雾里去了。”"},
+      {"id": "look", "label": "记下内圈雾口的方向", "effects": [{"flag": "chixia_mist"}], "chronicle": "你记下了雾口的方向。"},
+      {"id": "ignore", "label": "不管闲事，接着采药", "effects": [{"flag": "chixia_mist"}], "chronicle": "你没有多想。谷里少几个人，本是常事。"}
+    ]
+  },
+  "chixia_betray": {
+    "title": "赤霞谷 · 雷三",
+    "trigger": "manual",
+    "conditions": [
+      {"not": {"flag": "chixia_done"}}
+    ],
+    "text": "第九天，雷三说去前头探探路，天黑也没回来。第二天你在药圃边的石头上看见他留下的记号——一路指向你歇脚的地方。",
+    "choices": [
+      {"id": "know", "label": "心里有数了", "effects": [{"party": ["chixia", ""]}, {"flag": "chixia_reported"}], "chronicle": "雷三是焦长老的眼线。你的行踪，焦长老都知道了。"}
+    ]
+  },
+  "chixia_pool": {
+    "title": "赤霞谷 · 血池",
+    "trigger": "manual",
+    "conditions": [
+      {"not": {"flag": "chixia_done"}}
+    ],
+    "text": "池边吊着七八个人，都是失踪的顶名散修，还有气。焦长老盘坐在池边结阵，雷三跪在他跟前报信：“还差一个。”——差的就是你。",
+    "choices": [
+      {"id": "expose", "label": "当场揭穿，砍断阵旗（焦长老结着阵，腾不出全力）", "effects": [{"battle": "jiao_array"}], "chronicle": "你冲到池边，一剑砍向最近的阵旗。焦长老脸上的和气一下子没了。"},
+      {
+        "id": "sneak",
+        "label": "趁焦长老结阵，一根根拔掉阵旗",
+        "conditions": [
+          {"sense_at_least": 30},
+          {"not": {"flag": "chixia_reported"}}
+        ],
+        "effects": [
+          {"flag": "chixia_rescued"},
+          {"flag": "chixia_sneaked"}
+        ],
+        "chronicle": "你以神识摸清了阵旗的位置，趁焦长老闭目结阵，一根根拔了下来。阵一散，吊着的人落进池边的草里；等焦长老睁眼，你已经领着他们钻进了雾里。"
+      },
+      {
+        "id": "smash",
+        "label": "打碎池底的血元丹，让阵自己散",
+        "effects": [
+          {"flag": "chixia_rescued"},
+          {"flag": "chixia_smashed"},
+          {"mind": 3}
+        ],
+        "chronicle": "你跃进池中，一掌拍碎了池底那颗血红的丹丸。大阵轰然崩散，吊着的人一个个落了下来。焦长老盯着你，一字一顿：“好，很好。”"
+      },
+      {"id": "take", "label": "毁阵时抢走池底的血元丹", "effects": [{"item": ["xueyuan_dan", 1]}, {"flag": "chixia_dan"}], "chronicle": "你一把抓起池底的丹丸就走。大阵在身后崩散，池边的人……你没有回头看。"},
+      {"id": "leave", "label": "当作没看见，退出去", "effects": [{"flag": "chixia_ignored"}], "chronicle": "你退回了雾里。身后，焦长老的阵光又亮了一层。"}
+    ]
+  },
+  "chixia_exit": {
+    "title": "赤霞谷 · 出谷",
+    "trigger": "manual",
+    "conditions": [
+      {"not": {"flag": "chixia_done"}},
+      {"not": {"flag": "chixia_jiao_down"}},
+      {"not": {"flag": "chixia_jiao_beaten"}},
+      {"any": [{"flag": "chixia_rescued"}, {"flag": "chixia_dan"}]}
+    ],
+    "text": "谷口的赤雾就要合上了。各宗领队在谷口清点人数，焦长老当着五宗的面指着你：“此人在谷中残害同门，老夫亲眼所见！”",
+    "choices": [
+      {"id": "witness", "label": "让被救出来的散修作证", "conditions": [{"flag": "chixia_rescued"}], "effects": [{"flag": "chixia_exposed"}, {"mijing": "leave"}], "chronicle": "被救出来的散修一个接一个站了出来，把血池的事当着五宗领队说了一遍。赤霄的领队脸色铁青，当场命人拿下了焦长老。"},
+      {
+        "id": "token",
+        "label": "拿出那块烧焦的青灯木牌",
+        "conditions": [
+          {"flag": "qingdeng_token"},
+          {"not": {"flag": "chixia_rescued"}}
+        ],
+        "effects": [
+          {"flag": "chixia_exposed"},
+          {"mijing": "leave"}
+        ],
+        "chronicle": "你把青灯木牌往领队面前一放：“散修盟云溪分舵十一个人，跟着焦长老的车上了赤枫岭，一个也没回来。”青灯账上的名字一个个对得上，焦长老再也说不出话。"
+      },
+      {"id": "hand", "label": "交出采的霞血芝，堵住他的嘴", "effects": [{"mijing": "surrender"}, {"mijing": "leave"}], "chronicle": "你把药篓里的霞血芝全倒在焦长老脚下。他看了一眼，笑了：“想来是老夫看错了。”"},
+      {"id": "fight", "label": "跟他在谷口斗一场", "effects": [{"battle": "jiao_elder"}], "chronicle": "你没有辩解，拔出了兵刃。五宗领队纷纷退开。"}
+    ]
+  },
+  "chixia_meet": {
+    "title": "赤霞谷 · 狭路",
+    "trigger": "manual",
+    "text": "药田边撞上了{title}{foe}，对方也盯上了这片霞血芝。",
+    "choices": [
+      {"id": "fight", "label": "斗法，胜者采药", "effects": [{"mijing": "fight"}], "chronicle": "你和{foe}动起手来。"},
+      {"id": "share", "label": "分他一株霞血芝，各采各的", "conditions": [{"item_at_least": ["xiaxue_zhi", 1]}], "effects": [{"mijing": "share"}], "chronicle": "你分了{foe}一株霞血芝，两人各采各的。"},
+      {"id": "ally", "label": "把这片药田让给他，约好出谷时互保", "effects": [{"mijing": "ally"}], "chronicle": "你把药田让给了{foe}，约好出谷时一同走。"}
+    ]
+  },
+  "chixia_ambush": {
+    "title": "赤霞谷 · 截道",
+    "trigger": "manual",
+    "text": "出谷不过半里，乱石后头跳出几个蒙面人，为首的{foe}盯着你的药篓：“留下一半，放你过去。”",
+    "choices": [
+      {"id": "sneak", "label": "早察觉了埋伏，绕开他们", "conditions": [{"sense_at_least": 34}], "effects": [], "chronicle": "你早察觉乱石后头有人，绕了一条远路，把他们甩在身后。"},
+      {"id": "fight", "label": "跟他们动手", "effects": [{"mijing": "rob_fight"}], "chronicle": "你放下药篓，拔出了兵刃。"},
+      {"id": "pay", "label": "留下一半", "effects": [{"mijing": "rob_pay"}], "chronicle": "你分出一半所得丢在路边。蒙面人让开了路。"}
+    ]
+  },
+  "wanjian_notice": {
+    "title": "剑气将退",
+    "trigger": "date",
+    "priority": 6,
+    "periodic": {"start_year": 39, "every_years": 30, "month": 10, "from_day": 1, "to_day": 1},
+    "conditions": [
+      {"realm_at_least": 1}
+    ],
+    "chronicle": "断剑峡的老脚夫说，峡底的剑气一年比一年弱——明年四月，三十年一回的万剑冢又要露出来了。"
+  },
+  "wanjian_open": {
+    "title": "万剑冢现世",
+    "trigger": "date",
+    "priority": 6,
+    "major": true,
+    "periodic": {"start_year": 40, "every_years": 30, "month": 4, "from_day": 1, "to_day": 1},
+    "effects": [
+      {"mijing_open": "wanjian"}
+    ],
+    "chronicle": "断剑峡底的剑气退了，万剑冢露了出来——三个月后剑气回涌。"
+  },
+  "wanjian_close": {
+    "title": "剑气回涌",
+    "trigger": "date",
+    "priority": 6,
+    "periodic": {"start_year": 40, "every_years": 30, "month": 7, "from_day": 1, "to_day": 1},
+    "effects": [
+      {"mijing_close": "wanjian"}
+    ],
+    "chronicle": "断剑峡底的剑气涌了回来，万剑冢又沉进了剑潮里。"
+  },
+  "wanjian_season": {
+    "title": "万剑冢现世",
+    "trigger": "location",
+    "location": "duanjian",
+    "priority": 7,
+    "listed": true,
+    "periodic": {"start_year": 40, "every_years": 30, "month": 4, "from_day": 1, "to_day": 30},
+    "conditions": [
+      {"realm_at_least": 1},
+      {"not": {"realm_at_least": 3}}
+    ],
+    "chronicle": "断剑峡口挤满了剑修，天阙剑宗的白衣弟子守在冢口，一个一个地查剑令。"
+  },
+  "wanjian_gate": {
+    "title": "万剑冢 · 剑气潮退",
+    "trigger": "manual",
+    "text": "断剑峡底的剑气退了，万剑冢露了出来，还有 {days} 日剑气回涌。冢口立着两个白衣剑修，是天阙剑宗的守冢弟子：天阙自认是这里的主人，外人要进，先买一枚剑令。",
+    "choices": [
+      {"id": "sect", "label": "随青云的剑修入冢（青云与天阙同源，守冢弟子不拦）", "conditions": [{"affiliation": "qingyun"}], "effects": [{"mijing_enter": ["wanjian", "sect"]}], "chronicle": "守冢弟子看见青云的剑穗，冷哼一声，到底没有拦。"},
+      {
+        "id": "forced",
+        "label": "趁守冢弟子倒地，闯进冢去",
+        "conditions": [
+          {"flag": "wanjian_guard_down"}
+        ],
+        "effects": [
+          {"flag": "tianque_slight"},
+          {"mijing_enter": ["wanjian", "forced"]}
+        ],
+        "chronicle": "你跨过倒在冢口的守冢弟子，进了万剑冢。天阙剑宗记下了你的样子。"
+      },
+      {"id": "token", "label": "买一枚剑令（600 灵石）", "conditions": [{"stones_at_least": 600}], "effects": [{"stones": -600}, {"mijing_enter": ["wanjian", "token"]}], "chronicle": "守冢弟子收了灵石，递来一枚刻着「阙」字的铁令。"},
+      {"id": "force", "label": "不买剑令，闯过守冢弟子", "conditions": [{"not": {"flag": "wanjian_guard_down"}}], "effects": [{"battle": "tianque_guard"}], "chronicle": "你没有买剑令，径直往冢口走。守冢弟子拔剑拦住了你。"},
+      {"id": "decline", "label": "这一回不去", "effects": [{"mijing": "decline"}], "chronicle": "你没有进冢。"}
+    ]
+  },
+  "wanjian_meet": {
+    "title": "万剑冢 · 剑修",
+    "trigger": "manual",
+    "text": "古剑堆里站起一个人，是{title}{foe}。他手按剑柄：“冢里的剑，只认打得赢的人。”",
+    "choices": [
+      {"id": "fight", "label": "拔剑", "effects": [{"mijing": "fight"}], "chronicle": "你和{foe}在古剑堆里过起招来。"},
+      {"id": "share", "label": "分他一块玄铁，各走各路", "conditions": [{"item_at_least": ["ore_xuantie", 1]}], "effects": [{"mijing": "share"}], "chronicle": "你分了{foe}一块玄铁，两人各走各路。"},
+      {"id": "ally", "label": "把这里让给他，约好出冢时互保", "effects": [{"mijing": "ally"}], "chronicle": "你把这一处让给了{foe}，约好出冢时一同走。"}
+    ]
+  },
+  "wanjian_ambush": {
+    "title": "万剑冢 · 截道",
+    "trigger": "manual",
+    "text": "出了断剑峡不远，几个蒙着脸的剑修拦在路当中，为首的{foe}拿剑指了指你的行囊：“冢里带出来的东西，分一半。”",
+    "choices": [
+      {"id": "sneak", "label": "早察觉了埋伏，绕开他们", "conditions": [{"sense_at_least": 56}], "effects": [], "chronicle": "你早察觉峡口有人埋伏，从崖上绕了过去。"},
+      {"id": "fight", "label": "跟他们动手", "effects": [{"mijing": "rob_fight"}], "chronicle": "你拔出了兵刃。"},
+      {"id": "pay", "label": "分一半给他们", "effects": [{"mijing": "rob_pay"}], "chronicle": "你分出一半所得。蒙面剑修收了东西，让开了路。"}
+    ]
+  },
+  "wanjian_exit": {
+    "title": "万剑冢 · 出冢",
+    "trigger": "manual",
+    "conditions": [
+      {"holds_gear": "e:queguang:4:metal:sharp+spirit+attune:0"},
+      {"not": {"flag": "wanjian_done"}},
+      {"not": {"flag": "tianque_feud"}}
+    ],
+    "text": "出冢的石阶上站着一个白衣剑修，背后负着一只空剑匣。他是天阙剑宗宗主谢孤城的大弟子闻歧：“阙光是我宗祖师的剑。剑灵认了你，天阙认剑灵；可天阙认不认你，是另一回事。”",
+    "choices": [
+      {
+        "id": "return",
+        "label": "把阙光还给天阙剑宗",
+        "effects": [
+          {"give_gear": "e:queguang:4:metal:sharp+spirit+attune:0"},
+          {"flag": "tianque_friend"},
+          {"stones": 1500},
+          {"manual": 4},
+          {"mijing": "leave"}
+        ],
+        "chronicle": "你解下阙光，双手递了过去。闻歧怔了一怔，郑重接过，放进剑匣：“天阙欠你一柄剑。”他留下一千五百灵石与一卷天阙的剑诀，说宗主日后要见你。"
+      },
+      {
+        "id": "qingyun",
+        "label": "这柄剑，青云要了",
+        "conditions": [
+          {"affiliation": "qingyun"}
+        ],
+        "effects": [
+          {"give_gear": "e:queguang:4:metal:sharp+spirit+attune:0"},
+          {"contribution": 800},
+          {"flag": "tianque_qingyun"},
+          {"mijing": "leave"}
+        ],
+        "chronicle": "你把阙光送回了青云。青云的长老们在传功堂里看了一夜；天阙剑宗与青云的旧怨，又深了一层。"
+      },
+      {"id": "keep", "label": "剑认的是我", "effects": [{"flag": "tianque_feud"}, {"battle": "tianque_heir"}], "chronicle": "闻歧点点头：“那就请接我一剑。”"}
+    ]
+  },
+  "tale_chixia": {
+    "title": "说书 · 赤霞谷血池记",
+    "trigger": "location",
+    "location": "nanming",
+    "priority": 7,
+    "conditions": [
+      {"any": [{"flag": "chixia_exposed"}, {"flag": "chixia_jiao_down"}]}
+    ],
+    "effects": [
+      {"mind": 2}
+    ],
+    "chronicle": "南明的茶楼里，说书人新编了一回《赤霞谷血池记》，讲到焦长老被押下山，满座叫好。有人认出你来，硬要替你付茶钱；几个散修远远朝你作了个揖。"
+  },
+  "tale_wanjian": {
+    "title": "说书 · 阙光认主",
+    "trigger": "location",
+    "location": "beiyue",
+    "priority": 7,
+    "conditions": [
+      {
+        "any": [
+          {"flag": "tianque_friend"},
+          {"flag": "tianque_feud"},
+          {"flag": "tianque_qingyun"}
+        ]
+      }
+    ],
+    "effects": [
+      {"mind": 2}
+    ],
+    "chronicle": "北岳古物街上都在传：万剑冢里那柄几百年没人拔得动的阙光剑，认了主。古董铺的掌柜拉着你，非要看一眼你的剑。"
   }
 }

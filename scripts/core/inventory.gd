@@ -178,8 +178,9 @@ static func shop_goods(s) -> Array:
 	var goods: Array = s.content.locations[s.player.location].get("shop", []).duplicate(true)
 	goods.append_array(rotating_stock(s, s.player.location))
 	var percent: int = s.talent_modifier("buy")
-	# 沧澜's 客卿 buy at the sect's own price (guest.gd).
-	var share: float = s.Guest.discount(s)
+	# 沧澜's 客卿 buy at the sect's own price (guest.gd); the 天骄榜's ten highest, and those a place
+	# favors, buy cheaper too (tianji.gd). The better price holds.
+	var share: float = minf(s.Guest.discount(s), s.Tianji.discount(s))
 	for good: Dictionary in goods:
 		good.price = maxi(1, int(round(float(Talents.scaled(int(good.price), percent, 1)) * share)))
 	return goods

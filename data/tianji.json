@@ -1,0 +1,79 @@
+{
+  "name": "天机阁",
+  "revise_years": 10,
+  "reach": 5,
+  "cooldown_days": 30,
+  "tiers": [
+    [3, 3, 1.0],
+    [10, 2, 0.95],
+    [20, 1, 0.9],
+    [30, 0, 0.85]
+  ],
+  "defend_years": [
+    [3, 2],
+    [10, 3],
+    [30, 5]
+  ],
+  "discounts": [
+    [1, 0.8],
+    [3, 0.85],
+    [10, 0.9]
+  ],
+  "favors": [
+    {"location": "market", "flag": "xiao_yield", "rate": 0.8},
+    {"location": "market", "flag": "xiao_face", "rate": 0.9},
+    {"location": "changqing_valley", "flag": "chixia_suheng", "rate": 0.9}
+  ],
+  "scrolls": {
+    "zhuji": {"name": "天骄榜·筑基卷", "realm": 1, "size": 30, "win": {"stones": 60, "xp": 1000}, "gift": {"stones": 150, "items": {"ningqi_pill_fine": 2}}},
+    "jindan": {"name": "天骄榜·金丹卷", "realm": 2, "size": 30, "win": {"stones": 180, "xp": 5000}, "gift": {"stones": 600, "items": {"liaoshang_pill_fine": 3}}}
+  },
+  "filler": {
+    "lineages": ["qingyun", "chixiao", "changqing", "canglan", "xuanyue", "wanderer"]
+  },
+  "prodigies": {
+    "wuming": {"name": "无名", "title": "散修", "sect": "wanderer", "gender": "male", "power": 0.1, "zhuji": [1, 70, 1], "jindan": [70, 170, 1]},
+    "bai_tinglan": {"name": "白听澜", "title": "沧澜首徒", "sect": "canglan", "gender": "female", "person": "bai_tinglan", "zhuji": [1, 45, 2], "jindan": [45, 140, 3]},
+    "xiao_lingyun": {
+      "name": "萧凌云",
+      "title": "萧家麒麟子",
+      "sect": "chixiao",
+      "gender": "male",
+      "person": "xiao_lingyun",
+      "zhuji": [15, 68, 3],
+      "jindan": [68, 150, 2],
+      "absent_if": [
+        {"any": [{"flag": "xiao_ambush"}, {"flag": "xiao_slain"}]}
+      ],
+      "intercept": {"story": ["xiao_rival", "bang"], "event": "xiao_elder", "unless": [{"flag": "xiao_elder_beaten"}]},
+      "bout": {
+        "story": ["xiao_rival", "bang"],
+        "won": [
+          {"flag": "xiao_bout3"},
+          {"flag": "xiao_win3"},
+          {"rival": "face"}
+        ],
+        "lost": [
+          {"flag": "xiao_bout3"},
+          {"flag": "xiao_loss3"}
+        ],
+        "won_event": "xiao_after3"
+      }
+    },
+    "yan_lie": {"name": "炎烈", "title": "赤霄首席", "sect": "chixiao", "gender": "male", "zhuji": [1, 60, 4], "jindan": [60, 150, 5]},
+    "xue_yi": {"name": "血衣", "title": "血煞教", "sect": "chixiao", "gender": "male", "zhuji": [10, 70, 5], "jindan": [70, 160, 6]},
+    "su_heng": {"name": "苏蘅", "title": "长青内门", "sect": "changqing", "gender": "female", "zhuji": [1, 65, 6], "jindan": [65, 160, 8]},
+    "guimian": {"name": "鬼面书生", "title": "九幽宗", "sect": "canglan", "gender": "male", "zhuji": [10, 70, 7], "jindan": [70, 160, 7]},
+    "yue_shanqing": {"name": "岳山青", "title": "玄岳内门", "sect": "xuanyue", "gender": "male", "zhuji": [1, 70, 8], "jindan": [70, 170, 10]},
+    "ying_qi": {"name": "影七", "title": "散修", "sect": "wanderer", "gender": "male", "zhuji": [1, 60, 9], "jindan": [60, 150, 12]},
+    "cheng_yanzhi": {"name": "程砚之", "title": "青云大师兄", "sect": "qingyun", "gender": "male", "zhuji": [1, 60, 10], "jindan": [60, 160, 9]}
+  },
+  "rival": {
+    "person": "xiao_lingyun",
+    "story": "xiao_rival",
+    "prodigy": "xiao_lingyun",
+    "sect": "chixiao",
+    "qianlong": {"until": 15, "level": [0, 3], "power": 1.0, "xp": 150, "note": "潜龙会上，胜萧家麒麟子萧凌云。"},
+    "dabi": {"until": 69, "contest": "tiannan", "scroll": "zhuji", "event": "xiao_poison", "rigged": 0.05, "poison_percent": 60, "note": "天南大比决赛，胜萧凌云，取其筑基卷之位。"}
+  }
+}

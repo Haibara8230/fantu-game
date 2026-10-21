@@ -45,7 +45,7 @@ var barred := {}
 # Where each storyline finding lies: flag -> [cave, room] (a room's own finding or its guardian's flag).
 var findings := {}
 # The occasions a player plans a life around and ticks before a long retreat (the rest are left to chance).
-const APPOINTMENTS := ["tiannan_contest_", "five_sects_entry", "jianya_open", "chenxia_gathering", "wenren_sail_day", "ye_deadline"]
+const APPOINTMENTS := ["tiannan_contest_", "five_sects_entry", "jianya_open", "chenxia_gathering", "wenren_sail_day", "ye_deadline", "chixia_season", "wanjian_season"]
 # The world flags worth reporting at the end of a long life (batches 4–6).
 const REPORTED := ["guest_chixiao", "guest_changqing", "guest_canglan", "guest_xuanyue", "ye_cure", "ye_forbidden", "ye_letgo", "ye_late", "wenren_found_alive", "wenren_found_dead", "zhaochuan_seen", "guzhan_cleared", "pillar_cleared", "shouchuan_joined", "shouchuan_refused", "shouchuan_pact", "wen_testimony", "wen_diary", "zhaochuan_entered", "rift_seen", "truth_public", "truth_kept", "path_reopen", "path_replace", "path_self", "wuzong_champion", "tiannan_champion"]
 
@@ -167,6 +167,9 @@ func _step() -> void:
 	if s.at_brink():
 		_do("act", "BRINK", s.accept_end())
 		return
+	# Inside a 秘境 the days are counted: no resting at an inn there.
+	if not s.Mijing.inside(s).is_empty() and _mijing():
+		return
 	# A player rests before setting out hurt.
 	if int(s.player.hp) * 5 < int(s.player.max_hp) * 3 and s.player.journey.is_empty():
 		_rest()
@@ -182,7 +185,21 @@ func _step() -> void:
 			_mark(str(s.content.realm(realm).name))
 	if s.Storylines.deed_count(s, "win:serpent") > 0:
 		_mark("除蟒")
+	for bout: int in range(1, 4):
+		if s.has_flag("xiao_bout%d" % bout):
+			_mark("萧凌云第%d回：%s" % [bout, "胜" if s.has_flag("xiao_win%d" % bout) or (bout == 3 and s.has_flag("xiao_ambush")) else "负"])
+	for ending: String in ["xiao_friend", "xiao_yield", "xiao_slain", "xiao_trampled"]:
+		if s.has_flag(ending):
+			_mark("萧家结局：" + ending)
+	for scroll_id: String in s.Tianji.data(s).scrolls:
+		if s.Tianji.best(s, scroll_id) > 0 and s.Tianji.best(s, scroll_id) <= 10:
+			_mark("%s前十" % s.Tianji.scroll(s, scroll_id).name)
+	for ending: String in ["chixia_exposed", "chixia_jiao_down", "chixia_jiao_beaten", "chixia_dan", "chixia_suheng", "chixia_done", "tianque_friend", "tianque_feud", "tianque_qingyun"]:
+		if s.has_flag(ending):
+			_mark("秘境结局：" + ending)
 	if _opening():
+		return
+	if _mijing():
 		return
 	if _ascend():
 		return
@@ -210,6 +227,8 @@ func _step() -> void:
 	# when the retreat has grown stale or the xp waits at the stage's cap.
 	if s.retreat_efficiency() >= 70 and s.mind_percent() >= 60 and not s.at_xp_cap():
 		_retreat()
+		return
+	if _tianji():
 		return
 	if _commissions():
 		return
@@ -560,6 +579,63 @@ func _settle() -> bool:
 	if _go("market"):
 		return true
 	_do("act", "LEASE", s.take_lease())
+	return true
+
+## Out of the room, at a city's 榜亭 and whole: a 战帖 up the 天骄榜 (tianji.gd) — as far up as the
+## seat's strength allows the player's stage, else the next seat up.
+## 秘境 (mijing.gd): inside, the next room open to the player, a guardian faced again once, things a
+## fallen guardian kept, a hidden place the 神识 sees; out by the door when nothing is left or the days
+## run short. Outside, while one opens that the player may enter, go where it calls from.
+func _mijing() -> bool:
+	var realm_id: String = s.Mijing.inside(s)
+	if realm_id.is_empty():
+		for candidate: String in s.content.mijing_data.realms:
+			var info: Dictionary = s.content.mijing_data.realms[candidate]
+			var held: Dictionary = s.Mijing.state(s)
+			if not s.Mijing.is_open(s, candidate) or not s.Mijing.fits(s, candidate) or int(held.offered.get(candidate, -1)) == int(held.opened.get(candidate, -2)):
+				continue
+			for place: String in [_home()] + Array(info.call_at):
+				if place in info.call_at and s.location_visible(place) and (str(s.player.location) == place or not s.path_to(place).is_empty()):
+					_mark("秘境：" + str(info.name))
+					if _go(place):
+						return true
+					_do("act", "MIJING", s.wait(1))
+					return true
+		return false
+	var cave_id := str(s.Mijing.realm(s, realm_id).cave)
+	if s.Mijing.days_left(s, realm_id) <= 3 or int(s.player.hp) * 4 < int(s.player.max_hp):
+		_do("act", "MIJING", s.mijing_exit())
+		return true
+	for room: Dictionary in s.content.cave_data[cave_id].rooms:
+		var room_id := str(room.id)
+		if s.Caves.explored(s, cave_id, room_id):
+			if s.Caves.loot_waits(s, cave_id, room_id):
+				_do("act", "MIJING", s.collect_room(cave_id, room_id))
+				return true
+			if s.Caves.hidden_seen(s, cave_id, room_id) and s.Caves.hidden_block(s, cave_id, room_id).is_empty():
+				_do("act", "MIJING", s.open_hidden(cave_id, room_id))
+				return true
+			if s.Caves.guarded(s, cave_id, room_id) and int(tries.get(cave_id, 0)) < 1 and int(s.player.hp) == int(s.player.max_hp):
+				tries[cave_id] = int(tries.get(cave_id, 0)) + 1
+				_do("act", "MIJING", s.challenge_guardian(cave_id, room_id))
+				return true
+		elif s.Caves.enter_block(s, cave_id, room_id).is_empty():
+			_do("act", "MIJING", s.enter_room(cave_id, room_id))
+			return true
+	_do("act", "MIJING", s.mijing_exit())
+	tries.erase(cave_id)
+	return true
+
+func _tianji() -> bool:
+	if not s.available_here("tianji") or not s.Tianji.block(s).is_empty() or int(s.player.hp) < int(s.player.max_hp) or int(s.player.qi) < int(s.player.max_qi):
+		return false
+	var scroll_id: String = s.Tianji.own_scroll(s)
+	var span: Array = s.Tianji.reach(s, scroll_id)
+	if span.is_empty():
+		return false
+	var target: int = int(span[0]) if int(s.Tianji.tier(s, int(span[0]))[0]) <= int(s.player.stage) else int(span[1])
+	_mark("天骄榜")
+	_do("act", "TIANJI", s.tianji_challenge(target))
 	return true
 
 ## Out of the room for a while: gather and sell, spar, take a commission — the mind and fatigue recover.

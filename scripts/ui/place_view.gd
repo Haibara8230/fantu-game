@@ -301,6 +301,14 @@ static func _spot_action(ui, grid: GridContainer, action: String) -> void:
 				var about := "%s是散修自己结的盟，不算拜入：随时可入可退。入盟后可在各城分舵静室闭关、接青灯簿的差事；在野外落败，盟中人会把你抬回%s，不收药钱。拜入宗门即自动退盟。" % [league.name, branch]
 				var take: Button = _timed(ui, grid, "加入%s" % league.name, session.league_join, reason if not reason.is_empty() else about)
 				take.disabled = not reason.is_empty()
+		"tianji":
+			var scroll_id: String = session.Tianji.own_scroll(session)
+			var seat: int = 0 if scroll_id.is_empty() else session.Tianji.rank(session, scroll_id)
+			var about := "天机阁的天骄榜：筑基卷、金丹卷各三十名，十年一大修。同境的修士可递战帖挑战排在前头的人，点到为止，胜了便坐他的位子。"
+			if seat > 0:
+				about += "
+你在%s第 %d。" % [session.Tianji.scroll(session, scroll_id).name, seat]
+			_open(ui, grid, "观天骄榜", func() -> void: ui.set_view("tianji"), about)
 		"join_sect":
 			var sect: String = session.Sect.here(session)
 			var reason: String = session.join_block()

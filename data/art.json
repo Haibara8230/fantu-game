@@ -79,7 +79,16 @@
     "canglan_lamp_room": "sect_chamber",
     "wanghai_lamp_room": "sect_chamber",
     "beiyue_land": "ruin_stone_room",
-    "wanghai_land": "wild_eye"
+    "wanghai_land": "wild_eye",
+    "market_tianji_board": "town_palisade",
+    "nanming_tianji_board": "town_palisade",
+    "beiyue_tianji_board": "town_palisade",
+    "canglan_tianji_board": "town_palisade",
+    "wanghai_tianji_board": "town_palisade",
+    "market_xiao_house": "changqing_valley_pill_hall",
+    "chixia_gate": "wild_slope",
+    "wanjian_gate": "ruin_depths",
+    "chifeng_abode": "nanming_abode"
   },
   "location_art": {
     "beiyue": "nanming",
@@ -91,7 +100,9 @@
     "waihai": "ferry",
     "guzhanchang": "chifeng",
     "zhaochuan": "ruin",
-    "baihua": "changqing_valley"
+    "baihua": "changqing_valley",
+    "chixia": "wild",
+    "wanjian": "ruin"
   },
   "event_art": {
     "yunxi_autumn": "res://assets/art/events/yunxi_auction.png",
@@ -1766,7 +1777,23 @@
         "tint": "#ffffff",
         "faces_right": false
       }
-    }
+    },
+    "xiao_elder": {"texture": "res://assets/art/rival_atlas_v2.png", "columns": 3, "rows": 2, "frames": {"idle": 0, "prepare": 1, "attack": 2, "cast": 3, "hit": 4, "guard": 5}, "faces_right": true, "height_ratio": 0.85, "preferred": "res://assets/art/actors/cultivator_chixiao_male.png"},
+    "xiao_ambush": {"texture": "res://assets/art/rival_atlas_v2.png", "columns": 3, "rows": 2, "frames": {"idle": 0, "prepare": 1, "attack": 2, "cast": 3, "hit": 4, "guard": 5}, "faces_right": true, "height_ratio": 0.85, "preferred": "res://assets/art/actors/cultivator_chixiao_male.png"},
+    "xiao_house": {"texture": "res://assets/art/rival_atlas_v2.png", "columns": 3, "rows": 2, "frames": {"idle": 0, "prepare": 1, "attack": 2, "cast": 3, "hit": 4, "guard": 5}, "faces_right": true, "height_ratio": 0.85, "preferred": "res://assets/art/actors/cultivator_chixiao_male.png"},
+    "xiao_hunter": {"texture": "res://assets/art/rival_atlas_v2.png", "columns": 3, "rows": 2, "frames": {"idle": 0, "prepare": 1, "attack": 2, "cast": 3, "hit": 4, "guard": 5}, "faces_right": true, "height_ratio": 0.85, "preferred": "res://assets/art/actors/rogue.png"},
+    "xiao_remnant": {"texture": "res://assets/art/rival_atlas_v2.png", "columns": 3, "rows": 2, "frames": {"idle": 0, "prepare": 1, "attack": 2, "cast": 3, "hit": 4, "guard": 5}, "faces_right": true, "height_ratio": 0.85, "preferred": "res://assets/art/actors/cultivator_chixiao_male.png"},
+    "xiawen_bao": {"texture": "res://assets/art/beasts_atlas_v1.png", "columns": 2, "rows": 2, "frames": {"idle": 0, "prepare": 0, "attack": 1, "cast": 0, "hit": 0, "guard": 0}, "faces_right": false, "height_ratio": 0.64, "frame_regions": [[0, 0, 768, 464], [768, 0, 768, 464], [0, 472, 768, 552], [768, 472, 768, 552]]},
+    "jiao_array": {"texture": "res://assets/art/rival_atlas_v2.png", "columns": 3, "rows": 2, "frames": {"idle": 0, "prepare": 1, "attack": 2, "cast": 3, "hit": 4, "guard": 5}, "faces_right": true, "height_ratio": 0.85, "preferred": "res://assets/art/actors/cultivator_chixiao_male.png"},
+    "jiao_elder": {"texture": "res://assets/art/rival_atlas_v2.png", "columns": 3, "rows": 2, "frames": {"idle": 0, "prepare": 1, "attack": 2, "cast": 3, "hit": 4, "guard": 5}, "faces_right": true, "height_ratio": 0.85, "preferred": "res://assets/art/actors/cultivator_chixiao_male.png"},
+    "chixia_robber": {"texture": "res://assets/art/rival_atlas_v2.png", "columns": 3, "rows": 2, "frames": {"idle": 0, "prepare": 1, "attack": 2, "cast": 3, "hit": 4, "guard": 5}, "faces_right": true, "height_ratio": 0.85, "preferred": "res://assets/art/actors/rogue.png"},
+    "jiao_killer": {"texture": "res://assets/art/rival_atlas_v2.png", "columns": 3, "rows": 2, "frames": {"idle": 0, "prepare": 1, "attack": 2, "cast": 3, "hit": 4, "guard": 5}, "faces_right": true, "height_ratio": 0.85, "preferred": "res://assets/art/actors/rogue.png"},
+    "tianque_guard": {"texture": "res://assets/art/rival_atlas_v2.png", "columns": 3, "rows": 2, "frames": {"idle": 0, "prepare": 1, "attack": 2, "cast": 3, "hit": 4, "guard": 5}, "faces_right": true, "height_ratio": 0.85, "preferred": "res://assets/art/actors/cultivator_qingyun_male.png"},
+    "wanjian_kui": {"texture": "res://assets/art/rival_atlas_v2.png", "columns": 3, "rows": 2, "frames": {"idle": 0, "prepare": 1, "attack": 2, "cast": 3, "hit": 4, "guard": 5}, "faces_right": true, "height_ratio": 0.85},
+    "wanjian_ling": {"texture": "res://assets/art/rival_atlas_v2.png", "columns": 3, "rows": 2, "frames": {"idle": 0, "prepare": 1, "attack": 2, "cast": 3, "hit": 4, "guard": 5}, "faces_right": true, "height_ratio": 0.85},
+    "wanjian_robber": {"texture": "res://assets/art/rival_atlas_v2.png", "columns": 3, "rows": 2, "frames": {"idle": 0, "prepare": 1, "attack": 2, "cast": 3, "hit": 4, "guard": 5}, "faces_right": true, "height_ratio": 0.85, "preferred": "res://assets/art/actors/rogue.png"},
+    "tianque_heir": {"texture": "res://assets/art/rival_atlas_v2.png", "columns": 3, "rows": 2, "frames": {"idle": 0, "prepare": 1, "attack": 2, "cast": 3, "hit": 4, "guard": 5}, "faces_right": true, "height_ratio": 0.85, "preferred": "res://assets/art/actors/cultivator_qingyun_male.png"},
+    "tianque_hunter": {"texture": "res://assets/art/rival_atlas_v2.png", "columns": 3, "rows": 2, "frames": {"idle": 0, "prepare": 1, "attack": 2, "cast": 3, "hit": 4, "guard": 5}, "faces_right": true, "height_ratio": 0.85, "preferred": "res://assets/art/actors/cultivator_qingyun_male.png"}
   },
   "portrait_art": {
     "azhi": "res://assets/art/portraits/azhi_unique.png",

@@ -30,6 +30,9 @@ const Series = preload("res://scripts/core/series.gd")
 const Trials = preload("res://scripts/core/trials.gd")
 const Guest = preload("res://scripts/core/guest.gd")
 const League = preload("res://scripts/core/league.gd")
+const Tianji = preload("res://scripts/core/tianji.gd")
+const Mijing = preload("res://scripts/core/mijing.gd")
+const Rival = preload("res://scripts/core/rival.gd")
 const Ascension = preload("res://scripts/core/ascension.gd")
 const Feuds = preload("res://scripts/core/feuds.gd")
 const Schools = preload("res://scripts/core/schools.gd")
@@ -113,11 +116,11 @@ func new_game(character_name: String = "无名", seed_value: int = -1, roots: Ar
 		chosen_name = "无名"
 	# talent_lives: the generated population's talents shape their lives (journeys begun before talents
 	# keep the lives they had).
-	world = {"day": 0, "flags": {}, "events": {}, "people": {}, "seed": seed_value if seed_value >= 0 else absi(int(world_rng.randi())), "stock_sold": {}, "rumors": {}, "quests_taken": {}, "storylines": {}, "letters": [], "talent_lives": true, "invites": [], "loans": [], "visit_period": 0, "caves": {}, "market_supply": {}, "demand_supply": {}, "companion": "", "party": {}, "disciples": [], "sworn": [], "grudges": [], "grudge_seeds": {}, "grudge_serial": 0, "stashes": []}
+	world = {"day": 0, "flags": {}, "events": {}, "people": {}, "seed": seed_value if seed_value >= 0 else absi(int(world_rng.randi())), "stock_sold": {}, "rumors": {}, "quests_taken": {}, "storylines": {}, "letters": [], "talent_lives": true, "invites": [], "loans": [], "visit_period": 0, "caves": {}, "market_supply": {}, "demand_supply": {}, "companion": "", "party": {}, "disciples": [], "sworn": [], "grudges": [], "grudge_seeds": {}, "grudge_serial": 0, "stashes": [], "tianji": {}, "mijing": {}}
 	populate()
 	player = {
 		"name": chosen_name, "birth_day": -int(content.rules.starting_age) * Calendar.DAYS_PER_YEAR,
-		"realm": 0, "stage": 0, "xp": 0, "hp": 0, "qi": 0, "cultivation_carry": 0, "warned_for": -1, "wake": [], "leases": {}, "arena_best": {}, "series_last": {}, "trials": {}, "guests": [], "betrayed": [], "sect_day": 0, "league": {}, "roots": roots.duplicate(),
+		"realm": 0, "stage": 0, "xp": 0, "hp": 0, "qi": 0, "cultivation_carry": 0, "warned_for": -1, "wake": [], "leases": {}, "arena_best": {}, "series_last": {}, "trials": {}, "guests": [], "betrayed": [], "sect_day": 0, "league": {}, "tianji": {}, "roots": roots.duplicate(),
 		"fatigue": 0, "fatigue_day": 0, "insight": 0, "mind": 0,
 		"stones": int(content.rules.starting_stones), "items": {},
 		"journey": {}, "cooldowns": {},
@@ -201,6 +204,9 @@ func advance_days(days: int, interruptible: bool = false, retreat: bool = false)
 	var guest := Guest.pay_passive(self)
 	if not guest.is_empty():
 		messages.append(guest)
+	var gift := Tianji.pay_passive(self)
+	if not gift.is_empty():
+		messages.append(gift)
 	return {"elapsed": int(world.day) - start, "interrupted": interrupted, "by": by, "messages": messages}
 
 ## Joins an action's text with what happened meanwhile, fires location events, and notifies listeners.
@@ -1304,6 +1310,14 @@ func league_join() -> String:
 
 func league_leave() -> String:
 	return League.leave(self)
+
+## A 战帖 to the one at `target_rank` on the 天骄榜 of the player's realm (tianji.gd).
+func tianji_challenge(target_rank: int) -> String:
+	return Tianji.challenge(self, target_rank)
+
+## 出谷: out of the 秘境 by its door (mijing.gd).
+func mijing_exit() -> String:
+	return Mijing.exit(self)
 
 func take_lease() -> String:
 	return Leases.take(self)

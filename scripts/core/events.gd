@@ -5,6 +5,11 @@ extends RefCounted
 const Calendar = preload("res://scripts/core/calendar.gd")
 const NEVER := 2147483647
 const STATES := ["completed", "expired"]
+# A periodic dated event's next window to fire in, by event id: {"lo", "from", "to", "last"}. It follows
+# from the definition, the day asked from and the occurrence last fired alone, so it holds for any later
+# day up to the window's end while the event has not fired again (next_due asks it for every event on
+# every step of time).
+static var _due_windows := {}
 
 # --- Windows ---------------------------------------------------------------
 
@@ -120,6 +125,13 @@ static func met(s, condition: Dictionary) -> bool:
 				"banned":
 					return s.League.banned(s)
 			return false
+		# 天骄榜 (tianji.gd): the player within a rank on a scroll.
+		"tianji":
+			var held: int = s.Tianji.rank(s, str(value[0]))
+			return held >= 1 and held <= int(value[1])
+		# 萧家麒麟子 (rival.gd): how the bouts went, or what the player has heard.
+		"rival":
+			return s.Rival.met(s, str(value))
 		"holds_gear":
 			return s.Gear.holds(s, str(value))
 		"present":
@@ -211,6 +223,8 @@ static func apply(s, effects: Array) -> void:
 				s.add_item("j:" + str(value), 1)
 			"reforge":
 				s.Gear.reforge(s, str(value[0]), str(value[1]))
+			"give_gear":
+				s.Gear.give_up(s, str(value))
 			"guest_invite":
 				s.world.flags["guest_invite_" + str(value)] = true
 			# A choice that ends the life (`final`): the ending's words.
@@ -226,6 +240,16 @@ static func apply(s, effects: Array) -> void:
 				s.League.apply(s, str(value))
 			"league_standing":
 				s.League.gain(s, int(value))
+			# The 天机阁's 批注 ([scroll, seat, words]), a 战帖 sent past whoever stood in the way, the
+			# answer to a challenge, and the rival's turns (rival.gd).
+			"tianji":
+				s.Tianji.annotate(s, str(value[0]), int(value[1]), str(value[2]))
+			"tianji_duel":
+				s.Tianji.duel(s, str(value))
+			"tianji_defend":
+				s.Tianji.defend(s, str(value))
+			"rival":
+				s.Rival.apply(s, str(value))
 			"talent":
 				s.gain_talent(value)
 			"demon":
@@ -319,9 +343,18 @@ static func apply(s, effects: Array) -> void:
 			"summit":
 				s.Summit.begin(s, 1)
 			"contest":
-				s.Summit.begin(s, 1, str(value))
+				s.Rival.contest(s, str(value))
 			"reset_cave":
 				s.Caves.reset(s, value)
+			# 秘境 (mijing.gd): opened and shut on their days, gone into by a way, and what is done inside.
+			"mijing_open":
+				s.Mijing.open(s, str(value))
+			"mijing_close":
+				s.Mijing.close(s, str(value))
+			"mijing_enter":
+				s.Mijing.enter(s, str(value[0]), str(value[1]))
+			"mijing":
+				s.Mijing.apply(s, str(value))
 			"party":
 				if not s.world.has("party"):
 					s.world["party"] = {}
@@ -403,6 +436,16 @@ static func next_due(s, from_day: int) -> Dictionary:
 		var progress := progress_of(s, event_id)
 		# Completed fixed windows cannot become due again. Avoid rebuilding their calendars.
 		if str(progress.state) in STATES and not definition.has("periodic"):
+			continue
+		if definition.trigger == "date" and definition.has("periodic"):
+			var held: Dictionary = _due_windows.get(event_id, {})
+			if held.is_empty() or from_day < int(held.lo) or from_day > int(held.to) or int(held.last) != int(progress.last_occurrence):
+				var found := window_at(definition, from_day)
+				if found.is_empty() or not open_for(s, event_id, found, from_day):
+					found = next_window(definition, from_day + 1) if not found.is_empty() else next_window(definition, from_day)
+				held = {"lo": from_day, "from": int(found.from), "to": int(found.to), "last": int(progress.last_occurrence)}
+				_due_windows[event_id] = held
+			best = _earlier(best, {"day": maxi(from_day, int(held.from)), "kind": "date", "event": event_id})
 			continue
 		var window := window_at(definition, from_day)
 		if window.is_empty() or not open_for(s, event_id, window, from_day):
@@ -528,6 +571,8 @@ static func check_location(s, passing: bool = false) -> Array[String]:
 		s.Feuds.update(s)
 		s.Feuds.collect_stash(s)
 		s.Feuds.check_bounties(s)
+		s.Tianji.check(s)
+		s.Mijing.check(s)
 	return messages
 
 ## Whether the pending event offers a choice that would end the life (`final`), so the interface writes
@@ -552,7 +597,9 @@ static func choose(s, choice_id: String) -> String:
 		var raised: Dictionary = s.pending_event
 		apply(s, choice.get("effects", []))
 		args.merge(raised.get("values", {}))
-		s.pending_event = {}
+		# A choice may raise the next event itself (rival.gd: the pill before 天南大比); that one stays.
+		if is_same(s.pending_event, raised):
+			s.pending_event = {}
 		var text: String = s.log_event("event", args, bool(definition.get("major", false)))
 		# Living through an encounter, whatever the choice, is insight toward the next bottleneck.
 		var milestones: Array[String] = []
