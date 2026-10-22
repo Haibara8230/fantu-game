@@ -47,6 +47,7 @@ var league_data: Dictionary = {}
 var tianji_data: Dictionary = {}
 var mijing_data: Dictionary = {}
 var guishi_data: Dictionary = {}
+var wuxiang_data: Dictionary = {}
 # 炼器's materials and costs (forge.gd).
 var forge_data: Dictionary = {}
 # Lore heard in teahouses about the wider world (rumors.gd).
@@ -105,7 +106,7 @@ func load_data() -> bool:
 	for item_id: String in items:
 		if items[item_id] is Dictionary:
 			items[item_id].id = item_id
-	for pair: Array in [["techniques", "res://data/techniques.json"], ["equipment", "res://data/equipment.json"], ["vfx_tiers", "res://data/vfx_tiers.json"], ["vfx", "res://data/vfx.json"], ["population", "res://data/population.json"], ["commissions", "res://data/commissions.json"], ["storylines", "res://data/storylines.json"], ["talents", "res://data/talents.json"], ["sect", "res://data/sect.json"], ["bonds", "res://data/bonds.json"], ["alchemy", "res://data/alchemy.json"], ["caves", "res://data/caves.json"], ["auctions", "res://data/auctions.json"], ["summit", "res://data/summit.json"], ["forge", "res://data/forge.json"], ["lore", "res://data/lore.json"], ["guests", "res://data/guests.json"], ["league", "res://data/league.json"], ["tianji", "res://data/tianji.json"], ["mijing", "res://data/mijing.json"], ["guishi", "res://data/guishi.json"]]:
+	for pair: Array in [["techniques", "res://data/techniques.json"], ["equipment", "res://data/equipment.json"], ["vfx_tiers", "res://data/vfx_tiers.json"], ["vfx", "res://data/vfx.json"], ["population", "res://data/population.json"], ["commissions", "res://data/commissions.json"], ["storylines", "res://data/storylines.json"], ["talents", "res://data/talents.json"], ["sect", "res://data/sect.json"], ["bonds", "res://data/bonds.json"], ["alchemy", "res://data/alchemy.json"], ["caves", "res://data/caves.json"], ["auctions", "res://data/auctions.json"], ["summit", "res://data/summit.json"], ["forge", "res://data/forge.json"], ["lore", "res://data/lore.json"], ["guests", "res://data/guests.json"], ["league", "res://data/league.json"], ["tianji", "res://data/tianji.json"], ["mijing", "res://data/mijing.json"], ["guishi", "res://data/guishi.json"], ["wuxiang", "res://data/wuxiang.json"]]:
 		var loaded: Variant = _read_json(pair[1])
 		if not loaded is Dictionary:
 			error_message = "配置格式错误：" + pair[1]
@@ -156,6 +157,8 @@ func load_data() -> bool:
 				mijing_data = loaded
 			"guishi":
 				guishi_data = loaded
+			"wuxiang":
+				wuxiang_data = loaded
 	map = parsed.map
 	regions = parsed.get("regions", {})
 	locations = parsed.locations
@@ -442,6 +445,8 @@ func _validate() -> String:
 		problem = _validate_mijing()
 	if problem.is_empty():
 		problem = _validate_guishi()
+	if problem.is_empty():
+		problem = _validate_wuxiang()
 	if problem.is_empty():
 		problem = _validate_ascension()
 	if problem.is_empty():
@@ -1017,6 +1022,50 @@ func _validate_guishi() -> String:
 		if items[item_id].has("stolen") and not items[item_id].stolen is bool:
 			return "赃物标记无效：" + item_id
 	return ""
+
+## data/wuxiang.json: the seven places of 无相宝录 — where each is, how long before 影七 takes it, who
+## buys it from him and how it is had back, and what it gives; the blade's stages, 影七's offers and
+## what a 散修之主 is owed.
+func _validate_wuxiang() -> String:
+	var data := wuxiang_data
+	if not storylines.has(data.get("story", "")) or not _whole(data.get("stash_keep")) or not data.get("well_flag", "") in world_flags or not locations.has(data.get("well_place", "")):
+		return "无相宝录配置无效。"
+	var pages: Variant = data.get("pages")
+	if not pages is Array or pages.size() != 7:
+		return "无相宝录须有七处。"
+	for index: int in pages.size():
+		var page: Variant = pages[index]
+		if not page is Dictionary or not page.get("name") is String or not locations.has(page.get("place", "")) or not _whole(page.get("race_years")) or int(page.race_years) < 1:
+			return "无相宝录第 %d 处无效。" % (index + 1)
+		if not page.get("flags") is Array or page.flags.any(func(flag: Variant) -> bool: return not flag in world_flags):
+			return "无相宝录第 %d 处引用了未知标记。" % (index + 1)
+		# The last place has no keeper: 影七 waits there himself.
+		if index < pages.size() - 1 and (not locations.has(page.get("keeper", "")) or not sect_data.get("sects", {}).has(page.get("sect", "")) or not _whole(page.get("price")) or not _whole(page.get("sense"))):
+			return "无相宝录第 %d 处的收藏宗门无效。" % (index + 1)
+		var problem := _validate_effects(page.get("reward", []))
+		if not problem.is_empty():
+			return "无相宝录第 %d 处：%s" % [index + 1, problem]
+	if not data.get("blades") is Array or data.blades.size() != 3 or data.blades.any(func(blade: Variant) -> bool: return equipment(str(blade)).is_empty()):
+		return "无相剑的三阶无效。"
+	if not (data.get("gamble_chance") is float or data.get("gamble_chance") is int) or float(data.gamble_chance) <= 0.0 or float(data.gamble_chance) > 1.0:
+		return "赌石的把握无效。"
+	if not _whole(data.get("ally_takes")) or int(data.ally_takes) < 1 or int(data.ally_takes) > pages.size():
+		return "影七分走的一处无效。"
+	var master: Variant = data.get("master")
+	if not master is Dictionary or ["discount", "guard_favor"].any(func(key: String) -> bool: return not (master.get(key) is float or master.get(key) is int) or float(master[key]) <= 0.0 or float(master[key]) > 1.0):
+		return "散修之主的好处无效。"
+	return ""
+
+## A 无相宝录 query or deed (wuxiang.gd met / apply), with its page number where it takes one.
+func _valid_wuxiang(value: Variant, verbs: Array, numbered: Array) -> bool:
+	if not value is String:
+		return false
+	var parts: PackedStringArray = value.split(":")
+	if parts[0] in numbered:
+		return parts.size() == 2 and parts[1].is_valid_int() and int(parts[1]) >= 1 and int(parts[1]) <= wuxiang_data.get("pages", []).size()
+	if parts[0] == "favor":
+		return parts.size() == 2 and sect_data.get("sects", {}).has(parts[1])
+	return parts.size() == 1 and parts[0] in verbs
 
 # --- 天机阁与天骄榜 ------------------------------------------------------------------------------------
 
@@ -1788,6 +1837,8 @@ func _validate_reveals() -> String:
 		settable["guest_" + sect] = true
 	# 天南散修盟's rooms open to its members (league.gd).
 	settable["league_member"] = true
+	# 无相宝录's well opens once the player goes down it (wuxiang.gd).
+	settable[str(wuxiang_data.get("well_flag", ""))] = true
 	# A 秘境 opens on its days and closes its story with its outcomes (mijing.gd).
 	for info: Variant in mijing_data.get("realms", {}).values():
 		if info is Dictionary:
@@ -2125,6 +2176,8 @@ func _validate_condition(condition: Variant) -> String:
 			return "" if value is Array and value.size() == 2 and tianji_data.get("scrolls", {}).has(value[0]) and _whole(value[1]) and int(value[1]) >= 1 else "天骄榜条件无效"
 		"rival":
 			return "" if value in ["friend", "beaten", "elder_known"] else "宿敌条件无效"
+		"wuxiang":
+			return "" if _valid_wuxiang(value, ["can_gamble", "stash", "met", "ally", "sold", "master", "shared"], ["held", "lost", "decided", "own"]) else "无相宝录条件无效"
 		"mind_ready":
 			return "" if value is bool else "心境条件无效"
 		"present":
@@ -2205,6 +2258,8 @@ func _validate_effects(effects: Variant) -> String:
 				ok = value in ["fight", "share", "ally", "yield", "surrender", "leave", "decline", "rob_fight", "rob_pay"]
 			"guishi":
 				ok = value in ["tail_fight", "tail_pay"]
+			"wuxiang":
+				ok = _valid_wuxiang(value, ["descend", "gamble", "save", "cure", "refuse", "ally", "sold", "blade", "finish"], ["got", "plain", "reclaim", "page"])
 			"reforge":
 				ok = value is Array and value.size() == 2 and not equipment(str(value[0])).is_empty() and not equipment(str(value[1])).is_empty()
 			"guest_invite":
@@ -2490,6 +2545,9 @@ func _validate_item(item: Variant) -> String:
 		return "品级无效"
 	if item.has("toxin") and (not _whole(item.toxin) or int(item.toxin) < 1):
 		return "丹毒无效"
+	# 无相袋: carried, one more pill a duel (combat.gd pill_block).
+	if item.has("duel_pills") and (not _whole(item.duel_pills) or int(item.duel_pills) < 1):
+		return "斗法服丹之数无效"
 	if item.has("breakthrough") and (not item.breakthrough is Dictionary or not _whole(item.breakthrough.get("bonus")) or not _whole(item.breakthrough.get("grade", 0))):
 		return "突破之用无效"
 	return _validate_effects(item.get("use", []))
@@ -2598,7 +2656,7 @@ func _validate_arsenal() -> String:
 		if str(skill.get("slot", "art")) == "method":
 			if not _whole(skill.get("tier")) or int(skill.tier) < 1 or int(skill.tier) > data.tiers.size() or not skill.get("name") is String or not skill.get("description") is String:
 				return "手写心法的品阶或文字无效：" + skill_id
-			if not skill.get("passive") is Dictionary or skill.passive.is_empty() or skill.passive.keys().any(func(key: Variant) -> bool: return not key in ["cultivation", "max_hp", "max_qi", "dun_speed", "encounter", "element_damage", "orb_weight"]) or skill.passive.values().any(func(value: Variant) -> bool: return not (value is float or value is int)):
+			if not skill.get("passive") is Dictionary or skill.passive.is_empty() or skill.passive.keys().any(func(key: Variant) -> bool: return not key in ["cultivation", "max_hp", "max_qi", "dun_speed", "encounter", "element_damage", "orb_weight", "humble_rate", "room_rate", "poison_ward"]) or skill.passive.values().any(func(value: Variant) -> bool: return not (value is float or value is int)) or not skill.get("wanderer", false) is bool:
 				return "手写心法的常驻效果无效：" + skill_id
 			# 《照水分光诀》: two elements that answer each other as a 连击 (combat.gd linked_combo).
 			var link: Variant = skill.get("link", {})

@@ -168,6 +168,9 @@ static func _handwritten_method(content, id: String, layer: int) -> Dictionary:
 		"min_realm": int(tier_def.min_realm), "value": int(tier_def.value), "study_days": int(tier_def.study_days),
 		"layer": at, "layers": layers, "passive": passive,
 	}
+	# 散修专属 (《无相聚气诀》): it works only for one who belongs to no sect (loadout.gd bonuses).
+	if bool(skill.get("wanderer", false)):
+		result.wanderer = true
 	result.description = str(skill.description) + describe_technique(content, result)
 	return result
 
@@ -284,11 +287,11 @@ static func describe_technique(content, t: Dictionary) -> String:
 		lines.append("耗灵气：%s。" % cost_text(content, t.cost))
 		lines.append(combo_text(content, t))
 	else:
-		var names := {"cultivation": "修炼速度 +%d%%", "max_hp": "气血上限 +%d", "max_qi": "灵力上限 +%d", "element_damage": element_name + "属性伤害 +%d%%", "orb_weight": "斗法中" + element_name + "灵气更易抽到 +%d", "dun_speed": "遁速 +%d%%", "encounter": "野外遇险 %d%%"}
+		var names := {"cultivation": "修炼速度 +%d%%", "max_hp": "气血上限 +%d", "max_qi": "灵力上限 +%d", "element_damage": element_name + "属性伤害 +%d%%", "orb_weight": "斗法中" + element_name + "灵气更易抽到 +%d", "dun_speed": "遁速 +%d%%", "encounter": "野外遇险 %d%%", "humble_rate": "客栈、租屋与散修盟静室闭关收益 +%d%%", "room_rate": "闭关收益 +%d%%", "poison_ward": "所受流血与禁疗 -%d%%"}
 		var parts: Array[String] = []
 		for key: String in t.passive:
 			var value: float = float(t.passive[key])
-			parts.append(names[key] % int(round(value * 100.0 if key in ["cultivation", "element_damage", "dun_speed", "encounter"] else value)))
+			parts.append(names[key] % int(round(value * 100.0 if key in ["cultivation", "element_damage", "dun_speed", "encounter", "humble_rate", "room_rate", "poison_ward"] else value)))
 		lines.append("心法，常驻生效：" + "，".join(parts) + "。")
 	var unlocks: Array = t.get("affix_unlocks", [])
 	var texts: Array = t.get("affix_texts", [])

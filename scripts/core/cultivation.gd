@@ -34,7 +34,12 @@ static func room(s) -> Dictionary:
 			continue
 		var let: Dictionary = spot.get("lodging", {})
 		var rent := 0 if bool(let.get("league", false)) and s.League.deputy(s) else int(let.get("rent", 0))
-		rooms.append({"name": str(spot.name), "rate": float(let.get("rate", 1.0)), "rent": rent})
+		# The alliance's rooms cost a 散修之主 less (wuxiang.gd).
+		if bool(let.get("league", false)):
+			rent = int(round(float(rent) * s.Wuxiang.discount(s)))
+		# A room paid for (an inn, the alliance's) or a house let by the term: a 散修's lodging.
+		var humble: bool = int(let.get("rent", 0)) > 0 or s.Leases.until(s, str(spot.get("requires_flag", ""))) >= 0
+		rooms.append({"name": str(spot.name), "rate": float(let.get("rate", 1.0)), "rent": rent, "humble": humble})
 	rooms.sort_custom(func(a: Dictionary, b: Dictionary) -> bool: return a.rate > b.rate or (a.rate == b.rate and a.rent < b.rent))
 	for kept: Dictionary in rooms:
 		if int(kept.rent) <= int(s.player.stones):
@@ -54,9 +59,12 @@ static func lodging(s) -> Dictionary:
 	var kept := room(s)
 	return kept if int(kept.get("rent", 0)) > 0 else {}
 
-## How richly a retreat here goes: the room's rate, else whole.
+## How richly a retreat here goes: the room's rate, else whole; the 无相 心法 add to it everywhere
+## (room_rate) and in a 散修's lodging (humble_rate).
 static func place_rate(s) -> float:
-	return float(room(s).get("rate", 1.0))
+	var kept := room(s)
+	var bonuses: Dictionary = s.bonuses()
+	return float(kept.get("rate", 1.0)) + float(bonuses.room_rate) + (float(bonuses.humble_rate) if bool(kept.get("humble", false)) else 0.0)
 
 ## Stones the room asks for `days`, rounded up to whole stones.
 static func rent(s, days: int) -> int:

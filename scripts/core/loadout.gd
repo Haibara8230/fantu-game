@@ -10,11 +10,12 @@ const Gear = preload("res://scripts/core/gear.gd")
 const SLIP_FLAG := "hall_slip:"
 
 ## Totals from 心法, equipment and talents: attack, max_hp, max_qi, defense, cultivation, element_damage
-## {element|"*": x}, and the talents' max_hp_percent and max_qi_percent of the stage's caps.
+## {element|"*": x}, and the talents' max_hp_percent and max_qi_percent of the stage's caps; the 无相
+## 心法's humble_rate and room_rate (cultivation.gd place_rate) and poison_ward (combat.gd).
 static func bonuses(s, holder: Dictionary = {}) -> Dictionary:
 	if holder.is_empty():
 		holder = s.player
-	var total := {"attack": 0, "max_hp": 0, "max_qi": 0, "defense": 0.0, "cultivation": 0.0, "element_damage": {}, "max_hp_percent": 0, "max_qi_percent": 0, "dun_speed": 0.0, "encounter": 0.0, "orb_tide": 0}
+	var total := {"attack": 0, "max_hp": 0, "max_qi": 0, "defense": 0.0, "cultivation": 0.0, "element_damage": {}, "max_hp_percent": 0, "max_qi_percent": 0, "dun_speed": 0.0, "encounter": 0.0, "orb_tide": 0, "humble_rate": 0.0, "room_rate": 0.0, "poison_ward": 0.0}
 	for key: String in Talents.ORB_KEYS:
 		total[key] = 0
 	_add_talents(s, total, holder.get("talents", []) + holder.get("flaws", []), int(holder.get("realm", 0)))
@@ -24,7 +25,8 @@ static func bonuses(s, holder: Dictionary = {}) -> Dictionary:
 	var layers: Variant = holder.get("layers")
 	for technique_id: Variant in holder.get("methods", []):
 		var method: Dictionary = Layers.held_in(s.content, layers, str(technique_id), int(holder.get("realm", 0))) if layers is Dictionary else Layers.at_realm(s.content, str(technique_id), int(holder.get("realm", 0)))
-		if not method.is_empty():
+		# A 散修's own 心法 (《无相聚气诀》) does not turn for one who has joined a sect.
+		if not method.is_empty() and not (bool(method.get("wanderer", false)) and not str(holder.get("affiliation", "")).is_empty()):
 			sources.append({"stats": method.passive, "element": method.element})
 	for slot: String in holder.get("equipment", {}):
 		# The player's pieces may be instances with their 祭炼 (gear.gd).
@@ -43,7 +45,7 @@ static func bonuses(s, holder: Dictionary = {}) -> Dictionary:
 				# An element drawn more often: the 心法's or the 法宝's own element (none for plain gear).
 				if total.has("orb_" + str(source.element)):
 					total["orb_" + str(source.element)] = int(total["orb_" + str(source.element)]) + int(source.stats[key])
-			elif key in ["defense", "cultivation", "dun_speed", "encounter"]:
+			elif key in ["defense", "cultivation", "dun_speed", "encounter", "humble_rate", "room_rate", "poison_ward"]:
 				total[key] = float(total[key]) + float(source.stats[key])
 			else:
 				total[key] = int(total[key]) + int(source.stats[key])

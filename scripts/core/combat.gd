@@ -146,6 +146,14 @@ static func _inflict(status: Dictionary, key: String, value: Array) -> void:
 		return
 	status[key] = added
 
+## An opponent's lingering effect on the player: 《无相化毒经》 (poison_ward) halves 流血 and 禁疗.
+static func _inflict_player(s, key: String, value: Array) -> void:
+	var ward := float(s.bonuses().get("poison_ward", 0.0))
+	if ward > 0.0 and key in ["bleed", "wound"]:
+		var kept := lingering_value(key, value)
+		value = [float(kept[0]) * (1.0 - ward) if key in SHARES else maxi(1, int(round(float(kept[0]) * (1.0 - ward)))), int(kept[1])]
+	_inflict(s.battle.player_status, key, value)
+
 ## A heal through 禁疗: what is left of `amount`.
 static func _healed(status: Dictionary, amount: int) -> int:
 	return int(round(float(amount) * (1.0 - float(status.wound[0])))) if status.has("wound") else amount
@@ -863,9 +871,17 @@ static func pill_block(s, item_id: String) -> String:
 		if bool(item.duel.get("escape", false)) and s.battle.get("context", "") in ["spar", "tournament", "summit", "arena", "tianji", "tribulation"]:
 			return "比斗之中遁走，与认输无异；不必用符。"
 		return ""
-	if int(s.battle.get("pills", 0)) >= int(rules(s).pills):
-		return "这一场已服了 %d 枚丹药，药力再难化开。" % int(rules(s).pills)
+	if int(s.battle.get("pills", 0)) >= pill_limit(s):
+		return "这一场已服了 %d 枚丹药，药力再难化开。" % pill_limit(s)
 	return ""
+
+## Pills a duel takes: the rule's, and one more for each thing carried that holds them (无相袋).
+static func pill_limit(s) -> int:
+	var limit := int(rules(s).pills)
+	for item_id: String in s.player.get("items", {}):
+		if s.content.items.has(item_id) and s.item_count(item_id) > 0:
+			limit += int(s.content.items[item_id].get("duel_pills", 0))
+	return limit
 
 ## Takes a pill in the duel without ending the turn: 回气丹 brings orbs, 疗伤丹 heals.
 static func take_pill(s, item_id: String) -> String:
@@ -1312,7 +1328,7 @@ static func _do_move(s, planned: Dictionary, factor: float, guarding: bool) -> b
 					s.battle.hp = int(s.battle.hp) + drained
 			for lingering: String in LINGERING:
 				if move.get("inflict", {}).has(lingering):
-					_inflict(s.battle.player_status, lingering, move.inflict[lingering])
+					_inflict_player(s, lingering, move.inflict[lingering])
 	return false
 
 static func _enemy_turn(s, guarding: bool) -> String:
@@ -1398,7 +1414,7 @@ static func _enemy_turn(s, guarding: bool) -> String:
 			_:
 				for lingering: String in LINGERING:
 					if art.has(lingering):
-						_inflict(s.battle.player_status, lingering, art[lingering])
+						_inflict_player(s, lingering, art[lingering])
 				if _hurt_player(s, s.combat_rng.randi_range(int(planned.min), int(planned.max)), factor * ground(s, str(art.element), true) * school_force, guarding, look):
 					return _lose(s)
 	if _pack_strikes(s, guarding):

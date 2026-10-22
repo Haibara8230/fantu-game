@@ -102,7 +102,8 @@
     "chifeng_abode": "rogue_rented_abode",
     "market_ghost": "ferry_dock",
     "chifeng_cangfeng": "chifeng_cavern",
-    "chifeng_cangfeng_abode": "sect_chamber"
+    "chifeng_cangfeng_abode": "sect_chamber",
+    "town_well": "ruin_stone_room"
   },
   "location_art": {
     "duanjian": "chifeng",
@@ -1833,7 +1834,16 @@
     "shi_wufeng": {"texture": "res://assets/art/rival_atlas_v2.png", "columns": 3, "rows": 2, "frames": {"idle": 0, "prepare": 1, "attack": 2, "cast": 3, "hit": 4, "guard": 5}, "faces_right": true, "height_ratio": 0.85, "preferred": "res://assets/art/actors/cultivator_wanderer_male.png"},
     "kuzhu": {"texture": "res://assets/art/rival_atlas_v2.png", "columns": 3, "rows": 2, "frames": {"idle": 0, "prepare": 1, "attack": 2, "cast": 3, "hit": 4, "guard": 5}, "faces_right": true, "height_ratio": 0.85, "preferred": "res://assets/art/actors/cultivator_wanderer_male.png"},
     "xiao_house_guard": {"texture": "res://assets/art/rival_atlas_v2.png", "columns": 3, "rows": 2, "frames": {"idle": 0, "prepare": 1, "attack": 2, "cast": 3, "hit": 4, "guard": 5}, "faces_right": true, "height_ratio": 0.85, "preferred": "res://assets/art/actors/cultivator_chixiao_male.png"},
-    "chai_lie": {"texture": "res://assets/art/rival_atlas_v2.png", "columns": 3, "rows": 2, "frames": {"idle": 0, "prepare": 1, "attack": 2, "cast": 3, "hit": 4, "guard": 5}, "faces_right": true, "height_ratio": 0.85, "preferred": "res://assets/art/actors/cultivator_chixiao_male.png"}
+    "chai_lie": {"texture": "res://assets/art/rival_atlas_v2.png", "columns": 3, "rows": 2, "frames": {"idle": 0, "prepare": 1, "attack": 2, "cast": 3, "hit": 4, "guard": 5}, "faces_right": true, "height_ratio": 0.85, "preferred": "res://assets/art/actors/cultivator_chixiao_male.png"},
+    "wuxiang_kui": {"texture": "res://assets/art/rival_atlas_v2.png", "columns": 3, "rows": 2, "frames": {"idle": 0, "prepare": 1, "attack": 2, "cast": 3, "hit": 4, "guard": 5}, "faces_right": true, "height_ratio": 0.85},
+    "ying_qi": {"texture": "res://assets/art/rival_atlas_v2.png", "columns": 3, "rows": 2, "frames": {"idle": 0, "prepare": 1, "attack": 2, "cast": 3, "hit": 4, "guard": 5}, "faces_right": true, "height_ratio": 0.85, "preferred": "res://assets/art/actors/rogue.png"},
+    "wuxiang_guard1": {"texture": "res://assets/art/rival_atlas_v2.png", "columns": 3, "rows": 2, "frames": {"idle": 0, "prepare": 1, "attack": 2, "cast": 3, "hit": 4, "guard": 5}, "faces_right": true, "height_ratio": 0.85, "preferred": "res://assets/art/actors/cultivator_changqing_male.png"},
+    "wuxiang_guard2": {"texture": "res://assets/art/rival_atlas_v2.png", "columns": 3, "rows": 2, "frames": {"idle": 0, "prepare": 1, "attack": 2, "cast": 3, "hit": 4, "guard": 5}, "faces_right": true, "height_ratio": 0.85, "preferred": "res://assets/art/actors/cultivator_canglan_male.png"},
+    "wuxiang_guard3": {"texture": "res://assets/art/rival_atlas_v2.png", "columns": 3, "rows": 2, "frames": {"idle": 0, "prepare": 1, "attack": 2, "cast": 3, "hit": 4, "guard": 5}, "faces_right": true, "height_ratio": 0.85, "preferred": "res://assets/art/actors/cultivator_chixiao_male.png"},
+    "wuxiang_guard4": {"texture": "res://assets/art/rival_atlas_v2.png", "columns": 3, "rows": 2, "frames": {"idle": 0, "prepare": 1, "attack": 2, "cast": 3, "hit": 4, "guard": 5}, "faces_right": true, "height_ratio": 0.85, "preferred": "res://assets/art/actors/cultivator_changqing_male.png"},
+    "wuxiang_guard5": {"texture": "res://assets/art/rival_atlas_v2.png", "columns": 3, "rows": 2, "frames": {"idle": 0, "prepare": 1, "attack": 2, "cast": 3, "hit": 4, "guard": 5}, "faces_right": true, "height_ratio": 0.85, "preferred": "res://assets/art/actors/cultivator_xuanyue_male.png"},
+    "wuxiang_guard6": {"texture": "res://assets/art/rival_atlas_v2.png", "columns": 3, "rows": 2, "frames": {"idle": 0, "prepare": 1, "attack": 2, "cast": 3, "hit": 4, "guard": 5}, "faces_right": true, "height_ratio": 0.85, "preferred": "res://assets/art/actors/cultivator_canglan_male.png"},
+    "wuxiang_haishou": {"texture": "res://assets/art/beasts_atlas_v1.png", "columns": 2, "rows": 2, "frames": {"idle": 2, "prepare": 2, "attack": 3, "cast": 2, "hit": 2, "guard": 2}, "faces_right": false, "height_ratio": 0.83, "frame_regions": [[0, 0, 768, 464], [768, 0, 768, 464], [0, 472, 768, 552], [768, 472, 768, 552]]}
   },
   "portrait_art": {
     "azhi": "res://assets/art/portraits/azhi_unique.png",

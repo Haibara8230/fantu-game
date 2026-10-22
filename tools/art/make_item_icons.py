@@ -274,6 +274,12 @@ for base, (family, draw) in BASES.items():
     for tier in range(5):
         write('gear/%s_%d.svg' % (base, tier + 1), draw(MATERIAL[family][tier], tier))
 
+# 无相剑 (a named base, data/equipment.json): the plain blank, the edged blade and the bound one, each with
+# the formless ring of 无相子 over it.
+FORMLESS = '<circle cx="41" cy="23" r="9" fill="none" stroke="%s" stroke-width="1.6" stroke-dasharray="3.2 2.2"/>'
+for tier, steel, ring in ((3, ('#b9bdb9', '#7b8380'), '#c9a35a'), (4, ('#e4ecee', '#95a6ab'), '#e6c77a'), (5, ('#f6f3ff', '#a99fdc'), '#f2d68b')):
+    write('gear/wuxiang_%d.svg' % tier, sword(steel, tier - 1) + FORMLESS % ring)
+
 # --- A jade slip laid over a technique's icon for its 玉简 ----------------------------------------
 write('slip.svg', '<g transform="translate(36 36)"><rect x="0" y="0" width="24" height="24" rx="4" fill="#11221f" stroke="%s" stroke-width="1.6"/>'
                   '<path d="M5 5 L5 19 M10 5 L10 19 M15 5 L15 19 M20 5 L20 19" stroke="#86cba6" stroke-width="3.4" stroke-linecap="round"/>'
@@ -405,6 +411,14 @@ def bamboo_tag():
             + '<circle cx="32" cy="19" r="2" fill="#11221f"/>'
             + '<path d="M29 25 L35 25 M32 25 L32 31 M28 31 L36 31 M29 35 L35 35 M32 35 L31 44 M28 40 L36 40 M29 47 L35 48" stroke="#6b4a26" stroke-width="1.7" fill="none" stroke-linecap="round"/>'
             + '<path d="M25 18 L25 52" stroke="#f2e2a8" stroke-width="1.4" stroke-opacity="0.8"/></g>')
+
+def pouch(main, deep, tie):
+    return ('<path d="M22 24 C13 32 12 50 21 55 L43 55 C52 50 51 32 42 24 Z" fill="%s" %s/>'
+            '<path d="M24 30 C20 38 20 48 25 52" stroke="%s" stroke-width="2" fill="none" stroke-linecap="round" opacity="0.6"/>'
+            '<path d="M22 24 C27 20 37 20 42 24" stroke="%s" stroke-width="3.2" fill="none" stroke-linecap="round"/>'
+            '<path d="M32 22 C29 15 24 13 22 16 M32 22 C35 15 40 13 42 16" stroke="%s" stroke-width="2" fill="none" stroke-linecap="round"/>'
+            '<circle cx="32" cy="40" r="7" fill="none" stroke="%s" stroke-width="1.6" stroke-dasharray="3 2"/>'
+            % (main, O, deep, tie, tie, tie))
 
 def peddler_pack():
     def basket(x):
@@ -651,6 +665,7 @@ GOODS = {  # item id: (back, subject)
     'yiwu_jian': ('metal', sword(MATERIAL['metal'][0], 0)),
     'yiwu_pei': ('water', pendant(MATERIAL['jade'][1], 1)),
     'yiwu_dai': ('none', peddler_pack()),
+    'wuxiang_dai': ('none', pouch('#8f8a7c', '#5c584e', '#c9a35a')),
     'recipe_jiedu': ('wood', recipe(PILLS['jiedu'][0])),
     'jiedu_dan_fine': ('wood', p('jiedu', True)),
     'feiyu_tu': ('water', invitation()),

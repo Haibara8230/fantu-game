@@ -1446,5 +1446,28 @@
     "steps": [
       {"id": "war", "goal": "五宗要联手扫平鬼市，请你做内应；灯婆也托你帮她守市。十五夜去鬼市，把这件事了了。", "place": "market", "requires": [{"month_day": [15, 15]}], "choice_event": "guishi_war", "done": [{"flag": "guishi_settled"}]}
     ]
+  },
+  "wuxiang": {
+    "title": "无相宝录",
+    "giver": "storyteller",
+    "begin_if": [{"year_at_least": 40}, {"realm_at_least": 1}, {"affiliation": ""}],
+    "close_if": [{"wuxiang": "sold"}],
+    "closed": "你把宝录卖给了赤霄门。无相子的七处，从此与你无关。",
+    "steps": [
+      {"id": "p1", "goal": "去青石镇外的枯井：无相子的第一处考验是「贫」，身上只许带十块灵石下井。影七也在找，拖得太久，这一页就是他的了。", "place": "town", "say": "茶馆里的说书人新讲了一段：五百年前有个散修叫无相子，一辈子没进过宗门，凭一己之力修到化神，飞升前把一生所得分藏七处，留下一本《无相宝录》，说是“留给天下散修”。宝录撕成了七页，头一处就在青石镇外那口枯井。说书人压低了嗓子：“这阵子打听这事的人可不少，有个叫影七的，跑得比谁都勤。”", "done": [{"any": [{"flag": "wuxiang_page1"}, {"wuxiang": "lost:1"}]}], "effects": [{"wuxiang": "page:1"}]},
+      {"id": "p1r", "goal": "影七抢先取走了青石镇外枯井的那一页，转手卖给了长青谷。去长青谷把它换回来：花灵石、讨人情、夜里去偷，或者硬闯藏经阁。", "place": "changqing_valley", "skip_if": [{"wuxiang": "held:1"}], "choice_event": "wuxiang_reclaim1", "done": [{"wuxiang": "held:1"}], "effects": [{"wuxiang": "page:1"}]},
+      {"id": "p2", "goal": "第一页指向白鹭渡的河底。第二处考验是「信」：井底遇见的散修何三说他也要去。", "place": "ferry", "requires": [{"realm_at_least": 1}], "choice_event": "wuxiang_river", "done": [{"wuxiang": "decided:2"}], "effects": [{"wuxiang": "page:2"}]},
+      {"id": "p2r", "goal": "影七抢先取走了白鹭渡河底的那一页，转手卖给了沧澜阁。去沧澜阁把它换回来：花灵石、讨人情、夜里去偷，或者硬闯藏经阁。", "place": "canglan_pavilion", "skip_if": [{"wuxiang": "held:2"}], "choice_event": "wuxiang_reclaim2", "done": [{"wuxiang": "held:2"}], "effects": [{"wuxiang": "page:2"}]},
+      {"id": "p3", "goal": "第二页指向南明牙行后头的赌石摊。第三处考验是「智」：三块石头里挑出真宝。须筑基后期。", "place": "nanming", "requires": [{"stage_at_least": [1, 2]}], "choice_event": "wuxiang_stones", "done": [{"wuxiang": "decided:3"}], "effects": [{"wuxiang": "page:3"}]},
+      {"id": "p3r", "goal": "影七抢先取走了南明黑市的那一页，转手卖给了赤霄门。去赤霄门把它换回来：花灵石、讨人情、夜里去偷，或者硬闯藏经阁。", "place": "chixiao_gate", "skip_if": [{"wuxiang": "held:3"}], "choice_event": "wuxiang_reclaim3", "done": [{"wuxiang": "held:3"}], "effects": [{"wuxiang": "page:3"}]},
+      {"id": "meet", "goal": "影七托人带话，要见你一面。", "requires": [{"realm_at_least": 2}], "choice_event": "wuxiang_meet", "done": [{"wuxiang": "met"}]},
+      {"id": "p4", "goal": "第三页指向毒泽深处的一块石碑。第四处考验是「仁」。", "place": "duze", "requires": [{"realm_at_least": 2}], "choice_event": "wuxiang_poison", "done": [{"wuxiang": "decided:4"}], "effects": [{"wuxiang": "page:4"}]},
+      {"id": "p4r", "goal": "影七抢先取走了毒泽的那一页，转手卖给了长青谷。去长青谷把它换回来：花灵石、讨人情、夜里去偷，或者硬闯藏经阁。", "place": "changqing_valley", "skip_if": [{"wuxiang": "held:4"}], "choice_event": "wuxiang_reclaim4", "done": [{"wuxiang": "held:4"}], "effects": [{"wuxiang": "page:4"}]},
+      {"id": "p5", "goal": "第四页指向北岳古物街。第五处考验是「辨」：一百件古物里认出无相子的旧物。", "place": "beiyue", "requires": [{"realm_at_least": 2}], "choice_event": "wuxiang_antique", "done": [{"wuxiang": "decided:5"}], "effects": [{"wuxiang": "page:5"}]},
+      {"id": "p5r", "goal": "影七抢先取走了北岳古物街的那一页，转手卖给了玄岳宗。去玄岳宗把它换回来：花灵石、讨人情、夜里去偷，或者硬闯藏经阁。", "place": "xuanyue_gate", "skip_if": [{"wuxiang": "held:5"}], "choice_event": "wuxiang_reclaim5", "done": [{"wuxiang": "held:5"}], "effects": [{"wuxiang": "page:5"}]},
+      {"id": "p6", "goal": "第五页指向外海雾岛背面的海眼。第六处考验是「勇」：独自与海眼深处的古兽斗法。须金丹后期。", "place": "waihai", "requires": [{"stage_at_least": [2, 2]}], "choice_event": "wuxiang_sea", "done": [{"any": [{"flag": "wuxiang_haishou_down"}, {"wuxiang": "lost:6"}]}], "effects": [{"wuxiang": "page:6"}], "skip_if": [{"wuxiang": "ally"}]},
+      {"id": "p6r", "goal": "影七抢先取走了外海雾岛的那一页，转手卖给了沧澜阁。去沧澜阁把它换回来：花灵石、讨人情、夜里去偷，或者硬闯藏经阁。", "place": "canglan_pavilion", "skip_if": [{"wuxiang": "held:6"}, {"wuxiang": "ally"}], "choice_event": "wuxiang_reclaim6", "done": [{"wuxiang": "held:6"}], "effects": [{"wuxiang": "page:6"}]},
+      {"id": "p7", "goal": "第六页指向白鹭渡的天河渡口。最后一处考验是「心」：无相子留下的一缕神念在那里等着问你一句话。须元婴。", "place": "ferry", "requires": [{"realm_at_least": 3}], "choice_event": "wuxiang_heart", "done": [{"wuxiang": "held:7"}], "effects": [{"wuxiang": "page:7"}, {"wuxiang": "finish"}], "after": "七处走完了。无相剑在你手里轻轻一震，和你的气息连成了一片——从此是你的本命法宝。", "major": true}
+    ]
   }
 }

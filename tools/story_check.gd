@@ -421,6 +421,14 @@ func _collect_guest_flags() -> void:
 			for key: String in ["requires_flag", "gone_if"]:
 				if room.has(key):
 					_add(flag_readers, str(room[key]), site + "（%s）" % room.name)
+	# 无相宝录 (wuxiang.gd): the well is opened by going down it, and each page's gift and finding flags
+	# are given or read through wuxiang.json.
+	_add(flag_writers, str(content.wuxiang_data.get("well_flag", "")), "无相宝录（下井）")
+	for page: Dictionary in content.wuxiang_data.get("pages", []):
+		var place := "无相宝录（%s）" % str(page.name)
+		_effects(page.get("reward", []), place)
+		for flag: Variant in page.get("flags", []):
+			_add(flag_readers, str(flag), place)
 	# A sect ended by its story (close_sect) is marked sect_closed_<id>, read when someone would join it.
 	# Only sects a story can end register the flag (world_flags).
 	for sect: String in content.sect_data.get("sects", {}):

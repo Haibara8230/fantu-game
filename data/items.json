@@ -586,5 +586,13 @@
         ]
       }
     ]
+  },
+  "wuxiang_dai": {
+    "name": "无相袋",
+    "category": "quest",
+    "price": 0,
+    "rarity": 3,
+    "duel_pills": 1,
+    "description": "无相子的储物袋，灰扑扑的不起眼，里头却多出一格：带在身上，斗法时可多服一枚丹药。"
   }
 }

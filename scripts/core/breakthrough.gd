@@ -56,7 +56,9 @@ static func guards(s) -> Array[String]:
 	if _mentor_ready(s, guard) and s.is_person(str(guard.mentor)):
 		found.append(str(guard.mentor))
 	for person_id: String in s.known_npcs():
-		if person_id in found or s.favor(person_id) < int(guard.favor):
+		# A 散修之主 (wuxiang.gd) is guarded by 散修 who know them less well.
+		var needed: float = float(guard.favor) * (s.Wuxiang.guard_favor(s) if str(s.person(person_id).get("sect", "")) == "wanderer" else 1.0)
+		if person_id in found or s.favor(person_id) < needed:
 			continue
 		if s.is_generated(person_id) and s.npc_location(person_id).is_empty() and not s.life_by_id(person_id).is_empty() and int(s.life_by_id(person_id).death) <= int(s.world.day):
 			continue

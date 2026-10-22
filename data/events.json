@@ -3102,5 +3102,170 @@
       {"mind": 2}
     ],
     "chronicle": "说书人新编了一回《冷香案》，讲萧家借刀杀人、百花谷洗清冤屈。萧家丹坊这几天门可罗雀。"
+  },
+  "wuxiang_well": {
+    "title": "无相宝录 · 枯井",
+    "trigger": "location",
+    "location": "town",
+    "priority": 9,
+    "repeat": {"cooldown_days": 30},
+    "conditions": [
+      {"story_at": ["wuxiang", "p1"]},
+      {"not": {"flag": "wuxiang_well"}}
+    ],
+    "text": "镇子东头的枯井早没了水，井口长满青苔。井沿内侧刻着一行小字：「身无长物者，方可下井。」字下面压着一块青石，石上又刻着一个「十」。",
+    "choices": [
+      {"id": "descend", "label": "把灵石压在井口的青石下，只带十块下井", "effects": [{"wuxiang": "descend"}], "chronicle": "你把灵石包好，压在井口的青石底下，只揣了十块，抓着井绳下去了。"},
+      {"id": "later", "label": "改日再来", "chronicle": "你在井口站了一会儿，回镇上去了。"}
+    ]
+  },
+  "wuxiang_river": {
+    "title": "无相宝录 · 河底",
+    "trigger": "manual",
+    "text": "白鹭渡下游的河湾里，何三已经等着了：“残页上画的就是这儿。河底有个石匣，底下有禁制，只容得下一个人的气息。一人下去，一人在岸上拉绳。”他看着你：“你下，还是我下？”",
+    "choices": [
+      {"id": "trust", "label": "让何三下去，你在岸上拉绳", "effects": [{"wuxiang": "got:2"}], "chronicle": "你在岸上拉着绳。一炷香后，何三浮上来，把石匣递到你手里——匣里是一页残纸和一只灰扑扑的布袋。他的脸慢慢变成了一张木头的脸：“信人者，人亦信之。”木傀沉回了河底。一路同行的何三，原来就是无相子留下的试心傀。"},
+      {"id": "self", "label": "你自己下去，让何三在岸上等", "effects": [{"wuxiang": "plain:2"}], "chronicle": "你自己下了河。石匣就在河底，你抱着它浮上来时，岸上的何三不见了，只剩一具木头削的人偶倒在草里。匣里只有一页残纸，原本该放别的东西的那一格空着。"},
+      {"id": "later", "label": "改日再来", "chronicle": "你说再想想，何三耸耸肩，在河边坐下等你。"}
+    ]
+  },
+  "wuxiang_stones": {
+    "title": "无相宝录 · 赌石",
+    "trigger": "manual",
+    "text": "南明牙行后头有条窄巷，夜里摆满了赌石摊。残页上画的那个摊子还在，摊主是个瞎眼老头，面前摆着三块石头：“三块里只有一块是真的。看准了再开。”",
+    "choices": [
+      {"id": "look", "label": "凭神识细看（神识 40）", "conditions": [{"sense_at_least": 40}], "effects": [{"wuxiang": "got:3"}], "chronicle": "你把神识探进去。第一块里是空的，第三块里只有一团死气，第二块深处有一点光，冷得像剑锋。你指了第二块。老头笑了：“无相子说，智者不赌。”石头剖开，里头是一柄没开锋的剑胚，剑胚上压着第三页残纸。"},
+      {"id": "pay", "label": "请牙行的老掌眼替你看（300 灵石）", "conditions": [{"stones_at_least": 300}], "effects": [{"stones": -300}, {"wuxiang": "got:3"}], "chronicle": "老掌眼收了钱，绕着三块石头转了三圈，指了中间那块。剖开，里头是一柄剑胚和一页残纸。瞎眼老头叹了口气：“借人之智，也是智。”"},
+      {"id": "gamble", "label": "凭感觉挑一块（每月只许挑一次）", "conditions": [{"wuxiang": "can_gamble"}], "effects": [{"wuxiang": "gamble"}], "chronicle": "你闭上眼，摸了一块。"},
+      {"id": "later", "label": "改日再来", "chronicle": "你没有急着动手，先退了回去。"}
+    ]
+  },
+  "wuxiang_meet": {
+    "title": "无相宝录 · 影七",
+    "trigger": "manual",
+    "text": "有人在你对面坐下，一身灰衣，脸上什么都记不住：“影七。宝录的事，你我都在找，不如谈谈。”他压低声音：“我背后是赤霄门。你把手里的几页卖给赤霄，灵石、客卿之位都有。不卖也行——咱们合伙，后头几处你让我一处，往后我在宗门里替你看着。都不肯，那就各凭本事。”",
+    "choices": [
+      {"id": "refuse", "label": "各凭本事", "effects": [{"wuxiang": "refuse"}], "chronicle": "影七笑了笑，起身走了：“那就渡口见。”"},
+      {"id": "ally", "label": "与他合伙，分宝", "effects": [{"wuxiang": "ally"}], "chronicle": "你们击掌为誓。影七说外海雾岛那一处归他，其余的他不碰；往后宗门里有什么风声，他会先递个话。"},
+      {"id": "sell", "label": "把残页卖给赤霄门（4000 灵石，赤霄客卿之位）", "effects": [{"stones": 4000}, {"guest_invite": "chixiao"}, {"league": "ban"}, {"wuxiang": "sold"}], "chronicle": "你把手里的残页推了过去。影七数出四千灵石，又递来一封赤霄门的客卿请帖。消息传得比你想的快：天南的散修都知道了，有人把无相子留给散修的东西卖给了宗门。"}
+    ]
+  },
+  "wuxiang_poison": {
+    "title": "无相宝录 · 毒泽",
+    "trigger": "manual",
+    "text": "毒泽深处的一棵枯树下，残页上画的石碑露出半截。碑前倒着一个长青谷的弟子，嘴唇发紫，攥住你的衣角：“救……我中了瘴毒……”你知道影七也在往这里赶。",
+    "choices": [
+      {"id": "cure", "label": "喂他一枚解毒丹", "conditions": [{"item_at_least": ["jiedu_dan", 1]}], "effects": [{"item": ["jiedu_dan", -1]}, {"mind": 3}, {"wuxiang": "cure"}], "chronicle": "你把解毒丹塞进他嘴里。半个时辰后他缓过气来，千恩万谢地走了：“长青谷欠你一个人情。”碑下的石匣里，是第四页残纸和一卷《无相化毒经》。"},
+      {"id": "carry_ally", "label": "背他出泽再回来（影七是盟友，不会来抢）", "conditions": [{"wuxiang": "ally"}], "effects": [{"mind": 5}, {"wuxiang": "cure"}], "chronicle": "你背着他走了两天，把他交到长青谷的人手里，他说长青谷欠你一个人情。回到碑前，石匣原封未动，影七在匣上留了张字条：“说好不碰的。”匣里是第四页残纸和一卷《无相化毒经》。"},
+      {"id": "carry", "label": "背他出泽，再回来取宝", "conditions": [{"not": {"wuxiang": "ally"}}], "effects": [{"mind": 5}, {"wuxiang": "save"}], "chronicle": "你背着他走了两天，才把他送到长青谷的人手里，他说长青谷欠你一个人情。等你回到碑前，石匣已经空了，泥里留着一行新鲜的脚印。"},
+      {"id": "ignore", "label": "先取宝，回头再说", "effects": [{"mind": -3}, {"wuxiang": "got:4"}], "chronicle": "你绕过他，打开了碑下的石匣：第四页残纸和一卷《无相化毒经》。等你回头，那个弟子已经没了气息。"},
+      {"id": "later", "label": "改日再来", "chronicle": "你没有急着动手，先退了回去。"}
+    ]
+  },
+  "wuxiang_antique": {
+    "title": "无相宝录 · 古物街",
+    "trigger": "manual",
+    "text": "北岳古物街最里头的一间铺子，掌柜指着满屋的旧物：“残页上画的就是我这儿。一百件东西，里头有一件是无相子的旧物，认出来就是你的。认错了，那件也得照价买走。”",
+    "choices": [
+      {"id": "own", "label": "照前四页残纸上的笔迹去认（四页都是亲手所得）", "conditions": [{"wuxiang": "own:4"}], "effects": [{"wuxiang": "got:5"}], "chronicle": "四页残纸上的字你看了无数遍。满屋旧物里，只有一只缺口的木碗底下刻着同样的「无」字。掌柜收起了笑：“好眼力。”碗底压着第五页，碗里是一块磨剑石——无相剑在石上走了三遍，开了锋。"},
+      {"id": "sense", "label": "凭神识一件件看过去（神识 72）", "conditions": [{"sense_at_least": 72}], "effects": [{"wuxiang": "got:5"}], "chronicle": "你的神识一件件扫过去，扫到一只缺口的木碗时停住了：碗底有一缕极淡的剑意，和剑胚上的一模一样。碗底压着第五页，碗里是一块磨剑石——无相剑在石上走了三遍，开了锋。"},
+      {"id": "buy", "label": "认不出来，一件件买下来试（2000 灵石）", "conditions": [{"stones_at_least": 2000}], "effects": [{"stones": -2000}, {"wuxiang": "got:5"}], "chronicle": "你买了十几件，件件都是假的，直到一只缺口的木碗——碗底刻着一个「无」字，压着第五页残纸，碗里是一块磨剑石。无相剑在石上走了三遍，开了锋。"},
+      {"id": "later", "label": "改日再来", "chronicle": "你没有急着动手，先退了回去。"}
+    ]
+  },
+  "wuxiang_sea": {
+    "title": "无相宝录 · 海眼",
+    "trigger": "manual",
+    "text": "外海雾岛背面的海眼深不见底，残页上只写了四个字：「勇者独往。」海眼深处有什么东西在翻身，海面一阵阵地鼓起来。",
+    "choices": [
+      {"id": "dive", "label": "独自下海眼", "effects": [{"battle": "wuxiang_haishou"}], "chronicle": "你一个人沉了下去。海眼深处，一头背生石鳞的古兽睁开了眼。"},
+      {"id": "later", "label": "改日再来", "chronicle": "你没有急着动手，先退了回去。"}
+    ]
+  },
+  "wuxiang_heart": {
+    "title": "无相宝录 · 天河渡口",
+    "trigger": "manual",
+    "text": "月下的天河渡口，水面浮起一道灰影，看不清面目，只有一个声音：「五百年了，你是第几个走到这里的？我只问一句：你这一生，为什么修仙？」",
+    "choices": [
+      {"id": "duel", "label": "影七先你一步到了渡口，坐在石阶上等你。与他斗法，赢了宝录才归你", "conditions": [{"wuxiang": "lost:7"}, {"not": {"flag": "ying_qi_beaten"}}], "effects": [{"battle": "ying_qi"}], "chronicle": "影七站了起来：“最后一页，凭本事拿。”"},
+      {"id": "long", "label": "为了长生", "conditions": [{"mind_ready": true}, {"any": [{"not": {"wuxiang": "lost:7"}}, {"flag": "ying_qi_beaten"}]}], "effects": [{"wuxiang": "got:7"}], "chronicle": "灰影沉默了一会儿：「长生不是坏事。只是别活成一块石头。」灰影散成一页残纸，落在你手里——《无相宝录》第七页，也是最后一页。"},
+      {"id": "guard", "label": "为了护住想护的人", "conditions": [{"mind_ready": true}, {"any": [{"not": {"wuxiang": "lost:7"}}, {"flag": "ying_qi_beaten"}]}], "effects": [{"wuxiang": "got:7"}], "chronicle": "灰影笑了：「我当年也这么想，后来发现护不住的更多。你比我走得远些。」灰影散成一页残纸，落在你手里——《无相宝录》第七页，也是最后一页。"},
+      {"id": "way", "label": "为了看看道的尽头", "conditions": [{"mind_ready": true}, {"any": [{"not": {"wuxiang": "lost:7"}}, {"flag": "ying_qi_beaten"}]}], "effects": [{"wuxiang": "got:7"}], "chronicle": "灰影抬头看了看天河：「尽头我也没看见。你替我接着看。」灰影散成一页残纸，落在你手里——《无相宝录》第七页，也是最后一页。"},
+      {"id": "free", "label": "为了自在，不受人管", "conditions": [{"mind_ready": true}, {"any": [{"not": {"wuxiang": "lost:7"}}, {"flag": "ying_qi_beaten"}]}], "effects": [{"wuxiang": "got:7"}], "chronicle": "灰影大笑：「好！散修一辈子，图的就是这个。」灰影散成一页残纸，落在你手里——《无相宝录》第七页，也是最后一页。"},
+      {"id": "weak", "label": "（心境不足）你答不上来", "conditions": [{"mind_ready": false}], "chronicle": "你张了张嘴，什么也没说出来。灰影散了，渡口只剩水声。等心境足了再来。"},
+      {"id": "later", "label": "改日再来", "chronicle": "你没有急着动手，先退了回去。"}
+    ]
+  },
+  "wuxiang_reclaim1": {
+    "title": "无相宝录 · 赎回残页",
+    "trigger": "manual",
+    "text": "长青谷的藏经阁里收着影七卖来的那一页《无相宝录》（青石镇外枯井）。执事说得明白：要么拿灵石来换，要么拿人情来换。",
+    "choices": [
+      {"id": "buy", "label": "出 300 灵石赎回", "conditions": [{"stones_at_least": 300}], "effects": [{"stones": -300}, {"wuxiang": "reclaim:1"}], "chronicle": "你数出 300 灵石，执事把残页从架上取了下来。"},
+      {"id": "favor", "label": "凭人情讨回", "conditions": [{"any": [{"affiliation": "changqing"}, {"guest": "changqing"}, {"wuxiang": "favor:changqing"}]}], "effects": [{"wuxiang": "reclaim:1"}], "chronicle": "执事查过名册，没多说什么，把残页交给了你：“长青谷不欠人情。”"},
+      {"id": "steal", "label": "夜里摸进藏经阁（神识 36）", "conditions": [{"sense_at_least": 36}], "effects": [{"mind": -2}, {"wuxiang": "reclaim:1"}], "chronicle": "你收着气息摸进藏经阁，从守阁人眼皮底下把残页取走了。没人看见，可你心里不太踏实。"},
+      {"id": "rob", "label": "硬闯藏经阁", "effects": [{"battle": "wuxiang_guard1"}], "chronicle": "你推开了藏经阁的门。守阁的人迎了上来。"},
+      {"id": "later", "label": "改日再来", "chronicle": "你没有急着动手，先退了回去。"}
+    ]
+  },
+  "wuxiang_reclaim2": {
+    "title": "无相宝录 · 赎回残页",
+    "trigger": "manual",
+    "text": "沧澜阁的藏经阁里收着影七卖来的那一页《无相宝录》（白鹭渡河底）。执事说得明白：要么拿灵石来换，要么拿人情来换。",
+    "choices": [
+      {"id": "buy", "label": "出 400 灵石赎回", "conditions": [{"stones_at_least": 400}], "effects": [{"stones": -400}, {"wuxiang": "reclaim:2"}], "chronicle": "你数出 400 灵石，执事把残页从架上取了下来。"},
+      {"id": "favor", "label": "凭人情讨回", "conditions": [{"any": [{"affiliation": "canglan"}, {"guest": "canglan"}, {"wuxiang": "favor:canglan"}]}], "effects": [{"wuxiang": "reclaim:2"}], "chronicle": "执事查过名册，没多说什么，把残页交给了你：“沧澜阁不欠人情。”"},
+      {"id": "steal", "label": "夜里摸进藏经阁（神识 36）", "conditions": [{"sense_at_least": 36}], "effects": [{"mind": -2}, {"wuxiang": "reclaim:2"}], "chronicle": "你收着气息摸进藏经阁，从守阁人眼皮底下把残页取走了。没人看见，可你心里不太踏实。"},
+      {"id": "rob", "label": "硬闯藏经阁", "effects": [{"battle": "wuxiang_guard2"}], "chronicle": "你推开了藏经阁的门。守阁的人迎了上来。"},
+      {"id": "later", "label": "改日再来", "chronicle": "你没有急着动手，先退了回去。"}
+    ]
+  },
+  "wuxiang_reclaim3": {
+    "title": "无相宝录 · 赎回残页",
+    "trigger": "manual",
+    "text": "赤霄门的藏经阁里收着影七卖来的那一页《无相宝录》（南明黑市）。执事说得明白：要么拿灵石来换，要么拿人情来换。",
+    "choices": [
+      {"id": "buy", "label": "出 600 灵石赎回", "conditions": [{"stones_at_least": 600}], "effects": [{"stones": -600}, {"wuxiang": "reclaim:3"}], "chronicle": "你数出 600 灵石，执事把残页从架上取了下来。"},
+      {"id": "favor", "label": "凭人情讨回", "conditions": [{"any": [{"affiliation": "chixiao"}, {"guest": "chixiao"}, {"wuxiang": "favor:chixiao"}]}], "effects": [{"wuxiang": "reclaim:3"}], "chronicle": "执事查过名册，没多说什么，把残页交给了你：“赤霄门不欠人情。”"},
+      {"id": "steal", "label": "夜里摸进藏经阁（神识 40）", "conditions": [{"sense_at_least": 40}], "effects": [{"mind": -2}, {"wuxiang": "reclaim:3"}], "chronicle": "你收着气息摸进藏经阁，从守阁人眼皮底下把残页取走了。没人看见，可你心里不太踏实。"},
+      {"id": "rob", "label": "硬闯藏经阁", "effects": [{"battle": "wuxiang_guard3"}], "chronicle": "你推开了藏经阁的门。守阁的人迎了上来。"},
+      {"id": "later", "label": "改日再来", "chronicle": "你没有急着动手，先退了回去。"}
+    ]
+  },
+  "wuxiang_reclaim4": {
+    "title": "无相宝录 · 赎回残页",
+    "trigger": "manual",
+    "text": "长青谷的藏经阁里收着影七卖来的那一页《无相宝录》（毒泽）。执事说得明白：要么拿灵石来换，要么拿人情来换。",
+    "choices": [
+      {"id": "buy", "label": "出 1200 灵石赎回", "conditions": [{"stones_at_least": 1200}], "effects": [{"stones": -1200}, {"wuxiang": "reclaim:4"}], "chronicle": "你数出 1200 灵石，执事把残页从架上取了下来。"},
+      {"id": "favor", "label": "凭人情讨回", "conditions": [{"any": [{"affiliation": "changqing"}, {"guest": "changqing"}, {"wuxiang": "favor:changqing"}]}], "effects": [{"wuxiang": "reclaim:4"}], "chronicle": "执事查过名册，没多说什么，把残页交给了你：“长青谷不欠人情。”"},
+      {"id": "steal", "label": "夜里摸进藏经阁（神识 72）", "conditions": [{"sense_at_least": 72}], "effects": [{"mind": -2}, {"wuxiang": "reclaim:4"}], "chronicle": "你收着气息摸进藏经阁，从守阁人眼皮底下把残页取走了。没人看见，可你心里不太踏实。"},
+      {"id": "rob", "label": "硬闯藏经阁", "effects": [{"battle": "wuxiang_guard4"}], "chronicle": "你推开了藏经阁的门。守阁的人迎了上来。"},
+      {"id": "later", "label": "改日再来", "chronicle": "你没有急着动手，先退了回去。"}
+    ]
+  },
+  "wuxiang_reclaim5": {
+    "title": "无相宝录 · 赎回残页",
+    "trigger": "manual",
+    "text": "玄岳宗的藏经阁里收着影七卖来的那一页《无相宝录》（北岳古物街）。执事说得明白：要么拿灵石来换，要么拿人情来换。",
+    "choices": [
+      {"id": "buy", "label": "出 1600 灵石赎回", "conditions": [{"stones_at_least": 1600}], "effects": [{"stones": -1600}, {"wuxiang": "reclaim:5"}], "chronicle": "你数出 1600 灵石，执事把残页从架上取了下来。"},
+      {"id": "favor", "label": "凭人情讨回", "conditions": [{"any": [{"affiliation": "xuanyue"}, {"guest": "xuanyue"}, {"wuxiang": "favor:xuanyue"}]}], "effects": [{"wuxiang": "reclaim:5"}], "chronicle": "执事查过名册，没多说什么，把残页交给了你：“玄岳宗不欠人情。”"},
+      {"id": "steal", "label": "夜里摸进藏经阁（神识 72）", "conditions": [{"sense_at_least": 72}], "effects": [{"mind": -2}, {"wuxiang": "reclaim:5"}], "chronicle": "你收着气息摸进藏经阁，从守阁人眼皮底下把残页取走了。没人看见，可你心里不太踏实。"},
+      {"id": "rob", "label": "硬闯藏经阁", "effects": [{"battle": "wuxiang_guard5"}], "chronicle": "你推开了藏经阁的门。守阁的人迎了上来。"},
+      {"id": "later", "label": "改日再来", "chronicle": "你没有急着动手，先退了回去。"}
+    ]
+  },
+  "wuxiang_reclaim6": {
+    "title": "无相宝录 · 赎回残页",
+    "trigger": "manual",
+    "text": "沧澜阁的藏经阁里收着影七卖来的那一页《无相宝录》（外海雾岛）。执事说得明白：要么拿灵石来换，要么拿人情来换。",
+    "choices": [
+      {"id": "buy", "label": "出 2400 灵石赎回", "conditions": [{"stones_at_least": 2400}], "effects": [{"stones": -2400}, {"wuxiang": "reclaim:6"}], "chronicle": "你数出 2400 灵石，执事把残页从架上取了下来。"},
+      {"id": "favor", "label": "凭人情讨回", "conditions": [{"any": [{"affiliation": "canglan"}, {"guest": "canglan"}, {"wuxiang": "favor:canglan"}]}], "effects": [{"wuxiang": "reclaim:6"}], "chronicle": "执事查过名册，没多说什么，把残页交给了你：“沧澜阁不欠人情。”"},
+      {"id": "steal", "label": "夜里摸进藏经阁（神识 80）", "conditions": [{"sense_at_least": 80}], "effects": [{"mind": -2}, {"wuxiang": "reclaim:6"}], "chronicle": "你收着气息摸进藏经阁，从守阁人眼皮底下把残页取走了。没人看见，可你心里不太踏实。"},
+      {"id": "rob", "label": "硬闯藏经阁", "effects": [{"battle": "wuxiang_guard6"}], "chronicle": "你推开了藏经阁的门。守阁的人迎了上来。"},
+      {"id": "later", "label": "改日再来", "chronicle": "你没有急着动手，先退了回去。"}
+    ]
   }
 }

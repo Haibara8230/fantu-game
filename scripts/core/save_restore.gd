@@ -8,6 +8,7 @@ const Cultivation = preload("res://scripts/core/cultivation.gd")
 const Talents = preload("res://scripts/core/talents.gd")
 const Gear = preload("res://scripts/core/gear.gd")
 const Layers = preload("res://scripts/core/layers.gd")
+const Wuxiang = preload("res://scripts/core/wuxiang.gd")
 # More 祭炼 steps than any piece could use; a save above it is malformed.
 const MAX_REFINE := 20
 const PLAYER_COUNTS := ["realm", "xp", "hp", "qi", "stones", "cultivation_carry", "fatigue", "fatigue_day", "insight"]
@@ -115,6 +116,9 @@ static func restore(s, data: Variant) -> bool:
 		return false
 	var guishi: Variant = _valid_guishi(saved_world.get("guishi", {}))
 	if guishi == null:
+		return false
+	var wuxiang: Variant = _valid_wuxiang(content, saved_world.get("wuxiang", {}))
+	if wuxiang == null:
 		return false
 	var series_last: Variant = saved_player.get("series_last", {})
 	if not series_last is Dictionary or series_last.keys().any(func(series_id: Variant) -> bool: return not content.series.has(series_id) or not _whole_nonnegative(series_last[series_id])):
@@ -389,6 +393,7 @@ static func restore(s, data: Variant) -> bool:
 	s.world["tianji"] = tianji.world
 	s.world["mijing"] = mijing
 	s.world["guishi"] = guishi
+	s.world["wuxiang"] = wuxiang
 	s.populate()
 	var player: Dictionary = saved_player.duplicate(true)
 	for key: String in PLAYER_COUNTS:
@@ -937,6 +942,50 @@ static func _valid_guishi(saved: Variant) -> Variant:
 		for index: Variant in saved.bought:
 			bought.append(int(index))
 		held["bought"] = bought
+	return held
+
+## 无相宝录 (wuxiang.gd), normalized with only the keys saved, or null when malformed. Journeys from before
+## it hold none.
+static func _valid_wuxiang(content, saved: Variant) -> Variant:
+	if not saved is Dictionary:
+		return null
+	var held := {}
+	var pages := int(content.wuxiang_data.get("pages", []).size())
+	if saved.has("pages"):
+		if not saved.pages is Dictionary or saved.pages.keys().any(func(n: Variant) -> bool: return not str(n).is_valid_int() or int(str(n)) < 1 or int(str(n)) > pages or not saved.pages[n] in Wuxiang.STATES):
+			return null
+		var kept := {}
+		for n: Variant in saved.pages:
+			kept[str(int(str(n)))] = str(saved.pages[n])
+		held["pages"] = kept
+	if saved.has("rewarded"):
+		if not saved.rewarded is Array or saved.rewarded.any(func(n: Variant) -> bool: return not _whole_nonnegative(n) or int(n) < 1 or int(n) > pages):
+			return null
+		var given: Array = []
+		for n: Variant in saved.rewarded:
+			if not int(n) in given:
+				given.append(int(n))
+		held["rewarded"] = given
+	for key: String in ["stash", "blade", "gambled"]:
+		if saved.has(key):
+			if not _whole_nonnegative(saved[key]):
+				return null
+			held[key] = int(saved[key])
+	if held.get("blade", 0) > content.wuxiang_data.get("blades", []).size():
+		return null
+	for key: String in ["met", "ally", "sold"]:
+		if saved.has(key):
+			if not saved[key] is bool:
+				return null
+			held[key] = saved[key]
+	if saved.has("favor"):
+		if not content.sect_data.get("sects", {}).has(saved.favor):
+			return null
+		held["favor"] = str(saved.favor)
+	if saved.has("ending"):
+		if not saved.ending in Wuxiang.ENDINGS:
+			return null
+		held["ending"] = str(saved.ending)
 	return held
 
 ## Things gathered in a 秘境: {item: count}, unknown items dropped; null when malformed.

@@ -195,7 +195,7 @@ static func _hand_row(ui) -> HBoxContainer:
 	var taken := int(b.get("pills", 0))
 	for item_id: String in _duel_pills(session):
 		var item: Dictionary = session.content.item(item_id)
-		var limit := "每场至多 %d 张符箓，已用 %d 张" % [int(duel.get("talismans", 3)), int(b.get("talismans", 0))] if str(item.get("category", "")) == "talisman" else "每场至多 %d 枚，已服 %d 枚" % [int(duel.pills), taken]
+		var limit := "每场至多 %d 张符箓，已用 %d 张" % [int(duel.get("talismans", 3)), int(b.get("talismans", 0))] if str(item.get("category", "")) == "talisman" else "每场至多 %d 枚，已服 %d 枚" % [session.Combat.pill_limit(session), taken]
 		var pill: Button = ui.button("%s ×%d" % [item.name, session.item_count(item_id)], func() -> void: ui.battle_action("pill:" + item_id), "%s（不占回合；%s）" % [item.description, limit])
 		ui.tint(pill, ui.grade_color(item))
 		ui.with_icon(pill, ui.grade_icon(item), 16)

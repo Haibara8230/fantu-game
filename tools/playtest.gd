@@ -40,6 +40,8 @@ var kept := {}
 var idle := {}
 # Guardians faced again in a row, by cave.
 var tries := {}
+# Fights a choice has started ("event:choice" -> times): after a few, another way is taken if there is one.
+var fights := {}
 # Caves given up on until a day (cave id -> day), when a room barred the way.
 var barred := {}
 # Where each storyline finding lies: flag -> [cave, room] (a room's own finding or its guardian's flag).
@@ -200,6 +202,13 @@ func _step() -> void:
 	for ending: String in ["canyu_free", "canyu_lie", "canyu_lu", "canyu_given", "lengxiang_solved", "lengxiang_plead", "lengxiang_exposed", "xishou_mediated", "xishou_sided", "feiyu_owes", "guishi_second", "guishi_gone"]:
 		if s.has_flag(ending):
 			_mark("第 6 步结局：" + ending)
+	# 无相宝录 (wuxiang.gd): how each page was had, and how it ended.
+	for n: int in range(1, s.Wuxiang.data(s).pages.size() + 1):
+		if s.Wuxiang.held(s, n) or not s.Wuxiang.page_state(s, n).is_empty():
+			_mark("无相宝录第 %d 处：%s" % [n, s.Wuxiang.page_state(s, n) if not s.Wuxiang.page_state(s, n).is_empty() else "self"])
+	for ending: String in ["master", "shared", "sold"]:
+		if s.Wuxiang.met(s, ending):
+			_mark("无相宝录结局：" + ending)
 	if _opening():
 		return
 	if _mijing():
@@ -250,13 +259,17 @@ func _event() -> void:
 		shown.append("%s%s" % [str(choice.get("text", choice.get("label", choice.id))), "" if open else "（不可选）"])
 		# A fight to the death only when nothing else is open (a player keeps their life).
 		var deadly: bool = choice.get("effects", []).any(func(effect: Dictionary) -> bool: return effect.has("deadly"))
-		if open and deadly and fallback.is_empty():
+		# A fight lost again and again (萧家's house at 元婴): after five, the next way out instead.
+		var worn: bool = choice.get("effects", []).any(func(effect: Dictionary) -> bool: return effect.has("battle")) and int(fights.get("%s:%s" % [s.pending_event.id, choice.id], 0)) >= 5
+		if open and (deadly or worn) and fallback.is_empty():
 			fallback = str(choice.id)
-		elif open and pick.is_empty():
+		elif open and pick.is_empty() and not worn:
 			pick = str(choice.id)
 	if pick.is_empty():
 		pick = fallback
 	_say("EVENT", "%s：%s ｜ 选项：%s" % [str(definition.get("title", s.pending_event.id)), str(definition.get("text", "")), "、".join(shown)])
+	var key := "%s:%s" % [s.pending_event.id, pick]
+	fights[key] = int(fights.get(key, 0)) + 1
 	_do("event", "CHOSE", s.choose_event(pick))
 	if not s.pending_event.is_empty() and s.pending_event.get("id", "") == definition.get("id", "?"):
 		s.pending_event = {}

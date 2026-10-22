@@ -132,6 +132,9 @@ static func met(s, condition: Dictionary) -> bool:
 		# 萧家麒麟子 (rival.gd): how the bouts went, or what the player has heard.
 		"rival":
 			return s.Rival.met(s, str(value))
+		# 无相宝录 (wuxiang.gd): a page held or lost to 影七, a favor owed, how it ended.
+		"wuxiang":
+			return s.Wuxiang.met(s, str(value))
 		"holds_gear":
 			return s.Gear.holds(s, str(value))
 		"present":
@@ -361,6 +364,9 @@ static func apply(s, effects: Array) -> void:
 			# 鬼市 (guishi.gd): the shadow that followed the player out answered.
 			"guishi":
 				s.Guishi.apply(s, str(value))
+			# 无相宝录 (wuxiang.gd): the well gone down, a page found or bought back, its gift, 影七's offer.
+			"wuxiang":
+				s.Wuxiang.apply(s, str(value))
 			"party":
 				if not s.world.has("party"):
 					s.world["party"] = {}
@@ -580,6 +586,7 @@ static func check_location(s, passing: bool = false) -> Array[String]:
 		s.Tianji.check(s)
 		s.Mijing.check(s)
 		s.Guishi.check(s)
+		s.Wuxiang.check(s)
 	return messages
 
 ## Whether the pending event offers a choice that would end the life (`final`), so the interface writes

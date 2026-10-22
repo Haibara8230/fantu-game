@@ -91,7 +91,8 @@ static func lots(s) -> Array:
 		var hint := tier
 		if rng.randf() * 10.0 >= float(insight(s)):
 			hint = (tier + 1 + rng.randi_range(0, tiers.size() - 2)) % tiers.size()
-		var cost := int(round(float(price(s)) * (0.8 + rng.randf() * 0.4)))
+		# A 散修之主 is sold to cheaper (wuxiang.gd).
+		var cost := int(round(float(price(s)) * (0.8 + rng.randf() * 0.4) * s.Wuxiang.discount(s)))
 		found.append({"kind": str(kind.id), "name": str(kind.name), "text": str(kind.text), "price": cost, "tier": tier, "hint": hint})
 	return found
 

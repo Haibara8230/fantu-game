@@ -1,0 +1,20 @@
+{
+  "story": "wuxiang",
+  "stash_keep": 10,
+  "well_flag": "wuxiang_well",
+  "well_place": "town",
+  "pages": [
+    {"name": "青石镇外枯井", "test": "贫", "place": "town", "race_years": 3, "flags": ["wuxiang_page1", "wuxiang_guard1_down"], "keeper": "changqing_valley", "sect": "changqing", "price": 300, "sense": 36, "reward": [{"slip": "wuxiang_jue"}]},
+    {"name": "白鹭渡河底", "test": "信", "place": "ferry", "race_years": 3, "flags": ["wuxiang_guard2_down"], "keeper": "canglan_pavilion", "sect": "canglan", "price": 400, "sense": 36, "reward": [{"item": ["wuxiang_dai", 1]}]},
+    {"name": "南明黑市", "test": "智", "place": "nanming", "race_years": 3, "flags": ["wuxiang_guard3_down"], "keeper": "chixiao_gate", "sect": "chixiao", "price": 600, "sense": 40, "reward": [{"wuxiang": "blade"}]},
+    {"name": "毒泽", "test": "仁", "place": "duze", "race_years": 5, "flags": ["wuxiang_guard4_down"], "keeper": "changqing_valley", "sect": "changqing", "price": 1200, "sense": 72, "reward": [{"slip": "wuxiang_huadu"}]},
+    {"name": "北岳古物街", "test": "辨", "place": "beiyue", "race_years": 5, "flags": ["wuxiang_guard5_down"], "keeper": "xuanyue_gate", "sect": "xuanyue", "price": 1600, "sense": 72, "reward": [{"wuxiang": "blade"}]},
+    {"name": "外海雾岛", "test": "勇", "place": "waihai", "race_years": 6, "flags": ["wuxiang_haishou_down", "wuxiang_guard6_down"], "keeper": "canglan_pavilion", "sect": "canglan", "price": 2400, "sense": 80, "reward": [{"flag": "wuxiang_ningying"}]},
+    {"name": "天河渡口", "test": "心", "place": "ferry", "race_years": 8, "flags": [], "reward": [{"slip": "wuxiang_zhenjing"}, {"wuxiang": "blade"}]}
+  ],
+  "blades": ["e:wuxiang:3:none:sharp+spirit:0", "e:wuxiang:4:none:attune+sharp+spirit:0", "e:wuxiang:5:none:attune+calm+sharp+spirit:0"],
+  "gamble_chance": 0.34,
+  "ally_takes": 6,
+  "sale": {"stones": 4000, "sect": "chixiao"},
+  "master": {"discount": 0.8, "guard_favor": 0.5}
+}
