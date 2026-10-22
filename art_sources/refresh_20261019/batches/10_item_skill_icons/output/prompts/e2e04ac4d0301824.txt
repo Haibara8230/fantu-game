@@ -1,0 +1,7 @@
+Use case: style-transfer / identity-preserve / production game art.
+Asset: assets/art/icons/arts/barrage_metal.svg
+Content request: Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.
+This is one independent production asset for an original Chinese cultivation RPG.
+Input image 1: assets/art/icons/arts/barrage_metal.svg. Role: existing identity/content/layout target; preserve recognizable subject.
+Preserve the existing category-specific approved hand-drawn style: clear outlines, broad grouped colour areas, restrained shadows and low texture density. Do not impose character C anatomy rules on environments, maps, items or UI. No photorealism, cinematic bloom, dense surface scratches or depth-of-field blur.
+Old technical target: 64x64 pixels. Request the same proportions and retain usable safe margins; actual native output size will be measured, never mislabelled. Background: preserve_source_svg.

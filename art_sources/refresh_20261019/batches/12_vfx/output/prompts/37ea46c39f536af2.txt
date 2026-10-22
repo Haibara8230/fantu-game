@@ -1,0 +1,8 @@
+Use case: style-transfer / identity-preserve / production game art.
+Asset: cangxi_concealment.png
+Content request: 筑基篇藏息传承的轻雾／撤离表现，沿用原特效要求；不画成永久隐身，不改变实际风险规则
+This is one independent production asset for an original Chinese cultivation RPG.
+Preserve the existing category-specific approved hand-drawn style: clear outlines, broad grouped colour areas, restrained shadows and low texture density. Do not impose character C anatomy rules on environments, maps, items or UI. No photorealism, cinematic bloom, dense surface scratches or depth-of-field blur.
+Standalone readable skill VFX on genuinely transparent alpha. Preserve the old source footprint and frame structure where specified. No character, scenery, text, interface or permanent background. No new gameplay mechanics.
+Old technical target: 256x256 pixels. Request the same proportions and retain usable safe margins; actual native output size will be measured, never mislabelled. Background: transparent_required.
+VFX content: A few pale desaturated jade-grey mist ribbons peeling diagonally backward, suggesting brief retreat and reduced presence, soft but clearly separated flowing shapes. No human silhouette, invisibility bubble, solid shield or permanent magical dome. Single static expression candidate, not a falsely claimed animation atlas. True empty transparent pixels around effect, no checkerboard artwork or dark square baked into image.

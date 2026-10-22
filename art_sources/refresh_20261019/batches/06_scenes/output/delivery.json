@@ -1,0 +1,171 @@
+{
+  "date": "2026-10-19",
+  "scope": "P0 opening scene candidates only; P1-P3 deferred",
+  "images": [
+    {
+      "filename": "qingshi_inn_quiet_room.png",
+      "path": "art_sources/refresh_20261019/batches/06_scenes/output/qingshi_inn_quiet_room.png",
+      "sha256": "efa4f9e131ad801480d6dcbd842c9c607a69a470a67aa7b3db5071f2b654a950",
+      "status": "candidate_for_review",
+      "content_priority": "P0",
+      "content_stage": 1,
+      "tool": "builtin_image_gen",
+      "prompt_paths": [
+        "art_sources/refresh_20261019/batches/06_scenes/output/prompts/qingshi_inn_quiet_room.txt"
+      ],
+      "input_images": [
+        {
+          "path": "assets/art/scenes/sect_chamber.png",
+          "sha256": "2bf63397eb56453125e01e9136ac7723ec882f97339dd433ca7d25f92077422c",
+          "role": "edit_target_technical_layout_only"
+        },
+        {
+          "path": "art_sources/refresh_20261019/approved_samples/07_interior.png",
+          "sha256": "fc6cfaa9faed6c35500b9c8fc4affca675791e315785eab16c07dd405e712f23",
+          "role": "approved_interior_style_only"
+        }
+      ],
+      "technical_source": {
+        "path": "assets/art/scenes/sect_chamber.png",
+        "sha256": "2bf63397eb56453125e01e9136ac7723ec882f97339dd433ca7d25f92077422c",
+        "role": "old_technical_spec"
+      },
+      "target_dimensions": [
+        2400,
+        600
+      ],
+      "native_dimensions": [
+        2172,
+        724
+      ],
+      "native_mode": "RGB",
+      "alpha_extrema": null,
+      "native_matches_target": false,
+      "pixels_postprocessed": false,
+      "tool_logical_path": "C:\\Users\\Kuroro\\.codex\\generated_images\\01a15203-e7bc-7bc0-b21d-f11948dc04a9\\exec-06b0d014-56f6-4d17-974a-82d9c0cde27b.png",
+      "tool_physical_path": "D:\\claude\\flash\\.tmp\\imagegen_storage\\generated_images\\01a15203-e7bc-7bc0-b21d-f11948dc04a9\\exec-06b0d014-56f6-4d17-974a-82d9c0cde27b.png",
+      "checks": {
+        "decoded": true,
+        "opaque": true,
+        "physical_storage_on_d": true,
+        "manual_content_and_style_review": "passed"
+      },
+      "integration_notes": "Native output is taller than old 4:1 source. Central crop [0,90,2172,543] contains the main furniture and mat; engine preview/crop remains pending. Do not label native file 2400x600."
+    },
+    {
+      "filename": "tianhe_ferry_day.png",
+      "path": "art_sources/refresh_20261019/batches/06_scenes/output/tianhe_ferry_day.png",
+      "sha256": "4cddd4c99d9ec6ee111ff66969143957e5e1b3352bf5bfdf1a46f708209bb088",
+      "status": "candidate_for_review",
+      "content_priority": "P0",
+      "content_stage": 1,
+      "tool": "builtin_image_gen",
+      "prompt_paths": [
+        "art_sources/refresh_20261019/batches/06_scenes/output/prompts/tianhe_ferry_day.txt"
+      ],
+      "input_images": [
+        {
+          "path": "assets/art/scenes/ferry_dock.png",
+          "sha256": "ffc4b355c0edb935aa0f07f130936dc2e028bf9278f14ba361ba6a19ecc4816d",
+          "role": "landing_layout_identity_only"
+        },
+        {
+          "path": "art_sources/refresh_20261019/approved_samples/04_location.png",
+          "sha256": "46f177a060685f7966c27eebb2cacc2ee65eb2a189a2c4acff48a13d97157a6f",
+          "role": "approved_outdoor_style_only"
+        }
+      ],
+      "technical_source": {
+        "path": "assets/art/scenes/ferry_crossing.png",
+        "sha256": "fc1696644a7843eb323ab5d73d3d5244a932b2be67603da0733f6400e093bfd8",
+        "role": "old_technical_spec"
+      },
+      "target_dimensions": [
+        2172,
+        724
+      ],
+      "native_dimensions": [
+        2172,
+        724
+      ],
+      "native_mode": "RGB",
+      "alpha_extrema": null,
+      "native_matches_target": true,
+      "pixels_postprocessed": false,
+      "tool_logical_path": "C:\\Users\\Kuroro\\.codex\\generated_images\\01a15203-e7bc-7bc0-b21d-f11948dc04a9\\exec-e286cb62-97e6-4eeb-a27a-e256b7f7a7d0.png",
+      "tool_physical_path": "D:\\claude\\flash\\.tmp\\imagegen_storage\\generated_images\\01a15203-e7bc-7bc0-b21d-f11948dc04a9\\exec-e286cb62-97e6-4eeb-a27a-e256b7f7a7d0.png",
+      "checks": {
+        "decoded": true,
+        "opaque": true,
+        "physical_storage_on_d": true,
+        "manual_content_and_style_review": "passed"
+      },
+      "integration_notes": "Native size equals the selected old ferry-crossing specification. Scene-window crop and day/night transition still require integration review; no game files were replaced."
+    },
+    {
+      "filename": "tianhe_ferry_reflection.png",
+      "path": "art_sources/refresh_20261019/batches/06_scenes/output/tianhe_ferry_reflection.png",
+      "sha256": "bc3bf82f20980ca815ac76766111045e175e532bfabd6f463216abdf2afe9c51",
+      "status": "candidate_for_review",
+      "content_priority": "P0",
+      "content_stage": 1,
+      "tool": "builtin_image_gen",
+      "prompt_paths": [
+        "art_sources/refresh_20261019/batches/06_scenes/output/prompts/tianhe_ferry_reflection.txt",
+        "art_sources/refresh_20261019/batches/06_scenes/output/prompts/tianhe_ferry_reflection_fix.txt"
+      ],
+      "input_images": [
+        {
+          "path": "art_sources/refresh_20261019/batches/06_scenes/output/tianhe_ferry_day.png",
+          "sha256": "4cddd4c99d9ec6ee111ff66969143957e5e1b3352bf5bfdf1a46f708209bb088",
+          "role": "base_state_edit_target_preserve_camera_and_geometry"
+        },
+        {
+          "path": "art_sources/refresh_20261019/batches/10_item_skill_icons/review/vector_overview.png",
+          "sha256": "a2048f7c4929011cda364520a805f689dadba23ac0047a7ec15e7f3b4c9bf0ec",
+          "role": "specific_city_motif_cells_only"
+        },
+        {
+          "path": "art_sources/refresh_20261019/batches/06_scenes/output/originals/tianhe_ferry_reflection_v1.png",
+          "sha256": "ce1928c95996b5c4b18f13664a8841030767530fb0543529b2bc4946d54180b2",
+          "role": "correction_edit_target_invert_ghost_gate_only"
+        }
+      ],
+      "technical_source": {
+        "path": "assets/art/scenes/ferry_crossing.png",
+        "sha256": "fc1696644a7843eb323ab5d73d3d5244a932b2be67603da0733f6400e093bfd8",
+        "role": "old_technical_spec"
+      },
+      "target_dimensions": [
+        2172,
+        724
+      ],
+      "native_dimensions": [
+        2172,
+        724
+      ],
+      "native_mode": "RGB",
+      "alpha_extrema": null,
+      "native_matches_target": true,
+      "pixels_postprocessed": false,
+      "tool_logical_path": "C:\\Users\\Kuroro\\.codex\\generated_images\\01a15203-e7bc-7bc0-b21d-f11948dc04a9\\exec-b916a64a-afb3-46be-a462-d8a0d8c9154c.png",
+      "tool_physical_path": "D:\\claude\\flash\\.tmp\\imagegen_storage\\generated_images\\01a15203-e7bc-7bc0-b21d-f11948dc04a9\\exec-b916a64a-afb3-46be-a462-d8a0d8c9154c.png",
+      "checks": {
+        "decoded": true,
+        "opaque": true,
+        "physical_storage_on_d": true,
+        "manual_content_and_style_review": "passed; reflection required one targeted correction"
+      },
+      "integration_notes": "Native size equals the selected old ferry-crossing specification. Scene-window crop and day/night transition still require integration review; no game files were replaced."
+    }
+  ],
+  "superseded": [
+    {
+      "path": "art_sources/refresh_20261019/batches/06_scenes/output/originals/tianhe_ferry_reflection_v1.png",
+      "reason": "Ghost gate was upright. The selected revision inverts it as a reflection."
+    }
+  ],
+  "storage_redirection_report": ".tmp/imagegen_storage/redirection.json",
+  "runtime_assets_replaced": 0,
+  "game_tests_run": false
+}

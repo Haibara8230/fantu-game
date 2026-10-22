@@ -1,0 +1,1579 @@
+{
+  "scope": "candidate delivery; runtime installs listed in INTEGRATION.json",
+  "counts": {
+    "delivered_generated": 18,
+    "delivered_reuse": 7
+  },
+  "jobs": [
+    {
+      "id": "8f8006bcf8aed69f",
+      "batch": "02_key_portraits",
+      "kind": "existing",
+      "label": "assets/art/portraits/azhi.png",
+      "source": "assets/art/portraits/azhi.png",
+      "output": "art_sources/refresh_20261019/batches/02_key_portraits/output/existing/art/portraits/azhi.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/art/portraits/azhi.png",
+        "sha256": "7a3a8811a1d61beb03260905f12a2da552ec326b00e95d87da172daea2dfb0ad",
+        "format": "PNG",
+        "dimensions": [
+          512,
+          640
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          4,
+          5
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_generated",
+      "tool_refs": [
+        "assets/art/portraits/azhi.png",
+        "art_sources/refresh_20261019/approved_samples/02_portrait.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/02_key_portraits/output/prompts/8f8006bcf8aed69f.txt",
+      "newly_generated": true,
+      "sha256": "336b6eb535af2bdf5e2e11d6fcecbddd46b1110c98e32f807edeee5737c53395",
+      "native_dimensions": [
+        1122,
+        1402
+      ],
+      "native_mode": "RGB",
+      "alpha_extrema": null,
+      "tool_logical_path": "C:\\Users\\Kuroro\\.codex\\generated_images\\01a15203-e7bc-7bc0-b21d-f11948dc04a9\\exec-3750d2ea-b2a4-411b-a0ad-e91167a15b85.png",
+      "tool_physical_path": "D:\\claude\\flash\\.tmp\\imagegen_storage\\generated_images\\01a15203-e7bc-7bc0-b21d-f11948dc04a9\\exec-3750d2ea-b2a4-411b-a0ad-e91167a15b85.png",
+      "input_hashes": [
+        {
+          "path": "assets/art/portraits/azhi.png",
+          "sha256": "7a3a8811a1d61beb03260905f12a2da552ec326b00e95d87da172daea2dfb0ad"
+        },
+        {
+          "path": "art_sources/refresh_20261019/approved_samples/02_portrait.png",
+          "sha256": "139f85deb18db95d129b9e3e31db95460f47b934a7a68a4f006b95f8ad53c3fe"
+        }
+      ],
+      "review": "Visually checked identity/content, category style and complete composition; integration separate.",
+      "target_dimensions": [
+        512,
+        640
+      ],
+      "size_matches_technical_source": false,
+      "integration_status": "runtime_installed",
+      "size_note": "Native bytes retained; runtime crop/scale or atlas registration must be resolved separately. Target dimensions are not claimed as delivered dimensions.",
+      "runtime_targets": [
+        "assets/art/portraits/azhi.png"
+      ]
+    },
+    {
+      "id": "f3211efb28d2fc27",
+      "batch": "02_key_portraits",
+      "kind": "existing",
+      "label": "assets/art/portraits/azhi_unique.png",
+      "source": "assets/art/portraits/azhi_unique.png",
+      "output": "art_sources/refresh_20261019/batches/02_key_portraits/output/existing/art/portraits/azhi_unique.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/art/portraits/azhi_unique.png",
+        "sha256": "06ce356a5aa2403bcf10d535d98cfaf3e1db98f1d8411c7148259b1015c423bf",
+        "format": "PNG",
+        "dimensions": [
+          1122,
+          1402
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          561,
+          701
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_reuse",
+      "reuse_source": "art_sources/refresh_20261019/batches/02_key_portraits/candidates/azhi.png",
+      "tool_refs": [
+        "assets/art/portraits/azhi_unique.png",
+        "art_sources/refresh_20261019/approved_samples/02_portrait.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/02_key_portraits/output/prompts/f3211efb28d2fc27.txt",
+      "delivery_kind": "reuse_prior_candidate",
+      "sha256": "d4d0e67997d6441ed6f4aa517d87a8145bc9de11f13c60178632c8c5917e6175",
+      "newly_generated": false,
+      "native_mode": "RGB",
+      "alpha_extrema": null,
+      "native_dimensions": [
+        1122,
+        1402
+      ],
+      "target_dimensions": [
+        1122,
+        1402
+      ],
+      "size_matches_technical_source": true,
+      "integration_status": "runtime_installed",
+      "runtime_targets": [
+        "assets/art/portraits/azhi_unique.png"
+      ]
+    },
+    {
+      "id": "69aab6aabfc59df6",
+      "batch": "02_key_portraits",
+      "kind": "existing",
+      "label": "assets/art/portraits/boatman.png",
+      "source": "assets/art/portraits/boatman.png",
+      "output": "art_sources/refresh_20261019/batches/02_key_portraits/output/existing/art/portraits/boatman.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/art/portraits/boatman.png",
+        "sha256": "f20dc2e5e8c5f4223efc6e99a3157a521c365fa9cd33982b46d507940c143f4c",
+        "format": "PNG",
+        "dimensions": [
+          512,
+          640
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          4,
+          5
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_generated",
+      "tool_refs": [
+        "assets/art/portraits/boatman.png",
+        "art_sources/refresh_20261019/approved_samples/02_portrait.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/02_key_portraits/output/prompts/69aab6aabfc59df6.txt",
+      "newly_generated": true,
+      "sha256": "236496e8b33f2d4cd9cc07200a90a446a08c69c8b67037f6cf3c5eba77acb0d8",
+      "native_dimensions": [
+        1122,
+        1402
+      ],
+      "native_mode": "RGB",
+      "alpha_extrema": null,
+      "tool_logical_path": "C:\\Users\\Kuroro\\.codex\\generated_images\\01a15203-e7bc-7bc0-b21d-f11948dc04a9\\exec-4481911d-59c6-4117-ac77-96a678912850.png",
+      "tool_physical_path": "D:\\claude\\flash\\.tmp\\imagegen_storage\\generated_images\\01a15203-e7bc-7bc0-b21d-f11948dc04a9\\exec-4481911d-59c6-4117-ac77-96a678912850.png",
+      "input_hashes": [
+        {
+          "path": "assets/art/portraits/boatman.png",
+          "sha256": "f20dc2e5e8c5f4223efc6e99a3157a521c365fa9cd33982b46d507940c143f4c"
+        },
+        {
+          "path": "art_sources/refresh_20261019/approved_samples/02_portrait.png",
+          "sha256": "139f85deb18db95d129b9e3e31db95460f47b934a7a68a4f006b95f8ad53c3fe"
+        }
+      ],
+      "review": "Visually checked identity/content, category style and complete composition; integration separate.",
+      "target_dimensions": [
+        512,
+        640
+      ],
+      "size_matches_technical_source": false,
+      "integration_status": "runtime_installed",
+      "size_note": "Native bytes retained; runtime crop/scale or atlas registration must be resolved separately. Target dimensions are not claimed as delivered dimensions.",
+      "runtime_targets": [
+        "assets/art/portraits/boatman.png"
+      ]
+    },
+    {
+      "id": "8a5f0ca736a904be",
+      "batch": "02_key_portraits",
+      "kind": "existing",
+      "label": "assets/art/portraits/gu_changgeng_unique.png",
+      "source": "assets/art/portraits/gu_changgeng_unique.png",
+      "output": "art_sources/refresh_20261019/batches/02_key_portraits/output/existing/art/portraits/gu_changgeng_unique.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/art/portraits/gu_changgeng_unique.png",
+        "sha256": "373e9c3fd0e631709fbd9b9a6ee12d949057ddae69cbfa9890679e6fc73bd682",
+        "format": "PNG",
+        "dimensions": [
+          1122,
+          1402
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          561,
+          701
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_generated",
+      "tool_refs": [
+        "assets/art/portraits/gu_changgeng_unique.png",
+        "art_sources/refresh_20261019/approved_samples/02_portrait.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/02_key_portraits/output/prompts/8a5f0ca736a904be.txt",
+      "rejected_attempts": [
+        {
+          "path": "art_sources/refresh_20261019/batches/02_key_portraits/output/existing/art/portraits/originals/gu_changgeng_unique_rejected_f76d94b2.png",
+          "sha256": "f76d94b2acc8663957ab498d1acbea01c656be631fe34e5ad72a5634b17373a9",
+          "reason": "Hair or crown touches/crosses the top canvas edge. Reframe with a visible plain background margin above the entire hair/crown; preserve original face and props.",
+          "tool_physical_path": "D:\\claude\\flash\\.tmp\\imagegen_storage\\generated_images\\01a15203-e7bc-7bc0-b21d-f11948dc04a9\\exec-611b8af3-19d7-4b69-8272-739c39f38952.png",
+          "prompt_path": "art_sources/refresh_20261019/batches/02_key_portraits/output/existing/art/portraits/originals/gu_changgeng_unique_rejected_f76d94b2.prompt.txt"
+        }
+      ],
+      "newly_generated": true,
+      "sha256": "1a1ebffc3a602fe1fae912d35dfa33120fe428f7ec843ba680bf56d6296a28a6",
+      "native_dimensions": [
+        1122,
+        1402
+      ],
+      "native_mode": "RGB",
+      "alpha_extrema": null,
+      "tool_logical_path": "C:\\Users\\Kuroro\\.codex\\generated_images\\01a156b8-68e7-71d3-9e49-188fe4225a5e\\exec-89aac116-d185-4b34-8c10-633c13d3c684.png",
+      "tool_physical_path": "D:\\claude\\flash\\.tmp\\imagegen_storage\\generated_images\\01a156b8-68e7-71d3-9e49-188fe4225a5e\\exec-89aac116-d185-4b34-8c10-633c13d3c684.png",
+      "input_hashes": [
+        {
+          "path": "assets/art/portraits/gu_changgeng_unique.png",
+          "sha256": "373e9c3fd0e631709fbd9b9a6ee12d949057ddae69cbfa9890679e6fc73bd682"
+        },
+        {
+          "path": "art_sources/refresh_20261019/approved_samples/02_portrait.png",
+          "sha256": "139f85deb18db95d129b9e3e31db95460f47b934a7a68a4f006b95f8ad53c3fe"
+        }
+      ],
+      "review": "Visually checked identity/content, category style and complete composition; integration separate.",
+      "target_dimensions": [
+        1122,
+        1402
+      ],
+      "size_matches_technical_source": true,
+      "integration_status": "runtime_installed",
+      "runtime_targets": [
+        "assets/art/portraits/gu_changgeng_unique.png"
+      ]
+    },
+    {
+      "id": "80771024a1b3cc17",
+      "batch": "02_key_portraits",
+      "kind": "existing",
+      "label": "assets/art/portraits/han_jin_unique.png",
+      "source": "assets/art/portraits/han_jin_unique.png",
+      "output": "art_sources/refresh_20261019/batches/02_key_portraits/output/existing/art/portraits/han_jin_unique.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/art/portraits/han_jin_unique.png",
+        "sha256": "74ac8dd5fe9ec581bb5836b86ec433157660befe51d97e27a825effc898c697e",
+        "format": "PNG",
+        "dimensions": [
+          1122,
+          1402
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          561,
+          701
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_generated",
+      "tool_refs": [
+        "assets/art/portraits/han_jin_unique.png",
+        "art_sources/refresh_20261019/approved_samples/02_portrait.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/02_key_portraits/output/prompts/80771024a1b3cc17.txt",
+      "rejected_attempts": [
+        {
+          "path": "art_sources/refresh_20261019/batches/02_key_portraits/output/existing/art/portraits/originals/han_jin_unique_rejected_ca505ee2.png",
+          "sha256": "ca505ee2a6613d266c2df65bcd2a9394aaf8b60362738cd40fb05079270d7432",
+          "reason": "Hair/crown clipped at top edge; wound and torn-garment state was also erased. Keep three simple cheek scratches and two clear garment tears while simplifying texture.",
+          "tool_physical_path": "D:\\claude\\flash\\.tmp\\imagegen_storage\\generated_images\\01a15203-e7bc-7bc0-b21d-f11948dc04a9\\exec-d0ac0121-10fc-4783-b891-84cd9f08189f.png",
+          "prompt_path": "art_sources/refresh_20261019/batches/02_key_portraits/output/existing/art/portraits/originals/han_jin_unique_rejected_ca505ee2.prompt.txt"
+        }
+      ],
+      "newly_generated": true,
+      "sha256": "f726d564ddf89fa4ac98950a4f36789bcc19abfaa3918575338e32589ab05240",
+      "native_dimensions": [
+        1122,
+        1402
+      ],
+      "native_mode": "RGB",
+      "alpha_extrema": null,
+      "tool_logical_path": "C:\\Users\\Kuroro\\.codex\\generated_images\\01a156b8-68e7-71d3-9e49-188fe4225a5e\\exec-54836ed5-704c-4242-a6ba-be0f44cd5d29.png",
+      "tool_physical_path": "D:\\claude\\flash\\.tmp\\imagegen_storage\\generated_images\\01a156b8-68e7-71d3-9e49-188fe4225a5e\\exec-54836ed5-704c-4242-a6ba-be0f44cd5d29.png",
+      "input_hashes": [
+        {
+          "path": "assets/art/portraits/han_jin_unique.png",
+          "sha256": "74ac8dd5fe9ec581bb5836b86ec433157660befe51d97e27a825effc898c697e"
+        },
+        {
+          "path": "art_sources/refresh_20261019/approved_samples/02_portrait.png",
+          "sha256": "139f85deb18db95d129b9e3e31db95460f47b934a7a68a4f006b95f8ad53c3fe"
+        }
+      ],
+      "review": "Visually checked identity/content, category style and complete composition; integration separate.",
+      "target_dimensions": [
+        1122,
+        1402
+      ],
+      "size_matches_technical_source": true,
+      "integration_status": "runtime_installed",
+      "runtime_targets": [
+        "assets/art/portraits/han_jin_unique.png"
+      ]
+    },
+    {
+      "id": "b8fa8c37f10ae9c6",
+      "batch": "02_key_portraits",
+      "kind": "existing",
+      "label": "assets/art/portraits/peddler.png",
+      "source": "assets/art/portraits/peddler.png",
+      "output": "art_sources/refresh_20261019/batches/02_key_portraits/output/existing/art/portraits/peddler.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/art/portraits/peddler.png",
+        "sha256": "e39555ad5d9b24a569c43b81eb4f566665549662d66b5568badeaea4b6a04502",
+        "format": "PNG",
+        "dimensions": [
+          512,
+          640
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          4,
+          5
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_generated",
+      "tool_refs": [
+        "assets/art/portraits/peddler.png",
+        "art_sources/refresh_20261019/approved_samples/02_portrait.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/02_key_portraits/output/prompts/b8fa8c37f10ae9c6.txt",
+      "newly_generated": true,
+      "sha256": "7a3b7c8214c71d25947f7542117257622fc2e8d7e70cd437641912a452eccd58",
+      "native_dimensions": [
+        1122,
+        1402
+      ],
+      "native_mode": "RGB",
+      "alpha_extrema": null,
+      "tool_logical_path": "C:\\Users\\Kuroro\\.codex\\generated_images\\01a15203-e7bc-7bc0-b21d-f11948dc04a9\\exec-b91e570d-a03d-44bc-9090-a1dc4f43ee33.png",
+      "tool_physical_path": "D:\\claude\\flash\\.tmp\\imagegen_storage\\generated_images\\01a15203-e7bc-7bc0-b21d-f11948dc04a9\\exec-b91e570d-a03d-44bc-9090-a1dc4f43ee33.png",
+      "input_hashes": [
+        {
+          "path": "assets/art/portraits/peddler.png",
+          "sha256": "e39555ad5d9b24a569c43b81eb4f566665549662d66b5568badeaea4b6a04502"
+        },
+        {
+          "path": "art_sources/refresh_20261019/approved_samples/02_portrait.png",
+          "sha256": "139f85deb18db95d129b9e3e31db95460f47b934a7a68a4f006b95f8ad53c3fe"
+        }
+      ],
+      "review": "Visually checked identity/content, category style and complete composition; integration separate.",
+      "target_dimensions": [
+        512,
+        640
+      ],
+      "size_matches_technical_source": false,
+      "integration_status": "runtime_installed",
+      "size_note": "Native bytes retained; runtime crop/scale or atlas registration must be resolved separately. Target dimensions are not claimed as delivered dimensions.",
+      "runtime_targets": [
+        "assets/art/portraits/peddler.png"
+      ]
+    },
+    {
+      "id": "2596a4235c41acf0",
+      "batch": "02_key_portraits",
+      "kind": "existing",
+      "label": "assets/art/portraits/rogue.png",
+      "source": "assets/art/portraits/rogue.png",
+      "output": "art_sources/refresh_20261019/batches/02_key_portraits/output/existing/art/portraits/rogue.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/art/portraits/rogue.png",
+        "sha256": "ff7182364d0748affbbcdb983558a2e725c0cce6810b2943159e23682bcc5214",
+        "format": "PNG",
+        "dimensions": [
+          512,
+          640
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          4,
+          5
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_generated",
+      "tool_refs": [
+        "assets/art/portraits/rogue.png",
+        "art_sources/refresh_20261019/approved_samples/02_portrait.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/02_key_portraits/output/prompts/2596a4235c41acf0.txt",
+      "rejected_attempts": [
+        {
+          "path": "art_sources/refresh_20261019/batches/02_key_portraits/output/existing/art/portraits/originals/rogue_rejected_4971108f.png",
+          "sha256": "4971108f6e30fc2d436c38fab26b50b442c5d942e18a3279727622cc79c95885",
+          "reason": "Hair or crown touches/crosses the top canvas edge. Reframe with a visible plain background margin above the entire hair/crown; preserve original face and props.",
+          "tool_physical_path": "D:\\claude\\flash\\.tmp\\imagegen_storage\\generated_images\\01a15203-e7bc-7bc0-b21d-f11948dc04a9\\exec-9f556f92-9eb3-47f3-9846-f58a8cda70b5.png",
+          "prompt_path": "art_sources/refresh_20261019/batches/02_key_portraits/output/existing/art/portraits/originals/rogue_rejected_4971108f.prompt.txt"
+        }
+      ],
+      "newly_generated": true,
+      "sha256": "aa000d10edf4f3429315ead505f8575db68520842bb5e586e55ae46de77a819e",
+      "native_dimensions": [
+        1122,
+        1402
+      ],
+      "native_mode": "RGB",
+      "alpha_extrema": null,
+      "tool_logical_path": "C:\\Users\\Kuroro\\.codex\\generated_images\\01a156b8-68e7-71d3-9e49-188fe4225a5e\\exec-2cad3292-efa1-49cd-802e-b6da4914b3da.png",
+      "tool_physical_path": "D:\\claude\\flash\\.tmp\\imagegen_storage\\generated_images\\01a156b8-68e7-71d3-9e49-188fe4225a5e\\exec-2cad3292-efa1-49cd-802e-b6da4914b3da.png",
+      "input_hashes": [
+        {
+          "path": "assets/art/portraits/rogue.png",
+          "sha256": "ff7182364d0748affbbcdb983558a2e725c0cce6810b2943159e23682bcc5214"
+        },
+        {
+          "path": "art_sources/refresh_20261019/approved_samples/02_portrait.png",
+          "sha256": "139f85deb18db95d129b9e3e31db95460f47b934a7a68a4f006b95f8ad53c3fe"
+        }
+      ],
+      "review": "Visually checked identity/content, category style and complete composition; integration separate.",
+      "target_dimensions": [
+        512,
+        640
+      ],
+      "size_matches_technical_source": false,
+      "integration_status": "runtime_installed",
+      "size_note": "Native bytes retained; runtime crop/scale or atlas registration must be resolved separately. Target dimensions are not claimed as delivered dimensions.",
+      "runtime_targets": [
+        "assets/art/portraits/rogue.png"
+      ]
+    },
+    {
+      "id": "bcb0b7df043866ef",
+      "batch": "02_key_portraits",
+      "kind": "existing",
+      "label": "assets/art/portraits/shen_mo.png",
+      "source": "assets/art/portraits/shen_mo.png",
+      "output": "art_sources/refresh_20261019/batches/02_key_portraits/output/existing/art/portraits/shen_mo.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/art/portraits/shen_mo.png",
+        "sha256": "045e15a4fc9cfd7052b1b720525a28dcb2ea6eb38a1966bd1d9d38821900d252",
+        "format": "PNG",
+        "dimensions": [
+          512,
+          640
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          4,
+          5
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_reuse",
+      "reuse_source": "art_sources/refresh_20261019/approved_samples/02_portrait.png",
+      "tool_refs": [
+        "assets/art/portraits/shen_mo.png",
+        "art_sources/refresh_20261019/approved_samples/02_portrait.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/02_key_portraits/output/prompts/bcb0b7df043866ef.txt",
+      "delivery_kind": "reuse_prior_candidate",
+      "sha256": "139f85deb18db95d129b9e3e31db95460f47b934a7a68a4f006b95f8ad53c3fe",
+      "newly_generated": false,
+      "native_mode": "RGB",
+      "alpha_extrema": null,
+      "native_dimensions": [
+        1122,
+        1402
+      ],
+      "target_dimensions": [
+        512,
+        640
+      ],
+      "size_matches_technical_source": false,
+      "integration_status": "runtime_installed",
+      "size_note": "Native bytes retained; runtime crop/scale or atlas registration must be resolved separately. Target dimensions are not claimed as delivered dimensions.",
+      "runtime_targets": [
+        "assets/art/portraits/shen_mo.png"
+      ]
+    },
+    {
+      "id": "c9342433e294bd65",
+      "batch": "02_key_portraits",
+      "kind": "existing",
+      "label": "assets/art/portraits/squatter.png",
+      "source": "assets/art/portraits/squatter.png",
+      "output": "art_sources/refresh_20261019/batches/02_key_portraits/output/existing/art/portraits/squatter.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/art/portraits/squatter.png",
+        "sha256": "e54f44a3101ce65050df8fee042341e148738f1edaf77b73768f861a3d9aa3bf",
+        "format": "PNG",
+        "dimensions": [
+          512,
+          640
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          4,
+          5
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_generated",
+      "tool_refs": [
+        "assets/art/portraits/squatter.png",
+        "art_sources/refresh_20261019/approved_samples/02_portrait.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/02_key_portraits/output/prompts/c9342433e294bd65.txt",
+      "newly_generated": true,
+      "sha256": "167a1ba306aebb5e6262da24fb564152dd9e4419306f0ccb30791629293e47d0",
+      "native_dimensions": [
+        1122,
+        1402
+      ],
+      "native_mode": "RGB",
+      "alpha_extrema": null,
+      "tool_logical_path": "C:\\Users\\Kuroro\\.codex\\generated_images\\01a15203-e7bc-7bc0-b21d-f11948dc04a9\\exec-451b49ab-b11a-4572-b118-93ad6a71e300.png",
+      "tool_physical_path": "D:\\claude\\flash\\.tmp\\imagegen_storage\\generated_images\\01a15203-e7bc-7bc0-b21d-f11948dc04a9\\exec-451b49ab-b11a-4572-b118-93ad6a71e300.png",
+      "input_hashes": [
+        {
+          "path": "assets/art/portraits/squatter.png",
+          "sha256": "e54f44a3101ce65050df8fee042341e148738f1edaf77b73768f861a3d9aa3bf"
+        },
+        {
+          "path": "art_sources/refresh_20261019/approved_samples/02_portrait.png",
+          "sha256": "139f85deb18db95d129b9e3e31db95460f47b934a7a68a4f006b95f8ad53c3fe"
+        }
+      ],
+      "review": "Visually checked identity/content, category style and complete composition; integration separate.",
+      "target_dimensions": [
+        512,
+        640
+      ],
+      "size_matches_technical_source": false,
+      "integration_status": "runtime_installed",
+      "size_note": "Native bytes retained; runtime crop/scale or atlas registration must be resolved separately. Target dimensions are not claimed as delivered dimensions.",
+      "runtime_targets": [
+        "assets/art/portraits/squatter.png"
+      ]
+    },
+    {
+      "id": "f3b7337df09fe148",
+      "batch": "02_key_portraits",
+      "kind": "existing",
+      "label": "assets/art/portraits/storyteller.png",
+      "source": "assets/art/portraits/storyteller.png",
+      "output": "art_sources/refresh_20261019/batches/02_key_portraits/output/existing/art/portraits/storyteller.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/art/portraits/storyteller.png",
+        "sha256": "f8f746cd88b3b9c2d94f66dd521a5ab0f879e76c6fbc2c17ce502624645d566b",
+        "format": "PNG",
+        "dimensions": [
+          512,
+          640
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          4,
+          5
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_generated",
+      "tool_refs": [
+        "assets/art/portraits/storyteller.png",
+        "art_sources/refresh_20261019/approved_samples/02_portrait.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/02_key_portraits/output/prompts/f3b7337df09fe148.txt",
+      "newly_generated": true,
+      "sha256": "16557adcc9548322df1c3187ebb929f8e71c65a078d28bd9c0581c1a2b38d4ba",
+      "native_dimensions": [
+        1122,
+        1402
+      ],
+      "native_mode": "RGB",
+      "alpha_extrema": null,
+      "tool_logical_path": "C:\\Users\\Kuroro\\.codex\\generated_images\\01a15203-e7bc-7bc0-b21d-f11948dc04a9\\exec-c52a4eab-3549-4092-82bb-216471780fc6.png",
+      "tool_physical_path": "D:\\claude\\flash\\.tmp\\imagegen_storage\\generated_images\\01a15203-e7bc-7bc0-b21d-f11948dc04a9\\exec-c52a4eab-3549-4092-82bb-216471780fc6.png",
+      "input_hashes": [
+        {
+          "path": "assets/art/portraits/storyteller.png",
+          "sha256": "f8f746cd88b3b9c2d94f66dd521a5ab0f879e76c6fbc2c17ce502624645d566b"
+        },
+        {
+          "path": "art_sources/refresh_20261019/approved_samples/02_portrait.png",
+          "sha256": "139f85deb18db95d129b9e3e31db95460f47b934a7a68a4f006b95f8ad53c3fe"
+        }
+      ],
+      "review": "Visually checked identity/content, category style and complete composition; integration separate.",
+      "target_dimensions": [
+        512,
+        640
+      ],
+      "size_matches_technical_source": false,
+      "integration_status": "runtime_installed",
+      "size_note": "Native bytes retained; runtime crop/scale or atlas registration must be resolved separately. Target dimensions are not claimed as delivered dimensions.",
+      "runtime_targets": [
+        "assets/art/portraits/storyteller.png"
+      ]
+    },
+    {
+      "id": "8c9199257a684acc",
+      "batch": "02_key_portraits",
+      "kind": "existing",
+      "label": "assets/art/portraits/wounded.png",
+      "source": "assets/art/portraits/wounded.png",
+      "output": "art_sources/refresh_20261019/batches/02_key_portraits/output/existing/art/portraits/wounded.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/art/portraits/wounded.png",
+        "sha256": "4e34ea7fb14f66cef9e887a24fc0972055cf92367adc921cc86a2bd28200c685",
+        "format": "PNG",
+        "dimensions": [
+          512,
+          640
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          4,
+          5
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_generated",
+      "tool_refs": [
+        "assets/art/portraits/wounded.png",
+        "art_sources/refresh_20261019/batches/02_key_portraits/candidates/liu_hanzhou_healthy.png",
+        "art_sources/refresh_20261019/approved_samples/02_portrait.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/02_key_portraits/output/prompts/8c9199257a684acc.txt",
+      "rejected_attempts": [
+        {
+          "path": "art_sources/refresh_20261019/batches/02_key_portraits/output/existing/art/portraits/originals/wounded_rejected_4008d73e.png",
+          "sha256": "4008d73e96a64a6b2ed9beceae07ac2def8abba2f401aaef52a61464295a72be",
+          "reason": "Hair or crown touches/crosses the top canvas edge. Reframe with a visible plain background margin above the entire hair/crown; preserve original face and props.",
+          "tool_physical_path": "D:\\claude\\flash\\.tmp\\imagegen_storage\\generated_images\\01a15203-e7bc-7bc0-b21d-f11948dc04a9\\exec-97084858-d742-4dd4-9215-2666a2b752f6.png",
+          "prompt_path": "art_sources/refresh_20261019/batches/02_key_portraits/output/existing/art/portraits/originals/wounded_rejected_4008d73e.prompt.txt"
+        }
+      ],
+      "newly_generated": true,
+      "sha256": "351b7a279ec6946feb78fc35c4ec919752efc234e1d44a324d5544f605c252fe",
+      "native_dimensions": [
+        1122,
+        1402
+      ],
+      "native_mode": "RGB",
+      "alpha_extrema": null,
+      "tool_logical_path": "C:\\Users\\Kuroro\\.codex\\generated_images\\01a156b8-68e7-71d3-9e49-188fe4225a5e\\exec-23cb7e48-7b38-41cf-b5e6-80154d5154c9.png",
+      "tool_physical_path": "D:\\claude\\flash\\.tmp\\imagegen_storage\\generated_images\\01a156b8-68e7-71d3-9e49-188fe4225a5e\\exec-23cb7e48-7b38-41cf-b5e6-80154d5154c9.png",
+      "input_hashes": [
+        {
+          "path": "assets/art/portraits/wounded.png",
+          "sha256": "4e34ea7fb14f66cef9e887a24fc0972055cf92367adc921cc86a2bd28200c685"
+        },
+        {
+          "path": "art_sources/refresh_20261019/batches/02_key_portraits/candidates/liu_hanzhou_healthy.png",
+          "sha256": "ea67ce6b5d249c4bb5cb49dc138604024dfe9baafc9ddafac5826e77ec19ddfe"
+        },
+        {
+          "path": "art_sources/refresh_20261019/approved_samples/02_portrait.png",
+          "sha256": "139f85deb18db95d129b9e3e31db95460f47b934a7a68a4f006b95f8ad53c3fe"
+        }
+      ],
+      "review": "Visually checked identity/content, category style and complete composition; integration separate.",
+      "target_dimensions": [
+        512,
+        640
+      ],
+      "size_matches_technical_source": false,
+      "integration_status": "runtime_installed",
+      "size_note": "Native bytes retained; runtime crop/scale or atlas registration must be resolved separately. Target dimensions are not claimed as delivered dimensions.",
+      "runtime_targets": [
+        "assets/art/portraits/wounded.png"
+      ]
+    },
+    {
+      "id": "81243f75a480b071",
+      "batch": "02_key_portraits",
+      "kind": "existing",
+      "label": "assets/art/portraits/xu_qinghe_unique.png",
+      "source": "assets/art/portraits/xu_qinghe_unique.png",
+      "output": "art_sources/refresh_20261019/batches/02_key_portraits/output/existing/art/portraits/xu_qinghe_unique.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/art/portraits/xu_qinghe_unique.png",
+        "sha256": "50bd41fa745f7d2873afaf7ef3ee8708779d0179663cb94e810101c50d9e87f1",
+        "format": "PNG",
+        "dimensions": [
+          1122,
+          1402
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          561,
+          701
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_generated",
+      "tool_refs": [
+        "assets/art/portraits/xu_qinghe_unique.png",
+        "art_sources/refresh_20261019/approved_samples/02_portrait.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/02_key_portraits/output/prompts/81243f75a480b071.txt",
+      "rejected_attempts": [
+        {
+          "path": "art_sources/refresh_20261019/batches/02_key_portraits/output/existing/art/portraits/originals/xu_qinghe_unique_rejected_7576670e.png",
+          "sha256": "7576670ed96dc2590ed2387b2b14aab19075ea1e4205c9b6737379f744ac7ce2",
+          "reason": "Hair or crown touches/crosses the top canvas edge. Reframe with a visible plain background margin above the entire hair/crown; preserve original face and props.",
+          "tool_physical_path": "D:\\claude\\flash\\.tmp\\imagegen_storage\\generated_images\\01a15203-e7bc-7bc0-b21d-f11948dc04a9\\exec-46d9d21f-6699-4952-999a-58fdd8d84581.png",
+          "prompt_path": "art_sources/refresh_20261019/batches/02_key_portraits/output/existing/art/portraits/originals/xu_qinghe_unique_rejected_7576670e.prompt.txt"
+        }
+      ],
+      "newly_generated": true,
+      "sha256": "54794a01dd5fd1a82475b68551c6aff964440fc616f128ea0d66dc8008c2f3ff",
+      "native_dimensions": [
+        1122,
+        1402
+      ],
+      "native_mode": "RGB",
+      "alpha_extrema": null,
+      "tool_logical_path": "C:\\Users\\Kuroro\\.codex\\generated_images\\01a156b8-68e7-71d3-9e49-188fe4225a5e\\exec-b214f309-6d68-4ad4-bfed-6acb8db15c23.png",
+      "tool_physical_path": "D:\\claude\\flash\\.tmp\\imagegen_storage\\generated_images\\01a156b8-68e7-71d3-9e49-188fe4225a5e\\exec-b214f309-6d68-4ad4-bfed-6acb8db15c23.png",
+      "input_hashes": [
+        {
+          "path": "assets/art/portraits/xu_qinghe_unique.png",
+          "sha256": "50bd41fa745f7d2873afaf7ef3ee8708779d0179663cb94e810101c50d9e87f1"
+        },
+        {
+          "path": "art_sources/refresh_20261019/approved_samples/02_portrait.png",
+          "sha256": "139f85deb18db95d129b9e3e31db95460f47b934a7a68a4f006b95f8ad53c3fe"
+        }
+      ],
+      "review": "Visually checked identity/content, category style and complete composition; integration separate.",
+      "target_dimensions": [
+        1122,
+        1402
+      ],
+      "size_matches_technical_source": true,
+      "integration_status": "runtime_installed",
+      "runtime_targets": [
+        "assets/art/portraits/xu_qinghe_unique.png"
+      ]
+    },
+    {
+      "id": "3fb4877d550abbb3",
+      "batch": "02_key_portraits",
+      "kind": "existing",
+      "label": "assets/art/portraits/yuan_chifeng_unique.png",
+      "source": "assets/art/portraits/yuan_chifeng_unique.png",
+      "output": "art_sources/refresh_20261019/batches/02_key_portraits/output/existing/art/portraits/yuan_chifeng_unique.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/art/portraits/yuan_chifeng_unique.png",
+        "sha256": "bef32cd2d5eb9b690ae52cbd1c4eb468560af55700b4d79038fe52cf434634e6",
+        "format": "PNG",
+        "dimensions": [
+          1122,
+          1402
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          561,
+          701
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_generated",
+      "tool_refs": [
+        "assets/art/portraits/yuan_chifeng_unique.png",
+        "art_sources/refresh_20261019/approved_samples/02_portrait.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/02_key_portraits/output/prompts/3fb4877d550abbb3.txt",
+      "rejected_attempts": [
+        {
+          "path": "art_sources/refresh_20261019/batches/02_key_portraits/output/existing/art/portraits/originals/yuan_chifeng_unique_rejected_ea9e68e7.png",
+          "sha256": "ea9e68e7625ebc4388bd842d3280e3adec158ca1567f6034332d9f705e2c3282",
+          "reason": "Hair or crown touches/crosses the top canvas edge. Reframe with a visible plain background margin above the entire hair/crown; preserve original face and props.",
+          "tool_physical_path": "D:\\claude\\flash\\.tmp\\imagegen_storage\\generated_images\\01a15203-e7bc-7bc0-b21d-f11948dc04a9\\exec-5e209478-6834-466a-9299-8a1f823282a7.png",
+          "prompt_path": "art_sources/refresh_20261019/batches/02_key_portraits/output/existing/art/portraits/originals/yuan_chifeng_unique_rejected_ea9e68e7.prompt.txt"
+        }
+      ],
+      "newly_generated": true,
+      "sha256": "83e044e00552424d2ffe5b91beac72aaf7e166bbfeb0191dc74ea9bbb67e15de",
+      "native_dimensions": [
+        1122,
+        1402
+      ],
+      "native_mode": "RGB",
+      "alpha_extrema": null,
+      "tool_logical_path": "C:\\Users\\Kuroro\\.codex\\generated_images\\01a156b8-68e7-71d3-9e49-188fe4225a5e\\exec-d519ae80-ada0-4dbe-9eff-d0c744395cc4.png",
+      "tool_physical_path": "D:\\claude\\flash\\.tmp\\imagegen_storage\\generated_images\\01a156b8-68e7-71d3-9e49-188fe4225a5e\\exec-d519ae80-ada0-4dbe-9eff-d0c744395cc4.png",
+      "input_hashes": [
+        {
+          "path": "assets/art/portraits/yuan_chifeng_unique.png",
+          "sha256": "bef32cd2d5eb9b690ae52cbd1c4eb468560af55700b4d79038fe52cf434634e6"
+        },
+        {
+          "path": "art_sources/refresh_20261019/approved_samples/02_portrait.png",
+          "sha256": "139f85deb18db95d129b9e3e31db95460f47b934a7a68a4f006b95f8ad53c3fe"
+        }
+      ],
+      "review": "Visually checked identity/content, category style and complete composition; integration separate.",
+      "target_dimensions": [
+        1122,
+        1402
+      ],
+      "size_matches_technical_source": true,
+      "integration_status": "runtime_installed",
+      "runtime_targets": [
+        "assets/art/portraits/yuan_chifeng_unique.png"
+      ]
+    },
+    {
+      "id": "36ea1cef969e2206",
+      "batch": "02_key_portraits",
+      "kind": "existing",
+      "label": "assets/local/portraits/gu_changgeng.png",
+      "source": "assets/local/portraits/gu_changgeng.png",
+      "output": "art_sources/refresh_20261019/batches/02_key_portraits/output/existing/local/portraits/gu_changgeng.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/local/portraits/gu_changgeng.png",
+        "sha256": "b4b4f259d18e3cbca45844a7bd73b9ba10e8ae9502ab4fdb8a4a54d0a462eac7",
+        "format": "PNG",
+        "dimensions": [
+          512,
+          640
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          4,
+          5
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_generated",
+      "tool_refs": [
+        "assets/local/portraits/gu_changgeng.png",
+        "art_sources/refresh_20261019/approved_samples/02_portrait.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/02_key_portraits/output/prompts/36ea1cef969e2206.txt",
+      "newly_generated": true,
+      "sha256": "8ef83f03e3b3b5b900b475fed2b6977f2eb6764a803b55b4927caf246f623f9a",
+      "native_dimensions": [
+        1122,
+        1402
+      ],
+      "native_mode": "RGB",
+      "alpha_extrema": null,
+      "tool_logical_path": "C:\\Users\\Kuroro\\.codex\\generated_images\\01a15203-e7bc-7bc0-b21d-f11948dc04a9\\exec-2344dced-90c1-4a85-b0ec-2c5ff7102802.png",
+      "tool_physical_path": "D:\\claude\\flash\\.tmp\\imagegen_storage\\generated_images\\01a15203-e7bc-7bc0-b21d-f11948dc04a9\\exec-2344dced-90c1-4a85-b0ec-2c5ff7102802.png",
+      "input_hashes": [
+        {
+          "path": "assets/local/portraits/gu_changgeng.png",
+          "sha256": "b4b4f259d18e3cbca45844a7bd73b9ba10e8ae9502ab4fdb8a4a54d0a462eac7"
+        },
+        {
+          "path": "art_sources/refresh_20261019/approved_samples/02_portrait.png",
+          "sha256": "139f85deb18db95d129b9e3e31db95460f47b934a7a68a4f006b95f8ad53c3fe"
+        }
+      ],
+      "review": "Visually checked identity/content, category style and complete composition; integration separate.",
+      "target_dimensions": [
+        512,
+        640
+      ],
+      "size_matches_technical_source": false,
+      "integration_status": "runtime_installed",
+      "size_note": "Native bytes retained; runtime crop/scale or atlas registration must be resolved separately. Target dimensions are not claimed as delivered dimensions.",
+      "runtime_targets": [
+        "assets/local/portraits/gu_changgeng.png"
+      ]
+    },
+    {
+      "id": "9aec1e7d127253b3",
+      "batch": "02_key_portraits",
+      "kind": "existing",
+      "label": "assets/local/portraits/xu_qinghe.png",
+      "source": "assets/local/portraits/xu_qinghe.png",
+      "output": "art_sources/refresh_20261019/batches/02_key_portraits/output/existing/local/portraits/xu_qinghe.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/local/portraits/xu_qinghe.png",
+        "sha256": "dc4ca1bf4d60db3cbd157e408079d37325e3421e22da1edcfa07917c63657551",
+        "format": "PNG",
+        "dimensions": [
+          512,
+          640
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          4,
+          5
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_generated",
+      "tool_refs": [
+        "assets/local/portraits/xu_qinghe.png",
+        "art_sources/refresh_20261019/approved_samples/02_portrait.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/02_key_portraits/output/prompts/9aec1e7d127253b3.txt",
+      "newly_generated": true,
+      "sha256": "7604e84d9923cebbbf88b05e0b626d7b1d8542ed54967bf83c29a6df7bee905d",
+      "native_dimensions": [
+        1122,
+        1402
+      ],
+      "native_mode": "RGB",
+      "alpha_extrema": null,
+      "tool_logical_path": "C:\\Users\\Kuroro\\.codex\\generated_images\\01a15203-e7bc-7bc0-b21d-f11948dc04a9\\exec-da24ebe6-2da3-4255-bdd2-e5cfa5a4d7fd.png",
+      "tool_physical_path": "D:\\claude\\flash\\.tmp\\imagegen_storage\\generated_images\\01a15203-e7bc-7bc0-b21d-f11948dc04a9\\exec-da24ebe6-2da3-4255-bdd2-e5cfa5a4d7fd.png",
+      "input_hashes": [
+        {
+          "path": "assets/local/portraits/xu_qinghe.png",
+          "sha256": "dc4ca1bf4d60db3cbd157e408079d37325e3421e22da1edcfa07917c63657551"
+        },
+        {
+          "path": "art_sources/refresh_20261019/approved_samples/02_portrait.png",
+          "sha256": "139f85deb18db95d129b9e3e31db95460f47b934a7a68a4f006b95f8ad53c3fe"
+        }
+      ],
+      "review": "Visually checked identity/content, category style and complete composition; integration separate.",
+      "target_dimensions": [
+        512,
+        640
+      ],
+      "size_matches_technical_source": false,
+      "integration_status": "runtime_installed",
+      "size_note": "Native bytes retained; runtime crop/scale or atlas registration must be resolved separately. Target dimensions are not claimed as delivered dimensions.",
+      "runtime_targets": [
+        "assets/local/portraits/xu_qinghe.png"
+      ]
+    },
+    {
+      "id": "06e67036edede50a",
+      "batch": "02_key_portraits",
+      "kind": "planned",
+      "label": "lu_chengzhou.png",
+      "source": "assets/art/portraits/shen_mo.png",
+      "output": "art_sources/refresh_20261019/batches/02_key_portraits/output/lu_chengzhou.png",
+      "brief": "陆承舟初期身份；已有候选，先复核，不另造一张脸",
+      "spec": {
+        "path": "assets/art/portraits/shen_mo.png",
+        "sha256": "045e15a4fc9cfd7052b1b720525a28dcb2ea6eb38a1966bd1d9d38821900d252",
+        "format": "PNG",
+        "dimensions": [
+          512,
+          640
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          4,
+          5
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_reuse",
+      "priority": "P0",
+      "dependencies": [],
+      "reuse_source": "art_sources/refresh_20261019/batches/02_key_portraits/candidates/lu_chengzhou.png",
+      "tool_refs": [
+        "art_sources/refresh_20261019/batches/02_key_portraits/candidates/lu_chengzhou.png",
+        "art_sources/refresh_20261019/approved_samples/02_portrait.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/02_key_portraits/output/prompts/06e67036edede50a.txt",
+      "delivery_kind": "reuse_prior_candidate",
+      "sha256": "a7d038cc537349073873aa20693c116ce1763530448bfd009e19581d93fce4be",
+      "newly_generated": false,
+      "native_mode": "RGB",
+      "alpha_extrema": null,
+      "native_dimensions": [
+        1122,
+        1402
+      ],
+      "target_dimensions": [
+        512,
+        640
+      ],
+      "size_matches_technical_source": false,
+      "integration_status": "runtime_installed",
+      "size_note": "Native bytes retained; runtime crop/scale or atlas registration must be resolved separately. Target dimensions are not claimed as delivered dimensions.",
+      "runtime_targets": [
+        "assets/art/portraits/lu_chengzhou.png"
+      ]
+    },
+    {
+      "id": "abb20cbf48c537a0",
+      "batch": "02_key_portraits",
+      "kind": "planned",
+      "label": "ye_zhiwei.png",
+      "source": "assets/art/portraits/shen_mo.png",
+      "output": "art_sources/refresh_20261019/batches/02_key_portraits/output/ye_zhiwei.png",
+      "brief": "叶知微初期医修身份；已有候选",
+      "spec": {
+        "path": "assets/art/portraits/shen_mo.png",
+        "sha256": "045e15a4fc9cfd7052b1b720525a28dcb2ea6eb38a1966bd1d9d38821900d252",
+        "format": "PNG",
+        "dimensions": [
+          512,
+          640
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          4,
+          5
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_reuse",
+      "priority": "P0",
+      "dependencies": [],
+      "reuse_source": "art_sources/refresh_20261019/batches/02_key_portraits/candidates/ye_zhiwei.png",
+      "tool_refs": [
+        "art_sources/refresh_20261019/batches/02_key_portraits/candidates/ye_zhiwei.png",
+        "art_sources/refresh_20261019/approved_samples/02_portrait.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/02_key_portraits/output/prompts/abb20cbf48c537a0.txt",
+      "delivery_kind": "reuse_prior_candidate",
+      "sha256": "d844a0a6e01f95777c1014088a033a071b09de0d98630cd8a3ac83812d60e03d",
+      "newly_generated": false,
+      "native_mode": "RGB",
+      "alpha_extrema": null,
+      "native_dimensions": [
+        1122,
+        1402
+      ],
+      "target_dimensions": [
+        512,
+        640
+      ],
+      "size_matches_technical_source": false,
+      "integration_status": "runtime_installed",
+      "size_note": "Native bytes retained; runtime crop/scale or atlas registration must be resolved separately. Target dimensions are not claimed as delivered dimensions.",
+      "runtime_targets": [
+        "assets/art/portraits/ye_zhiwei.png"
+      ]
+    },
+    {
+      "id": "451dfdb9a5cd2da5",
+      "batch": "02_key_portraits",
+      "kind": "planned",
+      "label": "wenren_zhao.png",
+      "source": "assets/art/portraits/shen_mo.png",
+      "output": "art_sources/refresh_20261019/batches/02_key_portraits/output/wenren_zhao.png",
+      "brief": "闻人照初期阵法／远行身份；已有候选",
+      "spec": {
+        "path": "assets/art/portraits/shen_mo.png",
+        "sha256": "045e15a4fc9cfd7052b1b720525a28dcb2ea6eb38a1966bd1d9d38821900d252",
+        "format": "PNG",
+        "dimensions": [
+          512,
+          640
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          4,
+          5
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_reuse",
+      "priority": "P0",
+      "dependencies": [],
+      "reuse_source": "art_sources/refresh_20261019/batches/02_key_portraits/candidates/wenren_zhao.png",
+      "tool_refs": [
+        "art_sources/refresh_20261019/batches/02_key_portraits/candidates/wenren_zhao.png",
+        "art_sources/refresh_20261019/approved_samples/02_portrait.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/02_key_portraits/output/prompts/451dfdb9a5cd2da5.txt",
+      "delivery_kind": "reuse_prior_candidate",
+      "sha256": "67b9689ddc3361f4cf97376dc5254d3062028c574bed418e381a217f5f19be14",
+      "newly_generated": false,
+      "native_mode": "RGB",
+      "alpha_extrema": null,
+      "native_dimensions": [
+        1122,
+        1402
+      ],
+      "target_dimensions": [
+        512,
+        640
+      ],
+      "size_matches_technical_source": false,
+      "integration_status": "runtime_installed",
+      "size_note": "Native bytes retained; runtime crop/scale or atlas registration must be resolved separately. Target dimensions are not claimed as delivered dimensions.",
+      "runtime_targets": [
+        "assets/art/portraits/wenren_zhao.png"
+      ]
+    },
+    {
+      "id": "f515a45d96e17ca1",
+      "batch": "02_key_portraits",
+      "kind": "planned",
+      "label": "liu_hanzhou_healthy.png",
+      "source": "assets/art/portraits/shen_mo.png",
+      "output": "art_sources/refresh_20261019/batches/02_key_portraits/output/liu_hanzhou_healthy.png",
+      "brief": "柳寒舟健康状态；已有候选，与原 wounded 身份一致",
+      "spec": {
+        "path": "assets/art/portraits/shen_mo.png",
+        "sha256": "045e15a4fc9cfd7052b1b720525a28dcb2ea6eb38a1966bd1d9d38821900d252",
+        "format": "PNG",
+        "dimensions": [
+          512,
+          640
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          4,
+          5
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_reuse",
+      "priority": "P0",
+      "dependencies": [],
+      "reuse_source": "art_sources/refresh_20261019/batches/02_key_portraits/candidates/liu_hanzhou_healthy.png",
+      "tool_refs": [
+        "art_sources/refresh_20261019/batches/02_key_portraits/candidates/liu_hanzhou_healthy.png",
+        "art_sources/refresh_20261019/approved_samples/02_portrait.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/02_key_portraits/output/prompts/f515a45d96e17ca1.txt",
+      "delivery_kind": "reuse_prior_candidate",
+      "sha256": "ea67ce6b5d249c4bb5cb49dc138604024dfe9baafc9ddafac5826e77ec19ddfe",
+      "newly_generated": false,
+      "native_mode": "RGB",
+      "alpha_extrema": null,
+      "native_dimensions": [
+        1122,
+        1402
+      ],
+      "target_dimensions": [
+        512,
+        640
+      ],
+      "size_matches_technical_source": false,
+      "integration_status": "candidate_only_not_runtime_integrated",
+      "size_note": "Native bytes retained; runtime crop/scale or atlas registration must be resolved separately. Target dimensions are not claimed as delivered dimensions."
+    },
+    {
+      "id": "d818dfc7af861743",
+      "batch": "02_key_portraits",
+      "kind": "planned",
+      "label": "auction_elder.png",
+      "source": "assets/art/portraits/shen_mo.png",
+      "output": "art_sources/refresh_20261019/batches/02_key_portraits/output/auction_elder.png",
+      "brief": "温照衡初期拍卖老修士身份；已有候选，按元婴后期设定复核，不公开真相式装饰",
+      "spec": {
+        "path": "assets/art/portraits/shen_mo.png",
+        "sha256": "045e15a4fc9cfd7052b1b720525a28dcb2ea6eb38a1966bd1d9d38821900d252",
+        "format": "PNG",
+        "dimensions": [
+          512,
+          640
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          4,
+          5
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_reuse",
+      "priority": "P0",
+      "dependencies": [],
+      "reuse_source": "art_sources/refresh_20261019/batches/02_key_portraits/candidates/auction_elder.png",
+      "tool_refs": [
+        "assets/art/portraits/shen_mo.png",
+        "art_sources/refresh_20261019/approved_samples/02_portrait.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/02_key_portraits/output/prompts/d818dfc7af861743.txt",
+      "delivery_kind": "reuse_prior_candidate",
+      "sha256": "fa589f9d1def83d1511d4b8724dd0c0b3ba1d43181e4aaf4e7325a5144b9ec8a",
+      "newly_generated": false,
+      "native_mode": "RGB",
+      "alpha_extrema": null,
+      "native_dimensions": [
+        1122,
+        1402
+      ],
+      "target_dimensions": [
+        512,
+        640
+      ],
+      "size_matches_technical_source": false,
+      "integration_status": "runtime_installed",
+      "size_note": "Native bytes retained; runtime crop/scale or atlas registration must be resolved separately. Target dimensions are not claimed as delivered dimensions.",
+      "runtime_targets": [
+        "assets/art/portraits/wen_zhaoheng.png"
+      ]
+    },
+    {
+      "id": "16c16d62c3fd2b2c",
+      "batch": "02_key_portraits",
+      "kind": "planned",
+      "label": "yan_wujiu.png",
+      "source": null,
+      "output": "art_sources/refresh_20261019/batches/02_key_portraits/output/yan_wujiu.png",
+      "brief": "守川司主事晏无咎，元婴；第7.3节角色，姓名暂拟。先交身份候选，克制威仪，不提前把立场画成纯粹邪恶 Original identity design: composed mature male array custodian, angular broad jaw, dark hair tied with a plain grey cord, a little grey at temples, muted deep jade outer robe and ivory collar, plain dark belt, closed document case in one hand. No faction emblem, no evil aura, no beard/abacus copied from Shen Mo.",
+      "spec": {
+        "path": "assets/art/portraits/shen_mo.png",
+        "sha256": "045e15a4fc9cfd7052b1b720525a28dcb2ea6eb38a1966bd1d9d38821900d252",
+        "format": "PNG",
+        "dimensions": [
+          512,
+          640
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          4,
+          5
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_generated",
+      "priority": "P1",
+      "dependencies": [],
+      "tool_refs": [],
+      "prompt_path": "art_sources/refresh_20261019/batches/02_key_portraits/output/prompts/16c16d62c3fd2b2c.txt",
+      "newly_generated": true,
+      "sha256": "f031258709ed34c6225076d900209d55ddad54800cf94795871438b036b9246c",
+      "native_dimensions": [
+        1122,
+        1402
+      ],
+      "native_mode": "RGB",
+      "alpha_extrema": null,
+      "tool_logical_path": "C:\\Users\\Kuroro\\.codex\\generated_images\\01a15203-e7bc-7bc0-b21d-f11948dc04a9\\exec-5ab7e833-b55c-451d-9506-86ede3652ae6.png",
+      "tool_physical_path": "D:\\claude\\flash\\.tmp\\imagegen_storage\\generated_images\\01a15203-e7bc-7bc0-b21d-f11948dc04a9\\exec-5ab7e833-b55c-451d-9506-86ede3652ae6.png",
+      "input_hashes": [],
+      "review": "Visually checked against category style, supplied identity/content and safe layout; integration still separate.",
+      "target_dimensions": [
+        512,
+        640
+      ],
+      "size_matches_technical_source": false,
+      "integration_status": "runtime_installed",
+      "size_note": "Native bytes retained; runtime crop/scale or atlas registration must be resolved separately. Target dimensions are not claimed as delivered dimensions.",
+      "runtime_targets": [
+        "assets/art/portraits/yan_wujiu.png"
+      ]
+    },
+    {
+      "id": "a2e4173385242e55",
+      "batch": "02_key_portraits",
+      "kind": "planned",
+      "label": "lu_chengzhou_heir.png",
+      "source": "assets/art/portraits/shen_mo.png",
+      "output": "art_sources/refresh_20261019/batches/02_key_portraits/output/lu_chengzhou_heir.png",
+      "brief": "筑基篇：兄长离世后接掌家业，服饰与气质体现责任，保留同一张脸；不预设黑化或必须继任结局",
+      "spec": {
+        "path": "assets/art/portraits/shen_mo.png",
+        "sha256": "045e15a4fc9cfd7052b1b720525a28dcb2ea6eb38a1966bd1d9d38821900d252",
+        "format": "PNG",
+        "dimensions": [
+          512,
+          640
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          4,
+          5
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_generated",
+      "priority": "P1",
+      "dependencies": [],
+      "tool_refs": [
+        "art_sources/refresh_20261019/batches/02_key_portraits/candidates/lu_chengzhou.png",
+        "art_sources/refresh_20261019/approved_samples/02_portrait.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/02_key_portraits/output/prompts/a2e4173385242e55.txt",
+      "newly_generated": true,
+      "sha256": "a47257bda58eb1b5eee8fdbe238d24658c22bf2ce28444cf4a8ce3377d5b5c38",
+      "native_dimensions": [
+        1122,
+        1402
+      ],
+      "native_mode": "RGB",
+      "alpha_extrema": null,
+      "tool_logical_path": "C:\\Users\\Kuroro\\.codex\\generated_images\\01a15203-e7bc-7bc0-b21d-f11948dc04a9\\exec-39e5fa0e-3b20-4be3-bf5d-3807d6710736.png",
+      "tool_physical_path": "D:\\claude\\flash\\.tmp\\imagegen_storage\\generated_images\\01a15203-e7bc-7bc0-b21d-f11948dc04a9\\exec-39e5fa0e-3b20-4be3-bf5d-3807d6710736.png",
+      "input_hashes": [
+        {
+          "path": "art_sources/refresh_20261019/batches/02_key_portraits/candidates/lu_chengzhou.png",
+          "sha256": "a7d038cc537349073873aa20693c116ce1763530448bfd009e19581d93fce4be"
+        },
+        {
+          "path": "art_sources/refresh_20261019/approved_samples/02_portrait.png",
+          "sha256": "139f85deb18db95d129b9e3e31db95460f47b934a7a68a4f006b95f8ad53c3fe"
+        }
+      ],
+      "review": "Visually checked against category style, supplied identity/content and safe layout; integration still separate.",
+      "target_dimensions": [
+        512,
+        640
+      ],
+      "size_matches_technical_source": false,
+      "integration_status": "candidate_only_not_runtime_integrated",
+      "size_note": "Native bytes retained; runtime crop/scale or atlas registration must be resolved separately. Target dimensions are not claimed as delivered dimensions."
+    },
+    {
+      "id": "6478dae06e971c18",
+      "batch": "02_key_portraits",
+      "kind": "planned",
+      "label": "liu_hanzhou_case.png",
+      "source": "assets/art/portraits/shen_mo.png",
+      "output": "art_sources/refresh_20261019/batches/02_key_portraits/output/liu_hanzhou_case.png",
+      "brief": "筑基篇北岳证人与旧案状态，沿用健康候选及剑穗身份；先复用，确需经历变化才补图，不机械变老",
+      "spec": {
+        "path": "assets/art/portraits/shen_mo.png",
+        "sha256": "045e15a4fc9cfd7052b1b720525a28dcb2ea6eb38a1966bd1d9d38821900d252",
+        "format": "PNG",
+        "dimensions": [
+          512,
+          640
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          4,
+          5
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_generated",
+      "priority": "P1",
+      "dependencies": [],
+      "tool_refs": [
+        "art_sources/refresh_20261019/batches/02_key_portraits/candidates/liu_hanzhou_healthy.png",
+        "art_sources/refresh_20261019/approved_samples/02_portrait.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/02_key_portraits/output/prompts/6478dae06e971c18.txt",
+      "newly_generated": true,
+      "sha256": "cdab7b1effb3a12e58904b0c37ba71f80614e09686ad42e120d597c1e51cd129",
+      "native_dimensions": [
+        1122,
+        1402
+      ],
+      "native_mode": "RGB",
+      "alpha_extrema": null,
+      "tool_logical_path": "C:\\Users\\Kuroro\\.codex\\generated_images\\01a15203-e7bc-7bc0-b21d-f11948dc04a9\\exec-83e4f5ac-2024-45c8-942c-46cf75af2a1f.png",
+      "tool_physical_path": "D:\\claude\\flash\\.tmp\\imagegen_storage\\generated_images\\01a15203-e7bc-7bc0-b21d-f11948dc04a9\\exec-83e4f5ac-2024-45c8-942c-46cf75af2a1f.png",
+      "input_hashes": [
+        {
+          "path": "art_sources/refresh_20261019/batches/02_key_portraits/candidates/liu_hanzhou_healthy.png",
+          "sha256": "ea67ce6b5d249c4bb5cb49dc138604024dfe9baafc9ddafac5826e77ec19ddfe"
+        },
+        {
+          "path": "art_sources/refresh_20261019/approved_samples/02_portrait.png",
+          "sha256": "139f85deb18db95d129b9e3e31db95460f47b934a7a68a4f006b95f8ad53c3fe"
+        }
+      ],
+      "review": "Visually checked identity/content, category style and complete composition; integration separate.",
+      "target_dimensions": [
+        512,
+        640
+      ],
+      "size_matches_technical_source": false,
+      "integration_status": "candidate_only_not_runtime_integrated",
+      "size_note": "Native bytes retained; runtime crop/scale or atlas registration must be resolved separately. Target dimensions are not claimed as delivered dimensions."
+    },
+    {
+      "id": "e15fb064fd5d3a87",
+      "batch": "02_key_portraits",
+      "kind": "planned",
+      "label": "ye_zhiwei_physician.png",
+      "source": "assets/art/portraits/shen_mo.png",
+      "output": "art_sources/refresh_20261019/batches/02_key_portraits/output/ye_zhiwei_physician.png",
+      "brief": "叶知微行医重逢状态，禁药分支待剧情定案后另补",
+      "spec": {
+        "path": "assets/art/portraits/shen_mo.png",
+        "sha256": "045e15a4fc9cfd7052b1b720525a28dcb2ea6eb38a1966bd1d9d38821900d252",
+        "format": "PNG",
+        "dimensions": [
+          512,
+          640
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          4,
+          5
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_generated",
+      "priority": "P2",
+      "dependencies": [],
+      "tool_refs": [
+        "art_sources/refresh_20261019/batches/02_key_portraits/candidates/ye_zhiwei.png",
+        "art_sources/refresh_20261019/approved_samples/02_portrait.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/02_key_portraits/output/prompts/e15fb064fd5d3a87.txt",
+      "newly_generated": true,
+      "sha256": "c94410dc20f49776a5204617ab01df4d23ae42668b24d4718e49b226f46cb762",
+      "native_dimensions": [
+        1122,
+        1402
+      ],
+      "native_mode": "RGB",
+      "alpha_extrema": null,
+      "tool_logical_path": "C:\\Users\\Kuroro\\.codex\\generated_images\\01a15203-e7bc-7bc0-b21d-f11948dc04a9\\exec-c7ed1b4a-7cba-4534-8b2c-5603844ee094.png",
+      "tool_physical_path": "D:\\claude\\flash\\.tmp\\imagegen_storage\\generated_images\\01a15203-e7bc-7bc0-b21d-f11948dc04a9\\exec-c7ed1b4a-7cba-4534-8b2c-5603844ee094.png",
+      "input_hashes": [
+        {
+          "path": "art_sources/refresh_20261019/batches/02_key_portraits/candidates/ye_zhiwei.png",
+          "sha256": "d844a0a6e01f95777c1014088a033a071b09de0d98630cd8a3ac83812d60e03d"
+        },
+        {
+          "path": "art_sources/refresh_20261019/approved_samples/02_portrait.png",
+          "sha256": "139f85deb18db95d129b9e3e31db95460f47b934a7a68a4f006b95f8ad53c3fe"
+        }
+      ],
+      "review": "Visually checked against category style, supplied identity/content and safe layout; integration still separate.",
+      "target_dimensions": [
+        512,
+        640
+      ],
+      "size_matches_technical_source": false,
+      "integration_status": "candidate_only_not_runtime_integrated",
+      "size_note": "Native bytes retained; runtime crop/scale or atlas registration must be resolved separately. Target dimensions are not claimed as delivered dimensions."
+    },
+    {
+      "id": "ea2a5c0806064102",
+      "batch": "02_key_portraits",
+      "kind": "planned",
+      "label": "wenren_zhao_navigator.png",
+      "source": "assets/art/portraits/shen_mo.png",
+      "output": "art_sources/refresh_20261019/batches/02_key_portraits/output/wenren_zhao_navigator.png",
+      "brief": "闻人照可靠领航者状态，身份可辨，不默认失联即死亡",
+      "spec": {
+        "path": "assets/art/portraits/shen_mo.png",
+        "sha256": "045e15a4fc9cfd7052b1b720525a28dcb2ea6eb38a1966bd1d9d38821900d252",
+        "format": "PNG",
+        "dimensions": [
+          512,
+          640
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          4,
+          5
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_generated",
+      "priority": "P2",
+      "dependencies": [],
+      "tool_refs": [
+        "art_sources/refresh_20261019/batches/02_key_portraits/candidates/wenren_zhao.png",
+        "art_sources/refresh_20261019/approved_samples/02_portrait.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/02_key_portraits/output/prompts/ea2a5c0806064102.txt",
+      "newly_generated": true,
+      "sha256": "e61f35ecc1ea885a8bc5c2fd524989c8b352d65d9168521f7b0ffa46fe43cc26",
+      "native_dimensions": [
+        1122,
+        1402
+      ],
+      "native_mode": "RGB",
+      "alpha_extrema": null,
+      "tool_logical_path": "C:\\Users\\Kuroro\\.codex\\generated_images\\01a15203-e7bc-7bc0-b21d-f11948dc04a9\\exec-f5fa8129-6b46-4e65-979a-e598fc52716c.png",
+      "tool_physical_path": "D:\\claude\\flash\\.tmp\\imagegen_storage\\generated_images\\01a15203-e7bc-7bc0-b21d-f11948dc04a9\\exec-f5fa8129-6b46-4e65-979a-e598fc52716c.png",
+      "input_hashes": [
+        {
+          "path": "art_sources/refresh_20261019/batches/02_key_portraits/candidates/wenren_zhao.png",
+          "sha256": "67b9689ddc3361f4cf97376dc5254d3062028c574bed418e381a217f5f19be14"
+        },
+        {
+          "path": "art_sources/refresh_20261019/approved_samples/02_portrait.png",
+          "sha256": "139f85deb18db95d129b9e3e31db95460f47b934a7a68a4f006b95f8ad53c3fe"
+        }
+      ],
+      "review": "Visually checked identity/content, category style and complete composition; integration separate.",
+      "target_dimensions": [
+        512,
+        640
+      ],
+      "size_matches_technical_source": false,
+      "integration_status": "candidate_only_not_runtime_integrated",
+      "size_note": "Native bytes retained; runtime crop/scale or atlas registration must be resolved separately. Target dimensions are not claimed as delivered dimensions."
+    }
+  ]
+}

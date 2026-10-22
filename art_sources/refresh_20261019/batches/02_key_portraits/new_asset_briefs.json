@@ -4,55 +4,519 @@
     "filename": "lu_chengzhou.png",
     "brief": "陆承舟初期身份；已有候选，先复核，不另造一张脸",
     "status": "planned_or_existing_candidate",
-    "output_path": "D:/fqh/flash/art_sources/refresh_20261019/batches/02_key_portraits/output/lu_chengzhou.png"
+    "output_path": "art_sources/refresh_20261019/batches/02_key_portraits/output/lu_chengzhou.png",
+    "content_outline": "docs/GAME_OUTLINE.md",
+    "outline_sections": [
+      "4",
+      "7",
+      "8.1",
+      "11"
+    ],
+    "content_plan": "art_sources/refresh_20261019/CONTENT_PLAN.md",
+    "style_reference": "art_sources/refresh_20261019/batches/02_key_portraits/references.json",
+    "technical_spec": {
+      "path": "assets/art/portraits/shen_mo.png",
+      "sha256": "045e15a4fc9cfd7052b1b720525a28dcb2ea6eb38a1966bd1d9d38821900d252",
+      "format": "PNG",
+      "dimensions": [
+        512,
+        640
+      ],
+      "mode": "RGB",
+      "background": "opaque",
+      "native_vector_required": false,
+      "aspect_ratio": [
+        4,
+        5
+      ],
+      "actor_layouts": [],
+      "actor_layout_note": "No actor atlas definition on this technical source."
+    },
+    "spec_policy": "inherit_existing_source; retain measured native output separately; never mislabel dimensions",
+    "reference_bindings": [
+      {
+        "id": "technical:assets/art/portraits/shen_mo.png",
+        "role": "dimensions_alpha_layout_only"
+      },
+      {
+        "id": "style:02_portrait",
+        "role": "drawing_style_only"
+      },
+      {
+        "id": "original:02_portrait",
+        "role": "original_game_style_only_no_copy"
+      }
+    ],
+    "identity_policy": "If a registered person appears, use their identity_registry image and hash; unseen characters wait for batch02; never substitute style-reference faces.",
+    "generation_gate": "generate_after_dependencies",
+    "dependencies": []
   },
   {
     "priority": "P0",
     "filename": "ye_zhiwei.png",
     "brief": "叶知微初期医修身份；已有候选",
     "status": "planned_or_existing_candidate",
-    "output_path": "D:/fqh/flash/art_sources/refresh_20261019/batches/02_key_portraits/output/ye_zhiwei.png"
+    "output_path": "art_sources/refresh_20261019/batches/02_key_portraits/output/ye_zhiwei.png",
+    "content_outline": "docs/GAME_OUTLINE.md",
+    "outline_sections": [
+      "4",
+      "7",
+      "8.1",
+      "11"
+    ],
+    "content_plan": "art_sources/refresh_20261019/CONTENT_PLAN.md",
+    "style_reference": "art_sources/refresh_20261019/batches/02_key_portraits/references.json",
+    "technical_spec": {
+      "path": "assets/art/portraits/shen_mo.png",
+      "sha256": "045e15a4fc9cfd7052b1b720525a28dcb2ea6eb38a1966bd1d9d38821900d252",
+      "format": "PNG",
+      "dimensions": [
+        512,
+        640
+      ],
+      "mode": "RGB",
+      "background": "opaque",
+      "native_vector_required": false,
+      "aspect_ratio": [
+        4,
+        5
+      ],
+      "actor_layouts": [],
+      "actor_layout_note": "No actor atlas definition on this technical source."
+    },
+    "spec_policy": "inherit_existing_source; retain measured native output separately; never mislabel dimensions",
+    "reference_bindings": [
+      {
+        "id": "technical:assets/art/portraits/shen_mo.png",
+        "role": "dimensions_alpha_layout_only"
+      },
+      {
+        "id": "style:02_portrait",
+        "role": "drawing_style_only"
+      },
+      {
+        "id": "original:02_portrait",
+        "role": "original_game_style_only_no_copy"
+      }
+    ],
+    "identity_policy": "If a registered person appears, use their identity_registry image and hash; unseen characters wait for batch02; never substitute style-reference faces.",
+    "generation_gate": "generate_after_dependencies",
+    "dependencies": []
   },
   {
     "priority": "P0",
     "filename": "wenren_zhao.png",
     "brief": "闻人照初期阵法／远行身份；已有候选",
     "status": "planned_or_existing_candidate",
-    "output_path": "D:/fqh/flash/art_sources/refresh_20261019/batches/02_key_portraits/output/wenren_zhao.png"
+    "output_path": "art_sources/refresh_20261019/batches/02_key_portraits/output/wenren_zhao.png",
+    "content_outline": "docs/GAME_OUTLINE.md",
+    "outline_sections": [
+      "4",
+      "7",
+      "8.1",
+      "11"
+    ],
+    "content_plan": "art_sources/refresh_20261019/CONTENT_PLAN.md",
+    "style_reference": "art_sources/refresh_20261019/batches/02_key_portraits/references.json",
+    "technical_spec": {
+      "path": "assets/art/portraits/shen_mo.png",
+      "sha256": "045e15a4fc9cfd7052b1b720525a28dcb2ea6eb38a1966bd1d9d38821900d252",
+      "format": "PNG",
+      "dimensions": [
+        512,
+        640
+      ],
+      "mode": "RGB",
+      "background": "opaque",
+      "native_vector_required": false,
+      "aspect_ratio": [
+        4,
+        5
+      ],
+      "actor_layouts": [],
+      "actor_layout_note": "No actor atlas definition on this technical source."
+    },
+    "spec_policy": "inherit_existing_source; retain measured native output separately; never mislabel dimensions",
+    "reference_bindings": [
+      {
+        "id": "technical:assets/art/portraits/shen_mo.png",
+        "role": "dimensions_alpha_layout_only"
+      },
+      {
+        "id": "style:02_portrait",
+        "role": "drawing_style_only"
+      },
+      {
+        "id": "original:02_portrait",
+        "role": "original_game_style_only_no_copy"
+      }
+    ],
+    "identity_policy": "If a registered person appears, use their identity_registry image and hash; unseen characters wait for batch02; never substitute style-reference faces.",
+    "generation_gate": "generate_after_dependencies",
+    "dependencies": []
   },
   {
     "priority": "P0",
     "filename": "liu_hanzhou_healthy.png",
     "brief": "柳寒舟健康状态；已有候选，与原 wounded 身份一致",
     "status": "planned_or_existing_candidate",
-    "output_path": "D:/fqh/flash/art_sources/refresh_20261019/batches/02_key_portraits/output/liu_hanzhou_healthy.png"
+    "output_path": "art_sources/refresh_20261019/batches/02_key_portraits/output/liu_hanzhou_healthy.png",
+    "content_outline": "docs/GAME_OUTLINE.md",
+    "outline_sections": [
+      "4",
+      "7",
+      "8.1",
+      "11"
+    ],
+    "content_plan": "art_sources/refresh_20261019/CONTENT_PLAN.md",
+    "style_reference": "art_sources/refresh_20261019/batches/02_key_portraits/references.json",
+    "technical_spec": {
+      "path": "assets/art/portraits/shen_mo.png",
+      "sha256": "045e15a4fc9cfd7052b1b720525a28dcb2ea6eb38a1966bd1d9d38821900d252",
+      "format": "PNG",
+      "dimensions": [
+        512,
+        640
+      ],
+      "mode": "RGB",
+      "background": "opaque",
+      "native_vector_required": false,
+      "aspect_ratio": [
+        4,
+        5
+      ],
+      "actor_layouts": [],
+      "actor_layout_note": "No actor atlas definition on this technical source."
+    },
+    "spec_policy": "inherit_existing_source; retain measured native output separately; never mislabel dimensions",
+    "reference_bindings": [
+      {
+        "id": "technical:assets/art/portraits/shen_mo.png",
+        "role": "dimensions_alpha_layout_only"
+      },
+      {
+        "id": "style:02_portrait",
+        "role": "drawing_style_only"
+      },
+      {
+        "id": "original:02_portrait",
+        "role": "original_game_style_only_no_copy"
+      }
+    ],
+    "identity_policy": "If a registered person appears, use their identity_registry image and hash; unseen characters wait for batch02; never substitute style-reference faces.",
+    "generation_gate": "generate_after_dependencies",
+    "dependencies": []
   },
   {
     "priority": "P0",
     "filename": "auction_elder.png",
-    "brief": "拍卖老修士暂拟身份；已有候选，不公开真相式装饰",
+    "brief": "温照衡初期拍卖老修士身份；已有候选，按元婴后期设定复核，不公开真相式装饰",
     "status": "planned_or_existing_candidate",
-    "output_path": "D:/fqh/flash/art_sources/refresh_20261019/batches/02_key_portraits/output/auction_elder.png"
+    "output_path": "art_sources/refresh_20261019/batches/02_key_portraits/output/auction_elder.png",
+    "content_outline": "docs/GAME_OUTLINE.md",
+    "outline_sections": [
+      "4",
+      "7",
+      "8.1",
+      "11"
+    ],
+    "content_plan": "art_sources/refresh_20261019/CONTENT_PLAN.md",
+    "style_reference": "art_sources/refresh_20261019/batches/02_key_portraits/references.json",
+    "technical_spec": {
+      "path": "assets/art/portraits/shen_mo.png",
+      "sha256": "045e15a4fc9cfd7052b1b720525a28dcb2ea6eb38a1966bd1d9d38821900d252",
+      "format": "PNG",
+      "dimensions": [
+        512,
+        640
+      ],
+      "mode": "RGB",
+      "background": "opaque",
+      "native_vector_required": false,
+      "aspect_ratio": [
+        4,
+        5
+      ],
+      "actor_layouts": [],
+      "actor_layout_note": "No actor atlas definition on this technical source."
+    },
+    "spec_policy": "inherit_existing_source; retain measured native output separately; never mislabel dimensions",
+    "reference_bindings": [
+      {
+        "id": "technical:assets/art/portraits/shen_mo.png",
+        "role": "dimensions_alpha_layout_only"
+      },
+      {
+        "id": "style:02_portrait",
+        "role": "drawing_style_only"
+      },
+      {
+        "id": "original:02_portrait",
+        "role": "original_game_style_only_no_copy"
+      }
+    ],
+    "identity_policy": "If a registered person appears, use their identity_registry image and hash; unseen characters wait for batch02; never substitute style-reference faces.",
+    "generation_gate": "generate_after_dependencies",
+    "dependencies": []
   },
   {
-    "priority": "P2",
-    "filename": "lu_chengzhou_heir.png",
-    "brief": "陆承舟接掌生意后的服饰与气质变化，保留同一张脸",
+    "priority": "P1",
+    "filename": "yan_wujiu.png",
+    "brief": "守川司主事晏无咎，元婴；第7.3节角色，姓名暂拟。先交身份候选，克制威仪，不提前把立场画成纯粹邪恶",
     "status": "planned_or_existing_candidate",
-    "output_path": "D:/fqh/flash/art_sources/refresh_20261019/batches/02_key_portraits/output/lu_chengzhou_heir.png"
+    "output_path": "art_sources/refresh_20261019/batches/02_key_portraits/output/yan_wujiu.png",
+    "content_outline": "docs/GAME_OUTLINE.md",
+    "outline_sections": [
+      "4",
+      "7",
+      "8.1",
+      "11"
+    ],
+    "content_plan": "art_sources/refresh_20261019/CONTENT_PLAN.md",
+    "style_reference": "art_sources/refresh_20261019/batches/02_key_portraits/references.json",
+    "technical_spec": {
+      "path": "assets/art/portraits/shen_mo.png",
+      "sha256": "045e15a4fc9cfd7052b1b720525a28dcb2ea6eb38a1966bd1d9d38821900d252",
+      "format": "PNG",
+      "dimensions": [
+        512,
+        640
+      ],
+      "mode": "RGB",
+      "background": "opaque",
+      "native_vector_required": false,
+      "aspect_ratio": [
+        4,
+        5
+      ],
+      "actor_layouts": [],
+      "actor_layout_note": "No actor atlas definition on this technical source."
+    },
+    "spec_policy": "inherit_existing_source; retain measured native output separately; never mislabel dimensions",
+    "reference_bindings": [
+      {
+        "id": "technical:assets/art/portraits/shen_mo.png",
+        "role": "dimensions_alpha_layout_only"
+      },
+      {
+        "id": "style:02_portrait",
+        "role": "drawing_style_only"
+      },
+      {
+        "id": "original:02_portrait",
+        "role": "original_game_style_only_no_copy"
+      }
+    ],
+    "identity_policy": "If a registered person appears, use their identity_registry image and hash; unseen characters wait for batch02; never substitute style-reference faces.",
+    "generation_gate": "generate_after_dependencies",
+    "dependencies": []
+  },
+  {
+    "priority": "P1",
+    "filename": "lu_chengzhou_heir.png",
+    "brief": "筑基篇：兄长离世后接掌家业，服饰与气质体现责任，保留同一张脸；不预设黑化或必须继任结局",
+    "status": "planned_or_existing_candidate",
+    "output_path": "art_sources/refresh_20261019/batches/02_key_portraits/output/lu_chengzhou_heir.png",
+    "content_outline": "docs/GAME_OUTLINE.md",
+    "outline_sections": [
+      "4",
+      "7",
+      "8.1",
+      "11"
+    ],
+    "content_plan": "art_sources/refresh_20261019/CONTENT_PLAN.md",
+    "style_reference": "art_sources/refresh_20261019/batches/02_key_portraits/references.json",
+    "technical_spec": {
+      "path": "assets/art/portraits/shen_mo.png",
+      "sha256": "045e15a4fc9cfd7052b1b720525a28dcb2ea6eb38a1966bd1d9d38821900d252",
+      "format": "PNG",
+      "dimensions": [
+        512,
+        640
+      ],
+      "mode": "RGB",
+      "background": "opaque",
+      "native_vector_required": false,
+      "aspect_ratio": [
+        4,
+        5
+      ],
+      "actor_layouts": [],
+      "actor_layout_note": "No actor atlas definition on this technical source."
+    },
+    "spec_policy": "inherit_existing_source; retain measured native output separately; never mislabel dimensions",
+    "reference_bindings": [
+      {
+        "id": "technical:assets/art/portraits/shen_mo.png",
+        "role": "dimensions_alpha_layout_only"
+      },
+      {
+        "id": "style:02_portrait",
+        "role": "drawing_style_only"
+      },
+      {
+        "id": "original:02_portrait",
+        "role": "original_game_style_only_no_copy"
+      }
+    ],
+    "identity_policy": "If a registered person appears, use their identity_registry image and hash; unseen characters wait for batch02; never substitute style-reference faces.",
+    "generation_gate": "generate_after_dependencies",
+    "dependencies": []
+  },
+  {
+    "priority": "P1",
+    "filename": "liu_hanzhou_case.png",
+    "brief": "筑基篇北岳证人与旧案状态，沿用健康候选及剑穗身份；先复用，确需经历变化才补图，不机械变老",
+    "status": "planned_or_existing_candidate",
+    "output_path": "art_sources/refresh_20261019/batches/02_key_portraits/output/liu_hanzhou_case.png",
+    "content_outline": "docs/GAME_OUTLINE.md",
+    "outline_sections": [
+      "4",
+      "7",
+      "8.1",
+      "11"
+    ],
+    "content_plan": "art_sources/refresh_20261019/CONTENT_PLAN.md",
+    "style_reference": "art_sources/refresh_20261019/batches/02_key_portraits/references.json",
+    "technical_spec": {
+      "path": "assets/art/portraits/shen_mo.png",
+      "sha256": "045e15a4fc9cfd7052b1b720525a28dcb2ea6eb38a1966bd1d9d38821900d252",
+      "format": "PNG",
+      "dimensions": [
+        512,
+        640
+      ],
+      "mode": "RGB",
+      "background": "opaque",
+      "native_vector_required": false,
+      "aspect_ratio": [
+        4,
+        5
+      ],
+      "actor_layouts": [],
+      "actor_layout_note": "No actor atlas definition on this technical source."
+    },
+    "spec_policy": "inherit_existing_source; retain measured native output separately; never mislabel dimensions",
+    "reference_bindings": [
+      {
+        "id": "technical:assets/art/portraits/shen_mo.png",
+        "role": "dimensions_alpha_layout_only"
+      },
+      {
+        "id": "style:02_portrait",
+        "role": "drawing_style_only"
+      },
+      {
+        "id": "original:02_portrait",
+        "role": "original_game_style_only_no_copy"
+      }
+    ],
+    "identity_policy": "If a registered person appears, use their identity_registry image and hash; unseen characters wait for batch02; never substitute style-reference faces.",
+    "generation_gate": "generate_after_dependencies",
+    "dependencies": []
   },
   {
     "priority": "P2",
     "filename": "ye_zhiwei_physician.png",
     "brief": "叶知微行医重逢状态，禁药分支待剧情定案后另补",
     "status": "planned_or_existing_candidate",
-    "output_path": "D:/fqh/flash/art_sources/refresh_20261019/batches/02_key_portraits/output/ye_zhiwei_physician.png"
+    "output_path": "art_sources/refresh_20261019/batches/02_key_portraits/output/ye_zhiwei_physician.png",
+    "content_outline": "docs/GAME_OUTLINE.md",
+    "outline_sections": [
+      "4",
+      "7",
+      "8.1",
+      "11"
+    ],
+    "content_plan": "art_sources/refresh_20261019/CONTENT_PLAN.md",
+    "style_reference": "art_sources/refresh_20261019/batches/02_key_portraits/references.json",
+    "technical_spec": {
+      "path": "assets/art/portraits/shen_mo.png",
+      "sha256": "045e15a4fc9cfd7052b1b720525a28dcb2ea6eb38a1966bd1d9d38821900d252",
+      "format": "PNG",
+      "dimensions": [
+        512,
+        640
+      ],
+      "mode": "RGB",
+      "background": "opaque",
+      "native_vector_required": false,
+      "aspect_ratio": [
+        4,
+        5
+      ],
+      "actor_layouts": [],
+      "actor_layout_note": "No actor atlas definition on this technical source."
+    },
+    "spec_policy": "inherit_existing_source; retain measured native output separately; never mislabel dimensions",
+    "reference_bindings": [
+      {
+        "id": "technical:assets/art/portraits/shen_mo.png",
+        "role": "dimensions_alpha_layout_only"
+      },
+      {
+        "id": "style:02_portrait",
+        "role": "drawing_style_only"
+      },
+      {
+        "id": "original:02_portrait",
+        "role": "original_game_style_only_no_copy"
+      }
+    ],
+    "identity_policy": "If a registered person appears, use their identity_registry image and hash; unseen characters wait for batch02; never substitute style-reference faces.",
+    "generation_gate": "generate_after_dependencies",
+    "dependencies": []
   },
   {
     "priority": "P2",
     "filename": "wenren_zhao_navigator.png",
     "brief": "闻人照可靠领航者状态，身份可辨，不默认失联即死亡",
     "status": "planned_or_existing_candidate",
-    "output_path": "D:/fqh/flash/art_sources/refresh_20261019/batches/02_key_portraits/output/wenren_zhao_navigator.png"
+    "output_path": "art_sources/refresh_20261019/batches/02_key_portraits/output/wenren_zhao_navigator.png",
+    "content_outline": "docs/GAME_OUTLINE.md",
+    "outline_sections": [
+      "4",
+      "7",
+      "8.1",
+      "11"
+    ],
+    "content_plan": "art_sources/refresh_20261019/CONTENT_PLAN.md",
+    "style_reference": "art_sources/refresh_20261019/batches/02_key_portraits/references.json",
+    "technical_spec": {
+      "path": "assets/art/portraits/shen_mo.png",
+      "sha256": "045e15a4fc9cfd7052b1b720525a28dcb2ea6eb38a1966bd1d9d38821900d252",
+      "format": "PNG",
+      "dimensions": [
+        512,
+        640
+      ],
+      "mode": "RGB",
+      "background": "opaque",
+      "native_vector_required": false,
+      "aspect_ratio": [
+        4,
+        5
+      ],
+      "actor_layouts": [],
+      "actor_layout_note": "No actor atlas definition on this technical source."
+    },
+    "spec_policy": "inherit_existing_source; retain measured native output separately; never mislabel dimensions",
+    "reference_bindings": [
+      {
+        "id": "technical:assets/art/portraits/shen_mo.png",
+        "role": "dimensions_alpha_layout_only"
+      },
+      {
+        "id": "style:02_portrait",
+        "role": "drawing_style_only"
+      },
+      {
+        "id": "original:02_portrait",
+        "role": "original_game_style_only_no_copy"
+      }
+    ],
+    "identity_policy": "If a registered person appears, use their identity_registry image and hash; unseen characters wait for batch02; never substitute style-reference faces.",
+    "generation_gate": "generate_after_dependencies",
+    "dependencies": []
   }
 ]

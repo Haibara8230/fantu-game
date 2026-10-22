@@ -194,6 +194,7 @@ Style: NON-REALISTIC hand-drawn 2D game portrait, clear dark ink outlines, flat 
 
 ### 斗法背景与人物图集
 按地点区分的斗法背景、劫修与生成修士的斗法人物图集，规格见 `docs/ART_BRIEF_M4.md`，已接入代码；图片到位前沿用 `bamboo_arena_v1.png` 与同门图集。
+背景按序取第一张存在的图：`data/art.json` `stage_background` 的会场（`<context>:<contest>`，如 `summit:tiannan`，再 `<context>`，如潜龙会的 `tournament`）、`battle/<地点ID>.png`、`place_battle_art` 借给该地点的图、最后 `background`（2026-10-22）。
 
 
 ## 2026-10-09：青云山区域地图首张样图

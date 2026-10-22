@@ -1,0 +1,2624 @@
+{
+  "scope": "candidate delivery; runtime installs listed in INTEGRATION.json",
+  "counts": {
+    "pending": 32,
+    "delivered_generated": 21,
+    "delivered_reuse": 1
+  },
+  "jobs": [
+    {
+      "id": "7fecac857fcb7b6c",
+      "batch": "09_events",
+      "kind": "existing",
+      "label": "assets/art/events/ascension_opens.png",
+      "source": "assets/art/events/ascension_opens.png",
+      "output": "art_sources/refresh_20261019/batches/09_events/output/existing/art/events/ascension_opens.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/art/events/ascension_opens.png",
+        "sha256": "d1f3016d252b555463a924e0be249c7e7942e4e67ba7ae86ebad394da6625c87",
+        "format": "PNG",
+        "dimensions": [
+          1672,
+          941
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          1672,
+          941
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "pending",
+      "tool_refs": [
+        "assets/art/events/ascension_opens.png",
+        "art_sources/refresh_20261019/approved_samples/13_event.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/09_events/output/prompts/7fecac857fcb7b6c.txt"
+    },
+    {
+      "id": "9f647e96ecd036a5",
+      "batch": "09_events",
+      "kind": "existing",
+      "label": "assets/art/events/epiphany.png",
+      "source": "assets/art/events/epiphany.png",
+      "output": "art_sources/refresh_20261019/batches/09_events/output/existing/art/events/epiphany.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/art/events/epiphany.png",
+        "sha256": "90457353a5ddd93fd6fdd19ba4330dda82bdc4a490049d5643b0a942017c7070",
+        "format": "PNG",
+        "dimensions": [
+          1672,
+          941
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          1672,
+          941
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "pending",
+      "tool_refs": [
+        "assets/art/events/epiphany.png",
+        "art_sources/refresh_20261019/approved_samples/13_event.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/09_events/output/prompts/9f647e96ecd036a5.txt"
+    },
+    {
+      "id": "bfda0d4daaf3b6db",
+      "batch": "09_events",
+      "kind": "existing",
+      "label": "assets/art/events/heart_demon.png",
+      "source": "assets/art/events/heart_demon.png",
+      "output": "art_sources/refresh_20261019/batches/09_events/output/existing/art/events/heart_demon.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/art/events/heart_demon.png",
+        "sha256": "f77664d85ec2396dd8e31ec0e8d39255e0922476111730e4ecc9515dba96127b",
+        "format": "PNG",
+        "dimensions": [
+          1672,
+          941
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          1672,
+          941
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "pending",
+      "tool_refs": [
+        "assets/art/events/heart_demon.png",
+        "art_sources/refresh_20261019/approved_samples/13_event.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/09_events/output/prompts/bfda0d4daaf3b6db.txt"
+    },
+    {
+      "id": "eee859879d3d158e",
+      "batch": "09_events",
+      "kind": "existing",
+      "label": "assets/art/events/outer_tournament.png",
+      "source": "assets/art/events/outer_tournament.png",
+      "output": "art_sources/refresh_20261019/batches/09_events/output/existing/art/events/outer_tournament.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/art/events/outer_tournament.png",
+        "sha256": "8cc911a995c62c0f1272bfda614a9d7267980a69c4df3b2074dbf8fe9f96ab25",
+        "format": "PNG",
+        "dimensions": [
+          1600,
+          900
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          16,
+          9
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "pending",
+      "tool_refs": [
+        "assets/art/events/outer_tournament.png",
+        "art_sources/refresh_20261019/approved_samples/13_event.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/09_events/output/prompts/eee859879d3d158e.txt"
+    },
+    {
+      "id": "a0d1d3a599585528",
+      "batch": "09_events",
+      "kind": "existing",
+      "label": "assets/art/events/remnant_soul.png",
+      "source": "assets/art/events/remnant_soul.png",
+      "output": "art_sources/refresh_20261019/batches/09_events/output/existing/art/events/remnant_soul.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/art/events/remnant_soul.png",
+        "sha256": "d13668056b3c429503d147e335849c837a4279b97cac16173ebf21803682604f",
+        "format": "PNG",
+        "dimensions": [
+          1672,
+          941
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          1672,
+          941
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "pending",
+      "tool_refs": [
+        "assets/art/events/remnant_soul.png",
+        "art_sources/refresh_20261019/approved_samples/13_event.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/09_events/output/prompts/a0d1d3a599585528.txt"
+    },
+    {
+      "id": "d6d097784c464209",
+      "batch": "09_events",
+      "kind": "existing",
+      "label": "assets/art/events/rogue_ambush.png",
+      "source": "assets/art/events/rogue_ambush.png",
+      "output": "art_sources/refresh_20261019/batches/09_events/output/existing/art/events/rogue_ambush.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/art/events/rogue_ambush.png",
+        "sha256": "4c3e949997ba8a9c0b287a0530bc2552c1c4ab62307dc187792b75c8722e4580",
+        "format": "PNG",
+        "dimensions": [
+          1600,
+          900
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          16,
+          9
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "pending",
+      "tool_refs": [
+        "assets/art/events/rogue_ambush.png",
+        "art_sources/refresh_20261019/approved_samples/13_event.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/09_events/output/prompts/d6d097784c464209.txt"
+    },
+    {
+      "id": "557f01a9daa48a13",
+      "batch": "09_events",
+      "kind": "existing",
+      "label": "assets/art/events/serpent_rampage.png",
+      "source": "assets/art/events/serpent_rampage.png",
+      "output": "art_sources/refresh_20261019/batches/09_events/output/existing/art/events/serpent_rampage.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/art/events/serpent_rampage.png",
+        "sha256": "75046712b6a80d3033b95d2b73fd6b061386dfa3eab3f34ab36a90eee42d44f6",
+        "format": "PNG",
+        "dimensions": [
+          1600,
+          900
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          16,
+          9
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "pending",
+      "tool_refs": [
+        "assets/art/events/serpent_rampage.png",
+        "art_sources/refresh_20261019/approved_samples/13_event.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/09_events/output/prompts/557f01a9daa48a13.txt"
+    },
+    {
+      "id": "ad14261918dc5fc9",
+      "batch": "09_events",
+      "kind": "existing",
+      "label": "assets/art/events/spirit_eye.png",
+      "source": "assets/art/events/spirit_eye.png",
+      "output": "art_sources/refresh_20261019/batches/09_events/output/existing/art/events/spirit_eye.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/art/events/spirit_eye.png",
+        "sha256": "be844382d7ac4d0fcb7c92becd59c47ee4d806da0da0e4cc9e9abd554215d027",
+        "format": "PNG",
+        "dimensions": [
+          1672,
+          941
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          1672,
+          941
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "pending",
+      "tool_refs": [
+        "assets/art/events/spirit_eye.png",
+        "art_sources/refresh_20261019/approved_samples/13_event.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/09_events/output/prompts/ad14261918dc5fc9.txt"
+    },
+    {
+      "id": "d6e408ef35554467",
+      "batch": "09_events",
+      "kind": "existing",
+      "label": "assets/art/events/talent_bulao.png",
+      "source": "assets/art/events/talent_bulao.png",
+      "output": "art_sources/refresh_20261019/batches/09_events/output/existing/art/events/talent_bulao.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/art/events/talent_bulao.png",
+        "sha256": "d2193236ee0aad71711b3d212c97fd581f672e67d4a67c2ced8d5689784fddb5",
+        "format": "PNG",
+        "dimensions": [
+          1672,
+          941
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          1672,
+          941
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "pending",
+      "tool_refs": [
+        "assets/art/events/talent_bulao.png",
+        "art_sources/refresh_20261019/approved_samples/13_event.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/09_events/output/prompts/d6e408ef35554467.txt"
+    },
+    {
+      "id": "a960608006a67200",
+      "batch": "09_events",
+      "kind": "existing",
+      "label": "assets/art/events/talent_bumie.png",
+      "source": "assets/art/events/talent_bumie.png",
+      "output": "art_sources/refresh_20261019/batches/09_events/output/existing/art/events/talent_bumie.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/art/events/talent_bumie.png",
+        "sha256": "9ec7e1a641cc337509049195c6d77ae90d7b3dcc3b741ac4e447b60751e5e6a5",
+        "format": "PNG",
+        "dimensions": [
+          1672,
+          941
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          1672,
+          941
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "pending",
+      "tool_refs": [
+        "assets/art/events/talent_bumie.png",
+        "art_sources/refresh_20261019/approved_samples/13_event.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/09_events/output/prompts/a960608006a67200.txt"
+    },
+    {
+      "id": "7e1c04c93cf8c9c7",
+      "batch": "09_events",
+      "kind": "existing",
+      "label": "assets/art/events/talent_danqi.png",
+      "source": "assets/art/events/talent_danqi.png",
+      "output": "art_sources/refresh_20261019/batches/09_events/output/existing/art/events/talent_danqi.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/art/events/talent_danqi.png",
+        "sha256": "91aaa410bf20604c0cbcb72c4e15bdc86710248485d5998916c36281c2346699",
+        "format": "PNG",
+        "dimensions": [
+          1672,
+          941
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          1672,
+          941
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "pending",
+      "tool_refs": [
+        "assets/art/events/talent_danqi.png",
+        "art_sources/refresh_20261019/approved_samples/13_event.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/09_events/output/prompts/7e1c04c93cf8c9c7.txt"
+    },
+    {
+      "id": "1921eadb50514b81",
+      "batch": "09_events",
+      "kind": "existing",
+      "label": "assets/art/events/talent_daqiyun.png",
+      "source": "assets/art/events/talent_daqiyun.png",
+      "output": "art_sources/refresh_20261019/batches/09_events/output/existing/art/events/talent_daqiyun.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/art/events/talent_daqiyun.png",
+        "sha256": "fa9eb2b2f065ef979a84285551d8ddd59645cb3feae02d83ce4c668b9d020f7b",
+        "format": "PNG",
+        "dimensions": [
+          1672,
+          941
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          1672,
+          941
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "pending",
+      "tool_refs": [
+        "assets/art/events/talent_daqiyun.png",
+        "art_sources/refresh_20261019/approved_samples/13_event.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/09_events/output/prompts/1921eadb50514b81.txt"
+    },
+    {
+      "id": "22719b4381162706",
+      "batch": "09_events",
+      "kind": "existing",
+      "label": "assets/art/events/talent_fuze.png",
+      "source": "assets/art/events/talent_fuze.png",
+      "output": "art_sources/refresh_20261019/batches/09_events/output/existing/art/events/talent_fuze.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/art/events/talent_fuze.png",
+        "sha256": "3943696bce246693992746c508295c8751894f1c795da9b3c0577aea86fc9ebe",
+        "format": "PNG",
+        "dimensions": [
+          1672,
+          941
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          1672,
+          941
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "pending",
+      "tool_refs": [
+        "assets/art/events/talent_fuze.png",
+        "art_sources/refresh_20261019/approved_samples/13_event.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/09_events/output/prompts/22719b4381162706.txt"
+    },
+    {
+      "id": "9e397d0d9f4032ef",
+      "batch": "09_events",
+      "kind": "existing",
+      "label": "assets/art/events/talent_huigen.png",
+      "source": "assets/art/events/talent_huigen.png",
+      "output": "art_sources/refresh_20261019/batches/09_events/output/existing/art/events/talent_huigen.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/art/events/talent_huigen.png",
+        "sha256": "69c193636bdc1bfe7a6e6573f4e805b743e745831d4014bfe0a95abfd443d6f7",
+        "format": "PNG",
+        "dimensions": [
+          1672,
+          941
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          1672,
+          941
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "pending",
+      "tool_refs": [
+        "assets/art/events/talent_huigen.png",
+        "art_sources/refresh_20261019/approved_samples/13_event.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/09_events/output/prompts/9e397d0d9f4032ef.txt"
+    },
+    {
+      "id": "d87a3b845c9da1d7",
+      "batch": "09_events",
+      "kind": "existing",
+      "label": "assets/art/events/talent_hunyuan.png",
+      "source": "assets/art/events/talent_hunyuan.png",
+      "output": "art_sources/refresh_20261019/batches/09_events/output/existing/art/events/talent_hunyuan.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/art/events/talent_hunyuan.png",
+        "sha256": "9b3fd725e53b5d7fc48aa44c1235ef8150e9ca0445a0ca58883a394e8091ed98",
+        "format": "PNG",
+        "dimensions": [
+          1672,
+          941
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          1672,
+          941
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "pending",
+      "tool_refs": [
+        "assets/art/events/talent_hunyuan.png",
+        "art_sources/refresh_20261019/approved_samples/13_event.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/09_events/output/prompts/d87a3b845c9da1d7.txt"
+    },
+    {
+      "id": "1e8b9a598a0bc272",
+      "batch": "09_events",
+      "kind": "existing",
+      "label": "assets/art/events/talent_jiandan.png",
+      "source": "assets/art/events/talent_jiandan.png",
+      "output": "art_sources/refresh_20261019/batches/09_events/output/existing/art/events/talent_jiandan.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/art/events/talent_jiandan.png",
+        "sha256": "74c2e8231894dc9c3569e781f8adc2dec2fdadde43e7618f7d3b9d9ddc7de171",
+        "format": "PNG",
+        "dimensions": [
+          1672,
+          941
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          1672,
+          941
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "pending",
+      "tool_refs": [
+        "assets/art/events/talent_jiandan.png",
+        "art_sources/refresh_20261019/approved_samples/13_event.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/09_events/output/prompts/1e8b9a598a0bc272.txt"
+    },
+    {
+      "id": "9db177dbfbae6c89",
+      "batch": "09_events",
+      "kind": "existing",
+      "label": "assets/art/events/talent_jiangu.png",
+      "source": "assets/art/events/talent_jiangu.png",
+      "output": "art_sources/refresh_20261019/batches/09_events/output/existing/art/events/talent_jiangu.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/art/events/talent_jiangu.png",
+        "sha256": "59f7ecbdf430a5a4f397a641d34ae8720873b998ef01656b6ae8a119c559ac78",
+        "format": "PNG",
+        "dimensions": [
+          1672,
+          941
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          1672,
+          941
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "pending",
+      "tool_refs": [
+        "assets/art/events/talent_jiangu.png",
+        "art_sources/refresh_20261019/approved_samples/13_event.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/09_events/output/prompts/9db177dbfbae6c89.txt"
+    },
+    {
+      "id": "e9bd0db783809337",
+      "batch": "09_events",
+      "kind": "existing",
+      "label": "assets/art/events/talent_linglong.png",
+      "source": "assets/art/events/talent_linglong.png",
+      "output": "art_sources/refresh_20261019/batches/09_events/output/existing/art/events/talent_linglong.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/art/events/talent_linglong.png",
+        "sha256": "9f32e8d8137443eb3ef89ad98fbd9dd9b36b8b9b36cbe479ab950aaf3ff5cbab",
+        "format": "PNG",
+        "dimensions": [
+          1672,
+          941
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          1672,
+          941
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "pending",
+      "tool_refs": [
+        "assets/art/events/talent_linglong.png",
+        "art_sources/refresh_20261019/approved_samples/13_event.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/09_events/output/prompts/e9bd0db783809337.txt"
+    },
+    {
+      "id": "c08d896240040fa4",
+      "batch": "09_events",
+      "kind": "existing",
+      "label": "assets/art/events/talent_lingqiao_tian.png",
+      "source": "assets/art/events/talent_lingqiao_tian.png",
+      "output": "art_sources/refresh_20261019/batches/09_events/output/existing/art/events/talent_lingqiao_tian.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/art/events/talent_lingqiao_tian.png",
+        "sha256": "8cefdb9e6ddef0f4fd16915494c7bbb687956eb7dd7675c433278417338b6cf3",
+        "format": "PNG",
+        "dimensions": [
+          1672,
+          941
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          1672,
+          941
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "pending",
+      "tool_refs": [
+        "assets/art/events/talent_lingqiao_tian.png",
+        "art_sources/refresh_20261019/approved_samples/13_event.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/09_events/output/prompts/c08d896240040fa4.txt"
+    },
+    {
+      "id": "862a04fdd991a9ca",
+      "batch": "09_events",
+      "kind": "existing",
+      "label": "assets/art/events/talent_qiyun_zhizi.png",
+      "source": "assets/art/events/talent_qiyun_zhizi.png",
+      "output": "art_sources/refresh_20261019/batches/09_events/output/existing/art/events/talent_qiyun_zhizi.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/art/events/talent_qiyun_zhizi.png",
+        "sha256": "aa13b56a4ca99fa6ea84d9adc539d70b7ce7d3bff2616663abe214895dc3485e",
+        "format": "PNG",
+        "dimensions": [
+          1672,
+          941
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          1672,
+          941
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "pending",
+      "tool_refs": [
+        "assets/art/events/talent_qiyun_zhizi.png",
+        "art_sources/refresh_20261019/approved_samples/13_event.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/09_events/output/prompts/862a04fdd991a9ca.txt"
+    },
+    {
+      "id": "777a6be9fa56cd81",
+      "batch": "09_events",
+      "kind": "existing",
+      "label": "assets/art/events/talent_shouxing.png",
+      "source": "assets/art/events/talent_shouxing.png",
+      "output": "art_sources/refresh_20261019/batches/09_events/output/existing/art/events/talent_shouxing.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/art/events/talent_shouxing.png",
+        "sha256": "5301d5acdbee8ea8da63eef08a82cad87c15f36ad898be62b63ba1cec7f1ba44",
+        "format": "PNG",
+        "dimensions": [
+          1672,
+          941
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          1672,
+          941
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "pending",
+      "tool_refs": [
+        "assets/art/events/talent_shouxing.png",
+        "art_sources/refresh_20261019/approved_samples/13_event.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/09_events/output/prompts/777a6be9fa56cd81.txt"
+    },
+    {
+      "id": "5a8f034fbee5f110",
+      "batch": "09_events",
+      "kind": "existing",
+      "label": "assets/art/events/talent_shouyou.png",
+      "source": "assets/art/events/talent_shouyou.png",
+      "output": "art_sources/refresh_20261019/batches/09_events/output/existing/art/events/talent_shouyou.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/art/events/talent_shouyou.png",
+        "sha256": "3c2033c68bfa9c37c85c9859a6903f8052d88edc49fe40c57aeb798694721986",
+        "format": "PNG",
+        "dimensions": [
+          1672,
+          941
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          1672,
+          941
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "pending",
+      "tool_refs": [
+        "assets/art/events/talent_shouyou.png",
+        "art_sources/refresh_20261019/approved_samples/13_event.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/09_events/output/prompts/5a8f034fbee5f110.txt"
+    },
+    {
+      "id": "31b734a36d7a19e4",
+      "batch": "09_events",
+      "kind": "existing",
+      "label": "assets/art/events/talent_tianyan.png",
+      "source": "assets/art/events/talent_tianyan.png",
+      "output": "art_sources/refresh_20261019/batches/09_events/output/existing/art/events/talent_tianyan.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/art/events/talent_tianyan.png",
+        "sha256": "8f904166abdef796d0855716a9ceffd1145c0cae63a191719a5baed89b464573",
+        "format": "PNG",
+        "dimensions": [
+          1672,
+          941
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          1672,
+          941
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "pending",
+      "tool_refs": [
+        "assets/art/events/talent_tianyan.png",
+        "art_sources/refresh_20261019/approved_samples/13_event.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/09_events/output/prompts/31b734a36d7a19e4.txt"
+    },
+    {
+      "id": "65d399c5ae48c170",
+      "batch": "09_events",
+      "kind": "existing",
+      "label": "assets/art/events/talent_tongming.png",
+      "source": "assets/art/events/talent_tongming.png",
+      "output": "art_sources/refresh_20261019/batches/09_events/output/existing/art/events/talent_tongming.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/art/events/talent_tongming.png",
+        "sha256": "3f4f2b4cc99fa4b78930cf4dd150bbf7a0ac4b579d623ec064ccbb7ac10d34d1",
+        "format": "PNG",
+        "dimensions": [
+          1672,
+          941
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          1672,
+          941
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "pending",
+      "tool_refs": [
+        "assets/art/events/talent_tongming.png",
+        "art_sources/refresh_20261019/approved_samples/13_event.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/09_events/output/prompts/65d399c5ae48c170.txt"
+    },
+    {
+      "id": "78d915c1a13dcf6a",
+      "batch": "09_events",
+      "kind": "existing",
+      "label": "assets/art/events/talent_wanfa.png",
+      "source": "assets/art/events/talent_wanfa.png",
+      "output": "art_sources/refresh_20261019/batches/09_events/output/existing/art/events/talent_wanfa.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/art/events/talent_wanfa.png",
+        "sha256": "ff4dd8bc9840a3d421a710efaf053e1f4b998444be80f66c0a399c8528d81c3f",
+        "format": "PNG",
+        "dimensions": [
+          1672,
+          941
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          1672,
+          941
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "pending",
+      "tool_refs": [
+        "assets/art/events/talent_wanfa.png",
+        "art_sources/refresh_20261019/approved_samples/13_event.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/09_events/output/prompts/78d915c1a13dcf6a.txt"
+    },
+    {
+      "id": "66783e22381fedd5",
+      "batch": "09_events",
+      "kind": "existing",
+      "label": "assets/art/events/talent_xiantian_daoti.png",
+      "source": "assets/art/events/talent_xiantian_daoti.png",
+      "output": "art_sources/refresh_20261019/batches/09_events/output/existing/art/events/talent_xiantian_daoti.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/art/events/talent_xiantian_daoti.png",
+        "sha256": "ecc0e4c751db11d9b8a049776f5a607be36dceddd8da6d8f30c5a45a56383c6f",
+        "format": "PNG",
+        "dimensions": [
+          1672,
+          941
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          1672,
+          941
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "pending",
+      "tool_refs": [
+        "assets/art/events/talent_xiantian_daoti.png",
+        "art_sources/refresh_20261019/approved_samples/13_event.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/09_events/output/prompts/66783e22381fedd5.txt"
+    },
+    {
+      "id": "7d970b70e39e7994",
+      "batch": "09_events",
+      "kind": "existing",
+      "label": "assets/art/events/talent_yinyang.png",
+      "source": "assets/art/events/talent_yinyang.png",
+      "output": "art_sources/refresh_20261019/batches/09_events/output/existing/art/events/talent_yinyang.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/art/events/talent_yinyang.png",
+        "sha256": "902b762b0e2d9ba6b3aed555a451a02981f552773aa5419eda2d3beb1f9a68df",
+        "format": "PNG",
+        "dimensions": [
+          1672,
+          941
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          1672,
+          941
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "pending",
+      "tool_refs": [
+        "assets/art/events/talent_yinyang.png",
+        "art_sources/refresh_20261019/approved_samples/13_event.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/09_events/output/prompts/7d970b70e39e7994.txt"
+    },
+    {
+      "id": "bb1dfd2beab15f8c",
+      "batch": "09_events",
+      "kind": "existing",
+      "label": "assets/art/events/talent_zhanti.png",
+      "source": "assets/art/events/talent_zhanti.png",
+      "output": "art_sources/refresh_20261019/batches/09_events/output/existing/art/events/talent_zhanti.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/art/events/talent_zhanti.png",
+        "sha256": "5bda11e8824242186a5a844209ec4145b3aface3742b5cbf4643c76a612c4dbd",
+        "format": "PNG",
+        "dimensions": [
+          1672,
+          941
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          1672,
+          941
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "pending",
+      "tool_refs": [
+        "assets/art/events/talent_zhanti.png",
+        "art_sources/refresh_20261019/approved_samples/13_event.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/09_events/output/prompts/bb1dfd2beab15f8c.txt"
+    },
+    {
+      "id": "f0716a42cbc57aa1",
+      "batch": "09_events",
+      "kind": "existing",
+      "label": "assets/art/events/teahouse_story.png",
+      "source": "assets/art/events/teahouse_story.png",
+      "output": "art_sources/refresh_20261019/batches/09_events/output/existing/art/events/teahouse_story.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/art/events/teahouse_story.png",
+        "sha256": "528f387468f94220a5f8b01ed5064ce07e01a92b0af28a8388757d106ba9ea49",
+        "format": "PNG",
+        "dimensions": [
+          1600,
+          900
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          16,
+          9
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "pending",
+      "tool_refs": [
+        "assets/art/events/teahouse_story.png",
+        "art_sources/refresh_20261019/approved_samples/13_event.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/09_events/output/prompts/f0716a42cbc57aa1.txt"
+    },
+    {
+      "id": "589bdf1149625e30",
+      "batch": "09_events",
+      "kind": "existing",
+      "label": "assets/art/events/wounded_in_pines.png",
+      "source": "assets/art/events/wounded_in_pines.png",
+      "output": "art_sources/refresh_20261019/batches/09_events/output/existing/art/events/wounded_in_pines.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/art/events/wounded_in_pines.png",
+        "sha256": "bdd657f7a91efd611d15e1600004e9768e50f47ef7a1bf003dd7a752aa891976",
+        "format": "PNG",
+        "dimensions": [
+          1600,
+          900
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          16,
+          9
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "pending",
+      "tool_refs": [
+        "assets/art/events/wounded_in_pines.png",
+        "art_sources/refresh_20261019/approved_samples/13_event.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/09_events/output/prompts/589bdf1149625e30.txt"
+    },
+    {
+      "id": "deba944bb073cb5d",
+      "batch": "09_events",
+      "kind": "existing",
+      "label": "assets/art/events/yunxi_auction.png",
+      "source": "assets/art/events/yunxi_auction.png",
+      "output": "art_sources/refresh_20261019/batches/09_events/output/existing/art/events/yunxi_auction.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/art/events/yunxi_auction.png",
+        "sha256": "35c927dd2e92f05f2cf7d673a9ee03713e1689c63975fdac1a82a31bb4f3744e",
+        "format": "PNG",
+        "dimensions": [
+          1600,
+          900
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          16,
+          9
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "pending",
+      "tool_refs": [
+        "assets/art/events/yunxi_auction.png",
+        "art_sources/refresh_20261019/approved_samples/13_event.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/09_events/output/prompts/deba944bb073cb5d.txt"
+    },
+    {
+      "id": "63e61f9d832319fd",
+      "batch": "09_events",
+      "kind": "existing",
+      "label": "assets/art/events/yunxi_night_market.png",
+      "source": "assets/art/events/yunxi_night_market.png",
+      "output": "art_sources/refresh_20261019/batches/09_events/output/existing/art/events/yunxi_night_market.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/art/events/yunxi_night_market.png",
+        "sha256": "7064669b9fe378faa55401991d71fcd45e639737f533fc02bc5d34c65c862430",
+        "format": "PNG",
+        "dimensions": [
+          1600,
+          900
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          16,
+          9
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "pending",
+      "tool_refs": [
+        "assets/art/events/yunxi_night_market.png",
+        "art_sources/refresh_20261019/approved_samples/13_event.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/09_events/output/prompts/63e61f9d832319fd.txt"
+    },
+    {
+      "id": "a6d47190761413c2",
+      "batch": "09_events",
+      "kind": "planned",
+      "label": "tiannan_tournament_reunion.png",
+      "source": "assets/art/events/yunxi_auction.png",
+      "output": "art_sources/refresh_20261019/batches/09_events/output/tiannan_tournament_reunion.png",
+      "brief": "筑基天南大比同辈重逢；同一角色沿用第02批身份和成长状态，区别炼气潜龙会",
+      "spec": {
+        "path": "assets/art/events/yunxi_auction.png",
+        "sha256": "35c927dd2e92f05f2cf7d673a9ee03713e1689c63975fdac1a82a31bb4f3744e",
+        "format": "PNG",
+        "dimensions": [
+          1600,
+          900
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          16,
+          9
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_generated",
+      "priority": "P1",
+      "dependencies": [],
+      "tool_refs": [
+        "art_sources/refresh_20261019/approved_samples/13_event.png",
+        "art_sources/refresh_20261019/batches/02_key_portraits/candidates/lu_chengzhou.png",
+        "art_sources/refresh_20261019/batches/02_key_portraits/candidates/ye_zhiwei.png",
+        "art_sources/refresh_20261019/batches/02_key_portraits/candidates/wenren_zhao.png",
+        "art_sources/refresh_20261019/batches/02_key_portraits/candidates/liu_hanzhou_healthy.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/09_events/output/prompts/a6d47190761413c2.txt",
+      "newly_generated": true,
+      "sha256": "6d1ce4660a206068d3b6a918fddb6826e7a444d6bc0c27ed6648575b454b51e0",
+      "native_dimensions": [
+        1672,
+        941
+      ],
+      "native_mode": "RGB",
+      "alpha_extrema": null,
+      "tool_logical_path": "C:\\Users\\Kuroro\\.codex\\generated_images\\01a15203-e7bc-7bc0-b21d-f11948dc04a9\\exec-7b81983a-82ce-4ad5-98a1-41e149218f94.png",
+      "tool_physical_path": "D:\\claude\\flash\\.tmp\\imagegen_storage\\generated_images\\01a15203-e7bc-7bc0-b21d-f11948dc04a9\\exec-7b81983a-82ce-4ad5-98a1-41e149218f94.png",
+      "input_hashes": [
+        {
+          "path": "art_sources/refresh_20261019/approved_samples/13_event.png",
+          "sha256": "29dfc8b888a31fb0416861b2eaac9c7a4fb569cdd8d51d80afd3c94fa7b562a7"
+        },
+        {
+          "path": "art_sources/refresh_20261019/batches/02_key_portraits/candidates/lu_chengzhou.png",
+          "sha256": "a7d038cc537349073873aa20693c116ce1763530448bfd009e19581d93fce4be"
+        },
+        {
+          "path": "art_sources/refresh_20261019/batches/02_key_portraits/candidates/ye_zhiwei.png",
+          "sha256": "d844a0a6e01f95777c1014088a033a071b09de0d98630cd8a3ac83812d60e03d"
+        },
+        {
+          "path": "art_sources/refresh_20261019/batches/02_key_portraits/candidates/wenren_zhao.png",
+          "sha256": "67b9689ddc3361f4cf97376dc5254d3062028c574bed418e381a217f5f19be14"
+        },
+        {
+          "path": "art_sources/refresh_20261019/batches/02_key_portraits/candidates/liu_hanzhou_healthy.png",
+          "sha256": "ea67ce6b5d249c4bb5cb49dc138604024dfe9baafc9ddafac5826e77ec19ddfe"
+        }
+      ],
+      "review": "Visually checked identity/content, category style and complete composition; integration separate.",
+      "target_dimensions": [
+        1600,
+        900
+      ],
+      "size_matches_technical_source": false,
+      "integration_status": "runtime_installed",
+      "size_note": "Native bytes retained; runtime crop/scale or atlas registration must be resolved separately. Target dimensions are not claimed as delivered dimensions.",
+      "runtime_targets": [
+        "assets/art/events/tiannan_tournament_reunion.png"
+      ]
+    },
+    {
+      "id": "3494bbd692ec599c",
+      "batch": "09_events",
+      "kind": "planned",
+      "label": "beiyue_shouchuan_encounter.png",
+      "source": "assets/art/events/yunxi_auction.png",
+      "output": "art_sources/refresh_20261019/batches/09_events/output/beiyue_shouchuan_encounter.png",
+      "brief": "北岳旧档库守川司回收古物与缺页卷宗的首次正面交涉；晏无咎身份先由第02批确认",
+      "spec": {
+        "path": "assets/art/events/yunxi_auction.png",
+        "sha256": "35c927dd2e92f05f2cf7d673a9ee03713e1689c63975fdac1a82a31bb4f3744e",
+        "format": "PNG",
+        "dimensions": [
+          1600,
+          900
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          16,
+          9
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_generated",
+      "priority": "P1",
+      "dependencies": [
+        "planned:02_key_portraits/yan_wujiu.png"
+      ],
+      "tool_refs": [
+        "art_sources/refresh_20261019/approved_samples/13_event.png",
+        "art_sources/refresh_20261019/batches/02_key_portraits/output/yan_wujiu.png",
+        "art_sources/refresh_20261019/batches/06_scenes/output/beiyue_old_archive.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/09_events/output/prompts/3494bbd692ec599c.txt",
+      "rejected_attempts": [
+        {
+          "path": "art_sources/refresh_20261019/batches/09_events/output/originals/beiyue_shouchuan_encounter_rejected_c452901a.png",
+          "sha256": "c452901ad75cf33b6aa4ceb5a9c2b96a8abb3098ed1c5a37a9c81a15dd83848b",
+          "reason": "Baked lettering on the missing-page folio; remove all written glyphs and retain blank torn pages.",
+          "tool_physical_path": "D:\\claude\\flash\\.tmp\\imagegen_storage\\generated_images\\01a15203-e7bc-7bc0-b21d-f11948dc04a9\\exec-ad97f240-99fe-45a4-8d3d-03083cc36635.png",
+          "prompt_path": "art_sources/refresh_20261019/batches/09_events/output/originals/beiyue_shouchuan_encounter_rejected_c452901a.prompt.txt"
+        }
+      ],
+      "newly_generated": true,
+      "sha256": "0a329c36aee0fcf1e1213896c3ba4e38124637d29245505dd028a10ce58d42c3",
+      "native_dimensions": [
+        1672,
+        941
+      ],
+      "native_mode": "RGB",
+      "alpha_extrema": null,
+      "tool_logical_path": "C:\\Users\\Kuroro\\.codex\\generated_images\\01a15203-e7bc-7bc0-b21d-f11948dc04a9\\exec-8e08ba7c-f39e-42e3-947e-3f36660eb328.png",
+      "tool_physical_path": "D:\\claude\\flash\\.tmp\\imagegen_storage\\generated_images\\01a15203-e7bc-7bc0-b21d-f11948dc04a9\\exec-8e08ba7c-f39e-42e3-947e-3f36660eb328.png",
+      "input_hashes": [
+        {
+          "path": "art_sources/refresh_20261019/approved_samples/13_event.png",
+          "sha256": "29dfc8b888a31fb0416861b2eaac9c7a4fb569cdd8d51d80afd3c94fa7b562a7"
+        },
+        {
+          "path": "art_sources/refresh_20261019/batches/02_key_portraits/output/yan_wujiu.png",
+          "sha256": "f031258709ed34c6225076d900209d55ddad54800cf94795871438b036b9246c"
+        },
+        {
+          "path": "art_sources/refresh_20261019/batches/06_scenes/output/beiyue_old_archive.png",
+          "sha256": "875870363c0e0369109b8c7dfc921bb19f3befc7e28e856fef07b057b2db820e"
+        }
+      ],
+      "review": "Visually checked identity/content, category style and complete composition; integration separate.",
+      "target_dimensions": [
+        1600,
+        900
+      ],
+      "size_matches_technical_source": false,
+      "integration_status": "runtime_installed",
+      "size_note": "Native bytes retained; runtime crop/scale or atlas registration must be resolved separately. Target dimensions are not claimed as delivered dimensions.",
+      "runtime_targets": [
+        "assets/art/events/beiyue_shouchuan_encounter.png"
+      ]
+    },
+    {
+      "id": "189e5b1b956b62f4",
+      "batch": "09_events",
+      "kind": "planned",
+      "label": "lu_family_succession.png",
+      "source": "assets/art/events/yunxi_auction.png",
+      "output": "art_sources/refresh_20261019/batches/09_events/output/lu_family_succession.png",
+      "brief": "约30年陆家丧事与接掌家业的经历；复用陆府空间和同一张脸，后续离家／担责／疏远不固定成单一结局",
+      "spec": {
+        "path": "assets/art/events/yunxi_auction.png",
+        "sha256": "35c927dd2e92f05f2cf7d673a9ee03713e1689c63975fdac1a82a31bb4f3744e",
+        "format": "PNG",
+        "dimensions": [
+          1600,
+          900
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          16,
+          9
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_generated",
+      "priority": "P1",
+      "dependencies": [],
+      "tool_refs": [
+        "art_sources/refresh_20261019/approved_samples/13_event.png",
+        "art_sources/refresh_20261019/batches/02_key_portraits/candidates/lu_chengzhou.png",
+        "art_sources/refresh_20261019/batches/06_scenes/output/lu_family_courtyard.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/09_events/output/prompts/189e5b1b956b62f4.txt",
+      "newly_generated": true,
+      "sha256": "845a4d169b6b5be22e3ef315d6cbdcd576d723928c2984250bf894394ec51f22",
+      "native_dimensions": [
+        1672,
+        941
+      ],
+      "native_mode": "RGB",
+      "alpha_extrema": null,
+      "tool_logical_path": "C:\\Users\\Kuroro\\.codex\\generated_images\\01a15203-e7bc-7bc0-b21d-f11948dc04a9\\exec-39e6b6f1-e69c-4be4-b881-d2a9bdc4fc9a.png",
+      "tool_physical_path": "D:\\claude\\flash\\.tmp\\imagegen_storage\\generated_images\\01a15203-e7bc-7bc0-b21d-f11948dc04a9\\exec-39e6b6f1-e69c-4be4-b881-d2a9bdc4fc9a.png",
+      "input_hashes": [
+        {
+          "path": "art_sources/refresh_20261019/approved_samples/13_event.png",
+          "sha256": "29dfc8b888a31fb0416861b2eaac9c7a4fb569cdd8d51d80afd3c94fa7b562a7"
+        },
+        {
+          "path": "art_sources/refresh_20261019/batches/02_key_portraits/candidates/lu_chengzhou.png",
+          "sha256": "a7d038cc537349073873aa20693c116ce1763530448bfd009e19581d93fce4be"
+        },
+        {
+          "path": "art_sources/refresh_20261019/batches/06_scenes/output/lu_family_courtyard.png",
+          "sha256": "674a0ecc274e8473ce9ae80160b11c28b83141aa9e2a1513aa94fd12523a988c"
+        }
+      ],
+      "review": "Visually checked identity/content, category style and complete composition; integration separate.",
+      "target_dimensions": [
+        1600,
+        900
+      ],
+      "size_matches_technical_source": false,
+      "integration_status": "runtime_installed",
+      "size_note": "Native bytes retained; runtime crop/scale or atlas registration must be resolved separately. Target dimensions are not claimed as delivered dimensions.",
+      "runtime_targets": [
+        "assets/art/events/lu_family_succession.png"
+      ]
+    },
+    {
+      "id": "57bf5feda88cd079",
+      "batch": "09_events",
+      "kind": "planned",
+      "label": "beiyue_witness.png",
+      "source": "assets/art/events/yunxi_auction.png",
+      "output": "art_sources/refresh_20261019/batches/09_events/output/beiyue_witness.png",
+      "brief": "柳寒舟北岳证人与矛盾卷宗的会面；沿用剑穗身份与旧档空间，证人造型待实际人物内容确认",
+      "spec": {
+        "path": "assets/art/events/yunxi_auction.png",
+        "sha256": "35c927dd2e92f05f2cf7d673a9ee03713e1689c63975fdac1a82a31bb4f3744e",
+        "format": "PNG",
+        "dimensions": [
+          1600,
+          900
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          16,
+          9
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_generated",
+      "priority": "P1",
+      "dependencies": [],
+      "tool_refs": [
+        "art_sources/refresh_20261019/approved_samples/13_event.png",
+        "art_sources/refresh_20261019/batches/02_key_portraits/candidates/liu_hanzhou_healthy.png",
+        "art_sources/refresh_20261019/batches/06_scenes/output/beiyue_old_archive.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/09_events/output/prompts/57bf5feda88cd079.txt",
+      "rejected_attempts": [
+        {
+          "path": "art_sources/refresh_20261019/batches/09_events/output/originals/beiyue_witness_rejected_e7d46776.png",
+          "sha256": "e7d467765cabe03bd39cbbd1b88300e7a8cd4f2179c2a1dd47126263b13d5864",
+          "reason": "Baked lettering on documents; investigation props must be blank, with no writing.",
+          "tool_physical_path": "D:\\claude\\flash\\.tmp\\imagegen_storage\\generated_images\\01a15203-e7bc-7bc0-b21d-f11948dc04a9\\exec-04198d13-5541-4dc7-9978-9361524210f4.png",
+          "prompt_path": "art_sources/refresh_20261019/batches/09_events/output/originals/beiyue_witness_rejected_e7d46776.prompt.txt"
+        }
+      ],
+      "newly_generated": true,
+      "sha256": "bfb4d685220ae95837114711b11e398fcfcb593033930aca77db2d8e27039f12",
+      "native_dimensions": [
+        1672,
+        941
+      ],
+      "native_mode": "RGB",
+      "alpha_extrema": null,
+      "tool_logical_path": "C:\\Users\\Kuroro\\.codex\\generated_images\\01a15203-e7bc-7bc0-b21d-f11948dc04a9\\exec-5ebf1ef5-6cb8-45c1-b31a-b6c045d32b9f.png",
+      "tool_physical_path": "D:\\claude\\flash\\.tmp\\imagegen_storage\\generated_images\\01a15203-e7bc-7bc0-b21d-f11948dc04a9\\exec-5ebf1ef5-6cb8-45c1-b31a-b6c045d32b9f.png",
+      "input_hashes": [
+        {
+          "path": "art_sources/refresh_20261019/approved_samples/13_event.png",
+          "sha256": "29dfc8b888a31fb0416861b2eaac9c7a4fb569cdd8d51d80afd3c94fa7b562a7"
+        },
+        {
+          "path": "art_sources/refresh_20261019/batches/02_key_portraits/candidates/liu_hanzhou_healthy.png",
+          "sha256": "ea67ce6b5d249c4bb5cb49dc138604024dfe9baafc9ddafac5826e77ec19ddfe"
+        },
+        {
+          "path": "art_sources/refresh_20261019/batches/06_scenes/output/beiyue_old_archive.png",
+          "sha256": "875870363c0e0369109b8c7dfc921bb19f3befc7e28e856fef07b057b2db820e"
+        }
+      ],
+      "review": "Visually checked identity/content, category style and complete composition; integration separate.",
+      "target_dimensions": [
+        1600,
+        900
+      ],
+      "size_matches_technical_source": false,
+      "integration_status": "runtime_installed",
+      "size_note": "Native bytes retained; runtime crop/scale or atlas registration must be resolved separately. Target dimensions are not claimed as delivered dimensions.",
+      "runtime_targets": [
+        "assets/art/events/beiyue_witness.png"
+      ]
+    },
+    {
+      "id": "719318f34e3d3c28",
+      "batch": "09_events",
+      "kind": "planned",
+      "label": "yunxi_assembly.png",
+      "source": "assets/art/events/yunxi_auction.png",
+      "output": "art_sources/refresh_20261019/batches/09_events/output/yunxi_assembly.png",
+      "brief": "仙师集会事件：交易与结识的繁华，人物身份沿用头像候选",
+      "spec": {
+        "path": "assets/art/events/yunxi_auction.png",
+        "sha256": "35c927dd2e92f05f2cf7d673a9ee03713e1689c63975fdac1a82a31bb4f3744e",
+        "format": "PNG",
+        "dimensions": [
+          1600,
+          900
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          16,
+          9
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_generated",
+      "priority": "P0",
+      "dependencies": [],
+      "tool_refs": [
+        "art_sources/refresh_20261019/approved_samples/13_event.png",
+        "art_sources/refresh_20261019/batches/06_scenes/output/yunxi_assembly_street.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/09_events/output/prompts/719318f34e3d3c28.txt",
+      "newly_generated": true,
+      "sha256": "3469b28e905c0311870373a7ad9734b41ecf1ebd629c479ce8cab53ffc70d7f1",
+      "native_dimensions": [
+        1672,
+        941
+      ],
+      "native_mode": "RGB",
+      "alpha_extrema": null,
+      "tool_logical_path": "C:\\Users\\Kuroro\\.codex\\generated_images\\01a15203-e7bc-7bc0-b21d-f11948dc04a9\\exec-33377c7d-1c4d-4f13-b985-4519fe9e316e.png",
+      "tool_physical_path": "D:\\claude\\flash\\.tmp\\imagegen_storage\\generated_images\\01a15203-e7bc-7bc0-b21d-f11948dc04a9\\exec-33377c7d-1c4d-4f13-b985-4519fe9e316e.png",
+      "input_hashes": [
+        {
+          "path": "art_sources/refresh_20261019/approved_samples/13_event.png",
+          "sha256": "29dfc8b888a31fb0416861b2eaac9c7a4fb569cdd8d51d80afd3c94fa7b562a7"
+        },
+        {
+          "path": "art_sources/refresh_20261019/batches/06_scenes/output/yunxi_assembly_street.png",
+          "sha256": "4312515da4115fd5198dedaf35b148d9484f6fff80728c2be0e2c12bb41bea71"
+        }
+      ],
+      "review": "Visually checked identity/content, category style and complete composition; integration separate.",
+      "target_dimensions": [
+        1600,
+        900
+      ],
+      "size_matches_technical_source": false,
+      "integration_status": "runtime_installed",
+      "size_note": "Native bytes retained; runtime crop/scale or atlas registration must be resolved separately. Target dimensions are not claimed as delivered dimensions.",
+      "runtime_targets": [
+        "assets/art/events/yunxi_assembly.png"
+      ]
+    },
+    {
+      "id": "6fd4a7b79f31d830",
+      "batch": "09_events",
+      "kind": "planned",
+      "label": "auction_mirror_anomaly.png",
+      "source": "assets/art/events/yunxi_auction.png",
+      "output": "art_sources/refresh_20261019/batches/09_events/output/auction_mirror_anomaly.png",
+      "brief": "残镜短暂映出地图没有的城，铜片反应；不提前泄露完整真相",
+      "spec": {
+        "path": "assets/art/events/yunxi_auction.png",
+        "sha256": "35c927dd2e92f05f2cf7d673a9ee03713e1689c63975fdac1a82a31bb4f3744e",
+        "format": "PNG",
+        "dimensions": [
+          1600,
+          900
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          16,
+          9
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_generated",
+      "priority": "P0",
+      "dependencies": [
+        "motif:old_city_seal_candidate",
+        "output:tianhe_ferry_reflection.png"
+      ],
+      "tool_refs": [
+        "art_sources/refresh_20261019/approved_samples/13_event.png",
+        "art_sources/refresh_20261019/batches/06_scenes/output/tianhe_ferry_reflection.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/09_events/output/prompts/6fd4a7b79f31d830.txt",
+      "rejected_attempts": [
+        {
+          "path": "art_sources/refresh_20261019/batches/09_events/output/originals/auction_mirror_anomaly_rejected_b5903d01.png",
+          "sha256": "b5903d01068cca073614f0a77ec2bbd5c6efe6e60a8a62aafc27a3ee3ab56503",
+          "reason": "Photorealistic corroded metal and defocus drift from the approved flat event illustration style.",
+          "tool_physical_path": "D:\\claude\\flash\\.tmp\\imagegen_storage\\generated_images\\01a15203-e7bc-7bc0-b21d-f11948dc04a9\\exec-9d149fb8-803f-4c5f-9317-0341fea30aa9.png",
+          "prompt_path": "art_sources/refresh_20261019/batches/09_events/output/originals/auction_mirror_anomaly_rejected_b5903d01.prompt.txt"
+        }
+      ],
+      "newly_generated": true,
+      "sha256": "628d0cee8c4697b9258e870400d195016f839aca6c04560d629ec78b97123f01",
+      "native_dimensions": [
+        1672,
+        941
+      ],
+      "native_mode": "RGB",
+      "alpha_extrema": null,
+      "tool_logical_path": "C:\\Users\\Kuroro\\.codex\\generated_images\\01a15203-e7bc-7bc0-b21d-f11948dc04a9\\exec-860d4453-82e8-4cc0-9d2d-e144e6f73416.png",
+      "tool_physical_path": "D:\\claude\\flash\\.tmp\\imagegen_storage\\generated_images\\01a15203-e7bc-7bc0-b21d-f11948dc04a9\\exec-860d4453-82e8-4cc0-9d2d-e144e6f73416.png",
+      "input_hashes": [
+        {
+          "path": "art_sources/refresh_20261019/approved_samples/13_event.png",
+          "sha256": "29dfc8b888a31fb0416861b2eaac9c7a4fb569cdd8d51d80afd3c94fa7b562a7"
+        },
+        {
+          "path": "art_sources/refresh_20261019/batches/06_scenes/output/tianhe_ferry_reflection.png",
+          "sha256": "bc3bf82f20980ca815ac76766111045e175e532bfabd6f463216abdf2afe9c51"
+        }
+      ],
+      "review": "Visually checked identity/content, category style and complete composition; integration separate.",
+      "target_dimensions": [
+        1600,
+        900
+      ],
+      "size_matches_technical_source": false,
+      "integration_status": "runtime_installed",
+      "size_note": "Native bytes retained; runtime crop/scale or atlas registration must be resolved separately. Target dimensions are not claimed as delivered dimensions.",
+      "runtime_targets": [
+        "assets/art/events/auction_mirror_anomaly.png"
+      ]
+    },
+    {
+      "id": "0818dfd597a23531",
+      "batch": "09_events",
+      "kind": "planned",
+      "label": "qianlong_arena.png",
+      "source": "assets/art/events/yunxi_auction.png",
+      "output": "art_sources/refresh_20261019/batches/09_events/output/qianlong_arena.png",
+      "brief": "公共潜龙会场景；已有空背景候选，区别宗门外门比试",
+      "spec": {
+        "path": "assets/art/events/yunxi_auction.png",
+        "sha256": "35c927dd2e92f05f2cf7d673a9ee03713e1689c63975fdac1a82a31bb4f3744e",
+        "format": "PNG",
+        "dimensions": [
+          1600,
+          900
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          16,
+          9
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_reuse",
+      "priority": "P0",
+      "dependencies": [],
+      "reuse_source": "art_sources/refresh_20261019/batches/09_events/candidates/qianlong_arena.png",
+      "tool_refs": [
+        "assets/art/events/yunxi_auction.png",
+        "art_sources/refresh_20261019/approved_samples/13_event.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/09_events/output/prompts/0818dfd597a23531.txt",
+      "delivery_kind": "reuse_prior_candidate",
+      "sha256": "76c5ddfc060e91e680018137f3c7b5e415103d1033ff8b9a2b5c1ec51a764086",
+      "newly_generated": false,
+      "native_mode": "RGB",
+      "alpha_extrema": null,
+      "native_dimensions": [
+        1672,
+        941
+      ],
+      "target_dimensions": [
+        1600,
+        900
+      ],
+      "size_matches_technical_source": false,
+      "integration_status": "runtime_installed",
+      "size_note": "Native bytes retained; runtime crop/scale or atlas registration must be resolved separately. Target dimensions are not claimed as delivered dimensions.",
+      "runtime_targets": [
+        "assets/art/events/qianlong_arena.png"
+      ]
+    },
+    {
+      "id": "b5d56c66f991a601",
+      "batch": "09_events",
+      "kind": "planned",
+      "label": "lu_family_night_banquet.png",
+      "source": "assets/art/events/yunxi_auction.png",
+      "output": "art_sources/refresh_20261019/batches/09_events/output/lu_family_night_banquet.png",
+      "brief": "陆府夜宴与同辈相识，人物脸型引用第02批，不擅改身份",
+      "spec": {
+        "path": "assets/art/events/yunxi_auction.png",
+        "sha256": "35c927dd2e92f05f2cf7d673a9ee03713e1689c63975fdac1a82a31bb4f3744e",
+        "format": "PNG",
+        "dimensions": [
+          1600,
+          900
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          16,
+          9
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_generated",
+      "priority": "P0",
+      "dependencies": [],
+      "tool_refs": [
+        "art_sources/refresh_20261019/approved_samples/13_event.png",
+        "art_sources/refresh_20261019/batches/02_key_portraits/candidates/lu_chengzhou.png",
+        "art_sources/refresh_20261019/batches/02_key_portraits/candidates/ye_zhiwei.png",
+        "art_sources/refresh_20261019/batches/06_scenes/output/lu_family_dining_hall.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/09_events/output/prompts/b5d56c66f991a601.txt",
+      "newly_generated": true,
+      "sha256": "cd4758116cbd08e2da0fadfcd70822c389b77681cbe9d12679e2592bf710e162",
+      "native_dimensions": [
+        1672,
+        941
+      ],
+      "native_mode": "RGB",
+      "alpha_extrema": null,
+      "tool_logical_path": "C:\\Users\\Kuroro\\.codex\\generated_images\\01a15203-e7bc-7bc0-b21d-f11948dc04a9\\exec-21539e14-8e67-4bff-85ff-35b414317b16.png",
+      "tool_physical_path": "D:\\claude\\flash\\.tmp\\imagegen_storage\\generated_images\\01a15203-e7bc-7bc0-b21d-f11948dc04a9\\exec-21539e14-8e67-4bff-85ff-35b414317b16.png",
+      "input_hashes": [
+        {
+          "path": "art_sources/refresh_20261019/approved_samples/13_event.png",
+          "sha256": "29dfc8b888a31fb0416861b2eaac9c7a4fb569cdd8d51d80afd3c94fa7b562a7"
+        },
+        {
+          "path": "art_sources/refresh_20261019/batches/02_key_portraits/candidates/lu_chengzhou.png",
+          "sha256": "a7d038cc537349073873aa20693c116ce1763530448bfd009e19581d93fce4be"
+        },
+        {
+          "path": "art_sources/refresh_20261019/batches/02_key_portraits/candidates/ye_zhiwei.png",
+          "sha256": "d844a0a6e01f95777c1014088a033a071b09de0d98630cd8a3ac83812d60e03d"
+        },
+        {
+          "path": "art_sources/refresh_20261019/batches/06_scenes/output/lu_family_dining_hall.png",
+          "sha256": "1eb93ddb3af060ecfed5e7527ad39f6f6360d3d63d793c1a4462f81c3954117d"
+        }
+      ],
+      "review": "Visually checked identity/content, category style and complete composition; integration separate.",
+      "target_dimensions": [
+        1600,
+        900
+      ],
+      "size_matches_technical_source": false,
+      "integration_status": "runtime_installed",
+      "size_note": "Native bytes retained; runtime crop/scale or atlas registration must be resolved separately. Target dimensions are not claimed as delivered dimensions.",
+      "runtime_targets": [
+        "assets/art/events/lu_family_night_banquet.png"
+      ]
+    },
+    {
+      "id": "d9163fee27a7afd7",
+      "batch": "09_events",
+      "kind": "planned",
+      "label": "friends_breakthrough_meal.png",
+      "source": "assets/art/events/yunxi_auction.png",
+      "output": "art_sources/refresh_20261019/batches/09_events/output/friends_breakthrough_meal.png",
+      "brief": "突破后吃饭等轻松同辈日常，可复用陆府／客栈空间",
+      "spec": {
+        "path": "assets/art/events/yunxi_auction.png",
+        "sha256": "35c927dd2e92f05f2cf7d673a9ee03713e1689c63975fdac1a82a31bb4f3744e",
+        "format": "PNG",
+        "dimensions": [
+          1600,
+          900
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          16,
+          9
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_generated",
+      "priority": "P1",
+      "dependencies": [],
+      "tool_refs": [
+        "art_sources/refresh_20261019/approved_samples/13_event.png",
+        "art_sources/refresh_20261019/batches/02_key_portraits/candidates/lu_chengzhou.png",
+        "art_sources/refresh_20261019/batches/02_key_portraits/candidates/ye_zhiwei.png",
+        "art_sources/refresh_20261019/batches/02_key_portraits/candidates/wenren_zhao.png",
+        "art_sources/refresh_20261019/batches/02_key_portraits/candidates/liu_hanzhou_healthy.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/09_events/output/prompts/d9163fee27a7afd7.txt",
+      "newly_generated": true,
+      "sha256": "39b8e07aa02321386e09efafc86f609e4626f93f468fd521a21ce8bef6076096",
+      "native_dimensions": [
+        1672,
+        941
+      ],
+      "native_mode": "RGB",
+      "alpha_extrema": null,
+      "tool_logical_path": "C:\\Users\\Kuroro\\.codex\\generated_images\\01a15203-e7bc-7bc0-b21d-f11948dc04a9\\exec-4f126f53-74d6-4ef9-8229-0d1794be5604.png",
+      "tool_physical_path": "D:\\claude\\flash\\.tmp\\imagegen_storage\\generated_images\\01a15203-e7bc-7bc0-b21d-f11948dc04a9\\exec-4f126f53-74d6-4ef9-8229-0d1794be5604.png",
+      "input_hashes": [
+        {
+          "path": "art_sources/refresh_20261019/approved_samples/13_event.png",
+          "sha256": "29dfc8b888a31fb0416861b2eaac9c7a4fb569cdd8d51d80afd3c94fa7b562a7"
+        },
+        {
+          "path": "art_sources/refresh_20261019/batches/02_key_portraits/candidates/lu_chengzhou.png",
+          "sha256": "a7d038cc537349073873aa20693c116ce1763530448bfd009e19581d93fce4be"
+        },
+        {
+          "path": "art_sources/refresh_20261019/batches/02_key_portraits/candidates/ye_zhiwei.png",
+          "sha256": "d844a0a6e01f95777c1014088a033a071b09de0d98630cd8a3ac83812d60e03d"
+        },
+        {
+          "path": "art_sources/refresh_20261019/batches/02_key_portraits/candidates/wenren_zhao.png",
+          "sha256": "67b9689ddc3361f4cf97376dc5254d3062028c574bed418e381a217f5f19be14"
+        },
+        {
+          "path": "art_sources/refresh_20261019/batches/02_key_portraits/candidates/liu_hanzhou_healthy.png",
+          "sha256": "ea67ce6b5d249c4bb5cb49dc138604024dfe9baafc9ddafac5826e77ec19ddfe"
+        }
+      ],
+      "review": "Visually checked identity/content, category style and complete composition; integration separate.",
+      "target_dimensions": [
+        1600,
+        900
+      ],
+      "size_matches_technical_source": false,
+      "integration_status": "candidate_only_not_runtime_integrated",
+      "size_note": "Native bytes retained; runtime crop/scale or atlas registration must be resolved separately. Target dimensions are not claimed as delivered dimensions."
+    },
+    {
+      "id": "487e849d37fe52cb",
+      "batch": "09_events",
+      "kind": "planned",
+      "label": "auction_elder_old_painting.png",
+      "source": "assets/art/events/yunxi_auction.png",
+      "output": "art_sources/refresh_20261019/batches/09_events/output/auction_elder_old_painting.png",
+      "brief": "拍卖老修士的旧画像线索，必须是同一身份的历史版本",
+      "spec": {
+        "path": "assets/art/events/yunxi_auction.png",
+        "sha256": "35c927dd2e92f05f2cf7d673a9ee03713e1689c63975fdac1a82a31bb4f3744e",
+        "format": "PNG",
+        "dimensions": [
+          1600,
+          900
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          16,
+          9
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_generated",
+      "priority": "P1",
+      "dependencies": [],
+      "tool_refs": [
+        "art_sources/refresh_20261019/approved_samples/13_event.png",
+        "art_sources/refresh_20261019/batches/02_key_portraits/candidates/auction_elder.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/09_events/output/prompts/487e849d37fe52cb.txt",
+      "rejected_attempts": [
+        {
+          "path": "art_sources/refresh_20261019/batches/09_events/output/originals/auction_elder_old_painting_rejected_014a9d92.png",
+          "sha256": "014a9d9211973f2e161c8a58161775a989cf20b28f984f7f15bab0495340ce99",
+          "reason": "Historical thirty-year-old version retained an elderly pale beard; derive the same younger face with dark hair and clean-shaven jaw.",
+          "tool_physical_path": "D:\\claude\\flash\\.tmp\\imagegen_storage\\generated_images\\01a15203-e7bc-7bc0-b21d-f11948dc04a9\\exec-ad818755-2e90-4049-9eb9-5afb5f64cd3d.png",
+          "prompt_path": "art_sources/refresh_20261019/batches/09_events/output/originals/auction_elder_old_painting_rejected_014a9d92.prompt.txt"
+        }
+      ],
+      "newly_generated": true,
+      "sha256": "5d4bf5f6a45f20773dfb54bf66b5a7ede6c56d1f7737d5a39c840972df68cd67",
+      "native_dimensions": [
+        1672,
+        941
+      ],
+      "native_mode": "RGB",
+      "alpha_extrema": null,
+      "tool_logical_path": "C:\\Users\\Kuroro\\.codex\\generated_images\\01a15203-e7bc-7bc0-b21d-f11948dc04a9\\exec-efe13986-4887-4b8a-96bc-60b137c4d445.png",
+      "tool_physical_path": "D:\\claude\\flash\\.tmp\\imagegen_storage\\generated_images\\01a15203-e7bc-7bc0-b21d-f11948dc04a9\\exec-efe13986-4887-4b8a-96bc-60b137c4d445.png",
+      "input_hashes": [
+        {
+          "path": "art_sources/refresh_20261019/approved_samples/13_event.png",
+          "sha256": "29dfc8b888a31fb0416861b2eaac9c7a4fb569cdd8d51d80afd3c94fa7b562a7"
+        },
+        {
+          "path": "art_sources/refresh_20261019/batches/02_key_portraits/candidates/auction_elder.png",
+          "sha256": "fa589f9d1def83d1511d4b8724dd0c0b3ba1d43181e4aaf4e7325a5144b9ec8a"
+        }
+      ],
+      "review": "Visually checked identity/content, category style and complete composition; integration separate.",
+      "target_dimensions": [
+        1600,
+        900
+      ],
+      "size_matches_technical_source": false,
+      "integration_status": "candidate_only_not_runtime_integrated",
+      "size_note": "Native bytes retained; runtime crop/scale or atlas registration must be resolved separately. Target dimensions are not claimed as delivered dimensions."
+    },
+    {
+      "id": "fd64e7018c7fe1a6",
+      "batch": "09_events",
+      "kind": "planned",
+      "label": "ye_zhiwei_master_crisis.png",
+      "source": "assets/art/events/yunxi_auction.png",
+      "output": "art_sources/refresh_20261019/batches/09_events/output/ye_zhiwei_master_crisis.png",
+      "brief": "叶知微师父寿元将尽、替代救法与禁方抉择；先复用医馆与人物，师父造型随内容确认，不预设必然黑化或死亡",
+      "spec": {
+        "path": "assets/art/events/yunxi_auction.png",
+        "sha256": "35c927dd2e92f05f2cf7d673a9ee03713e1689c63975fdac1a82a31bb4f3744e",
+        "format": "PNG",
+        "dimensions": [
+          1600,
+          900
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          16,
+          9
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_generated",
+      "priority": "P2",
+      "dependencies": [],
+      "tool_refs": [
+        "art_sources/refresh_20261019/approved_samples/13_event.png",
+        "art_sources/refresh_20261019/batches/02_key_portraits/candidates/ye_zhiwei.png",
+        "art_sources/refresh_20261019/batches/06_scenes/output/canglan_medical_hall.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/09_events/output/prompts/fd64e7018c7fe1a6.txt",
+      "newly_generated": true,
+      "sha256": "4ad738f4bc6bd30e587dd6551dfa3f3359b773ee39e2c853c15c6b8b2e9856a6",
+      "native_dimensions": [
+        1672,
+        941
+      ],
+      "native_mode": "RGB",
+      "alpha_extrema": null,
+      "tool_logical_path": "C:\\Users\\Kuroro\\.codex\\generated_images\\01a15203-e7bc-7bc0-b21d-f11948dc04a9\\exec-a6a52aa2-d01c-42c1-8c0d-7ce3f27ca05f.png",
+      "tool_physical_path": "D:\\claude\\flash\\.tmp\\imagegen_storage\\generated_images\\01a15203-e7bc-7bc0-b21d-f11948dc04a9\\exec-a6a52aa2-d01c-42c1-8c0d-7ce3f27ca05f.png",
+      "input_hashes": [
+        {
+          "path": "art_sources/refresh_20261019/approved_samples/13_event.png",
+          "sha256": "29dfc8b888a31fb0416861b2eaac9c7a4fb569cdd8d51d80afd3c94fa7b562a7"
+        },
+        {
+          "path": "art_sources/refresh_20261019/batches/02_key_portraits/candidates/ye_zhiwei.png",
+          "sha256": "d844a0a6e01f95777c1014088a033a071b09de0d98630cd8a3ac83812d60e03d"
+        },
+        {
+          "path": "art_sources/refresh_20261019/batches/06_scenes/output/canglan_medical_hall.png",
+          "sha256": "9bccb9eb79ea91fedfa0500edfec413e1da8f98511483571a12e37bd8e855f50"
+        }
+      ],
+      "review": "Visually checked identity/content, category style and complete composition; integration separate.",
+      "target_dimensions": [
+        1600,
+        900
+      ],
+      "size_matches_technical_source": false,
+      "integration_status": "runtime_installed",
+      "size_note": "Native bytes retained; runtime crop/scale or atlas registration must be resolved separately. Target dimensions are not claimed as delivered dimensions.",
+      "runtime_targets": [
+        "assets/art/events/ye_zhiwei_master_crisis.png"
+      ]
+    },
+    {
+      "id": "871b0689e47b1750",
+      "batch": "09_events",
+      "kind": "planned",
+      "label": "five_sect_forum.png",
+      "source": "assets/art/events/yunxi_auction.png",
+      "output": "art_sources/refresh_20261019/batches/09_events/output/five_sect_forum.png",
+      "brief": "金丹以上五宗论道：斗法、观战论道、交易展示或支持后辈四类参与；与第06批会场一致，不固定夺冠",
+      "spec": {
+        "path": "assets/art/events/yunxi_auction.png",
+        "sha256": "35c927dd2e92f05f2cf7d673a9ee03713e1689c63975fdac1a82a31bb4f3744e",
+        "format": "PNG",
+        "dimensions": [
+          1600,
+          900
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          16,
+          9
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_generated",
+      "priority": "P2",
+      "dependencies": [],
+      "tool_refs": [
+        "art_sources/refresh_20261019/approved_samples/13_event.png",
+        "art_sources/refresh_20261019/batches/06_scenes/output/five_sect_forum_venue.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/09_events/output/prompts/871b0689e47b1750.txt",
+      "newly_generated": true,
+      "sha256": "8c66bd30da73b86be8860c9dc35de2c9abfa92224dc65c8ea886b8aedf407bd1",
+      "native_dimensions": [
+        1672,
+        940
+      ],
+      "native_mode": "RGB",
+      "alpha_extrema": null,
+      "tool_logical_path": "C:\\Users\\Kuroro\\.codex\\generated_images\\01a15203-e7bc-7bc0-b21d-f11948dc04a9\\exec-1b0cc3dd-b0c3-43df-8b19-038686afee69.png",
+      "tool_physical_path": "D:\\claude\\flash\\.tmp\\imagegen_storage\\generated_images\\01a15203-e7bc-7bc0-b21d-f11948dc04a9\\exec-1b0cc3dd-b0c3-43df-8b19-038686afee69.png",
+      "input_hashes": [
+        {
+          "path": "art_sources/refresh_20261019/approved_samples/13_event.png",
+          "sha256": "29dfc8b888a31fb0416861b2eaac9c7a4fb569cdd8d51d80afd3c94fa7b562a7"
+        },
+        {
+          "path": "art_sources/refresh_20261019/batches/06_scenes/output/five_sect_forum_venue.png",
+          "sha256": "d9dc2f70fd7aaca6482bc8e410d996782bcf071a4ba81e95acfdfe1b2a685b43"
+        }
+      ],
+      "review": "Visually checked identity/content, category style and complete composition; integration separate.",
+      "target_dimensions": [
+        1600,
+        900
+      ],
+      "size_matches_technical_source": false,
+      "integration_status": "runtime_installed",
+      "size_note": "Native bytes retained; runtime crop/scale or atlas registration must be resolved separately. Target dimensions are not claimed as delivered dimensions.",
+      "runtime_targets": [
+        "assets/art/events/five_sect_forum.png"
+      ]
+    },
+    {
+      "id": "0d3f802339f842ca",
+      "batch": "09_events",
+      "kind": "planned",
+      "label": "chenxia_old_city_record.png",
+      "source": "assets/art/events/yunxi_auction.png",
+      "output": "art_sources/refresh_20261019/batches/09_events/output/chenxia_old_city_record.png",
+      "brief": "古境记录证明旧城真实存在的发现演出",
+      "spec": {
+        "path": "assets/art/events/yunxi_auction.png",
+        "sha256": "35c927dd2e92f05f2cf7d673a9ee03713e1689c63975fdac1a82a31bb4f3744e",
+        "format": "PNG",
+        "dimensions": [
+          1600,
+          900
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          16,
+          9
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_generated",
+      "priority": "P2",
+      "dependencies": [
+        "motif:old_city_seal_candidate"
+      ],
+      "tool_refs": [
+        "art_sources/refresh_20261019/approved_samples/13_event.png",
+        "art_sources/refresh_20261019/batches/06_scenes/output/chenxia_record_room.png",
+        "art_sources/refresh_20261019/batches/06_scenes/output/tianhe_ferry_reflection.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/09_events/output/prompts/0d3f802339f842ca.txt",
+      "newly_generated": true,
+      "sha256": "5bf9f99afc934bf30e5c048a47e18651aa133a82c177f7f9efb62d037daa4d7c",
+      "native_dimensions": [
+        1672,
+        941
+      ],
+      "native_mode": "RGB",
+      "alpha_extrema": null,
+      "tool_logical_path": "C:\\Users\\Kuroro\\.codex\\generated_images\\01a15203-e7bc-7bc0-b21d-f11948dc04a9\\exec-fc008385-4a9b-431a-b78d-576609573ff5.png",
+      "tool_physical_path": "D:\\claude\\flash\\.tmp\\imagegen_storage\\generated_images\\01a15203-e7bc-7bc0-b21d-f11948dc04a9\\exec-fc008385-4a9b-431a-b78d-576609573ff5.png",
+      "input_hashes": [
+        {
+          "path": "art_sources/refresh_20261019/approved_samples/13_event.png",
+          "sha256": "29dfc8b888a31fb0416861b2eaac9c7a4fb569cdd8d51d80afd3c94fa7b562a7"
+        },
+        {
+          "path": "art_sources/refresh_20261019/batches/06_scenes/output/chenxia_record_room.png",
+          "sha256": "5f9693cb1d71c54603652985c6fc91d8a465165947816a436927190764e4253f"
+        },
+        {
+          "path": "art_sources/refresh_20261019/batches/06_scenes/output/tianhe_ferry_reflection.png",
+          "sha256": "bc3bf82f20980ca815ac76766111045e175e532bfabd6f463216abdf2afe9c51"
+        }
+      ],
+      "review": "Visually checked identity/content, category style and complete composition; integration separate.",
+      "target_dimensions": [
+        1600,
+        900
+      ],
+      "size_matches_technical_source": false,
+      "integration_status": "candidate_only_not_runtime_integrated",
+      "size_note": "Native bytes retained; runtime crop/scale or atlas registration must be resolved separately. Target dimensions are not claimed as delivered dimensions."
+    },
+    {
+      "id": "64bbf6346d30fe22",
+      "batch": "09_events",
+      "kind": "planned",
+      "label": "chenxia_shouchuan_evidence.png",
+      "source": "assets/art/events/yunxi_auction.png",
+      "output": "art_sources/refresh_20261019/batches/09_events/output/chenxia_shouchuan_evidence.png",
+      "brief": "沉霞古境合作探索及与守川司争夺照川城实证；同辈可缺席，交涉或争夺按实际剧情，不强制全员同框",
+      "spec": {
+        "path": "assets/art/events/yunxi_auction.png",
+        "sha256": "35c927dd2e92f05f2cf7d673a9ee03713e1689c63975fdac1a82a31bb4f3744e",
+        "format": "PNG",
+        "dimensions": [
+          1600,
+          900
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          16,
+          9
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_generated",
+      "priority": "P2",
+      "dependencies": [
+        "planned:02_key_portraits/yan_wujiu.png"
+      ],
+      "tool_refs": [
+        "art_sources/refresh_20261019/approved_samples/13_event.png",
+        "art_sources/refresh_20261019/batches/02_key_portraits/output/yan_wujiu.png",
+        "art_sources/refresh_20261019/batches/06_scenes/output/chenxia_array_chamber.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/09_events/output/prompts/64bbf6346d30fe22.txt",
+      "newly_generated": true,
+      "sha256": "82d793d6dbdc3e07ee96ff98d156493a1572d2b902fd54f215b48d17cbd8d297",
+      "native_dimensions": [
+        1672,
+        941
+      ],
+      "native_mode": "RGB",
+      "alpha_extrema": null,
+      "tool_logical_path": "C:\\Users\\Kuroro\\.codex\\generated_images\\01a15203-e7bc-7bc0-b21d-f11948dc04a9\\exec-7ab94d69-8cbf-4ea8-bcc5-5d3e77e49667.png",
+      "tool_physical_path": "D:\\claude\\flash\\.tmp\\imagegen_storage\\generated_images\\01a15203-e7bc-7bc0-b21d-f11948dc04a9\\exec-7ab94d69-8cbf-4ea8-bcc5-5d3e77e49667.png",
+      "input_hashes": [
+        {
+          "path": "art_sources/refresh_20261019/approved_samples/13_event.png",
+          "sha256": "29dfc8b888a31fb0416861b2eaac9c7a4fb569cdd8d51d80afd3c94fa7b562a7"
+        },
+        {
+          "path": "art_sources/refresh_20261019/batches/02_key_portraits/output/yan_wujiu.png",
+          "sha256": "f031258709ed34c6225076d900209d55ddad54800cf94795871438b036b9246c"
+        },
+        {
+          "path": "art_sources/refresh_20261019/batches/06_scenes/output/chenxia_array_chamber.png",
+          "sha256": "a67b57086b1bdd61af78b7ad2f23fd9d20c18733f3870b733af7ee5e540baa2c"
+        }
+      ],
+      "review": "Visually checked identity/content, category style and complete composition; integration separate.",
+      "target_dimensions": [
+        1600,
+        900
+      ],
+      "size_matches_technical_source": false,
+      "integration_status": "runtime_installed",
+      "size_note": "Native bytes retained; runtime crop/scale or atlas registration must be resolved separately. Target dimensions are not claimed as delivered dimensions.",
+      "runtime_targets": [
+        "assets/art/events/chenxia_shouchuan_evidence.png"
+      ]
+    },
+    {
+      "id": "33d0cca023604ad0",
+      "batch": "09_events",
+      "kind": "planned",
+      "label": "sea_chart_departure.png",
+      "source": "assets/art/events/yunxi_auction.png",
+      "output": "art_sources/refresh_20261019/batches/09_events/output/sea_chart_departure.png",
+      "brief": "闻人照筹船与出海，呼应海图、海船和同一人物",
+      "spec": {
+        "path": "assets/art/events/yunxi_auction.png",
+        "sha256": "35c927dd2e92f05f2cf7d673a9ee03713e1689c63975fdac1a82a31bb4f3744e",
+        "format": "PNG",
+        "dimensions": [
+          1600,
+          900
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          16,
+          9
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_generated",
+      "priority": "P2",
+      "dependencies": [],
+      "tool_refs": [
+        "art_sources/refresh_20261019/approved_samples/13_event.png",
+        "art_sources/refresh_20261019/batches/02_key_portraits/candidates/wenren_zhao.png",
+        "art_sources/refresh_20261019/batches/06_scenes/output/sea_ship_deck.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/09_events/output/prompts/33d0cca023604ad0.txt",
+      "newly_generated": true,
+      "sha256": "fdf93d24c040c020e1044ddf22093f1957b0b5e92e26a0e610f494ea3b22d24f",
+      "native_dimensions": [
+        1672,
+        940
+      ],
+      "native_mode": "RGB",
+      "alpha_extrema": null,
+      "tool_logical_path": "C:\\Users\\Kuroro\\.codex\\generated_images\\01a15203-e7bc-7bc0-b21d-f11948dc04a9\\exec-d541da40-ea8d-4687-8adc-18373368e614.png",
+      "tool_physical_path": "D:\\claude\\flash\\.tmp\\imagegen_storage\\generated_images\\01a15203-e7bc-7bc0-b21d-f11948dc04a9\\exec-d541da40-ea8d-4687-8adc-18373368e614.png",
+      "input_hashes": [
+        {
+          "path": "art_sources/refresh_20261019/approved_samples/13_event.png",
+          "sha256": "29dfc8b888a31fb0416861b2eaac9c7a4fb569cdd8d51d80afd3c94fa7b562a7"
+        },
+        {
+          "path": "art_sources/refresh_20261019/batches/02_key_portraits/candidates/wenren_zhao.png",
+          "sha256": "67b9689ddc3361f4cf97376dc5254d3062028c574bed418e381a217f5f19be14"
+        },
+        {
+          "path": "art_sources/refresh_20261019/batches/06_scenes/output/sea_ship_deck.png",
+          "sha256": "9f3939d526f464ca36c826204f880dec25e1818e8396266a557718b5b3bdd50f"
+        }
+      ],
+      "review": "Visually checked identity/content, category style and complete composition; integration separate.",
+      "target_dimensions": [
+        1600,
+        900
+      ],
+      "size_matches_technical_source": false,
+      "integration_status": "runtime_installed",
+      "size_note": "Native bytes retained; runtime crop/scale or atlas registration must be resolved separately. Target dimensions are not claimed as delivered dimensions.",
+      "runtime_targets": [
+        "assets/art/events/sea_chart_departure.png"
+      ]
+    },
+    {
+      "id": "f4c4fb80b9f6f265",
+      "batch": "09_events",
+      "kind": "planned",
+      "label": "wenren_missing_trace.png",
+      "source": "assets/art/events/yunxi_auction.png",
+      "output": "art_sources/refresh_20261019/batches/09_events/output/wenren_missing_trace.png",
+      "brief": "闻人照出海失联后的船队消息／遗留线索；复用海图与海船，不以遗体或葬礼断言人物已死",
+      "spec": {
+        "path": "assets/art/events/yunxi_auction.png",
+        "sha256": "35c927dd2e92f05f2cf7d673a9ee03713e1689c63975fdac1a82a31bb4f3744e",
+        "format": "PNG",
+        "dimensions": [
+          1600,
+          900
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          16,
+          9
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_generated",
+      "priority": "P2",
+      "dependencies": [],
+      "tool_refs": [
+        "art_sources/refresh_20261019/approved_samples/13_event.png",
+        "art_sources/refresh_20261019/batches/02_key_portraits/candidates/wenren_zhao.png",
+        "art_sources/refresh_20261019/batches/06_scenes/output/wanghai_chart_shop.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/09_events/output/prompts/f4c4fb80b9f6f265.txt",
+      "newly_generated": true,
+      "sha256": "3c6638ffbd32e9323286f9988a0916a77d23a39fbca45b9e677574404aeba41d",
+      "native_dimensions": [
+        1672,
+        941
+      ],
+      "native_mode": "RGB",
+      "alpha_extrema": null,
+      "tool_logical_path": "C:\\Users\\Kuroro\\.codex\\generated_images\\01a15203-e7bc-7bc0-b21d-f11948dc04a9\\exec-6c5af785-df03-4e93-a122-0dccf62b7a47.png",
+      "tool_physical_path": "D:\\claude\\flash\\.tmp\\imagegen_storage\\generated_images\\01a15203-e7bc-7bc0-b21d-f11948dc04a9\\exec-6c5af785-df03-4e93-a122-0dccf62b7a47.png",
+      "input_hashes": [
+        {
+          "path": "art_sources/refresh_20261019/approved_samples/13_event.png",
+          "sha256": "29dfc8b888a31fb0416861b2eaac9c7a4fb569cdd8d51d80afd3c94fa7b562a7"
+        },
+        {
+          "path": "art_sources/refresh_20261019/batches/02_key_portraits/candidates/wenren_zhao.png",
+          "sha256": "67b9689ddc3361f4cf97376dc5254d3062028c574bed418e381a217f5f19be14"
+        },
+        {
+          "path": "art_sources/refresh_20261019/batches/06_scenes/output/wanghai_chart_shop.png",
+          "sha256": "8a722bb11cc2af80968298995b00dd51c4b42b440e41f05627065b34f484f041"
+        }
+      ],
+      "review": "Visually checked identity/content, category style and complete composition; integration separate.",
+      "target_dimensions": [
+        1600,
+        900
+      ],
+      "size_matches_technical_source": false,
+      "integration_status": "runtime_installed",
+      "size_note": "Native bytes retained; runtime crop/scale or atlas registration must be resolved separately. Target dimensions are not claimed as delivered dimensions.",
+      "runtime_targets": [
+        "assets/art/events/wenren_missing_trace.png"
+      ]
+    },
+    {
+      "id": "62267728bacc0378",
+      "batch": "09_events",
+      "kind": "planned",
+      "label": "wen_zhaoheng_testimony.png",
+      "source": "assets/art/events/yunxi_auction.png",
+      "output": "art_sources/refresh_20261019/batches/09_events/output/wen_zhaoheng_testimony.png",
+      "brief": "约200年前温照衡建立信任后口述封存往事的版本；沿用元婴后期身份，后期真相与初期素材分开",
+      "spec": {
+        "path": "assets/art/events/yunxi_auction.png",
+        "sha256": "35c927dd2e92f05f2cf7d673a9ee03713e1689c63975fdac1a82a31bb4f3744e",
+        "format": "PNG",
+        "dimensions": [
+          1600,
+          900
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          16,
+          9
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_generated",
+      "priority": "P2",
+      "dependencies": [
+        "motif:old_city_seal_candidate"
+      ],
+      "tool_refs": [
+        "art_sources/refresh_20261019/approved_samples/13_event.png",
+        "art_sources/refresh_20261019/batches/02_key_portraits/candidates/auction_elder.png",
+        "art_sources/refresh_20261019/batches/06_scenes/output/tianhe_ferry_reflection.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/09_events/output/prompts/62267728bacc0378.txt",
+      "newly_generated": true,
+      "sha256": "4f4936a7e86e8749a6ac703fd51b7ff6dc80875eded7ed61023124e3aef52f64",
+      "native_dimensions": [
+        1672,
+        941
+      ],
+      "native_mode": "RGB",
+      "alpha_extrema": null,
+      "tool_logical_path": "C:\\Users\\Kuroro\\.codex\\generated_images\\01a15203-e7bc-7bc0-b21d-f11948dc04a9\\exec-0df2af7d-060f-4bdc-b977-af5012e2164b.png",
+      "tool_physical_path": "D:\\claude\\flash\\.tmp\\imagegen_storage\\generated_images\\01a15203-e7bc-7bc0-b21d-f11948dc04a9\\exec-0df2af7d-060f-4bdc-b977-af5012e2164b.png",
+      "input_hashes": [
+        {
+          "path": "art_sources/refresh_20261019/approved_samples/13_event.png",
+          "sha256": "29dfc8b888a31fb0416861b2eaac9c7a4fb569cdd8d51d80afd3c94fa7b562a7"
+        },
+        {
+          "path": "art_sources/refresh_20261019/batches/02_key_portraits/candidates/auction_elder.png",
+          "sha256": "fa589f9d1def83d1511d4b8724dd0c0b3ba1d43181e4aaf4e7325a5144b9ec8a"
+        },
+        {
+          "path": "art_sources/refresh_20261019/batches/06_scenes/output/tianhe_ferry_reflection.png",
+          "sha256": "bc3bf82f20980ca815ac76766111045e175e532bfabd6f463216abdf2afe9c51"
+        }
+      ],
+      "review": "Visually checked identity/content, category style and complete composition; integration separate.",
+      "target_dimensions": [
+        1600,
+        900
+      ],
+      "size_matches_technical_source": false,
+      "integration_status": "candidate_only_not_runtime_integrated",
+      "size_note": "Native bytes retained; runtime crop/scale or atlas registration must be resolved separately. Target dimensions are not claimed as delivered dimensions."
+    },
+    {
+      "id": "543fae99d57ac98f",
+      "batch": "09_events",
+      "kind": "planned",
+      "label": "wen_zhaoheng_legacy.png",
+      "source": "assets/art/events/yunxi_auction.png",
+      "output": "art_sources/refresh_20261019/batches/09_events/output/wen_zhaoheng_legacy.png",
+      "brief": "错过温照衡生前口述后的遗物、日记与阵图接续版本；使用同一器物母题，不让错过人物卡死主线",
+      "spec": {
+        "path": "assets/art/events/yunxi_auction.png",
+        "sha256": "35c927dd2e92f05f2cf7d673a9ee03713e1689c63975fdac1a82a31bb4f3744e",
+        "format": "PNG",
+        "dimensions": [
+          1600,
+          900
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          16,
+          9
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_generated",
+      "priority": "P2",
+      "dependencies": [
+        "motif:old_city_seal_candidate"
+      ],
+      "tool_refs": [
+        "art_sources/refresh_20261019/approved_samples/13_event.png",
+        "art_sources/refresh_20261019/batches/02_key_portraits/candidates/auction_elder.png",
+        "art_sources/refresh_20261019/batches/06_scenes/output/tianhe_ferry_reflection.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/09_events/output/prompts/543fae99d57ac98f.txt",
+      "newly_generated": true,
+      "sha256": "9fd0371e93bdb00d54b571760ec3996ff1f12041223f225861ca9a175de45402",
+      "native_dimensions": [
+        1672,
+        941
+      ],
+      "native_mode": "RGB",
+      "alpha_extrema": null,
+      "tool_logical_path": "C:\\Users\\Kuroro\\.codex\\generated_images\\01a15203-e7bc-7bc0-b21d-f11948dc04a9\\exec-2e696f22-6712-4f7e-8f84-ae6812627da0.png",
+      "tool_physical_path": "D:\\claude\\flash\\.tmp\\imagegen_storage\\generated_images\\01a15203-e7bc-7bc0-b21d-f11948dc04a9\\exec-2e696f22-6712-4f7e-8f84-ae6812627da0.png",
+      "input_hashes": [
+        {
+          "path": "art_sources/refresh_20261019/approved_samples/13_event.png",
+          "sha256": "29dfc8b888a31fb0416861b2eaac9c7a4fb569cdd8d51d80afd3c94fa7b562a7"
+        },
+        {
+          "path": "art_sources/refresh_20261019/batches/02_key_portraits/candidates/auction_elder.png",
+          "sha256": "fa589f9d1def83d1511d4b8724dd0c0b3ba1d43181e4aaf4e7325a5144b9ec8a"
+        },
+        {
+          "path": "art_sources/refresh_20261019/batches/06_scenes/output/tianhe_ferry_reflection.png",
+          "sha256": "bc3bf82f20980ca815ac76766111045e175e532bfabd6f463216abdf2afe9c51"
+        }
+      ],
+      "review": "Visually checked identity/content, category style and complete composition; integration separate.",
+      "target_dimensions": [
+        1600,
+        900
+      ],
+      "size_matches_technical_source": false,
+      "integration_status": "runtime_installed",
+      "size_note": "Native bytes retained; runtime crop/scale or atlas registration must be resolved separately. Target dimensions are not claimed as delivered dimensions.",
+      "runtime_targets": [
+        "assets/art/events/wen_zhaoheng_legacy.png"
+      ]
+    },
+    {
+      "id": "11ab7bdec82f9d77",
+      "batch": "09_events",
+      "kind": "planned",
+      "label": "old_city_revelation.png",
+      "source": "assets/art/events/yunxi_auction.png",
+      "output": "art_sources/refresh_20261019/batches/09_events/output/old_city_revelation.png",
+      "brief": "旧城封印与遗民历史揭示，不画成任意时间旅行",
+      "spec": {
+        "path": "assets/art/events/yunxi_auction.png",
+        "sha256": "35c927dd2e92f05f2cf7d673a9ee03713e1689c63975fdac1a82a31bb4f3744e",
+        "format": "PNG",
+        "dimensions": [
+          1600,
+          900
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          16,
+          9
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_generated",
+      "priority": "P3",
+      "dependencies": [
+        "motif:old_city_seal_candidate"
+      ],
+      "tool_refs": [
+        "art_sources/refresh_20261019/approved_samples/13_event.png",
+        "art_sources/refresh_20261019/batches/06_scenes/output/tianhe_ferry_reflection.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/09_events/output/prompts/11ab7bdec82f9d77.txt",
+      "newly_generated": true,
+      "sha256": "5bbe4a40a059a459d48a2a59260a10cbfe3cc696919c8e23f3e81ab12d7f7231",
+      "native_dimensions": [
+        1672,
+        941
+      ],
+      "native_mode": "RGB",
+      "alpha_extrema": null,
+      "tool_logical_path": "C:\\Users\\Kuroro\\.codex\\generated_images\\01a15203-e7bc-7bc0-b21d-f11948dc04a9\\exec-f99ecf68-6ff2-429c-8f44-1ff5cccda8a9.png",
+      "tool_physical_path": "D:\\claude\\flash\\.tmp\\imagegen_storage\\generated_images\\01a15203-e7bc-7bc0-b21d-f11948dc04a9\\exec-f99ecf68-6ff2-429c-8f44-1ff5cccda8a9.png",
+      "input_hashes": [
+        {
+          "path": "art_sources/refresh_20261019/approved_samples/13_event.png",
+          "sha256": "29dfc8b888a31fb0416861b2eaac9c7a4fb569cdd8d51d80afd3c94fa7b562a7"
+        },
+        {
+          "path": "art_sources/refresh_20261019/batches/06_scenes/output/tianhe_ferry_reflection.png",
+          "sha256": "bc3bf82f20980ca815ac76766111045e175e532bfabd6f463216abdf2afe9c51"
+        }
+      ],
+      "review": "Visually checked identity/content, category style and complete composition; integration separate.",
+      "target_dimensions": [
+        1600,
+        900
+      ],
+      "size_matches_technical_source": false,
+      "integration_status": "candidate_only_not_runtime_integrated",
+      "size_note": "Native bytes retained; runtime crop/scale or atlas registration must be resolved separately. Target dimensions are not claimed as delivered dimensions."
+    },
+    {
+      "id": "1d3b8aef11b22ee3",
+      "batch": "09_events",
+      "kind": "planned",
+      "label": "ending_reopen_passage.png",
+      "source": "assets/art/events/yunxi_auction.png",
+      "output": "art_sources/refresh_20261019/batches/09_events/output/ending_reopen_passage.png",
+      "brief": "修复重开：照川城部分恢复、通路重开与后续治理；公开真相另作独立状态",
+      "spec": {
+        "path": "assets/art/events/yunxi_auction.png",
+        "sha256": "35c927dd2e92f05f2cf7d673a9ee03713e1689c63975fdac1a82a31bb4f3744e",
+        "format": "PNG",
+        "dimensions": [
+          1600,
+          900
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          16,
+          9
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_generated",
+      "priority": "P3",
+      "dependencies": [],
+      "tool_refs": [
+        "art_sources/refresh_20261019/approved_samples/13_event.png",
+        "art_sources/refresh_20261019/batches/06_scenes/output/tianhe_ferry_reflection.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/09_events/output/prompts/1d3b8aef11b22ee3.txt",
+      "newly_generated": true,
+      "sha256": "c5dbd9c0232623e3da32a35e508483947a29f5e425374afe522c44bf45c45400",
+      "native_dimensions": [
+        1672,
+        941
+      ],
+      "native_mode": "RGB",
+      "alpha_extrema": null,
+      "tool_logical_path": "C:\\Users\\Kuroro\\.codex\\generated_images\\01a15203-e7bc-7bc0-b21d-f11948dc04a9\\exec-c3079b6a-4337-48f5-9669-3c9ab8a69456.png",
+      "tool_physical_path": "D:\\claude\\flash\\.tmp\\imagegen_storage\\generated_images\\01a15203-e7bc-7bc0-b21d-f11948dc04a9\\exec-c3079b6a-4337-48f5-9669-3c9ab8a69456.png",
+      "input_hashes": [
+        {
+          "path": "art_sources/refresh_20261019/approved_samples/13_event.png",
+          "sha256": "29dfc8b888a31fb0416861b2eaac9c7a4fb569cdd8d51d80afd3c94fa7b562a7"
+        },
+        {
+          "path": "art_sources/refresh_20261019/batches/06_scenes/output/tianhe_ferry_reflection.png",
+          "sha256": "bc3bf82f20980ca815ac76766111045e175e532bfabd6f463216abdf2afe9c51"
+        }
+      ],
+      "review": "Visually checked identity/content, category style and complete composition; integration separate.",
+      "target_dimensions": [
+        1600,
+        900
+      ],
+      "size_matches_technical_source": false,
+      "integration_status": "candidate_only_not_runtime_integrated",
+      "size_note": "Native bytes retained; runtime crop/scale or atlas registration must be resolved separately. Target dimensions are not claimed as delivered dimensions."
+    },
+    {
+      "id": "00bd71c19b7a630c",
+      "batch": "09_events",
+      "kind": "planned",
+      "label": "ending_replace_array.png",
+      "source": "assets/art/events/yunxi_auction.png",
+      "output": "art_sources/refresh_20261019/batches/09_events/output/ending_replace_array.png",
+      "brief": "替换旧阵：疏散可救者、部分遗迹永久封闭并另修通路；与重开结局有可见差异",
+      "spec": {
+        "path": "assets/art/events/yunxi_auction.png",
+        "sha256": "35c927dd2e92f05f2cf7d673a9ee03713e1689c63975fdac1a82a31bb4f3744e",
+        "format": "PNG",
+        "dimensions": [
+          1600,
+          900
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          16,
+          9
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_generated",
+      "priority": "P3",
+      "dependencies": [],
+      "tool_refs": [
+        "art_sources/refresh_20261019/approved_samples/13_event.png",
+        "art_sources/refresh_20261019/batches/06_scenes/output/tianhe_ferry_reflection.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/09_events/output/prompts/00bd71c19b7a630c.txt",
+      "newly_generated": true,
+      "sha256": "ea5c18153b167b2f880aca34f6b234e23c7dc3873a782301653832e067e76590",
+      "native_dimensions": [
+        1672,
+        941
+      ],
+      "native_mode": "RGB",
+      "alpha_extrema": null,
+      "tool_logical_path": "C:\\Users\\Kuroro\\.codex\\generated_images\\01a15203-e7bc-7bc0-b21d-f11948dc04a9\\exec-a082dbcf-2f53-49c8-b2b4-243f5332a056.png",
+      "tool_physical_path": "D:\\claude\\flash\\.tmp\\imagegen_storage\\generated_images\\01a15203-e7bc-7bc0-b21d-f11948dc04a9\\exec-a082dbcf-2f53-49c8-b2b4-243f5332a056.png",
+      "input_hashes": [
+        {
+          "path": "art_sources/refresh_20261019/approved_samples/13_event.png",
+          "sha256": "29dfc8b888a31fb0416861b2eaac9c7a4fb569cdd8d51d80afd3c94fa7b562a7"
+        },
+        {
+          "path": "art_sources/refresh_20261019/batches/06_scenes/output/tianhe_ferry_reflection.png",
+          "sha256": "bc3bf82f20980ca815ac76766111045e175e532bfabd6f463216abdf2afe9c51"
+        }
+      ],
+      "review": "Visually checked identity/content, category style and complete composition; integration separate.",
+      "target_dimensions": [
+        1600,
+        900
+      ],
+      "size_matches_technical_source": false,
+      "integration_status": "candidate_only_not_runtime_integrated",
+      "size_note": "Native bytes retained; runtime crop/scale or atlas registration must be resolved separately. Target dimensions are not claimed as delivered dimensions."
+    },
+    {
+      "id": "1c5942d550da4ce5",
+      "batch": "09_events",
+      "kind": "planned",
+      "label": "ending_personal_passage.png",
+      "source": "assets/art/events/yunxi_auction.png",
+      "output": "art_sources/refresh_20261019/batches/09_events/output/ending_personal_passage.png",
+      "brief": "自寻通路：个人飞升、移交证据与方案、后续责任按交托情况延续；不预设毁城或隐瞒真相",
+      "spec": {
+        "path": "assets/art/events/yunxi_auction.png",
+        "sha256": "35c927dd2e92f05f2cf7d673a9ee03713e1689c63975fdac1a82a31bb4f3744e",
+        "format": "PNG",
+        "dimensions": [
+          1600,
+          900
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          16,
+          9
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_generated",
+      "priority": "P3",
+      "dependencies": [],
+      "tool_refs": [
+        "art_sources/refresh_20261019/approved_samples/13_event.png",
+        "art_sources/refresh_20261019/batches/06_scenes/output/tianhe_ferry_reflection.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/09_events/output/prompts/1c5942d550da4ce5.txt",
+      "newly_generated": true,
+      "sha256": "5f8d1aa2bc5cc302f3e601edc3590be201272a9e30c68a28ec4601db29cc9959",
+      "native_dimensions": [
+        1672,
+        941
+      ],
+      "native_mode": "RGB",
+      "alpha_extrema": null,
+      "tool_logical_path": "C:\\Users\\Kuroro\\.codex\\generated_images\\01a15203-e7bc-7bc0-b21d-f11948dc04a9\\exec-b585662a-db4d-4bf9-8730-55eccb91e542.png",
+      "tool_physical_path": "D:\\claude\\flash\\.tmp\\imagegen_storage\\generated_images\\01a15203-e7bc-7bc0-b21d-f11948dc04a9\\exec-b585662a-db4d-4bf9-8730-55eccb91e542.png",
+      "input_hashes": [
+        {
+          "path": "art_sources/refresh_20261019/approved_samples/13_event.png",
+          "sha256": "29dfc8b888a31fb0416861b2eaac9c7a4fb569cdd8d51d80afd3c94fa7b562a7"
+        },
+        {
+          "path": "art_sources/refresh_20261019/batches/06_scenes/output/tianhe_ferry_reflection.png",
+          "sha256": "bc3bf82f20980ca815ac76766111045e175e532bfabd6f463216abdf2afe9c51"
+        }
+      ],
+      "review": "Visually checked identity/content, category style and complete composition; integration separate.",
+      "target_dimensions": [
+        1600,
+        900
+      ],
+      "size_matches_technical_source": false,
+      "integration_status": "candidate_only_not_runtime_integrated",
+      "size_note": "Native bytes retained; runtime crop/scale or atlas registration must be resolved separately. Target dimensions are not claimed as delivered dimensions."
+    }
+  ]
+}

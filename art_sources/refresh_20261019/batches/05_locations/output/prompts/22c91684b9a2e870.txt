@@ -1,0 +1,10 @@
+Use case: style-transfer / identity-preserve / production game art.
+Asset: canglan_city.png
+Content request: 沧澜医药城：丹会、药市、水榭；独立于沧澜阁
+This is one independent production asset for an original Chinese cultivation RPG.
+Input image 1: art_sources/refresh_20261019/approved_samples/04_location.png. Role: approved drawing-style reference ONLY; do not copy its subject, architecture, layout or camera.
+Preserve the existing category-specific approved hand-drawn style: clear outlines, broad grouped colour areas, restrained shadows and low texture density. Do not impose character C anatomy rules on environments, maps, items or UI. No photorealism, cinematic bloom, dense surface scratches or depth-of-field blur.
+Empty environment: no characters, animals, UI, baked text, signs, labels, names or watermark. Preserve clear functional spaces and complete landmarks. Scene banners need a central 4:1 safe crop. Battle fields keep clear left/right standing ground. Qingyun is a small sect; do not copy monumental palace scale from a style sample.
+Old technical target: 1672x941 pixels. Request the same proportions and retain usable safe margins; actual native output size will be measured, never mislabelled. Background: opaque.
+IMPORTANT NEW CONTENT: this is NOT a repaint of the old technical-source scene. Completely replace its subject and composition according to the requested new asset. The old size anchor does not authorize copying its city, terrain, camera or buildings. Retain ONLY the approved drawing language from the style reference.
+NEW ELEVATED THREE-QUARTER CITY OVERVIEW: a low lakeside medical city organized around water gardens, short bridges, a modest pharmacy courtyard, orderly herb drying yards and a small medicinal market, green-grey roofs with ivory walls, rounded wooded hills far behind. Buildings low and human-scale, open areas for each function. Not a mountain sect, not a giant cliff temple; no sheer peaks or numerous waterfalls.

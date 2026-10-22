@@ -4,20 +4,209 @@
     "filename": "tiannan_five_city_plan.png",
     "brief": "五城五宗及河运／海域整体规划候选；不直接覆盖当前可玩地图",
     "status": "planned_or_existing_candidate",
-    "output_path": "D:/fqh/flash/art_sources/refresh_20261019/batches/08_maps/output/tiannan_five_city_plan.png"
+    "output_path": "art_sources/refresh_20261019/batches/08_maps/output/tiannan_five_city_plan.png",
+    "content_outline": "docs/GAME_OUTLINE.md",
+    "outline_sections": [
+      "3",
+      "8",
+      "9.1",
+      "18"
+    ],
+    "content_plan": "art_sources/refresh_20261019/CONTENT_PLAN.md",
+    "style_reference": "art_sources/refresh_20261019/batches/08_maps/references.json",
+    "technical_spec": {
+      "path": "assets/art/map/region_tiannan.png",
+      "sha256": "9c25177e91df5b3bb50a188c8ef97b52981ae174ac947c4d2616197ae3a73a44",
+      "format": "PNG",
+      "dimensions": [
+        1586,
+        992
+      ],
+      "mode": "RGB",
+      "background": "opaque",
+      "native_vector_required": false,
+      "aspect_ratio": [
+        793,
+        496
+      ],
+      "actor_layouts": [],
+      "actor_layout_note": "No actor atlas definition on this technical source."
+    },
+    "spec_policy": "inherit_existing_source; retain measured native output separately; never mislabel dimensions",
+    "reference_bindings": [
+      {
+        "id": "technical:assets/art/map/region_tiannan.png",
+        "role": "dimensions_alpha_layout_only"
+      },
+      {
+        "id": "style:05_map",
+        "role": "drawing_style_only"
+      },
+      {
+        "id": "original:05_map",
+        "role": "original_game_style_only_no_copy"
+      }
+    ],
+    "identity_policy": "If a registered person appears, use their identity_registry image and hash; unseen characters wait for batch02; never substitute style-reference faces.",
+    "generation_gate": "generate_after_dependencies",
+    "dependencies": []
   },
   {
     "priority": "P2",
     "filename": "near_sea_map.png",
     "brief": "近海群岛、航线空间和沉船遗址布局；标签与路线独立",
     "status": "planned_or_existing_candidate",
-    "output_path": "D:/fqh/flash/art_sources/refresh_20261019/batches/08_maps/output/near_sea_map.png"
+    "output_path": "art_sources/refresh_20261019/batches/08_maps/output/near_sea_map.png",
+    "content_outline": "docs/GAME_OUTLINE.md",
+    "outline_sections": [
+      "3",
+      "8",
+      "9.1",
+      "18"
+    ],
+    "content_plan": "art_sources/refresh_20261019/CONTENT_PLAN.md",
+    "style_reference": "art_sources/refresh_20261019/batches/08_maps/references.json",
+    "technical_spec": {
+      "path": "assets/art/map/region_tiannan.png",
+      "sha256": "9c25177e91df5b3bb50a188c8ef97b52981ae174ac947c4d2616197ae3a73a44",
+      "format": "PNG",
+      "dimensions": [
+        1586,
+        992
+      ],
+      "mode": "RGB",
+      "background": "opaque",
+      "native_vector_required": false,
+      "aspect_ratio": [
+        793,
+        496
+      ],
+      "actor_layouts": [],
+      "actor_layout_note": "No actor atlas definition on this technical source."
+    },
+    "spec_policy": "inherit_existing_source; retain measured native output separately; never mislabel dimensions",
+    "reference_bindings": [
+      {
+        "id": "technical:assets/art/map/region_tiannan.png",
+        "role": "dimensions_alpha_layout_only"
+      },
+      {
+        "id": "style:05_map",
+        "role": "drawing_style_only"
+      },
+      {
+        "id": "original:05_map",
+        "role": "original_game_style_only_no_copy"
+      }
+    ],
+    "identity_policy": "If a registered person appears, use their identity_registry image and hash; unseen characters wait for batch02; never substitute style-reference faces.",
+    "generation_gate": "generate_after_dependencies",
+    "dependencies": []
   },
   {
     "priority": "P2",
     "filename": "chenxia_interior_map.png",
     "brief": "古境内部支路／阵室关系；先确定真实房间再画",
     "status": "planned_or_existing_candidate",
-    "output_path": "D:/fqh/flash/art_sources/refresh_20261019/batches/08_maps/output/chenxia_interior_map.png"
+    "output_path": "art_sources/refresh_20261019/batches/08_maps/output/chenxia_interior_map.png",
+    "content_outline": "docs/GAME_OUTLINE.md",
+    "outline_sections": [
+      "3",
+      "8",
+      "9.1",
+      "18"
+    ],
+    "content_plan": "art_sources/refresh_20261019/CONTENT_PLAN.md",
+    "style_reference": "art_sources/refresh_20261019/batches/08_maps/references.json",
+    "technical_spec": {
+      "path": "assets/art/map/region_tiannan.png",
+      "sha256": "9c25177e91df5b3bb50a188c8ef97b52981ae174ac947c4d2616197ae3a73a44",
+      "format": "PNG",
+      "dimensions": [
+        1586,
+        992
+      ],
+      "mode": "RGB",
+      "background": "opaque",
+      "native_vector_required": false,
+      "aspect_ratio": [
+        793,
+        496
+      ],
+      "actor_layouts": [],
+      "actor_layout_note": "No actor atlas definition on this technical source."
+    },
+    "spec_policy": "inherit_existing_source; retain measured native output separately; never mislabel dimensions",
+    "reference_bindings": [
+      {
+        "id": "technical:assets/art/map/region_tiannan.png",
+        "role": "dimensions_alpha_layout_only"
+      },
+      {
+        "id": "style:05_map",
+        "role": "drawing_style_only"
+      },
+      {
+        "id": "original:05_map",
+        "role": "original_game_style_only_no_copy"
+      }
+    ],
+    "identity_policy": "If a registered person appears, use their identity_registry image and hash; unseen characters wait for batch02; never substitute style-reference faces.",
+    "generation_gate": "generate_after_dependencies",
+    "dependencies": []
+  },
+  {
+    "priority": "P3",
+    "filename": "zhaochuan_sealed_space_map.png",
+    "brief": "照川城封存空间规划；城门、生活遗迹与阵枢的关系待大纲18节定案，先候选，不提前烘焙路线或结局状态",
+    "status": "planned_or_existing_candidate",
+    "output_path": "art_sources/refresh_20261019/batches/08_maps/output/zhaochuan_sealed_space_map.png",
+    "content_outline": "docs/GAME_OUTLINE.md",
+    "outline_sections": [
+      "3",
+      "8",
+      "9.1",
+      "18"
+    ],
+    "content_plan": "art_sources/refresh_20261019/CONTENT_PLAN.md",
+    "style_reference": "art_sources/refresh_20261019/batches/08_maps/references.json",
+    "technical_spec": {
+      "path": "assets/art/map/region_tiannan.png",
+      "sha256": "9c25177e91df5b3bb50a188c8ef97b52981ae174ac947c4d2616197ae3a73a44",
+      "format": "PNG",
+      "dimensions": [
+        1586,
+        992
+      ],
+      "mode": "RGB",
+      "background": "opaque",
+      "native_vector_required": false,
+      "aspect_ratio": [
+        793,
+        496
+      ],
+      "actor_layouts": [],
+      "actor_layout_note": "No actor atlas definition on this technical source."
+    },
+    "spec_policy": "inherit_existing_source; retain measured native output separately; never mislabel dimensions",
+    "reference_bindings": [
+      {
+        "id": "technical:assets/art/map/region_tiannan.png",
+        "role": "dimensions_alpha_layout_only"
+      },
+      {
+        "id": "style:05_map",
+        "role": "drawing_style_only"
+      },
+      {
+        "id": "original:05_map",
+        "role": "original_game_style_only_no_copy"
+      }
+    ],
+    "identity_policy": "If a registered person appears, use their identity_registry image and hash; unseen characters wait for batch02; never substitute style-reference faces.",
+    "generation_gate": "generate_after_dependencies",
+    "dependencies": [
+      "motif:old_city_seal_candidate"
+    ]
   }
 ]

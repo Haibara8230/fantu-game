@@ -2,18 +2,21 @@
   {
     "id": "13_event",
     "title": "事件插画 · 飞升通道",
-    "old": "D:/fqh/flash/assets/art/events/ascension_opens.png",
-    "ref": "D:/fqh/flash/.tmp/mcs_style_reference_20261019/originals/steam_08.jpg",
+    "old": "assets/art/events/ascension_opens.png",
+    "ref": "PNG/mcs_style_reference_20261019/originals/steam_08.jpg",
     "mode": "imagegen",
     "note": "参考突破演出画法；同类演出参考，并非同一事件",
     "transparent": false,
     "spec": "An original ASCENSION PASSAGE event illustration. Preserve target content and arrangement: a small covered boat and simple wooden dock low-left, a few white cranes as secondary silhouettes, calm river foreground, a rising white stone cloud bridge from centre toward upper-right, a simple distant celestial gateway/small palace, grouped jade mountain peaks and broad clouds. Reinterpret this as the ACTUAL GAME'S GRAPHIC EVENT / BREAKTHROUGH illustration language from the reference: a strong simple circular or arched luminous motif around the distant gateway, large ornamental cloud curls and mountain silhouettes, muted jade/teal and warm parchment/gold, a few large white highlights, restrained drawn outlines, low detail and deliberate blank areas. The earlier target is far too ornate, cinematic, textured and full of tiny leaves, water ripples and speckled stars: remove that detail. Flat 2D symbolic game vignette with layered scenery, not a realistic epic landscape. Do NOT copy the reference's Chinese calligraphy or breakthrough text. No text at all, no UI, no border, no character closeups, no lens flare or particle storm. Landscape 16:9.",
-    "new": "D:/fqh/flash/.tmp/style_samples_20261019/new/13_event.png",
-    "referenceOutput": "D:/fqh/flash/.tmp/style_samples_20261019/inputs/13_event_reference.png",
-    "comparison": "D:/fqh/flash/.tmp/style_samples_20261019/compare/13_event.png",
-    "promptPath": "D:/fqh/flash/.tmp/style_samples_20261019/prompts/13_event.txt",
+    "new": "art_sources/refresh_20261019/approved_samples/13_event.png",
     "panelHeight": 350,
     "refNote": "官方筑基演出；并非同一事件",
-    "packaged_new": "D:/fqh/flash/art_sources/refresh_20261019/approved_samples/13_event.png"
+    "packaged_new": "art_sources/refresh_20261019/approved_samples/13_event.png",
+    "historical_paths": {
+      "referenceOutput": ".tmp/style_samples_20261019/inputs/13_event_reference.png",
+      "comparison": ".tmp/style_samples_20261019/compare/13_event.png",
+      "promptPath": ".tmp/style_samples_20261019/prompts/13_event.txt"
+    },
+    "historical_note": "历史临时材料，不是当前生图输入；使用 packaged_new 与 ref。"
   }
 ]

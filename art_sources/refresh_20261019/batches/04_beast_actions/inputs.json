@@ -13,7 +13,6 @@
       "mode": "RGBA",
       "transparent_fraction": 0.7688
     },
-    "absolute_path": "D:/fqh/flash/assets/art/battle/bear_king.png",
     "actor_layouts": [
       {
         "actor_id": "bear_king",
@@ -90,7 +89,6 @@
       "mode": "RGBA",
       "transparent_fraction": 0.4287
     },
-    "absolute_path": "D:/fqh/flash/assets/art/battle/chilian_snake.png",
     "actor_layouts": [
       {
         "actor_id": "chilian_snake",
@@ -192,7 +190,6 @@
       "mode": "RGBA",
       "transparent_fraction": 0.4674
     },
-    "absolute_path": "D:/fqh/flash/assets/art/battle/huo_xi.png",
     "actor_layouts": [
       {
         "actor_id": "huo_xi",
@@ -269,7 +266,6 @@
       "mode": "RGBA",
       "transparent_fraction": 0.7168
     },
-    "absolute_path": "D:/fqh/flash/assets/art/battle/huo_ya.png",
     "actor_layouts": [
       {
         "actor_id": "huo_ya",
@@ -346,7 +342,6 @@
       "mode": "RGBA",
       "transparent_fraction": 0.7768
     },
-    "absolute_path": "D:/fqh/flash/assets/art/battle/qinglin_snake.png",
     "actor_layouts": [
       {
         "actor_id": "qinglin_snake",
@@ -423,7 +418,6 @@
       "mode": "RGBA",
       "transparent_fraction": 0.5336
     },
-    "absolute_path": "D:/fqh/flash/assets/art/battle/shan_xiao.png",
     "actor_layouts": [
       {
         "actor_id": "shan_xiao",
@@ -525,7 +519,6 @@
       "mode": "RGBA",
       "transparent_fraction": 0.4906
     },
-    "absolute_path": "D:/fqh/flash/assets/art/battle/wolf_pack.png",
     "actor_layouts": [
       {
         "actor_id": "wolf_pack",
@@ -602,7 +595,6 @@
       "mode": "RGBA",
       "transparent_fraction": 0.4188
     },
-    "absolute_path": "D:/fqh/flash/assets/art/battle/yanjia_xi.png",
     "actor_layouts": [
       {
         "actor_id": "yanjia_xi",
@@ -704,7 +696,6 @@
       "mode": "RGBA",
       "transparent_fraction": 0.5228
     },
-    "absolute_path": "D:/fqh/flash/assets/art/beasts_atlas_v1.png",
     "actor_layouts": [
       {
         "actor_id": "wolf_pack",

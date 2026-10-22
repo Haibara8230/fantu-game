@@ -12,7 +12,6 @@
       ],
       "mode": "RGB"
     },
-    "absolute_path": "D:/fqh/flash/assets/art/bamboo_arena_v1.png",
     "actor_layouts": []
   },
   {
@@ -28,7 +27,6 @@
       ],
       "mode": "RGB"
     },
-    "absolute_path": "D:/fqh/flash/assets/art/battle/canglan_pavilion.png",
     "actor_layouts": []
   },
   {
@@ -44,7 +42,6 @@
       ],
       "mode": "RGB"
     },
-    "absolute_path": "D:/fqh/flash/assets/art/battle/changqing_valley.png",
     "actor_layouts": []
   },
   {
@@ -60,7 +57,6 @@
       ],
       "mode": "RGB"
     },
-    "absolute_path": "D:/fqh/flash/assets/art/battle/chifeng.png",
     "actor_layouts": []
   },
   {
@@ -76,7 +72,6 @@
       ],
       "mode": "RGB"
     },
-    "absolute_path": "D:/fqh/flash/assets/art/battle/chixiao_gate.png",
     "actor_layouts": []
   },
   {
@@ -92,7 +87,6 @@
       ],
       "mode": "RGB"
     },
-    "absolute_path": "D:/fqh/flash/assets/art/battle/ferry.png",
     "actor_layouts": []
   },
   {
@@ -108,7 +102,6 @@
       ],
       "mode": "RGB"
     },
-    "absolute_path": "D:/fqh/flash/assets/art/battle/market.png",
     "actor_layouts": []
   },
   {
@@ -124,7 +117,6 @@
       ],
       "mode": "RGB"
     },
-    "absolute_path": "D:/fqh/flash/assets/art/battle/nanming.png",
     "actor_layouts": []
   },
   {
@@ -140,7 +132,6 @@
       ],
       "mode": "RGB"
     },
-    "absolute_path": "D:/fqh/flash/assets/art/battle/ridge.png",
     "actor_layouts": []
   },
   {
@@ -156,7 +147,6 @@
       ],
       "mode": "RGB"
     },
-    "absolute_path": "D:/fqh/flash/assets/art/battle/road.png",
     "actor_layouts": []
   },
   {
@@ -172,7 +162,6 @@
       ],
       "mode": "RGB"
     },
-    "absolute_path": "D:/fqh/flash/assets/art/battle/ruin.png",
     "actor_layouts": []
   },
   {
@@ -188,7 +177,6 @@
       ],
       "mode": "RGB"
     },
-    "absolute_path": "D:/fqh/flash/assets/art/battle/sect.png",
     "actor_layouts": []
   },
   {
@@ -204,7 +192,6 @@
       ],
       "mode": "RGB"
     },
-    "absolute_path": "D:/fqh/flash/assets/art/battle/town.png",
     "actor_layouts": []
   },
   {
@@ -220,7 +207,6 @@
       ],
       "mode": "RGB"
     },
-    "absolute_path": "D:/fqh/flash/assets/art/battle/wild.png",
     "actor_layouts": []
   },
   {
@@ -236,7 +222,6 @@
       ],
       "mode": "RGB"
     },
-    "absolute_path": "D:/fqh/flash/assets/art/battle/xuanyue_gate.png",
     "actor_layouts": []
   }
 ]

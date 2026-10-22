@@ -1,0 +1,2282 @@
+{
+  "scope": "candidate delivery; runtime installs listed in INTEGRATION.json",
+  "counts": {
+    "delivered_generated": 4,
+    "delivered_reuse": 37
+  },
+  "jobs": [
+    {
+      "id": "a6791bd486874f44",
+      "batch": "12_vfx",
+      "kind": "existing",
+      "label": "assets/art/battle/tribulation.png",
+      "source": "assets/art/battle/tribulation.png",
+      "output": "art_sources/refresh_20261019/batches/12_vfx/output/existing/art/battle/tribulation.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/art/battle/tribulation.png",
+        "sha256": "58b6defb18ae05453b84267c85b9783d80d4274f7e30763fc0cc434b10836969",
+        "format": "PNG",
+        "dimensions": [
+          1536,
+          1024
+        ],
+        "mode": "RGBA",
+        "background": "transparent_required",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          3,
+          2
+        ],
+        "actor_layouts": [
+          {
+            "actor_id": "tribulation_core",
+            "source_role": "preferred",
+            "definition": {
+              "texture": "res://assets/art/rival_atlas_v2.png",
+              "preferred": "res://assets/art/battle/tribulation.png",
+              "columns": 3,
+              "rows": 2,
+              "frames": {
+                "idle": 0,
+                "prepare": 1,
+                "attack": 2,
+                "cast": 3,
+                "hit": 4,
+                "guard": 5
+              },
+              "faces_right": true,
+              "height_ratio": 0.85,
+              "tint": "#bcd8ff8c",
+              "preferred_layout": {
+                "tint": "#ffffff",
+                "faces_right": false
+              }
+            }
+          },
+          {
+            "actor_id": "tribulation_nascent",
+            "source_role": "preferred",
+            "definition": {
+              "texture": "res://assets/art/rival_atlas_v2.png",
+              "preferred": "res://assets/art/battle/tribulation.png",
+              "columns": 3,
+              "rows": 2,
+              "frames": {
+                "idle": 0,
+                "prepare": 1,
+                "attack": 2,
+                "cast": 3,
+                "hit": 4,
+                "guard": 5
+              },
+              "faces_right": true,
+              "height_ratio": 0.85,
+              "tint": "#bcd8ff8c",
+              "preferred_layout": {
+                "tint": "#ffffff",
+                "faces_right": false
+              }
+            }
+          },
+          {
+            "actor_id": "tribulation_deity",
+            "source_role": "preferred",
+            "definition": {
+              "texture": "res://assets/art/rival_atlas_v2.png",
+              "preferred": "res://assets/art/battle/tribulation.png",
+              "columns": 3,
+              "rows": 2,
+              "frames": {
+                "idle": 0,
+                "prepare": 1,
+                "attack": 2,
+                "cast": 3,
+                "hit": 4,
+                "guard": 5
+              },
+              "faces_right": true,
+              "height_ratio": 0.85,
+              "tint": "#bcd8ff8c",
+              "preferred_layout": {
+                "tint": "#ffffff",
+                "faces_right": false
+              }
+            }
+          }
+        ],
+        "actor_layout_note": "For source_role=preferred, apply preferred_layout overrides, including removal of null frame_regions; do not use fallback-sheet cropping."
+      },
+      "status": "delivered_generated",
+      "tool_refs": [
+        "art_sources/refresh_20261019/batches/12_vfx/output/existing/art/battle/originals/tribulation_rejected_3ed76c6e.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/12_vfx/output/prompts/a6791bd486874f44.txt",
+      "rejected_attempts": [
+        {
+          "path": "art_sources/refresh_20261019/batches/12_vfx/output/existing/art/battle/originals/tribulation_rejected_3ed76c6e.png",
+          "sha256": "3ed76c6ea4e9d2f853f948f4bb5216754759451443e3f20d890b3cf67a61865c",
+          "reason": "Real alpha exists but attack bolt crosses the y=512 row boundary and several frame silhouettes approach cell edges. Reframe each entire effect smaller within its 512x512 cell with clear transparent gutters; retain all six distinct action states and down-left attack.",
+          "tool_physical_path": "D:\\claude\\flash\\.tmp\\imagegen_storage\\generated_images\\01a156b8-68e7-71d3-9e49-188fe4225a5e\\exec-93c065bc-9f6d-4f6a-be94-3137e5da4ba0.png",
+          "prompt_path": "art_sources/refresh_20261019/batches/12_vfx/output/existing/art/battle/originals/tribulation_rejected_3ed76c6e.prompt.txt"
+        }
+      ],
+      "edit_reason": "Shrink every complete cloud within its own equal cell and clean transparent gutters, preserving original six-state order and left-facing attack.",
+      "newly_generated": true,
+      "sha256": "63c2be910ccbac84fd5d9a81bfd2402587b73718a4b455c1326e0295f2215b99",
+      "native_dimensions": [
+        1536,
+        1024
+      ],
+      "native_mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        254
+      ],
+      "tool_logical_path": "C:\\Users\\Kuroro\\.codex\\generated_images\\01a156b8-68e7-71d3-9e49-188fe4225a5e\\exec-f335561d-92a9-4b7c-8081-6872e49db1ed.png",
+      "tool_physical_path": "D:\\claude\\flash\\.tmp\\imagegen_storage\\generated_images\\01a156b8-68e7-71d3-9e49-188fe4225a5e\\exec-f335561d-92a9-4b7c-8081-6872e49db1ed.png",
+      "input_hashes": [
+        {
+          "path": "art_sources/refresh_20261019/batches/12_vfx/output/existing/art/battle/originals/tribulation_rejected_3ed76c6e.png",
+          "sha256": "3ed76c6ea4e9d2f853f948f4bb5216754759451443e3f20d890b3cf67a61865c"
+        }
+      ],
+      "review": "Visually checked identity/content, category style and complete composition; integration separate.",
+      "atlas_checks": {
+        "native_canvas": [
+          1536,
+          1024
+        ],
+        "columns": 3,
+        "rows": 2,
+        "cell_dimensions": [
+          512,
+          512
+        ],
+        "order": [
+          "idle",
+          "prepare",
+          "attack",
+          "cast",
+          "hit",
+          "guard"
+        ],
+        "faces_right": false,
+        "alpha_threshold_32_cell_bounds": [
+          [
+            79,
+            100,
+            446,
+            455
+          ],
+          [
+            77,
+            84,
+            443,
+            446
+          ],
+          [
+            62,
+            90,
+            441,
+            492
+          ],
+          [
+            77,
+            67,
+            460,
+            446
+          ],
+          [
+            80,
+            97,
+            440,
+            430
+          ],
+          [
+            71,
+            74,
+            448,
+            436
+          ]
+        ],
+        "min_visible_margin_px": 20,
+        "max_alpha_on_grid_seams": 1,
+        "note": "Six distinct states visually checked; no visible cross-cell clipping. At most 1/255 residual alpha on seam scan. Frame registration and runtime rendering still require separate integration review."
+      },
+      "target_dimensions": [
+        1536,
+        1024
+      ],
+      "size_matches_technical_source": true,
+      "integration_status": "runtime_installed",
+      "runtime_targets": [
+        "assets/art/battle/tribulation.png"
+      ]
+    },
+    {
+      "id": "6064d7818664d59a",
+      "batch": "12_vfx",
+      "kind": "existing",
+      "label": "assets/art/vfx/circle_01.png",
+      "source": "assets/art/vfx/circle_01.png",
+      "output": "art_sources/refresh_20261019/batches/12_vfx/output/existing/art/vfx/circle_01.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/art/vfx/circle_01.png",
+        "sha256": "0cf54b96fba367d89779c49017c394889940f43e7dbf66ddb8d4e6b67671f33d",
+        "format": "PNG",
+        "dimensions": [
+          256,
+          256
+        ],
+        "mode": "RGBA",
+        "background": "transparent_required",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          1,
+          1
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_reuse",
+      "tool_refs": [
+        "assets/art/vfx/circle_01.png",
+        "art_sources/refresh_20261019/approved_samples/06_battle.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/12_vfx/output/prompts/6064d7818664d59a.txt",
+      "delivery_kind": "reuse_licensed_vfx",
+      "sha256": "0cf54b96fba367d89779c49017c394889940f43e7dbf66ddb8d4e6b67671f33d",
+      "newly_generated": false,
+      "native_mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        148
+      ],
+      "native_dimensions": [
+        256,
+        256
+      ],
+      "target_dimensions": [
+        256,
+        256
+      ],
+      "size_matches_technical_source": true,
+      "integration_status": "candidate_only_not_runtime_integrated"
+    },
+    {
+      "id": "3ee2b9f66512e7a1",
+      "batch": "12_vfx",
+      "kind": "existing",
+      "label": "assets/art/vfx/circle_02.png",
+      "source": "assets/art/vfx/circle_02.png",
+      "output": "art_sources/refresh_20261019/batches/12_vfx/output/existing/art/vfx/circle_02.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/art/vfx/circle_02.png",
+        "sha256": "6a2c5461ec68f187b8846d2d1e0c0e5ccd941ebad56d1788c028fe77f5a31996",
+        "format": "PNG",
+        "dimensions": [
+          256,
+          256
+        ],
+        "mode": "RGBA",
+        "background": "transparent_required",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          1,
+          1
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_reuse",
+      "tool_refs": [
+        "assets/art/vfx/circle_02.png",
+        "art_sources/refresh_20261019/approved_samples/06_battle.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/12_vfx/output/prompts/3ee2b9f66512e7a1.txt",
+      "delivery_kind": "reuse_licensed_vfx",
+      "sha256": "6a2c5461ec68f187b8846d2d1e0c0e5ccd941ebad56d1788c028fe77f5a31996",
+      "newly_generated": false,
+      "native_mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "native_dimensions": [
+        256,
+        256
+      ],
+      "target_dimensions": [
+        256,
+        256
+      ],
+      "size_matches_technical_source": true,
+      "integration_status": "candidate_only_not_runtime_integrated"
+    },
+    {
+      "id": "9515d8a8f92a2236",
+      "batch": "12_vfx",
+      "kind": "existing",
+      "label": "assets/art/vfx/circle_03.png",
+      "source": "assets/art/vfx/circle_03.png",
+      "output": "art_sources/refresh_20261019/batches/12_vfx/output/existing/art/vfx/circle_03.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/art/vfx/circle_03.png",
+        "sha256": "d37f539fb44d8184ed12d51b8620a366c1626f23518c76a8934b445ac582c73f",
+        "format": "PNG",
+        "dimensions": [
+          256,
+          256
+        ],
+        "mode": "RGBA",
+        "background": "transparent_required",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          1,
+          1
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_reuse",
+      "tool_refs": [
+        "assets/art/vfx/circle_03.png",
+        "art_sources/refresh_20261019/approved_samples/06_battle.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/12_vfx/output/prompts/9515d8a8f92a2236.txt",
+      "delivery_kind": "reuse_licensed_vfx",
+      "sha256": "d37f539fb44d8184ed12d51b8620a366c1626f23518c76a8934b445ac582c73f",
+      "newly_generated": false,
+      "native_mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "native_dimensions": [
+        256,
+        256
+      ],
+      "target_dimensions": [
+        256,
+        256
+      ],
+      "size_matches_technical_source": true,
+      "integration_status": "candidate_only_not_runtime_integrated"
+    },
+    {
+      "id": "8a33a27497640fb8",
+      "batch": "12_vfx",
+      "kind": "existing",
+      "label": "assets/art/vfx/circle_05.png",
+      "source": "assets/art/vfx/circle_05.png",
+      "output": "art_sources/refresh_20261019/batches/12_vfx/output/existing/art/vfx/circle_05.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/art/vfx/circle_05.png",
+        "sha256": "a756320363d1a6e6046d4d490c1496b6a81d58e3dbd18bac2de38caf753d49fd",
+        "format": "PNG",
+        "dimensions": [
+          256,
+          256
+        ],
+        "mode": "RGBA",
+        "background": "transparent_required",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          1,
+          1
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_reuse",
+      "tool_refs": [
+        "assets/art/vfx/circle_05.png",
+        "art_sources/refresh_20261019/approved_samples/06_battle.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/12_vfx/output/prompts/8a33a27497640fb8.txt",
+      "delivery_kind": "reuse_licensed_vfx",
+      "sha256": "a756320363d1a6e6046d4d490c1496b6a81d58e3dbd18bac2de38caf753d49fd",
+      "newly_generated": false,
+      "native_mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        236
+      ],
+      "native_dimensions": [
+        256,
+        256
+      ],
+      "target_dimensions": [
+        256,
+        256
+      ],
+      "size_matches_technical_source": true,
+      "integration_status": "candidate_only_not_runtime_integrated"
+    },
+    {
+      "id": "b488cb256987391a",
+      "batch": "12_vfx",
+      "kind": "existing",
+      "label": "assets/art/vfx/dirt_01.png",
+      "source": "assets/art/vfx/dirt_01.png",
+      "output": "art_sources/refresh_20261019/batches/12_vfx/output/existing/art/vfx/dirt_01.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/art/vfx/dirt_01.png",
+        "sha256": "d134f696ee4c7985087d70ef8cce985de1cf1819fb3363834566fdf7fff3f1c3",
+        "format": "PNG",
+        "dimensions": [
+          256,
+          256
+        ],
+        "mode": "RGBA",
+        "background": "transparent_required",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          1,
+          1
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_reuse",
+      "tool_refs": [
+        "assets/art/vfx/dirt_01.png",
+        "art_sources/refresh_20261019/approved_samples/06_battle.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/12_vfx/output/prompts/b488cb256987391a.txt",
+      "delivery_kind": "reuse_licensed_vfx",
+      "sha256": "d134f696ee4c7985087d70ef8cce985de1cf1819fb3363834566fdf7fff3f1c3",
+      "newly_generated": false,
+      "native_mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "native_dimensions": [
+        256,
+        256
+      ],
+      "target_dimensions": [
+        256,
+        256
+      ],
+      "size_matches_technical_source": true,
+      "integration_status": "candidate_only_not_runtime_integrated"
+    },
+    {
+      "id": "18309d0b59ef2977",
+      "batch": "12_vfx",
+      "kind": "existing",
+      "label": "assets/art/vfx/dirt_02.png",
+      "source": "assets/art/vfx/dirt_02.png",
+      "output": "art_sources/refresh_20261019/batches/12_vfx/output/existing/art/vfx/dirt_02.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/art/vfx/dirt_02.png",
+        "sha256": "3afa4250d9e44aca7a2602bbd78332e8915cfca4779f250c590a10cdb32fc5de",
+        "format": "PNG",
+        "dimensions": [
+          256,
+          256
+        ],
+        "mode": "RGBA",
+        "background": "transparent_required",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          1,
+          1
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_reuse",
+      "tool_refs": [
+        "assets/art/vfx/dirt_02.png",
+        "art_sources/refresh_20261019/approved_samples/06_battle.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/12_vfx/output/prompts/18309d0b59ef2977.txt",
+      "delivery_kind": "reuse_licensed_vfx",
+      "sha256": "3afa4250d9e44aca7a2602bbd78332e8915cfca4779f250c590a10cdb32fc5de",
+      "newly_generated": false,
+      "native_mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "native_dimensions": [
+        256,
+        256
+      ],
+      "target_dimensions": [
+        256,
+        256
+      ],
+      "size_matches_technical_source": true,
+      "integration_status": "candidate_only_not_runtime_integrated"
+    },
+    {
+      "id": "487e75ef5154d370",
+      "batch": "12_vfx",
+      "kind": "existing",
+      "label": "assets/art/vfx/fire_01.png",
+      "source": "assets/art/vfx/fire_01.png",
+      "output": "art_sources/refresh_20261019/batches/12_vfx/output/existing/art/vfx/fire_01.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/art/vfx/fire_01.png",
+        "sha256": "284e71b44e6bd352c2c4d0f4220f79f74a6b6b4cab1198f213b4379aa0d1c49b",
+        "format": "PNG",
+        "dimensions": [
+          256,
+          256
+        ],
+        "mode": "RGBA",
+        "background": "transparent_required",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          1,
+          1
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_reuse",
+      "tool_refs": [
+        "assets/art/vfx/fire_01.png",
+        "art_sources/refresh_20261019/approved_samples/06_battle.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/12_vfx/output/prompts/487e75ef5154d370.txt",
+      "delivery_kind": "reuse_licensed_vfx",
+      "sha256": "284e71b44e6bd352c2c4d0f4220f79f74a6b6b4cab1198f213b4379aa0d1c49b",
+      "newly_generated": false,
+      "native_mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "native_dimensions": [
+        256,
+        256
+      ],
+      "target_dimensions": [
+        256,
+        256
+      ],
+      "size_matches_technical_source": true,
+      "integration_status": "candidate_only_not_runtime_integrated"
+    },
+    {
+      "id": "2d03fe101a08ce23",
+      "batch": "12_vfx",
+      "kind": "existing",
+      "label": "assets/art/vfx/flame_05.png",
+      "source": "assets/art/vfx/flame_05.png",
+      "output": "art_sources/refresh_20261019/batches/12_vfx/output/existing/art/vfx/flame_05.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/art/vfx/flame_05.png",
+        "sha256": "2b95e354bb6a6ed6e5105a8338d2ce0de00ce1e8f11ea015986534e068d20707",
+        "format": "PNG",
+        "dimensions": [
+          256,
+          256
+        ],
+        "mode": "RGBA",
+        "background": "transparent_required",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          1,
+          1
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_reuse",
+      "tool_refs": [
+        "assets/art/vfx/flame_05.png",
+        "art_sources/refresh_20261019/approved_samples/06_battle.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/12_vfx/output/prompts/2d03fe101a08ce23.txt",
+      "delivery_kind": "reuse_licensed_vfx",
+      "sha256": "2b95e354bb6a6ed6e5105a8338d2ce0de00ce1e8f11ea015986534e068d20707",
+      "newly_generated": false,
+      "native_mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "native_dimensions": [
+        256,
+        256
+      ],
+      "target_dimensions": [
+        256,
+        256
+      ],
+      "size_matches_technical_source": true,
+      "integration_status": "candidate_only_not_runtime_integrated"
+    },
+    {
+      "id": "1706fb87c5cec3bd",
+      "batch": "12_vfx",
+      "kind": "existing",
+      "label": "assets/art/vfx/flame_06.png",
+      "source": "assets/art/vfx/flame_06.png",
+      "output": "art_sources/refresh_20261019/batches/12_vfx/output/existing/art/vfx/flame_06.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/art/vfx/flame_06.png",
+        "sha256": "522c5bebe87514d804126dd6755b68aeb0e49f80f8b6c60c8d2a440cb2c7c633",
+        "format": "PNG",
+        "dimensions": [
+          256,
+          256
+        ],
+        "mode": "RGBA",
+        "background": "transparent_required",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          1,
+          1
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_reuse",
+      "tool_refs": [
+        "assets/art/vfx/flame_06.png",
+        "art_sources/refresh_20261019/approved_samples/06_battle.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/12_vfx/output/prompts/1706fb87c5cec3bd.txt",
+      "delivery_kind": "reuse_licensed_vfx",
+      "sha256": "522c5bebe87514d804126dd6755b68aeb0e49f80f8b6c60c8d2a440cb2c7c633",
+      "newly_generated": false,
+      "native_mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "native_dimensions": [
+        256,
+        256
+      ],
+      "target_dimensions": [
+        256,
+        256
+      ],
+      "size_matches_technical_source": true,
+      "integration_status": "candidate_only_not_runtime_integrated"
+    },
+    {
+      "id": "faabb8ced123abfc",
+      "batch": "12_vfx",
+      "kind": "existing",
+      "label": "assets/art/vfx/flare_01.png",
+      "source": "assets/art/vfx/flare_01.png",
+      "output": "art_sources/refresh_20261019/batches/12_vfx/output/existing/art/vfx/flare_01.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/art/vfx/flare_01.png",
+        "sha256": "c7608516df329b0854022957eef834aa606f8e23deaaadeea2d3bb02dd4ed18f",
+        "format": "PNG",
+        "dimensions": [
+          256,
+          256
+        ],
+        "mode": "RGBA",
+        "background": "transparent_required",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          1,
+          1
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_reuse",
+      "tool_refs": [
+        "assets/art/vfx/flare_01.png",
+        "art_sources/refresh_20261019/approved_samples/06_battle.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/12_vfx/output/prompts/faabb8ced123abfc.txt",
+      "delivery_kind": "reuse_licensed_vfx",
+      "sha256": "c7608516df329b0854022957eef834aa606f8e23deaaadeea2d3bb02dd4ed18f",
+      "newly_generated": false,
+      "native_mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        254
+      ],
+      "native_dimensions": [
+        256,
+        256
+      ],
+      "target_dimensions": [
+        256,
+        256
+      ],
+      "size_matches_technical_source": true,
+      "integration_status": "candidate_only_not_runtime_integrated"
+    },
+    {
+      "id": "2e150188cbf7473e",
+      "batch": "12_vfx",
+      "kind": "existing",
+      "label": "assets/art/vfx/light_01.png",
+      "source": "assets/art/vfx/light_01.png",
+      "output": "art_sources/refresh_20261019/batches/12_vfx/output/existing/art/vfx/light_01.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/art/vfx/light_01.png",
+        "sha256": "db415f8bb65b88f18529ad7b8416b8eba4b5d7e781b5068959c0a5779666395d",
+        "format": "PNG",
+        "dimensions": [
+          256,
+          256
+        ],
+        "mode": "RGBA",
+        "background": "transparent_required",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          1,
+          1
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_reuse",
+      "tool_refs": [
+        "assets/art/vfx/light_01.png",
+        "art_sources/refresh_20261019/approved_samples/06_battle.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/12_vfx/output/prompts/2e150188cbf7473e.txt",
+      "delivery_kind": "reuse_licensed_vfx",
+      "sha256": "db415f8bb65b88f18529ad7b8416b8eba4b5d7e781b5068959c0a5779666395d",
+      "newly_generated": false,
+      "native_mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        251
+      ],
+      "native_dimensions": [
+        256,
+        256
+      ],
+      "target_dimensions": [
+        256,
+        256
+      ],
+      "size_matches_technical_source": true,
+      "integration_status": "candidate_only_not_runtime_integrated"
+    },
+    {
+      "id": "afe661bc6dcca3f6",
+      "batch": "12_vfx",
+      "kind": "existing",
+      "label": "assets/art/vfx/magic_01.png",
+      "source": "assets/art/vfx/magic_01.png",
+      "output": "art_sources/refresh_20261019/batches/12_vfx/output/existing/art/vfx/magic_01.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/art/vfx/magic_01.png",
+        "sha256": "ed9233d41c41fd864364718889947a18bbad16381969a7898de956d9a30d892e",
+        "format": "PNG",
+        "dimensions": [
+          256,
+          256
+        ],
+        "mode": "RGBA",
+        "background": "transparent_required",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          1,
+          1
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_reuse",
+      "tool_refs": [
+        "assets/art/vfx/magic_01.png",
+        "art_sources/refresh_20261019/approved_samples/06_battle.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/12_vfx/output/prompts/afe661bc6dcca3f6.txt",
+      "delivery_kind": "reuse_licensed_vfx",
+      "sha256": "ed9233d41c41fd864364718889947a18bbad16381969a7898de956d9a30d892e",
+      "newly_generated": false,
+      "native_mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        238
+      ],
+      "native_dimensions": [
+        256,
+        256
+      ],
+      "target_dimensions": [
+        256,
+        256
+      ],
+      "size_matches_technical_source": true,
+      "integration_status": "candidate_only_not_runtime_integrated"
+    },
+    {
+      "id": "4cfe33ea91ca0507",
+      "batch": "12_vfx",
+      "kind": "existing",
+      "label": "assets/art/vfx/magic_03.png",
+      "source": "assets/art/vfx/magic_03.png",
+      "output": "art_sources/refresh_20261019/batches/12_vfx/output/existing/art/vfx/magic_03.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/art/vfx/magic_03.png",
+        "sha256": "5cec1ea9a12e2ab0ec92dbee68fbb19f84b72aae8fb38d414bef1c4097848662",
+        "format": "PNG",
+        "dimensions": [
+          256,
+          256
+        ],
+        "mode": "RGBA",
+        "background": "transparent_required",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          1,
+          1
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_reuse",
+      "tool_refs": [
+        "assets/art/vfx/magic_03.png",
+        "art_sources/refresh_20261019/approved_samples/06_battle.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/12_vfx/output/prompts/4cfe33ea91ca0507.txt",
+      "delivery_kind": "reuse_licensed_vfx",
+      "sha256": "5cec1ea9a12e2ab0ec92dbee68fbb19f84b72aae8fb38d414bef1c4097848662",
+      "newly_generated": false,
+      "native_mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "native_dimensions": [
+        256,
+        256
+      ],
+      "target_dimensions": [
+        256,
+        256
+      ],
+      "size_matches_technical_source": true,
+      "integration_status": "candidate_only_not_runtime_integrated"
+    },
+    {
+      "id": "193c1a66022aa0ce",
+      "batch": "12_vfx",
+      "kind": "existing",
+      "label": "assets/art/vfx/magic_05.png",
+      "source": "assets/art/vfx/magic_05.png",
+      "output": "art_sources/refresh_20261019/batches/12_vfx/output/existing/art/vfx/magic_05.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/art/vfx/magic_05.png",
+        "sha256": "7216c32750fa2560b724ff3f846e97f4d86515660e42830df600008c6c19789a",
+        "format": "PNG",
+        "dimensions": [
+          256,
+          256
+        ],
+        "mode": "RGBA",
+        "background": "transparent_required",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          1,
+          1
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_reuse",
+      "tool_refs": [
+        "assets/art/vfx/magic_05.png",
+        "art_sources/refresh_20261019/approved_samples/06_battle.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/12_vfx/output/prompts/193c1a66022aa0ce.txt",
+      "delivery_kind": "reuse_licensed_vfx",
+      "sha256": "7216c32750fa2560b724ff3f846e97f4d86515660e42830df600008c6c19789a",
+      "newly_generated": false,
+      "native_mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        251
+      ],
+      "native_dimensions": [
+        256,
+        256
+      ],
+      "target_dimensions": [
+        256,
+        256
+      ],
+      "size_matches_technical_source": true,
+      "integration_status": "candidate_only_not_runtime_integrated"
+    },
+    {
+      "id": "467167a45d1709ff",
+      "batch": "12_vfx",
+      "kind": "existing",
+      "label": "assets/art/vfx/muzzle_02.png",
+      "source": "assets/art/vfx/muzzle_02.png",
+      "output": "art_sources/refresh_20261019/batches/12_vfx/output/existing/art/vfx/muzzle_02.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/art/vfx/muzzle_02.png",
+        "sha256": "3f8e7912c149b287964ac7b875682cba1871735b9805ba13b9230643565fcd83",
+        "format": "PNG",
+        "dimensions": [
+          256,
+          256
+        ],
+        "mode": "RGBA",
+        "background": "transparent_required",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          1,
+          1
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_reuse",
+      "tool_refs": [
+        "assets/art/vfx/muzzle_02.png",
+        "art_sources/refresh_20261019/approved_samples/06_battle.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/12_vfx/output/prompts/467167a45d1709ff.txt",
+      "delivery_kind": "reuse_licensed_vfx",
+      "sha256": "3f8e7912c149b287964ac7b875682cba1871735b9805ba13b9230643565fcd83",
+      "newly_generated": false,
+      "native_mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "native_dimensions": [
+        256,
+        256
+      ],
+      "target_dimensions": [
+        256,
+        256
+      ],
+      "size_matches_technical_source": true,
+      "integration_status": "candidate_only_not_runtime_integrated"
+    },
+    {
+      "id": "52f19bc8ed610f0c",
+      "batch": "12_vfx",
+      "kind": "existing",
+      "label": "assets/art/vfx/muzzle_04.png",
+      "source": "assets/art/vfx/muzzle_04.png",
+      "output": "art_sources/refresh_20261019/batches/12_vfx/output/existing/art/vfx/muzzle_04.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/art/vfx/muzzle_04.png",
+        "sha256": "ca6e735d695ca9792a741a74f0d0222caf5ed4789a2e489fd1a8b0e6ae316ea8",
+        "format": "PNG",
+        "dimensions": [
+          256,
+          256
+        ],
+        "mode": "RGBA",
+        "background": "transparent_required",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          1,
+          1
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_reuse",
+      "tool_refs": [
+        "assets/art/vfx/muzzle_04.png",
+        "art_sources/refresh_20261019/approved_samples/06_battle.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/12_vfx/output/prompts/52f19bc8ed610f0c.txt",
+      "delivery_kind": "reuse_licensed_vfx",
+      "sha256": "ca6e735d695ca9792a741a74f0d0222caf5ed4789a2e489fd1a8b0e6ae316ea8",
+      "newly_generated": false,
+      "native_mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "native_dimensions": [
+        256,
+        256
+      ],
+      "target_dimensions": [
+        256,
+        256
+      ],
+      "size_matches_technical_source": true,
+      "integration_status": "candidate_only_not_runtime_integrated"
+    },
+    {
+      "id": "e421b69bbae87688",
+      "batch": "12_vfx",
+      "kind": "existing",
+      "label": "assets/art/vfx/scorch_02.png",
+      "source": "assets/art/vfx/scorch_02.png",
+      "output": "art_sources/refresh_20261019/batches/12_vfx/output/existing/art/vfx/scorch_02.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/art/vfx/scorch_02.png",
+        "sha256": "a076cba46255d42754f77706bbd23019194d302eae777ea9027a03fa8cf99f4b",
+        "format": "PNG",
+        "dimensions": [
+          256,
+          256
+        ],
+        "mode": "RGBA",
+        "background": "transparent_required",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          1,
+          1
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_reuse",
+      "tool_refs": [
+        "assets/art/vfx/scorch_02.png",
+        "art_sources/refresh_20261019/approved_samples/06_battle.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/12_vfx/output/prompts/e421b69bbae87688.txt",
+      "delivery_kind": "reuse_licensed_vfx",
+      "sha256": "a076cba46255d42754f77706bbd23019194d302eae777ea9027a03fa8cf99f4b",
+      "newly_generated": false,
+      "native_mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "native_dimensions": [
+        256,
+        256
+      ],
+      "target_dimensions": [
+        256,
+        256
+      ],
+      "size_matches_technical_source": true,
+      "integration_status": "candidate_only_not_runtime_integrated"
+    },
+    {
+      "id": "ccd33599742fe3e7",
+      "batch": "12_vfx",
+      "kind": "existing",
+      "label": "assets/art/vfx/scratch_01.png",
+      "source": "assets/art/vfx/scratch_01.png",
+      "output": "art_sources/refresh_20261019/batches/12_vfx/output/existing/art/vfx/scratch_01.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/art/vfx/scratch_01.png",
+        "sha256": "84b9b6b262f07f5bbff04308ac7ef6fe9ae72cf2f9226c8e7cc841a25c07e5fd",
+        "format": "PNG",
+        "dimensions": [
+          256,
+          256
+        ],
+        "mode": "RGBA",
+        "background": "transparent_required",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          1,
+          1
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_reuse",
+      "tool_refs": [
+        "assets/art/vfx/scratch_01.png",
+        "art_sources/refresh_20261019/approved_samples/06_battle.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/12_vfx/output/prompts/ccd33599742fe3e7.txt",
+      "delivery_kind": "reuse_licensed_vfx",
+      "sha256": "84b9b6b262f07f5bbff04308ac7ef6fe9ae72cf2f9226c8e7cc841a25c07e5fd",
+      "newly_generated": false,
+      "native_mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "native_dimensions": [
+        256,
+        256
+      ],
+      "target_dimensions": [
+        256,
+        256
+      ],
+      "size_matches_technical_source": true,
+      "integration_status": "candidate_only_not_runtime_integrated"
+    },
+    {
+      "id": "8f4559a12bf8659e",
+      "batch": "12_vfx",
+      "kind": "existing",
+      "label": "assets/art/vfx/slash_01.png",
+      "source": "assets/art/vfx/slash_01.png",
+      "output": "art_sources/refresh_20261019/batches/12_vfx/output/existing/art/vfx/slash_01.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/art/vfx/slash_01.png",
+        "sha256": "26481da576b271cef784aba70b6be9379f211ee16328f58b95e3affabca63653",
+        "format": "PNG",
+        "dimensions": [
+          256,
+          256
+        ],
+        "mode": "RGBA",
+        "background": "transparent_required",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          1,
+          1
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_reuse",
+      "tool_refs": [
+        "assets/art/vfx/slash_01.png",
+        "art_sources/refresh_20261019/approved_samples/06_battle.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/12_vfx/output/prompts/8f4559a12bf8659e.txt",
+      "delivery_kind": "reuse_licensed_vfx",
+      "sha256": "26481da576b271cef784aba70b6be9379f211ee16328f58b95e3affabca63653",
+      "newly_generated": false,
+      "native_mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        210
+      ],
+      "native_dimensions": [
+        256,
+        256
+      ],
+      "target_dimensions": [
+        256,
+        256
+      ],
+      "size_matches_technical_source": true,
+      "integration_status": "candidate_only_not_runtime_integrated"
+    },
+    {
+      "id": "75f519cdae905107",
+      "batch": "12_vfx",
+      "kind": "existing",
+      "label": "assets/art/vfx/slash_02.png",
+      "source": "assets/art/vfx/slash_02.png",
+      "output": "art_sources/refresh_20261019/batches/12_vfx/output/existing/art/vfx/slash_02.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/art/vfx/slash_02.png",
+        "sha256": "7e11e8c854514e09e12effafb3a3ec1c265d5cf97d75be1ac03ac951f847bbb3",
+        "format": "PNG",
+        "dimensions": [
+          256,
+          256
+        ],
+        "mode": "RGBA",
+        "background": "transparent_required",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          1,
+          1
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_reuse",
+      "tool_refs": [
+        "assets/art/vfx/slash_02.png",
+        "art_sources/refresh_20261019/approved_samples/06_battle.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/12_vfx/output/prompts/75f519cdae905107.txt",
+      "delivery_kind": "reuse_licensed_vfx",
+      "sha256": "7e11e8c854514e09e12effafb3a3ec1c265d5cf97d75be1ac03ac951f847bbb3",
+      "newly_generated": false,
+      "native_mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        221
+      ],
+      "native_dimensions": [
+        256,
+        256
+      ],
+      "target_dimensions": [
+        256,
+        256
+      ],
+      "size_matches_technical_source": true,
+      "integration_status": "candidate_only_not_runtime_integrated"
+    },
+    {
+      "id": "aaa6a501df7e74d3",
+      "batch": "12_vfx",
+      "kind": "existing",
+      "label": "assets/art/vfx/slash_03.png",
+      "source": "assets/art/vfx/slash_03.png",
+      "output": "art_sources/refresh_20261019/batches/12_vfx/output/existing/art/vfx/slash_03.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/art/vfx/slash_03.png",
+        "sha256": "6fc514d977ba8b5fede55a7332d8c417e8a9739a26e8c890dcfd63582098bcdb",
+        "format": "PNG",
+        "dimensions": [
+          256,
+          256
+        ],
+        "mode": "RGBA",
+        "background": "transparent_required",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          1,
+          1
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_reuse",
+      "tool_refs": [
+        "assets/art/vfx/slash_03.png",
+        "art_sources/refresh_20261019/approved_samples/06_battle.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/12_vfx/output/prompts/aaa6a501df7e74d3.txt",
+      "delivery_kind": "reuse_licensed_vfx",
+      "sha256": "6fc514d977ba8b5fede55a7332d8c417e8a9739a26e8c890dcfd63582098bcdb",
+      "newly_generated": false,
+      "native_mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "native_dimensions": [
+        256,
+        256
+      ],
+      "target_dimensions": [
+        256,
+        256
+      ],
+      "size_matches_technical_source": true,
+      "integration_status": "candidate_only_not_runtime_integrated"
+    },
+    {
+      "id": "8126e88ee4849329",
+      "batch": "12_vfx",
+      "kind": "existing",
+      "label": "assets/art/vfx/slash_04.png",
+      "source": "assets/art/vfx/slash_04.png",
+      "output": "art_sources/refresh_20261019/batches/12_vfx/output/existing/art/vfx/slash_04.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/art/vfx/slash_04.png",
+        "sha256": "3a9dc49d22d1d8969b3c08e6ca16c2db71ae8b124e6598150aa7f51b42f11c17",
+        "format": "PNG",
+        "dimensions": [
+          256,
+          256
+        ],
+        "mode": "RGBA",
+        "background": "transparent_required",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          1,
+          1
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_reuse",
+      "tool_refs": [
+        "assets/art/vfx/slash_04.png",
+        "art_sources/refresh_20261019/approved_samples/06_battle.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/12_vfx/output/prompts/8126e88ee4849329.txt",
+      "delivery_kind": "reuse_licensed_vfx",
+      "sha256": "3a9dc49d22d1d8969b3c08e6ca16c2db71ae8b124e6598150aa7f51b42f11c17",
+      "newly_generated": false,
+      "native_mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "native_dimensions": [
+        256,
+        256
+      ],
+      "target_dimensions": [
+        256,
+        256
+      ],
+      "size_matches_technical_source": true,
+      "integration_status": "candidate_only_not_runtime_integrated"
+    },
+    {
+      "id": "a910da5611d72aa4",
+      "batch": "12_vfx",
+      "kind": "existing",
+      "label": "assets/art/vfx/smoke_02.png",
+      "source": "assets/art/vfx/smoke_02.png",
+      "output": "art_sources/refresh_20261019/batches/12_vfx/output/existing/art/vfx/smoke_02.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/art/vfx/smoke_02.png",
+        "sha256": "64e9aee894201bd95ab490d3cf69841f653cb63d4398957df09c602d271d5da4",
+        "format": "PNG",
+        "dimensions": [
+          256,
+          256
+        ],
+        "mode": "RGBA",
+        "background": "transparent_required",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          1,
+          1
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_reuse",
+      "tool_refs": [
+        "assets/art/vfx/smoke_02.png",
+        "art_sources/refresh_20261019/approved_samples/06_battle.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/12_vfx/output/prompts/a910da5611d72aa4.txt",
+      "delivery_kind": "reuse_licensed_vfx",
+      "sha256": "64e9aee894201bd95ab490d3cf69841f653cb63d4398957df09c602d271d5da4",
+      "newly_generated": false,
+      "native_mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        188
+      ],
+      "native_dimensions": [
+        256,
+        256
+      ],
+      "target_dimensions": [
+        256,
+        256
+      ],
+      "size_matches_technical_source": true,
+      "integration_status": "candidate_only_not_runtime_integrated"
+    },
+    {
+      "id": "0f23653273d9bc45",
+      "batch": "12_vfx",
+      "kind": "existing",
+      "label": "assets/art/vfx/smoke_07.png",
+      "source": "assets/art/vfx/smoke_07.png",
+      "output": "art_sources/refresh_20261019/batches/12_vfx/output/existing/art/vfx/smoke_07.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/art/vfx/smoke_07.png",
+        "sha256": "4e1f369f85d3cd5353a0b5be2e457b1709ebf99b00feeae9a2e20fe9f1811fce",
+        "format": "PNG",
+        "dimensions": [
+          256,
+          256
+        ],
+        "mode": "RGBA",
+        "background": "transparent_required",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          1,
+          1
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_reuse",
+      "tool_refs": [
+        "assets/art/vfx/smoke_07.png",
+        "art_sources/refresh_20261019/approved_samples/06_battle.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/12_vfx/output/prompts/0f23653273d9bc45.txt",
+      "delivery_kind": "reuse_licensed_vfx",
+      "sha256": "4e1f369f85d3cd5353a0b5be2e457b1709ebf99b00feeae9a2e20fe9f1811fce",
+      "newly_generated": false,
+      "native_mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        182
+      ],
+      "native_dimensions": [
+        256,
+        256
+      ],
+      "target_dimensions": [
+        256,
+        256
+      ],
+      "size_matches_technical_source": true,
+      "integration_status": "candidate_only_not_runtime_integrated"
+    },
+    {
+      "id": "0ef9be0cb4148ce6",
+      "batch": "12_vfx",
+      "kind": "existing",
+      "label": "assets/art/vfx/smoke_10.png",
+      "source": "assets/art/vfx/smoke_10.png",
+      "output": "art_sources/refresh_20261019/batches/12_vfx/output/existing/art/vfx/smoke_10.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/art/vfx/smoke_10.png",
+        "sha256": "0ecc569cdc5c9788c4de144e2d7c5a980074f12ce3e6b6f36ed692e8338422a5",
+        "format": "PNG",
+        "dimensions": [
+          256,
+          256
+        ],
+        "mode": "RGBA",
+        "background": "transparent_required",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          1,
+          1
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_reuse",
+      "tool_refs": [
+        "assets/art/vfx/smoke_10.png",
+        "art_sources/refresh_20261019/approved_samples/06_battle.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/12_vfx/output/prompts/0ef9be0cb4148ce6.txt",
+      "delivery_kind": "reuse_licensed_vfx",
+      "sha256": "0ecc569cdc5c9788c4de144e2d7c5a980074f12ce3e6b6f36ed692e8338422a5",
+      "newly_generated": false,
+      "native_mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        198
+      ],
+      "native_dimensions": [
+        256,
+        256
+      ],
+      "target_dimensions": [
+        256,
+        256
+      ],
+      "size_matches_technical_source": true,
+      "integration_status": "candidate_only_not_runtime_integrated"
+    },
+    {
+      "id": "b4e41a2abb29bc72",
+      "batch": "12_vfx",
+      "kind": "existing",
+      "label": "assets/art/vfx/spark_01.png",
+      "source": "assets/art/vfx/spark_01.png",
+      "output": "art_sources/refresh_20261019/batches/12_vfx/output/existing/art/vfx/spark_01.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/art/vfx/spark_01.png",
+        "sha256": "03c19215dc410b2f82b4bb6fdea42bf111a6077b10c02677d3f1737785d70913",
+        "format": "PNG",
+        "dimensions": [
+          256,
+          256
+        ],
+        "mode": "RGBA",
+        "background": "transparent_required",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          1,
+          1
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_reuse",
+      "tool_refs": [
+        "assets/art/vfx/spark_01.png",
+        "art_sources/refresh_20261019/approved_samples/06_battle.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/12_vfx/output/prompts/b4e41a2abb29bc72.txt",
+      "delivery_kind": "reuse_licensed_vfx",
+      "sha256": "03c19215dc410b2f82b4bb6fdea42bf111a6077b10c02677d3f1737785d70913",
+      "newly_generated": false,
+      "native_mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "native_dimensions": [
+        256,
+        256
+      ],
+      "target_dimensions": [
+        256,
+        256
+      ],
+      "size_matches_technical_source": true,
+      "integration_status": "candidate_only_not_runtime_integrated"
+    },
+    {
+      "id": "5849e2b58e45658d",
+      "batch": "12_vfx",
+      "kind": "existing",
+      "label": "assets/art/vfx/spark_05.png",
+      "source": "assets/art/vfx/spark_05.png",
+      "output": "art_sources/refresh_20261019/batches/12_vfx/output/existing/art/vfx/spark_05.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/art/vfx/spark_05.png",
+        "sha256": "5cd74f46333f80431852a4d4c82d7eca50c9b7a945809e27cdc40d7acaa6fe1d",
+        "format": "PNG",
+        "dimensions": [
+          256,
+          256
+        ],
+        "mode": "RGBA",
+        "background": "transparent_required",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          1,
+          1
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_reuse",
+      "tool_refs": [
+        "assets/art/vfx/spark_05.png",
+        "art_sources/refresh_20261019/approved_samples/06_battle.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/12_vfx/output/prompts/5849e2b58e45658d.txt",
+      "delivery_kind": "reuse_licensed_vfx",
+      "sha256": "5cd74f46333f80431852a4d4c82d7eca50c9b7a945809e27cdc40d7acaa6fe1d",
+      "newly_generated": false,
+      "native_mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "native_dimensions": [
+        256,
+        256
+      ],
+      "target_dimensions": [
+        256,
+        256
+      ],
+      "size_matches_technical_source": true,
+      "integration_status": "candidate_only_not_runtime_integrated"
+    },
+    {
+      "id": "23d85f8e7eb53ea2",
+      "batch": "12_vfx",
+      "kind": "existing",
+      "label": "assets/art/vfx/spark_07.png",
+      "source": "assets/art/vfx/spark_07.png",
+      "output": "art_sources/refresh_20261019/batches/12_vfx/output/existing/art/vfx/spark_07.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/art/vfx/spark_07.png",
+        "sha256": "880cae956895bdfa0d9f605054ed1dcad0d3fa3199673e1f428d4764ed4054ce",
+        "format": "PNG",
+        "dimensions": [
+          256,
+          256
+        ],
+        "mode": "RGBA",
+        "background": "transparent_required",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          1,
+          1
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_reuse",
+      "tool_refs": [
+        "assets/art/vfx/spark_07.png",
+        "art_sources/refresh_20261019/approved_samples/06_battle.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/12_vfx/output/prompts/23d85f8e7eb53ea2.txt",
+      "delivery_kind": "reuse_licensed_vfx",
+      "sha256": "880cae956895bdfa0d9f605054ed1dcad0d3fa3199673e1f428d4764ed4054ce",
+      "newly_generated": false,
+      "native_mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        195
+      ],
+      "native_dimensions": [
+        256,
+        256
+      ],
+      "target_dimensions": [
+        256,
+        256
+      ],
+      "size_matches_technical_source": true,
+      "integration_status": "candidate_only_not_runtime_integrated"
+    },
+    {
+      "id": "353f837a858ea43e",
+      "batch": "12_vfx",
+      "kind": "existing",
+      "label": "assets/art/vfx/star_01.png",
+      "source": "assets/art/vfx/star_01.png",
+      "output": "art_sources/refresh_20261019/batches/12_vfx/output/existing/art/vfx/star_01.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/art/vfx/star_01.png",
+        "sha256": "2b78b31d4824fff55f9508679bd3197341b38fd227a560940b18f9e32818e67d",
+        "format": "PNG",
+        "dimensions": [
+          256,
+          256
+        ],
+        "mode": "RGBA",
+        "background": "transparent_required",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          1,
+          1
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_reuse",
+      "tool_refs": [
+        "assets/art/vfx/star_01.png",
+        "art_sources/refresh_20261019/approved_samples/06_battle.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/12_vfx/output/prompts/353f837a858ea43e.txt",
+      "delivery_kind": "reuse_licensed_vfx",
+      "sha256": "2b78b31d4824fff55f9508679bd3197341b38fd227a560940b18f9e32818e67d",
+      "newly_generated": false,
+      "native_mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        238
+      ],
+      "native_dimensions": [
+        256,
+        256
+      ],
+      "target_dimensions": [
+        256,
+        256
+      ],
+      "size_matches_technical_source": true,
+      "integration_status": "candidate_only_not_runtime_integrated"
+    },
+    {
+      "id": "426d801531809d71",
+      "batch": "12_vfx",
+      "kind": "existing",
+      "label": "assets/art/vfx/star_06.png",
+      "source": "assets/art/vfx/star_06.png",
+      "output": "art_sources/refresh_20261019/batches/12_vfx/output/existing/art/vfx/star_06.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/art/vfx/star_06.png",
+        "sha256": "88c743f7aabae727e4d92ce549f3c0b276e2f08fb035da26a2190cffc51b4a48",
+        "format": "PNG",
+        "dimensions": [
+          256,
+          256
+        ],
+        "mode": "RGBA",
+        "background": "transparent_required",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          1,
+          1
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_reuse",
+      "tool_refs": [
+        "assets/art/vfx/star_06.png",
+        "art_sources/refresh_20261019/approved_samples/06_battle.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/12_vfx/output/prompts/426d801531809d71.txt",
+      "delivery_kind": "reuse_licensed_vfx",
+      "sha256": "88c743f7aabae727e4d92ce549f3c0b276e2f08fb035da26a2190cffc51b4a48",
+      "newly_generated": false,
+      "native_mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "native_dimensions": [
+        256,
+        256
+      ],
+      "target_dimensions": [
+        256,
+        256
+      ],
+      "size_matches_technical_source": true,
+      "integration_status": "candidate_only_not_runtime_integrated"
+    },
+    {
+      "id": "6c56bfafe86861fe",
+      "batch": "12_vfx",
+      "kind": "existing",
+      "label": "assets/art/vfx/star_08.png",
+      "source": "assets/art/vfx/star_08.png",
+      "output": "art_sources/refresh_20261019/batches/12_vfx/output/existing/art/vfx/star_08.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/art/vfx/star_08.png",
+        "sha256": "7518c9b7e019825a9970f3417c3dca7f36e138d810e19668e3876016e520105b",
+        "format": "PNG",
+        "dimensions": [
+          256,
+          256
+        ],
+        "mode": "RGBA",
+        "background": "transparent_required",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          1,
+          1
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_reuse",
+      "tool_refs": [
+        "assets/art/vfx/star_08.png",
+        "art_sources/refresh_20261019/approved_samples/06_battle.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/12_vfx/output/prompts/6c56bfafe86861fe.txt",
+      "delivery_kind": "reuse_licensed_vfx",
+      "sha256": "7518c9b7e019825a9970f3417c3dca7f36e138d810e19668e3876016e520105b",
+      "newly_generated": false,
+      "native_mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "native_dimensions": [
+        256,
+        256
+      ],
+      "target_dimensions": [
+        256,
+        256
+      ],
+      "size_matches_technical_source": true,
+      "integration_status": "candidate_only_not_runtime_integrated"
+    },
+    {
+      "id": "e43901b3f5c6e498",
+      "batch": "12_vfx",
+      "kind": "existing",
+      "label": "assets/art/vfx/star_09.png",
+      "source": "assets/art/vfx/star_09.png",
+      "output": "art_sources/refresh_20261019/batches/12_vfx/output/existing/art/vfx/star_09.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/art/vfx/star_09.png",
+        "sha256": "347ee9b1906fc6c3d0bed12672b64ceec585770ae0a5f218120915e49d87fcfe",
+        "format": "PNG",
+        "dimensions": [
+          256,
+          256
+        ],
+        "mode": "RGBA",
+        "background": "transparent_required",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          1,
+          1
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_reuse",
+      "tool_refs": [
+        "assets/art/vfx/star_09.png",
+        "art_sources/refresh_20261019/approved_samples/06_battle.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/12_vfx/output/prompts/e43901b3f5c6e498.txt",
+      "delivery_kind": "reuse_licensed_vfx",
+      "sha256": "347ee9b1906fc6c3d0bed12672b64ceec585770ae0a5f218120915e49d87fcfe",
+      "newly_generated": false,
+      "native_mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "native_dimensions": [
+        256,
+        256
+      ],
+      "target_dimensions": [
+        256,
+        256
+      ],
+      "size_matches_technical_source": true,
+      "integration_status": "candidate_only_not_runtime_integrated"
+    },
+    {
+      "id": "41fe3de1a511895a",
+      "batch": "12_vfx",
+      "kind": "existing",
+      "label": "assets/art/vfx/trace_01.png",
+      "source": "assets/art/vfx/trace_01.png",
+      "output": "art_sources/refresh_20261019/batches/12_vfx/output/existing/art/vfx/trace_01.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/art/vfx/trace_01.png",
+        "sha256": "2b08de9ccdc7d48cef57fb36d9fa679f1626e3e1224be9200fd2a73f781ace67",
+        "format": "PNG",
+        "dimensions": [
+          256,
+          256
+        ],
+        "mode": "RGBA",
+        "background": "transparent_required",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          1,
+          1
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_reuse",
+      "tool_refs": [
+        "assets/art/vfx/trace_01.png",
+        "art_sources/refresh_20261019/approved_samples/06_battle.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/12_vfx/output/prompts/41fe3de1a511895a.txt",
+      "delivery_kind": "reuse_licensed_vfx",
+      "sha256": "2b08de9ccdc7d48cef57fb36d9fa679f1626e3e1224be9200fd2a73f781ace67",
+      "newly_generated": false,
+      "native_mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        251
+      ],
+      "native_dimensions": [
+        256,
+        256
+      ],
+      "target_dimensions": [
+        256,
+        256
+      ],
+      "size_matches_technical_source": true,
+      "integration_status": "candidate_only_not_runtime_integrated"
+    },
+    {
+      "id": "604e850adf061638",
+      "batch": "12_vfx",
+      "kind": "existing",
+      "label": "assets/art/vfx/trace_03.png",
+      "source": "assets/art/vfx/trace_03.png",
+      "output": "art_sources/refresh_20261019/batches/12_vfx/output/existing/art/vfx/trace_03.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/art/vfx/trace_03.png",
+        "sha256": "38ce94960da4d6faa75634538c139a54c02251d5b2226ebbb00c007caef46aa1",
+        "format": "PNG",
+        "dimensions": [
+          256,
+          256
+        ],
+        "mode": "RGBA",
+        "background": "transparent_required",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          1,
+          1
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_reuse",
+      "tool_refs": [
+        "assets/art/vfx/trace_03.png",
+        "art_sources/refresh_20261019/approved_samples/06_battle.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/12_vfx/output/prompts/604e850adf061638.txt",
+      "delivery_kind": "reuse_licensed_vfx",
+      "sha256": "38ce94960da4d6faa75634538c139a54c02251d5b2226ebbb00c007caef46aa1",
+      "newly_generated": false,
+      "native_mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        254
+      ],
+      "native_dimensions": [
+        256,
+        256
+      ],
+      "target_dimensions": [
+        256,
+        256
+      ],
+      "size_matches_technical_source": true,
+      "integration_status": "candidate_only_not_runtime_integrated"
+    },
+    {
+      "id": "a91cfe1a527ae8f2",
+      "batch": "12_vfx",
+      "kind": "existing",
+      "label": "assets/art/vfx/trace_06.png",
+      "source": "assets/art/vfx/trace_06.png",
+      "output": "art_sources/refresh_20261019/batches/12_vfx/output/existing/art/vfx/trace_06.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/art/vfx/trace_06.png",
+        "sha256": "cb0815e708b588161e2e08e72f9b351a105b2162d0716b1d9a624d248e88973b",
+        "format": "PNG",
+        "dimensions": [
+          256,
+          256
+        ],
+        "mode": "RGBA",
+        "background": "transparent_required",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          1,
+          1
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_reuse",
+      "tool_refs": [
+        "assets/art/vfx/trace_06.png",
+        "art_sources/refresh_20261019/approved_samples/06_battle.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/12_vfx/output/prompts/a91cfe1a527ae8f2.txt",
+      "delivery_kind": "reuse_licensed_vfx",
+      "sha256": "cb0815e708b588161e2e08e72f9b351a105b2162d0716b1d9a624d248e88973b",
+      "newly_generated": false,
+      "native_mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        236
+      ],
+      "native_dimensions": [
+        256,
+        256
+      ],
+      "target_dimensions": [
+        256,
+        256
+      ],
+      "size_matches_technical_source": true,
+      "integration_status": "candidate_only_not_runtime_integrated"
+    },
+    {
+      "id": "af40b3dfc22359df",
+      "batch": "12_vfx",
+      "kind": "existing",
+      "label": "assets/art/vfx/twirl_01.png",
+      "source": "assets/art/vfx/twirl_01.png",
+      "output": "art_sources/refresh_20261019/batches/12_vfx/output/existing/art/vfx/twirl_01.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/art/vfx/twirl_01.png",
+        "sha256": "3e2b595321638a8490c48819cf32c0a25dfb040b4c9a80a1360ef476c1cd44b2",
+        "format": "PNG",
+        "dimensions": [
+          256,
+          256
+        ],
+        "mode": "RGBA",
+        "background": "transparent_required",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          1,
+          1
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_reuse",
+      "tool_refs": [
+        "assets/art/vfx/twirl_01.png",
+        "art_sources/refresh_20261019/approved_samples/06_battle.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/12_vfx/output/prompts/af40b3dfc22359df.txt",
+      "delivery_kind": "reuse_licensed_vfx",
+      "sha256": "3e2b595321638a8490c48819cf32c0a25dfb040b4c9a80a1360ef476c1cd44b2",
+      "newly_generated": false,
+      "native_mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "native_dimensions": [
+        256,
+        256
+      ],
+      "target_dimensions": [
+        256,
+        256
+      ],
+      "size_matches_technical_source": true,
+      "integration_status": "candidate_only_not_runtime_integrated"
+    },
+    {
+      "id": "9e772281b2322dcf",
+      "batch": "12_vfx",
+      "kind": "existing",
+      "label": "assets/art/vfx/twirl_02.png",
+      "source": "assets/art/vfx/twirl_02.png",
+      "output": "art_sources/refresh_20261019/batches/12_vfx/output/existing/art/vfx/twirl_02.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/art/vfx/twirl_02.png",
+        "sha256": "8baf702a641c7055d6a6835b8cd108e10559e28f7a6ff711f26fa95458040ae7",
+        "format": "PNG",
+        "dimensions": [
+          256,
+          256
+        ],
+        "mode": "RGBA",
+        "background": "transparent_required",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          1,
+          1
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_reuse",
+      "tool_refs": [
+        "assets/art/vfx/twirl_02.png",
+        "art_sources/refresh_20261019/approved_samples/06_battle.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/12_vfx/output/prompts/9e772281b2322dcf.txt",
+      "delivery_kind": "reuse_licensed_vfx",
+      "sha256": "8baf702a641c7055d6a6835b8cd108e10559e28f7a6ff711f26fa95458040ae7",
+      "newly_generated": false,
+      "native_mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        211
+      ],
+      "native_dimensions": [
+        256,
+        256
+      ],
+      "target_dimensions": [
+        256,
+        256
+      ],
+      "size_matches_technical_source": true,
+      "integration_status": "candidate_only_not_runtime_integrated"
+    },
+    {
+      "id": "c19096d89a8326c1",
+      "batch": "12_vfx",
+      "kind": "planned",
+      "label": "zhaoshui_water_metal_chain.png",
+      "source": "assets/art/vfx/magic_01.png",
+      "output": "art_sources/refresh_20261019/batches/12_vfx/output/zhaoshui_water_metal_chain.png",
+      "brief": "按新大纲6.3的水金神通连击和善水印转化制作表现候选，不沿用旧版蓄势／反击机制；不改规则",
+      "spec": {
+        "path": "assets/art/vfx/magic_01.png",
+        "sha256": "ed9233d41c41fd864364718889947a18bbad16381969a7898de956d9a30d892e",
+        "format": "PNG",
+        "dimensions": [
+          256,
+          256
+        ],
+        "mode": "RGBA",
+        "background": "transparent_required",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          1,
+          1
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_generated",
+      "priority": "P2",
+      "dependencies": [],
+      "tool_refs": [
+        "assets/art/vfx/magic_01.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/12_vfx/output/prompts/c19096d89a8326c1.txt",
+      "newly_generated": true,
+      "sha256": "90777b9c2ddae1dfc390344b2823f455831ec39cb9ec0bca1be8bfb4d1d5eb73",
+      "native_dimensions": [
+        1254,
+        1254
+      ],
+      "native_mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "tool_logical_path": "C:\\Users\\Kuroro\\.codex\\generated_images\\01a15203-e7bc-7bc0-b21d-f11948dc04a9\\exec-c7bf6625-cb99-471d-9d42-d3425191a942.png",
+      "tool_physical_path": "D:\\claude\\flash\\.tmp\\imagegen_storage\\generated_images\\01a15203-e7bc-7bc0-b21d-f11948dc04a9\\exec-c7bf6625-cb99-471d-9d42-d3425191a942.png",
+      "input_hashes": [
+        {
+          "path": "assets/art/vfx/magic_01.png",
+          "sha256": "ed9233d41c41fd864364718889947a18bbad16381969a7898de956d9a30d892e"
+        }
+      ],
+      "review": "Visually checked identity/content, category style and complete composition; integration separate.",
+      "target_dimensions": [
+        256,
+        256
+      ],
+      "size_matches_technical_source": false,
+      "integration_status": "candidate_only_not_runtime_integrated",
+      "size_note": "Native bytes retained; runtime crop/scale or atlas registration must be resolved separately. Target dimensions are not claimed as delivered dimensions."
+    },
+    {
+      "id": "37ea46c39f536af2",
+      "batch": "12_vfx",
+      "kind": "planned",
+      "label": "cangxi_concealment.png",
+      "source": "assets/art/vfx/magic_01.png",
+      "output": "art_sources/refresh_20261019/batches/12_vfx/output/cangxi_concealment.png",
+      "brief": "筑基篇藏息传承的轻雾／撤离表现，沿用原特效要求；不画成永久隐身，不改变实际风险规则",
+      "spec": {
+        "path": "assets/art/vfx/magic_01.png",
+        "sha256": "ed9233d41c41fd864364718889947a18bbad16381969a7898de956d9a30d892e",
+        "format": "PNG",
+        "dimensions": [
+          256,
+          256
+        ],
+        "mode": "RGBA",
+        "background": "transparent_required",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          1,
+          1
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_generated",
+      "priority": "P1",
+      "dependencies": [],
+      "tool_refs": [],
+      "prompt_path": "art_sources/refresh_20261019/batches/12_vfx/output/prompts/37ea46c39f536af2.txt",
+      "rejected_attempts": [
+        {
+          "path": "art_sources/refresh_20261019/batches/12_vfx/output/originals/cangxi_concealment_rejected_36fa3df6.png",
+          "sha256": "36fa3df614533c56b051465f00f1318375acf10bd8c55131abe5ad580cbd9d81",
+          "reason": "Copied five-node geometric glyph from technical size reference; requested brief retreat mist ribbons, without a permanent array.",
+          "tool_physical_path": "D:\\claude\\flash\\.tmp\\imagegen_storage\\generated_images\\01a15203-e7bc-7bc0-b21d-f11948dc04a9\\exec-b901925e-0a09-4a5c-86c9-3025ba3ca085.png"
+        }
+      ],
+      "newly_generated": true,
+      "sha256": "26ed10f5a6b99f5150dab29881fd16a0444e225cba3178f42aed427ae9e3008d",
+      "native_dimensions": [
+        1254,
+        1254
+      ],
+      "native_mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "tool_logical_path": "C:\\Users\\Kuroro\\.codex\\generated_images\\01a15203-e7bc-7bc0-b21d-f11948dc04a9\\exec-a56c2ab9-12d9-4805-bb70-7ec7d1709156.png",
+      "tool_physical_path": "D:\\claude\\flash\\.tmp\\imagegen_storage\\generated_images\\01a15203-e7bc-7bc0-b21d-f11948dc04a9\\exec-a56c2ab9-12d9-4805-bb70-7ec7d1709156.png",
+      "input_hashes": [],
+      "review": "Visually checked identity/content, category style and complete composition; integration separate.",
+      "target_dimensions": [
+        256,
+        256
+      ],
+      "size_matches_technical_source": false,
+      "integration_status": "candidate_only_not_runtime_integrated",
+      "size_note": "Native bytes retained; runtime crop/scale or atlas registration must be resolved separately. Target dimensions are not claimed as delivered dimensions."
+    },
+    {
+      "id": "d844dcebcfc69a90",
+      "batch": "12_vfx",
+      "kind": "planned",
+      "label": "tingchao_water_qi.png",
+      "source": "assets/art/vfx/magic_01.png",
+      "output": "art_sources/refresh_20261019/batches/12_vfx/output/tingchao_water_qi.png",
+      "brief": "听潮剑修复后在水脉附近开局多吸灵气的表现候选，保留同一剑型；帧数、时长与实际消费者确认后再做",
+      "spec": {
+        "path": "assets/art/vfx/magic_01.png",
+        "sha256": "ed9233d41c41fd864364718889947a18bbad16381969a7898de956d9a30d892e",
+        "format": "PNG",
+        "dimensions": [
+          256,
+          256
+        ],
+        "mode": "RGBA",
+        "background": "transparent_required",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          1,
+          1
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_generated",
+      "priority": "P2",
+      "dependencies": [],
+      "tool_refs": [],
+      "prompt_path": "art_sources/refresh_20261019/batches/12_vfx/output/prompts/d844dcebcfc69a90.txt",
+      "newly_generated": true,
+      "sha256": "0251a5d09a77c8b0d250a4807a553b162b6de895204b34b4e8ff34d6cee9373a",
+      "native_dimensions": [
+        1254,
+        1254
+      ],
+      "native_mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "tool_logical_path": "C:\\Users\\Kuroro\\.codex\\generated_images\\01a15203-e7bc-7bc0-b21d-f11948dc04a9\\exec-61b5be97-36a6-49c2-9ec5-4086b929ca03.png",
+      "tool_physical_path": "D:\\claude\\flash\\.tmp\\imagegen_storage\\generated_images\\01a15203-e7bc-7bc0-b21d-f11948dc04a9\\exec-61b5be97-36a6-49c2-9ec5-4086b929ca03.png",
+      "input_hashes": [],
+      "review": "Visually checked identity/content, category style and complete composition; integration separate.",
+      "target_dimensions": [
+        256,
+        256
+      ],
+      "size_matches_technical_source": false,
+      "integration_status": "candidate_only_not_runtime_integrated",
+      "size_note": "Native bytes retained; runtime crop/scale or atlas registration must be resolved separately. Target dimensions are not claimed as delivered dimensions."
+    }
+  ]
+}

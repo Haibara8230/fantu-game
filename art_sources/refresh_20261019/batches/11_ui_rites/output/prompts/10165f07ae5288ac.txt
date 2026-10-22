@@ -1,0 +1,9 @@
+Use case: style-transfer / identity-preserve / production game art.
+Asset: breakthrough_ritual_vignette.png
+Content request: 突破筹划功能插画，条件、资源和结果由UI独立绘制
+This is one independent production asset for an original Chinese cultivation RPG.
+Input image 1: art_sources/refresh_20261019/approved_samples/11_furnace.png. Role: approved drawing-style reference ONLY; do not copy its subject, architecture, layout or camera.
+Preserve the existing category-specific approved hand-drawn style: clear outlines, broad grouped colour areas, restrained shadows and low texture density. Do not impose character C anatomy rules on environments, maps, items or UI. No photorealism, cinematic bloom, dense surface scratches or depth-of-field blur.
+Retain the existing UI/rite illustration drawing language and readability. UI text, slots, dates and numerical values are not baked into the image. Any transparent reference must remain genuinely transparent. Do not replace editable SVG assets with this bitmap.
+Old technical target: 1254x1254 pixels. Request the same proportions and retain usable safe margins; actual native output size will be measured, never mislabelled. Background: transparent_required.
+One isolated compact planning vignette: round plain jade meditation mat, three small closed medicine bottles on a modest wooden tray, one rolled paper and a simple incense vessel beside it. Clear graphic outlines and flat muted jade/ochre colours from the approved furnace style, simple broad shading. No actual furnace needed. No slots, characters, text, numerical conditions, success flash or prediction. True transparent alpha.

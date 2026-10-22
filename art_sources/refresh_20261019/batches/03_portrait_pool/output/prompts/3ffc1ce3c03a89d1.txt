@@ -1,0 +1,11 @@
+Use case: style-transfer / identity-preserve / production game art.
+Asset: assets/local/portraits/pool/female_middle/disciple_female_middle_02.png
+Content request: Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.
+This is one independent production asset for an original Chinese cultivation RPG.
+Input image 1: assets/local/portraits/pool/female_middle/disciple_female_middle_02.png. Role: existing identity/content/layout target; preserve recognizable subject.
+Input image 2: art_sources/refresh_20261019/approved_samples/02_portrait.png. Role: approved drawing-style reference only.
+Use exactly the established C drawing language: economical clear thin dark outlines, lean stylized adult anatomy, small simply drawn manga facial features, grouped solid hair masses, broad flat muted colours, 3-5 structural clothing folds and one restrained shadow tone. No realistic face modelling, glossy anime rendering, intricate embroidery, fabric grain, individual hair strands, airbrushed skin or ornate magical effects. Plain muted grey-green backdrop. Do not copy the style reference person, beard, abacus or costume.
+ONE individual waist-up portrait. Preserve the target sex, apparent age, face shape, skin tone, hairstyle, clothing identity and occupational props. Full head, hair, both hands and important props inside frame. No scene, text, border, label or watermark. Do not make different people share the same face.
+Old technical target: 512x640 pixels. Request the same proportions and retain usable safe margins; actual native output size will be measured, never mislabelled. Background: opaque.
+
+Identity lock: MIDDLE-AGED female disciple with a broad square face, stern downturned mouth, slightly heavy eyelids, a few economical age lines at nose and cheeks, greying dark hair tied in a modest rear braid. Preserve her mature facial structure and neutral unsmiling expression; do not beautify her into a young slim-faced girl. Ivory robe with slate-blue wide collar, blue sash, modest sword hilt at viewer-right waist. Preserve source three-quarter right-facing view and actual waist-up framing. Keep full top of hair inside a visible plain grey-green top margin, no clipped bun, no invented hand gesture or extra prop.

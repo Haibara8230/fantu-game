@@ -1,0 +1,9 @@
+Use case: style-transfer / identity-preserve / production game art.
+Asset: near_sea_map.png
+Content request: 近海群岛、航线空间和沉船遗址布局；标签与路线独立
+This is one independent production asset for an original Chinese cultivation RPG.
+Input image 1: art_sources/refresh_20261019/approved_samples/05_map.png. Role: approved drawing-style reference ONLY; do not copy its subject, architecture, layout or camera.
+Preserve the existing category-specific approved hand-drawn style: clear outlines, broad grouped colour areas, restrained shadows and low texture density. Do not impose character C anatomy rules on environments, maps, items or UI. No photorealism, cinematic bloom, dense surface scratches or depth-of-field blur.
+Top-down stylized geographic base map only. Preserve layout anchors for existing maps; planned maps are provisional spatial concepts. No baked place names, routes, node symbols, fog, UI or watermark. Grouped small mountains, forest clusters, pale terrain blocks and readable rivers; no cinematic giant peak view.
+Old technical target: 1586x992 pixels. Request the same proportions and retain usable safe margins; actual native output size will be measured, never mislabelled. Background: opaque.
+IMPORTANT NEW CONTENT: this is NOT a repaint of the old technical-source scene. Completely replace its subject and composition according to the requested new asset. The old size anchor does not authorize copying its city, terrain, camera or buildings. Retain ONLY the approved drawing language from the style reference.

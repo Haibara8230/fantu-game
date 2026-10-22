@@ -1,0 +1,900 @@
+{
+  "scope": "candidate delivery; runtime installs listed in INTEGRATION.json",
+  "counts": {
+    "pending": 15,
+    "delivered_generated": 6
+  },
+  "jobs": [
+    {
+      "id": "e3056b8b303feba4",
+      "batch": "07_battle_backgrounds",
+      "kind": "existing",
+      "label": "assets/art/bamboo_arena_v1.png",
+      "source": "assets/art/bamboo_arena_v1.png",
+      "output": "art_sources/refresh_20261019/batches/07_battle_backgrounds/output/existing/art/bamboo_arena_v1.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/art/bamboo_arena_v1.png",
+        "sha256": "7e1ad7b9eed2ddca42a106f5ba7d7d1697db17ab737c41b2d15923823f901f2f",
+        "format": "PNG",
+        "dimensions": [
+          1916,
+          821
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          1916,
+          821
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "pending",
+      "tool_refs": [
+        "assets/art/bamboo_arena_v1.png",
+        "art_sources/refresh_20261019/approved_samples/06_battle.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/07_battle_backgrounds/output/prompts/e3056b8b303feba4.txt"
+    },
+    {
+      "id": "3b1f9849df376d03",
+      "batch": "07_battle_backgrounds",
+      "kind": "existing",
+      "label": "assets/art/battle/canglan_pavilion.png",
+      "source": "assets/art/battle/canglan_pavilion.png",
+      "output": "art_sources/refresh_20261019/batches/07_battle_backgrounds/output/existing/art/battle/canglan_pavilion.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/art/battle/canglan_pavilion.png",
+        "sha256": "d34da4c12a801b083c40c32349d1dcd68da7befbbd0457d755f84a87d81b0caa",
+        "format": "PNG",
+        "dimensions": [
+          1672,
+          941
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          1672,
+          941
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "pending",
+      "tool_refs": [
+        "assets/art/battle/canglan_pavilion.png",
+        "art_sources/refresh_20261019/approved_samples/06_battle.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/07_battle_backgrounds/output/prompts/3b1f9849df376d03.txt"
+    },
+    {
+      "id": "613425a3d3aff18c",
+      "batch": "07_battle_backgrounds",
+      "kind": "existing",
+      "label": "assets/art/battle/changqing_valley.png",
+      "source": "assets/art/battle/changqing_valley.png",
+      "output": "art_sources/refresh_20261019/batches/07_battle_backgrounds/output/existing/art/battle/changqing_valley.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/art/battle/changqing_valley.png",
+        "sha256": "73222a5652b43412c2656e9f951540131a6049778e49c557bd72a2259c5fa535",
+        "format": "PNG",
+        "dimensions": [
+          1672,
+          941
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          1672,
+          941
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "pending",
+      "tool_refs": [
+        "assets/art/battle/changqing_valley.png",
+        "art_sources/refresh_20261019/approved_samples/06_battle.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/07_battle_backgrounds/output/prompts/613425a3d3aff18c.txt"
+    },
+    {
+      "id": "e8713dd65f7560ea",
+      "batch": "07_battle_backgrounds",
+      "kind": "existing",
+      "label": "assets/art/battle/chifeng.png",
+      "source": "assets/art/battle/chifeng.png",
+      "output": "art_sources/refresh_20261019/batches/07_battle_backgrounds/output/existing/art/battle/chifeng.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/art/battle/chifeng.png",
+        "sha256": "2b459fa28fe53916e2ddc3150938ae2bdee278b732cdca00909ad5605aaf8078",
+        "format": "PNG",
+        "dimensions": [
+          1672,
+          941
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          1672,
+          941
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "pending",
+      "tool_refs": [
+        "assets/art/battle/chifeng.png",
+        "art_sources/refresh_20261019/approved_samples/06_battle.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/07_battle_backgrounds/output/prompts/e8713dd65f7560ea.txt"
+    },
+    {
+      "id": "265280a14ec643ff",
+      "batch": "07_battle_backgrounds",
+      "kind": "existing",
+      "label": "assets/art/battle/chixiao_gate.png",
+      "source": "assets/art/battle/chixiao_gate.png",
+      "output": "art_sources/refresh_20261019/batches/07_battle_backgrounds/output/existing/art/battle/chixiao_gate.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/art/battle/chixiao_gate.png",
+        "sha256": "f6507025a69c1b0952afb3d1877cbb16e25adee5ae38490bd6a63c6d6c41c740",
+        "format": "PNG",
+        "dimensions": [
+          1672,
+          941
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          1672,
+          941
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "pending",
+      "tool_refs": [
+        "assets/art/battle/chixiao_gate.png",
+        "art_sources/refresh_20261019/approved_samples/06_battle.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/07_battle_backgrounds/output/prompts/265280a14ec643ff.txt"
+    },
+    {
+      "id": "62ebcf0b1ba52cb3",
+      "batch": "07_battle_backgrounds",
+      "kind": "existing",
+      "label": "assets/art/battle/ferry.png",
+      "source": "assets/art/battle/ferry.png",
+      "output": "art_sources/refresh_20261019/batches/07_battle_backgrounds/output/existing/art/battle/ferry.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/art/battle/ferry.png",
+        "sha256": "705975e736825b19d205e5d807ce525adeccd9897dee8fb89bb523d303a46c16",
+        "format": "PNG",
+        "dimensions": [
+          1792,
+          768
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          7,
+          3
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "pending",
+      "tool_refs": [
+        "assets/art/battle/ferry.png",
+        "art_sources/refresh_20261019/approved_samples/06_battle.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/07_battle_backgrounds/output/prompts/62ebcf0b1ba52cb3.txt"
+    },
+    {
+      "id": "7416719c9d76d49c",
+      "batch": "07_battle_backgrounds",
+      "kind": "existing",
+      "label": "assets/art/battle/market.png",
+      "source": "assets/art/battle/market.png",
+      "output": "art_sources/refresh_20261019/batches/07_battle_backgrounds/output/existing/art/battle/market.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/art/battle/market.png",
+        "sha256": "274e510fee2488214820b3674dae3a250608c4f7bc67ae3ee027ebb259a338b7",
+        "format": "PNG",
+        "dimensions": [
+          1792,
+          768
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          7,
+          3
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "pending",
+      "tool_refs": [
+        "assets/art/battle/market.png",
+        "art_sources/refresh_20261019/approved_samples/06_battle.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/07_battle_backgrounds/output/prompts/7416719c9d76d49c.txt"
+    },
+    {
+      "id": "ad2332ff1f24e794",
+      "batch": "07_battle_backgrounds",
+      "kind": "existing",
+      "label": "assets/art/battle/nanming.png",
+      "source": "assets/art/battle/nanming.png",
+      "output": "art_sources/refresh_20261019/batches/07_battle_backgrounds/output/existing/art/battle/nanming.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/art/battle/nanming.png",
+        "sha256": "f5468a21f2c09e7f60ea12aa62fdea880e616bbe6bab93841e3bf49cc29732a3",
+        "format": "PNG",
+        "dimensions": [
+          1672,
+          940
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          418,
+          235
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "pending",
+      "tool_refs": [
+        "assets/art/battle/nanming.png",
+        "art_sources/refresh_20261019/approved_samples/06_battle.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/07_battle_backgrounds/output/prompts/ad2332ff1f24e794.txt"
+    },
+    {
+      "id": "f3f21dab5b3d490a",
+      "batch": "07_battle_backgrounds",
+      "kind": "existing",
+      "label": "assets/art/battle/ridge.png",
+      "source": "assets/art/battle/ridge.png",
+      "output": "art_sources/refresh_20261019/batches/07_battle_backgrounds/output/existing/art/battle/ridge.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/art/battle/ridge.png",
+        "sha256": "2533a7f9c36ac925103ab1a18aeba40d074ce238ec5d79a8db8d20f9a9d6c3da",
+        "format": "PNG",
+        "dimensions": [
+          1792,
+          768
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          7,
+          3
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "pending",
+      "tool_refs": [
+        "assets/art/battle/ridge.png",
+        "art_sources/refresh_20261019/approved_samples/06_battle.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/07_battle_backgrounds/output/prompts/f3f21dab5b3d490a.txt"
+    },
+    {
+      "id": "50aa4d8a4efe9fa3",
+      "batch": "07_battle_backgrounds",
+      "kind": "existing",
+      "label": "assets/art/battle/road.png",
+      "source": "assets/art/battle/road.png",
+      "output": "art_sources/refresh_20261019/batches/07_battle_backgrounds/output/existing/art/battle/road.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/art/battle/road.png",
+        "sha256": "436be5465b6de6100eb65e8943a2b4d08d1470faff2bd1f70c13fd7ea3357166",
+        "format": "PNG",
+        "dimensions": [
+          1792,
+          768
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          7,
+          3
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "pending",
+      "tool_refs": [
+        "assets/art/battle/road.png",
+        "art_sources/refresh_20261019/approved_samples/06_battle.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/07_battle_backgrounds/output/prompts/50aa4d8a4efe9fa3.txt"
+    },
+    {
+      "id": "fced84f5c3142e51",
+      "batch": "07_battle_backgrounds",
+      "kind": "existing",
+      "label": "assets/art/battle/ruin.png",
+      "source": "assets/art/battle/ruin.png",
+      "output": "art_sources/refresh_20261019/batches/07_battle_backgrounds/output/existing/art/battle/ruin.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/art/battle/ruin.png",
+        "sha256": "b0ca0c142e40fc9f319008b7e38ef07a64bc57cba2e807e3143478fe6cc77e80",
+        "format": "PNG",
+        "dimensions": [
+          1792,
+          768
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          7,
+          3
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "pending",
+      "tool_refs": [
+        "assets/art/battle/ruin.png",
+        "art_sources/refresh_20261019/approved_samples/06_battle.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/07_battle_backgrounds/output/prompts/fced84f5c3142e51.txt"
+    },
+    {
+      "id": "139d0765d8261f9d",
+      "batch": "07_battle_backgrounds",
+      "kind": "existing",
+      "label": "assets/art/battle/sect.png",
+      "source": "assets/art/battle/sect.png",
+      "output": "art_sources/refresh_20261019/batches/07_battle_backgrounds/output/existing/art/battle/sect.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/art/battle/sect.png",
+        "sha256": "cc2fce5ed90a534d646589d0e982e33ec7d6fbb529dff0a4f2d5232aea5964e1",
+        "format": "PNG",
+        "dimensions": [
+          1792,
+          768
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          7,
+          3
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "pending",
+      "tool_refs": [
+        "assets/art/battle/sect.png",
+        "art_sources/refresh_20261019/approved_samples/06_battle.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/07_battle_backgrounds/output/prompts/139d0765d8261f9d.txt"
+    },
+    {
+      "id": "e7aac9e62a35e7dd",
+      "batch": "07_battle_backgrounds",
+      "kind": "existing",
+      "label": "assets/art/battle/town.png",
+      "source": "assets/art/battle/town.png",
+      "output": "art_sources/refresh_20261019/batches/07_battle_backgrounds/output/existing/art/battle/town.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/art/battle/town.png",
+        "sha256": "839cea21f853f22355717608889e55d514af9f0b62beff6946acaa6bfa212b0b",
+        "format": "PNG",
+        "dimensions": [
+          1792,
+          768
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          7,
+          3
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "pending",
+      "tool_refs": [
+        "assets/art/battle/town.png",
+        "art_sources/refresh_20261019/approved_samples/06_battle.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/07_battle_backgrounds/output/prompts/e7aac9e62a35e7dd.txt"
+    },
+    {
+      "id": "bb432d998fd8fa0f",
+      "batch": "07_battle_backgrounds",
+      "kind": "existing",
+      "label": "assets/art/battle/wild.png",
+      "source": "assets/art/battle/wild.png",
+      "output": "art_sources/refresh_20261019/batches/07_battle_backgrounds/output/existing/art/battle/wild.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/art/battle/wild.png",
+        "sha256": "4ffc9c46bdce8fd58cf116bf6a1e54629c72d1d32d1ff47984453154a4af54fd",
+        "format": "PNG",
+        "dimensions": [
+          1792,
+          768
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          7,
+          3
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "pending",
+      "tool_refs": [
+        "assets/art/battle/wild.png",
+        "art_sources/refresh_20261019/approved_samples/06_battle.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/07_battle_backgrounds/output/prompts/bb432d998fd8fa0f.txt"
+    },
+    {
+      "id": "22e88bb88b9aedaa",
+      "batch": "07_battle_backgrounds",
+      "kind": "existing",
+      "label": "assets/art/battle/xuanyue_gate.png",
+      "source": "assets/art/battle/xuanyue_gate.png",
+      "output": "art_sources/refresh_20261019/batches/07_battle_backgrounds/output/existing/art/battle/xuanyue_gate.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/art/battle/xuanyue_gate.png",
+        "sha256": "192d40959f76dc9c16d5113b8fb5d733369314e6300a3faa480de12c3b4299c5",
+        "format": "PNG",
+        "dimensions": [
+          1672,
+          941
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          1672,
+          941
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "pending",
+      "tool_refs": [
+        "assets/art/battle/xuanyue_gate.png",
+        "art_sources/refresh_20261019/approved_samples/06_battle.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/07_battle_backgrounds/output/prompts/22e88bb88b9aedaa.txt"
+    },
+    {
+      "id": "534c0e20a93bdd4a",
+      "batch": "07_battle_backgrounds",
+      "kind": "planned",
+      "label": "tiannan_tournament_arena.png",
+      "source": "assets/art/bamboo_arena_v1.png",
+      "output": "art_sources/refresh_20261019/batches/07_battle_backgrounds/output/tiannan_tournament_arena.png",
+      "brief": "筑基天南大比斗法镜头，与第06批会场保持空间关系；五城轮办可换边缘陈设，站位清楚",
+      "spec": {
+        "path": "assets/art/bamboo_arena_v1.png",
+        "sha256": "7e1ad7b9eed2ddca42a106f5ba7d7d1697db17ab737c41b2d15923823f901f2f",
+        "format": "PNG",
+        "dimensions": [
+          1916,
+          821
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          1916,
+          821
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_generated",
+      "priority": "P1",
+      "dependencies": [],
+      "tool_refs": [
+        "art_sources/refresh_20261019/approved_samples/06_battle.png",
+        "art_sources/refresh_20261019/batches/06_scenes/output/tiannan_tournament_venue.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/07_battle_backgrounds/output/prompts/534c0e20a93bdd4a.txt",
+      "newly_generated": true,
+      "sha256": "ef1720c4a7c6bd1bc9e6bec5bad0fd43750f4b4b315e4331883802f3ba4d080e",
+      "native_dimensions": [
+        1916,
+        821
+      ],
+      "native_mode": "RGB",
+      "alpha_extrema": null,
+      "tool_logical_path": "C:\\Users\\Kuroro\\.codex\\generated_images\\01a15203-e7bc-7bc0-b21d-f11948dc04a9\\exec-d298983c-d405-4925-9e99-9822aacdde2c.png",
+      "tool_physical_path": "D:\\claude\\flash\\.tmp\\imagegen_storage\\generated_images\\01a15203-e7bc-7bc0-b21d-f11948dc04a9\\exec-d298983c-d405-4925-9e99-9822aacdde2c.png",
+      "input_hashes": [
+        {
+          "path": "art_sources/refresh_20261019/approved_samples/06_battle.png",
+          "sha256": "c55bd1aba9fba313c61ae1c89bb3c0b131190eb0068aa722af84dd60fcace0ed"
+        },
+        {
+          "path": "art_sources/refresh_20261019/batches/06_scenes/output/tiannan_tournament_venue.png",
+          "sha256": "bf24699a4bd0f9844af6679ebd127a65579df12cee424b689a2a3747b88ba3d9"
+        }
+      ],
+      "review": "Visually checked identity/content, category style and complete composition; integration separate.",
+      "target_dimensions": [
+        1916,
+        821
+      ],
+      "size_matches_technical_source": true,
+      "integration_status": "runtime_installed",
+      "runtime_targets": [
+        "assets/art/battle/tiannan_tournament_arena.png"
+      ]
+    },
+    {
+      "id": "f6c909b3542143aa",
+      "batch": "07_battle_backgrounds",
+      "kind": "planned",
+      "label": "public_tournament_stage.png",
+      "source": "assets/art/bamboo_arena_v1.png",
+      "output": "art_sources/refresh_20261019/batches/07_battle_backgrounds/output/public_tournament_stage.png",
+      "brief": "开局云溪潜龙会斗法镜头，与第09批全景保持空间关系；参赛与观战共用，不烘焙胜者或角色",
+      "spec": {
+        "path": "assets/art/bamboo_arena_v1.png",
+        "sha256": "7e1ad7b9eed2ddca42a106f5ba7d7d1697db17ab737c41b2d15923823f901f2f",
+        "format": "PNG",
+        "dimensions": [
+          1916,
+          821
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          1916,
+          821
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_generated",
+      "priority": "P0",
+      "dependencies": [],
+      "tool_refs": [
+        "art_sources/refresh_20261019/approved_samples/06_battle.png",
+        "art_sources/refresh_20261019/batches/09_events/candidates/qianlong_arena.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/07_battle_backgrounds/output/prompts/f6c909b3542143aa.txt",
+      "newly_generated": true,
+      "sha256": "f92203dbc8e1aa7b5960aa05dc36308c7dea99e37b2c62d20a50464fde24131a",
+      "native_dimensions": [
+        1916,
+        821
+      ],
+      "native_mode": "RGB",
+      "alpha_extrema": null,
+      "tool_logical_path": "C:\\Users\\Kuroro\\.codex\\generated_images\\01a15203-e7bc-7bc0-b21d-f11948dc04a9\\exec-ab84deaa-e0a1-403a-bacf-669fadb4abdb.png",
+      "tool_physical_path": "D:\\claude\\flash\\.tmp\\imagegen_storage\\generated_images\\01a15203-e7bc-7bc0-b21d-f11948dc04a9\\exec-ab84deaa-e0a1-403a-bacf-669fadb4abdb.png",
+      "input_hashes": [
+        {
+          "path": "art_sources/refresh_20261019/approved_samples/06_battle.png",
+          "sha256": "c55bd1aba9fba313c61ae1c89bb3c0b131190eb0068aa722af84dd60fcace0ed"
+        },
+        {
+          "path": "art_sources/refresh_20261019/batches/09_events/candidates/qianlong_arena.png",
+          "sha256": "76c5ddfc060e91e680018137f3c7b5e415103d1033ff8b9a2b5c1ec51a764086"
+        }
+      ],
+      "review": "Visually checked identity/content, category style and complete composition; integration separate.",
+      "target_dimensions": [
+        1916,
+        821
+      ],
+      "size_matches_technical_source": true,
+      "integration_status": "runtime_installed",
+      "runtime_targets": [
+        "assets/art/battle/public_tournament_stage.png"
+      ]
+    },
+    {
+      "id": "3aa3214ac058f2be",
+      "batch": "07_battle_backgrounds",
+      "kind": "planned",
+      "label": "five_sect_forum_arena.png",
+      "source": "assets/art/bamboo_arena_v1.png",
+      "output": "art_sources/refresh_20261019/batches/07_battle_backgrounds/output/five_sect_forum_arena.png",
+      "brief": "五宗论道的高阶斗法镜头；沿用第06批会场布局和既有斗法背景要求，优先复用相容场地",
+      "spec": {
+        "path": "assets/art/bamboo_arena_v1.png",
+        "sha256": "7e1ad7b9eed2ddca42a106f5ba7d7d1697db17ab737c41b2d15923823f901f2f",
+        "format": "PNG",
+        "dimensions": [
+          1916,
+          821
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          1916,
+          821
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_generated",
+      "priority": "P2",
+      "dependencies": [],
+      "tool_refs": [
+        "art_sources/refresh_20261019/approved_samples/06_battle.png",
+        "art_sources/refresh_20261019/batches/06_scenes/output/five_sect_forum_venue.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/07_battle_backgrounds/output/prompts/3aa3214ac058f2be.txt",
+      "newly_generated": true,
+      "sha256": "d52ddd70c3f0ec8143ae1e881268ccf5d2c94722abf8834356b14807fc000e16",
+      "native_dimensions": [
+        1916,
+        821
+      ],
+      "native_mode": "RGB",
+      "alpha_extrema": null,
+      "tool_logical_path": "C:\\Users\\Kuroro\\.codex\\generated_images\\01a15203-e7bc-7bc0-b21d-f11948dc04a9\\exec-97d83eb5-907a-4812-bd64-708dae567deb.png",
+      "tool_physical_path": "D:\\claude\\flash\\.tmp\\imagegen_storage\\generated_images\\01a15203-e7bc-7bc0-b21d-f11948dc04a9\\exec-97d83eb5-907a-4812-bd64-708dae567deb.png",
+      "input_hashes": [
+        {
+          "path": "art_sources/refresh_20261019/approved_samples/06_battle.png",
+          "sha256": "c55bd1aba9fba313c61ae1c89bb3c0b131190eb0068aa722af84dd60fcace0ed"
+        },
+        {
+          "path": "art_sources/refresh_20261019/batches/06_scenes/output/five_sect_forum_venue.png",
+          "sha256": "d9dc2f70fd7aaca6482bc8e410d996782bcf071a4ba81e95acfdfe1b2a685b43"
+        }
+      ],
+      "review": "Visually checked identity/content, category style and complete composition; integration separate.",
+      "target_dimensions": [
+        1916,
+        821
+      ],
+      "size_matches_technical_source": true,
+      "integration_status": "runtime_installed",
+      "runtime_targets": [
+        "assets/art/battle/five_sect_forum_arena.png"
+      ]
+    },
+    {
+      "id": "b6bbe727f76a2142",
+      "batch": "07_battle_backgrounds",
+      "kind": "planned",
+      "label": "chenxia_array_arena.png",
+      "source": "assets/art/bamboo_arena_v1.png",
+      "output": "art_sources/refresh_20261019/batches/07_battle_backgrounds/output/chenxia_array_arena.png",
+      "brief": "古境阵室斗法场，双方站位明确",
+      "spec": {
+        "path": "assets/art/bamboo_arena_v1.png",
+        "sha256": "7e1ad7b9eed2ddca42a106f5ba7d7d1697db17ab737c41b2d15923823f901f2f",
+        "format": "PNG",
+        "dimensions": [
+          1916,
+          821
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          1916,
+          821
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_generated",
+      "priority": "P2",
+      "dependencies": [],
+      "tool_refs": [
+        "art_sources/refresh_20261019/approved_samples/06_battle.png",
+        "art_sources/refresh_20261019/batches/06_scenes/output/chenxia_array_chamber.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/07_battle_backgrounds/output/prompts/b6bbe727f76a2142.txt",
+      "rejected_attempts": [
+        {
+          "path": "art_sources/refresh_20261019/batches/07_battle_backgrounds/output/originals/chenxia_array_arena_rejected_2727b787.png",
+          "sha256": "2727b787c78bba0349d3c014c0de1e3a08aecfd94363ec9162ca5d8186c1e709",
+          "reason": "Wrong setting: outdoor bamboo/mountain terrace instead of the supplied Chenxia indoor array chamber.",
+          "tool_physical_path": "D:\\claude\\flash\\.tmp\\imagegen_storage\\generated_images\\01a15203-e7bc-7bc0-b21d-f11948dc04a9\\exec-a3c0fc2d-ad17-4d1f-a3f3-2f126cd2b127.png"
+        }
+      ],
+      "newly_generated": true,
+      "sha256": "025bb4ed853bdb897848e87752c8897d779b3deb223be3769169b2e06bac05a4",
+      "native_dimensions": [
+        1916,
+        821
+      ],
+      "native_mode": "RGB",
+      "alpha_extrema": null,
+      "tool_logical_path": "C:\\Users\\Kuroro\\.codex\\generated_images\\01a15203-e7bc-7bc0-b21d-f11948dc04a9\\exec-5562327a-f769-4842-9a24-f49b4e1af848.png",
+      "tool_physical_path": "D:\\claude\\flash\\.tmp\\imagegen_storage\\generated_images\\01a15203-e7bc-7bc0-b21d-f11948dc04a9\\exec-5562327a-f769-4842-9a24-f49b4e1af848.png",
+      "input_hashes": [
+        {
+          "path": "art_sources/refresh_20261019/approved_samples/06_battle.png",
+          "sha256": "c55bd1aba9fba313c61ae1c89bb3c0b131190eb0068aa722af84dd60fcace0ed"
+        },
+        {
+          "path": "art_sources/refresh_20261019/batches/06_scenes/output/chenxia_array_chamber.png",
+          "sha256": "a67b57086b1bdd61af78b7ad2f23fd9d20c18733f3870b733af7ee5e540baa2c"
+        }
+      ],
+      "review": "Visually checked identity/content, category style and complete composition; integration separate.",
+      "target_dimensions": [
+        1916,
+        821
+      ],
+      "size_matches_technical_source": true,
+      "integration_status": "runtime_installed",
+      "runtime_targets": [
+        "assets/art/battle/chenxia_array_arena.png"
+      ]
+    },
+    {
+      "id": "ca2ab99a054abf79",
+      "batch": "07_battle_backgrounds",
+      "kind": "planned",
+      "label": "sea_island_arena.png",
+      "source": "assets/art/bamboo_arena_v1.png",
+      "output": "art_sources/refresh_20261019/batches/07_battle_backgrounds/output/sea_island_arena.png",
+      "brief": "海岛斗法场，海面与岛屿分层",
+      "spec": {
+        "path": "assets/art/bamboo_arena_v1.png",
+        "sha256": "7e1ad7b9eed2ddca42a106f5ba7d7d1697db17ab737c41b2d15923823f901f2f",
+        "format": "PNG",
+        "dimensions": [
+          1916,
+          821
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          1916,
+          821
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_generated",
+      "priority": "P2",
+      "dependencies": [],
+      "tool_refs": [
+        "art_sources/refresh_20261019/approved_samples/06_battle.png",
+        "art_sources/refresh_20261019/batches/06_scenes/output/island_landing.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/07_battle_backgrounds/output/prompts/ca2ab99a054abf79.txt",
+      "newly_generated": true,
+      "sha256": "c0f26a67dcc441afc7fd6b6da10618f4be794875ca01d5ca09b98b026ba2025a",
+      "native_dimensions": [
+        1915,
+        821
+      ],
+      "native_mode": "RGB",
+      "alpha_extrema": null,
+      "tool_logical_path": "C:\\Users\\Kuroro\\.codex\\generated_images\\01a15203-e7bc-7bc0-b21d-f11948dc04a9\\exec-26b34564-050c-46f1-8bdc-861a9a401040.png",
+      "tool_physical_path": "D:\\claude\\flash\\.tmp\\imagegen_storage\\generated_images\\01a15203-e7bc-7bc0-b21d-f11948dc04a9\\exec-26b34564-050c-46f1-8bdc-861a9a401040.png",
+      "input_hashes": [
+        {
+          "path": "art_sources/refresh_20261019/approved_samples/06_battle.png",
+          "sha256": "c55bd1aba9fba313c61ae1c89bb3c0b131190eb0068aa722af84dd60fcace0ed"
+        },
+        {
+          "path": "art_sources/refresh_20261019/batches/06_scenes/output/island_landing.png",
+          "sha256": "b6d11a1f82c66c680332610f9ac6ab0251cb53c54bd74a7084e852b5438f3f08"
+        }
+      ],
+      "review": "Visually checked identity/content, category style and complete composition; integration separate.",
+      "target_dimensions": [
+        1916,
+        821
+      ],
+      "size_matches_technical_source": false,
+      "integration_status": "runtime_installed",
+      "size_note": "Native bytes retained; runtime crop/scale or atlas registration must be resolved separately. Target dimensions are not claimed as delivered dimensions.",
+      "runtime_targets": [
+        "assets/art/battle/sea_island_arena.png"
+      ]
+    },
+    {
+      "id": "30e346f683982669",
+      "batch": "07_battle_backgrounds",
+      "kind": "planned",
+      "label": "underwater_ruin_arena.png",
+      "source": "assets/art/bamboo_arena_v1.png",
+      "output": "art_sources/refresh_20261019/batches/07_battle_backgrounds/output/underwater_ruin_arena.png",
+      "brief": "水下遗迹斗法场，同色系分层但不吞没角色",
+      "spec": {
+        "path": "assets/art/bamboo_arena_v1.png",
+        "sha256": "7e1ad7b9eed2ddca42a106f5ba7d7d1697db17ab737c41b2d15923823f901f2f",
+        "format": "PNG",
+        "dimensions": [
+          1916,
+          821
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          1916,
+          821
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_generated",
+      "priority": "P2",
+      "dependencies": [],
+      "tool_refs": [
+        "art_sources/refresh_20261019/approved_samples/06_battle.png",
+        "art_sources/refresh_20261019/batches/06_scenes/output/underwater_ruin_gate.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/07_battle_backgrounds/output/prompts/30e346f683982669.txt",
+      "newly_generated": true,
+      "sha256": "43597c4d54c3c490cda8d8ab72af391866e465cc9976d57c46eac013405d0cf3",
+      "native_dimensions": [
+        1916,
+        821
+      ],
+      "native_mode": "RGB",
+      "alpha_extrema": null,
+      "tool_logical_path": "C:\\Users\\Kuroro\\.codex\\generated_images\\01a15203-e7bc-7bc0-b21d-f11948dc04a9\\exec-83c7532b-8585-4435-ba69-d284a557ae0f.png",
+      "tool_physical_path": "D:\\claude\\flash\\.tmp\\imagegen_storage\\generated_images\\01a15203-e7bc-7bc0-b21d-f11948dc04a9\\exec-83c7532b-8585-4435-ba69-d284a557ae0f.png",
+      "input_hashes": [
+        {
+          "path": "art_sources/refresh_20261019/approved_samples/06_battle.png",
+          "sha256": "c55bd1aba9fba313c61ae1c89bb3c0b131190eb0068aa722af84dd60fcace0ed"
+        },
+        {
+          "path": "art_sources/refresh_20261019/batches/06_scenes/output/underwater_ruin_gate.png",
+          "sha256": "ce5e98d67c1d172a8e6c651b9ce029dbba91d16529f88735995fe08a53c05fc4"
+        }
+      ],
+      "review": "Visually checked identity/content, category style and complete composition; integration separate.",
+      "target_dimensions": [
+        1916,
+        821
+      ],
+      "size_matches_technical_source": true,
+      "integration_status": "candidate_only_not_runtime_integrated"
+    }
+  ]
+}

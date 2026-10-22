@@ -89,7 +89,8 @@ func _run() -> void:
 		main.session.player.location = location_id
 		main.render()
 		check(main.backdrop.texture.resource_path == ArtLibrary.fullscreen_location_path(location_id), location_id + " full-screen art reaches the place view")
-	check(main.window_style is StyleBoxTexture and main.window_style.get_minimum_size().y <= 80, "painted frame does not impose image-sized minimums, only room for its border")
+	var frame: Dictionary = load("res://scripts/ui/ui_skin.gd").FRAME
+	check(main.window_style is StyleBoxTexture and main.window_style.get_minimum_size().y <= frame[SIDE_TOP] + frame[SIDE_BOTTOM] + 18.0 and main.window_style.get_minimum_size().y < main.window_style.texture.get_height() / 2.0, "painted frame does not impose image-sized minimums, only room for its border")
 	main.queue_free()
 	await process_frame
 	_icons()
@@ -170,6 +171,17 @@ func _painted_actors() -> void:
 		check(stage.background.resource_path == "res://assets/art/battle/%s.png" % place, place + " selects its dedicated battle background")
 		stage.queue_free()
 		await process_frame
+	# Contest stages win over the host city's own backdrop; places without one borrow a lent picture.
+	var staged := {"tournament": ["market", "", "tournament"], "summit:tiannan": ["nanming", "tiannan", "summit"], "summit:wuzong": ["canglan", "wuzong", "summit"]}
+	for key: String in staged:
+		var snapshot: Dictionary = game.snapshot()
+		snapshot.battle.place = staged[key][0]
+		snapshot.battle.contest = staged[key][1]
+		snapshot.battle.context = staged[key][2]
+		check(Stage.art_path(Stage.background_candidates(ArtLibrary._config(), snapshot.battle)) == ArtLibrary._config().stage_background[key], key + " fights on its contest stage")
+	for place: String in ArtLibrary._config().place_battle_art:
+		var battle := {"place": place, "context": ""}
+		check(Stage.art_path(Stage.background_candidates(ArtLibrary._config(), battle)) == ArtLibrary._config().place_battle_art[place], place + " borrows its lent battle background")
 	for enemy_id: String in ["huo_xi", "bear_king", "wolf_pack", "shan_xiao", "huo_ya", "qinglin_snake", "chilian_snake", "yanjia_xi", "chixiao_zhifa", "tribulation_core", "tribulation_nascent", "tribulation_deity"]:
 		var definition: Dictionary = ArtLibrary._config().actors[enemy_id]
 		var snapshot: Dictionary = game.snapshot()

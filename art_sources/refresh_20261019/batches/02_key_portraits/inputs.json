@@ -12,7 +12,6 @@
       ],
       "mode": "RGB"
     },
-    "absolute_path": "D:/fqh/flash/assets/art/portraits/azhi.png",
     "actor_layouts": []
   },
   {
@@ -28,7 +27,6 @@
       ],
       "mode": "RGB"
     },
-    "absolute_path": "D:/fqh/flash/assets/art/portraits/azhi_unique.png",
     "actor_layouts": []
   },
   {
@@ -44,7 +42,6 @@
       ],
       "mode": "RGB"
     },
-    "absolute_path": "D:/fqh/flash/assets/art/portraits/boatman.png",
     "actor_layouts": []
   },
   {
@@ -60,7 +57,6 @@
       ],
       "mode": "RGB"
     },
-    "absolute_path": "D:/fqh/flash/assets/art/portraits/gu_changgeng_unique.png",
     "actor_layouts": []
   },
   {
@@ -76,7 +72,6 @@
       ],
       "mode": "RGB"
     },
-    "absolute_path": "D:/fqh/flash/assets/art/portraits/han_jin_unique.png",
     "actor_layouts": []
   },
   {
@@ -92,7 +87,6 @@
       ],
       "mode": "RGB"
     },
-    "absolute_path": "D:/fqh/flash/assets/art/portraits/peddler.png",
     "actor_layouts": []
   },
   {
@@ -108,7 +102,6 @@
       ],
       "mode": "RGB"
     },
-    "absolute_path": "D:/fqh/flash/assets/art/portraits/rogue.png",
     "actor_layouts": []
   },
   {
@@ -124,7 +117,6 @@
       ],
       "mode": "RGB"
     },
-    "absolute_path": "D:/fqh/flash/assets/art/portraits/shen_mo.png",
     "actor_layouts": []
   },
   {
@@ -140,7 +132,6 @@
       ],
       "mode": "RGB"
     },
-    "absolute_path": "D:/fqh/flash/assets/art/portraits/squatter.png",
     "actor_layouts": []
   },
   {
@@ -156,7 +147,6 @@
       ],
       "mode": "RGB"
     },
-    "absolute_path": "D:/fqh/flash/assets/art/portraits/storyteller.png",
     "actor_layouts": []
   },
   {
@@ -172,7 +162,6 @@
       ],
       "mode": "RGB"
     },
-    "absolute_path": "D:/fqh/flash/assets/art/portraits/wounded.png",
     "actor_layouts": []
   },
   {
@@ -188,7 +177,6 @@
       ],
       "mode": "RGB"
     },
-    "absolute_path": "D:/fqh/flash/assets/art/portraits/xu_qinghe_unique.png",
     "actor_layouts": []
   },
   {
@@ -204,7 +192,6 @@
       ],
       "mode": "RGB"
     },
-    "absolute_path": "D:/fqh/flash/assets/art/portraits/yuan_chifeng_unique.png",
     "actor_layouts": []
   },
   {
@@ -220,7 +207,6 @@
       ],
       "mode": "RGB"
     },
-    "absolute_path": "D:/fqh/flash/assets/local/portraits/gu_changgeng.png",
     "actor_layouts": []
   },
   {
@@ -236,7 +222,6 @@
       ],
       "mode": "RGB"
     },
-    "absolute_path": "D:/fqh/flash/assets/local/portraits/xu_qinghe.png",
     "actor_layouts": []
   }
 ]

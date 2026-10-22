@@ -12,7 +12,6 @@
       ],
       "mode": "RGB"
     },
-    "absolute_path": "D:/fqh/flash/assets/art/map/region_qingyun.png",
     "actor_layouts": []
   },
   {
@@ -28,7 +27,6 @@
       ],
       "mode": "RGB"
     },
-    "absolute_path": "D:/fqh/flash/assets/art/map/region_tiannan.png",
     "actor_layouts": []
   }
 ]

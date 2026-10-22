@@ -1,0 +1,1884 @@
+{
+  "date": "2026-10-20",
+  "tool_mode": "built-in image_gen; one independent call and visual review per portrait",
+  "physical_generated_image_storage": "D:\\claude\\flash\\.tmp\\imagegen_storage\\generated_images",
+  "scope": "Candidate-only portrait delivery in D-drive project. No runtime resource replacement, game launches, logic or save changes.",
+  "session_generated": 30,
+  "completed_milestone": "female_middle subbatch: all 30/30; four more male_young disciples delivered (05-08).",
+  "portrait_pool_counts": {
+    "delivered_generated": 38,
+    "pending": 208
+  },
+  "overall_counts": {
+    "pending": 336,
+    "delivered_reuse": 276,
+    "delivered_generated": 126,
+    "excluded_unconfirmed_enemy": 1,
+    "delivered_vector": 4
+  },
+  "checks": "Actual generated/cache paths resolve to D-drive project; logical junction/source/output byte hashes match; original identity and actual input hashes unchanged; decoded dimensions match records. All 30 visually reviewed for identity, mature/young age, hairstyle, pose, costume, important props, frame edges and approved C drawing style.",
+  "integration_note": "Native bytes preserved; these portraits are 1122x1402 candidates against 512x640 old targets. Runtime sizing/crop adaptation is still separate.",
+  "jobs": [
+    {
+      "id": "d6a84134da981f52",
+      "batch": "03_portrait_pool",
+      "kind": "existing",
+      "label": "assets/local/portraits/pool/female_middle/disciple_female_middle_05.png",
+      "source": "assets/local/portraits/pool/female_middle/disciple_female_middle_05.png",
+      "output": "art_sources/refresh_20261019/batches/03_portrait_pool/output/existing/local/portraits/pool/female_middle/disciple_female_middle_05.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/local/portraits/pool/female_middle/disciple_female_middle_05.png",
+        "sha256": "c3da53440afa7a007c1b3b24d0aabded796c4a72f701e584a493741e615025dc",
+        "format": "PNG",
+        "dimensions": [
+          512,
+          640
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          4,
+          5
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_generated",
+      "tool_refs": [
+        "assets/local/portraits/pool/female_middle/disciple_female_middle_05.png",
+        "art_sources/refresh_20261019/approved_samples/02_portrait.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/03_portrait_pool/output/prompts/d6a84134da981f52.txt",
+      "newly_generated": true,
+      "sha256": "533fd9ecc684f6bc59cab3d581294f7a26060eef6b529ec86db47b2a51752aa7",
+      "native_dimensions": [
+        1122,
+        1402
+      ],
+      "native_mode": "RGB",
+      "alpha_extrema": null,
+      "tool_logical_path": "C:\\Users\\Kuroro\\.codex\\generated_images\\01a156b8-68e7-71d3-9e49-188fe4225a5e\\exec-bd0505d5-90ab-4466-b16f-ddeae85294c5.png",
+      "tool_physical_path": "D:\\claude\\flash\\.tmp\\imagegen_storage\\generated_images\\01a156b8-68e7-71d3-9e49-188fe4225a5e\\exec-bd0505d5-90ab-4466-b16f-ddeae85294c5.png",
+      "input_hashes": [
+        {
+          "path": "assets/local/portraits/pool/female_middle/disciple_female_middle_05.png",
+          "sha256": "c3da53440afa7a007c1b3b24d0aabded796c4a72f701e584a493741e615025dc"
+        },
+        {
+          "path": "art_sources/refresh_20261019/approved_samples/02_portrait.png",
+          "sha256": "139f85deb18db95d129b9e3e31db95460f47b934a7a68a4f006b95f8ad53c3fe"
+        }
+      ],
+      "review": "Visually checked identity/content, category style and complete composition; integration separate.",
+      "target_dimensions": [
+        512,
+        640
+      ],
+      "size_matches_technical_source": false,
+      "integration_status": "candidate_only_not_runtime_integrated",
+      "size_note": "Native bytes retained; runtime crop/scale or atlas registration must be resolved separately. Target dimensions are not claimed as delivered dimensions.",
+      "actual_prompt": "Use case: style-transfer / identity-preserve.\nAsset: one independent waist-up portrait for a 2D Chinese cultivation RPG, opaque muted grey-green background, target 512x640 (4:5). Actual native dimensions will be measured.\nInput image 1 is the EDIT TARGET and individual identity, body, pose, costume and prop-placement anchor. Input image 2 is ONLY the approved C drawing-style reference: never copy its man, beard, abacus or costume.\nPreserve the individual in image 1, including apparent sex and age, facial structure, body build, hairstyle, expression, view and visible props. Redraw with economical clear thin dark outlines, small simple manga facial features, solid grouped hair, broad muted flat colours, a few large clothing folds and ONE restrained structural shadow tone. Keep identifying simplified robe motifs. No realistic face modelling, glossy anime skin, isolated hair strands, granular texture, intricate embroidery, airbrush, border, text, watermark or scenery. No extra objects or gestures. Keep entire head, highest hair, bun, hairpin and important props inside frame, with plainly visible background margin above hair, about six percent of height. Preserve the source waist-up framing and natural hands/arms visibility; do not invent hands absent from the crop. Do not turn mature people into generic young faces. Each file is ONE portrait, no contact sheet.\nIdentity details: middle-aged female disciple with a rounded full face, gentle upward glance, soft closed-mouth smile and one small cheek dimple. Dark subtly greying hair piled into a broad high folded bun with brown wooden pin projecting viewer-left. Ivory robe, muted slate-blue diagonal collar and sash, sparse pale cloud sleeve motifs. Sword hilt at VIEWER-LEFT waist, preserve this side. Preserve mature age and fuller build.\n"
+    },
+    {
+      "id": "8e7f5052e52895c2",
+      "batch": "03_portrait_pool",
+      "kind": "existing",
+      "label": "assets/local/portraits/pool/female_middle/disciple_female_middle_06.png",
+      "source": "assets/local/portraits/pool/female_middle/disciple_female_middle_06.png",
+      "output": "art_sources/refresh_20261019/batches/03_portrait_pool/output/existing/local/portraits/pool/female_middle/disciple_female_middle_06.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/local/portraits/pool/female_middle/disciple_female_middle_06.png",
+        "sha256": "2f9d000d4577715aa8fdf48c5213926bb87bce6e121a5712c4e67b64b03877f7",
+        "format": "PNG",
+        "dimensions": [
+          512,
+          640
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          4,
+          5
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_generated",
+      "tool_refs": [
+        "assets/local/portraits/pool/female_middle/disciple_female_middle_06.png",
+        "art_sources/refresh_20261019/approved_samples/02_portrait.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/03_portrait_pool/output/prompts/8e7f5052e52895c2.txt",
+      "newly_generated": true,
+      "sha256": "f5af1924114231199f99b833824b771b1b5938cafe36b0794a4416bc697b678a",
+      "native_dimensions": [
+        1122,
+        1402
+      ],
+      "native_mode": "RGB",
+      "alpha_extrema": null,
+      "tool_logical_path": "C:\\Users\\Kuroro\\.codex\\generated_images\\01a156b8-68e7-71d3-9e49-188fe4225a5e\\exec-837db930-5fc9-400c-8d29-f395a59a306e.png",
+      "tool_physical_path": "D:\\claude\\flash\\.tmp\\imagegen_storage\\generated_images\\01a156b8-68e7-71d3-9e49-188fe4225a5e\\exec-837db930-5fc9-400c-8d29-f395a59a306e.png",
+      "input_hashes": [
+        {
+          "path": "assets/local/portraits/pool/female_middle/disciple_female_middle_06.png",
+          "sha256": "2f9d000d4577715aa8fdf48c5213926bb87bce6e121a5712c4e67b64b03877f7"
+        },
+        {
+          "path": "art_sources/refresh_20261019/approved_samples/02_portrait.png",
+          "sha256": "139f85deb18db95d129b9e3e31db95460f47b934a7a68a4f006b95f8ad53c3fe"
+        }
+      ],
+      "review": "Visually checked identity/content, category style and complete composition; integration separate.",
+      "target_dimensions": [
+        512,
+        640
+      ],
+      "size_matches_technical_source": false,
+      "integration_status": "candidate_only_not_runtime_integrated",
+      "size_note": "Native bytes retained; runtime crop/scale or atlas registration must be resolved separately. Target dimensions are not claimed as delivered dimensions.",
+      "actual_prompt": "Use case: style-transfer / identity-preserve.\nAsset: one independent waist-up portrait for a 2D Chinese cultivation RPG, opaque muted grey-green background, target 512x640 (4:5). Actual native dimensions will be measured.\nInput image 1 is the EDIT TARGET and individual identity, body, pose, costume and prop-placement anchor. Input image 2 is ONLY the approved C drawing-style reference: never copy its man, beard, abacus or costume.\nPreserve the individual in image 1, including apparent sex and age, facial structure, body build, hairstyle, expression, view and visible props. Redraw with economical clear thin dark outlines, small simple manga facial features, solid grouped hair, broad muted flat colours, a few large clothing folds and ONE restrained structural shadow tone. Keep identifying simplified robe motifs. No realistic face modelling, glossy anime skin, isolated hair strands, granular texture, intricate embroidery, airbrush, border, text, watermark or scenery. No extra objects or gestures. Keep entire head, highest hair, bun, hairpin and important props inside frame, with plainly visible background margin above hair, about six percent of height. Preserve the source waist-up framing and natural hands/arms visibility; do not invent hands absent from the crop. Do not turn mature people into generic young faces. Each file is ONE portrait, no contact sheet.\nIdentity details: middle-aged female disciple with a narrow rather long face, straight serious unsmiling lips and a few simple age creases beside nose and mouth. Shoulder-length dark hair, partly swept back with a short brown pin at viewer-left rear; noticeable grey strands at the temples. Hair ends in a SHORT straight bob around neck, not a ponytail or bun. Ivory robe with wide slate-blue diagonal collar, matching sash and sparse cloud cuff motif. Sword hilt behind VIEWER-LEFT hip. Preserve lean build, reserved expression and right-facing three-quarter view.\n"
+    },
+    {
+      "id": "1d39e8e2c4e7774d",
+      "batch": "03_portrait_pool",
+      "kind": "existing",
+      "label": "assets/local/portraits/pool/female_middle/disciple_female_middle_07.png",
+      "source": "assets/local/portraits/pool/female_middle/disciple_female_middle_07.png",
+      "output": "art_sources/refresh_20261019/batches/03_portrait_pool/output/existing/local/portraits/pool/female_middle/disciple_female_middle_07.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/local/portraits/pool/female_middle/disciple_female_middle_07.png",
+        "sha256": "7a8c4ceea308442d4bcd43856cd8cc05f7a2b0d6e3ad43236c5bcab83d79d0ca",
+        "format": "PNG",
+        "dimensions": [
+          512,
+          640
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          4,
+          5
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_generated",
+      "tool_refs": [
+        "assets/local/portraits/pool/female_middle/disciple_female_middle_07.png",
+        "art_sources/refresh_20261019/approved_samples/02_portrait.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/03_portrait_pool/output/prompts/1d39e8e2c4e7774d.txt",
+      "newly_generated": true,
+      "sha256": "64454115f8b2a404a5eaf276538e53975e0a9a2e5e2b86e37576e542e6e10c66",
+      "native_dimensions": [
+        1122,
+        1402
+      ],
+      "native_mode": "RGB",
+      "alpha_extrema": null,
+      "tool_logical_path": "C:\\Users\\Kuroro\\.codex\\generated_images\\01a156b8-68e7-71d3-9e49-188fe4225a5e\\exec-3a598059-f683-44ce-aab3-0c1c0b319b79.png",
+      "tool_physical_path": "D:\\claude\\flash\\.tmp\\imagegen_storage\\generated_images\\01a156b8-68e7-71d3-9e49-188fe4225a5e\\exec-3a598059-f683-44ce-aab3-0c1c0b319b79.png",
+      "input_hashes": [
+        {
+          "path": "assets/local/portraits/pool/female_middle/disciple_female_middle_07.png",
+          "sha256": "7a8c4ceea308442d4bcd43856cd8cc05f7a2b0d6e3ad43236c5bcab83d79d0ca"
+        },
+        {
+          "path": "art_sources/refresh_20261019/approved_samples/02_portrait.png",
+          "sha256": "139f85deb18db95d129b9e3e31db95460f47b934a7a68a4f006b95f8ad53c3fe"
+        }
+      ],
+      "review": "Visually checked identity/content, category style and complete composition; integration separate.",
+      "target_dimensions": [
+        512,
+        640
+      ],
+      "size_matches_technical_source": false,
+      "integration_status": "candidate_only_not_runtime_integrated",
+      "size_note": "Native bytes retained; runtime crop/scale or atlas registration must be resolved separately. Target dimensions are not claimed as delivered dimensions.",
+      "actual_prompt": "Use case: style-transfer / identity-preserve.\nAsset: one independent waist-up portrait for a 2D Chinese cultivation RPG, opaque muted grey-green background, target 512x640 (4:5). Actual native dimensions will be measured.\nInput image 1 is the EDIT TARGET and individual identity, body, pose, costume and prop-placement anchor. Input image 2 is ONLY the approved C drawing-style reference: never copy its man, beard, abacus or costume.\nPreserve the individual in image 1, including apparent sex and age, facial structure, body build, hairstyle, expression, view and visible props. Redraw with economical clear thin dark outlines, small simple manga facial features, solid grouped hair, broad muted flat colours, a few large clothing folds and ONE restrained structural shadow tone. Keep identifying simplified robe motifs. No realistic face modelling, glossy anime skin, isolated hair strands, granular texture, intricate embroidery, airbrush, border, text, watermark or scenery. No extra objects or gestures. Keep entire head, highest hair, bun, hairpin and important props inside frame, with plainly visible background margin above hair, about six percent of height. Preserve the source waist-up framing and natural hands/arms visibility; do not invent hands absent from the crop. Do not turn mature people into generic young faces. Each file is ONE portrait, no contact sheet.\nIdentity details: Middle-aged female disciple with a slender angular face, composed unsmiling expression, a slight grey temple streak and a LONG HIGH PONYTAIL tied with slate-blue cloth, long loose dark tail behind viewer-left shoulder. No bun or short bob. Ivory robe with muted blue diagonal collar and sash, restrained pale cloud cuff motifs. Sword hilt at viewer-right waist. Keep mature face, subtle cheek structure and three-quarter right view; preserve lean body and long ponytail silhouette.\n"
+    },
+    {
+      "id": "8ae6ca2914e001f3",
+      "batch": "03_portrait_pool",
+      "kind": "existing",
+      "label": "assets/local/portraits/pool/female_middle/disciple_female_middle_08.png",
+      "source": "assets/local/portraits/pool/female_middle/disciple_female_middle_08.png",
+      "output": "art_sources/refresh_20261019/batches/03_portrait_pool/output/existing/local/portraits/pool/female_middle/disciple_female_middle_08.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/local/portraits/pool/female_middle/disciple_female_middle_08.png",
+        "sha256": "6eb9b37c650ba5215343975cd3c3bbc93dd4193e602c37612b43671039c1fa91",
+        "format": "PNG",
+        "dimensions": [
+          512,
+          640
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          4,
+          5
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_generated",
+      "tool_refs": [
+        "assets/local/portraits/pool/female_middle/disciple_female_middle_08.png",
+        "art_sources/refresh_20261019/approved_samples/02_portrait.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/03_portrait_pool/output/prompts/8ae6ca2914e001f3.txt",
+      "newly_generated": true,
+      "sha256": "2d9e07738b9ee0d36b2120afb2fb5bcbca686634cb89373868a681ae3f1c9c0b",
+      "native_dimensions": [
+        1122,
+        1402
+      ],
+      "native_mode": "RGB",
+      "alpha_extrema": null,
+      "tool_logical_path": "C:\\Users\\Kuroro\\.codex\\generated_images\\01a156b8-68e7-71d3-9e49-188fe4225a5e\\exec-71a5cd0f-496a-4d23-98f2-e659d7e9472c.png",
+      "tool_physical_path": "D:\\claude\\flash\\.tmp\\imagegen_storage\\generated_images\\01a156b8-68e7-71d3-9e49-188fe4225a5e\\exec-71a5cd0f-496a-4d23-98f2-e659d7e9472c.png",
+      "input_hashes": [
+        {
+          "path": "assets/local/portraits/pool/female_middle/disciple_female_middle_08.png",
+          "sha256": "6eb9b37c650ba5215343975cd3c3bbc93dd4193e602c37612b43671039c1fa91"
+        },
+        {
+          "path": "art_sources/refresh_20261019/approved_samples/02_portrait.png",
+          "sha256": "139f85deb18db95d129b9e3e31db95460f47b934a7a68a4f006b95f8ad53c3fe"
+        }
+      ],
+      "review": "Visually checked identity/content, category style and complete composition; integration separate.",
+      "target_dimensions": [
+        512,
+        640
+      ],
+      "size_matches_technical_source": false,
+      "integration_status": "candidate_only_not_runtime_integrated",
+      "size_note": "Native bytes retained; runtime crop/scale or atlas registration must be resolved separately. Target dimensions are not claimed as delivered dimensions.",
+      "actual_prompt": "Use case: style-transfer / identity-preserve.\nAsset: one independent waist-up portrait for a 2D Chinese cultivation RPG, opaque muted grey-green background, target 512x640 (4:5). Actual native dimensions will be measured.\nInput image 1 is the EDIT TARGET and individual identity, body, pose, costume and prop-placement anchor. Input image 2 is ONLY the approved C drawing-style reference: never copy its man, beard, abacus or costume.\nPreserve the individual in image 1, including apparent sex and age, facial structure, body build, hairstyle, expression, view and visible props. Redraw with economical clear thin dark outlines, small simple manga facial features, solid grouped hair, broad muted flat colours, a few large clothing folds and ONE restrained structural shadow tone. Keep identifying simplified robe motifs. No realistic face modelling, glossy anime skin, isolated hair strands, granular texture, intricate embroidery, airbrush, border, text, watermark or scenery. No extra objects or gestures. Keep entire head, highest hair, bun, hairpin and important props inside frame, with plainly visible background margin above hair, about six percent of height. Preserve the source waist-up framing and natural hands/arms visibility; do not invent hands absent from the crop. Do not turn mature people into generic young faces. Each file is ONE portrait, no contact sheet.\nIdentity details: Middle-aged female disciple with a broad roundish face, fuller cheeks, a few simple eye creases and neutral slightly pursed lips. Dark partly-up shoulder-length hair with a compact HIGH REAR BUN and a horizontal brown pin extending viewer-left, loose short back hair down to shoulders, slight grey temple strands. Preserve stockier body shape and calm reserved expression; do not slim the face or make her a young heroine. Ivory robe with slate-blue diagonal collar, simple blue waist sash and sparse pale cloud cuff shapes. Sword hilt at viewer-right front waist. Head turned to viewer-right, upper body more frontal.\n"
+    },
+    {
+      "id": "84b53d9d5217c197",
+      "batch": "03_portrait_pool",
+      "kind": "existing",
+      "label": "assets/local/portraits/pool/male_young/disciple_male_young_05.png",
+      "source": "assets/local/portraits/pool/male_young/disciple_male_young_05.png",
+      "output": "art_sources/refresh_20261019/batches/03_portrait_pool/output/existing/local/portraits/pool/male_young/disciple_male_young_05.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/local/portraits/pool/male_young/disciple_male_young_05.png",
+        "sha256": "0c76d0b49b163b204a95718f297525010271d85dac1a166979835cd5e99e7464",
+        "format": "PNG",
+        "dimensions": [
+          512,
+          640
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          4,
+          5
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_generated",
+      "tool_refs": [
+        "assets/local/portraits/pool/male_young/disciple_male_young_05.png",
+        "art_sources/refresh_20261019/approved_samples/02_portrait.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/03_portrait_pool/output/prompts/84b53d9d5217c197.txt",
+      "newly_generated": true,
+      "sha256": "5b1d267f7722f9a27caa5c7a0caee6fe0968d23e25a8cf04dfb5b465fd8f4aac",
+      "native_dimensions": [
+        1122,
+        1402
+      ],
+      "native_mode": "RGB",
+      "alpha_extrema": null,
+      "tool_logical_path": "C:\\Users\\Kuroro\\.codex\\generated_images\\01a156b8-68e7-71d3-9e49-188fe4225a5e\\exec-958e7c90-f0d4-453a-9cd1-2f7c6eb10142.png",
+      "tool_physical_path": "D:\\claude\\flash\\.tmp\\imagegen_storage\\generated_images\\01a156b8-68e7-71d3-9e49-188fe4225a5e\\exec-958e7c90-f0d4-453a-9cd1-2f7c6eb10142.png",
+      "input_hashes": [
+        {
+          "path": "assets/local/portraits/pool/male_young/disciple_male_young_05.png",
+          "sha256": "0c76d0b49b163b204a95718f297525010271d85dac1a166979835cd5e99e7464"
+        },
+        {
+          "path": "art_sources/refresh_20261019/approved_samples/02_portrait.png",
+          "sha256": "139f85deb18db95d129b9e3e31db95460f47b934a7a68a4f006b95f8ad53c3fe"
+        }
+      ],
+      "review": "Visually checked identity/content, category style and complete composition; integration separate.",
+      "target_dimensions": [
+        512,
+        640
+      ],
+      "size_matches_technical_source": false,
+      "integration_status": "candidate_only_not_runtime_integrated",
+      "size_note": "Native bytes retained; runtime crop/scale or atlas registration must be resolved separately. Target dimensions are not claimed as delivered dimensions.",
+      "actual_prompt": "Use case: style-transfer / identity-preserve.\nAsset: one independent waist-up portrait for a 2D Chinese cultivation RPG, opaque muted grey-green background, target 512x640 (4:5). Actual native dimensions will be measured.\nInput image 1 is the EDIT TARGET and individual identity, body, pose, costume and prop-placement anchor. Input image 2 is ONLY the approved C drawing-style reference: never copy its man, beard, abacus or costume.\nPreserve the individual in image 1, including apparent sex and age, facial structure, body build, hairstyle, expression, view and visible props. Redraw with economical clear thin dark outlines, small simple manga facial features, solid grouped hair, broad muted flat colours, a few large clothing folds and ONE restrained structural shadow tone. Keep identifying simplified robe motifs. No realistic face modelling, glossy anime skin, isolated hair strands, granular texture, intricate embroidery, airbrush, border, text, watermark or scenery. No extra objects or gestures. Keep entire head, highest hair, bun, hairpin and important props inside frame, with plainly visible background margin above hair, about six percent of height. Preserve the source waist-up framing and natural hands/arms visibility; do not invent hands absent from the crop. Do not turn mature people into generic young faces. Each file is ONE portrait, no contact sheet.\nIdentity details: Young adult male disciple, broad square jaw and solid athletic body, short spiky cropped dark hair with wide desaturated blue HEADBAND tied behind viewer-left ear, two cloth tails hanging at back. Preserve the faint SHORT MOUSTACHE visible on his upper lip; no full beard or pointed goatee. Calm serious sideways right gaze and unsmiling closed mouth. Ivory robe with wide blue diagonal collar and blue sash, sparse pale cloud cuff shapes. Sword hilt at viewer-right waist. No high bun, long loose hair or cap. Keep stockier masculine face, headband knot and whole hair silhouette.\n"
+    },
+    {
+      "id": "14bc6f61e1901d73",
+      "batch": "03_portrait_pool",
+      "kind": "existing",
+      "label": "assets/local/portraits/pool/male_young/disciple_male_young_06.png",
+      "source": "assets/local/portraits/pool/male_young/disciple_male_young_06.png",
+      "output": "art_sources/refresh_20261019/batches/03_portrait_pool/output/existing/local/portraits/pool/male_young/disciple_male_young_06.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/local/portraits/pool/male_young/disciple_male_young_06.png",
+        "sha256": "cbf20ad78282af29330c84cfc070f78df4721e8a7a142d24b2cfa9edaa0a63e9",
+        "format": "PNG",
+        "dimensions": [
+          512,
+          640
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          4,
+          5
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_generated",
+      "tool_refs": [
+        "assets/local/portraits/pool/male_young/disciple_male_young_06.png",
+        "art_sources/refresh_20261019/approved_samples/02_portrait.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/03_portrait_pool/output/prompts/14bc6f61e1901d73.txt",
+      "newly_generated": true,
+      "sha256": "3f0896ac68915a7b043b463c2d75928faf857eca1af8efaac2d022eb7cb0ea20",
+      "native_dimensions": [
+        1122,
+        1402
+      ],
+      "native_mode": "RGB",
+      "alpha_extrema": null,
+      "tool_logical_path": "C:\\Users\\Kuroro\\.codex\\generated_images\\01a156b8-68e7-71d3-9e49-188fe4225a5e\\exec-df71e5ce-d860-4d1e-a794-2a966d8f18dc.png",
+      "tool_physical_path": "D:\\claude\\flash\\.tmp\\imagegen_storage\\generated_images\\01a156b8-68e7-71d3-9e49-188fe4225a5e\\exec-df71e5ce-d860-4d1e-a794-2a966d8f18dc.png",
+      "input_hashes": [
+        {
+          "path": "assets/local/portraits/pool/male_young/disciple_male_young_06.png",
+          "sha256": "cbf20ad78282af29330c84cfc070f78df4721e8a7a142d24b2cfa9edaa0a63e9"
+        },
+        {
+          "path": "art_sources/refresh_20261019/approved_samples/02_portrait.png",
+          "sha256": "139f85deb18db95d129b9e3e31db95460f47b934a7a68a4f006b95f8ad53c3fe"
+        }
+      ],
+      "review": "Visually checked identity/content, category style and complete composition; integration separate.",
+      "target_dimensions": [
+        512,
+        640
+      ],
+      "size_matches_technical_source": false,
+      "integration_status": "candidate_only_not_runtime_integrated",
+      "size_note": "Native bytes retained; runtime crop/scale or atlas registration must be resolved separately. Target dimensions are not claimed as delivered dimensions.",
+      "actual_prompt": "Use case: style-transfer / identity-preserve.\nAsset: one independent waist-up portrait for a 2D Chinese cultivation RPG, opaque muted grey-green background, target 512x640 (4:5). Actual native dimensions will be measured.\nInput image 1 is the EDIT TARGET and individual identity, body, pose, costume and prop-placement anchor. Input image 2 is ONLY the approved C drawing-style reference: never copy its man, beard, abacus or costume.\nPreserve the individual in image 1, including apparent sex and age, facial structure, body build, hairstyle, expression, view and visible props. Redraw with economical clear thin dark outlines, small simple manga facial features, solid grouped hair, broad muted flat colours, a few large clothing folds and ONE restrained structural shadow tone. Keep identifying simplified robe motifs. No realistic face modelling, glossy anime skin, isolated hair strands, granular texture, intricate embroidery, airbrush, border, text, watermark or scenery. No extra objects or gestures. Keep entire head, highest hair, bun, hairpin and important props inside frame, with plainly visible background margin above hair, about six percent of height. Preserve the source waist-up framing and natural hands/arms visibility; do not invent hands absent from the crop. Do not turn mature people into generic young faces. Each file is ONE portrait, no contact sheet.\nIdentity details: Young clean-shaven male disciple with a slim angular face, narrow concentrated eyes and serious slightly lowered brow. Dark hair under a desaturated blue full HEADSCARF tied in a modest knot behind the head, long loose fabric tails extending behind viewer-left shoulder, two cheek-length hair strands. No exposed high bun or cap. Ivory robe, wide blue diagonal collar and blue sash, sparse pale cloud sleeve motifs. Preserve the visible hand resting across the sword hilt/scabbard at viewer-right lower waist, keep fingers anatomically simple and inside frame. Whole headscarf and knot must be safely inside with plain background above. Lean body, right-facing three-quarter view.\n"
+    },
+    {
+      "id": "560d0e84c2c60d7f",
+      "batch": "03_portrait_pool",
+      "kind": "existing",
+      "label": "assets/local/portraits/pool/male_young/disciple_male_young_07.png",
+      "source": "assets/local/portraits/pool/male_young/disciple_male_young_07.png",
+      "output": "art_sources/refresh_20261019/batches/03_portrait_pool/output/existing/local/portraits/pool/male_young/disciple_male_young_07.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/local/portraits/pool/male_young/disciple_male_young_07.png",
+        "sha256": "a179ac2f6c49ece5323aa25ec91a77701b8733e1f9c99c3affe376b3bbe3a096",
+        "format": "PNG",
+        "dimensions": [
+          512,
+          640
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          4,
+          5
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_generated",
+      "tool_refs": [
+        "assets/local/portraits/pool/male_young/disciple_male_young_07.png",
+        "art_sources/refresh_20261019/approved_samples/02_portrait.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/03_portrait_pool/output/prompts/560d0e84c2c60d7f.txt",
+      "newly_generated": true,
+      "sha256": "57a61c3c5bb94f7dfcdd024673423c50b1b83eb3584e3b75ce42dee1362581ac",
+      "native_dimensions": [
+        1122,
+        1402
+      ],
+      "native_mode": "RGB",
+      "alpha_extrema": null,
+      "tool_logical_path": "C:\\Users\\Kuroro\\.codex\\generated_images\\01a156b8-68e7-71d3-9e49-188fe4225a5e\\exec-c4beb3f9-ac06-4310-866b-cf766d6a30e1.png",
+      "tool_physical_path": "D:\\claude\\flash\\.tmp\\imagegen_storage\\generated_images\\01a156b8-68e7-71d3-9e49-188fe4225a5e\\exec-c4beb3f9-ac06-4310-866b-cf766d6a30e1.png",
+      "input_hashes": [
+        {
+          "path": "assets/local/portraits/pool/male_young/disciple_male_young_07.png",
+          "sha256": "a179ac2f6c49ece5323aa25ec91a77701b8733e1f9c99c3affe376b3bbe3a096"
+        },
+        {
+          "path": "art_sources/refresh_20261019/approved_samples/02_portrait.png",
+          "sha256": "139f85deb18db95d129b9e3e31db95460f47b934a7a68a4f006b95f8ad53c3fe"
+        }
+      ],
+      "review": "Visually checked identity/content, category style and complete composition; integration separate.",
+      "target_dimensions": [
+        512,
+        640
+      ],
+      "size_matches_technical_source": false,
+      "integration_status": "candidate_only_not_runtime_integrated",
+      "size_note": "Native bytes retained; runtime crop/scale or atlas registration must be resolved separately. Target dimensions are not claimed as delivered dimensions.",
+      "actual_prompt": "Use case: style-transfer / identity-preserve.\nAsset: one independent waist-up portrait for a 2D Chinese cultivation RPG, opaque muted grey-green background, target 512x640 (4:5). Actual native dimensions will be measured.\nInput image 1 is the EDIT TARGET and individual identity, body, pose, costume and prop-placement anchor. Input image 2 is ONLY the approved C drawing-style reference: never copy its man, beard, abacus or costume.\nPreserve the individual in image 1, including apparent sex and age, facial structure, body build, hairstyle, expression, view and visible props. Redraw with economical clear thin dark outlines, small simple manga facial features, solid grouped hair, broad muted flat colours, a few large clothing folds and ONE restrained structural shadow tone. Keep identifying simplified robe motifs. No realistic face modelling, glossy anime skin, isolated hair strands, granular texture, intricate embroidery, airbrush, border, text, watermark or scenery. No extra objects or gestures. Keep entire head, highest hair, bun, hairpin and important props inside frame, with plainly visible background margin above hair, about six percent of height. Preserve the source waist-up framing and natural hands/arms visibility; do not invent hands absent from the crop. Do not turn mature people into generic young faces. Each file is ONE portrait, no contact sheet.\nIdentity details: Young clean-shaven male disciple with broad oval face, full lips, straight thick brows and calm neutral expression. Short swept-back dark hair under a tall folded dark slate-blue CLOTH CAP, a wide wrapped band across head and a long dark cloth tail behind viewer-left shoulder. Preserve cap instead of exposed bun or headband. Ivory robe with wide muted blue diagonal collar and blue sash, minimal pale cloud sleeve motif; sword hilt at viewer-right lower waist. Average solid build, three-quarter right view. Entire folded cap top safely inside visible plain background margin, no beard, smile or extra jewellery.\n"
+    },
+    {
+      "id": "cdcc178a294c6ba9",
+      "batch": "03_portrait_pool",
+      "kind": "existing",
+      "label": "assets/local/portraits/pool/male_young/disciple_male_young_08.png",
+      "source": "assets/local/portraits/pool/male_young/disciple_male_young_08.png",
+      "output": "art_sources/refresh_20261019/batches/03_portrait_pool/output/existing/local/portraits/pool/male_young/disciple_male_young_08.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/local/portraits/pool/male_young/disciple_male_young_08.png",
+        "sha256": "e7577c2891cab38fbfac61f8834c65d649efc37a616fca335b2ddf6540b2ae99",
+        "format": "PNG",
+        "dimensions": [
+          512,
+          640
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          4,
+          5
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_generated",
+      "tool_refs": [
+        "assets/local/portraits/pool/male_young/disciple_male_young_08.png",
+        "art_sources/refresh_20261019/approved_samples/02_portrait.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/03_portrait_pool/output/prompts/cdcc178a294c6ba9.txt",
+      "newly_generated": true,
+      "sha256": "95097828713cc379c0222168dc5c6be5d5943d186bd3ac87dd9358562a0d0128",
+      "native_dimensions": [
+        1122,
+        1402
+      ],
+      "native_mode": "RGB",
+      "alpha_extrema": null,
+      "tool_logical_path": "C:\\Users\\Kuroro\\.codex\\generated_images\\01a156b8-68e7-71d3-9e49-188fe4225a5e\\exec-d6835487-8c43-456a-b009-9aaddd43494c.png",
+      "tool_physical_path": "D:\\claude\\flash\\.tmp\\imagegen_storage\\generated_images\\01a156b8-68e7-71d3-9e49-188fe4225a5e\\exec-d6835487-8c43-456a-b009-9aaddd43494c.png",
+      "input_hashes": [
+        {
+          "path": "assets/local/portraits/pool/male_young/disciple_male_young_08.png",
+          "sha256": "e7577c2891cab38fbfac61f8834c65d649efc37a616fca335b2ddf6540b2ae99"
+        },
+        {
+          "path": "art_sources/refresh_20261019/approved_samples/02_portrait.png",
+          "sha256": "139f85deb18db95d129b9e3e31db95460f47b934a7a68a4f006b95f8ad53c3fe"
+        }
+      ],
+      "review": "Visually checked identity/content, category style and complete composition; integration separate.",
+      "target_dimensions": [
+        512,
+        640
+      ],
+      "size_matches_technical_source": false,
+      "integration_status": "candidate_only_not_runtime_integrated",
+      "size_note": "Native bytes retained; runtime crop/scale or atlas registration must be resolved separately. Target dimensions are not claimed as delivered dimensions.",
+      "actual_prompt": "Use case: style-transfer / identity-preserve.\nAsset: one independent waist-up portrait for a 2D Chinese cultivation RPG, opaque muted grey-green background, target 512x640 (4:5). Actual native dimensions will be measured.\nInput image 1 is the EDIT TARGET and individual identity, body, pose, costume and prop-placement anchor. Input image 2 is ONLY the approved C drawing-style reference: never copy its man, beard, abacus or costume.\nPreserve the individual in image 1, including apparent sex and age, facial structure, body build, hairstyle, expression, view and visible props. Redraw with economical clear thin dark outlines, small simple manga facial features, solid grouped hair, broad muted flat colours, a few large clothing folds and ONE restrained structural shadow tone. Keep identifying simplified robe motifs. No realistic face modelling, glossy anime skin, isolated hair strands, granular texture, intricate embroidery, airbrush, border, text, watermark or scenery. No extra objects or gestures. Keep entire head, highest hair, bun, hairpin and important props inside frame, with plainly visible background margin above hair, about six percent of height. Preserve the source waist-up framing and natural hands/arms visibility; do not invent hands absent from the crop. Do not turn mature people into generic young faces. Each file is ONE portrait, no contact sheet.\nIdentity details: Young clean-shaven male disciple with a broad rounded youthful face, full cheeks, a gentle closed-mouth smile and a tiny dimple/mark on viewer-left cheek. Dark swept-back hair in a small HIGH BUN with plain thin brown wooden pin extending viewer-left and narrow blue-grey binding; a few broad front locks. Keep his slightly plump build and broad young face, do not slim him into another lean disciple. Ivory robe with wide muted slate-blue diagonal collar, TWO long dark blue front lapels and broad blue sash, sparse pale cloud cuff motifs. Sword hilt at viewer-right waist. Same three-quarter right view, no beard, headscarf, cap or extra props.\n"
+    },
+    {
+      "id": "6fcd4a4979d84af8",
+      "batch": "03_portrait_pool",
+      "kind": "existing",
+      "label": "assets/local/portraits/pool/female_middle/disciple_female_middle_09.png",
+      "source": "assets/local/portraits/pool/female_middle/disciple_female_middle_09.png",
+      "output": "art_sources/refresh_20261019/batches/03_portrait_pool/output/existing/local/portraits/pool/female_middle/disciple_female_middle_09.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/local/portraits/pool/female_middle/disciple_female_middle_09.png",
+        "sha256": "3e202933ba3ac9736c1e3c3a1a497c5c642bf6c121823930f061fe9e9a8923f4",
+        "format": "PNG",
+        "dimensions": [
+          512,
+          640
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          4,
+          5
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_generated",
+      "tool_refs": [
+        "assets/local/portraits/pool/female_middle/disciple_female_middle_09.png",
+        "art_sources/refresh_20261019/approved_samples/02_portrait.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/03_portrait_pool/output/prompts/6fcd4a4979d84af8.txt",
+      "newly_generated": true,
+      "sha256": "c0898ee59a1217c392bce48778d8ea76b69df1b1bafda6e2f865ade21c418c4e",
+      "native_dimensions": [
+        1122,
+        1402
+      ],
+      "native_mode": "RGB",
+      "alpha_extrema": null,
+      "tool_logical_path": "C:\\Users\\Kuroro\\.codex\\generated_images\\01a156b8-68e7-71d3-9e49-188fe4225a5e\\exec-b28cd3be-cfb6-4b59-8dc6-fa805a80a601.png",
+      "tool_physical_path": "D:\\claude\\flash\\.tmp\\imagegen_storage\\generated_images\\01a156b8-68e7-71d3-9e49-188fe4225a5e\\exec-b28cd3be-cfb6-4b59-8dc6-fa805a80a601.png",
+      "input_hashes": [
+        {
+          "path": "assets/local/portraits/pool/female_middle/disciple_female_middle_09.png",
+          "sha256": "3e202933ba3ac9736c1e3c3a1a497c5c642bf6c121823930f061fe9e9a8923f4"
+        },
+        {
+          "path": "art_sources/refresh_20261019/approved_samples/02_portrait.png",
+          "sha256": "139f85deb18db95d129b9e3e31db95460f47b934a7a68a4f006b95f8ad53c3fe"
+        }
+      ],
+      "review": "Visually checked identity/content, category style and complete composition; integration separate.",
+      "target_dimensions": [
+        512,
+        640
+      ],
+      "size_matches_technical_source": false,
+      "integration_status": "candidate_only_not_runtime_integrated",
+      "size_note": "Native bytes retained; runtime crop/scale or atlas registration must be resolved separately. Target dimensions are not claimed as delivered dimensions.",
+      "actual_prompt": "Use case: style-transfer / identity-preserve.\nAsset: one independent waist-up portrait for a 2D Chinese cultivation RPG, opaque muted grey-green background, target 512x640 (4:5). Actual native dimensions will be measured.\nInput image 1 is the EDIT TARGET and individual identity, body, pose, costume and prop-placement anchor. Input image 2 is ONLY the approved C drawing-style reference: never copy its man, beard, abacus or costume.\nPreserve the individual in image 1, including apparent sex and age, facial structure, body build, hairstyle, expression, view and visible props. Redraw with economical clear thin dark outlines, small simple manga facial features, solid grouped hair, broad muted flat colours, a few large clothing folds and ONE restrained structural shadow tone. Keep identifying simplified robe motifs. No realistic face modelling, glossy anime skin, isolated hair strands, granular texture, intricate embroidery, airbrush, border, text, watermark or scenery. No extra objects or gestures. Keep entire head, highest hair, bun, hairpin and important props inside frame, with plainly visible background margin above hair, about six percent of height. Preserve the source waist-up framing and natural hands/arms visibility; do not invent hands absent from the crop. Do not turn mature people into generic young faces. Each file is ONE portrait, no contact sheet.\nIdentity details: Middle-aged female disciple with a long narrow face, lightly tired eyes, a small simple crease beside the mouth and calm unsmiling lips. Dark subtly greying hair in a HIGH BUN tied with slate-blue ribbon, plain brown wooden pin projecting viewer-left and two ribbon tails behind left side. Preserve slight age lines and lean build. Ivory robe with dark blue inner diagonal collar, pale-blue wide outer lapel strips and sparse large pale cloud shoulder motifs, broad blue sash tied at viewer-left. Sword hilt at viewer-right waist. Three-quarter right view. Entire bun and ribbon safely inside canvas.\n"
+    },
+    {
+      "id": "01852dc88dad549e",
+      "batch": "03_portrait_pool",
+      "kind": "existing",
+      "label": "assets/local/portraits/pool/female_middle/gatherer_female_middle_01.png",
+      "source": "assets/local/portraits/pool/female_middle/gatherer_female_middle_01.png",
+      "output": "art_sources/refresh_20261019/batches/03_portrait_pool/output/existing/local/portraits/pool/female_middle/gatherer_female_middle_01.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/local/portraits/pool/female_middle/gatherer_female_middle_01.png",
+        "sha256": "c45ca7c10fd69d49b146ef120e5125a4786c9de05f929b9f96c9b90274f87bf7",
+        "format": "PNG",
+        "dimensions": [
+          512,
+          640
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          4,
+          5
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_generated",
+      "tool_refs": [
+        "assets/local/portraits/pool/female_middle/gatherer_female_middle_01.png",
+        "art_sources/refresh_20261019/approved_samples/02_portrait.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/03_portrait_pool/output/prompts/01852dc88dad549e.txt",
+      "newly_generated": true,
+      "sha256": "378aa4c1378383456dcf5611d3f6e689a9cd3866968f204aee45770dfaad9bea",
+      "native_dimensions": [
+        1122,
+        1402
+      ],
+      "native_mode": "RGB",
+      "alpha_extrema": null,
+      "tool_logical_path": "C:\\Users\\Kuroro\\.codex\\generated_images\\01a156b8-68e7-71d3-9e49-188fe4225a5e\\exec-07e8f362-33ef-4b38-8949-f036a17f48bf.png",
+      "tool_physical_path": "D:\\claude\\flash\\.tmp\\imagegen_storage\\generated_images\\01a156b8-68e7-71d3-9e49-188fe4225a5e\\exec-07e8f362-33ef-4b38-8949-f036a17f48bf.png",
+      "input_hashes": [
+        {
+          "path": "assets/local/portraits/pool/female_middle/gatherer_female_middle_01.png",
+          "sha256": "c45ca7c10fd69d49b146ef120e5125a4786c9de05f929b9f96c9b90274f87bf7"
+        },
+        {
+          "path": "art_sources/refresh_20261019/approved_samples/02_portrait.png",
+          "sha256": "139f85deb18db95d129b9e3e31db95460f47b934a7a68a4f006b95f8ad53c3fe"
+        }
+      ],
+      "review": "Visually checked identity/content, category style and complete composition; integration separate.",
+      "target_dimensions": [
+        512,
+        640
+      ],
+      "size_matches_technical_source": false,
+      "integration_status": "candidate_only_not_runtime_integrated",
+      "size_note": "Native bytes retained; runtime crop/scale or atlas registration must be resolved separately. Target dimensions are not claimed as delivered dimensions.",
+      "actual_prompt": "Use case: style-transfer / identity-preserve.\nAsset: one independent waist-up portrait for a 2D Chinese cultivation RPG, opaque muted grey-green background, target 512x640 (4:5). Actual native dimensions will be measured.\nInput image 1 is the EDIT TARGET and individual identity, body, pose, costume and prop-placement anchor. Input image 2 is ONLY the approved C drawing-style reference: never copy its man, beard, abacus or costume.\nPreserve the individual in image 1, including apparent sex and age, facial structure, body build, hairstyle, expression, view and visible props. Redraw with economical clear thin dark outlines, small simple manga facial features, solid grouped hair, broad muted flat colours, a few large clothing folds and ONE restrained structural shadow tone. Keep identifying simplified robe motifs. No realistic face modelling, glossy anime skin, isolated hair strands, granular texture, intricate embroidery, airbrush, border, text, watermark or scenery. No extra objects or gestures. Keep entire head, highest hair, bun, hairpin and important props inside frame, with plainly visible background margin above hair, about six percent of height. Preserve the source waist-up framing and natural hands/arms visibility; do not invent hands absent from the crop. Do not turn mature people into generic young faces. Each file is ONE portrait, no contact sheet.\nIdentity details: Middle-aged FEMALE HERB GATHERER with rounded full face, warm closed-mouth smile and a small cheek dimple. Subtly greying dark hair in a low rear bun with simple wooden pin projecting left. Muted sage-green practical robe over ivory inner collar, dark slate front lapels, rolled ivory sleeves tied above elbows and plain brown rope belt. A wicker HERB BASKET on her BACK at viewer-left, leafy stems protrude above it; her viewer-left raised hand grasps its thick rope shoulder strap. Her viewer-right hand holds a short wooden-handled herb HOE with a dark right-angled metal blade at lower right. Preserve both actual hands and every important prop inside canvas. Full mature build, no sword, sect robe, jewellery or invented spell effects. Simplify wicker weave and herbs into broad readable groups, keep basket silhouette.\n"
+    },
+    {
+      "id": "0cbe075433a128a7",
+      "batch": "03_portrait_pool",
+      "kind": "existing",
+      "label": "assets/local/portraits/pool/female_middle/gatherer_female_middle_02.png",
+      "source": "assets/local/portraits/pool/female_middle/gatherer_female_middle_02.png",
+      "output": "art_sources/refresh_20261019/batches/03_portrait_pool/output/existing/local/portraits/pool/female_middle/gatherer_female_middle_02.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/local/portraits/pool/female_middle/gatherer_female_middle_02.png",
+        "sha256": "3a4f8d9dde16ff2c4df140b685eafdcb6c13e5a312b5f542a6f4e1f27914c976",
+        "format": "PNG",
+        "dimensions": [
+          512,
+          640
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          4,
+          5
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_generated",
+      "tool_refs": [
+        "assets/local/portraits/pool/female_middle/gatherer_female_middle_02.png",
+        "art_sources/refresh_20261019/approved_samples/02_portrait.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/03_portrait_pool/output/prompts/0cbe075433a128a7.txt",
+      "newly_generated": true,
+      "sha256": "0b7af813561437b5f3aa179fff0e30b049488c9213e9b850f9af92e8bac1e99c",
+      "native_dimensions": [
+        1122,
+        1402
+      ],
+      "native_mode": "RGB",
+      "alpha_extrema": null,
+      "tool_logical_path": "C:\\Users\\Kuroro\\.codex\\generated_images\\01a156b8-68e7-71d3-9e49-188fe4225a5e\\exec-0d8cd2c5-7ad9-423b-b918-27fb99802d09.png",
+      "tool_physical_path": "D:\\claude\\flash\\.tmp\\imagegen_storage\\generated_images\\01a156b8-68e7-71d3-9e49-188fe4225a5e\\exec-0d8cd2c5-7ad9-423b-b918-27fb99802d09.png",
+      "input_hashes": [
+        {
+          "path": "assets/local/portraits/pool/female_middle/gatherer_female_middle_02.png",
+          "sha256": "3a4f8d9dde16ff2c4df140b685eafdcb6c13e5a312b5f542a6f4e1f27914c976"
+        },
+        {
+          "path": "art_sources/refresh_20261019/approved_samples/02_portrait.png",
+          "sha256": "139f85deb18db95d129b9e3e31db95460f47b934a7a68a4f006b95f8ad53c3fe"
+        }
+      ],
+      "review": "Visually checked identity/content, category style and complete composition; integration separate.",
+      "target_dimensions": [
+        512,
+        640
+      ],
+      "size_matches_technical_source": false,
+      "integration_status": "candidate_only_not_runtime_integrated",
+      "size_note": "Native bytes retained; runtime crop/scale or atlas registration must be resolved separately. Target dimensions are not claimed as delivered dimensions.",
+      "actual_prompt": "Use case: style-transfer / identity-preserve.\nAsset: one independent waist-up portrait for a 2D Chinese cultivation RPG, opaque muted grey-green background, target 512x640 (4:5). Actual native dimensions will be measured.\nInput image 1 is the EDIT TARGET and individual identity, body, pose, costume and prop-placement anchor. Input image 2 is ONLY the approved C drawing-style reference: never copy its man, beard, abacus or costume.\nPreserve the individual in image 1, including apparent sex and age, facial structure, body build, hairstyle, expression, view and visible props. Redraw with economical clear thin dark outlines, small simple manga facial features, solid grouped hair, broad muted flat colours, a few large clothing folds and ONE restrained structural shadow tone. Keep identifying simplified robe motifs. No realistic face modelling, glossy anime skin, isolated hair strands, granular texture, intricate embroidery, airbrush, border, text, watermark or scenery. No extra objects or gestures. Keep entire head, highest hair, bun, hairpin and important props inside frame, with plainly visible background margin above hair, about six percent of height. Preserve the source waist-up framing and natural hands/arms visibility; do not invent hands absent from the crop. Do not turn mature people into generic young faces. Each file is ONE portrait, no contact sheet.\nIdentity details: Middle-aged female herb gatherer with long narrow weathered face, tired slightly worried eyes, lowered serious lips and a few restrained age creases. Short chin/neck-length dark BOB haircut with greying temples, no bun, ponytail or hat. Muted olive-sage tunic with pale inner collar and rolled ivory sleeves tied at elbows, dark slate sleeveless outer layer and plain brown rope belt. Wicker herb basket on her BACK viewer-left, grouped green leaves protrude above it, two rope shoulder straps. She grips a wooden-handled HOE diagonally across lower foreground, dark right-angled metal blade at viewer-right, preserve visible gripping hand. Lean wiry physique, no sword or magic. Simplify basket weave, leaf shapes and metal shading, no fine grain.\n"
+    },
+    {
+      "id": "532bef523a8079e5",
+      "batch": "03_portrait_pool",
+      "kind": "existing",
+      "label": "assets/local/portraits/pool/female_middle/gatherer_female_middle_03.png",
+      "source": "assets/local/portraits/pool/female_middle/gatherer_female_middle_03.png",
+      "output": "art_sources/refresh_20261019/batches/03_portrait_pool/output/existing/local/portraits/pool/female_middle/gatherer_female_middle_03.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/local/portraits/pool/female_middle/gatherer_female_middle_03.png",
+        "sha256": "6ba827e50d4333a34629bc65c3950a6e063b2f1fd082cc41c67af28896a4d366",
+        "format": "PNG",
+        "dimensions": [
+          512,
+          640
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          4,
+          5
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_generated",
+      "tool_refs": [
+        "assets/local/portraits/pool/female_middle/gatherer_female_middle_03.png",
+        "art_sources/refresh_20261019/approved_samples/02_portrait.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/03_portrait_pool/output/prompts/532bef523a8079e5.txt",
+      "newly_generated": true,
+      "sha256": "0458209f38f6a29d4b9c6b1feec24a651ffba3f1503b1972329dba1dc7f1edbc",
+      "native_dimensions": [
+        1122,
+        1402
+      ],
+      "native_mode": "RGB",
+      "alpha_extrema": null,
+      "tool_logical_path": "C:\\Users\\Kuroro\\.codex\\generated_images\\01a156b8-68e7-71d3-9e49-188fe4225a5e\\exec-4b9a0356-143a-4168-b9fd-a2431dfcaf02.png",
+      "tool_physical_path": "D:\\claude\\flash\\.tmp\\imagegen_storage\\generated_images\\01a156b8-68e7-71d3-9e49-188fe4225a5e\\exec-4b9a0356-143a-4168-b9fd-a2431dfcaf02.png",
+      "input_hashes": [
+        {
+          "path": "assets/local/portraits/pool/female_middle/gatherer_female_middle_03.png",
+          "sha256": "6ba827e50d4333a34629bc65c3950a6e063b2f1fd082cc41c67af28896a4d366"
+        },
+        {
+          "path": "art_sources/refresh_20261019/approved_samples/02_portrait.png",
+          "sha256": "139f85deb18db95d129b9e3e31db95460f47b934a7a68a4f006b95f8ad53c3fe"
+        }
+      ],
+      "review": "Visually checked identity/content, category style and complete composition; integration separate.",
+      "target_dimensions": [
+        512,
+        640
+      ],
+      "size_matches_technical_source": false,
+      "integration_status": "candidate_only_not_runtime_integrated",
+      "size_note": "Native bytes retained; runtime crop/scale or atlas registration must be resolved separately. Target dimensions are not claimed as delivered dimensions.",
+      "actual_prompt": "Use case: style-transfer / identity-preserve.\nAsset: one independent waist-up portrait for a 2D Chinese cultivation RPG, opaque muted grey-green background, target 512x640 (4:5). Actual native dimensions will be measured.\nInput image 1 is the EDIT TARGET and individual identity, body, pose, costume and prop-placement anchor. Input image 2 is ONLY the approved C drawing-style reference: never copy its man, beard, abacus or costume.\nPreserve the individual in image 1, including apparent sex and age, facial structure, body build, hairstyle, expression, view and visible props. Redraw with economical clear thin dark outlines, small simple manga facial features, solid grouped hair, broad muted flat colours, a few large clothing folds and ONE restrained structural shadow tone. Keep identifying simplified robe motifs. No realistic face modelling, glossy anime skin, isolated hair strands, granular texture, intricate embroidery, airbrush, border, text, watermark or scenery. No extra objects or gestures. Keep entire head, highest hair, bun, hairpin and important props inside frame, with plainly visible background margin above hair, about six percent of height. Preserve the source waist-up framing and natural hands/arms visibility; do not invent hands absent from the crop. Do not turn mature people into generic young faces. Each file is ONE portrait, no contact sheet.\nIdentity details: Middle-aged female herb gatherer with slender angular mature face, concentrated neutral expression, subtle cheek crease and one small dark beauty mark on viewer-left cheek. Dark hair in a LONG HIGH PONYTAIL tied with muted olive-green cloth ribbon; greying temple strands. Dark blue-grey practical outer robe over olive-green diagonal inner layer and ivory collar, rolled pale sleeves bound at elbows and brown rope waist belt. Broad plain backpack shoulder straps. Her viewer-right hand holds a TIED HERB BUNDLE at chest/waist: grouped leaves, a few simple roots and coarse rope around a small brown wrapping. Preserve herb bundle and its gripping hand inside frame. No basket in front, hoe, sword or extra ornaments. Keep long ponytail silhouette and mature lean build.\n"
+    },
+    {
+      "id": "9faa529ff5244448",
+      "batch": "03_portrait_pool",
+      "kind": "existing",
+      "label": "assets/local/portraits/pool/female_middle/gatherer_female_middle_04.png",
+      "source": "assets/local/portraits/pool/female_middle/gatherer_female_middle_04.png",
+      "output": "art_sources/refresh_20261019/batches/03_portrait_pool/output/existing/local/portraits/pool/female_middle/gatherer_female_middle_04.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/local/portraits/pool/female_middle/gatherer_female_middle_04.png",
+        "sha256": "055e8dafbdf4c23a68437fb9785983e5a032b55704a15bed97d0c7f739bdba1d",
+        "format": "PNG",
+        "dimensions": [
+          512,
+          640
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          4,
+          5
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_generated",
+      "tool_refs": [
+        "assets/local/portraits/pool/female_middle/gatherer_female_middle_04.png",
+        "art_sources/refresh_20261019/approved_samples/02_portrait.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/03_portrait_pool/output/prompts/9faa529ff5244448.txt",
+      "newly_generated": true,
+      "sha256": "a99d6f7879dcf83810aca6984e373d1b4ba8ac7199c8aef1a6137322b6f8cc21",
+      "native_dimensions": [
+        1122,
+        1402
+      ],
+      "native_mode": "RGB",
+      "alpha_extrema": null,
+      "tool_logical_path": "C:\\Users\\Kuroro\\.codex\\generated_images\\01a156b8-68e7-71d3-9e49-188fe4225a5e\\exec-a4ab0183-5924-4a9d-ab76-fad849ac0759.png",
+      "tool_physical_path": "D:\\claude\\flash\\.tmp\\imagegen_storage\\generated_images\\01a156b8-68e7-71d3-9e49-188fe4225a5e\\exec-a4ab0183-5924-4a9d-ab76-fad849ac0759.png",
+      "input_hashes": [
+        {
+          "path": "assets/local/portraits/pool/female_middle/gatherer_female_middle_04.png",
+          "sha256": "055e8dafbdf4c23a68437fb9785983e5a032b55704a15bed97d0c7f739bdba1d"
+        },
+        {
+          "path": "art_sources/refresh_20261019/approved_samples/02_portrait.png",
+          "sha256": "139f85deb18db95d129b9e3e31db95460f47b934a7a68a4f006b95f8ad53c3fe"
+        }
+      ],
+      "review": "Visually checked identity/content, category style and complete composition; integration separate.",
+      "target_dimensions": [
+        512,
+        640
+      ],
+      "size_matches_technical_source": false,
+      "integration_status": "candidate_only_not_runtime_integrated",
+      "size_note": "Native bytes retained; runtime crop/scale or atlas registration must be resolved separately. Target dimensions are not claimed as delivered dimensions.",
+      "actual_prompt": "Use case: style-transfer / identity-preserve.\nAsset: one independent waist-up portrait for a 2D Chinese cultivation RPG, opaque muted grey-green background, target 512x640 (4:5). Actual native dimensions will be measured.\nInput image 1 is the EDIT TARGET and individual identity, body, pose, costume and prop-placement anchor. Input image 2 is ONLY the approved C drawing-style reference: never copy its man, beard, abacus or costume.\nPreserve the individual in image 1, including apparent sex and age, facial structure, body build, hairstyle, expression, view and visible props. Redraw with economical clear thin dark outlines, small simple manga facial features, solid grouped hair, broad muted flat colours, a few large clothing folds and ONE restrained structural shadow tone. Keep identifying simplified robe motifs. No realistic face modelling, glossy anime skin, isolated hair strands, granular texture, intricate embroidery, airbrush, border, text, watermark or scenery. No extra objects or gestures. Keep entire head, highest hair, bun, hairpin and important props inside frame, with plainly visible background margin above hair, about six percent of height. Preserve the source waist-up framing and natural hands/arms visibility; do not invent hands absent from the crop. Do not turn mature people into generic young faces. Each file is ONE portrait, no contact sheet.\nIdentity details: Middle-aged female herb gatherer with rounded broad face, fuller body, thoughtful slightly downturned mouth, restrained crow's feet and subtly greying temples. Dark shoulder-length partly-up hair with a small HIGH BUN tied using muted sage-grey ribbon and loose short back hair. Sage-green outer robe over dark slate blue diagonal inner layer and pale collar, sleeves rolled and tied above elbows, plain brown rope belt. A large wicker basket on her BACK viewer-left is filled with grouped brown ROOTS and a few thick stems, not leafy herbs. Her viewer-left hand holds the thick basket rope strap at chest height. Keep the actual hand, round face and basket silhouette, no hoe, sword or new objects. Three-quarter right view, quiet neutral expression.\n"
+    },
+    {
+      "id": "1bf55295990476fb",
+      "batch": "03_portrait_pool",
+      "kind": "existing",
+      "label": "assets/local/portraits/pool/female_middle/trader_female_middle_01.png",
+      "source": "assets/local/portraits/pool/female_middle/trader_female_middle_01.png",
+      "output": "art_sources/refresh_20261019/batches/03_portrait_pool/output/existing/local/portraits/pool/female_middle/trader_female_middle_01.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/local/portraits/pool/female_middle/trader_female_middle_01.png",
+        "sha256": "6f78c465e017c316b8ef1982683be13fd91c71872f190130520eea10191f8a58",
+        "format": "PNG",
+        "dimensions": [
+          512,
+          640
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          4,
+          5
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_generated",
+      "tool_refs": [
+        "assets/local/portraits/pool/female_middle/trader_female_middle_01.png",
+        "art_sources/refresh_20261019/approved_samples/02_portrait.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/03_portrait_pool/output/prompts/1bf55295990476fb.txt",
+      "newly_generated": true,
+      "sha256": "acb4e8fa5295aff341dbe47f3ecc4634ddf939ff3d31c68f594b91aac9e647c6",
+      "native_dimensions": [
+        1122,
+        1402
+      ],
+      "native_mode": "RGB",
+      "alpha_extrema": null,
+      "tool_logical_path": "C:\\Users\\Kuroro\\.codex\\generated_images\\01a156b8-68e7-71d3-9e49-188fe4225a5e\\exec-2615d142-538c-49c4-9289-c1a45cf00676.png",
+      "tool_physical_path": "D:\\claude\\flash\\.tmp\\imagegen_storage\\generated_images\\01a156b8-68e7-71d3-9e49-188fe4225a5e\\exec-2615d142-538c-49c4-9289-c1a45cf00676.png",
+      "input_hashes": [
+        {
+          "path": "assets/local/portraits/pool/female_middle/trader_female_middle_01.png",
+          "sha256": "6f78c465e017c316b8ef1982683be13fd91c71872f190130520eea10191f8a58"
+        },
+        {
+          "path": "art_sources/refresh_20261019/approved_samples/02_portrait.png",
+          "sha256": "139f85deb18db95d129b9e3e31db95460f47b934a7a68a4f006b95f8ad53c3fe"
+        }
+      ],
+      "review": "Visually checked identity/content, category style and complete composition; integration separate.",
+      "target_dimensions": [
+        512,
+        640
+      ],
+      "size_matches_technical_source": false,
+      "integration_status": "candidate_only_not_runtime_integrated",
+      "size_note": "Native bytes retained; runtime crop/scale or atlas registration must be resolved separately. Target dimensions are not claimed as delivered dimensions.",
+      "actual_prompt": "Use case: style-transfer / identity-preserve.\nAsset: one independent waist-up portrait for a 2D Chinese cultivation RPG, opaque muted grey-green background, target 512x640 (4:5). Actual native dimensions will be measured.\nInput image 1 is the EDIT TARGET and individual identity, body, pose, costume and prop-placement anchor. Input image 2 is ONLY the approved C drawing-style reference: never copy its man, beard, abacus or costume.\nPreserve the individual in image 1, including apparent sex and age, facial structure, body build, hairstyle, expression, view and visible props. Redraw with economical clear thin dark outlines, small simple manga facial features, solid grouped hair, broad muted flat colours, a few large clothing folds and ONE restrained structural shadow tone. Keep identifying simplified robe motifs. No realistic face modelling, glossy anime skin, isolated hair strands, granular texture, intricate embroidery, airbrush, border, text, watermark or scenery. No extra objects or gestures. Keep entire head, highest hair, bun, hairpin and important props inside frame, with plainly visible background margin above hair, about six percent of height. Preserve the source waist-up framing and natural hands/arms visibility; do not invent hands absent from the crop. Do not turn mature people into generic young faces. Each file is ONE portrait, no contact sheet.\nIdentity details: Middle-aged FEMALE TRADER, slim narrow mature face with tired neutral eyes, small simple age crease and unsmiling lips. Dark hair in a tall HIGH BUN tied with muted olive-brown cloth ribbon, long ribbon tails behind viewer-left, subtle grey temples. Forest-green robe with ochre edging over muted brown/plum diagonal inner layer and ivory collar, broad dark sash and brown waist cord. Small brown tied purse and pale jade ring pendant hang viewer-left waist. She holds a closed dark blue rectangular LEDGER upright at viewer-right waist with both hands, one supports lower edge. Preserve ledger binding, complete hands and simple purse/pendant positions. No written title, sword, abacus or new objects. Right-facing three-quarter view.\n"
+    },
+    {
+      "id": "2149737515d654b7",
+      "batch": "03_portrait_pool",
+      "kind": "existing",
+      "label": "assets/local/portraits/pool/female_middle/trader_female_middle_02.png",
+      "source": "assets/local/portraits/pool/female_middle/trader_female_middle_02.png",
+      "output": "art_sources/refresh_20261019/batches/03_portrait_pool/output/existing/local/portraits/pool/female_middle/trader_female_middle_02.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/local/portraits/pool/female_middle/trader_female_middle_02.png",
+        "sha256": "155d26663107fa249195d04b9ac64d5ad26f6a1c74952ff11eab1aba7aee9789",
+        "format": "PNG",
+        "dimensions": [
+          512,
+          640
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          4,
+          5
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_generated",
+      "tool_refs": [
+        "assets/local/portraits/pool/female_middle/trader_female_middle_02.png",
+        "art_sources/refresh_20261019/approved_samples/02_portrait.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/03_portrait_pool/output/prompts/2149737515d654b7.txt",
+      "newly_generated": true,
+      "sha256": "5fba47b63b373f7d869778829952c2030f15a15a7766c7443b4227aab19e83f5",
+      "native_dimensions": [
+        1122,
+        1402
+      ],
+      "native_mode": "RGB",
+      "alpha_extrema": null,
+      "tool_logical_path": "C:\\Users\\Kuroro\\.codex\\generated_images\\01a156b8-68e7-71d3-9e49-188fe4225a5e\\exec-819460df-4be0-4d74-93e4-9f373f294930.png",
+      "tool_physical_path": "D:\\claude\\flash\\.tmp\\imagegen_storage\\generated_images\\01a156b8-68e7-71d3-9e49-188fe4225a5e\\exec-819460df-4be0-4d74-93e4-9f373f294930.png",
+      "input_hashes": [
+        {
+          "path": "assets/local/portraits/pool/female_middle/trader_female_middle_02.png",
+          "sha256": "155d26663107fa249195d04b9ac64d5ad26f6a1c74952ff11eab1aba7aee9789"
+        },
+        {
+          "path": "art_sources/refresh_20261019/approved_samples/02_portrait.png",
+          "sha256": "139f85deb18db95d129b9e3e31db95460f47b934a7a68a4f006b95f8ad53c3fe"
+        }
+      ],
+      "review": "Visually checked identity/content, category style and complete composition; integration separate.",
+      "target_dimensions": [
+        512,
+        640
+      ],
+      "size_matches_technical_source": false,
+      "integration_status": "candidate_only_not_runtime_integrated",
+      "size_note": "Native bytes retained; runtime crop/scale or atlas registration must be resolved separately. Target dimensions are not claimed as delivered dimensions.",
+      "actual_prompt": "Use case: style-transfer / identity-preserve.\nAsset: one independent waist-up portrait for a 2D Chinese cultivation RPG, opaque muted grey-green background, target 512x640 (4:5). Actual native dimensions will be measured.\nInput image 1 is the EDIT TARGET and individual identity, body, pose, costume and prop-placement anchor. Input image 2 is ONLY the approved C drawing-style reference: never copy its man, beard, abacus or costume.\nPreserve the individual in image 1, including apparent sex and age, facial structure, body build, hairstyle, expression, view and visible props. Redraw with economical clear thin dark outlines, small simple manga facial features, solid grouped hair, broad muted flat colours, a few large clothing folds and ONE restrained structural shadow tone. Keep identifying simplified robe motifs. No realistic face modelling, glossy anime skin, isolated hair strands, granular texture, intricate embroidery, airbrush, border, text, watermark or scenery. No extra objects or gestures. Keep entire head, highest hair, bun, hairpin and important props inside frame, with plainly visible background margin above hair, about six percent of height. Preserve the source waist-up framing and natural hands/arms visibility; do not invent hands absent from the crop. Do not turn mature people into generic young faces. Each file is ONE portrait, no contact sheet.\nIdentity details: Middle-aged female trader with broad square mature face, thick straight brows, reserved unsmiling expression and a few restrained eye/cheek creases, solid average body. Dark subtly greying hair under a muted plum-brown HEADSCARF tied behind viewer-left with cloth tails. Forest-green robe over brown/plum diagonal inner layer and ivory collar, dark broad sash and brown waist cord; two broad brown backpack straps over shoulders. She holds ONE simple brown wooden ABACUS diagonally across lower chest with BOTH HANDS, preserving all bead rows, solid rectangular frame and visible fingers. No ledger, sword, jewellery or extra purse in hand. Plain abacus without text, entirely inside canvas. Keep mature face, headscarf silhouette and three-quarter right view.\n"
+    },
+    {
+      "id": "74a2ed3a2f0b5611",
+      "batch": "03_portrait_pool",
+      "kind": "existing",
+      "label": "assets/local/portraits/pool/female_middle/trader_female_middle_03.png",
+      "source": "assets/local/portraits/pool/female_middle/trader_female_middle_03.png",
+      "output": "art_sources/refresh_20261019/batches/03_portrait_pool/output/existing/local/portraits/pool/female_middle/trader_female_middle_03.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/local/portraits/pool/female_middle/trader_female_middle_03.png",
+        "sha256": "a79e193dcd345c2c9f611a8c860504b41aed93260882cb35e4a580ecce40d269",
+        "format": "PNG",
+        "dimensions": [
+          512,
+          640
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          4,
+          5
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_generated",
+      "tool_refs": [
+        "assets/local/portraits/pool/female_middle/trader_female_middle_03.png",
+        "art_sources/refresh_20261019/approved_samples/02_portrait.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/03_portrait_pool/output/prompts/74a2ed3a2f0b5611.txt",
+      "newly_generated": true,
+      "sha256": "006e76a6784f53d75ee6cd0e2e3567df6280b47dbb7458f9be87ed890e0247a7",
+      "native_dimensions": [
+        1122,
+        1402
+      ],
+      "native_mode": "RGB",
+      "alpha_extrema": null,
+      "tool_logical_path": "C:\\Users\\Kuroro\\.codex\\generated_images\\01a156b8-68e7-71d3-9e49-188fe4225a5e\\exec-58266d4c-07d5-4e19-94eb-c850a625d922.png",
+      "tool_physical_path": "D:\\claude\\flash\\.tmp\\imagegen_storage\\generated_images\\01a156b8-68e7-71d3-9e49-188fe4225a5e\\exec-58266d4c-07d5-4e19-94eb-c850a625d922.png",
+      "input_hashes": [
+        {
+          "path": "assets/local/portraits/pool/female_middle/trader_female_middle_03.png",
+          "sha256": "a79e193dcd345c2c9f611a8c860504b41aed93260882cb35e4a580ecce40d269"
+        },
+        {
+          "path": "art_sources/refresh_20261019/approved_samples/02_portrait.png",
+          "sha256": "139f85deb18db95d129b9e3e31db95460f47b934a7a68a4f006b95f8ad53c3fe"
+        }
+      ],
+      "review": "Visually checked identity/content, category style and complete composition; integration separate.",
+      "target_dimensions": [
+        512,
+        640
+      ],
+      "size_matches_technical_source": false,
+      "integration_status": "candidate_only_not_runtime_integrated",
+      "size_note": "Native bytes retained; runtime crop/scale or atlas registration must be resolved separately. Target dimensions are not claimed as delivered dimensions.",
+      "actual_prompt": "Use case: style-transfer / identity-preserve.\nAsset: one independent waist-up portrait for a 2D Chinese cultivation RPG, opaque muted grey-green background, target 512x640 (4:5). Actual native dimensions will be measured.\nInput image 1 is the EDIT TARGET and individual identity, body, pose, costume and prop-placement anchor. Input image 2 is ONLY the approved C drawing-style reference: never copy its man, beard, abacus or costume.\nPreserve the individual in image 1, including apparent sex and age, facial structure, body build, hairstyle, expression, view and visible props. Redraw with economical clear thin dark outlines, small simple manga facial features, solid grouped hair, broad muted flat colours, a few large clothing folds and ONE restrained structural shadow tone. Keep identifying simplified robe motifs. No realistic face modelling, glossy anime skin, isolated hair strands, granular texture, intricate embroidery, airbrush, border, text, watermark or scenery. No extra objects or gestures. Keep entire head, highest hair, bun, hairpin and important props inside frame, with plainly visible background margin above hair, about six percent of height. Preserve the source waist-up framing and natural hands/arms visibility; do not invent hands absent from the crop. Do not turn mature people into generic young faces. Each file is ONE portrait, no contact sheet.\nIdentity details: Middle-aged female trader with long narrow gently lined face, soft half-lidded eyes and subtle closed-mouth smile. Dark subtly greying hair in ONE thick LONG BRAID hanging over viewer-left chest, secured with a plain muted brown band. Forest-green robe edged ochre over muted plum-brown diagonal inner layer and ivory collar, broad brown cuffs and green/brown waist sash. Small brown waist purse and pale jade ring pendant near centre-left waist. Her visible hand holds a partly-open IVORY FOLDING FAN diagonally at viewer-right lower chest, with dark brown ribs and blank pale panels. Preserve complete fan and hand, no printed fan artwork or writing, no ledger, abacus or sword. Keep mature slim face and right-facing three-quarter view.\n"
+    },
+    {
+      "id": "5c324099ce1c2b34",
+      "batch": "03_portrait_pool",
+      "kind": "existing",
+      "label": "assets/local/portraits/pool/female_middle/trader_female_middle_04.png",
+      "source": "assets/local/portraits/pool/female_middle/trader_female_middle_04.png",
+      "output": "art_sources/refresh_20261019/batches/03_portrait_pool/output/existing/local/portraits/pool/female_middle/trader_female_middle_04.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/local/portraits/pool/female_middle/trader_female_middle_04.png",
+        "sha256": "ff7b8660817b322861847b764660fb41d90c2d61d195da9e7e08fd0aa2d13528",
+        "format": "PNG",
+        "dimensions": [
+          512,
+          640
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          4,
+          5
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_generated",
+      "tool_refs": [
+        "assets/local/portraits/pool/female_middle/trader_female_middle_04.png",
+        "art_sources/refresh_20261019/approved_samples/02_portrait.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/03_portrait_pool/output/prompts/5c324099ce1c2b34.txt",
+      "newly_generated": true,
+      "sha256": "87cd7fc3a09081162d4014fe1d8380632312b63b9188ac486cbefb4a537ddfab",
+      "native_dimensions": [
+        1122,
+        1402
+      ],
+      "native_mode": "RGB",
+      "alpha_extrema": null,
+      "tool_logical_path": "C:\\Users\\Kuroro\\.codex\\generated_images\\01a156b8-68e7-71d3-9e49-188fe4225a5e\\exec-6d744767-d5e5-400f-93c1-2a5185ec6d8e.png",
+      "tool_physical_path": "D:\\claude\\flash\\.tmp\\imagegen_storage\\generated_images\\01a156b8-68e7-71d3-9e49-188fe4225a5e\\exec-6d744767-d5e5-400f-93c1-2a5185ec6d8e.png",
+      "input_hashes": [
+        {
+          "path": "assets/local/portraits/pool/female_middle/trader_female_middle_04.png",
+          "sha256": "ff7b8660817b322861847b764660fb41d90c2d61d195da9e7e08fd0aa2d13528"
+        },
+        {
+          "path": "art_sources/refresh_20261019/approved_samples/02_portrait.png",
+          "sha256": "139f85deb18db95d129b9e3e31db95460f47b934a7a68a4f006b95f8ad53c3fe"
+        }
+      ],
+      "review": "Visually checked identity/content, category style and complete composition; integration separate.",
+      "target_dimensions": [
+        512,
+        640
+      ],
+      "size_matches_technical_source": false,
+      "integration_status": "candidate_only_not_runtime_integrated",
+      "size_note": "Native bytes retained; runtime crop/scale or atlas registration must be resolved separately. Target dimensions are not claimed as delivered dimensions.",
+      "actual_prompt": "Use case: style-transfer / identity-preserve.\nAsset: one independent waist-up portrait for a 2D Chinese cultivation RPG, opaque muted grey-green background, target 512x640 (4:5). Actual native dimensions will be measured.\nInput image 1 is the EDIT TARGET and individual identity, body, pose, costume and prop-placement anchor. Input image 2 is ONLY the approved C drawing-style reference: never copy its man, beard, abacus or costume.\nPreserve the individual in image 1, including apparent sex and age, facial structure, body build, hairstyle, expression, view and visible props. Redraw with economical clear thin dark outlines, small simple manga facial features, solid grouped hair, broad muted flat colours, a few large clothing folds and ONE restrained structural shadow tone. Keep identifying simplified robe motifs. No realistic face modelling, glossy anime skin, isolated hair strands, granular texture, intricate embroidery, airbrush, border, text, watermark or scenery. No extra objects or gestures. Keep entire head, highest hair, bun, hairpin and important props inside frame, with plainly visible background margin above hair, about six percent of height. Preserve the source waist-up framing and natural hands/arms visibility; do not invent hands absent from the crop. Do not turn mature people into generic young faces. Each file is ONE portrait, no contact sheet.\nIdentity details: Middle-aged female trader with broad round mature face, fuller cheeks, gentle closed-mouth smile, restrained eye creases and subtly greying dark hair in TWO modest low braided tails at back, one visible behind viewer-left shoulder with brown tie. Full-bodied green outer robe edged ochre over plum-brown diagonal inner robe and ivory collar, dark broad sash with brown front knot. Her raised viewer-right hand holds the drawstring of a hanging BROWN MONEY POUCH at waist height; small pale jade ornament and tassel attached to the pouch. Preserve complete hand, drawstrings, pouch and tassel inside frame. No ledger, fan, abacus or sword. Head turned right with upper body more frontal, mature and solid build.\n"
+    },
+    {
+      "id": "d7dfa0e22c934438",
+      "batch": "03_portrait_pool",
+      "kind": "existing",
+      "label": "assets/local/portraits/pool/female_middle/trader_female_middle_05.png",
+      "source": "assets/local/portraits/pool/female_middle/trader_female_middle_05.png",
+      "output": "art_sources/refresh_20261019/batches/03_portrait_pool/output/existing/local/portraits/pool/female_middle/trader_female_middle_05.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/local/portraits/pool/female_middle/trader_female_middle_05.png",
+        "sha256": "a7424ac332d7f83e965f6acd9e1969025290e09ae909c0215cd5ffcd3e116e8a",
+        "format": "PNG",
+        "dimensions": [
+          512,
+          640
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          4,
+          5
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_generated",
+      "tool_refs": [
+        "assets/local/portraits/pool/female_middle/trader_female_middle_05.png",
+        "art_sources/refresh_20261019/approved_samples/02_portrait.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/03_portrait_pool/output/prompts/d7dfa0e22c934438.txt",
+      "newly_generated": true,
+      "sha256": "4247c248b5ddd89a07602d01b84f77f6f63e7a167efc8f9a57ce3f438b74bb29",
+      "native_dimensions": [
+        1122,
+        1402
+      ],
+      "native_mode": "RGB",
+      "alpha_extrema": null,
+      "tool_logical_path": "C:\\Users\\Kuroro\\.codex\\generated_images\\01a156b8-68e7-71d3-9e49-188fe4225a5e\\exec-e9d0f24b-bc45-425c-8128-d0653a498420.png",
+      "tool_physical_path": "D:\\claude\\flash\\.tmp\\imagegen_storage\\generated_images\\01a156b8-68e7-71d3-9e49-188fe4225a5e\\exec-e9d0f24b-bc45-425c-8128-d0653a498420.png",
+      "input_hashes": [
+        {
+          "path": "assets/local/portraits/pool/female_middle/trader_female_middle_05.png",
+          "sha256": "a7424ac332d7f83e965f6acd9e1969025290e09ae909c0215cd5ffcd3e116e8a"
+        },
+        {
+          "path": "art_sources/refresh_20261019/approved_samples/02_portrait.png",
+          "sha256": "139f85deb18db95d129b9e3e31db95460f47b934a7a68a4f006b95f8ad53c3fe"
+        }
+      ],
+      "review": "Visually checked identity/content, category style and complete composition; integration separate.",
+      "target_dimensions": [
+        512,
+        640
+      ],
+      "size_matches_technical_source": false,
+      "integration_status": "candidate_only_not_runtime_integrated",
+      "size_note": "Native bytes retained; runtime crop/scale or atlas registration must be resolved separately. Target dimensions are not claimed as delivered dimensions.",
+      "actual_prompt": "Use case: style-transfer / identity-preserve.\nAsset: one independent waist-up portrait for a 2D Chinese cultivation RPG, opaque muted grey-green background, target 512x640 (4:5). Actual native dimensions will be measured.\nInput image 1 is the EDIT TARGET and individual identity, body, pose, costume and prop-placement anchor. Input image 2 is ONLY the approved C drawing-style reference: never copy its man, beard, abacus or costume.\nPreserve the individual in image 1, including apparent sex and age, facial structure, body build, hairstyle, expression, view and visible props. Redraw with economical clear thin dark outlines, small simple manga facial features, solid grouped hair, broad muted flat colours, a few large clothing folds and ONE restrained structural shadow tone. Keep identifying simplified robe motifs. No realistic face modelling, glossy anime skin, isolated hair strands, granular texture, intricate embroidery, airbrush, border, text, watermark or scenery. No extra objects or gestures. Keep entire head, highest hair, bun, hairpin and important props inside frame, with plainly visible background margin above hair, about six percent of height. Preserve the source waist-up framing and natural hands/arms visibility; do not invent hands absent from the crop. Do not turn mature people into generic young faces. Each file is ONE portrait, no contact sheet.\nIdentity details: Middle-aged female trader with slim angular face, serious slightly sceptical narrow eyes, straight unsmiling lips and a restrained simple cheek crease. Subtly greying dark hair in a LOW SIDE/REAR BUN behind viewer-left ear tied with muted plum-brown ribbon, two loose brown ribbon tails. Dark forest-green outer robe with ochre lapel edging over plum-brown diagonal inner layer and ivory collar. Brown cord belt, small tied brown purse at viewer-left waist and pale jade ring pendant at centre. Her viewer-right hand holds ONE closed blue rectangular LEDGER vertically against lower chest, simple pale binding lines and blank cover. Preserve hand and complete book inside frame; her other hand remains naturally low as source. No sword, fan or abacus, no writing or extra jewellery.\n"
+    },
+    {
+      "id": "8040d9c1676b5922",
+      "batch": "03_portrait_pool",
+      "kind": "existing",
+      "label": "assets/local/portraits/pool/female_middle/trader_female_middle_06.png",
+      "source": "assets/local/portraits/pool/female_middle/trader_female_middle_06.png",
+      "output": "art_sources/refresh_20261019/batches/03_portrait_pool/output/existing/local/portraits/pool/female_middle/trader_female_middle_06.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/local/portraits/pool/female_middle/trader_female_middle_06.png",
+        "sha256": "34bc4e4a821afce0df3621b3ff9889d1c96a91411dbdef9648c25ce0f063d43f",
+        "format": "PNG",
+        "dimensions": [
+          512,
+          640
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          4,
+          5
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_generated",
+      "tool_refs": [
+        "assets/local/portraits/pool/female_middle/trader_female_middle_06.png",
+        "art_sources/refresh_20261019/approved_samples/02_portrait.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/03_portrait_pool/output/prompts/8040d9c1676b5922.txt",
+      "newly_generated": true,
+      "sha256": "bf662fdada796d175b6338a8b5c6acc5291512bd2a5e15303e89409586f1697d",
+      "native_dimensions": [
+        1122,
+        1402
+      ],
+      "native_mode": "RGB",
+      "alpha_extrema": null,
+      "tool_logical_path": "C:\\Users\\Kuroro\\.codex\\generated_images\\01a156b8-68e7-71d3-9e49-188fe4225a5e\\exec-a76228f0-bba2-42e4-94e0-ac52e8f68829.png",
+      "tool_physical_path": "D:\\claude\\flash\\.tmp\\imagegen_storage\\generated_images\\01a156b8-68e7-71d3-9e49-188fe4225a5e\\exec-a76228f0-bba2-42e4-94e0-ac52e8f68829.png",
+      "input_hashes": [
+        {
+          "path": "assets/local/portraits/pool/female_middle/trader_female_middle_06.png",
+          "sha256": "34bc4e4a821afce0df3621b3ff9889d1c96a91411dbdef9648c25ce0f063d43f"
+        },
+        {
+          "path": "art_sources/refresh_20261019/approved_samples/02_portrait.png",
+          "sha256": "139f85deb18db95d129b9e3e31db95460f47b934a7a68a4f006b95f8ad53c3fe"
+        }
+      ],
+      "review": "Visually checked identity/content, category style and complete composition; integration separate.",
+      "target_dimensions": [
+        512,
+        640
+      ],
+      "size_matches_technical_source": false,
+      "integration_status": "candidate_only_not_runtime_integrated",
+      "size_note": "Native bytes retained; runtime crop/scale or atlas registration must be resolved separately. Target dimensions are not claimed as delivered dimensions.",
+      "actual_prompt": "Use case: style-transfer / identity-preserve.\nAsset: one independent waist-up portrait for a 2D Chinese cultivation RPG, opaque muted grey-green background, target 512x640 (4:5). Actual native dimensions will be measured.\nInput image 1 is the EDIT TARGET and individual identity, body, pose, costume and prop-placement anchor. Input image 2 is ONLY the approved C drawing-style reference: never copy its man, beard, abacus or costume.\nPreserve the individual in image 1, including apparent sex and age, facial structure, body build, hairstyle, expression, view and visible props. Redraw with economical clear thin dark outlines, small simple manga facial features, solid grouped hair, broad muted flat colours, a few large clothing folds and ONE restrained structural shadow tone. Keep identifying simplified robe motifs. No realistic face modelling, glossy anime skin, isolated hair strands, granular texture, intricate embroidery, airbrush, border, text, watermark or scenery. No extra objects or gestures. Keep entire head, highest hair, bun, hairpin and important props inside frame, with plainly visible background margin above hair, about six percent of height. Preserve the source waist-up framing and natural hands/arms visibility; do not invent hands absent from the crop. Do not turn mature people into generic young faces. Each file is ONE portrait, no contact sheet.\nIdentity details: Middle-aged female trader with broader oval face, full lower cheeks, level thoughtful eyes, slightly parted but calm closed lips and subtle age crease. Dark hair swept neatly into a LOW REAR BUN behind viewer-left ear, tied with plain brown band; no headscarf, high bun or long braid. Dark forest-green robe with ochre lapel edging over muted plum diagonal inner layer and ivory collar, plain olive/brown belt. She holds one dark brown rectangular ABACUS across lower chest/waist, tilted slightly upward to viewer-right. Viewer-right hand supports the frame's underside; viewer-left hand rests over the beads, gently counting. Keep both hands and whole abacus inside frame. No book, sword, fan or extra coins. Preserve mature average build and right-facing three-quarter view.\n"
+    },
+    {
+      "id": "47657228d18cf38e",
+      "batch": "03_portrait_pool",
+      "kind": "existing",
+      "label": "assets/local/portraits/pool/female_middle/visitor_female_middle_01.png",
+      "source": "assets/local/portraits/pool/female_middle/visitor_female_middle_01.png",
+      "output": "art_sources/refresh_20261019/batches/03_portrait_pool/output/existing/local/portraits/pool/female_middle/visitor_female_middle_01.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/local/portraits/pool/female_middle/visitor_female_middle_01.png",
+        "sha256": "28698e2429d82a0ae04480c1b1d9989e86e44141bcef255629e11a218e9fd5ab",
+        "format": "PNG",
+        "dimensions": [
+          512,
+          640
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          4,
+          5
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_generated",
+      "tool_refs": [
+        "assets/local/portraits/pool/female_middle/visitor_female_middle_01.png",
+        "art_sources/refresh_20261019/approved_samples/02_portrait.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/03_portrait_pool/output/prompts/47657228d18cf38e.txt",
+      "newly_generated": true,
+      "sha256": "0d1cb30fa22a7622d0f344dfdcb7ff5f13a9cb663d2608dbea990387102ad7bd",
+      "native_dimensions": [
+        1122,
+        1402
+      ],
+      "native_mode": "RGB",
+      "alpha_extrema": null,
+      "tool_logical_path": "C:\\Users\\Kuroro\\.codex\\generated_images\\01a156b8-68e7-71d3-9e49-188fe4225a5e\\exec-faa4b23b-5cfa-4f3a-a55c-e0c6fd2911b5.png",
+      "tool_physical_path": "D:\\claude\\flash\\.tmp\\imagegen_storage\\generated_images\\01a156b8-68e7-71d3-9e49-188fe4225a5e\\exec-faa4b23b-5cfa-4f3a-a55c-e0c6fd2911b5.png",
+      "input_hashes": [
+        {
+          "path": "assets/local/portraits/pool/female_middle/visitor_female_middle_01.png",
+          "sha256": "28698e2429d82a0ae04480c1b1d9989e86e44141bcef255629e11a218e9fd5ab"
+        },
+        {
+          "path": "art_sources/refresh_20261019/approved_samples/02_portrait.png",
+          "sha256": "139f85deb18db95d129b9e3e31db95460f47b934a7a68a4f006b95f8ad53c3fe"
+        }
+      ],
+      "review": "Visually checked identity/content, category style and complete composition; integration separate.",
+      "target_dimensions": [
+        512,
+        640
+      ],
+      "size_matches_technical_source": false,
+      "integration_status": "candidate_only_not_runtime_integrated",
+      "size_note": "Native bytes retained; runtime crop/scale or atlas registration must be resolved separately. Target dimensions are not claimed as delivered dimensions.",
+      "actual_prompt": "Use case: style-transfer / identity-preserve.\nAsset: one independent waist-up portrait for a 2D Chinese cultivation RPG, opaque muted grey-green background, target 512x640 (4:5). Actual native dimensions will be measured.\nInput image 1 is the EDIT TARGET and individual identity, body, pose, costume and prop-placement anchor. Input image 2 is ONLY the approved C drawing-style reference: never copy its man, beard, abacus or costume.\nPreserve the individual in image 1, including apparent sex and age, facial structure, body build, hairstyle, expression, view and visible props. Redraw with economical clear thin dark outlines, small simple manga facial features, solid grouped hair, broad muted flat colours, a few large clothing folds and ONE restrained structural shadow tone. Keep identifying simplified robe motifs. No realistic face modelling, glossy anime skin, isolated hair strands, granular texture, intricate embroidery, airbrush, border, text, watermark or scenery. No extra objects or gestures. Keep entire head, highest hair, bun, hairpin and important props inside frame, with plainly visible background margin above hair, about six percent of height. Preserve the source waist-up framing and natural hands/arms visibility; do not invent hands absent from the crop. Do not turn mature people into generic young faces. Each file is ONE portrait, no contact sheet.\nIdentity details: Middle-aged female VISITOR with slim long face, concerned slightly raised inner brows, tired gentle eyes, parted neutral lips and one small simple cheek crease. Dark subtly greying hair in a HIGH BUN tied with a muted brick-red ribbon, two ribbon tails behind viewer-left. Muted red and charcoal travelling robe with dark outer front lapels, red diagonal inner layer, pale ivory collar and a few large simple red flame-like shoulder motifs. Plain dark broad sash with red cord. A modest brown travelling BACKPACK behind viewer-left shoulder; her viewer-left hand grips its brown shoulder strap at chest height. Preserve actual hand, pack and strap. No sword, ledger, staff or extra props. Mature lean physique and right-facing three-quarter view, no exaggerated distress.\n"
+    },
+    {
+      "id": "1b462da0ea50ffc0",
+      "batch": "03_portrait_pool",
+      "kind": "existing",
+      "label": "assets/local/portraits/pool/female_middle/visitor_female_middle_02.png",
+      "source": "assets/local/portraits/pool/female_middle/visitor_female_middle_02.png",
+      "output": "art_sources/refresh_20261019/batches/03_portrait_pool/output/existing/local/portraits/pool/female_middle/visitor_female_middle_02.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/local/portraits/pool/female_middle/visitor_female_middle_02.png",
+        "sha256": "15756411dd8071ebc4a8b03f4b53535eaf324438d2ac813276f038499cee7a96",
+        "format": "PNG",
+        "dimensions": [
+          512,
+          640
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          4,
+          5
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_generated",
+      "tool_refs": [
+        "assets/local/portraits/pool/female_middle/visitor_female_middle_02.png",
+        "art_sources/refresh_20261019/approved_samples/02_portrait.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/03_portrait_pool/output/prompts/1b462da0ea50ffc0.txt",
+      "newly_generated": true,
+      "sha256": "3d797e056a97da2f348edb8a78974fe8b6fefaad1baedc91e209cfbc24406ca4",
+      "native_dimensions": [
+        1122,
+        1402
+      ],
+      "native_mode": "RGB",
+      "alpha_extrema": null,
+      "tool_logical_path": "C:\\Users\\Kuroro\\.codex\\generated_images\\01a156b8-68e7-71d3-9e49-188fe4225a5e\\exec-42fc47b7-b405-4ac9-a072-3692cf4251bc.png",
+      "tool_physical_path": "D:\\claude\\flash\\.tmp\\imagegen_storage\\generated_images\\01a156b8-68e7-71d3-9e49-188fe4225a5e\\exec-42fc47b7-b405-4ac9-a072-3692cf4251bc.png",
+      "input_hashes": [
+        {
+          "path": "assets/local/portraits/pool/female_middle/visitor_female_middle_02.png",
+          "sha256": "15756411dd8071ebc4a8b03f4b53535eaf324438d2ac813276f038499cee7a96"
+        },
+        {
+          "path": "art_sources/refresh_20261019/approved_samples/02_portrait.png",
+          "sha256": "139f85deb18db95d129b9e3e31db95460f47b934a7a68a4f006b95f8ad53c3fe"
+        }
+      ],
+      "review": "Visually checked identity/content, category style and complete composition; integration separate.",
+      "target_dimensions": [
+        512,
+        640
+      ],
+      "size_matches_technical_source": false,
+      "integration_status": "candidate_only_not_runtime_integrated",
+      "size_note": "Native bytes retained; runtime crop/scale or atlas registration must be resolved separately. Target dimensions are not claimed as delivered dimensions.",
+      "actual_prompt": "Use case: style-transfer / identity-preserve.\nAsset: one independent waist-up portrait for a 2D Chinese cultivation RPG, opaque muted grey-green background, target 512x640 (4:5). Actual native dimensions will be measured.\nInput image 1 is the EDIT TARGET and individual identity, body, pose, costume and prop-placement anchor. Input image 2 is ONLY the approved C drawing-style reference: never copy its man, beard, abacus or costume.\nPreserve the individual in image 1, including apparent sex and age, facial structure, body build, hairstyle, expression, view and visible props. Redraw with economical clear thin dark outlines, small simple manga facial features, solid grouped hair, broad muted flat colours, a few large clothing folds and ONE restrained structural shadow tone. Keep identifying simplified robe motifs. No realistic face modelling, glossy anime skin, isolated hair strands, granular texture, intricate embroidery, airbrush, border, text, watermark or scenery. No extra objects or gestures. Keep entire head, highest hair, bun, hairpin and important props inside frame, with plainly visible background margin above hair, about six percent of height. Preserve the source waist-up framing and natural hands/arms visibility; do not invent hands absent from the crop. Do not turn mature people into generic young faces. Each file is ONE portrait, no contact sheet.\nIdentity details: Middle-aged female travelling VISITOR with a broad square mature face, full cheeks, strong straight brows, serious composed eyes and neutral straight lips. Subtly greying dark hair under a muted brick-red HEADSCARF knotted behind viewer-left with red cloth tails. Charcoal/black travelling robe with muted red wide outer lapels and a few simple red flame shoulder motifs, grey diagonal inner layer and ivory collar, dark waist sash tied with red cord. Large plain brown travelling BACKPACK behind viewer-left shoulder; viewer-left hand grasps its dark strap at chest level. Preserve the solid average body, complete gripping hand and pack silhouette. No exposed high bun, ledger, sword, abacus or other new props. Three-quarter right view.\n"
+    },
+    {
+      "id": "8b6c9e368fb70f54",
+      "batch": "03_portrait_pool",
+      "kind": "existing",
+      "label": "assets/local/portraits/pool/female_middle/wanderer_female_middle_01.png",
+      "source": "assets/local/portraits/pool/female_middle/wanderer_female_middle_01.png",
+      "output": "art_sources/refresh_20261019/batches/03_portrait_pool/output/existing/local/portraits/pool/female_middle/wanderer_female_middle_01.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/local/portraits/pool/female_middle/wanderer_female_middle_01.png",
+        "sha256": "9f9b6c95419581f305dcdcbe2be8a4ec6115fefa5097cd58c88f6adff0b2e507",
+        "format": "PNG",
+        "dimensions": [
+          512,
+          640
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          4,
+          5
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_generated",
+      "tool_refs": [
+        "assets/local/portraits/pool/female_middle/wanderer_female_middle_01.png",
+        "art_sources/refresh_20261019/approved_samples/02_portrait.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/03_portrait_pool/output/prompts/8b6c9e368fb70f54.txt",
+      "newly_generated": true,
+      "sha256": "e8c51c7d60b87cd551b6407231d475c52c551a43fd120f76e14db24076c5afa6",
+      "native_dimensions": [
+        1122,
+        1402
+      ],
+      "native_mode": "RGB",
+      "alpha_extrema": null,
+      "tool_logical_path": "C:\\Users\\Kuroro\\.codex\\generated_images\\01a156b8-68e7-71d3-9e49-188fe4225a5e\\exec-37d18763-3299-453a-a1a5-adfc67dd2db4.png",
+      "tool_physical_path": "D:\\claude\\flash\\.tmp\\imagegen_storage\\generated_images\\01a156b8-68e7-71d3-9e49-188fe4225a5e\\exec-37d18763-3299-453a-a1a5-adfc67dd2db4.png",
+      "input_hashes": [
+        {
+          "path": "assets/local/portraits/pool/female_middle/wanderer_female_middle_01.png",
+          "sha256": "9f9b6c95419581f305dcdcbe2be8a4ec6115fefa5097cd58c88f6adff0b2e507"
+        },
+        {
+          "path": "art_sources/refresh_20261019/approved_samples/02_portrait.png",
+          "sha256": "139f85deb18db95d129b9e3e31db95460f47b934a7a68a4f006b95f8ad53c3fe"
+        }
+      ],
+      "review": "Visually checked identity/content, category style and complete composition; integration separate.",
+      "target_dimensions": [
+        512,
+        640
+      ],
+      "size_matches_technical_source": false,
+      "integration_status": "candidate_only_not_runtime_integrated",
+      "size_note": "Native bytes retained; runtime crop/scale or atlas registration must be resolved separately. Target dimensions are not claimed as delivered dimensions.",
+      "actual_prompt": "Use case: style-transfer / identity-preserve.\nAsset: one independent waist-up portrait for a 2D Chinese cultivation RPG, opaque muted grey-green background, target 512x640 (4:5). Actual native dimensions will be measured.\nInput image 1 is the EDIT TARGET and individual identity, body, pose, costume and prop-placement anchor. Input image 2 is ONLY the approved C drawing-style reference: never copy its man, beard, abacus or costume.\nPreserve the individual in image 1, including apparent sex and age, facial structure, body build, hairstyle, expression, view and visible props. Redraw with economical clear thin dark outlines, small simple manga facial features, solid grouped hair, broad muted flat colours, a few large clothing folds and ONE restrained structural shadow tone. Keep identifying simplified robe motifs. No realistic face modelling, glossy anime skin, isolated hair strands, granular texture, intricate embroidery, airbrush, border, text, watermark or scenery. No extra objects or gestures. Keep entire head, highest hair, bun, hairpin and important props inside frame, with plainly visible background margin above hair, about six percent of height. Preserve the source waist-up framing and natural hands/arms visibility; do not invent hands absent from the crop. Do not turn mature people into generic young faces. Each file is ONE portrait, no contact sheet.\nIdentity details: Middle-aged female WANDERER with broad square mature face, full cheeks, slightly weary serious eyes and straight unsmiling lips. Dark subtly greying hair under a patched coarse taupe/brown HEADSCARF tied at back, plain fabric tails behind viewer-left shoulder. Faded grey robe with brown sleeveless outer layer, grey diagonal collar and ivory undercollar, simple large visible stitched PATCHES at viewer-left shoulder and sleeves; pale ochre cloth waist sash. A tied dark travelling bundle on her BACK at viewer-left with broad shoulder straps. A small ochre double-bulb GOURD hangs at viewer-left front waist, tied with brown cord. Preserve mature solid body and practical worn identity; simplify patch stitches to a few short lines. No sword, staff, book or other new props. Three-quarter right view.\n"
+    },
+    {
+      "id": "89d2186c4485655c",
+      "batch": "03_portrait_pool",
+      "kind": "existing",
+      "label": "assets/local/portraits/pool/female_middle/wanderer_female_middle_02.png",
+      "source": "assets/local/portraits/pool/female_middle/wanderer_female_middle_02.png",
+      "output": "art_sources/refresh_20261019/batches/03_portrait_pool/output/existing/local/portraits/pool/female_middle/wanderer_female_middle_02.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/local/portraits/pool/female_middle/wanderer_female_middle_02.png",
+        "sha256": "df3a2b684b23302a1937299fa087ef8e977090973e85741c1f6e008e06c265ee",
+        "format": "PNG",
+        "dimensions": [
+          512,
+          640
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          4,
+          5
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_generated",
+      "tool_refs": [
+        "assets/local/portraits/pool/female_middle/wanderer_female_middle_02.png",
+        "art_sources/refresh_20261019/approved_samples/02_portrait.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/03_portrait_pool/output/prompts/89d2186c4485655c.txt",
+      "newly_generated": true,
+      "sha256": "30ca721cde7777fadff5e72b89742b519f853c8a19b38716d57f2680c0315c3d",
+      "native_dimensions": [
+        1122,
+        1402
+      ],
+      "native_mode": "RGB",
+      "alpha_extrema": null,
+      "tool_logical_path": "C:\\Users\\Kuroro\\.codex\\generated_images\\01a156b8-68e7-71d3-9e49-188fe4225a5e\\exec-e08c02f4-bfaf-4d34-afb4-6fc3ea112cd2.png",
+      "tool_physical_path": "D:\\claude\\flash\\.tmp\\imagegen_storage\\generated_images\\01a156b8-68e7-71d3-9e49-188fe4225a5e\\exec-e08c02f4-bfaf-4d34-afb4-6fc3ea112cd2.png",
+      "input_hashes": [
+        {
+          "path": "assets/local/portraits/pool/female_middle/wanderer_female_middle_02.png",
+          "sha256": "df3a2b684b23302a1937299fa087ef8e977090973e85741c1f6e008e06c265ee"
+        },
+        {
+          "path": "art_sources/refresh_20261019/approved_samples/02_portrait.png",
+          "sha256": "139f85deb18db95d129b9e3e31db95460f47b934a7a68a4f006b95f8ad53c3fe"
+        }
+      ],
+      "review": "Visually checked identity/content, category style and complete composition; integration separate.",
+      "target_dimensions": [
+        512,
+        640
+      ],
+      "size_matches_technical_source": false,
+      "integration_status": "candidate_only_not_runtime_integrated",
+      "size_note": "Native bytes retained; runtime crop/scale or atlas registration must be resolved separately. Target dimensions are not claimed as delivered dimensions.",
+      "actual_prompt": "Use case: style-transfer / identity-preserve.\nAsset: one independent waist-up portrait for a 2D Chinese cultivation RPG, opaque muted grey-green background, target 512x640 (4:5). Actual native dimensions will be measured.\nInput image 1 is the EDIT TARGET and individual identity, body, pose, costume and prop-placement anchor. Input image 2 is ONLY the approved C drawing-style reference: never copy its man, beard, abacus or costume.\nPreserve the individual in image 1, including apparent sex and age, facial structure, body build, hairstyle, expression, view and visible props. Redraw with economical clear thin dark outlines, small simple manga facial features, solid grouped hair, broad muted flat colours, a few large clothing folds and ONE restrained structural shadow tone. Keep identifying simplified robe motifs. No realistic face modelling, glossy anime skin, isolated hair strands, granular texture, intricate embroidery, airbrush, border, text, watermark or scenery. No extra objects or gestures. Keep entire head, highest hair, bun, hairpin and important props inside frame, with plainly visible background margin above hair, about six percent of height. Preserve the source waist-up framing and natural hands/arms visibility; do not invent hands absent from the crop. Do not turn mature people into generic young faces. Each file is ONE portrait, no contact sheet.\nIdentity details: Middle-aged female wanderer with slender long mature face, gentle half-lidded eyes, small smile and restrained mouth/cheek crease. Subtly greying dark hair in ONE thick LONG BRAID hanging viewer-left chest with plain taupe tie. Worn olive-grey robe with brown front layer, grey diagonal inner collar and pale undercollar, plain ochre cloth waist sash and a few large stitched taupe PATCHES on viewer-left shoulder and sleeves. Simple backpack shoulder straps. Small brown GOURD hanging at viewer-left front waist. Her viewer-right hand firmly grips a plain slightly crooked WOODEN WALKING STAFF upright at right, top safely inside canvas, preserve fingers. No sword, ornate staff head or magical effect. Mature lean build, calm right-facing three-quarter view.\n"
+    },
+    {
+      "id": "54a6f7d9d3b194c2",
+      "batch": "03_portrait_pool",
+      "kind": "existing",
+      "label": "assets/local/portraits/pool/female_middle/wanderer_female_middle_03.png",
+      "source": "assets/local/portraits/pool/female_middle/wanderer_female_middle_03.png",
+      "output": "art_sources/refresh_20261019/batches/03_portrait_pool/output/existing/local/portraits/pool/female_middle/wanderer_female_middle_03.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/local/portraits/pool/female_middle/wanderer_female_middle_03.png",
+        "sha256": "3dd63fbbab46b2429fdca8e9e4b26b5c010e61fceae8bb07ffb86b2e81db4309",
+        "format": "PNG",
+        "dimensions": [
+          512,
+          640
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          4,
+          5
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_generated",
+      "tool_refs": [
+        "assets/local/portraits/pool/female_middle/wanderer_female_middle_03.png",
+        "art_sources/refresh_20261019/approved_samples/02_portrait.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/03_portrait_pool/output/prompts/54a6f7d9d3b194c2.txt",
+      "newly_generated": true,
+      "sha256": "ec31592f7abe8143d83b037a7146375c757ff86047d7b9dcf23b778f975f531f",
+      "native_dimensions": [
+        1122,
+        1402
+      ],
+      "native_mode": "RGB",
+      "alpha_extrema": null,
+      "tool_logical_path": "C:\\Users\\Kuroro\\.codex\\generated_images\\01a156b8-68e7-71d3-9e49-188fe4225a5e\\exec-4e1c18b4-2ffe-4e72-82f1-c9565a9fe04b.png",
+      "tool_physical_path": "D:\\claude\\flash\\.tmp\\imagegen_storage\\generated_images\\01a156b8-68e7-71d3-9e49-188fe4225a5e\\exec-4e1c18b4-2ffe-4e72-82f1-c9565a9fe04b.png",
+      "input_hashes": [
+        {
+          "path": "assets/local/portraits/pool/female_middle/wanderer_female_middle_03.png",
+          "sha256": "3dd63fbbab46b2429fdca8e9e4b26b5c010e61fceae8bb07ffb86b2e81db4309"
+        },
+        {
+          "path": "art_sources/refresh_20261019/approved_samples/02_portrait.png",
+          "sha256": "139f85deb18db95d129b9e3e31db95460f47b934a7a68a4f006b95f8ad53c3fe"
+        }
+      ],
+      "review": "Visually checked identity/content, category style and complete composition; integration separate.",
+      "target_dimensions": [
+        512,
+        640
+      ],
+      "size_matches_technical_source": false,
+      "integration_status": "candidate_only_not_runtime_integrated",
+      "size_note": "Native bytes retained; runtime crop/scale or atlas registration must be resolved separately. Target dimensions are not claimed as delivered dimensions.",
+      "actual_prompt": "Use case: style-transfer / identity-preserve.\nAsset: one independent waist-up portrait for a 2D Chinese cultivation RPG, opaque muted grey-green background, target 512x640 (4:5). Actual native dimensions will be measured.\nInput image 1 is the EDIT TARGET and individual identity, body, pose, costume and prop-placement anchor. Input image 2 is ONLY the approved C drawing-style reference: never copy its man, beard, abacus or costume.\nPreserve the individual in image 1, including apparent sex and age, facial structure, body build, hairstyle, expression, view and visible props. Redraw with economical clear thin dark outlines, small simple manga facial features, solid grouped hair, broad muted flat colours, a few large clothing folds and ONE restrained structural shadow tone. Keep identifying simplified robe motifs. No realistic face modelling, glossy anime skin, isolated hair strands, granular texture, intricate embroidery, airbrush, border, text, watermark or scenery. No extra objects or gestures. Keep entire head, highest hair, bun, hairpin and important props inside frame, with plainly visible background margin above hair, about six percent of height. Preserve the source waist-up framing and natural hands/arms visibility; do not invent hands absent from the crop. Do not turn mature people into generic young faces. Each file is ONE portrait, no contact sheet.\nIdentity details: Middle-aged female wanderer with a broad strong mature face, full cheeks, slightly narrowed serious eyes, thick brows and straight firm lips. Subtly greying dark hair in TWO modest low braided tails at back, one hanging behind each shoulder, secured with plain taupe ties. Worn charcoal-grey outer robe over brown diagonal inner robe and ivory collar, visible large stitched brown/grey PATCHES on shoulders and sleeves, simple pale ochre cloth waist sash. A large plain tied TAUPE CLOTH TRAVELLING SACK behind viewer-left shoulder, hanging from a coarse knotted rope strap; viewer-left hand firmly grasps strap at chest level. Preserve full gripping hand, knot and sack silhouette. Solid full build, no sword, staff, gourd or extra props. Head turned right, upper body slightly frontal.\n"
+    },
+    {
+      "id": "a528f55e2fda5c8e",
+      "batch": "03_portrait_pool",
+      "kind": "existing",
+      "label": "assets/local/portraits/pool/female_middle/wanderer_female_middle_04.png",
+      "source": "assets/local/portraits/pool/female_middle/wanderer_female_middle_04.png",
+      "output": "art_sources/refresh_20261019/batches/03_portrait_pool/output/existing/local/portraits/pool/female_middle/wanderer_female_middle_04.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/local/portraits/pool/female_middle/wanderer_female_middle_04.png",
+        "sha256": "d6cf8031ad9c1ee583d48246a92423980539aa24b56547fa513543e74e777ec8",
+        "format": "PNG",
+        "dimensions": [
+          512,
+          640
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          4,
+          5
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_generated",
+      "tool_refs": [
+        "assets/local/portraits/pool/female_middle/wanderer_female_middle_04.png",
+        "art_sources/refresh_20261019/approved_samples/02_portrait.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/03_portrait_pool/output/prompts/a528f55e2fda5c8e.txt",
+      "newly_generated": true,
+      "sha256": "4684232c5df7d610c1cb0fac7562f908187638234851f0efbae1237157790ff0",
+      "native_dimensions": [
+        1122,
+        1402
+      ],
+      "native_mode": "RGB",
+      "alpha_extrema": null,
+      "tool_logical_path": "C:\\Users\\Kuroro\\.codex\\generated_images\\01a156b8-68e7-71d3-9e49-188fe4225a5e\\exec-0d324c06-d47f-4bf3-8378-5fb9fca93674.png",
+      "tool_physical_path": "D:\\claude\\flash\\.tmp\\imagegen_storage\\generated_images\\01a156b8-68e7-71d3-9e49-188fe4225a5e\\exec-0d324c06-d47f-4bf3-8378-5fb9fca93674.png",
+      "input_hashes": [
+        {
+          "path": "assets/local/portraits/pool/female_middle/wanderer_female_middle_04.png",
+          "sha256": "d6cf8031ad9c1ee583d48246a92423980539aa24b56547fa513543e74e777ec8"
+        },
+        {
+          "path": "art_sources/refresh_20261019/approved_samples/02_portrait.png",
+          "sha256": "139f85deb18db95d129b9e3e31db95460f47b934a7a68a4f006b95f8ad53c3fe"
+        }
+      ],
+      "review": "Visually checked identity/content, category style and complete composition; integration separate.",
+      "target_dimensions": [
+        512,
+        640
+      ],
+      "size_matches_technical_source": false,
+      "integration_status": "candidate_only_not_runtime_integrated",
+      "size_note": "Native bytes retained; runtime crop/scale or atlas registration must be resolved separately. Target dimensions are not claimed as delivered dimensions.",
+      "actual_prompt": "Use case: style-transfer / identity-preserve.\nAsset: one independent waist-up portrait for a 2D Chinese cultivation RPG, opaque muted grey-green background, target 512x640 (4:5). Actual native dimensions will be measured.\nInput image 1 is the EDIT TARGET and individual identity, body, pose, costume and prop-placement anchor. Input image 2 is ONLY the approved C drawing-style reference: never copy its man, beard, abacus or costume.\nPreserve the individual in image 1, including apparent sex and age, facial structure, body build, hairstyle, expression, view and visible props. Redraw with economical clear thin dark outlines, small simple manga facial features, solid grouped hair, broad muted flat colours, a few large clothing folds and ONE restrained structural shadow tone. Keep identifying simplified robe motifs. No realistic face modelling, glossy anime skin, isolated hair strands, granular texture, intricate embroidery, airbrush, border, text, watermark or scenery. No extra objects or gestures. Keep entire head, highest hair, bun, hairpin and important props inside frame, with plainly visible background margin above hair, about six percent of height. Preserve the source waist-up framing and natural hands/arms visibility; do not invent hands absent from the crop. Do not turn mature people into generic young faces. Each file is ONE portrait, no contact sheet.\nIdentity details: Middle-aged female wanderer with lean narrow angular face, firm slightly lowered brows, focused eyes, neutral tight lips and subtle grey temple streaks. Dark hair tied in a LOW REAR BUN behind viewer-left ear using muted brown cloth ribbon with short tails; long cheek-framing front strand. Faded taupe-grey patched outer robe over dark olive-green diagonal inner robe and ivory collar, broad brown shoulder strap crossing from viewer-left shoulder toward centre waist, simple ochre cloth waist sash. Keep the few large stitched patches at viewer-left shoulder and sleeves. Small brown GOURD at viewer-left/centre waist, simple dark SHEATHED SWORD at viewer-right hip, visible plain hilt angled upward right. Preserve mature lean identity, no walking staff or extra ornaments. Three-quarter right view.\n"
+    },
+    {
+      "id": "7e4e1c28fde3f742",
+      "batch": "03_portrait_pool",
+      "kind": "existing",
+      "label": "assets/local/portraits/pool/female_middle/wanderer_female_middle_05.png",
+      "source": "assets/local/portraits/pool/female_middle/wanderer_female_middle_05.png",
+      "output": "art_sources/refresh_20261019/batches/03_portrait_pool/output/existing/local/portraits/pool/female_middle/wanderer_female_middle_05.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/local/portraits/pool/female_middle/wanderer_female_middle_05.png",
+        "sha256": "346f4fb70b8f008fa1456cb156afec9da26123e07ec19a19276fbe53a9d13f0d",
+        "format": "PNG",
+        "dimensions": [
+          512,
+          640
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          4,
+          5
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_generated",
+      "tool_refs": [
+        "assets/local/portraits/pool/female_middle/wanderer_female_middle_05.png",
+        "art_sources/refresh_20261019/approved_samples/02_portrait.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/03_portrait_pool/output/prompts/7e4e1c28fde3f742.txt",
+      "newly_generated": true,
+      "sha256": "fc2b184dbb69579d9953fc2be2909e7ad7c1ac141229196ce9f19444bef4d94a",
+      "native_dimensions": [
+        1122,
+        1402
+      ],
+      "native_mode": "RGB",
+      "alpha_extrema": null,
+      "tool_logical_path": "C:\\Users\\Kuroro\\.codex\\generated_images\\01a156b8-68e7-71d3-9e49-188fe4225a5e\\exec-b94a15d4-281c-4e8f-a4ec-5f0b044b1124.png",
+      "tool_physical_path": "D:\\claude\\flash\\.tmp\\imagegen_storage\\generated_images\\01a156b8-68e7-71d3-9e49-188fe4225a5e\\exec-b94a15d4-281c-4e8f-a4ec-5f0b044b1124.png",
+      "input_hashes": [
+        {
+          "path": "assets/local/portraits/pool/female_middle/wanderer_female_middle_05.png",
+          "sha256": "346f4fb70b8f008fa1456cb156afec9da26123e07ec19a19276fbe53a9d13f0d"
+        },
+        {
+          "path": "art_sources/refresh_20261019/approved_samples/02_portrait.png",
+          "sha256": "139f85deb18db95d129b9e3e31db95460f47b934a7a68a4f006b95f8ad53c3fe"
+        }
+      ],
+      "review": "Visually checked identity/content, category style and complete composition; integration separate.",
+      "target_dimensions": [
+        512,
+        640
+      ],
+      "size_matches_technical_source": false,
+      "integration_status": "candidate_only_not_runtime_integrated",
+      "size_note": "Native bytes retained; runtime crop/scale or atlas registration must be resolved separately. Target dimensions are not claimed as delivered dimensions.",
+      "actual_prompt": "Use case: style-transfer / identity-preserve.\nAsset: one independent waist-up portrait for a 2D Chinese cultivation RPG, opaque muted grey-green background, target 512x640 (4:5). Actual native dimensions will be measured.\nInput image 1 is the EDIT TARGET and individual identity, body, pose, costume and prop-placement anchor. Input image 2 is ONLY the approved C drawing-style reference: never copy its man, beard, abacus or costume.\nPreserve the individual in image 1, including apparent sex and age, facial structure, body build, hairstyle, expression, view and visible props. Redraw with economical clear thin dark outlines, small simple manga facial features, solid grouped hair, broad muted flat colours, a few large clothing folds and ONE restrained structural shadow tone. Keep identifying simplified robe motifs. No realistic face modelling, glossy anime skin, isolated hair strands, granular texture, intricate embroidery, airbrush, border, text, watermark or scenery. No extra objects or gestures. Keep entire head, highest hair, bun, hairpin and important props inside frame, with plainly visible background margin above hair, about six percent of height. Preserve the source waist-up framing and natural hands/arms visibility; do not invent hands absent from the crop. Do not turn mature people into generic young faces. Each file is ONE portrait, no contact sheet.\nIdentity details: Middle-aged female wanderer with elongated mature face, half-lidded calm eyes, neutral closed lips, visible small dark beauty mark on VIEWER-LEFT cheek and a restrained crease beside nose. Dark grey-streaked hair gathered into a LOW REAR BUN behind viewer-left ear with plain ochre cloth band, a few broad loose front locks. Faded taupe-grey patched outer robe over dark olive diagonal inner layer and ivory collar, plain ochre cloth waist sash and brown shoulder straps. A tied BROWN CLOTH BACKPACK behind viewer-left shoulder, her viewer-left hand grasps its strap near chest. Small ochre double-bulb GOURD at VIEWER-RIGHT waist, preserve side. Keep large stitched patches at viewer-right shoulder/sleeves. Mature lean build, head looking right, no sword, staff or extra props.\n"
+    },
+    {
+      "id": "ce7c6f0efd14a2cc",
+      "batch": "03_portrait_pool",
+      "kind": "existing",
+      "label": "assets/local/portraits/pool/female_middle/wanderer_female_middle_06.png",
+      "source": "assets/local/portraits/pool/female_middle/wanderer_female_middle_06.png",
+      "output": "art_sources/refresh_20261019/batches/03_portrait_pool/output/existing/local/portraits/pool/female_middle/wanderer_female_middle_06.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/local/portraits/pool/female_middle/wanderer_female_middle_06.png",
+        "sha256": "a89663a17392b13b3ff3538928c74afe9f6cc6e251b4829674173762b5347f33",
+        "format": "PNG",
+        "dimensions": [
+          512,
+          640
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          4,
+          5
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_generated",
+      "tool_refs": [
+        "assets/local/portraits/pool/female_middle/wanderer_female_middle_06.png",
+        "art_sources/refresh_20261019/approved_samples/02_portrait.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/03_portrait_pool/output/prompts/ce7c6f0efd14a2cc.txt",
+      "newly_generated": true,
+      "sha256": "d63107c480f272ec72d8aba0a8e29bbf6558e5c8877fe1f16a0e787c0e575546",
+      "native_dimensions": [
+        1122,
+        1402
+      ],
+      "native_mode": "RGB",
+      "alpha_extrema": null,
+      "tool_logical_path": "C:\\Users\\Kuroro\\.codex\\generated_images\\01a156b8-68e7-71d3-9e49-188fe4225a5e\\exec-5a30327b-db6f-4b47-9d5d-2e99d1ed1119.png",
+      "tool_physical_path": "D:\\claude\\flash\\.tmp\\imagegen_storage\\generated_images\\01a156b8-68e7-71d3-9e49-188fe4225a5e\\exec-5a30327b-db6f-4b47-9d5d-2e99d1ed1119.png",
+      "input_hashes": [
+        {
+          "path": "assets/local/portraits/pool/female_middle/wanderer_female_middle_06.png",
+          "sha256": "a89663a17392b13b3ff3538928c74afe9f6cc6e251b4829674173762b5347f33"
+        },
+        {
+          "path": "art_sources/refresh_20261019/approved_samples/02_portrait.png",
+          "sha256": "139f85deb18db95d129b9e3e31db95460f47b934a7a68a4f006b95f8ad53c3fe"
+        }
+      ],
+      "review": "Visually checked identity/content, category style and complete composition; integration separate.",
+      "target_dimensions": [
+        512,
+        640
+      ],
+      "size_matches_technical_source": false,
+      "integration_status": "candidate_only_not_runtime_integrated",
+      "size_note": "Native bytes retained; runtime crop/scale or atlas registration must be resolved separately. Target dimensions are not claimed as delivered dimensions.",
+      "actual_prompt": "Use case: style-transfer / identity-preserve.\nAsset: one independent waist-up portrait for a 2D Chinese cultivation RPG, opaque muted grey-green background, target 512x640 (4:5). Actual native dimensions will be measured.\nInput image 1 is the EDIT TARGET and individual identity, body, pose, costume and prop-placement anchor. Input image 2 is ONLY the approved C drawing-style reference: never copy its man, beard, abacus or costume.\nPreserve the individual in image 1, including apparent sex and age, facial structure, body build, hairstyle, expression, view and visible props. Redraw with economical clear thin dark outlines, small simple manga facial features, solid grouped hair, broad muted flat colours, a few large clothing folds and ONE restrained structural shadow tone. Keep identifying simplified robe motifs. No realistic face modelling, glossy anime skin, isolated hair strands, granular texture, intricate embroidery, airbrush, border, text, watermark or scenery. No extra objects or gestures. Keep entire head, highest hair, bun, hairpin and important props inside frame, with plainly visible background margin above hair, about six percent of height. Preserve the source waist-up framing and natural hands/arms visibility; do not invent hands absent from the crop. Do not turn mature people into generic young faces. Each file is ONE portrait, no contact sheet.\nIdentity details: Middle-aged female wanderer with rounded full mature face, gentle half-lidded eyes and warm small closed-mouth smile, one subtle cheek dimple, greying temples. Dark hair in a broad high/rear folded BUN with plain horizontal brown wooden pin extending viewer-left. Worn olive-brown robe and muted taupe wide front lapels over ivory collar, plain ochre cloth waist sash, a few large grey stitched PATCHES on sleeves. Her viewer-LEFT hand holds a plain rough brown WOODEN WALKING STAFF upright at left, keep the top and gripping hand inside canvas. A small ochre double-bulb GOURD hangs front-left at waist, tied with plain brown cord. Preserve fuller mature body and right-looking head, no sword, high ponytail or extra objects.\n"
+    },
+    {
+      "id": "8f0690fc256db467",
+      "batch": "03_portrait_pool",
+      "kind": "existing",
+      "label": "assets/local/portraits/pool/female_middle/wanderer_female_middle_07.png",
+      "source": "assets/local/portraits/pool/female_middle/wanderer_female_middle_07.png",
+      "output": "art_sources/refresh_20261019/batches/03_portrait_pool/output/existing/local/portraits/pool/female_middle/wanderer_female_middle_07.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/local/portraits/pool/female_middle/wanderer_female_middle_07.png",
+        "sha256": "cafef24b60558f4a2817bd2b860acb5dd59648462ae97a07db3ccd63640c48b2",
+        "format": "PNG",
+        "dimensions": [
+          512,
+          640
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          4,
+          5
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_generated",
+      "tool_refs": [
+        "assets/local/portraits/pool/female_middle/wanderer_female_middle_07.png",
+        "art_sources/refresh_20261019/approved_samples/02_portrait.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/03_portrait_pool/output/prompts/8f0690fc256db467.txt",
+      "newly_generated": true,
+      "sha256": "c3f64b185c9f3b5afcda09fd0b5dcf21edfa9a1a57b2cf9eb6386d5e9028d569",
+      "native_dimensions": [
+        1122,
+        1402
+      ],
+      "native_mode": "RGB",
+      "alpha_extrema": null,
+      "tool_logical_path": "C:\\Users\\Kuroro\\.codex\\generated_images\\01a156b8-68e7-71d3-9e49-188fe4225a5e\\exec-467f9475-9ab8-4252-8f46-dccf6c324a48.png",
+      "tool_physical_path": "D:\\claude\\flash\\.tmp\\imagegen_storage\\generated_images\\01a156b8-68e7-71d3-9e49-188fe4225a5e\\exec-467f9475-9ab8-4252-8f46-dccf6c324a48.png",
+      "input_hashes": [
+        {
+          "path": "assets/local/portraits/pool/female_middle/wanderer_female_middle_07.png",
+          "sha256": "cafef24b60558f4a2817bd2b860acb5dd59648462ae97a07db3ccd63640c48b2"
+        },
+        {
+          "path": "art_sources/refresh_20261019/approved_samples/02_portrait.png",
+          "sha256": "139f85deb18db95d129b9e3e31db95460f47b934a7a68a4f006b95f8ad53c3fe"
+        }
+      ],
+      "review": "Visually checked identity/content, category style and complete composition; integration separate.",
+      "target_dimensions": [
+        512,
+        640
+      ],
+      "size_matches_technical_source": false,
+      "integration_status": "candidate_only_not_runtime_integrated",
+      "size_note": "Native bytes retained; runtime crop/scale or atlas registration must be resolved separately. Target dimensions are not claimed as delivered dimensions.",
+      "actual_prompt": "Use case: style-transfer / identity-preserve.\nAsset: one independent waist-up portrait for a 2D Chinese cultivation RPG, opaque muted grey-green background, target 512x640 (4:5). Actual native dimensions will be measured.\nInput image 1 is the EDIT TARGET and individual identity, body, pose, costume and prop-placement anchor. Input image 2 is ONLY the approved C drawing-style reference: never copy its man, beard, abacus or costume.\nPreserve the individual in image 1, including apparent sex and age, facial structure, body build, hairstyle, expression, view and visible props. Redraw with economical clear thin dark outlines, small simple manga facial features, solid grouped hair, broad muted flat colours, a few large clothing folds and ONE restrained structural shadow tone. Keep identifying simplified robe motifs. No realistic face modelling, glossy anime skin, isolated hair strands, granular texture, intricate embroidery, airbrush, border, text, watermark or scenery. No extra objects or gestures. Keep entire head, highest hair, bun, hairpin and important props inside frame, with plainly visible background margin above hair, about six percent of height. Preserve the source waist-up framing and natural hands/arms visibility; do not invent hands absent from the crop. Do not turn mature people into generic young faces. Each file is ONE portrait, no contact sheet.\nIdentity details: Middle-aged female wanderer with narrow long mature face, slightly tired serious eyes, downturned straight lips, subtle mouth/nose creases and grey temple strands. Short dark straight BOB to neck length, no bun, braid, ponytail or headscarf. Worn dark olive-grey outer robe over brown diagonal inner robe and pale ivory collar, simple large taupe stitched PATCHES on shoulders and sleeves, ochre cloth waist sash. A large plain tied brown CLOTH TRAVELLING SACK behind viewer-left shoulder with thick knotted rope strap; viewer-left hand grips the rope at chest level. Preserve the tied sack silhouette and complete gripping hand. Mature lean build, no sword, gourd, staff or new props. Three-quarter right view and quiet neutral expression.\n"
+    },
+    {
+      "id": "5f4df5f2329bb4ea",
+      "batch": "03_portrait_pool",
+      "kind": "existing",
+      "label": "assets/local/portraits/pool/female_middle/wanderer_female_middle_08.png",
+      "source": "assets/local/portraits/pool/female_middle/wanderer_female_middle_08.png",
+      "output": "art_sources/refresh_20261019/batches/03_portrait_pool/output/existing/local/portraits/pool/female_middle/wanderer_female_middle_08.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/local/portraits/pool/female_middle/wanderer_female_middle_08.png",
+        "sha256": "79da7669e1f3b38b354442ab8b55673ead85475a5c9d6825cc9b6a0384121fcf",
+        "format": "PNG",
+        "dimensions": [
+          512,
+          640
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          4,
+          5
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_generated",
+      "tool_refs": [
+        "assets/local/portraits/pool/female_middle/wanderer_female_middle_08.png",
+        "art_sources/refresh_20261019/approved_samples/02_portrait.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/03_portrait_pool/output/prompts/5f4df5f2329bb4ea.txt",
+      "newly_generated": true,
+      "sha256": "0559404722a27e52bfc6f9af8297843eede17dd9d48d72662f93b07f5b42c7fa",
+      "native_dimensions": [
+        1122,
+        1402
+      ],
+      "native_mode": "RGB",
+      "alpha_extrema": null,
+      "tool_logical_path": "C:\\Users\\Kuroro\\.codex\\generated_images\\01a156b8-68e7-71d3-9e49-188fe4225a5e\\exec-09209ebc-67d9-441c-bd1a-dbb0b4c1cc3b.png",
+      "tool_physical_path": "D:\\claude\\flash\\.tmp\\imagegen_storage\\generated_images\\01a156b8-68e7-71d3-9e49-188fe4225a5e\\exec-09209ebc-67d9-441c-bd1a-dbb0b4c1cc3b.png",
+      "input_hashes": [
+        {
+          "path": "assets/local/portraits/pool/female_middle/wanderer_female_middle_08.png",
+          "sha256": "79da7669e1f3b38b354442ab8b55673ead85475a5c9d6825cc9b6a0384121fcf"
+        },
+        {
+          "path": "art_sources/refresh_20261019/approved_samples/02_portrait.png",
+          "sha256": "139f85deb18db95d129b9e3e31db95460f47b934a7a68a4f006b95f8ad53c3fe"
+        }
+      ],
+      "review": "Visually checked identity/content, category style and complete composition; integration separate.",
+      "target_dimensions": [
+        512,
+        640
+      ],
+      "size_matches_technical_source": false,
+      "integration_status": "candidate_only_not_runtime_integrated",
+      "size_note": "Native bytes retained; runtime crop/scale or atlas registration must be resolved separately. Target dimensions are not claimed as delivered dimensions.",
+      "actual_prompt": "Use case: style-transfer / identity-preserve.\nAsset: one independent waist-up portrait for a 2D Chinese cultivation RPG, opaque muted grey-green background, target 512x640 (4:5). Actual native dimensions will be measured.\nInput image 1 is the EDIT TARGET and individual identity, body, pose, costume and prop-placement anchor. Input image 2 is ONLY the approved C drawing-style reference: never copy its man, beard, abacus or costume.\nPreserve the individual in image 1, including apparent sex and age, facial structure, body build, hairstyle, expression, view and visible props. Redraw with economical clear thin dark outlines, small simple manga facial features, solid grouped hair, broad muted flat colours, a few large clothing folds and ONE restrained structural shadow tone. Keep identifying simplified robe motifs. No realistic face modelling, glossy anime skin, isolated hair strands, granular texture, intricate embroidery, airbrush, border, text, watermark or scenery. No extra objects or gestures. Keep entire head, highest hair, bun, hairpin and important props inside frame, with plainly visible background margin above hair, about six percent of height. Preserve the source waist-up framing and natural hands/arms visibility; do not invent hands absent from the crop. Do not turn mature people into generic young faces. Each file is ONE portrait, no contact sheet.\nIdentity details: Middle-aged female wanderer with a long angular mature face, firm brows, focused slightly narrowed eyes, straight serious unsmiling lips and simple faint cheek creases, grey temple strands. Dark hair in a LONG HIGH PONYTAIL tied with plain ochre cloth ribbon, broad long hair masses behind viewer-left shoulder, two cheek-framing strands. Dark brown/charcoal worn patched outer robe with brown lapels, grey diagonal inner layers and pale collar, plain ochre cloth waist sash. Preserve large taupe stitched PATCHES on shoulders and sleeves. Simple dark SHEATHED SWORD angled upward at viewer-right hip, small brown GOURD tied beside it at the same viewer-right waist. No staff, pack or new objects. Preserve mature lean build and original three-quarter right view, whole ponytail top safely inside canvas.\n"
+    },
+    {
+      "id": "9f7c4fbb723eca37",
+      "batch": "03_portrait_pool",
+      "kind": "existing",
+      "label": "assets/local/portraits/pool/female_middle/wanderer_female_middle_09.png",
+      "source": "assets/local/portraits/pool/female_middle/wanderer_female_middle_09.png",
+      "output": "art_sources/refresh_20261019/batches/03_portrait_pool/output/existing/local/portraits/pool/female_middle/wanderer_female_middle_09.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/local/portraits/pool/female_middle/wanderer_female_middle_09.png",
+        "sha256": "dc4292959a36ceb6148750c0b5591204976a00e5966967f4648bc0a68110ca17",
+        "format": "PNG",
+        "dimensions": [
+          512,
+          640
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          4,
+          5
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_generated",
+      "tool_refs": [
+        "assets/local/portraits/pool/female_middle/wanderer_female_middle_09.png",
+        "art_sources/refresh_20261019/approved_samples/02_portrait.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/03_portrait_pool/output/prompts/9f7c4fbb723eca37.txt",
+      "newly_generated": true,
+      "sha256": "55239c6625748017f6e0675c6c7e29ef0a0a2b9f358ef6b9670a135ad8a399e4",
+      "native_dimensions": [
+        1122,
+        1402
+      ],
+      "native_mode": "RGB",
+      "alpha_extrema": null,
+      "tool_logical_path": "C:\\Users\\Kuroro\\.codex\\generated_images\\01a156b8-68e7-71d3-9e49-188fe4225a5e\\exec-56093d58-33ea-4023-b466-c3376c10055c.png",
+      "tool_physical_path": "D:\\claude\\flash\\.tmp\\imagegen_storage\\generated_images\\01a156b8-68e7-71d3-9e49-188fe4225a5e\\exec-56093d58-33ea-4023-b466-c3376c10055c.png",
+      "input_hashes": [
+        {
+          "path": "assets/local/portraits/pool/female_middle/wanderer_female_middle_09.png",
+          "sha256": "dc4292959a36ceb6148750c0b5591204976a00e5966967f4648bc0a68110ca17"
+        },
+        {
+          "path": "art_sources/refresh_20261019/approved_samples/02_portrait.png",
+          "sha256": "139f85deb18db95d129b9e3e31db95460f47b934a7a68a4f006b95f8ad53c3fe"
+        }
+      ],
+      "review": "Visually checked identity/content, category style and complete composition; integration separate.",
+      "target_dimensions": [
+        512,
+        640
+      ],
+      "size_matches_technical_source": false,
+      "integration_status": "candidate_only_not_runtime_integrated",
+      "size_note": "Native bytes retained; runtime crop/scale or atlas registration must be resolved separately. Target dimensions are not claimed as delivered dimensions.",
+      "actual_prompt": "Use case: style-transfer / identity-preserve.\nAsset: one independent waist-up portrait for a 2D Chinese cultivation RPG, opaque muted grey-green background, target 512x640 (4:5). Actual native dimensions will be measured.\nInput image 1 is the EDIT TARGET and individual identity, body, pose, costume and prop-placement anchor. Input image 2 is ONLY the approved C drawing-style reference: never copy its man, beard, abacus or costume.\nPreserve the individual in image 1, including apparent sex and age, facial structure, body build, hairstyle, expression, view and visible props. Redraw with economical clear thin dark outlines, small simple manga facial features, solid grouped hair, broad muted flat colours, a few large clothing folds and ONE restrained structural shadow tone. Keep identifying simplified robe motifs. No realistic face modelling, glossy anime skin, isolated hair strands, granular texture, intricate embroidery, airbrush, border, text, watermark or scenery. No extra objects or gestures. Keep entire head, highest hair, bun, hairpin and important props inside frame, with plainly visible background margin above hair, about six percent of height. Preserve the source waist-up framing and natural hands/arms visibility; do not invent hands absent from the crop. Do not turn mature people into generic young faces. Each file is ONE portrait, no contact sheet.\nIdentity details: Middle-aged female wanderer with round full mature face, soft eyes, warm gentle closed-mouth smile, fuller cheeks and a few subtle eye creases. Subtly greying dark hair partly-up in a small HIGH REAR BUN tied with plain ochre cloth, loose shoulder-length back hair. Faded olive-grey patched outer robe over brown diagonal inner layer and pale ivory collar, ochre cloth waist sash, a few large simple stitched PATCHES on viewer-right sleeve and shoulders. A tied brown CLOTH TRAVELLING BUNDLE behind viewer-left shoulder, her viewer-left hand grasps its brown strap at chest level. Small ochre double-bulb GOURD at VIEWER-RIGHT waist, tied with simple cord. Preserve fuller mature body, right-looking head and actual gripping hand. No sword, staff, extra jewellery or young slim face.\n"
+    }
+  ],
+  "next_work": "Continue pending male_young portraits from disciple_male_young_09, then the other original subbatches; 246 pool members total, do not expand pool."
+}

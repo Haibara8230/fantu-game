@@ -1,6 +1,6 @@
 # 《觅长生》美术参考与分类重绘标准
 
-整理日期：2026-10-19。当前阶段完成真实原图收集、风格观察与重绘分类；尚未批量生成或替换游戏美术。
+整理日期：2026-10-19。本文保留当时的原图收集与分类观察；当前已归档样张、候选和SVG修改状态以 [交接总入口](../art_sources/refresh_20261019/README.md) 为准，本文不证明正式资源已替换。
 
 用户已确认的人物方向：沈墨 C 版与主角 C 版。关键词为“低细节、大色块、少碎纹、漫画化五官、整体发束、简练衣褶”。这套人物画法继续作为人物一致性基准；其他类型按对应的原作图片分别约束。
 
@@ -13,12 +13,11 @@
 - 4 张灵田攻略截图：[百度经验原页面](https://jingyan.baidu.com/article/14bd256e78a17afa6c261241.html)。
 - 1 张室内剧情截图：复用已有资料，经[电玩帮原页面](https://www.vgover.com/topic/85841)复核来源。
 
-原图与参考板均保存在 D 盘项目 .tmp；不写入 assets，不作为游戏资源打包。
+原图现恢复至D盘项目 `PNG/mcs_style_reference_20261019/originals/`，不写入assets或作为游戏资源打包。历史分类参考板与裁切配置没有随Git携带，不假定当前机器存在；以下各节保留当时编号观察，并展示一张对应原图作为入口。
 
-- [原图目录与完整索引](D:/fqh/flash/.tmp/mcs_style_reference_20261019/README.md)
-- [来源、直链、尺寸、SHA256 与限制清单](D:/fqh/flash/.tmp/mcs_style_reference_20261019/sources.json)
-- [分类与精确裁切配置](D:/fqh/flash/.tmp/mcs_style_reference_20261019/reference_config.json)
-- [19 张官方截图编号总览](D:/fqh/flash/.tmp/mcs_style_reference_20261019/steam_overview.jpg)
+- [来源、直链、尺寸、SHA256与本机可用状态](../art_sources/refresh_20261019/reference_sources.json)
+- [恢复方法与C盘写入限制](../art_sources/refresh_20261019/REFERENCE_SETUP.md)
+- [已确认分类样张](../art_sources/refresh_20261019/approved_samples/index.json)
 
 版本限制：多张官方截图仍显示 EA 0.9.1.147，攻略图来自 2022 年。它们能说明各类素材的画法，不证明当前版本的完整 UI 或交互流程。灵田攻略图保留教程箭头，室内截图保留水印和原有裁切；Wiki 小图按原分辨率标注。
 
@@ -26,7 +25,7 @@
 
 ### 地点与环境
 
-![《觅长生》原图参考 · 地点与环境](D:/fqh/flash/.tmp/mcs_style_reference_20261019/01_scenes.png)
+![《觅长生》地点原图 · Steam 00](../PNG/mcs_style_reference_20261019/originals/steam_00.jpg)
 
 - 01 宗门／仙山建筑（Steam 00）：轮廓鲜明；屋顶、墙面、远山分成大色块。
 - 02 城镇俯视总览（Steam 06）：建筑有细节但按街区组织，远山降低对比。
@@ -35,7 +34,7 @@
 
 ### 舆图与节点
 
-![《觅长生》原图参考 · 舆图与节点](D:/fqh/flash/.tmp/mcs_style_reference_20261019/02_maps.png)
+![《觅长生》舆图原图 · Steam 02](../PNG/mcs_style_reference_20261019/originals/steam_02.jpg)
 
 - 01 陆地区域地图（Steam 02）：重复概括山形、林团；河流与地色组织空间。
 - 02 海域地图（Steam 04）：低细节海面、大色区与少量岛屿地标。
@@ -44,7 +43,7 @@
 
 ### 妖兽与斗法
 
-![《觅长生》原图参考 · 妖兽与斗法](D:/fqh/flash/.tmp/mcs_style_reference_20261019/03_beasts_battle.png)
+![《觅长生》妖兽原图 · 裂地蜥龙](../PNG/mcs_style_reference_20261019/originals/wiki_beast_lizard.png)
 
 - 01 白狐 · 截图裁切（Steam 01 crop）：毛发成簇，尾部靠大曲线和少量花纹辨识。
 - 02 裂地蜥龙 · Wiki 原图（Wiki 裂地蜥龙）：装甲块面与轮廓优先，鳞片分组排列。
@@ -55,7 +54,7 @@
 
 ### 物品与技能图标
 
-![《觅长生》原图参考 · 物品与技能图标](D:/fqh/flash/.tmp/mcs_style_reference_20261019/04_items_skills.png)
+![《觅长生》物品原图 · 夏枯草](../PNG/mcs_style_reference_20261019/originals/wiki_herb_xiakucao.png)
 
 - 01 夏枯草 · 原始 128×128（Wiki 夏枯草）：以植物剪影和颜色辨识；局部叶脉即可。
 - 02 洗髓丹 · 原始 128×128（Wiki 洗髓丹）：丹丸有简洁高光和明暗，重点是小尺寸识别。
@@ -66,7 +65,7 @@
 
 ### 系统与演出界面
 
-![《觅长生》原图参考 · 系统与演出界面](D:/fqh/flash/.tmp/mcs_style_reference_20261019/05_systems.png)
+![《觅长生》系统原图 · 任务卷轴](../PNG/mcs_style_reference_20261019/originals/steam_16.jpg)
 
 - 01 炼丹／丹炉（Steam 09）：中央炉体、周围材料槽；背景以大形支撑。
 - 02 炼器（Steam 10）：中央产物配环形材料区，暖色突出操作焦点。
@@ -77,7 +76,7 @@
 
 ### 内景与功能插画
 
-![《觅长生》原图参考 · 内景与功能插画](D:/fqh/flash/.tmp/mcs_style_reference_20261019/06_interiors_rites.png)
+![《觅长生》室内剧情原图](../PNG/mcs_style_reference_20261019/originals/interior_dialogue.jpg)
 
 - 01 室内剧情／对话（电玩帮 2022 / 原截图）：木构、窗格与桌案用明确色区组织；台词区独立。
 - 02 灵田种植 · 旧版截图（百度经验 2022 / 原截图）：功能格子、叶形外框与青绿色面板；保留教程标注。
@@ -127,7 +126,7 @@
 
 1. 每类选用同类原作原图为主要画风参考，现用素材负责内容／身份；人物再加入已确认 C 版。不要只写“觅长生风格”后让模型自行猜测。
 2. 先做该类别的“原作参考／现用素材／重绘结果”对比样张，以实际显示比例观察轮廓、色块、细节密度、明暗和主体留白，再展开该类批次。
-3. 新成品先进入 D:/fqh/flash/.tmp/ 的版本化文件；保留原图、完整提示词、输入参考、尺寸和透明度记录。
+3. 新成品先交对应批次 `output/`，中间材料存当前D盘项目 `.tmp/`；保留原图、完整提示词、输入参考、尺寸和透明度记录。内置生图缓存无法确认不写C盘时停止生图，不以事后搬迁替代限制。
 4. 接入时只修改表现资源和必要的美术配置。保留图集、地图节点、物品数据、游戏规则和玩家存档的约定。
 5. 自动导入与游戏回归必须 --headless；检查脚本错误与日志，不能只看退出码。人物、图标和场景逐张读取文件做视觉检查，不打开可见游戏窗口。
-6. 本轮尚未批量生成或替换任何游戏资源；参考收集与图像排版没有启动 Godot。
+6. 当前完成状态以交接总入口和 `VALIDATION.md` 为准；本次文档修复与原作参考恢复不生成新图、不启动Godot。

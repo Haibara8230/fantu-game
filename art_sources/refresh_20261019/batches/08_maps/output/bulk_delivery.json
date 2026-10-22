@@ -1,0 +1,372 @@
+{
+  "scope": "candidate delivery; runtime installs listed in INTEGRATION.json",
+  "counts": {
+    "delivered_reuse": 1,
+    "delivered_generated": 5
+  },
+  "jobs": [
+    {
+      "id": "42ba2ab8b62012e7",
+      "batch": "08_maps",
+      "kind": "existing",
+      "label": "assets/art/map/region_qingyun.png",
+      "source": "assets/art/map/region_qingyun.png",
+      "output": "art_sources/refresh_20261019/batches/08_maps/output/existing/art/map/region_qingyun.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/art/map/region_qingyun.png",
+        "sha256": "fb2d843b70c5591e126e3f7e77e72b7edbcafe2d6278a33d2d19fb9accc82971",
+        "format": "PNG",
+        "dimensions": [
+          2560,
+          1600
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          8,
+          5
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_reuse",
+      "tool_refs": [
+        "assets/art/map/region_qingyun.png",
+        "art_sources/refresh_20261019/approved_samples/05_map.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/08_maps/output/prompts/42ba2ab8b62012e7.txt",
+      "reuse_source": "art_sources/refresh_20261019/approved_samples/05_map.png",
+      "reuse_reason": "Approved Qingyun map sample redraws this exact source. Native size differs from old map; preserve bytes and resolve coordinate/crop adaptation at integration.",
+      "review": "Visually compared exact source, approved sample/candidate, content, complete silhouette and category style.",
+      "input_hashes": [
+        {
+          "path": "art_sources/refresh_20261019/approved_samples/05_map.png",
+          "sha256": "e915d26eed139f0b2a68d641eacacdc52d7d7d370d3e05ec81e164195d8c9785"
+        }
+      ],
+      "delivery_kind": "reuse_prior_candidate",
+      "sha256": "e915d26eed139f0b2a68d641eacacdc52d7d7d370d3e05ec81e164195d8c9785",
+      "newly_generated": false,
+      "native_mode": "RGB",
+      "alpha_extrema": null,
+      "native_dimensions": [
+        1586,
+        992
+      ],
+      "target_dimensions": [
+        2560,
+        1600
+      ],
+      "size_matches_technical_source": false,
+      "integration_status": "runtime_installed",
+      "size_note": "Native bytes retained; runtime crop/scale or atlas registration must be resolved separately. Target dimensions are not claimed as delivered dimensions.",
+      "runtime_targets": [
+        "assets/art/map/region_qingyun.png"
+      ]
+    },
+    {
+      "id": "9d1f9a2e1e2ae4b8",
+      "batch": "08_maps",
+      "kind": "existing",
+      "label": "assets/art/map/region_tiannan.png",
+      "source": "assets/art/map/region_tiannan.png",
+      "output": "art_sources/refresh_20261019/batches/08_maps/output/existing/art/map/region_tiannan.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/art/map/region_tiannan.png",
+        "sha256": "9c25177e91df5b3bb50a188c8ef97b52981ae174ac947c4d2616197ae3a73a44",
+        "format": "PNG",
+        "dimensions": [
+          1586,
+          992
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          793,
+          496
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_generated",
+      "tool_refs": [
+        "art_sources/refresh_20261019/approved_samples/05_map.png",
+        "assets/art/map/region_tiannan.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/08_maps/output/prompts/9d1f9a2e1e2ae4b8.txt",
+      "rejected_attempts": [
+        {
+          "path": "art_sources/refresh_20261019/batches/08_maps/output/existing/art/map/originals/region_tiannan_rejected_54db5499.png",
+          "sha256": "54db5499b6ca064af0896851e2ee5149cd225101c63e79cd35d8081bf6cc0364",
+          "reason": "Too close to dense landscape source: excessive small foliage, architectural detail and tall rocky relief instead of approved quiet grouped map style. Simplify and use approved sample as first/style-dominant input.",
+          "tool_physical_path": "D:\\claude\\flash\\.tmp\\imagegen_storage\\generated_images\\01a156b8-68e7-71d3-9e49-188fe4225a5e\\exec-462d7c3e-5308-426d-a1d7-8f234a45379a.png",
+          "prompt_path": "art_sources/refresh_20261019/batches/08_maps/output/existing/art/map/originals/region_tiannan_rejected_54db5499.prompt.txt"
+        }
+      ],
+      "newly_generated": true,
+      "sha256": "c78b81a5d7b4c396c4a361c449ef14899c1a63b19f7acdacd09adc84e05ca08b",
+      "native_dimensions": [
+        1586,
+        992
+      ],
+      "native_mode": "RGB",
+      "alpha_extrema": null,
+      "tool_logical_path": "C:\\Users\\Kuroro\\.codex\\generated_images\\01a156b8-68e7-71d3-9e49-188fe4225a5e\\exec-f4568119-4862-4762-8d88-909d70530d2f.png",
+      "tool_physical_path": "D:\\claude\\flash\\.tmp\\imagegen_storage\\generated_images\\01a156b8-68e7-71d3-9e49-188fe4225a5e\\exec-f4568119-4862-4762-8d88-909d70530d2f.png",
+      "input_hashes": [
+        {
+          "path": "art_sources/refresh_20261019/approved_samples/05_map.png",
+          "sha256": "e915d26eed139f0b2a68d641eacacdc52d7d7d370d3e05ec81e164195d8c9785"
+        },
+        {
+          "path": "assets/art/map/region_tiannan.png",
+          "sha256": "9c25177e91df5b3bb50a188c8ef97b52981ae174ac947c4d2616197ae3a73a44"
+        }
+      ],
+      "review": "Visually checked identity/content, category style and complete composition; integration separate.",
+      "target_dimensions": [
+        1586,
+        992
+      ],
+      "size_matches_technical_source": true,
+      "integration_status": "runtime_installed",
+      "runtime_targets": [
+        "assets/art/map/region_tiannan.png"
+      ]
+    },
+    {
+      "id": "1ceebda20bb375c6",
+      "batch": "08_maps",
+      "kind": "planned",
+      "label": "tiannan_five_city_plan.png",
+      "source": "assets/art/map/region_tiannan.png",
+      "output": "art_sources/refresh_20261019/batches/08_maps/output/tiannan_five_city_plan.png",
+      "brief": "五城五宗及河运／海域整体规划候选；不直接覆盖当前可玩地图",
+      "spec": {
+        "path": "assets/art/map/region_tiannan.png",
+        "sha256": "9c25177e91df5b3bb50a188c8ef97b52981ae174ac947c4d2616197ae3a73a44",
+        "format": "PNG",
+        "dimensions": [
+          1586,
+          992
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          793,
+          496
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_generated",
+      "priority": "P0",
+      "dependencies": [],
+      "tool_refs": [
+        "art_sources/refresh_20261019/approved_samples/05_map.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/08_maps/output/prompts/1ceebda20bb375c6.txt",
+      "newly_generated": true,
+      "sha256": "5fa5452918cd9d17faaf5f13c9acd7e374a282130a3fe9307acd03c8c3afae6a",
+      "native_dimensions": [
+        1586,
+        992
+      ],
+      "native_mode": "RGB",
+      "alpha_extrema": null,
+      "tool_logical_path": "C:\\Users\\Kuroro\\.codex\\generated_images\\01a15203-e7bc-7bc0-b21d-f11948dc04a9\\exec-b5de467a-933a-42ed-ad8c-e24cc7ea6563.png",
+      "tool_physical_path": "D:\\claude\\flash\\.tmp\\imagegen_storage\\generated_images\\01a15203-e7bc-7bc0-b21d-f11948dc04a9\\exec-b5de467a-933a-42ed-ad8c-e24cc7ea6563.png",
+      "input_hashes": [
+        {
+          "path": "art_sources/refresh_20261019/approved_samples/05_map.png",
+          "sha256": "e915d26eed139f0b2a68d641eacacdc52d7d7d370d3e05ec81e164195d8c9785"
+        }
+      ],
+      "review": "Visually checked identity/content, category style and complete composition; integration separate.",
+      "target_dimensions": [
+        1586,
+        992
+      ],
+      "size_matches_technical_source": true,
+      "integration_status": "candidate_only_not_runtime_integrated"
+    },
+    {
+      "id": "aa1b07bd342bad0d",
+      "batch": "08_maps",
+      "kind": "planned",
+      "label": "near_sea_map.png",
+      "source": "assets/art/map/region_tiannan.png",
+      "output": "art_sources/refresh_20261019/batches/08_maps/output/near_sea_map.png",
+      "brief": "近海群岛、航线空间和沉船遗址布局；标签与路线独立",
+      "spec": {
+        "path": "assets/art/map/region_tiannan.png",
+        "sha256": "9c25177e91df5b3bb50a188c8ef97b52981ae174ac947c4d2616197ae3a73a44",
+        "format": "PNG",
+        "dimensions": [
+          1586,
+          992
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          793,
+          496
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_generated",
+      "priority": "P2",
+      "dependencies": [],
+      "tool_refs": [
+        "art_sources/refresh_20261019/approved_samples/05_map.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/08_maps/output/prompts/aa1b07bd342bad0d.txt",
+      "newly_generated": true,
+      "sha256": "74cfc2ecbefb708a39a38df879062d343dfc51c18d784296139ae01fa5f39760",
+      "native_dimensions": [
+        1586,
+        992
+      ],
+      "native_mode": "RGB",
+      "alpha_extrema": null,
+      "tool_logical_path": "C:\\Users\\Kuroro\\.codex\\generated_images\\01a15203-e7bc-7bc0-b21d-f11948dc04a9\\exec-fb017053-dc2e-4704-a07b-34f025adc10b.png",
+      "tool_physical_path": "D:\\claude\\flash\\.tmp\\imagegen_storage\\generated_images\\01a15203-e7bc-7bc0-b21d-f11948dc04a9\\exec-fb017053-dc2e-4704-a07b-34f025adc10b.png",
+      "input_hashes": [
+        {
+          "path": "art_sources/refresh_20261019/approved_samples/05_map.png",
+          "sha256": "e915d26eed139f0b2a68d641eacacdc52d7d7d370d3e05ec81e164195d8c9785"
+        }
+      ],
+      "review": "Visually checked identity/content, category style and complete composition; integration separate.",
+      "target_dimensions": [
+        1586,
+        992
+      ],
+      "size_matches_technical_source": true,
+      "integration_status": "candidate_only_not_runtime_integrated"
+    },
+    {
+      "id": "c6b25f7662dab148",
+      "batch": "08_maps",
+      "kind": "planned",
+      "label": "chenxia_interior_map.png",
+      "source": "assets/art/map/region_tiannan.png",
+      "output": "art_sources/refresh_20261019/batches/08_maps/output/chenxia_interior_map.png",
+      "brief": "古境内部支路／阵室关系；先确定真实房间再画",
+      "spec": {
+        "path": "assets/art/map/region_tiannan.png",
+        "sha256": "9c25177e91df5b3bb50a188c8ef97b52981ae174ac947c4d2616197ae3a73a44",
+        "format": "PNG",
+        "dimensions": [
+          1586,
+          992
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          793,
+          496
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_generated",
+      "priority": "P2",
+      "dependencies": [],
+      "tool_refs": [
+        "art_sources/refresh_20261019/approved_samples/05_map.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/08_maps/output/prompts/c6b25f7662dab148.txt",
+      "newly_generated": true,
+      "sha256": "293529b40b059b60ded0cabced150f46380089dcb501f229d1d7aed81649ab3c",
+      "native_dimensions": [
+        1586,
+        992
+      ],
+      "native_mode": "RGB",
+      "alpha_extrema": null,
+      "tool_logical_path": "C:\\Users\\Kuroro\\.codex\\generated_images\\01a15203-e7bc-7bc0-b21d-f11948dc04a9\\exec-03731761-548b-4030-ba55-e89b25c7a54a.png",
+      "tool_physical_path": "D:\\claude\\flash\\.tmp\\imagegen_storage\\generated_images\\01a15203-e7bc-7bc0-b21d-f11948dc04a9\\exec-03731761-548b-4030-ba55-e89b25c7a54a.png",
+      "input_hashes": [
+        {
+          "path": "art_sources/refresh_20261019/approved_samples/05_map.png",
+          "sha256": "e915d26eed139f0b2a68d641eacacdc52d7d7d370d3e05ec81e164195d8c9785"
+        }
+      ],
+      "review": "Visually checked identity/content, category style and complete composition; integration separate.",
+      "target_dimensions": [
+        1586,
+        992
+      ],
+      "size_matches_technical_source": true,
+      "integration_status": "candidate_only_not_runtime_integrated"
+    },
+    {
+      "id": "8f252b75cb23bb88",
+      "batch": "08_maps",
+      "kind": "planned",
+      "label": "zhaochuan_sealed_space_map.png",
+      "source": "assets/art/map/region_tiannan.png",
+      "output": "art_sources/refresh_20261019/batches/08_maps/output/zhaochuan_sealed_space_map.png",
+      "brief": "照川城封存空间规划；城门、生活遗迹与阵枢的关系待大纲18节定案，先候选，不提前烘焙路线或结局状态",
+      "spec": {
+        "path": "assets/art/map/region_tiannan.png",
+        "sha256": "9c25177e91df5b3bb50a188c8ef97b52981ae174ac947c4d2616197ae3a73a44",
+        "format": "PNG",
+        "dimensions": [
+          1586,
+          992
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          793,
+          496
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_generated",
+      "priority": "P3",
+      "dependencies": [
+        "motif:old_city_seal_candidate"
+      ],
+      "tool_refs": [
+        "art_sources/refresh_20261019/approved_samples/05_map.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/08_maps/output/prompts/8f252b75cb23bb88.txt",
+      "newly_generated": true,
+      "sha256": "dda338c280e40607228b31c34df9396b34e87a93a67b69049399940a45a340a3",
+      "native_dimensions": [
+        1586,
+        992
+      ],
+      "native_mode": "RGB",
+      "alpha_extrema": null,
+      "tool_logical_path": "C:\\Users\\Kuroro\\.codex\\generated_images\\01a15203-e7bc-7bc0-b21d-f11948dc04a9\\exec-e387db58-5c31-4204-81a6-056b18476090.png",
+      "tool_physical_path": "D:\\claude\\flash\\.tmp\\imagegen_storage\\generated_images\\01a15203-e7bc-7bc0-b21d-f11948dc04a9\\exec-e387db58-5c31-4204-81a6-056b18476090.png",
+      "input_hashes": [
+        {
+          "path": "art_sources/refresh_20261019/approved_samples/05_map.png",
+          "sha256": "e915d26eed139f0b2a68d641eacacdc52d7d7d370d3e05ec81e164195d8c9785"
+        }
+      ],
+      "review": "Visually checked identity/content, category style and complete composition; integration separate.",
+      "target_dimensions": [
+        1586,
+        992
+      ],
+      "size_matches_technical_source": true,
+      "integration_status": "candidate_only_not_runtime_integrated"
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+Use case: style-transfer / identity-preserve / production game art.
+Asset: beiyue_old_archive.png
+Content request: 筑基篇北岳旧档库：缺页卷宗、古物与守川司交涉空间；线索与第10批一致
+This is one independent production asset for an original Chinese cultivation RPG.
+Input image 1: art_sources/refresh_20261019/approved_samples/07_interior.png. Role: approved drawing-style reference ONLY; do not copy its subject, architecture, layout or camera.
+Input image 2: art_sources/refresh_20261019/batches/05_locations/output/beiyue_city.png. Role: city continuity anchor: retain this city palette, roof materials and architectural scale; create the requested new viewpoint and functional space, do not duplicate the overview.
+Preserve the existing category-specific approved hand-drawn style: clear outlines, broad grouped colour areas, restrained shadows and low texture density. Do not impose character C anatomy rules on environments, maps, items or UI. No photorealism, cinematic bloom, dense surface scratches or depth-of-field blur.
+Empty environment: no characters, animals, UI, baked text, signs, labels, names or watermark. Preserve clear functional spaces and complete landmarks. Scene banners need a central 4:1 safe crop. Battle fields keep clear left/right standing ground. Qingyun is a small sect; do not copy monumental palace scale from a style sample.
+Old technical target: 2400x600 pixels. Request the same proportions and retain usable safe margins; actual native output size will be measured, never mislabelled. Background: opaque.
+IMPORTANT NEW CONTENT: this is NOT a repaint of the old technical-source scene. Completely replace its subject and composition according to the requested new asset. The old size anchor does not authorize copying its city, terrain, camera or buildings. Retain ONLY the approved drawing language from the style reference.
+MANDATORY SCENE COMPOSITION: Dry northern Beiyue old archive interior in cool grey stone and dark brown wood. Deep narrow room viewed along two asymmetrical floor-to-ceiling shelves of tied document bundles. One reading desk with an incomplete open paper folder and a plain closed courier case, no readable writing. Small high window shows only dry slate hillside and grey stone roofs. A locked side cabinet provides investigation interest. No lush rivers, white jade palace, broad inn windows, dining tables or stairway.

@@ -1,0 +1,339 @@
+{
+  "path_base": "project_root",
+  "active_priority": "ALL",
+  "initial_assets": [
+    "qingshi_inn_quiet_room.png",
+    "tianhe_ferry_reflection.png"
+  ],
+  "deferred_priorities": [],
+  "reference_resolution": "Resolve every reference_bindings.id and dependencies entry here. Verify SHA-256 before generation. Pending entries block dependent generation.",
+  "generated_image_storage_report": ".tmp/imagegen_storage/redirection.json",
+  "reference_registry": {
+    "style:01_hero": {
+      "path": "art_sources/refresh_20261019/approved_samples/01_hero.png",
+      "sha256": "a5fecf58591caffadaf51389955aaa2aa46c911cf2a8114f5785357d10f1f63d",
+      "state": "existing_confirmed_style"
+    },
+    "original:01_hero": {
+      "path": "PNG/mcs_style_reference_20261019/originals/steam_15.jpg",
+      "sha256": "41a4e0e94f50c7de20f8c59696480f22281ec5fa18b71b9de89a62c99f7b3c6f",
+      "state": "third_party_reference_only"
+    },
+    "style:02_portrait": {
+      "path": "art_sources/refresh_20261019/approved_samples/02_portrait.png",
+      "sha256": "139f85deb18db95d129b9e3e31db95460f47b934a7a68a4f006b95f8ad53c3fe",
+      "state": "existing_confirmed_style"
+    },
+    "original:02_portrait": {
+      "path": "PNG/人物交互_城市场景_旧版.jpg",
+      "sha256": "2987420f68558880cee9f2c9cb309472d09ab31a2113ad2867687df303c3ff71",
+      "state": "third_party_reference_only"
+    },
+    "style:03_beast": {
+      "path": "art_sources/refresh_20261019/approved_samples/03_beast.png",
+      "sha256": "79bcc7cbe8a979b3c19e5ad6f46aed8fe0a888deefbf41d72d24e3b32d80a157",
+      "state": "existing_confirmed_style"
+    },
+    "original:03_beast": {
+      "path": "PNG/mcs_style_reference_20261019/originals/wiki_beast_lizard.png",
+      "sha256": "b7cd471714b756f976aa8c3efcbf789053e791c6e6f7fb5254782839f7788860",
+      "state": "third_party_reference_only"
+    },
+    "style:04_location": {
+      "path": "art_sources/refresh_20261019/approved_samples/04_location.png",
+      "sha256": "46f177a060685f7966c27eebb2cacc2ee65eb2a189a2c4acff48a13d97157a6f",
+      "state": "existing_confirmed_style"
+    },
+    "original:04_location": {
+      "path": "PNG/mcs_style_reference_20261019/originals/steam_00.jpg",
+      "sha256": "b9c7bb63e8691ed0019c7d349bd769e67ed2c8bd2bf7be565d4e23bfea65f4dd",
+      "state": "third_party_reference_only"
+    },
+    "style:05_map": {
+      "path": "art_sources/refresh_20261019/approved_samples/05_map.png",
+      "sha256": "e915d26eed139f0b2a68d641eacacdc52d7d7d370d3e05ec81e164195d8c9785",
+      "state": "existing_confirmed_style"
+    },
+    "original:05_map": {
+      "path": "PNG/mcs_style_reference_20261019/originals/steam_02.jpg",
+      "sha256": "7f7173698dec36901f6bb283632a108906a0f763c6edf14433f94184ad9ab2e2",
+      "state": "third_party_reference_only"
+    },
+    "style:06_battle": {
+      "path": "art_sources/refresh_20261019/approved_samples/06_battle.png",
+      "sha256": "c55bd1aba9fba313c61ae1c89bb3c0b131190eb0068aa722af84dd60fcace0ed",
+      "state": "existing_confirmed_style"
+    },
+    "original:06_battle": {
+      "path": "PNG/mcs_style_reference_20261019/originals/steam_01.jpg",
+      "sha256": "0e1298459a980b2207628e2eabec6be85444cc5d17da8a2c13eaa65efd799309",
+      "state": "third_party_reference_only"
+    },
+    "style:07_interior": {
+      "path": "art_sources/refresh_20261019/approved_samples/07_interior.png",
+      "sha256": "fc6cfaa9faed6c35500b9c8fc4affca675791e315785eab16c07dd405e712f23",
+      "state": "existing_confirmed_style"
+    },
+    "original:07_interior": {
+      "path": "PNG/mcs_style_reference_20261019/originals/interior_dialogue.jpg",
+      "sha256": "d4ef645f0204cc1970bba36c533bc56c75f97a7b85436b4551f86ba2d1838652",
+      "state": "third_party_reference_only"
+    },
+    "style:08_herb": {
+      "path": "art_sources/refresh_20261019/approved_samples/08_herb.png",
+      "sha256": "9fa7eca4a60b65e9c13819a9f5027f96b4e0cd2c2544d16b891424ba3e9f9f8d",
+      "state": "existing_confirmed_style"
+    },
+    "original:08_herb": {
+      "path": "PNG/mcs_style_reference_20261019/originals/wiki_herb_xiakucao.png",
+      "sha256": "87d7bd1adf63fefb8494e04336db441561ed4cb3db93ace45988e60840b482f9",
+      "state": "third_party_reference_only"
+    },
+    "style:09_skill": {
+      "path": "art_sources/refresh_20261019/approved_samples/09_skill.png",
+      "sha256": "2518be7f8e6c26fb898e985c40d93b9c27b988034d88ccddc1e55bd853e66400",
+      "state": "existing_confirmed_style"
+    },
+    "original:09_skill": {
+      "path": "PNG/mcs_style_reference_20261019/originals/steam_01.jpg",
+      "sha256": "0e1298459a980b2207628e2eabec6be85444cc5d17da8a2c13eaa65efd799309",
+      "state": "third_party_reference_only"
+    },
+    "style:10_panel": {
+      "path": "art_sources/refresh_20261019/approved_samples/10_panel.png",
+      "sha256": "6962fc518e96a0c0e93f03310bbf5282ffb0885a4dc955cf880a644cdb16251c",
+      "state": "existing_confirmed_style"
+    },
+    "original:10_panel": {
+      "path": "PNG/mcs_style_reference_20261019/originals/steam_16.jpg",
+      "sha256": "9e1795148763966a9c27daf6ebd28bb5d6968265201676d604412de60950d1ad",
+      "state": "third_party_reference_only"
+    },
+    "style:11_furnace": {
+      "path": "art_sources/refresh_20261019/approved_samples/11_furnace.png",
+      "sha256": "c0d05eee32cf3a403d4b3c4ee72c87caf4ed8a26d19b667b972a7833b37494cf",
+      "state": "existing_confirmed_style"
+    },
+    "original:11_furnace": {
+      "path": "PNG/mcs_style_reference_20261019/originals/steam_09.jpg",
+      "sha256": "08f2cabbbef01e740cbcd80713030146e5412d95561fad0c8f496aa2433e84ac",
+      "state": "third_party_reference_only"
+    },
+    "style:12_garden": {
+      "path": "art_sources/refresh_20261019/approved_samples/12_garden.png",
+      "sha256": "27f8d5e098945a2ab32c19e3759edfcdeea668bfc71df5c0dacf0c1477864d1d",
+      "state": "existing_confirmed_style"
+    },
+    "original:12_garden": {
+      "path": "PNG/mcs_style_reference_20261019/originals/garden_03.jpg",
+      "sha256": "7657ab1dae73d6256d11f144b612cb5b7dbcba536a78ca97f013058b144b86a3",
+      "state": "third_party_reference_only"
+    },
+    "style:13_event": {
+      "path": "art_sources/refresh_20261019/approved_samples/13_event.png",
+      "sha256": "29dfc8b888a31fb0416861b2eaac9c7a4fb569cdd8d51d80afd3c94fa7b562a7",
+      "state": "existing_confirmed_style"
+    },
+    "original:13_event": {
+      "path": "PNG/mcs_style_reference_20261019/originals/steam_08.jpg",
+      "sha256": "5b3e25ebd0a39f7b2ee8cb601ed865027e406abe9ad1497adf682b9fdc431795",
+      "state": "third_party_reference_only"
+    },
+    "technical:assets/art/portraits/shen_mo.png": {
+      "path": "assets/art/portraits/shen_mo.png",
+      "sha256": "045e15a4fc9cfd7052b1b720525a28dcb2ea6eb38a1966bd1d9d38821900d252"
+    },
+    "technical:assets/art/battle/yanjia_xi.png": {
+      "path": "assets/art/battle/yanjia_xi.png",
+      "sha256": "46accc53dc8c6fbbc3ac0288b411cc10080537c5ab1f64f3882b8de9ad0aef1b"
+    },
+    "technical:assets/art/locations/sect_fullscreen.png": {
+      "path": "assets/art/locations/sect_fullscreen.png",
+      "sha256": "6200fd6696f03cf012c3231285cb24ffd552e30f529e369e00915c889fe6d641"
+    },
+    "technical:assets/art/locations/market_fullscreen.png": {
+      "path": "assets/art/locations/market_fullscreen.png",
+      "sha256": "7c861a3a3a70403723354dbec9021fa69e3b4c88770ab9f8eea8d7b373d2948f"
+    },
+    "technical:assets/art/locations/nanming_fullscreen.png": {
+      "path": "assets/art/locations/nanming_fullscreen.png",
+      "sha256": "01833159ef664bb9b5e7963047e194bcb33e7ddad4b4d798f015af320513bdac"
+    },
+    "technical:assets/art/scenes/sect_chamber.png": {
+      "path": "assets/art/scenes/sect_chamber.png",
+      "sha256": "2bf63397eb56453125e01e9136ac7723ec882f97339dd433ca7d25f92077422c"
+    },
+    "technical:assets/art/scenes/sect_gate.png": {
+      "path": "assets/art/scenes/sect_gate.png",
+      "sha256": "583ee2dbabbc0c3a2094041f546e3c5ce7608d2807e09c379c7f64b6b99fd016"
+    },
+    "technical:assets/art/scenes/market_street.png": {
+      "path": "assets/art/scenes/market_street.png",
+      "sha256": "2e0f521e0db36ac3db64c082d8c5d0c44a12f6ff44e0b5129d4d5ee537981f55"
+    },
+    "technical:assets/art/scenes/nanming_abode.png": {
+      "path": "assets/art/scenes/nanming_abode.png",
+      "sha256": "42ed080c87545cb2e27aa9ac2c363a529b3f310b68d05a6e06027806cd188951"
+    },
+    "technical:assets/art/scenes/ferry_crossing.png": {
+      "path": "assets/art/scenes/ferry_crossing.png",
+      "sha256": "fc1696644a7843eb323ab5d73d3d5244a932b2be67603da0733f6400e093bfd8"
+    },
+    "technical:assets/art/bamboo_arena_v1.png": {
+      "path": "assets/art/bamboo_arena_v1.png",
+      "sha256": "7e1ad7b9eed2ddca42a106f5ba7d7d1697db17ab737c41b2d15923823f901f2f"
+    },
+    "technical:assets/art/map/region_tiannan.png": {
+      "path": "assets/art/map/region_tiannan.png",
+      "sha256": "9c25177e91df5b3bb50a188c8ef97b52981ae174ac947c4d2616197ae3a73a44"
+    },
+    "technical:assets/art/events/yunxi_auction.png": {
+      "path": "assets/art/events/yunxi_auction.png",
+      "sha256": "35c927dd2e92f05f2cf7d673a9ee03713e1689c63975fdac1a82a31bb4f3744e"
+    },
+    "technical:assets/art/story/icons/old_city_seal.svg": {
+      "path": "assets/art/story/icons/old_city_seal.svg",
+      "sha256": "72b7cd6e5119ae7cc2d66a5ddd0d478f1c3ff7352a46b53b9f013b1016ae6381"
+    },
+    "technical:assets/art/story/icons/mirror_back_fragment.svg": {
+      "path": "assets/art/story/icons/mirror_back_fragment.svg",
+      "sha256": "c624c48123d0c33bd413ee9bcb2c57660a459306bff762e4ff0c5db6a9ce2d3b"
+    },
+    "technical:assets/art/story/icons/remnant_mirror.svg": {
+      "path": "assets/art/story/icons/remnant_mirror.svg",
+      "sha256": "10893db74c8277d6c2d9daad2281b26d8f9c6b4640cecf814cb2024c002718d5"
+    },
+    "technical:assets/art/story/icons/old_city_record.svg": {
+      "path": "assets/art/story/icons/old_city_record.svg",
+      "sha256": "236f32800a70d85239329b2ce55bde93762ad105b8f53051150603874e59f229"
+    },
+    "technical:assets/art/story/icons/zhaoshui_fenguang.svg": {
+      "path": "assets/art/story/icons/zhaoshui_fenguang.svg",
+      "sha256": "96e43ef5866ff6fde9bdf190425fc4735a344a978f040efdd73aa40e5675da1f"
+    },
+    "technical:assets/art/story/icons/cangxi_lu.svg": {
+      "path": "assets/art/story/icons/cangxi_lu.svg",
+      "sha256": "db4ca515c2759e4b5e989e8d55a226b8604663d1961ed7fb5e51b74f99141b64"
+    },
+    "technical:assets/art/story/icons/tingchao_broken.svg": {
+      "path": "assets/art/story/icons/tingchao_broken.svg",
+      "sha256": "f5a40b1e47eb489a72297f8093a31c57692af19146acbd46f3abb478b8c4a804"
+    },
+    "technical:assets/art/story/icons/tingchao_repaired.svg": {
+      "path": "assets/art/story/icons/tingchao_repaired.svg",
+      "sha256": "ebd659817c961abbbe20ec1ad79192d250a2e89518a6fe98d8131c0c3fd109ac"
+    },
+    "technical:assets/art/story/icons/wenren_sea_chart.svg": {
+      "path": "assets/art/story/icons/wenren_sea_chart.svg",
+      "sha256": "183b125e64b3577167342a667c1e3943296e754461dfead603d27f23aa110e5d"
+    },
+    "technical:assets/art/ui/scroll_panel.png": {
+      "path": "assets/art/ui/scroll_panel.png",
+      "sha256": "115c6f3dbc4fc00bf1423b7e1a661b864174872ba827bc4de053f7d99464c820"
+    },
+    "technical:assets/art/actors/hero_meditate.png": {
+      "path": "assets/art/actors/hero_meditate.png",
+      "sha256": "9e8a32da01d522683e60b6cc56e73bf5d6e5b8a0e8f4fe8d3dc4d5b23be6a1f1"
+    },
+    "technical:assets/art/ui/alchemy_vignette.png": {
+      "path": "assets/art/ui/alchemy_vignette.png",
+      "sha256": "88bf832d0b4156688f45d8fb3b53dfbe82d862f4840c3fa9cfbcfadb4df154a0"
+    },
+    "technical:assets/art/ui/map/market.svg": {
+      "path": "assets/art/ui/map/market.svg",
+      "sha256": "ad5e2f1c906e0fcde82f91bd80d06be4861a0d029718b081ffff4456cc589597"
+    },
+    "technical:assets/art/ui/tag.svg": {
+      "path": "assets/art/ui/tag.svg",
+      "sha256": "1a7c2d7ddf98c9573a61d417c5bbf2d58bc6daa78cc4f6305682de4db815fc76"
+    },
+    "technical:assets/art/vfx/magic_01.png": {
+      "path": "assets/art/vfx/magic_01.png",
+      "sha256": "ed9233d41c41fd864364718889947a18bbad16381969a7898de956d9a30d892e"
+    },
+    "motif:old_city_seal_candidate": {
+      "path": "assets/art/story/icons/old_city_seal.svg",
+      "sha256": "72b7cd6e5119ae7cc2d66a5ddd0d478f1c3ff7352a46b53b9f013b1016ae6381",
+      "state": "candidate_motif_not_final_approval",
+      "raster_reference": {
+        "path": "art_sources/refresh_20261019/batches/10_item_skill_icons/review/vector_overview.png",
+        "sha256": "a2048f7c4929011cda364520a805f689dadba23ac0047a7ec15e7f3b4c9bf0ec"
+      },
+      "use": "Only the old_city_seal/mirror motif cells; do not copy labels, frames or unrelated icons."
+    },
+    "output:tianhe_ferry_day.png": {
+      "path": "art_sources/refresh_20261019/batches/06_scenes/output/tianhe_ferry_day.png",
+      "sha256": "4cddd4c99d9ec6ee111ff66969143957e5e1b3352bf5bfdf1a46f708209bb088",
+      "state": "generated_candidate"
+    },
+    "output:tianhe_ferry_reflection.png": {
+      "path": "art_sources/refresh_20261019/batches/06_scenes/output/tianhe_ferry_reflection.png",
+      "sha256": "bc3bf82f20980ca815ac76766111045e175e532bfabd6f463216abdf2afe9c51",
+      "state": "generated_candidate"
+    },
+    "planned:02_key_portraits/yan_wujiu.png": {
+      "path": "art_sources/refresh_20261019/batches/02_key_portraits/output/yan_wujiu.png",
+      "sha256": "f031258709ed34c6225076d900209d55ddad54800cf94795871438b036b9246c",
+      "state": "generated_identity_candidate"
+    }
+  },
+  "identity_registry": {
+    "lu_chengzhou": {
+      "path": "art_sources/refresh_20261019/batches/02_key_portraits/candidates/lu_chengzhou.png",
+      "sha256": "a7d038cc537349073873aa20693c116ce1763530448bfd009e19581d93fce4be",
+      "state": "existing_identity_candidate"
+    },
+    "ye_zhiwei": {
+      "path": "art_sources/refresh_20261019/batches/02_key_portraits/candidates/ye_zhiwei.png",
+      "sha256": "d844a0a6e01f95777c1014088a033a071b09de0d98630cd8a3ac83812d60e03d",
+      "state": "existing_identity_candidate"
+    },
+    "wenren_zhao": {
+      "path": "art_sources/refresh_20261019/batches/02_key_portraits/candidates/wenren_zhao.png",
+      "sha256": "67b9689ddc3361f4cf97376dc5254d3062028c574bed418e381a217f5f19be14",
+      "state": "existing_identity_candidate"
+    },
+    "liu_hanzhou": {
+      "path": "art_sources/refresh_20261019/batches/02_key_portraits/candidates/liu_hanzhou_healthy.png",
+      "sha256": "ea67ce6b5d249c4bb5cb49dc138604024dfe9baafc9ddafac5826e77ec19ddfe",
+      "state": "existing_identity_candidate"
+    },
+    "wen_zhaoheng": {
+      "path": "art_sources/refresh_20261019/batches/02_key_portraits/candidates/auction_elder.png",
+      "sha256": "fa589f9d1def83d1511d4b8724dd0c0b3ba1d43181e4aaf4e7325a5144b9ec8a",
+      "state": "existing_identity_candidate"
+    },
+    "azhi": {
+      "path": "art_sources/refresh_20261019/batches/02_key_portraits/candidates/azhi.png",
+      "sha256": "d4d0e67997d6441ed6f4aa517d87a8145bc9de11f13c60178632c8c5917e6175",
+      "state": "existing_identity_candidate"
+    },
+    "hero": {
+      "path": "art_sources/refresh_20261019/approved_samples/01_hero.png",
+      "sha256": "a5fecf58591caffadaf51389955aaa2aa46c911cf2a8114f5785357d10f1f63d",
+      "state": "existing_confirmed_identity"
+    },
+    "shen_mo": {
+      "path": "art_sources/refresh_20261019/approved_samples/02_portrait.png",
+      "sha256": "139f85deb18db95d129b9e3e31db95460f47b934a7a68a4f006b95f8ad53c3fe",
+      "state": "existing_confirmed_identity"
+    },
+    "yan_wujiu": {
+      "path": "art_sources/refresh_20261019/batches/02_key_portraits/output/yan_wujiu.png",
+      "sha256": "f031258709ed34c6225076d900209d55ddad54800cf94795871438b036b9246c",
+      "state": "generated_identity_candidate"
+    }
+  },
+  "identity_exceptions": {
+    "liu_hanzhou_wounded": {
+      "path": "assets/art/portraits/wounded.png",
+      "sha256": "4e34ea7fb14f66cef9e887a24fc0972055cf92367adc921cc86a2bd28200c685"
+    },
+    "yan_wujiu": {
+      "path": "art_sources/refresh_20261019/batches/02_key_portraits/output/yan_wujiu.png",
+      "sha256": "f031258709ed34c6225076d900209d55ddad54800cf94795871438b036b9246c",
+      "state": "generated_identity_candidate",
+      "owned_by": "02_key_portraits"
+    }
+  }
+}

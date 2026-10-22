@@ -1,0 +1,10 @@
+Use case: style-transfer / identity-preserve / production game art.
+Asset: duanjian_gorge_outskirts.png
+Content request: 筑基断剑峡外围：安全商道、御剑近路与商队痕迹，内层另留后续内容
+This is one independent production asset for an original Chinese cultivation RPG.
+Input image 1: art_sources/refresh_20261019/approved_samples/04_location.png. Role: approved drawing-style reference ONLY; do not copy its subject, architecture, layout or camera.
+Preserve the existing category-specific approved hand-drawn style: clear outlines, broad grouped colour areas, restrained shadows and low texture density. Do not impose character C anatomy rules on environments, maps, items or UI. No photorealism, cinematic bloom, dense surface scratches or depth-of-field blur.
+Empty environment: no characters, animals, UI, baked text, signs, labels, names or watermark. Preserve clear functional spaces and complete landmarks. Scene banners need a central 4:1 safe crop. Battle fields keep clear left/right standing ground. Qingyun is a small sect; do not copy monumental palace scale from a style sample.
+Old technical target: 2400x600 pixels. Request the same proportions and retain usable safe margins; actual native output size will be measured, never mislabelled. Background: opaque.
+IMPORTANT NEW CONTENT: this is NOT a repaint of the old technical-source scene. Completely replace its subject and composition according to the requested new asset. The old size anchor does not authorize copying its city, terrain, camera or buildings. Retain ONLY the approved drawing language from the style reference.
+MANDATORY SCENE COMPOSITION: Outer Broken Sword Gorge: dry rocky ravine, narrow but safe caravan trail in foreground, two wheel ruts and an abandoned plain rope-tied supply crate, broken upright rock formations resembling sword silhouettes far behind. Restricted deeper path curls away right. No corpses or invented enemies.

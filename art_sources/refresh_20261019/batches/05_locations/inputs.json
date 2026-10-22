@@ -12,7 +12,6 @@
       ],
       "mode": "RGB"
     },
-    "absolute_path": "D:/fqh/flash/assets/art/locations/canglan_pavilion_fullscreen.png",
     "actor_layouts": []
   },
   {
@@ -28,7 +27,6 @@
       ],
       "mode": "RGB"
     },
-    "absolute_path": "D:/fqh/flash/assets/art/locations/changqing_valley_fullscreen.png",
     "actor_layouts": []
   },
   {
@@ -44,7 +42,6 @@
       ],
       "mode": "RGB"
     },
-    "absolute_path": "D:/fqh/flash/assets/art/locations/chifeng_fullscreen.png",
     "actor_layouts": []
   },
   {
@@ -60,7 +57,6 @@
       ],
       "mode": "RGB"
     },
-    "absolute_path": "D:/fqh/flash/assets/art/locations/chixiao_gate_fullscreen.png",
     "actor_layouts": []
   },
   {
@@ -76,7 +72,6 @@
       ],
       "mode": "RGB"
     },
-    "absolute_path": "D:/fqh/flash/assets/art/locations/ferry.png",
     "actor_layouts": []
   },
   {
@@ -92,7 +87,6 @@
       ],
       "mode": "RGB"
     },
-    "absolute_path": "D:/fqh/flash/assets/art/locations/ferry_fullscreen.png",
     "actor_layouts": []
   },
   {
@@ -108,7 +102,6 @@
       ],
       "mode": "RGB"
     },
-    "absolute_path": "D:/fqh/flash/assets/art/locations/market.png",
     "actor_layouts": []
   },
   {
@@ -124,7 +117,6 @@
       ],
       "mode": "RGB"
     },
-    "absolute_path": "D:/fqh/flash/assets/art/locations/market_fullscreen.png",
     "actor_layouts": []
   },
   {
@@ -140,7 +132,6 @@
       ],
       "mode": "RGB"
     },
-    "absolute_path": "D:/fqh/flash/assets/art/locations/nanming_fullscreen.png",
     "actor_layouts": []
   },
   {
@@ -156,7 +147,6 @@
       ],
       "mode": "RGB"
     },
-    "absolute_path": "D:/fqh/flash/assets/art/locations/ridge.png",
     "actor_layouts": []
   },
   {
@@ -172,7 +162,6 @@
       ],
       "mode": "RGB"
     },
-    "absolute_path": "D:/fqh/flash/assets/art/locations/ridge_fullscreen.png",
     "actor_layouts": []
   },
   {
@@ -188,7 +177,6 @@
       ],
       "mode": "RGB"
     },
-    "absolute_path": "D:/fqh/flash/assets/art/locations/ruin.png",
     "actor_layouts": []
   },
   {
@@ -204,7 +192,6 @@
       ],
       "mode": "RGB"
     },
-    "absolute_path": "D:/fqh/flash/assets/art/locations/ruin_fullscreen.png",
     "actor_layouts": []
   },
   {
@@ -220,7 +207,6 @@
       ],
       "mode": "RGB"
     },
-    "absolute_path": "D:/fqh/flash/assets/art/locations/sect.png",
     "actor_layouts": []
   },
   {
@@ -236,7 +222,6 @@
       ],
       "mode": "RGB"
     },
-    "absolute_path": "D:/fqh/flash/assets/art/locations/sect_fullscreen.png",
     "actor_layouts": []
   },
   {
@@ -252,7 +237,6 @@
       ],
       "mode": "RGB"
     },
-    "absolute_path": "D:/fqh/flash/assets/art/locations/town.png",
     "actor_layouts": []
   },
   {
@@ -268,7 +252,6 @@
       ],
       "mode": "RGB"
     },
-    "absolute_path": "D:/fqh/flash/assets/art/locations/town_fullscreen.png",
     "actor_layouts": []
   },
   {
@@ -284,7 +267,6 @@
       ],
       "mode": "RGB"
     },
-    "absolute_path": "D:/fqh/flash/assets/art/locations/wild.png",
     "actor_layouts": []
   },
   {
@@ -300,7 +282,6 @@
       ],
       "mode": "RGB"
     },
-    "absolute_path": "D:/fqh/flash/assets/art/locations/wild_fullscreen.png",
     "actor_layouts": []
   },
   {
@@ -316,7 +297,6 @@
       ],
       "mode": "RGB"
     },
-    "absolute_path": "D:/fqh/flash/assets/art/locations/xuanyue_gate_fullscreen.png",
     "actor_layouts": []
   }
 ]

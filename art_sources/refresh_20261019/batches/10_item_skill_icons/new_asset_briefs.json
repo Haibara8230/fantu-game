@@ -4,62 +4,647 @@
     "filename": "old_city_seal.svg",
     "brief": "已生成候选：三拱城门、双水纹与缺口圆环，非已批准设定",
     "status": "planned_or_existing_candidate",
-    "output_path": "D:/fqh/flash/art_sources/refresh_20261019/batches/10_item_skill_icons/output/old_city_seal.svg"
+    "output_path": "art_sources/refresh_20261019/batches/10_item_skill_icons/output/old_city_seal.svg",
+    "content_outline": "docs/GAME_OUTLINE.md",
+    "outline_sections": [
+      "6.2",
+      "6.3",
+      "8"
+    ],
+    "content_plan": "art_sources/refresh_20261019/CONTENT_PLAN.md",
+    "style_reference": "art_sources/refresh_20261019/batches/10_item_skill_icons/references.json",
+    "technical_spec": {
+      "path": "assets/art/story/icons/old_city_seal.svg",
+      "sha256": "72b7cd6e5119ae7cc2d66a5ddd0d478f1c3ff7352a46b53b9f013b1016ae6381",
+      "format": "SVG",
+      "dimensions": [
+        64,
+        64
+      ],
+      "view_box": [
+        0.0,
+        0.0,
+        64.0,
+        64.0
+      ],
+      "background": "preserve_source_svg",
+      "native_vector_required": true,
+      "aspect_ratio": [
+        1,
+        1
+      ],
+      "actor_layouts": [],
+      "actor_layout_note": "No actor atlas definition on this technical source."
+    },
+    "spec_policy": "inherit_existing_source; retain measured native output separately; never mislabel dimensions",
+    "reference_bindings": [
+      {
+        "id": "technical:assets/art/story/icons/old_city_seal.svg",
+        "role": "dimensions_alpha_layout_only"
+      },
+      {
+        "id": "style:08_herb",
+        "role": "drawing_style_only"
+      },
+      {
+        "id": "original:08_herb",
+        "role": "original_game_style_only_no_copy"
+      },
+      {
+        "id": "style:09_skill",
+        "role": "drawing_style_only"
+      },
+      {
+        "id": "original:09_skill",
+        "role": "original_game_style_only_no_copy"
+      }
+    ],
+    "identity_policy": "If a registered person appears, use their identity_registry image and hash; unseen characters wait for batch02; never substitute style-reference faces.",
+    "generation_gate": "generate_after_dependencies",
+    "dependencies": [
+      "motif:old_city_seal_candidate"
+    ]
   },
   {
     "priority": "P0",
     "filename": "mirror_back_fragment.svg",
     "brief": "已生成候选：廉价铜片，有可识别的部分阵纹",
     "status": "planned_or_existing_candidate",
-    "output_path": "D:/fqh/flash/art_sources/refresh_20261019/batches/10_item_skill_icons/output/mirror_back_fragment.svg"
+    "output_path": "art_sources/refresh_20261019/batches/10_item_skill_icons/output/mirror_back_fragment.svg",
+    "content_outline": "docs/GAME_OUTLINE.md",
+    "outline_sections": [
+      "6.2",
+      "6.3",
+      "8"
+    ],
+    "content_plan": "art_sources/refresh_20261019/CONTENT_PLAN.md",
+    "style_reference": "art_sources/refresh_20261019/batches/10_item_skill_icons/references.json",
+    "technical_spec": {
+      "path": "assets/art/story/icons/mirror_back_fragment.svg",
+      "sha256": "c624c48123d0c33bd413ee9bcb2c57660a459306bff762e4ff0c5db6a9ce2d3b",
+      "format": "SVG",
+      "dimensions": [
+        64,
+        64
+      ],
+      "view_box": [
+        0.0,
+        0.0,
+        64.0,
+        64.0
+      ],
+      "background": "preserve_source_svg",
+      "native_vector_required": true,
+      "aspect_ratio": [
+        1,
+        1
+      ],
+      "actor_layouts": [],
+      "actor_layout_note": "No actor atlas definition on this technical source."
+    },
+    "spec_policy": "inherit_existing_source; retain measured native output separately; never mislabel dimensions",
+    "reference_bindings": [
+      {
+        "id": "technical:assets/art/story/icons/mirror_back_fragment.svg",
+        "role": "dimensions_alpha_layout_only"
+      },
+      {
+        "id": "style:08_herb",
+        "role": "drawing_style_only"
+      },
+      {
+        "id": "original:08_herb",
+        "role": "original_game_style_only_no_copy"
+      },
+      {
+        "id": "style:09_skill",
+        "role": "drawing_style_only"
+      },
+      {
+        "id": "original:09_skill",
+        "role": "original_game_style_only_no_copy"
+      }
+    ],
+    "identity_policy": "If a registered person appears, use their identity_registry image and hash; unseen characters wait for batch02; never substitute style-reference faces.",
+    "generation_gate": "generate_after_dependencies",
+    "dependencies": [
+      "motif:old_city_seal_candidate"
+    ]
   },
   {
     "priority": "P0",
     "filename": "remnant_mirror.svg",
     "brief": "已生成候选：拍卖残镜，与铜片、城徽同一视觉母题",
     "status": "planned_or_existing_candidate",
-    "output_path": "D:/fqh/flash/art_sources/refresh_20261019/batches/10_item_skill_icons/output/remnant_mirror.svg"
+    "output_path": "art_sources/refresh_20261019/batches/10_item_skill_icons/output/remnant_mirror.svg",
+    "content_outline": "docs/GAME_OUTLINE.md",
+    "outline_sections": [
+      "6.2",
+      "6.3",
+      "8"
+    ],
+    "content_plan": "art_sources/refresh_20261019/CONTENT_PLAN.md",
+    "style_reference": "art_sources/refresh_20261019/batches/10_item_skill_icons/references.json",
+    "technical_spec": {
+      "path": "assets/art/story/icons/remnant_mirror.svg",
+      "sha256": "10893db74c8277d6c2d9daad2281b26d8f9c6b4640cecf814cb2024c002718d5",
+      "format": "SVG",
+      "dimensions": [
+        64,
+        64
+      ],
+      "view_box": [
+        0.0,
+        0.0,
+        64.0,
+        64.0
+      ],
+      "background": "preserve_source_svg",
+      "native_vector_required": true,
+      "aspect_ratio": [
+        1,
+        1
+      ],
+      "actor_layouts": [],
+      "actor_layout_note": "No actor atlas definition on this technical source."
+    },
+    "spec_policy": "inherit_existing_source; retain measured native output separately; never mislabel dimensions",
+    "reference_bindings": [
+      {
+        "id": "technical:assets/art/story/icons/remnant_mirror.svg",
+        "role": "dimensions_alpha_layout_only"
+      },
+      {
+        "id": "style:08_herb",
+        "role": "drawing_style_only"
+      },
+      {
+        "id": "original:08_herb",
+        "role": "original_game_style_only_no_copy"
+      },
+      {
+        "id": "style:09_skill",
+        "role": "drawing_style_only"
+      },
+      {
+        "id": "original:09_skill",
+        "role": "original_game_style_only_no_copy"
+      }
+    ],
+    "identity_policy": "If a registered person appears, use their identity_registry image and hash; unseen characters wait for batch02; never substitute style-reference faces.",
+    "generation_gate": "generate_after_dependencies",
+    "dependencies": [
+      "motif:old_city_seal_candidate"
+    ]
   },
   {
     "priority": "P1",
     "filename": "old_city_record.svg",
     "brief": "已生成候选：旧城档案，重复同一城徽而非无关符号",
     "status": "planned_or_existing_candidate",
-    "output_path": "D:/fqh/flash/art_sources/refresh_20261019/batches/10_item_skill_icons/output/old_city_record.svg"
+    "output_path": "art_sources/refresh_20261019/batches/10_item_skill_icons/output/old_city_record.svg",
+    "content_outline": "docs/GAME_OUTLINE.md",
+    "outline_sections": [
+      "6.2",
+      "6.3",
+      "8"
+    ],
+    "content_plan": "art_sources/refresh_20261019/CONTENT_PLAN.md",
+    "style_reference": "art_sources/refresh_20261019/batches/10_item_skill_icons/references.json",
+    "technical_spec": {
+      "path": "assets/art/story/icons/old_city_record.svg",
+      "sha256": "236f32800a70d85239329b2ce55bde93762ad105b8f53051150603874e59f229",
+      "format": "SVG",
+      "dimensions": [
+        64,
+        64
+      ],
+      "view_box": [
+        0.0,
+        0.0,
+        64.0,
+        64.0
+      ],
+      "background": "preserve_source_svg",
+      "native_vector_required": true,
+      "aspect_ratio": [
+        1,
+        1
+      ],
+      "actor_layouts": [],
+      "actor_layout_note": "No actor atlas definition on this technical source."
+    },
+    "spec_policy": "inherit_existing_source; retain measured native output separately; never mislabel dimensions",
+    "reference_bindings": [
+      {
+        "id": "technical:assets/art/story/icons/old_city_record.svg",
+        "role": "dimensions_alpha_layout_only"
+      },
+      {
+        "id": "style:08_herb",
+        "role": "drawing_style_only"
+      },
+      {
+        "id": "original:08_herb",
+        "role": "original_game_style_only_no_copy"
+      },
+      {
+        "id": "style:09_skill",
+        "role": "drawing_style_only"
+      },
+      {
+        "id": "original:09_skill",
+        "role": "original_game_style_only_no_copy"
+      }
+    ],
+    "identity_policy": "If a registered person appears, use their identity_registry image and hash; unseen characters wait for batch02; never substitute style-reference faces.",
+    "generation_gate": "generate_after_dependencies",
+    "dependencies": [
+      "motif:old_city_seal_candidate"
+    ]
   },
   {
-    "priority": "P0",
+    "priority": "P2",
     "filename": "zhaoshui_fenguang.svg",
-    "brief": "已生成候选：《照水分光诀》，分光水剑辨识形",
+    "brief": "已有候选：《照水分光诀》水剑辨识形，水金连击与善水印转化；开局可作演示／残篇，完整追求属五城阶段",
     "status": "planned_or_existing_candidate",
-    "output_path": "D:/fqh/flash/art_sources/refresh_20261019/batches/10_item_skill_icons/output/zhaoshui_fenguang.svg"
+    "output_path": "art_sources/refresh_20261019/batches/10_item_skill_icons/output/zhaoshui_fenguang.svg",
+    "content_outline": "docs/GAME_OUTLINE.md",
+    "outline_sections": [
+      "6.2",
+      "6.3",
+      "8"
+    ],
+    "content_plan": "art_sources/refresh_20261019/CONTENT_PLAN.md",
+    "style_reference": "art_sources/refresh_20261019/batches/10_item_skill_icons/references.json",
+    "technical_spec": {
+      "path": "assets/art/story/icons/zhaoshui_fenguang.svg",
+      "sha256": "96e43ef5866ff6fde9bdf190425fc4735a344a978f040efdd73aa40e5675da1f",
+      "format": "SVG",
+      "dimensions": [
+        64,
+        64
+      ],
+      "view_box": [
+        0.0,
+        0.0,
+        64.0,
+        64.0
+      ],
+      "background": "preserve_source_svg",
+      "native_vector_required": true,
+      "aspect_ratio": [
+        1,
+        1
+      ],
+      "actor_layouts": [],
+      "actor_layout_note": "No actor atlas definition on this technical source."
+    },
+    "spec_policy": "inherit_existing_source; retain measured native output separately; never mislabel dimensions",
+    "reference_bindings": [
+      {
+        "id": "technical:assets/art/story/icons/zhaoshui_fenguang.svg",
+        "role": "dimensions_alpha_layout_only"
+      },
+      {
+        "id": "style:08_herb",
+        "role": "drawing_style_only"
+      },
+      {
+        "id": "original:08_herb",
+        "role": "original_game_style_only_no_copy"
+      },
+      {
+        "id": "style:09_skill",
+        "role": "drawing_style_only"
+      },
+      {
+        "id": "original:09_skill",
+        "role": "original_game_style_only_no_copy"
+      }
+    ],
+    "identity_policy": "If a registered person appears, use their identity_registry image and hash; unseen characters wait for batch02; never substitute style-reference faces.",
+    "generation_gate": "generate_after_dependencies",
+    "dependencies": []
   },
   {
     "priority": "P1",
     "filename": "cangxi_lu.svg",
     "brief": "已生成候选：《藏息录》，隐息主题，区别水剑传承",
     "status": "planned_or_existing_candidate",
-    "output_path": "D:/fqh/flash/art_sources/refresh_20261019/batches/10_item_skill_icons/output/cangxi_lu.svg"
+    "output_path": "art_sources/refresh_20261019/batches/10_item_skill_icons/output/cangxi_lu.svg",
+    "content_outline": "docs/GAME_OUTLINE.md",
+    "outline_sections": [
+      "6.2",
+      "6.3",
+      "8"
+    ],
+    "content_plan": "art_sources/refresh_20261019/CONTENT_PLAN.md",
+    "style_reference": "art_sources/refresh_20261019/batches/10_item_skill_icons/references.json",
+    "technical_spec": {
+      "path": "assets/art/story/icons/cangxi_lu.svg",
+      "sha256": "db4ca515c2759e4b5e989e8d55a226b8604663d1961ed7fb5e51b74f99141b64",
+      "format": "SVG",
+      "dimensions": [
+        64,
+        64
+      ],
+      "view_box": [
+        0.0,
+        0.0,
+        64.0,
+        64.0
+      ],
+      "background": "preserve_source_svg",
+      "native_vector_required": true,
+      "aspect_ratio": [
+        1,
+        1
+      ],
+      "actor_layouts": [],
+      "actor_layout_note": "No actor atlas definition on this technical source."
+    },
+    "spec_policy": "inherit_existing_source; retain measured native output separately; never mislabel dimensions",
+    "reference_bindings": [
+      {
+        "id": "technical:assets/art/story/icons/cangxi_lu.svg",
+        "role": "dimensions_alpha_layout_only"
+      },
+      {
+        "id": "style:08_herb",
+        "role": "drawing_style_only"
+      },
+      {
+        "id": "original:08_herb",
+        "role": "original_game_style_only_no_copy"
+      },
+      {
+        "id": "style:09_skill",
+        "role": "drawing_style_only"
+      },
+      {
+        "id": "original:09_skill",
+        "role": "original_game_style_only_no_copy"
+      }
+    ],
+    "identity_policy": "If a registered person appears, use their identity_registry image and hash; unseen characters wait for batch02; never substitute style-reference faces.",
+    "generation_gate": "generate_after_dependencies",
+    "dependencies": []
   },
   {
     "priority": "P1",
     "filename": "tingchao_broken.svg",
     "brief": "已生成候选：听潮剑残损形态，和修复版保持同一器型",
     "status": "planned_or_existing_candidate",
-    "output_path": "D:/fqh/flash/art_sources/refresh_20261019/batches/10_item_skill_icons/output/tingchao_broken.svg"
+    "output_path": "art_sources/refresh_20261019/batches/10_item_skill_icons/output/tingchao_broken.svg",
+    "content_outline": "docs/GAME_OUTLINE.md",
+    "outline_sections": [
+      "6.2",
+      "6.3",
+      "8"
+    ],
+    "content_plan": "art_sources/refresh_20261019/CONTENT_PLAN.md",
+    "style_reference": "art_sources/refresh_20261019/batches/10_item_skill_icons/references.json",
+    "technical_spec": {
+      "path": "assets/art/story/icons/tingchao_broken.svg",
+      "sha256": "f5a40b1e47eb489a72297f8093a31c57692af19146acbd46f3abb478b8c4a804",
+      "format": "SVG",
+      "dimensions": [
+        64,
+        64
+      ],
+      "view_box": [
+        0.0,
+        0.0,
+        64.0,
+        64.0
+      ],
+      "background": "preserve_source_svg",
+      "native_vector_required": true,
+      "aspect_ratio": [
+        1,
+        1
+      ],
+      "actor_layouts": [],
+      "actor_layout_note": "No actor atlas definition on this technical source."
+    },
+    "spec_policy": "inherit_existing_source; retain measured native output separately; never mislabel dimensions",
+    "reference_bindings": [
+      {
+        "id": "technical:assets/art/story/icons/tingchao_broken.svg",
+        "role": "dimensions_alpha_layout_only"
+      },
+      {
+        "id": "style:08_herb",
+        "role": "drawing_style_only"
+      },
+      {
+        "id": "original:08_herb",
+        "role": "original_game_style_only_no_copy"
+      },
+      {
+        "id": "style:09_skill",
+        "role": "drawing_style_only"
+      },
+      {
+        "id": "original:09_skill",
+        "role": "original_game_style_only_no_copy"
+      }
+    ],
+    "identity_policy": "If a registered person appears, use their identity_registry image and hash; unseen characters wait for batch02; never substitute style-reference faces.",
+    "generation_gate": "generate_after_dependencies",
+    "dependencies": []
   },
   {
     "priority": "P1",
     "filename": "tingchao_repaired.svg",
     "brief": "已生成候选：听潮剑修复形态，不自动设为本命法宝",
     "status": "planned_or_existing_candidate",
-    "output_path": "D:/fqh/flash/art_sources/refresh_20261019/batches/10_item_skill_icons/output/tingchao_repaired.svg"
+    "output_path": "art_sources/refresh_20261019/batches/10_item_skill_icons/output/tingchao_repaired.svg",
+    "content_outline": "docs/GAME_OUTLINE.md",
+    "outline_sections": [
+      "6.2",
+      "6.3",
+      "8"
+    ],
+    "content_plan": "art_sources/refresh_20261019/CONTENT_PLAN.md",
+    "style_reference": "art_sources/refresh_20261019/batches/10_item_skill_icons/references.json",
+    "technical_spec": {
+      "path": "assets/art/story/icons/tingchao_repaired.svg",
+      "sha256": "ebd659817c961abbbe20ec1ad79192d250a2e89518a6fe98d8131c0c3fd109ac",
+      "format": "SVG",
+      "dimensions": [
+        64,
+        64
+      ],
+      "view_box": [
+        0.0,
+        0.0,
+        64.0,
+        64.0
+      ],
+      "background": "preserve_source_svg",
+      "native_vector_required": true,
+      "aspect_ratio": [
+        1,
+        1
+      ],
+      "actor_layouts": [],
+      "actor_layout_note": "No actor atlas definition on this technical source."
+    },
+    "spec_policy": "inherit_existing_source; retain measured native output separately; never mislabel dimensions",
+    "reference_bindings": [
+      {
+        "id": "technical:assets/art/story/icons/tingchao_repaired.svg",
+        "role": "dimensions_alpha_layout_only"
+      },
+      {
+        "id": "style:08_herb",
+        "role": "drawing_style_only"
+      },
+      {
+        "id": "original:08_herb",
+        "role": "original_game_style_only_no_copy"
+      },
+      {
+        "id": "style:09_skill",
+        "role": "drawing_style_only"
+      },
+      {
+        "id": "original:09_skill",
+        "role": "original_game_style_only_no_copy"
+      }
+    ],
+    "identity_policy": "If a registered person appears, use their identity_registry image and hash; unseen characters wait for batch02; never substitute style-reference faces.",
+    "generation_gate": "generate_after_dependencies",
+    "dependencies": []
   },
   {
     "priority": "P2",
     "filename": "wenren_sea_chart.svg",
     "brief": "已生成候选：闻人照海图，连接远行线索",
     "status": "planned_or_existing_candidate",
-    "output_path": "D:/fqh/flash/art_sources/refresh_20261019/batches/10_item_skill_icons/output/wenren_sea_chart.svg"
+    "output_path": "art_sources/refresh_20261019/batches/10_item_skill_icons/output/wenren_sea_chart.svg",
+    "content_outline": "docs/GAME_OUTLINE.md",
+    "outline_sections": [
+      "6.2",
+      "6.3",
+      "8"
+    ],
+    "content_plan": "art_sources/refresh_20261019/CONTENT_PLAN.md",
+    "style_reference": "art_sources/refresh_20261019/batches/10_item_skill_icons/references.json",
+    "technical_spec": {
+      "path": "assets/art/story/icons/wenren_sea_chart.svg",
+      "sha256": "183b125e64b3577167342a667c1e3943296e754461dfead603d27f23aa110e5d",
+      "format": "SVG",
+      "dimensions": [
+        64,
+        64
+      ],
+      "view_box": [
+        0.0,
+        0.0,
+        64.0,
+        64.0
+      ],
+      "background": "preserve_source_svg",
+      "native_vector_required": true,
+      "aspect_ratio": [
+        1,
+        1
+      ],
+      "actor_layouts": [],
+      "actor_layout_note": "No actor atlas definition on this technical source."
+    },
+    "spec_policy": "inherit_existing_source; retain measured native output separately; never mislabel dimensions",
+    "reference_bindings": [
+      {
+        "id": "technical:assets/art/story/icons/wenren_sea_chart.svg",
+        "role": "dimensions_alpha_layout_only"
+      },
+      {
+        "id": "style:08_herb",
+        "role": "drawing_style_only"
+      },
+      {
+        "id": "original:08_herb",
+        "role": "original_game_style_only_no_copy"
+      },
+      {
+        "id": "style:09_skill",
+        "role": "drawing_style_only"
+      },
+      {
+        "id": "original:09_skill",
+        "role": "original_game_style_only_no_copy"
+      }
+    ],
+    "identity_policy": "If a registered person appears, use their identity_registry image and hash; unseen characters wait for batch02; never substitute style-reference faces.",
+    "generation_gate": "generate_after_dependencies",
+    "dependencies": []
+  },
+  {
+    "priority": "P2",
+    "filename": "wen_zhaoheng_diary.svg",
+    "brief": "温照衡遗物日记与阵图线索；沿用档案和候选城徽部件，不将未揭示的完整真相写进小图文字",
+    "status": "planned_or_existing_candidate",
+    "output_path": "art_sources/refresh_20261019/batches/10_item_skill_icons/output/wen_zhaoheng_diary.svg",
+    "content_outline": "docs/GAME_OUTLINE.md",
+    "outline_sections": [
+      "6.2",
+      "6.3",
+      "8"
+    ],
+    "content_plan": "art_sources/refresh_20261019/CONTENT_PLAN.md",
+    "style_reference": "art_sources/refresh_20261019/batches/10_item_skill_icons/references.json",
+    "technical_spec": {
+      "path": "assets/art/story/icons/old_city_record.svg",
+      "sha256": "236f32800a70d85239329b2ce55bde93762ad105b8f53051150603874e59f229",
+      "format": "SVG",
+      "dimensions": [
+        64,
+        64
+      ],
+      "view_box": [
+        0.0,
+        0.0,
+        64.0,
+        64.0
+      ],
+      "background": "preserve_source_svg",
+      "native_vector_required": true,
+      "aspect_ratio": [
+        1,
+        1
+      ],
+      "actor_layouts": [],
+      "actor_layout_note": "No actor atlas definition on this technical source."
+    },
+    "spec_policy": "inherit_existing_source; retain measured native output separately; never mislabel dimensions",
+    "reference_bindings": [
+      {
+        "id": "technical:assets/art/story/icons/old_city_record.svg",
+        "role": "dimensions_alpha_layout_only"
+      },
+      {
+        "id": "style:08_herb",
+        "role": "drawing_style_only"
+      },
+      {
+        "id": "original:08_herb",
+        "role": "original_game_style_only_no_copy"
+      },
+      {
+        "id": "style:09_skill",
+        "role": "drawing_style_only"
+      },
+      {
+        "id": "original:09_skill",
+        "role": "original_game_style_only_no_copy"
+      }
+    ],
+    "identity_policy": "If a registered person appears, use their identity_registry image and hash; unseen characters wait for batch02; never substitute style-reference faces.",
+    "generation_gate": "generate_after_dependencies",
+    "dependencies": []
   }
 ]

@@ -1,0 +1,12 @@
+Use case: style-transfer / identity-preserve / production game art.
+Asset: wen_zhaoheng_legacy.png
+Content request: 错过温照衡生前口述后的遗物、日记与阵图接续版本；使用同一器物母题，不让错过人物卡死主线
+This is one independent production asset for an original Chinese cultivation RPG.
+Input image 1: art_sources/refresh_20261019/approved_samples/13_event.png. Role: approved drawing-style reference ONLY; do not copy its subject, architecture, layout or camera.
+Input image 2: art_sources/refresh_20261019/batches/02_key_portraits/candidates/auction_elder.png. Role: same named character identity anchor; preserve face, hair, costume cues and props.
+Input image 3: art_sources/refresh_20261019/batches/06_scenes/output/tianhe_ferry_reflection.png. Role: spatial and prop continuity reference; preserve recognizable place or story motif, redraw in this category drawing style and requested camera.
+Preserve the existing category-specific approved hand-drawn style: clear outlines, broad grouped colour areas, restrained shadows and low texture density. Do not impose character C anatomy rules on environments, maps, items or UI. No photorealism, cinematic bloom, dense surface scratches or depth-of-field blur.
+Story illustration in the approved graphic event style: symbolic focal point, layered mountain/cloud shapes and broad flat colours. Any depicted named person must match its supplied identity anchor in C style. No lettering, UI, labels, frames or watermark. Do not reveal late truth in early scenes; use only the requested event state. No obligatory victory/death/evil outcome unless requested.
+Old technical target: 1600x900 pixels. Request the same proportions and retain usable safe margins; actual native output size will be measured, never mislabelled. Background: opaque.
+IMPORTANT NEW CONTENT: this is NOT a repaint of the old technical-source scene. Completely replace its subject and composition according to the requested new asset. The old size anchor does not authorize copying its city, terrain, camera or buildings. Retain ONLY the approved drawing language from the style reference.
+MANDATORY EVENT COMPOSITION: No living person in the scene. Wen Zhaoheng legacy still life: one plain cloth-bound diary with faded slate cord, an incomplete array plan on parchment, a bronze mirror fragment and his small plain ring lie on an old desk. A softly layered old-city gate motif behind suggests the history can still be recovered. No readable writing, compulsory quest failure, ghost, corpse or imitation of a living testimony scene.

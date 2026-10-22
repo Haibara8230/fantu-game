@@ -1,0 +1,1067 @@
+{
+  "scope": "candidate delivery; runtime installs listed in INTEGRATION.json",
+  "counts": {
+    "pending": 19,
+    "delivered_reuse": 3,
+    "delivered_generated": 4
+  },
+  "jobs": [
+    {
+      "id": "391b54dd476043e8",
+      "batch": "05_locations",
+      "kind": "existing",
+      "label": "assets/art/locations/canglan_pavilion_fullscreen.png",
+      "source": "assets/art/locations/canglan_pavilion_fullscreen.png",
+      "output": "art_sources/refresh_20261019/batches/05_locations/output/existing/art/locations/canglan_pavilion_fullscreen.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/art/locations/canglan_pavilion_fullscreen.png",
+        "sha256": "f7b4cbba5ceb884fe901a9eb5133bc2c59587ef0e192af4722b535e6ba8cd71a",
+        "format": "PNG",
+        "dimensions": [
+          1672,
+          941
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          1672,
+          941
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "pending",
+      "tool_refs": [
+        "assets/art/locations/canglan_pavilion_fullscreen.png",
+        "art_sources/refresh_20261019/approved_samples/04_location.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/05_locations/output/prompts/391b54dd476043e8.txt"
+    },
+    {
+      "id": "d611f9df3edee3d8",
+      "batch": "05_locations",
+      "kind": "existing",
+      "label": "assets/art/locations/changqing_valley_fullscreen.png",
+      "source": "assets/art/locations/changqing_valley_fullscreen.png",
+      "output": "art_sources/refresh_20261019/batches/05_locations/output/existing/art/locations/changqing_valley_fullscreen.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/art/locations/changqing_valley_fullscreen.png",
+        "sha256": "32c179745d26f351a216f88ada63557ea8f2b1d8a36430f19886132f33c87743",
+        "format": "PNG",
+        "dimensions": [
+          1672,
+          941
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          1672,
+          941
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "pending",
+      "tool_refs": [
+        "assets/art/locations/changqing_valley_fullscreen.png",
+        "art_sources/refresh_20261019/approved_samples/04_location.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/05_locations/output/prompts/d611f9df3edee3d8.txt"
+    },
+    {
+      "id": "c5ff70a2a9954bef",
+      "batch": "05_locations",
+      "kind": "existing",
+      "label": "assets/art/locations/chifeng_fullscreen.png",
+      "source": "assets/art/locations/chifeng_fullscreen.png",
+      "output": "art_sources/refresh_20261019/batches/05_locations/output/existing/art/locations/chifeng_fullscreen.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/art/locations/chifeng_fullscreen.png",
+        "sha256": "a3bce82e741a13de1dc702a7307e66450bc3fd2d6d1c4263de12388f845a8043",
+        "format": "PNG",
+        "dimensions": [
+          1672,
+          941
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          1672,
+          941
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "pending",
+      "tool_refs": [
+        "assets/art/locations/chifeng_fullscreen.png",
+        "art_sources/refresh_20261019/approved_samples/04_location.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/05_locations/output/prompts/c5ff70a2a9954bef.txt"
+    },
+    {
+      "id": "4b45957ea7cdc43f",
+      "batch": "05_locations",
+      "kind": "existing",
+      "label": "assets/art/locations/chixiao_gate_fullscreen.png",
+      "source": "assets/art/locations/chixiao_gate_fullscreen.png",
+      "output": "art_sources/refresh_20261019/batches/05_locations/output/existing/art/locations/chixiao_gate_fullscreen.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/art/locations/chixiao_gate_fullscreen.png",
+        "sha256": "6d811e7ed7426a19be9917ff80df0953152dff6a7c8517b85b9a72d29d8e7806",
+        "format": "PNG",
+        "dimensions": [
+          1672,
+          941
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          1672,
+          941
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "pending",
+      "tool_refs": [
+        "assets/art/locations/chixiao_gate_fullscreen.png",
+        "art_sources/refresh_20261019/approved_samples/04_location.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/05_locations/output/prompts/4b45957ea7cdc43f.txt"
+    },
+    {
+      "id": "29a3fbc01ac1aad6",
+      "batch": "05_locations",
+      "kind": "existing",
+      "label": "assets/art/locations/ferry.png",
+      "source": "assets/art/locations/ferry.png",
+      "output": "art_sources/refresh_20261019/batches/05_locations/output/existing/art/locations/ferry.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/art/locations/ferry.png",
+        "sha256": "921b7f28b296e0f195c394b0401e948b9856e2f422a0ff4f673d3cc2e806f33e",
+        "format": "PNG",
+        "dimensions": [
+          2400,
+          600
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          4,
+          1
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "pending",
+      "tool_refs": [
+        "assets/art/locations/ferry.png",
+        "art_sources/refresh_20261019/approved_samples/04_location.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/05_locations/output/prompts/29a3fbc01ac1aad6.txt"
+    },
+    {
+      "id": "8323f226010da50b",
+      "batch": "05_locations",
+      "kind": "existing",
+      "label": "assets/art/locations/ferry_fullscreen.png",
+      "source": "assets/art/locations/ferry_fullscreen.png",
+      "output": "art_sources/refresh_20261019/batches/05_locations/output/existing/art/locations/ferry_fullscreen.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/art/locations/ferry_fullscreen.png",
+        "sha256": "3abd6ebd733ba2d8db4b3b976db2dd6011101e281a0468acbecedfd62fa19ed9",
+        "format": "PNG",
+        "dimensions": [
+          1672,
+          941
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          1672,
+          941
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "pending",
+      "tool_refs": [
+        "assets/art/locations/ferry_fullscreen.png",
+        "art_sources/refresh_20261019/approved_samples/04_location.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/05_locations/output/prompts/8323f226010da50b.txt"
+    },
+    {
+      "id": "08baec4efda8a238",
+      "batch": "05_locations",
+      "kind": "existing",
+      "label": "assets/art/locations/market.png",
+      "source": "assets/art/locations/market.png",
+      "output": "art_sources/refresh_20261019/batches/05_locations/output/existing/art/locations/market.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/art/locations/market.png",
+        "sha256": "7592622081fae41316b5103deb35471c176e3ae3e6d4173746c7c924a7e1a33c",
+        "format": "PNG",
+        "dimensions": [
+          2400,
+          600
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          4,
+          1
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "pending",
+      "tool_refs": [
+        "assets/art/locations/market.png",
+        "art_sources/refresh_20261019/approved_samples/04_location.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/05_locations/output/prompts/08baec4efda8a238.txt"
+    },
+    {
+      "id": "2b2e6bbc6a9c3342",
+      "batch": "05_locations",
+      "kind": "existing",
+      "label": "assets/art/locations/market_fullscreen.png",
+      "source": "assets/art/locations/market_fullscreen.png",
+      "output": "art_sources/refresh_20261019/batches/05_locations/output/existing/art/locations/market_fullscreen.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/art/locations/market_fullscreen.png",
+        "sha256": "7c861a3a3a70403723354dbec9021fa69e3b4c88770ab9f8eea8d7b373d2948f",
+        "format": "PNG",
+        "dimensions": [
+          1672,
+          941
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          1672,
+          941
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "pending",
+      "tool_refs": [
+        "assets/art/locations/market_fullscreen.png",
+        "art_sources/refresh_20261019/approved_samples/04_location.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/05_locations/output/prompts/2b2e6bbc6a9c3342.txt"
+    },
+    {
+      "id": "f19cc73d75d11d5b",
+      "batch": "05_locations",
+      "kind": "existing",
+      "label": "assets/art/locations/nanming_fullscreen.png",
+      "source": "assets/art/locations/nanming_fullscreen.png",
+      "output": "art_sources/refresh_20261019/batches/05_locations/output/existing/art/locations/nanming_fullscreen.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/art/locations/nanming_fullscreen.png",
+        "sha256": "01833159ef664bb9b5e7963047e194bcb33e7ddad4b4d798f015af320513bdac",
+        "format": "PNG",
+        "dimensions": [
+          1672,
+          941
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          1672,
+          941
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "pending",
+      "tool_refs": [
+        "assets/art/locations/nanming_fullscreen.png",
+        "art_sources/refresh_20261019/approved_samples/04_location.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/05_locations/output/prompts/f19cc73d75d11d5b.txt"
+    },
+    {
+      "id": "22713d21cf61414e",
+      "batch": "05_locations",
+      "kind": "existing",
+      "label": "assets/art/locations/ridge.png",
+      "source": "assets/art/locations/ridge.png",
+      "output": "art_sources/refresh_20261019/batches/05_locations/output/existing/art/locations/ridge.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/art/locations/ridge.png",
+        "sha256": "8030bb3bd967b7e997873f3a4cb66510fe0d7fdec2df18456cf94e73194cb88d",
+        "format": "PNG",
+        "dimensions": [
+          2400,
+          600
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          4,
+          1
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "pending",
+      "tool_refs": [
+        "assets/art/locations/ridge.png",
+        "art_sources/refresh_20261019/approved_samples/04_location.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/05_locations/output/prompts/22713d21cf61414e.txt"
+    },
+    {
+      "id": "5acc2602123c70bb",
+      "batch": "05_locations",
+      "kind": "existing",
+      "label": "assets/art/locations/ridge_fullscreen.png",
+      "source": "assets/art/locations/ridge_fullscreen.png",
+      "output": "art_sources/refresh_20261019/batches/05_locations/output/existing/art/locations/ridge_fullscreen.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/art/locations/ridge_fullscreen.png",
+        "sha256": "ac2672f4108cd63adffed471dd0123977b80aaf2037965b396ed5d6c57060ae9",
+        "format": "PNG",
+        "dimensions": [
+          1672,
+          941
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          1672,
+          941
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "pending",
+      "tool_refs": [
+        "assets/art/locations/ridge_fullscreen.png",
+        "art_sources/refresh_20261019/approved_samples/04_location.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/05_locations/output/prompts/5acc2602123c70bb.txt"
+    },
+    {
+      "id": "7a4ef36d564a86fc",
+      "batch": "05_locations",
+      "kind": "existing",
+      "label": "assets/art/locations/ruin.png",
+      "source": "assets/art/locations/ruin.png",
+      "output": "art_sources/refresh_20261019/batches/05_locations/output/existing/art/locations/ruin.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/art/locations/ruin.png",
+        "sha256": "0029526fa41d22b34dda406ff86598ebc729275041ced81479a671d322634ab8",
+        "format": "PNG",
+        "dimensions": [
+          2400,
+          600
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          4,
+          1
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "pending",
+      "tool_refs": [
+        "assets/art/locations/ruin.png",
+        "art_sources/refresh_20261019/approved_samples/04_location.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/05_locations/output/prompts/7a4ef36d564a86fc.txt"
+    },
+    {
+      "id": "61ada393cfe23a06",
+      "batch": "05_locations",
+      "kind": "existing",
+      "label": "assets/art/locations/ruin_fullscreen.png",
+      "source": "assets/art/locations/ruin_fullscreen.png",
+      "output": "art_sources/refresh_20261019/batches/05_locations/output/existing/art/locations/ruin_fullscreen.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/art/locations/ruin_fullscreen.png",
+        "sha256": "3e980c1a54484df9943c8a4cf03ae1dbe729c5bbd22989d317462f4f696c4f69",
+        "format": "PNG",
+        "dimensions": [
+          1672,
+          941
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          1672,
+          941
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "pending",
+      "tool_refs": [
+        "assets/art/locations/ruin_fullscreen.png",
+        "art_sources/refresh_20261019/approved_samples/04_location.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/05_locations/output/prompts/61ada393cfe23a06.txt"
+    },
+    {
+      "id": "375f6dfa56acf05a",
+      "batch": "05_locations",
+      "kind": "existing",
+      "label": "assets/art/locations/sect.png",
+      "source": "assets/art/locations/sect.png",
+      "output": "art_sources/refresh_20261019/batches/05_locations/output/existing/art/locations/sect.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/art/locations/sect.png",
+        "sha256": "7b6ebe98871a6c1d7717e651a2e419d74bdf0514d7bc613fb76d0b718f383a13",
+        "format": "PNG",
+        "dimensions": [
+          2400,
+          600
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          4,
+          1
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "pending",
+      "tool_refs": [
+        "assets/art/locations/sect.png",
+        "art_sources/refresh_20261019/approved_samples/04_location.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/05_locations/output/prompts/375f6dfa56acf05a.txt"
+    },
+    {
+      "id": "145478df72645f68",
+      "batch": "05_locations",
+      "kind": "existing",
+      "label": "assets/art/locations/sect_fullscreen.png",
+      "source": "assets/art/locations/sect_fullscreen.png",
+      "output": "art_sources/refresh_20261019/batches/05_locations/output/existing/art/locations/sect_fullscreen.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/art/locations/sect_fullscreen.png",
+        "sha256": "6200fd6696f03cf012c3231285cb24ffd552e30f529e369e00915c889fe6d641",
+        "format": "PNG",
+        "dimensions": [
+          1672,
+          941
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          1672,
+          941
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_reuse",
+      "reuse_source": "art_sources/refresh_20261019/batches/05_locations/candidates/sect_small.png",
+      "tool_refs": [
+        "assets/art/locations/sect_fullscreen.png",
+        "art_sources/refresh_20261019/approved_samples/04_location.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/05_locations/output/prompts/145478df72645f68.txt",
+      "delivery_kind": "reuse_prior_candidate",
+      "sha256": "2b505e98df65f56eb411893ec64a20943d773e09c3c15a8d9b31273376131b22",
+      "newly_generated": false,
+      "native_mode": "RGB",
+      "alpha_extrema": null,
+      "native_dimensions": [
+        1672,
+        941
+      ],
+      "target_dimensions": [
+        1672,
+        941
+      ],
+      "size_matches_technical_source": true,
+      "integration_status": "runtime_installed",
+      "runtime_targets": [
+        "assets/art/locations/sect_fullscreen.png"
+      ]
+    },
+    {
+      "id": "9b2a53caf1533d6e",
+      "batch": "05_locations",
+      "kind": "existing",
+      "label": "assets/art/locations/town.png",
+      "source": "assets/art/locations/town.png",
+      "output": "art_sources/refresh_20261019/batches/05_locations/output/existing/art/locations/town.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/art/locations/town.png",
+        "sha256": "df5aee8b6a789c913859866d97be4cc047b43cc94135bf172b3a1f5dd7912bbe",
+        "format": "PNG",
+        "dimensions": [
+          2400,
+          600
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          4,
+          1
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "pending",
+      "tool_refs": [
+        "assets/art/locations/town.png",
+        "art_sources/refresh_20261019/approved_samples/04_location.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/05_locations/output/prompts/9b2a53caf1533d6e.txt"
+    },
+    {
+      "id": "80619ae86ea77f30",
+      "batch": "05_locations",
+      "kind": "existing",
+      "label": "assets/art/locations/town_fullscreen.png",
+      "source": "assets/art/locations/town_fullscreen.png",
+      "output": "art_sources/refresh_20261019/batches/05_locations/output/existing/art/locations/town_fullscreen.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/art/locations/town_fullscreen.png",
+        "sha256": "143dc60b19941155f78f6ce4d9214ea7f1d8dfb5405089f70de58447ccf41dea",
+        "format": "PNG",
+        "dimensions": [
+          1672,
+          941
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          1672,
+          941
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "pending",
+      "tool_refs": [
+        "assets/art/locations/town_fullscreen.png",
+        "art_sources/refresh_20261019/approved_samples/04_location.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/05_locations/output/prompts/80619ae86ea77f30.txt"
+    },
+    {
+      "id": "6709bd37655bcf4a",
+      "batch": "05_locations",
+      "kind": "existing",
+      "label": "assets/art/locations/wild.png",
+      "source": "assets/art/locations/wild.png",
+      "output": "art_sources/refresh_20261019/batches/05_locations/output/existing/art/locations/wild.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/art/locations/wild.png",
+        "sha256": "b12b6a57afdaa12cc4e5d9e57fff260c123e55a90cc9e4b85f8b4262e39b39de",
+        "format": "PNG",
+        "dimensions": [
+          2400,
+          600
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          4,
+          1
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "pending",
+      "tool_refs": [
+        "assets/art/locations/wild.png",
+        "art_sources/refresh_20261019/approved_samples/04_location.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/05_locations/output/prompts/6709bd37655bcf4a.txt"
+    },
+    {
+      "id": "688d3772b651f90f",
+      "batch": "05_locations",
+      "kind": "existing",
+      "label": "assets/art/locations/wild_fullscreen.png",
+      "source": "assets/art/locations/wild_fullscreen.png",
+      "output": "art_sources/refresh_20261019/batches/05_locations/output/existing/art/locations/wild_fullscreen.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/art/locations/wild_fullscreen.png",
+        "sha256": "645e84b0374b8752ce29aa295218482cdb37e0308214a7a20e3499eae017d656",
+        "format": "PNG",
+        "dimensions": [
+          1672,
+          941
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          1672,
+          941
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "pending",
+      "tool_refs": [
+        "assets/art/locations/wild_fullscreen.png",
+        "art_sources/refresh_20261019/approved_samples/04_location.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/05_locations/output/prompts/688d3772b651f90f.txt"
+    },
+    {
+      "id": "42cc2174fb2740e7",
+      "batch": "05_locations",
+      "kind": "existing",
+      "label": "assets/art/locations/xuanyue_gate_fullscreen.png",
+      "source": "assets/art/locations/xuanyue_gate_fullscreen.png",
+      "output": "art_sources/refresh_20261019/batches/05_locations/output/existing/art/locations/xuanyue_gate_fullscreen.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/art/locations/xuanyue_gate_fullscreen.png",
+        "sha256": "2f56dcd292c48c0f699e481271e5c92f23a0695248d17f15d87270a380096a5f",
+        "format": "PNG",
+        "dimensions": [
+          1672,
+          941
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          1672,
+          941
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "pending",
+      "tool_refs": [
+        "assets/art/locations/xuanyue_gate_fullscreen.png",
+        "art_sources/refresh_20261019/approved_samples/04_location.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/05_locations/output/prompts/42cc2174fb2740e7.txt"
+    },
+    {
+      "id": "fa7f58a767e8912f",
+      "batch": "05_locations",
+      "kind": "planned",
+      "label": "qingyun_small_sect.png",
+      "source": "assets/art/locations/sect_fullscreen.png",
+      "output": "art_sources/refresh_20261019/batches/05_locations/output/qingyun_small_sect.png",
+      "brief": "青云小宗全景；已有候选，复核建筑规模和标签空间",
+      "spec": {
+        "path": "assets/art/locations/sect_fullscreen.png",
+        "sha256": "6200fd6696f03cf012c3231285cb24ffd552e30f529e369e00915c889fe6d641",
+        "format": "PNG",
+        "dimensions": [
+          1672,
+          941
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          1672,
+          941
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_reuse",
+      "priority": "P0",
+      "dependencies": [],
+      "reuse_source": "art_sources/refresh_20261019/batches/05_locations/candidates/sect_small.png",
+      "tool_refs": [
+        "assets/art/locations/sect_fullscreen.png",
+        "art_sources/refresh_20261019/approved_samples/04_location.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/05_locations/output/prompts/fa7f58a767e8912f.txt",
+      "delivery_kind": "reuse_prior_candidate",
+      "sha256": "2b505e98df65f56eb411893ec64a20943d773e09c3c15a8d9b31273376131b22",
+      "newly_generated": false,
+      "native_mode": "RGB",
+      "alpha_extrema": null,
+      "native_dimensions": [
+        1672,
+        941
+      ],
+      "target_dimensions": [
+        1672,
+        941
+      ],
+      "size_matches_technical_source": true,
+      "integration_status": "candidate_only_not_runtime_integrated"
+    },
+    {
+      "id": "b6ad344025e035db",
+      "batch": "05_locations",
+      "kind": "planned",
+      "label": "yunxi_city.png",
+      "source": "assets/art/locations/market_fullscreen.png",
+      "output": "art_sources/refresh_20261019/batches/05_locations/output/yunxi_city.png",
+      "brief": "云溪全城总览；已有候选，与旧坊市内部街区区分",
+      "spec": {
+        "path": "assets/art/locations/market_fullscreen.png",
+        "sha256": "7c861a3a3a70403723354dbec9021fa69e3b4c88770ab9f8eea8d7b373d2948f",
+        "format": "PNG",
+        "dimensions": [
+          1672,
+          941
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          1672,
+          941
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_reuse",
+      "priority": "P0",
+      "dependencies": [],
+      "reuse_source": "art_sources/refresh_20261019/batches/05_locations/candidates/yunxi_city.png",
+      "tool_refs": [
+        "assets/art/locations/market_fullscreen.png",
+        "art_sources/refresh_20261019/approved_samples/04_location.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/05_locations/output/prompts/b6ad344025e035db.txt",
+      "delivery_kind": "reuse_prior_candidate",
+      "sha256": "779e5018ba1892f448d0386ddf531c4a59e65c87eefc3c1f6705f39292b7d0ec",
+      "newly_generated": false,
+      "native_mode": "RGB",
+      "alpha_extrema": null,
+      "native_dimensions": [
+        1672,
+        941
+      ],
+      "target_dimensions": [
+        1672,
+        941
+      ],
+      "size_matches_technical_source": true,
+      "integration_status": "runtime_installed",
+      "runtime_targets": [
+        "assets/art/locations/market_fullscreen.png"
+      ]
+    },
+    {
+      "id": "58fadd6dfe101a9c",
+      "batch": "05_locations",
+      "kind": "planned",
+      "label": "nanming_city.png",
+      "source": "assets/art/locations/nanming_fullscreen.png",
+      "output": "art_sources/refresh_20261019/batches/05_locations/output/nanming_city.png",
+      "brief": "南明全城：器街、商会、地火产业及旧坊市，不是赤霄宗改名",
+      "spec": {
+        "path": "assets/art/locations/nanming_fullscreen.png",
+        "sha256": "01833159ef664bb9b5e7963047e194bcb33e7ddad4b4d798f015af320513bdac",
+        "format": "PNG",
+        "dimensions": [
+          1672,
+          941
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          1672,
+          941
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_generated",
+      "priority": "P1",
+      "dependencies": [],
+      "tool_refs": [
+        "art_sources/refresh_20261019/approved_samples/04_location.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/05_locations/output/prompts/58fadd6dfe101a9c.txt",
+      "rejected_attempts": [
+        {
+          "path": "art_sources/refresh_20261019/batches/05_locations/output/originals/nanming_city_rejected_cdafac4d.png",
+          "sha256": "cdafac4d34e4985809eccdf75e740568771e71ad27c92575f46ac174f556a4c0",
+          "reason": "Composition follows old market/cliff-palace too closely; city-specific districts and spatial identity need redesign.",
+          "tool_physical_path": "D:\\claude\\flash\\.tmp\\imagegen_storage\\generated_images\\01a15203-e7bc-7bc0-b21d-f11948dc04a9\\exec-56a2c067-403a-4d7b-b01b-459743b9e091.png"
+        }
+      ],
+      "newly_generated": true,
+      "sha256": "6df1c538ae07276581b1ce3331250bae50928931830fffb4d67ed6b2c7957cbf",
+      "native_dimensions": [
+        1672,
+        941
+      ],
+      "native_mode": "RGB",
+      "alpha_extrema": null,
+      "tool_logical_path": "C:\\Users\\Kuroro\\.codex\\generated_images\\01a15203-e7bc-7bc0-b21d-f11948dc04a9\\exec-97f4c8d1-d716-4cbd-a2dd-21e1ca4ebc84.png",
+      "tool_physical_path": "D:\\claude\\flash\\.tmp\\imagegen_storage\\generated_images\\01a15203-e7bc-7bc0-b21d-f11948dc04a9\\exec-97f4c8d1-d716-4cbd-a2dd-21e1ca4ebc84.png",
+      "input_hashes": [
+        {
+          "path": "art_sources/refresh_20261019/approved_samples/04_location.png",
+          "sha256": "46f177a060685f7966c27eebb2cacc2ee65eb2a189a2c4acff48a13d97157a6f"
+        }
+      ],
+      "review": "Visually checked identity/content, category style and complete composition; integration separate.",
+      "target_dimensions": [
+        1672,
+        941
+      ],
+      "size_matches_technical_source": true,
+      "integration_status": "runtime_installed",
+      "runtime_targets": [
+        "assets/art/locations/nanming_fullscreen.png"
+      ]
+    },
+    {
+      "id": "22c91684b9a2e870",
+      "batch": "05_locations",
+      "kind": "planned",
+      "label": "canglan_city.png",
+      "source": "assets/art/locations/market_fullscreen.png",
+      "output": "art_sources/refresh_20261019/batches/05_locations/output/canglan_city.png",
+      "brief": "沧澜医药城：丹会、药市、水榭；独立于沧澜阁",
+      "spec": {
+        "path": "assets/art/locations/market_fullscreen.png",
+        "sha256": "7c861a3a3a70403723354dbec9021fa69e3b4c88770ab9f8eea8d7b373d2948f",
+        "format": "PNG",
+        "dimensions": [
+          1672,
+          941
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          1672,
+          941
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_generated",
+      "priority": "P2",
+      "dependencies": [],
+      "tool_refs": [
+        "art_sources/refresh_20261019/approved_samples/04_location.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/05_locations/output/prompts/22c91684b9a2e870.txt",
+      "rejected_attempts": [
+        {
+          "path": "art_sources/refresh_20261019/batches/05_locations/output/originals/canglan_city_rejected_ffbe368a.png",
+          "sha256": "ffbe368a192ff0ea737b61b74b7d392b91e3e77455e2a6594124236b229b46a6",
+          "reason": "Composition follows old market/cliff-palace too closely; city-specific districts and spatial identity need redesign.",
+          "tool_physical_path": "D:\\claude\\flash\\.tmp\\imagegen_storage\\generated_images\\01a15203-e7bc-7bc0-b21d-f11948dc04a9\\exec-9af4f7f9-e929-47e9-8f21-fd732a8b1595.png"
+        }
+      ],
+      "newly_generated": true,
+      "sha256": "afed321c92c075179af4fab295fadcc11b73385c575a307d479da784a49d6693",
+      "native_dimensions": [
+        1672,
+        941
+      ],
+      "native_mode": "RGB",
+      "alpha_extrema": null,
+      "tool_logical_path": "C:\\Users\\Kuroro\\.codex\\generated_images\\01a15203-e7bc-7bc0-b21d-f11948dc04a9\\exec-dbe6fae5-7944-4632-867f-1fcbb787a3ff.png",
+      "tool_physical_path": "D:\\claude\\flash\\.tmp\\imagegen_storage\\generated_images\\01a15203-e7bc-7bc0-b21d-f11948dc04a9\\exec-dbe6fae5-7944-4632-867f-1fcbb787a3ff.png",
+      "input_hashes": [
+        {
+          "path": "art_sources/refresh_20261019/approved_samples/04_location.png",
+          "sha256": "46f177a060685f7966c27eebb2cacc2ee65eb2a189a2c4acff48a13d97157a6f"
+        }
+      ],
+      "review": "Visually checked identity/content, category style and complete composition; integration separate.",
+      "target_dimensions": [
+        1672,
+        941
+      ],
+      "size_matches_technical_source": true,
+      "integration_status": "runtime_installed",
+      "runtime_targets": [
+        "assets/art/locations/canglan_fullscreen.png"
+      ]
+    },
+    {
+      "id": "fd326370c25619d0",
+      "batch": "05_locations",
+      "kind": "planned",
+      "label": "beiyue_city.png",
+      "source": "assets/art/locations/market_fullscreen.png",
+      "output": "art_sources/refresh_20261019/batches/05_locations/output/beiyue_city.png",
+      "brief": "筑基篇先做北岳旧档库所在城区，五城阶段再补全古物街与阵师会馆；独立于玄岳宗",
+      "spec": {
+        "path": "assets/art/locations/market_fullscreen.png",
+        "sha256": "7c861a3a3a70403723354dbec9021fa69e3b4c88770ab9f8eea8d7b373d2948f",
+        "format": "PNG",
+        "dimensions": [
+          1672,
+          941
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          1672,
+          941
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_generated",
+      "priority": "P1",
+      "dependencies": [],
+      "tool_refs": [
+        "art_sources/refresh_20261019/approved_samples/04_location.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/05_locations/output/prompts/fd326370c25619d0.txt",
+      "rejected_attempts": [
+        {
+          "path": "art_sources/refresh_20261019/batches/05_locations/output/originals/beiyue_city_rejected_352e3ed8.png",
+          "sha256": "352e3ed857433eccec430e193c8f583ea3331d1ca330bfa94901d11421800a16",
+          "reason": "Composition follows old market/cliff-palace too closely; city-specific districts and spatial identity need redesign.",
+          "tool_physical_path": "D:\\claude\\flash\\.tmp\\imagegen_storage\\generated_images\\01a15203-e7bc-7bc0-b21d-f11948dc04a9\\exec-08ae0c2b-67e8-46fe-a306-85c2e3ed8a65.png"
+        }
+      ],
+      "newly_generated": true,
+      "sha256": "5f0c0ab579d4d89808885f9a4fa66d8017b0596d648044aac3571181543e9192",
+      "native_dimensions": [
+        1671,
+        941
+      ],
+      "native_mode": "RGB",
+      "alpha_extrema": null,
+      "tool_logical_path": "C:\\Users\\Kuroro\\.codex\\generated_images\\01a15203-e7bc-7bc0-b21d-f11948dc04a9\\exec-52de6d9e-1132-43de-ae93-478dbc2fdcc7.png",
+      "tool_physical_path": "D:\\claude\\flash\\.tmp\\imagegen_storage\\generated_images\\01a15203-e7bc-7bc0-b21d-f11948dc04a9\\exec-52de6d9e-1132-43de-ae93-478dbc2fdcc7.png",
+      "input_hashes": [
+        {
+          "path": "art_sources/refresh_20261019/approved_samples/04_location.png",
+          "sha256": "46f177a060685f7966c27eebb2cacc2ee65eb2a189a2c4acff48a13d97157a6f"
+        }
+      ],
+      "review": "Visually checked identity/content, category style and complete composition; integration separate.",
+      "target_dimensions": [
+        1672,
+        941
+      ],
+      "size_matches_technical_source": false,
+      "integration_status": "runtime_installed",
+      "size_note": "Native bytes retained; runtime crop/scale or atlas registration must be resolved separately. Target dimensions are not claimed as delivered dimensions.",
+      "runtime_targets": [
+        "assets/art/locations/beiyue_fullscreen.png"
+      ]
+    },
+    {
+      "id": "fcd3ccf9d898620a",
+      "batch": "05_locations",
+      "kind": "planned",
+      "label": "wanghai_city.png",
+      "source": "assets/art/locations/market_fullscreen.png",
+      "output": "art_sources/refresh_20261019/batches/05_locations/output/wanghai_city.png",
+      "brief": "望海海贸城：海港、船坞、海图铺；区分内河白鹭渡",
+      "spec": {
+        "path": "assets/art/locations/market_fullscreen.png",
+        "sha256": "7c861a3a3a70403723354dbec9021fa69e3b4c88770ab9f8eea8d7b373d2948f",
+        "format": "PNG",
+        "dimensions": [
+          1672,
+          941
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          1672,
+          941
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_generated",
+      "priority": "P2",
+      "dependencies": [],
+      "tool_refs": [
+        "art_sources/refresh_20261019/approved_samples/04_location.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/05_locations/output/prompts/fcd3ccf9d898620a.txt",
+      "rejected_attempts": [
+        {
+          "path": "art_sources/refresh_20261019/batches/05_locations/output/originals/wanghai_city_rejected_e2b12e73.png",
+          "sha256": "e2b12e7378757c16a23332300bda1f0726da4912d5b8001121cd7ccdbc889d1a",
+          "reason": "Composition follows old market/cliff-palace too closely; city-specific districts and spatial identity need redesign.",
+          "tool_physical_path": "D:\\claude\\flash\\.tmp\\imagegen_storage\\generated_images\\01a15203-e7bc-7bc0-b21d-f11948dc04a9\\exec-66649576-5516-44f7-907e-039118f29086.png"
+        }
+      ],
+      "newly_generated": true,
+      "sha256": "0facd4e8dea2ae60bf054060b09ec3bf1a8a6c66679dbfa9de8b01deeb50cf6a",
+      "native_dimensions": [
+        1672,
+        941
+      ],
+      "native_mode": "RGB",
+      "alpha_extrema": null,
+      "tool_logical_path": "C:\\Users\\Kuroro\\.codex\\generated_images\\01a15203-e7bc-7bc0-b21d-f11948dc04a9\\exec-1e7edbd6-bedc-4b9c-9dea-83b9254a5234.png",
+      "tool_physical_path": "D:\\claude\\flash\\.tmp\\imagegen_storage\\generated_images\\01a15203-e7bc-7bc0-b21d-f11948dc04a9\\exec-1e7edbd6-bedc-4b9c-9dea-83b9254a5234.png",
+      "input_hashes": [
+        {
+          "path": "art_sources/refresh_20261019/approved_samples/04_location.png",
+          "sha256": "46f177a060685f7966c27eebb2cacc2ee65eb2a189a2c4acff48a13d97157a6f"
+        }
+      ],
+      "review": "Visually checked identity/content, category style and complete composition; integration separate.",
+      "target_dimensions": [
+        1672,
+        941
+      ],
+      "size_matches_technical_source": true,
+      "integration_status": "runtime_installed",
+      "runtime_targets": [
+        "assets/art/locations/wanghai_fullscreen.png"
+      ]
+    }
+  ]
+}

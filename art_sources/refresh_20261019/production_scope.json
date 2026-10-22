@@ -1,0 +1,9 @@
+{
+  "authorization": "User requested: 继续做完所有图",
+  "scope": "all_existing_and_planned",
+  "priorities": ["P0", "P1", "P2", "P3"],
+  "style_policy": "Preserve all established category styles and reference samples",
+  "delivery_policy": "Candidate output only; no automatic runtime replacement",
+  "reuse_policy": "Review and explicitly record reusable vectors, licensed VFX and prior candidates; do not claim reuse as newly generated",
+  "unfinished_content_policy": "Produce provisional visual candidates without inventing gameplay rules; optional enemies without confirmed use remain explicitly excluded"
+}

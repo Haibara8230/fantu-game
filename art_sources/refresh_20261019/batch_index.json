@@ -5,126 +5,130 @@
       "title": "主角与人形战斗动作",
       "count": 18,
       "candidate_pngs": 2,
-      "task": "D:/fqh/flash/art_sources/refresh_20261019/batches/01_human_actions/TASK.md"
+      "task": "art_sources/refresh_20261019/batches/01_human_actions/TASK.md"
     },
     {
       "id": "02_key_portraits",
       "title": "关键 NPC 与同辈头像",
       "count": 15,
       "candidate_pngs": 6,
-      "task": "D:/fqh/flash/art_sources/refresh_20261019/batches/02_key_portraits/TASK.md"
+      "task": "art_sources/refresh_20261019/batches/02_key_portraits/TASK.md"
     },
     {
       "id": "03_portrait_pool",
       "title": "普通修士头像池",
       "count": 246,
       "candidate_pngs": 0,
-      "task": "D:/fqh/flash/art_sources/refresh_20261019/batches/03_portrait_pool/TASK.md"
+      "task": "art_sources/refresh_20261019/batches/03_portrait_pool/TASK.md"
     },
     {
       "id": "04_beast_actions",
       "title": "妖兽战斗图集",
       "count": 9,
       "candidate_pngs": 0,
-      "task": "D:/fqh/flash/art_sources/refresh_20261019/batches/04_beast_actions/TASK.md"
+      "task": "art_sources/refresh_20261019/batches/04_beast_actions/TASK.md"
     },
     {
       "id": "05_locations",
       "title": "城镇、宗门与地点全景",
       "count": 20,
       "candidate_pngs": 2,
-      "task": "D:/fqh/flash/art_sources/refresh_20261019/batches/05_locations/TASK.md"
+      "task": "art_sources/refresh_20261019/batches/05_locations/TASK.md"
     },
     {
       "id": "06_scenes",
       "title": "室内与二级探索场景",
       "count": 36,
       "candidate_pngs": 1,
-      "task": "D:/fqh/flash/art_sources/refresh_20261019/batches/06_scenes/TASK.md"
+      "task": "art_sources/refresh_20261019/batches/06_scenes/TASK.md"
     },
     {
       "id": "07_battle_backgrounds",
       "title": "斗法背景",
       "count": 15,
       "candidate_pngs": 0,
-      "task": "D:/fqh/flash/art_sources/refresh_20261019/batches/07_battle_backgrounds/TASK.md"
+      "task": "art_sources/refresh_20261019/batches/07_battle_backgrounds/TASK.md"
     },
     {
       "id": "08_maps",
       "title": "区域与探索舆图",
       "count": 2,
       "candidate_pngs": 0,
-      "task": "D:/fqh/flash/art_sources/refresh_20261019/batches/08_maps/TASK.md"
+      "task": "art_sources/refresh_20261019/batches/08_maps/TASK.md"
     },
     {
       "id": "09_events",
       "title": "剧情、天赋与结局插画",
       "count": 32,
       "candidate_pngs": 1,
-      "task": "D:/fqh/flash/art_sources/refresh_20261019/batches/09_events/TASK.md"
+      "task": "art_sources/refresh_20261019/batches/09_events/TASK.md"
     },
     {
       "id": "10_item_skill_icons",
       "title": "物品、功法、法宝与线索图标",
       "count": 175,
       "candidate_pngs": 0,
-      "task": "D:/fqh/flash/art_sources/refresh_20261019/batches/10_item_skill_icons/TASK.md"
+      "task": "art_sources/refresh_20261019/batches/10_item_skill_icons/TASK.md"
     },
     {
       "id": "11_ui_rites",
       "title": "界面、标记与修行生活插画",
       "count": 39,
       "candidate_pngs": 1,
-      "task": "D:/fqh/flash/art_sources/refresh_20261019/batches/11_ui_rites/TASK.md"
+      "task": "art_sources/refresh_20261019/batches/11_ui_rites/TASK.md"
     },
     {
       "id": "12_vfx",
       "title": "技能与劫雷特效",
       "count": 38,
       "candidate_pngs": 0,
-      "task": "D:/fqh/flash/art_sources/refresh_20261019/batches/12_vfx/TASK.md"
+      "task": "art_sources/refresh_20261019/batches/12_vfx/TASK.md"
     }
   ],
   "portrait_subbatches": [
     {
       "id": "female_middle",
       "count": 30,
-      "task": "D:/fqh/flash/art_sources/refresh_20261019/batches/03_portrait_pool/female_middle/TASK.md"
+      "task": "art_sources/refresh_20261019/batches/03_portrait_pool/female_middle/TASK.md"
     },
     {
       "id": "female_old",
       "count": 30,
-      "task": "D:/fqh/flash/art_sources/refresh_20261019/batches/03_portrait_pool/female_old/TASK.md"
+      "task": "art_sources/refresh_20261019/batches/03_portrait_pool/female_old/TASK.md"
     },
     {
       "id": "female_young_01",
       "count": 32,
-      "task": "D:/fqh/flash/art_sources/refresh_20261019/batches/03_portrait_pool/female_young_01/TASK.md"
+      "task": "art_sources/refresh_20261019/batches/03_portrait_pool/female_young_01/TASK.md"
     },
     {
       "id": "female_young_02",
       "count": 31,
-      "task": "D:/fqh/flash/art_sources/refresh_20261019/batches/03_portrait_pool/female_young_02/TASK.md"
+      "task": "art_sources/refresh_20261019/batches/03_portrait_pool/female_young_02/TASK.md"
     },
     {
       "id": "male_middle",
       "count": 30,
-      "task": "D:/fqh/flash/art_sources/refresh_20261019/batches/03_portrait_pool/male_middle/TASK.md"
+      "task": "art_sources/refresh_20261019/batches/03_portrait_pool/male_middle/TASK.md"
     },
     {
       "id": "male_old",
       "count": 30,
-      "task": "D:/fqh/flash/art_sources/refresh_20261019/batches/03_portrait_pool/male_old/TASK.md"
+      "task": "art_sources/refresh_20261019/batches/03_portrait_pool/male_old/TASK.md"
     },
     {
       "id": "male_young_01",
       "count": 32,
-      "task": "D:/fqh/flash/art_sources/refresh_20261019/batches/03_portrait_pool/male_young_01/TASK.md"
+      "task": "art_sources/refresh_20261019/batches/03_portrait_pool/male_young_01/TASK.md"
     },
     {
       "id": "male_young_02",
       "count": 31,
-      "task": "D:/fqh/flash/art_sources/refresh_20261019/batches/03_portrait_pool/male_young_02/TASK.md"
+      "task": "art_sources/refresh_20261019/batches/03_portrait_pool/male_young_02/TASK.md"
     }
-  ]
+  ],
+  "path_base": "project_root",
+  "content_outline": "docs/GAME_OUTLINE.md",
+  "content_plan": "art_sources/refresh_20261019/CONTENT_PLAN.md",
+  "style_policy": "inherit_existing_batch_references"
 }

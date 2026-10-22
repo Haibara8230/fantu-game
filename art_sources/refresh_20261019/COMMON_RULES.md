@@ -9,10 +9,12 @@
 7. 保留原始尺寸、长宽比、透明度、朝向、图集行列、帧顺序和自定义 frame_regions。需要变更时在 delivery.json 明确提出，不擅自改游戏规则或存档 ID。
 8. 背景默认无文字、无按钮、无角色；标签和交互位置由界面承担。剧情插画如需人物，必须沿用第02批身份参考。
 9. PNG 的真实 alpha 需检查，不能只凭预览底色判断。图集每一格都要有完整头发、道具和脚部，不跨格、不裁剑尖、不缺姿态。
-10. 全部项目输出、缓存、备份和日志存 D:/fqh/flash，临时文件在 .tmp/，不手动写 C 盘。内置 imagegen 的自动缓存路径不由提示词可靠控制：不承诺指定路径，已产出项目图片及时迁入 D 盘；不要为控制路径擅自切换 API／CLI。
+10. 全部项目输出、缓存、备份和日志只写当前 D 盘项目根目录，临时文件放 `.tmp/`。Python 使用 `-B`，TEMP／TMP 指向项目 `.tmp/`。不得写 C 盘。用户已授权将内置生图目录通过NTFS联接重定向到项目 `.tmp/imagegen_storage/generated_images/`；每次生图前用 `tools/art/redirect_imagegen.ps1 -VerifyOnly` 核验真实目标和写入探针。联接失效、目标不在D盘或工具另写未核验目录时停止，不用事后搬迁代替，不擅自切换API／CLI。此联接仅迁移图片负载目录，未迁移Codex应用设置与日志。
 11. 位图用 imagegen；原生 SVG 应直接编辑或修改对应生成器，不用批量滤镜冒充重绘，不把矢量统一栅格化。
 12. 原作截图仅作绘画语言参考，不复制原作人物、地理、UI文字或水印到交付图，不放入正式 assets/。
 13. 自动 Godot 检查只能 --headless，不开可见游戏／编辑器。图像生成对话通常只交候选和检查记录，正式导入与全量验证统一处理。
 14. 不提交 Git、不推送、不启动定时任务、不创建其他对话；用户自行安排各批。
 
 交付清单建议字段：source_path、output_path、status、dimensions、alpha、actor_layout、prompt_path、reference_paths、checks、integration_notes。
+
+路径约定：JSON、CSV、启动词中的路径均相对于当前项目根目录；Markdown链接相对于所在文档。原作参考缺失时按 [参考恢复说明](REFERENCE_SETUP.md) 处理；历史临时字段不算可用输入。

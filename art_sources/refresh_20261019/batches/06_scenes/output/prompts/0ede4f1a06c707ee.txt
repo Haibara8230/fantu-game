@@ -1,0 +1,9 @@
+Use case: style-transfer / identity-preserve / production game art.
+Asset: assets/art/scenes/ridge_pines.png
+Content request: Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.
+This is one independent production asset for an original Chinese cultivation RPG.
+Input image 1: assets/art/scenes/ridge_pines.png. Role: existing identity/content/layout target; preserve recognizable subject.
+Input image 2: art_sources/refresh_20261019/approved_samples/04_location.png. Role: approved drawing-style reference only.
+Preserve the existing category-specific approved hand-drawn style: clear outlines, broad grouped colour areas, restrained shadows and low texture density. Do not impose character C anatomy rules on environments, maps, items or UI. No photorealism, cinematic bloom, dense surface scratches or depth-of-field blur.
+Empty environment: no characters, animals, UI, baked text, signs, labels, names or watermark. Preserve clear functional spaces and complete landmarks. Scene banners need a central 4:1 safe crop. Battle fields keep clear left/right standing ground. Qingyun is a small sect; do not copy monumental palace scale from a style sample.
+Old technical target: 2400x600 pixels. Request the same proportions and retain usable safe margins; actual native output size will be measured, never mislabelled. Background: opaque.

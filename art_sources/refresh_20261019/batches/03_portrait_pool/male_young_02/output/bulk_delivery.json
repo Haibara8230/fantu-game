@@ -1,0 +1,1892 @@
+{
+  "subbatch": "male_young_02",
+  "input_count": 31,
+  "counts": {
+    "delivered_generated": 31
+  },
+  "scope": "Candidate-only byte-preserved output; parent queue paths authoritative.",
+  "jobs": [
+    {
+      "id": "35b031fb88ccc004",
+      "batch": "03_portrait_pool",
+      "kind": "existing",
+      "label": "assets/local/portraits/pool/male_young/trader_male_young_01.png",
+      "source": "assets/local/portraits/pool/male_young/trader_male_young_01.png",
+      "output": "art_sources/refresh_20261019/batches/03_portrait_pool/output/existing/local/portraits/pool/male_young/trader_male_young_01.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/local/portraits/pool/male_young/trader_male_young_01.png",
+        "sha256": "02cb99ae56b1311dfe5893d343922108d51388a72584c0c599e2457fc10c627e",
+        "format": "PNG",
+        "dimensions": [
+          512,
+          640
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          4,
+          5
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_generated",
+      "tool_refs": [
+        "assets/local/portraits/pool/male_young/trader_male_young_01.png",
+        "art_sources/refresh_20261019/approved_samples/02_portrait.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/03_portrait_pool/output/prompts/35b031fb88ccc004.txt",
+      "newly_generated": true,
+      "sha256": "e5093e14a4bae3db199378c62b18eaedecb82135c86240ede3ffb00d9815cca4",
+      "native_dimensions": [
+        1122,
+        1402
+      ],
+      "native_mode": "RGB",
+      "alpha_extrema": null,
+      "tool_logical_path": "C:\\Users\\Kuroro\\.codex\\generated_images\\01a156b8-68e7-71d3-9e49-188fe4225a5e\\exec-95982aac-59e3-4539-9614-e61f57128ad4.png",
+      "tool_physical_path": "D:\\claude\\flash\\.tmp\\imagegen_storage\\generated_images\\01a156b8-68e7-71d3-9e49-188fe4225a5e\\exec-95982aac-59e3-4539-9614-e61f57128ad4.png",
+      "input_hashes": [
+        {
+          "path": "assets/local/portraits/pool/male_young/trader_male_young_01.png",
+          "sha256": "02cb99ae56b1311dfe5893d343922108d51388a72584c0c599e2457fc10c627e"
+        },
+        {
+          "path": "art_sources/refresh_20261019/approved_samples/02_portrait.png",
+          "sha256": "139f85deb18db95d129b9e3e31db95460f47b934a7a68a4f006b95f8ad53c3fe"
+        }
+      ],
+      "review": "Visually checked identity/content, category style and complete composition; integration separate.",
+      "target_dimensions": [
+        512,
+        640
+      ],
+      "size_matches_technical_source": false,
+      "integration_status": "candidate_only_not_runtime_integrated",
+      "size_note": "Native bytes retained; runtime crop/scale or atlas registration must be resolved separately. Target dimensions are not claimed as delivered dimensions."
+    },
+    {
+      "id": "59be6478017a9d00",
+      "batch": "03_portrait_pool",
+      "kind": "existing",
+      "label": "assets/local/portraits/pool/male_young/trader_male_young_02.png",
+      "source": "assets/local/portraits/pool/male_young/trader_male_young_02.png",
+      "output": "art_sources/refresh_20261019/batches/03_portrait_pool/output/existing/local/portraits/pool/male_young/trader_male_young_02.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/local/portraits/pool/male_young/trader_male_young_02.png",
+        "sha256": "2d0cebb12fa05b26a469cac157c08335b6a5a23def287cdb1a8837f56f87f02f",
+        "format": "PNG",
+        "dimensions": [
+          512,
+          640
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          4,
+          5
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_generated",
+      "tool_refs": [
+        "assets/local/portraits/pool/male_young/trader_male_young_02.png",
+        "art_sources/refresh_20261019/approved_samples/02_portrait.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/03_portrait_pool/output/prompts/59be6478017a9d00.txt",
+      "newly_generated": true,
+      "sha256": "52cebd1d8dffc0a129ff99945152b6f0e02381b97e510241d605a4341b26d986",
+      "native_dimensions": [
+        1122,
+        1402
+      ],
+      "native_mode": "RGB",
+      "alpha_extrema": null,
+      "tool_logical_path": "C:\\Users\\Kuroro\\.codex\\generated_images\\01a156b8-68e7-71d3-9e49-188fe4225a5e\\exec-2f02c70c-f512-454a-ae40-ba31d208b2ff.png",
+      "tool_physical_path": "D:\\claude\\flash\\.tmp\\imagegen_storage\\generated_images\\01a156b8-68e7-71d3-9e49-188fe4225a5e\\exec-2f02c70c-f512-454a-ae40-ba31d208b2ff.png",
+      "input_hashes": [
+        {
+          "path": "assets/local/portraits/pool/male_young/trader_male_young_02.png",
+          "sha256": "2d0cebb12fa05b26a469cac157c08335b6a5a23def287cdb1a8837f56f87f02f"
+        },
+        {
+          "path": "art_sources/refresh_20261019/approved_samples/02_portrait.png",
+          "sha256": "139f85deb18db95d129b9e3e31db95460f47b934a7a68a4f006b95f8ad53c3fe"
+        }
+      ],
+      "review": "Visually checked identity/content, category style and complete composition; integration separate.",
+      "target_dimensions": [
+        512,
+        640
+      ],
+      "size_matches_technical_source": false,
+      "integration_status": "candidate_only_not_runtime_integrated",
+      "size_note": "Native bytes retained; runtime crop/scale or atlas registration must be resolved separately. Target dimensions are not claimed as delivered dimensions."
+    },
+    {
+      "id": "221ef4f389e5205d",
+      "batch": "03_portrait_pool",
+      "kind": "existing",
+      "label": "assets/local/portraits/pool/male_young/trader_male_young_03.png",
+      "source": "assets/local/portraits/pool/male_young/trader_male_young_03.png",
+      "output": "art_sources/refresh_20261019/batches/03_portrait_pool/output/existing/local/portraits/pool/male_young/trader_male_young_03.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/local/portraits/pool/male_young/trader_male_young_03.png",
+        "sha256": "aa2a18784c9013bcc69f427640558233b097504a7b0d2c4db5c7a4abef608091",
+        "format": "PNG",
+        "dimensions": [
+          512,
+          640
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          4,
+          5
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_generated",
+      "tool_refs": [
+        "assets/local/portraits/pool/male_young/trader_male_young_03.png",
+        "art_sources/refresh_20261019/approved_samples/02_portrait.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/03_portrait_pool/output/prompts/221ef4f389e5205d.txt",
+      "newly_generated": true,
+      "sha256": "1287296d465ae0a5d144198979070098c3da34c375da53607cdc97d565f8a323",
+      "native_dimensions": [
+        1122,
+        1402
+      ],
+      "native_mode": "RGB",
+      "alpha_extrema": null,
+      "tool_logical_path": "C:\\Users\\Kuroro\\.codex\\generated_images\\01a156b8-68e7-71d3-9e49-188fe4225a5e\\exec-6d0d6444-578f-4ab7-b2c7-225d745ef703.png",
+      "tool_physical_path": "D:\\claude\\flash\\.tmp\\imagegen_storage\\generated_images\\01a156b8-68e7-71d3-9e49-188fe4225a5e\\exec-6d0d6444-578f-4ab7-b2c7-225d745ef703.png",
+      "input_hashes": [
+        {
+          "path": "assets/local/portraits/pool/male_young/trader_male_young_03.png",
+          "sha256": "aa2a18784c9013bcc69f427640558233b097504a7b0d2c4db5c7a4abef608091"
+        },
+        {
+          "path": "art_sources/refresh_20261019/approved_samples/02_portrait.png",
+          "sha256": "139f85deb18db95d129b9e3e31db95460f47b934a7a68a4f006b95f8ad53c3fe"
+        }
+      ],
+      "review": "Visually checked identity/content, category style and complete composition; integration separate.",
+      "target_dimensions": [
+        512,
+        640
+      ],
+      "size_matches_technical_source": false,
+      "integration_status": "candidate_only_not_runtime_integrated",
+      "size_note": "Native bytes retained; runtime crop/scale or atlas registration must be resolved separately. Target dimensions are not claimed as delivered dimensions."
+    },
+    {
+      "id": "6d5e6f720a2c5a51",
+      "batch": "03_portrait_pool",
+      "kind": "existing",
+      "label": "assets/local/portraits/pool/male_young/trader_male_young_handsome_01.png",
+      "source": "assets/local/portraits/pool/male_young/trader_male_young_handsome_01.png",
+      "output": "art_sources/refresh_20261019/batches/03_portrait_pool/output/existing/local/portraits/pool/male_young/trader_male_young_handsome_01.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/local/portraits/pool/male_young/trader_male_young_handsome_01.png",
+        "sha256": "fdd0614bd7be001fa1d4829d00f871935a4fc2820d344efa22c9ea7e8feb4fcc",
+        "format": "PNG",
+        "dimensions": [
+          1122,
+          1402
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          561,
+          701
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_generated",
+      "tool_refs": [
+        "assets/local/portraits/pool/male_young/trader_male_young_handsome_01.png",
+        "art_sources/refresh_20261019/approved_samples/02_portrait.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/03_portrait_pool/output/prompts/6d5e6f720a2c5a51.txt",
+      "newly_generated": true,
+      "sha256": "136c5a4652827933b04b73022a996ffb7cbed56135adca65601b0e6cb7996642",
+      "native_dimensions": [
+        1122,
+        1402
+      ],
+      "native_mode": "RGB",
+      "alpha_extrema": null,
+      "tool_logical_path": "C:\\Users\\Kuroro\\.codex\\generated_images\\01a156b8-68e7-71d3-9e49-188fe4225a5e\\exec-50692e33-4075-4223-b44e-37468040884b.png",
+      "tool_physical_path": "D:\\claude\\flash\\.tmp\\imagegen_storage\\generated_images\\01a156b8-68e7-71d3-9e49-188fe4225a5e\\exec-50692e33-4075-4223-b44e-37468040884b.png",
+      "input_hashes": [
+        {
+          "path": "assets/local/portraits/pool/male_young/trader_male_young_handsome_01.png",
+          "sha256": "fdd0614bd7be001fa1d4829d00f871935a4fc2820d344efa22c9ea7e8feb4fcc"
+        },
+        {
+          "path": "art_sources/refresh_20261019/approved_samples/02_portrait.png",
+          "sha256": "139f85deb18db95d129b9e3e31db95460f47b934a7a68a4f006b95f8ad53c3fe"
+        }
+      ],
+      "review": "Visually checked identity/content, category style and complete composition; integration separate.",
+      "target_dimensions": [
+        1122,
+        1402
+      ],
+      "size_matches_technical_source": true,
+      "integration_status": "candidate_only_not_runtime_integrated"
+    },
+    {
+      "id": "4d682a1fb319fd40",
+      "batch": "03_portrait_pool",
+      "kind": "existing",
+      "label": "assets/local/portraits/pool/male_young/trader_male_young_high_b03_01.png",
+      "source": "assets/local/portraits/pool/male_young/trader_male_young_high_b03_01.png",
+      "output": "art_sources/refresh_20261019/batches/03_portrait_pool/output/existing/local/portraits/pool/male_young/trader_male_young_high_b03_01.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/local/portraits/pool/male_young/trader_male_young_high_b03_01.png",
+        "sha256": "c5f564074bb7a6423414f0fc43f3424d3653687556f96e47dfa8664fd0f2818e",
+        "format": "PNG",
+        "dimensions": [
+          1122,
+          1402
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          561,
+          701
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_generated",
+      "tool_refs": [
+        "assets/local/portraits/pool/male_young/trader_male_young_high_b03_01.png",
+        "art_sources/refresh_20261019/approved_samples/02_portrait.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/03_portrait_pool/output/prompts/4d682a1fb319fd40.txt",
+      "newly_generated": true,
+      "sha256": "4b7aae18f5b6910ad74a5575c6c394768d983e2eae0ef291736a38f80e61ac3e",
+      "native_dimensions": [
+        1122,
+        1402
+      ],
+      "native_mode": "RGB",
+      "alpha_extrema": null,
+      "tool_logical_path": "C:\\Users\\Kuroro\\.codex\\generated_images\\01a156b8-68e7-71d3-9e49-188fe4225a5e\\exec-a79ec23b-9367-42ca-b888-9d07a133bde1.png",
+      "tool_physical_path": "D:\\claude\\flash\\.tmp\\imagegen_storage\\generated_images\\01a156b8-68e7-71d3-9e49-188fe4225a5e\\exec-a79ec23b-9367-42ca-b888-9d07a133bde1.png",
+      "input_hashes": [
+        {
+          "path": "assets/local/portraits/pool/male_young/trader_male_young_high_b03_01.png",
+          "sha256": "c5f564074bb7a6423414f0fc43f3424d3653687556f96e47dfa8664fd0f2818e"
+        },
+        {
+          "path": "art_sources/refresh_20261019/approved_samples/02_portrait.png",
+          "sha256": "139f85deb18db95d129b9e3e31db95460f47b934a7a68a4f006b95f8ad53c3fe"
+        }
+      ],
+      "review": "Visually checked identity/content, category style and complete composition; integration separate.",
+      "target_dimensions": [
+        1122,
+        1402
+      ],
+      "size_matches_technical_source": true,
+      "integration_status": "candidate_only_not_runtime_integrated"
+    },
+    {
+      "id": "ff202fb29cc280c0",
+      "batch": "03_portrait_pool",
+      "kind": "existing",
+      "label": "assets/local/portraits/pool/male_young/trader_male_young_high_b03_02.png",
+      "source": "assets/local/portraits/pool/male_young/trader_male_young_high_b03_02.png",
+      "output": "art_sources/refresh_20261019/batches/03_portrait_pool/output/existing/local/portraits/pool/male_young/trader_male_young_high_b03_02.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/local/portraits/pool/male_young/trader_male_young_high_b03_02.png",
+        "sha256": "3e443e05ec5c013f5510f0d57425feb2482389ee2209639f8c82dcf311d8d8ef",
+        "format": "PNG",
+        "dimensions": [
+          1122,
+          1402
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          561,
+          701
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_generated",
+      "tool_refs": [
+        "assets/local/portraits/pool/male_young/trader_male_young_high_b03_02.png",
+        "art_sources/refresh_20261019/approved_samples/02_portrait.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/03_portrait_pool/output/prompts/ff202fb29cc280c0.txt",
+      "newly_generated": true,
+      "sha256": "ec51d118674ece387a752df179afdf69b795d60681493fbbf5499488129996f5",
+      "native_dimensions": [
+        1122,
+        1402
+      ],
+      "native_mode": "RGB",
+      "alpha_extrema": null,
+      "tool_logical_path": "C:\\Users\\Kuroro\\.codex\\generated_images\\01a156b8-68e7-71d3-9e49-188fe4225a5e\\exec-3a746c1e-d1f5-4bac-8ece-0db856112fff.png",
+      "tool_physical_path": "D:\\claude\\flash\\.tmp\\imagegen_storage\\generated_images\\01a156b8-68e7-71d3-9e49-188fe4225a5e\\exec-3a746c1e-d1f5-4bac-8ece-0db856112fff.png",
+      "input_hashes": [
+        {
+          "path": "assets/local/portraits/pool/male_young/trader_male_young_high_b03_02.png",
+          "sha256": "3e443e05ec5c013f5510f0d57425feb2482389ee2209639f8c82dcf311d8d8ef"
+        },
+        {
+          "path": "art_sources/refresh_20261019/approved_samples/02_portrait.png",
+          "sha256": "139f85deb18db95d129b9e3e31db95460f47b934a7a68a4f006b95f8ad53c3fe"
+        }
+      ],
+      "review": "Visually checked identity/content, category style and complete composition; integration separate.",
+      "target_dimensions": [
+        1122,
+        1402
+      ],
+      "size_matches_technical_source": true,
+      "integration_status": "candidate_only_not_runtime_integrated"
+    },
+    {
+      "id": "d42a950554d9738a",
+      "batch": "03_portrait_pool",
+      "kind": "existing",
+      "label": "assets/local/portraits/pool/male_young/trader_male_young_high_b03_03.png",
+      "source": "assets/local/portraits/pool/male_young/trader_male_young_high_b03_03.png",
+      "output": "art_sources/refresh_20261019/batches/03_portrait_pool/output/existing/local/portraits/pool/male_young/trader_male_young_high_b03_03.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/local/portraits/pool/male_young/trader_male_young_high_b03_03.png",
+        "sha256": "df779cbb8241b39f7b08826fb34c647d79cdfa8ac7652a7b67299d10fed7c73e",
+        "format": "PNG",
+        "dimensions": [
+          1122,
+          1402
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          561,
+          701
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_generated",
+      "tool_refs": [
+        "assets/local/portraits/pool/male_young/trader_male_young_high_b03_03.png",
+        "art_sources/refresh_20261019/approved_samples/02_portrait.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/03_portrait_pool/output/prompts/d42a950554d9738a.txt",
+      "newly_generated": true,
+      "sha256": "f247c89fe87dc6763a28799c4b3efaac08272e080adfddf3e0895f30780a9b75",
+      "native_dimensions": [
+        1122,
+        1402
+      ],
+      "native_mode": "RGB",
+      "alpha_extrema": null,
+      "tool_logical_path": "C:\\Users\\Kuroro\\.codex\\generated_images\\01a156b8-68e7-71d3-9e49-188fe4225a5e\\exec-45ea072e-b25b-45f8-a615-a9f27a230324.png",
+      "tool_physical_path": "D:\\claude\\flash\\.tmp\\imagegen_storage\\generated_images\\01a156b8-68e7-71d3-9e49-188fe4225a5e\\exec-45ea072e-b25b-45f8-a615-a9f27a230324.png",
+      "input_hashes": [
+        {
+          "path": "assets/local/portraits/pool/male_young/trader_male_young_high_b03_03.png",
+          "sha256": "df779cbb8241b39f7b08826fb34c647d79cdfa8ac7652a7b67299d10fed7c73e"
+        },
+        {
+          "path": "art_sources/refresh_20261019/approved_samples/02_portrait.png",
+          "sha256": "139f85deb18db95d129b9e3e31db95460f47b934a7a68a4f006b95f8ad53c3fe"
+        }
+      ],
+      "review": "Visually checked identity/content, category style and complete composition; integration separate.",
+      "target_dimensions": [
+        1122,
+        1402
+      ],
+      "size_matches_technical_source": true,
+      "integration_status": "candidate_only_not_runtime_integrated"
+    },
+    {
+      "id": "bcb0c0ad2a54d4c3",
+      "batch": "03_portrait_pool",
+      "kind": "existing",
+      "label": "assets/local/portraits/pool/male_young/trader_male_young_high_b03_04.png",
+      "source": "assets/local/portraits/pool/male_young/trader_male_young_high_b03_04.png",
+      "output": "art_sources/refresh_20261019/batches/03_portrait_pool/output/existing/local/portraits/pool/male_young/trader_male_young_high_b03_04.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/local/portraits/pool/male_young/trader_male_young_high_b03_04.png",
+        "sha256": "0bcedfc8f0a02a5a640e3fab4898162bc8c7ee95664104fcbd841c279d29f12f",
+        "format": "PNG",
+        "dimensions": [
+          1122,
+          1402
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          561,
+          701
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_generated",
+      "tool_refs": [
+        "assets/local/portraits/pool/male_young/trader_male_young_high_b03_04.png",
+        "art_sources/refresh_20261019/approved_samples/02_portrait.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/03_portrait_pool/output/prompts/bcb0c0ad2a54d4c3.txt",
+      "newly_generated": true,
+      "sha256": "3a83c746f2e00c8b3e49f5a4a44178dffefcc74bc635f3d0bcdf968f3501407b",
+      "native_dimensions": [
+        1122,
+        1402
+      ],
+      "native_mode": "RGB",
+      "alpha_extrema": null,
+      "tool_logical_path": "C:\\Users\\Kuroro\\.codex\\generated_images\\01a156b8-68e7-71d3-9e49-188fe4225a5e\\exec-3125b8a5-abe1-4622-a9a9-ea3fde07ddea.png",
+      "tool_physical_path": "D:\\claude\\flash\\.tmp\\imagegen_storage\\generated_images\\01a156b8-68e7-71d3-9e49-188fe4225a5e\\exec-3125b8a5-abe1-4622-a9a9-ea3fde07ddea.png",
+      "input_hashes": [
+        {
+          "path": "assets/local/portraits/pool/male_young/trader_male_young_high_b03_04.png",
+          "sha256": "0bcedfc8f0a02a5a640e3fab4898162bc8c7ee95664104fcbd841c279d29f12f"
+        },
+        {
+          "path": "art_sources/refresh_20261019/approved_samples/02_portrait.png",
+          "sha256": "139f85deb18db95d129b9e3e31db95460f47b934a7a68a4f006b95f8ad53c3fe"
+        }
+      ],
+      "review": "Visually checked identity/content, category style and complete composition; integration separate.",
+      "target_dimensions": [
+        1122,
+        1402
+      ],
+      "size_matches_technical_source": true,
+      "integration_status": "candidate_only_not_runtime_integrated"
+    },
+    {
+      "id": "70959ca0a07e8f3d",
+      "batch": "03_portrait_pool",
+      "kind": "existing",
+      "label": "assets/local/portraits/pool/male_young/trader_male_young_high_b03_05.png",
+      "source": "assets/local/portraits/pool/male_young/trader_male_young_high_b03_05.png",
+      "output": "art_sources/refresh_20261019/batches/03_portrait_pool/output/existing/local/portraits/pool/male_young/trader_male_young_high_b03_05.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/local/portraits/pool/male_young/trader_male_young_high_b03_05.png",
+        "sha256": "c1829a44e941f0870184a5e92c9e89c7c21e39c60fc6d83768dd683f5c487605",
+        "format": "PNG",
+        "dimensions": [
+          1122,
+          1402
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          561,
+          701
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_generated",
+      "tool_refs": [
+        "assets/local/portraits/pool/male_young/trader_male_young_high_b03_05.png",
+        "art_sources/refresh_20261019/approved_samples/02_portrait.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/03_portrait_pool/output/prompts/70959ca0a07e8f3d.txt",
+      "newly_generated": true,
+      "sha256": "83219c31dfa3a07f08efc11d7c3476610809d4c4f9481878af95b40de282b111",
+      "native_dimensions": [
+        1122,
+        1402
+      ],
+      "native_mode": "RGB",
+      "alpha_extrema": null,
+      "tool_logical_path": "C:\\Users\\Kuroro\\.codex\\generated_images\\01a156b8-68e7-71d3-9e49-188fe4225a5e\\exec-36181d76-14e5-462d-881c-63d116dec212.png",
+      "tool_physical_path": "D:\\claude\\flash\\.tmp\\imagegen_storage\\generated_images\\01a156b8-68e7-71d3-9e49-188fe4225a5e\\exec-36181d76-14e5-462d-881c-63d116dec212.png",
+      "input_hashes": [
+        {
+          "path": "assets/local/portraits/pool/male_young/trader_male_young_high_b03_05.png",
+          "sha256": "c1829a44e941f0870184a5e92c9e89c7c21e39c60fc6d83768dd683f5c487605"
+        },
+        {
+          "path": "art_sources/refresh_20261019/approved_samples/02_portrait.png",
+          "sha256": "139f85deb18db95d129b9e3e31db95460f47b934a7a68a4f006b95f8ad53c3fe"
+        }
+      ],
+      "review": "Visually checked identity/content, category style and complete composition; integration separate.",
+      "target_dimensions": [
+        1122,
+        1402
+      ],
+      "size_matches_technical_source": true,
+      "integration_status": "candidate_only_not_runtime_integrated"
+    },
+    {
+      "id": "e02e56e6de014ef8",
+      "batch": "03_portrait_pool",
+      "kind": "existing",
+      "label": "assets/local/portraits/pool/male_young/visitor_male_young_01.png",
+      "source": "assets/local/portraits/pool/male_young/visitor_male_young_01.png",
+      "output": "art_sources/refresh_20261019/batches/03_portrait_pool/output/existing/local/portraits/pool/male_young/visitor_male_young_01.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/local/portraits/pool/male_young/visitor_male_young_01.png",
+        "sha256": "e7679e688547019ec7d72113b8020e1dd0507b2e21e45fef5f811c5406d4e9bb",
+        "format": "PNG",
+        "dimensions": [
+          512,
+          640
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          4,
+          5
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_generated",
+      "tool_refs": [
+        "assets/local/portraits/pool/male_young/visitor_male_young_01.png",
+        "art_sources/refresh_20261019/approved_samples/02_portrait.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/03_portrait_pool/output/prompts/e02e56e6de014ef8.txt",
+      "newly_generated": true,
+      "sha256": "e0e6034ec326e7924769fa8cfa8dd01289f7d9c6e63b907f82486dc15ec5a2f7",
+      "native_dimensions": [
+        1122,
+        1402
+      ],
+      "native_mode": "RGB",
+      "alpha_extrema": null,
+      "tool_logical_path": "C:\\Users\\Kuroro\\.codex\\generated_images\\01a156b8-68e7-71d3-9e49-188fe4225a5e\\exec-a18f6564-aa55-4d89-a9dd-b8a11da109bb.png",
+      "tool_physical_path": "D:\\claude\\flash\\.tmp\\imagegen_storage\\generated_images\\01a156b8-68e7-71d3-9e49-188fe4225a5e\\exec-a18f6564-aa55-4d89-a9dd-b8a11da109bb.png",
+      "input_hashes": [
+        {
+          "path": "assets/local/portraits/pool/male_young/visitor_male_young_01.png",
+          "sha256": "e7679e688547019ec7d72113b8020e1dd0507b2e21e45fef5f811c5406d4e9bb"
+        },
+        {
+          "path": "art_sources/refresh_20261019/approved_samples/02_portrait.png",
+          "sha256": "139f85deb18db95d129b9e3e31db95460f47b934a7a68a4f006b95f8ad53c3fe"
+        }
+      ],
+      "review": "Visually checked identity/content, category style and complete composition; integration separate.",
+      "target_dimensions": [
+        512,
+        640
+      ],
+      "size_matches_technical_source": false,
+      "integration_status": "candidate_only_not_runtime_integrated",
+      "size_note": "Native bytes retained; runtime crop/scale or atlas registration must be resolved separately. Target dimensions are not claimed as delivered dimensions."
+    },
+    {
+      "id": "99d81d293dbb5629",
+      "batch": "03_portrait_pool",
+      "kind": "existing",
+      "label": "assets/local/portraits/pool/male_young/visitor_male_young_02.png",
+      "source": "assets/local/portraits/pool/male_young/visitor_male_young_02.png",
+      "output": "art_sources/refresh_20261019/batches/03_portrait_pool/output/existing/local/portraits/pool/male_young/visitor_male_young_02.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/local/portraits/pool/male_young/visitor_male_young_02.png",
+        "sha256": "5cf9e6aa2b52e1123c7fda5a7c2ad2fb21b7a3c19d9359576509eb4a044cadd2",
+        "format": "PNG",
+        "dimensions": [
+          512,
+          640
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          4,
+          5
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_generated",
+      "tool_refs": [
+        "assets/local/portraits/pool/male_young/visitor_male_young_02.png",
+        "art_sources/refresh_20261019/approved_samples/02_portrait.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/03_portrait_pool/output/prompts/99d81d293dbb5629.txt",
+      "newly_generated": true,
+      "sha256": "2c815298ef9d02bf655d7db65535cb3e5467efe1d8870b3307ffc9f4a0fc5bf5",
+      "native_dimensions": [
+        1122,
+        1402
+      ],
+      "native_mode": "RGB",
+      "alpha_extrema": null,
+      "tool_logical_path": "C:\\Users\\Kuroro\\.codex\\generated_images\\01a156b8-68e7-71d3-9e49-188fe4225a5e\\exec-c2af0f62-7264-4deb-9d29-71f7767fb575.png",
+      "tool_physical_path": "D:\\claude\\flash\\.tmp\\imagegen_storage\\generated_images\\01a156b8-68e7-71d3-9e49-188fe4225a5e\\exec-c2af0f62-7264-4deb-9d29-71f7767fb575.png",
+      "input_hashes": [
+        {
+          "path": "assets/local/portraits/pool/male_young/visitor_male_young_02.png",
+          "sha256": "5cf9e6aa2b52e1123c7fda5a7c2ad2fb21b7a3c19d9359576509eb4a044cadd2"
+        },
+        {
+          "path": "art_sources/refresh_20261019/approved_samples/02_portrait.png",
+          "sha256": "139f85deb18db95d129b9e3e31db95460f47b934a7a68a4f006b95f8ad53c3fe"
+        }
+      ],
+      "review": "Visually checked identity/content, category style and complete composition; integration separate.",
+      "target_dimensions": [
+        512,
+        640
+      ],
+      "size_matches_technical_source": false,
+      "integration_status": "candidate_only_not_runtime_integrated",
+      "size_note": "Native bytes retained; runtime crop/scale or atlas registration must be resolved separately. Target dimensions are not claimed as delivered dimensions."
+    },
+    {
+      "id": "004751c038f18bd1",
+      "batch": "03_portrait_pool",
+      "kind": "existing",
+      "label": "assets/local/portraits/pool/male_young/visitor_male_young_handsome_01.png",
+      "source": "assets/local/portraits/pool/male_young/visitor_male_young_handsome_01.png",
+      "output": "art_sources/refresh_20261019/batches/03_portrait_pool/output/existing/local/portraits/pool/male_young/visitor_male_young_handsome_01.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/local/portraits/pool/male_young/visitor_male_young_handsome_01.png",
+        "sha256": "0e960a28475622e870ab181866ce15e0e6a4596a833c8148c97c431a91ae0fb4",
+        "format": "PNG",
+        "dimensions": [
+          1122,
+          1402
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          561,
+          701
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_generated",
+      "tool_refs": [
+        "art_sources/refresh_20261019/batches/03_portrait_pool/output/existing/local/portraits/pool/male_young/originals/visitor_male_young_handsome_01_rejected_977fccfd.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/03_portrait_pool/output/prompts/004751c038f18bd1.txt",
+      "rejected_attempts": [
+        {
+          "path": "art_sources/refresh_20261019/batches/03_portrait_pool/output/existing/local/portraits/pool/male_young/originals/visitor_male_young_handsome_01_rejected_977fccfd.png",
+          "sha256": "977fccfd8d51cd0b1e0379ec2d4fae30345249253bdb7e45f6f878858049efd8",
+          "reason": "High ponytail touches/crosses the top edge; needs complete silhouette and background margin.",
+          "tool_physical_path": "D:\\claude\\flash\\.tmp\\imagegen_storage\\generated_images\\01a156b8-68e7-71d3-9e49-188fe4225a5e\\exec-8e1bf511-f342-44cd-9f10-92cfb9aab61e.png",
+          "prompt_path": "art_sources/refresh_20261019/batches/03_portrait_pool/output/existing/local/portraits/pool/male_young/originals/visitor_male_young_handsome_01_rejected_977fccfd.prompt.txt"
+        }
+      ],
+      "edit_reason": "Reframe clipped ponytail crown",
+      "newly_generated": true,
+      "sha256": "6d49227f97d7addfc14e18a574b13ec1f38aa32d8ad90c801fbfd720e168baa7",
+      "native_dimensions": [
+        1122,
+        1402
+      ],
+      "native_mode": "RGB",
+      "alpha_extrema": null,
+      "tool_logical_path": "C:\\Users\\Kuroro\\.codex\\generated_images\\01a156b8-68e7-71d3-9e49-188fe4225a5e\\exec-49063771-81bc-43e2-8cb8-27534a535370.png",
+      "tool_physical_path": "D:\\claude\\flash\\.tmp\\imagegen_storage\\generated_images\\01a156b8-68e7-71d3-9e49-188fe4225a5e\\exec-49063771-81bc-43e2-8cb8-27534a535370.png",
+      "input_hashes": [
+        {
+          "path": "art_sources/refresh_20261019/batches/03_portrait_pool/output/existing/local/portraits/pool/male_young/originals/visitor_male_young_handsome_01_rejected_977fccfd.png",
+          "sha256": "977fccfd8d51cd0b1e0379ec2d4fae30345249253bdb7e45f6f878858049efd8"
+        }
+      ],
+      "review": "Visually checked identity/content, category style and complete composition; integration separate.",
+      "target_dimensions": [
+        1122,
+        1402
+      ],
+      "size_matches_technical_source": true,
+      "integration_status": "candidate_only_not_runtime_integrated"
+    },
+    {
+      "id": "810441578cecea53",
+      "batch": "03_portrait_pool",
+      "kind": "existing",
+      "label": "assets/local/portraits/pool/male_young/visitor_male_young_high_b03_01.png",
+      "source": "assets/local/portraits/pool/male_young/visitor_male_young_high_b03_01.png",
+      "output": "art_sources/refresh_20261019/batches/03_portrait_pool/output/existing/local/portraits/pool/male_young/visitor_male_young_high_b03_01.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/local/portraits/pool/male_young/visitor_male_young_high_b03_01.png",
+        "sha256": "b663035f87f307bb616866e3dc15103e1ad4e5a5e23a442f121f4f2299f6beb7",
+        "format": "PNG",
+        "dimensions": [
+          1122,
+          1402
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          561,
+          701
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_generated",
+      "tool_refs": [
+        "assets/local/portraits/pool/male_young/visitor_male_young_high_b03_01.png",
+        "art_sources/refresh_20261019/approved_samples/02_portrait.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/03_portrait_pool/output/prompts/810441578cecea53.txt",
+      "newly_generated": true,
+      "sha256": "c4883766e8548b285149f478f4166b1196dfa56781fb0a492ac58a0a474a037c",
+      "native_dimensions": [
+        1122,
+        1402
+      ],
+      "native_mode": "RGB",
+      "alpha_extrema": null,
+      "tool_logical_path": "C:\\Users\\Kuroro\\.codex\\generated_images\\01a156b8-68e7-71d3-9e49-188fe4225a5e\\exec-c212ef6c-3a87-4947-9fad-b8eac97f6232.png",
+      "tool_physical_path": "D:\\claude\\flash\\.tmp\\imagegen_storage\\generated_images\\01a156b8-68e7-71d3-9e49-188fe4225a5e\\exec-c212ef6c-3a87-4947-9fad-b8eac97f6232.png",
+      "input_hashes": [
+        {
+          "path": "assets/local/portraits/pool/male_young/visitor_male_young_high_b03_01.png",
+          "sha256": "b663035f87f307bb616866e3dc15103e1ad4e5a5e23a442f121f4f2299f6beb7"
+        },
+        {
+          "path": "art_sources/refresh_20261019/approved_samples/02_portrait.png",
+          "sha256": "139f85deb18db95d129b9e3e31db95460f47b934a7a68a4f006b95f8ad53c3fe"
+        }
+      ],
+      "review": "Visually checked identity/content, category style and complete composition; integration separate.",
+      "target_dimensions": [
+        1122,
+        1402
+      ],
+      "size_matches_technical_source": true,
+      "integration_status": "candidate_only_not_runtime_integrated"
+    },
+    {
+      "id": "4db327f7b51f4cee",
+      "batch": "03_portrait_pool",
+      "kind": "existing",
+      "label": "assets/local/portraits/pool/male_young/visitor_male_young_high_b03_02.png",
+      "source": "assets/local/portraits/pool/male_young/visitor_male_young_high_b03_02.png",
+      "output": "art_sources/refresh_20261019/batches/03_portrait_pool/output/existing/local/portraits/pool/male_young/visitor_male_young_high_b03_02.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/local/portraits/pool/male_young/visitor_male_young_high_b03_02.png",
+        "sha256": "2d46cfc83487f0910ca0974f2fe75da4886f8542a2c5dc4ebe6b52391f35e4fd",
+        "format": "PNG",
+        "dimensions": [
+          1122,
+          1402
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          561,
+          701
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_generated",
+      "tool_refs": [
+        "assets/local/portraits/pool/male_young/visitor_male_young_high_b03_02.png",
+        "art_sources/refresh_20261019/approved_samples/02_portrait.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/03_portrait_pool/output/prompts/4db327f7b51f4cee.txt",
+      "newly_generated": true,
+      "sha256": "fdaaf7fd3894239f5c6e9c0419ecdfb2160a888615f46b60b64443bb95362a4c",
+      "native_dimensions": [
+        1122,
+        1402
+      ],
+      "native_mode": "RGB",
+      "alpha_extrema": null,
+      "tool_logical_path": "C:\\Users\\Kuroro\\.codex\\generated_images\\01a156b8-68e7-71d3-9e49-188fe4225a5e\\exec-9ca9b9fa-85aa-4978-b122-1a305bc24620.png",
+      "tool_physical_path": "D:\\claude\\flash\\.tmp\\imagegen_storage\\generated_images\\01a156b8-68e7-71d3-9e49-188fe4225a5e\\exec-9ca9b9fa-85aa-4978-b122-1a305bc24620.png",
+      "input_hashes": [
+        {
+          "path": "assets/local/portraits/pool/male_young/visitor_male_young_high_b03_02.png",
+          "sha256": "2d46cfc83487f0910ca0974f2fe75da4886f8542a2c5dc4ebe6b52391f35e4fd"
+        },
+        {
+          "path": "art_sources/refresh_20261019/approved_samples/02_portrait.png",
+          "sha256": "139f85deb18db95d129b9e3e31db95460f47b934a7a68a4f006b95f8ad53c3fe"
+        }
+      ],
+      "review": "Visually checked identity/content, category style and complete composition; integration separate.",
+      "target_dimensions": [
+        1122,
+        1402
+      ],
+      "size_matches_technical_source": true,
+      "integration_status": "candidate_only_not_runtime_integrated"
+    },
+    {
+      "id": "35db8b65f62e8013",
+      "batch": "03_portrait_pool",
+      "kind": "existing",
+      "label": "assets/local/portraits/pool/male_young/visitor_male_young_high_b03_03.png",
+      "source": "assets/local/portraits/pool/male_young/visitor_male_young_high_b03_03.png",
+      "output": "art_sources/refresh_20261019/batches/03_portrait_pool/output/existing/local/portraits/pool/male_young/visitor_male_young_high_b03_03.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/local/portraits/pool/male_young/visitor_male_young_high_b03_03.png",
+        "sha256": "2ad62591392be6209cc757e24388b501da0004b355b25571f4176f9c41f4414f",
+        "format": "PNG",
+        "dimensions": [
+          1122,
+          1402
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          561,
+          701
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_generated",
+      "tool_refs": [
+        "assets/local/portraits/pool/male_young/visitor_male_young_high_b03_03.png",
+        "art_sources/refresh_20261019/approved_samples/02_portrait.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/03_portrait_pool/output/prompts/35db8b65f62e8013.txt",
+      "newly_generated": true,
+      "sha256": "0c0d34e40cd7d9fc3bdd1628d05c66e059ec59f0dc30bd7d781c09e9c4740125",
+      "native_dimensions": [
+        1122,
+        1402
+      ],
+      "native_mode": "RGB",
+      "alpha_extrema": null,
+      "tool_logical_path": "C:\\Users\\Kuroro\\.codex\\generated_images\\01a156b8-68e7-71d3-9e49-188fe4225a5e\\exec-b93cdd61-987b-4ecf-a75a-3bfb7d4cc859.png",
+      "tool_physical_path": "D:\\claude\\flash\\.tmp\\imagegen_storage\\generated_images\\01a156b8-68e7-71d3-9e49-188fe4225a5e\\exec-b93cdd61-987b-4ecf-a75a-3bfb7d4cc859.png",
+      "input_hashes": [
+        {
+          "path": "assets/local/portraits/pool/male_young/visitor_male_young_high_b03_03.png",
+          "sha256": "2ad62591392be6209cc757e24388b501da0004b355b25571f4176f9c41f4414f"
+        },
+        {
+          "path": "art_sources/refresh_20261019/approved_samples/02_portrait.png",
+          "sha256": "139f85deb18db95d129b9e3e31db95460f47b934a7a68a4f006b95f8ad53c3fe"
+        }
+      ],
+      "review": "Visually checked identity/content, category style and complete composition; integration separate.",
+      "target_dimensions": [
+        1122,
+        1402
+      ],
+      "size_matches_technical_source": true,
+      "integration_status": "candidate_only_not_runtime_integrated"
+    },
+    {
+      "id": "eb8414bd456ac7d6",
+      "batch": "03_portrait_pool",
+      "kind": "existing",
+      "label": "assets/local/portraits/pool/male_young/visitor_male_young_high_b03_04.png",
+      "source": "assets/local/portraits/pool/male_young/visitor_male_young_high_b03_04.png",
+      "output": "art_sources/refresh_20261019/batches/03_portrait_pool/output/existing/local/portraits/pool/male_young/visitor_male_young_high_b03_04.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/local/portraits/pool/male_young/visitor_male_young_high_b03_04.png",
+        "sha256": "603edfd8c16ad02e51615936c1e05243d7aca4385b21b4951f3d639d99dde3df",
+        "format": "PNG",
+        "dimensions": [
+          1122,
+          1402
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          561,
+          701
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_generated",
+      "tool_refs": [
+        "art_sources/refresh_20261019/batches/03_portrait_pool/output/existing/local/portraits/pool/male_young/originals/visitor_male_young_high_b03_04_rejected_6c24310d.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/03_portrait_pool/output/prompts/eb8414bd456ac7d6.txt",
+      "rejected_attempts": [
+        {
+          "path": "art_sources/refresh_20261019/batches/03_portrait_pool/output/existing/local/portraits/pool/male_young/originals/visitor_male_young_high_b03_04_rejected_6c24310d.png",
+          "sha256": "6c24310dd087701e0c8bf1875381eb6cc0fca4dbca5d36e5d315cf5d16b6ffb2",
+          "reason": "Bun/tuft touches top edge; needs complete hair silhouette and empty background above.",
+          "tool_physical_path": "D:\\claude\\flash\\.tmp\\imagegen_storage\\generated_images\\01a156b8-68e7-71d3-9e49-188fe4225a5e\\exec-788e3351-99b4-4fab-a4fe-fc0f51668f9d.png",
+          "prompt_path": "art_sources/refresh_20261019/batches/03_portrait_pool/output/existing/local/portraits/pool/male_young/originals/visitor_male_young_high_b03_04_rejected_6c24310d.prompt.txt"
+        }
+      ],
+      "edit_reason": "Reframe clipped bun tuft",
+      "newly_generated": true,
+      "sha256": "65728855dbfccdd4fc908c830cf998c3e474bdcb6945913421dc3daf11265105",
+      "native_dimensions": [
+        1122,
+        1402
+      ],
+      "native_mode": "RGB",
+      "alpha_extrema": null,
+      "tool_logical_path": "C:\\Users\\Kuroro\\.codex\\generated_images\\01a156b8-68e7-71d3-9e49-188fe4225a5e\\exec-0a27f2c1-f440-498c-a8cd-1b7c8138db23.png",
+      "tool_physical_path": "D:\\claude\\flash\\.tmp\\imagegen_storage\\generated_images\\01a156b8-68e7-71d3-9e49-188fe4225a5e\\exec-0a27f2c1-f440-498c-a8cd-1b7c8138db23.png",
+      "input_hashes": [
+        {
+          "path": "art_sources/refresh_20261019/batches/03_portrait_pool/output/existing/local/portraits/pool/male_young/originals/visitor_male_young_high_b03_04_rejected_6c24310d.png",
+          "sha256": "6c24310dd087701e0c8bf1875381eb6cc0fca4dbca5d36e5d315cf5d16b6ffb2"
+        }
+      ],
+      "review": "Visually checked identity/content, category style and complete composition; integration separate.",
+      "target_dimensions": [
+        1122,
+        1402
+      ],
+      "size_matches_technical_source": true,
+      "integration_status": "candidate_only_not_runtime_integrated"
+    },
+    {
+      "id": "fb4a2908742adeb3",
+      "batch": "03_portrait_pool",
+      "kind": "existing",
+      "label": "assets/local/portraits/pool/male_young/visitor_male_young_high_b03_05.png",
+      "source": "assets/local/portraits/pool/male_young/visitor_male_young_high_b03_05.png",
+      "output": "art_sources/refresh_20261019/batches/03_portrait_pool/output/existing/local/portraits/pool/male_young/visitor_male_young_high_b03_05.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/local/portraits/pool/male_young/visitor_male_young_high_b03_05.png",
+        "sha256": "65fe6d3528c95e9e51cdcd43805ec037af43792f780e47fbaa6f7ed3e30341b5",
+        "format": "PNG",
+        "dimensions": [
+          1122,
+          1402
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          561,
+          701
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_generated",
+      "tool_refs": [
+        "assets/local/portraits/pool/male_young/visitor_male_young_high_b03_05.png",
+        "art_sources/refresh_20261019/approved_samples/02_portrait.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/03_portrait_pool/output/prompts/fb4a2908742adeb3.txt",
+      "newly_generated": true,
+      "sha256": "e0c9a4a66b3e352535f031bb0d47081fc46a6e5844884980674ca96e6c6c5ebd",
+      "native_dimensions": [
+        1122,
+        1402
+      ],
+      "native_mode": "RGB",
+      "alpha_extrema": null,
+      "tool_logical_path": "C:\\Users\\Kuroro\\.codex\\generated_images\\01a156b8-68e7-71d3-9e49-188fe4225a5e\\exec-f5713664-7e81-4157-8915-b64929bebde4.png",
+      "tool_physical_path": "D:\\claude\\flash\\.tmp\\imagegen_storage\\generated_images\\01a156b8-68e7-71d3-9e49-188fe4225a5e\\exec-f5713664-7e81-4157-8915-b64929bebde4.png",
+      "input_hashes": [
+        {
+          "path": "assets/local/portraits/pool/male_young/visitor_male_young_high_b03_05.png",
+          "sha256": "65fe6d3528c95e9e51cdcd43805ec037af43792f780e47fbaa6f7ed3e30341b5"
+        },
+        {
+          "path": "art_sources/refresh_20261019/approved_samples/02_portrait.png",
+          "sha256": "139f85deb18db95d129b9e3e31db95460f47b934a7a68a4f006b95f8ad53c3fe"
+        }
+      ],
+      "review": "Visually checked identity/content, category style and complete composition; integration separate.",
+      "target_dimensions": [
+        1122,
+        1402
+      ],
+      "size_matches_technical_source": true,
+      "integration_status": "candidate_only_not_runtime_integrated"
+    },
+    {
+      "id": "42dc66ea4f68b7be",
+      "batch": "03_portrait_pool",
+      "kind": "existing",
+      "label": "assets/local/portraits/pool/male_young/wanderer_male_young_01.png",
+      "source": "assets/local/portraits/pool/male_young/wanderer_male_young_01.png",
+      "output": "art_sources/refresh_20261019/batches/03_portrait_pool/output/existing/local/portraits/pool/male_young/wanderer_male_young_01.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/local/portraits/pool/male_young/wanderer_male_young_01.png",
+        "sha256": "9d647114c641653201f32729664cc8af9512f141f630360ea039587b013801c9",
+        "format": "PNG",
+        "dimensions": [
+          512,
+          640
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          4,
+          5
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_generated",
+      "tool_refs": [
+        "assets/local/portraits/pool/male_young/wanderer_male_young_01.png",
+        "art_sources/refresh_20261019/approved_samples/02_portrait.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/03_portrait_pool/output/prompts/42dc66ea4f68b7be.txt",
+      "newly_generated": true,
+      "sha256": "f9eb045cc211f6539bce1c291dd78bbba68341bf1a2ef85bea10cf8e8f2adfe7",
+      "native_dimensions": [
+        1122,
+        1402
+      ],
+      "native_mode": "RGB",
+      "alpha_extrema": null,
+      "tool_logical_path": "C:\\Users\\Kuroro\\.codex\\generated_images\\01a156b8-68e7-71d3-9e49-188fe4225a5e\\exec-52a94858-6fef-4f08-a350-d78c926e9d83.png",
+      "tool_physical_path": "D:\\claude\\flash\\.tmp\\imagegen_storage\\generated_images\\01a156b8-68e7-71d3-9e49-188fe4225a5e\\exec-52a94858-6fef-4f08-a350-d78c926e9d83.png",
+      "input_hashes": [
+        {
+          "path": "assets/local/portraits/pool/male_young/wanderer_male_young_01.png",
+          "sha256": "9d647114c641653201f32729664cc8af9512f141f630360ea039587b013801c9"
+        },
+        {
+          "path": "art_sources/refresh_20261019/approved_samples/02_portrait.png",
+          "sha256": "139f85deb18db95d129b9e3e31db95460f47b934a7a68a4f006b95f8ad53c3fe"
+        }
+      ],
+      "review": "Visually checked identity/content, category style and complete composition; integration separate.",
+      "target_dimensions": [
+        512,
+        640
+      ],
+      "size_matches_technical_source": false,
+      "integration_status": "candidate_only_not_runtime_integrated",
+      "size_note": "Native bytes retained; runtime crop/scale or atlas registration must be resolved separately. Target dimensions are not claimed as delivered dimensions."
+    },
+    {
+      "id": "e9523544329c3aad",
+      "batch": "03_portrait_pool",
+      "kind": "existing",
+      "label": "assets/local/portraits/pool/male_young/wanderer_male_young_02.png",
+      "source": "assets/local/portraits/pool/male_young/wanderer_male_young_02.png",
+      "output": "art_sources/refresh_20261019/batches/03_portrait_pool/output/existing/local/portraits/pool/male_young/wanderer_male_young_02.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/local/portraits/pool/male_young/wanderer_male_young_02.png",
+        "sha256": "88fe6f2ad96534656fb8efb524c9d64c866d926d63fbcda6d4fc489ac0f4c611",
+        "format": "PNG",
+        "dimensions": [
+          512,
+          640
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          4,
+          5
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_generated",
+      "tool_refs": [
+        "assets/local/portraits/pool/male_young/wanderer_male_young_02.png",
+        "art_sources/refresh_20261019/approved_samples/02_portrait.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/03_portrait_pool/output/prompts/e9523544329c3aad.txt",
+      "newly_generated": true,
+      "sha256": "8b12a27da95cf66e6a9ac19f99c8f0e269ff36fc54bf72d4b24b0d8f2dbf11b8",
+      "native_dimensions": [
+        1122,
+        1402
+      ],
+      "native_mode": "RGB",
+      "alpha_extrema": null,
+      "tool_logical_path": "C:\\Users\\Kuroro\\.codex\\generated_images\\01a156b8-68e7-71d3-9e49-188fe4225a5e\\exec-a4fbd1e7-0ba4-47d7-ba25-f77212508b35.png",
+      "tool_physical_path": "D:\\claude\\flash\\.tmp\\imagegen_storage\\generated_images\\01a156b8-68e7-71d3-9e49-188fe4225a5e\\exec-a4fbd1e7-0ba4-47d7-ba25-f77212508b35.png",
+      "input_hashes": [
+        {
+          "path": "assets/local/portraits/pool/male_young/wanderer_male_young_02.png",
+          "sha256": "88fe6f2ad96534656fb8efb524c9d64c866d926d63fbcda6d4fc489ac0f4c611"
+        },
+        {
+          "path": "art_sources/refresh_20261019/approved_samples/02_portrait.png",
+          "sha256": "139f85deb18db95d129b9e3e31db95460f47b934a7a68a4f006b95f8ad53c3fe"
+        }
+      ],
+      "review": "Visually checked identity/content, category style and complete composition; integration separate.",
+      "target_dimensions": [
+        512,
+        640
+      ],
+      "size_matches_technical_source": false,
+      "integration_status": "candidate_only_not_runtime_integrated",
+      "size_note": "Native bytes retained; runtime crop/scale or atlas registration must be resolved separately. Target dimensions are not claimed as delivered dimensions."
+    },
+    {
+      "id": "9a09ce6421ce9df1",
+      "batch": "03_portrait_pool",
+      "kind": "existing",
+      "label": "assets/local/portraits/pool/male_young/wanderer_male_young_03.png",
+      "source": "assets/local/portraits/pool/male_young/wanderer_male_young_03.png",
+      "output": "art_sources/refresh_20261019/batches/03_portrait_pool/output/existing/local/portraits/pool/male_young/wanderer_male_young_03.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/local/portraits/pool/male_young/wanderer_male_young_03.png",
+        "sha256": "448bb3eb04db1e0a63f038798278809415d2557a0c2ef765cb62a9a9acba23bf",
+        "format": "PNG",
+        "dimensions": [
+          512,
+          640
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          4,
+          5
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_generated",
+      "tool_refs": [
+        "assets/local/portraits/pool/male_young/wanderer_male_young_03.png",
+        "art_sources/refresh_20261019/approved_samples/02_portrait.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/03_portrait_pool/output/prompts/9a09ce6421ce9df1.txt",
+      "newly_generated": true,
+      "sha256": "4df4f4f66ef052694322edbc2131c97698406be89af78ec426bc0bda8e933ed1",
+      "native_dimensions": [
+        1122,
+        1402
+      ],
+      "native_mode": "RGB",
+      "alpha_extrema": null,
+      "tool_logical_path": "C:\\Users\\Kuroro\\.codex\\generated_images\\01a156b8-68e7-71d3-9e49-188fe4225a5e\\exec-aea76125-0b94-4ec1-a51d-e2ce93342ca4.png",
+      "tool_physical_path": "D:\\claude\\flash\\.tmp\\imagegen_storage\\generated_images\\01a156b8-68e7-71d3-9e49-188fe4225a5e\\exec-aea76125-0b94-4ec1-a51d-e2ce93342ca4.png",
+      "input_hashes": [
+        {
+          "path": "assets/local/portraits/pool/male_young/wanderer_male_young_03.png",
+          "sha256": "448bb3eb04db1e0a63f038798278809415d2557a0c2ef765cb62a9a9acba23bf"
+        },
+        {
+          "path": "art_sources/refresh_20261019/approved_samples/02_portrait.png",
+          "sha256": "139f85deb18db95d129b9e3e31db95460f47b934a7a68a4f006b95f8ad53c3fe"
+        }
+      ],
+      "review": "Visually checked identity/content, category style and complete composition; integration separate.",
+      "target_dimensions": [
+        512,
+        640
+      ],
+      "size_matches_technical_source": false,
+      "integration_status": "candidate_only_not_runtime_integrated",
+      "size_note": "Native bytes retained; runtime crop/scale or atlas registration must be resolved separately. Target dimensions are not claimed as delivered dimensions."
+    },
+    {
+      "id": "6790670622e87ba6",
+      "batch": "03_portrait_pool",
+      "kind": "existing",
+      "label": "assets/local/portraits/pool/male_young/wanderer_male_young_04.png",
+      "source": "assets/local/portraits/pool/male_young/wanderer_male_young_04.png",
+      "output": "art_sources/refresh_20261019/batches/03_portrait_pool/output/existing/local/portraits/pool/male_young/wanderer_male_young_04.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/local/portraits/pool/male_young/wanderer_male_young_04.png",
+        "sha256": "d402199cde8a22291e93e531730f67bbf9abbc97caa0d0b65c065e15e87045f8",
+        "format": "PNG",
+        "dimensions": [
+          512,
+          640
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          4,
+          5
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_generated",
+      "tool_refs": [
+        "assets/local/portraits/pool/male_young/wanderer_male_young_04.png",
+        "art_sources/refresh_20261019/approved_samples/02_portrait.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/03_portrait_pool/output/prompts/6790670622e87ba6.txt",
+      "newly_generated": true,
+      "sha256": "f1ca0ff7ddba0f46fad07872b2e387ef7762f20f8c664662736c795fc1bb8e73",
+      "native_dimensions": [
+        1122,
+        1402
+      ],
+      "native_mode": "RGB",
+      "alpha_extrema": null,
+      "tool_logical_path": "C:\\Users\\Kuroro\\.codex\\generated_images\\01a156b8-68e7-71d3-9e49-188fe4225a5e\\exec-439d5774-6989-48ef-a4b7-e69670e10a6e.png",
+      "tool_physical_path": "D:\\claude\\flash\\.tmp\\imagegen_storage\\generated_images\\01a156b8-68e7-71d3-9e49-188fe4225a5e\\exec-439d5774-6989-48ef-a4b7-e69670e10a6e.png",
+      "input_hashes": [
+        {
+          "path": "assets/local/portraits/pool/male_young/wanderer_male_young_04.png",
+          "sha256": "d402199cde8a22291e93e531730f67bbf9abbc97caa0d0b65c065e15e87045f8"
+        },
+        {
+          "path": "art_sources/refresh_20261019/approved_samples/02_portrait.png",
+          "sha256": "139f85deb18db95d129b9e3e31db95460f47b934a7a68a4f006b95f8ad53c3fe"
+        }
+      ],
+      "review": "Visually checked identity/content, category style and complete composition; integration separate.",
+      "target_dimensions": [
+        512,
+        640
+      ],
+      "size_matches_technical_source": false,
+      "integration_status": "candidate_only_not_runtime_integrated",
+      "size_note": "Native bytes retained; runtime crop/scale or atlas registration must be resolved separately. Target dimensions are not claimed as delivered dimensions."
+    },
+    {
+      "id": "535f59cf31994dce",
+      "batch": "03_portrait_pool",
+      "kind": "existing",
+      "label": "assets/local/portraits/pool/male_young/wanderer_male_young_05.png",
+      "source": "assets/local/portraits/pool/male_young/wanderer_male_young_05.png",
+      "output": "art_sources/refresh_20261019/batches/03_portrait_pool/output/existing/local/portraits/pool/male_young/wanderer_male_young_05.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/local/portraits/pool/male_young/wanderer_male_young_05.png",
+        "sha256": "be2467c67e28c96ab70096aab246f904e862798fdc8c3d022f53f805c3ee3087",
+        "format": "PNG",
+        "dimensions": [
+          512,
+          640
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          4,
+          5
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_generated",
+      "tool_refs": [
+        "assets/local/portraits/pool/male_young/wanderer_male_young_05.png",
+        "art_sources/refresh_20261019/approved_samples/02_portrait.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/03_portrait_pool/output/prompts/535f59cf31994dce.txt",
+      "newly_generated": true,
+      "sha256": "13e647be4ac3a6179973f4abe4a274d2e48baf24470a324022e8d70ed66c21e6",
+      "native_dimensions": [
+        1122,
+        1402
+      ],
+      "native_mode": "RGB",
+      "alpha_extrema": null,
+      "tool_logical_path": "C:\\Users\\Kuroro\\.codex\\generated_images\\01a156b8-68e7-71d3-9e49-188fe4225a5e\\exec-06c6e552-c4f3-4d8e-8bbb-e5971e570344.png",
+      "tool_physical_path": "D:\\claude\\flash\\.tmp\\imagegen_storage\\generated_images\\01a156b8-68e7-71d3-9e49-188fe4225a5e\\exec-06c6e552-c4f3-4d8e-8bbb-e5971e570344.png",
+      "input_hashes": [
+        {
+          "path": "assets/local/portraits/pool/male_young/wanderer_male_young_05.png",
+          "sha256": "be2467c67e28c96ab70096aab246f904e862798fdc8c3d022f53f805c3ee3087"
+        },
+        {
+          "path": "art_sources/refresh_20261019/approved_samples/02_portrait.png",
+          "sha256": "139f85deb18db95d129b9e3e31db95460f47b934a7a68a4f006b95f8ad53c3fe"
+        }
+      ],
+      "review": "Visually checked identity/content, category style and complete composition; integration separate.",
+      "target_dimensions": [
+        512,
+        640
+      ],
+      "size_matches_technical_source": false,
+      "integration_status": "candidate_only_not_runtime_integrated",
+      "size_note": "Native bytes retained; runtime crop/scale or atlas registration must be resolved separately. Target dimensions are not claimed as delivered dimensions."
+    },
+    {
+      "id": "47dd2eefcf3e6f2a",
+      "batch": "03_portrait_pool",
+      "kind": "existing",
+      "label": "assets/local/portraits/pool/male_young/wanderer_male_young_06.png",
+      "source": "assets/local/portraits/pool/male_young/wanderer_male_young_06.png",
+      "output": "art_sources/refresh_20261019/batches/03_portrait_pool/output/existing/local/portraits/pool/male_young/wanderer_male_young_06.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/local/portraits/pool/male_young/wanderer_male_young_06.png",
+        "sha256": "5ed7c7db0373cbf219177f2300bc8cc6ba1efe801a61806afa44329840e0d71a",
+        "format": "PNG",
+        "dimensions": [
+          512,
+          640
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          4,
+          5
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_generated",
+      "tool_refs": [
+        "assets/local/portraits/pool/male_young/wanderer_male_young_06.png",
+        "art_sources/refresh_20261019/approved_samples/02_portrait.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/03_portrait_pool/output/prompts/47dd2eefcf3e6f2a.txt",
+      "newly_generated": true,
+      "sha256": "04ac4f812ee50bdde0cbb2cb0c0ba8a1977f6be50e058035f261dd03a3a32fe7",
+      "native_dimensions": [
+        1122,
+        1402
+      ],
+      "native_mode": "RGB",
+      "alpha_extrema": null,
+      "tool_logical_path": "C:\\Users\\Kuroro\\.codex\\generated_images\\01a156b8-68e7-71d3-9e49-188fe4225a5e\\exec-522fe496-27f2-427a-a605-a6bfbe3e596e.png",
+      "tool_physical_path": "D:\\claude\\flash\\.tmp\\imagegen_storage\\generated_images\\01a156b8-68e7-71d3-9e49-188fe4225a5e\\exec-522fe496-27f2-427a-a605-a6bfbe3e596e.png",
+      "input_hashes": [
+        {
+          "path": "assets/local/portraits/pool/male_young/wanderer_male_young_06.png",
+          "sha256": "5ed7c7db0373cbf219177f2300bc8cc6ba1efe801a61806afa44329840e0d71a"
+        },
+        {
+          "path": "art_sources/refresh_20261019/approved_samples/02_portrait.png",
+          "sha256": "139f85deb18db95d129b9e3e31db95460f47b934a7a68a4f006b95f8ad53c3fe"
+        }
+      ],
+      "review": "Visually checked identity/content, category style and complete composition; integration separate.",
+      "target_dimensions": [
+        512,
+        640
+      ],
+      "size_matches_technical_source": false,
+      "integration_status": "candidate_only_not_runtime_integrated",
+      "size_note": "Native bytes retained; runtime crop/scale or atlas registration must be resolved separately. Target dimensions are not claimed as delivered dimensions."
+    },
+    {
+      "id": "2b148010299e766a",
+      "batch": "03_portrait_pool",
+      "kind": "existing",
+      "label": "assets/local/portraits/pool/male_young/wanderer_male_young_07.png",
+      "source": "assets/local/portraits/pool/male_young/wanderer_male_young_07.png",
+      "output": "art_sources/refresh_20261019/batches/03_portrait_pool/output/existing/local/portraits/pool/male_young/wanderer_male_young_07.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/local/portraits/pool/male_young/wanderer_male_young_07.png",
+        "sha256": "8cbcfeea948d5ef6064d59e2ec575ad4e69fd18945b79e689ad276c40d1f7645",
+        "format": "PNG",
+        "dimensions": [
+          512,
+          640
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          4,
+          5
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_generated",
+      "tool_refs": [
+        "assets/local/portraits/pool/male_young/wanderer_male_young_07.png",
+        "art_sources/refresh_20261019/approved_samples/02_portrait.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/03_portrait_pool/output/prompts/2b148010299e766a.txt",
+      "newly_generated": true,
+      "sha256": "0a8ec44047148104e68e908cd158170a33074101bf6ecfca24dd51d5796a43d7",
+      "native_dimensions": [
+        1122,
+        1402
+      ],
+      "native_mode": "RGB",
+      "alpha_extrema": null,
+      "tool_logical_path": "C:\\Users\\Kuroro\\.codex\\generated_images\\01a156b8-68e7-71d3-9e49-188fe4225a5e\\exec-7d07e5cd-d415-44cb-b6c0-fda7e28eb6d3.png",
+      "tool_physical_path": "D:\\claude\\flash\\.tmp\\imagegen_storage\\generated_images\\01a156b8-68e7-71d3-9e49-188fe4225a5e\\exec-7d07e5cd-d415-44cb-b6c0-fda7e28eb6d3.png",
+      "input_hashes": [
+        {
+          "path": "assets/local/portraits/pool/male_young/wanderer_male_young_07.png",
+          "sha256": "8cbcfeea948d5ef6064d59e2ec575ad4e69fd18945b79e689ad276c40d1f7645"
+        },
+        {
+          "path": "art_sources/refresh_20261019/approved_samples/02_portrait.png",
+          "sha256": "139f85deb18db95d129b9e3e31db95460f47b934a7a68a4f006b95f8ad53c3fe"
+        }
+      ],
+      "review": "Visually checked identity/content, category style and complete composition; integration separate.",
+      "target_dimensions": [
+        512,
+        640
+      ],
+      "size_matches_technical_source": false,
+      "integration_status": "candidate_only_not_runtime_integrated",
+      "size_note": "Native bytes retained; runtime crop/scale or atlas registration must be resolved separately. Target dimensions are not claimed as delivered dimensions."
+    },
+    {
+      "id": "b3a160c873abcf09",
+      "batch": "03_portrait_pool",
+      "kind": "existing",
+      "label": "assets/local/portraits/pool/male_young/wanderer_male_young_ethereal_01.png",
+      "source": "assets/local/portraits/pool/male_young/wanderer_male_young_ethereal_01.png",
+      "output": "art_sources/refresh_20261019/batches/03_portrait_pool/output/existing/local/portraits/pool/male_young/wanderer_male_young_ethereal_01.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/local/portraits/pool/male_young/wanderer_male_young_ethereal_01.png",
+        "sha256": "30b607c99d7e2c8130daa4e0f436762b4461acf62456d582357c52f65b396c61",
+        "format": "PNG",
+        "dimensions": [
+          1122,
+          1402
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          561,
+          701
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_generated",
+      "tool_refs": [
+        "assets/local/portraits/pool/male_young/wanderer_male_young_ethereal_01.png",
+        "art_sources/refresh_20261019/approved_samples/02_portrait.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/03_portrait_pool/output/prompts/b3a160c873abcf09.txt",
+      "newly_generated": true,
+      "sha256": "70c7e6a4cf461f379dd4e5489a689b2a64a0a1beea405b9d99b8bd46dee21d61",
+      "native_dimensions": [
+        1122,
+        1402
+      ],
+      "native_mode": "RGB",
+      "alpha_extrema": null,
+      "tool_logical_path": "C:\\Users\\Kuroro\\.codex\\generated_images\\01a156b8-68e7-71d3-9e49-188fe4225a5e\\exec-c038bd24-c45f-417c-99eb-25a4dda16c53.png",
+      "tool_physical_path": "D:\\claude\\flash\\.tmp\\imagegen_storage\\generated_images\\01a156b8-68e7-71d3-9e49-188fe4225a5e\\exec-c038bd24-c45f-417c-99eb-25a4dda16c53.png",
+      "input_hashes": [
+        {
+          "path": "assets/local/portraits/pool/male_young/wanderer_male_young_ethereal_01.png",
+          "sha256": "30b607c99d7e2c8130daa4e0f436762b4461acf62456d582357c52f65b396c61"
+        },
+        {
+          "path": "art_sources/refresh_20261019/approved_samples/02_portrait.png",
+          "sha256": "139f85deb18db95d129b9e3e31db95460f47b934a7a68a4f006b95f8ad53c3fe"
+        }
+      ],
+      "review": "Visually checked identity/content, category style and complete composition; integration separate.",
+      "target_dimensions": [
+        1122,
+        1402
+      ],
+      "size_matches_technical_source": true,
+      "integration_status": "candidate_only_not_runtime_integrated"
+    },
+    {
+      "id": "10c98d52326a6ac2",
+      "batch": "03_portrait_pool",
+      "kind": "existing",
+      "label": "assets/local/portraits/pool/male_young/wanderer_male_young_handsome_01.png",
+      "source": "assets/local/portraits/pool/male_young/wanderer_male_young_handsome_01.png",
+      "output": "art_sources/refresh_20261019/batches/03_portrait_pool/output/existing/local/portraits/pool/male_young/wanderer_male_young_handsome_01.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/local/portraits/pool/male_young/wanderer_male_young_handsome_01.png",
+        "sha256": "568425edfd1bfd2412d3ede523f95d1902a9d0b3dc1a277bfb83a45260c0663b",
+        "format": "PNG",
+        "dimensions": [
+          1122,
+          1402
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          561,
+          701
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_generated",
+      "tool_refs": [
+        "assets/local/portraits/pool/male_young/wanderer_male_young_handsome_01.png",
+        "art_sources/refresh_20261019/approved_samples/02_portrait.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/03_portrait_pool/output/prompts/10c98d52326a6ac2.txt",
+      "newly_generated": true,
+      "sha256": "3e973dc021c27b1141613aaf1e0b970c6aebb777c72c257fd9e669a1c9f5bebd",
+      "native_dimensions": [
+        1122,
+        1402
+      ],
+      "native_mode": "RGB",
+      "alpha_extrema": null,
+      "tool_logical_path": "C:\\Users\\Kuroro\\.codex\\generated_images\\01a156b8-68e7-71d3-9e49-188fe4225a5e\\exec-7ae0ad58-07b8-442b-af0b-6087a09c2272.png",
+      "tool_physical_path": "D:\\claude\\flash\\.tmp\\imagegen_storage\\generated_images\\01a156b8-68e7-71d3-9e49-188fe4225a5e\\exec-7ae0ad58-07b8-442b-af0b-6087a09c2272.png",
+      "input_hashes": [
+        {
+          "path": "assets/local/portraits/pool/male_young/wanderer_male_young_handsome_01.png",
+          "sha256": "568425edfd1bfd2412d3ede523f95d1902a9d0b3dc1a277bfb83a45260c0663b"
+        },
+        {
+          "path": "art_sources/refresh_20261019/approved_samples/02_portrait.png",
+          "sha256": "139f85deb18db95d129b9e3e31db95460f47b934a7a68a4f006b95f8ad53c3fe"
+        }
+      ],
+      "review": "Visually checked identity/content, category style and complete composition; integration separate.",
+      "target_dimensions": [
+        1122,
+        1402
+      ],
+      "size_matches_technical_source": true,
+      "integration_status": "candidate_only_not_runtime_integrated"
+    },
+    {
+      "id": "176e97465e07ecb4",
+      "batch": "03_portrait_pool",
+      "kind": "existing",
+      "label": "assets/local/portraits/pool/male_young/wanderer_male_young_high_b03_01.png",
+      "source": "assets/local/portraits/pool/male_young/wanderer_male_young_high_b03_01.png",
+      "output": "art_sources/refresh_20261019/batches/03_portrait_pool/output/existing/local/portraits/pool/male_young/wanderer_male_young_high_b03_01.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/local/portraits/pool/male_young/wanderer_male_young_high_b03_01.png",
+        "sha256": "67e579e54aa0aeb420fe46121e02415b40f8e156293e35a2b48d2e02f0545f3d",
+        "format": "PNG",
+        "dimensions": [
+          1122,
+          1402
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          561,
+          701
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_generated",
+      "tool_refs": [
+        "assets/local/portraits/pool/male_young/wanderer_male_young_high_b03_01.png",
+        "art_sources/refresh_20261019/approved_samples/02_portrait.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/03_portrait_pool/output/prompts/176e97465e07ecb4.txt",
+      "newly_generated": true,
+      "sha256": "b4bf31667f02606b96c4494aea6646a15639e9b45223a878574c62e15125b814",
+      "native_dimensions": [
+        1122,
+        1402
+      ],
+      "native_mode": "RGB",
+      "alpha_extrema": null,
+      "tool_logical_path": "C:\\Users\\Kuroro\\.codex\\generated_images\\01a156b8-68e7-71d3-9e49-188fe4225a5e\\exec-e974c4c1-921d-4845-ae4a-6c74c48703d6.png",
+      "tool_physical_path": "D:\\claude\\flash\\.tmp\\imagegen_storage\\generated_images\\01a156b8-68e7-71d3-9e49-188fe4225a5e\\exec-e974c4c1-921d-4845-ae4a-6c74c48703d6.png",
+      "input_hashes": [
+        {
+          "path": "assets/local/portraits/pool/male_young/wanderer_male_young_high_b03_01.png",
+          "sha256": "67e579e54aa0aeb420fe46121e02415b40f8e156293e35a2b48d2e02f0545f3d"
+        },
+        {
+          "path": "art_sources/refresh_20261019/approved_samples/02_portrait.png",
+          "sha256": "139f85deb18db95d129b9e3e31db95460f47b934a7a68a4f006b95f8ad53c3fe"
+        }
+      ],
+      "review": "Visually checked identity/content, category style and complete composition; integration separate.",
+      "target_dimensions": [
+        1122,
+        1402
+      ],
+      "size_matches_technical_source": true,
+      "integration_status": "candidate_only_not_runtime_integrated"
+    },
+    {
+      "id": "eff2c8a831a6e398",
+      "batch": "03_portrait_pool",
+      "kind": "existing",
+      "label": "assets/local/portraits/pool/male_young/wanderer_male_young_high_b03_02.png",
+      "source": "assets/local/portraits/pool/male_young/wanderer_male_young_high_b03_02.png",
+      "output": "art_sources/refresh_20261019/batches/03_portrait_pool/output/existing/local/portraits/pool/male_young/wanderer_male_young_high_b03_02.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/local/portraits/pool/male_young/wanderer_male_young_high_b03_02.png",
+        "sha256": "2cf2a8d89aab0415d9f39fba38c808f3f045b7085605b23457a0ba25883e757f",
+        "format": "PNG",
+        "dimensions": [
+          1122,
+          1402
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          561,
+          701
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_generated",
+      "tool_refs": [
+        "assets/local/portraits/pool/male_young/wanderer_male_young_high_b03_02.png",
+        "art_sources/refresh_20261019/approved_samples/02_portrait.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/03_portrait_pool/output/prompts/eff2c8a831a6e398.txt",
+      "newly_generated": true,
+      "sha256": "31f433ffdf32ce8d1802b79b20e5b4f3a717471d8d0fbc8c91a612673244484e",
+      "native_dimensions": [
+        1122,
+        1402
+      ],
+      "native_mode": "RGB",
+      "alpha_extrema": null,
+      "tool_logical_path": "C:\\Users\\Kuroro\\.codex\\generated_images\\01a156b8-68e7-71d3-9e49-188fe4225a5e\\exec-72eec463-8c07-4e1c-b912-b86a2dc440fe.png",
+      "tool_physical_path": "D:\\claude\\flash\\.tmp\\imagegen_storage\\generated_images\\01a156b8-68e7-71d3-9e49-188fe4225a5e\\exec-72eec463-8c07-4e1c-b912-b86a2dc440fe.png",
+      "input_hashes": [
+        {
+          "path": "assets/local/portraits/pool/male_young/wanderer_male_young_high_b03_02.png",
+          "sha256": "2cf2a8d89aab0415d9f39fba38c808f3f045b7085605b23457a0ba25883e757f"
+        },
+        {
+          "path": "art_sources/refresh_20261019/approved_samples/02_portrait.png",
+          "sha256": "139f85deb18db95d129b9e3e31db95460f47b934a7a68a4f006b95f8ad53c3fe"
+        }
+      ],
+      "review": "Visually checked identity/content, category style and complete composition; integration separate.",
+      "target_dimensions": [
+        1122,
+        1402
+      ],
+      "size_matches_technical_source": true,
+      "integration_status": "candidate_only_not_runtime_integrated"
+    },
+    {
+      "id": "ed05a9456305e344",
+      "batch": "03_portrait_pool",
+      "kind": "existing",
+      "label": "assets/local/portraits/pool/male_young/wanderer_male_young_high_b03_03.png",
+      "source": "assets/local/portraits/pool/male_young/wanderer_male_young_high_b03_03.png",
+      "output": "art_sources/refresh_20261019/batches/03_portrait_pool/output/existing/local/portraits/pool/male_young/wanderer_male_young_high_b03_03.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/local/portraits/pool/male_young/wanderer_male_young_high_b03_03.png",
+        "sha256": "adbe113e1d38198ca494729dc039c9552e7a3b0ac91009f24fdcf166985eb8b8",
+        "format": "PNG",
+        "dimensions": [
+          1122,
+          1402
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          561,
+          701
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_generated",
+      "tool_refs": [
+        "assets/local/portraits/pool/male_young/wanderer_male_young_high_b03_03.png",
+        "art_sources/refresh_20261019/approved_samples/02_portrait.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/03_portrait_pool/output/prompts/ed05a9456305e344.txt",
+      "newly_generated": true,
+      "sha256": "61df0f44814654905396147f7d3438be03decd0e30966b0869e163c201d1a1a6",
+      "native_dimensions": [
+        1122,
+        1402
+      ],
+      "native_mode": "RGB",
+      "alpha_extrema": null,
+      "tool_logical_path": "C:\\Users\\Kuroro\\.codex\\generated_images\\01a156b8-68e7-71d3-9e49-188fe4225a5e\\exec-46c34b84-585e-49ca-ad60-7bf93b782add.png",
+      "tool_physical_path": "D:\\claude\\flash\\.tmp\\imagegen_storage\\generated_images\\01a156b8-68e7-71d3-9e49-188fe4225a5e\\exec-46c34b84-585e-49ca-ad60-7bf93b782add.png",
+      "input_hashes": [
+        {
+          "path": "assets/local/portraits/pool/male_young/wanderer_male_young_high_b03_03.png",
+          "sha256": "adbe113e1d38198ca494729dc039c9552e7a3b0ac91009f24fdcf166985eb8b8"
+        },
+        {
+          "path": "art_sources/refresh_20261019/approved_samples/02_portrait.png",
+          "sha256": "139f85deb18db95d129b9e3e31db95460f47b934a7a68a4f006b95f8ad53c3fe"
+        }
+      ],
+      "review": "Visually checked identity/content, category style and complete composition; integration separate.",
+      "target_dimensions": [
+        1122,
+        1402
+      ],
+      "size_matches_technical_source": true,
+      "integration_status": "candidate_only_not_runtime_integrated"
+    },
+    {
+      "id": "416f33a78d75ed19",
+      "batch": "03_portrait_pool",
+      "kind": "existing",
+      "label": "assets/local/portraits/pool/male_young/wanderer_male_young_high_b03_04.png",
+      "source": "assets/local/portraits/pool/male_young/wanderer_male_young_high_b03_04.png",
+      "output": "art_sources/refresh_20261019/batches/03_portrait_pool/output/existing/local/portraits/pool/male_young/wanderer_male_young_high_b03_04.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/local/portraits/pool/male_young/wanderer_male_young_high_b03_04.png",
+        "sha256": "7259b751dbe25874da0b0abcb7e9a5b019d062a1b8db8a2837d81e0826a8ce7b",
+        "format": "PNG",
+        "dimensions": [
+          1122,
+          1402
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          561,
+          701
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_generated",
+      "tool_refs": [
+        "assets/local/portraits/pool/male_young/wanderer_male_young_high_b03_04.png",
+        "art_sources/refresh_20261019/approved_samples/02_portrait.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/03_portrait_pool/output/prompts/416f33a78d75ed19.txt",
+      "newly_generated": true,
+      "sha256": "e6923b17a1c31fe28b2010c9bf2ef139c3d0f2f5d700550cb0c72b8590cb2809",
+      "native_dimensions": [
+        1122,
+        1402
+      ],
+      "native_mode": "RGB",
+      "alpha_extrema": null,
+      "tool_logical_path": "C:\\Users\\Kuroro\\.codex\\generated_images\\01a156b8-68e7-71d3-9e49-188fe4225a5e\\exec-2aa68df4-3532-49b3-afe9-b3db889d1fad.png",
+      "tool_physical_path": "D:\\claude\\flash\\.tmp\\imagegen_storage\\generated_images\\01a156b8-68e7-71d3-9e49-188fe4225a5e\\exec-2aa68df4-3532-49b3-afe9-b3db889d1fad.png",
+      "input_hashes": [
+        {
+          "path": "assets/local/portraits/pool/male_young/wanderer_male_young_high_b03_04.png",
+          "sha256": "7259b751dbe25874da0b0abcb7e9a5b019d062a1b8db8a2837d81e0826a8ce7b"
+        },
+        {
+          "path": "art_sources/refresh_20261019/approved_samples/02_portrait.png",
+          "sha256": "139f85deb18db95d129b9e3e31db95460f47b934a7a68a4f006b95f8ad53c3fe"
+        }
+      ],
+      "review": "Visually checked identity/content, category style and complete composition; integration separate.",
+      "target_dimensions": [
+        1122,
+        1402
+      ],
+      "size_matches_technical_source": true,
+      "integration_status": "candidate_only_not_runtime_integrated"
+    },
+    {
+      "id": "0acdc6fa1625b777",
+      "batch": "03_portrait_pool",
+      "kind": "existing",
+      "label": "assets/local/portraits/pool/male_young/wanderer_male_young_high_b03_05.png",
+      "source": "assets/local/portraits/pool/male_young/wanderer_male_young_high_b03_05.png",
+      "output": "art_sources/refresh_20261019/batches/03_portrait_pool/output/existing/local/portraits/pool/male_young/wanderer_male_young_high_b03_05.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/local/portraits/pool/male_young/wanderer_male_young_high_b03_05.png",
+        "sha256": "7691eff276fb1a1810c86f997fe5af655e439d866c780467815a35264e6c0471",
+        "format": "PNG",
+        "dimensions": [
+          1122,
+          1402
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          561,
+          701
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_generated",
+      "tool_refs": [
+        "assets/local/portraits/pool/male_young/wanderer_male_young_high_b03_05.png",
+        "art_sources/refresh_20261019/approved_samples/02_portrait.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/03_portrait_pool/output/prompts/0acdc6fa1625b777.txt",
+      "newly_generated": true,
+      "sha256": "b4c133c60db0a30c8266c5911d4dfea51a699e32bae8f68db0748471d032279d",
+      "native_dimensions": [
+        1122,
+        1402
+      ],
+      "native_mode": "RGB",
+      "alpha_extrema": null,
+      "tool_logical_path": "C:\\Users\\Kuroro\\.codex\\generated_images\\01a156b8-68e7-71d3-9e49-188fe4225a5e\\exec-b5a23959-2dda-42ec-8dd8-abfaf7f9e0bc.png",
+      "tool_physical_path": "D:\\claude\\flash\\.tmp\\imagegen_storage\\generated_images\\01a156b8-68e7-71d3-9e49-188fe4225a5e\\exec-b5a23959-2dda-42ec-8dd8-abfaf7f9e0bc.png",
+      "input_hashes": [
+        {
+          "path": "assets/local/portraits/pool/male_young/wanderer_male_young_high_b03_05.png",
+          "sha256": "7691eff276fb1a1810c86f997fe5af655e439d866c780467815a35264e6c0471"
+        },
+        {
+          "path": "art_sources/refresh_20261019/approved_samples/02_portrait.png",
+          "sha256": "139f85deb18db95d129b9e3e31db95460f47b934a7a68a4f006b95f8ad53c3fe"
+        }
+      ],
+      "review": "Visually checked identity/content, category style and complete composition; integration separate.",
+      "target_dimensions": [
+        1122,
+        1402
+      ],
+      "size_matches_technical_source": true,
+      "integration_status": "candidate_only_not_runtime_integrated"
+    }
+  ]
+}

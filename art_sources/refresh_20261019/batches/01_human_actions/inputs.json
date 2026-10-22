@@ -13,8 +13,28 @@
       "mode": "RGBA",
       "transparent_fraction": 0.7565
     },
-    "absolute_path": "D:/fqh/flash/assets/art/actors/cultivator_canglan_female.png",
-    "actor_layouts": []
+    "actor_layouts": [
+      {
+        "actor_id": "cultivator",
+        "source_role": "look",
+        "definition": {
+          "texture": "res://assets/art/actors/cultivator_canglan_female.png",
+          "look": "res://assets/art/actors/cultivator_%s_%s.png",
+          "columns": 3,
+          "rows": 2,
+          "frames": {
+            "idle": 0,
+            "prepare": 1,
+            "attack": 2,
+            "cast": 3,
+            "hit": 4,
+            "guard": 5
+          },
+          "faces_right": true,
+          "height_ratio": 0.85
+        }
+      }
+    ]
   },
   {
     "path": "assets/art/actors/cultivator_canglan_male.png",
@@ -30,8 +50,28 @@
       "mode": "RGBA",
       "transparent_fraction": 0.7651
     },
-    "absolute_path": "D:/fqh/flash/assets/art/actors/cultivator_canglan_male.png",
-    "actor_layouts": []
+    "actor_layouts": [
+      {
+        "actor_id": "cultivator",
+        "source_role": "look",
+        "definition": {
+          "texture": "res://assets/art/actors/cultivator_canglan_male.png",
+          "look": "res://assets/art/actors/cultivator_%s_%s.png",
+          "columns": 3,
+          "rows": 2,
+          "frames": {
+            "idle": 0,
+            "prepare": 1,
+            "attack": 2,
+            "cast": 3,
+            "hit": 4,
+            "guard": 5
+          },
+          "faces_right": true,
+          "height_ratio": 0.85
+        }
+      }
+    ]
   },
   {
     "path": "assets/art/actors/cultivator_changqing_female.png",
@@ -47,8 +87,28 @@
       "mode": "RGBA",
       "transparent_fraction": 0.7708
     },
-    "absolute_path": "D:/fqh/flash/assets/art/actors/cultivator_changqing_female.png",
-    "actor_layouts": []
+    "actor_layouts": [
+      {
+        "actor_id": "cultivator",
+        "source_role": "look",
+        "definition": {
+          "texture": "res://assets/art/actors/cultivator_changqing_female.png",
+          "look": "res://assets/art/actors/cultivator_%s_%s.png",
+          "columns": 3,
+          "rows": 2,
+          "frames": {
+            "idle": 0,
+            "prepare": 1,
+            "attack": 2,
+            "cast": 3,
+            "hit": 4,
+            "guard": 5
+          },
+          "faces_right": true,
+          "height_ratio": 0.85
+        }
+      }
+    ]
   },
   {
     "path": "assets/art/actors/cultivator_changqing_male.png",
@@ -64,8 +124,28 @@
       "mode": "RGBA",
       "transparent_fraction": 0.7643
     },
-    "absolute_path": "D:/fqh/flash/assets/art/actors/cultivator_changqing_male.png",
-    "actor_layouts": []
+    "actor_layouts": [
+      {
+        "actor_id": "cultivator",
+        "source_role": "look",
+        "definition": {
+          "texture": "res://assets/art/actors/cultivator_changqing_male.png",
+          "look": "res://assets/art/actors/cultivator_%s_%s.png",
+          "columns": 3,
+          "rows": 2,
+          "frames": {
+            "idle": 0,
+            "prepare": 1,
+            "attack": 2,
+            "cast": 3,
+            "hit": 4,
+            "guard": 5
+          },
+          "faces_right": true,
+          "height_ratio": 0.85
+        }
+      }
+    ]
   },
   {
     "path": "assets/art/actors/cultivator_chixiao_female.png",
@@ -81,8 +161,28 @@
       "mode": "RGBA",
       "transparent_fraction": 0.7535
     },
-    "absolute_path": "D:/fqh/flash/assets/art/actors/cultivator_chixiao_female.png",
-    "actor_layouts": []
+    "actor_layouts": [
+      {
+        "actor_id": "cultivator",
+        "source_role": "look",
+        "definition": {
+          "texture": "res://assets/art/actors/cultivator_chixiao_female.png",
+          "look": "res://assets/art/actors/cultivator_%s_%s.png",
+          "columns": 3,
+          "rows": 2,
+          "frames": {
+            "idle": 0,
+            "prepare": 1,
+            "attack": 2,
+            "cast": 3,
+            "hit": 4,
+            "guard": 5
+          },
+          "faces_right": true,
+          "height_ratio": 0.85
+        }
+      }
+    ]
   },
   {
     "path": "assets/art/actors/cultivator_chixiao_male.png",
@@ -98,8 +198,28 @@
       "mode": "RGBA",
       "transparent_fraction": 0.7794
     },
-    "absolute_path": "D:/fqh/flash/assets/art/actors/cultivator_chixiao_male.png",
-    "actor_layouts": []
+    "actor_layouts": [
+      {
+        "actor_id": "cultivator",
+        "source_role": "look",
+        "definition": {
+          "texture": "res://assets/art/actors/cultivator_chixiao_male.png",
+          "look": "res://assets/art/actors/cultivator_%s_%s.png",
+          "columns": 3,
+          "rows": 2,
+          "frames": {
+            "idle": 0,
+            "prepare": 1,
+            "attack": 2,
+            "cast": 3,
+            "hit": 4,
+            "guard": 5
+          },
+          "faces_right": true,
+          "height_ratio": 0.85
+        }
+      }
+    ]
   },
   {
     "path": "assets/art/actors/cultivator_qingyun_female.png",
@@ -115,8 +235,28 @@
       "mode": "RGBA",
       "transparent_fraction": 0.7951
     },
-    "absolute_path": "D:/fqh/flash/assets/art/actors/cultivator_qingyun_female.png",
-    "actor_layouts": []
+    "actor_layouts": [
+      {
+        "actor_id": "cultivator",
+        "source_role": "look",
+        "definition": {
+          "texture": "res://assets/art/actors/cultivator_qingyun_female.png",
+          "look": "res://assets/art/actors/cultivator_%s_%s.png",
+          "columns": 3,
+          "rows": 2,
+          "frames": {
+            "idle": 0,
+            "prepare": 1,
+            "attack": 2,
+            "cast": 3,
+            "hit": 4,
+            "guard": 5
+          },
+          "faces_right": true,
+          "height_ratio": 0.85
+        }
+      }
+    ]
   },
   {
     "path": "assets/art/actors/cultivator_qingyun_male.png",
@@ -132,8 +272,28 @@
       "mode": "RGBA",
       "transparent_fraction": 0.8239
     },
-    "absolute_path": "D:/fqh/flash/assets/art/actors/cultivator_qingyun_male.png",
-    "actor_layouts": []
+    "actor_layouts": [
+      {
+        "actor_id": "cultivator",
+        "source_role": "look",
+        "definition": {
+          "texture": "res://assets/art/actors/cultivator_qingyun_male.png",
+          "look": "res://assets/art/actors/cultivator_%s_%s.png",
+          "columns": 3,
+          "rows": 2,
+          "frames": {
+            "idle": 0,
+            "prepare": 1,
+            "attack": 2,
+            "cast": 3,
+            "hit": 4,
+            "guard": 5
+          },
+          "faces_right": true,
+          "height_ratio": 0.85
+        }
+      }
+    ]
   },
   {
     "path": "assets/art/actors/cultivator_wanderer_female.png",
@@ -149,8 +309,28 @@
       "mode": "RGBA",
       "transparent_fraction": 0.807
     },
-    "absolute_path": "D:/fqh/flash/assets/art/actors/cultivator_wanderer_female.png",
-    "actor_layouts": []
+    "actor_layouts": [
+      {
+        "actor_id": "cultivator",
+        "source_role": "look",
+        "definition": {
+          "texture": "res://assets/art/actors/cultivator_wanderer_female.png",
+          "look": "res://assets/art/actors/cultivator_%s_%s.png",
+          "columns": 3,
+          "rows": 2,
+          "frames": {
+            "idle": 0,
+            "prepare": 1,
+            "attack": 2,
+            "cast": 3,
+            "hit": 4,
+            "guard": 5
+          },
+          "faces_right": true,
+          "height_ratio": 0.85
+        }
+      }
+    ]
   },
   {
     "path": "assets/art/actors/cultivator_wanderer_male.png",
@@ -166,8 +346,28 @@
       "mode": "RGBA",
       "transparent_fraction": 0.81
     },
-    "absolute_path": "D:/fqh/flash/assets/art/actors/cultivator_wanderer_male.png",
-    "actor_layouts": []
+    "actor_layouts": [
+      {
+        "actor_id": "cultivator",
+        "source_role": "look",
+        "definition": {
+          "texture": "res://assets/art/actors/cultivator_wanderer_male.png",
+          "look": "res://assets/art/actors/cultivator_%s_%s.png",
+          "columns": 3,
+          "rows": 2,
+          "frames": {
+            "idle": 0,
+            "prepare": 1,
+            "attack": 2,
+            "cast": 3,
+            "hit": 4,
+            "guard": 5
+          },
+          "faces_right": true,
+          "height_ratio": 0.85
+        }
+      }
+    ]
   },
   {
     "path": "assets/art/actors/cultivator_xuanyue_female.png",
@@ -183,8 +383,28 @@
       "mode": "RGBA",
       "transparent_fraction": 0.7824
     },
-    "absolute_path": "D:/fqh/flash/assets/art/actors/cultivator_xuanyue_female.png",
-    "actor_layouts": []
+    "actor_layouts": [
+      {
+        "actor_id": "cultivator",
+        "source_role": "look",
+        "definition": {
+          "texture": "res://assets/art/actors/cultivator_xuanyue_female.png",
+          "look": "res://assets/art/actors/cultivator_%s_%s.png",
+          "columns": 3,
+          "rows": 2,
+          "frames": {
+            "idle": 0,
+            "prepare": 1,
+            "attack": 2,
+            "cast": 3,
+            "hit": 4,
+            "guard": 5
+          },
+          "faces_right": true,
+          "height_ratio": 0.85
+        }
+      }
+    ]
   },
   {
     "path": "assets/art/actors/cultivator_xuanyue_male.png",
@@ -200,7 +420,6 @@
       "mode": "RGBA",
       "transparent_fraction": 0.7603
     },
-    "absolute_path": "D:/fqh/flash/assets/art/actors/cultivator_xuanyue_male.png",
     "actor_layouts": [
       {
         "actor_id": "yue_disciple",
@@ -208,6 +427,26 @@
         "definition": {
           "preferred": "res://assets/art/actors/cultivator_xuanyue_male.png",
           "texture": "res://assets/art/rival_atlas_v2.png",
+          "columns": 3,
+          "rows": 2,
+          "frames": {
+            "idle": 0,
+            "prepare": 1,
+            "attack": 2,
+            "cast": 3,
+            "hit": 4,
+            "guard": 5
+          },
+          "faces_right": true,
+          "height_ratio": 0.85
+        }
+      },
+      {
+        "actor_id": "cultivator",
+        "source_role": "look",
+        "definition": {
+          "texture": "res://assets/art/actors/cultivator_xuanyue_male.png",
+          "look": "res://assets/art/actors/cultivator_%s_%s.png",
           "columns": 3,
           "rows": 2,
           "frames": {
@@ -238,7 +477,6 @@
       "mode": "RGBA",
       "transparent_fraction": 0.7561
     },
-    "absolute_path": "D:/fqh/flash/assets/art/actors/rogue.png",
     "actor_layouts": [
       {
         "actor_id": "shui_fei",
@@ -376,7 +614,6 @@
       "mode": "RGBA",
       "transparent_fraction": 0.7588
     },
-    "absolute_path": "D:/fqh/flash/assets/art/actors/ruin_rogue.png",
     "actor_layouts": [
       {
         "actor_id": "ruin_rogue",
@@ -454,7 +691,6 @@
       "mode": "RGBA",
       "transparent_fraction": 0.631
     },
-    "absolute_path": "D:/fqh/flash/assets/art/battle/chixiao_zhifa.png",
     "actor_layouts": [
       {
         "actor_id": "chixiao_zhifa",
@@ -533,7 +769,6 @@
       "mode": "RGBA",
       "transparent_fraction": 0.473
     },
-    "absolute_path": "D:/fqh/flash/assets/art/cultivator_atlas_v1.png",
     "actor_layouts": []
   },
   {
@@ -550,7 +785,6 @@
       "mode": "RGBA",
       "transparent_fraction": 0.4849
     },
-    "absolute_path": "D:/fqh/flash/assets/art/cultivator_atlas_v2.png",
     "actor_layouts": [
       {
         "actor_id": "hero",
@@ -607,7 +841,6 @@
       "mode": "RGBA",
       "transparent_fraction": 0.438
     },
-    "absolute_path": "D:/fqh/flash/assets/art/rival_atlas_v2.png",
     "actor_layouts": [
       {
         "actor_id": "yue_disciple",

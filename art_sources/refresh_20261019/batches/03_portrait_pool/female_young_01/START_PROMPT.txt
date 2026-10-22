@@ -1,1 +1,2 @@
-请按 D:/fqh/flash/art_sources/refresh_20261019/batches/03_portrait_pool/female_young_01/TASK.md 执行这一批 32 张普通头像，只处理本批 inputs.json，只在本批 output/ 交付，遵守上级风格规范和通用规则。
+从当前项目根目录执行，以下路径均相对于项目根目录。
+请按 art_sources/refresh_20261019/batches/03_portrait_pool/female_young_01/TASK.md 执行本子批32张头像。先读上级TASK.md、COMMON_RULES.md、CONTENT_PLAN.md与上级references.json；只处理本子批inputs.json。新大纲只更新人物用途，原人物C版、参考样张、构图、底色和验收要求保持不变。头像规格继承每张inputs.json旧图；引用按PRODUCTION_MANIFEST.json核验。本轮头像全池纳入逐张制作与验收，保持原有246张范围。只交本子批output/，不扩池、不替换正式资源；遵守不写C盘，生图前核验目录联接。

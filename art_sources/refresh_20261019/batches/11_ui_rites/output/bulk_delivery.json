@@ -1,0 +1,2435 @@
+{
+  "scope": "candidate delivery; runtime installs listed in INTEGRATION.json",
+  "counts": {
+    "delivered_reuse": 39,
+    "delivered_generated": 3,
+    "delivered_vector": 3
+  },
+  "jobs": [
+    {
+      "id": "84b65c31c2401b2a",
+      "batch": "11_ui_rites",
+      "kind": "existing",
+      "label": "assets/art/actors/hero_meditate.png",
+      "source": "assets/art/actors/hero_meditate.png",
+      "output": "art_sources/refresh_20261019/batches/11_ui_rites/output/existing/art/actors/hero_meditate.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/art/actors/hero_meditate.png",
+        "sha256": "9e8a32da01d522683e60b6cc56e73bf5d6e5b8a0e8f4fe8d3dc4d5b23be6a1f1",
+        "format": "PNG",
+        "dimensions": [
+          1254,
+          1254
+        ],
+        "mode": "RGBA",
+        "background": "transparent_required",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          1,
+          1
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_reuse",
+      "tool_refs": [
+        "assets/art/actors/hero_meditate.png",
+        "art_sources/refresh_20261019/approved_samples/10_panel.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/11_ui_rites/output/prompts/84b65c31c2401b2a.txt",
+      "reuse_source": "art_sources/refresh_20261019/batches/11_ui_rites/output/hero_meditate.png",
+      "reuse_reason": "Reuse reviewed planned meditation candidate for the existing static illustration consumer. Same hero and seated purpose; hands rest on knees instead of in lap, a candidate pose change for integration review.",
+      "review": "Visually compared exact source, approved sample/candidate, content, complete silhouette and category style.",
+      "input_hashes": [
+        {
+          "path": "art_sources/refresh_20261019/batches/11_ui_rites/output/hero_meditate.png",
+          "sha256": "3f4bd8abb7caf3666fa07f9a1c599022a906fd4e2b63638ff8df5a9c8791376b"
+        }
+      ],
+      "delivery_kind": "reuse_prior_candidate",
+      "sha256": "3f4bd8abb7caf3666fa07f9a1c599022a906fd4e2b63638ff8df5a9c8791376b",
+      "newly_generated": false,
+      "native_mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "native_dimensions": [
+        1254,
+        1254
+      ],
+      "target_dimensions": [
+        1254,
+        1254
+      ],
+      "size_matches_technical_source": true,
+      "integration_status": "runtime_installed",
+      "runtime_targets": [
+        "assets/art/actors/hero_meditate.png"
+      ]
+    },
+    {
+      "id": "79cfab4ed938c6d3",
+      "batch": "11_ui_rites",
+      "kind": "existing",
+      "label": "assets/art/ui/alchemy_vignette.png",
+      "source": "assets/art/ui/alchemy_vignette.png",
+      "output": "art_sources/refresh_20261019/batches/11_ui_rites/output/existing/art/ui/alchemy_vignette.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/art/ui/alchemy_vignette.png",
+        "sha256": "88bf832d0b4156688f45d8fb3b53dfbe82d862f4840c3fa9cfbcfadb4df154a0",
+        "format": "PNG",
+        "dimensions": [
+          1254,
+          1254
+        ],
+        "mode": "RGBA",
+        "background": "transparent_required",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          1,
+          1
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_generated",
+      "tool_refs": [
+        "assets/art/ui/alchemy_vignette.png",
+        "art_sources/refresh_20261019/approved_samples/11_furnace.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/11_ui_rites/output/prompts/79cfab4ed938c6d3.txt",
+      "newly_generated": true,
+      "sha256": "f6b658c7867243ac7d67b49585c15bc930bd56ce684504bd8858702476367caf",
+      "native_dimensions": [
+        1254,
+        1254
+      ],
+      "native_mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "tool_logical_path": "C:\\Users\\Kuroro\\.codex\\generated_images\\01a156b8-68e7-71d3-9e49-188fe4225a5e\\exec-3d34d043-75fa-476c-b92b-edfbe970b60a.png",
+      "tool_physical_path": "D:\\claude\\flash\\.tmp\\imagegen_storage\\generated_images\\01a156b8-68e7-71d3-9e49-188fe4225a5e\\exec-3d34d043-75fa-476c-b92b-edfbe970b60a.png",
+      "input_hashes": [
+        {
+          "path": "assets/art/ui/alchemy_vignette.png",
+          "sha256": "88bf832d0b4156688f45d8fb3b53dfbe82d862f4840c3fa9cfbcfadb4df154a0"
+        },
+        {
+          "path": "art_sources/refresh_20261019/approved_samples/11_furnace.png",
+          "sha256": "c0d05eee32cf3a403d4b3c4ee72c87caf4ed8a26d19b667b972a7833b37494cf"
+        }
+      ],
+      "review": "Visually checked identity/content, category style and complete composition; integration separate.",
+      "target_dimensions": [
+        1254,
+        1254
+      ],
+      "size_matches_technical_source": true,
+      "integration_status": "runtime_installed",
+      "runtime_targets": [
+        "assets/art/ui/alchemy_vignette.png"
+      ]
+    },
+    {
+      "id": "28642f109dde97e5",
+      "batch": "11_ui_rites",
+      "kind": "existing",
+      "label": "assets/art/ui/divider.svg",
+      "source": "assets/art/ui/divider.svg",
+      "output": "art_sources/refresh_20261019/batches/11_ui_rites/output/existing/art/ui/divider.svg",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/art/ui/divider.svg",
+        "sha256": "008d749c8dd9ec6fa43ed5bc7df832e5ceabbf0748bf90deaef324e20e3b878d",
+        "format": "SVG",
+        "dimensions": [
+          200,
+          24
+        ],
+        "view_box": [
+          0.0,
+          0.0,
+          200.0,
+          24.0
+        ],
+        "background": "preserve_source_svg",
+        "native_vector_required": true,
+        "aspect_ratio": [
+          25,
+          3
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_reuse",
+      "tool_refs": [
+        "assets/art/ui/divider.svg",
+        "art_sources/refresh_20261019/approved_samples/10_panel.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/11_ui_rites/output/prompts/28642f109dde97e5.txt",
+      "delivery_kind": "reuse_vector",
+      "sha256": "008d749c8dd9ec6fa43ed5bc7df832e5ceabbf0748bf90deaef324e20e3b878d",
+      "newly_generated": false,
+      "native_dimensions": [
+        200,
+        24
+      ],
+      "target_dimensions": [
+        200,
+        24
+      ],
+      "size_matches_technical_source": true,
+      "integration_status": "candidate_only_not_runtime_integrated"
+    },
+    {
+      "id": "b5c537ca35c0c510",
+      "batch": "11_ui_rites",
+      "kind": "existing",
+      "label": "assets/art/ui/grades/grade_0.svg",
+      "source": "assets/art/ui/grades/grade_0.svg",
+      "output": "art_sources/refresh_20261019/batches/11_ui_rites/output/existing/art/ui/grades/grade_0.svg",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/art/ui/grades/grade_0.svg",
+        "sha256": "5586e25ae8046064e8db455949fd7a9ab1c392e7a504985dcd0b8ba6c4fe35e1",
+        "format": "SVG",
+        "dimensions": [
+          48,
+          48
+        ],
+        "view_box": [
+          0.0,
+          0.0,
+          48.0,
+          48.0
+        ],
+        "background": "preserve_source_svg",
+        "native_vector_required": true,
+        "aspect_ratio": [
+          1,
+          1
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_reuse",
+      "tool_refs": [
+        "assets/art/ui/grades/grade_0.svg",
+        "art_sources/refresh_20261019/approved_samples/10_panel.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/11_ui_rites/output/prompts/b5c537ca35c0c510.txt",
+      "delivery_kind": "reuse_vector",
+      "sha256": "5586e25ae8046064e8db455949fd7a9ab1c392e7a504985dcd0b8ba6c4fe35e1",
+      "newly_generated": false,
+      "native_dimensions": [
+        48,
+        48
+      ],
+      "target_dimensions": [
+        48,
+        48
+      ],
+      "size_matches_technical_source": true,
+      "integration_status": "candidate_only_not_runtime_integrated"
+    },
+    {
+      "id": "f6d16146c686e17f",
+      "batch": "11_ui_rites",
+      "kind": "existing",
+      "label": "assets/art/ui/grades/grade_1.svg",
+      "source": "assets/art/ui/grades/grade_1.svg",
+      "output": "art_sources/refresh_20261019/batches/11_ui_rites/output/existing/art/ui/grades/grade_1.svg",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/art/ui/grades/grade_1.svg",
+        "sha256": "c40cd1152d6f7f76779555bb29e8b543ca172aba92b32be708f772c1b2c54eb3",
+        "format": "SVG",
+        "dimensions": [
+          48,
+          48
+        ],
+        "view_box": [
+          0.0,
+          0.0,
+          48.0,
+          48.0
+        ],
+        "background": "preserve_source_svg",
+        "native_vector_required": true,
+        "aspect_ratio": [
+          1,
+          1
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_reuse",
+      "tool_refs": [
+        "assets/art/ui/grades/grade_1.svg",
+        "art_sources/refresh_20261019/approved_samples/10_panel.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/11_ui_rites/output/prompts/f6d16146c686e17f.txt",
+      "delivery_kind": "reuse_vector",
+      "sha256": "c40cd1152d6f7f76779555bb29e8b543ca172aba92b32be708f772c1b2c54eb3",
+      "newly_generated": false,
+      "native_dimensions": [
+        48,
+        48
+      ],
+      "target_dimensions": [
+        48,
+        48
+      ],
+      "size_matches_technical_source": true,
+      "integration_status": "candidate_only_not_runtime_integrated"
+    },
+    {
+      "id": "144e1ca7525ccb38",
+      "batch": "11_ui_rites",
+      "kind": "existing",
+      "label": "assets/art/ui/grades/grade_2.svg",
+      "source": "assets/art/ui/grades/grade_2.svg",
+      "output": "art_sources/refresh_20261019/batches/11_ui_rites/output/existing/art/ui/grades/grade_2.svg",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/art/ui/grades/grade_2.svg",
+        "sha256": "210ec0dcd4001f804be6345aee78aea9b353eee4b53c4a3d57d7377ab05ab529",
+        "format": "SVG",
+        "dimensions": [
+          48,
+          48
+        ],
+        "view_box": [
+          0.0,
+          0.0,
+          48.0,
+          48.0
+        ],
+        "background": "preserve_source_svg",
+        "native_vector_required": true,
+        "aspect_ratio": [
+          1,
+          1
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_reuse",
+      "tool_refs": [
+        "assets/art/ui/grades/grade_2.svg",
+        "art_sources/refresh_20261019/approved_samples/10_panel.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/11_ui_rites/output/prompts/144e1ca7525ccb38.txt",
+      "delivery_kind": "reuse_vector",
+      "sha256": "210ec0dcd4001f804be6345aee78aea9b353eee4b53c4a3d57d7377ab05ab529",
+      "newly_generated": false,
+      "native_dimensions": [
+        48,
+        48
+      ],
+      "target_dimensions": [
+        48,
+        48
+      ],
+      "size_matches_technical_source": true,
+      "integration_status": "candidate_only_not_runtime_integrated"
+    },
+    {
+      "id": "86faa8331e580160",
+      "batch": "11_ui_rites",
+      "kind": "existing",
+      "label": "assets/art/ui/grades/grade_3.svg",
+      "source": "assets/art/ui/grades/grade_3.svg",
+      "output": "art_sources/refresh_20261019/batches/11_ui_rites/output/existing/art/ui/grades/grade_3.svg",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/art/ui/grades/grade_3.svg",
+        "sha256": "c6974ac6269ca4eaf65250053891e81b5e85b9c624dadb4c3298d9281fe433d1",
+        "format": "SVG",
+        "dimensions": [
+          48,
+          48
+        ],
+        "view_box": [
+          0.0,
+          0.0,
+          48.0,
+          48.0
+        ],
+        "background": "preserve_source_svg",
+        "native_vector_required": true,
+        "aspect_ratio": [
+          1,
+          1
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_reuse",
+      "tool_refs": [
+        "assets/art/ui/grades/grade_3.svg",
+        "art_sources/refresh_20261019/approved_samples/10_panel.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/11_ui_rites/output/prompts/86faa8331e580160.txt",
+      "delivery_kind": "reuse_vector",
+      "sha256": "c6974ac6269ca4eaf65250053891e81b5e85b9c624dadb4c3298d9281fe433d1",
+      "newly_generated": false,
+      "native_dimensions": [
+        48,
+        48
+      ],
+      "target_dimensions": [
+        48,
+        48
+      ],
+      "size_matches_technical_source": true,
+      "integration_status": "candidate_only_not_runtime_integrated"
+    },
+    {
+      "id": "48038043643f5771",
+      "batch": "11_ui_rites",
+      "kind": "existing",
+      "label": "assets/art/ui/grades/grade_4.svg",
+      "source": "assets/art/ui/grades/grade_4.svg",
+      "output": "art_sources/refresh_20261019/batches/11_ui_rites/output/existing/art/ui/grades/grade_4.svg",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/art/ui/grades/grade_4.svg",
+        "sha256": "bd92897932b8ec515b1b96e6984dca5ac7202963562c428fc492927c29fee922",
+        "format": "SVG",
+        "dimensions": [
+          48,
+          48
+        ],
+        "view_box": [
+          0.0,
+          0.0,
+          48.0,
+          48.0
+        ],
+        "background": "preserve_source_svg",
+        "native_vector_required": true,
+        "aspect_ratio": [
+          1,
+          1
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_reuse",
+      "tool_refs": [
+        "assets/art/ui/grades/grade_4.svg",
+        "art_sources/refresh_20261019/approved_samples/10_panel.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/11_ui_rites/output/prompts/48038043643f5771.txt",
+      "delivery_kind": "reuse_vector",
+      "sha256": "bd92897932b8ec515b1b96e6984dca5ac7202963562c428fc492927c29fee922",
+      "newly_generated": false,
+      "native_dimensions": [
+        48,
+        48
+      ],
+      "target_dimensions": [
+        48,
+        48
+      ],
+      "size_matches_technical_source": true,
+      "integration_status": "candidate_only_not_runtime_integrated"
+    },
+    {
+      "id": "95719b0f6afd79b7",
+      "batch": "11_ui_rites",
+      "kind": "existing",
+      "label": "assets/art/ui/grades/grade_5.svg",
+      "source": "assets/art/ui/grades/grade_5.svg",
+      "output": "art_sources/refresh_20261019/batches/11_ui_rites/output/existing/art/ui/grades/grade_5.svg",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/art/ui/grades/grade_5.svg",
+        "sha256": "bb0e885641bfeac7eeb1898485ac03177c62562c5e1671878cc72d9ae28eb9b4",
+        "format": "SVG",
+        "dimensions": [
+          48,
+          48
+        ],
+        "view_box": [
+          0.0,
+          0.0,
+          48.0,
+          48.0
+        ],
+        "background": "preserve_source_svg",
+        "native_vector_required": true,
+        "aspect_ratio": [
+          1,
+          1
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_reuse",
+      "tool_refs": [
+        "assets/art/ui/grades/grade_5.svg",
+        "art_sources/refresh_20261019/approved_samples/10_panel.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/11_ui_rites/output/prompts/95719b0f6afd79b7.txt",
+      "delivery_kind": "reuse_vector",
+      "sha256": "bb0e885641bfeac7eeb1898485ac03177c62562c5e1671878cc72d9ae28eb9b4",
+      "newly_generated": false,
+      "native_dimensions": [
+        48,
+        48
+      ],
+      "target_dimensions": [
+        48,
+        48
+      ],
+      "size_matches_technical_source": true,
+      "integration_status": "candidate_only_not_runtime_integrated"
+    },
+    {
+      "id": "c6b4c2705ba7f1a7",
+      "batch": "11_ui_rites",
+      "kind": "existing",
+      "label": "assets/art/ui/map/ferry.svg",
+      "source": "assets/art/ui/map/ferry.svg",
+      "output": "art_sources/refresh_20261019/batches/11_ui_rites/output/existing/art/ui/map/ferry.svg",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/art/ui/map/ferry.svg",
+        "sha256": "9f80b4f5de9cb84f550e3ed8db7c98a0bf5018df64d4020ba644bd9be7aa2347",
+        "format": "SVG",
+        "dimensions": [
+          64,
+          64
+        ],
+        "view_box": [
+          0.0,
+          0.0,
+          64.0,
+          64.0
+        ],
+        "background": "preserve_source_svg",
+        "native_vector_required": true,
+        "aspect_ratio": [
+          1,
+          1
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_reuse",
+      "tool_refs": [
+        "assets/art/ui/map/ferry.svg",
+        "art_sources/refresh_20261019/approved_samples/10_panel.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/11_ui_rites/output/prompts/c6b4c2705ba7f1a7.txt",
+      "delivery_kind": "reuse_vector",
+      "sha256": "9f80b4f5de9cb84f550e3ed8db7c98a0bf5018df64d4020ba644bd9be7aa2347",
+      "newly_generated": false,
+      "native_dimensions": [
+        64,
+        64
+      ],
+      "target_dimensions": [
+        64,
+        64
+      ],
+      "size_matches_technical_source": true,
+      "integration_status": "candidate_only_not_runtime_integrated"
+    },
+    {
+      "id": "50b3548f944e7c71",
+      "batch": "11_ui_rites",
+      "kind": "existing",
+      "label": "assets/art/ui/map/market.svg",
+      "source": "assets/art/ui/map/market.svg",
+      "output": "art_sources/refresh_20261019/batches/11_ui_rites/output/existing/art/ui/map/market.svg",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/art/ui/map/market.svg",
+        "sha256": "ad5e2f1c906e0fcde82f91bd80d06be4861a0d029718b081ffff4456cc589597",
+        "format": "SVG",
+        "dimensions": [
+          64,
+          64
+        ],
+        "view_box": [
+          0.0,
+          0.0,
+          64.0,
+          64.0
+        ],
+        "background": "preserve_source_svg",
+        "native_vector_required": true,
+        "aspect_ratio": [
+          1,
+          1
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_reuse",
+      "tool_refs": [
+        "assets/art/ui/map/market.svg",
+        "art_sources/refresh_20261019/approved_samples/10_panel.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/11_ui_rites/output/prompts/50b3548f944e7c71.txt",
+      "delivery_kind": "reuse_vector",
+      "sha256": "ad5e2f1c906e0fcde82f91bd80d06be4861a0d029718b081ffff4456cc589597",
+      "newly_generated": false,
+      "native_dimensions": [
+        64,
+        64
+      ],
+      "target_dimensions": [
+        64,
+        64
+      ],
+      "size_matches_technical_source": true,
+      "integration_status": "candidate_only_not_runtime_integrated"
+    },
+    {
+      "id": "0ca07ffe2a84ad51",
+      "batch": "11_ui_rites",
+      "kind": "existing",
+      "label": "assets/art/ui/map/mountain.svg",
+      "source": "assets/art/ui/map/mountain.svg",
+      "output": "art_sources/refresh_20261019/batches/11_ui_rites/output/existing/art/ui/map/mountain.svg",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/art/ui/map/mountain.svg",
+        "sha256": "86dbb2b3b274cb69386f34c386eeaa4ef3ccd9ef721e2c7e0e0469324be5ecdb",
+        "format": "SVG",
+        "dimensions": [
+          64,
+          64
+        ],
+        "view_box": [
+          0.0,
+          0.0,
+          64.0,
+          64.0
+        ],
+        "background": "preserve_source_svg",
+        "native_vector_required": true,
+        "aspect_ratio": [
+          1,
+          1
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_reuse",
+      "tool_refs": [
+        "assets/art/ui/map/mountain.svg",
+        "art_sources/refresh_20261019/approved_samples/10_panel.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/11_ui_rites/output/prompts/0ca07ffe2a84ad51.txt",
+      "delivery_kind": "reuse_vector",
+      "sha256": "86dbb2b3b274cb69386f34c386eeaa4ef3ccd9ef721e2c7e0e0469324be5ecdb",
+      "newly_generated": false,
+      "native_dimensions": [
+        64,
+        64
+      ],
+      "target_dimensions": [
+        64,
+        64
+      ],
+      "size_matches_technical_source": true,
+      "integration_status": "candidate_only_not_runtime_integrated"
+    },
+    {
+      "id": "67d302d498cf6fe5",
+      "batch": "11_ui_rites",
+      "kind": "existing",
+      "label": "assets/art/ui/map/ridge.svg",
+      "source": "assets/art/ui/map/ridge.svg",
+      "output": "art_sources/refresh_20261019/batches/11_ui_rites/output/existing/art/ui/map/ridge.svg",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/art/ui/map/ridge.svg",
+        "sha256": "c7538c835a39c2a95f9b783895bdf3e6d2c3ba5df33e0b92b1394b3db68c090c",
+        "format": "SVG",
+        "dimensions": [
+          64,
+          64
+        ],
+        "view_box": [
+          0.0,
+          0.0,
+          64.0,
+          64.0
+        ],
+        "background": "preserve_source_svg",
+        "native_vector_required": true,
+        "aspect_ratio": [
+          1,
+          1
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_reuse",
+      "tool_refs": [
+        "assets/art/ui/map/ridge.svg",
+        "art_sources/refresh_20261019/approved_samples/10_panel.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/11_ui_rites/output/prompts/67d302d498cf6fe5.txt",
+      "delivery_kind": "reuse_vector",
+      "sha256": "c7538c835a39c2a95f9b783895bdf3e6d2c3ba5df33e0b92b1394b3db68c090c",
+      "newly_generated": false,
+      "native_dimensions": [
+        64,
+        64
+      ],
+      "target_dimensions": [
+        64,
+        64
+      ],
+      "size_matches_technical_source": true,
+      "integration_status": "candidate_only_not_runtime_integrated"
+    },
+    {
+      "id": "ca779444a73038dc",
+      "batch": "11_ui_rites",
+      "kind": "existing",
+      "label": "assets/art/ui/map/ruin.svg",
+      "source": "assets/art/ui/map/ruin.svg",
+      "output": "art_sources/refresh_20261019/batches/11_ui_rites/output/existing/art/ui/map/ruin.svg",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/art/ui/map/ruin.svg",
+        "sha256": "d984f3b99b40a5d48c4f63252b9a69ba4e3cfb399c11cebd67dac45b3d479004",
+        "format": "SVG",
+        "dimensions": [
+          64,
+          64
+        ],
+        "view_box": [
+          0.0,
+          0.0,
+          64.0,
+          64.0
+        ],
+        "background": "preserve_source_svg",
+        "native_vector_required": true,
+        "aspect_ratio": [
+          1,
+          1
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_reuse",
+      "tool_refs": [
+        "assets/art/ui/map/ruin.svg",
+        "art_sources/refresh_20261019/approved_samples/10_panel.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/11_ui_rites/output/prompts/ca779444a73038dc.txt",
+      "delivery_kind": "reuse_vector",
+      "sha256": "d984f3b99b40a5d48c4f63252b9a69ba4e3cfb399c11cebd67dac45b3d479004",
+      "newly_generated": false,
+      "native_dimensions": [
+        64,
+        64
+      ],
+      "target_dimensions": [
+        64,
+        64
+      ],
+      "size_matches_technical_source": true,
+      "integration_status": "candidate_only_not_runtime_integrated"
+    },
+    {
+      "id": "402d9de182d485b3",
+      "batch": "11_ui_rites",
+      "kind": "existing",
+      "label": "assets/art/ui/map/town.svg",
+      "source": "assets/art/ui/map/town.svg",
+      "output": "art_sources/refresh_20261019/batches/11_ui_rites/output/existing/art/ui/map/town.svg",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/art/ui/map/town.svg",
+        "sha256": "c6eb7237e0607031cf59931fb263c44e7d3054b64306e774396c28fb88347e6a",
+        "format": "SVG",
+        "dimensions": [
+          64,
+          64
+        ],
+        "view_box": [
+          0.0,
+          0.0,
+          64.0,
+          64.0
+        ],
+        "background": "preserve_source_svg",
+        "native_vector_required": true,
+        "aspect_ratio": [
+          1,
+          1
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_reuse",
+      "tool_refs": [
+        "assets/art/ui/map/town.svg",
+        "art_sources/refresh_20261019/approved_samples/10_panel.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/11_ui_rites/output/prompts/402d9de182d485b3.txt",
+      "delivery_kind": "reuse_vector",
+      "sha256": "c6eb7237e0607031cf59931fb263c44e7d3054b64306e774396c28fb88347e6a",
+      "newly_generated": false,
+      "native_dimensions": [
+        64,
+        64
+      ],
+      "target_dimensions": [
+        64,
+        64
+      ],
+      "size_matches_technical_source": true,
+      "integration_status": "candidate_only_not_runtime_integrated"
+    },
+    {
+      "id": "fcdd45e41a8633ee",
+      "batch": "11_ui_rites",
+      "kind": "existing",
+      "label": "assets/art/ui/map/valley.svg",
+      "source": "assets/art/ui/map/valley.svg",
+      "output": "art_sources/refresh_20261019/batches/11_ui_rites/output/existing/art/ui/map/valley.svg",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/art/ui/map/valley.svg",
+        "sha256": "523182e72ce590790c1a0db39936af9cf2c1c1e0756bce8d38bab150d3d25dd1",
+        "format": "SVG",
+        "dimensions": [
+          64,
+          64
+        ],
+        "view_box": [
+          0.0,
+          0.0,
+          64.0,
+          64.0
+        ],
+        "background": "preserve_source_svg",
+        "native_vector_required": true,
+        "aspect_ratio": [
+          1,
+          1
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_reuse",
+      "tool_refs": [
+        "assets/art/ui/map/valley.svg",
+        "art_sources/refresh_20261019/approved_samples/10_panel.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/11_ui_rites/output/prompts/fcdd45e41a8633ee.txt",
+      "delivery_kind": "reuse_vector",
+      "sha256": "523182e72ce590790c1a0db39936af9cf2c1c1e0756bce8d38bab150d3d25dd1",
+      "newly_generated": false,
+      "native_dimensions": [
+        64,
+        64
+      ],
+      "target_dimensions": [
+        64,
+        64
+      ],
+      "size_matches_technical_source": true,
+      "integration_status": "candidate_only_not_runtime_integrated"
+    },
+    {
+      "id": "13a6d3cd03e608bd",
+      "batch": "11_ui_rites",
+      "kind": "existing",
+      "label": "assets/art/ui/orbs/earth.svg",
+      "source": "assets/art/ui/orbs/earth.svg",
+      "output": "art_sources/refresh_20261019/batches/11_ui_rites/output/existing/art/ui/orbs/earth.svg",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/art/ui/orbs/earth.svg",
+        "sha256": "52e244a85310ec0454bf4494c8fef26dad3f4ed6fca5ea2e1ec07dba225fae2d",
+        "format": "SVG",
+        "dimensions": [
+          64,
+          64
+        ],
+        "view_box": [
+          0.0,
+          0.0,
+          64.0,
+          64.0
+        ],
+        "background": "preserve_source_svg",
+        "native_vector_required": true,
+        "aspect_ratio": [
+          1,
+          1
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_reuse",
+      "tool_refs": [
+        "assets/art/ui/orbs/earth.svg",
+        "art_sources/refresh_20261019/approved_samples/10_panel.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/11_ui_rites/output/prompts/13a6d3cd03e608bd.txt",
+      "delivery_kind": "reuse_vector",
+      "sha256": "52e244a85310ec0454bf4494c8fef26dad3f4ed6fca5ea2e1ec07dba225fae2d",
+      "newly_generated": false,
+      "native_dimensions": [
+        64,
+        64
+      ],
+      "target_dimensions": [
+        64,
+        64
+      ],
+      "size_matches_technical_source": true,
+      "integration_status": "candidate_only_not_runtime_integrated"
+    },
+    {
+      "id": "c79fb658e432d6d8",
+      "batch": "11_ui_rites",
+      "kind": "existing",
+      "label": "assets/art/ui/orbs/fire.svg",
+      "source": "assets/art/ui/orbs/fire.svg",
+      "output": "art_sources/refresh_20261019/batches/11_ui_rites/output/existing/art/ui/orbs/fire.svg",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/art/ui/orbs/fire.svg",
+        "sha256": "e53fafe3ed5344b9d90805a251b84ac318647c68a7451ccf0ba5671e2cd80ec0",
+        "format": "SVG",
+        "dimensions": [
+          64,
+          64
+        ],
+        "view_box": [
+          0.0,
+          0.0,
+          64.0,
+          64.0
+        ],
+        "background": "preserve_source_svg",
+        "native_vector_required": true,
+        "aspect_ratio": [
+          1,
+          1
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_reuse",
+      "tool_refs": [
+        "assets/art/ui/orbs/fire.svg",
+        "art_sources/refresh_20261019/approved_samples/10_panel.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/11_ui_rites/output/prompts/c79fb658e432d6d8.txt",
+      "delivery_kind": "reuse_vector",
+      "sha256": "e53fafe3ed5344b9d90805a251b84ac318647c68a7451ccf0ba5671e2cd80ec0",
+      "newly_generated": false,
+      "native_dimensions": [
+        64,
+        64
+      ],
+      "target_dimensions": [
+        64,
+        64
+      ],
+      "size_matches_technical_source": true,
+      "integration_status": "candidate_only_not_runtime_integrated"
+    },
+    {
+      "id": "ca649f1f7ea04a94",
+      "batch": "11_ui_rites",
+      "kind": "existing",
+      "label": "assets/art/ui/orbs/metal.svg",
+      "source": "assets/art/ui/orbs/metal.svg",
+      "output": "art_sources/refresh_20261019/batches/11_ui_rites/output/existing/art/ui/orbs/metal.svg",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/art/ui/orbs/metal.svg",
+        "sha256": "1dafdd4376d1c4425bec1f920cf0c982478c2d222f9b60e341b936ef2578eab6",
+        "format": "SVG",
+        "dimensions": [
+          64,
+          64
+        ],
+        "view_box": [
+          0.0,
+          0.0,
+          64.0,
+          64.0
+        ],
+        "background": "preserve_source_svg",
+        "native_vector_required": true,
+        "aspect_ratio": [
+          1,
+          1
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_reuse",
+      "tool_refs": [
+        "assets/art/ui/orbs/metal.svg",
+        "art_sources/refresh_20261019/approved_samples/10_panel.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/11_ui_rites/output/prompts/ca649f1f7ea04a94.txt",
+      "delivery_kind": "reuse_vector",
+      "sha256": "1dafdd4376d1c4425bec1f920cf0c982478c2d222f9b60e341b936ef2578eab6",
+      "newly_generated": false,
+      "native_dimensions": [
+        64,
+        64
+      ],
+      "target_dimensions": [
+        64,
+        64
+      ],
+      "size_matches_technical_source": true,
+      "integration_status": "candidate_only_not_runtime_integrated"
+    },
+    {
+      "id": "a645f65a65ff8aef",
+      "batch": "11_ui_rites",
+      "kind": "existing",
+      "label": "assets/art/ui/orbs/water.svg",
+      "source": "assets/art/ui/orbs/water.svg",
+      "output": "art_sources/refresh_20261019/batches/11_ui_rites/output/existing/art/ui/orbs/water.svg",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/art/ui/orbs/water.svg",
+        "sha256": "8ce458c060eff813c16ef60e9edcda25ae9338b2ff73ae3758b91dbb9cd53426",
+        "format": "SVG",
+        "dimensions": [
+          64,
+          64
+        ],
+        "view_box": [
+          0.0,
+          0.0,
+          64.0,
+          64.0
+        ],
+        "background": "preserve_source_svg",
+        "native_vector_required": true,
+        "aspect_ratio": [
+          1,
+          1
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_reuse",
+      "tool_refs": [
+        "assets/art/ui/orbs/water.svg",
+        "art_sources/refresh_20261019/approved_samples/10_panel.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/11_ui_rites/output/prompts/a645f65a65ff8aef.txt",
+      "delivery_kind": "reuse_vector",
+      "sha256": "8ce458c060eff813c16ef60e9edcda25ae9338b2ff73ae3758b91dbb9cd53426",
+      "newly_generated": false,
+      "native_dimensions": [
+        64,
+        64
+      ],
+      "target_dimensions": [
+        64,
+        64
+      ],
+      "size_matches_technical_source": true,
+      "integration_status": "candidate_only_not_runtime_integrated"
+    },
+    {
+      "id": "9bcb57e7331f39a7",
+      "batch": "11_ui_rites",
+      "kind": "existing",
+      "label": "assets/art/ui/orbs/wood.svg",
+      "source": "assets/art/ui/orbs/wood.svg",
+      "output": "art_sources/refresh_20261019/batches/11_ui_rites/output/existing/art/ui/orbs/wood.svg",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/art/ui/orbs/wood.svg",
+        "sha256": "3fa28df81f06b9d2930c828a938f3eaf030fe92b9d1117277995ba21862b2b2c",
+        "format": "SVG",
+        "dimensions": [
+          64,
+          64
+        ],
+        "view_box": [
+          0.0,
+          0.0,
+          64.0,
+          64.0
+        ],
+        "background": "preserve_source_svg",
+        "native_vector_required": true,
+        "aspect_ratio": [
+          1,
+          1
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_reuse",
+      "tool_refs": [
+        "assets/art/ui/orbs/wood.svg",
+        "art_sources/refresh_20261019/approved_samples/10_panel.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/11_ui_rites/output/prompts/9bcb57e7331f39a7.txt",
+      "delivery_kind": "reuse_vector",
+      "sha256": "3fa28df81f06b9d2930c828a938f3eaf030fe92b9d1117277995ba21862b2b2c",
+      "newly_generated": false,
+      "native_dimensions": [
+        64,
+        64
+      ],
+      "target_dimensions": [
+        64,
+        64
+      ],
+      "size_matches_technical_source": true,
+      "integration_status": "candidate_only_not_runtime_integrated"
+    },
+    {
+      "id": "35b173e56df3d1dc",
+      "batch": "11_ui_rites",
+      "kind": "existing",
+      "label": "assets/art/ui/rite_furnace.png",
+      "source": "assets/art/ui/rite_furnace.png",
+      "output": "art_sources/refresh_20261019/batches/11_ui_rites/output/existing/art/ui/rite_furnace.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/art/ui/rite_furnace.png",
+        "sha256": "c0054f65e74b4d6a4a3ce381212e559b04d137e781ff28d5a2672eb96680432f",
+        "format": "PNG",
+        "dimensions": [
+          1254,
+          1254
+        ],
+        "mode": "RGBA",
+        "background": "transparent_required",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          1,
+          1
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_reuse",
+      "tool_refs": [
+        "assets/art/ui/rite_furnace.png",
+        "art_sources/refresh_20261019/approved_samples/10_panel.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/11_ui_rites/output/prompts/35b173e56df3d1dc.txt",
+      "reuse_source": "art_sources/refresh_20261019/approved_samples/11_furnace.png",
+      "reuse_reason": "Approved furnace sample redraws this exact source; same isolated vessel purpose, simplified motifs.",
+      "review": "Visually compared exact source, approved sample/candidate, content, complete silhouette and category style.",
+      "input_hashes": [
+        {
+          "path": "art_sources/refresh_20261019/approved_samples/11_furnace.png",
+          "sha256": "c0d05eee32cf3a403d4b3c4ee72c87caf4ed8a26d19b667b972a7833b37494cf"
+        }
+      ],
+      "delivery_kind": "reuse_prior_candidate",
+      "sha256": "c0d05eee32cf3a403d4b3c4ee72c87caf4ed8a26d19b667b972a7833b37494cf",
+      "newly_generated": false,
+      "native_mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "native_dimensions": [
+        1254,
+        1254
+      ],
+      "target_dimensions": [
+        1254,
+        1254
+      ],
+      "size_matches_technical_source": true,
+      "integration_status": "runtime_installed",
+      "runtime_targets": [
+        "assets/art/ui/rite_furnace.png"
+      ]
+    },
+    {
+      "id": "7cb32712c3bd3ac6",
+      "batch": "11_ui_rites",
+      "kind": "existing",
+      "label": "assets/art/ui/scroll_panel.png",
+      "source": "assets/art/ui/scroll_panel.png",
+      "output": "art_sources/refresh_20261019/batches/11_ui_rites/output/existing/art/ui/scroll_panel.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/art/ui/scroll_panel.png",
+        "sha256": "115c6f3dbc4fc00bf1423b7e1a661b864174872ba827bc4de053f7d99464c820",
+        "format": "PNG",
+        "dimensions": [
+          1672,
+          941
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          1672,
+          941
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_reuse",
+      "reuse_source": "art_sources/refresh_20261019/batches/11_ui_rites/candidates/scroll_panel_dark.png",
+      "tool_refs": [
+        "assets/art/ui/scroll_panel.png",
+        "art_sources/refresh_20261019/approved_samples/10_panel.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/11_ui_rites/output/prompts/7cb32712c3bd3ac6.txt",
+      "delivery_kind": "reuse_prior_candidate",
+      "sha256": "f6d496d0084871fca648a38b8f1f0d5d632a73beb67b74d0515b254676ebb34f",
+      "newly_generated": false,
+      "native_mode": "RGB",
+      "alpha_extrema": null,
+      "native_dimensions": [
+        1671,
+        941
+      ],
+      "target_dimensions": [
+        1672,
+        941
+      ],
+      "size_matches_technical_source": false,
+      "integration_status": "runtime_installed",
+      "size_note": "Native bytes retained; runtime crop/scale or atlas registration must be resolved separately. Target dimensions are not claimed as delivered dimensions.",
+      "runtime_targets": [
+        "assets/art/ui/scroll_panel.png"
+      ]
+    },
+    {
+      "id": "737a3a8e92802341",
+      "batch": "11_ui_rites",
+      "kind": "existing",
+      "label": "assets/art/ui/seal.svg",
+      "source": "assets/art/ui/seal.svg",
+      "output": "art_sources/refresh_20261019/batches/11_ui_rites/output/existing/art/ui/seal.svg",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/art/ui/seal.svg",
+        "sha256": "911a60c84fd619d9cc817c9b89f42debb8d6510e25c1e75dfd2af9205204af41",
+        "format": "SVG",
+        "dimensions": [
+          64,
+          64
+        ],
+        "view_box": [
+          0.0,
+          0.0,
+          64.0,
+          64.0
+        ],
+        "background": "preserve_source_svg",
+        "native_vector_required": true,
+        "aspect_ratio": [
+          1,
+          1
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_reuse",
+      "tool_refs": [
+        "assets/art/ui/seal.svg",
+        "art_sources/refresh_20261019/approved_samples/10_panel.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/11_ui_rites/output/prompts/737a3a8e92802341.txt",
+      "delivery_kind": "reuse_vector",
+      "sha256": "911a60c84fd619d9cc817c9b89f42debb8d6510e25c1e75dfd2af9205204af41",
+      "newly_generated": false,
+      "native_dimensions": [
+        64,
+        64
+      ],
+      "target_dimensions": [
+        64,
+        64
+      ],
+      "size_matches_technical_source": true,
+      "integration_status": "candidate_only_not_runtime_integrated"
+    },
+    {
+      "id": "81dbd8509fd8b557",
+      "batch": "11_ui_rites",
+      "kind": "existing",
+      "label": "assets/art/ui/spirit_field_vignette.png",
+      "source": "assets/art/ui/spirit_field_vignette.png",
+      "output": "art_sources/refresh_20261019/batches/11_ui_rites/output/existing/art/ui/spirit_field_vignette.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/art/ui/spirit_field_vignette.png",
+        "sha256": "f6f6725d06a70b41b073d69aba9422c4f0961150962430b85ef3126095c2a017",
+        "format": "PNG",
+        "dimensions": [
+          1254,
+          1254
+        ],
+        "mode": "RGBA",
+        "background": "transparent_required",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          1,
+          1
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_reuse",
+      "tool_refs": [
+        "assets/art/ui/spirit_field_vignette.png",
+        "art_sources/refresh_20261019/approved_samples/10_panel.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/11_ui_rites/output/prompts/81dbd8509fd8b557.txt",
+      "reuse_source": "art_sources/refresh_20261019/approved_samples/12_garden.png",
+      "reuse_reason": "Approved garden sample redraws this exact source, preserving planter, grouped herbs and watering jug.",
+      "review": "Visually compared exact source, approved sample/candidate, content, complete silhouette and category style.",
+      "input_hashes": [
+        {
+          "path": "art_sources/refresh_20261019/approved_samples/12_garden.png",
+          "sha256": "27f8d5e098945a2ab32c19e3759edfcdeea668bfc71df5c0dacf0c1477864d1d"
+        }
+      ],
+      "delivery_kind": "reuse_prior_candidate",
+      "sha256": "27f8d5e098945a2ab32c19e3759edfcdeea668bfc71df5c0dacf0c1477864d1d",
+      "newly_generated": false,
+      "native_mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "native_dimensions": [
+        1254,
+        1254
+      ],
+      "target_dimensions": [
+        1254,
+        1254
+      ],
+      "size_matches_technical_source": true,
+      "integration_status": "runtime_installed",
+      "runtime_targets": [
+        "assets/art/ui/spirit_field_vignette.png"
+      ]
+    },
+    {
+      "id": "85f853abe68cf7f8",
+      "batch": "11_ui_rites",
+      "kind": "existing",
+      "label": "assets/art/ui/status/bleed.svg",
+      "source": "assets/art/ui/status/bleed.svg",
+      "output": "art_sources/refresh_20261019/batches/11_ui_rites/output/existing/art/ui/status/bleed.svg",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/art/ui/status/bleed.svg",
+        "sha256": "7abf65d3a3082302790941bf084dcf1c41cea6e1cc6038cf55b44c50942a54d0",
+        "format": "SVG",
+        "dimensions": [
+          64,
+          64
+        ],
+        "view_box": [
+          0.0,
+          0.0,
+          64.0,
+          64.0
+        ],
+        "background": "preserve_source_svg",
+        "native_vector_required": true,
+        "aspect_ratio": [
+          1,
+          1
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_reuse",
+      "tool_refs": [
+        "assets/art/ui/status/bleed.svg",
+        "art_sources/refresh_20261019/approved_samples/10_panel.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/11_ui_rites/output/prompts/85f853abe68cf7f8.txt",
+      "delivery_kind": "reuse_vector",
+      "sha256": "7abf65d3a3082302790941bf084dcf1c41cea6e1cc6038cf55b44c50942a54d0",
+      "newly_generated": false,
+      "native_dimensions": [
+        64,
+        64
+      ],
+      "target_dimensions": [
+        64,
+        64
+      ],
+      "size_matches_technical_source": true,
+      "integration_status": "candidate_only_not_runtime_integrated"
+    },
+    {
+      "id": "99b927684e7232a8",
+      "batch": "11_ui_rites",
+      "kind": "existing",
+      "label": "assets/art/ui/status/burn.svg",
+      "source": "assets/art/ui/status/burn.svg",
+      "output": "art_sources/refresh_20261019/batches/11_ui_rites/output/existing/art/ui/status/burn.svg",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/art/ui/status/burn.svg",
+        "sha256": "ef121c0ead657397d0c770e9cab846b3514b7488984bf5cc4eadc3d886a0fb52",
+        "format": "SVG",
+        "dimensions": [
+          64,
+          64
+        ],
+        "view_box": [
+          0.0,
+          0.0,
+          64.0,
+          64.0
+        ],
+        "background": "preserve_source_svg",
+        "native_vector_required": true,
+        "aspect_ratio": [
+          1,
+          1
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_reuse",
+      "tool_refs": [
+        "assets/art/ui/status/burn.svg",
+        "art_sources/refresh_20261019/approved_samples/10_panel.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/11_ui_rites/output/prompts/99b927684e7232a8.txt",
+      "delivery_kind": "reuse_vector",
+      "sha256": "ef121c0ead657397d0c770e9cab846b3514b7488984bf5cc4eadc3d886a0fb52",
+      "newly_generated": false,
+      "native_dimensions": [
+        64,
+        64
+      ],
+      "target_dimensions": [
+        64,
+        64
+      ],
+      "size_matches_technical_source": true,
+      "integration_status": "candidate_only_not_runtime_integrated"
+    },
+    {
+      "id": "f6f61166301ab69f",
+      "batch": "11_ui_rites",
+      "kind": "existing",
+      "label": "assets/art/ui/status/entangle.svg",
+      "source": "assets/art/ui/status/entangle.svg",
+      "output": "art_sources/refresh_20261019/batches/11_ui_rites/output/existing/art/ui/status/entangle.svg",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/art/ui/status/entangle.svg",
+        "sha256": "b96727f39e549bcaca77668dcfd0970f3e810e3db83813cff8a4f26e7b0e0929",
+        "format": "SVG",
+        "dimensions": [
+          64,
+          64
+        ],
+        "view_box": [
+          0.0,
+          0.0,
+          64.0,
+          64.0
+        ],
+        "background": "preserve_source_svg",
+        "native_vector_required": true,
+        "aspect_ratio": [
+          1,
+          1
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_reuse",
+      "tool_refs": [
+        "assets/art/ui/status/entangle.svg",
+        "art_sources/refresh_20261019/approved_samples/10_panel.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/11_ui_rites/output/prompts/f6f61166301ab69f.txt",
+      "delivery_kind": "reuse_vector",
+      "sha256": "b96727f39e549bcaca77668dcfd0970f3e810e3db83813cff8a4f26e7b0e0929",
+      "newly_generated": false,
+      "native_dimensions": [
+        64,
+        64
+      ],
+      "target_dimensions": [
+        64,
+        64
+      ],
+      "size_matches_technical_source": true,
+      "integration_status": "candidate_only_not_runtime_integrated"
+    },
+    {
+      "id": "d21211db64163c2b",
+      "batch": "11_ui_rites",
+      "kind": "existing",
+      "label": "assets/art/ui/status/fervor.svg",
+      "source": "assets/art/ui/status/fervor.svg",
+      "output": "art_sources/refresh_20261019/batches/11_ui_rites/output/existing/art/ui/status/fervor.svg",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/art/ui/status/fervor.svg",
+        "sha256": "09ebebf1c568b86de2beaabba3814179a63e88ecdfd43b75fde0f6f70861c5ba",
+        "format": "SVG",
+        "dimensions": [
+          64,
+          64
+        ],
+        "view_box": [
+          0.0,
+          0.0,
+          64.0,
+          64.0
+        ],
+        "background": "preserve_source_svg",
+        "native_vector_required": true,
+        "aspect_ratio": [
+          1,
+          1
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_reuse",
+      "tool_refs": [
+        "assets/art/ui/status/fervor.svg",
+        "art_sources/refresh_20261019/approved_samples/10_panel.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/11_ui_rites/output/prompts/d21211db64163c2b.txt",
+      "delivery_kind": "reuse_vector",
+      "sha256": "09ebebf1c568b86de2beaabba3814179a63e88ecdfd43b75fde0f6f70861c5ba",
+      "newly_generated": false,
+      "native_dimensions": [
+        64,
+        64
+      ],
+      "target_dimensions": [
+        64,
+        64
+      ],
+      "size_matches_technical_source": true,
+      "integration_status": "candidate_only_not_runtime_integrated"
+    },
+    {
+      "id": "b283e987b2607c3c",
+      "batch": "11_ui_rites",
+      "kind": "existing",
+      "label": "assets/art/ui/status/focus.svg",
+      "source": "assets/art/ui/status/focus.svg",
+      "output": "art_sources/refresh_20261019/batches/11_ui_rites/output/existing/art/ui/status/focus.svg",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/art/ui/status/focus.svg",
+        "sha256": "6476f6884d97a7a319c0acc28b7256a22b55f2659a2eef4750407d43b0d3a8f6",
+        "format": "SVG",
+        "dimensions": [
+          64,
+          64
+        ],
+        "view_box": [
+          0.0,
+          0.0,
+          64.0,
+          64.0
+        ],
+        "background": "preserve_source_svg",
+        "native_vector_required": true,
+        "aspect_ratio": [
+          1,
+          1
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_reuse",
+      "tool_refs": [
+        "assets/art/ui/status/focus.svg",
+        "art_sources/refresh_20261019/approved_samples/10_panel.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/11_ui_rites/output/prompts/b283e987b2607c3c.txt",
+      "delivery_kind": "reuse_vector",
+      "sha256": "6476f6884d97a7a319c0acc28b7256a22b55f2659a2eef4750407d43b0d3a8f6",
+      "newly_generated": false,
+      "native_dimensions": [
+        64,
+        64
+      ],
+      "target_dimensions": [
+        64,
+        64
+      ],
+      "size_matches_technical_source": true,
+      "integration_status": "candidate_only_not_runtime_integrated"
+    },
+    {
+      "id": "406a181c7a2017f7",
+      "batch": "11_ui_rites",
+      "kind": "existing",
+      "label": "assets/art/ui/status/minions.svg",
+      "source": "assets/art/ui/status/minions.svg",
+      "output": "art_sources/refresh_20261019/batches/11_ui_rites/output/existing/art/ui/status/minions.svg",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/art/ui/status/minions.svg",
+        "sha256": "b6ef5b618ec84effb58267ecc0643eed01dcab0729fa29984fa481e8454d955d",
+        "format": "SVG",
+        "dimensions": [
+          64,
+          64
+        ],
+        "view_box": [
+          0.0,
+          0.0,
+          64.0,
+          64.0
+        ],
+        "background": "preserve_source_svg",
+        "native_vector_required": true,
+        "aspect_ratio": [
+          1,
+          1
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_reuse",
+      "tool_refs": [
+        "assets/art/ui/status/minions.svg",
+        "art_sources/refresh_20261019/approved_samples/10_panel.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/11_ui_rites/output/prompts/406a181c7a2017f7.txt",
+      "delivery_kind": "reuse_vector",
+      "sha256": "b6ef5b618ec84effb58267ecc0643eed01dcab0729fa29984fa481e8454d955d",
+      "newly_generated": false,
+      "native_dimensions": [
+        64,
+        64
+      ],
+      "target_dimensions": [
+        64,
+        64
+      ],
+      "size_matches_technical_source": true,
+      "integration_status": "candidate_only_not_runtime_integrated"
+    },
+    {
+      "id": "5428457c66615bc1",
+      "batch": "11_ui_rites",
+      "kind": "existing",
+      "label": "assets/art/ui/status/shield.svg",
+      "source": "assets/art/ui/status/shield.svg",
+      "output": "art_sources/refresh_20261019/batches/11_ui_rites/output/existing/art/ui/status/shield.svg",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/art/ui/status/shield.svg",
+        "sha256": "1a1aac90f5906fc8abff647b6daf2c5eb08945a5fca5738e17f2a1816991b762",
+        "format": "SVG",
+        "dimensions": [
+          64,
+          64
+        ],
+        "view_box": [
+          0.0,
+          0.0,
+          64.0,
+          64.0
+        ],
+        "background": "preserve_source_svg",
+        "native_vector_required": true,
+        "aspect_ratio": [
+          1,
+          1
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_reuse",
+      "tool_refs": [
+        "assets/art/ui/status/shield.svg",
+        "art_sources/refresh_20261019/approved_samples/10_panel.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/11_ui_rites/output/prompts/5428457c66615bc1.txt",
+      "delivery_kind": "reuse_vector",
+      "sha256": "1a1aac90f5906fc8abff647b6daf2c5eb08945a5fca5738e17f2a1816991b762",
+      "newly_generated": false,
+      "native_dimensions": [
+        64,
+        64
+      ],
+      "target_dimensions": [
+        64,
+        64
+      ],
+      "size_matches_technical_source": true,
+      "integration_status": "candidate_only_not_runtime_integrated"
+    },
+    {
+      "id": "bb2c0a36680d88df",
+      "batch": "11_ui_rites",
+      "kind": "existing",
+      "label": "assets/art/ui/status/slow.svg",
+      "source": "assets/art/ui/status/slow.svg",
+      "output": "art_sources/refresh_20261019/batches/11_ui_rites/output/existing/art/ui/status/slow.svg",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/art/ui/status/slow.svg",
+        "sha256": "f841830c63c311a8e3905433a3ae3129b9f57bfb81e3acc8569902f4cdee48ab",
+        "format": "SVG",
+        "dimensions": [
+          64,
+          64
+        ],
+        "view_box": [
+          0.0,
+          0.0,
+          64.0,
+          64.0
+        ],
+        "background": "preserve_source_svg",
+        "native_vector_required": true,
+        "aspect_ratio": [
+          1,
+          1
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_reuse",
+      "tool_refs": [
+        "assets/art/ui/status/slow.svg",
+        "art_sources/refresh_20261019/approved_samples/10_panel.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/11_ui_rites/output/prompts/bb2c0a36680d88df.txt",
+      "delivery_kind": "reuse_vector",
+      "sha256": "f841830c63c311a8e3905433a3ae3129b9f57bfb81e3acc8569902f4cdee48ab",
+      "newly_generated": false,
+      "native_dimensions": [
+        64,
+        64
+      ],
+      "target_dimensions": [
+        64,
+        64
+      ],
+      "size_matches_technical_source": true,
+      "integration_status": "candidate_only_not_runtime_integrated"
+    },
+    {
+      "id": "cbcee2cf28d2986c",
+      "batch": "11_ui_rites",
+      "kind": "existing",
+      "label": "assets/art/ui/status/sunder.svg",
+      "source": "assets/art/ui/status/sunder.svg",
+      "output": "art_sources/refresh_20261019/batches/11_ui_rites/output/existing/art/ui/status/sunder.svg",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/art/ui/status/sunder.svg",
+        "sha256": "e8a1b157bd006e9be802c053c5580031fadfc48068524466a1f25e131a478579",
+        "format": "SVG",
+        "dimensions": [
+          64,
+          64
+        ],
+        "view_box": [
+          0.0,
+          0.0,
+          64.0,
+          64.0
+        ],
+        "background": "preserve_source_svg",
+        "native_vector_required": true,
+        "aspect_ratio": [
+          1,
+          1
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_reuse",
+      "tool_refs": [
+        "assets/art/ui/status/sunder.svg",
+        "art_sources/refresh_20261019/approved_samples/10_panel.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/11_ui_rites/output/prompts/cbcee2cf28d2986c.txt",
+      "delivery_kind": "reuse_vector",
+      "sha256": "e8a1b157bd006e9be802c053c5580031fadfc48068524466a1f25e131a478579",
+      "newly_generated": false,
+      "native_dimensions": [
+        64,
+        64
+      ],
+      "target_dimensions": [
+        64,
+        64
+      ],
+      "size_matches_technical_source": true,
+      "integration_status": "candidate_only_not_runtime_integrated"
+    },
+    {
+      "id": "3f1bcaacbb27d98f",
+      "batch": "11_ui_rites",
+      "kind": "existing",
+      "label": "assets/art/ui/status/weaken.svg",
+      "source": "assets/art/ui/status/weaken.svg",
+      "output": "art_sources/refresh_20261019/batches/11_ui_rites/output/existing/art/ui/status/weaken.svg",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/art/ui/status/weaken.svg",
+        "sha256": "a9a4994bab6a981cbaaa0ac1ffc52d38a375b2c435b3175a254fded84e18e1e9",
+        "format": "SVG",
+        "dimensions": [
+          64,
+          64
+        ],
+        "view_box": [
+          0.0,
+          0.0,
+          64.0,
+          64.0
+        ],
+        "background": "preserve_source_svg",
+        "native_vector_required": true,
+        "aspect_ratio": [
+          1,
+          1
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_reuse",
+      "tool_refs": [
+        "assets/art/ui/status/weaken.svg",
+        "art_sources/refresh_20261019/approved_samples/10_panel.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/11_ui_rites/output/prompts/3f1bcaacbb27d98f.txt",
+      "delivery_kind": "reuse_vector",
+      "sha256": "a9a4994bab6a981cbaaa0ac1ffc52d38a375b2c435b3175a254fded84e18e1e9",
+      "newly_generated": false,
+      "native_dimensions": [
+        64,
+        64
+      ],
+      "target_dimensions": [
+        64,
+        64
+      ],
+      "size_matches_technical_source": true,
+      "integration_status": "candidate_only_not_runtime_integrated"
+    },
+    {
+      "id": "832465485d3a84c3",
+      "batch": "11_ui_rites",
+      "kind": "existing",
+      "label": "assets/art/ui/status/wound.svg",
+      "source": "assets/art/ui/status/wound.svg",
+      "output": "art_sources/refresh_20261019/batches/11_ui_rites/output/existing/art/ui/status/wound.svg",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/art/ui/status/wound.svg",
+        "sha256": "d9ad95984b7f8bb968e2e929ce63bfaea6338f44214ed5f5bbb4f1601e4dd1c4",
+        "format": "SVG",
+        "dimensions": [
+          64,
+          64
+        ],
+        "view_box": [
+          0.0,
+          0.0,
+          64.0,
+          64.0
+        ],
+        "background": "preserve_source_svg",
+        "native_vector_required": true,
+        "aspect_ratio": [
+          1,
+          1
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_reuse",
+      "tool_refs": [
+        "assets/art/ui/status/wound.svg",
+        "art_sources/refresh_20261019/approved_samples/10_panel.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/11_ui_rites/output/prompts/832465485d3a84c3.txt",
+      "delivery_kind": "reuse_vector",
+      "sha256": "d9ad95984b7f8bb968e2e929ce63bfaea6338f44214ed5f5bbb4f1601e4dd1c4",
+      "newly_generated": false,
+      "native_dimensions": [
+        64,
+        64
+      ],
+      "target_dimensions": [
+        64,
+        64
+      ],
+      "size_matches_technical_source": true,
+      "integration_status": "candidate_only_not_runtime_integrated"
+    },
+    {
+      "id": "f02a3608f5c56509",
+      "batch": "11_ui_rites",
+      "kind": "existing",
+      "label": "assets/art/ui/tag.svg",
+      "source": "assets/art/ui/tag.svg",
+      "output": "art_sources/refresh_20261019/batches/11_ui_rites/output/existing/art/ui/tag.svg",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/art/ui/tag.svg",
+        "sha256": "1a7c2d7ddf98c9573a61d417c5bbf2d58bc6daa78cc4f6305682de4db815fc76",
+        "format": "SVG",
+        "dimensions": [
+          48,
+          148
+        ],
+        "view_box": [
+          0.0,
+          0.0,
+          48.0,
+          148.0
+        ],
+        "background": "preserve_source_svg",
+        "native_vector_required": true,
+        "aspect_ratio": [
+          12,
+          37
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_reuse",
+      "tool_refs": [
+        "assets/art/ui/tag.svg",
+        "art_sources/refresh_20261019/approved_samples/10_panel.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/11_ui_rites/output/prompts/f02a3608f5c56509.txt",
+      "delivery_kind": "reuse_vector",
+      "sha256": "1a7c2d7ddf98c9573a61d417c5bbf2d58bc6daa78cc4f6305682de4db815fc76",
+      "newly_generated": false,
+      "native_dimensions": [
+        48,
+        148
+      ],
+      "target_dimensions": [
+        48,
+        148
+      ],
+      "size_matches_technical_source": true,
+      "integration_status": "candidate_only_not_runtime_integrated"
+    },
+    {
+      "id": "f526a30f70e83b42",
+      "batch": "11_ui_rites",
+      "kind": "existing",
+      "label": "assets/art/ui/tag_chosen.svg",
+      "source": "assets/art/ui/tag_chosen.svg",
+      "output": "art_sources/refresh_20261019/batches/11_ui_rites/output/existing/art/ui/tag_chosen.svg",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/art/ui/tag_chosen.svg",
+        "sha256": "54b01869747ffec59b87cad6ad215f06e4ca800df10e028127573e1402c5c810",
+        "format": "SVG",
+        "dimensions": [
+          48,
+          148
+        ],
+        "view_box": [
+          0.0,
+          0.0,
+          48.0,
+          148.0
+        ],
+        "background": "preserve_source_svg",
+        "native_vector_required": true,
+        "aspect_ratio": [
+          12,
+          37
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_reuse",
+      "tool_refs": [
+        "assets/art/ui/tag_chosen.svg",
+        "art_sources/refresh_20261019/approved_samples/10_panel.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/11_ui_rites/output/prompts/f526a30f70e83b42.txt",
+      "delivery_kind": "reuse_vector",
+      "sha256": "54b01869747ffec59b87cad6ad215f06e4ca800df10e028127573e1402c5c810",
+      "newly_generated": false,
+      "native_dimensions": [
+        48,
+        148
+      ],
+      "target_dimensions": [
+        48,
+        148
+      ],
+      "size_matches_technical_source": true,
+      "integration_status": "candidate_only_not_runtime_integrated"
+    },
+    {
+      "id": "2c4fd57abd1cc6e3",
+      "batch": "11_ui_rites",
+      "kind": "existing",
+      "label": "assets/icon.svg",
+      "source": "assets/icon.svg",
+      "output": "art_sources/refresh_20261019/batches/11_ui_rites/output/existing/icon.svg",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/icon.svg",
+        "sha256": "f83f9019467c2dd806625a1d066f363ee08f223ed9b2e82c6d382d14d1bcdad0",
+        "format": "SVG",
+        "dimensions": [
+          128,
+          128
+        ],
+        "view_box": [
+          0.0,
+          0.0,
+          128.0,
+          128.0
+        ],
+        "background": "preserve_source_svg",
+        "native_vector_required": true,
+        "aspect_ratio": [
+          1,
+          1
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_reuse",
+      "tool_refs": [
+        "assets/icon.svg",
+        "art_sources/refresh_20261019/approved_samples/10_panel.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/11_ui_rites/output/prompts/2c4fd57abd1cc6e3.txt",
+      "delivery_kind": "reuse_vector",
+      "sha256": "f83f9019467c2dd806625a1d066f363ee08f223ed9b2e82c6d382d14d1bcdad0",
+      "newly_generated": false,
+      "native_dimensions": [
+        128,
+        128
+      ],
+      "target_dimensions": [
+        128,
+        128
+      ],
+      "size_matches_technical_source": true,
+      "integration_status": "candidate_only_not_runtime_integrated"
+    },
+    {
+      "id": "db788d96ab16e50e",
+      "batch": "11_ui_rites",
+      "kind": "planned",
+      "label": "scroll_panel_dark.png",
+      "source": "assets/art/ui/scroll_panel.png",
+      "output": "art_sources/refresh_20261019/batches/11_ui_rites/output/scroll_panel_dark.png",
+      "brief": "深色兼容卷轴已有候选，适配现有浅色文字",
+      "spec": {
+        "path": "assets/art/ui/scroll_panel.png",
+        "sha256": "115c6f3dbc4fc00bf1423b7e1a661b864174872ba827bc4de053f7d99464c820",
+        "format": "PNG",
+        "dimensions": [
+          1672,
+          941
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          1672,
+          941
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_reuse",
+      "priority": "P0",
+      "dependencies": [],
+      "reuse_source": "art_sources/refresh_20261019/batches/11_ui_rites/candidates/scroll_panel_dark.png",
+      "tool_refs": [
+        "assets/art/ui/scroll_panel.png",
+        "art_sources/refresh_20261019/approved_samples/10_panel.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/11_ui_rites/output/prompts/db788d96ab16e50e.txt",
+      "delivery_kind": "reuse_prior_candidate",
+      "sha256": "f6d496d0084871fca648a38b8f1f0d5d632a73beb67b74d0515b254676ebb34f",
+      "newly_generated": false,
+      "native_mode": "RGB",
+      "alpha_extrema": null,
+      "native_dimensions": [
+        1671,
+        941
+      ],
+      "target_dimensions": [
+        1672,
+        941
+      ],
+      "size_matches_technical_source": false,
+      "integration_status": "candidate_only_not_runtime_integrated",
+      "size_note": "Native bytes retained; runtime crop/scale or atlas registration must be resolved separately. Target dimensions are not claimed as delivered dimensions."
+    },
+    {
+      "id": "14e9e69b51574b3d",
+      "batch": "11_ui_rites",
+      "kind": "planned",
+      "label": "hero_meditate.png",
+      "source": "assets/art/actors/hero_meditate.png",
+      "output": "art_sources/refresh_20261019/batches/11_ui_rites/output/hero_meditate.png",
+      "brief": "开局静房首次闭关与领悟的打坐插画；沿用第01批主角身份与既定画法，真实透明背景，不提前宣告宗门归属",
+      "spec": {
+        "path": "assets/art/actors/hero_meditate.png",
+        "sha256": "9e8a32da01d522683e60b6cc56e73bf5d6e5b8a0e8f4fe8d3dc4d5b23be6a1f1",
+        "format": "PNG",
+        "dimensions": [
+          1254,
+          1254
+        ],
+        "mode": "RGBA",
+        "background": "transparent_required",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          1,
+          1
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_generated",
+      "priority": "P0",
+      "dependencies": [],
+      "tool_refs": [
+        "art_sources/refresh_20261019/approved_samples/01_hero.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/11_ui_rites/output/prompts/14e9e69b51574b3d.txt",
+      "newly_generated": true,
+      "sha256": "3f4bd8abb7caf3666fa07f9a1c599022a906fd4e2b63638ff8df5a9c8791376b",
+      "native_dimensions": [
+        1254,
+        1254
+      ],
+      "native_mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "tool_logical_path": "C:\\Users\\Kuroro\\.codex\\generated_images\\01a15203-e7bc-7bc0-b21d-f11948dc04a9\\exec-dbf4ad0f-2624-41da-a13b-ecab831ed9cc.png",
+      "tool_physical_path": "D:\\claude\\flash\\.tmp\\imagegen_storage\\generated_images\\01a15203-e7bc-7bc0-b21d-f11948dc04a9\\exec-dbf4ad0f-2624-41da-a13b-ecab831ed9cc.png",
+      "input_hashes": [
+        {
+          "path": "art_sources/refresh_20261019/approved_samples/01_hero.png",
+          "sha256": "a5fecf58591caffadaf51389955aaa2aa46c911cf2a8114f5785357d10f1f63d"
+        }
+      ],
+      "review": "Visually checked identity/content, category style and complete composition; integration separate.",
+      "target_dimensions": [
+        1254,
+        1254
+      ],
+      "size_matches_technical_source": true,
+      "integration_status": "candidate_only_not_runtime_integrated"
+    },
+    {
+      "id": "10165f07ae5288ac",
+      "batch": "11_ui_rites",
+      "kind": "planned",
+      "label": "breakthrough_ritual_vignette.png",
+      "source": "assets/art/ui/alchemy_vignette.png",
+      "output": "art_sources/refresh_20261019/batches/11_ui_rites/output/breakthrough_ritual_vignette.png",
+      "brief": "突破筹划功能插画，条件、资源和结果由UI独立绘制",
+      "spec": {
+        "path": "assets/art/ui/alchemy_vignette.png",
+        "sha256": "88bf832d0b4156688f45d8fb3b53dfbe82d862f4840c3fa9cfbcfadb4df154a0",
+        "format": "PNG",
+        "dimensions": [
+          1254,
+          1254
+        ],
+        "mode": "RGBA",
+        "background": "transparent_required",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          1,
+          1
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_generated",
+      "priority": "P1",
+      "dependencies": [],
+      "tool_refs": [
+        "art_sources/refresh_20261019/approved_samples/11_furnace.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/11_ui_rites/output/prompts/10165f07ae5288ac.txt",
+      "newly_generated": true,
+      "sha256": "dc4bfb881474888cbbf68d59888e1e90157a310f550de234b0012b2e0b3e71d6",
+      "native_dimensions": [
+        1254,
+        1254
+      ],
+      "native_mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "tool_logical_path": "C:\\Users\\Kuroro\\.codex\\generated_images\\01a15203-e7bc-7bc0-b21d-f11948dc04a9\\exec-6adf1b55-f7ad-4fe0-ba1d-26c8e231149e.png",
+      "tool_physical_path": "D:\\claude\\flash\\.tmp\\imagegen_storage\\generated_images\\01a15203-e7bc-7bc0-b21d-f11948dc04a9\\exec-6adf1b55-f7ad-4fe0-ba1d-26c8e231149e.png",
+      "input_hashes": [
+        {
+          "path": "art_sources/refresh_20261019/approved_samples/11_furnace.png",
+          "sha256": "c0d05eee32cf3a403d4b3c4ee72c87caf4ed8a26d19b667b972a7833b37494cf"
+        }
+      ],
+      "review": "Visually checked identity/content, category style and complete composition; integration separate.",
+      "target_dimensions": [
+        1254,
+        1254
+      ],
+      "size_matches_technical_source": true,
+      "integration_status": "candidate_only_not_runtime_integrated"
+    },
+    {
+      "id": "e273548919918f68",
+      "batch": "11_ui_rites",
+      "kind": "planned",
+      "label": "exploration_states.svg",
+      "source": "assets/art/ui/map/market.svg",
+      "output": "art_sources/refresh_20261019/batches/11_ui_rites/output/exploration_states.svg",
+      "brief": "未知／已听闻／已发现／已到访／已探索完毕五种状态，交独立可组合矢量而非写死在地图",
+      "spec": {
+        "path": "assets/art/ui/map/market.svg",
+        "sha256": "ad5e2f1c906e0fcde82f91bd80d06be4861a0d029718b081ffff4456cc589597",
+        "format": "SVG",
+        "dimensions": [
+          64,
+          64
+        ],
+        "view_box": [
+          0.0,
+          0.0,
+          64.0,
+          64.0
+        ],
+        "background": "preserve_source_svg",
+        "native_vector_required": true,
+        "aspect_ratio": [
+          1,
+          1
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_vector",
+      "priority": "P1",
+      "dependencies": [],
+      "tool_refs": [
+        "art_sources/refresh_20261019/approved_samples/10_panel.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/11_ui_rites/output/prompts/e273548919918f68.txt",
+      "newly_generated": false,
+      "newly_created_vector": true,
+      "sha256": "fec9c83f545357d8968e13becd5ee5169599dae5766f3d526be5d880c229af6a",
+      "native_dimensions": [
+        64,
+        64
+      ],
+      "parts": [
+        {
+          "path": "art_sources/refresh_20261019/batches/11_ui_rites/output/parts/exploration_unknown.svg",
+          "sha256": "22f6ae4c5ce91bc2d70169e5a65f9e67ccaccfec96635d4e7ed9a5415a47663d"
+        },
+        {
+          "path": "art_sources/refresh_20261019/batches/11_ui_rites/output/parts/exploration_heard.svg",
+          "sha256": "34214d5c9648c394518ae53f8d7cbf745dbe0f46ac32b1f95cd3e84150839715"
+        },
+        {
+          "path": "art_sources/refresh_20261019/batches/11_ui_rites/output/parts/exploration_discovered.svg",
+          "sha256": "fec9c83f545357d8968e13becd5ee5169599dae5766f3d526be5d880c229af6a"
+        },
+        {
+          "path": "art_sources/refresh_20261019/batches/11_ui_rites/output/parts/exploration_visited.svg",
+          "sha256": "219131d203891afe09d70986e88453ce96db8e43f9a68ac1ef979b7f5133ff61"
+        },
+        {
+          "path": "art_sources/refresh_20261019/batches/11_ui_rites/output/parts/exploration_complete.svg",
+          "sha256": "64c8370096eba0ec1f55d8d8d74b2094bcded60f04167d24d191fc8731f35e7c"
+        }
+      ],
+      "delivery_kind": "editable_svg_parts",
+      "review": "XML parsed; visual preview pending",
+      "integration_notes": "Blank UI parts: names, dates, messages and status labels remain runtime text. Native editable vector, not an imagegen bitmap.",
+      "target_dimensions": [
+        64,
+        64
+      ],
+      "size_matches_technical_source": true,
+      "integration_status": "candidate_only_not_runtime_integrated"
+    },
+    {
+      "id": "dfdb1995f55bbc5a",
+      "batch": "11_ui_rites",
+      "kind": "planned",
+      "label": "city_port_markers.svg",
+      "source": "assets/art/ui/map/market.svg",
+      "output": "art_sources/refresh_20261019/batches/11_ui_rites/output/city_port_markers.svg",
+      "brief": "城市与海港地图标记，区分旧坊市及内河渡口",
+      "spec": {
+        "path": "assets/art/ui/map/market.svg",
+        "sha256": "ad5e2f1c906e0fcde82f91bd80d06be4861a0d029718b081ffff4456cc589597",
+        "format": "SVG",
+        "dimensions": [
+          64,
+          64
+        ],
+        "view_box": [
+          0.0,
+          0.0,
+          64.0,
+          64.0
+        ],
+        "background": "preserve_source_svg",
+        "native_vector_required": true,
+        "aspect_ratio": [
+          1,
+          1
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_vector",
+      "priority": "P1",
+      "dependencies": [],
+      "tool_refs": [
+        "art_sources/refresh_20261019/approved_samples/10_panel.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/11_ui_rites/output/prompts/dfdb1995f55bbc5a.txt",
+      "newly_generated": false,
+      "newly_created_vector": true,
+      "sha256": "6dc5ad841810d9bbd900989077490a7ca5723d66b65b4eb0d39e14c61df70f1a",
+      "native_dimensions": [
+        64,
+        64
+      ],
+      "parts": [
+        {
+          "path": "art_sources/refresh_20261019/batches/11_ui_rites/output/parts/city_marker.svg",
+          "sha256": "6dc5ad841810d9bbd900989077490a7ca5723d66b65b4eb0d39e14c61df70f1a"
+        },
+        {
+          "path": "art_sources/refresh_20261019/batches/11_ui_rites/output/parts/sea_port_marker.svg",
+          "sha256": "e3bb119b0eac76047c63184a08344bbd99f8f84429b549e5a6329d147d591415"
+        }
+      ],
+      "delivery_kind": "editable_svg_parts",
+      "review": "XML parsed; visual preview pending",
+      "integration_notes": "Blank UI parts: names, dates, messages and status labels remain runtime text. Native editable vector, not an imagegen bitmap.",
+      "target_dimensions": [
+        64,
+        64
+      ],
+      "size_matches_technical_source": true,
+      "integration_status": "candidate_only_not_runtime_integrated"
+    },
+    {
+      "id": "1f29a7951aea8b5a",
+      "batch": "11_ui_rites",
+      "kind": "planned",
+      "label": "retreat_return_summary.svg",
+      "source": "assets/art/ui/tag.svg",
+      "output": "art_sources/refresh_20261019/batches/11_ui_rites/output/retreat_return_summary.svg",
+      "brief": "出关消息、故人变故与约定提醒的可组合空白部件；沿用现有UI画法，日期、人名与结果由程序绘制，先复用现有卷轴",
+      "spec": {
+        "path": "assets/art/ui/tag.svg",
+        "sha256": "1a7c2d7ddf98c9573a61d417c5bbf2d58bc6daa78cc4f6305682de4db815fc76",
+        "format": "SVG",
+        "dimensions": [
+          48,
+          148
+        ],
+        "view_box": [
+          0.0,
+          0.0,
+          48.0,
+          148.0
+        ],
+        "background": "preserve_source_svg",
+        "native_vector_required": true,
+        "aspect_ratio": [
+          12,
+          37
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_vector",
+      "priority": "P1",
+      "dependencies": [],
+      "tool_refs": [
+        "art_sources/refresh_20261019/approved_samples/10_panel.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/11_ui_rites/output/prompts/1f29a7951aea8b5a.txt",
+      "newly_generated": false,
+      "newly_created_vector": false,
+      "sha256": "bdf35e5bed93bf0ce660ab7e6a311bc8e1958a7ef51430a4f53d1aa694cc85ab",
+      "native_dimensions": [
+        48,
+        148
+      ],
+      "parts": [
+        {
+          "path": "art_sources/refresh_20261019/batches/11_ui_rites/output/parts/retreat_message_blank.svg",
+          "sha256": "bdf35e5bed93bf0ce660ab7e6a311bc8e1958a7ef51430a4f53d1aa694cc85ab"
+        },
+        {
+          "path": "art_sources/refresh_20261019/batches/11_ui_rites/output/parts/retreat_changed_friend_blank.svg",
+          "sha256": "bdf35e5bed93bf0ce660ab7e6a311bc8e1958a7ef51430a4f53d1aa694cc85ab"
+        },
+        {
+          "path": "art_sources/refresh_20261019/batches/11_ui_rites/output/parts/retreat_promise_blank.svg",
+          "sha256": "bdf35e5bed93bf0ce660ab7e6a311bc8e1958a7ef51430a4f53d1aa694cc85ab"
+        }
+      ],
+      "delivery_kind": "reuse_blank_tag_with_independent_parts",
+      "review": "XML parsed; visual preview pending",
+      "integration_notes": "Existing blank tag reused unchanged for independent message parts. Not claimed as newly drawn art.",
+      "target_dimensions": [
+        48,
+        148
+      ],
+      "size_matches_technical_source": true,
+      "integration_status": "candidate_only_not_runtime_integrated"
+    }
+  ]
+}

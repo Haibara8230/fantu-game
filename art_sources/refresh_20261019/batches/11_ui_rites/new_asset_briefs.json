@@ -4,34 +4,428 @@
     "filename": "scroll_panel_dark.png",
     "brief": "深色兼容卷轴已有候选，适配现有浅色文字",
     "status": "planned_or_existing_candidate",
-    "output_path": "D:/fqh/flash/art_sources/refresh_20261019/batches/11_ui_rites/output/scroll_panel_dark.png"
+    "output_path": "art_sources/refresh_20261019/batches/11_ui_rites/output/scroll_panel_dark.png",
+    "content_outline": "docs/GAME_OUTLINE.md",
+    "outline_sections": [
+      "2",
+      "3.1",
+      "5.2",
+      "6.1",
+      "6.2"
+    ],
+    "content_plan": "art_sources/refresh_20261019/CONTENT_PLAN.md",
+    "style_reference": "art_sources/refresh_20261019/batches/11_ui_rites/references.json",
+    "technical_spec": {
+      "path": "assets/art/ui/scroll_panel.png",
+      "sha256": "115c6f3dbc4fc00bf1423b7e1a661b864174872ba827bc4de053f7d99464c820",
+      "format": "PNG",
+      "dimensions": [
+        1672,
+        941
+      ],
+      "mode": "RGB",
+      "background": "opaque",
+      "native_vector_required": false,
+      "aspect_ratio": [
+        1672,
+        941
+      ],
+      "actor_layouts": [],
+      "actor_layout_note": "No actor atlas definition on this technical source."
+    },
+    "spec_policy": "inherit_existing_source; retain measured native output separately; never mislabel dimensions",
+    "reference_bindings": [
+      {
+        "id": "technical:assets/art/ui/scroll_panel.png",
+        "role": "dimensions_alpha_layout_only"
+      },
+      {
+        "id": "style:10_panel",
+        "role": "drawing_style_only"
+      },
+      {
+        "id": "original:10_panel",
+        "role": "original_game_style_only_no_copy"
+      },
+      {
+        "id": "style:11_furnace",
+        "role": "drawing_style_only"
+      },
+      {
+        "id": "original:11_furnace",
+        "role": "original_game_style_only_no_copy"
+      },
+      {
+        "id": "style:12_garden",
+        "role": "drawing_style_only"
+      },
+      {
+        "id": "original:12_garden",
+        "role": "original_game_style_only_no_copy"
+      }
+    ],
+    "identity_policy": "If a registered person appears, use their identity_registry image and hash; unseen characters wait for batch02; never substitute style-reference faces.",
+    "generation_gate": "generate_after_dependencies",
+    "dependencies": []
   },
   {
-    "priority": "P1",
+    "priority": "P0",
     "filename": "hero_meditate.png",
-    "brief": "主角打坐插画，人物身份与第01批一致，真实透明背景",
+    "brief": "开局静房首次闭关与领悟的打坐插画；沿用第01批主角身份与既定画法，真实透明背景，不提前宣告宗门归属",
     "status": "planned_or_existing_candidate",
-    "output_path": "D:/fqh/flash/art_sources/refresh_20261019/batches/11_ui_rites/output/hero_meditate.png"
+    "output_path": "art_sources/refresh_20261019/batches/11_ui_rites/output/hero_meditate.png",
+    "content_outline": "docs/GAME_OUTLINE.md",
+    "outline_sections": [
+      "2",
+      "3.1",
+      "5.2",
+      "6.1",
+      "6.2"
+    ],
+    "content_plan": "art_sources/refresh_20261019/CONTENT_PLAN.md",
+    "style_reference": "art_sources/refresh_20261019/batches/11_ui_rites/references.json",
+    "technical_spec": {
+      "path": "assets/art/actors/hero_meditate.png",
+      "sha256": "9e8a32da01d522683e60b6cc56e73bf5d6e5b8a0e8f4fe8d3dc4d5b23be6a1f1",
+      "format": "PNG",
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "mode": "RGBA",
+      "background": "transparent_required",
+      "native_vector_required": false,
+      "aspect_ratio": [
+        1,
+        1
+      ],
+      "actor_layouts": [],
+      "actor_layout_note": "No actor atlas definition on this technical source."
+    },
+    "spec_policy": "inherit_existing_source; retain measured native output separately; never mislabel dimensions",
+    "reference_bindings": [
+      {
+        "id": "technical:assets/art/actors/hero_meditate.png",
+        "role": "dimensions_alpha_layout_only"
+      },
+      {
+        "id": "style:10_panel",
+        "role": "drawing_style_only"
+      },
+      {
+        "id": "original:10_panel",
+        "role": "original_game_style_only_no_copy"
+      },
+      {
+        "id": "style:11_furnace",
+        "role": "drawing_style_only"
+      },
+      {
+        "id": "original:11_furnace",
+        "role": "original_game_style_only_no_copy"
+      },
+      {
+        "id": "style:12_garden",
+        "role": "drawing_style_only"
+      },
+      {
+        "id": "original:12_garden",
+        "role": "original_game_style_only_no_copy"
+      }
+    ],
+    "identity_policy": "If a registered person appears, use their identity_registry image and hash; unseen characters wait for batch02; never substitute style-reference faces.",
+    "generation_gate": "generate_after_dependencies",
+    "dependencies": []
   },
   {
     "priority": "P1",
     "filename": "breakthrough_ritual_vignette.png",
     "brief": "突破筹划功能插画，条件、资源和结果由UI独立绘制",
     "status": "planned_or_existing_candidate",
-    "output_path": "D:/fqh/flash/art_sources/refresh_20261019/batches/11_ui_rites/output/breakthrough_ritual_vignette.png"
+    "output_path": "art_sources/refresh_20261019/batches/11_ui_rites/output/breakthrough_ritual_vignette.png",
+    "content_outline": "docs/GAME_OUTLINE.md",
+    "outline_sections": [
+      "2",
+      "3.1",
+      "5.2",
+      "6.1",
+      "6.2"
+    ],
+    "content_plan": "art_sources/refresh_20261019/CONTENT_PLAN.md",
+    "style_reference": "art_sources/refresh_20261019/batches/11_ui_rites/references.json",
+    "technical_spec": {
+      "path": "assets/art/ui/alchemy_vignette.png",
+      "sha256": "88bf832d0b4156688f45d8fb3b53dfbe82d862f4840c3fa9cfbcfadb4df154a0",
+      "format": "PNG",
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "mode": "RGBA",
+      "background": "transparent_required",
+      "native_vector_required": false,
+      "aspect_ratio": [
+        1,
+        1
+      ],
+      "actor_layouts": [],
+      "actor_layout_note": "No actor atlas definition on this technical source."
+    },
+    "spec_policy": "inherit_existing_source; retain measured native output separately; never mislabel dimensions",
+    "reference_bindings": [
+      {
+        "id": "technical:assets/art/ui/alchemy_vignette.png",
+        "role": "dimensions_alpha_layout_only"
+      },
+      {
+        "id": "style:10_panel",
+        "role": "drawing_style_only"
+      },
+      {
+        "id": "original:10_panel",
+        "role": "original_game_style_only_no_copy"
+      },
+      {
+        "id": "style:11_furnace",
+        "role": "drawing_style_only"
+      },
+      {
+        "id": "original:11_furnace",
+        "role": "original_game_style_only_no_copy"
+      },
+      {
+        "id": "style:12_garden",
+        "role": "drawing_style_only"
+      },
+      {
+        "id": "original:12_garden",
+        "role": "original_game_style_only_no_copy"
+      }
+    ],
+    "identity_policy": "If a registered person appears, use their identity_registry image and hash; unseen characters wait for batch02; never substitute style-reference faces.",
+    "generation_gate": "generate_after_dependencies",
+    "dependencies": []
   },
   {
     "priority": "P1",
     "filename": "exploration_states.svg",
-    "brief": "未知／听闻／发现／到访／内部探索状态，交独立可组合矢量而非写死在地图",
+    "brief": "未知／已听闻／已发现／已到访／已探索完毕五种状态，交独立可组合矢量而非写死在地图",
     "status": "planned_or_existing_candidate",
-    "output_path": "D:/fqh/flash/art_sources/refresh_20261019/batches/11_ui_rites/output/exploration_states.svg"
+    "output_path": "art_sources/refresh_20261019/batches/11_ui_rites/output/exploration_states.svg",
+    "content_outline": "docs/GAME_OUTLINE.md",
+    "outline_sections": [
+      "2",
+      "3.1",
+      "5.2",
+      "6.1",
+      "6.2"
+    ],
+    "content_plan": "art_sources/refresh_20261019/CONTENT_PLAN.md",
+    "style_reference": "art_sources/refresh_20261019/batches/11_ui_rites/references.json",
+    "technical_spec": {
+      "path": "assets/art/ui/map/market.svg",
+      "sha256": "ad5e2f1c906e0fcde82f91bd80d06be4861a0d029718b081ffff4456cc589597",
+      "format": "SVG",
+      "dimensions": [
+        64,
+        64
+      ],
+      "view_box": [
+        0.0,
+        0.0,
+        64.0,
+        64.0
+      ],
+      "background": "preserve_source_svg",
+      "native_vector_required": true,
+      "aspect_ratio": [
+        1,
+        1
+      ],
+      "actor_layouts": [],
+      "actor_layout_note": "No actor atlas definition on this technical source."
+    },
+    "spec_policy": "inherit_existing_source; retain measured native output separately; never mislabel dimensions",
+    "reference_bindings": [
+      {
+        "id": "technical:assets/art/ui/map/market.svg",
+        "role": "dimensions_alpha_layout_only"
+      },
+      {
+        "id": "style:10_panel",
+        "role": "drawing_style_only"
+      },
+      {
+        "id": "original:10_panel",
+        "role": "original_game_style_only_no_copy"
+      },
+      {
+        "id": "style:11_furnace",
+        "role": "drawing_style_only"
+      },
+      {
+        "id": "original:11_furnace",
+        "role": "original_game_style_only_no_copy"
+      },
+      {
+        "id": "style:12_garden",
+        "role": "drawing_style_only"
+      },
+      {
+        "id": "original:12_garden",
+        "role": "original_game_style_only_no_copy"
+      }
+    ],
+    "identity_policy": "If a registered person appears, use their identity_registry image and hash; unseen characters wait for batch02; never substitute style-reference faces.",
+    "generation_gate": "generate_after_dependencies",
+    "dependencies": []
   },
   {
     "priority": "P1",
     "filename": "city_port_markers.svg",
     "brief": "城市与海港地图标记，区分旧坊市及内河渡口",
     "status": "planned_or_existing_candidate",
-    "output_path": "D:/fqh/flash/art_sources/refresh_20261019/batches/11_ui_rites/output/city_port_markers.svg"
+    "output_path": "art_sources/refresh_20261019/batches/11_ui_rites/output/city_port_markers.svg",
+    "content_outline": "docs/GAME_OUTLINE.md",
+    "outline_sections": [
+      "2",
+      "3.1",
+      "5.2",
+      "6.1",
+      "6.2"
+    ],
+    "content_plan": "art_sources/refresh_20261019/CONTENT_PLAN.md",
+    "style_reference": "art_sources/refresh_20261019/batches/11_ui_rites/references.json",
+    "technical_spec": {
+      "path": "assets/art/ui/map/market.svg",
+      "sha256": "ad5e2f1c906e0fcde82f91bd80d06be4861a0d029718b081ffff4456cc589597",
+      "format": "SVG",
+      "dimensions": [
+        64,
+        64
+      ],
+      "view_box": [
+        0.0,
+        0.0,
+        64.0,
+        64.0
+      ],
+      "background": "preserve_source_svg",
+      "native_vector_required": true,
+      "aspect_ratio": [
+        1,
+        1
+      ],
+      "actor_layouts": [],
+      "actor_layout_note": "No actor atlas definition on this technical source."
+    },
+    "spec_policy": "inherit_existing_source; retain measured native output separately; never mislabel dimensions",
+    "reference_bindings": [
+      {
+        "id": "technical:assets/art/ui/map/market.svg",
+        "role": "dimensions_alpha_layout_only"
+      },
+      {
+        "id": "style:10_panel",
+        "role": "drawing_style_only"
+      },
+      {
+        "id": "original:10_panel",
+        "role": "original_game_style_only_no_copy"
+      },
+      {
+        "id": "style:11_furnace",
+        "role": "drawing_style_only"
+      },
+      {
+        "id": "original:11_furnace",
+        "role": "original_game_style_only_no_copy"
+      },
+      {
+        "id": "style:12_garden",
+        "role": "drawing_style_only"
+      },
+      {
+        "id": "original:12_garden",
+        "role": "original_game_style_only_no_copy"
+      }
+    ],
+    "identity_policy": "If a registered person appears, use their identity_registry image and hash; unseen characters wait for batch02; never substitute style-reference faces.",
+    "generation_gate": "generate_after_dependencies",
+    "dependencies": []
+  },
+  {
+    "priority": "P1",
+    "filename": "retreat_return_summary.svg",
+    "brief": "出关消息、故人变故与约定提醒的可组合空白部件；沿用现有UI画法，日期、人名与结果由程序绘制，先复用现有卷轴",
+    "status": "planned_or_existing_candidate",
+    "output_path": "art_sources/refresh_20261019/batches/11_ui_rites/output/retreat_return_summary.svg",
+    "content_outline": "docs/GAME_OUTLINE.md",
+    "outline_sections": [
+      "2",
+      "3.1",
+      "5.2",
+      "6.1",
+      "6.2"
+    ],
+    "content_plan": "art_sources/refresh_20261019/CONTENT_PLAN.md",
+    "style_reference": "art_sources/refresh_20261019/batches/11_ui_rites/references.json",
+    "technical_spec": {
+      "path": "assets/art/ui/tag.svg",
+      "sha256": "1a7c2d7ddf98c9573a61d417c5bbf2d58bc6daa78cc4f6305682de4db815fc76",
+      "format": "SVG",
+      "dimensions": [
+        48,
+        148
+      ],
+      "view_box": [
+        0.0,
+        0.0,
+        48.0,
+        148.0
+      ],
+      "background": "preserve_source_svg",
+      "native_vector_required": true,
+      "aspect_ratio": [
+        12,
+        37
+      ],
+      "actor_layouts": [],
+      "actor_layout_note": "No actor atlas definition on this technical source."
+    },
+    "spec_policy": "inherit_existing_source; retain measured native output separately; never mislabel dimensions",
+    "reference_bindings": [
+      {
+        "id": "technical:assets/art/ui/tag.svg",
+        "role": "dimensions_alpha_layout_only"
+      },
+      {
+        "id": "style:10_panel",
+        "role": "drawing_style_only"
+      },
+      {
+        "id": "original:10_panel",
+        "role": "original_game_style_only_no_copy"
+      },
+      {
+        "id": "style:11_furnace",
+        "role": "drawing_style_only"
+      },
+      {
+        "id": "original:11_furnace",
+        "role": "original_game_style_only_no_copy"
+      },
+      {
+        "id": "style:12_garden",
+        "role": "drawing_style_only"
+      },
+      {
+        "id": "original:12_garden",
+        "role": "original_game_style_only_no_copy"
+      }
+    ],
+    "identity_policy": "If a registered person appears, use their identity_registry image and hash; unseen characters wait for batch02; never substitute style-reference faces.",
+    "generation_gate": "generate_after_dependencies",
+    "dependencies": []
   }
 ]

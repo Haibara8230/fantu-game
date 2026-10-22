@@ -1,0 +1,3382 @@
+{
+ "scope": "runtime art installed from reviewed deliveries",
+ "installed": {
+  "9d7e892f2ee6f516": [
+   {
+    "path": "assets/art/cultivator_atlas_v2.png",
+    "dimensions": [
+     1536,
+     1024
+    ],
+    "mode": "RGBA",
+    "sha256": "30f7da9822c02dc4e0181020eb9973f2bc471b4c7ab0d1a2a5cd8828500b73ee"
+   }
+  ],
+  "8f8006bcf8aed69f": [
+   {
+    "path": "assets/art/portraits/azhi.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "a771a49d8a009bbfb1a17ccb9d9ba65744e9b6a1b28e3022f7695bcfce7fcc87"
+   }
+  ],
+  "f3211efb28d2fc27": [
+   {
+    "path": "assets/art/portraits/azhi_unique.png",
+    "dimensions": [
+     1122,
+     1402
+    ],
+    "mode": "RGB",
+    "sha256": "678b4091021e3bbeac58729b40d92f44d1c8c6b831202c26598f1fb178b371b5"
+   }
+  ],
+  "69aab6aabfc59df6": [
+   {
+    "path": "assets/art/portraits/boatman.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "e9b24d6a2957ceb6f89707d2dff3bfe8334b48ab71708b701d61c249ce0d2348"
+   }
+  ],
+  "8a5f0ca736a904be": [
+   {
+    "path": "assets/art/portraits/gu_changgeng_unique.png",
+    "dimensions": [
+     1122,
+     1402
+    ],
+    "mode": "RGB",
+    "sha256": "91344a51c8b690c1cc3d68e3aca4c17b6616235350834e38375a2bf18e5166bc"
+   }
+  ],
+  "80771024a1b3cc17": [
+   {
+    "path": "assets/art/portraits/han_jin_unique.png",
+    "dimensions": [
+     1122,
+     1402
+    ],
+    "mode": "RGB",
+    "sha256": "5f1f9ec426df2fb8fc7ac1386c55c921c7da84741fa4790383b3002914eb4a52"
+   }
+  ],
+  "b8fa8c37f10ae9c6": [
+   {
+    "path": "assets/art/portraits/peddler.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "d073e2233780327a71fe522d6e96218be67a7ec8f10fd1c3503ed1b3c0fc422c"
+   }
+  ],
+  "2596a4235c41acf0": [
+   {
+    "path": "assets/art/portraits/rogue.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "55b5ff0b860c92052963facc9a49f1288381856beeafab5a0cc75c2e36d08f3d"
+   }
+  ],
+  "bcb0b7df043866ef": [
+   {
+    "path": "assets/art/portraits/shen_mo.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "6bdc6053211a7431cdd6dbd832360a8ad6c9a93e798a4b6fcfd5771e2857400f"
+   }
+  ],
+  "c9342433e294bd65": [
+   {
+    "path": "assets/art/portraits/squatter.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "d3d68beb67a0e78ba60b8d676982c0f2cedebb514bfbbe0adbf270e61dc2db41"
+   }
+  ],
+  "f3b7337df09fe148": [
+   {
+    "path": "assets/art/portraits/storyteller.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "b75137478ead826ba202c5b655967f39d72da7c8acdeecfd84acb90126687c4a"
+   }
+  ],
+  "8c9199257a684acc": [
+   {
+    "path": "assets/art/portraits/wounded.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "9da3b9a6b9a628ad1cc0e53135b1e120d6c4d3e2f8b2e16f7aa45e3991014b2f"
+   }
+  ],
+  "81243f75a480b071": [
+   {
+    "path": "assets/art/portraits/xu_qinghe_unique.png",
+    "dimensions": [
+     1122,
+     1402
+    ],
+    "mode": "RGB",
+    "sha256": "96cf191e6bdcfe411cc85058c8d4f2b4fcd97c878ca0396ccbdf9c7f49bbdf8e"
+   }
+  ],
+  "3fb4877d550abbb3": [
+   {
+    "path": "assets/art/portraits/yuan_chifeng_unique.png",
+    "dimensions": [
+     1122,
+     1402
+    ],
+    "mode": "RGB",
+    "sha256": "8fd970d2d2b04cc2a82b2d0d22eafc7e6ae48f4904eefa6758cf3cd2b2be9039"
+   }
+  ],
+  "36ea1cef969e2206": [
+   {
+    "path": "assets/local/portraits/gu_changgeng.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "153e1f1c08c7d377e072ed14235d80b49dd024acf22e658a3ebf42f462829731"
+   }
+  ],
+  "9aec1e7d127253b3": [
+   {
+    "path": "assets/local/portraits/xu_qinghe.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "cb526c796da7883cb3399960d2800e89f5a452b1449e2fe032f9005fddef9fef"
+   }
+  ],
+  "adfbcf95176dde2d": [
+   {
+    "path": "assets/local/portraits/pool/female_middle/disciple_female_middle_01.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "7ddd2307b4c270fe8b63cd61869675d653c5f926773e54a79d9b71725b883a2a"
+   }
+  ],
+  "3ffc1ce3c03a89d1": [
+   {
+    "path": "assets/local/portraits/pool/female_middle/disciple_female_middle_02.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "d5ae29c237229bdd645dcd39a5992838597388382efc7895459b87655ce30c1e"
+   }
+  ],
+  "4fde35d31cd274f1": [
+   {
+    "path": "assets/local/portraits/pool/female_middle/disciple_female_middle_03.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "d495b8bd6086d958726ebdd37ec42f1a6eda72d70f9ff3dcedb60e7f38ca8b8e"
+   }
+  ],
+  "33f9bba7fb949f23": [
+   {
+    "path": "assets/local/portraits/pool/female_middle/disciple_female_middle_04.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "83fa15acd544fe68670ce43d75a6f1077cff296432293998193b5bfb5bf5dfc0"
+   }
+  ],
+  "d6a84134da981f52": [
+   {
+    "path": "assets/local/portraits/pool/female_middle/disciple_female_middle_05.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "c4c9b85de237da3f3f387bbbf60036336a0a448d8b44d0d0b45b67097688a9b1"
+   }
+  ],
+  "8e7f5052e52895c2": [
+   {
+    "path": "assets/local/portraits/pool/female_middle/disciple_female_middle_06.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "3932d3da0347d882254aac8f362af4d7b8b6f0f0349ce1275cfe9bacac03d3aa"
+   }
+  ],
+  "1d39e8e2c4e7774d": [
+   {
+    "path": "assets/local/portraits/pool/female_middle/disciple_female_middle_07.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "d1b3a103f178ceb790a9f9f8cc6a905d52cba6a87581f48a2211e469c69d85a5"
+   }
+  ],
+  "8ae6ca2914e001f3": [
+   {
+    "path": "assets/local/portraits/pool/female_middle/disciple_female_middle_08.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "f095636b5122ff2c3a0d49e853de9968c39b94dfefb7f0e20f1625d5e3ca1e3f"
+   }
+  ],
+  "6fcd4a4979d84af8": [
+   {
+    "path": "assets/local/portraits/pool/female_middle/disciple_female_middle_09.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "b44f3a17dcf91e93d935f1d5b9815164fce8288f7803409d9eeba2989c55b7cb"
+   }
+  ],
+  "01852dc88dad549e": [
+   {
+    "path": "assets/local/portraits/pool/female_middle/gatherer_female_middle_01.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "b872667e0ef0985e6c26c1c1c2dafab71965e29a002e587d4b0925ca806eb951"
+   }
+  ],
+  "0cbe075433a128a7": [
+   {
+    "path": "assets/local/portraits/pool/female_middle/gatherer_female_middle_02.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "6b4a4f9ce12459f9256999ca8a7d1f6543992ccf37cf87bc842639d30e01eaf6"
+   }
+  ],
+  "532bef523a8079e5": [
+   {
+    "path": "assets/local/portraits/pool/female_middle/gatherer_female_middle_03.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "b40eb26c6c29fb9eafccd8f335598e77efaa7d512845731cb24e44adf26427da"
+   }
+  ],
+  "9faa529ff5244448": [
+   {
+    "path": "assets/local/portraits/pool/female_middle/gatherer_female_middle_04.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "1ace4a0253bb666fde6214f98511a399b63fc0b74399e2ec4d7fc5f949e84674"
+   }
+  ],
+  "1bf55295990476fb": [
+   {
+    "path": "assets/local/portraits/pool/female_middle/trader_female_middle_01.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "f57fb2e5c195416776a6c2afe2d1b577f5934273e0cd26bb719ae20f8547c2e8"
+   }
+  ],
+  "2149737515d654b7": [
+   {
+    "path": "assets/local/portraits/pool/female_middle/trader_female_middle_02.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "2ffa63fa9fbc90f0d0537b9a899d41a7a935012ee603df0786532e4f77f19425"
+   }
+  ],
+  "74a2ed3a2f0b5611": [
+   {
+    "path": "assets/local/portraits/pool/female_middle/trader_female_middle_03.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "d668df8e3155c682b0a855025eef493e33f8f42255961f6a83a55f544094478a"
+   }
+  ],
+  "5c324099ce1c2b34": [
+   {
+    "path": "assets/local/portraits/pool/female_middle/trader_female_middle_04.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "26300337751c4fdc20ddc5c0b67f8f4bbe17d6410ea87baeaf0d30ce18207a42"
+   }
+  ],
+  "d7dfa0e22c934438": [
+   {
+    "path": "assets/local/portraits/pool/female_middle/trader_female_middle_05.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "29efc192703a7501cb180ffcc706ce6fa28f438c8f61e118019e8d19f701c6ec"
+   }
+  ],
+  "8040d9c1676b5922": [
+   {
+    "path": "assets/local/portraits/pool/female_middle/trader_female_middle_06.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "74b685196e7520ca6d84eaab5afa7c9c89f04064f5750b0d05dcbf37ea237644"
+   }
+  ],
+  "47657228d18cf38e": [
+   {
+    "path": "assets/local/portraits/pool/female_middle/visitor_female_middle_01.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "f16a2f2be9e6a33c86a34bac28e801dcefe0f355140c85e854a6b469d9a10020"
+   }
+  ],
+  "1b462da0ea50ffc0": [
+   {
+    "path": "assets/local/portraits/pool/female_middle/visitor_female_middle_02.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "f087ea7bdb88e1f0a6e7032782846b3d4b68e96b96600f636818893db713b696"
+   }
+  ],
+  "8b6c9e368fb70f54": [
+   {
+    "path": "assets/local/portraits/pool/female_middle/wanderer_female_middle_01.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "7efd7952392252ca63fa41a215c73260e53937958e18d76a396677ebd6711d13"
+   }
+  ],
+  "89d2186c4485655c": [
+   {
+    "path": "assets/local/portraits/pool/female_middle/wanderer_female_middle_02.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "20b36a8d9a171538d35cac754db18c651aa52c47af87ccf100c12487fd12f1c2"
+   }
+  ],
+  "54a6f7d9d3b194c2": [
+   {
+    "path": "assets/local/portraits/pool/female_middle/wanderer_female_middle_03.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "5d4e1b0c5ed875d75d2647c0059b0c79ae386c176cb363d4a4da7c2047a85e53"
+   }
+  ],
+  "a528f55e2fda5c8e": [
+   {
+    "path": "assets/local/portraits/pool/female_middle/wanderer_female_middle_04.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "8d95911fe6ae0d4957875313bd19930606e24a63fb7664c83ae7b0242112f7df"
+   }
+  ],
+  "7e4e1c28fde3f742": [
+   {
+    "path": "assets/local/portraits/pool/female_middle/wanderer_female_middle_05.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "08c2d16e638952527a8db539ce2c176c1cf3c7f4e37c26129fef2a588dc942d7"
+   }
+  ],
+  "ce7c6f0efd14a2cc": [
+   {
+    "path": "assets/local/portraits/pool/female_middle/wanderer_female_middle_06.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "698b4df62b09ae00114caf1e4e3ebd65ee13016eaabb9fec0d0f3a8e345bcd7f"
+   }
+  ],
+  "8f0690fc256db467": [
+   {
+    "path": "assets/local/portraits/pool/female_middle/wanderer_female_middle_07.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "930006a059029998ecef34c8549c2e10a0b3b46e2e29011693ba4f6a6cebad5d"
+   }
+  ],
+  "5f4df5f2329bb4ea": [
+   {
+    "path": "assets/local/portraits/pool/female_middle/wanderer_female_middle_08.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "3a08e6e950f3060790be876d85f646da7f932c559fe46152c1ef20e1074a4694"
+   }
+  ],
+  "9f7c4fbb723eca37": [
+   {
+    "path": "assets/local/portraits/pool/female_middle/wanderer_female_middle_09.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "c698537c234a667e4fb96331f911bbcbd5878c8696f97d41564cd165930d7768"
+   }
+  ],
+  "31886583cbbfece0": [
+   {
+    "path": "assets/local/portraits/pool/female_old/disciple_female_old_01.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "788e6c5b32822a5cddb03ef6b4cefbbffd00e44a2c25b2ef390fa3dfec166f1b"
+   }
+  ],
+  "23d83dfdf34f4de6": [
+   {
+    "path": "assets/local/portraits/pool/female_old/disciple_female_old_02.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "79fc719e09c70dd24a9dd41b7703a42769541e9c34ffe424318d7c0461bac94d"
+   }
+  ],
+  "b55957f34619d1e4": [
+   {
+    "path": "assets/local/portraits/pool/female_old/disciple_female_old_03.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "eee65c3ae79c1f2b4e4f18fed2fe9e61ba9aa3d26f4da364da741f48304be028"
+   }
+  ],
+  "727fb2070dbaa19f": [
+   {
+    "path": "assets/local/portraits/pool/female_old/disciple_female_old_04.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "60a37de09acb8d738eace094d9ba528006969c418cbe501e1611b7a75902918a"
+   }
+  ],
+  "35f47a84d4d2f350": [
+   {
+    "path": "assets/local/portraits/pool/female_old/disciple_female_old_05.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "cf0f13b7981be8f4a2efa89221cee626683856b26dc6f6676641362b70a6a95a"
+   }
+  ],
+  "e5ffd9487cf12e8b": [
+   {
+    "path": "assets/local/portraits/pool/female_old/disciple_female_old_06.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "196d0db0f6b09f9dca3f5f42fc7391242326ecc829a4fd6d0e434265f7552ad9"
+   }
+  ],
+  "a5b134df3b990603": [
+   {
+    "path": "assets/local/portraits/pool/female_old/disciple_female_old_07.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "ed98a7505c88e65664008853c92f1afc8057c30c6b7a9921fb4baa9205502b9b"
+   }
+  ],
+  "1dac38adf072a378": [
+   {
+    "path": "assets/local/portraits/pool/female_old/gatherer_female_old_01.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "002f77c0951f8fdd20767b1c3558da48c25ee29534e5a6b310c30648239fb5b4"
+   }
+  ],
+  "75f25a0e3af63a3f": [
+   {
+    "path": "assets/local/portraits/pool/female_old/gatherer_female_old_02.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "5c6a507e521b6e167dacca46a9ab6b3630cd8814603b0261779fd07597036ace"
+   }
+  ],
+  "7d8397c4f6b53407": [
+   {
+    "path": "assets/local/portraits/pool/female_old/gatherer_female_old_03.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "0c470ddd7cf609a4bfd8b2484bd7c371f496ea8dfec268b97b35833d5c000dd1"
+   }
+  ],
+  "5c0e6081e05d9b32": [
+   {
+    "path": "assets/local/portraits/pool/female_old/gatherer_female_old_04.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "b2d688b3cafd1802b2fc238ef48d787c591180d834a96b979256e56195d056fa"
+   }
+  ],
+  "26063fac2d9daed5": [
+   {
+    "path": "assets/local/portraits/pool/female_old/gatherer_female_old_05.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "368f3b4f86cb0b144dfd10f237e560f4399cc725f083b84294e3506ebaed3bea"
+   }
+  ],
+  "b58bfdf11aa642dc": [
+   {
+    "path": "assets/local/portraits/pool/female_old/trader_female_old_01.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "c1378e17094201838b0b2a923a22accaf6f00080d4a79a721c53cc76ffb71d63"
+   }
+  ],
+  "fe6489b59704db49": [
+   {
+    "path": "assets/local/portraits/pool/female_old/trader_female_old_02.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "c61c1ef2f8b8f40d085f5917b4025541219846e9e5b465b06e0a9ff10bf81dbe"
+   }
+  ],
+  "d4204f5df5c77a57": [
+   {
+    "path": "assets/local/portraits/pool/female_old/trader_female_old_03.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "c8585a7f59da2bd61dc8f471baa4c867cf4a1648ea3492c8c25775faeca71e07"
+   }
+  ],
+  "6477c6ff914f4bc1": [
+   {
+    "path": "assets/local/portraits/pool/female_old/trader_female_old_04.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "2b8e231646d90aed567d83516374687d0426d29bcf003b89142ab3cc79464282"
+   }
+  ],
+  "0c99eab5a427e612": [
+   {
+    "path": "assets/local/portraits/pool/female_old/trader_female_old_05.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "ef405b184a74b2600764536da81593a9475c12b98d6a43b06539c6f8b42d0b59"
+   }
+  ],
+  "65be5e1474d93557": [
+   {
+    "path": "assets/local/portraits/pool/female_old/trader_female_old_06.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "99b4937494866ee6aa011f398cd17581bb0555f4bd985b4e82e739955163d95a"
+   }
+  ],
+  "89ce5af995441c6f": [
+   {
+    "path": "assets/local/portraits/pool/female_old/visitor_female_old_01.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "fcc97239404f525b6be94197fd54dfc411b96ca7bcb02bdff8396deff3d78f58"
+   }
+  ],
+  "464ff8675f2a522c": [
+   {
+    "path": "assets/local/portraits/pool/female_old/visitor_female_old_02.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "8ba156f3d78855292ec395f431f5c550a9a51e2d5cb219cf8d872c79b393e4dc"
+   }
+  ],
+  "d5d6aa5253dc82a1": [
+   {
+    "path": "assets/local/portraits/pool/female_old/wanderer_female_old_01.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "246b1b970b1228e54eefde22bb2b3a44432c31d102517e10d6f9b69d01e39275"
+   }
+  ],
+  "de31737b8b6b474b": [
+   {
+    "path": "assets/local/portraits/pool/female_old/wanderer_female_old_02.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "2c03e03bd7f001ad1832ae3155ca90052a7b29d2f26a1305299494780c8514bd"
+   }
+  ],
+  "529b863beeccf887": [
+   {
+    "path": "assets/local/portraits/pool/female_old/wanderer_female_old_03.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "75b5ef32ce15e99ed8879bb98ad133ac6475f3f56cc51762ae42aa8a3f589c80"
+   }
+  ],
+  "4c877b26e61bacb9": [
+   {
+    "path": "assets/local/portraits/pool/female_old/wanderer_female_old_04.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "9ddb40e0201c18e17ab1178b7d04786d1933001148479aec6aa2be1c0e2ac455"
+   }
+  ],
+  "2267f17b6f767635": [
+   {
+    "path": "assets/local/portraits/pool/female_old/wanderer_female_old_05.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "0344614aa8560ef95bc8f0c63ecf714b13f1672d0f2452654b872bf31af4e274"
+   }
+  ],
+  "deb2ca4c0aa94dcc": [
+   {
+    "path": "assets/local/portraits/pool/female_old/wanderer_female_old_06.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "408065417ea4d6c6490970ca1a77ebe8531f43715408977123a8a3b37fb89791"
+   }
+  ],
+  "daca8576bfc01835": [
+   {
+    "path": "assets/local/portraits/pool/female_old/wanderer_female_old_07.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "2cac07efbd07f2da5ba7f934205060f02761243f2fadabc30e37c0df9541c8ad"
+   }
+  ],
+  "620380dc4c94c37a": [
+   {
+    "path": "assets/local/portraits/pool/female_old/wanderer_female_old_08.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "1d992edf7ca50ee53ec3b1b47f67be75b4282f370421844ced1673fb8eb19a42"
+   }
+  ],
+  "2b7bc7dd571f4dc2": [
+   {
+    "path": "assets/local/portraits/pool/female_old/wanderer_female_old_09.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "04e2fa16c4ed30b6c7d0adb0c3cea165024c8d12d7f33093acc76cd913963e48"
+   }
+  ],
+  "4a5ea65929ba0885": [
+   {
+    "path": "assets/local/portraits/pool/female_old/wanderer_female_old_10.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "c142d8b74ac3122f20b8f8ce4118b3d57f5c91e7da9e07c979fb4ce78174bfa3"
+   }
+  ],
+  "3edb3610ae8c500f": [
+   {
+    "path": "assets/local/portraits/pool/female_young/disciple_female_young_01.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "cb720f19f4eee9f8b9c539682d6e2bb59aa2681faee12351f627e36e71452c66"
+   }
+  ],
+  "37e1d2f7cb31fa21": [
+   {
+    "path": "assets/local/portraits/pool/female_young/disciple_female_young_02.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "7b4bf3d2905ebf4e3087cab0e29d40e52f8fe168fc307bc82098383c84584b7f"
+   }
+  ],
+  "2ee07f30142ad6ec": [
+   {
+    "path": "assets/local/portraits/pool/female_young/disciple_female_young_03.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "a86dca87752dd0f9d830c90aca71e29529e76cb69d6e2a251824413e87b8ec71"
+   }
+  ],
+  "9be460b32f73a8d9": [
+   {
+    "path": "assets/local/portraits/pool/female_young/disciple_female_young_04.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "105b1143bd2d491d45fddfb117de39b8ba303a193b143cc43f7afa5b2b1448bc"
+   }
+  ],
+  "311bfc37cd5e9e05": [
+   {
+    "path": "assets/local/portraits/pool/female_young/disciple_female_young_05.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "a1c3419c51ce2c47132d1bc1fc98e434dceb0844670423af5dcfce2b136b9c27"
+   }
+  ],
+  "7fbf30d4bdbbf80b": [
+   {
+    "path": "assets/local/portraits/pool/female_young/disciple_female_young_06.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "e77dd0ccf368a2c9281a0d7081ef71891f6aaef70bb78fd6f0d7db360581b74b"
+   }
+  ],
+  "45c37fa1f602fad1": [
+   {
+    "path": "assets/local/portraits/pool/female_young/disciple_female_young_07.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "11456a7d98005ddde7dcab3400dc24394d831a4da334be2eed0a129f400791a7"
+   }
+  ],
+  "addce0b08a9212ab": [
+   {
+    "path": "assets/local/portraits/pool/female_young/disciple_female_young_08.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "996901a87068094aedf1a1aede44be5793a006a035be96fb34b51c35d67e5029"
+   }
+  ],
+  "1a8149fb1eb917c1": [
+   {
+    "path": "assets/local/portraits/pool/female_young/disciple_female_young_09.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "12524c9668fa452c69fdadce8a0d1ff869699ea2ebcba98fa463ea6c64900d77"
+   }
+  ],
+  "81a3f99076613ac7": [
+   {
+    "path": "assets/local/portraits/pool/female_young/disciple_female_young_10.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "c252a6f507b84af6c013d368883f07c8bdf386e67ffd3f38802238a24df4fba9"
+   }
+  ],
+  "38f81ace2433113a": [
+   {
+    "path": "assets/local/portraits/pool/female_young/disciple_female_young_11.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "a9ed809824c586dda0772c651cc7545dff7bfcddb9cc00dda6e410d050b88016"
+   }
+  ],
+  "47efe75e42ccfae4": [
+   {
+    "path": "assets/local/portraits/pool/female_young/disciple_female_young_12.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "c0e95c5de0fae1e02acb0fcb5381fbabe1d0b8b971ccaf57ca6ca03a5f71bac1"
+   }
+  ],
+  "3dea808ca22ecff5": [
+   {
+    "path": "assets/local/portraits/pool/female_young/disciple_female_young_13.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "c82b1f9d7013761c1a11248f09425bcd26f56f98ed48e79b3a851baabc0c95dc"
+   }
+  ],
+  "073a99d6313a846b": [
+   {
+    "path": "assets/local/portraits/pool/female_young/disciple_female_young_14.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "d5c31744c3678d3d7352dba96eb6dd8add34886c1a91feb82f976228a287c6f0"
+   }
+  ],
+  "8b47c9bfeeffa19a": [
+   {
+    "path": "assets/local/portraits/pool/female_young/disciple_female_young_beautiful_01.png",
+    "dimensions": [
+     1122,
+     1402
+    ],
+    "mode": "RGB",
+    "sha256": "02bcc9332a48ab7879027e6e81b1b0304f7b1008885d76aa2fb036b7b84235a3"
+   }
+  ],
+  "5bc6812525948c76": [
+   {
+    "path": "assets/local/portraits/pool/female_young/disciple_female_young_beautiful_02.png",
+    "dimensions": [
+     1122,
+     1402
+    ],
+    "mode": "RGB",
+    "sha256": "5c1e26ec50d9db1cb7a1642fb6904c7e489fce91d6d98d553cbe3e22853c3606"
+   }
+  ],
+  "52838215d5a671d0": [
+   {
+    "path": "assets/local/portraits/pool/female_young/disciple_female_young_ethereal_01.png",
+    "dimensions": [
+     1122,
+     1402
+    ],
+    "mode": "RGB",
+    "sha256": "74b8863924a2b631f1aa84cf5622502b23870b5af8bf9709c4957af2a4a60595"
+   }
+  ],
+  "59dd4a7d4d456f4e": [
+   {
+    "path": "assets/local/portraits/pool/female_young/disciple_female_young_high_b03_01.png",
+    "dimensions": [
+     1122,
+     1402
+    ],
+    "mode": "RGB",
+    "sha256": "10809def45271ca060f9ab59480440908dfb5b5f97d580cb186d228a72ebef24"
+   }
+  ],
+  "65f35af664b78897": [
+   {
+    "path": "assets/local/portraits/pool/female_young/disciple_female_young_high_b03_02.png",
+    "dimensions": [
+     1122,
+     1402
+    ],
+    "mode": "RGB",
+    "sha256": "87bdfb8f2a1ce4bacc44d1b3dbeb07a36915d4bfe17d7ffd3f1f30d8785bca99"
+   }
+  ],
+  "982e004b24e25e33": [
+   {
+    "path": "assets/local/portraits/pool/female_young/disciple_female_young_high_b03_03.png",
+    "dimensions": [
+     1122,
+     1402
+    ],
+    "mode": "RGB",
+    "sha256": "3fa42b0b93cbc5f068e58d942e46559e217bea93ca8ad1122d71ab86c663ac96"
+   }
+  ],
+  "7f472ea9403604c5": [
+   {
+    "path": "assets/local/portraits/pool/female_young/disciple_female_young_high_b03_04.png",
+    "dimensions": [
+     1122,
+     1402
+    ],
+    "mode": "RGB",
+    "sha256": "169f880ac2fc3b3bc5eab0913b881c06dca1b87dc4c3e7ea44c8b0dbe6c6e408"
+   }
+  ],
+  "a5694ccfa0e862d4": [
+   {
+    "path": "assets/local/portraits/pool/female_young/disciple_female_young_high_b03_05.png",
+    "dimensions": [
+     1122,
+     1402
+    ],
+    "mode": "RGB",
+    "sha256": "fe2d52b6c79881bea091ba5e87995ae767e6fc184e6d1bf618581033b1e4da3e"
+   }
+  ],
+  "502daefd80b9e612": [
+   {
+    "path": "assets/local/portraits/pool/female_young/gatherer_female_young_01.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "ba9ba92f563e22baf88203cc37376643b9e043bc074cd1c6214afa55f0a3a96b"
+   }
+  ],
+  "ad491e19aedb4257": [
+   {
+    "path": "assets/local/portraits/pool/female_young/gatherer_female_young_02.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "991cea42b26ca4e6fbda986227671e1416fc7f3caf6f585d27a0d4827348453a"
+   }
+  ],
+  "5589b5622729d627": [
+   {
+    "path": "assets/local/portraits/pool/female_young/gatherer_female_young_03.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "9ebe1bfba31cac194f3ddbba5c6f78697ab63309f4d832e3bfe75be7cd2e9545"
+   }
+  ],
+  "a6d4337a319c74a4": [
+   {
+    "path": "assets/local/portraits/pool/female_young/gatherer_female_young_04.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "53f25044992ccd10a3957eb87545cf0e8c58f1570bf3cf96f994b4278089dd0f"
+   }
+  ],
+  "5f441fc0053d26cf": [
+   {
+    "path": "assets/local/portraits/pool/female_young/gatherer_female_young_beautiful_01.png",
+    "dimensions": [
+     1122,
+     1402
+    ],
+    "mode": "RGB",
+    "sha256": "4f86fc0208b9dac80fb7c3e207fb133be82a9d95e330de3f02647b8668dde176"
+   }
+  ],
+  "1777f4a24dc9b154": [
+   {
+    "path": "assets/local/portraits/pool/female_young/gatherer_female_young_high_b03_01.png",
+    "dimensions": [
+     1122,
+     1402
+    ],
+    "mode": "RGB",
+    "sha256": "e335d8b31732a96fa4069d967d8cc3462f472bf5fc992f52525a4d65f57ea28e"
+   }
+  ],
+  "0951f50709c479de": [
+   {
+    "path": "assets/local/portraits/pool/female_young/gatherer_female_young_high_b03_02.png",
+    "dimensions": [
+     1122,
+     1402
+    ],
+    "mode": "RGB",
+    "sha256": "9a68632325764f450a5e73b76bccd76bb7994761a190c13d7258e4ef609c72f4"
+   }
+  ],
+  "0166c9b7d55cc179": [
+   {
+    "path": "assets/local/portraits/pool/female_young/gatherer_female_young_high_b03_03.png",
+    "dimensions": [
+     1122,
+     1402
+    ],
+    "mode": "RGB",
+    "sha256": "c93f8a51eff10ad0509fcbf3935017b8488cf16e71b1b8122ab3cc91a3fd56df"
+   }
+  ],
+  "d4efc814e74c40c7": [
+   {
+    "path": "assets/local/portraits/pool/female_young/gatherer_female_young_high_b03_04.png",
+    "dimensions": [
+     1122,
+     1402
+    ],
+    "mode": "RGB",
+    "sha256": "18a562b6e4b0acfcac62ee17eabf19de2c7b408e3ded9db3fdc05bce5beaed56"
+   }
+  ],
+  "fc1e13eb4ee69118": [
+   {
+    "path": "assets/local/portraits/pool/female_young/gatherer_female_young_high_b03_05.png",
+    "dimensions": [
+     1122,
+     1402
+    ],
+    "mode": "RGB",
+    "sha256": "42283f804777004dc2242010ad41f94dc7191a8cbfe990f372fcb64cf5827d4b"
+   }
+  ],
+  "402eebd5f6bd5901": [
+   {
+    "path": "assets/local/portraits/pool/female_young/trader_female_young_01.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "147ef687aa5406c91ac518d3a7e6f4fa95b9adc0312359e9b7c91d9895204fbe"
+   }
+  ],
+  "7b5ac8b5db80deb0": [
+   {
+    "path": "assets/local/portraits/pool/female_young/trader_female_young_02.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "d83e52efd137b514c3393560d4fd0a645e7989baef73eceaa08a134eebdb4c59"
+   }
+  ],
+  "e5a22bf0d9621066": [
+   {
+    "path": "assets/local/portraits/pool/female_young/trader_female_young_03.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "4df628f6b1cf6e6173f4cda9ebe36bcdd038aa81fe86f037adcad1b4ab909c02"
+   }
+  ],
+  "81386632a7e2ee0f": [
+   {
+    "path": "assets/local/portraits/pool/female_young/trader_female_young_beautiful_01.png",
+    "dimensions": [
+     1122,
+     1402
+    ],
+    "mode": "RGB",
+    "sha256": "6132794451fae54261a337facbd87cae2421deaf34f8ccd5e764fa6f203e8e82"
+   }
+  ],
+  "20fa50c8eb96a042": [
+   {
+    "path": "assets/local/portraits/pool/female_young/trader_female_young_high_b03_01.png",
+    "dimensions": [
+     1062,
+     1481
+    ],
+    "mode": "RGB",
+    "sha256": "5a1a3b8be3a1a22cf38f20576e8dd0cb19a54e17c81f991fd483fd4ae9e3eb49"
+   }
+  ],
+  "2ec2440b57d4361f": [
+   {
+    "path": "assets/local/portraits/pool/female_young/trader_female_young_high_b03_02.png",
+    "dimensions": [
+     1072,
+     1467
+    ],
+    "mode": "RGB",
+    "sha256": "ee4fbbcf10e8df49ce603f455c1758d7ba24c37fced7a851c68ee80e6f379ab9"
+   }
+  ],
+  "ba9339a693d8b8e7": [
+   {
+    "path": "assets/local/portraits/pool/female_young/trader_female_young_high_b03_03.png",
+    "dimensions": [
+     1122,
+     1402
+    ],
+    "mode": "RGB",
+    "sha256": "0a8adc700ca6d25e6091c778c1589395e5a5e88577510ac3e2923685c9d183de"
+   }
+  ],
+  "89194ce99ffe5409": [
+   {
+    "path": "assets/local/portraits/pool/female_young/trader_female_young_high_b03_04.png",
+    "dimensions": [
+     1122,
+     1402
+    ],
+    "mode": "RGB",
+    "sha256": "32bf13a893019459e98392b2fec132584296debdaf5f693a836a6fb371757fdf"
+   }
+  ],
+  "e7bba5d0d78f77b0": [
+   {
+    "path": "assets/local/portraits/pool/female_young/trader_female_young_high_b03_05.png",
+    "dimensions": [
+     1072,
+     1467
+    ],
+    "mode": "RGB",
+    "sha256": "08974a3574f24e81dd96581263829b297b9acb368dddaeb9fc95274691fc7f81"
+   }
+  ],
+  "81f6f3019de54805": [
+   {
+    "path": "assets/local/portraits/pool/female_young/visitor_female_young_01.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "a8f153aa2df51e47677497aa69e4eb88cd399bd7e52428fa8971717ba03a0cd9"
+   }
+  ],
+  "172d8278e632ef25": [
+   {
+    "path": "assets/local/portraits/pool/female_young/visitor_female_young_02.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "f96a8185a0968a53bf6cc9d58e7ad1bbd2776998298ac1ef491c41aacb045671"
+   }
+  ],
+  "da6e9381e7809ab3": [
+   {
+    "path": "assets/local/portraits/pool/female_young/visitor_female_young_beautiful_01.png",
+    "dimensions": [
+     1122,
+     1402
+    ],
+    "mode": "RGB",
+    "sha256": "aecb69c8fee704514cf53a7177ca907a72b946eeac640d4969173250bfe4963b"
+   }
+  ],
+  "14faeeb9baa394eb": [
+   {
+    "path": "assets/local/portraits/pool/female_young/visitor_female_young_beautiful_02.png",
+    "dimensions": [
+     1122,
+     1402
+    ],
+    "mode": "RGB",
+    "sha256": "df1681f5645147913fcea97763ac8a03df55195d97619354d06ada9c00d78c69"
+   }
+  ],
+  "50c1896822b4b11c": [
+   {
+    "path": "assets/local/portraits/pool/female_young/visitor_female_young_high_b03_01.png",
+    "dimensions": [
+     1122,
+     1402
+    ],
+    "mode": "RGB",
+    "sha256": "491b04accd1bb6157bdc80185b441167b1042d3ad827ac95dacc135bff2efe99"
+   }
+  ],
+  "feacf800cc6f3915": [
+   {
+    "path": "assets/local/portraits/pool/female_young/visitor_female_young_high_b03_02.png",
+    "dimensions": [
+     1122,
+     1402
+    ],
+    "mode": "RGB",
+    "sha256": "de3be2dac778170202a4eab31ae9aabd56c62a2a225822e635afa17b2edad752"
+   }
+  ],
+  "9138d2937c851770": [
+   {
+    "path": "assets/local/portraits/pool/female_young/visitor_female_young_high_b03_03.png",
+    "dimensions": [
+     1122,
+     1402
+    ],
+    "mode": "RGB",
+    "sha256": "6a37756d2b36f61bbae16a4ba2506f3946f4f05b40af55fa30c43b5a459be494"
+   }
+  ],
+  "fa511f4d8b391b0c": [
+   {
+    "path": "assets/local/portraits/pool/female_young/visitor_female_young_high_b03_04.png",
+    "dimensions": [
+     1122,
+     1402
+    ],
+    "mode": "RGB",
+    "sha256": "24d8d421d38db8abe0d5ac6d621b2ff6a83398f4b5710a91a60d3ce23e826eaf"
+   }
+  ],
+  "cbfb0a5a01713d5a": [
+   {
+    "path": "assets/local/portraits/pool/female_young/visitor_female_young_high_b03_05.png",
+    "dimensions": [
+     1122,
+     1402
+    ],
+    "mode": "RGB",
+    "sha256": "7fbbd5b69fccd85948425f48a322bb2752b22ac3766be7d24fe1ba264e21eb7b"
+   }
+  ],
+  "1352a4bd262632ab": [
+   {
+    "path": "assets/local/portraits/pool/female_young/wanderer_female_young_01.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "8271e9585bbcf54bf1a3129fa838d5758ee6d54c593f5cb7096c9439f169770f"
+   }
+  ],
+  "b03503cc7329828d": [
+   {
+    "path": "assets/local/portraits/pool/female_young/wanderer_female_young_02.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "dbfaf5371eca6ff9000667bcadc33770f9def81760bce8531c6c98fa54b6b492"
+   }
+  ],
+  "fa1056a5d75c7fb2": [
+   {
+    "path": "assets/local/portraits/pool/female_young/wanderer_female_young_03.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "c00adcf96a33048823f27a77bacfce494ecb22657538b5931d4ae1a588acab84"
+   }
+  ],
+  "f9fd539f337c6e3f": [
+   {
+    "path": "assets/local/portraits/pool/female_young/wanderer_female_young_04.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "86ae0f68fa20184337b41a61f42b948a82a512b991b75a79fcdb9f4881569178"
+   }
+  ],
+  "47ef1735dddf11b9": [
+   {
+    "path": "assets/local/portraits/pool/male_middle/disciple_male_middle_01.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "e003a8b5b48aea4434faf9f16423af18dca4d301aa645ce04c594112c8be864f"
+   }
+  ],
+  "c5f091596252c83d": [
+   {
+    "path": "assets/local/portraits/pool/male_middle/disciple_male_middle_02.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "ab8eb00e121f1b2d7c189ed9da8e29a3b9145e78a7eefaa042d3034b15a0deed"
+   }
+  ],
+  "20c5acd6c561965b": [
+   {
+    "path": "assets/local/portraits/pool/male_middle/disciple_male_middle_03.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "e4db5f5c5d949915440694bd6070afd40f105b2c6c9c51bf7c643cb77d028354"
+   }
+  ],
+  "b35b71e3725aeb13": [
+   {
+    "path": "assets/local/portraits/pool/male_middle/disciple_male_middle_04.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "3f78f3a1055a53290a29e0bec73000af2eb7a8b0a8c300848aaceb310b0a5a88"
+   }
+  ],
+  "e8eef2644ea07423": [
+   {
+    "path": "assets/local/portraits/pool/male_middle/disciple_male_middle_05.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "2828071c8115ea0375cf0f424921df79a8961130c26d5e74f752ebf1764295f5"
+   }
+  ],
+  "beaac1026b27c681": [
+   {
+    "path": "assets/local/portraits/pool/male_middle/disciple_male_middle_06.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "61469039072a1586c82e11a84f0005011b1bc2a9cc43209c4f7fa8667f589bcf"
+   }
+  ],
+  "681c07465cc85845": [
+   {
+    "path": "assets/local/portraits/pool/male_middle/disciple_male_middle_07.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "dda0bd8f32d393f51bd0013be2ff78bb76cafb94f308b62175f12782ae844877"
+   }
+  ],
+  "7cc522c6b19ad8ee": [
+   {
+    "path": "assets/local/portraits/pool/male_middle/disciple_male_middle_08.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "c53b90a32d5d010fe82c3dc16123e728e2408eb0292291a6704dd27e16ee48be"
+   }
+  ],
+  "54da229e84289d03": [
+   {
+    "path": "assets/local/portraits/pool/male_middle/disciple_male_middle_09.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "fd4b524a2048a047b930e03720216d269ed1b5e8bf0c6f3284fa1c286365c9e2"
+   }
+  ],
+  "8048023bf5b85cac": [
+   {
+    "path": "assets/local/portraits/pool/male_middle/gatherer_male_middle_01.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "63aced992cd0ff54fece09f9bf1b1614770bb4a7261601c607eb628876596ab3"
+   }
+  ],
+  "613a2baccf79f042": [
+   {
+    "path": "assets/local/portraits/pool/male_middle/gatherer_male_middle_02.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "688c11def50de15374f7aa5cae4628389da10a5bbf4811d9ddf3e8eeac554d71"
+   }
+  ],
+  "e2b3796e1a69fcf3": [
+   {
+    "path": "assets/local/portraits/pool/male_middle/gatherer_male_middle_03.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "862bbae419caa3651afdb6cd222682edc80bbfdc03c9f30611eea77a7fb70928"
+   }
+  ],
+  "a575e3559b83e552": [
+   {
+    "path": "assets/local/portraits/pool/male_middle/gatherer_male_middle_04.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "5c08ad0b2423e831adacce584796140f004c8be2f80e1e2c44ba8b892f47f7a6"
+   }
+  ],
+  "0e80b1acbb83c7de": [
+   {
+    "path": "assets/local/portraits/pool/male_middle/trader_male_middle_01.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "0afcc67d3d69f9f6817064f14ae43e323b5ee21402a5cc4a8f01639d227b6b7f"
+   }
+  ],
+  "5492ae6b95b3d99c": [
+   {
+    "path": "assets/local/portraits/pool/male_middle/trader_male_middle_02.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "c583b7e31f1eb062a445fe1462d93725939ebefd59a225df2d1b7904047260b3"
+   }
+  ],
+  "fc02ac06bed69711": [
+   {
+    "path": "assets/local/portraits/pool/male_middle/trader_male_middle_03.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "3cea8503542d41b3e1dddd4b8542797fef2e83567055e72837679bd2f76c5775"
+   }
+  ],
+  "976208cd569e7989": [
+   {
+    "path": "assets/local/portraits/pool/male_middle/trader_male_middle_04.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "5ade24420b9756110bc61cc2e5605a60e6e7d762cb8fd1b018d8ebe295ae6147"
+   }
+  ],
+  "cc16f75859577f6a": [
+   {
+    "path": "assets/local/portraits/pool/male_middle/trader_male_middle_05.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "62e8adbe6d388eb57e5135fdad5f849013365865582879cf456c24113a21aef8"
+   }
+  ],
+  "14ea80983e044f11": [
+   {
+    "path": "assets/local/portraits/pool/male_middle/trader_male_middle_06.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "59e3afe5db25f522a0e1824aaae641df7cbfb8b8dbbf7616111f17685ef23033"
+   }
+  ],
+  "793c6dcea11fbc57": [
+   {
+    "path": "assets/local/portraits/pool/male_middle/visitor_male_middle_01.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "8bf8fdc5039495f47c9662b86acac4c0ba73ea52ab152f292121ea4bf7732ade"
+   }
+  ],
+  "2bf8ace12d7ee08f": [
+   {
+    "path": "assets/local/portraits/pool/male_middle/visitor_male_middle_02.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "215670380c3e84938d11fade8d571c811c1705dafdd18d5b3874d8419bdd87bc"
+   }
+  ],
+  "893d1ea9370680db": [
+   {
+    "path": "assets/local/portraits/pool/male_middle/wanderer_male_middle_01.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "f5dfb8c4bb4bcb2394a77ef62937a1662a5b3987c7cd3272a684294fe9fd06df"
+   }
+  ],
+  "f7fad33e76b077fc": [
+   {
+    "path": "assets/local/portraits/pool/male_middle/wanderer_male_middle_02.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "efd6656c4e41e64d23ab2abc18d4486b4f29afd875e30b2d391b6c3eb0dd3df3"
+   }
+  ],
+  "39b5dadbdda54880": [
+   {
+    "path": "assets/local/portraits/pool/male_middle/wanderer_male_middle_03.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "edb12726fe974bb7967274b72455b3367f61ee73b01a88ac5c66b2fedcfd1795"
+   }
+  ],
+  "b4fc627443eb8a69": [
+   {
+    "path": "assets/local/portraits/pool/male_middle/wanderer_male_middle_04.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "9b7356cae36c5844eea9a9c929ea1da101f17da65b3ec5104d6cd9ac84e34df4"
+   }
+  ],
+  "111df60aac6888c6": [
+   {
+    "path": "assets/local/portraits/pool/male_middle/wanderer_male_middle_05.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "a38d72c137ad326a9dde0c7e95257b43f5dc8e8b6160dd6706de0a34a736749e"
+   }
+  ],
+  "cedcc90a84388072": [
+   {
+    "path": "assets/local/portraits/pool/male_middle/wanderer_male_middle_06.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "0c0e4392caf1dcd7311dc55056ed13fd6e4206960b0fc332e70298cd6fc01dc7"
+   }
+  ],
+  "5d0dff5360bc4838": [
+   {
+    "path": "assets/local/portraits/pool/male_middle/wanderer_male_middle_07.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "d66c5ce19ac48f80348258256ae22c0bc178212eb238dfefb750eb941f6ba7a8"
+   }
+  ],
+  "32fb6f2fa58629e7": [
+   {
+    "path": "assets/local/portraits/pool/male_middle/wanderer_male_middle_08.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "fe3a25fdc20fbe0002cb6310fe95778e349f7a47d190ec4afa38142ddf6f4f14"
+   }
+  ],
+  "48b63489b953727d": [
+   {
+    "path": "assets/local/portraits/pool/male_middle/wanderer_male_middle_09.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "c3a91975e639c44918ed0c7c3ffa369770f09fb29a32fbd57afd89c5792bc911"
+   }
+  ],
+  "07c1d1143aafefc7": [
+   {
+    "path": "assets/local/portraits/pool/male_old/disciple_male_old_01.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "f2f0678bed076be5444647dc31e740b4d2b67da423b54be1eb3d38df4ae385cc"
+   }
+  ],
+  "9326b78461e026f5": [
+   {
+    "path": "assets/local/portraits/pool/male_old/disciple_male_old_02.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "9313b3a92980183d236e37acfc425bba4ecde22d4fc0cf1c7399f47fc970bb04"
+   }
+  ],
+  "26300c8e692a9043": [
+   {
+    "path": "assets/local/portraits/pool/male_old/disciple_male_old_03.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "a020986377ac37c997b109bcdba8dcf81b0fd06fec3ef0e071655161fba6d538"
+   }
+  ],
+  "ac2fa56a05b31302": [
+   {
+    "path": "assets/local/portraits/pool/male_old/disciple_male_old_04.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "2a02114d1fb9b54a09bbd4fdbb3009ca861222f2f087192e2ed6e9913a9cf6bc"
+   }
+  ],
+  "4ce98e2621a549a9": [
+   {
+    "path": "assets/local/portraits/pool/male_old/disciple_male_old_05.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "b0be190c04e0f83f98eaf29a99d385a0aeebd50b40a1889a7a74771dbede557a"
+   }
+  ],
+  "9bfe648e70cb8790": [
+   {
+    "path": "assets/local/portraits/pool/male_old/disciple_male_old_06.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "e11ec45a2e22ade9976d1a860ad55a8e32585f710364b11732d0b87edec9c32e"
+   }
+  ],
+  "01668176bdf7c189": [
+   {
+    "path": "assets/local/portraits/pool/male_old/disciple_male_old_07.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "4126e665b0622c27c3d20ee252fd7e875102e4fa126b0930861c7545a22b2ed4"
+   }
+  ],
+  "1391f4c28ccf6afa": [
+   {
+    "path": "assets/local/portraits/pool/male_old/gatherer_male_old_01.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "f8e4cc8f1652846738baabb359b732ca4448252d0fea46b80eb4a3f301169a06"
+   }
+  ],
+  "7942705703af1223": [
+   {
+    "path": "assets/local/portraits/pool/male_old/gatherer_male_old_02.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "f15111749a555e80b48b28795edad9f86191498221b86548e102593d2072b33c"
+   }
+  ],
+  "1e356477abb298a6": [
+   {
+    "path": "assets/local/portraits/pool/male_old/gatherer_male_old_03.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "f1f58fac665c98bcf734ff98a18767b59d7e9ba3a408f289090de453a7025266"
+   }
+  ],
+  "65fda54f3626f732": [
+   {
+    "path": "assets/local/portraits/pool/male_old/gatherer_male_old_04.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "9c59d8228ea2dde3e046afc5ef6c7b2150a14bbb3300789539b48fb7fb8b4067"
+   }
+  ],
+  "b6c7fde84d0370f6": [
+   {
+    "path": "assets/local/portraits/pool/male_old/gatherer_male_old_05.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "10c34f340c43edde2f38f391ff978f97ba69e7046f8e4eac0b8305b86eb793dd"
+   }
+  ],
+  "8bbfeafafb341b56": [
+   {
+    "path": "assets/local/portraits/pool/male_old/trader_male_old_01.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "170c2af8a4aee1fa24402da3401c33f1cd29d3ea08cacb40332b2d1e3f050764"
+   }
+  ],
+  "7c2e99cc8972b28c": [
+   {
+    "path": "assets/local/portraits/pool/male_old/trader_male_old_02.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "dc6e86be7bee6dbb91aa7b7ab92e6257fb4d25d69ddfbe9c68068a74a3d44705"
+   }
+  ],
+  "862805acac833da5": [
+   {
+    "path": "assets/local/portraits/pool/male_old/trader_male_old_03.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "5800475202408657c4ae0c64ac94bbe0c422b21194a4e008e85926beb3ba257c"
+   }
+  ],
+  "cf86d351867b36c4": [
+   {
+    "path": "assets/local/portraits/pool/male_old/trader_male_old_04.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "7b57ad1efb34038c3e94e31482b80e58c86a5ae7436a43e42e0825c366503e86"
+   }
+  ],
+  "1ada1948122eae2c": [
+   {
+    "path": "assets/local/portraits/pool/male_old/trader_male_old_05.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "65f2c497ebaaf0011354c8d2a5aa0bc716a9bcdea48a3dced246f75f09f17744"
+   }
+  ],
+  "7cc60f4c0b3536c2": [
+   {
+    "path": "assets/local/portraits/pool/male_old/trader_male_old_06.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "3eb2b559bccc535f8ddb30b79ba2a12f1da3ce2794a04155c6001d1cbe6c0148"
+   }
+  ],
+  "a3f73485c6a6a973": [
+   {
+    "path": "assets/local/portraits/pool/male_old/visitor_male_old_01.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "4ff3d39891e8f0e7081acf69dbc48f5d51c3f70690ac576b4f6b36e83d1c343b"
+   }
+  ],
+  "9c1ace04ccd4a51a": [
+   {
+    "path": "assets/local/portraits/pool/male_old/visitor_male_old_02.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "7c86db9c40ca51b95af3c8c46cc15f1355c5d28d7379f145b3063d81c5dcb7d1"
+   }
+  ],
+  "ab1b4c86407e961a": [
+   {
+    "path": "assets/local/portraits/pool/male_old/wanderer_male_old_01.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "61e08cb6913313dffdc2fd4b6faea647e9cb2e44c0342958b5d49593ff135e81"
+   }
+  ],
+  "21bc43678b51def8": [
+   {
+    "path": "assets/local/portraits/pool/male_old/wanderer_male_old_02.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "59f91658fe9dec06a59820eb31fc8fcc3baffe25abdfc896feca6a8f5b619289"
+   }
+  ],
+  "d9b4c8e34e720806": [
+   {
+    "path": "assets/local/portraits/pool/male_old/wanderer_male_old_03.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "db630edcbb6bc68f6521abeb13ece448b1669185c773a2afaf79200ceda4bf50"
+   }
+  ],
+  "2eee03306fcf48c3": [
+   {
+    "path": "assets/local/portraits/pool/male_old/wanderer_male_old_04.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "f7ee1654ec5cdcbfc38aa18c8a3221c42abd3a14f5f25feaf77760c24653caaa"
+   }
+  ],
+  "04ae1552e21f0aad": [
+   {
+    "path": "assets/local/portraits/pool/male_old/wanderer_male_old_05.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "96af39473cdeba7ee4f470793add79fdbb1163b64a1e5e892ff100197d10990b"
+   }
+  ],
+  "75a0ee8c05a6da0c": [
+   {
+    "path": "assets/local/portraits/pool/male_old/wanderer_male_old_06.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "0a67f6fce0274905b10155d3f12587900307bfec4c1d21c90a2a40857b68037e"
+   }
+  ],
+  "2ff70a68c3c03379": [
+   {
+    "path": "assets/local/portraits/pool/male_old/wanderer_male_old_07.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "c993ce58a242a6757609d0c36cc4433516fd49a4630fcfcb3315c5644808119d"
+   }
+  ],
+  "95f06b16d9dd7bb1": [
+   {
+    "path": "assets/local/portraits/pool/male_old/wanderer_male_old_08.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "0c3b38a9475bd88b9094dea1a0dd9e5c05ab34c7fe7c7bb2e99893fb065c0caf"
+   }
+  ],
+  "505b2a7dbdee32ac": [
+   {
+    "path": "assets/local/portraits/pool/male_old/wanderer_male_old_09.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "e64501c6fedba1bf3b33914085f0957ce89d0048fa1561ab0b45d12728c7cbe5"
+   }
+  ],
+  "8579e6b704c17009": [
+   {
+    "path": "assets/local/portraits/pool/male_old/wanderer_male_old_10.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "e0417c4746c7cf50ae3435b6f5be975e903caa3bbfcd94e0e3e718c77e2b7b17"
+   }
+  ],
+  "267d34c2bbc15be8": [
+   {
+    "path": "assets/local/portraits/pool/male_young/disciple_male_young_01.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "a7037a2c89ea7cf7bf6f4ea6a02cd3c1427502175945530863ee12f840d9a3bb"
+   }
+  ],
+  "59a9258fdc159a68": [
+   {
+    "path": "assets/local/portraits/pool/male_young/disciple_male_young_02.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "fc853c4a5cb91ae551d15d67c14cfbdabf0a22de96081719906b93a1855e9fda"
+   }
+  ],
+  "977bca8ed663fc59": [
+   {
+    "path": "assets/local/portraits/pool/male_young/disciple_male_young_03.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "cacee200b15bdf6e21828aaef6a984e462b879f62836ebc6d78c4df7ac746a27"
+   }
+  ],
+  "4ce04c7fdc07b56f": [
+   {
+    "path": "assets/local/portraits/pool/male_young/disciple_male_young_04.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "2b14841fcaed3efaec2726f629d8513894616eb43263fc1e89a3ce42deca71c9"
+   }
+  ],
+  "84b53d9d5217c197": [
+   {
+    "path": "assets/local/portraits/pool/male_young/disciple_male_young_05.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "c0f8cbab8da24c9048deb6ef15b49c13590d29196fdef959760f9250aeeb315c"
+   }
+  ],
+  "14bc6f61e1901d73": [
+   {
+    "path": "assets/local/portraits/pool/male_young/disciple_male_young_06.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "ec577095190d58324ffad247bff13807c62f1461843af481c03d4c8bc75ecd4a"
+   }
+  ],
+  "560d0e84c2c60d7f": [
+   {
+    "path": "assets/local/portraits/pool/male_young/disciple_male_young_07.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "8dfb6ea3e1336a873b4671adb9906a33a4376879718763718d27a98f3a5fffc1"
+   }
+  ],
+  "cdcc178a294c6ba9": [
+   {
+    "path": "assets/local/portraits/pool/male_young/disciple_male_young_08.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "1fbbdfd81ccb3de8e02b4eb9b95d443431a14feea5c8718024a5805d26e15952"
+   }
+  ],
+  "825d88efc8268a70": [
+   {
+    "path": "assets/local/portraits/pool/male_young/disciple_male_young_09.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "74829a59f9742cc0f63734800057b959aa584ae0706d6dd807c2ea33eb957c63"
+   }
+  ],
+  "a3b732cfc8187b98": [
+   {
+    "path": "assets/local/portraits/pool/male_young/disciple_male_young_10.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "997be7ed098765a2ec40493a9cb93ba243dcd5ab93ebd90397f503d4d9c708ea"
+   }
+  ],
+  "262bc52f2a51ac4e": [
+   {
+    "path": "assets/local/portraits/pool/male_young/disciple_male_young_11.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "950227eaacda53903b5331a3607c9cc87453b25967bdb75acf039c4ca42c9ed3"
+   }
+  ],
+  "6bdc1e300a527a45": [
+   {
+    "path": "assets/local/portraits/pool/male_young/disciple_male_young_12.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "fd2494ea8a290d40cf46606dee4d2421918ba336095996815acfe2466e07533d"
+   }
+  ],
+  "b23def2b88fc4849": [
+   {
+    "path": "assets/local/portraits/pool/male_young/disciple_male_young_13.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "1e98816864d5732b4ff632d4c36646b105a4d4a16a1249689228751c5bcf51cf"
+   }
+  ],
+  "ba56cc726753390f": [
+   {
+    "path": "assets/local/portraits/pool/male_young/disciple_male_young_14.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "e43603eb2f3d41a1a3a515bba1236bffa4a7eb7c9bb068d74274e24ed70df946"
+   }
+  ],
+  "4b193da76004ae19": [
+   {
+    "path": "assets/local/portraits/pool/male_young/disciple_male_young_ethereal_01.png",
+    "dimensions": [
+     1122,
+     1402
+    ],
+    "mode": "RGB",
+    "sha256": "9101ff24c66ea392c21cb85ecd7400d3eeacbccde1b48fae13848db97164cabc"
+   }
+  ],
+  "522e9ac3a2f02a55": [
+   {
+    "path": "assets/local/portraits/pool/male_young/disciple_male_young_handsome_01.png",
+    "dimensions": [
+     1122,
+     1402
+    ],
+    "mode": "RGB",
+    "sha256": "f1308c4e033a8a5e2032ac9a43d085a228991338f78b645cd1279c5ad4e72daf"
+   }
+  ],
+  "4794a5853e0de05c": [
+   {
+    "path": "assets/local/portraits/pool/male_young/disciple_male_young_handsome_02.png",
+    "dimensions": [
+     1122,
+     1402
+    ],
+    "mode": "RGB",
+    "sha256": "fab8b3917f30a31b87a0e024e55f7fc5ffe8c8ef6dcb6e4f67883a1fa57128b2"
+   }
+  ],
+  "f8dd2363f2ce6118": [
+   {
+    "path": "assets/local/portraits/pool/male_young/disciple_male_young_high_b03_01.png",
+    "dimensions": [
+     1122,
+     1402
+    ],
+    "mode": "RGB",
+    "sha256": "f056cbec6c2484b7a182ec6e4eb70b55aa915d6090b15dfc4d5025e848494fc8"
+   }
+  ],
+  "ced74be8eb81db2f": [
+   {
+    "path": "assets/local/portraits/pool/male_young/disciple_male_young_high_b03_02.png",
+    "dimensions": [
+     1122,
+     1402
+    ],
+    "mode": "RGB",
+    "sha256": "d0cc7669a160a588bba574a531bd782d7fcfc135b872984ad2d9edbaee329de4"
+   }
+  ],
+  "0e275eaa50a7b71c": [
+   {
+    "path": "assets/local/portraits/pool/male_young/disciple_male_young_high_b03_03.png",
+    "dimensions": [
+     1122,
+     1402
+    ],
+    "mode": "RGB",
+    "sha256": "af219bdf541ba2cbc55593e05929bd5b1b27088756fd5a8d424335ee747dcf07"
+   }
+  ],
+  "cb9812047cfeb239": [
+   {
+    "path": "assets/local/portraits/pool/male_young/disciple_male_young_high_b03_04.png",
+    "dimensions": [
+     1122,
+     1402
+    ],
+    "mode": "RGB",
+    "sha256": "72a3b38de861c9858a547ab4b892d4f955d81acf6bc0f2f5196952401142809d"
+   }
+  ],
+  "083f6237b6a934bc": [
+   {
+    "path": "assets/local/portraits/pool/male_young/disciple_male_young_high_b03_05.png",
+    "dimensions": [
+     1122,
+     1402
+    ],
+    "mode": "RGB",
+    "sha256": "650929a6e39aa93245ebcb5283d8fbfc66cc8084dfed17cced887d81c00274c1"
+   }
+  ],
+  "7f522f329df034a5": [
+   {
+    "path": "assets/local/portraits/pool/male_young/gatherer_male_young_01.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "e188fe3e02e38336264f8a179de134b74c2d84b780bce163c5d82a36fd5d9b36"
+   }
+  ],
+  "8fdac11460cbfd65": [
+   {
+    "path": "assets/local/portraits/pool/male_young/gatherer_male_young_02.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "553f6704d38968ed5d8f833b4c38d4572ef16e261b3c9211f5573f1d6b43e673"
+   }
+  ],
+  "369999b8c68e8b5c": [
+   {
+    "path": "assets/local/portraits/pool/male_young/gatherer_male_young_03.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "92c21213237f9ff42541c7b285585ed0b92960087e80514991481bdf160ff798"
+   }
+  ],
+  "917ee4e38198459d": [
+   {
+    "path": "assets/local/portraits/pool/male_young/gatherer_male_young_04.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "fbc3a6c3d128e09c0efd1b8060f347da503e4d50daa838e0fd453ebe6307b689"
+   }
+  ],
+  "560ca7f0ee2578a2": [
+   {
+    "path": "assets/local/portraits/pool/male_young/gatherer_male_young_handsome_01.png",
+    "dimensions": [
+     1122,
+     1402
+    ],
+    "mode": "RGB",
+    "sha256": "93e80d9b4f4d23891ad800a2e83337678fdd8a5e3b1a0079f775fcb74722799a"
+   }
+  ],
+  "d81b0e7215aba5cc": [
+   {
+    "path": "assets/local/portraits/pool/male_young/gatherer_male_young_high_b03_01.png",
+    "dimensions": [
+     1122,
+     1402
+    ],
+    "mode": "RGB",
+    "sha256": "61b31a2f39ec90099a7e14fee41dc39462841aebbef4870f18988b1cf882a59d"
+   }
+  ],
+  "746f401c99db37e9": [
+   {
+    "path": "assets/local/portraits/pool/male_young/gatherer_male_young_high_b03_02.png",
+    "dimensions": [
+     1122,
+     1402
+    ],
+    "mode": "RGB",
+    "sha256": "8424d49e718a1fcdd9c7b9335146ab39a291411aedac5b040238d9a730e525bc"
+   }
+  ],
+  "003de2be2f81f729": [
+   {
+    "path": "assets/local/portraits/pool/male_young/gatherer_male_young_high_b03_03.png",
+    "dimensions": [
+     1122,
+     1402
+    ],
+    "mode": "RGB",
+    "sha256": "28b48bd5f06605ec3b762d462c322b606fd497e81f6480712f335c7953ca6432"
+   }
+  ],
+  "9fddf0239eff32db": [
+   {
+    "path": "assets/local/portraits/pool/male_young/gatherer_male_young_high_b03_04.png",
+    "dimensions": [
+     1122,
+     1402
+    ],
+    "mode": "RGB",
+    "sha256": "1794876c505227d239abd3c73162ae5dcb8e2bddb394527c0463ca1324df1076"
+   }
+  ],
+  "0b874dfd6845a5e6": [
+   {
+    "path": "assets/local/portraits/pool/male_young/gatherer_male_young_high_b03_05.png",
+    "dimensions": [
+     1122,
+     1402
+    ],
+    "mode": "RGB",
+    "sha256": "8e0dd7ebe22090d3fc6ff9428ca95fcb1a281a3c9f07b487a3f3741122604d2d"
+   }
+  ],
+  "35b031fb88ccc004": [
+   {
+    "path": "assets/local/portraits/pool/male_young/trader_male_young_01.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "ad3f1048eb0addfbad68a4baf0fe84a3954ca10d7a7c1d1d5c4508ed3ce8d705"
+   }
+  ],
+  "59be6478017a9d00": [
+   {
+    "path": "assets/local/portraits/pool/male_young/trader_male_young_02.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "7477ab74dab6fc320f82e35cbeda262653bf513ccd07dfe76d859e9873d0586c"
+   }
+  ],
+  "221ef4f389e5205d": [
+   {
+    "path": "assets/local/portraits/pool/male_young/trader_male_young_03.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "0d4a90ab28cd52baa9478f30c99347283948bf2254259d7d1e62fd6708e23a82"
+   }
+  ],
+  "6d5e6f720a2c5a51": [
+   {
+    "path": "assets/local/portraits/pool/male_young/trader_male_young_handsome_01.png",
+    "dimensions": [
+     1122,
+     1402
+    ],
+    "mode": "RGB",
+    "sha256": "2e60f30ea7385da59d578b1e3e0de90b09f5a29b6e0202facbe3e7820a01c0b0"
+   }
+  ],
+  "4d682a1fb319fd40": [
+   {
+    "path": "assets/local/portraits/pool/male_young/trader_male_young_high_b03_01.png",
+    "dimensions": [
+     1122,
+     1402
+    ],
+    "mode": "RGB",
+    "sha256": "f8210c7710bbf94e8bd6d43902663f40e8534d2f6a8655a862b07be8cd062120"
+   }
+  ],
+  "ff202fb29cc280c0": [
+   {
+    "path": "assets/local/portraits/pool/male_young/trader_male_young_high_b03_02.png",
+    "dimensions": [
+     1122,
+     1402
+    ],
+    "mode": "RGB",
+    "sha256": "599b6fbe6fc43b4a008725641a8752bed58bf1ba570d03a0979a296f1f361c81"
+   }
+  ],
+  "d42a950554d9738a": [
+   {
+    "path": "assets/local/portraits/pool/male_young/trader_male_young_high_b03_03.png",
+    "dimensions": [
+     1122,
+     1402
+    ],
+    "mode": "RGB",
+    "sha256": "a88e2dd364fd3d0d3025cd6f6b4d9cc1014fbcee1ea3c15c3f16fb17e45a2253"
+   }
+  ],
+  "bcb0c0ad2a54d4c3": [
+   {
+    "path": "assets/local/portraits/pool/male_young/trader_male_young_high_b03_04.png",
+    "dimensions": [
+     1122,
+     1402
+    ],
+    "mode": "RGB",
+    "sha256": "d67b11e958418d589b7c3c55143b65c02eb57d111b6a622448ef547dee570e99"
+   }
+  ],
+  "70959ca0a07e8f3d": [
+   {
+    "path": "assets/local/portraits/pool/male_young/trader_male_young_high_b03_05.png",
+    "dimensions": [
+     1122,
+     1402
+    ],
+    "mode": "RGB",
+    "sha256": "5e9387d018ec897338f25722c46f278c62a89a2e2228877e8de5903b9a6a2c27"
+   }
+  ],
+  "e02e56e6de014ef8": [
+   {
+    "path": "assets/local/portraits/pool/male_young/visitor_male_young_01.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "0d0d9e370f27ed909eaa35c4541b2434b5780111740f4d64164ac85a0a70c268"
+   }
+  ],
+  "99d81d293dbb5629": [
+   {
+    "path": "assets/local/portraits/pool/male_young/visitor_male_young_02.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "bd7ea603982fea0bb1d88ba7c64391a6d35bb6bb09a7eb1fc02c482ba8e5a4d7"
+   }
+  ],
+  "004751c038f18bd1": [
+   {
+    "path": "assets/local/portraits/pool/male_young/visitor_male_young_handsome_01.png",
+    "dimensions": [
+     1122,
+     1402
+    ],
+    "mode": "RGB",
+    "sha256": "7a29ba49c6a31d2bdc66ec719fd9d05008f1466d14fa11a48db0a28d0cf2269d"
+   }
+  ],
+  "810441578cecea53": [
+   {
+    "path": "assets/local/portraits/pool/male_young/visitor_male_young_high_b03_01.png",
+    "dimensions": [
+     1122,
+     1402
+    ],
+    "mode": "RGB",
+    "sha256": "11d1663fcf7a56576fe60f528d4d52ac8e666416bf105bac7e7d326194caf533"
+   }
+  ],
+  "4db327f7b51f4cee": [
+   {
+    "path": "assets/local/portraits/pool/male_young/visitor_male_young_high_b03_02.png",
+    "dimensions": [
+     1122,
+     1402
+    ],
+    "mode": "RGB",
+    "sha256": "a843c267b1619ac254abea9a372b31d0800da752e86ea14c2ea6700f9f184f39"
+   }
+  ],
+  "35db8b65f62e8013": [
+   {
+    "path": "assets/local/portraits/pool/male_young/visitor_male_young_high_b03_03.png",
+    "dimensions": [
+     1122,
+     1402
+    ],
+    "mode": "RGB",
+    "sha256": "8c5a4d2ad64fc666bd5d28ce4311d3ca68b9e91965560245fb01238d47ada1e8"
+   }
+  ],
+  "eb8414bd456ac7d6": [
+   {
+    "path": "assets/local/portraits/pool/male_young/visitor_male_young_high_b03_04.png",
+    "dimensions": [
+     1122,
+     1402
+    ],
+    "mode": "RGB",
+    "sha256": "8b1d8810269dda3f909bee4451dd80557f59dfd827e7e4e9b9422bf96a7c42de"
+   }
+  ],
+  "fb4a2908742adeb3": [
+   {
+    "path": "assets/local/portraits/pool/male_young/visitor_male_young_high_b03_05.png",
+    "dimensions": [
+     1122,
+     1402
+    ],
+    "mode": "RGB",
+    "sha256": "cae66c8e8f156d5df805c2e6ae1e30b663a25bca413268c40e6f5b51ee3725d4"
+   }
+  ],
+  "42dc66ea4f68b7be": [
+   {
+    "path": "assets/local/portraits/pool/male_young/wanderer_male_young_01.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "69961b5d20d281ba698a26aa582aacdbca907ae26d33897bb486b40a4cd7bb58"
+   }
+  ],
+  "e9523544329c3aad": [
+   {
+    "path": "assets/local/portraits/pool/male_young/wanderer_male_young_02.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "a616788192b6742275bf879431b42a24609dcf3a1eb9a635814c74582603df7d"
+   }
+  ],
+  "9a09ce6421ce9df1": [
+   {
+    "path": "assets/local/portraits/pool/male_young/wanderer_male_young_03.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "9991ddd9ac053ad6d52b41b65dfce8dc5064ae9c49d2923644d4557c06c1ca79"
+   }
+  ],
+  "6790670622e87ba6": [
+   {
+    "path": "assets/local/portraits/pool/male_young/wanderer_male_young_04.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "147b5a2ad0c6bb78865b5845da8850617dbd7dd8a7c9315d103ef52769320aab"
+   }
+  ],
+  "535f59cf31994dce": [
+   {
+    "path": "assets/local/portraits/pool/male_young/wanderer_male_young_05.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "73f77b0e1644afa7a6ccdbc74275cbf570e5da69c68c84b3e68e0b355eb2f504"
+   }
+  ],
+  "47dd2eefcf3e6f2a": [
+   {
+    "path": "assets/local/portraits/pool/male_young/wanderer_male_young_06.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "a52ca8df960d9e6e223386974f72b3d3f37f357bf03017d63543a71a27ff4296"
+   }
+  ],
+  "2b148010299e766a": [
+   {
+    "path": "assets/local/portraits/pool/male_young/wanderer_male_young_07.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "c805b8ab08b66b31aeffb23db434470e47833b967aac451a684b726fec69c73a"
+   }
+  ],
+  "b3a160c873abcf09": [
+   {
+    "path": "assets/local/portraits/pool/male_young/wanderer_male_young_ethereal_01.png",
+    "dimensions": [
+     1122,
+     1402
+    ],
+    "mode": "RGB",
+    "sha256": "f447e859e3f50e4207b9784bbac9573609c4f60efe230b30c848a0a93fdca258"
+   }
+  ],
+  "10c98d52326a6ac2": [
+   {
+    "path": "assets/local/portraits/pool/male_young/wanderer_male_young_handsome_01.png",
+    "dimensions": [
+     1122,
+     1402
+    ],
+    "mode": "RGB",
+    "sha256": "f85ac0cce33f9ca1f542ec6c073bec743592956b5a116bfa97836bcdcbc2357d"
+   }
+  ],
+  "176e97465e07ecb4": [
+   {
+    "path": "assets/local/portraits/pool/male_young/wanderer_male_young_high_b03_01.png",
+    "dimensions": [
+     1122,
+     1402
+    ],
+    "mode": "RGB",
+    "sha256": "af10aa35399890cea6ee804b67496053cde828e9539001d7cc87f6527c5b32fe"
+   }
+  ],
+  "eff2c8a831a6e398": [
+   {
+    "path": "assets/local/portraits/pool/male_young/wanderer_male_young_high_b03_02.png",
+    "dimensions": [
+     1122,
+     1402
+    ],
+    "mode": "RGB",
+    "sha256": "b2c13f7fb79f88f2bb78254335de0ccb5327411eefffec92f678400a622d6cd8"
+   }
+  ],
+  "ed05a9456305e344": [
+   {
+    "path": "assets/local/portraits/pool/male_young/wanderer_male_young_high_b03_03.png",
+    "dimensions": [
+     1122,
+     1402
+    ],
+    "mode": "RGB",
+    "sha256": "b730777acaaa1020c463b35592d81893c1e3464f03d2a1bbfae919164c0e28b0"
+   }
+  ],
+  "416f33a78d75ed19": [
+   {
+    "path": "assets/local/portraits/pool/male_young/wanderer_male_young_high_b03_04.png",
+    "dimensions": [
+     1122,
+     1402
+    ],
+    "mode": "RGB",
+    "sha256": "936dc999cf9ac90347eaf939f4cc8fe40e6d579977d8370e2507398af789b5ec"
+   }
+  ],
+  "0acdc6fa1625b777": [
+   {
+    "path": "assets/local/portraits/pool/male_young/wanderer_male_young_high_b03_05.png",
+    "dimensions": [
+     1122,
+     1402
+    ],
+    "mode": "RGB",
+    "sha256": "1696d3b162d15e148428be7813682b91bfe13dfb7726f65acec71e564c8cc614"
+   }
+  ],
+  "145478df72645f68": [
+   {
+    "path": "assets/art/locations/sect_fullscreen.png",
+    "dimensions": [
+     1672,
+     941
+    ],
+    "mode": "RGB",
+    "sha256": "1814dc9447cccfd23a81f2ae4a9b0cc0bf8867455991ec25f3f74355dbc1949e"
+   }
+  ],
+  "42ba2ab8b62012e7": [
+   {
+    "path": "assets/art/map/region_qingyun.png",
+    "dimensions": [
+     1586,
+     992
+    ],
+    "mode": "RGB",
+    "sha256": "0d5da1ba5b7c70797d79e5672f9d76803592f963c60815a5fd6fedae44527fce"
+   }
+  ],
+  "9d1f9a2e1e2ae4b8": [
+   {
+    "path": "assets/art/map/region_tiannan.png",
+    "dimensions": [
+     1586,
+     992
+    ],
+    "mode": "RGB",
+    "sha256": "ae6627366570f7315696faa937851a649c0488a8ee60e632ffb6e5540982478b"
+   }
+  ],
+  "84b65c31c2401b2a": [
+   {
+    "path": "assets/art/actors/hero_meditate.png",
+    "dimensions": [
+     1254,
+     1254
+    ],
+    "mode": "RGBA",
+    "sha256": "bd81f260a18ed402f711f8173ab0ad6d06c95cbfe919dfe440251eb5bf4ca1a9"
+   }
+  ],
+  "79cfab4ed938c6d3": [
+   {
+    "path": "assets/art/ui/alchemy_vignette.png",
+    "dimensions": [
+     1254,
+     1254
+    ],
+    "mode": "RGBA",
+    "sha256": "ed09eeac7e90e7f989449fb8212615ce25053beaf532705c48beaf81b3f2c38e"
+   }
+  ],
+  "35b173e56df3d1dc": [
+   {
+    "path": "assets/art/ui/rite_furnace.png",
+    "dimensions": [
+     1254,
+     1254
+    ],
+    "mode": "RGBA",
+    "sha256": "6d7ec0a427c884623bf9e88a5fde9591fe2d553adaa713b2013c8b226f3e64e5"
+   }
+  ],
+  "7cb32712c3bd3ac6": [
+   {
+    "path": "assets/art/ui/scroll_panel.png",
+    "dimensions": [
+     894,
+     427
+    ],
+    "mode": "RGB",
+    "sha256": "9a1adf930fec3a3490272ffab3141f8abc0e51854976f8fabcaf0b2d350bd9e0"
+   }
+  ],
+  "81dbd8509fd8b557": [
+   {
+    "path": "assets/art/ui/spirit_field_vignette.png",
+    "dimensions": [
+     1254,
+     1254
+    ],
+    "mode": "RGBA",
+    "sha256": "899efbc26f7acb48ce5ca8e424efb35a9eeb7d11d1794939d6630f0296f4bcd6"
+   }
+  ],
+  "a6791bd486874f44": [
+   {
+    "path": "assets/art/battle/tribulation.png",
+    "dimensions": [
+     1536,
+     1024
+    ],
+    "mode": "RGBA",
+    "sha256": "ba71bcd5be1bb12bc2c6eedb841ecc558688996fdab10924cbb3eb68dd1b686a"
+   }
+  ],
+  "06e67036edede50a": [
+   {
+    "path": "assets/art/portraits/lu_chengzhou.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "16bcdb06ceea31c409a349b8ceed8394c7d268f53b9cc43fcc7ea780b8833ec7"
+   }
+  ],
+  "abb20cbf48c537a0": [
+   {
+    "path": "assets/art/portraits/ye_zhiwei.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "0b30d5a60a5ff402e82229310ac7793af320668d3b0433df9bc0e76320c710f4"
+   }
+  ],
+  "451dfdb9a5cd2da5": [
+   {
+    "path": "assets/art/portraits/wenren_zhao.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "76652df71e302c9429a38aa2827142f462101554ae4fa6a58fd0b78e3a54ce24"
+   }
+  ],
+  "d818dfc7af861743": [
+   {
+    "path": "assets/art/portraits/wen_zhaoheng.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "2cf4e54338930f2499fcd84c8be3ecd7c83b648e0b3094ead1f8de096264520d"
+   }
+  ],
+  "16c16d62c3fd2b2c": [
+   {
+    "path": "assets/art/portraits/yan_wujiu.png",
+    "dimensions": [
+     512,
+     640
+    ],
+    "mode": "RGB",
+    "sha256": "33a3585dbc1bdd7c6865996045c42fb8bbd02858809a2a0540d8f5450c279afc"
+   }
+  ],
+  "b6ad344025e035db": [
+   {
+    "path": "assets/art/locations/market_fullscreen.png",
+    "dimensions": [
+     1672,
+     941
+    ],
+    "mode": "RGB",
+    "sha256": "ecac8ea7f5f5df98df7099fc6238e2b59c32387d1758206ec98289fbae8daf91"
+   }
+  ],
+  "58fadd6dfe101a9c": [
+   {
+    "path": "assets/art/locations/nanming_fullscreen.png",
+    "dimensions": [
+     1672,
+     941
+    ],
+    "mode": "RGB",
+    "sha256": "7a44878f387b6181cbadb6ac077aa8bcffa1e3832453ce3e402bcbec4c0b2b2f"
+   }
+  ],
+  "22c91684b9a2e870": [
+   {
+    "path": "assets/art/locations/canglan_fullscreen.png",
+    "dimensions": [
+     1672,
+     941
+    ],
+    "mode": "RGB",
+    "sha256": "19ef0a070654eaac08e1311d6c6614fbea50672edfa9a33c12c1abb427ddcf02"
+   }
+  ],
+  "fd326370c25619d0": [
+   {
+    "path": "assets/art/locations/beiyue_fullscreen.png",
+    "dimensions": [
+     1671,
+     941
+    ],
+    "mode": "RGB",
+    "sha256": "1fb8b4cd653081d28ba74f82450769abca147e7f512831f9b982d503e71d3132"
+   }
+  ],
+  "fcd3ccf9d898620a": [
+   {
+    "path": "assets/art/locations/wanghai_fullscreen.png",
+    "dimensions": [
+     1672,
+     941
+    ],
+    "mode": "RGB",
+    "sha256": "d3d72e830d4eef200d01dced7ed11c6eb1e1c0cd981bcee4012ee9e4a5c07735"
+   }
+  ],
+  "2d4229e4835904b3": [
+   {
+    "path": "assets/art/scenes/city_inn_quiet_room.png",
+    "dimensions": [
+     2172,
+     724
+    ],
+    "mode": "RGB",
+    "sha256": "2cc281b5ab33e319b7af7cdf32cee49232987347464d75a6a50bc327ef5ddc83"
+   }
+  ],
+  "1fd175c7dc163a6f": [
+   {
+    "path": "assets/art/scenes/sect_gate_normal.png",
+    "dimensions": [
+     2164,
+     727
+    ],
+    "mode": "RGB",
+    "sha256": "3700106bb6e4ce4b382b1c44eef2465260cfce2efea45fbcbc962e64f578f82e"
+   }
+  ],
+  "e4b03ca0efac5e7a": [
+   {
+    "path": "assets/art/scenes/rogue_rented_abode.png",
+    "dimensions": [
+     2172,
+     724
+    ],
+    "mode": "RGB",
+    "sha256": "a6ecca0255d9f268806fc14ca8e91561cb946c18038bbb9634ca7df1a338f1fc"
+   }
+  ],
+  "c0cb37863f82f2cd": [
+   {
+    "path": "assets/art/scenes/canglan_medical_hall.png",
+    "dimensions": [
+     2172,
+     724
+    ],
+    "mode": "RGB",
+    "sha256": "39590bcdb109a86d92ad61d87b1c8ae499865b6f4b50718fda38c83feb7df4d9"
+   }
+  ],
+  "0456d2622081c002": [
+   {
+    "path": "assets/art/scenes/beiyue_old_archive.png",
+    "dimensions": [
+     2172,
+     724
+    ],
+    "mode": "RGB",
+    "sha256": "5a9a326c885972eafcf6b21bc151c0be2ab1c40362c8ea7f43735b4dcc1d8d47"
+   }
+  ],
+  "d9774a041bb2847e": [
+   {
+    "path": "assets/art/scenes/qingyun_sword_trial_cliff.png",
+    "dimensions": [
+     1983,
+     793
+    ],
+    "mode": "RGB",
+    "sha256": "a1ee58767ee4d5e422d5bcdaa1416113d1176593a378e4ba7dbc4731224e3c9c"
+   }
+  ],
+  "fa1a2909205d271e": [
+   {
+    "path": "assets/art/scenes/rogue_trial_notice_hall.png",
+    "dimensions": [
+     2172,
+     724
+    ],
+    "mode": "RGB",
+    "sha256": "c93152815229629204bfc26ce4839945535e03ae704f25aca77400f45832965a"
+   }
+  ],
+  "538e0d4ae242af5f": [
+   {
+    "path": "assets/art/scenes/luoxia_deep_spirit_spring.png",
+    "dimensions": [
+     1983,
+     793
+    ],
+    "mode": "RGB",
+    "sha256": "d352974379a198b28708dbdce7eef3d4a7226d94a24fb365d6850d3c93ab0040"
+   }
+  ],
+  "69f3c7eec5a76ee2": [
+   {
+    "path": "assets/art/scenes/duanjian_gorge_outskirts.png",
+    "dimensions": [
+     1983,
+     793
+    ],
+    "mode": "RGB",
+    "sha256": "00b37470255fbdf818d0aa8e695632e99d5a8bf411b602f3a8d2873b67ad695a"
+   }
+  ],
+  "9ee809a808aecbe2": [
+   {
+    "path": "assets/art/scenes/wanghai_chart_shop.png",
+    "dimensions": [
+     2172,
+     724
+    ],
+    "mode": "RGB",
+    "sha256": "d7619938bdccb2e266b3ce0ca05e0dfaf67540c61f67f0f6b97bb0a6849b18ee"
+   }
+  ],
+  "6a99a4ad22697bee": [
+   {
+    "path": "assets/art/scenes/sea_ship_deck.png",
+    "dimensions": [
+     2172,
+     724
+    ],
+    "mode": "RGB",
+    "sha256": "cbc087e4456f3258e9185768e46ba5873810d92e508a2002d48af2cb78c7b368"
+   }
+  ],
+  "4960fa9517f85f1a": [
+   {
+    "path": "assets/art/scenes/island_landing.png",
+    "dimensions": [
+     1983,
+     793
+    ],
+    "mode": "RGB",
+    "sha256": "cf1ddf6706c2759bd0f296e78bc8bbd805b54c19ee395a4e4662f74a88c2c415"
+   }
+  ],
+  "b96235d028b50a85": [
+   {
+    "path": "assets/art/scenes/underwater_ruin_gate.png",
+    "dimensions": [
+     1983,
+     793
+    ],
+    "mode": "RGB",
+    "sha256": "dfd7a05cf129b9f9bbd025ef65ed9004111bdb88286169fea5f22b076ee0a4db"
+   }
+  ],
+  "1ce6497f91bd0588": [
+   {
+    "path": "assets/art/scenes/sealed_old_city_gate.png",
+    "dimensions": [
+     1983,
+     793
+    ],
+    "mode": "RGB",
+    "sha256": "430cbd3cb964223b1b26aeb2179bf04b69a0ffbd4efcf56418244c29e86b6f22"
+   }
+  ],
+  "e917e24449b6122a": [
+   {
+    "path": "assets/art/scenes/sealed_old_city_street.png",
+    "dimensions": [
+     1983,
+     793
+    ],
+    "mode": "RGB",
+    "sha256": "981d1fe11ba8043a0dec7fea6d414cac99f7ebb1968447360ed37e16c3f66412"
+   }
+  ],
+  "fe522abe614f937b": [
+   {
+    "path": "assets/art/scenes/old_city_array_core.png",
+    "dimensions": [
+     2172,
+     724
+    ],
+    "mode": "RGB",
+    "sha256": "39c401790c72598d3fde6fd8dff09f36cc306e48e1e25094aadfce61ce9db07e"
+   }
+  ],
+  "534c0e20a93bdd4a": [
+   {
+    "path": "assets/art/battle/tiannan_tournament_arena.png",
+    "dimensions": [
+     1916,
+     821
+    ],
+    "mode": "RGB",
+    "sha256": "ab3f9562960183d89e4a4b2939796c21cbea5ed98578f3960fc8fdf81e27dc7e"
+   }
+  ],
+  "f6c909b3542143aa": [
+   {
+    "path": "assets/art/battle/public_tournament_stage.png",
+    "dimensions": [
+     1916,
+     821
+    ],
+    "mode": "RGB",
+    "sha256": "71e3dce15d69b00aaf1cfbe2ade7590b0337693a1462d63106ad69551881314f"
+   }
+  ],
+  "3aa3214ac058f2be": [
+   {
+    "path": "assets/art/battle/five_sect_forum_arena.png",
+    "dimensions": [
+     1916,
+     821
+    ],
+    "mode": "RGB",
+    "sha256": "4d023320735dd07996e958f4aa34bdd2f4a9644944d8b96f4426493154ca4292"
+   }
+  ],
+  "b6bbe727f76a2142": [
+   {
+    "path": "assets/art/battle/chenxia_array_arena.png",
+    "dimensions": [
+     1916,
+     821
+    ],
+    "mode": "RGB",
+    "sha256": "5d84887c9be38088f95b411b9b7a75ad4083acae73fa354dfc4054f92bec8b83"
+   }
+  ],
+  "ca2ab99a054abf79": [
+   {
+    "path": "assets/art/battle/sea_island_arena.png",
+    "dimensions": [
+     1915,
+     821
+    ],
+    "mode": "RGB",
+    "sha256": "65a6ce4ca75b69277f45362f44a6541690ee1060067d68d434830b69ed9d1815"
+   }
+  ],
+  "a6d47190761413c2": [
+   {
+    "path": "assets/art/events/tiannan_tournament_reunion.png",
+    "dimensions": [
+     1672,
+     941
+    ],
+    "mode": "RGB",
+    "sha256": "547b56fbeb45ca010e703dab330b2e340dab072e7f1a8ca88b228ea8a30e76b8"
+   }
+  ],
+  "3494bbd692ec599c": [
+   {
+    "path": "assets/art/events/beiyue_shouchuan_encounter.png",
+    "dimensions": [
+     1672,
+     941
+    ],
+    "mode": "RGB",
+    "sha256": "7f7f23637b35bd6bc86a1c45cbdb1b936c582206df5ec6c90d7db06e5d315945"
+   }
+  ],
+  "189e5b1b956b62f4": [
+   {
+    "path": "assets/art/events/lu_family_succession.png",
+    "dimensions": [
+     1672,
+     941
+    ],
+    "mode": "RGB",
+    "sha256": "a509536211db0fd6e1d4018dbfab65ec470d13015294ab5e1dc40041cbf451ee"
+   }
+  ],
+  "57bf5feda88cd079": [
+   {
+    "path": "assets/art/events/beiyue_witness.png",
+    "dimensions": [
+     1672,
+     941
+    ],
+    "mode": "RGB",
+    "sha256": "b98a72dc24e208ee55d940942951608d23ca63467bf4a886a9c33fb6e26bcc4f"
+   }
+  ],
+  "719318f34e3d3c28": [
+   {
+    "path": "assets/art/events/yunxi_assembly.png",
+    "dimensions": [
+     1672,
+     941
+    ],
+    "mode": "RGB",
+    "sha256": "0501b75109732d81e4befe4518d3c1e027c2e8fadef0d2860c54f5b57977e546"
+   }
+  ],
+  "6fd4a7b79f31d830": [
+   {
+    "path": "assets/art/events/auction_mirror_anomaly.png",
+    "dimensions": [
+     1672,
+     941
+    ],
+    "mode": "RGB",
+    "sha256": "18cb0634d08665bd65d2233c12cd26f6eda3511cf03f80d9b218c7ee490e6c1c"
+   }
+  ],
+  "0818dfd597a23531": [
+   {
+    "path": "assets/art/events/qianlong_arena.png",
+    "dimensions": [
+     1672,
+     941
+    ],
+    "mode": "RGB",
+    "sha256": "7755e15fe02d8fabd0b379be00370782c30b34109c53bf8237c0a74d16745965"
+   }
+  ],
+  "b5d56c66f991a601": [
+   {
+    "path": "assets/art/events/lu_family_night_banquet.png",
+    "dimensions": [
+     1672,
+     941
+    ],
+    "mode": "RGB",
+    "sha256": "dd6e92e8be3e4867a14befdd218410291fa65f42fc8d9b89de801bbab32776c3"
+   }
+  ],
+  "fd64e7018c7fe1a6": [
+   {
+    "path": "assets/art/events/ye_zhiwei_master_crisis.png",
+    "dimensions": [
+     1672,
+     941
+    ],
+    "mode": "RGB",
+    "sha256": "b6760eb09621f84487fbb76ba19c365f0a085b9e840da09076000111956b381d"
+   }
+  ],
+  "871b0689e47b1750": [
+   {
+    "path": "assets/art/events/five_sect_forum.png",
+    "dimensions": [
+     1672,
+     940
+    ],
+    "mode": "RGB",
+    "sha256": "c51d33a99ffd5de3f638dc9d1614788ad96324ac31b32ba3d0209766bb11a958"
+   }
+  ],
+  "64bbf6346d30fe22": [
+   {
+    "path": "assets/art/events/chenxia_shouchuan_evidence.png",
+    "dimensions": [
+     1672,
+     941
+    ],
+    "mode": "RGB",
+    "sha256": "8579b75a19fcffcecc44f017ebd4cc1ff8c54194f5e5b39f6e5e69d237e1beee"
+   }
+  ],
+  "33d0cca023604ad0": [
+   {
+    "path": "assets/art/events/sea_chart_departure.png",
+    "dimensions": [
+     1672,
+     940
+    ],
+    "mode": "RGB",
+    "sha256": "04d5013cb0049d87f0fe84f741a4ac9a41e490c5c5d5b402bc82b7b11edc75ac"
+   }
+  ],
+  "f4c4fb80b9f6f265": [
+   {
+    "path": "assets/art/events/wenren_missing_trace.png",
+    "dimensions": [
+     1672,
+     941
+    ],
+    "mode": "RGB",
+    "sha256": "0f6048a10732448ea4f41a72764b1a5cce87c2385985c78b1ddab8109af94a91"
+   }
+  ],
+  "543fae99d57ac98f": [
+   {
+    "path": "assets/art/events/wen_zhaoheng_legacy.png",
+    "dimensions": [
+     1672,
+     941
+    ],
+    "mode": "RGB",
+    "sha256": "f02980919a24b5ac9e378911ad4bdf87f01b1de686fba101094232f40d8cf792"
+   }
+  ]
+ }
+}

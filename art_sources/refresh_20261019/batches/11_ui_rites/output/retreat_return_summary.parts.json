@@ -1,0 +1,22 @@
+{
+  "main": {
+    "path": "art_sources/refresh_20261019/batches/11_ui_rites/output/retreat_return_summary.svg",
+    "sha256": "bdf35e5bed93bf0ce660ab7e6a311bc8e1958a7ef51430a4f53d1aa694cc85ab"
+  },
+  "parts": [
+    {
+      "path": "art_sources/refresh_20261019/batches/11_ui_rites/output/parts/retreat_message_blank.svg",
+      "sha256": "bdf35e5bed93bf0ce660ab7e6a311bc8e1958a7ef51430a4f53d1aa694cc85ab"
+    },
+    {
+      "path": "art_sources/refresh_20261019/batches/11_ui_rites/output/parts/retreat_changed_friend_blank.svg",
+      "sha256": "bdf35e5bed93bf0ce660ab7e6a311bc8e1958a7ef51430a4f53d1aa694cc85ab"
+    },
+    {
+      "path": "art_sources/refresh_20261019/batches/11_ui_rites/output/parts/retreat_promise_blank.svg",
+      "sha256": "bdf35e5bed93bf0ce660ab7e6a311bc8e1958a7ef51430a4f53d1aa694cc85ab"
+    }
+  ],
+  "technical_source": "assets/art/ui/tag.svg",
+  "technical_source_sha256": "1a7c2d7ddf98c9573a61d417c5bbf2d58bc6daa78cc4f6305682de4db815fc76"
+}

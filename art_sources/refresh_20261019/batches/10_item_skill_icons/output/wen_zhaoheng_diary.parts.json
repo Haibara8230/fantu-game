@@ -1,0 +1,9 @@
+{
+  "main": {
+    "path": "art_sources/refresh_20261019/batches/10_item_skill_icons/output/wen_zhaoheng_diary.svg",
+    "sha256": "df585824190f927d4d7b0f4852854aa81b95fa2bc7db8a791cf2715730f9cfd9"
+  },
+  "parts": [],
+  "technical_source": "assets/art/story/icons/old_city_record.svg",
+  "technical_source_sha256": "236f32800a70d85239329b2ce55bde93762ad105b8f53051150603874e59f229"
+}

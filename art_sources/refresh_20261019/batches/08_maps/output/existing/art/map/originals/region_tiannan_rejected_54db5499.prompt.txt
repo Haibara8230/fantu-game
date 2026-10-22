@@ -1,0 +1,11 @@
+Use case: style-transfer / identity-preserve / production game art.
+Asset: assets/art/map/region_tiannan.png
+Content request: Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.
+This is one independent production asset for an original Chinese cultivation RPG.
+Input image 1: assets/art/map/region_tiannan.png. Role: existing identity/content/layout target; preserve recognizable subject.
+Input image 2: art_sources/refresh_20261019/approved_samples/05_map.png. Role: approved drawing-style reference ONLY; do not copy its subject, architecture, layout or camera.
+Preserve the existing category-specific approved hand-drawn style: clear outlines, broad grouped colour areas, restrained shadows and low texture density. Do not impose character C anatomy rules on environments, maps, items or UI. No photorealism, cinematic bloom, dense surface scratches or depth-of-field blur.
+Top-down stylized geographic base map only. Preserve layout anchors for existing maps; planned maps are provisional spatial concepts. No baked place names, routes, node symbols, fog, UI or watermark. Grouped small mountains, forest clusters, pale terrain blocks and readable rivers; no cinematic giant peak view.
+Old technical target: 1586x992 pixels. Request the same proportions and retain usable safe margins; actual native output size will be measured, never mislabelled. Background: opaque.
+
+Mandatory layout anchors from input 1: compact red-roof fire sect upper-left; pale-stone mountain sect upper-centre; blue-roof waterside sect centre-right above the main city; practical red-roof town and small river bridge below centre; green terraced medicine garden lower-left; broad pale-blue coastal water occupies the right third. Preserve these relative geographic anchors, converting giant vertical landscape into a legible high-angle terrain map with grouped small hills. No new cities, fake open areas, route lines, node circles, names, letters, clouds covering land, imperial architecture or disaster smoke. The mountain paths in the old scene are NOT route UI to reproduce. Same wide 8:5 framing.

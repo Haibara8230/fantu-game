@@ -4,41 +4,305 @@
     "filename": "qingyun_small_sect.png",
     "brief": "青云小宗全景；已有候选，复核建筑规模和标签空间",
     "status": "planned_or_existing_candidate",
-    "output_path": "D:/fqh/flash/art_sources/refresh_20261019/batches/05_locations/output/qingyun_small_sect.png"
+    "output_path": "art_sources/refresh_20261019/batches/05_locations/output/qingyun_small_sect.png",
+    "content_outline": "docs/GAME_OUTLINE.md",
+    "outline_sections": [
+      "3",
+      "12",
+      "16"
+    ],
+    "content_plan": "art_sources/refresh_20261019/CONTENT_PLAN.md",
+    "style_reference": "art_sources/refresh_20261019/batches/05_locations/references.json",
+    "technical_spec": {
+      "path": "assets/art/locations/sect_fullscreen.png",
+      "sha256": "6200fd6696f03cf012c3231285cb24ffd552e30f529e369e00915c889fe6d641",
+      "format": "PNG",
+      "dimensions": [
+        1672,
+        941
+      ],
+      "mode": "RGB",
+      "background": "opaque",
+      "native_vector_required": false,
+      "aspect_ratio": [
+        1672,
+        941
+      ],
+      "actor_layouts": [],
+      "actor_layout_note": "No actor atlas definition on this technical source."
+    },
+    "spec_policy": "inherit_existing_source; retain measured native output separately; never mislabel dimensions",
+    "reference_bindings": [
+      {
+        "id": "technical:assets/art/locations/sect_fullscreen.png",
+        "role": "dimensions_alpha_layout_only"
+      },
+      {
+        "id": "style:04_location",
+        "role": "drawing_style_only"
+      },
+      {
+        "id": "original:04_location",
+        "role": "original_game_style_only_no_copy"
+      }
+    ],
+    "identity_policy": "If a registered person appears, use their identity_registry image and hash; unseen characters wait for batch02; never substitute style-reference faces.",
+    "generation_gate": "generate_after_dependencies",
+    "dependencies": []
   },
   {
     "priority": "P0",
     "filename": "yunxi_city.png",
     "brief": "云溪全城总览；已有候选，与旧坊市内部街区区分",
     "status": "planned_or_existing_candidate",
-    "output_path": "D:/fqh/flash/art_sources/refresh_20261019/batches/05_locations/output/yunxi_city.png"
+    "output_path": "art_sources/refresh_20261019/batches/05_locations/output/yunxi_city.png",
+    "content_outline": "docs/GAME_OUTLINE.md",
+    "outline_sections": [
+      "3",
+      "12",
+      "16"
+    ],
+    "content_plan": "art_sources/refresh_20261019/CONTENT_PLAN.md",
+    "style_reference": "art_sources/refresh_20261019/batches/05_locations/references.json",
+    "technical_spec": {
+      "path": "assets/art/locations/market_fullscreen.png",
+      "sha256": "7c861a3a3a70403723354dbec9021fa69e3b4c88770ab9f8eea8d7b373d2948f",
+      "format": "PNG",
+      "dimensions": [
+        1672,
+        941
+      ],
+      "mode": "RGB",
+      "background": "opaque",
+      "native_vector_required": false,
+      "aspect_ratio": [
+        1672,
+        941
+      ],
+      "actor_layouts": [],
+      "actor_layout_note": "No actor atlas definition on this technical source."
+    },
+    "spec_policy": "inherit_existing_source; retain measured native output separately; never mislabel dimensions",
+    "reference_bindings": [
+      {
+        "id": "technical:assets/art/locations/market_fullscreen.png",
+        "role": "dimensions_alpha_layout_only"
+      },
+      {
+        "id": "style:04_location",
+        "role": "drawing_style_only"
+      },
+      {
+        "id": "original:04_location",
+        "role": "original_game_style_only_no_copy"
+      }
+    ],
+    "identity_policy": "If a registered person appears, use their identity_registry image and hash; unseen characters wait for batch02; never substitute style-reference faces.",
+    "generation_gate": "generate_after_dependencies",
+    "dependencies": []
   },
   {
     "priority": "P1",
     "filename": "nanming_city.png",
     "brief": "南明全城：器街、商会、地火产业及旧坊市，不是赤霄宗改名",
     "status": "planned_or_existing_candidate",
-    "output_path": "D:/fqh/flash/art_sources/refresh_20261019/batches/05_locations/output/nanming_city.png"
+    "output_path": "art_sources/refresh_20261019/batches/05_locations/output/nanming_city.png",
+    "content_outline": "docs/GAME_OUTLINE.md",
+    "outline_sections": [
+      "3",
+      "12",
+      "16"
+    ],
+    "content_plan": "art_sources/refresh_20261019/CONTENT_PLAN.md",
+    "style_reference": "art_sources/refresh_20261019/batches/05_locations/references.json",
+    "technical_spec": {
+      "path": "assets/art/locations/nanming_fullscreen.png",
+      "sha256": "01833159ef664bb9b5e7963047e194bcb33e7ddad4b4d798f015af320513bdac",
+      "format": "PNG",
+      "dimensions": [
+        1672,
+        941
+      ],
+      "mode": "RGB",
+      "background": "opaque",
+      "native_vector_required": false,
+      "aspect_ratio": [
+        1672,
+        941
+      ],
+      "actor_layouts": [],
+      "actor_layout_note": "No actor atlas definition on this technical source."
+    },
+    "spec_policy": "inherit_existing_source; retain measured native output separately; never mislabel dimensions",
+    "reference_bindings": [
+      {
+        "id": "technical:assets/art/locations/nanming_fullscreen.png",
+        "role": "dimensions_alpha_layout_only"
+      },
+      {
+        "id": "style:04_location",
+        "role": "drawing_style_only"
+      },
+      {
+        "id": "original:04_location",
+        "role": "original_game_style_only_no_copy"
+      }
+    ],
+    "identity_policy": "If a registered person appears, use their identity_registry image and hash; unseen characters wait for batch02; never substitute style-reference faces.",
+    "generation_gate": "generate_after_dependencies",
+    "dependencies": []
   },
   {
     "priority": "P2",
     "filename": "canglan_city.png",
     "brief": "沧澜医药城：丹会、药市、水榭；独立于沧澜阁",
     "status": "planned_or_existing_candidate",
-    "output_path": "D:/fqh/flash/art_sources/refresh_20261019/batches/05_locations/output/canglan_city.png"
+    "output_path": "art_sources/refresh_20261019/batches/05_locations/output/canglan_city.png",
+    "content_outline": "docs/GAME_OUTLINE.md",
+    "outline_sections": [
+      "3",
+      "12",
+      "16"
+    ],
+    "content_plan": "art_sources/refresh_20261019/CONTENT_PLAN.md",
+    "style_reference": "art_sources/refresh_20261019/batches/05_locations/references.json",
+    "technical_spec": {
+      "path": "assets/art/locations/market_fullscreen.png",
+      "sha256": "7c861a3a3a70403723354dbec9021fa69e3b4c88770ab9f8eea8d7b373d2948f",
+      "format": "PNG",
+      "dimensions": [
+        1672,
+        941
+      ],
+      "mode": "RGB",
+      "background": "opaque",
+      "native_vector_required": false,
+      "aspect_ratio": [
+        1672,
+        941
+      ],
+      "actor_layouts": [],
+      "actor_layout_note": "No actor atlas definition on this technical source."
+    },
+    "spec_policy": "inherit_existing_source; retain measured native output separately; never mislabel dimensions",
+    "reference_bindings": [
+      {
+        "id": "technical:assets/art/locations/market_fullscreen.png",
+        "role": "dimensions_alpha_layout_only"
+      },
+      {
+        "id": "style:04_location",
+        "role": "drawing_style_only"
+      },
+      {
+        "id": "original:04_location",
+        "role": "original_game_style_only_no_copy"
+      }
+    ],
+    "identity_policy": "If a registered person appears, use their identity_registry image and hash; unseen characters wait for batch02; never substitute style-reference faces.",
+    "generation_gate": "generate_after_dependencies",
+    "dependencies": []
   },
   {
-    "priority": "P2",
+    "priority": "P1",
     "filename": "beiyue_city.png",
-    "brief": "北岳古物阵法城：古物街、阵师会馆、旧档库；独立于玄岳宗",
+    "brief": "筑基篇先做北岳旧档库所在城区，五城阶段再补全古物街与阵师会馆；独立于玄岳宗",
     "status": "planned_or_existing_candidate",
-    "output_path": "D:/fqh/flash/art_sources/refresh_20261019/batches/05_locations/output/beiyue_city.png"
+    "output_path": "art_sources/refresh_20261019/batches/05_locations/output/beiyue_city.png",
+    "content_outline": "docs/GAME_OUTLINE.md",
+    "outline_sections": [
+      "3",
+      "12",
+      "16"
+    ],
+    "content_plan": "art_sources/refresh_20261019/CONTENT_PLAN.md",
+    "style_reference": "art_sources/refresh_20261019/batches/05_locations/references.json",
+    "technical_spec": {
+      "path": "assets/art/locations/market_fullscreen.png",
+      "sha256": "7c861a3a3a70403723354dbec9021fa69e3b4c88770ab9f8eea8d7b373d2948f",
+      "format": "PNG",
+      "dimensions": [
+        1672,
+        941
+      ],
+      "mode": "RGB",
+      "background": "opaque",
+      "native_vector_required": false,
+      "aspect_ratio": [
+        1672,
+        941
+      ],
+      "actor_layouts": [],
+      "actor_layout_note": "No actor atlas definition on this technical source."
+    },
+    "spec_policy": "inherit_existing_source; retain measured native output separately; never mislabel dimensions",
+    "reference_bindings": [
+      {
+        "id": "technical:assets/art/locations/market_fullscreen.png",
+        "role": "dimensions_alpha_layout_only"
+      },
+      {
+        "id": "style:04_location",
+        "role": "drawing_style_only"
+      },
+      {
+        "id": "original:04_location",
+        "role": "original_game_style_only_no_copy"
+      }
+    ],
+    "identity_policy": "If a registered person appears, use their identity_registry image and hash; unseen characters wait for batch02; never substitute style-reference faces.",
+    "generation_gate": "generate_after_dependencies",
+    "dependencies": []
   },
   {
     "priority": "P2",
     "filename": "wanghai_city.png",
     "brief": "望海海贸城：海港、船坞、海图铺；区分内河白鹭渡",
     "status": "planned_or_existing_candidate",
-    "output_path": "D:/fqh/flash/art_sources/refresh_20261019/batches/05_locations/output/wanghai_city.png"
+    "output_path": "art_sources/refresh_20261019/batches/05_locations/output/wanghai_city.png",
+    "content_outline": "docs/GAME_OUTLINE.md",
+    "outline_sections": [
+      "3",
+      "12",
+      "16"
+    ],
+    "content_plan": "art_sources/refresh_20261019/CONTENT_PLAN.md",
+    "style_reference": "art_sources/refresh_20261019/batches/05_locations/references.json",
+    "technical_spec": {
+      "path": "assets/art/locations/market_fullscreen.png",
+      "sha256": "7c861a3a3a70403723354dbec9021fa69e3b4c88770ab9f8eea8d7b373d2948f",
+      "format": "PNG",
+      "dimensions": [
+        1672,
+        941
+      ],
+      "mode": "RGB",
+      "background": "opaque",
+      "native_vector_required": false,
+      "aspect_ratio": [
+        1672,
+        941
+      ],
+      "actor_layouts": [],
+      "actor_layout_note": "No actor atlas definition on this technical source."
+    },
+    "spec_policy": "inherit_existing_source; retain measured native output separately; never mislabel dimensions",
+    "reference_bindings": [
+      {
+        "id": "technical:assets/art/locations/market_fullscreen.png",
+        "role": "dimensions_alpha_layout_only"
+      },
+      {
+        "id": "style:04_location",
+        "role": "drawing_style_only"
+      },
+      {
+        "id": "original:04_location",
+        "role": "original_game_style_only_no_copy"
+      }
+    ],
+    "identity_policy": "If a registered person appears, use their identity_registry image and hash; unseen characters wait for batch02; never substitute style-reference faces.",
+    "generation_gate": "generate_after_dependencies",
+    "dependencies": []
   }
 ]

@@ -1,0 +1,2277 @@
+{
+  "scope": "male_old 30/30 candidates; image files use stable parent batch output/existing paths; no runtime replacement",
+  "counts": {
+    "delivered_generated": 30
+  },
+  "session": "sessions/20261021_portrait_pool_07.json",
+  "jobs": [
+    {
+      "id": "07c1d1143aafefc7",
+      "batch": "03_portrait_pool",
+      "kind": "existing",
+      "label": "assets/local/portraits/pool/male_old/disciple_male_old_01.png",
+      "source": "assets/local/portraits/pool/male_old/disciple_male_old_01.png",
+      "output": "art_sources/refresh_20261019/batches/03_portrait_pool/output/existing/local/portraits/pool/male_old/disciple_male_old_01.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/local/portraits/pool/male_old/disciple_male_old_01.png",
+        "sha256": "b4b4f259d18e3cbca45844a7bd73b9ba10e8ae9502ab4fdb8a4a54d0a462eac7",
+        "format": "PNG",
+        "dimensions": [
+          512,
+          640
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          4,
+          5
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_generated",
+      "tool_refs": [
+        "assets/local/portraits/pool/male_old/disciple_male_old_01.png",
+        "art_sources/refresh_20261019/approved_samples/02_portrait.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/03_portrait_pool/output/prompts/07c1d1143aafefc7.txt",
+      "newly_generated": true,
+      "sha256": "32d85f1264e0540c80d7b8287744a20247724a8bb7cd8482ec076c6236df04e4",
+      "native_dimensions": [
+        1122,
+        1402
+      ],
+      "native_mode": "RGB",
+      "alpha_extrema": null,
+      "tool_logical_path": "C:\\Users\\Kuroro\\.codex\\generated_images\\01a15bd8-ea44-7b52-a757-df11f7e1379f\\exec-24973a0e-aac8-40c0-8faa-e1acb47b0fa9.png",
+      "tool_physical_path": "D:\\claude\\flash\\.tmp\\imagegen_storage\\generated_images\\01a15bd8-ea44-7b52-a757-df11f7e1379f\\exec-24973a0e-aac8-40c0-8faa-e1acb47b0fa9.png",
+      "input_hashes": [
+        {
+          "path": "assets/local/portraits/pool/male_old/disciple_male_old_01.png",
+          "sha256": "b4b4f259d18e3cbca45844a7bd73b9ba10e8ae9502ab4fdb8a4a54d0a462eac7"
+        },
+        {
+          "path": "art_sources/refresh_20261019/approved_samples/02_portrait.png",
+          "sha256": "139f85deb18db95d129b9e3e31db95460f47b934a7a68a4f006b95f8ad53c3fe"
+        }
+      ],
+      "review": "Visually checked identity/content, category style and complete composition; integration separate.",
+      "target_dimensions": [
+        512,
+        640
+      ],
+      "size_matches_technical_source": false,
+      "integration_status": "candidate_only_not_runtime_integrated",
+      "size_note": "Native bytes retained; runtime crop/scale remains separate. Target dimensions are not claimed as delivered dimensions.",
+      "actual_prompt": "Use case: style-transfer / identity-preserve.\nAsset: ONE independent waist-up elderly male portrait for a 2D Chinese cultivation RPG, target 512x640, opaque muted grey-green background. Measure actual native size separately.\nImage 1 is the EDIT TARGET: preserve this individual man's face, old age, build, hairstyle, beard pattern, view, costume, pose and exact props. Image 2 is ONLY the approved C drawing style reference; do not copy that man's face, beard, abacus, blue costume or pose.\nUse economical clear thin dark outlines, small simply drawn manga facial features, broad flat muted colour shapes, solid grouped hair and beard, few large clothing folds and ONE restrained structural cel shadow. Preserve original robe motifs simplified. Preserve elderly face shape, grey hair and beard, hooded eyes, cheek folds and a FEW readable age lines. Do not turn him into a young man or generic bearded elder. No photorealism, glossy skin, individual hair strands, fabric grain, material speckles, airbrush, intricate embroidery, dense wrinkles, border, text, watermark, scenery or invented gestures/props. Keep complete head, topmost hair/bun, pins, ribbons and important props inside frame; leave at least six percent plain background ABOVE highest hair/headwear. Keep source waist-up framing and hand visibility; do not add hands absent from crop. ONE portrait, no contact sheet.\nIdentity details: Sturdy elderly swordsman with broad square tan face, thick grey brows, neat short grey MOUSTACHE and NO chin beard. Small MOLE below eye at VIEWER RIGHT near nose. Serious eyes glancing strongly viewer right and firm closed mouth; a few forehead and cheek age lines. Silver-grey hair HALF DOWN to shoulders, upper rounded bun pinned with horizontal brown wooden hairpin extending viewer left, long side locks. Ivory outer robe with long plain blue-grey outer lapel strips, slate-blue crossing inner robe, cream collar and dark blue sash. Small short dark blue wrapped sword hilt with bronze guard/pommel at viewer-right waist. Hands outside source crop. Preserve moustache-only, mole side, broad build and half-down grey hair.",
+      "actual_input_roles": [
+        {
+          "path": "assets/local/portraits/pool/male_old/disciple_male_old_01.png",
+          "sha256": "b4b4f259d18e3cbca45844a7bd73b9ba10e8ae9502ab4fdb8a4a54d0a462eac7",
+          "role": "edit_target_identity_pose_costume_and_props"
+        },
+        {
+          "path": "art_sources/refresh_20261019/approved_samples/02_portrait.png",
+          "sha256": "139f85deb18db95d129b9e3e31db95460f47b934a7a68a4f006b95f8ad53c3fe",
+          "role": "approved_c_drawing_style_only_do_not_copy_identity"
+        }
+      ],
+      "session": "20261021_portrait_pool_07"
+    },
+    {
+      "id": "9326b78461e026f5",
+      "batch": "03_portrait_pool",
+      "kind": "existing",
+      "label": "assets/local/portraits/pool/male_old/disciple_male_old_02.png",
+      "source": "assets/local/portraits/pool/male_old/disciple_male_old_02.png",
+      "output": "art_sources/refresh_20261019/batches/03_portrait_pool/output/existing/local/portraits/pool/male_old/disciple_male_old_02.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/local/portraits/pool/male_old/disciple_male_old_02.png",
+        "sha256": "39f347797993cb82c581f505379a918c531b5842613f5f636c338064c15eda02",
+        "format": "PNG",
+        "dimensions": [
+          512,
+          640
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          4,
+          5
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_generated",
+      "tool_refs": [
+        "assets/local/portraits/pool/male_old/disciple_male_old_02.png",
+        "art_sources/refresh_20261019/approved_samples/02_portrait.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/03_portrait_pool/output/prompts/9326b78461e026f5.txt",
+      "newly_generated": true,
+      "sha256": "85b05b9b85933124529d6aa869004a755dc1b10c5c0ef89aa0f8a70fe801989d",
+      "native_dimensions": [
+        1122,
+        1402
+      ],
+      "native_mode": "RGB",
+      "alpha_extrema": null,
+      "tool_logical_path": "C:\\Users\\Kuroro\\.codex\\generated_images\\01a15bd8-ea44-7b52-a757-df11f7e1379f\\exec-d39474e6-ce3f-4491-9c3b-edd724ce0d72.png",
+      "tool_physical_path": "D:\\claude\\flash\\.tmp\\imagegen_storage\\generated_images\\01a15bd8-ea44-7b52-a757-df11f7e1379f\\exec-d39474e6-ce3f-4491-9c3b-edd724ce0d72.png",
+      "input_hashes": [
+        {
+          "path": "assets/local/portraits/pool/male_old/disciple_male_old_02.png",
+          "sha256": "39f347797993cb82c581f505379a918c531b5842613f5f636c338064c15eda02"
+        },
+        {
+          "path": "art_sources/refresh_20261019/approved_samples/02_portrait.png",
+          "sha256": "139f85deb18db95d129b9e3e31db95460f47b934a7a68a4f006b95f8ad53c3fe"
+        }
+      ],
+      "review": "Visually checked identity/content, category style and complete composition; integration separate.",
+      "target_dimensions": [
+        512,
+        640
+      ],
+      "size_matches_technical_source": false,
+      "integration_status": "candidate_only_not_runtime_integrated",
+      "size_note": "Native bytes retained; runtime crop/scale remains separate. Target dimensions are not claimed as delivered dimensions.",
+      "actual_prompt": "Use case: style-transfer / identity-preserve.\nAsset: ONE independent waist-up elderly male portrait for a 2D Chinese cultivation RPG, target 512x640, opaque muted grey-green background. Measure actual native size separately.\nImage 1 is the EDIT TARGET: preserve this individual man's face, old age, build, hairstyle, beard pattern, view, costume, pose and exact props. Image 2 is ONLY the approved C drawing style reference; do not copy that man's face, beard, abacus, blue costume or pose.\nUse economical clear thin dark outlines, small simply drawn manga facial features, broad flat muted colour shapes, solid grouped hair and beard, few large clothing folds and ONE restrained structural cel shadow. Preserve original robe motifs simplified. Preserve elderly face shape, grey hair and beard, hooded eyes, cheek folds and a FEW readable age lines. Do not turn him into a young man or generic bearded elder. No photorealism, glossy skin, individual hair strands, fabric grain, material speckles, airbrush, intricate embroidery, dense wrinkles, border, text, watermark, scenery or invented gestures/props. Keep complete head, topmost hair/bun, pins, ribbons and important props inside frame; leave at least six percent plain background ABOVE highest hair/headwear. Keep source waist-up framing and hand visibility; do not add hands absent from crop. ONE portrait, no contact sheet.\nIdentity details: Thin elderly swordsman with long angular warm pale tan face, simple forehead and cheek lines, serious narrow eyes viewer right. Grey moustache extending around upper mouth and short FULL pointed grey chin beard, not long wispy strands. Silver-grey hair in HIGH compact bun tied dark slate-blue ribbon tails and crossed by horizontal brown wooden pin extending viewer left; long front locks. Ivory outer robe, slate-blue crossing lapels and sleeve edging, ivory collar, dark blue sash tied viewer right. Large pale blue-grey cloud curves on viewer-left outer sleeve. Short dark wrapped sword hilt with bronze pommel/guard angled up at viewer-right waist. No visible hands. Preserve thin elderly face, full short beard, high bun and pin.",
+      "actual_input_roles": [
+        {
+          "path": "assets/local/portraits/pool/male_old/disciple_male_old_02.png",
+          "sha256": "39f347797993cb82c581f505379a918c531b5842613f5f636c338064c15eda02",
+          "role": "edit_target_identity_pose_costume_and_props"
+        },
+        {
+          "path": "art_sources/refresh_20261019/approved_samples/02_portrait.png",
+          "sha256": "139f85deb18db95d129b9e3e31db95460f47b934a7a68a4f006b95f8ad53c3fe",
+          "role": "approved_c_drawing_style_only_do_not_copy_identity"
+        }
+      ],
+      "session": "20261021_portrait_pool_07"
+    },
+    {
+      "id": "26300c8e692a9043",
+      "batch": "03_portrait_pool",
+      "kind": "existing",
+      "label": "assets/local/portraits/pool/male_old/disciple_male_old_03.png",
+      "source": "assets/local/portraits/pool/male_old/disciple_male_old_03.png",
+      "output": "art_sources/refresh_20261019/batches/03_portrait_pool/output/existing/local/portraits/pool/male_old/disciple_male_old_03.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/local/portraits/pool/male_old/disciple_male_old_03.png",
+        "sha256": "6e95b471e1b30602fb0c6959b1e90cd4924285165e80bb8a59723b55014bc96f",
+        "format": "PNG",
+        "dimensions": [
+          512,
+          640
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          4,
+          5
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_generated",
+      "tool_refs": [
+        "assets/local/portraits/pool/male_old/disciple_male_old_03.png",
+        "art_sources/refresh_20261019/approved_samples/02_portrait.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/03_portrait_pool/output/prompts/26300c8e692a9043.txt",
+      "newly_generated": true,
+      "sha256": "7fa06f242b78754389b7cfadfc47b27e2b70ff89c6a1341be9dc20e1f59a223c",
+      "native_dimensions": [
+        1122,
+        1402
+      ],
+      "native_mode": "RGB",
+      "alpha_extrema": null,
+      "tool_logical_path": "C:\\Users\\Kuroro\\.codex\\generated_images\\01a15bd8-ea44-7b52-a757-df11f7e1379f\\exec-6a7d7ef0-a05d-4f72-8306-f1e4af3845ed.png",
+      "tool_physical_path": "D:\\claude\\flash\\.tmp\\imagegen_storage\\generated_images\\01a15bd8-ea44-7b52-a757-df11f7e1379f\\exec-6a7d7ef0-a05d-4f72-8306-f1e4af3845ed.png",
+      "input_hashes": [
+        {
+          "path": "assets/local/portraits/pool/male_old/disciple_male_old_03.png",
+          "sha256": "6e95b471e1b30602fb0c6959b1e90cd4924285165e80bb8a59723b55014bc96f"
+        },
+        {
+          "path": "art_sources/refresh_20261019/approved_samples/02_portrait.png",
+          "sha256": "139f85deb18db95d129b9e3e31db95460f47b934a7a68a4f006b95f8ad53c3fe"
+        }
+      ],
+      "review": "Visually checked identity/content, category style and complete composition; integration separate.",
+      "target_dimensions": [
+        512,
+        640
+      ],
+      "size_matches_technical_source": false,
+      "integration_status": "candidate_only_not_runtime_integrated",
+      "size_note": "Native bytes retained; runtime crop/scale remains separate. Target dimensions are not claimed as delivered dimensions.",
+      "actual_prompt": "Use case: style-transfer / identity-preserve.\nAsset: ONE independent waist-up elderly male portrait for a 2D Chinese cultivation RPG, target 512x640, opaque muted grey-green background. Measure actual native size separately.\nImage 1 is the EDIT TARGET: preserve this individual man's face, old age, build, hairstyle, beard pattern, view, costume, pose and exact props. Image 2 is ONLY the approved C drawing style reference; do not copy that man's face, beard, abacus, blue costume or pose.\nUse economical clear thin dark outlines, small simply drawn manga facial features, broad flat muted colour shapes, solid grouped hair and beard, few large clothing folds and ONE restrained structural cel shadow. Preserve original robe motifs simplified. Preserve elderly face shape, grey hair and beard, hooded eyes, cheek folds and a FEW readable age lines. Do not turn him into a young man or generic bearded elder. No photorealism, glossy skin, individual hair strands, fabric grain, material speckles, airbrush, intricate embroidery, dense wrinkles, border, text, watermark, scenery or invented gestures/props. Keep complete head, topmost hair/bun, pins, ribbons and important props inside frame; leave at least six percent plain background ABOVE highest hair/headwear. Keep source waist-up framing and hand visibility; do not add hands absent from crop. ONE portrait, no contact sheet.\nIdentity details: Broad stocky elderly swordsman with round square warm tan face, thick grey eyebrows, serious calm narrow eyes viewer right and small faint closed smile. Completely CLEAN SHAVEN, no moustache or beard. Silver-grey hair drawn back to LOW ponytail tied dark blue cord behind viewer-left shoulder, loose long front locks. Ivory robe, wide plain muted slate-blue crossed lapels and dark blue sash tied at viewer right, white inner collar. Large pale blue-grey cloud motif near viewer-left sleeve hem. Sheathed sword at viewer-right hip with dark blue wrapped hilt and round bronze guard/pommel. Hands out of original crop. Preserve clean-shaven broad old face, low ponytail, cloud motif and sword.",
+      "actual_input_roles": [
+        {
+          "path": "assets/local/portraits/pool/male_old/disciple_male_old_03.png",
+          "sha256": "6e95b471e1b30602fb0c6959b1e90cd4924285165e80bb8a59723b55014bc96f",
+          "role": "edit_target_identity_pose_costume_and_props"
+        },
+        {
+          "path": "art_sources/refresh_20261019/approved_samples/02_portrait.png",
+          "sha256": "139f85deb18db95d129b9e3e31db95460f47b934a7a68a4f006b95f8ad53c3fe",
+          "role": "approved_c_drawing_style_only_do_not_copy_identity"
+        }
+      ],
+      "session": "20261021_portrait_pool_07"
+    },
+    {
+      "id": "ac2fa56a05b31302",
+      "batch": "03_portrait_pool",
+      "kind": "existing",
+      "label": "assets/local/portraits/pool/male_old/disciple_male_old_04.png",
+      "source": "assets/local/portraits/pool/male_old/disciple_male_old_04.png",
+      "output": "art_sources/refresh_20261019/batches/03_portrait_pool/output/existing/local/portraits/pool/male_old/disciple_male_old_04.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/local/portraits/pool/male_old/disciple_male_old_04.png",
+        "sha256": "dae8e0f33163e1ca5a447714bec6000a118eb21fec52f9339dc28ca07531a51e",
+        "format": "PNG",
+        "dimensions": [
+          512,
+          640
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          4,
+          5
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_generated",
+      "tool_refs": [
+        "assets/local/portraits/pool/male_old/disciple_male_old_04.png",
+        "art_sources/refresh_20261019/approved_samples/02_portrait.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/03_portrait_pool/output/prompts/ac2fa56a05b31302.txt",
+      "newly_generated": true,
+      "sha256": "a9c3ebecf81935a4acba322a7d54d4194bfca9be9c4fec0312c3492cd34e7569",
+      "native_dimensions": [
+        1122,
+        1402
+      ],
+      "native_mode": "RGB",
+      "alpha_extrema": null,
+      "tool_logical_path": "C:\\Users\\Kuroro\\.codex\\generated_images\\01a15bd8-ea44-7b52-a757-df11f7e1379f\\exec-607c22b2-b0a1-4835-88cd-ed8e03775545.png",
+      "tool_physical_path": "D:\\claude\\flash\\.tmp\\imagegen_storage\\generated_images\\01a15bd8-ea44-7b52-a757-df11f7e1379f\\exec-607c22b2-b0a1-4835-88cd-ed8e03775545.png",
+      "input_hashes": [
+        {
+          "path": "assets/local/portraits/pool/male_old/disciple_male_old_04.png",
+          "sha256": "dae8e0f33163e1ca5a447714bec6000a118eb21fec52f9339dc28ca07531a51e"
+        },
+        {
+          "path": "art_sources/refresh_20261019/approved_samples/02_portrait.png",
+          "sha256": "139f85deb18db95d129b9e3e31db95460f47b934a7a68a4f006b95f8ad53c3fe"
+        }
+      ],
+      "review": "Visually checked identity/content, category style and complete composition; integration separate.",
+      "target_dimensions": [
+        512,
+        640
+      ],
+      "size_matches_technical_source": false,
+      "integration_status": "candidate_only_not_runtime_integrated",
+      "size_note": "Native bytes retained; runtime crop/scale remains separate. Target dimensions are not claimed as delivered dimensions.",
+      "actual_prompt": "Use case: style-transfer / identity-preserve.\nAsset: ONE independent waist-up elderly male portrait for a 2D Chinese cultivation RPG, target 512x640, opaque muted grey-green background. Measure actual native size separately.\nImage 1 is the EDIT TARGET: preserve this individual man's face, old age, build, hairstyle, beard pattern, view, costume, pose and exact props. Image 2 is ONLY the approved C drawing style reference; do not copy that man's face, beard, abacus, blue costume or pose.\nUse economical clear thin dark outlines, small simply drawn manga facial features, broad flat muted colour shapes, solid grouped hair and beard, few large clothing folds and ONE restrained structural cel shadow. Preserve original robe motifs simplified. Preserve elderly face shape, grey hair and beard, hooded eyes, cheek folds and a FEW readable age lines. Do not turn him into a young man or generic bearded elder. No photorealism, glossy skin, individual hair strands, fabric grain, material speckles, airbrush, intricate embroidery, dense wrinkles, border, text, watermark, scenery or invented gestures/props. Keep complete head, topmost hair/bun, pins, ribbons and important props inside frame; leave at least six percent plain background ABOVE highest hair/headwear. Keep source waist-up framing and hand visibility; do not add hands absent from crop. ONE portrait, no contact sheet.\nIdentity details: Very lean elderly swordsman with narrow angular warm tan face, sharp cheekbones, firm narrow eyes viewer right, straight serious lips and a few brow/mouth age creases. Very SHORT upright silver-grey hair under a wide dark slate-blue HEADBAND with ribbon tails behind viewer left, no bun/long hair. Small narrow pointed grey GOATEE only at chin, NO moustache. Ivory robe with wide desaturated blue-grey cross lapels, cream inner collar and dark blue sash. Large pale blue-grey cloud motifs on sleeve hems and near waist. Dark wrapped sword hilt with bronze pommel/guard at viewer-right hip. Hands not visible. Preserve cropped hair, headband, chin tuft and severe thin older face.",
+      "actual_input_roles": [
+        {
+          "path": "assets/local/portraits/pool/male_old/disciple_male_old_04.png",
+          "sha256": "dae8e0f33163e1ca5a447714bec6000a118eb21fec52f9339dc28ca07531a51e",
+          "role": "edit_target_identity_pose_costume_and_props"
+        },
+        {
+          "path": "art_sources/refresh_20261019/approved_samples/02_portrait.png",
+          "sha256": "139f85deb18db95d129b9e3e31db95460f47b934a7a68a4f006b95f8ad53c3fe",
+          "role": "approved_c_drawing_style_only_do_not_copy_identity"
+        }
+      ],
+      "session": "20261021_portrait_pool_07"
+    },
+    {
+      "id": "4ce98e2621a549a9",
+      "batch": "03_portrait_pool",
+      "kind": "existing",
+      "label": "assets/local/portraits/pool/male_old/disciple_male_old_05.png",
+      "source": "assets/local/portraits/pool/male_old/disciple_male_old_05.png",
+      "output": "art_sources/refresh_20261019/batches/03_portrait_pool/output/existing/local/portraits/pool/male_old/disciple_male_old_05.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/local/portraits/pool/male_old/disciple_male_old_05.png",
+        "sha256": "bd0e5337e4b15174311f0be6c73ed1d2b5158d096cb22be581319e97c0e2533f",
+        "format": "PNG",
+        "dimensions": [
+          512,
+          640
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          4,
+          5
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_generated",
+      "tool_refs": [
+        "assets/local/portraits/pool/male_old/disciple_male_old_05.png",
+        "art_sources/refresh_20261019/approved_samples/02_portrait.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/03_portrait_pool/output/prompts/4ce98e2621a549a9.txt",
+      "newly_generated": true,
+      "sha256": "714cc8d74826681e6fdb54b0d6e05a50664e2a99bf4ffa121417dbbf2ff34d07",
+      "native_dimensions": [
+        1122,
+        1402
+      ],
+      "native_mode": "RGB",
+      "alpha_extrema": null,
+      "tool_logical_path": "C:\\Users\\Kuroro\\.codex\\generated_images\\01a15bd8-ea44-7b52-a757-df11f7e1379f\\exec-fb801d15-182e-4dc3-89f3-b3aafa28eef3.png",
+      "tool_physical_path": "D:\\claude\\flash\\.tmp\\imagegen_storage\\generated_images\\01a15bd8-ea44-7b52-a757-df11f7e1379f\\exec-fb801d15-182e-4dc3-89f3-b3aafa28eef3.png",
+      "input_hashes": [
+        {
+          "path": "assets/local/portraits/pool/male_old/disciple_male_old_05.png",
+          "sha256": "bd0e5337e4b15174311f0be6c73ed1d2b5158d096cb22be581319e97c0e2533f"
+        },
+        {
+          "path": "art_sources/refresh_20261019/approved_samples/02_portrait.png",
+          "sha256": "139f85deb18db95d129b9e3e31db95460f47b934a7a68a4f006b95f8ad53c3fe"
+        }
+      ],
+      "review": "Visually checked identity/content, category style and complete composition; integration separate.",
+      "target_dimensions": [
+        512,
+        640
+      ],
+      "size_matches_technical_source": false,
+      "integration_status": "candidate_only_not_runtime_integrated",
+      "size_note": "Native bytes retained; runtime crop/scale remains separate. Target dimensions are not claimed as delivered dimensions.",
+      "actual_prompt": "Use case: style-transfer / identity-preserve.\nAsset: ONE independent waist-up elderly male portrait for a 2D Chinese cultivation RPG, target 512x640, opaque muted grey-green background. Measure actual native size separately.\nImage 1 is the EDIT TARGET: preserve this individual man's face, old age, build, hairstyle, beard pattern, view, costume, pose and exact props. Image 2 is ONLY the approved C drawing style reference; do not copy that man's face, beard, abacus, blue costume or pose.\nUse economical clear thin dark outlines, small simply drawn manga facial features, broad flat muted colour shapes, solid grouped hair and beard, few large clothing folds and ONE restrained structural cel shadow. Preserve original robe motifs simplified. Preserve elderly face shape, grey hair and beard, hooded eyes, cheek folds and a FEW readable age lines. Do not turn him into a young man or generic bearded elder. No photorealism, glossy skin, individual hair strands, fabric grain, material speckles, airbrush, intricate embroidery, dense wrinkles, border, text, watermark, scenery or invented gestures/props. Keep complete head, topmost hair/bun, pins, ribbons and important props inside frame; leave at least six percent plain background ABOVE highest hair/headwear. Keep source waist-up framing and hand visibility; do not add hands absent from crop. ONE portrait, no contact sheet.\nIdentity details: Lean elderly swordsman with angular warm tan face, thick grey brows, calm narrow eyes viewer right and slightly softened closed mouth, a few forehead and cheek lines. Grey moustache and NARROW LONG grey chin goatee to collar. Grey hair mostly under a soft folded SLATE-BLUE HEADWRAP tied behind head with long tails at viewer left, two long side locks; no cap band or bun. Ivory outer robe with slate-blue narrow shoulder strips and wide crossing lapels, white collar, blue sash. Short dark brown wrapped sword hilt with bronze pommel at viewer-right hip and blue cloth knot below hilt. No visible hands. Preserve lean aged face, narrow beard and headwrap shape.",
+      "actual_input_roles": [
+        {
+          "path": "assets/local/portraits/pool/male_old/disciple_male_old_05.png",
+          "sha256": "bd0e5337e4b15174311f0be6c73ed1d2b5158d096cb22be581319e97c0e2533f",
+          "role": "edit_target_identity_pose_costume_and_props"
+        },
+        {
+          "path": "art_sources/refresh_20261019/approved_samples/02_portrait.png",
+          "sha256": "139f85deb18db95d129b9e3e31db95460f47b934a7a68a4f006b95f8ad53c3fe",
+          "role": "approved_c_drawing_style_only_do_not_copy_identity"
+        }
+      ],
+      "session": "20261021_portrait_pool_07"
+    },
+    {
+      "id": "9bfe648e70cb8790",
+      "batch": "03_portrait_pool",
+      "kind": "existing",
+      "label": "assets/local/portraits/pool/male_old/disciple_male_old_06.png",
+      "source": "assets/local/portraits/pool/male_old/disciple_male_old_06.png",
+      "output": "art_sources/refresh_20261019/batches/03_portrait_pool/output/existing/local/portraits/pool/male_old/disciple_male_old_06.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/local/portraits/pool/male_old/disciple_male_old_06.png",
+        "sha256": "9f34203950ed15e7ee7a1a4acdeddcf641e2b824ffdae5a99bdfddab67c0a33d",
+        "format": "PNG",
+        "dimensions": [
+          512,
+          640
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          4,
+          5
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_generated",
+      "tool_refs": [
+        "assets/local/portraits/pool/male_old/disciple_male_old_06.png",
+        "art_sources/refresh_20261019/approved_samples/02_portrait.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/03_portrait_pool/output/prompts/9bfe648e70cb8790.txt",
+      "newly_generated": true,
+      "sha256": "16c539203392b59606a86dc6854af9832b4bcc8f709af684127d4026e493611d",
+      "native_dimensions": [
+        1122,
+        1402
+      ],
+      "native_mode": "RGB",
+      "alpha_extrema": null,
+      "tool_logical_path": "C:\\Users\\Kuroro\\.codex\\generated_images\\01a15bd8-ea44-7b52-a757-df11f7e1379f\\exec-0f90b8c3-a9c0-4e06-b408-6effd5cd96d8.png",
+      "tool_physical_path": "D:\\claude\\flash\\.tmp\\imagegen_storage\\generated_images\\01a15bd8-ea44-7b52-a757-df11f7e1379f\\exec-0f90b8c3-a9c0-4e06-b408-6effd5cd96d8.png",
+      "input_hashes": [
+        {
+          "path": "assets/local/portraits/pool/male_old/disciple_male_old_06.png",
+          "sha256": "9f34203950ed15e7ee7a1a4acdeddcf641e2b824ffdae5a99bdfddab67c0a33d"
+        },
+        {
+          "path": "art_sources/refresh_20261019/approved_samples/02_portrait.png",
+          "sha256": "139f85deb18db95d129b9e3e31db95460f47b934a7a68a4f006b95f8ad53c3fe"
+        }
+      ],
+      "review": "Visually checked identity/content, category style and complete composition; integration separate.",
+      "target_dimensions": [
+        512,
+        640
+      ],
+      "size_matches_technical_source": false,
+      "integration_status": "candidate_only_not_runtime_integrated",
+      "size_note": "Native bytes retained; runtime crop/scale remains separate. Target dimensions are not claimed as delivered dimensions.",
+      "actual_prompt": "Use case: style-transfer / identity-preserve.\nAsset: ONE independent waist-up elderly male portrait for a 2D Chinese cultivation RPG, target 512x640, opaque muted grey-green background. Measure actual native size separately.\nImage 1 is the EDIT TARGET: preserve this individual man's face, old age, build, hairstyle, beard pattern, view, costume, pose and exact props. Image 2 is ONLY the approved C drawing style reference; do not copy that man's face, beard, abacus, blue costume or pose.\nUse economical clear thin dark outlines, small simply drawn manga facial features, broad flat muted colour shapes, solid grouped hair and beard, few large clothing folds and ONE restrained structural cel shadow. Preserve original robe motifs simplified. Preserve elderly face shape, grey hair and beard, hooded eyes, cheek folds and a FEW readable age lines. Do not turn him into a young man or generic bearded elder. No photorealism, glossy skin, individual hair strands, fabric grain, material speckles, airbrush, intricate embroidery, dense wrinkles, border, text, watermark, scenery or invented gestures/props. Keep complete head, topmost hair/bun, pins, ribbons and important props inside frame; leave at least six percent plain background ABOVE highest hair/headwear. Keep source waist-up framing and hand visibility; do not add hands absent from crop. ONE portrait, no contact sheet.\nIdentity details: Stocky elderly swordsman with very broad round warm tan face, small drooping eyes viewer right, gentle downturned mouth, simple forehead and cheek age lines. Short grey MOUSTACHE only, NO chin beard. Short grey hair visible beneath a soft slate-blue traditional cloth CAP with one wide IVORY BAND across forehead and dark blue tails behind viewer left. Ivory robe with wide slate-blue crossed lapels, white collar, blue waist sash tied viewer right. Large pale blue-grey cloud curves near sleeve hems. Short black wrapped sword hilt with bronze pommel and round guard angles up at viewer-right hip. Hands not visible. Preserve round old face, blue cap/ivory band and moustache-only.",
+      "actual_input_roles": [
+        {
+          "path": "assets/local/portraits/pool/male_old/disciple_male_old_06.png",
+          "sha256": "9f34203950ed15e7ee7a1a4acdeddcf641e2b824ffdae5a99bdfddab67c0a33d",
+          "role": "edit_target_identity_pose_costume_and_props"
+        },
+        {
+          "path": "art_sources/refresh_20261019/approved_samples/02_portrait.png",
+          "sha256": "139f85deb18db95d129b9e3e31db95460f47b934a7a68a4f006b95f8ad53c3fe",
+          "role": "approved_c_drawing_style_only_do_not_copy_identity"
+        }
+      ],
+      "session": "20261021_portrait_pool_07"
+    },
+    {
+      "id": "01668176bdf7c189",
+      "batch": "03_portrait_pool",
+      "kind": "existing",
+      "label": "assets/local/portraits/pool/male_old/disciple_male_old_07.png",
+      "source": "assets/local/portraits/pool/male_old/disciple_male_old_07.png",
+      "output": "art_sources/refresh_20261019/batches/03_portrait_pool/output/existing/local/portraits/pool/male_old/disciple_male_old_07.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/local/portraits/pool/male_old/disciple_male_old_07.png",
+        "sha256": "58f0d16fff8552a6a3a0d0dbc2b43f19ec0aed410ab65ca8e5949e654e2cd154",
+        "format": "PNG",
+        "dimensions": [
+          512,
+          640
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          4,
+          5
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_generated",
+      "tool_refs": [
+        "assets/local/portraits/pool/male_old/disciple_male_old_07.png",
+        "art_sources/refresh_20261019/approved_samples/02_portrait.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/03_portrait_pool/output/prompts/01668176bdf7c189.txt",
+      "newly_generated": true,
+      "sha256": "ac91ce3ccffd372b298b035a419b62db7bdd97b709477809ff6f2fcf123cfb75",
+      "native_dimensions": [
+        1122,
+        1402
+      ],
+      "native_mode": "RGB",
+      "alpha_extrema": null,
+      "tool_logical_path": "C:\\Users\\Kuroro\\.codex\\generated_images\\01a15bd8-ea44-7b52-a757-df11f7e1379f\\exec-9b33956b-39ba-4f84-bd56-983763164954.png",
+      "tool_physical_path": "D:\\claude\\flash\\.tmp\\imagegen_storage\\generated_images\\01a15bd8-ea44-7b52-a757-df11f7e1379f\\exec-9b33956b-39ba-4f84-bd56-983763164954.png",
+      "input_hashes": [
+        {
+          "path": "assets/local/portraits/pool/male_old/disciple_male_old_07.png",
+          "sha256": "58f0d16fff8552a6a3a0d0dbc2b43f19ec0aed410ab65ca8e5949e654e2cd154"
+        },
+        {
+          "path": "art_sources/refresh_20261019/approved_samples/02_portrait.png",
+          "sha256": "139f85deb18db95d129b9e3e31db95460f47b934a7a68a4f006b95f8ad53c3fe"
+        }
+      ],
+      "review": "Visually checked identity/content, category style and complete composition; integration separate.",
+      "target_dimensions": [
+        512,
+        640
+      ],
+      "size_matches_technical_source": false,
+      "integration_status": "candidate_only_not_runtime_integrated",
+      "size_note": "Native bytes retained; runtime crop/scale remains separate. Target dimensions are not claimed as delivered dimensions.",
+      "actual_prompt": "Use case: style-transfer / identity-preserve.\nAsset: ONE independent waist-up elderly male portrait for a 2D Chinese cultivation RPG, target 512x640, opaque muted grey-green background. Measure actual native size separately.\nImage 1 is the EDIT TARGET: preserve this individual man's face, old age, build, hairstyle, beard pattern, view, costume, pose and exact props. Image 2 is ONLY the approved C drawing style reference; do not copy that man's face, beard, abacus, blue costume or pose.\nUse economical clear thin dark outlines, small simply drawn manga facial features, broad flat muted colour shapes, solid grouped hair and beard, few large clothing folds and ONE restrained structural cel shadow. Preserve original robe motifs simplified. Preserve elderly face shape, grey hair and beard, hooded eyes, cheek folds and a FEW readable age lines. Do not turn him into a young man or generic bearded elder. No photorealism, glossy skin, individual hair strands, fabric grain, material speckles, airbrush, intricate embroidery, dense wrinkles, border, text, watermark, scenery or invented gestures/props. Keep complete head, topmost hair/bun, pins, ribbons and important props inside frame; leave at least six percent plain background ABOVE highest hair/headwear. Keep source waist-up framing and hand visibility; do not add hands absent from crop. ONE portrait, no contact sheet.\nIdentity details: Very slender elderly swordsman with long narrow warm pale tan face, worried inward-lifted grey brows, downcast eyes viewer right and small downturned closed mouth, simple forehead/eye/cheek age lines. Short squared grey CHIN BEARD only, NO moustache. Silver-grey hair in rounded back bun with dark blue ribbon tails and small brown horizontal hairpin extending viewer left, long front locks. Ivory outer robe with long plain blue-grey edging strips, slate-blue crossed inner robe, cream collar and dark blue sash. Pale blue-grey cloud motifs at sleeve hems. Dark blue wrapped sword hilt with bronze pommel/guard at viewer-right hip. No visible hands. Preserve worried elderly face and moustache-free chin beard.",
+      "actual_input_roles": [
+        {
+          "path": "assets/local/portraits/pool/male_old/disciple_male_old_07.png",
+          "sha256": "58f0d16fff8552a6a3a0d0dbc2b43f19ec0aed410ab65ca8e5949e654e2cd154",
+          "role": "edit_target_identity_pose_costume_and_props"
+        },
+        {
+          "path": "art_sources/refresh_20261019/approved_samples/02_portrait.png",
+          "sha256": "139f85deb18db95d129b9e3e31db95460f47b934a7a68a4f006b95f8ad53c3fe",
+          "role": "approved_c_drawing_style_only_do_not_copy_identity"
+        }
+      ],
+      "session": "20261021_portrait_pool_07"
+    },
+    {
+      "id": "1391f4c28ccf6afa",
+      "batch": "03_portrait_pool",
+      "kind": "existing",
+      "label": "assets/local/portraits/pool/male_old/gatherer_male_old_01.png",
+      "source": "assets/local/portraits/pool/male_old/gatherer_male_old_01.png",
+      "output": "art_sources/refresh_20261019/batches/03_portrait_pool/output/existing/local/portraits/pool/male_old/gatherer_male_old_01.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/local/portraits/pool/male_old/gatherer_male_old_01.png",
+        "sha256": "77eefa20d6c8878f7b3177a532d91107def88ab3c1b5c3a45791bc2e97b98422",
+        "format": "PNG",
+        "dimensions": [
+          512,
+          640
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          4,
+          5
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_generated",
+      "tool_refs": [
+        "assets/local/portraits/pool/male_old/gatherer_male_old_01.png",
+        "art_sources/refresh_20261019/approved_samples/02_portrait.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/03_portrait_pool/output/prompts/1391f4c28ccf6afa.txt",
+      "newly_generated": true,
+      "sha256": "7caae1406fcedea5aa1010c8e520a4efdaad7e077cd7e9701b73003a43cb34c0",
+      "native_dimensions": [
+        1122,
+        1402
+      ],
+      "native_mode": "RGB",
+      "alpha_extrema": null,
+      "tool_logical_path": "C:\\Users\\Kuroro\\.codex\\generated_images\\01a15bd8-ea44-7b52-a757-df11f7e1379f\\exec-794bb1c0-ca69-4979-8bf5-12c94b099174.png",
+      "tool_physical_path": "D:\\claude\\flash\\.tmp\\imagegen_storage\\generated_images\\01a15bd8-ea44-7b52-a757-df11f7e1379f\\exec-794bb1c0-ca69-4979-8bf5-12c94b099174.png",
+      "input_hashes": [
+        {
+          "path": "assets/local/portraits/pool/male_old/gatherer_male_old_01.png",
+          "sha256": "77eefa20d6c8878f7b3177a532d91107def88ab3c1b5c3a45791bc2e97b98422"
+        },
+        {
+          "path": "art_sources/refresh_20261019/approved_samples/02_portrait.png",
+          "sha256": "139f85deb18db95d129b9e3e31db95460f47b934a7a68a4f006b95f8ad53c3fe"
+        }
+      ],
+      "review": "Visually checked identity/content, category style and complete composition; integration separate.",
+      "target_dimensions": [
+        512,
+        640
+      ],
+      "size_matches_technical_source": false,
+      "integration_status": "candidate_only_not_runtime_integrated",
+      "size_note": "Native bytes retained; runtime crop/scale remains separate. Target dimensions are not claimed as delivered dimensions.",
+      "actual_prompt": "Use case: style-transfer / identity-preserve.\nAsset: ONE independent waist-up elderly male portrait for a 2D Chinese cultivation RPG, target 512x640, opaque muted grey-green background. Measure actual native size separately.\nImage 1 is the EDIT TARGET: preserve this individual man's face, old age, build, hairstyle, beard pattern, view, costume, pose and exact props. Image 2 is ONLY the approved C drawing style reference; do not copy that man's face, beard, abacus, blue costume or pose.\nUse economical clear thin dark outlines, small simply drawn manga facial features, broad flat muted colour shapes, solid grouped hair and beard, few large clothing folds and ONE restrained structural cel shadow. Preserve original robe motifs simplified. Preserve elderly face shape, grey hair and beard, hooded eyes, cheek folds and a FEW readable age lines. Do not turn him into a young man or generic bearded elder. No photorealism, glossy skin, individual hair strands, fabric grain, material speckles, airbrush, intricate embroidery, dense wrinkles, border, text, watermark, scenery or invented gestures/props. Keep complete head, topmost hair/bun, pins, ribbons and important props inside frame; leave at least six percent plain background ABOVE highest hair/headwear. Keep source waist-up framing and hand visibility; do not add hands absent from crop. ONE portrait, no contact sheet.\nIdentity details: Very thin elderly herb gatherer with long weathered tan face, smiling narrow eyes viewer right, small closed friendly smile, simple forehead and cheek creases. Thin grey moustache and long narrow pointed grey GOATEE to collar. Very short grey hair sticking above taupe cloth HEADBAND tied behind viewer left with broad tails, no bun. Slate-blue short outer robe over ivory rolled sleeves, blue crossed lapel over cream inner robe, brown cloth sash. ONE hand at viewer-left chest grips thick tan rope shoulder strap; golden-brown wicker BACK BASKET behind viewer-left shoulder holds grouped broad green leaves. Other arm only partially visible at lower right. Preserve thin old face, cropped hair/headband, narrow beard and hand on rope. Simplify basket to sparse plain lattice and foliage to broad leaf masses.",
+      "actual_input_roles": [
+        {
+          "path": "assets/local/portraits/pool/male_old/gatherer_male_old_01.png",
+          "sha256": "77eefa20d6c8878f7b3177a532d91107def88ab3c1b5c3a45791bc2e97b98422",
+          "role": "edit_target_identity_pose_costume_and_props"
+        },
+        {
+          "path": "art_sources/refresh_20261019/approved_samples/02_portrait.png",
+          "sha256": "139f85deb18db95d129b9e3e31db95460f47b934a7a68a4f006b95f8ad53c3fe",
+          "role": "approved_c_drawing_style_only_do_not_copy_identity"
+        }
+      ],
+      "session": "20261021_portrait_pool_07"
+    },
+    {
+      "id": "7942705703af1223",
+      "batch": "03_portrait_pool",
+      "kind": "existing",
+      "label": "assets/local/portraits/pool/male_old/gatherer_male_old_02.png",
+      "source": "assets/local/portraits/pool/male_old/gatherer_male_old_02.png",
+      "output": "art_sources/refresh_20261019/batches/03_portrait_pool/output/existing/local/portraits/pool/male_old/gatherer_male_old_02.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/local/portraits/pool/male_old/gatherer_male_old_02.png",
+        "sha256": "98b667003f94dcf74b148e500b5c897c89d0fc398f4ad636ef1d9c5bbfcbd584",
+        "format": "PNG",
+        "dimensions": [
+          512,
+          640
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          4,
+          5
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_generated",
+      "tool_refs": [
+        "assets/local/portraits/pool/male_old/gatherer_male_old_02.png",
+        "art_sources/refresh_20261019/approved_samples/02_portrait.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/03_portrait_pool/output/prompts/7942705703af1223.txt",
+      "rejected_attempts": [
+        {
+          "path": "art_sources/refresh_20261019/batches/03_portrait_pool/output/existing/local/portraits/pool/male_old/originals/gatherer_male_old_02_rejected_53139824.png",
+          "sha256": "5313982455618cc17a4e26cfd654c2a4b441a6af0c39fcdd1dc9f3cdbe85fa66",
+          "reason": "Style drift on sickle blade: fine mottled material texture instead of plain flat cel shapes. Retain identity, hat, pose and props, replace blade surface with one solid grey polygon and one dark side shadow; no granular texture.",
+          "tool_physical_path": "D:\\claude\\flash\\.tmp\\imagegen_storage\\generated_images\\01a15bd8-ea44-7b52-a757-df11f7e1379f\\exec-5f9afae0-0d22-4ded-a0da-bf379251dfc9.png",
+          "prompt_path": "art_sources/refresh_20261019/batches/03_portrait_pool/output/existing/local/portraits/pool/male_old/originals/gatherer_male_old_02_rejected_53139824.prompt.txt"
+        }
+      ],
+      "newly_generated": true,
+      "sha256": "164e70f575553339290d10aa94387314f097359b55588d233714e7a60536f4f2",
+      "native_dimensions": [
+        1122,
+        1402
+      ],
+      "native_mode": "RGB",
+      "alpha_extrema": null,
+      "tool_logical_path": "C:\\Users\\Kuroro\\.codex\\generated_images\\01a15bd8-ea44-7b52-a757-df11f7e1379f\\exec-bef36636-99cf-4339-a5be-4d5f7dd441e9.png",
+      "tool_physical_path": "D:\\claude\\flash\\.tmp\\imagegen_storage\\generated_images\\01a15bd8-ea44-7b52-a757-df11f7e1379f\\exec-bef36636-99cf-4339-a5be-4d5f7dd441e9.png",
+      "input_hashes": [
+        {
+          "path": "assets/local/portraits/pool/male_old/gatherer_male_old_02.png",
+          "sha256": "98b667003f94dcf74b148e500b5c897c89d0fc398f4ad636ef1d9c5bbfcbd584"
+        },
+        {
+          "path": "art_sources/refresh_20261019/approved_samples/02_portrait.png",
+          "sha256": "139f85deb18db95d129b9e3e31db95460f47b934a7a68a4f006b95f8ad53c3fe"
+        }
+      ],
+      "review": "Visually checked identity/content, category style and complete composition; integration separate.",
+      "target_dimensions": [
+        512,
+        640
+      ],
+      "size_matches_technical_source": false,
+      "integration_status": "candidate_only_not_runtime_integrated",
+      "size_note": "Native bytes retained; runtime crop/scale remains separate. Target dimensions are not claimed as delivered dimensions.",
+      "actual_prompt": "Use case: style-transfer / identity-preserve.\nAsset: ONE independent waist-up elderly male portrait for a 2D Chinese cultivation RPG, target 512x640, opaque muted grey-green background. Measure actual native size separately.\nImage 1 is the EDIT TARGET: preserve this individual man's face, old age, build, hairstyle, beard pattern, view, costume, pose and exact props. Image 2 is ONLY the approved C drawing style reference; do not copy that man's face, beard, abacus, blue costume or pose.\nUse economical clear thin dark outlines, small simply drawn manga facial features, broad flat muted colour shapes, solid grouped hair and beard, few large clothing folds and ONE restrained structural cel shadow. Preserve original robe motifs simplified. Preserve elderly face shape, grey hair and beard, hooded eyes, cheek folds and a FEW readable age lines. Do not turn him into a young man or generic bearded elder. No photorealism, glossy skin, individual hair strands, fabric grain, material speckles, airbrush, intricate embroidery, dense wrinkles, border, text, watermark, scenery or invented gestures/props. Keep complete head, topmost hair/bun, pins, ribbons and important props inside frame; leave at least six percent plain background ABOVE highest hair/headwear. Keep source waist-up framing and hand visibility; do not add hands absent from crop. ONE portrait, no contact sheet.\nIdentity details: Lean elderly herb gatherer with broad angular tan face, thick grey brows, calm eyes viewer right and small closed mouth; neat short grey MOUSTACHE with NO chin beard. Grey hair partly visible under a large loose dark brown HEADSCARF tied behind viewer left, long folded tails. Muted sage-green short outer robe with dark slate cross lapels, pale collar and ivory rolled sleeves, rope waist belt. Brown wicker BACK BASKET with grouped dried olive leaves, a few pale roots and cream blossoms behind viewer-left shoulder; thick rope straps. Across lower body ONE hand holds a wooden-handled curved herb SICKLE angled up viewer right, dark triangular curved blade at lower viewer right. Blade must be two plain flat grey shapes, no speckling/patina/texture. Sparse basket lattice and broad herbs only. Preserve moustache-only, headscarf and exact grip.\nREQUIRED STYLE REPAIR: The sickle blade is ONE uniformly filled charcoal-grey polygon plus ONE sharply bounded darker side-shadow polygon. Absolutely NO speckles, fine noise, scratches, mottling, patina, grain, metallic reflection or light-scattering texture. Flat smooth two-colour cel artwork across the entire blade. Wooden handle is one flat ochre block with a single shadow. Keep same old man's moustache-only face, headscarf, body, basket, sickle shape, orientation and hand grip. Draw fewer, broader herb groups and sparse basket lattice, not realistic materials. The blade surface is the mandatory correction.",
+      "actual_input_roles": [
+        {
+          "path": "assets/local/portraits/pool/male_old/gatherer_male_old_02.png",
+          "sha256": "98b667003f94dcf74b148e500b5c897c89d0fc398f4ad636ef1d9c5bbfcbd584",
+          "role": "edit_target_identity_pose_costume_and_props"
+        },
+        {
+          "path": "art_sources/refresh_20261019/approved_samples/02_portrait.png",
+          "sha256": "139f85deb18db95d129b9e3e31db95460f47b934a7a68a4f006b95f8ad53c3fe",
+          "role": "approved_c_drawing_style_only_do_not_copy_identity"
+        }
+      ],
+      "session": "20261021_portrait_pool_07"
+    },
+    {
+      "id": "1e356477abb298a6",
+      "batch": "03_portrait_pool",
+      "kind": "existing",
+      "label": "assets/local/portraits/pool/male_old/gatherer_male_old_03.png",
+      "source": "assets/local/portraits/pool/male_old/gatherer_male_old_03.png",
+      "output": "art_sources/refresh_20261019/batches/03_portrait_pool/output/existing/local/portraits/pool/male_old/gatherer_male_old_03.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/local/portraits/pool/male_old/gatherer_male_old_03.png",
+        "sha256": "8b12f098a5b134f00df0d40f91e625227ba952978df81f77e01bbe0c6c3c5d09",
+        "format": "PNG",
+        "dimensions": [
+          512,
+          640
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          4,
+          5
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_generated",
+      "tool_refs": [
+        "assets/local/portraits/pool/male_old/gatherer_male_old_03.png",
+        "art_sources/refresh_20261019/approved_samples/02_portrait.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/03_portrait_pool/output/prompts/1e356477abb298a6.txt",
+      "newly_generated": true,
+      "sha256": "52f30ef2022cefdcee8569df8ad6aee8330048f66d9fa7c16f5d947d846ac0bc",
+      "native_dimensions": [
+        1122,
+        1402
+      ],
+      "native_mode": "RGB",
+      "alpha_extrema": null,
+      "tool_logical_path": "C:\\Users\\Kuroro\\.codex\\generated_images\\01a15bd8-ea44-7b52-a757-df11f7e1379f\\exec-fb072979-ac42-4074-9120-8c875780566d.png",
+      "tool_physical_path": "D:\\claude\\flash\\.tmp\\imagegen_storage\\generated_images\\01a15bd8-ea44-7b52-a757-df11f7e1379f\\exec-fb072979-ac42-4074-9120-8c875780566d.png",
+      "input_hashes": [
+        {
+          "path": "assets/local/portraits/pool/male_old/gatherer_male_old_03.png",
+          "sha256": "8b12f098a5b134f00df0d40f91e625227ba952978df81f77e01bbe0c6c3c5d09"
+        },
+        {
+          "path": "art_sources/refresh_20261019/approved_samples/02_portrait.png",
+          "sha256": "139f85deb18db95d129b9e3e31db95460f47b934a7a68a4f006b95f8ad53c3fe"
+        }
+      ],
+      "review": "Visually checked identity/content, category style and complete composition; integration separate.",
+      "target_dimensions": [
+        512,
+        640
+      ],
+      "size_matches_technical_source": false,
+      "integration_status": "candidate_only_not_runtime_integrated",
+      "size_note": "Native bytes retained; runtime crop/scale remains separate. Target dimensions are not claimed as delivered dimensions.",
+      "actual_prompt": "Use case: style-transfer / identity-preserve.\nAsset: ONE independent waist-up elderly male portrait for a 2D Chinese cultivation RPG, target 512x640, opaque muted grey-green background. Measure actual native size separately.\nImage 1 is the EDIT TARGET: preserve this individual man's face, old age, build, hairstyle, beard pattern, view, costume, pose and exact props. Image 2 is ONLY the approved C drawing style reference; do not copy that man's face, beard, abacus, blue costume or pose.\nUse economical clear thin dark outlines, small simply drawn manga facial features, broad flat muted colour shapes, solid grouped hair and beard, few large clothing folds and ONE restrained structural cel shadow. Preserve original robe motifs simplified. Preserve elderly face shape, grey hair and beard, hooded eyes, cheek folds and a FEW readable age lines. Do not turn him into a young man or generic bearded elder. No photorealism, glossy skin, individual hair strands, fabric grain, material speckles, airbrush, intricate embroidery, dense wrinkles, border, text, watermark, scenery or invented gestures/props. Keep complete head, topmost hair/bun, pins, ribbons and important props inside frame; leave at least six percent plain background ABOVE highest hair/headwear. Keep source waist-up framing and hand visibility; do not add hands absent from crop. ONE portrait, no contact sheet.\nIdentity details: Stocky cheerful elderly herb gatherer with round full-cheeked warm tan face, smiling tiny eyes viewer right and warm closed smile, simple forehead and cheek creases. Short pointed grey CHIN BEARD and NO moustache. Grey short hair beneath soft taupe-brown cap/headcloth with dark slate-blue forehead band and tied blue tails at viewer left. Slate-blue short outer robe, ivory rolled sleeves and brown crossing inner robe with pale collar, tan rope waist belt. Brown wicker BACK BASKET behind viewer-left shoulder full of broad grouped green leaves, thick tan rope straps. ONE hand at lower viewer right holds ONE cord-tied upright bunch of green herbs by stems, other arm relaxed at lower crop. Preserve round old face, chin beard, cap and held herb bunch. Plain broad leaves and sparse basket lattice.",
+      "actual_input_roles": [
+        {
+          "path": "assets/local/portraits/pool/male_old/gatherer_male_old_03.png",
+          "sha256": "8b12f098a5b134f00df0d40f91e625227ba952978df81f77e01bbe0c6c3c5d09",
+          "role": "edit_target_identity_pose_costume_and_props"
+        },
+        {
+          "path": "art_sources/refresh_20261019/approved_samples/02_portrait.png",
+          "sha256": "139f85deb18db95d129b9e3e31db95460f47b934a7a68a4f006b95f8ad53c3fe",
+          "role": "approved_c_drawing_style_only_do_not_copy_identity"
+        }
+      ],
+      "session": "20261021_portrait_pool_07"
+    },
+    {
+      "id": "65fda54f3626f732",
+      "batch": "03_portrait_pool",
+      "kind": "existing",
+      "label": "assets/local/portraits/pool/male_old/gatherer_male_old_04.png",
+      "source": "assets/local/portraits/pool/male_old/gatherer_male_old_04.png",
+      "output": "art_sources/refresh_20261019/batches/03_portrait_pool/output/existing/local/portraits/pool/male_old/gatherer_male_old_04.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/local/portraits/pool/male_old/gatherer_male_old_04.png",
+        "sha256": "209621fe1e8a3ebab2fe7e6ff40c4d8cf97fba63cc3f6aa0244e20d8eae77506",
+        "format": "PNG",
+        "dimensions": [
+          512,
+          640
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          4,
+          5
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_generated",
+      "tool_refs": [
+        "assets/local/portraits/pool/male_old/gatherer_male_old_04.png",
+        "art_sources/refresh_20261019/approved_samples/02_portrait.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/03_portrait_pool/output/prompts/65fda54f3626f732.txt",
+      "newly_generated": true,
+      "sha256": "68e60090a4f0790c82f04fcc23f7e91cda2a4b8e7eede86da44dff4efa70221b",
+      "native_dimensions": [
+        1122,
+        1402
+      ],
+      "native_mode": "RGB",
+      "alpha_extrema": null,
+      "tool_logical_path": "C:\\Users\\Kuroro\\.codex\\generated_images\\01a15bd8-ea44-7b52-a757-df11f7e1379f\\exec-24a0cd14-638c-4c3b-aaa8-13f04984a490.png",
+      "tool_physical_path": "D:\\claude\\flash\\.tmp\\imagegen_storage\\generated_images\\01a15bd8-ea44-7b52-a757-df11f7e1379f\\exec-24a0cd14-638c-4c3b-aaa8-13f04984a490.png",
+      "input_hashes": [
+        {
+          "path": "assets/local/portraits/pool/male_old/gatherer_male_old_04.png",
+          "sha256": "209621fe1e8a3ebab2fe7e6ff40c4d8cf97fba63cc3f6aa0244e20d8eae77506"
+        },
+        {
+          "path": "art_sources/refresh_20261019/approved_samples/02_portrait.png",
+          "sha256": "139f85deb18db95d129b9e3e31db95460f47b934a7a68a4f006b95f8ad53c3fe"
+        }
+      ],
+      "review": "Visually checked identity/content, category style and complete composition; integration separate.",
+      "target_dimensions": [
+        512,
+        640
+      ],
+      "size_matches_technical_source": false,
+      "integration_status": "candidate_only_not_runtime_integrated",
+      "size_note": "Native bytes retained; runtime crop/scale remains separate. Target dimensions are not claimed as delivered dimensions.",
+      "actual_prompt": "Use case: style-transfer / identity-preserve.\nAsset: ONE independent waist-up elderly male portrait for a 2D Chinese cultivation RPG, target 512x640, opaque muted grey-green background. Measure actual native size separately.\nImage 1 is the EDIT TARGET: preserve this individual man's face, old age, build, hairstyle, beard pattern, view, costume, pose and exact props. Image 2 is ONLY the approved C drawing style reference; do not copy that man's face, beard, abacus, blue costume or pose.\nUse economical clear thin dark outlines, small simply drawn manga facial features, broad flat muted colour shapes, solid grouped hair and beard, few large clothing folds and ONE restrained structural cel shadow. Preserve original robe motifs simplified. Preserve elderly face shape, grey hair and beard, hooded eyes, cheek folds and a FEW readable age lines. Do not turn him into a young man or generic bearded elder. No photorealism, glossy skin, individual hair strands, fabric grain, material speckles, airbrush, intricate embroidery, dense wrinkles, border, text, watermark, scenery or invented gestures/props. Keep complete head, topmost hair/bun, pins, ribbons and important props inside frame; leave at least six percent plain background ABOVE highest hair/headwear. Keep source waist-up framing and hand visibility; do not add hands absent from crop. ONE portrait, no contact sheet.\nIdentity details: Very slender elderly herb gatherer with long narrow pale tan face, small MOLE below viewer-left eye, gently drooping eyes viewer right and faint closed smile. Completely CLEAN SHAVEN, NO beard or moustache; a few clear forehead and cheek age lines. Silver-grey hair in LOW nape bun tied brown ribbon tails, two long front locks. Worn brown sleeveless vest with ragged shoulder edges over slate-blue short robe and ivory rolled sleeves, pale crossing collar, tan rope belt. ONE hand near lower viewer-left chest grips thick tan rope strap attached to wicker BACK BASKET behind viewer-left shoulder, containing grouped pale ochre roots and a few dry herb sprigs. Other forearm descends near crop viewer right. Preserve clean-shaven thin old face, mole, low bun and rope grip; simple broad root shapes and sparse basket weaving.",
+      "actual_input_roles": [
+        {
+          "path": "assets/local/portraits/pool/male_old/gatherer_male_old_04.png",
+          "sha256": "209621fe1e8a3ebab2fe7e6ff40c4d8cf97fba63cc3f6aa0244e20d8eae77506",
+          "role": "edit_target_identity_pose_costume_and_props"
+        },
+        {
+          "path": "art_sources/refresh_20261019/approved_samples/02_portrait.png",
+          "sha256": "139f85deb18db95d129b9e3e31db95460f47b934a7a68a4f006b95f8ad53c3fe",
+          "role": "approved_c_drawing_style_only_do_not_copy_identity"
+        }
+      ],
+      "session": "20261021_portrait_pool_07"
+    },
+    {
+      "id": "b6c7fde84d0370f6",
+      "batch": "03_portrait_pool",
+      "kind": "existing",
+      "label": "assets/local/portraits/pool/male_old/gatherer_male_old_05.png",
+      "source": "assets/local/portraits/pool/male_old/gatherer_male_old_05.png",
+      "output": "art_sources/refresh_20261019/batches/03_portrait_pool/output/existing/local/portraits/pool/male_old/gatherer_male_old_05.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/local/portraits/pool/male_old/gatherer_male_old_05.png",
+        "sha256": "30e84c2ae803cc3769ecd897741957b53de1a033f61719b2767c45fadaea30ca",
+        "format": "PNG",
+        "dimensions": [
+          512,
+          640
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          4,
+          5
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_generated",
+      "tool_refs": [
+        "assets/local/portraits/pool/male_old/gatherer_male_old_05.png",
+        "art_sources/refresh_20261019/approved_samples/02_portrait.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/03_portrait_pool/output/prompts/b6c7fde84d0370f6.txt",
+      "newly_generated": true,
+      "sha256": "94b336f1e30c5891ed47a7a035078f95c8124f0cfdddfef897f34719189bc8e0",
+      "native_dimensions": [
+        1122,
+        1402
+      ],
+      "native_mode": "RGB",
+      "alpha_extrema": null,
+      "tool_logical_path": "C:\\Users\\Kuroro\\.codex\\generated_images\\01a15bd8-ea44-7b52-a757-df11f7e1379f\\exec-760aae2d-fd7a-407b-a1a6-e9f86bbe2c71.png",
+      "tool_physical_path": "D:\\claude\\flash\\.tmp\\imagegen_storage\\generated_images\\01a15bd8-ea44-7b52-a757-df11f7e1379f\\exec-760aae2d-fd7a-407b-a1a6-e9f86bbe2c71.png",
+      "input_hashes": [
+        {
+          "path": "assets/local/portraits/pool/male_old/gatherer_male_old_05.png",
+          "sha256": "30e84c2ae803cc3769ecd897741957b53de1a033f61719b2767c45fadaea30ca"
+        },
+        {
+          "path": "art_sources/refresh_20261019/approved_samples/02_portrait.png",
+          "sha256": "139f85deb18db95d129b9e3e31db95460f47b934a7a68a4f006b95f8ad53c3fe"
+        }
+      ],
+      "review": "Visually checked identity/content, category style and complete composition; integration separate.",
+      "target_dimensions": [
+        512,
+        640
+      ],
+      "size_matches_technical_source": false,
+      "integration_status": "candidate_only_not_runtime_integrated",
+      "size_note": "Native bytes retained; runtime crop/scale remains separate. Target dimensions are not claimed as delivered dimensions.",
+      "actual_prompt": "Use case: style-transfer / identity-preserve.\nAsset: ONE independent waist-up elderly male portrait for a 2D Chinese cultivation RPG, target 512x640, opaque muted grey-green background. Measure actual native size separately.\nImage 1 is the EDIT TARGET: preserve this individual man's face, old age, build, hairstyle, beard pattern, view, costume, pose and exact props. Image 2 is ONLY the approved C drawing style reference; do not copy that man's face, beard, abacus, blue costume or pose.\nUse economical clear thin dark outlines, small simply drawn manga facial features, broad flat muted colour shapes, solid grouped hair and beard, few large clothing folds and ONE restrained structural cel shadow. Preserve original robe motifs simplified. Preserve elderly face shape, grey hair and beard, hooded eyes, cheek folds and a FEW readable age lines. Do not turn him into a young man or generic bearded elder. No photorealism, glossy skin, individual hair strands, fabric grain, material speckles, airbrush, intricate embroidery, dense wrinkles, border, text, watermark, scenery or invented gestures/props. Keep complete head, topmost hair/bun, pins, ribbons and important props inside frame; leave at least six percent plain background ABOVE highest hair/headwear. Keep source waist-up framing and hand visibility; do not add hands absent from crop. ONE portrait, no contact sheet.\nIdentity details: Lean elderly herb gatherer with long angular tan face, faint closed kind smile and small relaxed eyes viewer right, a few forehead/cheek creases. Small short grey chin tuft with NO moustache. Silver-grey hair drawn into ONE thick braid hanging behind viewer-left shoulder, no bun/headwrap. Worn slate-blue short outer robe over ivory rolled sleeves, cream robe with olive-brown crossing inner lapel, brown rope belt. ONE visible hand at viewer-left chest grips thick tan rope shoulder strap; golden-brown wicker BACK BASKET behind viewer-left shoulder holds broad grouped green herbs. Preserve long old face, chin tuft, braid and original rope-grip pose. Simplify leafy silhouettes and weave; no dense veins or grain.",
+      "actual_input_roles": [
+        {
+          "path": "assets/local/portraits/pool/male_old/gatherer_male_old_05.png",
+          "sha256": "30e84c2ae803cc3769ecd897741957b53de1a033f61719b2767c45fadaea30ca",
+          "role": "edit_target_identity_pose_costume_and_props"
+        },
+        {
+          "path": "art_sources/refresh_20261019/approved_samples/02_portrait.png",
+          "sha256": "139f85deb18db95d129b9e3e31db95460f47b934a7a68a4f006b95f8ad53c3fe",
+          "role": "approved_c_drawing_style_only_do_not_copy_identity"
+        }
+      ],
+      "session": "20261021_portrait_pool_07"
+    },
+    {
+      "id": "8bbfeafafb341b56",
+      "batch": "03_portrait_pool",
+      "kind": "existing",
+      "label": "assets/local/portraits/pool/male_old/trader_male_old_01.png",
+      "source": "assets/local/portraits/pool/male_old/trader_male_old_01.png",
+      "output": "art_sources/refresh_20261019/batches/03_portrait_pool/output/existing/local/portraits/pool/male_old/trader_male_old_01.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/local/portraits/pool/male_old/trader_male_old_01.png",
+        "sha256": "d58f8bce52c952c1ec57cf36cc99105be64ed4c1d97ac44512d94f80c0e2fa88",
+        "format": "PNG",
+        "dimensions": [
+          512,
+          640
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          4,
+          5
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_generated",
+      "tool_refs": [
+        "assets/local/portraits/pool/male_old/trader_male_old_01.png",
+        "art_sources/refresh_20261019/approved_samples/02_portrait.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/03_portrait_pool/output/prompts/8bbfeafafb341b56.txt",
+      "newly_generated": true,
+      "sha256": "9b9ba1f15a05dc3341fd2a5f083a0b2693bb9c020acbba40fcf963c03f565e35",
+      "native_dimensions": [
+        1122,
+        1402
+      ],
+      "native_mode": "RGB",
+      "alpha_extrema": null,
+      "tool_logical_path": "C:\\Users\\Kuroro\\.codex\\generated_images\\01a15bd8-ea44-7b52-a757-df11f7e1379f\\exec-64bfd295-9a8c-4c11-b3bf-4f09baa51c1f.png",
+      "tool_physical_path": "D:\\claude\\flash\\.tmp\\imagegen_storage\\generated_images\\01a15bd8-ea44-7b52-a757-df11f7e1379f\\exec-64bfd295-9a8c-4c11-b3bf-4f09baa51c1f.png",
+      "input_hashes": [
+        {
+          "path": "assets/local/portraits/pool/male_old/trader_male_old_01.png",
+          "sha256": "d58f8bce52c952c1ec57cf36cc99105be64ed4c1d97ac44512d94f80c0e2fa88"
+        },
+        {
+          "path": "art_sources/refresh_20261019/approved_samples/02_portrait.png",
+          "sha256": "139f85deb18db95d129b9e3e31db95460f47b934a7a68a4f006b95f8ad53c3fe"
+        }
+      ],
+      "review": "Visually checked identity/content, category style and complete composition; integration separate.",
+      "target_dimensions": [
+        512,
+        640
+      ],
+      "size_matches_technical_source": false,
+      "integration_status": "candidate_only_not_runtime_integrated",
+      "size_note": "Native bytes retained; runtime crop/scale remains separate. Target dimensions are not claimed as delivered dimensions.",
+      "actual_prompt": "Use case: style-transfer / identity-preserve.\nAsset: ONE independent waist-up elderly male portrait for a 2D Chinese cultivation RPG, target 512x640, opaque muted grey-green background. Measure actual native size separately.\nImage 1 is the EDIT TARGET: preserve this individual man's face, old age, build, hairstyle, beard pattern, view, costume, pose and exact props. Image 2 is ONLY the approved C drawing style reference; do not copy that man's face, beard, abacus, blue costume or pose.\nUse economical clear thin dark outlines, small simply drawn manga facial features, broad flat muted colour shapes, solid grouped hair and beard, few large clothing folds and ONE restrained structural cel shadow. Preserve original robe motifs simplified. Preserve elderly face shape, grey hair and beard, hooded eyes, cheek folds and a FEW readable age lines. Do not turn him into a young man or generic bearded elder. No photorealism, glossy skin, individual hair strands, fabric grain, material speckles, airbrush, intricate embroidery, dense wrinkles, border, text, watermark, scenery or invented gestures/props. Keep complete head, topmost hair/bun, pins, ribbons and important props inside frame; leave at least six percent plain background ABOVE highest hair/headwear. Keep source waist-up framing and hand visibility; do not add hands absent from crop. ONE portrait, no contact sheet.\nIdentity details: Very slender elderly merchant with long angular pale tan face, thick grey brows, short diagonal scar across VIEWER-LEFT eyebrow, calm serious eyes viewer right and firm closed mouth, simple forehead and cheek lines. Short pointed grey CHIN BEARD only, NO moustache. Silver-grey hair pulled into long braid behind viewer-left shoulder, loose front locks, no bun. Forest-green outer robe with wide plum-brown lapel bands containing FEW large simple ochre scroll curves, ivory inner robe with olive-brown crossing lapel and cream collar. ONE visible hand at lower centre-right holds CLOSED blue-grey thread-stitched ledger upright against torso. Preserve eyebrow scar, braid, chin beard, single-hand book pose, blank book cover and slim older face.",
+      "actual_input_roles": [
+        {
+          "path": "assets/local/portraits/pool/male_old/trader_male_old_01.png",
+          "sha256": "d58f8bce52c952c1ec57cf36cc99105be64ed4c1d97ac44512d94f80c0e2fa88",
+          "role": "edit_target_identity_pose_costume_and_props"
+        },
+        {
+          "path": "art_sources/refresh_20261019/approved_samples/02_portrait.png",
+          "sha256": "139f85deb18db95d129b9e3e31db95460f47b934a7a68a4f006b95f8ad53c3fe",
+          "role": "approved_c_drawing_style_only_do_not_copy_identity"
+        }
+      ],
+      "session": "20261021_portrait_pool_07"
+    },
+    {
+      "id": "7c2e99cc8972b28c",
+      "batch": "03_portrait_pool",
+      "kind": "existing",
+      "label": "assets/local/portraits/pool/male_old/trader_male_old_02.png",
+      "source": "assets/local/portraits/pool/male_old/trader_male_old_02.png",
+      "output": "art_sources/refresh_20261019/batches/03_portrait_pool/output/existing/local/portraits/pool/male_old/trader_male_old_02.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/local/portraits/pool/male_old/trader_male_old_02.png",
+        "sha256": "c4d225528b157de995ed8b303e4ca8e6c55a4621dded69ec97ea467ed74c2c9f",
+        "format": "PNG",
+        "dimensions": [
+          512,
+          640
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          4,
+          5
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_generated",
+      "tool_refs": [
+        "assets/local/portraits/pool/male_old/trader_male_old_02.png",
+        "art_sources/refresh_20261019/approved_samples/02_portrait.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/03_portrait_pool/output/prompts/7c2e99cc8972b28c.txt",
+      "newly_generated": true,
+      "sha256": "f6c8f119e1e075b02011dc1219ca26e59ac788807e10307073c9de67f57410f9",
+      "native_dimensions": [
+        1122,
+        1402
+      ],
+      "native_mode": "RGB",
+      "alpha_extrema": null,
+      "tool_logical_path": "C:\\Users\\Kuroro\\.codex\\generated_images\\01a15bd8-ea44-7b52-a757-df11f7e1379f\\exec-14944594-e497-4cf1-8bcd-f854d0e684ed.png",
+      "tool_physical_path": "D:\\claude\\flash\\.tmp\\imagegen_storage\\generated_images\\01a15bd8-ea44-7b52-a757-df11f7e1379f\\exec-14944594-e497-4cf1-8bcd-f854d0e684ed.png",
+      "input_hashes": [
+        {
+          "path": "assets/local/portraits/pool/male_old/trader_male_old_02.png",
+          "sha256": "c4d225528b157de995ed8b303e4ca8e6c55a4621dded69ec97ea467ed74c2c9f"
+        },
+        {
+          "path": "art_sources/refresh_20261019/approved_samples/02_portrait.png",
+          "sha256": "139f85deb18db95d129b9e3e31db95460f47b934a7a68a4f006b95f8ad53c3fe"
+        }
+      ],
+      "review": "Visually checked identity/content, category style and complete composition; integration separate.",
+      "target_dimensions": [
+        512,
+        640
+      ],
+      "size_matches_technical_source": false,
+      "integration_status": "candidate_only_not_runtime_integrated",
+      "size_note": "Native bytes retained; runtime crop/scale remains separate. Target dimensions are not claimed as delivered dimensions.",
+      "actual_prompt": "Use case: style-transfer / identity-preserve.\nAsset: ONE independent waist-up elderly male portrait for a 2D Chinese cultivation RPG, target 512x640, opaque muted grey-green background. Measure actual native size separately.\nImage 1 is the EDIT TARGET: preserve this individual man's face, old age, build, hairstyle, beard pattern, view, costume, pose and exact props. Image 2 is ONLY the approved C drawing style reference; do not copy that man's face, beard, abacus, blue costume or pose.\nUse economical clear thin dark outlines, small simply drawn manga facial features, broad flat muted colour shapes, solid grouped hair and beard, few large clothing folds and ONE restrained structural cel shadow. Preserve original robe motifs simplified. Preserve elderly face shape, grey hair and beard, hooded eyes, cheek folds and a FEW readable age lines. Do not turn him into a young man or generic bearded elder. No photorealism, glossy skin, individual hair strands, fabric grain, material speckles, airbrush, intricate embroidery, dense wrinkles, border, text, watermark, scenery or invented gestures/props. Keep complete head, topmost hair/bun, pins, ribbons and important props inside frame; leave at least six percent plain background ABOVE highest hair/headwear. Keep source waist-up framing and hand visibility; do not add hands absent from crop. ONE portrait, no contact sheet.\nIdentity details: Stocky cheerful elderly merchant with very broad round warm tan face, smiling tiny eyes viewer right, closed contented smile and a few forehead/cheek age lines. Completely CLEAN SHAVEN, no moustache/beard. Silver-grey hair in small HIGH round bun tied long muted olive-green ribbon tails behind viewer left. Dark forest-green robe with plain wide plum-brown edging and thin tan piping, muted brown inner crossed robe and ivory collar. BOTH hands hold ONE wide wooden ABACUS across lower waist, tilted slightly up toward viewer right: viewer-left hand on upper-left edge over beads and viewer-right hand supports right underside. Preserve round old face, high bun, clean-shaven identity and exact original abacus grip. Simple grouped beads and flat wood, no grain.",
+      "actual_input_roles": [
+        {
+          "path": "assets/local/portraits/pool/male_old/trader_male_old_02.png",
+          "sha256": "c4d225528b157de995ed8b303e4ca8e6c55a4621dded69ec97ea467ed74c2c9f",
+          "role": "edit_target_identity_pose_costume_and_props"
+        },
+        {
+          "path": "art_sources/refresh_20261019/approved_samples/02_portrait.png",
+          "sha256": "139f85deb18db95d129b9e3e31db95460f47b934a7a68a4f006b95f8ad53c3fe",
+          "role": "approved_c_drawing_style_only_do_not_copy_identity"
+        }
+      ],
+      "session": "20261021_portrait_pool_07"
+    },
+    {
+      "id": "862805acac833da5",
+      "batch": "03_portrait_pool",
+      "kind": "existing",
+      "label": "assets/local/portraits/pool/male_old/trader_male_old_03.png",
+      "source": "assets/local/portraits/pool/male_old/trader_male_old_03.png",
+      "output": "art_sources/refresh_20261019/batches/03_portrait_pool/output/existing/local/portraits/pool/male_old/trader_male_old_03.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/local/portraits/pool/male_old/trader_male_old_03.png",
+        "sha256": "96c94e0e19d9b354a937295bbf39ff62670356033dff7076a50300defe2bb33a",
+        "format": "PNG",
+        "dimensions": [
+          512,
+          640
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          4,
+          5
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_generated",
+      "tool_refs": [
+        "assets/local/portraits/pool/male_old/trader_male_old_03.png",
+        "art_sources/refresh_20261019/approved_samples/02_portrait.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/03_portrait_pool/output/prompts/862805acac833da5.txt",
+      "newly_generated": true,
+      "sha256": "42de438714f60648cef5abd85e85776753263124300a7b6c9096bf2f6bf40d9a",
+      "native_dimensions": [
+        1122,
+        1402
+      ],
+      "native_mode": "RGB",
+      "alpha_extrema": null,
+      "tool_logical_path": "C:\\Users\\Kuroro\\.codex\\generated_images\\01a15bd8-ea44-7b52-a757-df11f7e1379f\\exec-5e527d6b-a617-4c7e-a862-863dfbb8e030.png",
+      "tool_physical_path": "D:\\claude\\flash\\.tmp\\imagegen_storage\\generated_images\\01a15bd8-ea44-7b52-a757-df11f7e1379f\\exec-5e527d6b-a617-4c7e-a862-863dfbb8e030.png",
+      "input_hashes": [
+        {
+          "path": "assets/local/portraits/pool/male_old/trader_male_old_03.png",
+          "sha256": "96c94e0e19d9b354a937295bbf39ff62670356033dff7076a50300defe2bb33a"
+        },
+        {
+          "path": "art_sources/refresh_20261019/approved_samples/02_portrait.png",
+          "sha256": "139f85deb18db95d129b9e3e31db95460f47b934a7a68a4f006b95f8ad53c3fe"
+        }
+      ],
+      "review": "Visually checked identity/content, category style and complete composition; integration separate.",
+      "target_dimensions": [
+        512,
+        640
+      ],
+      "size_matches_technical_source": false,
+      "integration_status": "candidate_only_not_runtime_integrated",
+      "size_note": "Native bytes retained; runtime crop/scale remains separate. Target dimensions are not claimed as delivered dimensions.",
+      "actual_prompt": "Use case: style-transfer / identity-preserve.\nAsset: ONE independent waist-up elderly male portrait for a 2D Chinese cultivation RPG, target 512x640, opaque muted grey-green background. Measure actual native size separately.\nImage 1 is the EDIT TARGET: preserve this individual man's face, old age, build, hairstyle, beard pattern, view, costume, pose and exact props. Image 2 is ONLY the approved C drawing style reference; do not copy that man's face, beard, abacus, blue costume or pose.\nUse economical clear thin dark outlines, small simply drawn manga facial features, broad flat muted colour shapes, solid grouped hair and beard, few large clothing folds and ONE restrained structural cel shadow. Preserve original robe motifs simplified. Preserve elderly face shape, grey hair and beard, hooded eyes, cheek folds and a FEW readable age lines. Do not turn him into a young man or generic bearded elder. No photorealism, glossy skin, individual hair strands, fabric grain, material speckles, airbrush, intricate embroidery, dense wrinkles, border, text, watermark, scenery or invented gestures/props. Keep complete head, topmost hair/bun, pins, ribbons and important props inside frame; leave at least six percent plain background ABOVE highest hair/headwear. Keep source waist-up framing and hand visibility; do not add hands absent from crop. ONE portrait, no contact sheet.\nIdentity details: Very slender elderly merchant with long narrow pale tan face, fine grey eyebrows, relaxed narrow eyes viewer right and faint knowing closed smile. Small pointed narrow grey CHIN GOATEE only, NO moustache. Grey hair in small HIGH bun tied dark brown ribbon with tiny plain dull-gold square clasp, long front locks. Dark forest-green outer robe with plain plum-brown crossing lapels and thin ochre piping, ivory inner collar and brown waist sash. ONE visible hand at lower centre-right grips a CLOSED cream paper folding FAN with dark brown ribs, angled up toward viewer right. Preserve thin old face, chin tuft, high bun, closed fan and exact one-hand pose.",
+      "actual_input_roles": [
+        {
+          "path": "assets/local/portraits/pool/male_old/trader_male_old_03.png",
+          "sha256": "96c94e0e19d9b354a937295bbf39ff62670356033dff7076a50300defe2bb33a",
+          "role": "edit_target_identity_pose_costume_and_props"
+        },
+        {
+          "path": "art_sources/refresh_20261019/approved_samples/02_portrait.png",
+          "sha256": "139f85deb18db95d129b9e3e31db95460f47b934a7a68a4f006b95f8ad53c3fe",
+          "role": "approved_c_drawing_style_only_do_not_copy_identity"
+        }
+      ],
+      "session": "20261021_portrait_pool_07"
+    },
+    {
+      "id": "cf86d351867b36c4",
+      "batch": "03_portrait_pool",
+      "kind": "existing",
+      "label": "assets/local/portraits/pool/male_old/trader_male_old_04.png",
+      "source": "assets/local/portraits/pool/male_old/trader_male_old_04.png",
+      "output": "art_sources/refresh_20261019/batches/03_portrait_pool/output/existing/local/portraits/pool/male_old/trader_male_old_04.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/local/portraits/pool/male_old/trader_male_old_04.png",
+        "sha256": "89b75f05a6de7c8ee6fafd13af75252e775654955309d7a26e36818668491ece",
+        "format": "PNG",
+        "dimensions": [
+          512,
+          640
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          4,
+          5
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_generated",
+      "tool_refs": [
+        "assets/local/portraits/pool/male_old/trader_male_old_04.png",
+        "art_sources/refresh_20261019/approved_samples/02_portrait.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/03_portrait_pool/output/prompts/cf86d351867b36c4.txt",
+      "newly_generated": true,
+      "sha256": "18591c7708acfec04b96fd3ac65165c4d336282373533e314504bf86d8e66c66",
+      "native_dimensions": [
+        1122,
+        1402
+      ],
+      "native_mode": "RGB",
+      "alpha_extrema": null,
+      "tool_logical_path": "C:\\Users\\Kuroro\\.codex\\generated_images\\01a15bd8-ea44-7b52-a757-df11f7e1379f\\exec-ff577e40-07d1-4a45-9d61-c3b1a9954e1b.png",
+      "tool_physical_path": "D:\\claude\\flash\\.tmp\\imagegen_storage\\generated_images\\01a15bd8-ea44-7b52-a757-df11f7e1379f\\exec-ff577e40-07d1-4a45-9d61-c3b1a9954e1b.png",
+      "input_hashes": [
+        {
+          "path": "assets/local/portraits/pool/male_old/trader_male_old_04.png",
+          "sha256": "89b75f05a6de7c8ee6fafd13af75252e775654955309d7a26e36818668491ece"
+        },
+        {
+          "path": "art_sources/refresh_20261019/approved_samples/02_portrait.png",
+          "sha256": "139f85deb18db95d129b9e3e31db95460f47b934a7a68a4f006b95f8ad53c3fe"
+        }
+      ],
+      "review": "Visually checked identity/content, category style and complete composition; integration separate.",
+      "target_dimensions": [
+        512,
+        640
+      ],
+      "size_matches_technical_source": false,
+      "integration_status": "candidate_only_not_runtime_integrated",
+      "size_note": "Native bytes retained; runtime crop/scale remains separate. Target dimensions are not claimed as delivered dimensions.",
+      "actual_prompt": "Use case: style-transfer / identity-preserve.\nAsset: ONE independent waist-up elderly male portrait for a 2D Chinese cultivation RPG, target 512x640, opaque muted grey-green background. Measure actual native size separately.\nImage 1 is the EDIT TARGET: preserve this individual man's face, old age, build, hairstyle, beard pattern, view, costume, pose and exact props. Image 2 is ONLY the approved C drawing style reference; do not copy that man's face, beard, abacus, blue costume or pose.\nUse economical clear thin dark outlines, small simply drawn manga facial features, broad flat muted colour shapes, solid grouped hair and beard, few large clothing folds and ONE restrained structural cel shadow. Preserve original robe motifs simplified. Preserve elderly face shape, grey hair and beard, hooded eyes, cheek folds and a FEW readable age lines. Do not turn him into a young man or generic bearded elder. No photorealism, glossy skin, individual hair strands, fabric grain, material speckles, airbrush, intricate embroidery, dense wrinkles, border, text, watermark, scenery or invented gestures/props. Keep complete head, topmost hair/bun, pins, ribbons and important props inside frame; leave at least six percent plain background ABOVE highest hair/headwear. Keep source waist-up framing and hand visibility; do not add hands absent from crop. ONE portrait, no contact sheet.\nIdentity details: Sturdy elderly merchant with broad long tan face, thick grey brows, serious calm eyes viewer right, grey MOUSTACHE and narrow pointed LONG grey chin beard reaching collar, a few forehead/cheek age lines. Silver-grey hair HALF DOWN to shoulders with small upper bun tied brown cloth ribbon tails, loose front locks. Deep forest-green robe with long plain dark brown edging and narrow tan piping, muted plum-brown crossing inner robe and ivory collar, brown belt. Brown cloth MONEY POUCH with round pale jade pendant hangs at VIEWER-LEFT waist. ONE visible hand at viewer-right waist rests loosely against brown sash, not holding a fan/book. Preserve broad old face, half-down hair, long beard, pouch side and hand at waist.",
+      "actual_input_roles": [
+        {
+          "path": "assets/local/portraits/pool/male_old/trader_male_old_04.png",
+          "sha256": "89b75f05a6de7c8ee6fafd13af75252e775654955309d7a26e36818668491ece",
+          "role": "edit_target_identity_pose_costume_and_props"
+        },
+        {
+          "path": "art_sources/refresh_20261019/approved_samples/02_portrait.png",
+          "sha256": "139f85deb18db95d129b9e3e31db95460f47b934a7a68a4f006b95f8ad53c3fe",
+          "role": "approved_c_drawing_style_only_do_not_copy_identity"
+        }
+      ],
+      "session": "20261021_portrait_pool_07"
+    },
+    {
+      "id": "1ada1948122eae2c",
+      "batch": "03_portrait_pool",
+      "kind": "existing",
+      "label": "assets/local/portraits/pool/male_old/trader_male_old_05.png",
+      "source": "assets/local/portraits/pool/male_old/trader_male_old_05.png",
+      "output": "art_sources/refresh_20261019/batches/03_portrait_pool/output/existing/local/portraits/pool/male_old/trader_male_old_05.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/local/portraits/pool/male_old/trader_male_old_05.png",
+        "sha256": "e7f02077db008ac343c499f5d19eabeb8ed8298be1fd4574cc423b89b88862cf",
+        "format": "PNG",
+        "dimensions": [
+          512,
+          640
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          4,
+          5
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_generated",
+      "tool_refs": [
+        "assets/local/portraits/pool/male_old/trader_male_old_05.png",
+        "art_sources/refresh_20261019/approved_samples/02_portrait.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/03_portrait_pool/output/prompts/1ada1948122eae2c.txt",
+      "newly_generated": true,
+      "sha256": "50c7ce1a82e3cb4e81925330a34a0b2fdd5a701a94b7d119c64a43a92f1d7e60",
+      "native_dimensions": [
+        1122,
+        1402
+      ],
+      "native_mode": "RGB",
+      "alpha_extrema": null,
+      "tool_logical_path": "C:\\Users\\Kuroro\\.codex\\generated_images\\01a15bd8-ea44-7b52-a757-df11f7e1379f\\exec-3aee8a1f-0915-4735-8c59-3de180fb612b.png",
+      "tool_physical_path": "D:\\claude\\flash\\.tmp\\imagegen_storage\\generated_images\\01a15bd8-ea44-7b52-a757-df11f7e1379f\\exec-3aee8a1f-0915-4735-8c59-3de180fb612b.png",
+      "input_hashes": [
+        {
+          "path": "assets/local/portraits/pool/male_old/trader_male_old_05.png",
+          "sha256": "e7f02077db008ac343c499f5d19eabeb8ed8298be1fd4574cc423b89b88862cf"
+        },
+        {
+          "path": "art_sources/refresh_20261019/approved_samples/02_portrait.png",
+          "sha256": "139f85deb18db95d129b9e3e31db95460f47b934a7a68a4f006b95f8ad53c3fe"
+        }
+      ],
+      "review": "Visually checked identity/content, category style and complete composition; integration separate.",
+      "target_dimensions": [
+        512,
+        640
+      ],
+      "size_matches_technical_source": false,
+      "integration_status": "candidate_only_not_runtime_integrated",
+      "size_note": "Native bytes retained; runtime crop/scale remains separate. Target dimensions are not claimed as delivered dimensions.",
+      "actual_prompt": "Use case: style-transfer / identity-preserve.\nAsset: ONE independent waist-up elderly male portrait for a 2D Chinese cultivation RPG, target 512x640, opaque muted grey-green background. Measure actual native size separately.\nImage 1 is the EDIT TARGET: preserve this individual man's face, old age, build, hairstyle, beard pattern, view, costume, pose and exact props. Image 2 is ONLY the approved C drawing style reference; do not copy that man's face, beard, abacus, blue costume or pose.\nUse economical clear thin dark outlines, small simply drawn manga facial features, broad flat muted colour shapes, solid grouped hair and beard, few large clothing folds and ONE restrained structural cel shadow. Preserve original robe motifs simplified. Preserve elderly face shape, grey hair and beard, hooded eyes, cheek folds and a FEW readable age lines. Do not turn him into a young man or generic bearded elder. No photorealism, glossy skin, individual hair strands, fabric grain, material speckles, airbrush, intricate embroidery, dense wrinkles, border, text, watermark, scenery or invented gestures/props. Keep complete head, topmost hair/bun, pins, ribbons and important props inside frame; leave at least six percent plain background ABOVE highest hair/headwear. Keep source waist-up framing and hand visibility; do not add hands absent from crop. ONE portrait, no contact sheet.\nIdentity details: Slender elderly merchant with long warm pale tan face, gently smiling small eyes viewer right and slight closed smile, a few simple forehead and eye creases. Neat short grey MOUSTACHE only, NO chin beard. Grey hair in small HIGH bun tied dark brown ribbon tails, long front locks. Dark forest-green robe with broad plain brown lapel bands, plum-brown crossing inner robe and ivory collar. BOTH hands hold ONE CLOSED dark BROWN thread-stitched ledger at lower centre-right, tilted upright slightly right; viewer-left hand along upper-left edge and viewer-right hand supports bottom. Blank brown cover, no writing. Preserve moustache-only, slim older face and brown book/hand arrangement.",
+      "actual_input_roles": [
+        {
+          "path": "assets/local/portraits/pool/male_old/trader_male_old_05.png",
+          "sha256": "e7f02077db008ac343c499f5d19eabeb8ed8298be1fd4574cc423b89b88862cf",
+          "role": "edit_target_identity_pose_costume_and_props"
+        },
+        {
+          "path": "art_sources/refresh_20261019/approved_samples/02_portrait.png",
+          "sha256": "139f85deb18db95d129b9e3e31db95460f47b934a7a68a4f006b95f8ad53c3fe",
+          "role": "approved_c_drawing_style_only_do_not_copy_identity"
+        }
+      ],
+      "session": "20261021_portrait_pool_07"
+    },
+    {
+      "id": "7cc60f4c0b3536c2",
+      "batch": "03_portrait_pool",
+      "kind": "existing",
+      "label": "assets/local/portraits/pool/male_old/trader_male_old_06.png",
+      "source": "assets/local/portraits/pool/male_old/trader_male_old_06.png",
+      "output": "art_sources/refresh_20261019/batches/03_portrait_pool/output/existing/local/portraits/pool/male_old/trader_male_old_06.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/local/portraits/pool/male_old/trader_male_old_06.png",
+        "sha256": "b1210736e7b01f9d513df1d4f1909315b1f14ee462866e587e9c8b4aec657401",
+        "format": "PNG",
+        "dimensions": [
+          512,
+          640
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          4,
+          5
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_generated",
+      "tool_refs": [
+        "assets/local/portraits/pool/male_old/trader_male_old_06.png",
+        "art_sources/refresh_20261019/approved_samples/02_portrait.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/03_portrait_pool/output/prompts/7cc60f4c0b3536c2.txt",
+      "newly_generated": true,
+      "sha256": "51f11703062c11e5599ad08eba0588cf40305728e71ce0195c51c1a4479d5d1d",
+      "native_dimensions": [
+        1122,
+        1402
+      ],
+      "native_mode": "RGB",
+      "alpha_extrema": null,
+      "tool_logical_path": "C:\\Users\\Kuroro\\.codex\\generated_images\\01a15bd8-ea44-7b52-a757-df11f7e1379f\\exec-aa0e3d28-fd9c-44a8-829f-a6be2f6c8b59.png",
+      "tool_physical_path": "D:\\claude\\flash\\.tmp\\imagegen_storage\\generated_images\\01a15bd8-ea44-7b52-a757-df11f7e1379f\\exec-aa0e3d28-fd9c-44a8-829f-a6be2f6c8b59.png",
+      "input_hashes": [
+        {
+          "path": "assets/local/portraits/pool/male_old/trader_male_old_06.png",
+          "sha256": "b1210736e7b01f9d513df1d4f1909315b1f14ee462866e587e9c8b4aec657401"
+        },
+        {
+          "path": "art_sources/refresh_20261019/approved_samples/02_portrait.png",
+          "sha256": "139f85deb18db95d129b9e3e31db95460f47b934a7a68a4f006b95f8ad53c3fe"
+        }
+      ],
+      "review": "Visually checked identity/content, category style and complete composition; integration separate.",
+      "actual_prompt": "Use case: style-transfer / identity-preserve.\nAsset: ONE independent waist-up elderly male portrait for a 2D Chinese cultivation RPG, target 512x640, opaque muted grey-green background. Measure actual native size separately.\nImage 1 is the EDIT TARGET: preserve this individual man's face, old age, build, hairstyle, beard pattern, view, costume, pose and exact props. Image 2 is ONLY the approved C drawing style reference; do not copy that man's face, beard, abacus, blue costume or pose.\nUse economical clear thin dark outlines, small simply drawn manga facial features, broad flat muted colour shapes, solid grouped hair and beard, few large clothing folds and ONE restrained structural cel shadow. Preserve original robe motifs simplified. Preserve elderly face shape, grey hair and beard, hooded eyes, cheek folds and a FEW readable age lines. Do not turn him into a young man or generic bearded elder. No photorealism, glossy skin, individual hair strands, fabric grain, material speckles, airbrush, intricate embroidery, dense wrinkles, border, text, watermark, scenery or invented gestures/props. Keep complete head, topmost hair/bun, pins, ribbons and important props inside frame; leave at least six percent plain background ABOVE highest hair/headwear. Keep source waist-up framing and hand visibility; do not add hands absent from crop. ONE portrait, no contact sheet.\nIdentity details: Sturdy elderly merchant with broad square tan face, smiling narrow eyes viewer right, slightly amused closed smile and simple forehead/cheek age creases. Short FULL grey CHIN BEARD with NO moustache, small gap below lower lip. Grey hair half down to shoulders tied LOW behind neck with brown ribbon, no high bun. Dark forest-green outer robe with broad plain plum-brown lapels and narrow tan piping, dark plum crossed inner robe and ivory collar. BOTH hands hold a SMALL wooden ABACUS across lower chest almost horizontal tilted slightly down toward viewer right: viewer-left hand grips left frame over beads and viewer-right hand supports right edge. Preserve broad old face, short full chin beard and low hair tie. Plain grouped beads and flat brown wood.",
+      "actual_input_roles": [
+        {
+          "path": "assets/local/portraits/pool/male_old/trader_male_old_06.png",
+          "sha256": "b1210736e7b01f9d513df1d4f1909315b1f14ee462866e587e9c8b4aec657401",
+          "role": "edit_target_identity_pose_costume_and_props"
+        },
+        {
+          "path": "art_sources/refresh_20261019/approved_samples/02_portrait.png",
+          "sha256": "139f85deb18db95d129b9e3e31db95460f47b934a7a68a4f006b95f8ad53c3fe",
+          "role": "approved_c_drawing_style_only_do_not_copy_identity"
+        }
+      ],
+      "session": "20261021_portrait_pool_07",
+      "target_dimensions": [
+        512,
+        640
+      ],
+      "size_matches_technical_source": false,
+      "integration_status": "candidate_only_not_runtime_integrated",
+      "size_note": "Native bytes retained; runtime crop/scale remains separate. Target dimensions are not claimed as delivered dimensions."
+    },
+    {
+      "id": "a3f73485c6a6a973",
+      "batch": "03_portrait_pool",
+      "kind": "existing",
+      "label": "assets/local/portraits/pool/male_old/visitor_male_old_01.png",
+      "source": "assets/local/portraits/pool/male_old/visitor_male_old_01.png",
+      "output": "art_sources/refresh_20261019/batches/03_portrait_pool/output/existing/local/portraits/pool/male_old/visitor_male_old_01.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/local/portraits/pool/male_old/visitor_male_old_01.png",
+        "sha256": "857163c246defeb177e7e546880f1292d707bf672852dbb6bbea8aa1d1c14f00",
+        "format": "PNG",
+        "dimensions": [
+          512,
+          640
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          4,
+          5
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_generated",
+      "tool_refs": [
+        "assets/local/portraits/pool/male_old/visitor_male_old_01.png",
+        "art_sources/refresh_20261019/approved_samples/02_portrait.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/03_portrait_pool/output/prompts/a3f73485c6a6a973.txt",
+      "newly_generated": true,
+      "sha256": "1f975845babaa064cebd441316750d39d6a1a8dc34b4c158e50172f675066a35",
+      "native_dimensions": [
+        1122,
+        1402
+      ],
+      "native_mode": "RGB",
+      "alpha_extrema": null,
+      "tool_logical_path": "C:\\Users\\Kuroro\\.codex\\generated_images\\01a15bd8-ea44-7b52-a757-df11f7e1379f\\exec-3713b5f6-f3bd-441a-88ad-c90b735bea00.png",
+      "tool_physical_path": "D:\\claude\\flash\\.tmp\\imagegen_storage\\generated_images\\01a15bd8-ea44-7b52-a757-df11f7e1379f\\exec-3713b5f6-f3bd-441a-88ad-c90b735bea00.png",
+      "input_hashes": [
+        {
+          "path": "assets/local/portraits/pool/male_old/visitor_male_old_01.png",
+          "sha256": "857163c246defeb177e7e546880f1292d707bf672852dbb6bbea8aa1d1c14f00"
+        },
+        {
+          "path": "art_sources/refresh_20261019/approved_samples/02_portrait.png",
+          "sha256": "139f85deb18db95d129b9e3e31db95460f47b934a7a68a4f006b95f8ad53c3fe"
+        }
+      ],
+      "review": "Visually checked identity/content, category style and complete composition; integration separate.",
+      "actual_prompt": "Use case: style-transfer / identity-preserve.\nAsset: ONE independent waist-up elderly male portrait for a 2D Chinese cultivation RPG, target 512x640, opaque muted grey-green background. Measure actual native size separately.\nImage 1 is the EDIT TARGET: preserve this individual man's face, old age, build, hairstyle, beard pattern, view, costume, pose and exact props. Image 2 is ONLY the approved C drawing style reference; do not copy that man's face, beard, abacus, blue costume or pose.\nUse economical clear thin dark outlines, small simply drawn manga facial features, broad flat muted colour shapes, solid grouped hair and beard, few large clothing folds and ONE restrained structural cel shadow. Preserve original robe motifs simplified. Preserve elderly face shape, grey hair and beard, hooded eyes, cheek folds and a FEW readable age lines. Do not turn him into a young man or generic bearded elder. No photorealism, glossy skin, individual hair strands, fabric grain, material speckles, airbrush, intricate embroidery, dense wrinkles, border, text, watermark, scenery or invented gestures/props. Keep complete head, topmost hair/bun, pins, ribbons and important props inside frame; leave at least six percent plain background ABOVE highest hair/headwear. Keep source waist-up framing and hand visibility; do not add hands absent from crop. ONE portrait, no contact sheet.\nIdentity details: Stocky elderly traveller with round warm tan face, gently drooping grey eyebrows and eyes viewer right, small concerned closed mouth and simple age creases. Thin grey moustache and narrow pointed chin goatee to collar. Grey hair in small HIGH bun tied long rust-red ribbon tails behind viewer left, loose front locks. Brick-red sleeveless outer vest over charcoal robe, broad black lapel bands with FEW large simple red flame motifs, grey cross lapels and ivory collar, dark sash. ONE visible hand at lower viewer right holds one CLOSED short tan bamboo scroll, bound by dark cord near bottom, angled upright right. Preserve round older face, moustache/goatee and bamboo roll; no exposed text or extra prop.",
+      "actual_input_roles": [
+        {
+          "path": "assets/local/portraits/pool/male_old/visitor_male_old_01.png",
+          "sha256": "857163c246defeb177e7e546880f1292d707bf672852dbb6bbea8aa1d1c14f00",
+          "role": "edit_target_identity_pose_costume_and_props"
+        },
+        {
+          "path": "art_sources/refresh_20261019/approved_samples/02_portrait.png",
+          "sha256": "139f85deb18db95d129b9e3e31db95460f47b934a7a68a4f006b95f8ad53c3fe",
+          "role": "approved_c_drawing_style_only_do_not_copy_identity"
+        }
+      ],
+      "session": "20261021_portrait_pool_07",
+      "target_dimensions": [
+        512,
+        640
+      ],
+      "size_matches_technical_source": false,
+      "integration_status": "candidate_only_not_runtime_integrated",
+      "size_note": "Native bytes retained; runtime crop/scale remains separate. Target dimensions are not claimed as delivered dimensions."
+    },
+    {
+      "id": "9c1ace04ccd4a51a",
+      "batch": "03_portrait_pool",
+      "kind": "existing",
+      "label": "assets/local/portraits/pool/male_old/visitor_male_old_02.png",
+      "source": "assets/local/portraits/pool/male_old/visitor_male_old_02.png",
+      "output": "art_sources/refresh_20261019/batches/03_portrait_pool/output/existing/local/portraits/pool/male_old/visitor_male_old_02.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/local/portraits/pool/male_old/visitor_male_old_02.png",
+        "sha256": "7a760597b09f04603bca6abcc9ac5dd5c1cb1a1404a6e8d4f45dfad117844cfa",
+        "format": "PNG",
+        "dimensions": [
+          512,
+          640
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          4,
+          5
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_generated",
+      "tool_refs": [
+        "assets/local/portraits/pool/male_old/visitor_male_old_02.png",
+        "art_sources/refresh_20261019/approved_samples/02_portrait.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/03_portrait_pool/output/prompts/9c1ace04ccd4a51a.txt",
+      "newly_generated": true,
+      "sha256": "c2437c6302f97b71b3af9ed411437850f9a7e69b9dd32bcce793d688a8aa6173",
+      "native_dimensions": [
+        1122,
+        1402
+      ],
+      "native_mode": "RGB",
+      "alpha_extrema": null,
+      "tool_logical_path": "C:\\Users\\Kuroro\\.codex\\generated_images\\01a15bd8-ea44-7b52-a757-df11f7e1379f\\exec-03efe118-7ce5-4f00-854d-bd564fa1e189.png",
+      "tool_physical_path": "D:\\claude\\flash\\.tmp\\imagegen_storage\\generated_images\\01a15bd8-ea44-7b52-a757-df11f7e1379f\\exec-03efe118-7ce5-4f00-854d-bd564fa1e189.png",
+      "input_hashes": [
+        {
+          "path": "assets/local/portraits/pool/male_old/visitor_male_old_02.png",
+          "sha256": "7a760597b09f04603bca6abcc9ac5dd5c1cb1a1404a6e8d4f45dfad117844cfa"
+        },
+        {
+          "path": "art_sources/refresh_20261019/approved_samples/02_portrait.png",
+          "sha256": "139f85deb18db95d129b9e3e31db95460f47b934a7a68a4f006b95f8ad53c3fe"
+        }
+      ],
+      "review": "Visually checked identity/content, category style and complete composition; integration separate.",
+      "actual_prompt": "Use case: style-transfer / identity-preserve.\nAsset: ONE independent waist-up elderly male portrait for a 2D Chinese cultivation RPG, target 512x640, opaque muted grey-green background. Measure actual native size separately.\nImage 1 is the EDIT TARGET: preserve this individual man's face, old age, build, hairstyle, beard pattern, view, costume, pose and exact props. Image 2 is ONLY the approved C drawing style reference; do not copy that man's face, beard, abacus, blue costume or pose.\nUse economical clear thin dark outlines, small simply drawn manga facial features, broad flat muted colour shapes, solid grouped hair and beard, few large clothing folds and ONE restrained structural cel shadow. Preserve original robe motifs simplified. Preserve elderly face shape, grey hair and beard, hooded eyes, cheek folds and a FEW readable age lines. Do not turn him into a young man or generic bearded elder. No photorealism, glossy skin, individual hair strands, fabric grain, material speckles, airbrush, intricate embroidery, dense wrinkles, border, text, watermark, scenery or invented gestures/props. Keep complete head, topmost hair/bun, pins, ribbons and important props inside frame; leave at least six percent plain background ABOVE highest hair/headwear. Keep source waist-up framing and hand visibility; do not add hands absent from crop. ONE portrait, no contact sheet.\nIdentity details: Tall thin elderly traveller with very long angular warm pale tan face, firm thick grey brows and serious eyes viewer right, pursed closed lips and a few forehead/cheek lines. Neat grey MOUSTACHE only, NO chin beard. Silver-grey hair in HIGH compact bun wrapped rust-red cloth ribbon with tails behind viewer left and long front locks. Brick-red sleeveless overvest, black-grey wide lapel bands with a few broad red flame shapes, charcoal crossing robe and ivory collar, rust sash. No visible hands or handheld props in source crop. Small edge of dark travel pack/strap behind viewer-left shoulder only as source. Preserve lean severe old face, moustache-only, bun and source framing.",
+      "actual_input_roles": [
+        {
+          "path": "assets/local/portraits/pool/male_old/visitor_male_old_02.png",
+          "sha256": "7a760597b09f04603bca6abcc9ac5dd5c1cb1a1404a6e8d4f45dfad117844cfa",
+          "role": "edit_target_identity_pose_costume_and_props"
+        },
+        {
+          "path": "art_sources/refresh_20261019/approved_samples/02_portrait.png",
+          "sha256": "139f85deb18db95d129b9e3e31db95460f47b934a7a68a4f006b95f8ad53c3fe",
+          "role": "approved_c_drawing_style_only_do_not_copy_identity"
+        }
+      ],
+      "session": "20261021_portrait_pool_07",
+      "target_dimensions": [
+        512,
+        640
+      ],
+      "size_matches_technical_source": false,
+      "integration_status": "candidate_only_not_runtime_integrated",
+      "size_note": "Native bytes retained; runtime crop/scale remains separate. Target dimensions are not claimed as delivered dimensions."
+    },
+    {
+      "id": "ab1b4c86407e961a",
+      "batch": "03_portrait_pool",
+      "kind": "existing",
+      "label": "assets/local/portraits/pool/male_old/wanderer_male_old_01.png",
+      "source": "assets/local/portraits/pool/male_old/wanderer_male_old_01.png",
+      "output": "art_sources/refresh_20261019/batches/03_portrait_pool/output/existing/local/portraits/pool/male_old/wanderer_male_old_01.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/local/portraits/pool/male_old/wanderer_male_old_01.png",
+        "sha256": "c06f4b567b79c3ffc73b9226205d176223bd3e5bee01e69c9a40884764c210b6",
+        "format": "PNG",
+        "dimensions": [
+          512,
+          640
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          4,
+          5
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_generated",
+      "tool_refs": [
+        "assets/local/portraits/pool/male_old/wanderer_male_old_01.png",
+        "art_sources/refresh_20261019/approved_samples/02_portrait.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/03_portrait_pool/output/prompts/ab1b4c86407e961a.txt",
+      "newly_generated": true,
+      "sha256": "2a1bd3215fd1129a2bbe3753eb852899834d4819191d158f19d4ece9e3df58fb",
+      "native_dimensions": [
+        1122,
+        1402
+      ],
+      "native_mode": "RGB",
+      "alpha_extrema": null,
+      "tool_logical_path": "C:\\Users\\Kuroro\\.codex\\generated_images\\01a15bd8-ea44-7b52-a757-df11f7e1379f\\exec-4a721de7-ef75-4794-9287-cd0b893fefb6.png",
+      "tool_physical_path": "D:\\claude\\flash\\.tmp\\imagegen_storage\\generated_images\\01a15bd8-ea44-7b52-a757-df11f7e1379f\\exec-4a721de7-ef75-4794-9287-cd0b893fefb6.png",
+      "input_hashes": [
+        {
+          "path": "assets/local/portraits/pool/male_old/wanderer_male_old_01.png",
+          "sha256": "c06f4b567b79c3ffc73b9226205d176223bd3e5bee01e69c9a40884764c210b6"
+        },
+        {
+          "path": "art_sources/refresh_20261019/approved_samples/02_portrait.png",
+          "sha256": "139f85deb18db95d129b9e3e31db95460f47b934a7a68a4f006b95f8ad53c3fe"
+        }
+      ],
+      "review": "Visually checked identity/content, category style and complete composition; integration separate.",
+      "actual_prompt": "Use case: style-transfer / identity-preserve.\nAsset: ONE independent waist-up elderly male portrait for a 2D Chinese cultivation RPG, target 512x640, opaque muted grey-green background. Measure actual native size separately.\nImage 1 is the EDIT TARGET: preserve this individual man's face, old age, build, hairstyle, beard pattern, view, costume, pose and exact props. Image 2 is ONLY the approved C drawing style reference; do not copy that man's face, beard, abacus, blue costume or pose.\nUse economical clear thin dark outlines, small simply drawn manga facial features, broad flat muted colour shapes, solid grouped hair and beard, few large clothing folds and ONE restrained structural cel shadow. Preserve original robe motifs simplified. Preserve elderly face shape, grey hair and beard, hooded eyes, cheek folds and a FEW readable age lines. Do not turn him into a young man or generic bearded elder. No photorealism, glossy skin, individual hair strands, fabric grain, material speckles, airbrush, intricate embroidery, dense wrinkles, border, text, watermark, scenery or invented gestures/props. Keep complete head, topmost hair/bun, pins, ribbons and important props inside frame; leave at least six percent plain background ABOVE highest hair/headwear. Keep source waist-up framing and hand visibility; do not add hands absent from crop. ONE portrait, no contact sheet.\nIdentity details: Tall lean elderly wanderer with long angular weathered tan face, thick grey brows, stern small eyes viewer right and straight closed lips, clear simple forehead/cheek age creases. Grey moustache and short squared grey chin beard. Silver-grey hair in ONE long braid behind viewer-left shoulder, loose long front locks, no bun/headwrap. Worn charcoal-grey outer coat with wide brown lapels, muted dark green crossed inner robe and ivory collar, large simple tan stitched cloth patches on shoulders/sleeves/lapels. Faded ochre sash with brown double-lobed gourd at VIEWER-RIGHT waist. Hands not visible in source. Preserve lean old face, beard, braid and gourd position.",
+      "actual_input_roles": [
+        {
+          "path": "assets/local/portraits/pool/male_old/wanderer_male_old_01.png",
+          "sha256": "c06f4b567b79c3ffc73b9226205d176223bd3e5bee01e69c9a40884764c210b6",
+          "role": "edit_target_identity_pose_costume_and_props"
+        },
+        {
+          "path": "art_sources/refresh_20261019/approved_samples/02_portrait.png",
+          "sha256": "139f85deb18db95d129b9e3e31db95460f47b934a7a68a4f006b95f8ad53c3fe",
+          "role": "approved_c_drawing_style_only_do_not_copy_identity"
+        }
+      ],
+      "session": "20261021_portrait_pool_07",
+      "target_dimensions": [
+        512,
+        640
+      ],
+      "size_matches_technical_source": false,
+      "integration_status": "candidate_only_not_runtime_integrated",
+      "size_note": "Native bytes retained; runtime crop/scale remains separate. Target dimensions are not claimed as delivered dimensions."
+    },
+    {
+      "id": "21bc43678b51def8",
+      "batch": "03_portrait_pool",
+      "kind": "existing",
+      "label": "assets/local/portraits/pool/male_old/wanderer_male_old_02.png",
+      "source": "assets/local/portraits/pool/male_old/wanderer_male_old_02.png",
+      "output": "art_sources/refresh_20261019/batches/03_portrait_pool/output/existing/local/portraits/pool/male_old/wanderer_male_old_02.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/local/portraits/pool/male_old/wanderer_male_old_02.png",
+        "sha256": "cef18c48bc0828d6ce4473ceac46dd306b7ad5489a752d39cf5a2c71b2f48119",
+        "format": "PNG",
+        "dimensions": [
+          512,
+          640
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          4,
+          5
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_generated",
+      "tool_refs": [
+        "assets/local/portraits/pool/male_old/wanderer_male_old_02.png",
+        "art_sources/refresh_20261019/approved_samples/02_portrait.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/03_portrait_pool/output/prompts/21bc43678b51def8.txt",
+      "newly_generated": true,
+      "sha256": "d3261fd970abc4104bc30208857aa4637e52d765219fdcdc07286c137884d0af",
+      "native_dimensions": [
+        1122,
+        1402
+      ],
+      "native_mode": "RGB",
+      "alpha_extrema": null,
+      "tool_logical_path": "C:\\Users\\Kuroro\\.codex\\generated_images\\01a15bd8-ea44-7b52-a757-df11f7e1379f\\exec-297f3861-7dca-4a33-aab4-488711f1e980.png",
+      "tool_physical_path": "D:\\claude\\flash\\.tmp\\imagegen_storage\\generated_images\\01a15bd8-ea44-7b52-a757-df11f7e1379f\\exec-297f3861-7dca-4a33-aab4-488711f1e980.png",
+      "input_hashes": [
+        {
+          "path": "assets/local/portraits/pool/male_old/wanderer_male_old_02.png",
+          "sha256": "cef18c48bc0828d6ce4473ceac46dd306b7ad5489a752d39cf5a2c71b2f48119"
+        },
+        {
+          "path": "art_sources/refresh_20261019/approved_samples/02_portrait.png",
+          "sha256": "139f85deb18db95d129b9e3e31db95460f47b934a7a68a4f006b95f8ad53c3fe"
+        }
+      ],
+      "review": "Visually checked identity/content, category style and complete composition; integration separate.",
+      "actual_prompt": "Use case: style-transfer / identity-preserve.\nAsset: ONE independent waist-up elderly male portrait for a 2D Chinese cultivation RPG, target 512x640, opaque muted grey-green background. Measure actual native size separately.\nImage 1 is the EDIT TARGET: preserve this individual man's face, old age, build, hairstyle, beard pattern, view, costume, pose and exact props. Image 2 is ONLY the approved C drawing style reference; do not copy that man's face, beard, abacus, blue costume or pose.\nUse economical clear thin dark outlines, small simply drawn manga facial features, broad flat muted colour shapes, solid grouped hair and beard, few large clothing folds and ONE restrained structural cel shadow. Preserve original robe motifs simplified. Preserve elderly face shape, grey hair and beard, hooded eyes, cheek folds and a FEW readable age lines. Do not turn him into a young man or generic bearded elder. No photorealism, glossy skin, individual hair strands, fabric grain, material speckles, airbrush, intricate embroidery, dense wrinkles, border, text, watermark, scenery or invented gestures/props. Keep complete head, topmost hair/bun, pins, ribbons and important props inside frame; leave at least six percent plain background ABOVE highest hair/headwear. Keep source waist-up framing and hand visibility; do not add hands absent from crop. ONE portrait, no contact sheet.\nIdentity details: Sturdy elderly wanderer with broad square tan face, heavy grey eyebrows, serious narrowed eyes glancing strongly viewer right and pursed downturned lips, simple forehead and cheek age lines. Completely CLEAN SHAVEN, no moustache/beard. Grey hair in small HIGH bun tied tan cloth tails, short grey nape hair. Worn grey-olive outer robe with large dark slate stitched patches, charcoal crossed inner robe, cream collar and tan belt. Wide tan shoulder sash runs diagonally across chest from viewer-left shoulder to viewer-right waist; dark blue cloth pack behind viewer-left shoulder. ONE hand at viewer right holds crooked brown walking STAFF upright, grey cloth wrapped around upper shaft below bent top. Preserve stocky clean-shaven older face, diagonal sash, pack and staff side, plain flat wood.",
+      "actual_input_roles": [
+        {
+          "path": "assets/local/portraits/pool/male_old/wanderer_male_old_02.png",
+          "sha256": "cef18c48bc0828d6ce4473ceac46dd306b7ad5489a752d39cf5a2c71b2f48119",
+          "role": "edit_target_identity_pose_costume_and_props"
+        },
+        {
+          "path": "art_sources/refresh_20261019/approved_samples/02_portrait.png",
+          "sha256": "139f85deb18db95d129b9e3e31db95460f47b934a7a68a4f006b95f8ad53c3fe",
+          "role": "approved_c_drawing_style_only_do_not_copy_identity"
+        }
+      ],
+      "session": "20261021_portrait_pool_07",
+      "target_dimensions": [
+        512,
+        640
+      ],
+      "size_matches_technical_source": false,
+      "integration_status": "candidate_only_not_runtime_integrated",
+      "size_note": "Native bytes retained; runtime crop/scale remains separate. Target dimensions are not claimed as delivered dimensions."
+    },
+    {
+      "id": "d9b4c8e34e720806",
+      "batch": "03_portrait_pool",
+      "kind": "existing",
+      "label": "assets/local/portraits/pool/male_old/wanderer_male_old_03.png",
+      "source": "assets/local/portraits/pool/male_old/wanderer_male_old_03.png",
+      "output": "art_sources/refresh_20261019/batches/03_portrait_pool/output/existing/local/portraits/pool/male_old/wanderer_male_old_03.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/local/portraits/pool/male_old/wanderer_male_old_03.png",
+        "sha256": "b1ea067799ac341184f646be45dcf686e6a7694958fd95c759f1e62d2bdcfb73",
+        "format": "PNG",
+        "dimensions": [
+          512,
+          640
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          4,
+          5
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_generated",
+      "tool_refs": [
+        "assets/local/portraits/pool/male_old/wanderer_male_old_03.png",
+        "art_sources/refresh_20261019/approved_samples/02_portrait.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/03_portrait_pool/output/prompts/d9b4c8e34e720806.txt",
+      "newly_generated": true,
+      "sha256": "83e568d722ead586e6cf7525e5d0bdc9be6fe452fc0e5cbfdd41e1d6ddbe550d",
+      "native_dimensions": [
+        1122,
+        1402
+      ],
+      "native_mode": "RGB",
+      "alpha_extrema": null,
+      "tool_logical_path": "C:\\Users\\Kuroro\\.codex\\generated_images\\01a15bd8-ea44-7b52-a757-df11f7e1379f\\exec-b371565e-a50e-4c31-b909-b2ca4bc38eb3.png",
+      "tool_physical_path": "D:\\claude\\flash\\.tmp\\imagegen_storage\\generated_images\\01a15bd8-ea44-7b52-a757-df11f7e1379f\\exec-b371565e-a50e-4c31-b909-b2ca4bc38eb3.png",
+      "input_hashes": [
+        {
+          "path": "assets/local/portraits/pool/male_old/wanderer_male_old_03.png",
+          "sha256": "b1ea067799ac341184f646be45dcf686e6a7694958fd95c759f1e62d2bdcfb73"
+        },
+        {
+          "path": "art_sources/refresh_20261019/approved_samples/02_portrait.png",
+          "sha256": "139f85deb18db95d129b9e3e31db95460f47b934a7a68a4f006b95f8ad53c3fe"
+        }
+      ],
+      "review": "Visually checked identity/content, category style and complete composition; integration separate.",
+      "actual_prompt": "Use case: style-transfer / identity-preserve.\nAsset: ONE independent waist-up elderly male portrait for a 2D Chinese cultivation RPG, target 512x640, opaque muted grey-green background. Measure actual native size separately.\nImage 1 is the EDIT TARGET: preserve this individual man's face, old age, build, hairstyle, beard pattern, view, costume, pose and exact props. Image 2 is ONLY the approved C drawing style reference; do not copy that man's face, beard, abacus, blue costume or pose.\nUse economical clear thin dark outlines, small simply drawn manga facial features, broad flat muted colour shapes, solid grouped hair and beard, few large clothing folds and ONE restrained structural cel shadow. Preserve original robe motifs simplified. Preserve elderly face shape, grey hair and beard, hooded eyes, cheek folds and a FEW readable age lines. Do not turn him into a young man or generic bearded elder. No photorealism, glossy skin, individual hair strands, fabric grain, material speckles, airbrush, intricate embroidery, dense wrinkles, border, text, watermark, scenery or invented gestures/props. Keep complete head, topmost hair/bun, pins, ribbons and important props inside frame; leave at least six percent plain background ABOVE highest hair/headwear. Keep source waist-up framing and hand visibility; do not add hands absent from crop. ONE portrait, no contact sheet.\nIdentity details: Very tall thin elderly wanderer with long narrow tan face, downcast serious small eyes viewer right and straight closed lips, simple forehead/cheek lines. Narrow pointed grey CHIN TUFT only, NO moustache. Silver-grey hair in HIGH round bun tied tan cord, loose long front locks. Worn dark brown outer robe with wide chocolate lapels and large brown/slate stitched patches, grey-beige crossed inner robe, pale collar and faded ochre sash. Small brown double-lobed gourd hangs at VIEWER-LEFT waist. ONE hand at viewer-left chest grips plain brown strap of large tied pale taupe travel bundle behind viewer-left shoulder. Preserve thin elderly face, chin tuft, high bun, bag and hand-on-strap pose.",
+      "actual_input_roles": [
+        {
+          "path": "assets/local/portraits/pool/male_old/wanderer_male_old_03.png",
+          "sha256": "b1ea067799ac341184f646be45dcf686e6a7694958fd95c759f1e62d2bdcfb73",
+          "role": "edit_target_identity_pose_costume_and_props"
+        },
+        {
+          "path": "art_sources/refresh_20261019/approved_samples/02_portrait.png",
+          "sha256": "139f85deb18db95d129b9e3e31db95460f47b934a7a68a4f006b95f8ad53c3fe",
+          "role": "approved_c_drawing_style_only_do_not_copy_identity"
+        }
+      ],
+      "session": "20261021_portrait_pool_07",
+      "target_dimensions": [
+        512,
+        640
+      ],
+      "size_matches_technical_source": false,
+      "integration_status": "candidate_only_not_runtime_integrated",
+      "size_note": "Native bytes retained; runtime crop/scale remains separate. Target dimensions are not claimed as delivered dimensions."
+    },
+    {
+      "id": "2eee03306fcf48c3",
+      "batch": "03_portrait_pool",
+      "kind": "existing",
+      "label": "assets/local/portraits/pool/male_old/wanderer_male_old_04.png",
+      "source": "assets/local/portraits/pool/male_old/wanderer_male_old_04.png",
+      "output": "art_sources/refresh_20261019/batches/03_portrait_pool/output/existing/local/portraits/pool/male_old/wanderer_male_old_04.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/local/portraits/pool/male_old/wanderer_male_old_04.png",
+        "sha256": "9f122712dbfb687902c5a623628d8ca97bf51fdcb8ae8d87b8249e1b73ca6a4a",
+        "format": "PNG",
+        "dimensions": [
+          512,
+          640
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          4,
+          5
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_generated",
+      "tool_refs": [
+        "assets/local/portraits/pool/male_old/wanderer_male_old_04.png",
+        "art_sources/refresh_20261019/approved_samples/02_portrait.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/03_portrait_pool/output/prompts/2eee03306fcf48c3.txt",
+      "newly_generated": true,
+      "sha256": "ba76317bec694f1647516c2803d9000326833b6760500d403a4756d130df4a28",
+      "native_dimensions": [
+        1122,
+        1402
+      ],
+      "native_mode": "RGB",
+      "alpha_extrema": null,
+      "tool_logical_path": "C:\\Users\\Kuroro\\.codex\\generated_images\\01a15bd8-ea44-7b52-a757-df11f7e1379f\\exec-6699b49d-0aad-445f-a409-c683f16317ee.png",
+      "tool_physical_path": "D:\\claude\\flash\\.tmp\\imagegen_storage\\generated_images\\01a15bd8-ea44-7b52-a757-df11f7e1379f\\exec-6699b49d-0aad-445f-a409-c683f16317ee.png",
+      "input_hashes": [
+        {
+          "path": "assets/local/portraits/pool/male_old/wanderer_male_old_04.png",
+          "sha256": "9f122712dbfb687902c5a623628d8ca97bf51fdcb8ae8d87b8249e1b73ca6a4a"
+        },
+        {
+          "path": "art_sources/refresh_20261019/approved_samples/02_portrait.png",
+          "sha256": "139f85deb18db95d129b9e3e31db95460f47b934a7a68a4f006b95f8ad53c3fe"
+        }
+      ],
+      "review": "Visually checked identity/content, category style and complete composition; integration separate.",
+      "actual_prompt": "Use case: style-transfer / identity-preserve.\nAsset: ONE independent waist-up elderly male portrait for a 2D Chinese cultivation RPG, target 512x640, opaque muted grey-green background. Measure actual native size separately.\nImage 1 is the EDIT TARGET: preserve this individual man's face, old age, build, hairstyle, beard pattern, view, costume, pose and exact props. Image 2 is ONLY the approved C drawing style reference; do not copy that man's face, beard, abacus, blue costume or pose.\nUse economical clear thin dark outlines, small simply drawn manga facial features, broad flat muted colour shapes, solid grouped hair and beard, few large clothing folds and ONE restrained structural cel shadow. Preserve original robe motifs simplified. Preserve elderly face shape, grey hair and beard, hooded eyes, cheek folds and a FEW readable age lines. Do not turn him into a young man or generic bearded elder. No photorealism, glossy skin, individual hair strands, fabric grain, material speckles, airbrush, intricate embroidery, dense wrinkles, border, text, watermark, scenery or invented gestures/props. Keep complete head, topmost hair/bun, pins, ribbons and important props inside frame; leave at least six percent plain background ABOVE highest hair/headwear. Keep source waist-up framing and hand visibility; do not add hands absent from crop. ONE portrait, no contact sheet.\nIdentity details: Broad sturdy elderly swordsman wanderer with square weathered tan face, thick grey brows, stern narrowed eyes viewer right, downturned closed mouth and two short faint SCAR marks on VIEWER-LEFT cheek. Grey moustache and long narrow pointed grey chin beard. Silver-grey hair HALF DOWN to shoulders, high small upper bun tied brown ribbon tails. Worn brown outer robe with wide taupe edging, dark grey crossing inner robe and cream collar; big tan stitched patches on shoulder and sleeve. Tan sash, dark cloth travel bundle behind viewer-left shoulder with broad brown straps. Sheathed sword at viewer-right hip, dark brown wrapped hilt with bronze guard/pommel points up right. No hands visible. Preserve cheek scars, stern broad face, half-down grey hair, pack and sword.",
+      "actual_input_roles": [
+        {
+          "path": "assets/local/portraits/pool/male_old/wanderer_male_old_04.png",
+          "sha256": "9f122712dbfb687902c5a623628d8ca97bf51fdcb8ae8d87b8249e1b73ca6a4a",
+          "role": "edit_target_identity_pose_costume_and_props"
+        },
+        {
+          "path": "art_sources/refresh_20261019/approved_samples/02_portrait.png",
+          "sha256": "139f85deb18db95d129b9e3e31db95460f47b934a7a68a4f006b95f8ad53c3fe",
+          "role": "approved_c_drawing_style_only_do_not_copy_identity"
+        }
+      ],
+      "session": "20261021_portrait_pool_07",
+      "target_dimensions": [
+        512,
+        640
+      ],
+      "size_matches_technical_source": false,
+      "integration_status": "candidate_only_not_runtime_integrated",
+      "size_note": "Native bytes retained; runtime crop/scale remains separate. Target dimensions are not claimed as delivered dimensions."
+    },
+    {
+      "id": "04ae1552e21f0aad",
+      "batch": "03_portrait_pool",
+      "kind": "existing",
+      "label": "assets/local/portraits/pool/male_old/wanderer_male_old_05.png",
+      "source": "assets/local/portraits/pool/male_old/wanderer_male_old_05.png",
+      "output": "art_sources/refresh_20261019/batches/03_portrait_pool/output/existing/local/portraits/pool/male_old/wanderer_male_old_05.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/local/portraits/pool/male_old/wanderer_male_old_05.png",
+        "sha256": "6e016c5f5873c7cce31cbc377ce3f7a917bc23ede1a909feda66d119cad825e6",
+        "format": "PNG",
+        "dimensions": [
+          512,
+          640
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          4,
+          5
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_generated",
+      "tool_refs": [
+        "assets/local/portraits/pool/male_old/wanderer_male_old_05.png",
+        "art_sources/refresh_20261019/approved_samples/02_portrait.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/03_portrait_pool/output/prompts/04ae1552e21f0aad.txt",
+      "newly_generated": true,
+      "sha256": "6c64da0a5e97b8b823752fb7587db894f881d860037b72948d3db8f91821487f",
+      "native_dimensions": [
+        1122,
+        1402
+      ],
+      "native_mode": "RGB",
+      "alpha_extrema": null,
+      "tool_logical_path": "C:\\Users\\Kuroro\\.codex\\generated_images\\01a15bd8-ea44-7b52-a757-df11f7e1379f\\exec-5bb065c8-26cb-48d9-8e60-9ed9b4b7dee1.png",
+      "tool_physical_path": "D:\\claude\\flash\\.tmp\\imagegen_storage\\generated_images\\01a15bd8-ea44-7b52-a757-df11f7e1379f\\exec-5bb065c8-26cb-48d9-8e60-9ed9b4b7dee1.png",
+      "input_hashes": [
+        {
+          "path": "assets/local/portraits/pool/male_old/wanderer_male_old_05.png",
+          "sha256": "6e016c5f5873c7cce31cbc377ce3f7a917bc23ede1a909feda66d119cad825e6"
+        },
+        {
+          "path": "art_sources/refresh_20261019/approved_samples/02_portrait.png",
+          "sha256": "139f85deb18db95d129b9e3e31db95460f47b934a7a68a4f006b95f8ad53c3fe"
+        }
+      ],
+      "review": "Visually checked identity/content, category style and complete composition; integration separate.",
+      "actual_prompt": "Use case: style-transfer / identity-preserve.\nAsset: ONE independent waist-up elderly male portrait for a 2D Chinese cultivation RPG, target 512x640, opaque muted grey-green background. Measure actual native size separately.\nImage 1 is the EDIT TARGET: preserve this individual man's face, old age, build, hairstyle, beard pattern, view, costume, pose and exact props. Image 2 is ONLY the approved C drawing style reference; do not copy that man's face, beard, abacus, blue costume or pose.\nUse economical clear thin dark outlines, small simply drawn manga facial features, broad flat muted colour shapes, solid grouped hair and beard, few large clothing folds and ONE restrained structural cel shadow. Preserve original robe motifs simplified. Preserve elderly face shape, grey hair and beard, hooded eyes, cheek folds and a FEW readable age lines. Do not turn him into a young man or generic bearded elder. No photorealism, glossy skin, individual hair strands, fabric grain, material speckles, airbrush, intricate embroidery, dense wrinkles, border, text, watermark, scenery or invented gestures/props. Keep complete head, topmost hair/bun, pins, ribbons and important props inside frame; leave at least six percent plain background ABOVE highest hair/headwear. Keep source waist-up framing and hand visibility; do not add hands absent from crop. ONE portrait, no contact sheet.\nIdentity details: Very slender elderly wanderer with long narrow warm pale tan face, drooping grey brows, worried downcast eyes viewer right and small closed downturned lips, a few forehead/cheek age lines. Grey moustache and narrow pointed medium-long grey goatee. Silver-grey hair in high compact bun tied brown ribbon with long tails, front locks. Worn dark olive-grey robe, brown sleeveless outer edging with ragged shoulder patch, brown crossing inner lapel and ivory collar. Faded tan waist belt, ochre double-lobed gourd at VIEWER-LEFT waist attached to plain brown shoulder strap. Hands out of source crop, no held object. Preserve thin sad old face, beard, bun, gourd left side and worn patches.",
+      "actual_input_roles": [
+        {
+          "path": "assets/local/portraits/pool/male_old/wanderer_male_old_05.png",
+          "sha256": "6e016c5f5873c7cce31cbc377ce3f7a917bc23ede1a909feda66d119cad825e6",
+          "role": "edit_target_identity_pose_costume_and_props"
+        },
+        {
+          "path": "art_sources/refresh_20261019/approved_samples/02_portrait.png",
+          "sha256": "139f85deb18db95d129b9e3e31db95460f47b934a7a68a4f006b95f8ad53c3fe",
+          "role": "approved_c_drawing_style_only_do_not_copy_identity"
+        }
+      ],
+      "session": "20261021_portrait_pool_07",
+      "target_dimensions": [
+        512,
+        640
+      ],
+      "size_matches_technical_source": false,
+      "integration_status": "candidate_only_not_runtime_integrated",
+      "size_note": "Native bytes retained; runtime crop/scale remains separate. Target dimensions are not claimed as delivered dimensions."
+    },
+    {
+      "id": "75a0ee8c05a6da0c",
+      "batch": "03_portrait_pool",
+      "kind": "existing",
+      "label": "assets/local/portraits/pool/male_old/wanderer_male_old_06.png",
+      "source": "assets/local/portraits/pool/male_old/wanderer_male_old_06.png",
+      "output": "art_sources/refresh_20261019/batches/03_portrait_pool/output/existing/local/portraits/pool/male_old/wanderer_male_old_06.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/local/portraits/pool/male_old/wanderer_male_old_06.png",
+        "sha256": "4180870f40262169e7c71074ffb8a7fa757029bd8dc80fd5f88be63b7ef2457c",
+        "format": "PNG",
+        "dimensions": [
+          512,
+          640
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          4,
+          5
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_generated",
+      "tool_refs": [
+        "assets/local/portraits/pool/male_old/wanderer_male_old_06.png",
+        "art_sources/refresh_20261019/approved_samples/02_portrait.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/03_portrait_pool/output/prompts/75a0ee8c05a6da0c.txt",
+      "newly_generated": true,
+      "sha256": "fc907f1f1e4e70a7e5d33caade53e5c78d41488d5dc399045bacd24090665dc0",
+      "native_dimensions": [
+        1122,
+        1402
+      ],
+      "native_mode": "RGB",
+      "alpha_extrema": null,
+      "tool_logical_path": "C:\\Users\\Kuroro\\.codex\\generated_images\\01a15bd8-ea44-7b52-a757-df11f7e1379f\\exec-0d0cf806-6e17-450d-aa0f-4065443723a4.png",
+      "tool_physical_path": "D:\\claude\\flash\\.tmp\\imagegen_storage\\generated_images\\01a15bd8-ea44-7b52-a757-df11f7e1379f\\exec-0d0cf806-6e17-450d-aa0f-4065443723a4.png",
+      "input_hashes": [
+        {
+          "path": "assets/local/portraits/pool/male_old/wanderer_male_old_06.png",
+          "sha256": "4180870f40262169e7c71074ffb8a7fa757029bd8dc80fd5f88be63b7ef2457c"
+        },
+        {
+          "path": "art_sources/refresh_20261019/approved_samples/02_portrait.png",
+          "sha256": "139f85deb18db95d129b9e3e31db95460f47b934a7a68a4f006b95f8ad53c3fe"
+        }
+      ],
+      "review": "Visually checked identity/content, category style and complete composition; integration separate.",
+      "actual_prompt": "Use case: style-transfer / identity-preserve.\nAsset: ONE independent waist-up elderly male portrait for a 2D Chinese cultivation RPG, target 512x640, opaque muted grey-green background. Measure actual native size separately.\nImage 1 is the EDIT TARGET: preserve this individual man's face, old age, build, hairstyle, beard pattern, view, costume, pose and exact props. Image 2 is ONLY the approved C drawing style reference; do not copy that man's face, beard, abacus, blue costume or pose.\nUse economical clear thin dark outlines, small simply drawn manga facial features, broad flat muted colour shapes, solid grouped hair and beard, few large clothing folds and ONE restrained structural cel shadow. Preserve original robe motifs simplified. Preserve elderly face shape, grey hair and beard, hooded eyes, cheek folds and a FEW readable age lines. Do not turn him into a young man or generic bearded elder. No photorealism, glossy skin, individual hair strands, fabric grain, material speckles, airbrush, intricate embroidery, dense wrinkles, border, text, watermark, scenery or invented gestures/props. Keep complete head, topmost hair/bun, pins, ribbons and important props inside frame; leave at least six percent plain background ABOVE highest hair/headwear. Keep source waist-up framing and hand visibility; do not add hands absent from crop. ONE portrait, no contact sheet.\nIdentity details: Sturdy gruff elderly wanderer with broad square tan face, thick dark grey brows, frowning eyes glancing strongly viewer right and tense downturned mouth, simple forehead/cheek age lines. Short grey jaw/chin beard with faint jaw stubble, NO moustache on upper lip. Grey hair pulled into LOW ponytail tied brown cord behind viewer left, loose long side locks, no bun. Worn muted olive-grey robe with plain brown outer lapels, dark brown crossing inner robe, cream collar and faded ochre sash. Several large grey/tan stitched patches on sleeves/shoulders. ONE visible hand at VIEWER LEFT grips a crooked plain dark-brown wooden walking staff upright along left side; brown rope/strap over left shoulder. Preserve broad gruff older face, low ponytail and LEFT-side staff grip, flat wood without grain.",
+      "actual_input_roles": [
+        {
+          "path": "assets/local/portraits/pool/male_old/wanderer_male_old_06.png",
+          "sha256": "4180870f40262169e7c71074ffb8a7fa757029bd8dc80fd5f88be63b7ef2457c",
+          "role": "edit_target_identity_pose_costume_and_props"
+        },
+        {
+          "path": "art_sources/refresh_20261019/approved_samples/02_portrait.png",
+          "sha256": "139f85deb18db95d129b9e3e31db95460f47b934a7a68a4f006b95f8ad53c3fe",
+          "role": "approved_c_drawing_style_only_do_not_copy_identity"
+        }
+      ],
+      "session": "20261021_portrait_pool_07",
+      "target_dimensions": [
+        512,
+        640
+      ],
+      "size_matches_technical_source": false,
+      "integration_status": "candidate_only_not_runtime_integrated",
+      "size_note": "Native bytes retained; runtime crop/scale remains separate. Target dimensions are not claimed as delivered dimensions."
+    },
+    {
+      "id": "2ff70a68c3c03379",
+      "batch": "03_portrait_pool",
+      "kind": "existing",
+      "label": "assets/local/portraits/pool/male_old/wanderer_male_old_07.png",
+      "source": "assets/local/portraits/pool/male_old/wanderer_male_old_07.png",
+      "output": "art_sources/refresh_20261019/batches/03_portrait_pool/output/existing/local/portraits/pool/male_old/wanderer_male_old_07.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/local/portraits/pool/male_old/wanderer_male_old_07.png",
+        "sha256": "65f31756087356ac9643e4398f21ce0f8f0e23d4f8bb7c9051d3658994dd2a2e",
+        "format": "PNG",
+        "dimensions": [
+          512,
+          640
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          4,
+          5
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_generated",
+      "tool_refs": [
+        "assets/local/portraits/pool/male_old/wanderer_male_old_07.png",
+        "art_sources/refresh_20261019/approved_samples/02_portrait.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/03_portrait_pool/output/prompts/2ff70a68c3c03379.txt",
+      "rejected_attempts": [
+        {
+          "path": "art_sources/refresh_20261019/batches/03_portrait_pool/output/existing/local/portraits/pool/male_old/originals/wanderer_male_old_07_rejected_b955a6ab.png",
+          "sha256": "b955a6ab9e3138b9b7a8f28497e822d1434eb77dbc5669f435ed02c5fed35103",
+          "reason": "Prop anatomy/framing error: belt gourd was drawn with three stacked bulbous sections and its lower body is cut by bottom edge. Redraw ONE small upper bulb and ONE larger lower bulb only, short straight neck, fully visible inside frame; retain same elderly clean-shaven face, headband, hand, rope, pack and patched robe.",
+          "tool_physical_path": "D:\\claude\\flash\\.tmp\\imagegen_storage\\generated_images\\01a15bd8-ea44-7b52-a757-df11f7e1379f\\exec-b7ad4b24-d13d-4524-afe2-dc52708f7bdc.png",
+          "prompt_path": "art_sources/refresh_20261019/batches/03_portrait_pool/output/existing/local/portraits/pool/male_old/originals/wanderer_male_old_07_rejected_b955a6ab.prompt.txt"
+        }
+      ],
+      "newly_generated": true,
+      "sha256": "36ea0a825d7771e8b3015c1b0a7b90dfdcd8b0c3e6982b5eb96da01ffb8201a9",
+      "native_dimensions": [
+        1122,
+        1402
+      ],
+      "native_mode": "RGB",
+      "alpha_extrema": null,
+      "tool_logical_path": "C:\\Users\\Kuroro\\.codex\\generated_images\\01a15bd8-ea44-7b52-a757-df11f7e1379f\\exec-6b0794e6-1eb7-43be-8968-463437ece5bf.png",
+      "tool_physical_path": "D:\\claude\\flash\\.tmp\\imagegen_storage\\generated_images\\01a15bd8-ea44-7b52-a757-df11f7e1379f\\exec-6b0794e6-1eb7-43be-8968-463437ece5bf.png",
+      "input_hashes": [
+        {
+          "path": "assets/local/portraits/pool/male_old/wanderer_male_old_07.png",
+          "sha256": "65f31756087356ac9643e4398f21ce0f8f0e23d4f8bb7c9051d3658994dd2a2e"
+        },
+        {
+          "path": "art_sources/refresh_20261019/approved_samples/02_portrait.png",
+          "sha256": "139f85deb18db95d129b9e3e31db95460f47b934a7a68a4f006b95f8ad53c3fe"
+        }
+      ],
+      "review": "Visually checked identity/content, category style and complete composition; integration separate.",
+      "actual_prompt": "Use case: style-transfer / identity-preserve.\nAsset: ONE independent waist-up elderly male portrait for a 2D Chinese cultivation RPG, target 512x640, opaque muted grey-green background. Measure actual native size separately.\nImage 1 is the EDIT TARGET: preserve this individual man's face, old age, build, hairstyle, beard pattern, view, costume, pose and exact props. Image 2 is ONLY the approved C drawing style reference; do not copy that man's face, beard, abacus, blue costume or pose.\nUse economical clear thin dark outlines, small simply drawn manga facial features, broad flat muted colour shapes, solid grouped hair and beard, few large clothing folds and ONE restrained structural cel shadow. Preserve original robe motifs simplified. Preserve elderly face shape, grey hair and beard, hooded eyes, cheek folds and a FEW readable age lines. Do not turn him into a young man or generic bearded elder. No photorealism, glossy skin, individual hair strands, fabric grain, material speckles, airbrush, intricate embroidery, dense wrinkles, border, text, watermark, scenery or invented gestures/props. Keep complete head, topmost hair/bun, pins, ribbons and important props inside frame; leave at least six percent plain background ABOVE highest hair/headwear. Keep source waist-up framing and hand visibility; do not add hands absent from crop. ONE portrait, no contact sheet.\nIdentity details: Tall thin elderly wanderer with angular warm tan face, small MOLE below VIEWER-LEFT eye, firm grey brows and alert small eyes viewer right, straight closed lips and a few forehead/cheek creases. Completely CLEAN SHAVEN, no moustache/beard. Very SHORT spiky silver-grey hair under broad dark brown HEADBAND tied with broad tails behind viewer left, no bun. Worn brown outer robe with broad slate-grey lapel edging and large dark grey/tan stitched patches, muted sage-grey crossing inner robe and cream collar. Faded tan sash; dark ochre double-lobed gourd hangs at VIEWER-LEFT waist. ONE hand at viewer-left chest grips thick rope strap of large tied grey-taupe cloth bundle behind viewer-left shoulder. Preserve mole, cropped hair/headband, clean-shaven old face, gourd and strap grip.\nMANDATORY PROP REPAIR: ONE SMALL COMPACT DOUBLE-LOBED BOTTLE GOURD AT VIEWER-LEFT BELT. Exactly TWO joined rounded bulbs: one small upper bulb and one large lower bulb, pinched waist between them, with ONE SHORT STRAIGHT narrow neck above the small bulb. Never THREE balls, never stacked multiple gourds, never an extra spherical neck. Make the entire gourd small enough to fit within the canvas at left waist, including its round bottom, and leave plain garment or background beneath its bottom. Move belt and crop up slightly or zoom out for this. Keep whole head, hand, rope, face, headband and pack safely inside frame, unchanged identity and pose. All flat smooth ochre fields with one shadow.",
+      "actual_input_roles": [
+        {
+          "path": "assets/local/portraits/pool/male_old/wanderer_male_old_07.png",
+          "sha256": "65f31756087356ac9643e4398f21ce0f8f0e23d4f8bb7c9051d3658994dd2a2e",
+          "role": "edit_target_identity_pose_costume_and_props"
+        },
+        {
+          "path": "art_sources/refresh_20261019/approved_samples/02_portrait.png",
+          "sha256": "139f85deb18db95d129b9e3e31db95460f47b934a7a68a4f006b95f8ad53c3fe",
+          "role": "approved_c_drawing_style_only_do_not_copy_identity"
+        }
+      ],
+      "session": "20261021_portrait_pool_07",
+      "target_dimensions": [
+        512,
+        640
+      ],
+      "size_matches_technical_source": false,
+      "integration_status": "candidate_only_not_runtime_integrated",
+      "size_note": "Native bytes retained; runtime crop/scale remains separate. Target dimensions are not claimed as delivered dimensions."
+    },
+    {
+      "id": "95f06b16d9dd7bb1",
+      "batch": "03_portrait_pool",
+      "kind": "existing",
+      "label": "assets/local/portraits/pool/male_old/wanderer_male_old_08.png",
+      "source": "assets/local/portraits/pool/male_old/wanderer_male_old_08.png",
+      "output": "art_sources/refresh_20261019/batches/03_portrait_pool/output/existing/local/portraits/pool/male_old/wanderer_male_old_08.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/local/portraits/pool/male_old/wanderer_male_old_08.png",
+        "sha256": "485e8b498633951554448339f742d6c1155db7f1d431cf99605076d02b806f2c",
+        "format": "PNG",
+        "dimensions": [
+          512,
+          640
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          4,
+          5
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_generated",
+      "tool_refs": [
+        "assets/local/portraits/pool/male_old/wanderer_male_old_08.png",
+        "art_sources/refresh_20261019/approved_samples/02_portrait.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/03_portrait_pool/output/prompts/95f06b16d9dd7bb1.txt",
+      "newly_generated": true,
+      "sha256": "d46070c38f15996141fedd4ab07acedfe64776826a7cd1fde71077e582d05895",
+      "native_dimensions": [
+        1122,
+        1402
+      ],
+      "native_mode": "RGB",
+      "alpha_extrema": null,
+      "tool_logical_path": "C:\\Users\\Kuroro\\.codex\\generated_images\\01a15bd8-ea44-7b52-a757-df11f7e1379f\\exec-052a6277-287b-4da3-a2db-9eacf93245c7.png",
+      "tool_physical_path": "D:\\claude\\flash\\.tmp\\imagegen_storage\\generated_images\\01a15bd8-ea44-7b52-a757-df11f7e1379f\\exec-052a6277-287b-4da3-a2db-9eacf93245c7.png",
+      "input_hashes": [
+        {
+          "path": "assets/local/portraits/pool/male_old/wanderer_male_old_08.png",
+          "sha256": "485e8b498633951554448339f742d6c1155db7f1d431cf99605076d02b806f2c"
+        },
+        {
+          "path": "art_sources/refresh_20261019/approved_samples/02_portrait.png",
+          "sha256": "139f85deb18db95d129b9e3e31db95460f47b934a7a68a4f006b95f8ad53c3fe"
+        }
+      ],
+      "review": "Visually checked identity/content, category style and complete composition; integration separate.",
+      "actual_prompt": "Use case: style-transfer / identity-preserve.\nAsset: ONE independent waist-up elderly male portrait for a 2D Chinese cultivation RPG, target 512x640, opaque muted grey-green background. Measure actual native size separately.\nImage 1 is the EDIT TARGET: preserve this individual man's face, old age, build, hairstyle, beard pattern, view, costume, pose and exact props. Image 2 is ONLY the approved C drawing style reference; do not copy that man's face, beard, abacus, blue costume or pose.\nUse economical clear thin dark outlines, small simply drawn manga facial features, broad flat muted colour shapes, solid grouped hair and beard, few large clothing folds and ONE restrained structural cel shadow. Preserve original robe motifs simplified. Preserve elderly face shape, grey hair and beard, hooded eyes, cheek folds and a FEW readable age lines. Do not turn him into a young man or generic bearded elder. No photorealism, glossy skin, individual hair strands, fabric grain, material speckles, airbrush, intricate embroidery, dense wrinkles, border, text, watermark, scenery or invented gestures/props. Keep complete head, topmost hair/bun, pins, ribbons and important props inside frame; leave at least six percent plain background ABOVE highest hair/headwear. Keep source waist-up framing and hand visibility; do not add hands absent from crop. ONE portrait, no contact sheet.\nIdentity details: Lean elderly swordsman wanderer with angular tan face, thick grey brows, stern narrowed eyes looking sideways viewer right and downturned closed lips, simple forehead/cheek age creases. Grey moustache and narrow pointed grey chin beard to collar. Grey hair tucked under large folded dark brown HEADSCARF tied behind viewer left with broad tails; long thin front locks. Worn dark green robe with broad dark brown crossing lapels, taupe inner robe and pale collar, tan cloth waist belt. Large tan/slate square stitched patches on viewer-left shoulder/sleeve. Brown cloth travel pack behind viewer-left shoulder with tan strap. SHEATHED sword at viewer-right hip, dark wrapped hilt with bronze pommel/guard points up right. No hands visible in source. Keep headscarf, narrow beard, severe older face and sheathed sword.",
+      "actual_input_roles": [
+        {
+          "path": "assets/local/portraits/pool/male_old/wanderer_male_old_08.png",
+          "sha256": "485e8b498633951554448339f742d6c1155db7f1d431cf99605076d02b806f2c",
+          "role": "edit_target_identity_pose_costume_and_props"
+        },
+        {
+          "path": "art_sources/refresh_20261019/approved_samples/02_portrait.png",
+          "sha256": "139f85deb18db95d129b9e3e31db95460f47b934a7a68a4f006b95f8ad53c3fe",
+          "role": "approved_c_drawing_style_only_do_not_copy_identity"
+        }
+      ],
+      "session": "20261021_portrait_pool_07",
+      "target_dimensions": [
+        512,
+        640
+      ],
+      "size_matches_technical_source": false,
+      "integration_status": "candidate_only_not_runtime_integrated",
+      "size_note": "Native bytes retained; runtime crop/scale remains separate. Target dimensions are not claimed as delivered dimensions."
+    },
+    {
+      "id": "505b2a7dbdee32ac",
+      "batch": "03_portrait_pool",
+      "kind": "existing",
+      "label": "assets/local/portraits/pool/male_old/wanderer_male_old_09.png",
+      "source": "assets/local/portraits/pool/male_old/wanderer_male_old_09.png",
+      "output": "art_sources/refresh_20261019/batches/03_portrait_pool/output/existing/local/portraits/pool/male_old/wanderer_male_old_09.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/local/portraits/pool/male_old/wanderer_male_old_09.png",
+        "sha256": "47278c0ac26be77afa5a3d6e8837a22cba830118360f977f07622967e13bfcbb",
+        "format": "PNG",
+        "dimensions": [
+          512,
+          640
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          4,
+          5
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_generated",
+      "tool_refs": [
+        "assets/local/portraits/pool/male_old/wanderer_male_old_09.png",
+        "art_sources/refresh_20261019/approved_samples/02_portrait.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/03_portrait_pool/output/prompts/505b2a7dbdee32ac.txt",
+      "newly_generated": true,
+      "sha256": "847468ff9db65f6fbba9a85482709eaea2e4fa3b54838aeb5cfbc6cdf63af18e",
+      "native_dimensions": [
+        1122,
+        1402
+      ],
+      "native_mode": "RGB",
+      "alpha_extrema": null,
+      "tool_logical_path": "C:\\Users\\Kuroro\\.codex\\generated_images\\01a15bd8-ea44-7b52-a757-df11f7e1379f\\exec-36da2dd9-ab7c-41d8-a94b-3011acf18da0.png",
+      "tool_physical_path": "D:\\claude\\flash\\.tmp\\imagegen_storage\\generated_images\\01a15bd8-ea44-7b52-a757-df11f7e1379f\\exec-36da2dd9-ab7c-41d8-a94b-3011acf18da0.png",
+      "input_hashes": [
+        {
+          "path": "assets/local/portraits/pool/male_old/wanderer_male_old_09.png",
+          "sha256": "47278c0ac26be77afa5a3d6e8837a22cba830118360f977f07622967e13bfcbb"
+        },
+        {
+          "path": "art_sources/refresh_20261019/approved_samples/02_portrait.png",
+          "sha256": "139f85deb18db95d129b9e3e31db95460f47b934a7a68a4f006b95f8ad53c3fe"
+        }
+      ],
+      "review": "Visually checked identity/content, category style and complete composition; integration separate.",
+      "actual_prompt": "Use case: style-transfer / identity-preserve.\nAsset: ONE independent waist-up elderly male portrait for a 2D Chinese cultivation RPG, target 512x640, opaque muted grey-green background. Measure actual native size separately.\nImage 1 is the EDIT TARGET: preserve this individual man's face, old age, build, hairstyle, beard pattern, view, costume, pose and exact props. Image 2 is ONLY the approved C drawing style reference; do not copy that man's face, beard, abacus, blue costume or pose.\nUse economical clear thin dark outlines, small simply drawn manga facial features, broad flat muted colour shapes, solid grouped hair and beard, few large clothing folds and ONE restrained structural cel shadow. Preserve original robe motifs simplified. Preserve elderly face shape, grey hair and beard, hooded eyes, cheek folds and a FEW readable age lines. Do not turn him into a young man or generic bearded elder. No photorealism, glossy skin, individual hair strands, fabric grain, material speckles, airbrush, intricate embroidery, dense wrinkles, border, text, watermark, scenery or invented gestures/props. Keep complete head, topmost hair/bun, pins, ribbons and important props inside frame; leave at least six percent plain background ABOVE highest hair/headwear. Keep source waist-up framing and hand visibility; do not add hands absent from crop. ONE portrait, no contact sheet.\nIdentity details: Stocky jovial elderly wanderer with very round warm tan face, tiny smiling eyes glancing strongly viewer right, warm closed smile and simple forehead/cheek age lines. Thin grey moustache plus LONG narrow wispy grey goatee ending at collar, simplify beard as few grouped tapered shapes. Short grey hair below soft dark brown HEADSCARF tied behind viewer left. Worn muted olive-grey outer robe, dark brown cross lapels, grey-beige inner robe and cream collar, broad plain brown edging strips. Big taupe stitched cloth patches on shoulders/sleeves. Faded tan sash and one ochre double-lobed gourd at VIEWER-RIGHT waist. Both hands outside source crop, no new gesture or held object. Preserve plump cheerful older face, headscarf, long narrow goatee and gourd right side.",
+      "actual_input_roles": [
+        {
+          "path": "assets/local/portraits/pool/male_old/wanderer_male_old_09.png",
+          "sha256": "47278c0ac26be77afa5a3d6e8837a22cba830118360f977f07622967e13bfcbb",
+          "role": "edit_target_identity_pose_costume_and_props"
+        },
+        {
+          "path": "art_sources/refresh_20261019/approved_samples/02_portrait.png",
+          "sha256": "139f85deb18db95d129b9e3e31db95460f47b934a7a68a4f006b95f8ad53c3fe",
+          "role": "approved_c_drawing_style_only_do_not_copy_identity"
+        }
+      ],
+      "session": "20261021_portrait_pool_07",
+      "target_dimensions": [
+        512,
+        640
+      ],
+      "size_matches_technical_source": false,
+      "integration_status": "candidate_only_not_runtime_integrated",
+      "size_note": "Native bytes retained; runtime crop/scale remains separate. Target dimensions are not claimed as delivered dimensions."
+    },
+    {
+      "id": "8579e6b704c17009",
+      "batch": "03_portrait_pool",
+      "kind": "existing",
+      "label": "assets/local/portraits/pool/male_old/wanderer_male_old_10.png",
+      "source": "assets/local/portraits/pool/male_old/wanderer_male_old_10.png",
+      "output": "art_sources/refresh_20261019/batches/03_portrait_pool/output/existing/local/portraits/pool/male_old/wanderer_male_old_10.png",
+      "brief": "Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.",
+      "spec": {
+        "path": "assets/local/portraits/pool/male_old/wanderer_male_old_10.png",
+        "sha256": "7bc5fac1430ca9db7af92b1ecc95a604dc61c44e564bcfba654336c06074e1c3",
+        "format": "PNG",
+        "dimensions": [
+          512,
+          640
+        ],
+        "mode": "RGB",
+        "background": "opaque",
+        "native_vector_required": false,
+        "aspect_ratio": [
+          4,
+          5
+        ],
+        "actor_layouts": [],
+        "actor_layout_note": "No actor atlas definition on this technical source."
+      },
+      "status": "delivered_generated",
+      "tool_refs": [
+        "assets/local/portraits/pool/male_old/wanderer_male_old_10.png",
+        "art_sources/refresh_20261019/approved_samples/02_portrait.png"
+      ],
+      "prompt_path": "art_sources/refresh_20261019/batches/03_portrait_pool/output/prompts/8579e6b704c17009.txt",
+      "newly_generated": true,
+      "sha256": "a93256efd418458f7c442e17d07f7189fff8ae873ab55f19cc04d2a8027d317c",
+      "native_dimensions": [
+        1122,
+        1402
+      ],
+      "native_mode": "RGB",
+      "alpha_extrema": null,
+      "tool_logical_path": "C:\\Users\\Kuroro\\.codex\\generated_images\\01a15bd8-ea44-7b52-a757-df11f7e1379f\\exec-b9fc9c89-639d-4b5d-ba0b-d18032f4fbd5.png",
+      "tool_physical_path": "D:\\claude\\flash\\.tmp\\imagegen_storage\\generated_images\\01a15bd8-ea44-7b52-a757-df11f7e1379f\\exec-b9fc9c89-639d-4b5d-ba0b-d18032f4fbd5.png",
+      "input_hashes": [
+        {
+          "path": "assets/local/portraits/pool/male_old/wanderer_male_old_10.png",
+          "sha256": "7bc5fac1430ca9db7af92b1ecc95a604dc61c44e564bcfba654336c06074e1c3"
+        },
+        {
+          "path": "art_sources/refresh_20261019/approved_samples/02_portrait.png",
+          "sha256": "139f85deb18db95d129b9e3e31db95460f47b934a7a68a4f006b95f8ad53c3fe"
+        }
+      ],
+      "review": "Visually checked identity/content, category style and complete composition; integration separate.",
+      "actual_prompt": "Use case: style-transfer / identity-preserve.\nAsset: ONE independent waist-up elderly male portrait for a 2D Chinese cultivation RPG, target 512x640, opaque muted grey-green background. Measure actual native size separately.\nImage 1 is the EDIT TARGET: preserve this individual man's face, old age, build, hairstyle, beard pattern, view, costume, pose and exact props. Image 2 is ONLY the approved C drawing style reference; do not copy that man's face, beard, abacus, blue costume or pose.\nUse economical clear thin dark outlines, small simply drawn manga facial features, broad flat muted colour shapes, solid grouped hair and beard, few large clothing folds and ONE restrained structural cel shadow. Preserve original robe motifs simplified. Preserve elderly face shape, grey hair and beard, hooded eyes, cheek folds and a FEW readable age lines. Do not turn him into a young man or generic bearded elder. No photorealism, glossy skin, individual hair strands, fabric grain, material speckles, airbrush, intricate embroidery, dense wrinkles, border, text, watermark, scenery or invented gestures/props. Keep complete head, topmost hair/bun, pins, ribbons and important props inside frame; leave at least six percent plain background ABOVE highest hair/headwear. Keep source waist-up framing and hand visibility; do not add hands absent from crop. ONE portrait, no contact sheet.\nIdentity details: Tall slender stern elderly wanderer with long angular tan face, sharp dark grey brows, small hooded eyes glancing viewer right, closed firm mouth and a few clear forehead/cheek age lines. Short dark GREY MOUSTACHE only, NO chin beard. Dark grey hair with lighter temple streaks in small HIGH bun tied tan cloth tails, long front locks, keep darker hair than white-haired men. Worn brown outer coat with broad plain chocolate lapels and large taupe stitched patches, muted sage-green crossed inner robe, cream collar and faded ochre sash. Pale tan cloth travel bundle behind viewer-left shoulder with broad pale tan strap. ONE visible hand at VIEWER LEFT grips a straight slightly crooked brown wooden STAFF rising along left chest, top fully visible. Preserve moustache-only face, darker grey hair, high bun, pack and LEFT staff grip. Flat wood without grain.",
+      "actual_input_roles": [
+        {
+          "path": "assets/local/portraits/pool/male_old/wanderer_male_old_10.png",
+          "sha256": "7bc5fac1430ca9db7af92b1ecc95a604dc61c44e564bcfba654336c06074e1c3",
+          "role": "edit_target_identity_pose_costume_and_props"
+        },
+        {
+          "path": "art_sources/refresh_20261019/approved_samples/02_portrait.png",
+          "sha256": "139f85deb18db95d129b9e3e31db95460f47b934a7a68a4f006b95f8ad53c3fe",
+          "role": "approved_c_drawing_style_only_do_not_copy_identity"
+        }
+      ],
+      "session": "20261021_portrait_pool_07",
+      "target_dimensions": [
+        512,
+        640
+      ],
+      "size_matches_technical_source": false,
+      "integration_status": "candidate_only_not_runtime_integrated",
+      "size_note": "Native bytes retained; runtime crop/scale remains separate. Target dimensions are not claimed as delivered dimensions."
+    }
+  ]
+}

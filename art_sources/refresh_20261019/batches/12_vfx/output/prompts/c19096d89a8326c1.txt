@@ -1,0 +1,9 @@
+Use case: style-transfer / identity-preserve / production game art.
+Asset: zhaoshui_water_metal_chain.png
+Content request: 按新大纲6.3的水金神通连击和善水印转化制作表现候选，不沿用旧版蓄势／反击机制；不改规则
+This is one independent production asset for an original Chinese cultivation RPG.
+Input image 1: assets/art/vfx/magic_01.png. Role: existing identity/content/layout target; preserve recognizable subject.
+Preserve the existing category-specific approved hand-drawn style: clear outlines, broad grouped colour areas, restrained shadows and low texture density. Do not impose character C anatomy rules on environments, maps, items or UI. No photorealism, cinematic bloom, dense surface scratches or depth-of-field blur.
+Standalone readable skill VFX on genuinely transparent alpha. Preserve the old source footprint and frame structure where specified. No character, scenery, text, interface or permanent background. No new gameplay mechanics.
+Old technical target: 256x256 pixels. Request the same proportions and retain usable safe margins; actual native output size will be measured, never mislabelled. Background: transparent_required.
+VFX content: Two simple interwoven water arcs and three short pale-gold blade-like streaks moving left-to-right, one small water seal spark converting into a gold highlight. Readable compact chain-combo expression, no counterattack shield or stored-charge orb. Single static expression candidate, not a falsely claimed animation atlas. True empty transparent pixels around effect, no checkerboard artwork or dark square baked into image.

@@ -1,0 +1,9 @@
+Use case: style-transfer / identity-preserve / production game art.
+Asset: assets/art/cultivator_atlas_v1.png
+Content request: Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.
+This is one independent production asset for an original Chinese cultivation RPG.
+Input image 1: assets/art/cultivator_atlas_v1.png. Role: existing identity/content/layout target; preserve recognizable subject.
+Input image 2: art_sources/refresh_20261019/approved_samples/01_hero.png. Role: approved drawing-style reference only.
+Use exactly the established C drawing language: economical clear thin dark outlines, lean stylized adult anatomy, small simply drawn manga facial features, grouped solid hair masses, broad flat muted colours, 3-5 structural clothing folds and one restrained shadow tone. No realistic face modelling, glossy anime rendering, intricate embroidery, fabric grain, individual hair strands, airbrushed skin or ornate magical effects. Plain muted grey-green backdrop. Do not copy the style reference person, beard, abacus or costume.
+A complete transparent 3-column by 2-row atlas: idle, prepare, attack, cast, hit, guard in that order. Six genuinely different usable action poses of ONE consistent character. Preserve original facing and custom frame registrations. Full head, hair, weapons and boots inside each cell, safe margins, no crossing cells, no contact shadows or background.
+Old technical target: 1536x1024 pixels. Request the same proportions and retain usable safe margins; actual native output size will be measured, never mislabelled. Background: transparent_required.

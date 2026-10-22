@@ -1,0 +1,14 @@
+Use case: style-transfer / identity-preserve / production game art.
+Asset: tiannan_tournament_reunion.png
+Content request: 筑基天南大比同辈重逢；同一角色沿用第02批身份和成长状态，区别炼气潜龙会
+This is one independent production asset for an original Chinese cultivation RPG.
+Input image 1: art_sources/refresh_20261019/approved_samples/13_event.png. Role: approved drawing-style reference ONLY; do not copy its subject, architecture, layout or camera.
+Input image 2: art_sources/refresh_20261019/batches/02_key_portraits/candidates/lu_chengzhou.png. Role: same named character identity anchor; preserve face, hair, costume cues and props.
+Input image 3: art_sources/refresh_20261019/batches/02_key_portraits/candidates/ye_zhiwei.png. Role: same named character identity anchor; preserve face, hair, costume cues and props.
+Input image 4: art_sources/refresh_20261019/batches/02_key_portraits/candidates/wenren_zhao.png. Role: same named character identity anchor; preserve face, hair, costume cues and props.
+Input image 5: art_sources/refresh_20261019/batches/02_key_portraits/candidates/liu_hanzhou_healthy.png. Role: same named character identity anchor; preserve face, hair, costume cues and props.
+Preserve the existing category-specific approved hand-drawn style: clear outlines, broad grouped colour areas, restrained shadows and low texture density. Do not impose character C anatomy rules on environments, maps, items or UI. No photorealism, cinematic bloom, dense surface scratches or depth-of-field blur.
+Story illustration in the approved graphic event style: symbolic focal point, layered mountain/cloud shapes and broad flat colours. Any depicted named person must match its supplied identity anchor in C style. No lettering, UI, labels, frames or watermark. Do not reveal late truth in early scenes; use only the requested event state. No obligatory victory/death/evil outcome unless requested.
+Old technical target: 1600x900 pixels. Request the same proportions and retain usable safe margins; actual native output size will be measured, never mislabelled. Background: opaque.
+IMPORTANT NEW CONTENT: this is NOT a repaint of the old technical-source scene. Completely replace its subject and composition according to the requested new asset. The old size anchor does not authorize copying its city, terrain, camera or buildings. Retain ONLY the approved drawing language from the style reference.
+MANDATORY EVENT COMPOSITION: Foundation-stage Tiannan tournament reunion, medium-wide view at the venue side terrace. Lu Chengzhou in ochre, Ye Zhiwei in green, Wenren Zhao in blue and Liu Hanzhou in grey-green stand naturally chatting with modest smiles, the same four distinct supplied faces and characteristic props. No medals, champion pose or forced outcome. Background arena is secondary, no sky bridge or ascension gateway.

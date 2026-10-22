@@ -1,0 +1,9 @@
+Use case: style-transfer / identity-preserve / production game art.
+Asset: scroll_panel_dark.png
+Content request: 深色兼容卷轴已有候选，适配现有浅色文字
+This is one independent production asset for an original Chinese cultivation RPG.
+Input image 1: assets/art/ui/scroll_panel.png. Role: existing identity/content/layout target; preserve recognizable subject.
+Input image 2: art_sources/refresh_20261019/approved_samples/10_panel.png. Role: approved drawing-style reference only.
+Preserve the existing category-specific approved hand-drawn style: clear outlines, broad grouped colour areas, restrained shadows and low texture density. Do not impose character C anatomy rules on environments, maps, items or UI. No photorealism, cinematic bloom, dense surface scratches or depth-of-field blur.
+Retain the existing UI/rite illustration drawing language and readability. UI text, slots, dates and numerical values are not baked into the image. Any transparent reference must remain genuinely transparent. Do not replace editable SVG assets with this bitmap.
+Old technical target: 1672x941 pixels. Request the same proportions and retain usable safe margins; actual native output size will be measured, never mislabelled. Background: opaque.

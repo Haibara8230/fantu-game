@@ -11,8 +11,10 @@ import hashlib
 import json
 from pathlib import Path
 import shutil
+import sys
 
 from PIL import Image
+from handoff_support import actor_sources as collect_actor_sources, configure_writes, markdown_paths, normalize, project_path, relative_path
 
 ROOT = Path(__file__).resolve().parents[2]
 PACK = ROOT / 'art_sources/refresh_20261019'
@@ -21,17 +23,20 @@ BATCHES = PACK / 'batches'
 
 
 def jsave(path, value):
+    path = project_path(path)
     path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(value, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+    path.write_text(json.dumps(normalize(value), ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
 
 
 def text(path, value):
+    path = project_path(path)
     path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(value.strip() + '\n', encoding='utf-8')
+    value = markdown_paths(value, path) if path.suffix == '.md' else value
+    path.write_text(normalize(value).strip() + '\n', encoding='utf-8')
 
 
 def link(label, path):
-    return f'[{label}]({path.as_posix()})'
+    return f'[{label}]({relative_path(path)})'
 
 
 DEFS = {
@@ -135,8 +140,10 @@ PLANNED = {
   ('P0', 'ye_zhiwei.png', '叶知微初期医修身份；已有候选'),
   ('P0', 'wenren_zhao.png', '闻人照初期阵法／远行身份；已有候选'),
   ('P0', 'liu_hanzhou_healthy.png', '柳寒舟健康状态；已有候选，与原 wounded 身份一致'),
-  ('P0', 'auction_elder.png', '拍卖老修士暂拟身份；已有候选，不公开真相式装饰'),
-  ('P2', 'lu_chengzhou_heir.png', '陆承舟接掌生意后的服饰与气质变化，保留同一张脸'),
+  ('P0', 'auction_elder.png', '温照衡初期拍卖老修士身份；已有候选，按元婴后期设定复核，不公开真相式装饰'),
+  ('P1', 'yan_wujiu.png', '守川司主事晏无咎，元婴；第7.3节角色，姓名暂拟。先交身份候选，克制威仪，不提前把立场画成纯粹邪恶'),
+  ('P1', 'lu_chengzhou_heir.png', '筑基篇：兄长离世后接掌家业，服饰与气质体现责任，保留同一张脸；不预设黑化或必须继任结局'),
+  ('P1', 'liu_hanzhou_case.png', '筑基篇北岳证人与旧案状态，沿用健康候选及剑穗身份；先复用，确需经历变化才补图，不机械变老'),
   ('P2', 'ye_zhiwei_physician.png', '叶知微行医重逢状态，禁药分支待剧情定案后另补'),
   ('P2', 'wenren_zhao_navigator.png', '闻人照可靠领航者状态，身份可辨，不默认失联即死亡'),
  ],
@@ -149,10 +156,12 @@ PLANNED = {
   ('P0', 'yunxi_city.png', '云溪全城总览；已有候选，与旧坊市内部街区区分'),
   ('P1', 'nanming_city.png', '南明全城：器街、商会、地火产业及旧坊市，不是赤霄宗改名'),
   ('P2', 'canglan_city.png', '沧澜医药城：丹会、药市、水榭；独立于沧澜阁'),
-  ('P2', 'beiyue_city.png', '北岳古物阵法城：古物街、阵师会馆、旧档库；独立于玄岳宗'),
+  ('P1', 'beiyue_city.png', '筑基篇先做北岳旧档库所在城区，五城阶段再补全古物街与阵师会馆；独立于玄岳宗'),
   ('P2', 'wanghai_city.png', '望海海贸城：海港、船坞、海图铺；区分内河白鹭渡'),
  ],
  '06_scenes': [
+  ('P0', 'qingshi_inn_quiet_room.png', '青石镇客栈静房：散修首次闭关、领悟与突破教学；简朴蒲团、床榻与案几，和客栈公共厅区分，空背景'),
+  ('P0', 'city_inn_quiet_room.png', '五城客栈静房共用基础及城市陈设变体；服务散修闭关与领悟，不画成已有私家洞府'),
   ('P0', 'sect_gate_normal.png', '日常青云山门；已有候选，正式旧图当前为魔潮状态'),
   ('P0', 'yunxi_city_gate.png', '结伴赴云溪的入城背景，门楼人间尺度，无烘焙文字'),
   ('P0', 'yunxi_assembly_street.png', '仙师集会街道：摊位、买卖与请教空间，空背景版'),
@@ -162,7 +171,15 @@ PLANNED = {
   ('P1', 'rogue_rented_abode.png', '散修租住洞府，简洁住处、修炼与生活陈设'),
   ('P1', 'nanming_artisan_street.png', '南明器街与炼器作坊，与现有万宝楼、牙行分工'),
   ('P2', 'canglan_medical_hall.png', '沧澜城丹会／医馆代表内景'),
-  ('P2', 'beiyue_old_archive.png', '北岳旧档库，缺页卷宗线索需与图标批一致'),
+  ('P1', 'beiyue_old_archive.png', '筑基篇北岳旧档库：缺页卷宗、古物与守川司交涉空间；线索与第10批一致'),
+  ('P0', 'tianhe_ferry_reflection.png', '白鹭渡内的天河渡口，开局夜宴后首条线索；复用日常内河岸线，补月圆照川城倒影状态，不另造港口，不提前泄露封印真相'),
+  ('P1', 'qingyun_sword_trial_cliff.png', '筑基宗门试炼青云试剑崖：山崖、分层攀登与剑痕；层数文字和交互由UI绘制'),
+  ('P1', 'rogue_trial_notice_hall.png', '各城悬赏会与散修历练帖领取处；告示正文与排名留给UI，不烘焙文字'),
+  ('P1', 'tiannan_tournament_venue.png', '筑基天南大比会场：斗法台、论道席与易宝会的空间关系；五城轮办用陈设变化，区别炼气潜龙会'),
+  ('P2', 'five_sect_forum_venue.png', '金丹以上五宗论道：论道席、交易展示和支持后辈的空间；优先复用公共会场，背景无年号、排名或奖励文字'),
+  ('P1', 'ancient_abode_inner_chamber.png', '筑基古修洞府深处：前厅通向受损阵法内室，留出合作与避阵的可读路线'),
+  ('P1', 'luoxia_deep_spirit_spring.png', '筑基落霞深谷灵泉：灵眼、异常水流与药路妖蟒线索；不自动加照川城阴谋符号'),
+  ('P1', 'duanjian_gorge_outskirts.png', '筑基断剑峡外围：安全商道、御剑近路与商队痕迹，内层另留后续内容'),
   ('P2', 'wanghai_chart_shop.png', '望海海图铺，闻人照远行相关'),
   ('P2', 'chenxia_branching_path.png', '沉霞古境可分岔的内部路径，区别现有入口'),
   ('P2', 'chenxia_array_chamber.png', '沉霞阵室，体现可研究／合作处理的空间'),
@@ -170,12 +187,14 @@ PLANNED = {
   ('P2', 'sea_ship_deck.png', '海船甲板，区分内河小舟'),
   ('P2', 'island_landing.png', '近海岛屿登陆点，清楚可行路线'),
   ('P2', 'underwater_ruin_gate.png', '海底遗址入口，与闻人照海图视觉相连'),
-  ('P3', 'sealed_old_city_gate.png', '封存旧城城门，城徽沿用候选母题，最终构图随真相定案'),
+  ('P3', 'sealed_old_city_gate.png', '元婴进入照川城封存空间的城门；城徽沿用候选母题，空间结构随大纲18节定案，不画时间旅行'),
   ('P3', 'sealed_old_city_street.png', '旧城生活遗迹，避免只有宏大宫殿'),
   ('P3', 'old_city_array_core.png', '旧城阵枢，可共享基础场景并留分支状态层'),
  ],
  '07_battle_backgrounds': [
-  ('P1', 'public_tournament_stage.png', '公共赛场斗法镜头，与第09批潜龙会全景保持空间关系'),
+  ('P1', 'tiannan_tournament_arena.png', '筑基天南大比斗法镜头，与第06批会场保持空间关系；五城轮办可换边缘陈设，站位清楚'),
+  ('P0', 'public_tournament_stage.png', '开局云溪潜龙会斗法镜头，与第09批全景保持空间关系；参赛与观战共用，不烘焙胜者或角色'),
+  ('P2', 'five_sect_forum_arena.png', '五宗论道的高阶斗法镜头；沿用第06批会场布局和既有斗法背景要求，优先复用相容场地'),
   ('P2', 'chenxia_array_arena.png', '古境阵室斗法场，双方站位明确'),
   ('P2', 'sea_island_arena.png', '海岛斗法场，海面与岛屿分层'),
   ('P2', 'underwater_ruin_arena.png', '水下遗迹斗法场，同色系分层但不吞没角色'),
@@ -184,48 +203,62 @@ PLANNED = {
   ('P0', 'tiannan_five_city_plan.png', '五城五宗及河运／海域整体规划候选；不直接覆盖当前可玩地图'),
   ('P2', 'near_sea_map.png', '近海群岛、航线空间和沉船遗址布局；标签与路线独立'),
   ('P2', 'chenxia_interior_map.png', '古境内部支路／阵室关系；先确定真实房间再画'),
+  ('P3', 'zhaochuan_sealed_space_map.png', '照川城封存空间规划；城门、生活遗迹与阵枢的关系待大纲18节定案，先候选，不提前烘焙路线或结局状态'),
  ],
  '09_events': [
+  ('P1', 'tiannan_tournament_reunion.png', '筑基天南大比同辈重逢；同一角色沿用第02批身份和成长状态，区别炼气潜龙会'),
+  ('P1', 'beiyue_shouchuan_encounter.png', '北岳旧档库守川司回收古物与缺页卷宗的首次正面交涉；晏无咎身份先由第02批确认'),
+  ('P1', 'lu_family_succession.png', '约30年陆家丧事与接掌家业的经历；复用陆府空间和同一张脸，后续离家／担责／疏远不固定成单一结局'),
+  ('P1', 'beiyue_witness.png', '柳寒舟北岳证人与矛盾卷宗的会面；沿用剑穗身份与旧档空间，证人造型待实际人物内容确认'),
   ('P0', 'yunxi_assembly.png', '仙师集会事件：交易与结识的繁华，人物身份沿用头像候选'),
   ('P0', 'auction_mirror_anomaly.png', '残镜短暂映出地图没有的城，铜片反应；不提前泄露完整真相'),
   ('P0', 'qianlong_arena.png', '公共潜龙会场景；已有空背景候选，区别宗门外门比试'),
   ('P0', 'lu_family_night_banquet.png', '陆府夜宴与同辈相识，人物脸型引用第02批，不擅改身份'),
   ('P1', 'friends_breakthrough_meal.png', '突破后吃饭等轻松同辈日常，可复用陆府／客栈空间'),
   ('P1', 'auction_elder_old_painting.png', '拍卖老修士的旧画像线索，必须是同一身份的历史版本'),
+  ('P2', 'ye_zhiwei_master_crisis.png', '叶知微师父寿元将尽、替代救法与禁方抉择；先复用医馆与人物，师父造型随内容确认，不预设必然黑化或死亡'),
+  ('P2', 'five_sect_forum.png', '金丹以上五宗论道：斗法、观战论道、交易展示或支持后辈四类参与；与第06批会场一致，不固定夺冠'),
   ('P2', 'chenxia_old_city_record.png', '古境记录证明旧城真实存在的发现演出'),
+  ('P2', 'chenxia_shouchuan_evidence.png', '沉霞古境合作探索及与守川司争夺照川城实证；同辈可缺席，交涉或争夺按实际剧情，不强制全员同框'),
   ('P2', 'sea_chart_departure.png', '闻人照筹船与出海，呼应海图、海船和同一人物'),
+  ('P2', 'wenren_missing_trace.png', '闻人照出海失联后的船队消息／遗留线索；复用海图与海船，不以遗体或葬礼断言人物已死'),
+  ('P2', 'wen_zhaoheng_testimony.png', '约200年前温照衡建立信任后口述封存往事的版本；沿用元婴后期身份，后期真相与初期素材分开'),
+  ('P2', 'wen_zhaoheng_legacy.png', '错过温照衡生前口述后的遗物、日记与阵图接续版本；使用同一器物母题，不让错过人物卡死主线'),
   ('P3', 'old_city_revelation.png', '旧城封印与遗民历史揭示，不画成任意时间旅行'),
-  ('P3', 'ending_reopen_passage.png', '修复并重新开放通路的结局状态'),
-  ('P3', 'ending_replace_array.png', '另立阵法、封存危险区域的结局状态'),
-  ('P3', 'ending_personal_passage.png', '寻找个人通路并交托后续责任的结局状态'),
+  ('P3', 'ending_reopen_passage.png', '修复重开：照川城部分恢复、通路重开与后续治理；公开真相另作独立状态'),
+  ('P3', 'ending_replace_array.png', '替换旧阵：疏散可救者、部分遗迹永久封闭并另修通路；与重开结局有可见差异'),
+  ('P3', 'ending_personal_passage.png', '自寻通路：个人飞升、移交证据与方案、后续责任按交托情况延续；不预设毁城或隐瞒真相'),
  ],
  '10_item_skill_icons': [
   ('P0', 'old_city_seal.svg', '已生成候选：三拱城门、双水纹与缺口圆环，非已批准设定'),
   ('P0', 'mirror_back_fragment.svg', '已生成候选：廉价铜片，有可识别的部分阵纹'),
   ('P0', 'remnant_mirror.svg', '已生成候选：拍卖残镜，与铜片、城徽同一视觉母题'),
   ('P1', 'old_city_record.svg', '已生成候选：旧城档案，重复同一城徽而非无关符号'),
-  ('P0', 'zhaoshui_fenguang.svg', '已生成候选：《照水分光诀》，分光水剑辨识形'),
+  ('P2', 'zhaoshui_fenguang.svg', '已有候选：《照水分光诀》水剑辨识形，水金连击与善水印转化；开局可作演示／残篇，完整追求属五城阶段'),
   ('P1', 'cangxi_lu.svg', '已生成候选：《藏息录》，隐息主题，区别水剑传承'),
   ('P1', 'tingchao_broken.svg', '已生成候选：听潮剑残损形态，和修复版保持同一器型'),
   ('P1', 'tingchao_repaired.svg', '已生成候选：听潮剑修复形态，不自动设为本命法宝'),
   ('P2', 'wenren_sea_chart.svg', '已生成候选：闻人照海图，连接远行线索'),
+  ('P2', 'wen_zhaoheng_diary.svg', '温照衡遗物日记与阵图线索；沿用档案和候选城徽部件，不将未揭示的完整真相写进小图文字'),
  ],
  '11_ui_rites': [
   ('P0', 'scroll_panel_dark.png', '深色兼容卷轴已有候选，适配现有浅色文字'),
-  ('P1', 'hero_meditate.png', '主角打坐插画，人物身份与第01批一致，真实透明背景'),
+  ('P0', 'hero_meditate.png', '开局静房首次闭关与领悟的打坐插画；沿用第01批主角身份与既定画法，真实透明背景，不提前宣告宗门归属'),
   ('P1', 'breakthrough_ritual_vignette.png', '突破筹划功能插画，条件、资源和结果由UI独立绘制'),
-  ('P1', 'exploration_states.svg', '未知／听闻／发现／到访／内部探索状态，交独立可组合矢量而非写死在地图'),
+  ('P1', 'exploration_states.svg', '未知／已听闻／已发现／已到访／已探索完毕五种状态，交独立可组合矢量而非写死在地图'),
   ('P1', 'city_port_markers.svg', '城市与海港地图标记，区分旧坊市及内河渡口'),
+  ('P1', 'retreat_return_summary.svg', '出关消息、故人变故与约定提醒的可组合空白部件；沿用现有UI画法，日期、人名与结果由程序绘制，先复用现有卷轴'),
  ],
  '12_vfx': [
-  ('P1', 'zhaoshui_charge.png', '照水分光蓄势视觉，机制确认后制作，保留可读剪影'),
-  ('P1', 'zhaoshui_counter.png', '照水分光反击视觉，与图标／武器形保持一致'),
-  ('P2', 'cangxi_concealment.png', '藏息轻雾／隐息效果，不改变所有风险的实际规则'),
+  ('P2', 'zhaoshui_water_metal_chain.png', '按新大纲6.3的水金神通连击和善水印转化制作表现候选，不沿用旧版蓄势／反击机制；不改规则'),
+  ('P1', 'cangxi_concealment.png', '筑基篇藏息传承的轻雾／撤离表现，沿用原特效要求；不画成永久隐身，不改变实际风险规则'),
+  ('P2', 'tingchao_water_qi.png', '听潮剑修复后在水脉附近开局多吸灵气的表现候选，保留同一剑型；帧数、时长与实际消费者确认后再做'),
  ],
 }
 
 
 def main():
+    configure_writes()
     catalog_path = PACK / 'inventory.json'
     catalog = json.loads(catalog_path.read_text(encoding='utf-8'))
     art = json.loads((ROOT / 'data/art.json').read_text(encoding='utf-8'))
@@ -262,32 +295,31 @@ def main():
     catalog.update(generation_status='stopped_by_user', runtime_png_replaced=0,
                    note='User will dispatch separate chats. Handoffs produce candidates only; integration is separate.')
     jsave(catalog_path, catalog)
-    actor_sources = {}
-    for actor_id, definition in art['actors'].items():
-        for key in ('texture', 'preferred'):
-            path = definition.get(key, '').removeprefix('res://')
-            if path:
-                actor_sources.setdefault(path, []).append({'actor_id': actor_id, 'source_role': key, 'definition': definition})
+    actor_sources = collect_actor_sources(art)
     entries = {key: [] for key in DEFS}
     for entry in catalog['assets']:
         record = dict(entry)
-        record['absolute_path'] = (ROOT / entry['path']).as_posix()
         record['actor_layouts'] = actor_sources.get(entry['path'], [])
         entries[category(entry['path'], actor_sources)].append(record)
     assert sum(map(len, entries.values())) == len(catalog['assets'])
     all_paths = [e['path'] for group in entries.values() for e in group]
     assert len(all_paths) == len(set(all_paths))
 
-    samples = json.loads((ROOT / '.tmp/style_samples_20261019/samples.json').read_text(encoding='utf-8'))
+    samples_path = ROOT / '.tmp/style_samples_20261019/samples.json'
+    if not samples_path.exists():
+        samples_path = PACK / 'approved_samples/index.json'
+    samples = normalize(json.loads(samples_path.read_text(encoding='utf-8')))
     sample_map = {}
     for sample in samples:
         dest = PACK / 'approved_samples' / Path(sample['new']).name
         dest.parent.mkdir(parents=True, exist_ok=True)
-        shutil.copy2(Path(sample['new']), dest)
+        source = project_path(sample.get('packaged_new', sample['new']))
+        if source != dest:
+            shutil.copy2(source, dest)
         sample_map[int(sample['id'][:2])] = {**sample, 'packaged_new': dest.as_posix()}
         for suffix in ('.svg',):
-            svg = Path(sample['new']).with_suffix(suffix)
-            if svg.exists():
+            svg = source.with_suffix(suffix)
+            if svg.exists() and svg != dest.with_suffix(suffix):
                 shutil.copy2(svg, dest.with_suffix(suffix))
     jsave(PACK / 'approved_samples/index.json', list(sample_map.values()))
 
@@ -299,7 +331,10 @@ def main():
         source = WORK / (job['id'] + '.png')
         dest = BATCHES / batch / 'candidates' / source.name
         dest.parent.mkdir(parents=True, exist_ok=True)
-        shutil.copy2(source, dest)
+        if source.exists():
+            shutil.copy2(source, dest)
+        elif not dest.exists():
+            raise FileNotFoundError('Missing packaged candidate: ' + str(dest))
         with Image.open(dest) as im:
             info = {'size': list(im.size), 'mode': im.mode}
             if im.mode == 'RGBA':
@@ -310,7 +345,9 @@ def main():
                           'path': dest.as_posix(), 'prompt': prompt_path.as_posix(), 'refs': job.get('refs', []),
                           'sha256': hashlib.sha256(dest.read_bytes()).hexdigest(), **info})
     jsave(PACK / 'completed_candidates.json', completed)
-    jsave(PACK / 'reference_sources.json', json.loads((ROOT / '.tmp/mcs_style_reference_20261019/sources.json').read_text(encoding='utf-8')))
+    references_path = ROOT / '.tmp/mcs_style_reference_20261019/sources.json'
+    if references_path.exists():
+        jsave(PACK / 'reference_sources.json', json.loads(references_path.read_text(encoding='utf-8')))
 
     common = '''
 # 多对话共用规则
@@ -348,7 +385,7 @@ def main():
             for e in group:
                 info = e.get('current', e.get('baseline', {}))
                 size = info.get('size', ['', ''])
-                writer.writerow([e['absolute_path'], e['status'], *size, info.get('mode', ''), e.get('baseline', {}).get('sha256', '')])
+                writer.writerow([e['path'], e['status'], *size, info.get('mode', ''), e.get('baseline', {}).get('sha256', '')])
         refs = [sample_map[i] for i in sample_ids]
         jsave(folder / 'references.json', refs)
         planned = [{'priority': priority, 'filename': filename, 'brief': brief,
@@ -357,7 +394,7 @@ def main():
                    for priority, filename, brief in PLANNED[key]]
         jsave(folder / 'new_asset_briefs.json', planned)
         candidates = [e for e in completed if e['batch'] == key]
-        lines = [f'# {key} · {title}', '', f'现有资源：{len(group)} 项。已归档本轮生成位图：{len(candidates)} 张。', '', '本文件是交接说明；当前对话已按用户要求停止生成，后续由用户在新对话授权执行。', '', '## 先读', '', link('通用规则', PACK / 'COMMON_RULES.md'), link('分类风格规范', PACK / 'STYLE_GUIDE.md'), link('新大纲', ROOT / 'docs/WORLD_STORY_REWRITE_20261019.md'), link('美术影响评审', ROOT / 'docs/ART_IMPACT_WORLD_REWRITE_20261019.md'), '', '## 本批画法', '', style, '', '## 制作范围与顺序', '']
+        lines = [f'# {key} · {title}', '', f'现有资源：{len(group)} 项。已归档本轮生成位图：{len(candidates)} 张。', '', '本文件是交接说明；当前对话已按用户要求停止生成，后续由用户在新对话授权执行。', '', '## 先读', '', link('通用规则', PACK / 'COMMON_RULES.md'), link('分类风格规范', PACK / 'STYLE_GUIDE.md'), link('新大纲', ROOT / 'docs/GAME_OUTLINE.md'), link('美术影响评审', ROOT / 'docs/ART_IMPACT_WORLD_REWRITE_20261019.md'), '', '## 本批画法', '', style, '', '## 制作范围与顺序', '']
         lines += [f'{i+1}. {t}' for i, t in enumerate(tasks)]
         lines += ['', '## 输入与输出', '', '- `inputs.json` 是本批完整原图清单，含尺寸、哈希和角色帧定义；`inputs.csv` 便于浏览。', '- `references.json` 指向本批已确定样张及对应真实参考。注意参考内容不一定与交付题材相同。', '- `new_asset_briefs.json` 是新大纲所需图片的逐项说明，不代表已经生成或接入。P0开局／基础，P1首段修行，P2中期扩展，P3旧城与结局；后期布局未定时先留待办。', '- `candidates/` 为已生成待验收图片，`prompts/` 为当时完整提示词；先复用或修订，不盲目从头生成。', '- 新产物只写本目录 `output/`，交付 `delivery.json` 和逐张提示词；未生成项目保留待办，不冒称已完成。', '']
         if candidates:
@@ -393,7 +430,8 @@ def main():
         shutil.copy2(path, icon_candidates / path.name)
     review = BATCHES / '10_item_skill_icons/review'
     review.mkdir(exist_ok=True)
-    shutil.copy2(WORK / 'vector_overview.png', review / 'vector_overview.png')
+    if (WORK / 'vector_overview.png').exists():
+        shutil.copy2(WORK / 'vector_overview.png', review / 'vector_overview.png')
     baseline_count = sum('baseline' in e for e in catalog['assets'])
     changed = sum(e['status'] == 'modified_pending_game_qa' for e in catalog['assets'])
     rows = ['# 美术分批交接总入口', '', '**状态：按用户要求停止图片生成。用户将自行开启多个对话，分别执行下列批次。**', '', f'本包覆盖{baseline_count}项原有美术，加9个新大纲SVG，共{len(catalog["assets"])}项正式目录资源。另归档本轮13张生成位图（12项独立资源，主角图集含初版及修正版），以及此前13类样张。', '', f'当前正式PNG替换数：0。已有{changed}个正式SVG及两个原生生成器被修改，另有9个新增SVG；205个SVG已通过Godot无窗口渲染检查，尚未完成游戏导入／美术／UI回归。没有修改玩法数据、存档或运行脚本。', '', '## 开新对话的用法', '', '每批目录都有 `START_PROMPT.txt`，复制其内容到新对话即可。普通头像使用8个子批中的启动词，不把父目录与子批同时分给不同对话。', '', '所有生成对话先交付本批 `output/`，正式替换最后统一集成。这样多对话不会同时改同一张正式资源或共享配置。', '', link('通用规则', PACK / 'COMMON_RULES.md') + ' · ' + link('分类风格规范', PACK / 'STYLE_GUIDE.md') + ' · ' + link('本轮13张候选索引', PACK / 'completed_candidates.json'), '', '## 12类任务', '', '| 批次 | 工作范围 | 原有／已新增目录资源 | 本轮位图候选 |', '|---|---|---:|---:|']
@@ -405,8 +443,12 @@ def main():
     readme = readme.replace('本次整理不会继续生成图片、替换PNG、自动创建对话或提交Git。', '生成批次不会自动替换PNG或创建其他对话；Git提交推送由用户另行授权。')
     text(PACK / 'README.md', readme)
     jsave(WORK / 'handoff_validation.json', {'baseline_assets': baseline_count, 'runtime_entries': len(all_paths), 'unique_entries': len(set(all_paths)), 'batch_counts': {k: len(v) for k, v in entries.items()}, 'pool_subbatches': len(subbatches), 'pool_subbatch_total': sum(s['count'] for s in subbatches), 'candidate_pngs': len(completed), 'candidate_unique_assets': len(completed)-1, 'modified_svg': changed, 'missing_inputs': [p for p in all_paths if not (ROOT / p).exists()]})
+    from repair_handoffs import repair
+    repair()
     print('HANDOFF_READY', {'baseline': baseline_count, 'runtime_entries': len(all_paths), 'candidate_pngs': len(completed), 'batches': len(summary), 'portrait_subbatches': len(subbatches), 'modified_svg': changed})
 
 
 if __name__ == '__main__':
+    if not sys.dont_write_bytecode:
+        raise SystemExit('Run with python -B to avoid bytecode cache writes.')
     main()

@@ -1,0 +1,7 @@
+Use case: style-transfer / identity-preserve / production game art.
+Asset: zhaoshui_fenguang.svg
+Content request: 已有候选：《照水分光诀》水剑辨识形，水金连击与善水印转化；开局可作演示／残篇，完整追求属五城阶段
+This is one independent production asset for an original Chinese cultivation RPG.
+Input image 1: assets/art/story/icons/zhaoshui_fenguang.svg. Role: existing identity/content/layout target; preserve recognizable subject.
+Preserve the existing category-specific approved hand-drawn style: clear outlines, broad grouped colour areas, restrained shadows and low texture density. Do not impose character C anatomy rules on environments, maps, items or UI. No photorealism, cinematic bloom, dense surface scratches or depth-of-field blur.
+Old technical target: 64x64 pixels. Request the same proportions and retain usable safe margins; actual native output size will be measured, never mislabelled. Background: preserve_source_svg.

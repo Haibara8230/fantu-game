@@ -16,14 +16,17 @@ static func scroll_style(padding: float = 18.0, opacity: float = 1.0) -> StyleBo
 		var painted := StyleBoxTexture.new()
 		painted.texture = texture
 		painted.modulate_color = Color(1, 1, 1, opacity)
-		# Compress the ornamental frame as a whole; it must not impose image-sized minimums.
-		painted.set_texture_margin_all(0)
+		# A 9-slice: the rollers, their caps and the gold rails keep their drawn size on any panel, and
+		# only the paper between them stretches.
+		for side: int in FRAME:
+			painted.set_texture_margin(side, FRAME[side])
 		box = painted
-	# The painted frame's border and corner ornaments need more room than the flat fallback: its bamboo
-	# reaches well in from the sides and its clouds rise from the lower corners, so text keeps clear.
-	var side := 0.0 if texture == null else 52.0
-	box.content_margin_left = padding + side
-	box.content_margin_right = padding + side
-	box.content_margin_top = padding + (0.0 if texture == null else 14.0)
-	box.content_margin_bottom = padding + (0.0 if texture == null else 24.0)
+	# Text keeps clear of the rollers at the sides and of the rails above and below.
+	for side: int in [SIDE_LEFT, SIDE_RIGHT]:
+		box.set_content_margin(side, padding + (0.0 if texture == null else FRAME[side]))
+	for side: int in [SIDE_TOP, SIDE_BOTTOM]:
+		box.set_content_margin(side, padding * (1.0 if texture == null else 0.5) + (0.0 if texture == null else FRAME[side]))
 	return box
+
+## The scroll frame's edges in assets/art/ui/scroll_panel.png pixels (894x427): the rollers and the rails.
+const FRAME := {SIDE_LEFT: 52.0, SIDE_TOP: 37.0, SIDE_RIGHT: 52.0, SIDE_BOTTOM: 44.0}

@@ -1,30 +1,308 @@
 [
   {
     "priority": "P1",
-    "filename": "public_tournament_stage.png",
-    "brief": "公共赛场斗法镜头，与第09批潜龙会全景保持空间关系",
+    "filename": "tiannan_tournament_arena.png",
+    "brief": "筑基天南大比斗法镜头，与第06批会场保持空间关系；五城轮办可换边缘陈设，站位清楚",
     "status": "planned_or_existing_candidate",
-    "output_path": "D:/fqh/flash/art_sources/refresh_20261019/batches/07_battle_backgrounds/output/public_tournament_stage.png"
+    "output_path": "art_sources/refresh_20261019/batches/07_battle_backgrounds/output/tiannan_tournament_arena.png",
+    "content_outline": "docs/GAME_OUTLINE.md",
+    "outline_sections": [
+      "4.5",
+      "9",
+      "11"
+    ],
+    "content_plan": "art_sources/refresh_20261019/CONTENT_PLAN.md",
+    "style_reference": "art_sources/refresh_20261019/batches/07_battle_backgrounds/references.json",
+    "technical_spec": {
+      "path": "assets/art/bamboo_arena_v1.png",
+      "sha256": "7e1ad7b9eed2ddca42a106f5ba7d7d1697db17ab737c41b2d15923823f901f2f",
+      "format": "PNG",
+      "dimensions": [
+        1916,
+        821
+      ],
+      "mode": "RGB",
+      "background": "opaque",
+      "native_vector_required": false,
+      "aspect_ratio": [
+        1916,
+        821
+      ],
+      "actor_layouts": [],
+      "actor_layout_note": "No actor atlas definition on this technical source."
+    },
+    "spec_policy": "inherit_existing_source; retain measured native output separately; never mislabel dimensions",
+    "reference_bindings": [
+      {
+        "id": "technical:assets/art/bamboo_arena_v1.png",
+        "role": "dimensions_alpha_layout_only"
+      },
+      {
+        "id": "style:06_battle",
+        "role": "drawing_style_only"
+      },
+      {
+        "id": "original:06_battle",
+        "role": "original_game_style_only_no_copy"
+      }
+    ],
+    "identity_policy": "If a registered person appears, use their identity_registry image and hash; unseen characters wait for batch02; never substitute style-reference faces.",
+    "generation_gate": "generate_after_dependencies",
+    "dependencies": []
+  },
+  {
+    "priority": "P0",
+    "filename": "public_tournament_stage.png",
+    "brief": "开局云溪潜龙会斗法镜头，与第09批全景保持空间关系；参赛与观战共用，不烘焙胜者或角色",
+    "status": "planned_or_existing_candidate",
+    "output_path": "art_sources/refresh_20261019/batches/07_battle_backgrounds/output/public_tournament_stage.png",
+    "content_outline": "docs/GAME_OUTLINE.md",
+    "outline_sections": [
+      "4.5",
+      "9",
+      "11"
+    ],
+    "content_plan": "art_sources/refresh_20261019/CONTENT_PLAN.md",
+    "style_reference": "art_sources/refresh_20261019/batches/07_battle_backgrounds/references.json",
+    "technical_spec": {
+      "path": "assets/art/bamboo_arena_v1.png",
+      "sha256": "7e1ad7b9eed2ddca42a106f5ba7d7d1697db17ab737c41b2d15923823f901f2f",
+      "format": "PNG",
+      "dimensions": [
+        1916,
+        821
+      ],
+      "mode": "RGB",
+      "background": "opaque",
+      "native_vector_required": false,
+      "aspect_ratio": [
+        1916,
+        821
+      ],
+      "actor_layouts": [],
+      "actor_layout_note": "No actor atlas definition on this technical source."
+    },
+    "spec_policy": "inherit_existing_source; retain measured native output separately; never mislabel dimensions",
+    "reference_bindings": [
+      {
+        "id": "technical:assets/art/bamboo_arena_v1.png",
+        "role": "dimensions_alpha_layout_only"
+      },
+      {
+        "id": "style:06_battle",
+        "role": "drawing_style_only"
+      },
+      {
+        "id": "original:06_battle",
+        "role": "original_game_style_only_no_copy"
+      }
+    ],
+    "identity_policy": "If a registered person appears, use their identity_registry image and hash; unseen characters wait for batch02; never substitute style-reference faces.",
+    "generation_gate": "generate_after_dependencies",
+    "dependencies": []
+  },
+  {
+    "priority": "P2",
+    "filename": "five_sect_forum_arena.png",
+    "brief": "五宗论道的高阶斗法镜头；沿用第06批会场布局和既有斗法背景要求，优先复用相容场地",
+    "status": "planned_or_existing_candidate",
+    "output_path": "art_sources/refresh_20261019/batches/07_battle_backgrounds/output/five_sect_forum_arena.png",
+    "content_outline": "docs/GAME_OUTLINE.md",
+    "outline_sections": [
+      "4.5",
+      "9",
+      "11"
+    ],
+    "content_plan": "art_sources/refresh_20261019/CONTENT_PLAN.md",
+    "style_reference": "art_sources/refresh_20261019/batches/07_battle_backgrounds/references.json",
+    "technical_spec": {
+      "path": "assets/art/bamboo_arena_v1.png",
+      "sha256": "7e1ad7b9eed2ddca42a106f5ba7d7d1697db17ab737c41b2d15923823f901f2f",
+      "format": "PNG",
+      "dimensions": [
+        1916,
+        821
+      ],
+      "mode": "RGB",
+      "background": "opaque",
+      "native_vector_required": false,
+      "aspect_ratio": [
+        1916,
+        821
+      ],
+      "actor_layouts": [],
+      "actor_layout_note": "No actor atlas definition on this technical source."
+    },
+    "spec_policy": "inherit_existing_source; retain measured native output separately; never mislabel dimensions",
+    "reference_bindings": [
+      {
+        "id": "technical:assets/art/bamboo_arena_v1.png",
+        "role": "dimensions_alpha_layout_only"
+      },
+      {
+        "id": "style:06_battle",
+        "role": "drawing_style_only"
+      },
+      {
+        "id": "original:06_battle",
+        "role": "original_game_style_only_no_copy"
+      }
+    ],
+    "identity_policy": "If a registered person appears, use their identity_registry image and hash; unseen characters wait for batch02; never substitute style-reference faces.",
+    "generation_gate": "generate_after_dependencies",
+    "dependencies": []
   },
   {
     "priority": "P2",
     "filename": "chenxia_array_arena.png",
     "brief": "古境阵室斗法场，双方站位明确",
     "status": "planned_or_existing_candidate",
-    "output_path": "D:/fqh/flash/art_sources/refresh_20261019/batches/07_battle_backgrounds/output/chenxia_array_arena.png"
+    "output_path": "art_sources/refresh_20261019/batches/07_battle_backgrounds/output/chenxia_array_arena.png",
+    "content_outline": "docs/GAME_OUTLINE.md",
+    "outline_sections": [
+      "4.5",
+      "9",
+      "11"
+    ],
+    "content_plan": "art_sources/refresh_20261019/CONTENT_PLAN.md",
+    "style_reference": "art_sources/refresh_20261019/batches/07_battle_backgrounds/references.json",
+    "technical_spec": {
+      "path": "assets/art/bamboo_arena_v1.png",
+      "sha256": "7e1ad7b9eed2ddca42a106f5ba7d7d1697db17ab737c41b2d15923823f901f2f",
+      "format": "PNG",
+      "dimensions": [
+        1916,
+        821
+      ],
+      "mode": "RGB",
+      "background": "opaque",
+      "native_vector_required": false,
+      "aspect_ratio": [
+        1916,
+        821
+      ],
+      "actor_layouts": [],
+      "actor_layout_note": "No actor atlas definition on this technical source."
+    },
+    "spec_policy": "inherit_existing_source; retain measured native output separately; never mislabel dimensions",
+    "reference_bindings": [
+      {
+        "id": "technical:assets/art/bamboo_arena_v1.png",
+        "role": "dimensions_alpha_layout_only"
+      },
+      {
+        "id": "style:06_battle",
+        "role": "drawing_style_only"
+      },
+      {
+        "id": "original:06_battle",
+        "role": "original_game_style_only_no_copy"
+      }
+    ],
+    "identity_policy": "If a registered person appears, use their identity_registry image and hash; unseen characters wait for batch02; never substitute style-reference faces.",
+    "generation_gate": "generate_after_dependencies",
+    "dependencies": []
   },
   {
     "priority": "P2",
     "filename": "sea_island_arena.png",
     "brief": "海岛斗法场，海面与岛屿分层",
     "status": "planned_or_existing_candidate",
-    "output_path": "D:/fqh/flash/art_sources/refresh_20261019/batches/07_battle_backgrounds/output/sea_island_arena.png"
+    "output_path": "art_sources/refresh_20261019/batches/07_battle_backgrounds/output/sea_island_arena.png",
+    "content_outline": "docs/GAME_OUTLINE.md",
+    "outline_sections": [
+      "4.5",
+      "9",
+      "11"
+    ],
+    "content_plan": "art_sources/refresh_20261019/CONTENT_PLAN.md",
+    "style_reference": "art_sources/refresh_20261019/batches/07_battle_backgrounds/references.json",
+    "technical_spec": {
+      "path": "assets/art/bamboo_arena_v1.png",
+      "sha256": "7e1ad7b9eed2ddca42a106f5ba7d7d1697db17ab737c41b2d15923823f901f2f",
+      "format": "PNG",
+      "dimensions": [
+        1916,
+        821
+      ],
+      "mode": "RGB",
+      "background": "opaque",
+      "native_vector_required": false,
+      "aspect_ratio": [
+        1916,
+        821
+      ],
+      "actor_layouts": [],
+      "actor_layout_note": "No actor atlas definition on this technical source."
+    },
+    "spec_policy": "inherit_existing_source; retain measured native output separately; never mislabel dimensions",
+    "reference_bindings": [
+      {
+        "id": "technical:assets/art/bamboo_arena_v1.png",
+        "role": "dimensions_alpha_layout_only"
+      },
+      {
+        "id": "style:06_battle",
+        "role": "drawing_style_only"
+      },
+      {
+        "id": "original:06_battle",
+        "role": "original_game_style_only_no_copy"
+      }
+    ],
+    "identity_policy": "If a registered person appears, use their identity_registry image and hash; unseen characters wait for batch02; never substitute style-reference faces.",
+    "generation_gate": "generate_after_dependencies",
+    "dependencies": []
   },
   {
     "priority": "P2",
     "filename": "underwater_ruin_arena.png",
     "brief": "水下遗迹斗法场，同色系分层但不吞没角色",
     "status": "planned_or_existing_candidate",
-    "output_path": "D:/fqh/flash/art_sources/refresh_20261019/batches/07_battle_backgrounds/output/underwater_ruin_arena.png"
+    "output_path": "art_sources/refresh_20261019/batches/07_battle_backgrounds/output/underwater_ruin_arena.png",
+    "content_outline": "docs/GAME_OUTLINE.md",
+    "outline_sections": [
+      "4.5",
+      "9",
+      "11"
+    ],
+    "content_plan": "art_sources/refresh_20261019/CONTENT_PLAN.md",
+    "style_reference": "art_sources/refresh_20261019/batches/07_battle_backgrounds/references.json",
+    "technical_spec": {
+      "path": "assets/art/bamboo_arena_v1.png",
+      "sha256": "7e1ad7b9eed2ddca42a106f5ba7d7d1697db17ab737c41b2d15923823f901f2f",
+      "format": "PNG",
+      "dimensions": [
+        1916,
+        821
+      ],
+      "mode": "RGB",
+      "background": "opaque",
+      "native_vector_required": false,
+      "aspect_ratio": [
+        1916,
+        821
+      ],
+      "actor_layouts": [],
+      "actor_layout_note": "No actor atlas definition on this technical source."
+    },
+    "spec_policy": "inherit_existing_source; retain measured native output separately; never mislabel dimensions",
+    "reference_bindings": [
+      {
+        "id": "technical:assets/art/bamboo_arena_v1.png",
+        "role": "dimensions_alpha_layout_only"
+      },
+      {
+        "id": "style:06_battle",
+        "role": "drawing_style_only"
+      },
+      {
+        "id": "original:06_battle",
+        "role": "original_game_style_only_no_copy"
+      }
+    ],
+    "identity_policy": "If a registered person appears, use their identity_registry image and hash; unseen characters wait for batch02; never substitute style-reference faces.",
+    "generation_gate": "generate_after_dependencies",
+    "dependencies": []
   }
 ]

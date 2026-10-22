@@ -1,86 +1,1205 @@
 [
   {
+    "priority": "P1",
+    "filename": "tiannan_tournament_reunion.png",
+    "brief": "筑基天南大比同辈重逢；同一角色沿用第02批身份和成长状态，区别炼气潜龙会",
+    "status": "planned_or_existing_candidate",
+    "output_path": "art_sources/refresh_20261019/batches/09_events/output/tiannan_tournament_reunion.png",
+    "content_outline": "docs/GAME_OUTLINE.md",
+    "outline_sections": [
+      "4",
+      "7",
+      "8",
+      "9",
+      "10",
+      "11"
+    ],
+    "content_plan": "art_sources/refresh_20261019/CONTENT_PLAN.md",
+    "style_reference": "art_sources/refresh_20261019/batches/09_events/references.json",
+    "technical_spec": {
+      "path": "assets/art/events/yunxi_auction.png",
+      "sha256": "35c927dd2e92f05f2cf7d673a9ee03713e1689c63975fdac1a82a31bb4f3744e",
+      "format": "PNG",
+      "dimensions": [
+        1600,
+        900
+      ],
+      "mode": "RGB",
+      "background": "opaque",
+      "native_vector_required": false,
+      "aspect_ratio": [
+        16,
+        9
+      ],
+      "actor_layouts": [],
+      "actor_layout_note": "No actor atlas definition on this technical source."
+    },
+    "spec_policy": "inherit_existing_source; retain measured native output separately; never mislabel dimensions",
+    "reference_bindings": [
+      {
+        "id": "technical:assets/art/events/yunxi_auction.png",
+        "role": "dimensions_alpha_layout_only"
+      },
+      {
+        "id": "style:13_event",
+        "role": "drawing_style_only"
+      },
+      {
+        "id": "original:13_event",
+        "role": "original_game_style_only_no_copy"
+      }
+    ],
+    "identity_policy": "If a registered person appears, use their identity_registry image and hash; unseen characters wait for batch02; never substitute style-reference faces.",
+    "generation_gate": "generate_after_dependencies",
+    "dependencies": []
+  },
+  {
+    "priority": "P1",
+    "filename": "beiyue_shouchuan_encounter.png",
+    "brief": "北岳旧档库守川司回收古物与缺页卷宗的首次正面交涉；晏无咎身份先由第02批确认",
+    "status": "planned_or_existing_candidate",
+    "output_path": "art_sources/refresh_20261019/batches/09_events/output/beiyue_shouchuan_encounter.png",
+    "content_outline": "docs/GAME_OUTLINE.md",
+    "outline_sections": [
+      "4",
+      "7",
+      "8",
+      "9",
+      "10",
+      "11"
+    ],
+    "content_plan": "art_sources/refresh_20261019/CONTENT_PLAN.md",
+    "style_reference": "art_sources/refresh_20261019/batches/09_events/references.json",
+    "technical_spec": {
+      "path": "assets/art/events/yunxi_auction.png",
+      "sha256": "35c927dd2e92f05f2cf7d673a9ee03713e1689c63975fdac1a82a31bb4f3744e",
+      "format": "PNG",
+      "dimensions": [
+        1600,
+        900
+      ],
+      "mode": "RGB",
+      "background": "opaque",
+      "native_vector_required": false,
+      "aspect_ratio": [
+        16,
+        9
+      ],
+      "actor_layouts": [],
+      "actor_layout_note": "No actor atlas definition on this technical source."
+    },
+    "spec_policy": "inherit_existing_source; retain measured native output separately; never mislabel dimensions",
+    "reference_bindings": [
+      {
+        "id": "technical:assets/art/events/yunxi_auction.png",
+        "role": "dimensions_alpha_layout_only"
+      },
+      {
+        "id": "style:13_event",
+        "role": "drawing_style_only"
+      },
+      {
+        "id": "original:13_event",
+        "role": "original_game_style_only_no_copy"
+      }
+    ],
+    "identity_policy": "If a registered person appears, use their identity_registry image and hash; unseen characters wait for batch02; never substitute style-reference faces.",
+    "generation_gate": "generate_after_dependencies",
+    "dependencies": [
+      "planned:02_key_portraits/yan_wujiu.png"
+    ]
+  },
+  {
+    "priority": "P1",
+    "filename": "lu_family_succession.png",
+    "brief": "约30年陆家丧事与接掌家业的经历；复用陆府空间和同一张脸，后续离家／担责／疏远不固定成单一结局",
+    "status": "planned_or_existing_candidate",
+    "output_path": "art_sources/refresh_20261019/batches/09_events/output/lu_family_succession.png",
+    "content_outline": "docs/GAME_OUTLINE.md",
+    "outline_sections": [
+      "4",
+      "7",
+      "8",
+      "9",
+      "10",
+      "11"
+    ],
+    "content_plan": "art_sources/refresh_20261019/CONTENT_PLAN.md",
+    "style_reference": "art_sources/refresh_20261019/batches/09_events/references.json",
+    "technical_spec": {
+      "path": "assets/art/events/yunxi_auction.png",
+      "sha256": "35c927dd2e92f05f2cf7d673a9ee03713e1689c63975fdac1a82a31bb4f3744e",
+      "format": "PNG",
+      "dimensions": [
+        1600,
+        900
+      ],
+      "mode": "RGB",
+      "background": "opaque",
+      "native_vector_required": false,
+      "aspect_ratio": [
+        16,
+        9
+      ],
+      "actor_layouts": [],
+      "actor_layout_note": "No actor atlas definition on this technical source."
+    },
+    "spec_policy": "inherit_existing_source; retain measured native output separately; never mislabel dimensions",
+    "reference_bindings": [
+      {
+        "id": "technical:assets/art/events/yunxi_auction.png",
+        "role": "dimensions_alpha_layout_only"
+      },
+      {
+        "id": "style:13_event",
+        "role": "drawing_style_only"
+      },
+      {
+        "id": "original:13_event",
+        "role": "original_game_style_only_no_copy"
+      }
+    ],
+    "identity_policy": "If a registered person appears, use their identity_registry image and hash; unseen characters wait for batch02; never substitute style-reference faces.",
+    "generation_gate": "generate_after_dependencies",
+    "dependencies": []
+  },
+  {
+    "priority": "P1",
+    "filename": "beiyue_witness.png",
+    "brief": "柳寒舟北岳证人与矛盾卷宗的会面；沿用剑穗身份与旧档空间，证人造型待实际人物内容确认",
+    "status": "planned_or_existing_candidate",
+    "output_path": "art_sources/refresh_20261019/batches/09_events/output/beiyue_witness.png",
+    "content_outline": "docs/GAME_OUTLINE.md",
+    "outline_sections": [
+      "4",
+      "7",
+      "8",
+      "9",
+      "10",
+      "11"
+    ],
+    "content_plan": "art_sources/refresh_20261019/CONTENT_PLAN.md",
+    "style_reference": "art_sources/refresh_20261019/batches/09_events/references.json",
+    "technical_spec": {
+      "path": "assets/art/events/yunxi_auction.png",
+      "sha256": "35c927dd2e92f05f2cf7d673a9ee03713e1689c63975fdac1a82a31bb4f3744e",
+      "format": "PNG",
+      "dimensions": [
+        1600,
+        900
+      ],
+      "mode": "RGB",
+      "background": "opaque",
+      "native_vector_required": false,
+      "aspect_ratio": [
+        16,
+        9
+      ],
+      "actor_layouts": [],
+      "actor_layout_note": "No actor atlas definition on this technical source."
+    },
+    "spec_policy": "inherit_existing_source; retain measured native output separately; never mislabel dimensions",
+    "reference_bindings": [
+      {
+        "id": "technical:assets/art/events/yunxi_auction.png",
+        "role": "dimensions_alpha_layout_only"
+      },
+      {
+        "id": "style:13_event",
+        "role": "drawing_style_only"
+      },
+      {
+        "id": "original:13_event",
+        "role": "original_game_style_only_no_copy"
+      }
+    ],
+    "identity_policy": "If a registered person appears, use their identity_registry image and hash; unseen characters wait for batch02; never substitute style-reference faces.",
+    "generation_gate": "generate_after_dependencies",
+    "dependencies": []
+  },
+  {
     "priority": "P0",
     "filename": "yunxi_assembly.png",
     "brief": "仙师集会事件：交易与结识的繁华，人物身份沿用头像候选",
     "status": "planned_or_existing_candidate",
-    "output_path": "D:/fqh/flash/art_sources/refresh_20261019/batches/09_events/output/yunxi_assembly.png"
+    "output_path": "art_sources/refresh_20261019/batches/09_events/output/yunxi_assembly.png",
+    "content_outline": "docs/GAME_OUTLINE.md",
+    "outline_sections": [
+      "4",
+      "7",
+      "8",
+      "9",
+      "10",
+      "11"
+    ],
+    "content_plan": "art_sources/refresh_20261019/CONTENT_PLAN.md",
+    "style_reference": "art_sources/refresh_20261019/batches/09_events/references.json",
+    "technical_spec": {
+      "path": "assets/art/events/yunxi_auction.png",
+      "sha256": "35c927dd2e92f05f2cf7d673a9ee03713e1689c63975fdac1a82a31bb4f3744e",
+      "format": "PNG",
+      "dimensions": [
+        1600,
+        900
+      ],
+      "mode": "RGB",
+      "background": "opaque",
+      "native_vector_required": false,
+      "aspect_ratio": [
+        16,
+        9
+      ],
+      "actor_layouts": [],
+      "actor_layout_note": "No actor atlas definition on this technical source."
+    },
+    "spec_policy": "inherit_existing_source; retain measured native output separately; never mislabel dimensions",
+    "reference_bindings": [
+      {
+        "id": "technical:assets/art/events/yunxi_auction.png",
+        "role": "dimensions_alpha_layout_only"
+      },
+      {
+        "id": "style:13_event",
+        "role": "drawing_style_only"
+      },
+      {
+        "id": "original:13_event",
+        "role": "original_game_style_only_no_copy"
+      }
+    ],
+    "identity_policy": "If a registered person appears, use their identity_registry image and hash; unseen characters wait for batch02; never substitute style-reference faces.",
+    "generation_gate": "generate_after_dependencies",
+    "dependencies": []
   },
   {
     "priority": "P0",
     "filename": "auction_mirror_anomaly.png",
     "brief": "残镜短暂映出地图没有的城，铜片反应；不提前泄露完整真相",
     "status": "planned_or_existing_candidate",
-    "output_path": "D:/fqh/flash/art_sources/refresh_20261019/batches/09_events/output/auction_mirror_anomaly.png"
+    "output_path": "art_sources/refresh_20261019/batches/09_events/output/auction_mirror_anomaly.png",
+    "content_outline": "docs/GAME_OUTLINE.md",
+    "outline_sections": [
+      "4",
+      "7",
+      "8",
+      "9",
+      "10",
+      "11"
+    ],
+    "content_plan": "art_sources/refresh_20261019/CONTENT_PLAN.md",
+    "style_reference": "art_sources/refresh_20261019/batches/09_events/references.json",
+    "technical_spec": {
+      "path": "assets/art/events/yunxi_auction.png",
+      "sha256": "35c927dd2e92f05f2cf7d673a9ee03713e1689c63975fdac1a82a31bb4f3744e",
+      "format": "PNG",
+      "dimensions": [
+        1600,
+        900
+      ],
+      "mode": "RGB",
+      "background": "opaque",
+      "native_vector_required": false,
+      "aspect_ratio": [
+        16,
+        9
+      ],
+      "actor_layouts": [],
+      "actor_layout_note": "No actor atlas definition on this technical source."
+    },
+    "spec_policy": "inherit_existing_source; retain measured native output separately; never mislabel dimensions",
+    "reference_bindings": [
+      {
+        "id": "technical:assets/art/events/yunxi_auction.png",
+        "role": "dimensions_alpha_layout_only"
+      },
+      {
+        "id": "style:13_event",
+        "role": "drawing_style_only"
+      },
+      {
+        "id": "original:13_event",
+        "role": "original_game_style_only_no_copy"
+      }
+    ],
+    "identity_policy": "If a registered person appears, use their identity_registry image and hash; unseen characters wait for batch02; never substitute style-reference faces.",
+    "generation_gate": "generate_after_dependencies",
+    "dependencies": [
+      "motif:old_city_seal_candidate",
+      "output:tianhe_ferry_reflection.png"
+    ]
   },
   {
     "priority": "P0",
     "filename": "qianlong_arena.png",
     "brief": "公共潜龙会场景；已有空背景候选，区别宗门外门比试",
     "status": "planned_or_existing_candidate",
-    "output_path": "D:/fqh/flash/art_sources/refresh_20261019/batches/09_events/output/qianlong_arena.png"
+    "output_path": "art_sources/refresh_20261019/batches/09_events/output/qianlong_arena.png",
+    "content_outline": "docs/GAME_OUTLINE.md",
+    "outline_sections": [
+      "4",
+      "7",
+      "8",
+      "9",
+      "10",
+      "11"
+    ],
+    "content_plan": "art_sources/refresh_20261019/CONTENT_PLAN.md",
+    "style_reference": "art_sources/refresh_20261019/batches/09_events/references.json",
+    "technical_spec": {
+      "path": "assets/art/events/yunxi_auction.png",
+      "sha256": "35c927dd2e92f05f2cf7d673a9ee03713e1689c63975fdac1a82a31bb4f3744e",
+      "format": "PNG",
+      "dimensions": [
+        1600,
+        900
+      ],
+      "mode": "RGB",
+      "background": "opaque",
+      "native_vector_required": false,
+      "aspect_ratio": [
+        16,
+        9
+      ],
+      "actor_layouts": [],
+      "actor_layout_note": "No actor atlas definition on this technical source."
+    },
+    "spec_policy": "inherit_existing_source; retain measured native output separately; never mislabel dimensions",
+    "reference_bindings": [
+      {
+        "id": "technical:assets/art/events/yunxi_auction.png",
+        "role": "dimensions_alpha_layout_only"
+      },
+      {
+        "id": "style:13_event",
+        "role": "drawing_style_only"
+      },
+      {
+        "id": "original:13_event",
+        "role": "original_game_style_only_no_copy"
+      }
+    ],
+    "identity_policy": "If a registered person appears, use their identity_registry image and hash; unseen characters wait for batch02; never substitute style-reference faces.",
+    "generation_gate": "generate_after_dependencies",
+    "dependencies": []
   },
   {
     "priority": "P0",
     "filename": "lu_family_night_banquet.png",
     "brief": "陆府夜宴与同辈相识，人物脸型引用第02批，不擅改身份",
     "status": "planned_or_existing_candidate",
-    "output_path": "D:/fqh/flash/art_sources/refresh_20261019/batches/09_events/output/lu_family_night_banquet.png"
+    "output_path": "art_sources/refresh_20261019/batches/09_events/output/lu_family_night_banquet.png",
+    "content_outline": "docs/GAME_OUTLINE.md",
+    "outline_sections": [
+      "4",
+      "7",
+      "8",
+      "9",
+      "10",
+      "11"
+    ],
+    "content_plan": "art_sources/refresh_20261019/CONTENT_PLAN.md",
+    "style_reference": "art_sources/refresh_20261019/batches/09_events/references.json",
+    "technical_spec": {
+      "path": "assets/art/events/yunxi_auction.png",
+      "sha256": "35c927dd2e92f05f2cf7d673a9ee03713e1689c63975fdac1a82a31bb4f3744e",
+      "format": "PNG",
+      "dimensions": [
+        1600,
+        900
+      ],
+      "mode": "RGB",
+      "background": "opaque",
+      "native_vector_required": false,
+      "aspect_ratio": [
+        16,
+        9
+      ],
+      "actor_layouts": [],
+      "actor_layout_note": "No actor atlas definition on this technical source."
+    },
+    "spec_policy": "inherit_existing_source; retain measured native output separately; never mislabel dimensions",
+    "reference_bindings": [
+      {
+        "id": "technical:assets/art/events/yunxi_auction.png",
+        "role": "dimensions_alpha_layout_only"
+      },
+      {
+        "id": "style:13_event",
+        "role": "drawing_style_only"
+      },
+      {
+        "id": "original:13_event",
+        "role": "original_game_style_only_no_copy"
+      }
+    ],
+    "identity_policy": "If a registered person appears, use their identity_registry image and hash; unseen characters wait for batch02; never substitute style-reference faces.",
+    "generation_gate": "generate_after_dependencies",
+    "dependencies": []
   },
   {
     "priority": "P1",
     "filename": "friends_breakthrough_meal.png",
     "brief": "突破后吃饭等轻松同辈日常，可复用陆府／客栈空间",
     "status": "planned_or_existing_candidate",
-    "output_path": "D:/fqh/flash/art_sources/refresh_20261019/batches/09_events/output/friends_breakthrough_meal.png"
+    "output_path": "art_sources/refresh_20261019/batches/09_events/output/friends_breakthrough_meal.png",
+    "content_outline": "docs/GAME_OUTLINE.md",
+    "outline_sections": [
+      "4",
+      "7",
+      "8",
+      "9",
+      "10",
+      "11"
+    ],
+    "content_plan": "art_sources/refresh_20261019/CONTENT_PLAN.md",
+    "style_reference": "art_sources/refresh_20261019/batches/09_events/references.json",
+    "technical_spec": {
+      "path": "assets/art/events/yunxi_auction.png",
+      "sha256": "35c927dd2e92f05f2cf7d673a9ee03713e1689c63975fdac1a82a31bb4f3744e",
+      "format": "PNG",
+      "dimensions": [
+        1600,
+        900
+      ],
+      "mode": "RGB",
+      "background": "opaque",
+      "native_vector_required": false,
+      "aspect_ratio": [
+        16,
+        9
+      ],
+      "actor_layouts": [],
+      "actor_layout_note": "No actor atlas definition on this technical source."
+    },
+    "spec_policy": "inherit_existing_source; retain measured native output separately; never mislabel dimensions",
+    "reference_bindings": [
+      {
+        "id": "technical:assets/art/events/yunxi_auction.png",
+        "role": "dimensions_alpha_layout_only"
+      },
+      {
+        "id": "style:13_event",
+        "role": "drawing_style_only"
+      },
+      {
+        "id": "original:13_event",
+        "role": "original_game_style_only_no_copy"
+      }
+    ],
+    "identity_policy": "If a registered person appears, use their identity_registry image and hash; unseen characters wait for batch02; never substitute style-reference faces.",
+    "generation_gate": "generate_after_dependencies",
+    "dependencies": []
   },
   {
     "priority": "P1",
     "filename": "auction_elder_old_painting.png",
     "brief": "拍卖老修士的旧画像线索，必须是同一身份的历史版本",
     "status": "planned_or_existing_candidate",
-    "output_path": "D:/fqh/flash/art_sources/refresh_20261019/batches/09_events/output/auction_elder_old_painting.png"
+    "output_path": "art_sources/refresh_20261019/batches/09_events/output/auction_elder_old_painting.png",
+    "content_outline": "docs/GAME_OUTLINE.md",
+    "outline_sections": [
+      "4",
+      "7",
+      "8",
+      "9",
+      "10",
+      "11"
+    ],
+    "content_plan": "art_sources/refresh_20261019/CONTENT_PLAN.md",
+    "style_reference": "art_sources/refresh_20261019/batches/09_events/references.json",
+    "technical_spec": {
+      "path": "assets/art/events/yunxi_auction.png",
+      "sha256": "35c927dd2e92f05f2cf7d673a9ee03713e1689c63975fdac1a82a31bb4f3744e",
+      "format": "PNG",
+      "dimensions": [
+        1600,
+        900
+      ],
+      "mode": "RGB",
+      "background": "opaque",
+      "native_vector_required": false,
+      "aspect_ratio": [
+        16,
+        9
+      ],
+      "actor_layouts": [],
+      "actor_layout_note": "No actor atlas definition on this technical source."
+    },
+    "spec_policy": "inherit_existing_source; retain measured native output separately; never mislabel dimensions",
+    "reference_bindings": [
+      {
+        "id": "technical:assets/art/events/yunxi_auction.png",
+        "role": "dimensions_alpha_layout_only"
+      },
+      {
+        "id": "style:13_event",
+        "role": "drawing_style_only"
+      },
+      {
+        "id": "original:13_event",
+        "role": "original_game_style_only_no_copy"
+      }
+    ],
+    "identity_policy": "If a registered person appears, use their identity_registry image and hash; unseen characters wait for batch02; never substitute style-reference faces.",
+    "generation_gate": "generate_after_dependencies",
+    "dependencies": []
+  },
+  {
+    "priority": "P2",
+    "filename": "ye_zhiwei_master_crisis.png",
+    "brief": "叶知微师父寿元将尽、替代救法与禁方抉择；先复用医馆与人物，师父造型随内容确认，不预设必然黑化或死亡",
+    "status": "planned_or_existing_candidate",
+    "output_path": "art_sources/refresh_20261019/batches/09_events/output/ye_zhiwei_master_crisis.png",
+    "content_outline": "docs/GAME_OUTLINE.md",
+    "outline_sections": [
+      "4",
+      "7",
+      "8",
+      "9",
+      "10",
+      "11"
+    ],
+    "content_plan": "art_sources/refresh_20261019/CONTENT_PLAN.md",
+    "style_reference": "art_sources/refresh_20261019/batches/09_events/references.json",
+    "technical_spec": {
+      "path": "assets/art/events/yunxi_auction.png",
+      "sha256": "35c927dd2e92f05f2cf7d673a9ee03713e1689c63975fdac1a82a31bb4f3744e",
+      "format": "PNG",
+      "dimensions": [
+        1600,
+        900
+      ],
+      "mode": "RGB",
+      "background": "opaque",
+      "native_vector_required": false,
+      "aspect_ratio": [
+        16,
+        9
+      ],
+      "actor_layouts": [],
+      "actor_layout_note": "No actor atlas definition on this technical source."
+    },
+    "spec_policy": "inherit_existing_source; retain measured native output separately; never mislabel dimensions",
+    "reference_bindings": [
+      {
+        "id": "technical:assets/art/events/yunxi_auction.png",
+        "role": "dimensions_alpha_layout_only"
+      },
+      {
+        "id": "style:13_event",
+        "role": "drawing_style_only"
+      },
+      {
+        "id": "original:13_event",
+        "role": "original_game_style_only_no_copy"
+      }
+    ],
+    "identity_policy": "If a registered person appears, use their identity_registry image and hash; unseen characters wait for batch02; never substitute style-reference faces.",
+    "generation_gate": "generate_after_dependencies",
+    "dependencies": []
+  },
+  {
+    "priority": "P2",
+    "filename": "five_sect_forum.png",
+    "brief": "金丹以上五宗论道：斗法、观战论道、交易展示或支持后辈四类参与；与第06批会场一致，不固定夺冠",
+    "status": "planned_or_existing_candidate",
+    "output_path": "art_sources/refresh_20261019/batches/09_events/output/five_sect_forum.png",
+    "content_outline": "docs/GAME_OUTLINE.md",
+    "outline_sections": [
+      "4",
+      "7",
+      "8",
+      "9",
+      "10",
+      "11"
+    ],
+    "content_plan": "art_sources/refresh_20261019/CONTENT_PLAN.md",
+    "style_reference": "art_sources/refresh_20261019/batches/09_events/references.json",
+    "technical_spec": {
+      "path": "assets/art/events/yunxi_auction.png",
+      "sha256": "35c927dd2e92f05f2cf7d673a9ee03713e1689c63975fdac1a82a31bb4f3744e",
+      "format": "PNG",
+      "dimensions": [
+        1600,
+        900
+      ],
+      "mode": "RGB",
+      "background": "opaque",
+      "native_vector_required": false,
+      "aspect_ratio": [
+        16,
+        9
+      ],
+      "actor_layouts": [],
+      "actor_layout_note": "No actor atlas definition on this technical source."
+    },
+    "spec_policy": "inherit_existing_source; retain measured native output separately; never mislabel dimensions",
+    "reference_bindings": [
+      {
+        "id": "technical:assets/art/events/yunxi_auction.png",
+        "role": "dimensions_alpha_layout_only"
+      },
+      {
+        "id": "style:13_event",
+        "role": "drawing_style_only"
+      },
+      {
+        "id": "original:13_event",
+        "role": "original_game_style_only_no_copy"
+      }
+    ],
+    "identity_policy": "If a registered person appears, use their identity_registry image and hash; unseen characters wait for batch02; never substitute style-reference faces.",
+    "generation_gate": "generate_after_dependencies",
+    "dependencies": []
   },
   {
     "priority": "P2",
     "filename": "chenxia_old_city_record.png",
     "brief": "古境记录证明旧城真实存在的发现演出",
     "status": "planned_or_existing_candidate",
-    "output_path": "D:/fqh/flash/art_sources/refresh_20261019/batches/09_events/output/chenxia_old_city_record.png"
+    "output_path": "art_sources/refresh_20261019/batches/09_events/output/chenxia_old_city_record.png",
+    "content_outline": "docs/GAME_OUTLINE.md",
+    "outline_sections": [
+      "4",
+      "7",
+      "8",
+      "9",
+      "10",
+      "11"
+    ],
+    "content_plan": "art_sources/refresh_20261019/CONTENT_PLAN.md",
+    "style_reference": "art_sources/refresh_20261019/batches/09_events/references.json",
+    "technical_spec": {
+      "path": "assets/art/events/yunxi_auction.png",
+      "sha256": "35c927dd2e92f05f2cf7d673a9ee03713e1689c63975fdac1a82a31bb4f3744e",
+      "format": "PNG",
+      "dimensions": [
+        1600,
+        900
+      ],
+      "mode": "RGB",
+      "background": "opaque",
+      "native_vector_required": false,
+      "aspect_ratio": [
+        16,
+        9
+      ],
+      "actor_layouts": [],
+      "actor_layout_note": "No actor atlas definition on this technical source."
+    },
+    "spec_policy": "inherit_existing_source; retain measured native output separately; never mislabel dimensions",
+    "reference_bindings": [
+      {
+        "id": "technical:assets/art/events/yunxi_auction.png",
+        "role": "dimensions_alpha_layout_only"
+      },
+      {
+        "id": "style:13_event",
+        "role": "drawing_style_only"
+      },
+      {
+        "id": "original:13_event",
+        "role": "original_game_style_only_no_copy"
+      }
+    ],
+    "identity_policy": "If a registered person appears, use their identity_registry image and hash; unseen characters wait for batch02; never substitute style-reference faces.",
+    "generation_gate": "generate_after_dependencies",
+    "dependencies": [
+      "motif:old_city_seal_candidate"
+    ]
+  },
+  {
+    "priority": "P2",
+    "filename": "chenxia_shouchuan_evidence.png",
+    "brief": "沉霞古境合作探索及与守川司争夺照川城实证；同辈可缺席，交涉或争夺按实际剧情，不强制全员同框",
+    "status": "planned_or_existing_candidate",
+    "output_path": "art_sources/refresh_20261019/batches/09_events/output/chenxia_shouchuan_evidence.png",
+    "content_outline": "docs/GAME_OUTLINE.md",
+    "outline_sections": [
+      "4",
+      "7",
+      "8",
+      "9",
+      "10",
+      "11"
+    ],
+    "content_plan": "art_sources/refresh_20261019/CONTENT_PLAN.md",
+    "style_reference": "art_sources/refresh_20261019/batches/09_events/references.json",
+    "technical_spec": {
+      "path": "assets/art/events/yunxi_auction.png",
+      "sha256": "35c927dd2e92f05f2cf7d673a9ee03713e1689c63975fdac1a82a31bb4f3744e",
+      "format": "PNG",
+      "dimensions": [
+        1600,
+        900
+      ],
+      "mode": "RGB",
+      "background": "opaque",
+      "native_vector_required": false,
+      "aspect_ratio": [
+        16,
+        9
+      ],
+      "actor_layouts": [],
+      "actor_layout_note": "No actor atlas definition on this technical source."
+    },
+    "spec_policy": "inherit_existing_source; retain measured native output separately; never mislabel dimensions",
+    "reference_bindings": [
+      {
+        "id": "technical:assets/art/events/yunxi_auction.png",
+        "role": "dimensions_alpha_layout_only"
+      },
+      {
+        "id": "style:13_event",
+        "role": "drawing_style_only"
+      },
+      {
+        "id": "original:13_event",
+        "role": "original_game_style_only_no_copy"
+      }
+    ],
+    "identity_policy": "If a registered person appears, use their identity_registry image and hash; unseen characters wait for batch02; never substitute style-reference faces.",
+    "generation_gate": "generate_after_dependencies",
+    "dependencies": [
+      "planned:02_key_portraits/yan_wujiu.png"
+    ]
   },
   {
     "priority": "P2",
     "filename": "sea_chart_departure.png",
     "brief": "闻人照筹船与出海，呼应海图、海船和同一人物",
     "status": "planned_or_existing_candidate",
-    "output_path": "D:/fqh/flash/art_sources/refresh_20261019/batches/09_events/output/sea_chart_departure.png"
+    "output_path": "art_sources/refresh_20261019/batches/09_events/output/sea_chart_departure.png",
+    "content_outline": "docs/GAME_OUTLINE.md",
+    "outline_sections": [
+      "4",
+      "7",
+      "8",
+      "9",
+      "10",
+      "11"
+    ],
+    "content_plan": "art_sources/refresh_20261019/CONTENT_PLAN.md",
+    "style_reference": "art_sources/refresh_20261019/batches/09_events/references.json",
+    "technical_spec": {
+      "path": "assets/art/events/yunxi_auction.png",
+      "sha256": "35c927dd2e92f05f2cf7d673a9ee03713e1689c63975fdac1a82a31bb4f3744e",
+      "format": "PNG",
+      "dimensions": [
+        1600,
+        900
+      ],
+      "mode": "RGB",
+      "background": "opaque",
+      "native_vector_required": false,
+      "aspect_ratio": [
+        16,
+        9
+      ],
+      "actor_layouts": [],
+      "actor_layout_note": "No actor atlas definition on this technical source."
+    },
+    "spec_policy": "inherit_existing_source; retain measured native output separately; never mislabel dimensions",
+    "reference_bindings": [
+      {
+        "id": "technical:assets/art/events/yunxi_auction.png",
+        "role": "dimensions_alpha_layout_only"
+      },
+      {
+        "id": "style:13_event",
+        "role": "drawing_style_only"
+      },
+      {
+        "id": "original:13_event",
+        "role": "original_game_style_only_no_copy"
+      }
+    ],
+    "identity_policy": "If a registered person appears, use their identity_registry image and hash; unseen characters wait for batch02; never substitute style-reference faces.",
+    "generation_gate": "generate_after_dependencies",
+    "dependencies": []
+  },
+  {
+    "priority": "P2",
+    "filename": "wenren_missing_trace.png",
+    "brief": "闻人照出海失联后的船队消息／遗留线索；复用海图与海船，不以遗体或葬礼断言人物已死",
+    "status": "planned_or_existing_candidate",
+    "output_path": "art_sources/refresh_20261019/batches/09_events/output/wenren_missing_trace.png",
+    "content_outline": "docs/GAME_OUTLINE.md",
+    "outline_sections": [
+      "4",
+      "7",
+      "8",
+      "9",
+      "10",
+      "11"
+    ],
+    "content_plan": "art_sources/refresh_20261019/CONTENT_PLAN.md",
+    "style_reference": "art_sources/refresh_20261019/batches/09_events/references.json",
+    "technical_spec": {
+      "path": "assets/art/events/yunxi_auction.png",
+      "sha256": "35c927dd2e92f05f2cf7d673a9ee03713e1689c63975fdac1a82a31bb4f3744e",
+      "format": "PNG",
+      "dimensions": [
+        1600,
+        900
+      ],
+      "mode": "RGB",
+      "background": "opaque",
+      "native_vector_required": false,
+      "aspect_ratio": [
+        16,
+        9
+      ],
+      "actor_layouts": [],
+      "actor_layout_note": "No actor atlas definition on this technical source."
+    },
+    "spec_policy": "inherit_existing_source; retain measured native output separately; never mislabel dimensions",
+    "reference_bindings": [
+      {
+        "id": "technical:assets/art/events/yunxi_auction.png",
+        "role": "dimensions_alpha_layout_only"
+      },
+      {
+        "id": "style:13_event",
+        "role": "drawing_style_only"
+      },
+      {
+        "id": "original:13_event",
+        "role": "original_game_style_only_no_copy"
+      }
+    ],
+    "identity_policy": "If a registered person appears, use their identity_registry image and hash; unseen characters wait for batch02; never substitute style-reference faces.",
+    "generation_gate": "generate_after_dependencies",
+    "dependencies": []
+  },
+  {
+    "priority": "P2",
+    "filename": "wen_zhaoheng_testimony.png",
+    "brief": "约200年前温照衡建立信任后口述封存往事的版本；沿用元婴后期身份，后期真相与初期素材分开",
+    "status": "planned_or_existing_candidate",
+    "output_path": "art_sources/refresh_20261019/batches/09_events/output/wen_zhaoheng_testimony.png",
+    "content_outline": "docs/GAME_OUTLINE.md",
+    "outline_sections": [
+      "4",
+      "7",
+      "8",
+      "9",
+      "10",
+      "11"
+    ],
+    "content_plan": "art_sources/refresh_20261019/CONTENT_PLAN.md",
+    "style_reference": "art_sources/refresh_20261019/batches/09_events/references.json",
+    "technical_spec": {
+      "path": "assets/art/events/yunxi_auction.png",
+      "sha256": "35c927dd2e92f05f2cf7d673a9ee03713e1689c63975fdac1a82a31bb4f3744e",
+      "format": "PNG",
+      "dimensions": [
+        1600,
+        900
+      ],
+      "mode": "RGB",
+      "background": "opaque",
+      "native_vector_required": false,
+      "aspect_ratio": [
+        16,
+        9
+      ],
+      "actor_layouts": [],
+      "actor_layout_note": "No actor atlas definition on this technical source."
+    },
+    "spec_policy": "inherit_existing_source; retain measured native output separately; never mislabel dimensions",
+    "reference_bindings": [
+      {
+        "id": "technical:assets/art/events/yunxi_auction.png",
+        "role": "dimensions_alpha_layout_only"
+      },
+      {
+        "id": "style:13_event",
+        "role": "drawing_style_only"
+      },
+      {
+        "id": "original:13_event",
+        "role": "original_game_style_only_no_copy"
+      }
+    ],
+    "identity_policy": "If a registered person appears, use their identity_registry image and hash; unseen characters wait for batch02; never substitute style-reference faces.",
+    "generation_gate": "generate_after_dependencies",
+    "dependencies": [
+      "motif:old_city_seal_candidate"
+    ]
+  },
+  {
+    "priority": "P2",
+    "filename": "wen_zhaoheng_legacy.png",
+    "brief": "错过温照衡生前口述后的遗物、日记与阵图接续版本；使用同一器物母题，不让错过人物卡死主线",
+    "status": "planned_or_existing_candidate",
+    "output_path": "art_sources/refresh_20261019/batches/09_events/output/wen_zhaoheng_legacy.png",
+    "content_outline": "docs/GAME_OUTLINE.md",
+    "outline_sections": [
+      "4",
+      "7",
+      "8",
+      "9",
+      "10",
+      "11"
+    ],
+    "content_plan": "art_sources/refresh_20261019/CONTENT_PLAN.md",
+    "style_reference": "art_sources/refresh_20261019/batches/09_events/references.json",
+    "technical_spec": {
+      "path": "assets/art/events/yunxi_auction.png",
+      "sha256": "35c927dd2e92f05f2cf7d673a9ee03713e1689c63975fdac1a82a31bb4f3744e",
+      "format": "PNG",
+      "dimensions": [
+        1600,
+        900
+      ],
+      "mode": "RGB",
+      "background": "opaque",
+      "native_vector_required": false,
+      "aspect_ratio": [
+        16,
+        9
+      ],
+      "actor_layouts": [],
+      "actor_layout_note": "No actor atlas definition on this technical source."
+    },
+    "spec_policy": "inherit_existing_source; retain measured native output separately; never mislabel dimensions",
+    "reference_bindings": [
+      {
+        "id": "technical:assets/art/events/yunxi_auction.png",
+        "role": "dimensions_alpha_layout_only"
+      },
+      {
+        "id": "style:13_event",
+        "role": "drawing_style_only"
+      },
+      {
+        "id": "original:13_event",
+        "role": "original_game_style_only_no_copy"
+      }
+    ],
+    "identity_policy": "If a registered person appears, use their identity_registry image and hash; unseen characters wait for batch02; never substitute style-reference faces.",
+    "generation_gate": "generate_after_dependencies",
+    "dependencies": [
+      "motif:old_city_seal_candidate"
+    ]
   },
   {
     "priority": "P3",
     "filename": "old_city_revelation.png",
     "brief": "旧城封印与遗民历史揭示，不画成任意时间旅行",
     "status": "planned_or_existing_candidate",
-    "output_path": "D:/fqh/flash/art_sources/refresh_20261019/batches/09_events/output/old_city_revelation.png"
+    "output_path": "art_sources/refresh_20261019/batches/09_events/output/old_city_revelation.png",
+    "content_outline": "docs/GAME_OUTLINE.md",
+    "outline_sections": [
+      "4",
+      "7",
+      "8",
+      "9",
+      "10",
+      "11"
+    ],
+    "content_plan": "art_sources/refresh_20261019/CONTENT_PLAN.md",
+    "style_reference": "art_sources/refresh_20261019/batches/09_events/references.json",
+    "technical_spec": {
+      "path": "assets/art/events/yunxi_auction.png",
+      "sha256": "35c927dd2e92f05f2cf7d673a9ee03713e1689c63975fdac1a82a31bb4f3744e",
+      "format": "PNG",
+      "dimensions": [
+        1600,
+        900
+      ],
+      "mode": "RGB",
+      "background": "opaque",
+      "native_vector_required": false,
+      "aspect_ratio": [
+        16,
+        9
+      ],
+      "actor_layouts": [],
+      "actor_layout_note": "No actor atlas definition on this technical source."
+    },
+    "spec_policy": "inherit_existing_source; retain measured native output separately; never mislabel dimensions",
+    "reference_bindings": [
+      {
+        "id": "technical:assets/art/events/yunxi_auction.png",
+        "role": "dimensions_alpha_layout_only"
+      },
+      {
+        "id": "style:13_event",
+        "role": "drawing_style_only"
+      },
+      {
+        "id": "original:13_event",
+        "role": "original_game_style_only_no_copy"
+      }
+    ],
+    "identity_policy": "If a registered person appears, use their identity_registry image and hash; unseen characters wait for batch02; never substitute style-reference faces.",
+    "generation_gate": "generate_after_dependencies",
+    "dependencies": [
+      "motif:old_city_seal_candidate"
+    ]
   },
   {
     "priority": "P3",
     "filename": "ending_reopen_passage.png",
-    "brief": "修复并重新开放通路的结局状态",
+    "brief": "修复重开：照川城部分恢复、通路重开与后续治理；公开真相另作独立状态",
     "status": "planned_or_existing_candidate",
-    "output_path": "D:/fqh/flash/art_sources/refresh_20261019/batches/09_events/output/ending_reopen_passage.png"
+    "output_path": "art_sources/refresh_20261019/batches/09_events/output/ending_reopen_passage.png",
+    "content_outline": "docs/GAME_OUTLINE.md",
+    "outline_sections": [
+      "4",
+      "7",
+      "8",
+      "9",
+      "10",
+      "11"
+    ],
+    "content_plan": "art_sources/refresh_20261019/CONTENT_PLAN.md",
+    "style_reference": "art_sources/refresh_20261019/batches/09_events/references.json",
+    "technical_spec": {
+      "path": "assets/art/events/yunxi_auction.png",
+      "sha256": "35c927dd2e92f05f2cf7d673a9ee03713e1689c63975fdac1a82a31bb4f3744e",
+      "format": "PNG",
+      "dimensions": [
+        1600,
+        900
+      ],
+      "mode": "RGB",
+      "background": "opaque",
+      "native_vector_required": false,
+      "aspect_ratio": [
+        16,
+        9
+      ],
+      "actor_layouts": [],
+      "actor_layout_note": "No actor atlas definition on this technical source."
+    },
+    "spec_policy": "inherit_existing_source; retain measured native output separately; never mislabel dimensions",
+    "reference_bindings": [
+      {
+        "id": "technical:assets/art/events/yunxi_auction.png",
+        "role": "dimensions_alpha_layout_only"
+      },
+      {
+        "id": "style:13_event",
+        "role": "drawing_style_only"
+      },
+      {
+        "id": "original:13_event",
+        "role": "original_game_style_only_no_copy"
+      }
+    ],
+    "identity_policy": "If a registered person appears, use their identity_registry image and hash; unseen characters wait for batch02; never substitute style-reference faces.",
+    "generation_gate": "generate_after_dependencies",
+    "dependencies": []
   },
   {
     "priority": "P3",
     "filename": "ending_replace_array.png",
-    "brief": "另立阵法、封存危险区域的结局状态",
+    "brief": "替换旧阵：疏散可救者、部分遗迹永久封闭并另修通路；与重开结局有可见差异",
     "status": "planned_or_existing_candidate",
-    "output_path": "D:/fqh/flash/art_sources/refresh_20261019/batches/09_events/output/ending_replace_array.png"
+    "output_path": "art_sources/refresh_20261019/batches/09_events/output/ending_replace_array.png",
+    "content_outline": "docs/GAME_OUTLINE.md",
+    "outline_sections": [
+      "4",
+      "7",
+      "8",
+      "9",
+      "10",
+      "11"
+    ],
+    "content_plan": "art_sources/refresh_20261019/CONTENT_PLAN.md",
+    "style_reference": "art_sources/refresh_20261019/batches/09_events/references.json",
+    "technical_spec": {
+      "path": "assets/art/events/yunxi_auction.png",
+      "sha256": "35c927dd2e92f05f2cf7d673a9ee03713e1689c63975fdac1a82a31bb4f3744e",
+      "format": "PNG",
+      "dimensions": [
+        1600,
+        900
+      ],
+      "mode": "RGB",
+      "background": "opaque",
+      "native_vector_required": false,
+      "aspect_ratio": [
+        16,
+        9
+      ],
+      "actor_layouts": [],
+      "actor_layout_note": "No actor atlas definition on this technical source."
+    },
+    "spec_policy": "inherit_existing_source; retain measured native output separately; never mislabel dimensions",
+    "reference_bindings": [
+      {
+        "id": "technical:assets/art/events/yunxi_auction.png",
+        "role": "dimensions_alpha_layout_only"
+      },
+      {
+        "id": "style:13_event",
+        "role": "drawing_style_only"
+      },
+      {
+        "id": "original:13_event",
+        "role": "original_game_style_only_no_copy"
+      }
+    ],
+    "identity_policy": "If a registered person appears, use their identity_registry image and hash; unseen characters wait for batch02; never substitute style-reference faces.",
+    "generation_gate": "generate_after_dependencies",
+    "dependencies": []
   },
   {
     "priority": "P3",
     "filename": "ending_personal_passage.png",
-    "brief": "寻找个人通路并交托后续责任的结局状态",
+    "brief": "自寻通路：个人飞升、移交证据与方案、后续责任按交托情况延续；不预设毁城或隐瞒真相",
     "status": "planned_or_existing_candidate",
-    "output_path": "D:/fqh/flash/art_sources/refresh_20261019/batches/09_events/output/ending_personal_passage.png"
+    "output_path": "art_sources/refresh_20261019/batches/09_events/output/ending_personal_passage.png",
+    "content_outline": "docs/GAME_OUTLINE.md",
+    "outline_sections": [
+      "4",
+      "7",
+      "8",
+      "9",
+      "10",
+      "11"
+    ],
+    "content_plan": "art_sources/refresh_20261019/CONTENT_PLAN.md",
+    "style_reference": "art_sources/refresh_20261019/batches/09_events/references.json",
+    "technical_spec": {
+      "path": "assets/art/events/yunxi_auction.png",
+      "sha256": "35c927dd2e92f05f2cf7d673a9ee03713e1689c63975fdac1a82a31bb4f3744e",
+      "format": "PNG",
+      "dimensions": [
+        1600,
+        900
+      ],
+      "mode": "RGB",
+      "background": "opaque",
+      "native_vector_required": false,
+      "aspect_ratio": [
+        16,
+        9
+      ],
+      "actor_layouts": [],
+      "actor_layout_note": "No actor atlas definition on this technical source."
+    },
+    "spec_policy": "inherit_existing_source; retain measured native output separately; never mislabel dimensions",
+    "reference_bindings": [
+      {
+        "id": "technical:assets/art/events/yunxi_auction.png",
+        "role": "dimensions_alpha_layout_only"
+      },
+      {
+        "id": "style:13_event",
+        "role": "drawing_style_only"
+      },
+      {
+        "id": "original:13_event",
+        "role": "original_game_style_only_no_copy"
+      }
+    ],
+    "identity_policy": "If a registered person appears, use their identity_registry image and hash; unseen characters wait for batch02; never substitute style-reference faces.",
+    "generation_gate": "generate_after_dependencies",
+    "dependencies": []
   }
 ]

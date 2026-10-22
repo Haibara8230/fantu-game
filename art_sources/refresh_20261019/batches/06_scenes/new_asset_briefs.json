@@ -1,142 +1,1817 @@
 [
   {
     "priority": "P0",
+    "filename": "qingshi_inn_quiet_room.png",
+    "brief": "青石镇客栈静房：散修首次闭关、领悟与突破教学；简朴蒲团、床榻与案几，和客栈公共厅区分，空背景",
+    "status": "planned_or_existing_candidate",
+    "output_path": "art_sources/refresh_20261019/batches/06_scenes/output/qingshi_inn_quiet_room.png",
+    "content_outline": "docs/GAME_OUTLINE.md",
+    "outline_sections": [
+      "3",
+      "4",
+      "5.2",
+      "8",
+      "9",
+      "10",
+      "13"
+    ],
+    "content_plan": "art_sources/refresh_20261019/CONTENT_PLAN.md",
+    "style_reference": "art_sources/refresh_20261019/batches/06_scenes/references.json",
+    "technical_spec": {
+      "path": "assets/art/scenes/sect_chamber.png",
+      "sha256": "2bf63397eb56453125e01e9136ac7723ec882f97339dd433ca7d25f92077422c",
+      "format": "PNG",
+      "dimensions": [
+        2400,
+        600
+      ],
+      "mode": "RGB",
+      "background": "opaque",
+      "native_vector_required": false,
+      "aspect_ratio": [
+        4,
+        1
+      ],
+      "actor_layouts": [],
+      "actor_layout_note": "No actor atlas definition on this technical source."
+    },
+    "spec_policy": "inherit_existing_source; retain measured native output separately; never mislabel dimensions",
+    "reference_bindings": [
+      {
+        "id": "technical:assets/art/scenes/sect_chamber.png",
+        "role": "dimensions_alpha_layout_only"
+      },
+      {
+        "id": "style:07_interior",
+        "role": "drawing_style_only"
+      },
+      {
+        "id": "original:07_interior",
+        "role": "original_game_style_only_no_copy"
+      }
+    ],
+    "identity_policy": "If a registered person appears, use their identity_registry image and hash; unseen characters wait for batch02; never substitute style-reference faces.",
+    "generation_gate": "review_generated_candidate",
+    "dependencies": [],
+    "display_crop_aspect": [
+      4,
+      1
+    ],
+    "safe_area": "Complete functional subjects in the central 4:1 banner crop; retain full native original."
+  },
+  {
+    "priority": "P0",
+    "filename": "city_inn_quiet_room.png",
+    "brief": "五城客栈静房共用基础及城市陈设变体；服务散修闭关与领悟，不画成已有私家洞府",
+    "status": "planned_or_existing_candidate",
+    "output_path": "art_sources/refresh_20261019/batches/06_scenes/output/city_inn_quiet_room.png",
+    "content_outline": "docs/GAME_OUTLINE.md",
+    "outline_sections": [
+      "3",
+      "4",
+      "5.2",
+      "8",
+      "9",
+      "10",
+      "13"
+    ],
+    "content_plan": "art_sources/refresh_20261019/CONTENT_PLAN.md",
+    "style_reference": "art_sources/refresh_20261019/batches/06_scenes/references.json",
+    "technical_spec": {
+      "path": "assets/art/scenes/sect_chamber.png",
+      "sha256": "2bf63397eb56453125e01e9136ac7723ec882f97339dd433ca7d25f92077422c",
+      "format": "PNG",
+      "dimensions": [
+        2400,
+        600
+      ],
+      "mode": "RGB",
+      "background": "opaque",
+      "native_vector_required": false,
+      "aspect_ratio": [
+        4,
+        1
+      ],
+      "actor_layouts": [],
+      "actor_layout_note": "No actor atlas definition on this technical source."
+    },
+    "spec_policy": "inherit_existing_source; retain measured native output separately; never mislabel dimensions",
+    "reference_bindings": [
+      {
+        "id": "technical:assets/art/scenes/sect_chamber.png",
+        "role": "dimensions_alpha_layout_only"
+      },
+      {
+        "id": "style:07_interior",
+        "role": "drawing_style_only"
+      },
+      {
+        "id": "original:07_interior",
+        "role": "original_game_style_only_no_copy"
+      }
+    ],
+    "identity_policy": "If a registered person appears, use their identity_registry image and hash; unseen characters wait for batch02; never substitute style-reference faces.",
+    "generation_gate": "generate_after_dependencies",
+    "dependencies": [],
+    "display_crop_aspect": [
+      4,
+      1
+    ],
+    "safe_area": "Complete functional subjects in the central 4:1 banner crop; retain full native original."
+  },
+  {
+    "priority": "P0",
     "filename": "sect_gate_normal.png",
     "brief": "日常青云山门；已有候选，正式旧图当前为魔潮状态",
     "status": "planned_or_existing_candidate",
-    "output_path": "D:/fqh/flash/art_sources/refresh_20261019/batches/06_scenes/output/sect_gate_normal.png"
+    "output_path": "art_sources/refresh_20261019/batches/06_scenes/output/sect_gate_normal.png",
+    "content_outline": "docs/GAME_OUTLINE.md",
+    "outline_sections": [
+      "3",
+      "4",
+      "5.2",
+      "8",
+      "9",
+      "10",
+      "13"
+    ],
+    "content_plan": "art_sources/refresh_20261019/CONTENT_PLAN.md",
+    "style_reference": "art_sources/refresh_20261019/batches/06_scenes/references.json",
+    "technical_spec": {
+      "path": "assets/art/scenes/sect_gate.png",
+      "sha256": "583ee2dbabbc0c3a2094041f546e3c5ce7608d2807e09c379c7f64b6b99fd016",
+      "format": "PNG",
+      "dimensions": [
+        2172,
+        724
+      ],
+      "mode": "RGB",
+      "background": "opaque",
+      "native_vector_required": false,
+      "aspect_ratio": [
+        3,
+        1
+      ],
+      "actor_layouts": [],
+      "actor_layout_note": "No actor atlas definition on this technical source."
+    },
+    "spec_policy": "inherit_existing_source; retain measured native output separately; never mislabel dimensions",
+    "reference_bindings": [
+      {
+        "id": "technical:assets/art/scenes/sect_gate.png",
+        "role": "dimensions_alpha_layout_only"
+      },
+      {
+        "id": "style:04_location",
+        "role": "drawing_style_only"
+      },
+      {
+        "id": "original:04_location",
+        "role": "original_game_style_only_no_copy"
+      }
+    ],
+    "identity_policy": "If a registered person appears, use their identity_registry image and hash; unseen characters wait for batch02; never substitute style-reference faces.",
+    "generation_gate": "generate_after_dependencies",
+    "dependencies": [],
+    "display_crop_aspect": [
+      4,
+      1
+    ],
+    "safe_area": "Complete functional subjects in the central 4:1 banner crop; retain full native original."
   },
   {
     "priority": "P0",
     "filename": "yunxi_city_gate.png",
     "brief": "结伴赴云溪的入城背景，门楼人间尺度，无烘焙文字",
     "status": "planned_or_existing_candidate",
-    "output_path": "D:/fqh/flash/art_sources/refresh_20261019/batches/06_scenes/output/yunxi_city_gate.png"
+    "output_path": "art_sources/refresh_20261019/batches/06_scenes/output/yunxi_city_gate.png",
+    "content_outline": "docs/GAME_OUTLINE.md",
+    "outline_sections": [
+      "3",
+      "4",
+      "5.2",
+      "8",
+      "9",
+      "10",
+      "13"
+    ],
+    "content_plan": "art_sources/refresh_20261019/CONTENT_PLAN.md",
+    "style_reference": "art_sources/refresh_20261019/batches/06_scenes/references.json",
+    "technical_spec": {
+      "path": "assets/art/scenes/market_street.png",
+      "sha256": "2e0f521e0db36ac3db64c082d8c5d0c44a12f6ff44e0b5129d4d5ee537981f55",
+      "format": "PNG",
+      "dimensions": [
+        2400,
+        600
+      ],
+      "mode": "RGB",
+      "background": "opaque",
+      "native_vector_required": false,
+      "aspect_ratio": [
+        4,
+        1
+      ],
+      "actor_layouts": [],
+      "actor_layout_note": "No actor atlas definition on this technical source."
+    },
+    "spec_policy": "inherit_existing_source; retain measured native output separately; never mislabel dimensions",
+    "reference_bindings": [
+      {
+        "id": "technical:assets/art/scenes/market_street.png",
+        "role": "dimensions_alpha_layout_only"
+      },
+      {
+        "id": "style:04_location",
+        "role": "drawing_style_only"
+      },
+      {
+        "id": "original:04_location",
+        "role": "original_game_style_only_no_copy"
+      }
+    ],
+    "identity_policy": "If a registered person appears, use their identity_registry image and hash; unseen characters wait for batch02; never substitute style-reference faces.",
+    "generation_gate": "generate_after_dependencies",
+    "dependencies": [],
+    "display_crop_aspect": [
+      4,
+      1
+    ],
+    "safe_area": "Complete functional subjects in the central 4:1 banner crop; retain full native original."
   },
   {
     "priority": "P0",
     "filename": "yunxi_assembly_street.png",
     "brief": "仙师集会街道：摊位、买卖与请教空间，空背景版",
     "status": "planned_or_existing_candidate",
-    "output_path": "D:/fqh/flash/art_sources/refresh_20261019/batches/06_scenes/output/yunxi_assembly_street.png"
+    "output_path": "art_sources/refresh_20261019/batches/06_scenes/output/yunxi_assembly_street.png",
+    "content_outline": "docs/GAME_OUTLINE.md",
+    "outline_sections": [
+      "3",
+      "4",
+      "5.2",
+      "8",
+      "9",
+      "10",
+      "13"
+    ],
+    "content_plan": "art_sources/refresh_20261019/CONTENT_PLAN.md",
+    "style_reference": "art_sources/refresh_20261019/batches/06_scenes/references.json",
+    "technical_spec": {
+      "path": "assets/art/scenes/market_street.png",
+      "sha256": "2e0f521e0db36ac3db64c082d8c5d0c44a12f6ff44e0b5129d4d5ee537981f55",
+      "format": "PNG",
+      "dimensions": [
+        2400,
+        600
+      ],
+      "mode": "RGB",
+      "background": "opaque",
+      "native_vector_required": false,
+      "aspect_ratio": [
+        4,
+        1
+      ],
+      "actor_layouts": [],
+      "actor_layout_note": "No actor atlas definition on this technical source."
+    },
+    "spec_policy": "inherit_existing_source; retain measured native output separately; never mislabel dimensions",
+    "reference_bindings": [
+      {
+        "id": "technical:assets/art/scenes/market_street.png",
+        "role": "dimensions_alpha_layout_only"
+      },
+      {
+        "id": "style:04_location",
+        "role": "drawing_style_only"
+      },
+      {
+        "id": "original:04_location",
+        "role": "original_game_style_only_no_copy"
+      }
+    ],
+    "identity_policy": "If a registered person appears, use their identity_registry image and hash; unseen characters wait for batch02; never substitute style-reference faces.",
+    "generation_gate": "generate_after_dependencies",
+    "dependencies": [],
+    "display_crop_aspect": [
+      4,
+      1
+    ],
+    "safe_area": "Complete functional subjects in the central 4:1 banner crop; retain full native original."
   },
   {
     "priority": "P0",
     "filename": "yunxi_auction_hall.png",
     "brief": "日常拍卖楼内景：台面、席位和普通拍品陈设",
     "status": "planned_or_existing_candidate",
-    "output_path": "D:/fqh/flash/art_sources/refresh_20261019/batches/06_scenes/output/yunxi_auction_hall.png"
+    "output_path": "art_sources/refresh_20261019/batches/06_scenes/output/yunxi_auction_hall.png",
+    "content_outline": "docs/GAME_OUTLINE.md",
+    "outline_sections": [
+      "3",
+      "4",
+      "5.2",
+      "8",
+      "9",
+      "10",
+      "13"
+    ],
+    "content_plan": "art_sources/refresh_20261019/CONTENT_PLAN.md",
+    "style_reference": "art_sources/refresh_20261019/batches/06_scenes/references.json",
+    "technical_spec": {
+      "path": "assets/art/scenes/market_street.png",
+      "sha256": "2e0f521e0db36ac3db64c082d8c5d0c44a12f6ff44e0b5129d4d5ee537981f55",
+      "format": "PNG",
+      "dimensions": [
+        2400,
+        600
+      ],
+      "mode": "RGB",
+      "background": "opaque",
+      "native_vector_required": false,
+      "aspect_ratio": [
+        4,
+        1
+      ],
+      "actor_layouts": [],
+      "actor_layout_note": "No actor atlas definition on this technical source."
+    },
+    "spec_policy": "inherit_existing_source; retain measured native output separately; never mislabel dimensions",
+    "reference_bindings": [
+      {
+        "id": "technical:assets/art/scenes/market_street.png",
+        "role": "dimensions_alpha_layout_only"
+      },
+      {
+        "id": "style:07_interior",
+        "role": "drawing_style_only"
+      },
+      {
+        "id": "original:07_interior",
+        "role": "original_game_style_only_no_copy"
+      }
+    ],
+    "identity_policy": "If a registered person appears, use their identity_registry image and hash; unseen characters wait for batch02; never substitute style-reference faces.",
+    "generation_gate": "generate_after_dependencies",
+    "dependencies": [],
+    "display_crop_aspect": [
+      4,
+      1
+    ],
+    "safe_area": "Complete functional subjects in the central 4:1 banner crop; retain full native original."
   },
   {
     "priority": "P0",
     "filename": "lu_family_courtyard.png",
     "brief": "陆府庭院，世家生活与商路气息，避免皇宫规模",
     "status": "planned_or_existing_candidate",
-    "output_path": "D:/fqh/flash/art_sources/refresh_20261019/batches/06_scenes/output/lu_family_courtyard.png"
+    "output_path": "art_sources/refresh_20261019/batches/06_scenes/output/lu_family_courtyard.png",
+    "content_outline": "docs/GAME_OUTLINE.md",
+    "outline_sections": [
+      "3",
+      "4",
+      "5.2",
+      "8",
+      "9",
+      "10",
+      "13"
+    ],
+    "content_plan": "art_sources/refresh_20261019/CONTENT_PLAN.md",
+    "style_reference": "art_sources/refresh_20261019/batches/06_scenes/references.json",
+    "technical_spec": {
+      "path": "assets/art/scenes/market_street.png",
+      "sha256": "2e0f521e0db36ac3db64c082d8c5d0c44a12f6ff44e0b5129d4d5ee537981f55",
+      "format": "PNG",
+      "dimensions": [
+        2400,
+        600
+      ],
+      "mode": "RGB",
+      "background": "opaque",
+      "native_vector_required": false,
+      "aspect_ratio": [
+        4,
+        1
+      ],
+      "actor_layouts": [],
+      "actor_layout_note": "No actor atlas definition on this technical source."
+    },
+    "spec_policy": "inherit_existing_source; retain measured native output separately; never mislabel dimensions",
+    "reference_bindings": [
+      {
+        "id": "technical:assets/art/scenes/market_street.png",
+        "role": "dimensions_alpha_layout_only"
+      },
+      {
+        "id": "style:04_location",
+        "role": "drawing_style_only"
+      },
+      {
+        "id": "original:04_location",
+        "role": "original_game_style_only_no_copy"
+      }
+    ],
+    "identity_policy": "If a registered person appears, use their identity_registry image and hash; unseen characters wait for batch02; never substitute style-reference faces.",
+    "generation_gate": "generate_after_dependencies",
+    "dependencies": [],
+    "display_crop_aspect": [
+      4,
+      1
+    ],
+    "safe_area": "Complete functional subjects in the central 4:1 banner crop; retain full native original."
   },
   {
     "priority": "P0",
     "filename": "lu_family_dining_hall.png",
     "brief": "夜宴室内空背景，便于人物和对话层复用",
     "status": "planned_or_existing_candidate",
-    "output_path": "D:/fqh/flash/art_sources/refresh_20261019/batches/06_scenes/output/lu_family_dining_hall.png"
+    "output_path": "art_sources/refresh_20261019/batches/06_scenes/output/lu_family_dining_hall.png",
+    "content_outline": "docs/GAME_OUTLINE.md",
+    "outline_sections": [
+      "3",
+      "4",
+      "5.2",
+      "8",
+      "9",
+      "10",
+      "13"
+    ],
+    "content_plan": "art_sources/refresh_20261019/CONTENT_PLAN.md",
+    "style_reference": "art_sources/refresh_20261019/batches/06_scenes/references.json",
+    "technical_spec": {
+      "path": "assets/art/scenes/market_street.png",
+      "sha256": "2e0f521e0db36ac3db64c082d8c5d0c44a12f6ff44e0b5129d4d5ee537981f55",
+      "format": "PNG",
+      "dimensions": [
+        2400,
+        600
+      ],
+      "mode": "RGB",
+      "background": "opaque",
+      "native_vector_required": false,
+      "aspect_ratio": [
+        4,
+        1
+      ],
+      "actor_layouts": [],
+      "actor_layout_note": "No actor atlas definition on this technical source."
+    },
+    "spec_policy": "inherit_existing_source; retain measured native output separately; never mislabel dimensions",
+    "reference_bindings": [
+      {
+        "id": "technical:assets/art/scenes/market_street.png",
+        "role": "dimensions_alpha_layout_only"
+      },
+      {
+        "id": "style:07_interior",
+        "role": "drawing_style_only"
+      },
+      {
+        "id": "original:07_interior",
+        "role": "original_game_style_only_no_copy"
+      }
+    ],
+    "identity_policy": "If a registered person appears, use their identity_registry image and hash; unseen characters wait for batch02; never substitute style-reference faces.",
+    "generation_gate": "generate_after_dependencies",
+    "dependencies": [],
+    "display_crop_aspect": [
+      4,
+      1
+    ],
+    "safe_area": "Complete functional subjects in the central 4:1 banner crop; retain full native original."
   },
   {
     "priority": "P1",
     "filename": "rogue_rented_abode.png",
     "brief": "散修租住洞府，简洁住处、修炼与生活陈设",
     "status": "planned_or_existing_candidate",
-    "output_path": "D:/fqh/flash/art_sources/refresh_20261019/batches/06_scenes/output/rogue_rented_abode.png"
+    "output_path": "art_sources/refresh_20261019/batches/06_scenes/output/rogue_rented_abode.png",
+    "content_outline": "docs/GAME_OUTLINE.md",
+    "outline_sections": [
+      "3",
+      "4",
+      "5.2",
+      "8",
+      "9",
+      "10",
+      "13"
+    ],
+    "content_plan": "art_sources/refresh_20261019/CONTENT_PLAN.md",
+    "style_reference": "art_sources/refresh_20261019/batches/06_scenes/references.json",
+    "technical_spec": {
+      "path": "assets/art/scenes/nanming_abode.png",
+      "sha256": "42ed080c87545cb2e27aa9ac2c363a529b3f310b68d05a6e06027806cd188951",
+      "format": "PNG",
+      "dimensions": [
+        2172,
+        724
+      ],
+      "mode": "RGB",
+      "background": "opaque",
+      "native_vector_required": false,
+      "aspect_ratio": [
+        3,
+        1
+      ],
+      "actor_layouts": [],
+      "actor_layout_note": "No actor atlas definition on this technical source."
+    },
+    "spec_policy": "inherit_existing_source; retain measured native output separately; never mislabel dimensions",
+    "reference_bindings": [
+      {
+        "id": "technical:assets/art/scenes/nanming_abode.png",
+        "role": "dimensions_alpha_layout_only"
+      },
+      {
+        "id": "style:07_interior",
+        "role": "drawing_style_only"
+      },
+      {
+        "id": "original:07_interior",
+        "role": "original_game_style_only_no_copy"
+      }
+    ],
+    "identity_policy": "If a registered person appears, use their identity_registry image and hash; unseen characters wait for batch02; never substitute style-reference faces.",
+    "generation_gate": "generate_after_dependencies",
+    "dependencies": [],
+    "display_crop_aspect": [
+      4,
+      1
+    ],
+    "safe_area": "Complete functional subjects in the central 4:1 banner crop; retain full native original."
   },
   {
     "priority": "P1",
     "filename": "nanming_artisan_street.png",
     "brief": "南明器街与炼器作坊，与现有万宝楼、牙行分工",
     "status": "planned_or_existing_candidate",
-    "output_path": "D:/fqh/flash/art_sources/refresh_20261019/batches/06_scenes/output/nanming_artisan_street.png"
+    "output_path": "art_sources/refresh_20261019/batches/06_scenes/output/nanming_artisan_street.png",
+    "content_outline": "docs/GAME_OUTLINE.md",
+    "outline_sections": [
+      "3",
+      "4",
+      "5.2",
+      "8",
+      "9",
+      "10",
+      "13"
+    ],
+    "content_plan": "art_sources/refresh_20261019/CONTENT_PLAN.md",
+    "style_reference": "art_sources/refresh_20261019/batches/06_scenes/references.json",
+    "technical_spec": {
+      "path": "assets/art/scenes/market_street.png",
+      "sha256": "2e0f521e0db36ac3db64c082d8c5d0c44a12f6ff44e0b5129d4d5ee537981f55",
+      "format": "PNG",
+      "dimensions": [
+        2400,
+        600
+      ],
+      "mode": "RGB",
+      "background": "opaque",
+      "native_vector_required": false,
+      "aspect_ratio": [
+        4,
+        1
+      ],
+      "actor_layouts": [],
+      "actor_layout_note": "No actor atlas definition on this technical source."
+    },
+    "spec_policy": "inherit_existing_source; retain measured native output separately; never mislabel dimensions",
+    "reference_bindings": [
+      {
+        "id": "technical:assets/art/scenes/market_street.png",
+        "role": "dimensions_alpha_layout_only"
+      },
+      {
+        "id": "style:07_interior",
+        "role": "drawing_style_only"
+      },
+      {
+        "id": "original:07_interior",
+        "role": "original_game_style_only_no_copy"
+      }
+    ],
+    "identity_policy": "If a registered person appears, use their identity_registry image and hash; unseen characters wait for batch02; never substitute style-reference faces.",
+    "generation_gate": "generate_after_dependencies",
+    "dependencies": [],
+    "display_crop_aspect": [
+      4,
+      1
+    ],
+    "safe_area": "Complete functional subjects in the central 4:1 banner crop; retain full native original."
   },
   {
     "priority": "P2",
     "filename": "canglan_medical_hall.png",
     "brief": "沧澜城丹会／医馆代表内景",
     "status": "planned_or_existing_candidate",
-    "output_path": "D:/fqh/flash/art_sources/refresh_20261019/batches/06_scenes/output/canglan_medical_hall.png"
+    "output_path": "art_sources/refresh_20261019/batches/06_scenes/output/canglan_medical_hall.png",
+    "content_outline": "docs/GAME_OUTLINE.md",
+    "outline_sections": [
+      "3",
+      "4",
+      "5.2",
+      "8",
+      "9",
+      "10",
+      "13"
+    ],
+    "content_plan": "art_sources/refresh_20261019/CONTENT_PLAN.md",
+    "style_reference": "art_sources/refresh_20261019/batches/06_scenes/references.json",
+    "technical_spec": {
+      "path": "assets/art/scenes/market_street.png",
+      "sha256": "2e0f521e0db36ac3db64c082d8c5d0c44a12f6ff44e0b5129d4d5ee537981f55",
+      "format": "PNG",
+      "dimensions": [
+        2400,
+        600
+      ],
+      "mode": "RGB",
+      "background": "opaque",
+      "native_vector_required": false,
+      "aspect_ratio": [
+        4,
+        1
+      ],
+      "actor_layouts": [],
+      "actor_layout_note": "No actor atlas definition on this technical source."
+    },
+    "spec_policy": "inherit_existing_source; retain measured native output separately; never mislabel dimensions",
+    "reference_bindings": [
+      {
+        "id": "technical:assets/art/scenes/market_street.png",
+        "role": "dimensions_alpha_layout_only"
+      },
+      {
+        "id": "style:07_interior",
+        "role": "drawing_style_only"
+      },
+      {
+        "id": "original:07_interior",
+        "role": "original_game_style_only_no_copy"
+      }
+    ],
+    "identity_policy": "If a registered person appears, use their identity_registry image and hash; unseen characters wait for batch02; never substitute style-reference faces.",
+    "generation_gate": "generate_after_dependencies",
+    "dependencies": [],
+    "display_crop_aspect": [
+      4,
+      1
+    ],
+    "safe_area": "Complete functional subjects in the central 4:1 banner crop; retain full native original."
+  },
+  {
+    "priority": "P1",
+    "filename": "beiyue_old_archive.png",
+    "brief": "筑基篇北岳旧档库：缺页卷宗、古物与守川司交涉空间；线索与第10批一致",
+    "status": "planned_or_existing_candidate",
+    "output_path": "art_sources/refresh_20261019/batches/06_scenes/output/beiyue_old_archive.png",
+    "content_outline": "docs/GAME_OUTLINE.md",
+    "outline_sections": [
+      "3",
+      "4",
+      "5.2",
+      "8",
+      "9",
+      "10",
+      "13"
+    ],
+    "content_plan": "art_sources/refresh_20261019/CONTENT_PLAN.md",
+    "style_reference": "art_sources/refresh_20261019/batches/06_scenes/references.json",
+    "technical_spec": {
+      "path": "assets/art/scenes/market_street.png",
+      "sha256": "2e0f521e0db36ac3db64c082d8c5d0c44a12f6ff44e0b5129d4d5ee537981f55",
+      "format": "PNG",
+      "dimensions": [
+        2400,
+        600
+      ],
+      "mode": "RGB",
+      "background": "opaque",
+      "native_vector_required": false,
+      "aspect_ratio": [
+        4,
+        1
+      ],
+      "actor_layouts": [],
+      "actor_layout_note": "No actor atlas definition on this technical source."
+    },
+    "spec_policy": "inherit_existing_source; retain measured native output separately; never mislabel dimensions",
+    "reference_bindings": [
+      {
+        "id": "technical:assets/art/scenes/market_street.png",
+        "role": "dimensions_alpha_layout_only"
+      },
+      {
+        "id": "style:07_interior",
+        "role": "drawing_style_only"
+      },
+      {
+        "id": "original:07_interior",
+        "role": "original_game_style_only_no_copy"
+      }
+    ],
+    "identity_policy": "If a registered person appears, use their identity_registry image and hash; unseen characters wait for batch02; never substitute style-reference faces.",
+    "generation_gate": "generate_after_dependencies",
+    "dependencies": [],
+    "display_crop_aspect": [
+      4,
+      1
+    ],
+    "safe_area": "Complete functional subjects in the central 4:1 banner crop; retain full native original."
+  },
+  {
+    "priority": "P0",
+    "filename": "tianhe_ferry_reflection.png",
+    "brief": "白鹭渡内的天河渡口，开局夜宴后首条线索；复用日常内河岸线，补月圆照川城倒影状态，不另造港口，不提前泄露封印真相",
+    "status": "planned_or_existing_candidate",
+    "output_path": "art_sources/refresh_20261019/batches/06_scenes/output/tianhe_ferry_reflection.png",
+    "content_outline": "docs/GAME_OUTLINE.md",
+    "outline_sections": [
+      "3",
+      "4",
+      "5.2",
+      "8",
+      "9",
+      "10",
+      "13"
+    ],
+    "content_plan": "art_sources/refresh_20261019/CONTENT_PLAN.md",
+    "style_reference": "art_sources/refresh_20261019/batches/06_scenes/references.json",
+    "technical_spec": {
+      "path": "assets/art/scenes/ferry_crossing.png",
+      "sha256": "fc1696644a7843eb323ab5d73d3d5244a932b2be67603da0733f6400e093bfd8",
+      "format": "PNG",
+      "dimensions": [
+        2172,
+        724
+      ],
+      "mode": "RGB",
+      "background": "opaque",
+      "native_vector_required": false,
+      "aspect_ratio": [
+        3,
+        1
+      ],
+      "actor_layouts": [],
+      "actor_layout_note": "No actor atlas definition on this technical source."
+    },
+    "spec_policy": "inherit_existing_source; retain measured native output separately; never mislabel dimensions",
+    "reference_bindings": [
+      {
+        "id": "technical:assets/art/scenes/ferry_crossing.png",
+        "role": "dimensions_alpha_layout_only"
+      },
+      {
+        "id": "style:04_location",
+        "role": "drawing_style_only"
+      },
+      {
+        "id": "original:04_location",
+        "role": "original_game_style_only_no_copy"
+      }
+    ],
+    "identity_policy": "If a registered person appears, use their identity_registry image and hash; unseen characters wait for batch02; never substitute style-reference faces.",
+    "generation_gate": "review_generated_candidate",
+    "dependencies": [
+      "output:tianhe_ferry_day.png",
+      "motif:old_city_seal_candidate"
+    ],
+    "display_crop_aspect": [
+      4,
+      1
+    ],
+    "safe_area": "Complete functional subjects in the central 4:1 banner crop; retain full native original.",
+    "variants": [
+      "tianhe_ferry_day.png",
+      "tianhe_ferry_reflection.png"
+    ]
+  },
+  {
+    "priority": "P1",
+    "filename": "qingyun_sword_trial_cliff.png",
+    "brief": "筑基宗门试炼青云试剑崖：山崖、分层攀登与剑痕；层数文字和交互由UI绘制",
+    "status": "planned_or_existing_candidate",
+    "output_path": "art_sources/refresh_20261019/batches/06_scenes/output/qingyun_sword_trial_cliff.png",
+    "content_outline": "docs/GAME_OUTLINE.md",
+    "outline_sections": [
+      "3",
+      "4",
+      "5.2",
+      "8",
+      "9",
+      "10",
+      "13"
+    ],
+    "content_plan": "art_sources/refresh_20261019/CONTENT_PLAN.md",
+    "style_reference": "art_sources/refresh_20261019/batches/06_scenes/references.json",
+    "technical_spec": {
+      "path": "assets/art/scenes/market_street.png",
+      "sha256": "2e0f521e0db36ac3db64c082d8c5d0c44a12f6ff44e0b5129d4d5ee537981f55",
+      "format": "PNG",
+      "dimensions": [
+        2400,
+        600
+      ],
+      "mode": "RGB",
+      "background": "opaque",
+      "native_vector_required": false,
+      "aspect_ratio": [
+        4,
+        1
+      ],
+      "actor_layouts": [],
+      "actor_layout_note": "No actor atlas definition on this technical source."
+    },
+    "spec_policy": "inherit_existing_source; retain measured native output separately; never mislabel dimensions",
+    "reference_bindings": [
+      {
+        "id": "technical:assets/art/scenes/market_street.png",
+        "role": "dimensions_alpha_layout_only"
+      },
+      {
+        "id": "style:04_location",
+        "role": "drawing_style_only"
+      },
+      {
+        "id": "original:04_location",
+        "role": "original_game_style_only_no_copy"
+      }
+    ],
+    "identity_policy": "If a registered person appears, use their identity_registry image and hash; unseen characters wait for batch02; never substitute style-reference faces.",
+    "generation_gate": "generate_after_dependencies",
+    "dependencies": [],
+    "display_crop_aspect": [
+      4,
+      1
+    ],
+    "safe_area": "Complete functional subjects in the central 4:1 banner crop; retain full native original."
+  },
+  {
+    "priority": "P1",
+    "filename": "rogue_trial_notice_hall.png",
+    "brief": "各城悬赏会与散修历练帖领取处；告示正文与排名留给UI，不烘焙文字",
+    "status": "planned_or_existing_candidate",
+    "output_path": "art_sources/refresh_20261019/batches/06_scenes/output/rogue_trial_notice_hall.png",
+    "content_outline": "docs/GAME_OUTLINE.md",
+    "outline_sections": [
+      "3",
+      "4",
+      "5.2",
+      "8",
+      "9",
+      "10",
+      "13"
+    ],
+    "content_plan": "art_sources/refresh_20261019/CONTENT_PLAN.md",
+    "style_reference": "art_sources/refresh_20261019/batches/06_scenes/references.json",
+    "technical_spec": {
+      "path": "assets/art/scenes/market_street.png",
+      "sha256": "2e0f521e0db36ac3db64c082d8c5d0c44a12f6ff44e0b5129d4d5ee537981f55",
+      "format": "PNG",
+      "dimensions": [
+        2400,
+        600
+      ],
+      "mode": "RGB",
+      "background": "opaque",
+      "native_vector_required": false,
+      "aspect_ratio": [
+        4,
+        1
+      ],
+      "actor_layouts": [],
+      "actor_layout_note": "No actor atlas definition on this technical source."
+    },
+    "spec_policy": "inherit_existing_source; retain measured native output separately; never mislabel dimensions",
+    "reference_bindings": [
+      {
+        "id": "technical:assets/art/scenes/market_street.png",
+        "role": "dimensions_alpha_layout_only"
+      },
+      {
+        "id": "style:07_interior",
+        "role": "drawing_style_only"
+      },
+      {
+        "id": "original:07_interior",
+        "role": "original_game_style_only_no_copy"
+      }
+    ],
+    "identity_policy": "If a registered person appears, use their identity_registry image and hash; unseen characters wait for batch02; never substitute style-reference faces.",
+    "generation_gate": "generate_after_dependencies",
+    "dependencies": [],
+    "display_crop_aspect": [
+      4,
+      1
+    ],
+    "safe_area": "Complete functional subjects in the central 4:1 banner crop; retain full native original."
+  },
+  {
+    "priority": "P1",
+    "filename": "tiannan_tournament_venue.png",
+    "brief": "筑基天南大比会场：斗法台、论道席与易宝会的空间关系；五城轮办用陈设变化，区别炼气潜龙会",
+    "status": "planned_or_existing_candidate",
+    "output_path": "art_sources/refresh_20261019/batches/06_scenes/output/tiannan_tournament_venue.png",
+    "content_outline": "docs/GAME_OUTLINE.md",
+    "outline_sections": [
+      "3",
+      "4",
+      "5.2",
+      "8",
+      "9",
+      "10",
+      "13"
+    ],
+    "content_plan": "art_sources/refresh_20261019/CONTENT_PLAN.md",
+    "style_reference": "art_sources/refresh_20261019/batches/06_scenes/references.json",
+    "technical_spec": {
+      "path": "assets/art/scenes/market_street.png",
+      "sha256": "2e0f521e0db36ac3db64c082d8c5d0c44a12f6ff44e0b5129d4d5ee537981f55",
+      "format": "PNG",
+      "dimensions": [
+        2400,
+        600
+      ],
+      "mode": "RGB",
+      "background": "opaque",
+      "native_vector_required": false,
+      "aspect_ratio": [
+        4,
+        1
+      ],
+      "actor_layouts": [],
+      "actor_layout_note": "No actor atlas definition on this technical source."
+    },
+    "spec_policy": "inherit_existing_source; retain measured native output separately; never mislabel dimensions",
+    "reference_bindings": [
+      {
+        "id": "technical:assets/art/scenes/market_street.png",
+        "role": "dimensions_alpha_layout_only"
+      },
+      {
+        "id": "style:07_interior",
+        "role": "drawing_style_only"
+      },
+      {
+        "id": "original:07_interior",
+        "role": "original_game_style_only_no_copy"
+      }
+    ],
+    "identity_policy": "If a registered person appears, use their identity_registry image and hash; unseen characters wait for batch02; never substitute style-reference faces.",
+    "generation_gate": "generate_after_dependencies",
+    "dependencies": [],
+    "display_crop_aspect": [
+      4,
+      1
+    ],
+    "safe_area": "Complete functional subjects in the central 4:1 banner crop; retain full native original."
   },
   {
     "priority": "P2",
-    "filename": "beiyue_old_archive.png",
-    "brief": "北岳旧档库，缺页卷宗线索需与图标批一致",
+    "filename": "five_sect_forum_venue.png",
+    "brief": "金丹以上五宗论道：论道席、交易展示和支持后辈的空间；优先复用公共会场，背景无年号、排名或奖励文字",
     "status": "planned_or_existing_candidate",
-    "output_path": "D:/fqh/flash/art_sources/refresh_20261019/batches/06_scenes/output/beiyue_old_archive.png"
+    "output_path": "art_sources/refresh_20261019/batches/06_scenes/output/five_sect_forum_venue.png",
+    "content_outline": "docs/GAME_OUTLINE.md",
+    "outline_sections": [
+      "3",
+      "4",
+      "5.2",
+      "8",
+      "9",
+      "10",
+      "13"
+    ],
+    "content_plan": "art_sources/refresh_20261019/CONTENT_PLAN.md",
+    "style_reference": "art_sources/refresh_20261019/batches/06_scenes/references.json",
+    "technical_spec": {
+      "path": "assets/art/scenes/market_street.png",
+      "sha256": "2e0f521e0db36ac3db64c082d8c5d0c44a12f6ff44e0b5129d4d5ee537981f55",
+      "format": "PNG",
+      "dimensions": [
+        2400,
+        600
+      ],
+      "mode": "RGB",
+      "background": "opaque",
+      "native_vector_required": false,
+      "aspect_ratio": [
+        4,
+        1
+      ],
+      "actor_layouts": [],
+      "actor_layout_note": "No actor atlas definition on this technical source."
+    },
+    "spec_policy": "inherit_existing_source; retain measured native output separately; never mislabel dimensions",
+    "reference_bindings": [
+      {
+        "id": "technical:assets/art/scenes/market_street.png",
+        "role": "dimensions_alpha_layout_only"
+      },
+      {
+        "id": "style:07_interior",
+        "role": "drawing_style_only"
+      },
+      {
+        "id": "original:07_interior",
+        "role": "original_game_style_only_no_copy"
+      }
+    ],
+    "identity_policy": "If a registered person appears, use their identity_registry image and hash; unseen characters wait for batch02; never substitute style-reference faces.",
+    "generation_gate": "generate_after_dependencies",
+    "dependencies": [],
+    "display_crop_aspect": [
+      4,
+      1
+    ],
+    "safe_area": "Complete functional subjects in the central 4:1 banner crop; retain full native original."
+  },
+  {
+    "priority": "P1",
+    "filename": "ancient_abode_inner_chamber.png",
+    "brief": "筑基古修洞府深处：前厅通向受损阵法内室，留出合作与避阵的可读路线",
+    "status": "planned_or_existing_candidate",
+    "output_path": "art_sources/refresh_20261019/batches/06_scenes/output/ancient_abode_inner_chamber.png",
+    "content_outline": "docs/GAME_OUTLINE.md",
+    "outline_sections": [
+      "3",
+      "4",
+      "5.2",
+      "8",
+      "9",
+      "10",
+      "13"
+    ],
+    "content_plan": "art_sources/refresh_20261019/CONTENT_PLAN.md",
+    "style_reference": "art_sources/refresh_20261019/batches/06_scenes/references.json",
+    "technical_spec": {
+      "path": "assets/art/scenes/market_street.png",
+      "sha256": "2e0f521e0db36ac3db64c082d8c5d0c44a12f6ff44e0b5129d4d5ee537981f55",
+      "format": "PNG",
+      "dimensions": [
+        2400,
+        600
+      ],
+      "mode": "RGB",
+      "background": "opaque",
+      "native_vector_required": false,
+      "aspect_ratio": [
+        4,
+        1
+      ],
+      "actor_layouts": [],
+      "actor_layout_note": "No actor atlas definition on this technical source."
+    },
+    "spec_policy": "inherit_existing_source; retain measured native output separately; never mislabel dimensions",
+    "reference_bindings": [
+      {
+        "id": "technical:assets/art/scenes/market_street.png",
+        "role": "dimensions_alpha_layout_only"
+      },
+      {
+        "id": "style:07_interior",
+        "role": "drawing_style_only"
+      },
+      {
+        "id": "original:07_interior",
+        "role": "original_game_style_only_no_copy"
+      }
+    ],
+    "identity_policy": "If a registered person appears, use their identity_registry image and hash; unseen characters wait for batch02; never substitute style-reference faces.",
+    "generation_gate": "generate_after_dependencies",
+    "dependencies": [],
+    "display_crop_aspect": [
+      4,
+      1
+    ],
+    "safe_area": "Complete functional subjects in the central 4:1 banner crop; retain full native original."
+  },
+  {
+    "priority": "P1",
+    "filename": "luoxia_deep_spirit_spring.png",
+    "brief": "筑基落霞深谷灵泉：灵眼、异常水流与药路妖蟒线索；不自动加照川城阴谋符号",
+    "status": "planned_or_existing_candidate",
+    "output_path": "art_sources/refresh_20261019/batches/06_scenes/output/luoxia_deep_spirit_spring.png",
+    "content_outline": "docs/GAME_OUTLINE.md",
+    "outline_sections": [
+      "3",
+      "4",
+      "5.2",
+      "8",
+      "9",
+      "10",
+      "13"
+    ],
+    "content_plan": "art_sources/refresh_20261019/CONTENT_PLAN.md",
+    "style_reference": "art_sources/refresh_20261019/batches/06_scenes/references.json",
+    "technical_spec": {
+      "path": "assets/art/scenes/market_street.png",
+      "sha256": "2e0f521e0db36ac3db64c082d8c5d0c44a12f6ff44e0b5129d4d5ee537981f55",
+      "format": "PNG",
+      "dimensions": [
+        2400,
+        600
+      ],
+      "mode": "RGB",
+      "background": "opaque",
+      "native_vector_required": false,
+      "aspect_ratio": [
+        4,
+        1
+      ],
+      "actor_layouts": [],
+      "actor_layout_note": "No actor atlas definition on this technical source."
+    },
+    "spec_policy": "inherit_existing_source; retain measured native output separately; never mislabel dimensions",
+    "reference_bindings": [
+      {
+        "id": "technical:assets/art/scenes/market_street.png",
+        "role": "dimensions_alpha_layout_only"
+      },
+      {
+        "id": "style:04_location",
+        "role": "drawing_style_only"
+      },
+      {
+        "id": "original:04_location",
+        "role": "original_game_style_only_no_copy"
+      }
+    ],
+    "identity_policy": "If a registered person appears, use their identity_registry image and hash; unseen characters wait for batch02; never substitute style-reference faces.",
+    "generation_gate": "generate_after_dependencies",
+    "dependencies": [],
+    "display_crop_aspect": [
+      4,
+      1
+    ],
+    "safe_area": "Complete functional subjects in the central 4:1 banner crop; retain full native original."
+  },
+  {
+    "priority": "P1",
+    "filename": "duanjian_gorge_outskirts.png",
+    "brief": "筑基断剑峡外围：安全商道、御剑近路与商队痕迹，内层另留后续内容",
+    "status": "planned_or_existing_candidate",
+    "output_path": "art_sources/refresh_20261019/batches/06_scenes/output/duanjian_gorge_outskirts.png",
+    "content_outline": "docs/GAME_OUTLINE.md",
+    "outline_sections": [
+      "3",
+      "4",
+      "5.2",
+      "8",
+      "9",
+      "10",
+      "13"
+    ],
+    "content_plan": "art_sources/refresh_20261019/CONTENT_PLAN.md",
+    "style_reference": "art_sources/refresh_20261019/batches/06_scenes/references.json",
+    "technical_spec": {
+      "path": "assets/art/scenes/market_street.png",
+      "sha256": "2e0f521e0db36ac3db64c082d8c5d0c44a12f6ff44e0b5129d4d5ee537981f55",
+      "format": "PNG",
+      "dimensions": [
+        2400,
+        600
+      ],
+      "mode": "RGB",
+      "background": "opaque",
+      "native_vector_required": false,
+      "aspect_ratio": [
+        4,
+        1
+      ],
+      "actor_layouts": [],
+      "actor_layout_note": "No actor atlas definition on this technical source."
+    },
+    "spec_policy": "inherit_existing_source; retain measured native output separately; never mislabel dimensions",
+    "reference_bindings": [
+      {
+        "id": "technical:assets/art/scenes/market_street.png",
+        "role": "dimensions_alpha_layout_only"
+      },
+      {
+        "id": "style:04_location",
+        "role": "drawing_style_only"
+      },
+      {
+        "id": "original:04_location",
+        "role": "original_game_style_only_no_copy"
+      }
+    ],
+    "identity_policy": "If a registered person appears, use their identity_registry image and hash; unseen characters wait for batch02; never substitute style-reference faces.",
+    "generation_gate": "generate_after_dependencies",
+    "dependencies": [],
+    "display_crop_aspect": [
+      4,
+      1
+    ],
+    "safe_area": "Complete functional subjects in the central 4:1 banner crop; retain full native original."
   },
   {
     "priority": "P2",
     "filename": "wanghai_chart_shop.png",
     "brief": "望海海图铺，闻人照远行相关",
     "status": "planned_or_existing_candidate",
-    "output_path": "D:/fqh/flash/art_sources/refresh_20261019/batches/06_scenes/output/wanghai_chart_shop.png"
+    "output_path": "art_sources/refresh_20261019/batches/06_scenes/output/wanghai_chart_shop.png",
+    "content_outline": "docs/GAME_OUTLINE.md",
+    "outline_sections": [
+      "3",
+      "4",
+      "5.2",
+      "8",
+      "9",
+      "10",
+      "13"
+    ],
+    "content_plan": "art_sources/refresh_20261019/CONTENT_PLAN.md",
+    "style_reference": "art_sources/refresh_20261019/batches/06_scenes/references.json",
+    "technical_spec": {
+      "path": "assets/art/scenes/market_street.png",
+      "sha256": "2e0f521e0db36ac3db64c082d8c5d0c44a12f6ff44e0b5129d4d5ee537981f55",
+      "format": "PNG",
+      "dimensions": [
+        2400,
+        600
+      ],
+      "mode": "RGB",
+      "background": "opaque",
+      "native_vector_required": false,
+      "aspect_ratio": [
+        4,
+        1
+      ],
+      "actor_layouts": [],
+      "actor_layout_note": "No actor atlas definition on this technical source."
+    },
+    "spec_policy": "inherit_existing_source; retain measured native output separately; never mislabel dimensions",
+    "reference_bindings": [
+      {
+        "id": "technical:assets/art/scenes/market_street.png",
+        "role": "dimensions_alpha_layout_only"
+      },
+      {
+        "id": "style:07_interior",
+        "role": "drawing_style_only"
+      },
+      {
+        "id": "original:07_interior",
+        "role": "original_game_style_only_no_copy"
+      }
+    ],
+    "identity_policy": "If a registered person appears, use their identity_registry image and hash; unseen characters wait for batch02; never substitute style-reference faces.",
+    "generation_gate": "generate_after_dependencies",
+    "dependencies": [],
+    "display_crop_aspect": [
+      4,
+      1
+    ],
+    "safe_area": "Complete functional subjects in the central 4:1 banner crop; retain full native original."
   },
   {
     "priority": "P2",
     "filename": "chenxia_branching_path.png",
     "brief": "沉霞古境可分岔的内部路径，区别现有入口",
     "status": "planned_or_existing_candidate",
-    "output_path": "D:/fqh/flash/art_sources/refresh_20261019/batches/06_scenes/output/chenxia_branching_path.png"
+    "output_path": "art_sources/refresh_20261019/batches/06_scenes/output/chenxia_branching_path.png",
+    "content_outline": "docs/GAME_OUTLINE.md",
+    "outline_sections": [
+      "3",
+      "4",
+      "5.2",
+      "8",
+      "9",
+      "10",
+      "13"
+    ],
+    "content_plan": "art_sources/refresh_20261019/CONTENT_PLAN.md",
+    "style_reference": "art_sources/refresh_20261019/batches/06_scenes/references.json",
+    "technical_spec": {
+      "path": "assets/art/scenes/market_street.png",
+      "sha256": "2e0f521e0db36ac3db64c082d8c5d0c44a12f6ff44e0b5129d4d5ee537981f55",
+      "format": "PNG",
+      "dimensions": [
+        2400,
+        600
+      ],
+      "mode": "RGB",
+      "background": "opaque",
+      "native_vector_required": false,
+      "aspect_ratio": [
+        4,
+        1
+      ],
+      "actor_layouts": [],
+      "actor_layout_note": "No actor atlas definition on this technical source."
+    },
+    "spec_policy": "inherit_existing_source; retain measured native output separately; never mislabel dimensions",
+    "reference_bindings": [
+      {
+        "id": "technical:assets/art/scenes/market_street.png",
+        "role": "dimensions_alpha_layout_only"
+      },
+      {
+        "id": "style:04_location",
+        "role": "drawing_style_only"
+      },
+      {
+        "id": "original:04_location",
+        "role": "original_game_style_only_no_copy"
+      }
+    ],
+    "identity_policy": "If a registered person appears, use their identity_registry image and hash; unseen characters wait for batch02; never substitute style-reference faces.",
+    "generation_gate": "generate_after_dependencies",
+    "dependencies": [],
+    "display_crop_aspect": [
+      4,
+      1
+    ],
+    "safe_area": "Complete functional subjects in the central 4:1 banner crop; retain full native original."
   },
   {
     "priority": "P2",
     "filename": "chenxia_array_chamber.png",
     "brief": "沉霞阵室，体现可研究／合作处理的空间",
     "status": "planned_or_existing_candidate",
-    "output_path": "D:/fqh/flash/art_sources/refresh_20261019/batches/06_scenes/output/chenxia_array_chamber.png"
+    "output_path": "art_sources/refresh_20261019/batches/06_scenes/output/chenxia_array_chamber.png",
+    "content_outline": "docs/GAME_OUTLINE.md",
+    "outline_sections": [
+      "3",
+      "4",
+      "5.2",
+      "8",
+      "9",
+      "10",
+      "13"
+    ],
+    "content_plan": "art_sources/refresh_20261019/CONTENT_PLAN.md",
+    "style_reference": "art_sources/refresh_20261019/batches/06_scenes/references.json",
+    "technical_spec": {
+      "path": "assets/art/scenes/market_street.png",
+      "sha256": "2e0f521e0db36ac3db64c082d8c5d0c44a12f6ff44e0b5129d4d5ee537981f55",
+      "format": "PNG",
+      "dimensions": [
+        2400,
+        600
+      ],
+      "mode": "RGB",
+      "background": "opaque",
+      "native_vector_required": false,
+      "aspect_ratio": [
+        4,
+        1
+      ],
+      "actor_layouts": [],
+      "actor_layout_note": "No actor atlas definition on this technical source."
+    },
+    "spec_policy": "inherit_existing_source; retain measured native output separately; never mislabel dimensions",
+    "reference_bindings": [
+      {
+        "id": "technical:assets/art/scenes/market_street.png",
+        "role": "dimensions_alpha_layout_only"
+      },
+      {
+        "id": "style:07_interior",
+        "role": "drawing_style_only"
+      },
+      {
+        "id": "original:07_interior",
+        "role": "original_game_style_only_no_copy"
+      }
+    ],
+    "identity_policy": "If a registered person appears, use their identity_registry image and hash; unseen characters wait for batch02; never substitute style-reference faces.",
+    "generation_gate": "generate_after_dependencies",
+    "dependencies": [],
+    "display_crop_aspect": [
+      4,
+      1
+    ],
+    "safe_area": "Complete functional subjects in the central 4:1 banner crop; retain full native original."
   },
   {
     "priority": "P2",
     "filename": "chenxia_record_room.png",
     "brief": "古境旧城记录所在房间，线索标记与第10批一致",
     "status": "planned_or_existing_candidate",
-    "output_path": "D:/fqh/flash/art_sources/refresh_20261019/batches/06_scenes/output/chenxia_record_room.png"
+    "output_path": "art_sources/refresh_20261019/batches/06_scenes/output/chenxia_record_room.png",
+    "content_outline": "docs/GAME_OUTLINE.md",
+    "outline_sections": [
+      "3",
+      "4",
+      "5.2",
+      "8",
+      "9",
+      "10",
+      "13"
+    ],
+    "content_plan": "art_sources/refresh_20261019/CONTENT_PLAN.md",
+    "style_reference": "art_sources/refresh_20261019/batches/06_scenes/references.json",
+    "technical_spec": {
+      "path": "assets/art/scenes/market_street.png",
+      "sha256": "2e0f521e0db36ac3db64c082d8c5d0c44a12f6ff44e0b5129d4d5ee537981f55",
+      "format": "PNG",
+      "dimensions": [
+        2400,
+        600
+      ],
+      "mode": "RGB",
+      "background": "opaque",
+      "native_vector_required": false,
+      "aspect_ratio": [
+        4,
+        1
+      ],
+      "actor_layouts": [],
+      "actor_layout_note": "No actor atlas definition on this technical source."
+    },
+    "spec_policy": "inherit_existing_source; retain measured native output separately; never mislabel dimensions",
+    "reference_bindings": [
+      {
+        "id": "technical:assets/art/scenes/market_street.png",
+        "role": "dimensions_alpha_layout_only"
+      },
+      {
+        "id": "style:07_interior",
+        "role": "drawing_style_only"
+      },
+      {
+        "id": "original:07_interior",
+        "role": "original_game_style_only_no_copy"
+      }
+    ],
+    "identity_policy": "If a registered person appears, use their identity_registry image and hash; unseen characters wait for batch02; never substitute style-reference faces.",
+    "generation_gate": "generate_after_dependencies",
+    "dependencies": [
+      "motif:old_city_seal_candidate"
+    ],
+    "display_crop_aspect": [
+      4,
+      1
+    ],
+    "safe_area": "Complete functional subjects in the central 4:1 banner crop; retain full native original."
   },
   {
     "priority": "P2",
     "filename": "sea_ship_deck.png",
     "brief": "海船甲板，区分内河小舟",
     "status": "planned_or_existing_candidate",
-    "output_path": "D:/fqh/flash/art_sources/refresh_20261019/batches/06_scenes/output/sea_ship_deck.png"
+    "output_path": "art_sources/refresh_20261019/batches/06_scenes/output/sea_ship_deck.png",
+    "content_outline": "docs/GAME_OUTLINE.md",
+    "outline_sections": [
+      "3",
+      "4",
+      "5.2",
+      "8",
+      "9",
+      "10",
+      "13"
+    ],
+    "content_plan": "art_sources/refresh_20261019/CONTENT_PLAN.md",
+    "style_reference": "art_sources/refresh_20261019/batches/06_scenes/references.json",
+    "technical_spec": {
+      "path": "assets/art/scenes/ferry_crossing.png",
+      "sha256": "fc1696644a7843eb323ab5d73d3d5244a932b2be67603da0733f6400e093bfd8",
+      "format": "PNG",
+      "dimensions": [
+        2172,
+        724
+      ],
+      "mode": "RGB",
+      "background": "opaque",
+      "native_vector_required": false,
+      "aspect_ratio": [
+        3,
+        1
+      ],
+      "actor_layouts": [],
+      "actor_layout_note": "No actor atlas definition on this technical source."
+    },
+    "spec_policy": "inherit_existing_source; retain measured native output separately; never mislabel dimensions",
+    "reference_bindings": [
+      {
+        "id": "technical:assets/art/scenes/ferry_crossing.png",
+        "role": "dimensions_alpha_layout_only"
+      },
+      {
+        "id": "style:04_location",
+        "role": "drawing_style_only"
+      },
+      {
+        "id": "original:04_location",
+        "role": "original_game_style_only_no_copy"
+      }
+    ],
+    "identity_policy": "If a registered person appears, use their identity_registry image and hash; unseen characters wait for batch02; never substitute style-reference faces.",
+    "generation_gate": "generate_after_dependencies",
+    "dependencies": [],
+    "display_crop_aspect": [
+      4,
+      1
+    ],
+    "safe_area": "Complete functional subjects in the central 4:1 banner crop; retain full native original."
   },
   {
     "priority": "P2",
     "filename": "island_landing.png",
     "brief": "近海岛屿登陆点，清楚可行路线",
     "status": "planned_or_existing_candidate",
-    "output_path": "D:/fqh/flash/art_sources/refresh_20261019/batches/06_scenes/output/island_landing.png"
+    "output_path": "art_sources/refresh_20261019/batches/06_scenes/output/island_landing.png",
+    "content_outline": "docs/GAME_OUTLINE.md",
+    "outline_sections": [
+      "3",
+      "4",
+      "5.2",
+      "8",
+      "9",
+      "10",
+      "13"
+    ],
+    "content_plan": "art_sources/refresh_20261019/CONTENT_PLAN.md",
+    "style_reference": "art_sources/refresh_20261019/batches/06_scenes/references.json",
+    "technical_spec": {
+      "path": "assets/art/scenes/market_street.png",
+      "sha256": "2e0f521e0db36ac3db64c082d8c5d0c44a12f6ff44e0b5129d4d5ee537981f55",
+      "format": "PNG",
+      "dimensions": [
+        2400,
+        600
+      ],
+      "mode": "RGB",
+      "background": "opaque",
+      "native_vector_required": false,
+      "aspect_ratio": [
+        4,
+        1
+      ],
+      "actor_layouts": [],
+      "actor_layout_note": "No actor atlas definition on this technical source."
+    },
+    "spec_policy": "inherit_existing_source; retain measured native output separately; never mislabel dimensions",
+    "reference_bindings": [
+      {
+        "id": "technical:assets/art/scenes/market_street.png",
+        "role": "dimensions_alpha_layout_only"
+      },
+      {
+        "id": "style:04_location",
+        "role": "drawing_style_only"
+      },
+      {
+        "id": "original:04_location",
+        "role": "original_game_style_only_no_copy"
+      }
+    ],
+    "identity_policy": "If a registered person appears, use their identity_registry image and hash; unseen characters wait for batch02; never substitute style-reference faces.",
+    "generation_gate": "generate_after_dependencies",
+    "dependencies": [],
+    "display_crop_aspect": [
+      4,
+      1
+    ],
+    "safe_area": "Complete functional subjects in the central 4:1 banner crop; retain full native original."
   },
   {
     "priority": "P2",
     "filename": "underwater_ruin_gate.png",
     "brief": "海底遗址入口，与闻人照海图视觉相连",
     "status": "planned_or_existing_candidate",
-    "output_path": "D:/fqh/flash/art_sources/refresh_20261019/batches/06_scenes/output/underwater_ruin_gate.png"
+    "output_path": "art_sources/refresh_20261019/batches/06_scenes/output/underwater_ruin_gate.png",
+    "content_outline": "docs/GAME_OUTLINE.md",
+    "outline_sections": [
+      "3",
+      "4",
+      "5.2",
+      "8",
+      "9",
+      "10",
+      "13"
+    ],
+    "content_plan": "art_sources/refresh_20261019/CONTENT_PLAN.md",
+    "style_reference": "art_sources/refresh_20261019/batches/06_scenes/references.json",
+    "technical_spec": {
+      "path": "assets/art/scenes/market_street.png",
+      "sha256": "2e0f521e0db36ac3db64c082d8c5d0c44a12f6ff44e0b5129d4d5ee537981f55",
+      "format": "PNG",
+      "dimensions": [
+        2400,
+        600
+      ],
+      "mode": "RGB",
+      "background": "opaque",
+      "native_vector_required": false,
+      "aspect_ratio": [
+        4,
+        1
+      ],
+      "actor_layouts": [],
+      "actor_layout_note": "No actor atlas definition on this technical source."
+    },
+    "spec_policy": "inherit_existing_source; retain measured native output separately; never mislabel dimensions",
+    "reference_bindings": [
+      {
+        "id": "technical:assets/art/scenes/market_street.png",
+        "role": "dimensions_alpha_layout_only"
+      },
+      {
+        "id": "style:04_location",
+        "role": "drawing_style_only"
+      },
+      {
+        "id": "original:04_location",
+        "role": "original_game_style_only_no_copy"
+      }
+    ],
+    "identity_policy": "If a registered person appears, use their identity_registry image and hash; unseen characters wait for batch02; never substitute style-reference faces.",
+    "generation_gate": "generate_after_dependencies",
+    "dependencies": [],
+    "display_crop_aspect": [
+      4,
+      1
+    ],
+    "safe_area": "Complete functional subjects in the central 4:1 banner crop; retain full native original."
   },
   {
     "priority": "P3",
     "filename": "sealed_old_city_gate.png",
-    "brief": "封存旧城城门，城徽沿用候选母题，最终构图随真相定案",
+    "brief": "元婴进入照川城封存空间的城门；城徽沿用候选母题，空间结构随大纲18节定案，不画时间旅行",
     "status": "planned_or_existing_candidate",
-    "output_path": "D:/fqh/flash/art_sources/refresh_20261019/batches/06_scenes/output/sealed_old_city_gate.png"
+    "output_path": "art_sources/refresh_20261019/batches/06_scenes/output/sealed_old_city_gate.png",
+    "content_outline": "docs/GAME_OUTLINE.md",
+    "outline_sections": [
+      "3",
+      "4",
+      "5.2",
+      "8",
+      "9",
+      "10",
+      "13"
+    ],
+    "content_plan": "art_sources/refresh_20261019/CONTENT_PLAN.md",
+    "style_reference": "art_sources/refresh_20261019/batches/06_scenes/references.json",
+    "technical_spec": {
+      "path": "assets/art/scenes/market_street.png",
+      "sha256": "2e0f521e0db36ac3db64c082d8c5d0c44a12f6ff44e0b5129d4d5ee537981f55",
+      "format": "PNG",
+      "dimensions": [
+        2400,
+        600
+      ],
+      "mode": "RGB",
+      "background": "opaque",
+      "native_vector_required": false,
+      "aspect_ratio": [
+        4,
+        1
+      ],
+      "actor_layouts": [],
+      "actor_layout_note": "No actor atlas definition on this technical source."
+    },
+    "spec_policy": "inherit_existing_source; retain measured native output separately; never mislabel dimensions",
+    "reference_bindings": [
+      {
+        "id": "technical:assets/art/scenes/market_street.png",
+        "role": "dimensions_alpha_layout_only"
+      },
+      {
+        "id": "style:04_location",
+        "role": "drawing_style_only"
+      },
+      {
+        "id": "original:04_location",
+        "role": "original_game_style_only_no_copy"
+      }
+    ],
+    "identity_policy": "If a registered person appears, use their identity_registry image and hash; unseen characters wait for batch02; never substitute style-reference faces.",
+    "generation_gate": "generate_after_dependencies",
+    "dependencies": [
+      "motif:old_city_seal_candidate"
+    ],
+    "display_crop_aspect": [
+      4,
+      1
+    ],
+    "safe_area": "Complete functional subjects in the central 4:1 banner crop; retain full native original."
   },
   {
     "priority": "P3",
     "filename": "sealed_old_city_street.png",
     "brief": "旧城生活遗迹，避免只有宏大宫殿",
     "status": "planned_or_existing_candidate",
-    "output_path": "D:/fqh/flash/art_sources/refresh_20261019/batches/06_scenes/output/sealed_old_city_street.png"
+    "output_path": "art_sources/refresh_20261019/batches/06_scenes/output/sealed_old_city_street.png",
+    "content_outline": "docs/GAME_OUTLINE.md",
+    "outline_sections": [
+      "3",
+      "4",
+      "5.2",
+      "8",
+      "9",
+      "10",
+      "13"
+    ],
+    "content_plan": "art_sources/refresh_20261019/CONTENT_PLAN.md",
+    "style_reference": "art_sources/refresh_20261019/batches/06_scenes/references.json",
+    "technical_spec": {
+      "path": "assets/art/scenes/market_street.png",
+      "sha256": "2e0f521e0db36ac3db64c082d8c5d0c44a12f6ff44e0b5129d4d5ee537981f55",
+      "format": "PNG",
+      "dimensions": [
+        2400,
+        600
+      ],
+      "mode": "RGB",
+      "background": "opaque",
+      "native_vector_required": false,
+      "aspect_ratio": [
+        4,
+        1
+      ],
+      "actor_layouts": [],
+      "actor_layout_note": "No actor atlas definition on this technical source."
+    },
+    "spec_policy": "inherit_existing_source; retain measured native output separately; never mislabel dimensions",
+    "reference_bindings": [
+      {
+        "id": "technical:assets/art/scenes/market_street.png",
+        "role": "dimensions_alpha_layout_only"
+      },
+      {
+        "id": "style:04_location",
+        "role": "drawing_style_only"
+      },
+      {
+        "id": "original:04_location",
+        "role": "original_game_style_only_no_copy"
+      }
+    ],
+    "identity_policy": "If a registered person appears, use their identity_registry image and hash; unseen characters wait for batch02; never substitute style-reference faces.",
+    "generation_gate": "generate_after_dependencies",
+    "dependencies": [
+      "motif:old_city_seal_candidate"
+    ],
+    "display_crop_aspect": [
+      4,
+      1
+    ],
+    "safe_area": "Complete functional subjects in the central 4:1 banner crop; retain full native original."
   },
   {
     "priority": "P3",
     "filename": "old_city_array_core.png",
     "brief": "旧城阵枢，可共享基础场景并留分支状态层",
     "status": "planned_or_existing_candidate",
-    "output_path": "D:/fqh/flash/art_sources/refresh_20261019/batches/06_scenes/output/old_city_array_core.png"
+    "output_path": "art_sources/refresh_20261019/batches/06_scenes/output/old_city_array_core.png",
+    "content_outline": "docs/GAME_OUTLINE.md",
+    "outline_sections": [
+      "3",
+      "4",
+      "5.2",
+      "8",
+      "9",
+      "10",
+      "13"
+    ],
+    "content_plan": "art_sources/refresh_20261019/CONTENT_PLAN.md",
+    "style_reference": "art_sources/refresh_20261019/batches/06_scenes/references.json",
+    "technical_spec": {
+      "path": "assets/art/scenes/market_street.png",
+      "sha256": "2e0f521e0db36ac3db64c082d8c5d0c44a12f6ff44e0b5129d4d5ee537981f55",
+      "format": "PNG",
+      "dimensions": [
+        2400,
+        600
+      ],
+      "mode": "RGB",
+      "background": "opaque",
+      "native_vector_required": false,
+      "aspect_ratio": [
+        4,
+        1
+      ],
+      "actor_layouts": [],
+      "actor_layout_note": "No actor atlas definition on this technical source."
+    },
+    "spec_policy": "inherit_existing_source; retain measured native output separately; never mislabel dimensions",
+    "reference_bindings": [
+      {
+        "id": "technical:assets/art/scenes/market_street.png",
+        "role": "dimensions_alpha_layout_only"
+      },
+      {
+        "id": "style:07_interior",
+        "role": "drawing_style_only"
+      },
+      {
+        "id": "original:07_interior",
+        "role": "original_game_style_only_no_copy"
+      }
+    ],
+    "identity_policy": "If a registered person appears, use their identity_registry image and hash; unseen characters wait for batch02; never substitute style-reference faces.",
+    "generation_gate": "generate_after_dependencies",
+    "dependencies": [
+      "motif:old_city_seal_candidate"
+    ],
+    "display_crop_aspect": [
+      4,
+      1
+    ],
+    "safe_area": "Complete functional subjects in the central 4:1 banner crop; retain full native original."
   }
 ]

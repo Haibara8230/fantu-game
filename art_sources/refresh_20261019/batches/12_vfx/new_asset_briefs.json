@@ -1,23 +1,155 @@
 [
   {
-    "priority": "P1",
-    "filename": "zhaoshui_charge.png",
-    "brief": "照水分光蓄势视觉，机制确认后制作，保留可读剪影",
+    "priority": "P2",
+    "filename": "zhaoshui_water_metal_chain.png",
+    "brief": "按新大纲6.3的水金神通连击和善水印转化制作表现候选，不沿用旧版蓄势／反击机制；不改规则",
     "status": "planned_or_existing_candidate",
-    "output_path": "D:/fqh/flash/art_sources/refresh_20261019/batches/12_vfx/output/zhaoshui_charge.png"
+    "output_path": "art_sources/refresh_20261019/batches/12_vfx/output/zhaoshui_water_metal_chain.png",
+    "content_outline": "docs/GAME_OUTLINE.md",
+    "outline_sections": [
+      "2",
+      "6.3",
+      "8.3"
+    ],
+    "content_plan": "art_sources/refresh_20261019/CONTENT_PLAN.md",
+    "style_reference": "art_sources/refresh_20261019/batches/12_vfx/references.json",
+    "technical_spec": {
+      "path": "assets/art/vfx/magic_01.png",
+      "sha256": "ed9233d41c41fd864364718889947a18bbad16381969a7898de956d9a30d892e",
+      "format": "PNG",
+      "dimensions": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "background": "transparent_required",
+      "native_vector_required": false,
+      "aspect_ratio": [
+        1,
+        1
+      ],
+      "actor_layouts": [],
+      "actor_layout_note": "No actor atlas definition on this technical source."
+    },
+    "spec_policy": "inherit_existing_source; retain measured native output separately; never mislabel dimensions",
+    "reference_bindings": [
+      {
+        "id": "technical:assets/art/vfx/magic_01.png",
+        "role": "dimensions_alpha_layout_only"
+      },
+      {
+        "id": "style:06_battle",
+        "role": "drawing_style_only"
+      },
+      {
+        "id": "original:06_battle",
+        "role": "original_game_style_only_no_copy"
+      }
+    ],
+    "identity_policy": "If a registered person appears, use their identity_registry image and hash; unseen characters wait for batch02; never substitute style-reference faces.",
+    "generation_gate": "generate_after_dependencies",
+    "dependencies": []
   },
   {
     "priority": "P1",
-    "filename": "zhaoshui_counter.png",
-    "brief": "照水分光反击视觉，与图标／武器形保持一致",
+    "filename": "cangxi_concealment.png",
+    "brief": "筑基篇藏息传承的轻雾／撤离表现，沿用原特效要求；不画成永久隐身，不改变实际风险规则",
     "status": "planned_or_existing_candidate",
-    "output_path": "D:/fqh/flash/art_sources/refresh_20261019/batches/12_vfx/output/zhaoshui_counter.png"
+    "output_path": "art_sources/refresh_20261019/batches/12_vfx/output/cangxi_concealment.png",
+    "content_outline": "docs/GAME_OUTLINE.md",
+    "outline_sections": [
+      "2",
+      "6.3",
+      "8.3"
+    ],
+    "content_plan": "art_sources/refresh_20261019/CONTENT_PLAN.md",
+    "style_reference": "art_sources/refresh_20261019/batches/12_vfx/references.json",
+    "technical_spec": {
+      "path": "assets/art/vfx/magic_01.png",
+      "sha256": "ed9233d41c41fd864364718889947a18bbad16381969a7898de956d9a30d892e",
+      "format": "PNG",
+      "dimensions": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "background": "transparent_required",
+      "native_vector_required": false,
+      "aspect_ratio": [
+        1,
+        1
+      ],
+      "actor_layouts": [],
+      "actor_layout_note": "No actor atlas definition on this technical source."
+    },
+    "spec_policy": "inherit_existing_source; retain measured native output separately; never mislabel dimensions",
+    "reference_bindings": [
+      {
+        "id": "technical:assets/art/vfx/magic_01.png",
+        "role": "dimensions_alpha_layout_only"
+      },
+      {
+        "id": "style:06_battle",
+        "role": "drawing_style_only"
+      },
+      {
+        "id": "original:06_battle",
+        "role": "original_game_style_only_no_copy"
+      }
+    ],
+    "identity_policy": "If a registered person appears, use their identity_registry image and hash; unseen characters wait for batch02; never substitute style-reference faces.",
+    "generation_gate": "generate_after_dependencies",
+    "dependencies": []
   },
   {
     "priority": "P2",
-    "filename": "cangxi_concealment.png",
-    "brief": "藏息轻雾／隐息效果，不改变所有风险的实际规则",
+    "filename": "tingchao_water_qi.png",
+    "brief": "听潮剑修复后在水脉附近开局多吸灵气的表现候选，保留同一剑型；帧数、时长与实际消费者确认后再做",
     "status": "planned_or_existing_candidate",
-    "output_path": "D:/fqh/flash/art_sources/refresh_20261019/batches/12_vfx/output/cangxi_concealment.png"
+    "output_path": "art_sources/refresh_20261019/batches/12_vfx/output/tingchao_water_qi.png",
+    "content_outline": "docs/GAME_OUTLINE.md",
+    "outline_sections": [
+      "2",
+      "6.3",
+      "8.3"
+    ],
+    "content_plan": "art_sources/refresh_20261019/CONTENT_PLAN.md",
+    "style_reference": "art_sources/refresh_20261019/batches/12_vfx/references.json",
+    "technical_spec": {
+      "path": "assets/art/vfx/magic_01.png",
+      "sha256": "ed9233d41c41fd864364718889947a18bbad16381969a7898de956d9a30d892e",
+      "format": "PNG",
+      "dimensions": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "background": "transparent_required",
+      "native_vector_required": false,
+      "aspect_ratio": [
+        1,
+        1
+      ],
+      "actor_layouts": [],
+      "actor_layout_note": "No actor atlas definition on this technical source."
+    },
+    "spec_policy": "inherit_existing_source; retain measured native output separately; never mislabel dimensions",
+    "reference_bindings": [
+      {
+        "id": "technical:assets/art/vfx/magic_01.png",
+        "role": "dimensions_alpha_layout_only"
+      },
+      {
+        "id": "style:06_battle",
+        "role": "drawing_style_only"
+      },
+      {
+        "id": "original:06_battle",
+        "role": "original_game_style_only_no_copy"
+      }
+    ],
+    "identity_policy": "If a registered person appears, use their identity_registry image and hash; unseen characters wait for batch02; never substitute style-reference faces.",
+    "generation_gate": "generate_after_dependencies",
+    "dependencies": []
   }
 ]

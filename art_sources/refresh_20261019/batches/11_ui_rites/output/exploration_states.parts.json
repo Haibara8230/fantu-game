@@ -1,0 +1,30 @@
+{
+  "main": {
+    "path": "art_sources/refresh_20261019/batches/11_ui_rites/output/exploration_states.svg",
+    "sha256": "fec9c83f545357d8968e13becd5ee5169599dae5766f3d526be5d880c229af6a"
+  },
+  "parts": [
+    {
+      "path": "art_sources/refresh_20261019/batches/11_ui_rites/output/parts/exploration_unknown.svg",
+      "sha256": "22f6ae4c5ce91bc2d70169e5a65f9e67ccaccfec96635d4e7ed9a5415a47663d"
+    },
+    {
+      "path": "art_sources/refresh_20261019/batches/11_ui_rites/output/parts/exploration_heard.svg",
+      "sha256": "34214d5c9648c394518ae53f8d7cbf745dbe0f46ac32b1f95cd3e84150839715"
+    },
+    {
+      "path": "art_sources/refresh_20261019/batches/11_ui_rites/output/parts/exploration_discovered.svg",
+      "sha256": "fec9c83f545357d8968e13becd5ee5169599dae5766f3d526be5d880c229af6a"
+    },
+    {
+      "path": "art_sources/refresh_20261019/batches/11_ui_rites/output/parts/exploration_visited.svg",
+      "sha256": "219131d203891afe09d70986e88453ce96db8e43f9a68ac1ef979b7f5133ff61"
+    },
+    {
+      "path": "art_sources/refresh_20261019/batches/11_ui_rites/output/parts/exploration_complete.svg",
+      "sha256": "64c8370096eba0ec1f55d8d8d74b2094bcded60f04167d24d191fc8731f35e7c"
+    }
+  ],
+  "technical_source": "assets/art/ui/map/market.svg",
+  "technical_source_sha256": "ad5e2f1c906e0fcde82f91bd80d06be4861a0d029718b081ffff4456cc589597"
+}

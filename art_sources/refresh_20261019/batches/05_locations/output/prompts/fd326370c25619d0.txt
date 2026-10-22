@@ -1,0 +1,10 @@
+Use case: style-transfer / identity-preserve / production game art.
+Asset: beiyue_city.png
+Content request: 筑基篇先做北岳旧档库所在城区，五城阶段再补全古物街与阵师会馆；独立于玄岳宗
+This is one independent production asset for an original Chinese cultivation RPG.
+Input image 1: art_sources/refresh_20261019/approved_samples/04_location.png. Role: approved drawing-style reference ONLY; do not copy its subject, architecture, layout or camera.
+Preserve the existing category-specific approved hand-drawn style: clear outlines, broad grouped colour areas, restrained shadows and low texture density. Do not impose character C anatomy rules on environments, maps, items or UI. No photorealism, cinematic bloom, dense surface scratches or depth-of-field blur.
+Empty environment: no characters, animals, UI, baked text, signs, labels, names or watermark. Preserve clear functional spaces and complete landmarks. Scene banners need a central 4:1 safe crop. Battle fields keep clear left/right standing ground. Qingyun is a small sect; do not copy monumental palace scale from a style sample.
+Old technical target: 1672x941 pixels. Request the same proportions and retain usable safe margins; actual native output size will be measured, never mislabelled. Background: opaque.
+IMPORTANT NEW CONTENT: this is NOT a repaint of the old technical-source scene. Completely replace its subject and composition according to the requested new asset. The old size anchor does not authorize copying its city, terrain, camera or buildings. Retain ONLY the approved drawing language from the style reference.
+NEW ELEVATED THREE-QUARTER CITY OVERVIEW: a dry northern foothill town, grey stone wall and modest gate near the lower right, winding ochre streets linking a rectangular old archive courtyard, covered antique stalls and a small array-scholar hall. Low angular slate hills behind, a few dark pines, muted cool roofs and warm stone. No river, waterfall, boat harbour, tall palace or monumental white towers. Strong horizontal city footprint.

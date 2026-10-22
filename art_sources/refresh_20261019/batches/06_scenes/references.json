@@ -2,16 +2,13 @@
   {
     "id": "07_interior",
     "title": "室内场景 · 青石客栈",
-    "old": "D:/fqh/flash/assets/art/scenes/town_inn.png",
-    "ref": "D:/fqh/flash/.tmp/mcs_style_reference_20261019/originals/interior_dialogue.jpg",
+    "old": "assets/art/scenes/town_inn.png",
+    "ref": "PNG/mcs_style_reference_20261019/originals/interior_dialogue.jpg",
     "mode": "imagegen",
     "note": "木构与家具归并色块，减少写实光照和材质纹理",
     "transparent": false,
     "spec": "A very wide empty Chinese inn interior backdrop, preserving the original target layout: broad windows and distant town at LEFT, a few wooden tables/benches across front and middle, rear counter and SIMPLE crockery shelves in centre, wooden staircase rising at RIGHT, warm lanterns and muted teal cloth accents. Use the actual game reference's simple clearly delineated wooden architecture, large warm terracotta/brown colour blocks, ivory window light, moderate flat shading, few organized props, no surface grain or tiny intricate details. Avoid realistic bounced light, cinematic glow, depth-of-field blur and dense wood scratches. Merge clutter into readable grouped shapes, keep a quiet central dialogue space. Interior style only from reference: do NOT copy its bedchamber or dialogue UI. No people, no text, no labels, no interface. Wide panoramic crop roughly 4:1.",
-    "new": "D:/fqh/flash/.tmp/style_samples_20261019/new/07_interior.png",
-    "referenceOutput": "D:/fqh/flash/.tmp/style_samples_20261019/inputs/07_interior_reference.png",
-    "comparison": "D:/fqh/flash/.tmp/style_samples_20261019/compare/07_interior.png",
-    "promptPath": "D:/fqh/flash/.tmp/style_samples_20261019/prompts/07_interior.txt",
+    "new": "art_sources/refresh_20261019/approved_samples/07_interior.png",
     "panelHeight": 310,
     "refNote": "原作室内截图裁切；不同室内布局",
     "displayRefCrop": [
@@ -20,6 +17,12 @@
       750,
       200
     ],
-    "packaged_new": "D:/fqh/flash/art_sources/refresh_20261019/approved_samples/07_interior.png"
+    "packaged_new": "art_sources/refresh_20261019/approved_samples/07_interior.png",
+    "historical_paths": {
+      "referenceOutput": ".tmp/style_samples_20261019/inputs/07_interior_reference.png",
+      "comparison": ".tmp/style_samples_20261019/compare/07_interior.png",
+      "promptPath": ".tmp/style_samples_20261019/prompts/07_interior.txt"
+    },
+    "historical_note": "历史临时材料，不是当前生图输入；使用 packaged_new 与 ref。"
   }
 ]

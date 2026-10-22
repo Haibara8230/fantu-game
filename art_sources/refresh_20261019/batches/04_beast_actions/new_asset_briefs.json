@@ -3,7 +3,136 @@
     "priority": "P2",
     "filename": "mine_guardian_puppet_atlas.png",
     "brief": "矿道守卫傀儡；先确定实际战斗用途和帧数，再制作动作候选",
-    "status": "planned_or_existing_candidate",
-    "output_path": "D:/fqh/flash/art_sources/refresh_20261019/batches/04_beast_actions/output/mine_guardian_puppet_atlas.png"
+    "status": "needs_content_confirmation",
+    "output_path": "art_sources/refresh_20261019/batches/04_beast_actions/output/mine_guardian_puppet_atlas.png",
+    "content_outline": "docs/GAME_OUTLINE.md",
+    "outline_sections": [
+      "3.4",
+      "9.1",
+      "10"
+    ],
+    "content_plan": "art_sources/refresh_20261019/CONTENT_PLAN.md",
+    "style_reference": "art_sources/refresh_20261019/batches/04_beast_actions/references.json",
+    "technical_spec": {
+      "path": "assets/art/battle/yanjia_xi.png",
+      "sha256": "46accc53dc8c6fbbc3ac0288b411cc10080537c5ab1f64f3882b8de9ad0aef1b",
+      "format": "PNG",
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "mode": "RGBA",
+      "background": "transparent_required",
+      "native_vector_required": false,
+      "aspect_ratio": [
+        3,
+        2
+      ],
+      "actor_layouts": [
+        {
+          "actor_id": "yanjia_xi",
+          "source_role": "preferred",
+          "definition": {
+            "preferred": "res://assets/art/battle/yanjia_xi.png",
+            "texture": "res://assets/art/beasts_atlas_v1.png",
+            "columns": 2,
+            "rows": 2,
+            "frames": {
+              "idle": 0,
+              "prepare": 0,
+              "attack": 1,
+              "cast": 0,
+              "hit": 0,
+              "guard": 0
+            },
+            "faces_right": false,
+            "height_ratio": 0.64,
+            "frame_regions": [
+              [
+                0,
+                0,
+                768,
+                464
+              ],
+              [
+                768,
+                0,
+                768,
+                464
+              ],
+              [
+                0,
+                472,
+                768,
+                552
+              ],
+              [
+                768,
+                472,
+                768,
+                552
+              ]
+            ],
+            "preferred_layout": {
+              "columns": 2,
+              "rows": 2,
+              "frames": {
+                "idle": 0,
+                "prepare": 0,
+                "attack": 1,
+                "cast": 0,
+                "hit": 2,
+                "guard": 3
+              },
+              "frame_regions": [
+                [
+                  0,
+                  0,
+                  736,
+                  512
+                ],
+                [
+                  736,
+                  0,
+                  800,
+                  512
+                ],
+                [
+                  0,
+                  512,
+                  736,
+                  512
+                ],
+                [
+                  736,
+                  512,
+                  800,
+                  512
+                ]
+              ]
+            }
+          }
+        }
+      ],
+      "actor_layout_note": "For source_role=preferred, apply preferred_layout overrides, including removal of null frame_regions; do not use fallback-sheet cropping."
+    },
+    "spec_policy": "inherit_existing_source; retain measured native output separately; never mislabel dimensions",
+    "reference_bindings": [
+      {
+        "id": "technical:assets/art/battle/yanjia_xi.png",
+        "role": "dimensions_alpha_layout_only"
+      },
+      {
+        "id": "style:03_beast",
+        "role": "drawing_style_only"
+      },
+      {
+        "id": "original:03_beast",
+        "role": "original_game_style_only_no_copy"
+      }
+    ],
+    "identity_policy": "If a registered person appears, use their identity_registry image and hash; unseen characters wait for batch02; never substitute style-reference faces.",
+    "generation_gate": "requires_actual_content_not_invented_enemy",
+    "dependencies": []
   }
 ]

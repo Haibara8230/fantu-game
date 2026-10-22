@@ -1,0 +1,10 @@
+Use case: style-transfer / identity-preserve / production game art.
+Asset: five_sect_forum_venue.png
+Content request: 金丹以上五宗论道：论道席、交易展示和支持后辈的空间；优先复用公共会场，背景无年号、排名或奖励文字
+This is one independent production asset for an original Chinese cultivation RPG.
+Input image 1: art_sources/refresh_20261019/approved_samples/07_interior.png. Role: approved drawing-style reference ONLY; do not copy its subject, architecture, layout or camera.
+Preserve the existing category-specific approved hand-drawn style: clear outlines, broad grouped colour areas, restrained shadows and low texture density. Do not impose character C anatomy rules on environments, maps, items or UI. No photorealism, cinematic bloom, dense surface scratches or depth-of-field blur.
+Empty environment: no characters, animals, UI, baked text, signs, labels, names or watermark. Preserve clear functional spaces and complete landmarks. Scene banners need a central 4:1 safe crop. Battle fields keep clear left/right standing ground. Qingyun is a small sect; do not copy monumental palace scale from a style sample.
+Old technical target: 2400x600 pixels. Request the same proportions and retain usable safe margins; actual native output size will be measured, never mislabelled. Background: opaque.
+IMPORTANT NEW CONTENT: this is NOT a repaint of the old technical-source scene. Completely replace its subject and composition according to the requested new asset. The old size anchor does not authorize copying its city, terrain, camera or buildings. Retain ONLY the approved drawing language from the style reference.
+MANDATORY SCENE COMPOSITION: Five-sect discussion venue: five equal low wooden seats arranged in an open semicircle around a simple central demonstration mat, side benches for younger disciples, modest bamboo pavilion in rear and courtyard pines. No hierarchy throne or six seats. Blank restrained banners. Empty day scene.

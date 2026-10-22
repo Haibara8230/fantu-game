@@ -13,7 +13,6 @@
       "mode": "RGBA",
       "transparent_fraction": 0.4702
     },
-    "absolute_path": "D:/fqh/flash/assets/art/actors/hero_meditate.png",
     "actor_layouts": []
   },
   {
@@ -30,7 +29,6 @@
       "mode": "RGBA",
       "transparent_fraction": 0.5081
     },
-    "absolute_path": "D:/fqh/flash/assets/art/ui/alchemy_vignette.png",
     "actor_layouts": []
   },
   {
@@ -47,7 +45,6 @@
       "bytes": 606
     },
     "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
-    "absolute_path": "D:/fqh/flash/assets/art/ui/divider.svg",
     "actor_layouts": []
   },
   {
@@ -64,7 +61,6 @@
       "bytes": 286
     },
     "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
-    "absolute_path": "D:/fqh/flash/assets/art/ui/grades/grade_0.svg",
     "actor_layouts": []
   },
   {
@@ -81,7 +77,6 @@
       "bytes": 335
     },
     "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
-    "absolute_path": "D:/fqh/flash/assets/art/ui/grades/grade_1.svg",
     "actor_layouts": []
   },
   {
@@ -98,7 +93,6 @@
       "bytes": 656
     },
     "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
-    "absolute_path": "D:/fqh/flash/assets/art/ui/grades/grade_2.svg",
     "actor_layouts": []
   },
   {
@@ -115,7 +109,6 @@
       "bytes": 563
     },
     "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
-    "absolute_path": "D:/fqh/flash/assets/art/ui/grades/grade_3.svg",
     "actor_layouts": []
   },
   {
@@ -132,7 +125,6 @@
       "bytes": 1207
     },
     "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
-    "absolute_path": "D:/fqh/flash/assets/art/ui/grades/grade_4.svg",
     "actor_layouts": []
   },
   {
@@ -149,7 +141,6 @@
       "bytes": 1752
     },
     "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
-    "absolute_path": "D:/fqh/flash/assets/art/ui/grades/grade_5.svg",
     "actor_layouts": []
   },
   {
@@ -166,7 +157,6 @@
       "bytes": 693
     },
     "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
-    "absolute_path": "D:/fqh/flash/assets/art/ui/map/ferry.svg",
     "actor_layouts": []
   },
   {
@@ -183,7 +173,6 @@
       "bytes": 1045
     },
     "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
-    "absolute_path": "D:/fqh/flash/assets/art/ui/map/market.svg",
     "actor_layouts": []
   },
   {
@@ -200,7 +189,6 @@
       "bytes": 691
     },
     "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
-    "absolute_path": "D:/fqh/flash/assets/art/ui/map/mountain.svg",
     "actor_layouts": []
   },
   {
@@ -217,7 +205,6 @@
       "bytes": 669
     },
     "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
-    "absolute_path": "D:/fqh/flash/assets/art/ui/map/ridge.svg",
     "actor_layouts": []
   },
   {
@@ -234,7 +221,6 @@
       "bytes": 651
     },
     "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
-    "absolute_path": "D:/fqh/flash/assets/art/ui/map/ruin.svg",
     "actor_layouts": []
   },
   {
@@ -251,7 +237,6 @@
       "bytes": 682
     },
     "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
-    "absolute_path": "D:/fqh/flash/assets/art/ui/map/town.svg",
     "actor_layouts": []
   },
   {
@@ -268,7 +253,6 @@
       "bytes": 709
     },
     "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
-    "absolute_path": "D:/fqh/flash/assets/art/ui/map/valley.svg",
     "actor_layouts": []
   },
   {
@@ -285,7 +269,6 @@
       "bytes": 637
     },
     "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
-    "absolute_path": "D:/fqh/flash/assets/art/ui/orbs/earth.svg",
     "actor_layouts": []
   },
   {
@@ -302,7 +285,6 @@
       "bytes": 616
     },
     "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
-    "absolute_path": "D:/fqh/flash/assets/art/ui/orbs/fire.svg",
     "actor_layouts": []
   },
   {
@@ -319,7 +301,6 @@
       "bytes": 551
     },
     "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
-    "absolute_path": "D:/fqh/flash/assets/art/ui/orbs/metal.svg",
     "actor_layouts": []
   },
   {
@@ -336,7 +317,6 @@
       "bytes": 926
     },
     "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
-    "absolute_path": "D:/fqh/flash/assets/art/ui/orbs/water.svg",
     "actor_layouts": []
   },
   {
@@ -353,7 +333,6 @@
       "bytes": 599
     },
     "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
-    "absolute_path": "D:/fqh/flash/assets/art/ui/orbs/wood.svg",
     "actor_layouts": []
   },
   {
@@ -370,7 +349,6 @@
       "mode": "RGBA",
       "transparent_fraction": 0.5242
     },
-    "absolute_path": "D:/fqh/flash/assets/art/ui/rite_furnace.png",
     "actor_layouts": []
   },
   {
@@ -386,7 +364,6 @@
       ],
       "mode": "RGB"
     },
-    "absolute_path": "D:/fqh/flash/assets/art/ui/scroll_panel.png",
     "actor_layouts": []
   },
   {
@@ -403,7 +380,6 @@
       "bytes": 756
     },
     "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
-    "absolute_path": "D:/fqh/flash/assets/art/ui/seal.svg",
     "actor_layouts": []
   },
   {
@@ -420,7 +396,6 @@
       "mode": "RGBA",
       "transparent_fraction": 0.4758
     },
-    "absolute_path": "D:/fqh/flash/assets/art/ui/spirit_field_vignette.png",
     "actor_layouts": []
   },
   {
@@ -437,7 +412,6 @@
       "bytes": 896
     },
     "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
-    "absolute_path": "D:/fqh/flash/assets/art/ui/status/bleed.svg",
     "actor_layouts": []
   },
   {
@@ -454,7 +428,6 @@
       "bytes": 557
     },
     "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
-    "absolute_path": "D:/fqh/flash/assets/art/ui/status/burn.svg",
     "actor_layouts": []
   },
   {
@@ -471,7 +444,6 @@
       "bytes": 851
     },
     "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
-    "absolute_path": "D:/fqh/flash/assets/art/ui/status/entangle.svg",
     "actor_layouts": []
   },
   {
@@ -488,7 +460,6 @@
       "bytes": 797
     },
     "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
-    "absolute_path": "D:/fqh/flash/assets/art/ui/status/fervor.svg",
     "actor_layouts": []
   },
   {
@@ -505,7 +476,6 @@
       "bytes": 932
     },
     "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
-    "absolute_path": "D:/fqh/flash/assets/art/ui/status/focus.svg",
     "actor_layouts": []
   },
   {
@@ -522,7 +492,6 @@
       "bytes": 748
     },
     "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
-    "absolute_path": "D:/fqh/flash/assets/art/ui/status/minions.svg",
     "actor_layouts": []
   },
   {
@@ -539,7 +508,6 @@
       "bytes": 644
     },
     "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
-    "absolute_path": "D:/fqh/flash/assets/art/ui/status/shield.svg",
     "actor_layouts": []
   },
   {
@@ -556,7 +524,6 @@
       "bytes": 2336
     },
     "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
-    "absolute_path": "D:/fqh/flash/assets/art/ui/status/slow.svg",
     "actor_layouts": []
   },
   {
@@ -573,7 +540,6 @@
       "bytes": 610
     },
     "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
-    "absolute_path": "D:/fqh/flash/assets/art/ui/status/sunder.svg",
     "actor_layouts": []
   },
   {
@@ -590,7 +556,6 @@
       "bytes": 602
     },
     "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
-    "absolute_path": "D:/fqh/flash/assets/art/ui/status/weaken.svg",
     "actor_layouts": []
   },
   {
@@ -607,7 +572,6 @@
       "bytes": 569
     },
     "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
-    "absolute_path": "D:/fqh/flash/assets/art/ui/status/wound.svg",
     "actor_layouts": []
   },
   {
@@ -624,7 +588,6 @@
       "bytes": 712
     },
     "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
-    "absolute_path": "D:/fqh/flash/assets/art/ui/tag.svg",
     "actor_layouts": []
   },
   {
@@ -641,7 +604,6 @@
       "bytes": 712
     },
     "note": "Native editable vectors; simplified subjects, quiet field and thin grade rim",
-    "absolute_path": "D:/fqh/flash/assets/art/ui/tag_chosen.svg",
     "actor_layouts": []
   },
   {
@@ -652,7 +614,6 @@
       "sha256": "f83f9019467c2dd806625a1d066f363ee08f223ed9b2e82c6d382d14d1bcdad0",
       "bytes": 335
     },
-    "absolute_path": "D:/fqh/flash/assets/icon.svg",
     "actor_layouts": []
   }
 ]

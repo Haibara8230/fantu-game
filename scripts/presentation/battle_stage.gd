@@ -80,7 +80,7 @@ var effect_font := SystemFont.new()
 
 func configure(snapshot: Dictionary, enemy_definition: Dictionary) -> void:
 	art = JSON.parse_string(FileAccess.get_file_as_string("res://data/art.json"))
-	background = load(art_path([str(art.place_background) % str(snapshot.battle.get("place", "")), art.background]))
+	background = load(art_path(background_candidates(art, snapshot.battle)))
 	var definitions: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://data/world.json"))
 	skills = definitions.skills
 	enemy_names = {}
@@ -125,6 +125,22 @@ func configure(snapshot: Dictionary, enemy_definition: Dictionary) -> void:
 	_layout()
 
 ## The first image path that exists, so art dropped into its folder replaces the shared fallback.
+## The duel's backdrop, best first: the contest's stage (潜龙会, a 擂台大会 by contest), the place's own
+## picture, a picture another place lends it (data/art.json `place_battle_art`), then the default.
+static func background_candidates(art_config: Dictionary, battle: Dictionary) -> Array:
+	var stages: Dictionary = art_config.get("stage_background", {})
+	var context := str(battle.get("context", ""))
+	var place := str(battle.get("place", ""))
+	var candidates := []
+	for key: String in ["%s:%s" % [context, str(battle.get("contest", ""))], context]:
+		if stages.has(key):
+			candidates.append(str(stages[key]))
+	candidates.append(str(art_config.place_background) % place)
+	if art_config.get("place_battle_art", {}).has(place):
+		candidates.append(str(art_config.place_battle_art[place]))
+	candidates.append(art_config.background)
+	return candidates
+
 static func art_path(candidates: Array) -> String:
 	for path: Variant in candidates:
 		if ResourceLoader.exists(str(path)):

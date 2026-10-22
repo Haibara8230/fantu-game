@@ -1,0 +1,13 @@
+Use case: style-transfer / identity-preserve / production game art.
+Asset: lu_family_night_banquet.png
+Content request: 陆府夜宴与同辈相识，人物脸型引用第02批，不擅改身份
+This is one independent production asset for an original Chinese cultivation RPG.
+Input image 1: art_sources/refresh_20261019/approved_samples/13_event.png. Role: approved drawing-style reference ONLY; do not copy its subject, architecture, layout or camera.
+Input image 2: art_sources/refresh_20261019/batches/02_key_portraits/candidates/lu_chengzhou.png. Role: same named character identity anchor; preserve face, hair, costume cues and props.
+Input image 3: art_sources/refresh_20261019/batches/02_key_portraits/candidates/ye_zhiwei.png. Role: same named character identity anchor; preserve face, hair, costume cues and props.
+Input image 4: art_sources/refresh_20261019/batches/06_scenes/output/lu_family_dining_hall.png. Role: spatial and prop continuity reference; preserve recognizable place or story motif, redraw in this category drawing style and requested camera.
+Preserve the existing category-specific approved hand-drawn style: clear outlines, broad grouped colour areas, restrained shadows and low texture density. Do not impose character C anatomy rules on environments, maps, items or UI. No photorealism, cinematic bloom, dense surface scratches or depth-of-field blur.
+Story illustration in the approved graphic event style: symbolic focal point, layered mountain/cloud shapes and broad flat colours. Any depicted named person must match its supplied identity anchor in C style. No lettering, UI, labels, frames or watermark. Do not reveal late truth in early scenes; use only the requested event state. No obligatory victory/death/evil outcome unless requested.
+Old technical target: 1600x900 pixels. Request the same proportions and retain usable safe margins; actual native output size will be measured, never mislabelled. Background: opaque.
+IMPORTANT NEW CONTENT: this is NOT a repaint of the old technical-source scene. Completely replace its subject and composition according to the requested new asset. The old size anchor does not authorize copying its city, terrain, camera or buildings. Retain ONLY the approved drawing language from the style reference.
+MANDATORY EVENT COMPOSITION: Private Lu family night banquet, medium-wide view around one table in the supplied private dining hall. Lu Chengzhou with his closed fan nearby and Ye Zhiwei with herb pouch exchange relaxed conversation over modest dishes and tea. Preserve both supplied distinct faces and costumes. Two or three other guests may be small backs or hands only. No romance declaration, victory toast or restaurant rows.

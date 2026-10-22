@@ -1,0 +1,9 @@
+Use case: style-transfer / identity-preserve / production game art.
+Asset: assets/art/events/talent_fuze.png
+Content request: Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.
+This is one independent production asset for an original Chinese cultivation RPG.
+Input image 1: assets/art/events/talent_fuze.png. Role: existing identity/content/layout target; preserve recognizable subject.
+Input image 2: art_sources/refresh_20261019/approved_samples/13_event.png. Role: approved drawing-style reference only.
+Preserve the existing category-specific approved hand-drawn style: clear outlines, broad grouped colour areas, restrained shadows and low texture density. Do not impose character C anatomy rules on environments, maps, items or UI. No photorealism, cinematic bloom, dense surface scratches or depth-of-field blur.
+Story illustration in the approved graphic event style: symbolic focal point, layered mountain/cloud shapes and broad flat colours. Any depicted named person must match its supplied identity anchor in C style. No lettering, UI, labels, frames or watermark. Do not reveal late truth in early scenes; use only the requested event state. No obligatory victory/death/evil outcome unless requested.
+Old technical target: 1672x941 pixels. Request the same proportions and retain usable safe margins; actual native output size will be measured, never mislabelled. Background: opaque.

@@ -8,3 +8,5 @@ PNG/**/*.jpg
 PNG/**/*.jpeg
 PNG/**/*.webp
 .tmp/
+# Full-size art candidates stay on the local D drive; their runtime copies live in assets/ (2026-10-22).
+art_sources/refresh_20261019/batches/**/output/**/*.png

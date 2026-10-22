@@ -1,0 +1,11 @@
+Use case: style-transfer / identity-preserve / production game art.
+Asset: assets/art/ui/alchemy_vignette.png
+Content request: Redraw the existing asset while preserving its actual identity, purpose and technical registration. Inspect the supplied original; filenames are not an excuse to invent its content.
+This is one independent production asset for an original Chinese cultivation RPG.
+Input image 1: assets/art/ui/alchemy_vignette.png. Role: existing identity/content/layout target; preserve recognizable subject.
+Input image 2: art_sources/refresh_20261019/approved_samples/11_furnace.png. Role: approved drawing-style reference ONLY; do not copy its subject, architecture, layout or camera.
+Preserve the existing category-specific approved hand-drawn style: clear outlines, broad grouped colour areas, restrained shadows and low texture density. Do not impose character C anatomy rules on environments, maps, items or UI. No photorealism, cinematic bloom, dense surface scratches or depth-of-field blur.
+Retain the existing UI/rite illustration drawing language and readability. UI text, slots, dates and numerical values are not baked into the image. Any transparent reference must remain genuinely transparent. Do not replace editable SVG assets with this bitmap.
+Old technical target: 1254x1254 pixels. Request the same proportions and retain usable safe margins; actual native output size will be measured, never mislabelled. Background: transparent_required.
+
+Composition: retain the original squat round jade-and-bronze lidded tripod furnace on the left, a small ivory bowl containing three red pills at lower right, and one tied broad-leaf herb bundle behind the bowl. All objects fully inside a square canvas with transparent margins. Broad flat colour shapes, only a few large cloud motifs, no material grain or patina, no labels, no separate floor or contact-shadow disk. Preserve the alchemy combination rather than replacing it with the style sample's furnace alone.
