@@ -86,7 +86,11 @@ static func set_item_count(s, item_id: String, count: int) -> void:
 	add_item(s, item_id, count)
 
 ## What this place pays for one of the item, or 0 when it does not buy it here.
+## What one of an item fetches here; nothing for a stolen thing (`stolen`), which would be known: the
+## 鬼市 takes those (guishi.gd).
 static func sell_price(s, item_id: String) -> int:
+	if bool(s.content.item(Gear.type_of(s, item_id)).get("stolen", false)):
+		return 0
 	return _price_at(s, item_id, demand_factor(s, item_id))
 
 ## What `count` of the item fetch here together. A place short of something (its `demand`) pays the
@@ -238,6 +242,8 @@ static func sell(s, item_id: String, count: int = 1) -> String:
 	if not blocked.is_empty():
 		return blocked
 	var price := sell_price(s, item_id)
+	if bool(s.content.item(Gear.type_of(s, item_id)).get("stolen", false)):
+		return "这是别人的东西，明面上一卖就会被认出来——只能拿去鬼市销赃。"
 	if price <= 0:
 		return "这里不收这件东西。"
 	# Named by its type: an instance is gone once sold.

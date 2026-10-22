@@ -46,6 +46,7 @@ var guest_data: Dictionary = {}
 var league_data: Dictionary = {}
 var tianji_data: Dictionary = {}
 var mijing_data: Dictionary = {}
+var guishi_data: Dictionary = {}
 # 炼器's materials and costs (forge.gd).
 var forge_data: Dictionary = {}
 # Lore heard in teahouses about the wider world (rumors.gd).
@@ -58,11 +59,11 @@ const FAVOR_MAX := 200
 const FAVOR_STAGES := [[0, "初识"], [40, "相熟"], [80, "友好"], [140, "信赖"], [200, "亲密"]]
 const ATTITUDES := {"friendly": "友善", "neutral": "中立", "hostile": "敌意"}
 const BUILT_IN_INTERACTIONS := ["talk", "gift", "help", "consult", "teach", "invite_spar", "invite_help", "companion", "disciple", "instruct", "sworn"]
-const PLAIN_ACTIONS := ["cultivate", "rest", "breakthrough", "study", "teach", "sell", "shop", "gather", "inn_rest", "search_ruin", "explore_cave", "forge", "ascend", "inquire", "commissions", "sect", "alchemy", "field", "lease", "hunt", "arena", "series", "join_sect", "guest", "league", "tianji"]
+const PLAIN_ACTIONS := ["cultivate", "rest", "breakthrough", "study", "teach", "sell", "shop", "gather", "inn_rest", "search_ruin", "explore_cave", "forge", "ascend", "inquire", "commissions", "sect", "alchemy", "field", "lease", "hunt", "arena", "series", "join_sect", "guest", "league", "tianji", "guishi"]
 const ITEM_CATEGORIES := {"herb": "灵草", "pill": "丹药", "treasure": "天材地宝", "manual": "玉简", "equipment": "宝物", "material": "材料", "recipe": "丹方", "talisman": "符箓", "tool": "器具", "quest": "信物"}
 # Milestones friends send word of, and the deeds the session counts besides victories ("win:<enemy>").
 const CONGRATS := ["breakthrough", "core", "nascent", "deity", "serpent", "champion", "summit", "calamity", "promotion"]
-const DEEDS := ["retreat_days", "duel", "trade", "gather", "hunt", "commission", "help", "tournament_champion", "summit_champion"]
+const DEEDS := ["retreat_days", "duel", "trade", "gather", "hunt", "commission", "help", "tournament_champion", "summit_champion", "guishi", "guishi_contract"]
 const STORY_STATES := ["none", "active", "done", "closed"]
 const Arsenal = preload("res://scripts/core/arsenal.gd")
 const Talents = preload("res://scripts/core/talents.gd")
@@ -104,7 +105,7 @@ func load_data() -> bool:
 	for item_id: String in items:
 		if items[item_id] is Dictionary:
 			items[item_id].id = item_id
-	for pair: Array in [["techniques", "res://data/techniques.json"], ["equipment", "res://data/equipment.json"], ["vfx_tiers", "res://data/vfx_tiers.json"], ["vfx", "res://data/vfx.json"], ["population", "res://data/population.json"], ["commissions", "res://data/commissions.json"], ["storylines", "res://data/storylines.json"], ["talents", "res://data/talents.json"], ["sect", "res://data/sect.json"], ["bonds", "res://data/bonds.json"], ["alchemy", "res://data/alchemy.json"], ["caves", "res://data/caves.json"], ["auctions", "res://data/auctions.json"], ["summit", "res://data/summit.json"], ["forge", "res://data/forge.json"], ["lore", "res://data/lore.json"], ["guests", "res://data/guests.json"], ["league", "res://data/league.json"], ["tianji", "res://data/tianji.json"], ["mijing", "res://data/mijing.json"]]:
+	for pair: Array in [["techniques", "res://data/techniques.json"], ["equipment", "res://data/equipment.json"], ["vfx_tiers", "res://data/vfx_tiers.json"], ["vfx", "res://data/vfx.json"], ["population", "res://data/population.json"], ["commissions", "res://data/commissions.json"], ["storylines", "res://data/storylines.json"], ["talents", "res://data/talents.json"], ["sect", "res://data/sect.json"], ["bonds", "res://data/bonds.json"], ["alchemy", "res://data/alchemy.json"], ["caves", "res://data/caves.json"], ["auctions", "res://data/auctions.json"], ["summit", "res://data/summit.json"], ["forge", "res://data/forge.json"], ["lore", "res://data/lore.json"], ["guests", "res://data/guests.json"], ["league", "res://data/league.json"], ["tianji", "res://data/tianji.json"], ["mijing", "res://data/mijing.json"], ["guishi", "res://data/guishi.json"]]:
 		var loaded: Variant = _read_json(pair[1])
 		if not loaded is Dictionary:
 			error_message = "配置格式错误：" + pair[1]
@@ -153,6 +154,8 @@ func load_data() -> bool:
 				tianji_data = loaded
 			"mijing":
 				mijing_data = loaded
+			"guishi":
+				guishi_data = loaded
 	map = parsed.map
 	regions = parsed.get("regions", {})
 	locations = parsed.locations
@@ -287,6 +290,8 @@ func _validate() -> String:
 			return "路线名称无效：%s" % "—".join(route.between)
 		if route.has("fee") and (not _whole(route.fee) or int(route.fee) < 1):
 			return "路线费用无效：%s" % "—".join(route.between)
+		if route.has("free_if") and (not route.has("fee") or not route.free_if in world_flags):
+			return "路线免费标记无效：%s" % "—".join(route.between)
 		if route.has("realm") and (not _whole(route.realm) or int(route.realm) >= realms.size()):
 			return "路线境界要求无效：%s" % "—".join(route.between)
 	for action_id: String in actions:
@@ -435,6 +440,8 @@ func _validate() -> String:
 		problem = _validate_tianji()
 	if problem.is_empty():
 		problem = _validate_mijing()
+	if problem.is_empty():
+		problem = _validate_guishi()
 	if problem.is_empty():
 		problem = _validate_ascension()
 	if problem.is_empty():
@@ -972,6 +979,45 @@ func _validate_mijing() -> String:
 				return where + " 的同行者翻脸配置无效：" + person_id
 	return ""
 
+# --- 鬼市 ------------------------------------------------------------------------------------------
+
+## data/guishi.json: the night, who may come, the lots and what the 神识 sees of them, the fence, the
+## contract, hiring, the black auction and the shadow.
+func _validate_guishi() -> String:
+	var data := guishi_data
+	if not locations.has(data.get("location", "")) or not _whole(data.get("day")) or int(data.day) < 1 or int(data.day) > 30 or not _whole(data.get("realm")):
+		return "鬼市配置无效。"
+	if not locations[data.location].spots.any(func(spot: Dictionary) -> bool: return "guishi" in spot.actions):
+		return "鬼市所在地点没有鬼市的场景。"
+	for key: String in ["gone_flag", "second_flag"]:
+		if not data.get(key, "") in world_flags:
+			return "鬼市引用了未知标记：" + key
+	for key: String in ["price", "insight"]:
+		if not data.get(key) is Array or data[key].size() != realms.size() or data[key].any(func(value: Variant) -> bool: return not (value is float or value is int) or float(value) <= 0.0):
+			return "鬼市的%s须按境界逐一给出。" % key
+	if not _whole(data.get("lots")) or int(data.lots) < 1 or not data.get("kinds") is Array or data.kinds.is_empty() or data.kinds.any(func(kind: Variant) -> bool: return not kind is Dictionary or not kind.get("name") is String or not kind.get("text") is String):
+		return "鬼市的赌宝货色无效。"
+	if not data.get("tiers") is Array or data.tiers.size() < 2 or data.tiers.any(func(tier: Variant) -> bool: return not tier is Dictionary or not _whole(tier.get("weight")) or not (tier.get("stones") is float or tier.get("stones") is int) or not tier.get("hint") is String or not tier.get("opened") is String):
+		return "鬼市的赌宝成色无效。"
+	for key: String in ["fence", "fence_second"]:
+		if not (data.get(key) is float or data.get(key) is int) or float(data[key]) <= 0.0:
+			return "鬼市的销赃折价无效。"
+	var deal: Variant = data.get("contract")
+	if not deal is Dictionary or not deal.get("flag", "") in world_flags or not deal.get("targets") is Array or deal.targets.is_empty() or deal.targets.any(func(target: Variant) -> bool: return not target is Dictionary or not sects.has(target.get("sect", "")) or not target.get("title") is String):
+		return "鬼市的单子无效。"
+	if not _whole(data.get("hire")) or int(data.hire) < 1:
+		return "鬼市的雇凶价无效。"
+	var auction: Variant = data.get("black")
+	if not auction is Dictionary or not auction_data.auctions.has(auction.get("auction", "")) or not auction.get("months") is Array or auction.months.any(func(month: Variant) -> bool: return not _whole(month) or int(month) < 1 or int(month) > 12):
+		return "鬼市的黑拍无效。"
+	var tail: Variant = data.get("tail")
+	if not tail is Dictionary or not _whole(tail.get("spend")) or not enemies.has(tail.get("enemy", "")) or not events.has(tail.get("event", "")) or events[tail.event].get("trigger") != "manual":
+		return "鬼市的尾随配置无效。"
+	for item_id: String in items:
+		if items[item_id].has("stolen") and not items[item_id].stolen is bool:
+			return "赃物标记无效：" + item_id
+	return ""
+
 # --- 天机阁与天骄榜 ------------------------------------------------------------------------------------
 
 func _validate_tianji() -> String:
@@ -1174,6 +1220,10 @@ func _validate_auctions() -> String:
 				return "拍品须是物品、玉简或宝物之一：" + auction_id
 			if entry.has("item") and not items.has(entry.item):
 				return "拍品引用了未知物品：%s" % entry.item
+			if entry.has("if"):
+				var problem := _validate_conditions(entry["if"])
+				if not problem.is_empty():
+					return "拍品条件：" + problem
 			for key: String in ["manual", "equipment"]:
 				if entry.has(key) and (not _whole(entry[key]) or int(entry[key]) < 1 or int(entry[key]) > technique_data.tiers.size()):
 					return "拍品品阶无效：" + auction_id
@@ -2075,6 +2125,8 @@ func _validate_condition(condition: Variant) -> String:
 			return "" if value is Array and value.size() == 2 and tianji_data.get("scrolls", {}).has(value[0]) and _whole(value[1]) and int(value[1]) >= 1 else "天骄榜条件无效"
 		"rival":
 			return "" if value in ["friend", "beaten", "elder_known"] else "宿敌条件无效"
+		"mind_ready":
+			return "" if value is bool else "心境条件无效"
 		"present":
 			return "" if people.has(value) else "未知人物：%s" % value
 		"party":
@@ -2151,6 +2203,8 @@ func _validate_effects(effects: Variant) -> String:
 				ok = value is Array and value.size() == 2 and mijing_data.get("realms", {}).get(str(value[0]), {}).get("ways", {}).has(str(value[1]))
 			"mijing":
 				ok = value in ["fight", "share", "ally", "yield", "surrender", "leave", "decline", "rob_fight", "rob_pay"]
+			"guishi":
+				ok = value in ["tail_fight", "tail_pay"]
 			"reforge":
 				ok = value is Array and value.size() == 2 and not equipment(str(value[0])).is_empty() and not equipment(str(value[1])).is_empty()
 			"guest_invite":

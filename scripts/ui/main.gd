@@ -19,6 +19,7 @@ const Hud = preload("res://scripts/ui/hud.gd")
 const StatusView = preload("res://scripts/ui/status_view.gd")
 const SectView = preload("res://scripts/ui/sect_view.gd")
 const TianjiView = preload("res://scripts/ui/tianji_view.gd")
+const GuishiView = preload("res://scripts/ui/guishi_view.gd")
 const AlchemyView = preload("res://scripts/ui/alchemy_view.gd")
 const Rite = preload("res://scripts/presentation/rite.gd")
 const TasksView = preload("res://scripts/ui/tasks_view.gd")
@@ -47,7 +48,7 @@ const MUTED := Color("#97aaa4")
 const PANEL_TABS := [["status", "属性"], ["sect", "宗门"], ["arts", "神通"], ["methods", "功法"], ["bag", "行囊"], ["people", "相识"], ["chronicle", "编年史"], ["system", "系统"]]
 const SCROLL_TABS := [["goals", "当前目标"], ["stories", "剧情"], ["quests", "委托"], ["letters", "传音"], ["upcoming", "约定"], ["messages", "消息"]]
 const RETREAT_TABS := [["retreat", "修炼"], ["insight", "领悟"], ["breakthrough", "突破"]]
-const TAB_GROUPS := {"panel": PANEL_TABS, "scroll": SCROLL_TABS, "retreat": RETREAT_TABS, "trade": [["trade", "交易"]], "alchemy": [["alchemy", "炼丹"]], "field": [["field", "灵田"]], "forge": [["forge", "炼器"]], "tianji": [["tianji", "天骄榜"]]}
+const TAB_GROUPS := {"panel": PANEL_TABS, "scroll": SCROLL_TABS, "retreat": RETREAT_TABS, "trade": [["trade", "交易"]], "alchemy": [["alchemy", "炼丹"]], "field": [["field", "灵田"]], "forge": [["forge", "炼器"]], "tianji": [["tianji", "天骄榜"]], "guishi": [["guishi", "鬼市"]]}
 var session = Session.new()
 var manual_store = SaveStore.new("user://saves/manual")
 var auto_store = SaveStore.new("user://saves/auto")
@@ -475,7 +476,7 @@ func _arrange(screen: String) -> void:
 					shade.color.a = 0.4
 				else:
 					_place_window(0.0, 1.0, 14.0, -60.0, 14.0)
-		"retreat", "trade", "alchemy", "field", "forge", "tianji":
+		"retreat", "trade", "alchemy", "field", "forge", "tianji", "guishi":
 			# Smaller scrolls over the place, which darkens behind them.
 			shade.color.a = 0.6
 			_place_window(0.0, 1.0, 40.0, -64.0, 96.0)
@@ -617,6 +618,8 @@ func render() -> void:
 				AlchemyView.render_field(self)
 			"tianji":
 				TianjiView.render(self)
+			"guishi":
+				GuishiView.render(self)
 			"goals":
 				TasksView.render_goals(self)
 			"quests":

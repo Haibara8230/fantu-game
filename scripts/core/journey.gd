@@ -25,8 +25,14 @@ static func preview(s, location_id: String, mode: String = "fast") -> Dictionary
 static func path_fee(s, path: Array[String]) -> int:
 	var total := 0
 	for index: int in range(1, path.size()):
-		total += int(s.content.route_between(path[index - 1], path[index]).get("fee", 0))
+		total += fee_of(s, s.content.route_between(path[index - 1], path[index]))
 	return total
+
+## What a road asks: its fee, none once its `free_if` flag is set (飞鱼帮's boats carry the player free).
+static func fee_of(s, route: Dictionary) -> int:
+	if route.has("free_if") and s.has_flag(str(route.free_if)):
+		return 0
+	return int(route.get("fee", 0))
 
 ## Sets out for a destination along the shortest known path and walks it leg by leg.
 static func travel(s, location_id: String, mode: String = "fast") -> String:
@@ -82,7 +88,7 @@ static func _walk(s) -> String:
 			break
 		var next: String = path[1]
 		var route: Dictionary = s.content.route_between(s.player.location, next)
-		var fee := int(route.get("fee", 0))
+		var fee := fee_of(s, route)
 		if fee > 0:
 			if int(s.player.stones) < fee:
 				s.player.journey = {}

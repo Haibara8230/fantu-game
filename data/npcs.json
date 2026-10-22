@@ -4363,5 +4363,98 @@
         ]
       }
     ]
+  },
+  "deng_po": {
+    "name": "灯婆",
+    "title": "鬼市之主",
+    "attitude": "neutral",
+    "gender": "female",
+    "realm_text": "金丹后期",
+    "affiliation": "鬼市",
+    "age": 168,
+    "personality": "沉静",
+    "standing": [
+      2,
+      2
+    ],
+    "description": "鬼市的主人，总坐在废码头尽头那盏灯下，面具后面是一张很老的脸。鬼市里谁动手谁死，这是她定的规矩，一百年没人破过。没人知道她从哪里来；她说话带一点云溪大户人家的口音。",
+    "home": "market",
+    "spot": "ghost",
+    "talk_favor": 2,
+    "gift_favor": 2,
+    "talk": [
+      "“戴上面具，就别问来历。”",
+      "“鬼市里谁动手，我便要谁的命；出了鬼市，你的命是你自己的。”",
+      "“看货靠眼力，眼力不够，就多交些学费。”"
+    ]
+  },
+  "xiaoman": {
+    "name": "小满",
+    "title": "拍卖楼跑堂",
+    "attitude": "friendly",
+    "gender": "female",
+    "realm_text": "炼气初期",
+    "affiliation": "云溪拍卖楼",
+    "age": 15,
+    "personality": "好奇",
+    "standing": [
+      0,
+      0
+    ],
+    "description": "云溪拍卖楼里端茶送水的小姑娘，眼睛尖，记性好，楼里谁跟谁说过话，她都记得。",
+    "home": "market",
+    "spot": "street",
+    "talk_favor": 3,
+    "gift_favor": 3,
+    "talk": [
+      "“秋拍的时候楼里最热闹，二掌柜笑得最多。”",
+      "“我在楼里端了三年茶，见过的宝贝比见过的人还多。”"
+    ]
+  },
+  "mei_sanniang": {
+    "name": "梅三娘",
+    "title": "百花谷谷主",
+    "attitude": "neutral",
+    "gender": "female",
+    "realm_text": "金丹初期",
+    "affiliation": "百花谷",
+    "age": 132,
+    "personality": "清冷",
+    "standing": [
+      2,
+      0
+    ],
+    "description": "百花谷的谷主，一手冷香，能静心，也能杀人。谷里的女弟子都怕她，也都护着她。",
+    "home": "baihua",
+    "spot": "gate",
+    "talk_favor": 2,
+    "gift_favor": 3,
+    "talk": [
+      "“香能静心，也能杀人。看点香的是什么人。”",
+      "“百花谷不收来路不明的银子，也不卖来路不明的香。”"
+    ]
+  },
+  "lao_bie": {
+    "name": "老鳖",
+    "title": "飞鱼帮帮主",
+    "attitude": "neutral",
+    "gender": "male",
+    "realm_text": "金丹初期",
+    "affiliation": "飞鱼帮",
+    "age": 154,
+    "personality": "圆滑",
+    "standing": [
+      1,
+      1
+    ],
+    "description": "飞鱼帮的帮主，劫修出身，十年前金盆洗手，在白鹭渡开了渡船行。脸上总挂着笑，手上的老茧却没退。",
+    "home": "ferry",
+    "spot": "feiyu_gate",
+    "talk_favor": 2,
+    "gift_favor": 2,
+    "talk": [
+      "“洗手容易，洗名声难。”",
+      "“坐我的船，不问来历；船到了岸，各走各路。”"
+    ]
   }
 }

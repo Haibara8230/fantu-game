@@ -32,6 +32,7 @@ const Guest = preload("res://scripts/core/guest.gd")
 const League = preload("res://scripts/core/league.gd")
 const Tianji = preload("res://scripts/core/tianji.gd")
 const Mijing = preload("res://scripts/core/mijing.gd")
+const Guishi = preload("res://scripts/core/guishi.gd")
 const Rival = preload("res://scripts/core/rival.gd")
 const Ascension = preload("res://scripts/core/ascension.gd")
 const Feuds = preload("res://scripts/core/feuds.gd")
@@ -116,7 +117,7 @@ func new_game(character_name: String = "无名", seed_value: int = -1, roots: Ar
 		chosen_name = "无名"
 	# talent_lives: the generated population's talents shape their lives (journeys begun before talents
 	# keep the lives they had).
-	world = {"day": 0, "flags": {}, "events": {}, "people": {}, "seed": seed_value if seed_value >= 0 else absi(int(world_rng.randi())), "stock_sold": {}, "rumors": {}, "quests_taken": {}, "storylines": {}, "letters": [], "talent_lives": true, "invites": [], "loans": [], "visit_period": 0, "caves": {}, "market_supply": {}, "demand_supply": {}, "companion": "", "party": {}, "disciples": [], "sworn": [], "grudges": [], "grudge_seeds": {}, "grudge_serial": 0, "stashes": [], "tianji": {}, "mijing": {}}
+	world = {"day": 0, "flags": {}, "events": {}, "people": {}, "seed": seed_value if seed_value >= 0 else absi(int(world_rng.randi())), "stock_sold": {}, "rumors": {}, "quests_taken": {}, "storylines": {}, "letters": [], "talent_lives": true, "invites": [], "loans": [], "visit_period": 0, "caves": {}, "market_supply": {}, "demand_supply": {}, "companion": "", "party": {}, "disciples": [], "sworn": [], "grudges": [], "grudge_seeds": {}, "grudge_serial": 0, "stashes": [], "tianji": {}, "mijing": {}, "guishi": {}}
 	populate()
 	player = {
 		"name": chosen_name, "birth_day": -int(content.rules.starting_age) * Calendar.DAYS_PER_YEAR,
@@ -1314,6 +1315,23 @@ func league_leave() -> String:
 ## A 战帖 to the one at `target_rank` on the 天骄榜 of the player's realm (tianji.gd).
 func tianji_challenge(target_rank: int) -> String:
 	return Tianji.challenge(self, target_rank)
+
+## 鬼市 (guishi.gd): a sealed lot opened, a stolen thing fenced, tonight's contract, a grudge hired out,
+## the black auction.
+func guishi_gamble(index: int) -> String:
+	return Guishi.gamble(self, index)
+
+func guishi_fence(item_id: String) -> String:
+	return Guishi.fence(self, item_id)
+
+func guishi_contract() -> String:
+	return Guishi.take_contract(self)
+
+func guishi_hire(grudge_id: String) -> String:
+	return Guishi.hire(self, grudge_id)
+
+func guishi_black() -> String:
+	return Guishi.black(self)
 
 ## 出谷: out of the 秘境 by its door (mijing.gd).
 func mijing_exit() -> String:

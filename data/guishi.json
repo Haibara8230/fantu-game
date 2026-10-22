@@ -1,0 +1,45 @@
+{
+  "name": "鬼市",
+  "location": "market",
+  "day": 15,
+  "realm": 1,
+  "gone_flag": "guishi_gone",
+  "second_flag": "guishi_second",
+  "price": [60, 300, 1200, 4000, 12000],
+  "insight": [32, 60, 120, 240, 400],
+  "lots": 3,
+  "kinds": [
+    {"id": "bag", "name": "古修储物袋", "text": "袋口的禁制没解，掂着有些分量。"},
+    {"id": "blade", "name": "蒙布旧兵器", "text": "粗布裹着，只露出一截锈柄。"},
+    {"id": "box", "name": "封泥木匣", "text": "封泥上压着一枚看不清的私印。"}
+  ],
+  "tiers": [
+    {"weight": 35, "stones": 0.2, "hint": "禁制早就散了，里头空落落的——多半是空货。", "opened": "里头只剩几块碎灵石，看走眼了。"},
+    {"weight": 35, "stones": 0.9, "hint": "禁制还在，纹路寻常——寻常货色。", "opened": "寻常货色，好歹没亏。"},
+    {"weight": 22, "stones": 1.2, "manual": 1, "hint": "禁制里透出一丝灵光——像是有好东西。", "opened": "里头压着一枚玉简，赚了。"},
+    {"weight": 8, "stones": 2.0, "equipment": 2, "hint": "隔着封都觉得手心发烫——是件宝贝。", "opened": "是件宝贝！旁边几个戴面具的人都看直了眼。"}
+  ],
+  "fence": 0.6,
+  "fence_second": 0.8,
+  "contract": {
+    "reward": 1.5,
+    "power": 0.95,
+    "flag": "xiongren_guishi",
+    "targets": [
+      {"sect": "wanderer", "title": "露了富的散修"},
+      {"sect": "chixiao", "title": "外地行商的护卫"},
+      {"sect": "canglan", "title": "沧澜阁的采买执事"},
+      {"sect": "xuanyue", "title": "玄岳宗的弃徒"}
+    ]
+  },
+  "hire": 5,
+  "black": {
+    "auction": "guishi_black",
+    "months": [3, 6, 9, 12]
+  },
+  "tail": {
+    "spend": 3,
+    "event": "guishi_tail",
+    "enemy": "guishi_tail"
+  }
+}

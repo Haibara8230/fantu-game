@@ -113,6 +113,9 @@ static func restore(s, data: Variant) -> bool:
 	var mijing: Variant = _valid_mijing(content, saved_world.get("mijing", {}))
 	if mijing == null:
 		return false
+	var guishi: Variant = _valid_guishi(saved_world.get("guishi", {}))
+	if guishi == null:
+		return false
 	var series_last: Variant = saved_player.get("series_last", {})
 	if not series_last is Dictionary or series_last.keys().any(func(series_id: Variant) -> bool: return not content.series.has(series_id) or not _whole_nonnegative(series_last[series_id])):
 		return false
@@ -240,12 +243,15 @@ static func restore(s, data: Variant) -> bool:
 		for skill_id: Variant in saved_battle.cooldowns:
 			if not skill_id is String or content.technique(skill_id).is_empty() or not _whole_nonnegative(saved_battle.cooldowns[skill_id]):
 				return false
-		if saved_battle.has("context") and not saved_battle.context in ["event", "spar", "tournament", "summit", "arena", "demon", "tribulation", "tianji", "mijing"]:
+		if saved_battle.has("context") and not saved_battle.context in ["event", "spar", "tournament", "summit", "arena", "demon", "tribulation", "tianji", "mijing", "guishi"]:
 			return false
 		# A duel with someone met in a 秘境 (mijing.gd), and robbers at its door.
 		if saved_battle.get("context", "") == "mijing" and (not content.mijing_data.realms.has(str(saved_battle.get("mijing", ""))) or not saved_battle.get("foe") is Dictionary):
 			return false
 		if saved_battle.has("robbery") and not content.mijing_data.realms.has(str(saved_battle.robbery)):
+			return false
+		# A 鬼市 contract's duel (guishi.gd): whom, and what it pays.
+		if saved_battle.get("context", "") == "guishi" and (not saved_battle.get("guishi") is Dictionary or not _whole_nonnegative(saved_battle.guishi.get("reward")) or not saved_battle.get("foe") is Dictionary):
 			return false
 		# A 天骄榜 duel (tianji.gd): the scroll, whom and what for.
 		if saved_battle.get("context", "") == "tianji":
@@ -382,6 +388,7 @@ static func restore(s, data: Variant) -> bool:
 	s.world["stashes"] = kept_stashes
 	s.world["tianji"] = tianji.world
 	s.world["mijing"] = mijing
+	s.world["guishi"] = guishi
 	s.populate()
 	var player: Dictionary = saved_player.duplicate(true)
 	for key: String in PLAYER_COUNTS:
@@ -483,6 +490,9 @@ static func restore(s, data: Variant) -> bool:
 			var lingering: Dictionary = battle.get(status_key, {})
 			for key: String in lingering:
 				lingering[key] = s.Combat.lingering_value(key, lingering[key])
+		# A 鬼市 contract's pay (guishi.gd).
+		if battle.get("guishi") is Dictionary and battle.guishi.has("reward"):
+			battle.guishi.reward = int(battle.guishi.reward)
 		var foe_stats: Dictionary = battle.get("foe", {})
 		for key: String in ["hp", "damage_min", "damage_max", "tier", "xp", "bonus", "realm"]:
 			if foe_stats.has(key):
@@ -904,6 +914,29 @@ static func _valid_mijing(content, saved: Variant) -> Variant:
 		return null
 	if saved.has("out"):
 		held["out"] = {} if out.is_empty() else {"realm": str(out.realm), "haul": out_haul}
+	return held
+
+## The 鬼市's nights (guishi.gd), normalized with only the keys saved, or null when malformed.
+static func _valid_guishi(saved: Variant) -> Variant:
+	if not saved is Dictionary:
+		return null
+	var held := {}
+	for key: String in ["night", "spent", "contract", "black", "visited"]:
+		if saved.has(key):
+			if not _whole_nonnegative(saved[key]):
+				return null
+			held[key] = int(saved[key])
+	if saved.has("tail"):
+		if not saved.tail is bool:
+			return null
+		held["tail"] = saved.tail
+	if saved.has("bought"):
+		if not saved.bought is Array or saved.bought.any(func(index: Variant) -> bool: return not _whole_nonnegative(index)):
+			return null
+		var bought: Array = []
+		for index: Variant in saved.bought:
+			bought.append(int(index))
+		held["bought"] = bought
 	return held
 
 ## Things gathered in a 秘境: {item: count}, unknown items dropped; null when malformed.

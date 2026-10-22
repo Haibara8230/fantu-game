@@ -309,6 +309,12 @@ static func _spot_action(ui, grid: GridContainer, action: String) -> void:
 				about += "
 你在%s第 %d。" % [session.Tianji.scroll(session, scroll_id).name, seat]
 			_open(ui, grid, "观天骄榜", func() -> void: ui.set_view("tianji"), about)
+		"guishi":
+			var reason: String = session.Guishi.block(session)
+			var night: Button = ui.button("入鬼市", func() -> void: ui.set_view("guishi"), reason if not reason.is_empty() else "每月十五子时开灯，天亮就散。赌宝、销赃、接单、雇凶，季末还有黑拍。")
+			night.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+			night.disabled = not reason.is_empty()
+			grid.add_child(night)
 		"join_sect":
 			var sect: String = session.Sect.here(session)
 			var reason: String = session.join_block()

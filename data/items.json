@@ -517,5 +517,74 @@
         ]
       }
     ]
+  },
+  "canyu": {
+    "name": "无名残玉",
+    "category": "treasure",
+    "price": 20,
+    "rarity": 1,
+    "description": "云溪秋拍上没人要的一块残玉，巴掌大，缺了一角。玉里隐约有纹路，看久了像一张图。"
+  },
+  "yiwu_jian": {
+    "name": "刻名的残剑",
+    "category": "treasure",
+    "price": 200,
+    "rarity": 2,
+    "stolen": true,
+    "description": "劫修销赃库里翻出来的残剑，剑脊上刻着「南明周氏」。明面上卖会被认出来，只能拿去鬼市。"
+  },
+  "yiwu_pei": {
+    "name": "带血的玉佩",
+    "category": "treasure",
+    "price": 150,
+    "rarity": 2,
+    "stolen": true,
+    "description": "一枚沧澜样式的玉佩，系绳上还有干了的血。明面上卖会被认出来，只能拿去鬼市。"
+  },
+  "yiwu_dai": {
+    "name": "绣字的储物袋",
+    "category": "treasure",
+    "price": 250,
+    "rarity": 2,
+    "stolen": true,
+    "description": "袋口绣着一个「岳」字，里头的东西早被劫修掏空了。明面上卖会被认出来，只能拿去鬼市。"
+  },
+  "recipe_jiedu": {
+    "name": "冷香解毒方",
+    "category": "recipe",
+    "price": 60,
+    "rarity": 2,
+    "description": "百花谷谢你的方子，以冷香入药炼解毒丹，化得开丹毒，也化得开暗下的散功药。",
+    "use": [
+      {
+        "recipe": "jiedu"
+      }
+    ]
+  },
+  "jiedu_dan_fine": {
+    "name": "上品解毒丹",
+    "category": "pill",
+    "price": 70,
+    "rarity": 2,
+    "fine_of": "jiedu_dan",
+    "description": "冷香炼成的上品解毒丹，丹香清冷。"
+  },
+  "feiyu_tu": {
+    "name": "芦荡藏宝图",
+    "category": "treasure",
+    "price": 80,
+    "rarity": 2,
+    "description": "老鳖当年埋下的一箱赃物，图上画着芦荡里的一棵歪脖柳。按图去挖，能得灵石八百、玄铁两锭。",
+    "use": [
+      {
+        "stones": 800
+      },
+      {
+        "item": [
+          "ore_xuantie",
+          2
+        ]
+      }
+    ]
   }
 }

@@ -1333,5 +1333,118 @@
       {"id": "house", "goal": "萧凌云结婴，做了萧家家主。回云溪，与他做个了断。", "place": "market", "requires": [{"realm_at_least": 3}, {"year_at_least": 150}], "choice_event": "xiao_house", "done": [{"flag": "xiao_house_won"}]},
       {"id": "fate", "goal": "萧凌云败了。如何处置他，在你一念之间。", "place": "market", "skip_if": [{"flag": "xiao_friend"}, {"flag": "xiao_trampled"}], "choice_event": "xiao_fate"}
     ]
+  },
+  "canyu": {
+    "title": "残玉三更",
+    "giver": "xiaoman",
+    "begin_if": [
+      {"item_at_least": ["canyu", 1]},
+      {"realm_at_least": 1},
+      {"not": {"realm_at_least": 3}}
+    ],
+    "close_if": [
+      {"flag": "canyu_given"}
+    ],
+    "closed": "残玉交了出去，这件事与你再无干系。",
+    "steps": [
+      {"id": "road", "goal": "带着残玉离开云溪——拍卖楼里有人盯上了它，出城的路上小心。", "place": "ferry", "choice_event": "canyu_ambush", "done": [{"flag": "canyu_robbers_down"}], "after": "领头的蒙面人身上搜出一块铜号牌，背面刻着云溪拍卖楼的楼徽。一块没人要的残玉，拍卖楼的人为什么要截？"},
+      {
+        "id": "house",
+        "goal": "回云溪，顺着号牌查拍卖楼：问跑堂的小满、夜探账房，或当面去问二掌柜贾怀瑾。",
+        "place": "market",
+        "choice_event": "canyu_house",
+        "done": [
+          {
+            "any": [
+              {"flag": "canyu_witness"},
+              {"flag": "canyu_ledger"},
+              {"flag": "guishou_beaten"}
+            ]
+          }
+        ],
+        "after": "拍卖楼的二掌柜贾怀瑾暗里养着一伙劫修，头目叫鬼手，专截在拍卖会上露了富的人。那块残玉，是他从一个死人身上搜来的。"
+      },
+      {"id": "read", "goal": "残玉里藏着什么？拿去北岳阵师会馆请人看，或者十五夜到鬼市找鉴宝师。", "place": "beiyue", "choice_event": "canyu_read", "done": [{"flag": "canyu_read"}], "after": "阵纹是一张地图，指向赤枫岭深处。拍卖楼也找人看过了——鬼手已经带人去了赤枫岭。"},
+      {
+        "id": "race",
+        "goal": "赶去赤枫岭：在必经之路伏击鬼手、把销赃账交给陆家，或者干脆抢先进山。",
+        "place": "chifeng",
+        "choice_event": "canyu_race",
+        "done": [
+          {"any": [{"flag": "guishou_slain"}, {"flag": "canyu_rush"}]}
+        ],
+        "effects": [
+          {"flag": "canyu_open"}
+        ],
+        "after": "赤枫岭深处，枫林背后的石壁上现出一道石门，门上的纹路与残玉严丝合缝。"
+      },
+      {"id": "cave", "goal": "进赤枫岭深处的藏锋洞，看看洞里等着谁。", "place": "chifeng", "done": [{"flag": "canyu_shi_met"}]}
+    ]
+  },
+  "lengxiang": {
+    "title": "一炉冷香",
+    "giver": "mei_sanniang",
+    "begin_if": [
+      {"realm_at_least": 1},
+      {"not": {"realm_at_least": 3}},
+      {"flag": "rushi_done"},
+      {"at_location": "baihua"},
+      {"not": {"flag": "sect_closed_baihua"}}
+    ],
+    "close_if": [
+      {
+        "any": [
+          {"flag": "lengxiang_plead"},
+          {"flag": "lengxiang_exposed"}
+        ]
+      }
+    ],
+    "closed": "冷香的事，就这样了了。",
+    "steps": [
+      {"id": "news", "goal": "云溪宋家的公子死在百花谷外，身上一股冷香。听梅三娘说说。", "place": "baihua", "done": [{"at_location": "baihua"}], "after": "梅三娘把一只香炉推到你面前：“这是谷里的冷香，静心用的。宋公子身上那一缕闻着像，里头却多了一味断魂草——有人拿我谷里的香，换了芯子。”宋家的人堵在谷口，要谷里交一个人出来抵命。谷里最小的弟子小鹊哭着说，香是她卖出去的。"},
+      {"id": "choose", "goal": "百花谷交不交人、查不查下去，由你来定。", "place": "baihua", "choice_event": "lengxiang_choice"},
+      {"id": "trace", "goal": "断魂草从哪里来？去云溪萧家丹坊查查进货的账。", "place": "market", "choice_event": "lengxiang_xiao", "done": [{"flag": "lengxiang_solved"}]}
+    ]
+  },
+  "xishou": {
+    "title": "洗手",
+    "giver": "lao_bie",
+    "begin_if": [
+      {"realm_at_least": 1},
+      {"not": {"realm_at_least": 3}},
+      {"flag": "rushi_done"},
+      {"any": [{"affiliation": "feiyu"}, {"talked": "lao_bie"}]},
+      {"at_location": "ferry"},
+      {"not": {"flag": "sect_closed_feiyu"}}
+    ],
+    "steps": [
+      {
+        "id": "debt",
+        "goal": "赤霄门的人堵在白鹭渡的渡船行，说是来讨四十年前的债。",
+        "place": "ferry",
+        "choice_event": "xishou_debt",
+        "done": [
+          {
+            "any": [
+              {"flag": "xishou_mediated"},
+              {"flag": "xishou_sided"},
+              {"flag": "feiyu_owes"}
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "guishi_war": {
+    "title": "鬼市夜灯",
+    "giver": "deng_po",
+    "begin_if": [
+      {"realm_at_least": 2},
+      {"deed_at_least": ["guishi", 3]},
+      {"not": {"flag": "guishi_gone"}}
+    ],
+    "steps": [
+      {"id": "war", "goal": "五宗要联手扫平鬼市，请你做内应；灯婆也托你帮她守市。十五夜去鬼市，把这件事了了。", "place": "market", "requires": [{"month_day": [15, 15]}], "choice_event": "guishi_war", "done": [{"flag": "guishi_settled"}]}
+    ]
   }
 }

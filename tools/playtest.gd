@@ -197,6 +197,9 @@ func _step() -> void:
 	for ending: String in ["chixia_exposed", "chixia_jiao_down", "chixia_jiao_beaten", "chixia_dan", "chixia_suheng", "chixia_done", "tianque_friend", "tianque_feud", "tianque_qingyun"]:
 		if s.has_flag(ending):
 			_mark("秘境结局：" + ending)
+	for ending: String in ["canyu_free", "canyu_lie", "canyu_lu", "canyu_given", "lengxiang_solved", "lengxiang_plead", "lengxiang_exposed", "xishou_mediated", "xishou_sided", "feiyu_owes", "guishi_second", "guishi_gone"]:
+		if s.has_flag(ending):
+			_mark("第 6 步结局：" + ending)
 	if _opening():
 		return
 	if _mijing():
@@ -229,6 +232,8 @@ func _step() -> void:
 		_retreat()
 		return
 	if _tianji():
+		return
+	if _guishi():
 		return
 	if _commissions():
 		return
@@ -583,6 +588,20 @@ func _settle() -> bool:
 
 ## Out of the room, at a city's 榜亭 and whole: a 战帖 up the 天骄榜 (tianji.gd) — as far up as the
 ## seat's strength allows the player's stage, else the next seat up.
+## 鬼市 (guishi.gd): on the fifteenth at 云溪, a look round, and a lot the 神识 believes is good bought
+## when the purse is deep enough.
+func _guishi() -> bool:
+	if not s.available_here("guishi") or not s.Guishi.block(s).is_empty():
+		return false
+	s.Guishi.visit(s)
+	_mark("鬼市")
+	var lots: Array = s.Guishi.lots(s)
+	for index: int in lots.size():
+		if int(lots[index].hint) >= 2 and int(s.player.stones) >= int(lots[index].price) * 3 and s.Guishi.gamble_block(s, index).is_empty():
+			_do("act", "GUISHI", s.guishi_gamble(index))
+			return true
+	return false
+
 ## 秘境 (mijing.gd): inside, the next room open to the player, a guardian faced again once, things a
 ## fallen guardian kept, a hidden place the 神识 sees; out by the door when nothing is left or the days
 ## run short. Outside, while one opens that the player may enter, go where it calls from.

@@ -24,6 +24,9 @@
     {"id": "guzhan_field", "text": "北岳来的人说，城北的古战场夜里有阴兵列阵走过，荒原深处那半截石台底下，玄岳宗的人都不肯去。", "conditions": [{"flag": "tiannan_known"}, {"not": {"flag": "guzhan_cleared"}}]},
     {"id": "waihai_fog", "text": "望海的老水手说，近海群岛东南有一片终年不散的雾，雾里一座孤岛，岛下的海里立着一根比山还粗的石柱。", "conditions": [{"flag": "tiannan_known"}, {"not": {"flag": "pillar_cleared"}}]},
     {"id": "chixia_rumor", "text": "南明来的人说，城西的赤霞谷十五年开一回，谷里的霞血芝能替筑基丹；可赤霄门招去顶名的散修，回来的没几个。", "conditions": [{"stage_at_least": [0, 3]}, {"not": {"flag": "chixia_done"}}, {"not": {"realm_at_least": 2}}]},
-    {"id": "wanjian_rumor", "text": "断剑峡的老脚夫说，峡底的万剑冢三十年才露一回，天阙剑宗的人守着冢口卖剑令；冢心那柄剑，几百年没人拔得动。", "conditions": [{"flag": "tiannan_known"}, {"not": {"flag": "wanjian_done"}}]}
+    {"id": "wanjian_rumor", "text": "断剑峡的老脚夫说，峡底的万剑冢三十年才露一回，天阙剑宗的人守着冢口卖剑令；冢心那柄剑，几百年没人拔得动。", "conditions": [{"flag": "tiannan_known"}, {"not": {"flag": "wanjian_done"}}]},
+    {"id": "guishi_rumor", "text": "茶客压低声音说，城西的废码头每月十五子时点灯，戴面具的人在那里买卖见不得光的东西。主人是个老婆子，鬼市里谁动手，她就要谁的命。", "conditions": [{"realm_at_least": 1}, {"not": {"flag": "guishi_gone"}}]},
+    {"id": "canyu_rumor", "text": "有人说，云溪拍卖楼这些年拍出去的好东西，买主出城后十个里有三个出了事。", "conditions": [{"year_at_least": 40}, {"realm_at_least": 1}, {"story_state": ["canyu", "none"]}]},
+    {"id": "xishou_rumor", "text": "渡口的船客说，飞鱼帮最近不太平：帮主老鳖整天坐在船头发呆，听说赤霄门有人要来找他算一笔四十年前的旧账。", "conditions": [{"realm_at_least": 1}, {"not": {"realm_at_least": 3}}, {"story_state": ["xishou", "none"]}]}
   ]
 }

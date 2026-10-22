@@ -1024,6 +1024,10 @@ static func _escape(s, text: String) -> String:
 	if s.battle.get("context", "") == "mijing":
 		s.combat_events.append({"type": "end", "result": "flee"})
 		return s.Mijing.over(s, false, true)
+	# Running from a 鬼市 contract is failing it.
+	if s.battle.get("context", "") == "guishi":
+		s.combat_events.append({"type": "end", "result": "flee"})
+		return s.Guishi.over(s, false)
 	s.combat_events.append({"type": "end", "result": "flee"})
 	var days := _recovery_days(s, "flee")
 	s.battle.clear()
@@ -1531,6 +1535,8 @@ static func _lose(s) -> String:
 		return s.Tianji.over(s, false)
 	if s.battle.get("context", "") == "mijing":
 		return s.Mijing.over(s, false)
+	if s.battle.get("context", "") == "guishi":
+		return s.Guishi.over(s, false)
 	var grudge_id := str(s.battle.get("grudge", ""))
 	var robbery := str(s.battle.get("robbery", ""))
 	var deadly := bool(s.battle.get("deadly", false))
@@ -1721,6 +1727,8 @@ static func _win(s) -> String:
 		return s.Tianji.over(s, true)
 	if s.battle.get("context", "") == "mijing":
 		return s.Mijing.over(s, true)
+	if s.battle.get("context", "") == "guishi":
+		return s.Guishi.over(s, true)
 	var enemy_id: String = s.battle.enemy_id
 	var enemy: Dictionary = s.content.enemies[enemy_id]
 	var days := _recovery_days(s, "battle_victory")

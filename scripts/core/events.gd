@@ -156,6 +156,9 @@ static func met(s, condition: Dictionary) -> bool:
 			return int(s.world.people.get(value[0], {}).get("relation", 0)) >= int(value[1])
 		"mind_at_least":
 			return int(s.player.get("mind", 0)) >= int(value)
+		# 心境 enough for the stage (or short of it, false).
+		"mind_ready":
+			return (int(s.player.get("mind", 0)) >= s.mind_needed()) == bool(value)
 		"sense_at_least":
 			return s.sense() >= int(value)
 		"stage_at_least":
@@ -355,6 +358,9 @@ static func apply(s, effects: Array) -> void:
 				s.Mijing.enter(s, str(value[0]), str(value[1]))
 			"mijing":
 				s.Mijing.apply(s, str(value))
+			# 鬼市 (guishi.gd): the shadow that followed the player out answered.
+			"guishi":
+				s.Guishi.apply(s, str(value))
 			"party":
 				if not s.world.has("party"):
 					s.world["party"] = {}
@@ -573,6 +579,7 @@ static func check_location(s, passing: bool = false) -> Array[String]:
 		s.Feuds.check_bounties(s)
 		s.Tianji.check(s)
 		s.Mijing.check(s)
+		s.Guishi.check(s)
 	return messages
 
 ## Whether the pending event offers a choice that would end the life (`final`), so the interface writes

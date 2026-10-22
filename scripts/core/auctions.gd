@@ -24,8 +24,10 @@ static func open(s, auction_id: String) -> String:
 	var auction := definition(s, auction_id)
 	var year := int(s.world.day) / 360
 	# A lot marked `last` is the 压轴: always sold, after the others drawn.
-	var pool: Array = auction.pool.filter(func(entry: Dictionary) -> bool: return not bool(entry.get("last", false)))
-	var closing: Array = auction.pool.filter(func(entry: Dictionary) -> bool: return bool(entry.get("last", false)))
+	# A lot offered only while its conditions hold (`if`: the 残玉 at 云溪's autumn sale).
+	var offered: Array = auction.pool.filter(func(entry: Dictionary) -> bool: return s.Events.all_met(s, entry.get("if", [])))
+	var pool: Array = offered.filter(func(entry: Dictionary) -> bool: return not bool(entry.get("last", false)))
+	var closing: Array = offered.filter(func(entry: Dictionary) -> bool: return bool(entry.get("last", false)))
 	pool.sort_custom(func(a: Dictionary, b: Dictionary) -> bool: return _roll(s, "%s:%d:lot:%s" % [auction_id, year, JSON.stringify(a)]) < _roll(s, "%s:%d:lot:%s" % [auction_id, year, JSON.stringify(b)]))
 	var lots: Array = []
 	for entry: Dictionary in pool.slice(0, maxi(0, int(auction.lots) - closing.size())) + closing:

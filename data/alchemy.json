@@ -5,7 +5,8 @@
     "huiqi": {"pill": "huiqi_pill", "fine": "huiqi_pill_fine", "main": {"ninglu_grass": 2, "huichun_grass": 1}, "days": 3, "success": 70, "yield": [2, 3]},
     "ningqi": {"pill": "ningqi_pill", "fine": "ningqi_pill_fine", "main": {"huichun_grass": 4, "chiyan_flower": 1}, "days": 5, "success": 55, "yield": [1, 2]},
     "pozhang": {"pill": "pozhang_pill", "fine": "pozhang_pill_fine", "main": {"ninglu_grass": 2, "chiyan_flower": 2}, "days": 5, "success": 50, "yield": [1, 1]},
-    "foundation": {"pill": "foundation_pill", "fine": "foundation_pill_fine", "main": {"lingzhi": 1, "huichun_grass": 3, "ninglu_grass": 1, "chiyan_flower": 1}, "days": 7, "success": 40, "yield": [1, 1]}
+    "foundation": {"pill": "foundation_pill", "fine": "foundation_pill_fine", "main": {"lingzhi": 1, "huichun_grass": 3, "ninglu_grass": 1, "chiyan_flower": 1}, "days": 7, "success": 40, "yield": [1, 1]},
+    "jiedu": {"pill": "jiedu_dan", "fine": "jiedu_dan_fine", "main": {"ninglu_grass": 2, "huichun_grass": 2}, "days": 3, "success": 65, "yield": [2, 3]}
   },
   "places": {
     "sect": {"name": "静室的公用丹炉", "success": 0, "fee": 0},

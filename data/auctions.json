@@ -16,7 +16,8 @@
         {"item": "huiqi_pill_fine", "count": 3, "start": 20, "step": 5, "value": 45},
         {"item": "yanshou_dan", "start": 60, "step": 10, "value": 130},
         {"item": "xiaguang_lingsui", "start": 200, "step": 20, "value": 480},
-        {"item": "silk_xuancan", "count": 3, "start": 120, "step": 10, "value": 220}
+        {"item": "silk_xuancan", "count": 3, "start": 120, "step": 10, "value": 220},
+        {"item": "canyu", "start": 10, "step": 2, "value": 20, "last": true, "if": [{"year_at_least": 40}, {"realm_at_least": 1}, {"not": {"realm_at_least": 3}}, {"story_state": ["canyu", "none"]}, {"not": {"item_at_least": ["canyu", 1]}}]}
       ]
     },
     "yunxi_first": {
@@ -45,6 +46,7 @@
         {"item": "pozhang_pill", "start": 20, "step": 5, "value": 45},
         {"item": "ninglu_grass", "count": 5, "start": 10, "step": 2, "value": 22}
       ]
-    }
+    },
+    "guishi_black": {"name": "鬼市黑拍", "lots": 4, "bidders": 4, "pool": [{"manual": 4, "start": 600, "step": 60, "value": 1300}, {"equipment": 4, "start": 560, "step": 60, "value": 1200}, {"item": "xueyuan_dan", "start": 1200, "step": 100, "value": 2600}, {"item": "yanghun_mu", "start": 1500, "step": 100, "value": 3200}, {"item": "canyu", "start": 1500, "step": 100, "value": 3000, "if": [{"flag": "canyu_given"}, {"not": {"item_at_least": ["canyu", 1]}}, {"not": {"flag": "canyu_open"}}]}, {"item": "huitian_cao", "start": 200, "step": 20, "value": 420}]}
   }
 }

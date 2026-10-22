@@ -2601,5 +2601,506 @@
       {"mind": 2}
     ],
     "chronicle": "北岳古物街上都在传：万剑冢里那柄几百年没人拔得动的阙光剑，认了主。古董铺的掌柜拉着你，非要看一眼你的剑。"
+  },
+  "guishi_tail": {
+    "title": "鬼市 · 尾随",
+    "trigger": "manual",
+    "text": "你出手太阔，散场后有人一路跟出了云溪。拐过一片林子，{foe}从树后闪了出来，亮出一柄短刃。",
+    "choices": [
+      {"id": "slip", "label": "早察觉了，绕路甩掉他", "conditions": [{"sense_at_least": 50}], "effects": [], "chronicle": "你早察觉身后有人，绕了几个弯，把他甩在了林子里。"},
+      {"id": "fight", "label": "动手", "effects": [{"guishi": "tail_fight"}], "chronicle": "你回身拔出了兵刃。"},
+      {"id": "pay", "label": "丢下两成灵石脱身", "effects": [{"guishi": "tail_pay"}], "chronicle": "你丢下一袋灵石，那人捡起来就走了。"}
+    ]
+  },
+  "guishi_war": {
+    "title": "鬼市夜灯 · 灯下",
+    "trigger": "manual",
+    "text": "十五夜，灯婆把你请到码头尽头的灯下。五宗的人前几日也找过你：他们要扫平鬼市，缺一个熟门熟路的内应。灯婆给你斟了一杯冷茶：“鬼市开了一百年，我守了一百年。你帮谁，我都不怪你——只是别骗我。”",
+    "choices": [
+      {"id": "wuzong", "label": "替五宗开门，扫平鬼市", "effects": [{"battle": "guishi_guard"}], "chronicle": "你给五宗的人开了门。灯婆的打手头子拦在码头上。"},
+      {"id": "dengpo", "label": "帮灯婆守住鬼市", "effects": [{"battle": "wuzong_raider"}], "chronicle": "五宗的执法长老带人杀进废码头时，你站在了灯婆这边。"},
+      {
+        "id": "both_quiet",
+        "label": "两头吃：把两边的底卖给对方，趁乱抄了鬼市的库房",
+        "conditions": [
+          {"sense_at_least": 72}
+        ],
+        "effects": [
+          {"flag": "guishi_gone"},
+          {"flag": "guishi_settled"},
+          {"flag": "guishi_both"},
+          {"flag": "guishi_hated"},
+          {"stones": 3000},
+          {"manual": 4}
+        ],
+        "chronicle": "你把两边的底都卖了个干净。五宗杀进鬼市那一夜，你从库房的后墙出去，背着鬼市一百年的积蓄。灯婆在灯下看着库房的方向，什么也没说。"
+      },
+      {"id": "both_bold", "label": "两头吃，硬抄库房", "effects": [{"battle": "deng_po_boss"}], "chronicle": "你摸进库房时，灯婆提着灯站在门口：“我说过，别骗我。”"}
+    ]
+  },
+  "guishi_fall": {
+    "title": "鬼市散了",
+    "trigger": "location",
+    "location": "market",
+    "priority": 8,
+    "conditions": [
+      {"flag": "guishi_guard_down"},
+      {"not": {"flag": "guishi_settled"}}
+    ],
+    "effects": [
+      {"flag": "guishi_gone"},
+      {"flag": "guishi_settled"},
+      {"flag": "guishi_hated"},
+      {"stones": 800},
+      {"contribution": 400},
+      {"mind": 2}
+    ],
+    "chronicle": "五宗的人涌进了废码头。灯婆没有逃，吹灭了码头尽头那盏灯，跟着执法长老走了。鬼市从此散了；散修们记住了是谁开的门。"
+  },
+  "guishi_held": {
+    "title": "鬼市二灯",
+    "trigger": "location",
+    "location": "market",
+    "priority": 8,
+    "conditions": [
+      {"flag": "guishi_defended"},
+      {"not": {"flag": "guishi_settled"}}
+    ],
+    "effects": [
+      {"flag": "guishi_second"},
+      {"flag": "guishi_settled"},
+      {"flag": "xiongren_guishi"},
+      {"flag": "dengpo_lu_ledger"},
+      {"stones": 500}
+    ],
+    "chronicle": "五宗的人退了。灯婆把码头尽头的第二盏灯交给你：从今往后，你是鬼市的二灯。那夜她摘了面具，说她本姓陆，是陆家当年被逐出门的长女——鬼市的账本上，记着陆家一半生意的黑底子。“陆家要是有一天乱了，这本账能定胜负。”"
+  },
+  "guishi_both_won": {
+    "title": "鬼市散了",
+    "trigger": "location",
+    "location": "market",
+    "priority": 8,
+    "conditions": [
+      {"flag": "deng_po_beaten"},
+      {"not": {"flag": "guishi_settled"}}
+    ],
+    "effects": [
+      {"flag": "guishi_gone"},
+      {"flag": "guishi_settled"},
+      {"flag": "guishi_both"},
+      {"flag": "guishi_hated"},
+      {"stones": 3000},
+      {"manual": 4}
+    ],
+    "chronicle": "灯婆倒在库房门口，灯也灭了。五宗的人赶到时，库房已经空了一半。鬼市从此散了。"
+  },
+  "canyu_ambush": {
+    "title": "残玉三更 · 截杀",
+    "trigger": "manual",
+    "text": "出城第三天，白鹭渡外的芦苇荡里钻出三个蒙面人，为首的拿刀指着你腰间：“残玉留下，饶你一命。”",
+    "choices": [
+      {"id": "fight", "label": "斗法", "effects": [{"battle": "canyu_robbers"}], "chronicle": "你没有交，拔出了兵刃。"},
+      {"id": "give", "label": "交出残玉", "effects": [{"take_item": "canyu"}, {"flag": "canyu_given"}], "chronicle": "你把残玉丢了过去。蒙面人接住，钻回了芦苇荡。"}
+    ]
+  },
+  "canyu_house": {
+    "title": "残玉三更 · 拍卖楼",
+    "trigger": "manual",
+    "text": "云溪拍卖楼照常开着，二掌柜贾怀瑾在柜台后笑眯眯地拨算盘。跑堂的小满端着茶从你身边过，眼睛往二楼账房瞟了一下。",
+    "choices": [
+      {"id": "ask", "label": "找小满问问（给她一百灵石，让她离开云溪）", "conditions": [{"stones_at_least": 100}], "effects": [{"stones": -100}, {"flag": "canyu_witness"}], "chronicle": "小满攥着灵石，声音压得很低：“秋拍那天，二掌柜跟一个戴斗笠的人说了很久的话——那人左手只有三根指头，楼里都叫他鬼手。”第二天她就搭船走了。"},
+      {"id": "night", "label": "夜探拍卖楼账房", "conditions": [{"sense_at_least": 34}], "effects": [{"flag": "canyu_ledger"}], "chronicle": "你避开账房门上的禁制，在暗格里翻出一本销赃账：十年里二十多个在拍卖会上露了富的修士，名字后面都画着一个圈。有几个名字你认得。"},
+      {"id": "confront", "label": "当面去问贾怀瑾", "effects": [{"battle": "guishou"}], "chronicle": "贾怀瑾矢口否认，笑着送你出门。当夜你歇脚的客栈窗外，站着一个左手只有三根指头的人。"}
+    ]
+  },
+  "canyu_read": {
+    "title": "残玉三更 · 阵师会馆",
+    "trigger": "manual",
+    "text": "北岳阵师会馆的老阵师接过残玉，对着灯看了很久。“玉里封着一道禁制，”他说，“要看懂里头的纹路，得费些工夫。”",
+    "choices": [
+      {"id": "pay", "label": "请老阵师细看（两百灵石）", "conditions": [{"stones_at_least": 200}], "effects": [{"stones": -200}, {"flag": "canyu_read"}], "chronicle": "老阵师用了一整夜，把玉里的纹路拓在纸上：是一张地图，画的是赤枫岭深处。"},
+      {"id": "later", "label": "改日再来", "effects": [], "chronicle": "你收起了残玉。"}
+    ]
+  },
+  "canyu_read_ghost": {
+    "title": "残玉三更 · 鉴宝师",
+    "trigger": "location",
+    "location": "market",
+    "priority": 8, "repeat": {"cooldown_days": 20},
+    "conditions": [
+      {"story_at": ["canyu", "read"]},
+      {"month_day": [15, 15]},
+      {"realm_at_least": 1}
+    ],
+    "text": "鬼市的鉴宝师坐在一盏绿灯下，面前摆着一只放大镜。据说他什么都认得——也什么都肯卖。",
+    "choices": [
+      {
+        "id": "ask",
+        "label": "请鬼市的鉴宝师看残玉（一百灵石）",
+        "conditions": [
+          {"stones_at_least": 100}
+        ],
+        "effects": [
+          {"stones": -100},
+          {"flag": "canyu_read"},
+          {"flag": "canyu_leaked"}
+        ],
+        "chronicle": "鉴宝师只看了一眼就说：“赤枫岭深处，一座古洞的钥匙。”第二天，这句话就被他卖给了三个人。"
+      },
+      {"id": "no", "label": "不问了", "effects": [], "chronicle": "你没有把残玉拿出来。"}
+    ]
+  },
+  "canyu_race": {
+    "title": "残玉三更 · 赤枫岭",
+    "trigger": "manual",
+    "text": "赤枫岭的山道上留着新鲜的脚印。鬼手的人比你先到了一步，正往山里去。",
+    "choices": [
+      {
+        "id": "ambush",
+        "label": "在必经之路伏击鬼手",
+        "conditions": [
+          {"not": {"flag": "canyu_leaked"}},
+          {"not": {"flag": "guishou_beaten"}}
+        ],
+        "effects": [
+          {"flag": "canyu_ambush_set"},
+          {"battle": "guishou_pass"}
+        ],
+        "chronicle": "你抄近路赶到前头，在山道拐角伏下。鬼手走进来时，你先出了手。"
+      },
+      {
+        "id": "ambush_crowd",
+        "label": "在必经之路伏击鬼手和他新雇的人",
+        "conditions": [
+          {"flag": "canyu_leaked"},
+          {"not": {"flag": "guishou_beaten"}}
+        ],
+        "effects": [
+          {"flag": "canyu_ambush_set"},
+          {"battle": "guishou_pass"},
+          {"pack": ["canyu_robbers"]}
+        ],
+        "chronicle": "鉴宝师卖出去的消息招来了更多的人。你在山道拐角伏下，等来的是一整队。"
+      },
+      {
+        "id": "lu",
+        "label": "把销赃账交给拍卖楼大掌柜和陆家，请陆家出人",
+        "conditions": [
+          {"flag": "canyu_ledger"},
+          {"not": {"flag": "guishou_beaten"}}
+        ],
+        "effects": [
+          {"flag": "guishou_slain"},
+          {"flag": "canyu_lu"},
+          {"stones": 1500},
+          {"relation": ["lu_chengzhou", 15]}
+        ],
+        "chronicle": "大掌柜是陆家的人。陆家的供奉连夜追上赤枫岭，斩了鬼手；贾怀瑾被逐出云溪，拍卖楼从此拍后护送出城。被劫修士的家人凑了一千五百灵石送到你手上。"
+      },
+      {"id": "rush", "label": "不等，日夜兼程抢先进山", "conditions": [{"not": {"flag": "guishou_beaten"}}], "effects": [{"flag": "canyu_rush"}, {"flag": "guishou_slain"}], "chronicle": "你抢先找到了石门。鬼手带人追进来，刚过石门便被洞里涌出的剑意绞成了碎片——洞主醒着。"},
+      {"id": "gone", "label": "鬼手已经逃了，直接进山", "conditions": [{"flag": "guishou_beaten"}], "effects": [{"flag": "canyu_rush"}], "chronicle": "鬼手上回败走之后再没露面，听说去投了萧家。山道上只剩你一个人。"},
+      {"id": "later", "label": "先退下山，回头再来", "effects": [], "chronicle": "你没有贸然进山。"}
+    ]
+  },
+  "canyu_den": {
+    "title": "残玉三更 · 销赃库",
+    "trigger": "location",
+    "location": "chifeng",
+    "priority": 8,
+    "conditions": [
+      {"flag": "guishou_slain"},
+      {"flag": "canyu_ambush_set"},
+      {"not": {"flag": "canyu_den"}}
+    ],
+    "text": "鬼手的人身上搜出一把钥匙，开的是山下一处石窟——劫修的销赃库。箱子里堆满了这些年截来的东西，有几件还刻着原主的名字。",
+    "choices": [
+      {
+        "id": "take",
+        "label": "挑几样带走",
+        "effects": [
+          {"flag": "canyu_den"},
+          {"item": ["yiwu_jian", 1]},
+          {"item": ["yiwu_pei", 1]},
+          {"item": ["yiwu_dai", 1]}
+        ],
+        "chronicle": "你挑了一柄残剑、一枚玉佩、一只储物袋。每一件都是某个人的遗物；日后，或许会有人找上门来。"
+      },
+      {"id": "leave", "label": "一样也不碰", "effects": [{"flag": "canyu_den"}, {"mind": 2}], "chronicle": "你合上了箱子。那些东西的主人，不该被人拿去鬼市论斤卖。"}
+    ]
+  },
+  "canyu_shi": {
+    "title": "残玉三更 · 石无锋",
+    "trigger": "manual",
+    "conditions": [
+      {"not": {"flag": "canyu_shi_met"}}
+    ],
+    "text": "你一进门，枯骨睁开了眼。他叫石无锋，三百年前把自己封在洞里假死避仇。他的嗓子像生了锈：“赤霄派你来的？”",
+    "choices": [
+      {
+        "id": "truth",
+        "label": "告诉他：赤霄老门主三百年前就死了",
+        "conditions": [
+          {"mind_ready": true}
+        ],
+        "effects": [
+          {"flag": "canyu_free"},
+          {"mind": 5},
+          {"flag": "canyu_shi_met"},
+          {"flag": "canyu_abode"},
+          {"slip": "cangfeng_jue"}
+        ],
+        "chronicle": "石无锋愣了很久，大笑，又大哭。哭完了，他问你愿不愿意继承他的洞府和剑意：“我要出去看看，这三百年变成了什么样子。”他把《藏锋剑诀》留在石桌上，走出了石门。"
+      },
+      {
+        "id": "truth_weak",
+        "label": "告诉他：赤霄老门主三百年前就死了（心境不足）",
+        "conditions": [
+          {"mind_ready": false}
+        ],
+        "effects": [
+          {"flag": "canyu_shi_met"},
+          {"flag": "canyu_shi_left"},
+          {"hp": -60}
+        ],
+        "chronicle": "石无锋浑身一震，三百年的剑意冲出石室，你被掀出了石门。等你爬起来，他已经走了，什么也没留下。"
+      },
+      {
+        "id": "lie",
+        "label": "骗他说你是来替他报仇的",
+        "effects": [
+          {"flag": "canyu_lie"},
+          {"flag": "canyu_shi_met"},
+          {"flag": "canyu_abode"},
+          {"slip": "cangfeng_jue"}
+        ],
+        "chronicle": "石无锋传了你《藏锋剑诀》，提着剑出了洞。半个月后，消息传遍天南：一个疯剑客闯上赤霄门，与炎千秋两败俱伤。赤霄门查到了你。"
+      },
+      {"id": "fight", "label": "与他斗法", "effects": [{"battle": "shi_wufeng"}], "chronicle": "你拔出了兵刃。石无锋站了起来，膝上那柄剑嗡的一声出了鞘。"}
+    ]
+  },
+  "canyu_shi_beaten": {
+    "title": "残玉三更 · 剑败",
+    "trigger": "location",
+    "location": "chifeng",
+    "priority": 8,
+    "conditions": [
+      {"flag": "shi_wufeng_beaten"},
+      {"not": {"flag": "canyu_shi_met"}}
+    ],
+    "effects": [
+      {"flag": "canyu_shi_met"},
+      {"flag": "canyu_abode"},
+      {"slip": "cangfeng_jue"}
+    ],
+    "chronicle": "石无锋的剑断了。他看着断剑，忽然笑了：“三百年，第一个打赢我的人。”他把《藏锋剑诀》和洞府都留给了你，自己走了。"
+  },
+  "lengxiang_choice": {
+    "title": "一炉冷香 · 谷口",
+    "trigger": "manual",
+    "text": "宋家的人还堵在谷口。梅三娘看着你：“你若肯替百花谷查下去，谷里欠你；你若觉得该交人，我也不拦。”",
+    "choices": [
+      {"id": "trace", "label": "替百花谷查下去", "effects": [{"story_advance": "lengxiang"}], "chronicle": "你答应替百花谷查下去。梅三娘让宋家宽限十日。"},
+      {
+        "id": "plead",
+        "label": "替顶罪的小鹊说情，这件事到此为止",
+        "effects": [
+          {"flag": "lengxiang_plead"},
+          {"flag": "meisanniang_favor"},
+          {"relation": ["mei_sanniang", 30]}
+        ],
+        "chronicle": "你替小鹊挡下了宋家的人，宋家看在你的面子上收了一笔烧埋钱。梅三娘没说谢，只说：“百花谷欠你一次。”"
+      },
+      {
+        "id": "expose",
+        "label": "顺势揭发百花谷",
+        "conditions": [
+          {"not": {"affiliation": "baihua"}}
+        ],
+        "effects": [
+          {"flag": "lengxiang_exposed"},
+          {"stones": 600},
+          {"close_sect": ["baihua", ""]}
+        ],
+        "chronicle": "你把冷香的事捅到了云溪城主那里。百花谷被逐出云溪，谷里的人一夜散尽。没过几天，萧家的管事给你送来一袋灵石，什么也没说。"
+      }
+    ]
+  },
+  "lengxiang_xiao": {
+    "title": "一炉冷香 · 萧家丹坊",
+    "trigger": "manual",
+    "text": "萧家丹坊的伙计拨着算盘，账册就压在他手边。断魂草是禁药，整个云溪只有丹坊进过货。",
+    "choices": [
+      {
+        "id": "read",
+        "label": "以神识翻看账册",
+        "conditions": [
+          {"sense_at_least": 30}
+        ],
+        "effects": [
+          {"flag": "lengxiang_solved"},
+          {"item": ["recipe_jiedu", 1]},
+          {"relation": ["mei_sanniang", 20]},
+          {"mind": 3}
+        ],
+        "chronicle": "你不动声色地以神识扫过账册：断魂草的进货，记在萧家二房的名下，日子就在宋公子死前三天。宋家与萧家争一块药田争了十年——萧家借百花谷的刀杀了人。梅三娘送来一张冷香解毒方。"
+      },
+      {
+        "id": "bribe",
+        "label": "塞给伙计两百灵石",
+        "conditions": [
+          {"stones_at_least": 200}
+        ],
+        "effects": [
+          {"stones": -200},
+          {"flag": "lengxiang_solved"},
+          {"item": ["recipe_jiedu", 1]},
+          {"relation": ["mei_sanniang", 20]},
+          {"mind": 3}
+        ],
+        "chronicle": "伙计收了灵石，翻出一页进货单：断魂草，萧家二房，宋公子死前三天。宋家与萧家争一块药田争了十年。梅三娘送来一张冷香解毒方。"
+      },
+      {"id": "press", "label": "当面质问萧家掌柜", "effects": [{"battle": "xiao_house_guard"}], "chronicle": "萧家掌柜一挥手，后堂冲出了护院。"}
+    ]
+  },
+  "lengxiang_won": {
+    "title": "一炉冷香 · 真凶",
+    "trigger": "location",
+    "location": "market",
+    "priority": 8,
+    "conditions": [
+      {"flag": "lengxiang_guard_down"},
+      {"not": {"flag": "lengxiang_solved"}}
+    ],
+    "effects": [
+      {"flag": "lengxiang_solved"},
+      {"item": ["recipe_jiedu", 1]},
+      {"relation": ["mei_sanniang", 20]},
+      {"mind": 3}
+    ],
+    "chronicle": "护院倒了，萧家掌柜只好拿出账册：断魂草记在萧家二房名下，日子就在宋公子死前三天。宋家与萧家争一块药田争了十年——萧家借百花谷的刀杀了人。梅三娘送来一张冷香解毒方。"
+  },
+  "xishou_debt": {
+    "title": "洗手 · 讨债",
+    "trigger": "manual",
+    "text": "渡船行门口站着一排赤霄门的弟子。为首的执事叫柴烈，四十年前老鳖劫过的那条船上有他的祖父。“三条人命，一船货。”他把一本发黄的船簿拍在桌上，“老鳖，今天连本带利算清楚。”老鳖坐在船头一言不发，帮里的弟兄都看着你。",
+    "choices": [
+      {
+        "id": "mediate",
+        "label": "居中调停（替老鳖垫上三百灵石赔礼）",
+        "conditions": [
+          {"stones_at_least": 300}
+        ],
+        "effects": [
+          {"stones": -300},
+          {"flag": "xishou_mediated"},
+          {"flag": "feiyu_free_ferry"},
+          {"item": ["feiyu_tu", 1]},
+          {"relation": ["lao_bie", 20]}
+        ],
+        "chronicle": "你替老鳖垫上赔礼，又陪柴烈在祖父的牌位前上了一炷香。柴烈走时说：“这笔账，看在你的面上算了。”老鳖塞给你一张芦荡藏宝图：“飞鱼帮的船，往后你随便坐。”"
+      },
+      {
+        "id": "side",
+        "label": "帮赤霄讨债",
+        "conditions": [
+          {"not": {"affiliation": "feiyu"}}
+        ],
+        "effects": [
+          {"flag": "xishou_sided"},
+          {"stones": 300},
+          {"contribution": 120},
+          {"close_sect": ["feiyu", ""]}
+        ],
+        "chronicle": "你站到了柴烈那边。那一夜白鹭渡的芦荡烧了半边天，飞鱼帮从此没了。柴烈分了你一份赃。"
+      },
+      {"id": "defend", "label": "帮老鳖杀退讨债的", "effects": [{"battle": "chai_lie"}], "chronicle": "你挡在了老鳖前头。柴烈冷笑一声，祭出了炉火。"}
+    ]
+  },
+  "xishou_after": {
+    "title": "洗手 · 欠命",
+    "trigger": "location",
+    "location": "ferry",
+    "priority": 8,
+    "conditions": [
+      {"flag": "xishou_defended"},
+      {"not": {"flag": "feiyu_owes"}}
+    ],
+    "effects": [
+      {"flag": "feiyu_owes"},
+      {"flag": "xiongren_feiyu"},
+      {"relation": ["lao_bie", 30]}
+    ],
+    "chronicle": "柴烈带着伤走了。老鳖把一碗酒推到你面前：“飞鱼帮欠你一条命。”消息传开，天机阁的凶人榜上多了一笔：你杀退了赤霄门的讨债人。"
+  },
+  "kuzhu_jian": {
+    "title": "苦主",
+    "trigger": "location",
+    "location": "nanming",
+    "priority": 8,
+    "conditions": [
+      {"item_at_least": ["yiwu_jian", 1]}
+    ],
+    "text": "南明周家的少爷认出了你身上的刻名的残剑：“那是……那是我家的东西。”",
+    "choices": [
+      {"id": "return", "label": "把东西还给他", "effects": [{"take_item": "yiwu_jian"}, {"mind": 3}], "chronicle": "你把刻名的残剑还了回去。对方攥着它，半晌说不出话。"},
+      {"id": "sell", "label": "卖给他（两百灵石）", "effects": [{"take_item": "yiwu_jian"}, {"stones": 200}], "chronicle": "对方咬着牙付了钱。"},
+      {"id": "kill", "label": "灭口", "effects": [{"battle": "kuzhu"}, {"flag": "xiongren_kuzhu"}], "chronicle": "你拔出了兵刃。天机阁的凶人榜，会记下这一笔。"}
+    ]
+  },
+  "kuzhu_pei": {
+    "title": "苦主",
+    "trigger": "location",
+    "location": "canglan",
+    "priority": 8,
+    "conditions": [
+      {"item_at_least": ["yiwu_pei", 1]}
+    ],
+    "text": "沧澜阁一位执事的遗孀认出了你身上的带血的玉佩：“那是……那是我家的东西。”",
+    "choices": [
+      {"id": "return", "label": "把东西还给他", "effects": [{"take_item": "yiwu_pei"}, {"mind": 3}], "chronicle": "你把带血的玉佩还了回去。对方攥着它，半晌说不出话。"},
+      {"id": "sell", "label": "卖给他（两百灵石）", "effects": [{"take_item": "yiwu_pei"}, {"stones": 200}], "chronicle": "对方咬着牙付了钱。"},
+      {"id": "kill", "label": "灭口", "effects": [{"battle": "kuzhu"}, {"flag": "xiongren_kuzhu"}], "chronicle": "你拔出了兵刃。天机阁的凶人榜，会记下这一笔。"}
+    ]
+  },
+  "kuzhu_dai": {
+    "title": "苦主",
+    "trigger": "location",
+    "location": "beiyue",
+    "priority": 8,
+    "conditions": [
+      {"item_at_least": ["yiwu_dai", 1]}
+    ],
+    "text": "北岳岳家的老仆认出了你身上的绣字的储物袋：“那是……那是我家的东西。”",
+    "choices": [
+      {"id": "return", "label": "把东西还给他", "effects": [{"take_item": "yiwu_dai"}, {"mind": 3}], "chronicle": "你把绣字的储物袋还了回去。对方攥着它，半晌说不出话。"},
+      {"id": "sell", "label": "卖给他（两百灵石）", "effects": [{"take_item": "yiwu_dai"}, {"stones": 200}], "chronicle": "对方咬着牙付了钱。"},
+      {"id": "kill", "label": "灭口", "effects": [{"battle": "kuzhu"}, {"flag": "xiongren_kuzhu"}], "chronicle": "你拔出了兵刃。天机阁的凶人榜，会记下这一笔。"}
+    ]
+  },
+  "tale_canyu": {
+    "title": "说书 · 残玉三更",
+    "trigger": "location",
+    "location": "market",
+    "priority": 7,
+    "conditions": [
+      {"flag": "canyu_lu"}
+    ],
+    "effects": [
+      {"mind": 2}
+    ],
+    "chronicle": "云溪的茶摊上，说书人讲起拍卖楼二掌柜养劫修的事，讲到陆家的供奉连夜追上赤枫岭，满座叫好。拍卖楼的门口如今挂着一块新牌子：拍后护送出城。"
+  },
+  "tale_lengxiang": {
+    "title": "说书 · 冷香案",
+    "trigger": "location",
+    "location": "market",
+    "priority": 7,
+    "conditions": [
+      {"flag": "lengxiang_solved"}
+    ],
+    "effects": [
+      {"mind": 2}
+    ],
+    "chronicle": "说书人新编了一回《冷香案》，讲萧家借刀杀人、百花谷洗清冤屈。萧家丹坊这几天门可罗雀。"
   }
 }
