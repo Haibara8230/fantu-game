@@ -48,6 +48,7 @@ var tianji_data: Dictionary = {}
 var mijing_data: Dictionary = {}
 var guishi_data: Dictionary = {}
 var wuxiang_data: Dictionary = {}
+var opening_data: Dictionary = {}
 # 炼器's materials and costs (forge.gd).
 var forge_data: Dictionary = {}
 # Lore heard in teahouses about the wider world (rumors.gd).
@@ -106,7 +107,7 @@ func load_data() -> bool:
 	for item_id: String in items:
 		if items[item_id] is Dictionary:
 			items[item_id].id = item_id
-	for pair: Array in [["techniques", "res://data/techniques.json"], ["equipment", "res://data/equipment.json"], ["vfx_tiers", "res://data/vfx_tiers.json"], ["vfx", "res://data/vfx.json"], ["population", "res://data/population.json"], ["commissions", "res://data/commissions.json"], ["storylines", "res://data/storylines.json"], ["talents", "res://data/talents.json"], ["sect", "res://data/sect.json"], ["bonds", "res://data/bonds.json"], ["alchemy", "res://data/alchemy.json"], ["caves", "res://data/caves.json"], ["auctions", "res://data/auctions.json"], ["summit", "res://data/summit.json"], ["forge", "res://data/forge.json"], ["lore", "res://data/lore.json"], ["guests", "res://data/guests.json"], ["league", "res://data/league.json"], ["tianji", "res://data/tianji.json"], ["mijing", "res://data/mijing.json"], ["guishi", "res://data/guishi.json"], ["wuxiang", "res://data/wuxiang.json"]]:
+	for pair: Array in [["techniques", "res://data/techniques.json"], ["equipment", "res://data/equipment.json"], ["vfx_tiers", "res://data/vfx_tiers.json"], ["vfx", "res://data/vfx.json"], ["population", "res://data/population.json"], ["commissions", "res://data/commissions.json"], ["storylines", "res://data/storylines.json"], ["talents", "res://data/talents.json"], ["sect", "res://data/sect.json"], ["bonds", "res://data/bonds.json"], ["alchemy", "res://data/alchemy.json"], ["caves", "res://data/caves.json"], ["auctions", "res://data/auctions.json"], ["summit", "res://data/summit.json"], ["forge", "res://data/forge.json"], ["lore", "res://data/lore.json"], ["guests", "res://data/guests.json"], ["league", "res://data/league.json"], ["tianji", "res://data/tianji.json"], ["mijing", "res://data/mijing.json"], ["guishi", "res://data/guishi.json"], ["wuxiang", "res://data/wuxiang.json"], ["opening", "res://data/opening.json"]]:
 		var loaded: Variant = _read_json(pair[1])
 		if not loaded is Dictionary:
 			error_message = "配置格式错误：" + pair[1]
@@ -159,6 +160,8 @@ func load_data() -> bool:
 				guishi_data = loaded
 			"wuxiang":
 				wuxiang_data = loaded
+			"opening":
+				opening_data = loaded
 	map = parsed.map
 	regions = parsed.get("regions", {})
 	locations = parsed.locations
@@ -447,6 +450,8 @@ func _validate() -> String:
 		problem = _validate_guishi()
 	if problem.is_empty():
 		problem = _validate_wuxiang()
+	if problem.is_empty():
+		problem = _validate_opening()
 	if problem.is_empty():
 		problem = _validate_ascension()
 	if problem.is_empty():
@@ -1054,6 +1059,39 @@ func _validate_wuxiang() -> String:
 	var master: Variant = data.get("master")
 	if not master is Dictionary or ["discount", "guard_favor"].any(func(key: String) -> bool: return not (master.get(key) is float or master.get(key) is int) or float(master[key]) <= 0.0 or float(master[key]) > 1.0):
 		return "散修之主的好处无效。"
+	return ""
+
+## data/opening.json (opening.gd): the difficulties' points, the roots' costs by count, a price for every
+## tier, the flaws' refunds, the pages (each talent or flaw on one page at most, none of them a talent
+## gained in play), the roots some need, and the talents left for play to grant.
+func _validate_opening() -> String:
+	var data := opening_data
+	var difficulties: Variant = data.get("difficulties")
+	if not difficulties is Array or difficulties.is_empty() or difficulties.any(func(entry: Variant) -> bool: return not entry is Dictionary or not entry.get("id") is String or not entry.get("name") is String or not _whole(entry.get("points"))):
+		return "开局难度配置无效。"
+	var counts: Array = rules.spirit_roots.grades.map(func(grade: Dictionary) -> int: return int(grade.count))
+	if not data.get("roots") is Array or data.roots.size() != counts.size() or data.roots.any(func(entry: Variant) -> bool: return not entry is Dictionary or not int(entry.get("count", 0)) in counts or not (entry.get("cost") is float or entry.get("cost") is int)):
+		return "开局灵根的点数须按灵根品类逐一给出。"
+	if not int(data.get("default_roots", 0)) in counts:
+		return "开局默认灵根数无效。"
+	if not data.get("tier_costs") is Dictionary or talent_data.tiers.any(func(tier: Dictionary) -> bool: return not _whole(data.tier_costs.get(str(tier.id)))):
+		return "开局天赋价格须按品级逐一给出。"
+	var seen := {}
+	for entry: Variant in data.get("pages", []):
+		if not entry is Dictionary or not entry.get("id") is String or not entry.get("name") is String or not entry.get("plain") is String or not entry.get("talents") is Array or not entry.get("flaws") is Array:
+			return "开局页面配置无效。"
+		for id: Variant in entry.talents:
+			if not talent_data.talents.has(id) or bool(talent_data.talents[id].get("gained", false)) or seen.has(id) or id in data.get("earned", []):
+				return "开局页面的天赋无效或重复：" + str(id)
+			seen[id] = true
+		for id: Variant in entry.flaws:
+			if not talent_data.flaws.has(id) or seen.has(id) or not _whole(data.get("refunds", {}).get(id)) or int(data.refunds[id]) < 1:
+				return "开局页面的缺陷无效、重复或没有返还点数：" + str(id)
+			seen[id] = true
+	if not data.get("root_bound") is Dictionary or data.root_bound.keys().any(func(id: Variant) -> bool: return not seen.has(id) or not data.root_bound[id] is Array or data.root_bound[id].any(func(element: Variant) -> bool: return not element in rules.spirit_roots.elements)):
+		return "开局限定灵根的配置无效。"
+	if not data.get("earned") is Array or data.earned.any(func(id: Variant) -> bool: return not talent_data.talents.has(id)):
+		return "留给剧情获得的天赋无效。"
 	return ""
 
 ## A 无相宝录 query or deed (wuxiang.gd met / apply), with its page number where it takes one.

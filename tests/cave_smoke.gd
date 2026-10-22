@@ -311,6 +311,10 @@ func _scroll() -> void:
 	main.intro_finished_once = true
 	main.close_welcome()
 	main._show_welcome()
+	for button: Button in main.welcome_layer.find_children("*", "Button", true, false):
+		if button.text == "总览":
+			button.pressed.emit()
+			break
 	main.skip_intro.button_pressed = true
 	main.begin()
 	main.close_story()

@@ -120,10 +120,12 @@ var forge_plan := {}
 var shown_location := ""
 var show_everyone_here := false
 var welcome_roots: Array = []
-# The talents sensed with them ({"talents", "flaws"}), the senses left, and the action to sense again.
+# The talents chosen with them ({"talents", "flaws"}); the welcome's choice page by page (opening.gd),
+# the page shown and the box the pages are drawn in (welcome_screen.gd).
 var welcome_born: Dictionary = {"talents": [], "flaws": []}
-var welcome_senses := 0
-var welcome_resense: Callable
+var welcome_choice: Dictionary = {}
+var welcome_page := 0
+var welcome_body: VBoxContainer
 # The local portrait pack (see ArtLibrary); tests point this elsewhere.
 var portrait_root := ArtLibrary.LOCAL_PORTRAITS
 # Pool portraits assigned to generated people, kept by people_view.gd for the current world and pool.
@@ -1411,6 +1413,8 @@ func begin() -> void:
 	var skipped := is_instance_valid(skip_intro) and skip_intro.button_pressed
 	var mark: int = session.chronicle.added
 	session.new_game(character_name, -1, welcome_roots, "free" if skipped else "rushi", welcome_born)
+	# The next new journey is chosen afresh.
+	welcome_choice = {}
 	_stage_story(mark)
 	notice("入世已略过：你是青石镇客栈里的一个散修，去哪里、做什么都由你定；右上角的「任务」写着眼下可做的事。" if skipped else "你在青石镇客栈落了脚，听说云溪城就要开仙师集会。右上角的「目标」写着眼下可做的事。")
 

@@ -363,6 +363,13 @@ static func _ascend(s, grade: int, days: int, texts: Array, passed: Dictionary) 
 	if int(s.player.realm) <= 2:
 		reached.grade = grade
 	texts.append(s.log_event("breakthrough", reached, true))
+	# A realm entered at the 灵眼 draws its qi into the strongest root: that element's 道脉, once.
+	if at_eye(s) and not s.player.get("roots", []).is_empty():
+		var vein := str(rules(s).eye.get("veins", {}).get(str(s.player.roots[0]), ""))
+		if not vein.is_empty():
+			var gained: String = s.gain_talent(vein)
+			if not gained.is_empty():
+				texts.append(gained)
 	# The realm lifts the techniques' layer caps; practice that waited climbs now.
 	var climbed: Array[String] = s.Layers.after_breakthrough(s)
 	if not climbed.is_empty():

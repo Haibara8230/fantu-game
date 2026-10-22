@@ -103,17 +103,31 @@ func _goals() -> void:
 ## and a 传音 later shows in the scroll and on the HUD.
 func _guided() -> void:
 	main.intro_finished_once = false
+	main.welcome_choice = {}
 	main._show_welcome()
+	# The journey is chosen page by page after 觅长生: difficulty, roots, then a talent on each page.
+	check(_welcome_button("修士 · 20 点") != null and _welcome_button("修士 · 20 点").button_pressed and _texts(main.welcome_layer, "Label").contains("天赋点 · 剩余 20 / 20"), "the welcome opens on the difficulty, 修士's twenty points chosen")
+	_welcome_button("天骄 · 40 点").pressed.emit()
+	check(_texts(main.welcome_layer, "Label").contains("剩余 40 / 40"), "天骄 gives forty points")
+	_welcome_button("下一页").pressed.emit()
+	_welcome_button("天灵根（8").pressed.emit()
+	_welcome_button("金").pressed.emit()
+	check(main.welcome_roots == ["metal"] and _texts(main.welcome_layer, "Label").contains("剩余 32 / 40"), "a 金 天灵根 for eight points")
+	_welcome_button("下一页").pressed.emit()
+	_welcome_button("下一页").pressed.emit()
+	check(_welcome_button("锐金之体") != null and _welcome_button("青木之体") == null, "on the body page only the roots' own element is offered")
+	_welcome_button("锐金之体").pressed.emit()
+	check(main.welcome_born.talents == ["body_metal"] and _texts(main.welcome_layer, "Label").contains("剩余 26 / 40"), "taken for its tier's price")
+	_welcome_button("体弱多病").pressed.emit()
+	check(main.welcome_born.talents.is_empty() and main.welcome_born.flaws == ["tiruo"] and _texts(main.welcome_layer, "Label").contains("剩余 35 / 40"), "one per page: a flaw instead gives three points back")
+	_welcome_button("总览").pressed.emit()
 	check(main.skip_intro == null, "no skipping before the opening was finished once")
-	var sensed := _texts(main.welcome_layer, "Label")
-	check(sensed.contains("灵根 · ") and sensed.contains("资质 · ") and sensed.contains("先天天赋") and _welcome_button("重新感应（余 5 次）") != null, "the welcome senses roots, talents and aptitude")
-	for i: int in 5:
-		_welcome_button("重新感应（余 %d 次）" % (5 - i)).pressed.emit()
-	check(_welcome_button("重新感应（余 0 次）") != null and _welcome_button("重新感应（余 0 次）").disabled, "and may sense again only five times")
+	check(_texts(main.welcome_layer, "Label").contains("资质 · ") and not _welcome_button("踏入仙途").disabled, "the overview shows the aptitude and lets the journey begin")
 	main.name_input.text = "新人"
 	main.welcome_roots = ["metal", "wood", "fire"]
 	main.welcome_born = {"talents": [], "flaws": []}
 	main.begin()
+	check(main.welcome_choice.is_empty(), "the next new journey is chosen afresh")
 	check(main.session.player.location == "town" and main.current_screen() == "full" and main.session.pending_event.get("id", "") == "rushi_inn" and _texts(main.center, "Label").contains("陆承舟"), "a new journey opens at the 青石镇 inn, where 陆承舟 cannot pay his rent")
 	main.choose("watch")
 	check(main.goal_label.text.begins_with("目标 · 入世") and main.goal_label.tooltip_text.contains("云溪"), "the HUD's goal is the way to 云溪")
@@ -215,6 +229,7 @@ func _run() -> void:
 	main.intro_finished_once = true
 	main.close_welcome()
 	main._show_welcome()
+	_welcome_button("总览").pressed.emit()
 	main.name_input.text = "青禾"
 	main.welcome_roots = ["metal", "wood", "fire"]
 	main.welcome_born = {"talents": [], "flaws": []}

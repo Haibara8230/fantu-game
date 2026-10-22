@@ -59,6 +59,17 @@ func _run() -> void:
 	# Cards switched off by an earlier run would stay off in the capture's own user dir.
 	main.set_guide_enabled(true)
 	await _shot("01_welcome")
+	# The pages of the opening (welcome_screen.gd): the roots, a page of talents, the overview.
+	_press("天骄 · 40 点")
+	_press("灵根")
+	_press("天灵根（8")
+	_press("金")
+	await _shot("01b_welcome_roots")
+	_press("先天体质")
+	_press("锐金之体")
+	await _shot("01c_welcome_body")
+	_press("总览")
+	await _shot("01d_welcome_summary")
 	main.name_input.text = "青禾"
 	main.welcome_roots = ["metal", "wood", "fire"]
 	main.welcome_born = {"talents": ["danqi", "touyao"], "flaws": []}
@@ -359,3 +370,10 @@ func _run() -> void:
 	main.queue_free()
 	await create_timer(0.2).timeout
 	quit(0)
+
+## Presses the welcome's first button whose text holds `text_part`.
+func _press(text_part: String) -> void:
+	for button: Button in main.welcome_layer.find_children("*", "Button", true, false):
+		if button.text.contains(text_part):
+			button.pressed.emit()
+			return

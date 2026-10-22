@@ -6,6 +6,7 @@ extends SceneTree
 const Session = preload("res://scripts/core/session.gd")
 const Talents = preload("res://scripts/core/talents.gd")
 const Calendar = preload("res://scripts/core/calendar.gd")
+const Opening = preload("res://scripts/core/opening.gd")
 var checks := 0
 var failures := 0
 
@@ -29,6 +30,7 @@ func _initialize() -> void:
 	_breakthrough_saves()
 	_fortune()
 	_talent_stories()
+	_opening()
 	print("TALENTS: %d checks, %d failures" % [checks, failures])
 	quit(0 if failures == 0 else 1)
 
@@ -574,3 +576,40 @@ func _talent_stories() -> void:
 	reborn.player.mind = 24
 	reborn.cultivate(10)
 	check(reborn.has_flag("spirit_eye_found") and reborn.journal_lines().any(func(line: String) -> bool: return line.contains("灵眼")), "and its memories tell where the 灵眼 is")
+
+## 开局 after 觅长生 (opening.gd): every talent born with is on one page unless play grants it; prices by
+## tier, flaws by weight, roots by count; element talents need their root; and the earned ones come in play.
+func _opening() -> void:
+	var content = Session.new().content
+	var data: Dictionary = Opening.data(content)
+	var listed := {}
+	for page: Dictionary in data.pages:
+		for id: Variant in page.talents + page.flaws:
+			listed[id] = true
+	var unlisted: Array = content.talent_data.talents.keys().filter(func(id: String) -> bool: return not listed.has(id) and not bool(content.talent_data.talents[id].get("gained", false)) and not id in data.earned)
+	check(unlisted.is_empty(), "every talent one may be born with is on a page (%s)" % str(unlisted.slice(0, 5)))
+	var choice: Dictionary = Opening.fresh(content)
+	check(Opening.points(content, choice) == 20 and Opening.left(content, choice) == 20, "修士: twenty points, three roots for nothing")
+	check(not Opening.block(content, choice).is_empty(), "the roots must be chosen first")
+	Opening.set_root_count(content, choice, 1)
+	Opening.toggle_root(content, choice, "water")
+	check(Opening.left(content, choice) == 12 and Opening.block(content, choice).is_empty(), "a 天灵根 costs eight")
+	check("body_water" in Opening.offered(content, "body", choice.roots) and not "body_fire" in Opening.offered(content, "body", choice.roots) and not "yinyang" in Opening.offered(content, "body", choice.roots), "element talents need their roots (阴阳同体 both water and fire)")
+	check(not "vein_water" in Opening.offered(content, "body", choice.roots) and not "jiantai" in Opening.offered(content, "body", choice.roots), "道脉 and 先天剑胎 are left for play")
+	check(Opening.pick_block(content, choice, "body", "hundun").contains("不够"), "a red talent is beyond 修士's points")
+	choice.picks["body"] = "body_water"
+	choice.picks["gift"] = "lansan"
+	check(Opening.left(content, choice) == 12 - 6 + 4 and Opening.born(content, choice) == {"talents": ["body_water"], "flaws": ["lansan"]}, "a blue talent for six, a heavy flaw gives four back")
+	Opening.toggle_root(content, choice, "water")
+	Opening.toggle_root(content, choice, "fire")
+	check(not choice.picks.has("body") and choice.picks.has("gift"), "changing the root drops what it no longer allows")
+	var five: Dictionary = Opening.fresh(content)
+	Opening.set_root_count(content, five, 5)
+	check(five.roots.size() == 5 and Opening.left(content, five) == 24, "伪灵根: all five, four points back")
+	# Earned in play: the 道脉 at the 灵眼, 先天剑胎 from 万剑冢, 百毒不侵 from 毒泽's old garden.
+	var game := _ripe()
+	game.world.flags["spirit_eye_found"] = true
+	game.player.location = "wild"
+	game.Breakthrough._ascend(game, 1, 30, [], {})
+	check("vein_metal" in game.player.talents, "a realm entered at the 灵眼 leaves the strongest root's 道脉")
+	check(JSON.stringify(content.mijing_data.realms.wanjian.outcomes).contains('"jiantai"') and content.storylines.changqing_garden.steps[0].effects.has({"talent": "baidu"}), "先天剑胎 and 百毒不侵 are given by their stories")

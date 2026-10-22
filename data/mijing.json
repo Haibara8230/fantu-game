@@ -151,6 +151,7 @@
           ],
           "effects": [
             {"flag": "wanjian_done"},
+            {"talent": "jiantai"},
             {"mind": 3}
           ],
           "text": "天阙剑宗在断剑峡口为你立了一块剑碑，碑上只刻一行字：还剑者。往后天阙的剑修见了你，都要行一礼。"
@@ -161,7 +162,8 @@
             {"flag": "tianque_qingyun"}
           ],
           "effects": [
-            {"flag": "wanjian_done"}
+            {"flag": "wanjian_done"},
+            {"talent": "jiantai"}
           ],
           "text": "青云剑宗传出话来：阙光归青云，开山祖师出走天阙的旧债，一笔勾销。天阙剑宗没有回话。"
         },
@@ -172,6 +174,7 @@
           ],
           "effects": [
             {"flag": "wanjian_done"},
+            {"talent": "jiantai"},
             {"flag": "tianque_feud"},
             {"mind": 3}
           ],
