@@ -125,6 +125,9 @@ var welcome_roots: Array = []
 var welcome_born: Dictionary = {"talents": [], "flaws": []}
 var welcome_choice: Dictionary = {}
 var welcome_page := 0
+# The talent pages' filter (welcome_screen.gd): {"tier": "" | tier id | "flaw", "effect": "" | kind,
+# "affordable": bool}.
+var welcome_filter: Dictionary = {}
 var welcome_body: VBoxContainer
 # The local portrait pack (see ArtLibrary); tests point this elsewhere.
 var portrait_root := ArtLibrary.LOCAL_PORTRAITS
@@ -1415,6 +1418,7 @@ func begin() -> void:
 	session.new_game(character_name, -1, welcome_roots, "free" if skipped else "rushi", welcome_born)
 	# The next new journey is chosen afresh.
 	welcome_choice = {}
+	welcome_filter = {}
 	_stage_story(mark)
 	notice("入世已略过：你是青石镇客栈里的一个散修，去哪里、做什么都由你定；右上角的「任务」写着眼下可做的事。" if skipped else "你在青石镇客栈落了脚，听说云溪城就要开仙师集会。右上角的「目标」写着眼下可做的事。")
 

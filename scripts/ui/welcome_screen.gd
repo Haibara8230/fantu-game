@@ -5,6 +5,16 @@ extends RefCounted
 const Talents = preload("res://scripts/core/talents.gd")
 const TalentCards = preload("res://scripts/ui/talent_cards.gd")
 const Opening = preload("res://scripts/core/opening.gd")
+## The kinds of effect a talent page can be filtered by, each by the modifiers that make it.
+const EFFECTS := {
+	"修炼": ["cultivation", "retreat_days", "fresh_days", "breakthrough", "grade", "mind_need"],
+	"斗法": ["attack", "defense", "damage_all", "damage_metal", "damage_wood", "damage_water", "damage_fire", "damage_earth", "max_hp", "max_qi", "orb_draw", "orb_cap", "orb_first", "orb_metal", "orb_wood", "orb_water", "orb_fire", "orb_earth"],
+	"悟性心境": ["insight", "study", "mind_gain", "demon", "sense"],
+	"寿元养伤": ["lifespan", "rest"],
+	"机缘行路": ["boon", "encounter", "travel", "favor"],
+	"丹药采集": ["pill", "pill_cooldown", "alchemy", "gather"],
+	"钱财": ["stones", "sell", "buy"],
+}
 
 static func build(ui) -> void:
 	var session = ui.session
@@ -174,6 +184,9 @@ static func _talents(ui, body: VBoxContainer, page_id: String) -> void:
 	var roots: Array = ui.welcome_choice.get("roots", [])
 	var picked := str(ui.welcome_choice.picks.get(page_id, ""))
 	body.add_child(ui.paragraph("此页只选一样，或什么都不选。鼠标停留可看效果；缺陷返还点数，与灵根相关的只在有那一行灵根时出现。"))
+	var all: Array[String] = Opening.offered(content, page_id, roots)
+	var shown: Array = all.filter(func(id: String) -> bool: return id == picked or _passes(ui, page_id, id))
+	_filters(ui, body, all.size(), shown.size())
 	var flow := HFlowContainer.new()
 	flow.add_theme_constant_override("h_separation", 8)
 	flow.add_theme_constant_override("v_separation", 8)
@@ -184,7 +197,7 @@ static func _talents(ui, body: VBoxContainer, page_id: String) -> void:
 	plain.toggle_mode = true
 	plain.button_pressed = picked.is_empty()
 	flow.add_child(plain)
-	for id: String in Opening.offered(content, page_id, roots):
+	for id: String in shown:
 		var entry := id
 		var price: int = Opening.cost(content, id)
 		var reason: String = "" if id == picked else Opening.pick_block(content, ui.welcome_choice, page_id, id)
@@ -197,6 +210,71 @@ static func _talents(ui, body: VBoxContainer, page_id: String) -> void:
 		option.disabled = not reason.is_empty()
 		option.add_theme_color_override("font_color", Color(str(Talents.tier_of(content, id).get("color", "#d6d0c2"))))
 		flow.add_child(option)
+
+## The filter row: by grade (缺陷 among them), by kind of effect, only what the points still allow.
+static func _filters(ui, body: VBoxContainer, total: int, shown: int) -> void:
+	var content = ui.session.content
+	var filter: Dictionary = ui.welcome_filter
+	var tiers := HFlowContainer.new()
+	tiers.add_theme_constant_override("h_separation", 6)
+	tiers.add_theme_constant_override("v_separation", 6)
+	body.add_child(tiers)
+	var grades: Array = [["", "全部品级", ui.INK]]
+	for tier: Dictionary in content.talent_data.tiers:
+		grades.append([str(tier.id), str(tier.name), Color(str(tier.color))])
+	grades.append(["flaw", "缺陷", Color(str(content.talent_data.flaw.color))])
+	for grade: Array in grades:
+		var value := str(grade[0])
+		var chip: Button = ui.button(str(grade[1]), func() -> void:
+			ui.welcome_filter.tier = value
+			_render(ui))
+		chip.toggle_mode = true
+		chip.button_pressed = str(filter.get("tier", "")) == value
+		chip.custom_minimum_size.y = 34
+		chip.add_theme_color_override("font_color", grade[2])
+		tiers.add_child(chip)
+	var effects := HFlowContainer.new()
+	effects.add_theme_constant_override("h_separation", 6)
+	effects.add_theme_constant_override("v_separation", 6)
+	body.add_child(effects)
+	for kind: String in [""] + EFFECTS.keys():
+		var value := kind
+		var chip: Button = ui.button("全部效果" if kind.is_empty() else kind, func() -> void:
+			ui.welcome_filter.effect = value
+			_render(ui))
+		chip.toggle_mode = true
+		chip.button_pressed = str(filter.get("effect", "")) == value
+		chip.custom_minimum_size.y = 34
+		effects.add_child(chip)
+	var row := HBoxContainer.new()
+	row.add_theme_constant_override("separation", 16)
+	body.add_child(row)
+	var affordable := CheckBox.new()
+	affordable.text = "只看点数够的"
+	affordable.button_pressed = bool(filter.get("affordable", false))
+	affordable.toggled.connect(func(on: bool) -> void:
+		ui.welcome_filter.affordable = on
+		_render(ui))
+	row.add_child(affordable)
+	row.add_child(ui.label("显示 %d / %d 项" % [shown, total], 15, ui.MUTED))
+
+## Whether an entry passes the filter (the one taken is always shown).
+static func _passes(ui, page_id: String, id: String) -> bool:
+	var content = ui.session.content
+	var filter: Dictionary = ui.welcome_filter
+	var tier := str(filter.get("tier", ""))
+	if not tier.is_empty():
+		var flaw: bool = Talents.is_flaw(content, id)
+		if (tier == "flaw") != flaw or (not flaw and str(Talents.definition(content, id).get("tier", "")) != tier):
+			return false
+	var kind := str(filter.get("effect", ""))
+	if not kind.is_empty():
+		var mods: Dictionary = Talents.definition(content, id).get("mods", {})
+		if not EFFECTS.get(kind, []).any(func(key: String) -> bool: return int(mods.get(key, 0)) != 0):
+			return false
+	if bool(filter.get("affordable", false)) and Opening.pick_block(content, ui.welcome_choice, page_id, id).contains("不够"):
+		return false
+	return true
 
 static func _summary(ui, body: VBoxContainer) -> void:
 	var content = ui.session.content

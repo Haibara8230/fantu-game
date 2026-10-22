@@ -118,6 +118,22 @@ func _guided() -> void:
 	check(_welcome_button("锐金之体") != null and _welcome_button("青木之体") == null, "on the body page only the roots' own element is offered")
 	_welcome_button("锐金之体").pressed.emit()
 	check(main.welcome_born.talents == ["body_metal"] and _texts(main.welcome_layer, "Label").contains("剩余 26 / 40"), "taken for its tier's price")
+	# A long page is filtered by grade, by kind of effect, and by what the points still allow.
+	_welcome_button("缺陷").pressed.emit()
+	check(_welcome_button("体弱多病") != null and _welcome_button("铁骨") == null and _welcome_button("锐金之体") != null, "only the flaws, and what is taken stays in sight")
+	_welcome_button("全部品级").pressed.emit()
+	_welcome_button("寿元养伤").pressed.emit()
+	check(_welcome_button("长寿相") != null and _welcome_button("铁骨") == null and _texts(main.welcome_layer, "Label").contains("显示 "), "by kind of effect, with the count shown")
+	_welcome_button("全部效果").pressed.emit()
+	check(_welcome_button("混沌灵体") != null, "a red talent is within 天骄's points")
+	main.welcome_choice.difficulty = "fanren"
+	main.WelcomeScreen.goto(main, main.welcome_page)
+	var affordable: CheckBox = main.welcome_layer.find_children("*", "CheckBox", true, false).filter(func(box: CheckBox) -> bool: return box.text == "只看点数够的")[0]
+	affordable.button_pressed = true
+	check(_welcome_button("混沌灵体") == null and _welcome_button("体健") != null, "only what the points allow")
+	affordable.button_pressed = false
+	main.welcome_choice.difficulty = "tianjiao"
+	main.WelcomeScreen.goto(main, main.welcome_page)
 	_welcome_button("体弱多病").pressed.emit()
 	check(main.welcome_born.talents.is_empty() and main.welcome_born.flaws == ["tiruo"] and _texts(main.welcome_layer, "Label").contains("剩余 35 / 40"), "one per page: a flaw instead gives three points back")
 	_welcome_button("总览").pressed.emit()
