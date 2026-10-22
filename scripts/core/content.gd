@@ -2707,6 +2707,8 @@ func _validate_arsenal() -> String:
 			return "装备底材配置错误：" + base_id
 		if base.has("release") and (not base.release is Dictionary or not base.release.get("name") is String or not (base.release.get("power") is float or base.release.get("power") is int) or float(base.release.power) <= 0.0 or base.get("slot") != "weapon"):
 			return "兵刃祭出配置错误：" + base_id
+		if base.has("bound") and (not _whole(base.bound) or not base.get("named", {}).has(str(int(base.bound)))):
+			return "本命法宝的阶位须是它有名字的一阶：" + str(base_id)
 		if base.has("named") and (not base.named is Dictionary or base.named.is_empty() or base.named.keys().any(func(key: Variant) -> bool: return not str(key).is_valid_int() or int(str(key)) < 1 or int(str(key)) > gear.tiers.size() or not base.named[key] is String)):
 			return "有名宝物的阶段配置错误：" + base_id
 		# A weapon's own art (枪、锤、鞭) names it back, and its 祭出 may go past or break a shield.

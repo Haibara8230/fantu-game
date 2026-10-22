@@ -287,6 +287,14 @@ func _heart() -> void:
 	game.conclude("")
 	check(game.story_state("wuxiang") == "done" and game.Wuxiang.met(game, "master"), "all seven: 散修之主")
 	check(game.item_count("j:wuxiang_zhenjing") == 1 and game.Gear.holds(game, str(game.content.wuxiang_data.blades[2])), "《无相真经》 and the bound blade")
+	var bound := str(game.content.wuxiang_data.blades[2])
+	game.player.location = "market"
+	check(bool(game.content.item(bound).get("bound", false)) and game.content.item(bound).description.contains("不可出售"), "the bound blade says it is never sold")
+	check(game.sell(bound).contains("卖不得") and game.item_count(bound) == 1, "a shop is refused it")
+	game.add_item("wolf_fang", 1)
+	game.act("sell")
+	check(game.item_count(bound) == 1 and game.item_count("wolf_fang") == 0, "selling everything keeps it")
+	check(not bool(game.content.item(str(game.content.wuxiang_data.blades[1])).get("bound", false)), "the blade before it is an ordinary 法宝")
 	var late := _game(3)
 	for n: int in range(1, 7):
 		late.Wuxiang.apply(late, "got:%d" % n)

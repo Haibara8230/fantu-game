@@ -378,6 +378,9 @@ static func equipment(content, id: String) -> Dictionary:
 		"price": int(tier_def.value) + 10 * affix_ids.size(),
 		"realm": int(tier_def.get("realm", 0)), "base_stats": base_stats, "affix_stats": affix_stats,
 	}
+	# 本命法宝 (无相本命剑): from its `bound` stage the piece is one with its owner and is never sold.
+	if base.has("bound") and tier >= int(base.bound):
+		result.bound = true
 	result.description = describe_equipment(content, result)
 	return result
 
@@ -441,6 +444,8 @@ static func describe_equipment(content, item: Dictionary) -> String:
 		text += "可祭出「%s」（斗法中每场%s，不占回合）。" % [base.release.name, "两次" if int(item.tier) >= 4 else "一次"]
 	if base.has("art") and content.skills.has(str(base.art)):
 		text += "持之可施展「%s」。" % content.skills[str(base.art)].name
+	if bool(item.get("bound", false)):
+		text += "本命法宝，与主人性命相连，不可出售。"
 	if bool(base.get("lead", false)):
 		text += "持之斗法总是先出手。"
 	if base.has("trait"):
