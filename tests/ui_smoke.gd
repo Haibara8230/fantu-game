@@ -136,7 +136,9 @@ func _guided() -> void:
 	main.WelcomeScreen.goto(main, main.welcome_page)
 	_welcome_button("体弱多病").pressed.emit()
 	check(main.welcome_born.talents.is_empty() and main.welcome_born.flaws == ["tiruo"] and _texts(main.welcome_layer, "Label").contains("剩余 35 / 40"), "one per page: a flaw instead gives three points back")
+	main.welcome_choice.picks["origin"] = "tiejiang"
 	_welcome_button("总览").pressed.emit()
+	check(_texts(main.welcome_layer, "Label").contains("开局所带：灵石 30、") and _texts(main.welcome_layer, "Label").contains("青钢锭 ×1"), "the overview spells out what the 出身 brings")
 	check(main.skip_intro == null, "no skipping before the opening was finished once")
 	check(_texts(main.welcome_layer, "Label").contains("资质 · ") and not _welcome_button("踏入仙途").disabled, "the overview shows the aptitude and lets the journey begin")
 	main.name_input.text = "新人"

@@ -1592,6 +1592,11 @@ func _validate_talents() -> String:
 				return "天赋分组无效：%s" % id
 			if talent.has("gained") and not talent.gained is bool:
 				return "天赋来源无效：%s" % id
+			# What a player born with it brings from home (an 出身's things, Session.new_game).
+			if talent.has("start"):
+				var problem := _validate_effects(talent.start)
+				if not problem.is_empty():
+					return "天赋开局所带无效：%s：%s" % [id, problem]
 	for tier: Dictionary in data.tiers:
 		if not data.talents.values().any(func(talent: Dictionary) -> bool: return talent.tier == tier.id and not bool(talent.get("gained", false))):
 			return "天赋等级没有可抽取的天赋：%s" % tier.id
@@ -2240,8 +2245,11 @@ func _validate_effects(effects: Variant) -> String:
 				ok = value is Array and value.size() == 2 and items.has(value[0]) and (value[1] is int or value[1] is float)
 			"take_item":
 				ok = items.has(value)
-			"give_gear":
+			"give_gear", "gear":
 				ok = value is String and not equipment(value).is_empty()
+			# A 心法's slip in the first root's element (修真家族's own art).
+			"method":
+				ok = _whole(value) and int(value) >= 1 and int(value) <= technique_data.tiers.size()
 			"flag":
 				ok = value in world_flags
 			"meet":

@@ -1051,7 +1051,8 @@
     "max_hp": 3,
     "gather": 5
    },
-   "group": "origin"
+   "group": "origin",
+   "start": [{"item": ["huichun_grass", 4]}]
   },
   "liehu": {
    "name": "猎户之子",
@@ -1061,7 +1062,8 @@
     "attack": 1,
     "encounter": -5
    },
-   "group": "origin"
+   "group": "origin",
+   "start": [{"gear": "e:saber:1:none::0"}]
   },
   "yujia": {
    "name": "渔家儿女",
@@ -1071,7 +1073,8 @@
     "travel": -3,
     "damage_water": 5
    },
-   "group": "origin"
+   "group": "origin",
+   "start": [{"item": ["huiqi_pill", 2]}]
   },
   "shuxiang": {
    "name": "书香门第",
@@ -1081,7 +1084,8 @@
     "insight": 8,
     "study": -5
    },
-   "group": "origin"
+   "group": "origin",
+   "start": [{"manual": 1}]
   },
   "yaopu": {
    "name": "药铺学徒",
@@ -1091,7 +1095,8 @@
     "gather": 8,
     "pill": 5
    },
-   "group": "origin"
+   "group": "origin",
+   "start": [{"item": ["recipe_liaoshang", 1]}, {"item": ["huichun_grass", 2]}]
   },
   "tiejiang": {
    "name": "铁匠之后",
@@ -1101,7 +1106,8 @@
     "max_hp": 3,
     "damage_metal": 5
    },
-   "group": "origin"
+   "group": "origin",
+   "start": [{"gear": "e:sword:1:metal::0"}, {"item": ["ore_qinggang", 1]}]
   },
   "biaoju": {
    "name": "镖局出身",
@@ -1111,7 +1117,8 @@
     "defense": 2,
     "travel": -3
    },
-   "group": "origin"
+   "group": "origin",
+   "start": [{"gear": "e:vest:1:none::0"}]
   },
   "luopo": {
    "name": "落魄世家",
@@ -1141,7 +1148,8 @@
     "mind_gain": 10,
     "demon": 10
    },
-   "group": "origin"
+   "group": "origin",
+   "start": [{"item": ["jinguang_fu", 1]}]
   },
   "daoguan": {
    "name": "道观杂役",
@@ -1151,7 +1159,8 @@
     "cultivation": 3,
     "mind_need": -3
    },
-   "group": "origin"
+   "group": "origin",
+   "start": [{"item": ["lei_fu", 1]}]
   },
   "huolang": {
    "name": "货郎之后",
@@ -1161,7 +1170,8 @@
     "sell": 5,
     "buy": -3
    },
-   "group": "origin"
+   "group": "origin",
+   "start": [{"item": ["liaoshang_pill", 1]}, {"item": ["huiqi_pill", 1]}]
   },
   "qiaofu": {
    "name": "樵夫之子",
@@ -1171,7 +1181,8 @@
     "damage_wood": 5,
     "max_hp": 2
    },
-   "group": "origin"
+   "group": "origin",
+   "start": [{"gear": "e:saber:1:wood::0"}]
   },
   "yaogong": {
    "name": "窑工之子",
@@ -1181,7 +1192,8 @@
     "damage_fire": 5,
     "rest": -5
    },
-   "group": "origin"
+   "group": "origin",
+   "start": [{"item": ["chiyan_flower", 2]}]
   },
   "caishi": {
    "name": "石匠之后",
@@ -1191,7 +1203,8 @@
     "damage_earth": 5,
     "defense": 1
    },
-   "group": "origin"
+   "group": "origin",
+   "start": [{"item": ["jade_qing", 1]}]
   },
   "shanye": {
    "name": "山野散人",
@@ -1201,7 +1214,8 @@
     "encounter": -8,
     "gather": 3
    },
-   "group": "origin"
+   "group": "origin",
+   "start": [{"item": ["ninglu_grass", 3]}]
   },
   "xiban": {
    "name": "戏班出身",
@@ -1211,7 +1225,8 @@
     "favor": 10,
     "mind_gain": -5
    },
-   "group": "origin"
+   "group": "origin",
+   "start": [{"item": ["dingshen_fu", 1]}]
   },
   "zhangfang": {
    "name": "账房之子",
@@ -1222,7 +1237,8 @@
     "buy": -3,
     "study": -3
    },
-   "group": "origin"
+   "group": "origin",
+   "start": [{"stones": 20}]
   },
   "langzhong": {
    "name": "郎中之后",
@@ -1232,7 +1248,8 @@
     "rest": -10,
     "pill": 3
    },
-   "group": "origin"
+   "group": "origin",
+   "start": [{"item": ["liaoshang_pill", 3]}]
   },
   "buqing": {
    "name": "捕快之后",
@@ -1242,7 +1259,8 @@
     "attack": 1,
     "favor": 3
    },
-   "group": "origin"
+   "group": "origin",
+   "start": [{"gear": "e:saber:1:none::1"}]
   },
   "letian": {
    "name": "乐天",
@@ -1697,7 +1715,8 @@
     "attack": 3,
     "defense": 4
    },
-   "group": "origin"
+   "group": "origin",
+   "start": [{"gear": "e:spear:2:metal:sharp:0"}]
   },
   "yidao": {
    "name": "医道世家",
@@ -1707,7 +1726,8 @@
     "rest": -30,
     "pill": 15
    },
-   "group": "origin"
+   "group": "origin",
+   "start": [{"item": ["recipe_liaoshang", 1]}, {"item": ["liaoshang_pill", 3]}]
   },
   "danshi": {
    "name": "丹师之后",
@@ -1717,7 +1737,8 @@
     "pill": 22,
     "pill_cooldown": -15
    },
-   "group": "origin"
+   "group": "origin",
+   "start": [{"item": ["furnace_bronze", 1]}, {"item": ["recipe_huiqi", 1]}]
   },
   "shanggu": {
    "name": "商贾世家",
@@ -1737,7 +1758,8 @@
     "insight": 22,
     "study": -15
    },
-   "group": "origin"
+   "group": "origin",
+   "start": [{"manual": 2}]
   },
   "lieyao": {
    "name": "猎妖人之后",
@@ -1747,7 +1769,8 @@
     "damage_all": 8,
     "attack": 2
    },
-   "group": "origin"
+   "group": "origin",
+   "start": [{"gear": "e:sword:2:metal:sharp:0"}, {"item": ["polin_powder", 1]}]
   },
   "chuanjia": {
    "name": "渡口船家",
@@ -1757,7 +1780,22 @@
     "travel": -15,
     "damage_water": 12
    },
-   "group": "origin"
+   "group": "origin",
+   "start": [{"item": ["dundi_fu", 1]}, {"item": ["huiqi_pill", 2]}]
+  },
+  "xiuzhen": {
+   "name": "修真家族",
+   "tier": "green",
+   "description": "家里出过几位修士，家传一门心法，入门比旁人早。",
+   "mods": {
+    "cultivation": 6
+   },
+   "group": "origin",
+   "start": [
+    {
+     "method": 2
+    }
+   ]
   },
   "yinshi": {
    "name": "隐士门下",
@@ -1767,7 +1805,8 @@
     "cultivation": 9,
     "mind_gain": 15
    },
-   "group": "origin"
+   "group": "origin",
+   "start": [{"method": 2}]
   },
   "yigu": {
    "name": "宗门遗孤",
@@ -1777,7 +1816,8 @@
     "cultivation": 8,
     "favor": 15
    },
-   "group": "origin"
+   "group": "origin",
+   "start": [{"manual": 2}, {"item": ["huiqi_pill", 2]}]
   },
   "caiyao": {
    "name": "采药世家",
@@ -1786,7 +1826,8 @@
    "mods": {
     "gather": 30
    },
-   "group": "origin"
+   "group": "origin",
+   "start": [{"item": ["lingzhi", 1]}, {"item": ["huichun_grass", 4]}]
   },
   "zhishui": {
    "name": "心如止水",
@@ -2398,7 +2439,8 @@
     "pill": 40,
     "rest": -30
    },
-   "group": "origin"
+   "group": "origin",
+   "start": [{"item": ["recipe_ningqi", 1]}, {"item": ["ningqi_pill", 2]}]
   },
   "jianzhong": {
    "name": "剑冢遗孤",
@@ -2408,7 +2450,8 @@
     "damage_metal": 30,
     "attack": 4
    },
-   "group": "origin"
+   "group": "origin",
+   "start": [{"gear": "e:sword:3:metal:sharp+spirit:0"}]
   },
   "mingmen": {
    "name": "名门之后",
@@ -2418,7 +2461,8 @@
     "cultivation": 16,
     "stones": 160
    },
-   "group": "origin"
+   "group": "origin",
+   "start": [{"manual": 3}]
   },
   "qianchao": {
    "name": "前朝遗脉",
@@ -2428,7 +2472,8 @@
     "max_qi": 20,
     "lifespan": 16
    },
-   "group": "origin"
+   "group": "origin",
+   "start": [{"gear": "e:pendant:3:none:guard+spirit:0"}]
   },
   "jiusi": {
    "name": "九死一生",
@@ -2652,7 +2697,8 @@
     "favor": 60,
     "buy": -30
    },
-   "group": "origin"
+   "group": "origin",
+   "start": [{"gear": "e:robe:2:none:guard:0"}]
   },
   "jianxian": {
    "name": "剑仙后人",
@@ -2662,7 +2708,8 @@
     "damage_metal": 60,
     "cultivation": 30
    },
-   "group": "origin"
+   "group": "origin",
+   "start": [{"gear": "e:sword:4:metal:attune+sharp+spirit:0"}]
   },
   "dansheng": {
    "name": "丹圣后人",
@@ -2672,7 +2719,8 @@
     "pill": 120,
     "pill_cooldown": -90
    },
-   "group": "origin"
+   "group": "origin",
+   "start": [{"item": ["recipe_foundation", 1]}, {"item": ["furnace_xuantie", 1]}]
   },
   "dichuan": {
    "name": "道门嫡传之资",

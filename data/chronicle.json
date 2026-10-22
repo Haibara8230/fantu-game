@@ -1,6 +1,8 @@
 {
   "legacy": "{text}",
   "start": "你带着三十块灵石和一片旧镜背，在青石镇的客栈落了脚，从此踏上仙途。",
+  "start_items": "离家时，家里给你带上了{loot_text}。",
+  "start_stones": "家里另塞给你 {stones} 灵石作盘缠。",
   "cultivate": "闭关 {duration}，修为增加 {xp}，灵力恢复。",
   "rent": "付了静房的房钱 {stones} 灵石。",
   "join_sect": "{join_text}",

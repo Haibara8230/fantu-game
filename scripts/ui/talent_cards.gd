@@ -30,11 +30,36 @@ static func effects_text(mods: Dictionary) -> String:
 		parts.append("%s %s%d%s" % [word[0], "+" if amount > 0 else "", amount, unit])
 	return "、".join(parts) if not parts.is_empty() else "并无实效"
 
-## The tooltip of a talent: its tier, its words and its effects.
+## The tooltip of a talent: its tier, its words and its effects, and what an 出身 brings from home.
 static func tooltip(content, id: String) -> String:
 	var talent: Dictionary = Talents.definition(content, id)
 	var tier: Dictionary = Talents.tier_of(content, id)
-	return "%s · %s\n%s\n%s" % [talent.get("name", id), tier.get("name", ""), talent.get("description", ""), effects_text(talent.get("mods", {}))]
+	var text := "%s · %s\n%s\n%s" % [talent.get("name", id), tier.get("name", ""), talent.get("description", ""), effects_text(talent.get("mods", {}))]
+	var brought := start_text(content, talent.get("start", []))
+	return text + ("\n开局带：" + brought if not brought.is_empty() else "")
+
+## What a talent's `start` hands the player at the beginning, in words: "回春草 ×4、黄阶玉简一枚（功法随机）".
+static func start_text(content, effects: Array) -> String:
+	var parts: Array[String] = []
+	var tiers: Array = content.technique_data.tiers
+	for effect: Dictionary in effects:
+		var key: String = effect.keys()[0]
+		var value: Variant = effect[key]
+		match key:
+			"item":
+				parts.append("%s ×%d" % [content.item(str(value[0])).get("name", value[0]), int(value[1])])
+			"gear":
+				var piece: Dictionary = content.equipment(str(value))
+				parts.append("%s（%s）" % [piece.get("name", value), piece.get("tier_name", "")])
+			"manual":
+				parts.append("%s玉简一枚（功法随机）" % tiers[int(value) - 1].name)
+			"method":
+				parts.append("%s心法玉简一枚（随第一行灵根）" % tiers[int(value) - 1].name)
+			"slip":
+				parts.append("《%s》玉简" % content.technique(str(value)).get("name", value))
+			"stones":
+				parts.append("灵石 %d" % int(value))
+	return "、".join(parts)
 
 ## A talent as a small tag in its tier's colour.
 static func chip(ui, content, id: String) -> PanelContainer:

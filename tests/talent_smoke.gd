@@ -52,7 +52,7 @@ func _content() -> void:
 		var talent: Dictionary = content.talent_data.talents[id]
 		if not talent.get("gained", false):
 			counts[talent.tier] = int(counts.get(talent.tier, 0)) + 1
-	check(counts == {"white": 90, "green": 75, "blue": 60, "purple": 40, "orange": 20, "red": 10}, "talents in six tiers, white to red: %s" % counts)
+	check(counts == {"white": 90, "green": 76, "blue": 60, "purple": 40, "orange": 20, "red": 10}, "talents in six tiers, white to red: %s" % counts)
 	var flaws: Array = content.talent_data.flaws.keys().filter(func(id: String) -> bool: return not content.talent_data.flaws[id].get("gained", false))
 	check(flaws.size() == 40, "forty flaws to be born with")
 	var tiers: Array = content.talent_data.tiers.map(func(tier: Dictionary) -> String: return tier.name)
@@ -612,4 +612,16 @@ func _opening() -> void:
 	game.player.location = "wild"
 	game.Breakthrough._ascend(game, 1, 30, [], {})
 	check("vein_metal" in game.player.talents, "a realm entered at the 灵眼 leaves the strongest root's 道脉")
+	# An 出身 brings things from home, written in its tooltip; the systems' own tests have none.
+	var merchant := Session.new()
+	merchant.new_game("商贾", 7, ["metal", "wood", "fire"], "free", {"talents": ["shanggu"], "flaws": []})
+	check(int(merchant.player.stones) == int(content.rules.starting_stones) + 90, "商贾世家 sets out with ninety stones more")
+	var family := Session.new()
+	family.new_game("修真", 7, ["water", "wood", "fire"], "free", {"talents": ["xiuzhen"], "flaws": []})
+	var slips: Array = family.player.items.keys().filter(func(id: String) -> bool: return id.begins_with("j:"))
+	check(slips.size() == 1 and content.technique(str(slips[0]).trim_prefix("j:")).slot == "method" and content.technique(str(slips[0]).trim_prefix("j:")).element == "water", "修真家族 brings a family 心法 of the first root's element")
+	var smith := Session.new()
+	smith.new_game("铁匠", 7, ["metal", "wood", "fire"], "free", {"talents": ["tiejiang"], "flaws": []})
+	check(smith.item_count("e:sword:1:metal::0") == 1 and smith.item_count("ore_qinggang") == 1 and smith.journal_lines().any(func(line: String) -> bool: return line.contains("家里给你带上了")), "铁匠之后: a sword and a bar of steel, told in the chronicle")
+	check(load("res://scripts/ui/talent_cards.gd").tooltip(content, "tiejiang").contains("开局带：") and load("res://scripts/ui/talent_cards.gd").tooltip(content, "xiuzhen").contains("心法玉简"), "the tooltip says what it brings")
 	check(JSON.stringify(content.mijing_data.realms.wanjian.outcomes).contains('"jiantai"') and content.storylines.changqing_garden.steps[0].effects.has({"talent": "baidu"}), "先天剑胎 and 百毒不侵 are given by their stories")

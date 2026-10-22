@@ -283,6 +283,16 @@ static func _summary(ui, body: VBoxContainer) -> void:
 	body.add_child(ui.label("%s · 灵根 %s" % [Opening.difficulty(content, str(choice.get("difficulty", ""))).get("name", ""), content.root_title(roots) if roots.size() == int(choice.root_count) else "未选全"], 18, ui.GOLD))
 	var born: Dictionary = ui.welcome_born
 	body.add_child(TalentCards.row(ui, content, born))
+	# What the 出身 and the rest bring from home, spelled out before the journey begins.
+	var brought: Array[String] = []
+	for id: Variant in born.talents:
+		var text: String = TalentCards.start_text(content, Talents.definition(content, str(id)).get("start", []))
+		if not text.is_empty():
+			brought.append(text)
+	var stones := int(content.rules.starting_stones)
+	for id: Variant in born.talents + born.flaws:
+		stones += int(Talents.definition(content, str(id)).get("mods", {}).get("stones", 0))
+	body.add_child(ui.paragraph("开局所带：灵石 %d%s" % [maxi(0, stones), "、" + "、".join(brought) if not brought.is_empty() else ""], ui.INK))
 	if roots.size() == int(choice.root_count):
 		var score := Talents.score(content, Talents.root_score(content, roots), born.talents + born.flaws)
 		body.add_child(TalentCards.aptitude_label(ui, Talents.aptitude(content, score)))

@@ -149,6 +149,23 @@ func new_game(character_name: String = "无名", seed_value: int = -1, roots: Ar
 	combat_events.clear()
 	chronicle.clear()
 	log_event("start", {}, true)
+	# What the 出身 brings from home (talents' `start`), told once.
+	var brought := {}
+	for talent_id: Variant in player.talents:
+		var start_effects: Array = Talents.definition(content, str(talent_id)).get("start", [])
+		if start_effects.is_empty():
+			continue
+		var before: Dictionary = player.items.duplicate()
+		var stones_before := int(player.stones)
+		Events.apply(self, start_effects)
+		for item_id: String in player.items:
+			var gained := int(player.items[item_id]) - int(before.get(item_id, 0))
+			if gained > 0:
+				brought[item_id] = gained
+		if int(player.stones) > stones_before:
+			log_event("start_stones", {"stones": int(player.stones) - stones_before})
+	if not brought.is_empty():
+		log_event("start_items", {"loot": loot_code(brought)})
 	# A wanderer enters the world at the 青石镇 inn; the systems' tests begin as a disciple of 青云.
 	if start in ["rushi", "free"]:
 		player.location = str(content.rules.opening.location)

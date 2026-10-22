@@ -227,6 +227,16 @@ static func apply(s, effects: Array) -> void:
 			# A named slip (a handwritten technique: 《藏息录》).
 			"slip":
 				s.add_item("j:" + str(value), 1)
+			# A 心法's slip of this tier in the first root's element (an 出身's family art).
+			"method":
+				var roots: Array = s.player.get("roots", [])
+				var filters := {"slot": "method"}
+				if not roots.is_empty():
+					filters["element"] = str(roots[0])
+				s.add_item("j:" + s.Arsenal.generate_technique(s.content, s.world_rng, int(value), filters), 1)
+			# A piece of gear as named (an 出身's sword from home).
+			"gear":
+				s.add_item(str(value), 1)
 			"reforge":
 				s.Gear.reforge(s, str(value[0]), str(value[1]))
 			"give_gear":
