@@ -32,6 +32,7 @@ const PeopleView = preload("res://scripts/ui/people_view.gd")
 const MapView = preload("res://scripts/ui/map_view.gd")
 const BagView = preload("res://scripts/ui/bag_view.gd")
 const ArtsView = preload("res://scripts/ui/arts_view.gd")
+const DaoView = preload("res://scripts/ui/dao_view.gd")
 const BattleView = preload("res://scripts/ui/battle_view.gd")
 const AuctionView = preload("res://scripts/ui/auction_view.gd")
 const ForgeView = preload("res://scripts/ui/forge_view.gd")
@@ -45,7 +46,10 @@ const GOLD := Color("#d5b777")
 const INK := Color("#e3e8dc")
 const MUTED := Color("#97aaa4")
 # The scrolls laid over the world and their tabs: the view each tab shows, and its name.
-const PANEL_TABS := [["status", "属性"], ["sect", "宗门"], ["arts", "神通"], ["methods", "功法"], ["bag", "行囊"], ["people", "相识"], ["chronicle", "编年史"], ["system", "系统"]]
+const PANEL_TABS := [["status", "属性"], ["sect", "宗门"], ["arts", "神通"], ["methods", "功法"], ["dao", "悟道"], ["bag", "行囊"], ["people", "相识"], ["chronicle", "编年史"], ["system", "系统"]]
+var dao_path := "earth"
+var arts_slot := 0
+var bag_selected := ""
 const SCROLL_TABS := [["goals", "当前目标"], ["stories", "剧情"], ["quests", "委托"], ["letters", "传音"], ["upcoming", "约定"], ["messages", "消息"]]
 const RETREAT_TABS := [["retreat", "修炼"], ["insight", "领悟"], ["breakthrough", "突破"]]
 const TAB_GROUPS := {"panel": PANEL_TABS, "scroll": SCROLL_TABS, "retreat": RETREAT_TABS, "trade": [["trade", "交易"]], "alchemy": [["alchemy", "炼丹"]], "field": [["field", "灵田"]], "forge": [["forge", "炼器"]], "tianji": [["tianji", "天骄榜"]], "guishi": [["guishi", "鬼市"]]}
@@ -222,7 +226,7 @@ func _ready() -> void:
 	session.new_game()
 	session.changed.connect(_on_changed)
 	render()
-	preview_mode = "--art-preview" in OS.get_cmdline_user_args() or "--sect-preview" in OS.get_cmdline_user_args() or "--battle-v6-preview" in OS.get_cmdline_user_args()
+	preview_mode = "--art-preview" in OS.get_cmdline_user_args() or "--sect-preview" in OS.get_cmdline_user_args() or "--battle-v6-preview" in OS.get_cmdline_user_args() or "--dust-flow-preview" in OS.get_cmdline_user_args()
 	if preview_mode:
 		manual_store = SaveStore.new("res://.tmp/art_preview/manual")
 		auto_store = SaveStore.new("res://.tmp/art_preview/auto")
@@ -611,6 +615,8 @@ func render() -> void:
 				ArtsView.render_arts(self)
 			"methods":
 				ArtsView.render_methods(self)
+			"dao":
+				DaoView.render(self)
 			"retreat":
 				RetreatView.render_retreat(self)
 			"insight":
@@ -844,6 +850,10 @@ func brew_now() -> void:
 		return
 	alchemy_plan = session.alchemy_plan(str(plan.recipe))
 	alchemy_plan.fire = str(plan.fire)
+	if plan.has("main"):
+		alchemy_plan.main = plan.main.duplicate()
+		var guides: Array[String] = session.Alchemy.guide_options(session, str(plan.recipe), alchemy_plan.main)
+		alchemy_plan.guide = guides[0] if not guides.is_empty() and session.Alchemy.nature(session, guides[0]) == session.Alchemy.guide_nature(session, str(plan.recipe), alchemy_plan.main) else ""
 	if not str(plan.get("aid", "")).is_empty() and session.item_count(str(plan.aid)) > 0:
 		alchemy_plan.aid = str(plan.aid)
 	render()
@@ -1271,6 +1281,8 @@ func battle_action(action: String) -> void:
 		message = session.Combat.release(session)
 	elif action == "array":
 		message = session.Combat.lay_array(session)
+	elif action == "drive_array":
+		message = session.Combat.drive_array(session)
 	elif action.begins_with("secret:"):
 		message = session.Combat.use_secret(session, action.trim_prefix("secret:"))
 	elif action.begins_with("target:"):
@@ -1627,6 +1639,22 @@ func reset_preview(sect_id: String = "qingyun", opponent_id: String = "qingyun")
 	session.Loadout.take_lineage(session, sect_id)
 	session.player.hp = maxi(1, int(session.player.max_hp) - 20)
 	session.start_battle("disciple", opponent_id)
+	if "--dust-flow-preview" in OS.get_cmdline_user_args():
+		session.player.roots = ["earth", "fire"]
+		var arts: Array = session.content.combat_flow_data.preview_loadout.duplicate()
+		for art: String in arts:
+			if not art in session.player.learned:
+				session.player.learned.append(art)
+		session.player.arts = arts
+		var methods: Array = session.content.combat_flow_data.preview_methods.duplicate()
+		for id: String in methods:
+			if not id in session.player.learned:
+				session.player.learned.append(id)
+		session.player.methods = methods
+		session.battle.orbs = ["earth", "earth", "earth", "earth", "earth", "earth", "earth", "fire", "fire"]
+		session.battle.hp = int(session.content.enemies.disciple.hp)
+		session.combat_events.clear()
+		render()
 	notice("斗法试演 · {skills} 选招，{end_turn}确认或结束回合，Esc 取消；使用独立试演存档。".format(Settings.key_hints(self)))
 
 ## Fit a short telling after labels have wrapped, including the scroll frame's real padding.

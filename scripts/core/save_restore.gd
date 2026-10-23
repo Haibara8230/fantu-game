@@ -12,6 +12,7 @@ const Wuxiang = preload("res://scripts/core/wuxiang.gd")
 # More 祭炼 steps than any piece could use; a save above it is malformed.
 const MAX_REFINE := 20
 const PLAYER_COUNTS := ["realm", "xp", "hp", "qi", "stones", "cultivation_carry", "fatigue", "fatigue_day", "insight"]
+const FLOW_TURNS := ["dao_hit_turn", "array_driven", "dao_chain_metal", "dao_chain_wood", "dao_chain_water", "dao_chain_fire", "dao_chain_earth"]
 const LIMIT := 1000000000.0
 
 static func restore(s, data: Variant) -> bool:
@@ -64,7 +65,14 @@ static func restore(s, data: Variant) -> bool:
 	if not saved_player.get("name") is String or not saved_player.get("location") is String or not content.locations.has(saved_player.location):
 		return false
 	var prepared_pill: Variant = saved_player.get("prepared_pill", "")
+	if not s.Prebattle.valid_ids(content, saved_player.get("prepared_pills", [])) or not s.Prebattle.valid_ids(content, saved_battle.get("prepared_pills", [])):
+		return false
 	if not prepared_pill is String or (not prepared_pill.is_empty() and not content.item(prepared_pill).has("battle_preparation")):
+		return false
+	var pending_pills: Array = saved_player.get("prepared_pills", []).duplicate()
+	if not prepared_pill.is_empty() and not prepared_pill in pending_pills:
+		pending_pills.append(prepared_pill)
+	if not s.Prebattle.valid_ids(content, pending_pills):
 		return false
 	var memory: Variant = saved_battle.get("payment_memory", {})
 	if not memory is Dictionary or memory.size() > 256:
@@ -75,7 +83,29 @@ static func restore(s, data: Variant) -> bool:
 		if memory[art_id].any(func(e: Variant) -> bool: return not e is String or not content.technique_data.elements.has(e)):
 			return false
 	var battle_pill: Variant = saved_battle.get("prepared_pill", "")
+	# Optional, battle-local build resources. Validate before assigning any live state.
+	for key: String in ["resources", "foe_resources"]:
+		var counters: Variant = saved_battle.get(key, {})
+		if not counters is Dictionary or counters.keys().any(func(name: Variant) -> bool: return not name in ["dust", "sand"] or not _whole_nonnegative(counters[name]) or float(counters[name]) > s.Combat.DustFlow.CAP):
+			return false
+	for key: String in ["flow_used", "foe_flow_used"]:
+		var used: Variant = saved_battle.get(key, {})
+		if not used is Dictionary or used.size() > 256:
+			return false
+		for id: Variant in used:
+			if not id is String or content.technique(id).is_empty() or not _whole_nonnegative(used[id]) or float(used[id]) < 1 or float(used[id]) > float(saved_battle.get("turn", 0)):
+				return false
 	if not battle_pill is String or (not battle_pill.is_empty() and not content.item(battle_pill).has("battle_preparation")):
+		return false
+	var active_pills: Array = saved_battle.get("prepared_pills", []).duplicate()
+	if not battle_pill.is_empty() and not battle_pill in active_pills:
+		active_pills.append(battle_pill)
+	if not s.Prebattle.valid_ids(content, active_pills):
+		return false
+	for key: String in FLOW_TURNS:
+		if saved_battle.has(key) and (not _whole_nonnegative(saved_battle[key]) or float(saved_battle[key]) > float(saved_battle.get("turn", 0))):
+			return false
+	if saved_battle.has("foe_next_draw") and (not _whole_nonnegative(saved_battle.foe_next_draw) or float(saved_battle.foe_next_draw) > 1000000):
 		return false
 	for key: String in PLAYER_COUNTS:
 		if not _whole_nonnegative(saved_player.get(key)):
@@ -180,6 +210,8 @@ static func restore(s, data: Variant) -> bool:
 		saved_stage = int(saved_player.stage)
 		if saved_stage + 1 < stages.size() and int(saved_player.xp) > int(stages[saved_stage + 1].xp):
 			return false
+	if not s.Dao.valid_state(content, saved_player, day):
+		return false
 	var loadout := _valid_loadout(content, saved_player)
 	if loadout.is_empty():
 		return false
@@ -224,6 +256,7 @@ static func restore(s, data: Variant) -> bool:
 	# Health and qi within the caps the save was made with (before any talents awakened).
 	var holder: Dictionary = loadout.duplicate()
 	holder.merge({"realm": int(saved_player.realm), "stage": saved_stage, "talents": [] if awakened else born.talents, "flaws": [] if awakened else born.flaws, "foundation_grade": int(progress.foundation_grade), "core_grade": int(progress.core_grade)}, true)
+	holder["dao"] = saved_player.get("dao", {})
 	var saved_caps: Dictionary = s.stat_caps(holder)
 	if int(saved_player.hp) <= 0 or int(saved_player.hp) > int(saved_caps.max_hp) or int(saved_player.qi) > int(saved_caps.max_qi):
 		return false
@@ -329,10 +362,10 @@ static func restore(s, data: Variant) -> bool:
 		# Qi orbs (optional: duels saved before them draw a fresh hand when loaded).
 		for orbs_key: String in ["orbs", "foe_orbs"]:
 			var orbs: Variant = saved_battle.get(orbs_key, [])
-			if not orbs is Array or orbs.size() > 60 or orbs.any(func(orb: Variant) -> bool: return not content.technique_data.elements.has(orb)):
+			if not orbs is Array or orbs.size() > 4096 or orbs.any(func(orb: Variant) -> bool: return not content.technique_data.elements.has(orb)):
 				return false
 		# The element of the art cast last, for 连击 ("chain" in duels saved before it, read the same way).
-		for last_key: String in ["last", "chain"]:
+		for last_key: String in ["last", "chain", "foe_last"]:
 			var last: Variant = saved_battle.get(last_key, "")
 			if not last is String or (not last.is_empty() and content.element_info(last).is_empty()):
 				return false
@@ -347,6 +380,8 @@ static func restore(s, data: Variant) -> bool:
 		if foe.has("arts") and (not foe.arts is Array or foe.arts.any(func(art: Variant) -> bool: return not art is String or content.technique(art).is_empty()) or not (foe.get("power") is float or foe.get("power") is int) or not _whole_signed(foe.get("bonus")) or content.element_info(str(foe.get("element", ""))).is_empty()):
 			return false
 		if saved_battle.has("npc") and (not saved_battle.npc is String or not s.is_person(saved_battle.npc)):
+			return false
+		if foe.has("methods") and (not foe.methods is Array or foe.methods.any(func(id: Variant) -> bool: return not id is String or content.technique(id).get("slot", "") != "method")):
 			return false
 		var opponent: Variant = saved_battle.get("opponent_sect")
 		if not opponent is String or not content.sects.has(opponent):
@@ -480,8 +515,20 @@ static func restore(s, data: Variant) -> bool:
 	# The fatigue limit depends on the realm, so it is applied once the player is in place.
 	player.fatigue = mini(int(player.fatigue), Cultivation.fatigue_cap(s))
 	var battle: Dictionary = saved_battle.duplicate(true)
+	if player.has("dao"):
+		for key: String in ["xp", "pending", "debates"]:
+			for id: String in player.dao[key]:
+				player.dao[key][id] = int(player.dao[key][id])
+		player.dao.debate_xp = int(player.dao.debate_xp)
 	var fresh_hand := false
 	if not battle.is_empty():
+		for key: String in FLOW_TURNS + ["foe_next_draw"]:
+			if battle.has(key):
+				battle[key] = int(battle[key])
+		for key: String in ["resources", "foe_resources", "flow_used", "foe_flow_used"]:
+			if battle.has(key):
+				for entry: String in battle[key]:
+					battle[key][entry] = int(battle[key][entry])
 		if not battle.has("status"):
 			battle.status = {}
 		battle.hp = int(battle.hp)
@@ -1253,8 +1300,14 @@ static func _valid_loadout(content, saved_player: Dictionary) -> Dictionary:
 			return {}
 		if not held is Dictionary or not held.get("type") is String or not _whole_nonnegative(held.get("refine")) or int(held.refine) > MAX_REFINE:
 			return {}
+		if held.has("sigil") and (not held.sigil is String or not content.formulation_data.sigils.has(held.sigil)):
+			return {}
 		if not content.equipment(held.type).is_empty():
+			if held.has("sigil") and content.equipment(held.type).slot != "weapon":
+				return {}
 			gear[item_id] = {"type": held.type, "refine": int(held.refine)}
+			if held.has("sigil"):
+				gear[item_id].sigil = str(held.sigil)
 	var equipment := {}
 	for slot: String in content.equipment_data.slots:
 		var worn: Variant = saved_player.equipment.get(slot, "")

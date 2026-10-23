@@ -179,8 +179,8 @@ static func is_errand(ui, person_id: String, option_id: String) -> bool:
 			return keys.any(func(key: String) -> bool: return key in ["story_at", "start_story", "story_advance"])
 	return false
 
-## Facing a person, after Mi Chang Sheng: their portrait large in the middle with their name, what can be
-## done with them in two columns either side, what was just said below; 查看 opens who they are, their
+## Facing a person: portrait and name at left, introduction and favor in the middle, interactions
+## in a bounded scroll at right, with 查看 and 离开 always outside it; 查看 opens who they are, their
 ## arts and what has passed between you.
 static func render_person(ui, person_id: String) -> void:
 	var session = ui.session
@@ -190,11 +190,6 @@ static func render_person(ui, person_id: String) -> void:
 	var favor: int = session.favor(person_id)
 	var where: String = session.npc_location(person_id)
 	var here: bool = where == session.player.location
-	# Some people are met in a scene of their own (the storyteller on his stage, the rogue on the road).
-	if here:
-		var scene: TextureRect = ui.picture(ArtLibrary.person_art(person_id), 200)
-		if scene != null:
-			center.add_child(scene)
 	var stage := HBoxContainer.new()
 	stage.alignment = BoxContainer.ALIGNMENT_CENTER
 	stage.add_theme_constant_override("separation", 14)
@@ -209,7 +204,7 @@ static func render_person(ui, person_id: String) -> void:
 	stage.add_child(middle)
 	var frame := PanelContainer.new()
 	frame.add_theme_stylebox_override("panel", ui.style(Color("#152a30"), Color("#e39a82") if person.attitude == "hostile" else ui.GOLD, 4))
-	frame.add_child(_portrait(ui, person_id, person, Vector2(176, 220)))
+	frame.add_child(_portrait(ui, person_id, person, Vector2(208, 260)))
 	middle.add_child(frame)
 	var name_label: Label = ui.label(person.name, 22, ui.GOLD)
 	name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
@@ -235,6 +230,22 @@ static func render_person(ui, person_id: String) -> void:
 	right.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	right.alignment = BoxContainer.ALIGNMENT_CENTER
 	stage.add_child(right)
+	stage.move_child(middle, 0)
+	left.add_child(ui.label(str(person.title), 20, ui.GOLD))
+	left.add_child(ui.paragraph(str(person.description), ui.INK))
+	left.add_child(ui.paragraph("%s · %s" % [person.realm_text, session.content.ATTITUDES[person.attitude]], ui.MUTED))
+	if bool(progress.get("met", false)):
+		ui.meter(left, "交情", favor, session.content.FAVOR_MAX, ui.GOLD)
+	right.custom_minimum_size.x = 210
+	right.add_child(ui.label("交 往", 18, ui.GOLD))
+	var action_scroll := ScrollContainer.new()
+	action_scroll.custom_minimum_size = Vector2(210, 265)
+	action_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	right.add_child(action_scroll)
+	var commands := VBoxContainer.new()
+	commands.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	commands.add_theme_constant_override("separation", 6)
+	action_scroll.add_child(commands)
 	var options: Array[Control] = []
 	if here:
 		for option: Dictionary in session.npc_options(person_id):
@@ -263,9 +274,8 @@ static func render_person(ui, person_id: String) -> void:
 			if not option.available and not reason.is_empty():
 				option_box.add_child(ui.paragraph(reason, ui.MUTED))
 			options.append(option_box)
-	var half := (options.size() + 1) / 2
 	for index: int in options.size():
-		(left if index < half else right).add_child(options[index])
+		commands.add_child(options[index])
 	right.add_child(ui.button("收起" if ui.profile_open else "查看", ui.toggle_profile, "此人的来历、功法与往来"))
 	if not here and not where.is_empty():
 		right.add_child(ui.button("在舆图上查看", func() -> void:

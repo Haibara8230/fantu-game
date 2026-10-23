@@ -97,6 +97,7 @@ static func practise(s, technique_id: String, tenths: int) -> Array[String]:
 	while int(entry.layer) < top and int(entry.practice) >= need_days(s, t, int(entry.layer)) * TENTHS:
 		entry.practice = int(entry.practice) - need_days(s, t, int(entry.layer)) * TENTHS
 		entry.layer = int(entry.layer) + 1
+		s.Dao.after_learning(s, t, true)
 		lines.append(s.log_event("layer_up", {"technique": technique_id, "layer": int(entry.layer)}, int(entry.layer) >= int(t.layers) and int(t.tier) >= 3))
 	if int(entry.layer) >= int(t.layers):
 		entry.practice = 0

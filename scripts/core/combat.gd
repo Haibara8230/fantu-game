@@ -1,4 +1,6 @@
 extends RefCounted
+const QiRelations = preload("res://scripts/core/qi_relations.gd")
+const DustFlow = preload("res://scripts/core/dust_flow.gd")
 ## Turn-based duel rules. Operates on a Session; only the combat random stream is used here.
 
 static func start_battle(s, enemy_id: String, opponent_sect: String = "") -> String:
@@ -105,12 +107,14 @@ static func _battle_place(s) -> String:
 # it in). An art is cast by spending the orbs its cost names — an element, 同 (that many of one
 # element, whichever) or 任意 (any) — several arts a turn while orbs last, and 结束回合 hands the turn
 # over. At most four orbs (hand_least, and what holds more) stay at the end of a turn: the player
-# chooses which to let go. There is no conversion of its own and no 克制: qi is turned into another
+# chooses which to let go. There is no conversion of its own or global target-element multiplier: qi is turned into another
 # element only by arts that do it (the 印, `absorb`), and each art has its own 连击 (`combo`): when the
 # art cast before it was of the element it names, it does more. 聚气 (`gather`) brings more orbs next
 # turn. 遁速 decides who moves first and how readily one gets away.
 # The opponent shows what it means to do next (intent). Generated cultivators draw orbs of their own
 # and cast their whole loadout from them; beasts and the handwritten foes strike once a turn.
+# 生/同/克 read the paid orbs and only trigger effects explicitly defined on that art (qi_relations.gd).
+# 尘/沙 and their once-per-turn conversion live separately in dust_flow.gd.
 # battle: orbs (the player's), last (the element of the art cast last), next_draw, shield,
 # player_status, pills; foe_orbs, foe_shield, intent [{"art"?, "kind", "name", "min", "max" | "amount"}].
 
@@ -147,6 +151,8 @@ static func _inflict(status: Dictionary, key: String, value: Array) -> void:
 
 ## An opponent's lingering effect on the player: 《无相化毒经》 (poison_ward) halves 流血 and 禁疗.
 static func _inflict_player(s, key: String, value: Array) -> void:
+	if key == "burn" and s.Prebattle.burn_immune(s):
+		return
 	var ward := float(s.bonuses().get("poison_ward", 0.0))
 	if ward > 0.0 and key in ["bleed", "wound"]:
 		var kept := lingering_value(key, value)
@@ -157,6 +163,10 @@ static func _inflict_player(s, key: String, value: Array) -> void:
 static func _healed(status: Dictionary, amount: int) -> int:
 	return int(round(float(amount) * (1.0 - float(status.wound[0])))) if status.has("wound") else amount
 
+static func _player_healing(s, amount: int) -> int:
+	var scale := 1.3 if s.Dao.value(s, "element_master", "water") > 0 else 1.0
+	return _healed(s.battle.get("player_status", {}), int(round(amount * scale)))
+
 static func rules(s) -> Dictionary:
 	return s.content.rules.duel
 
@@ -166,11 +176,20 @@ static func elements(s) -> Array:
 ## How many orbs the player keeps at the end of a turn: four, and what talents, arts and equipment
 ## hold more (orb_cap).
 static func hand_cap(s) -> int:
-	return int(rules(s).hand_least) + int(s.orb_bonus("orb_cap"))
+	return int(rules(s).hand_least) + int(s.orb_bonus("orb_cap")) + int(s.Dao.value(s, "orb_cap"))
 
 ## Orbs the player draws each turn: the realm's, and what talents, arts and equipment add (orb_draw).
 static func draw_count(s) -> int:
-	return _by_realm(s, "draw", int(s.player.realm)) + int(s.orb_bonus("orb_draw"))
+	return _by_realm(s, "draw", int(s.player.realm)) + int(s.orb_bonus("orb_draw")) + int(s.Dao.value(s, "orb_draw"))
+
+static func _dao_draw(s) -> Array:
+	var result: Array = []
+	for element: String in elements(s):
+		for count: int in int(s.Dao.value(s, "element_draw", element)):
+			result.append(element)
+		for count: int in s.Prebattle.value(s, "turn_orbs", element):
+			result.append(element)
+	return result
 
 ## With five orbs a turn in every realm, an art's strength grows with the realm instead (realm_power):
 ## the player's arts and a generated opponent's alike.
@@ -229,12 +248,9 @@ static func open_hand(s) -> void:
 	s.battle.pills = 0
 	s.battle.cooldowns = {}
 	# A swallowed preparation belongs to the next battle only, regardless of its entry/context.
-	var prepared := str(s.player.get("prepared_pill", ""))
-	s.player.erase("prepared_pill")
-	var preparation: Dictionary = s.content.item(prepared).get("battle_preparation", {})
-	if not preparation.is_empty():
-		s.battle.prepared_pill = prepared
-	var extra := int(rules(s).first_extra) + int(s.orb_bonus("orb_first")) + int(preparation.get("opening_orbs", 0))
+	var preparation: Dictionary = s.Prebattle.consume(s)
+	s.battle.shield = int(preparation.get("opening_shield", 0))
+	var extra := int(rules(s).first_extra) + int(s.orb_bonus("orb_first")) + int(preparation.get("opening_orbs", 0)) + int(s.Dao.value(s, "opening_draw"))
 	var tide := tide_orbs(s)
 	if foe_leads(s):
 		s.battle.foe_led = true
@@ -250,6 +266,7 @@ static func open_hand(s) -> void:
 		s.battle.turn = 1
 		return
 	var drawn := _draw(s, draw_count(s) + extra, player_weights(s))
+	drawn.append_array(_dao_draw(s))
 	for count: int in tide:
 		drawn.append("water")
 	s.battle.orbs = drawn
@@ -376,6 +393,53 @@ static func payment_plan(s, skill_id: String, cycle: bool = false, current: Arra
 	var at := plans.find(sorted)
 	return plans[(at + 1) % plans.size()].duplicate() if cycle else plans[0].duplicate()
 
+static func skill_block(s, art: Dictionary, enemy: bool = false) -> String:
+	if s.battle.is_empty() or art.is_empty():
+		return "当前无法施展神通。"
+	if bool(art.get("once_per_turn", false)) and int(s.battle.get("foe_flow_used" if enemy else "flow_used", {}).get(art.id, 0)) == int(s.battle.turn):
+		return "【后继无力】本回合已施展过此神通。"
+	return DustFlow.block(s.battle, art, int(s.battle.get("foe", {}).get("realm", 0)) if enemy else int(s.player.realm), enemy)
+
+## Pure preview shared by confirmation and UI; no effects are committed until the legal payment.
+static func payment_preview(s, art: Dictionary, payment: Array) -> Dictionary:
+	var cycle: Dictionary = rules(s).generates
+	return {"relations": QiRelations.classify(payment, cycle), "triggers": QiRelations.triggers(art, payment, cycle), "effects": QiRelations.effect(art, payment, cycle)}
+
+static func _flow_event(s, art: Dictionary, enemy: bool = false) -> void:
+	var realm: int = int(s.battle.get("foe", {}).get("realm", 0)) if enemy else int(s.player.realm)
+	var flow := DustFlow.apply(s.battle, art, realm, enemy)
+	if not flow.is_empty():
+		if not flow.discarded.is_empty():
+			s.combat_events.append({"type": "discard", "actor": "enemy" if enemy else "player", "orbs": flow.discarded.duplicate()})
+		s.combat_events.append({"type": "resource", "actor": "enemy" if enemy else "player", "name": str(art.name), "operation": flow.operation, "moved": flow.moved, "own": flow.own, "other": flow.other})
+		var methods: Array = s.battle.get("foe", {}).get("methods", []) if enemy else s.player.get("methods", [])
+		for id: String in methods:
+			var method: Dictionary = s.content.technique(id)
+			var hook: Dictionary = method.get("dust_hooks", {}).get(str(flow.operation), {})
+			var look := {"style": id, "name": str(method.get("name", id)), "vfx": "earth", "tier": int(method.get("tier", 1)), "element": "earth"}
+			for key: String in hook:
+				var values: Array = hook[key]
+				var amount := int(values[clampi(realm, 0, values.size() - 1)])
+				match key:
+					"shield":
+						var shield_key := "foe_shield" if enemy else "shield"
+						s.battle[shield_key] = int(s.battle.get(shield_key, 0)) + amount
+						s.combat_events.append(_event({"type": "guard", "actor": "enemy" if enemy else "player", "amount": 0, "shield": int(s.battle[shield_key])}, look))
+					"gather":
+						var gather_key := "foe_next_draw" if enemy else "next_draw"
+						s.battle[gather_key] = int(s.battle.get(gather_key, 0)) + amount
+					"damage":
+						if enemy:
+							_hurt_player(s, amount, 1.0 - s.defense(), look)
+						else:
+							var dealt := _strike_foe(s, amount)
+							s.combat_events.append(_event({"type": "attack", "actor": "player", "hits": 1, "amount": dealt, "hp_after": int(s.battle.hp)}, look))
+	if bool(art.get("once_per_turn", false)):
+		var key := "foe_flow_used" if enemy else "flow_used"
+		var used: Dictionary = s.battle.get(key, {})
+		used[art.id] = int(s.battle.turn)
+		s.battle[key] = used
+
 static func use_skill(s, skill_id: String, payment: Variant = null) -> String:
 	s.combat_events.clear()
 	var t: Dictionary = s.held_technique(skill_id)
@@ -383,6 +447,9 @@ static func use_skill(s, skill_id: String, payment: Variant = null) -> String:
 		return "当前无法施展神通。"
 	if skill_id not in s.active_skills():
 		return "此神通未在运转。"
+	var blocked := skill_block(s, t)
+	if not blocked.is_empty():
+		return blocked
 	if not affordable(s.battle.orbs, t.cost):
 		return "灵气不足：%s需要%s。" % [t.name, s.Arsenal.cost_text(s.content, t.cost)]
 	if payment != null and (not payment is Array or not payment_valid(s.battle.orbs, t.cost, payment)):
@@ -395,13 +462,32 @@ static func use_skill(s, skill_id: String, payment: Variant = null) -> String:
 		s.battle.payment_memory = {}
 	s.battle.payment_memory[skill_id] = spent.duplicate()
 	s.combat_events.append({"type": "spend", "actor": "player", "orbs": spent.duplicate()})
+	var preview := payment_preview(s, t, spent)
+	var paid: Dictionary = preview.effects
+	paid.damage = int(paid.get("damage", 0)) + s.Prebattle.value(s, "damage", str(t.element)) + (s.Prebattle.value(s, "first_turn_damage") if int(s.battle.turn) == 1 else 0)
+	var source := str(s.battle.get("last", ""))
+	if str(rules(s).generates.get(source, "")) == str(t.element):
+		paid.damage = int(paid.get("damage", 0)) + int(s.Dao.value(s, "combo_damage", str(t.element)))
 	# 连击: the art before it was of the element its combo names, or a linked one (linked_combo).
 	var link := linked_combo(s, t)
 	var partner := str(s.battle.get("last", ""))
 	var combo := combo_holds(s, t)
+	if combo and t.combo.has("flat_damage") and not t.has("dust_flow"):
+		var values: Array = t.combo.flat_damage
+		paid.damage = int(paid.get("damage", 0)) + int(values[clampi(int(s.player.realm), 0, values.size() - 1)])
 	var bonus := float(link.get("bonus", 0.0)) if not link.is_empty() else (float(t.combo.get("bonus", 0.0)) if combo else 0.0)
 	var boost := (1.0 + bonus) * realm_power(s, int(s.player.realm))
-	var look := {"style": skill_id, "name": t.name, "vfx": t.vfx, "tier": int(t.tier), "element": t.element, "spent": spent, "combo": combo}
+	var look := {"style": skill_id, "name": t.name, "vfx": t.vfx, "tier": int(t.tier), "element": t.element, "spent": spent, "combo": combo, "qi_triggers": preview.triggers}
+	if t.has("dust_flow"):
+		# These source values already grow by realm; applying realm_power again would double-scale.
+		boost = 1.0
+		if t.dust_flow.has("damage"):
+			var damage := DustFlow.amount(t, "damage", int(s.player.realm))
+			if str(s.battle.get("last", "")) == "fire":
+				damage += DustFlow.amount(t, "fire_bonus", int(s.player.realm))
+			t.damage_min = damage
+			t.damage_max = damage
+	_flow_event(s, t)
 	_soul_strike(s)
 	# A sect's own art cast by its disciple carries the lineage's signature layer.
 	var lineage: String = s.content.legacy_sect(skill_id, str(s.player.get("sect", "wanderer")))
@@ -410,12 +496,12 @@ static func use_skill(s, skill_id: String, payment: Variant = null) -> String:
 	var text := ""
 	match str(t.kind):
 		"heal":
-			var recovered := mini(_healed(s.battle.get("player_status", {}), int(round(float(t.heal) * boost))), int(s.player.max_hp) - int(s.player.hp))
+			var recovered := mini(_player_healing(s, int(round(float(t.heal + int(paid.get("heal", 0))) * boost))), int(s.player.max_hp) - int(s.player.hp))
 			s.player.hp += recovered
 			s.combat_events.append(_event({"type": "heal", "amount": recovered, "hp_after": int(s.player.hp)}, look))
 			text = s.log_event("skill_heal", {"skill": skill_id, "amount": recovered})
 		"guard":
-			var shield := int(round(float(t.shield) * boost))
+			var shield := int(round(float(t.shield + int(paid.get("shield", 0))) * boost))
 			s.battle.shield = int(s.battle.get("shield", 0)) + shield
 			s.combat_events.append(_event({"type": "guard", "amount": 0, "shield": int(s.battle.shield)}, look))
 			text = s.log_event("skill_shield", {"skill": skill_id, "amount": shield})
@@ -428,8 +514,11 @@ static func use_skill(s, skill_id: String, payment: Variant = null) -> String:
 		_:
 			# The realm's attack bonus counts half for each orb spent, so many small arts gain no more
 			# from it than one great one.
-			var roll: int = s.combat_rng.randi_range(int(t.damage_min), int(t.damage_max)) + int(round(float(s.attack_bonus()) * spent.size() / 2.0))
+			var roll: int = s.combat_rng.randi_range(int(t.damage_min), int(t.damage_max)) + int(paid.get("damage", 0)) + int(round(float(s.attack_bonus()) * spent.size() / 2.0))
 			var factor: float = s.element_multiplier(t) * boost * ground(s, str(t.element), false) * _school_force(s, str(t.element))
+			factor *= _dao_attack_scale(s, t, spent.size())
+			if s.Dao.is_sword(t):
+				roll += int(s.Dao.value(s, "sword_damage"))
 			if s.battle.get("player_status", {}).has("fervor"):
 				factor *= 1.0 + float(s.battle.player_status.fervor[0])
 			if s.battle.get("player_status", {}).has("weaken"):
@@ -445,7 +534,7 @@ static func use_skill(s, skill_id: String, payment: Variant = null) -> String:
 			s.combat_events.append(_event({"type": "attack", "actor": "player", "hits": int(t.hits), "amount": dealt, "hp_after": int(s.battle.hp)}, look))
 			text = s.log_event("skill_attack", {"skill": skill_id, "amount": dealt})
 			if t.has("lifesteal"):
-				var healed := mini(int(round(dealt * float(t.lifesteal))), int(s.player.max_hp) - int(s.player.hp))
+				var healed := mini(_player_healing(s, int(round(dealt * float(t.lifesteal)))), int(s.player.max_hp) - int(s.player.hp))
 				if healed > 0:
 					s.player.hp += healed
 					s.combat_events.append(_event({"type": "heal", "amount": healed, "hp_after": int(s.player.hp)}, look))
@@ -454,6 +543,34 @@ static func use_skill(s, skill_id: String, payment: Variant = null) -> String:
 					_inflict(s.battle.status, status, t[status])
 	if combo:
 		s.combat_events.append({"type": "combo", "name": t.name, "after": partner if not link.is_empty() else str(t.combo.after), "element": str(t.element)})
+	if not preview.triggers.is_empty():
+		s.combat_events.append({"type": "qi_trigger", "actor": "player", "name": t.name, "triggers": preview.triggers.duplicate()})
+		text += " 【%s】" % "／".join(preview.triggers.map(func(key: String) -> String: return QiRelations.LABELS[key]))
+	for path: String in s.Dao.paths_for(t):
+		s.Dao.gain(s, path, spent.size() * 12, true)
+	if combo and s.Dao.value(s, "combo_gather", str(t.element)) > 0:
+		var key := "dao_chain_" + str(t.element)
+		if int(s.battle.get(key, 0)) != int(s.battle.turn):
+			s.battle[key] = int(s.battle.turn)
+			s.battle.next_draw = int(s.battle.get("next_draw", 0)) + int(s.Dao.value(s, "combo_gather", str(t.element)))
+	if s.Dao.is_sword(t) and s.Dao.value(s, "sword_shield") > 0:
+		paid.shield = int(paid.get("shield", 0)) + int(s.Dao.value(s, "sword_shield")) * spent.size()
+	if t.kind == "attack" and s.Dao.value(s, "attack_heal") > 0:
+		paid.heal = int(paid.get("heal", 0)) + int(s.Dao.value(s, "attack_heal"))
+	if str(t.kind) != "heal" and int(paid.get("heal", 0)) > 0:
+		var restored := mini(_player_healing(s, int(paid.heal)), int(s.player.max_hp) - int(s.player.hp))
+		s.player.hp += restored
+		s.combat_events.append(_event({"type": "heal", "amount": restored, "hp_after": int(s.player.hp)}, look))
+	if str(t.kind) != "guard" and int(paid.get("shield", 0)) > 0:
+		s.battle.shield = int(s.battle.get("shield", 0)) + int(paid.shield)
+		s.combat_events.append(_event({"type": "guard", "amount": 0, "shield": int(s.battle.shield)}, look))
+	if int(paid.get("gather", 0)) > 0:
+		s.battle.next_draw = int(s.battle.get("next_draw", 0)) + int(paid.gather)
+	if paid.has("absorb"):
+		var extra: Array = []
+		extra.resize(int(paid.absorb[1]))
+		extra.fill(str(paid.absorb[0]))
+		_gain(s, extra)
 	# Each cast is practice toward the art's next layer (layers.gd).
 	var reached: Array[String] = s.Layers.after_cast(s, skill_id)
 	if not reached.is_empty():
@@ -479,6 +596,26 @@ static func use_skill(s, skill_id: String, payment: Variant = null) -> String:
 		return _win(s)
 	s.changed.emit()
 	return text
+
+static func _dao_attack_scale(s, art: Dictionary, count: int) -> float:
+	var scale := 1.0
+	if s.Dao.is_sword(art):
+		scale *= 1.0 + s.Dao.value(s, "sword_scale")
+		if int(s.battle.get("foe_shield", 0)) > 0 and s.Dao.value(s, "sword_shatter") > 0:
+			scale *= 2.0
+	if s.Dao.value(s, "element_master", str(art.element)) > 0:
+		match str(art.element):
+			"metal":
+				var maximum: int = int(s.battle.get("foe", {}).get("hp", s.content.enemies[s.battle.enemy_id].hp))
+				scale *= minf(2.0, 1.0 + (maximum - int(s.battle.hp)) / float(maxi(1, maximum)))
+			"wood":
+				var negatives: Array = s.battle.get("status", {}).keys().filter(func(key: String) -> bool: return key in ["burn", "weaken", "sunder", "slow", "bleed", "entangle", "wound"])
+				scale *= 1.0 + negatives.size() * 0.1
+			"fire":
+				scale *= 1.0 + int(s.battle.turn) * 0.2
+			"earth":
+				scale *= 1.0 + count * 0.06
+	return scale
 
 ## An opponent's art as they hold it: at the cap of their realm (layers.gd); the 心魔 holds the player's
 ## own layers.
@@ -551,9 +688,23 @@ static func lay_array(s) -> String:
 	if not reason.is_empty():
 		return reason
 	s.battle.array = true
+	s.Dao.gain(s, "array", 288, true)
+	s.battle.next_draw = int(s.battle.get("next_draw", 0)) + int(s.Dao.value(s, "array_gather"))
 	s.combat_events.append({"type": "guard", "amount": 0, "name": "布阵", "sect": str(s.player.get("sect", "wanderer"))})
 	s.log_event("school_array", {})
 	return end_turn(s)
+
+static func drive_array(s) -> String:
+	if s.battle.is_empty() or not bool(s.battle.get("array", false)) or s.Dao.value(s, "array_drive") <= 0:
+		return "尚无可驱动的阵法。"
+	if int(s.battle.get("array_driven", 0)) == int(s.battle.turn):
+		return "本回合已驱阵。"
+	s.combat_events.clear()
+	s.battle.array_driven = int(s.battle.turn)
+	s.battle.shield = int(s.battle.get("shield", 0)) + int(s.Schools.value(s, "array", "shield"))
+	s.combat_events.append({"type": "guard", "actor": "player", "amount": 0, "shield": int(s.battle.shield), "name": "驱阵"})
+	s.changed.emit()
+	return "驱动阵法，护罩凝聚。"
 
 ## 地利 (docs/COMBAT_PLAN.md, part one, stage three): where a fight happens may favour some elements
 ## (a location's or a cave's `field`: {"name", "mods": {element: share}}), and a sect's own ground
@@ -717,7 +868,7 @@ static func use_secret(s, art_id: String) -> String:
 			_gain(s, gained)
 		"offer_core":
 			s.remove_item(_secret_item(s, art), 1)
-			var healed := mini(int(round(float(s.player.max_hp) * float(art.heal))), int(s.player.max_hp) - int(s.player.hp))
+			var healed := mini(_player_healing(s, int(round(float(s.player.max_hp) * float(art.heal)))), int(s.player.max_hp) - int(s.player.hp))
 			s.player.hp = int(s.player.hp) + healed
 			s.battle.shield = int(s.battle.get("shield", 0)) + int(art.shield)
 			s.combat_events.append(_event({"type": "heal", "amount": healed, "hp_after": int(s.player.hp)}, look))
@@ -825,6 +976,8 @@ static func _next_foe(s) -> String:
 	s.battle.enemy_id = str(next.enemy_id)
 	s.battle.hp = int(next.hp)
 	s.battle.status = {}
+	s.battle.erase("foe_resources")
+	s.battle.erase("foe_flow_used")
 	s.battle.foe_shield = 0
 	s.battle.target = 0
 	for key: String in ["phase", "used", "charged"]:
@@ -1074,6 +1227,9 @@ static func release_of(s) -> Dictionary:
 	var held: Dictionary = s.Arsenal.wielded(s.content, gear, int(s.player.realm))
 	var uses := 2 if int(gear.tier) >= 4 else 1
 	var damage := int(round((12.0 + 5.0 * float(held.stats.get("attack", 0))) * float(base.release.power)))
+	var sigil: Dictionary = s.content.formulation_data.sigils.get(str(gear.get("sigil", "")), {})
+	if not sigil.is_empty() and (not sigil.has("threshold") or float(s.player.hp) < float(s.player.max_hp) * float(sigil.threshold)):
+		damage = int(round(damage * float(sigil.scale)))
 	return {"name": "%s · %s" % [gear.name, base.release.name], "move": base.release, "gear": gear, "damage": damage, "left": maxi(0, uses - int(s.battle.get("released", 0))), "usable": bool(held.usable) and float(held.share) >= 0.5}
 
 static func release_block(s) -> String:
@@ -1103,6 +1259,11 @@ static func release(s) -> String:
 	var dealt := _strike_foe(s, maxi(1, int(round(float(release.damage) * ground(s, element, false)))), bool(release.move.get("through", false)))
 	var look := {"style": "release", "name": str(release.name), "vfx": str(release.move.get("vfx", "sword")), "tier": int(gear.tier), "element": "metal" if element == "none" else element}
 	s.combat_events.append(_event({"type": "attack", "actor": "player", "hits": int(release.move.get("hits", 1)), "amount": dealt, "hp_after": int(s.battle.hp)}, look))
+	var sigil: Dictionary = s.content.formulation_data.sigils.get(str(gear.get("sigil", "")), {})
+	if int(sigil.get("self_damage", 0)) > 0:
+		var bite := mini(int(sigil.self_damage), int(s.player.hp) - 1)
+		s.player.hp -= bite
+		s.combat_events.append({"type": "self_harm", "name": "白虎反噬", "amount": bite, "hp_after": int(s.player.hp)})
 	for lingering: String in LINGERING:
 		if release.move.get("inflict", {}).has(lingering):
 			_inflict(s.battle.status, lingering, release.move.inflict[lingering])
@@ -1141,7 +1302,8 @@ static func _foe_prepare(s) -> void:
 		return
 	var orbs: Array = s.battle.get("foe_orbs", [])
 	var short := int(s.battle.status.slow[0]) if s.battle.get("status", {}).has("slow") else 0
-	var drawn := _draw(s, maxi(1, _by_realm(s, "foe_draw", int(foe.get("realm", 0))) - short), _foe_weights(s))
+	var drawn := _draw(s, maxi(1, _by_realm(s, "foe_draw", int(foe.get("realm", 0))) - short + int(s.battle.get("foe_next_draw", 0))), _foe_weights(s))
+	s.battle.erase("foe_next_draw")
 	orbs.append_array(drawn)
 	s.combat_events.append({"type": "draw", "actor": "enemy", "orbs": drawn.duplicate()})
 	# As for the player: what it kept (at most hand_least) and what it just drew.
@@ -1152,13 +1314,17 @@ static func _foe_prepare(s) -> void:
 		s.combat_events.append({"type": "discard", "actor": "enemy", "orbs": released})
 	s.battle.foe_orbs = orbs
 	var left := orbs.duplicate()
+	var simulated: Dictionary = s.battle.duplicate(true)
+	simulated.foe_orbs = left
 	var plan: Array = []
 	var hurt := int(s.battle.hp) * 5 < int(foe.hp) * 2
 	for step: int in 3:
 		var pick: Dictionary = {}
 		for art_id: Variant in foe.arts:
 			var art: Dictionary = foe_art(s, foe, str(art_id))
-			if art.is_empty() or art.slot != "art" or art.kind == "spirit" or not affordable(left, art.cost):
+			if art.is_empty() or art.slot != "art" or not affordable(left, art.cost):
+				continue
+			if not DustFlow.block(simulated, art, int(foe.get("realm", 0)), true).is_empty() or (bool(art.get("once_per_turn", false)) and int(simulated.get("foe_flow_used", {}).get(art.id, 0)) == int(s.battle.turn)):
 				continue
 			if plan.any(func(entry: Dictionary) -> bool: return entry.kind in ["heal", "guard"] and entry.kind == art.kind):
 				continue
@@ -1168,6 +1334,14 @@ static func _foe_prepare(s) -> void:
 					worth = 1000 if hurt else -1
 				"guard":
 					worth = 1
+				"spirit":
+					if art.has("dust_flow"):
+						var operation := str(art.dust_flow.operation)
+						worth = 20 if operation in ["scatter", "return"] else (15 if int(DustFlow.counters(simulated, true).get("dust", 0)) < 3 else 0)
+						if operation == "earth_to_dust" and left.count("earth") < 2:
+							worth = 0
+					else:
+						worth = 0
 				_:
 					worth = 100 + int(art.damage_max)
 			if worth > int(pick.get("worth", 0)):
@@ -1176,6 +1350,11 @@ static func _foe_prepare(s) -> void:
 			break
 		var chosen: Dictionary = pick.art
 		_pay(left, chosen.cost)
+		DustFlow.apply(simulated, chosen, int(foe.get("realm", 0)), true)
+		if bool(chosen.get("once_per_turn", false)):
+			var used: Dictionary = simulated.get("foe_flow_used", {})
+			used[chosen.id] = int(s.battle.turn)
+			simulated.foe_flow_used = used
 		var entry := {"art": str(chosen.id), "kind": str(chosen.kind), "name": str(chosen.name)}
 		var grown := realm_power(s, int(foe.get("realm", 0)))
 		match str(chosen.kind):
@@ -1183,11 +1362,16 @@ static func _foe_prepare(s) -> void:
 				entry.amount = int(round(float(chosen.heal) * grown))
 			"guard":
 				entry.amount = int(round(float(chosen.shield) * grown))
+			"spirit":
+				pass
 			_:
 				# The realm's bonus counts half per orb, as for the player.
 				var share := int(round(float(foe.bonus) * _orbs_in(chosen.cost) / 2.0))
 				entry.min = maxi(1, int(round(float(chosen.damage_min) * float(foe.power) * grown)) + share)
 				entry.max = maxi(1, int(round(float(chosen.damage_max) * float(foe.power) * grown)) + share)
+				if chosen.has("dust_flow"):
+					entry.min = DustFlow.amount(chosen, "damage", int(foe.get("realm", 0))) + share
+					entry.max = entry.min
 		plan.append(entry)
 	if plan.is_empty():
 		plan.append({"kind": "gather", "name": "凝神聚气"})
@@ -1403,10 +1587,15 @@ static func _enemy_turn(s) -> String:
 						return _win(s)
 			continue
 		var art: Dictionary = foe_art(s, foe, str(planned.art))
-		if art.is_empty() or not affordable(s.battle.foe_orbs, art.cost):
+		if art.is_empty() or not affordable(s.battle.foe_orbs, art.cost) or not skill_block(s, art, true).is_empty():
 			continue
 		var spent := _pay(s.battle.foe_orbs, art.cost)
 		s.combat_events.append({"type": "spend", "actor": "enemy", "orbs": spent.duplicate()})
+		var triggers := QiRelations.triggers(art, spent, rules(s).generates)
+		var paid := QiRelations.effect(art, spent, rules(s).generates)
+		_flow_event(s, art, true)
+		if int(s.player.hp) <= 0:
+			return _lose(s)
 		var look := {"style": str(art.id), "name": str(art.name), "vfx": str(art.vfx), "tier": int(art.tier), "element": str(art.element), "spent": spent}
 		# Their 流派 too: 剑意 across their metal arts, 魂修 shaking the player's next draw.
 		var foe_school: String = s.Schools.foe(s)
@@ -1419,18 +1608,37 @@ static func _enemy_turn(s) -> String:
 			foe_swords += 1
 		match str(art.kind):
 			"heal":
-				var recovered := mini(_healed(status, int(planned.get("amount", art.heal))), int(foe.hp) - int(s.battle.hp))
+				var recovered := mini(_healed(status, int(planned.get("amount", art.heal)) + int(paid.get("heal", 0))), int(foe.hp) - int(s.battle.hp))
 				s.battle.hp = int(s.battle.hp) + recovered
 				s.combat_events.append(_event({"type": "heal", "actor": "enemy", "amount": recovered, "hp_after": int(s.battle.hp)}, look))
 			"guard":
-				s.battle.foe_shield = int(s.battle.get("foe_shield", 0)) + int(planned.get("amount", art.shield))
+				s.battle.foe_shield = int(s.battle.get("foe_shield", 0)) + int(planned.get("amount", art.shield)) + int(paid.get("shield", 0))
 				s.combat_events.append(_event({"type": "guard", "actor": "enemy", "amount": 0, "shield": int(s.battle.foe_shield)}, look))
+			"spirit":
+				s.combat_events.append(_event({"type": "spirit", "actor": "enemy", "amount": 0}, look))
 			_:
 				for lingering: String in LINGERING:
 					if art.has(lingering):
 						_inflict_player(s, lingering, art[lingering])
-				if _hurt_player(s, s.combat_rng.randi_range(int(planned.min), int(planned.max)), factor * ground(s, str(art.element), true) * school_force, look):
+				var roll: int = s.combat_rng.randi_range(int(planned.min), int(planned.max)) + int(paid.get("damage", 0))
+				if art.has("dust_flow") and str(s.battle.get("foe_last", "")) == "fire":
+					roll += DustFlow.amount(art, "fire_bonus", int(foe.get("realm", 0)))
+				if _hurt_player(s, roll, factor * ground(s, str(art.element), true) * school_force, look):
 					return _lose(s)
+		if str(art.kind) != "guard" and int(paid.get("shield", 0)) > 0:
+			s.battle.foe_shield = int(s.battle.get("foe_shield", 0)) + int(paid.shield)
+			s.combat_events.append(_event({"type": "guard", "actor": "enemy", "amount": 0, "shield": int(s.battle.foe_shield)}, look))
+		if paid.has("absorb") or art.has("absorb"):
+			var drawn: Array = []
+			for source: Dictionary in [art, paid]:
+				if source.has("absorb"):
+					for count: int in int(source.absorb[1]):
+						drawn.append(str(source.absorb[0]))
+			s.battle.foe_orbs.append_array(drawn)
+			s.combat_events.append({"type": "draw", "actor": "enemy", "orbs": drawn})
+		if not triggers.is_empty():
+			s.combat_events.append({"type": "qi_trigger", "actor": "enemy", "name": str(art.name), "triggers": triggers})
+		s.battle.foe_last = str(art.element)
 	if _pack_strikes(s):
 		return _lose(s)
 	# The player's turn: the shield has done its work, burning bites, new orbs come and the opponent
@@ -1457,6 +1665,7 @@ static func _enemy_turn(s) -> String:
 	var gathered := int(s.battle.get("next_draw", 0))
 	s.battle.erase("next_draw")
 	var hand := _draw(s, maxi(1, draw_count(s) - short + formation + gathered), player_weights(s))
+	hand.append_array(_dao_draw(s))
 	# The tide's orbs held back when the opponent moved first (open_hand).
 	for count: int in int(s.battle.get("tide", 0)):
 		hand.append("water")
@@ -1479,6 +1688,17 @@ static func _hurt_player(s, roll: int, factor: float, look: Dictionary) -> bool:
 	if s.Schools.player(s) == "body":
 		factor *= s.Schools.value(s, "body", "countered")
 	var damage := maxi(1, int(round(float(roll) * factor)))
+	var element := str(look.get("element", ""))
+	for guard_element: String in elements(s):
+		var overcome: String = rules(s).generates[rules(s).generates[guard_element]]
+		if element == overcome:
+			damage -= int(s.Dao.value(s, "element_guard", guard_element)) * s.battle.orbs.count(guard_element)
+	if str(look.get("vfx", "")).begins_with("sword"):
+		damage -= int(s.Dao.value(s, "sword_guard"))
+	damage = maxi(0, int(round(maxi(0, damage) * (1.0 - s.Dao.value(s, "damage_cut")))))
+	if damage > 0 and s.Dao.value(s, "first_hit_cut") > 0 and int(s.battle.get("dao_hit_turn", 0)) != int(s.battle.turn):
+		s.battle.dao_hit_turn = int(s.battle.turn)
+		damage = int(round(damage * (1.0 - s.Dao.value(s, "first_hit_cut"))))
 	damage = _gear_traits(s, damage, look)
 	var absorbed := mini(int(s.battle.get("shield", 0)), damage)
 	s.battle.shield = int(s.battle.get("shield", 0)) - absorbed
@@ -1623,7 +1843,7 @@ static func plain_turn(s) -> String:
 		var best_worth := -1
 		for art_id: String in s.active_skills():
 			var t: Dictionary = s.held_technique(art_id)
-			if t.is_empty() or not affordable(s.battle.orbs, t.cost):
+			if t.is_empty() or not affordable(s.battle.orbs, t.cost) or not skill_block(s, t).is_empty():
 				continue
 			var worth := int(t.get("damage_max", 0)) * (2 if combo_holds(s, t) else 1)
 			if t.kind == "heal":

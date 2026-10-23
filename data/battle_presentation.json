@@ -1,8 +1,16 @@
 {
-  "reference": "https://steamcommunity.com/games/1189490/announcements/detail/3128310340404203146?l=schinese",
+  "reference": "https://store.steampowered.com/app/1189490/",
+  "reference_movie_id": 256924900,
+  "reference_sha256": "17a4bd3fd5b5f9b935b10074ff16ad92ce943f9cbd0e5380e6ff64cdf173399e",
+  "reference_build": "official_1.0_release_gameplay_demo_exact_patch_not_visible",
+  "reference_fps": 60,
   "visual_baseline": "approved_v6_20261023",
-  "animation_calibration": "provisional_until_original_video_frame_measurement",
-  "qi_transfer_seconds": 0.26,
-  "qi_arc_height": 32.0,
-  "qi_trail_count": 5
+  "animation_calibration": "reserve_and_spend_landmarks_measured_other_actions_observed_or_inferred",
+  "profiles": {
+    "reserve": {"duration": 1.1, "stagger": 0.025, "commit": 0.216667, "status": "count_change_measured_tail_approximate", "evidence_seconds": [101.15, 101.366667, 102.35]},
+    "return": {"duration": 0.45, "stagger": 0.025, "commit": 0.216667, "status": "mirrored_unobserved_cancel"},
+    "draw": {"duration": 0.85, "stagger": 0.04, "commit": 0.0, "status": "appearance_observed_start_cut_by_edit"},
+    "spend": {"duration": 0.6, "stagger": 0.0, "commit": 0.0, "icon_fade": 0.033333, "status": "icon_removal_measured_tail_approximate", "evidence_seconds": [103.766667, 103.8, 104.383333]},
+    "discard": {"duration": 0.45, "stagger": 0.025, "commit": 0.0, "status": "inferred_unobserved_discard"}
+  }
 }

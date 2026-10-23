@@ -31,27 +31,51 @@ static func _page(ui, slot_kind: String, title: String, in_use: Array, limit: in
 	slots.add_theme_constant_override("separation", 8)
 	columns.add_child(slots)
 	slots.add_child(ui.label("%s  %d / %d" % [title, in_use.size(), limit], 18, ui.GOLD))
+	ui.arts_slot = clampi(ui.arts_slot, 0, limit - 1)
+	var selected_slot: int = ui.arts_slot
+	var slot_grid := GridContainer.new()
+	slot_grid.columns = 5 if keyed else 3
+	slot_grid.add_theme_constant_override("h_separation", 7)
+	slot_grid.add_theme_constant_override("v_separation", 7)
+	slots.add_child(slot_grid)
 	for index: int in limit:
-		var row := HBoxContainer.new()
-		row.add_theme_constant_override("separation", 8)
-		slots.add_child(row)
-		var key: Label = ui.label(("[%s]" % Settings.key_name(ui, "skill_%d" % (index + 1))) if keyed else "%d" % (index + 1), 15, ui.MUTED)
-		key.custom_minimum_size.x = 48
-		row.add_child(key)
-		if index >= in_use.size():
-			row.add_child(ui.label("空", 15, ui.MUTED))
-			continue
-		var technique_id: String = in_use[index]
-		var t: Dictionary = session.held_technique(technique_id)
-		row.add_child(_technique_picture(t, 44))
-		var name: Label = ui.label("%s\n%s" % [t.name, session.Layers.progress_text(session, technique_id)], 15, ui.grade_color(t))
-		name.tooltip_text = "%s\n%s" % [session.Arsenal.technique_tag(session.content, t), t.description]
-		name.mouse_filter = Control.MOUSE_FILTER_PASS
-		name.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		row.add_child(name)
-		var stop: Button = ui.button("停下", func() -> void: ui.run(func() -> String: return session.unequip_technique(technique_id)), "移出栏位")
+		var key_text := ("[%s]" % Settings.key_name(ui, "skill_%d" % (index + 1))) if keyed else "主修" if index == 0 else "辅修%d" % index
+		var id: String = in_use[index] if index < in_use.size() else ""
+		var t: Dictionary = session.held_technique(id)
+		var cell: Button = ui.button("", func() -> void: ui.arts_slot = index; ui.render(), "空槽" if t.is_empty() else str(t.name) + "\n" + str(t.description))
+		cell.custom_minimum_size = Vector2(59, 81)
+		cell.name = "LoadoutSlot%d" % (index + 1)
+		cell.disabled = not session.battle.is_empty()
+		if index == selected_slot:
+			ui.tint(cell, ui.GOLD)
+		slot_grid.add_child(cell)
+		if not t.is_empty():
+			var picture := _technique_picture(t, 43)
+			picture.position = Vector2(8, 15)
+			picture.mouse_filter = Control.MOUSE_FILTER_IGNORE
+			cell.add_child(picture)
+		var key: Label = ui.label(key_text, 12, ui.GOLD)
+		key.position = Vector2(4, 0)
+		key.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		cell.add_child(key)
+		var caption: Label = ui.label(str(t.get("name", "空")), 12, ui.GOLD if index == selected_slot else ui.INK)
+		caption.position = Vector2(1, 59)
+		caption.size = Vector2(57, 20)
+		caption.clip_text = true
+		caption.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		caption.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		cell.add_child(caption)
+	var selected_id: String = in_use[selected_slot] if selected_slot < in_use.size() else ""
+	if selected_id.is_empty():
+		slots.add_child(ui.paragraph("已选择空槽 · 从右侧选择一门功法放入。"))
+	else:
+		var selected: Dictionary = session.held_technique(selected_id)
+		slots.add_child(ui.label(str(selected.name), 20, ui.grade_color(selected)))
+		slots.add_child(ui.paragraph(session.Layers.progress_text(session, selected_id), ui.GOLD))
+		slots.add_child(ui.paragraph(str(selected.description)))
+		var stop: Button = ui.button("停下", func() -> void: ui.run(func() -> String: return session.unequip_technique(selected_id)), "移出当前选中栏位")
 		stop.disabled = not session.battle.is_empty()
-		row.add_child(stop)
+		slots.add_child(stop)
 	var library := VBoxContainer.new()
 	library.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	library.add_theme_constant_override("separation", 8)
@@ -73,7 +97,6 @@ static func _page(ui, slot_kind: String, title: String, in_use: Array, limit: in
 	grid.add_theme_constant_override("h_separation", 8)
 	grid.add_theme_constant_override("v_separation", 8)
 	library.add_child(grid)
-	var full := in_use.size() >= limit
 	var shown := 0
 	for technique_id: String in session.player.learned:
 		var t: Dictionary = session.held_technique(technique_id)
@@ -83,15 +106,18 @@ static func _page(ui, slot_kind: String, title: String, in_use: Array, limit: in
 		var active: bool = technique_id in in_use
 		var card: Button = ui.button("%s%s\n%s · %s · 第 %d / %d 层" % [t.name, "（运转中）" if active else "", t.tier_name, session.content.element_info(str(t.element)).get("name", ""), int(t.layer), int(t.layers)], func() -> void:
 			if active:
-				ui.run(func() -> String: return session.unequip_technique(technique_id))
+				ui.arts_slot = in_use.find(technique_id)
+				ui.render()
 			else:
-				ui.run(func() -> String: return session.equip_technique(technique_id)), t.description + ("\n点击停下" if active else ("\n栏位已满，先停下一门" if full else "\n点击运转")))
+				if selected_id.is_empty():
+					ui.arts_slot = in_use.size()
+				ui.run(func() -> String: return session.equip_technique(technique_id, selected_id)), t.description + ("\n点击查看所在栏位" if active else "\n放入选中槽位；该槽有功法时直接替换。"))
 		ui.tint(card, ui.grade_color(t))
 		ui.with_icon(card, ArtLibrary.technique_icon(t), 40)
 		card.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		card.custom_minimum_size.y = 56
 		card.alignment = HORIZONTAL_ALIGNMENT_LEFT
-		card.disabled = (not active and full) or not session.battle.is_empty()
+		card.disabled = not session.battle.is_empty()
 		grid.add_child(card)
 	if shown == 0:
 		library.add_child(ui.paragraph("没有此类已学的功法。"))

@@ -366,6 +366,12 @@ func play(events: Array[Dictionary]) -> void:
 					await qi_view.play_event(event)
 			"attack":
 				await _attack(event)
+			"self_harm":
+				hero_hp = int(event.hp_after)
+				_number(hero, int(event.amount), false)
+				banner = str(event.name)
+				if motion_enabled:
+					await _pause(0.2)
 			"phase":
 				# A boss changes its ways (combat.gd phases): its name over the stage and a shudder.
 				banner = str(event.get("name", ""))
@@ -430,14 +436,25 @@ func play(events: Array[Dictionary]) -> void:
 				_emit_cue("chain")
 				await _pause(0.4)
 			"lead":
-				# 遁速: the quicker opponent moves first.
 				banner = "对手遁速更快，抢先出手"
 				await _pause(0.6)
+			"qi_trigger":
+				var names := {"generate": "生", "same": "同", "overcome": "克"}
+				banner = "%s · %s" % ["／".join(event.triggers.map(func(key: String) -> String: return names[key])), str(event.name)]
+				_emit_cue("chain")
+				if motion_enabled:
+					await _pause(0.2)
+			"resource":
+				banner = "%s · %d 层" % [str(event.name), int(event.moved)]
+				if motion_enabled:
+					await _pause(0.15)
 			"spirit":
 				# 印 and 聚气: qi turned or gathered, no blow.
-				hero.set_pose("cast")
+				var caster = enemy if event.get("actor", "player") == "enemy" else hero
+				caster.set_pose("cast")
 				banner = str(event.get("name", ""))
 				await _pause(0.35)
+				caster.set_pose("idle")
 			"end":
 				banner = {"win": "斗法获胜", "lose": "斗法落败", "flee": "收势撤离"}.get(event.result, "")
 				if event.result == "win":

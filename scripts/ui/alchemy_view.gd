@@ -39,6 +39,7 @@ static func render(ui) -> void:
 		tab.custom_minimum_size = Vector2(96, 36)
 		recipes.add_child(tab)
 	center.add_child(HSeparator.new())
+	_formula(ui, center, plan)
 	_herbs(ui, center, plan)
 	_guide(ui, center, plan)
 	_fire(ui, center, plan)
@@ -62,6 +63,51 @@ static func render(ui) -> void:
 static func _span(pair: Array) -> String:
 	return str(int(pair[0])) if int(pair[0]) == int(pair[1]) else "%d–%d" % [int(pair[0]), int(pair[1])]
 
+static func _formula(ui, center: VBoxContainer, plan: Dictionary) -> void:
+	var s = ui.session
+	var row := HBoxContainer.new()
+	center.add_child(row)
+	var edit := CheckBox.new()
+	edit.text = "调整丹方"
+	edit.button_pressed = plan.has("main")
+	edit.toggled.connect(func(on: bool) -> void:
+		if on:
+			plan.main = s.content.alchemy_data.recipes[str(plan.recipe)].main.duplicate()
+		else:
+			plan.erase("main")
+		ui.render())
+	row.add_child(edit)
+	if not plan.has("main"):
+		return
+	var herbs: Dictionary = s.Alchemy.Formulation.main_for(s.content, plan)
+	var provided: Dictionary = s.Alchemy.Formulation.potency(s.content, herbs)
+	var required: Dictionary = s.Alchemy.Formulation.potency(s.content, s.content.alchemy_data.recipes[str(plan.recipe)].main)
+	var words: Array[String] = []
+	for key: String in required:
+		words.append("%s %d/%d" % [s.content.formulation_data.names[key], int(provided.get(key, 0)), int(required[key])])
+	row.add_child(ui.label("　".join(words), 15, ui.GOLD))
+	var grid := GridContainer.new()
+	grid.columns = 2
+	grid.add_theme_constant_override("h_separation", 16)
+	center.add_child(grid)
+	for id: String in s.content.formulation_data.properties:
+		if s.item_count(id) <= 0 and not herbs.has(id):
+			continue
+		var line := HBoxContainer.new()
+		grid.add_child(line)
+		line.add_child(ui.label("%s ×%d" % [s.content.item(id).name, int(herbs.get(id, 0))], 15))
+		for delta: int in [-1, 1]:
+			var change: Button = ui.button("−" if delta < 0 else "+", func() -> void:
+				var count := int(plan.main.get(id, 0)) + delta
+				if count <= 0:
+					plan.main.erase(id)
+				else:
+					plan.main[id] = count
+				ui.render())
+			change.custom_minimum_size = Vector2(34, 30)
+			change.disabled = int(herbs.get(id, 0)) <= 0 if delta < 0 else int(herbs.get(id, 0)) >= mini(20, s.item_count(id))
+			line.add_child(change)
+
 ## Ignore the source image's size so the illustration never stretches the scroll.
 static func _decoration(heading: HBoxContainer, art_id: String) -> void:
 	var texture := ArtLibrary.texture(ArtLibrary.ui_art(art_id))
@@ -84,8 +130,9 @@ static func _herbs(ui, center: VBoxContainer, plan: Dictionary) -> void:
 	row.add_theme_constant_override("separation", 14)
 	center.add_child(row)
 	row.add_child(ui.label("主药", 17, ui.GOLD))
-	for herb_id: String in recipe.main:
-		var need := int(recipe.main[herb_id])
+	var main: Dictionary = session.Alchemy.Formulation.main_for(session.content, plan)
+	for herb_id: String in main:
+		var need := int(main[herb_id])
 		var have: int = session.item_count(herb_id)
 		var herb: Dictionary = session.content.item(herb_id)
 		row.add_child(ui.label("%s（%s）×%d　行囊 %d" % [herb.name, natures[herb.nature], need, have], 16, ui.INK if have >= need else WARN))
@@ -95,15 +142,16 @@ static func _guide(ui, center: VBoxContainer, plan: Dictionary) -> void:
 	var session = ui.session
 	var natures: Dictionary = session.content.alchemy_data.natures
 	var recipe_id := str(plan.recipe)
-	var wanted: String = session.Alchemy.guide_nature(session, recipe_id)
-	var lean: String = session.Alchemy.lean(session, recipe_id)
+	var main: Dictionary = session.Alchemy.Formulation.main_for(session.content, plan)
+	var wanted: String = session.Alchemy.guide_nature(session, recipe_id, main)
+	var lean: String = session.Alchemy.lean(session, recipe_id, main)
 	var words := "主药寒热相济，以一株平性灵草作引即可。" if lean == "neutral" else "主药偏%s，须以一株%s性灵草作引，调和寒热。" % [natures[lean], natures[wanted]]
 	center.add_child(ui.paragraph(words + "寒热不调也能成丹，只是少成一枚，也出不了上品。"))
 	var row := HBoxContainer.new()
 	row.add_theme_constant_override("separation", 8)
 	center.add_child(row)
 	row.add_child(ui.label("药引", 17, ui.GOLD))
-	for herb_id: String in session.Alchemy.guide_options(session, recipe_id):
+	for herb_id: String in session.Alchemy.guide_options(session, recipe_id, main):
 		var herb: Dictionary = session.content.item(herb_id)
 		var fits: bool = herb.nature == wanted
 		var picked := herb_id

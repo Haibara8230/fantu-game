@@ -110,10 +110,10 @@ func _initialize() -> void:
 	check(game.battle.orbs == ["metal"], "驱物术 takes two orbs of one element, whichever (同×2)")
 	game.battle.orbs = ["metal", "earth"]
 	check(not game.Combat.affordable(game.battle.orbs, game.held_technique("qi_strike").cost), "and two of different elements will not do")
-	game.battle.orbs = ["wood", "metal"]
+	game.battle.orbs = ["wood", "water"]
 	game.battle.last = "water"
 	game.use_skill("seal_wood")
-	check(game.battle.orbs == ["fire", "fire"], "上清印 turns wood qi into fire, one more on a 连击 after a water art")
+	check(game.battle.orbs == ["fire", "fire"], "上清印 gains its extra fire orb from generating paid qi")
 	# Five qi a turn from the spirit roots alone; four kept, the player choosing what goes.
 	check(game.Combat.draw_count(game) == 5 and game.Combat.hand_cap(game) == 4 + int(game.orb_bonus("orb_cap")), "five qi a turn, four kept")
 	check(game.Combat.player_weights(game).keys().all(func(element: String) -> bool: return int(game.Combat.player_weights(game)[element]) > 0 == (element in game.player.roots or int(game.orb_bonus("orb_" + element)) > 0)), "qi comes only from the spirit roots")

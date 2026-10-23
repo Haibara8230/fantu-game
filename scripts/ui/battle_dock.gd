@@ -2,6 +2,7 @@ extends Control
 ## Presentation only. Reservations never change the authoritative hand or random stream.
 const Art = preload("res://scripts/ui/art_library.gd")
 const Settings = preload("res://scripts/ui/settings.gd")
+const QiMotion = preload("res://scripts/presentation/qi_motion.gd")
 const ELEMENTS := ["metal", "water", "wood", "fire", "earth"]
 const POOL := {"metal": Vector2(887, 77), "water": Vector2(940, 116), "wood": Vector2(920, 172), "fire": Vector2(850, 172), "earth": Vector2(833, 116)}
 const CENTER := Vector2(655, 125)
@@ -15,6 +16,7 @@ var controls := Control.new()
 var flight_layer := Control.new()
 var held: Array = []
 var reserved: Array = []
+var pool_reserved: Array = []
 var flights: Array[Dictionary] = []
 var art_buttons: Array[Button] = []
 var pool_buttons: Dictionary = {}
@@ -23,6 +25,7 @@ var confirm: Button
 var cancel: Button
 var turn_label: Label
 var count_label: Label
+var payment_hint: Label
 var selected := ""
 var busy := false
 var pulse := 0.0
@@ -37,6 +40,7 @@ func configure(owner_ui) -> void:
 	held = ui.session.battle.get("orbs", []).duplicate()
 	selected = ui.battle_selection
 	reserved = ui.battle_payment.duplicate()
+	pool_reserved = reserved.duplicate()
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
 	canvas.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	canvas.size = Vector2(1280, 230)
@@ -182,6 +186,12 @@ func _build() -> void:
 	turn_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	turn_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	controls.add_child(turn_label)
+	payment_hint = ui.label("", 15, Color("#efcf7d"))
+	payment_hint.position = Vector2(567, 181)
+	payment_hint.size = Vector2(176, 27)
+	payment_hint.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	payment_hint.mouse_filter = Control.MOUSE_FILTER_PASS
+	controls.add_child(payment_hint)
 	count_label = ui.label("", 16, Color("#e5d49d"))
 	count_label.position = Vector2(982, 72)
 	count_label.tooltip_text = "回合末最多保留 %d 颗灵气" % session.Combat.hand_cap(session)
@@ -206,14 +216,17 @@ func refresh() -> void:
 		var button := art_buttons[index]
 		button.disabled = locked or ui.battle_discarding or id.is_empty()
 		if not id.is_empty():
-			var affordable: bool = session.Combat.affordable(held, session.held_technique(id).cost)
+			var art: Dictionary = session.held_technique(id)
+			var reason: String = session.Combat.skill_block(session, art)
+			var affordable: bool = session.Combat.affordable(held, art.cost) and reason.is_empty()
 			button.disabled = button.disabled or not affordable
+			button.tooltip_text = "%s\n%s%s" % [art.name, art.description, "\n" + reason if not reason.is_empty() else ""]
 			button.get_child(0).modulate = Color(1, 1, 1, 1) if affordable else Color(0.38, 0.43, 0.4, 1)
 			button.modulate = Color("#ffe5a4") if id == selected else Color.WHITE
 	var groups: Array = ELEMENTS.filter(func(e: String) -> bool: return reserved.count(e) > 0)
 	for element: String in ELEMENTS:
 		var pool: Dictionary = pool_buttons[element]
-		var count: int = held.count(element) - reserved.count(element)
+		var count: int = held.count(element) - pool_reserved.count(element)
 		pool.count.text = str(count)
 		pool.icon.modulate.a = 1.0 if count > 0 else 0.2
 		pool.button.disabled = locked or count <= 0 or (selected.is_empty() and not ui.battle_discarding)
@@ -230,16 +243,28 @@ func refresh() -> void:
 			payment.count.size.x = diameter
 			payment.count.text = str(reserved.count(element))
 	var cap: int = session.Combat.hand_cap(session)
-	count_label.text = "%d/%d" % [held.size() - reserved.size(), cap]
+	count_label.text = "%d/%d" % [held.size(), cap]
 	if is_instance_valid(ui.battle_stage):
-		ui.battle_stage.hero_qi = held.size() - reserved.size()
+		ui.battle_stage.hero_qi = held.size()
 		ui.battle_stage.qi_cap = cap
 	cancel.visible = not selected.is_empty() or ui.battle_discarding
 	confirm.text = "确定" if not selected.is_empty() or ui.battle_discarding else "回合结束"
 	cancel.disabled = locked
 	confirm.disabled = locked
+	payment_hint.text = ""
+	payment_hint.tooltip_text = ""
 	if not selected.is_empty():
-		confirm.disabled = locked or not session.Combat.payment_valid(held, session.held_technique(selected).cost, reserved)
+		var art: Dictionary = session.held_technique(selected)
+		var reason: String = session.Combat.skill_block(session, art)
+		var valid: bool = session.Combat.payment_valid(held, art.cost, reserved)
+		confirm.disabled = locked or not valid or not reason.is_empty()
+		if valid:
+			var preview: Dictionary = session.Combat.payment_preview(session, art, reserved)
+			payment_hint.text = " · ".join(preview.triggers.map(func(key: String) -> String: return "【%s】" % session.Combat.QiRelations.LABELS[key]))
+			payment_hint.tooltip_text = session.Combat.QiRelations.describe(art, session.content.technique_data.elements)
+		if not reason.is_empty():
+			payment_hint.text = "条件未满足"
+			payment_hint.tooltip_text = reason
 	elif ui.battle_discarding:
 		confirm.disabled = locked or held.size() > cap
 	turn_label.visible = selected.is_empty()
@@ -248,84 +273,115 @@ func refresh() -> void:
 
 func set_payment(skill_id: String, payment: Array) -> void:
 	busy = true
-	refresh()
+	flights.clear()
 	var returning := reserved.duplicate()
 	var entering := payment.duplicate()
 	for element: Variant in reserved:
 		if element in entering:
 			entering.erase(element)
 			returning.erase(element)
-	for element: String in returning:
-		reserved.erase(element)
-		refresh()
-		await _fly(element, CENTER, POOL[element], false)
 	selected = skill_id
-	for element: String in entering:
-		await _fly(element, POOL[element], CENTER, false)
-		reserved.append(element)
-		refresh()
 	reserved = payment.duplicate()
+	refresh()
+	await _batch(returning, "return", false)
+	await _batch(entering, "reserve", false)
+	pool_reserved = payment.duplicate()
 	busy = false
 	refresh()
 
 func play_event(event: Dictionary) -> void:
 	if event.get("actor", "player") != "player":
-		for element: String in event.orbs:
-			var anchor := Vector2(1200, -450)
-			if event.type == "draw":
-				await _fly(element, Vector2(1080, -220), anchor, false)
-				ui.battle_stage.enemy_qi += 1
-			else:
-				ui.battle_stage.enemy_qi = maxi(0, ui.battle_stage.enemy_qi - 1)
-				await _fly(element, anchor, Vector2(1010, -180), true)
+		ui.battle_stage.enemy_qi = maxi(0, ui.battle_stage.enemy_qi + event.orbs.size() * (1 if event.type == "draw" else -1))
+		await _batch(event.orbs, str(event.type), true, true)
 		return
 	busy = true
 	refresh()
 	match str(event.type):
 		"draw":
-			for element: String in event.orbs:
-				await _fly(element, Vector2(640, -165), POOL[element], false)
-				held.append(element)
-				refresh()
+			held.append_array(event.orbs)
 		"discard":
 			for element: String in event.orbs:
 				held.erase(element)
-				refresh()
-				await _fly(element, POOL[element], POOL[element] + Vector2(0, -110), true)
 		"spend":
-			if reserved.is_empty():
-				for element: String in event.orbs:
-					await _fly(element, POOL[element], CENTER, false)
-					reserved.append(element)
-					refresh()
+			flights.clear()
 			for element: String in event.orbs:
 				held.erase(element)
-				reserved.erase(element)
-				await _fly(element, CENTER, CENTER + Vector2(0, -90), true)
+			pool_reserved.clear()
 			selected = ""
+			refresh()
+			if ui.battle_stage.motion_enabled and not reserved.is_empty():
+				var fade := create_tween().set_parallel(true)
+				var seconds := clampf(float(motion.profiles.spend.get("icon_fade", 0.033333)), 0.001, 0.2)
+				for value: Dictionary in payment_buttons.values():
+					if value.button.visible:
+						fade.tween_property(value.button, "modulate:a", 0.0, seconds)
+						fade.tween_property(value.button, "scale", Vector2.ONE * 0.35, seconds)
+				await fade.finished
+			reserved.clear()
+			for value: Dictionary in payment_buttons.values():
+				value.button.modulate.a = 1.0
+				value.button.scale = Vector2.ONE
+	refresh()
+	await _batch(event.orbs, str(event.type), true)
 	busy = false
 	refresh()
 
-func _fly(element: String, origin: Vector2, target: Vector2, dissolve: bool) -> void:
-	if is_instance_valid(ui.battle_stage) and not ui.battle_stage.motion_enabled:
+func _batch(orbs: Array, kind: String, finish: bool, enemy: bool = false) -> void:
+	if orbs.is_empty() or (is_instance_valid(ui.battle_stage) and not ui.battle_stage.motion_enabled):
 		return
-	var flight := {"element": element, "origin": origin, "target": target, "t": 0.0, "dissolve": dissolve}
-	flights.append(flight)
+	var profile: Dictionary = motion.get("profiles", {}).get(kind, {})
+	var duration := clampf(float(profile.get("duration", 0.6)), 0.05, 2.0)
+	var batch: Array[Dictionary] = []
+	for index: int in orbs.size():
+		var element := str(orbs[index])
+		var origin: Vector2 = POOL[element]
+		var target := CENTER
+		var fan := float(index % 5 - 2)
+		match kind:
+			"return":
+				origin = CENTER
+				target = POOL[element]
+			"draw":
+				target = origin
+				origin += Vector2(fan * 18, -240)
+			"spend":
+				origin = CENTER
+				target = CENTER + Vector2(fan * 18, -180)
+			"discard":
+				target = origin + Vector2(fan * 18, -140)
+		if enemy:
+			target = Vector2(1200, -450) if kind == "draw" else Vector2(1010 + fan * 18, -620)
+			origin = Vector2(1080 + fan * 18, -680) if kind == "draw" else Vector2(1200, -450)
+		var flight := {"element": element, "origin": origin, "target": target, "kind": kind, "index": index, "t": -1.0, "delay": minf(0.16, index * float(profile.get("stagger", 0.0)))}
+		batch.append(flight)
+		flights.append(flight)
+	var seconds := QiMotion.batch_seconds(profile, orbs.size())
 	var tween := create_tween()
-	tween.tween_method(func(t: float) -> void: flight.t = t, 0.0, 1.0, clampf(float(motion.get("qi_transfer_seconds", 0.26)), 0.05, 2.0)).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
-	await tween.finished
-	ui.audio.cue("qi_dissolve" if dissolve else "qi_transfer")
-	flights.erase(flight)
+	tween.tween_method(func(elapsed: float) -> void:
+		for flight: Dictionary in batch:
+			flight.t = (elapsed - float(flight.delay)) / duration, 0.0, seconds, seconds)
+	tween.tween_callback(func() -> void:
+		for flight: Dictionary in batch:
+			flights.erase(flight))
+	ui.audio.cue("qi_dissolve" if kind in ["spend", "discard"] else "qi_transfer")
+	if finish:
+		await tween.finished
+	else:
+		await get_tree().create_timer(clampf(float(profile.get("commit", 0.216667)), 0.001, seconds)).timeout
 
 func _draw_flights() -> void:
 	for flight: Dictionary in flights:
 		var t := float(flight.t)
-		var arc := clampf(float(motion.get("qi_arc_height", 32.0)), 0.0, 120.0)
-		var point: Vector2 = flight.origin.lerp(flight.target, t) + Vector2(0, -sin(t * PI) * arc)
+		if t < 0.0 or t > 1.0:
+			continue
+		var kind := str(flight.kind)
 		var color := Color(ui.session.content.element_info(str(flight.element)).color)
-		var alpha := 1.0 - t if bool(flight.dissolve) else 1.0
-		for trail: int in clampi(int(motion.get("qi_trail_count", 5)), 1, 6):
-			var back := maxf(0.0, t - trail * 0.035)
-			var p: Vector2 = flight.origin.lerp(flight.target, back) + Vector2(0, -sin(back * PI) * arc)
-			flight_layer.draw_circle(p, 12.0 - trail * 1.7, Color(color, alpha * (0.2 - trail * 0.03)))
-		flight_layer.draw_texture_rect(Art.ui_icon("orbs/" + str(flight.element)), Rect2(point - Vector2(17, 17), Vector2(34, 34)), false, Color(1, 1, 1, alpha))
+		var alpha := minf(1.0, (1.0 - t) * 5.0)
+		var head: Vector2 = QiMotion.point(flight.origin, flight.target, kind, t, int(flight.index))
+		for segment: int in 14:
+			var back := maxf(0.0, t - segment * 0.014)
+			var tail := maxf(0.0, t - (segment + 1) * 0.014)
+			var p: Vector2 = QiMotion.point(flight.origin, flight.target, kind, back, int(flight.index))
+			var q: Vector2 = QiMotion.point(flight.origin, flight.target, kind, tail, int(flight.index))
+			flight_layer.draw_line(p, q, Color(color, alpha * (1.0 - segment / 14.0)), maxf(0.5, 3.8 - segment * 0.25), true)
+		flight_layer.draw_circle(head, 1.6, Color(1, 0.97, 0.85, alpha))

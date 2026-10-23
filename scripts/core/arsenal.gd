@@ -1,4 +1,5 @@
 extends RefCounted
+const QiRelations = preload("res://scripts/core/qi_relations.gd")
 ## Techniques and equipment. Handwritten sect techniques live in world.json "skills"; generated ones
 ## are encoded entirely in their id, so saves store ids only and the pools are effectively unlimited:
 ##   technique  t:<archetype>:<element>:<tier>:<affix+affix>:<variant>
@@ -71,6 +72,9 @@ static func technique(content, id: String, layer: int = 0) -> Dictionary:
 	}
 	if archetype.slot == "art":
 		result.cost = _cost(archetype.cost, parts[2], int(effect.get("thrift", 0)))
+		var triggers: Dictionary = content.combat_flow_data.get("archetype_triggers", {}).get(parts[1], {})
+		if not triggers.is_empty():
+			result.on_payment = triggers.duplicate(true)
 		result.vfx = archetype.vfx[parts[2]]
 		if archetype.has("damage"):
 			var scale := power * float(effect.get("damage_scale", 1.0)) * (1.0 + float(effect.get("pierce", 0.0)))
@@ -123,7 +127,7 @@ static func _handwritten(content, id: String, layer: int = 0) -> Dictionary:
 		"id": id, "generated": false, "element": skill.get("element", "metal"), "tier": tier,
 		"tier_name": content.technique_data.tiers[tier - 1].name, "name": skill.name, "slot": "art", "kind": skill.kind,
 		"affixes": [], "affix_texts": [], "affix_unlocks": [], "min_realm": 0, "value": int(content.technique_data.tiers[tier - 1].value),
-		"study_days": 0, "cost": skill.cost.duplicate(), "vfx": skill.vfx, "layer": at, "layers": layers,
+		"study_days": int(skill.get("study_days", 0)), "cost": skill.cost.duplicate(), "vfx": skill.vfx, "layer": at, "layers": layers,
 	}
 	if skill.has("damage_min"):
 		result.damage_min = maxi(1, int(round(float(skill.damage_min) * share)))
@@ -140,14 +144,19 @@ static func _handwritten(content, id: String, layer: int = 0) -> Dictionary:
 	for key: String in ["through", "shatter", "weapon"]:
 		if skill.has(key):
 			result[key] = skill[key]
-	for key: String in ["combo", "absorb"]:
+	for key: String in ["combo", "absorb", "on_payment", "dust_flow"]:
 		if skill.has(key):
 			result[key] = skill[key].duplicate()
 	if skill.has("gather"):
 		result.gather = int(skill.gather)
+	if skill.has("once_per_turn"):
+		result.once_per_turn = bool(skill.once_per_turn)
 	if result.has("burn"):
 		result.burn = [maxi(1, int(round(float(result.burn[0]) * share))), int(result.burn[1])]
 	result.description = str(skill.description) + _layered_numbers(result) + "耗灵气：%s。" % cost_text(content, skill.cost) + combo_text(content, result)
+	result.description += QiRelations.describe(result, content.technique_data.elements)
+	if bool(result.get("once_per_turn", false)):
+		result.description += "【后继无力】每回合限一次。"
 	return result
 
 ## A named 心法 written by hand (《藏息录》): its own tier and passive, growing with its layers like any
@@ -169,6 +178,8 @@ static func _handwritten_method(content, id: String, layer: int) -> Dictionary:
 		"layer": at, "layers": layers, "passive": passive,
 	}
 	# 散修专属 (《无相聚气诀》): it works only for one who belongs to no sect (loadout.gd bonuses).
+	if skill.has("dust_hooks"):
+		result.dust_hooks = skill.dust_hooks.duplicate(true)
 	if bool(skill.get("wanderer", false)):
 		result.wanderer = true
 	result.description = str(skill.description) + describe_technique(content, result)
@@ -264,6 +275,8 @@ static func combo_text(content, t: Dictionary) -> String:
 		effects.append("%s +%d%%" % [word, int(round(float(combo.bonus) * 100.0))])
 	if combo.has("absorb"):
 		effects.append("多吸收 %d 颗灵气" % int(combo.absorb))
+	if combo.has("flat_damage"):
+		effects.append("追加伤害 %s（依境界）" % "／".join(combo.flat_damage.map(func(value: Variant) -> String: return str(int(value)))))
 	return "连击：上一道神通为%s系时，%s。" % [content.element_info(str(combo.after)).get("name", ""), "，".join(effects)]
 
 static func _scaled(key: String, value: float) -> Variant:
@@ -286,6 +299,7 @@ static func describe_technique(content, t: Dictionary) -> String:
 				lines.append("结成 %d 点护盾，先替你挡下伤害，至对手下一回合结束。" % t.shield)
 		lines.append("耗灵气：%s。" % cost_text(content, t.cost))
 		lines.append(combo_text(content, t))
+		lines.append(QiRelations.describe(t, content.technique_data.elements))
 	else:
 		var names := {"cultivation": "修炼速度 +%d%%", "max_hp": "气血上限 +%d", "max_qi": "灵力上限 +%d", "element_damage": element_name + "属性伤害 +%d%%", "orb_weight": "斗法中" + element_name + "灵气更易抽到 +%d", "dun_speed": "遁速 +%d%%", "encounter": "野外遇险 %d%%", "humble_rate": "客栈、租屋与散修盟静室闭关收益 +%d%%", "room_rate": "闭关收益 +%d%%", "poison_ward": "所受流血与禁疗 -%d%%"}
 		var parts: Array[String] = []

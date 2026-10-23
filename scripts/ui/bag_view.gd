@@ -13,9 +13,12 @@ static func render(ui) -> void:
 	worn.add_theme_constant_override("separation", 8)
 	columns.add_child(worn)
 	worn.add_child(ui.label("宝 物", 18, ui.GOLD))
-	var prepared := str(session.player.get("prepared_pill", ""))
-	if not prepared.is_empty():
-		worn.add_child(ui.paragraph("已服药力 · %s\n下一场开战时额外吸收 %d 颗灵气，开战后药力耗尽。" % [session.content.item(prepared).name, int(session.content.item(prepared).battle_preparation.opening_orbs)], ui.GOLD))
+	var medicines: Array = session.Prebattle.pending(session)
+	if not medicines.is_empty():
+		var prepared: Label = ui.paragraph("战前药力 · " + "、".join(medicines.map(func(id: String) -> String: return session.content.item(id).name)) + "\n下一场斗法生效", ui.GOLD)
+		prepared.mouse_filter = Control.MOUSE_FILTER_PASS
+		prepared.tooltip_text = "\n".join(medicines.map(func(id: String) -> String: return session.Prebattle.describe(session, id)))
+		worn.add_child(prepared)
 	for slot: String in session.content.equipment_data.slots:
 		var item_id: String = str(session.player.equipment.get(slot, ""))
 		var row := HBoxContainer.new()
@@ -69,21 +72,52 @@ static func render(ui) -> void:
 	if session.player.items.is_empty() and instances.is_empty():
 		carried.add_child(ui.paragraph("行囊空空如也。", ui.MUTED))
 		return
-	if ui.bag_filter in ["all", "equipment"]:
-		for item_id: String in instances:
-			_item_row(ui, carried, item_id)
 	var ids: Array = session.player.items.keys().filter(func(item_id: String) -> bool: return ui.bag_filter == "all" or session.content.item(item_id).get("category", "") == ui.bag_filter)
 	ids.sort_custom(func(a: String, b: String) -> bool:
 		var ca: String = session.content.item(a).get("category", "")
 		var cb: String = session.content.item(b).get("category", "")
 		return ca < cb or (ca == cb and a < b))
-	for item_id: String in ids:
-		_item_row(ui, carried, item_id)
+	if ui.bag_filter in ["all", "equipment"]:
+		ids = instances + ids
+	_item_grid(ui, carried, ids)
+
+static func _item_grid(ui, parent: VBoxContainer, ids: Array) -> void:
+	var session = ui.session
+	if ids.is_empty():
+		parent.add_child(ui.paragraph("这一类暂时没有物品。"))
+		return
+	if not ui.bag_selected in ids:
+		ui.bag_selected = str(ids[0])
+	var grid := GridContainer.new()
+	grid.columns = 6
+	grid.add_theme_constant_override("h_separation", 7)
+	grid.add_theme_constant_override("v_separation", 7)
+	parent.add_child(grid)
+	for id: String in ids:
+		var item: Dictionary = session.gear_item(id) if session.Gear.is_instance(id) else session.content.item(id)
+		var cell: Button = ui.button("", func() -> void: ui.bag_selected = id; ui.render(), str(item.name) + "\n" + str(item.description))
+		cell.custom_minimum_size = Vector2(64, 66)
+		cell.name = "BagCell_" + id.validate_node_name()
+		if id == ui.bag_selected:
+			ui.tint(cell, ui.GOLD)
+		grid.add_child(cell)
+		var texture: Texture2D = ArtLibrary.item_icon(session.content, item)
+		if texture != null:
+			var picture := _icon(texture, 46)
+			picture.position = Vector2(9, 6)
+			picture.mouse_filter = Control.MOUSE_FILTER_IGNORE
+			cell.add_child(picture)
+		var count: Label = ui.label(str(session.item_count(id)), 13, ui.GOLD)
+		count.position = Vector2(39, 45)
+		count.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		cell.add_child(count)
+	parent.add_child(HSeparator.new())
+	_item_row(ui, parent, ui.bag_selected)
 
 static func _item_row(ui, parent: VBoxContainer, item_id: String) -> void:
 	var session = ui.session
 	var item: Dictionary = session.gear_item(item_id) if session.Gear.is_instance(item_id) else session.content.item(item_id)
-	var row := HBoxContainer.new()
+	var row := VBoxContainer.new()
 	row.add_theme_constant_override("separation", 8)
 	parent.add_child(row)
 	# The item's picture (art_library.gd item_icon): painted art, or the composed icon of a 宝物 or 玉简,

@@ -581,6 +581,10 @@ func _run() -> void:
 	check(main.session.item_count("liaoshang_pill") == 1 and main.session.item_count("huichun_grass") == 1 and main.trade.buy.is_empty(), "确定 sells and buys what is on the table")
 	main.close_overlay()
 	main.set_view("bag")
+	var pill_cell: Button = main.center.find_child("BagCell_liaoshang_pill", true, false)
+	check(pill_cell != null, "the inventory grid exposes its pill cell")
+	if pill_cell != null:
+		pill_cell.pressed.emit()
 	await _capture("bag")
 	check(_texts(main.center, "Label").contains("疗伤丹 ×1") and _button("服用") != null, "the 行囊 lists items with a use button")
 	main.set_bag_filter("pill")
@@ -623,7 +627,7 @@ func _run() -> void:
 	check(is_equal_approx(main.center.modulate.a, 1.0), "and settles fully visible")
 	if "storyteller" in main.session.present_npcs():
 		main.open_person("storyteller")
-		check(_has_art("teahouse_story"), "the storyteller is met on his stage")
+		check(_button("离开") != null and _texts(main.center, "Label").contains(main.session.person("storyteller").name), "the storyteller profile keeps its name and exit beside interaction choices")
 		main.close_person()
 	main.session.pending_event = {"id": "night_market", "day": int(main.session.world.day)}
 	main.render()
@@ -743,8 +747,13 @@ func _run() -> void:
 	check(main.view == "alchemy" and _texts(main.center, "Label").contains("还不会任何丹方"), "without a recipe the page says where to find one")
 	main.session.set_item_count("recipe_liaoshang", 1)
 	main.set_view("bag")
+	var recipe_cell: Button = main.center.find_child("BagCell_recipe_liaoshang", true, false)
+	check(recipe_cell != null, "recipe is selectable in the inventory grid")
+	if recipe_cell != null:
+		recipe_cell.pressed.emit()
 	check(_button("研读") != null, "a 丹方 in the 行囊 is read, not swallowed")
-	_button("研读").pressed.emit()
+	if _button("研读") != null:
+		_button("研读").pressed.emit()
 	main.session.set_item_count("huichun_grass", 4)
 	main.open_alchemy()
 	var brew_text := _texts(main.center, "Label")

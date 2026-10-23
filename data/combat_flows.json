@@ -1,0 +1,61 @@
+{
+  "sources": {
+    "payment_rules": "https://store.steampowered.com/news/posts/?appids=1189490&enddate=1593347034",
+    "dust_effects": "https://store.steampowered.com/news/posts/?appids=1189490&enddate=1641802503&feed=steam_community_announcements",
+    "cost_crosscheck": "https://wiki.biligame.com/mcs/卸甲",
+    "cost_records": ["https://wiki.biligame.com/mcs/化沙", "https://wiki.biligame.com/mcs/还尘", "https://wiki.biligame.com/mcs/绝尘", "https://wiki.biligame.com/mcs/万土归尘"],
+    "calibration": "尘沙核心效果以官方公告为主，费用交叉核对 2023-01-18 图鉴记录；学习价格及项目原有神通的配气附加值仍为项目适配。"
+  },
+  "archetype_triggers": {
+    "bolt": {"generate": {"damage": 1}},
+    "barrage": {"same": {"shield": 2}},
+    "burst": {"overcome": {"damage": 2}}
+  },
+  "skill_triggers": {
+    "qi_strike": {"same": {"damage": 2}},
+    "earth": {"overcome": {"damage": 2}}
+  },
+  "seals": ["seal_metal", "seal_water", "seal_wood", "seal_fire", "seal_earth"],
+  "skills": {
+    "dust_shed": {
+      "name": "卸甲", "element": "earth", "kind": "spirit", "cost": {"earth": 1, "same": 1}, "vfx": "earth_guard", "study_days": 10,
+      "description": "先获得护罩，再将自身全部护罩转为等量【尘】。",
+      "dust_flow": {"operation": "shed", "shield": [2, 4, 6, 8, 15]}
+    },
+    "dust_scatter": {
+      "name": "化沙", "element": "earth", "kind": "spirit", "cost": {"earth": 1, "same": 1}, "vfx": "earth", "study_days": 10,
+      "description": "【后继无力】将自身全部【尘】转为对手等量【沙】。需要自身有尘；每回合限一次。",
+      "dust_flow": {"operation": "scatter", "once_per_turn": true}
+    },
+    "dust_return": {
+      "name": "还尘", "element": "earth", "kind": "spirit", "cost": {"earth": 1, "same": 1}, "vfx": "earth", "study_days": 10,
+      "description": "【后继无力】移除对手全部【沙】，转为自身等量【尘】。每回合限一次。",
+      "dust_flow": {"operation": "return", "once_per_turn": true}
+    },
+    "dust_burst": {
+      "name": "绝尘", "element": "earth", "kind": "attack", "cost": {"earth": 2, "same": 1}, "vfx": "rock_spire", "study_days": 15,
+      "description": "消耗【尘】打出土系伤害；上一招为火系时，追加固定伤害。消耗与伤害随境界提高。",
+      "damage_min": 7, "damage_max": 7,
+      "combo": {"after": "fire", "flat_damage": [2, 4, 6, 10, 20]},
+      "dust_flow": {"operation": "consume", "consume": [3, 6, 12, 24, 48], "damage": [7, 11, 20, 40, 80], "fire_bonus": [2, 4, 6, 10, 20]}
+    },
+    "dust_method": {
+      "name": "化尘诀", "slot": "method", "tier": 2, "element": "earth", "passive": {"cultivation": 0.04}, "study_days": 30,
+      "description": "还尘后获得护罩；化沙后追加土系伤害。与尘沙神通配合运转。",
+      "dust_hooks": {"return": {"shield": [2, 2, 2, 2, 2]}, "scatter": {"damage": [2, 3, 4, 5, 6]}}
+    },
+    "dust_breath": {
+      "name": "万尘归灵诀", "slot": "method", "tier": 2, "element": "earth", "passive": {"cultivation": 0.04}, "study_days": 30,
+      "description": "每次还尘后获得聚气，下一回合额外吸收灵气。",
+      "dust_hooks": {"return": {"gather": [1, 1, 2, 2, 3]}}
+    },
+    "dust_condense": {
+      "name": "万土归尘", "element": "earth", "kind": "spirit", "cost": {"same": 1}, "vfx": "earth", "study_days": 15,
+      "description": "【后继无力】配气后，将手中剩余全部土灵气转为【尘】。每颗转化层数随境界提高。",
+      "dust_flow": {"operation": "earth_to_dust", "once_per_turn": true, "per_orb": [1, 3, 7, 20, 40]}
+    }
+  },
+  "shop": {"location": "market", "price": 60, "arts": ["dust_shed", "dust_scatter", "dust_return", "dust_burst", "dust_condense", "dust_method", "dust_breath"]},
+  "preview_methods": ["dust_method", "dust_breath"],
+  "preview_loadout": ["dust_shed", "dust_scatter", "dust_return", "dust_burst", "dust_condense", "earth_guard", "seal_fire", "seal_earth", "flame_bolt", "earth"]
+}

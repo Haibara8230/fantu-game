@@ -18,6 +18,7 @@ extends RefCounted
 ## toxin as of player.toxin_day; player.field is {"grade", "plots": [{"herb", "day"} or {}]}.
 const Talents = preload("res://scripts/core/talents.gd")
 const Calendar = preload("res://scripts/core/calendar.gd")
+const Formulation = preload("res://scripts/core/formulation.gd")
 
 static func data(s) -> Dictionary:
 	return s.content.alchemy_data
@@ -45,9 +46,9 @@ static func nature(s, herb_id: String) -> String:
 	return str(s.content.item(herb_id).get("nature", "neutral"))
 
 ## The way the main herbs lean: "cold", "hot" or "neutral" when they balance.
-static func lean(s, recipe_id: String) -> String:
+static func lean(s, recipe_id: String, main_override: Variant = null) -> String:
 	var heat := 0
-	var main: Dictionary = recipe(s, recipe_id).main
+	var main: Dictionary = main_override if main_override is Dictionary else recipe(s, recipe_id).main
 	for herb_id: String in main:
 		match nature(s, herb_id):
 			"cold":
@@ -57,8 +58,8 @@ static func lean(s, recipe_id: String) -> String:
 	return "cold" if heat < 0 else ("hot" if heat > 0 else "neutral")
 
 ## The nature a 药引 needs for this recipe.
-static func guide_nature(s, recipe_id: String) -> String:
-	match lean(s, recipe_id):
+static func guide_nature(s, recipe_id: String, main_override: Variant = null) -> String:
+	match lean(s, recipe_id, main_override):
 		"cold":
 			return "hot"
 		"hot":
@@ -66,14 +67,14 @@ static func guide_nature(s, recipe_id: String) -> String:
 	return "neutral"
 
 ## Herbs held that could go in as 药引 (beyond what the main herbs take), fitting ones first.
-static func guide_options(s, recipe_id: String) -> Array[String]:
-	var main: Dictionary = recipe(s, recipe_id).main
+static func guide_options(s, recipe_id: String, main_override: Variant = null) -> Array[String]:
+	var main: Dictionary = main_override if main_override is Dictionary else recipe(s, recipe_id).main
 	var fitting: Array[String] = []
 	var other: Array[String] = []
 	for herb_id: String in s.content.herbs_by_value():
 		if s.item_count(herb_id) <= int(main.get(herb_id, 0)):
 			continue
-		if nature(s, herb_id) == guide_nature(s, recipe_id):
+		if nature(s, herb_id) == guide_nature(s, recipe_id, main):
 			fitting.append(herb_id)
 		else:
 			other.append(herb_id)
@@ -119,7 +120,7 @@ static func aids(s) -> Array[String]:
 
 ## The herbs a plan takes: {herb_id: count}.
 static func cost(s, plan: Dictionary) -> Dictionary:
-	var herbs: Dictionary = recipe(s, str(plan.recipe)).main.duplicate()
+	var herbs := Formulation.main_for(s.content, plan)
 	var guide := str(plan.get("guide", ""))
 	if not guide.is_empty():
 		herbs[guide] = int(herbs.get(guide, 0)) + 1
@@ -127,7 +128,7 @@ static func cost(s, plan: Dictionary) -> Dictionary:
 
 static func balanced(s, plan: Dictionary) -> bool:
 	var guide := str(plan.get("guide", ""))
-	return not guide.is_empty() and nature(s, guide) == guide_nature(s, str(plan.recipe))
+	return not guide.is_empty() and nature(s, guide) == guide_nature(s, str(plan.recipe), Formulation.main_for(s.content, plan))
 
 ## Why the plan cannot be brewed now, or "".
 static func block(s, plan: Dictionary) -> String:
@@ -142,6 +143,9 @@ static func block(s, plan: Dictionary) -> String:
 	var recipe_id := str(plan.get("recipe", ""))
 	if not knows(s, recipe_id):
 		return "你还不会这张丹方。"
+	var formula_problem := Formulation.problem(s.content, plan)
+	if not formula_problem.is_empty():
+		return formula_problem
 	var guide := str(plan.get("guide", ""))
 	if not guide.is_empty() and s.content.item(guide).get("category", "") != "herb":
 		return "药引须是灵草。"
@@ -182,9 +186,10 @@ static func odds(s, plan: Dictionary) -> Dictionary:
 	var fine := int(rules.fine_base) + int(used.fine) + mini(int(practice.fine_most), brews * int(practice.fine_step)) + talent / 2 + int(fire.fine)
 	var least := int(r.yield[0]) + int(used.yield) - (0 if is_balanced else 1)
 	var most := int(r.yield[1]) + int(used.yield) - (0 if is_balanced else 1)
+	var yield_scale: float = 1.0 + s.Dao.value(s, "brew_scale")
 	return {
 		"success": clampi(success, int(range_of[0]), int(range_of[1])), "fine": clampi(fine, 0, int(rules.fine_most)) if is_balanced else 0,
-		"yield": [maxi(1, least), maxi(1, most)], "balanced": is_balanced, "days": int(r.days), "fee": int(place(s).get("fee", 0)),
+		"yield": [int(round(maxi(1, least) * yield_scale)), int(round(maxi(1, most) * yield_scale))], "balanced": is_balanced, "days": int(r.days), "fee": int(place(s).get("fee", 0)),
 		"furnace": used, "parts": parts, "burst": bool(fire.get("burst", false)) and not bool(aid.get("safe", false)),
 	}
 
@@ -216,6 +221,7 @@ static func brew(s, plan: Dictionary) -> String:
 		var fine := fine_roll * 100.0 < float(chances.fine)
 		var pill: String = str(r.fine) if fine else str(r.pill)
 		s.add_item(pill, count)
+		s.Dao.gain(s, "alchemy", int(r.get("tier", 1)) * 288)
 		text = s.log_event("alchemy_fine" if fine else "alchemy_done", {"days": passed.elapsed, "loot": "%s:%d" % [pill, count]}, fine and recipe_id == "foundation")
 		if not bool(chances.balanced):
 			text += " 寒热未调，这一炉少成了一枚，也出不了上品。"
@@ -250,7 +256,7 @@ static func toxin(s) -> int:
 static func toxin_of(s, item: Dictionary) -> int:
 	if not item.has("toxin"):
 		return 0
-	return Talents.scaled(int(item.toxin), s.talent_modifier("pill_cooldown"), 1)
+	return maxi(0, Talents.scaled(int(item.toxin), s.talent_modifier("pill_cooldown"), 1) - int(s.Dao.value(s, "toxin_cut")))
 
 ## Why the toxin refuses this pill now, or "".
 static func toxin_block(s, item: Dictionary) -> String:

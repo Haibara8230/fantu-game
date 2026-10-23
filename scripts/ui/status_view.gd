@@ -143,6 +143,9 @@ static func _body(ui, parent: VBoxContainer) -> void:
 		var way: Dictionary = session.content.technique_data.schools[school]
 		_row(ui, parent, "流派", str(way.name), str(way.text))
 	_row(ui, parent, "神识", str(session.sense()), "随境界与天赋增长：识破洞府机关、看见暗格，看穿神识不及你的人的天赋")
+	var medicines: Array = session.Prebattle.pending(session)
+	if not medicines.is_empty():
+		_row(ui, parent, "战前药力", "、".join(medicines.map(func(id: String) -> String: return session.content.item(id).name)), "\n".join(medicines.map(func(id: String) -> String: return session.Prebattle.describe(session, id))), ui.GOLD)
 	var toxin: int = session.toxin()
 	var rule: Dictionary = session.content.alchemy_data.toxin
 	_row(ui, parent, "丹毒", "%d / %d · 每日消退 %d" % [toxin, int(rule.limit), int(rule.decay_per_day)] + (" · 突破把握 -%d" % (toxin / int(rule.breakthrough_step)) if toxin >= int(rule.breakthrough_step) else ""), "服增长修为的丹药会积丹毒；积满便服不下，突破时也少几分把握", ui.INK if toxin * 2 < int(rule.limit) else WARN)

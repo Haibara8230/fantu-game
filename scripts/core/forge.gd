@@ -3,11 +3,31 @@ extends RefCounted
 ## Session. Data in data/forge.json: each material's family (metal, cloth, jade — the families of the
 ## bases in data/equipment.json) and tier. A forging takes `count` materials of one kind for a base of
 ## the same family, an element chosen by the player (or none), a fee and days by the tier; the piece
-## comes out at the material's tier. Its affixes and variant follow from the world seed and how many
+## comes out at the material's tier, or the lowest tier in an optional mixed-material plan.
+## Materials can select affinity-based affixes; unselected slots and the variant follow the world seed and how many
 ## pieces have been forged in this life (player.forged), so loading a save forges the same piece again.
 ## plan: {"base", "material", "element", "flux"}. With `flux` (data `flux`, 地火精 from 天南) one more is
 ## spent and the piece comes out with that many more affixes.
 const Arsenal = preload("res://scripts/core/arsenal.gd")
+const Formulation = preload("res://scripts/core/formulation.gd")
+
+static func ingredients(s, plan: Dictionary) -> Dictionary:
+	return plan.materials.duplicate() if plan.get("materials") is Dictionary else {str(plan.get("material", "")): int(data(s).count)}
+
+static func tier_for_plan(s, plan: Dictionary) -> int:
+	var tier := tier_of(s, str(plan.get("material", "")))
+	for id: String in ingredients(s, plan):
+		tier = mini(tier, tier_of(s, id))
+	return tier
+
+static func affixes_for(s, plan: Dictionary) -> Array[String]:
+	var result: Array[String] = []
+	for id: String in ingredients(s, plan):
+		var family := str(data(s).materials.get(id, {}).get("family", ""))
+		for key: String in s.content.formulation_data.forge_affinities.get(family, []):
+			if not key in result:
+				result.append(key)
+	return result
 
 static func data(s) -> Dictionary:
 	return s.content.forge_data
@@ -41,7 +61,7 @@ static func fee(s, material_id: String) -> int:
 	return int(data(s).fee[tier_of(s, material_id) - 1])
 
 static func days(s, material_id: String) -> int:
-	return int(data(s).days[tier_of(s, material_id) - 1])
+	return maxi(1, int(round(int(data(s).days[tier_of(s, material_id) - 1]) * (1.0 - s.Dao.value(s, "forge_speed")))))
 
 ## Why the plan cannot be forged here and now, or "".
 static func block(s, plan: Dictionary) -> String:
@@ -58,8 +78,29 @@ static func block(s, plan: Dictionary) -> String:
 	var element := str(plan.get("element", "none"))
 	if element != "none" and not s.content.technique_data.elements.has(element):
 		return "未知的属性。"
-	if s.item_count(material) < int(data(s).count):
-		return "%s不足 %d 份。" % [s.content.item(material).name, int(data(s).count)]
+	if plan.has("materials") and not plan.materials is Dictionary:
+		return "炼器材料配置无效。"
+	var total := 0
+	var parts := ingredients(s, plan)
+	if not parts.has(material):
+		return "须投入选定的主材。"
+	for id: Variant in parts:
+		if not id is String or not data(s).materials.has(id) or not Formulation.whole(parts[id], 12) or int(parts[id]) < 1:
+			return "每种炼器材料须投入 1 至 12 份。"
+		total += int(parts[id])
+		if s.item_count(id) < int(parts[id]):
+			return "%s不足 %d 份。" % [s.content.item(id).name, int(parts[id])]
+	if total < int(data(s).count) or total > 12:
+		return "每炉合计需 %d 至 12 份材料。" % int(data(s).count)
+	var chosen: Variant = plan.get("affixes", [])
+	var budget := int(s.content.equipment_data.tiers[tier_for_plan(s, plan) - 1].affixes) + (int(data(s).flux.affixes) if bool(plan.get("flux", false)) else 0)
+	if not chosen is Array or chosen.size() > budget or chosen.any(func(id: Variant) -> bool: return not id is String or not id in affixes_for(s, plan) or chosen.count(id) != 1):
+		return "材料承载不了所选词条，或词条数量超过成器品阶。"
+	var sigil := str(plan.get("sigil", ""))
+	if not sigil.is_empty():
+		var rule: Dictionary = s.content.formulation_data.sigils.get(sigil, {})
+		if rule.is_empty() or s.Dao.value(s, str(rule.dao)) <= 0 or s.content.equipment_data.bases[str(plan.base)].slot != "weapon":
+			return "尚未领悟此灵纹，或器型不能铭刻。"
 	if int(s.player.stones) < fee(s, material):
 		return "灵石不足：炉火与器师要 %d 灵石。" % fee(s, material)
 	if bool(plan.get("flux", false)) and s.item_count(flux_item(s)) < 1:
@@ -83,8 +124,9 @@ static func forge(s, plan: Dictionary) -> String:
 	if not reason.is_empty():
 		return reason
 	var material := str(plan.material)
-	var tier := tier_of(s, material)
-	s.remove_item(material, int(data(s).count))
+	var tier := tier_for_plan(s, plan)
+	for id: String in ingredients(s, plan):
+		s.remove_item(id, int(ingredients(s, plan)[id]))
 	var flux := bool(plan.get("flux", false))
 	if flux:
 		s.remove_item(flux_item(s), 1)
@@ -95,9 +137,18 @@ static func forge(s, plan: Dictionary) -> String:
 	rng.seed = hash([int(s.world.get("seed", 0)), "forge", made, str(plan.base), material])
 	var affixes: Array = s.content.equipment_data.affixes.keys()
 	affixes.sort()
-	var piece := Arsenal.equipment_id(str(plan.base), tier, str(plan.get("element", "none")), Arsenal._pick(rng, affixes, affix_count(s, material, flux)), rng.randi_range(0, 9))
+	var picked: Array = plan.get("affixes", []).duplicate()
+	var budget := mini(affix_count(s, material, flux), int(s.content.equipment_data.tiers[tier - 1].affixes) + (int(data(s).flux.affixes) if flux else 0))
+	var pool: Array = affixes.filter(func(id: String) -> bool: return not id in picked)
+	picked.append_array(Arsenal._pick(rng, pool, maxi(0, budget - picked.size())))
+	var piece := Arsenal.equipment_id(str(plan.base), tier, str(plan.get("element", "none")), picked, rng.randi_range(0, 9))
 	var passed: Dictionary = s.advance_days(days(s, material))
 	if not s.ended.is_empty():
 		return s.conclude("", passed)
-	s.add_item(piece, 1)
+	if not str(plan.get("sigil", "")).is_empty():
+		var instance: String = s.Gear._create(s, piece)
+		s.player.gear[instance].sigil = str(plan.sigil)
+	else:
+		s.add_item(piece, 1)
+	s.Dao.gain(s, "craft", tier * 288)
 	return s.conclude(s.log_event("forged", {"days": passed.elapsed, "item": piece}), passed)

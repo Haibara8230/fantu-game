@@ -432,7 +432,7 @@ static func interact(s, person_id: String, option_id: String) -> String:
 	mark_met(s, person_id)
 	var progress := Events.person(s, person_id)
 	progress.last[option_id] = int(s.world.day)
-	if option_id in ["consult", "teach", "invite_spar", "invite_help", "companion", "disciple", "instruct", "sworn"]:
+	if option_id in ["consult", "teach", "invite_spar", "invite_help", "companion", "disciple", "instruct", "sworn", "debate"]:
 		return Bonds.interact(s, person_id, option_id)
 	var text := ""
 	match option_id:

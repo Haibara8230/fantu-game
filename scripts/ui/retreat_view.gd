@@ -77,6 +77,14 @@ static func render_retreat(ui) -> void:
 		preview.text = preview_text(session, ui.retreat_days)
 	slider.value_changed.connect(refresh)
 	refresh.call(slider.value)
+	var presets := HBoxContainer.new()
+	presets.add_theme_constant_override("separation", 8)
+	right.add_child(presets)
+	for units: int in [1, 3, 12]:
+		var days := mini(cap, units * step)
+		var pick: Button = ui.button(Calendar.duration_text(days), func() -> void: slider.value = clampi(units, 1, most), "选择时间并更新出关预览")
+		pick.disabled = units > most
+		presets.add_child(pick)
 
 ## 领悟, after Mi Chang Sheng's: everything studied in seclusion in one place — the 玉简 in the 行囊,
 ## the lineage (in the sect's own chamber) and the next layer of what is already learned. Each takes its
@@ -91,6 +99,14 @@ static func render_insight(ui) -> void:
 	if not ui.retreat_result.is_empty():
 		right.add_child(ui.paragraph(ui.retreat_result, ui.INK))
 	right.add_child(ui.paragraph("悟性与灵根决定领悟的快慢：功法与灵根同属，耗时更少。闭关时运转的心法与神通也会慢慢积累熟练。", ui.MUTED))
+	var insight: Array[String] = []
+	for path: String in session.content.dao_data.paths:
+		var amount := int(session.Dao.state(session).pending.get(path, 0))
+		if amount > 0:
+			insight.append("%s道 %d" % [session.content.dao_data.paths[path], amount])
+	if not insight.is_empty():
+		right.add_child(ui.paragraph("待吸收感悟 · " + "、".join(insight), ui.GOLD))
+		right.add_child(ui.button("感悟大道", func() -> void: ui.set_view("dao"), "选择大道吸收感悟，或领悟悟道节点。"))
 	right.add_child(ui.label("研读玉简", 20, ui.GOLD))
 	var manuals: Array = session.player.items.keys().filter(func(item_id: String) -> bool: return str(session.content.item(item_id).get("category", "")) == "manual")
 	manuals.sort()

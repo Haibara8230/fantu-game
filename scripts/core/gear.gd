@@ -37,6 +37,10 @@ static func item_in(content, gear: Dictionary, item_id: String) -> Dictionary:
 		return piece
 	piece.instance = item_id
 	piece.refine = int(held.refine)
+	if held.has("sigil"):
+		piece.sigil = str(held.sigil)
+		var rule: Dictionary = content.formulation_data.sigils.get(str(held.sigil), {})
+		piece.description += "\n【%s灵纹】%s" % [str(rule.get("name", "")), str(rule.get("text", ""))]
 	return piece
 
 static func worn(s, item_id: String) -> bool:

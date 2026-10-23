@@ -165,6 +165,16 @@ func _run() -> void:
 	retiring.tree_exiting.connect(func() -> void: observed.qi = retiring.enemy_qi)
 	await main._play_opening()
 	check(observed.qi == 6, "faster-foe opening reconstructs all draws and payments without negative or lost visual qi")
+	main.session.battle.orbs = ["fire", "fire", "wood"]
+	main.render()
+	main.battle_stage.motion_enabled = true
+	var dock = main.battle_dock
+	state = main.session.snapshot()
+	await dock.set_payment("qi_strike", ["fire", "fire"])
+	check(dock.held.size() == 3 and dock.pool_reserved.size() == 2 and main.session.snapshot() == state, "animated reservation updates available pool while keeping authoritative total")
+	await dock.play_event({"type": "spend", "actor": "player", "orbs": ["fire", "fire"]})
+	check(dock.held == ["wood"] and dock.reserved.is_empty() and dock.pool_reserved.is_empty() and dock.flights.is_empty(), "animated spending shrinks payment icons and clears tails without double subtraction")
+	check(main.session.snapshot() == state and not dock.busy, "animated replay only changes presentation and releases the input lock")
 	main.queue_free()
 	await process_frame
 	print("BATTLE LAYOUT: %d checks, %d failures" % [checks, failures])

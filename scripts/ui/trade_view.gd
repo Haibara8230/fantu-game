@@ -102,11 +102,19 @@ static func render(ui) -> void:
 	actions.add_child(confirm)
 
 static func _column(ui, parent: HBoxContainer, title: String) -> VBoxContainer:
+	var frame := VBoxContainer.new()
+	frame.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	parent.add_child(frame)
+	frame.add_child(ui.label(title, 18, ui.GOLD))
+	var scroll := ScrollContainer.new()
+	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	scroll.custom_minimum_size = Vector2(0, 350)
+	scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	frame.add_child(scroll)
 	var column := VBoxContainer.new()
 	column.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	column.add_theme_constant_override("separation", 6)
-	parent.add_child(column)
-	column.add_child(ui.label(title, 18, ui.GOLD))
+	scroll.add_child(column)
 	return column
 
 static func _price(goods: Array, item_id: String) -> int:

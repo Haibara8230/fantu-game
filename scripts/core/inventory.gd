@@ -230,7 +230,7 @@ static func gather_picks(s, gather: Dictionary) -> Dictionary:
 	for entry: Dictionary in gather.table:
 		total += int(entry.weight)
 	var picks: int = s.world_rng.randi_range(int(gather.picks[0]), int(gather.picks[1]))
-	for pick: int in Talents.scaled(picks, s.talent_modifier("gather"), 1):
+	for pick: int in int(round(Talents.scaled(picks, s.talent_modifier("gather"), 1) * (1.0 + s.Dao.value(s, "gather_scale")))):
 		var roll: int = s.world_rng.randi_range(1, total)
 		for entry: Dictionary in gather.table:
 			roll -= int(entry.weight)
@@ -264,8 +264,6 @@ static func buy(s, item_id: String) -> String:
 	var blocked: String = s.blocked()
 	if not blocked.is_empty():
 		return blocked
-	if s.content.item(item_id).has("battle_preparation") and not str(s.player.get("prepared_pill", "")).is_empty():
-		return "已有待生效的回气药力；下一场开战时生效，不能叠服。"
 	if _teaches_known(s, s.content.item(item_id)):
 		return "你已通晓此丹方。"
 	for good: Dictionary in shop_goods(s):
@@ -289,8 +287,8 @@ static func use_block(s, item_id: String) -> String:
 		return "此物不能直接服用。"
 	if item_count(s, item_id) < 1:
 		return "行囊里没有此物。"
-	if s.content.item(item_id).has("battle_preparation") and not str(s.player.get("prepared_pill", "")).is_empty():
-		return "已有待生效的回气药力；下一场开战时生效，不能叠服。"
+	if s.content.item(item_id).has("battle_preparation") and not s.Prebattle.block(s, item_id).is_empty():
+		return s.Prebattle.block(s, item_id)
 	if _teaches_known(s, s.content.item(item_id)):
 		return "你已通晓此丹方。"
 	var toxic := Alchemy.toxin_block(s, s.content.item(item_id))
@@ -314,7 +312,7 @@ static func use_item(s, item_id: String) -> String:
 	remove_item(s, item_id, 1)
 	Alchemy.add_toxin(s, item)
 	if item.has("battle_preparation"):
-		s.player.prepared_pill = item_id
+		s.Prebattle.prepare(s, item_id)
 	var text: String = s.log_event("read_recipe" if item.category == "recipe" else "use_item", {"item": item_id})
 	Events.apply(s, pill_effects(s, item))
 	return s.conclude(text)

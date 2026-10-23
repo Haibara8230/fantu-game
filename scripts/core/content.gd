@@ -19,6 +19,10 @@ var map: Dictionary = {}
 # The regions the map is drawn in (舆图分页); places name theirs, or belong to map.region.
 var regions: Dictionary = {}
 var technique_data: Dictionary = {}
+var combat_flow_data: Dictionary = {}
+var dao_data: Dictionary = {}
+var dao_nodes: Dictionary = {}
+var formulation_data: Dictionary = {}
 var equipment_data: Dictionary = {}
 var vfx_tiers: Array = []
 # Tier layers that start at some tier instead of rising from the first, and each sect's signature layer.
@@ -60,7 +64,7 @@ const DANGER_LEVELS := 4
 const FAVOR_MAX := 200
 const FAVOR_STAGES := [[0, "初识"], [40, "相熟"], [80, "友好"], [140, "信赖"], [200, "亲密"]]
 const ATTITUDES := {"friendly": "友善", "neutral": "中立", "hostile": "敌意"}
-const BUILT_IN_INTERACTIONS := ["talk", "gift", "help", "consult", "teach", "invite_spar", "invite_help", "companion", "disciple", "instruct", "sworn"]
+const BUILT_IN_INTERACTIONS := ["talk", "gift", "help", "consult", "teach", "invite_spar", "invite_help", "companion", "disciple", "instruct", "sworn", "debate"]
 const PLAIN_ACTIONS := ["cultivate", "rest", "breakthrough", "study", "teach", "sell", "shop", "gather", "inn_rest", "search_ruin", "explore_cave", "forge", "ascend", "inquire", "commissions", "sect", "alchemy", "field", "lease", "hunt", "arena", "series", "join_sect", "guest", "league", "tianji", "guishi"]
 const ITEM_CATEGORIES := {"herb": "灵草", "pill": "丹药", "treasure": "天材地宝", "manual": "玉简", "equipment": "宝物", "material": "材料", "recipe": "丹方", "talisman": "符箓", "tool": "器具", "quest": "信物"}
 # Milestones friends send word of, and the deeds the session counts besides victories ("win:<enemy>").
@@ -70,6 +74,9 @@ const STORY_STATES := ["none", "active", "done", "closed"]
 const Arsenal = preload("res://scripts/core/arsenal.gd")
 const Talents = preload("res://scripts/core/talents.gd")
 const Combat = preload("res://scripts/core/combat.gd")
+const Dao = preload("res://scripts/core/dao.gd")
+const Prebattle = preload("res://scripts/core/prebattle.gd")
+const Formulation = preload("res://scripts/core/formulation.gd")
 
 func load_data() -> bool:
 	var parsed: Variant = _read_json("res://data/world.json")
@@ -166,6 +173,55 @@ func load_data() -> bool:
 	regions = parsed.get("regions", {})
 	locations = parsed.locations
 	skills = parsed.skills
+	var flows: Variant = _read_json("res://data/combat_flows.json")
+	if not flows is Dictionary or not flows.get("skills") is Dictionary:
+		error_message = "斗法流派配置格式错误。"
+		return false
+	combat_flow_data = flows
+	var medicines: Variant = _read_json("res://data/prebattle.json")
+	if not medicines is Dictionary or not medicines.get("items") is Dictionary or not locations.has(medicines.get("shop", "")):
+		error_message = "战前药力配置错误。"
+		return false
+	for id: String in medicines.items:
+		if items.has(id):
+			error_message = "战前丹药重复：" + id
+			return false
+		items[id] = medicines.items[id].duplicate(true)
+		items[id].id = id
+		locations[medicines.shop].shop.append({"item": id, "price": int(items[id].get("price", 0))})
+	var understanding: Variant = _read_json("res://data/dao.json")
+	if not understanding is Dictionary:
+		error_message = "悟道配置格式错误。"
+		return false
+	dao_data = understanding
+	var formulas: Variant = _read_json("res://data/formulations.json")
+	if not formulas is Dictionary:
+		error_message = "丹器配方配置错误。"
+		return false
+	formulation_data = formulas
+	for id: String in flows.skills:
+		if skills.has(id):
+			error_message = "斗法流派神通重复：" + id
+			return false
+		skills[id] = flows.skills[id].duplicate(true)
+	for id: String in flows.get("skill_triggers", {}):
+		if skills.has(id):
+			skills[id].on_payment = flows.skill_triggers[id].duplicate(true)
+	for id: String in flows.get("seals", []):
+		if skills.has(id):
+			var seal: Dictionary = skills[id]
+			seal.erase("combo")
+			seal.on_payment = {"generate": {"absorb": seal.absorb.duplicate()}}
+			seal.once_per_turn = true
+	var flow_shop: Variant = flows.get("shop")
+	if not flow_shop is Dictionary or not locations.has(flow_shop.get("location", "")) or not flow_shop.get("arts") is Array or not _whole(flow_shop.get("price")):
+		error_message = "斗法流派玉简商店配置错误。"
+		return false
+	for id: Variant in flow_shop.arts:
+		if not id is String or not skills.has(id):
+			error_message = "斗法流派玉简引用错误。"
+			return false
+		locations[flow_shop.location].shop.append({"item": "j:" + id, "price": int(flow_shop.price)})
 	enemies = parsed.enemies
 	series = parsed.get("series", {})
 	feuds = parsed.get("feuds", {})
@@ -186,6 +242,10 @@ func _read_json(path: String) -> Variant:
 	return JSON.parse_string(file.get_as_text())
 
 func _validate() -> String:
+	if not Formulation.valid_data(self):
+		return "丹器配方配置无效。"
+	if not Dao.valid_data(self):
+		return "悟道配置无效。"
 	# 禁忌秘术 (combat.gd).
 	for art_id: String in rules.get("duel", {}).get("secret_arts", {}):
 		var art: Variant = rules.duel.secret_arts[art_id]
@@ -726,7 +786,9 @@ func _validate_moves(enemy: Dictionary) -> String:
 ## 连击: {"after": an element (or, for archetypes, "source" — the one that gives rise to theirs — or
 ## "same"), and "bonus" (a share more of the effect) and/or "absorb" (more orbs drawn in)}.
 func _valid_combo(combo: Variant, afters: Array) -> bool:
-	if not combo is Dictionary or not combo.get("after") in afters or not (combo.has("bonus") or combo.has("absorb")):
+	if not combo is Dictionary or not combo.get("after") in afters or not (combo.has("bonus") or combo.has("absorb") or combo.has("flat_damage")):
+		return false
+	if combo.has("flat_damage") and (not combo.flat_damage is Array or combo.flat_damage.size() != realms.size() or combo.flat_damage.any(func(value: Variant) -> bool: return not _whole(value) or int(value) < 1)):
 		return false
 	return (not combo.has("bonus") or float(combo.bonus) > 0.0) and (not combo.has("absorb") or (_whole(combo.absorb) and int(combo.absorb) >= 1))
 
@@ -2585,7 +2647,7 @@ func _validate_item(item: Variant) -> String:
 		return "品类未知"
 	if not _whole(item.get("price")):
 		return "价格无效"
-	if item.has("battle_preparation") and (not item.battle_preparation is Dictionary or not _whole(item.battle_preparation.get("opening_orbs")) or int(item.battle_preparation.opening_orbs) < 1 or item.category != "pill"):
+	if item.has("battle_preparation") and (not Prebattle.valid_definition(item.battle_preparation, technique_data.elements) or item.category != "pill"):
 		return "战前药力无效"
 	if item.has("duel") and (not item.duel is Dictionary or item.duel.is_empty() or (item.duel.has("orbs") and (not _whole(item.duel.orbs) or int(item.duel.orbs) < 1)) or (item.duel.has("heal") and not item.duel.heal is bool) or ["damage", "shield"].any(func(key: String) -> bool: return item.duel.has(key) and (not _whole(item.duel[key]) or int(item.duel[key]) < 1)) or (item.duel.has("bind") and (not item.duel.bind is Array or item.duel.bind.size() != 2)) or (item.duel.has("escape") and not item.duel.escape is bool)):
 		return "斗法中服用的配置无效"
@@ -2681,6 +2743,8 @@ func _validate_arsenal() -> String:
 		if archetype.slot == "art":
 			if not archetype.get("kind") in ["attack", "heal", "guard"] or not _valid_cost(archetype.get("cost"), ["element", "same", "any"]) or (archetype.has("combo") and not _valid_combo(archetype.combo, ["source", "same"])):
 				return "神通原型配置错误：" + archetype_id
+			if not Combat.QiRelations.valid(combat_flow_data.get("archetype_triggers", {}).get(archetype_id, {}), data.elements):
+				return "神通原型配气触发错误：" + archetype_id
 			for element: String in data.elements:
 				if not vfx_styles.has(archetype.get("vfx", {}).get(element, "")):
 					return "神通原型缺少特效：%s.%s" % [archetype_id, element]
@@ -2704,6 +2768,16 @@ func _validate_arsenal() -> String:
 			if not skill.get("passive") is Dictionary or skill.passive.is_empty() or skill.passive.keys().any(func(key: Variant) -> bool: return not key in ["cultivation", "max_hp", "max_qi", "dun_speed", "encounter", "element_damage", "orb_weight", "humble_rate", "room_rate", "poison_ward"]) or skill.passive.values().any(func(value: Variant) -> bool: return not (value is float or value is int)) or not skill.get("wanderer", false) is bool:
 				return "手写心法的常驻效果无效：" + skill_id
 			# 《照水分光诀》: two elements that answer each other as a 连击 (combat.gd linked_combo).
+			if skill.has("dust_hooks"):
+				if not skill.dust_hooks is Dictionary or skill.dust_hooks.is_empty():
+					return "尘沙功法配置错误：" + skill_id
+				for action: Variant in skill.dust_hooks:
+					if not action in ["return", "scatter"] or not skill.dust_hooks[action] is Dictionary:
+						return "尘沙功法触发错误：" + skill_id
+					for key: Variant in skill.dust_hooks[action]:
+						var values: Variant = skill.dust_hooks[action][key]
+						if not key in ["shield", "damage", "gather"] or not values is Array or values.size() != realms.size() or values.any(func(value: Variant) -> bool: return not _whole(value)):
+							return "尘沙功法数值错误：" + skill_id
 			var link: Variant = skill.get("link", {})
 			if not link is Dictionary or (not link.is_empty() and (not link.get("elements") is Array or link.elements.size() != 2 or link.elements.any(func(element: Variant) -> bool: return not data.elements.has(element)) or not (link.get("bonus") is float or link.get("bonus") is int) or not _whole(link.get("absorb", 0)))):
 				return "手写心法的连击相合无效：" + skill_id
@@ -2712,6 +2786,10 @@ func _validate_arsenal() -> String:
 			return "传承神通的灵气消耗无效：" + skill_id
 		if not skill.get("kind") in ["attack", "heal", "guard", "spirit"]:
 			return "传承神通的种类无效：" + skill_id
+		if not Combat.QiRelations.valid(skill.get("on_payment", {}), data.elements) or not skill.get("once_per_turn", false) is bool:
+			return "神通配气触发配置错误：" + skill_id
+		if skill.has("dust_flow") and not Combat.DustFlow.valid(skill.dust_flow, realms.size()):
+			return "尘沙神通配置错误：" + skill_id
 		if skill.has("combo") and not _valid_combo(skill.combo, data.elements.keys()):
 			return "传承神通的连击无效：" + skill_id
 		if skill.has("absorb") and (not skill.absorb is Array or skill.absorb.size() != 2 or not data.elements.has(skill.absorb[0]) or not _whole(skill.absorb[1]) or int(skill.absorb[1]) < 1):

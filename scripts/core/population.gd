@@ -252,5 +252,5 @@ static func foe(content, person_id: String, person: Dictionary) -> Dictionary:
 		"damage_max": maxi(1, int(round(float(best.damage_max) * power)) + bonus), "art": best.id, "art_name": best.name,
 		"vfx": best.vfx, "tier": int(best.tier), "xp": 10 * (int(person.stage) + 1) + 30 * int(person.realm), "npc": person_id,
 		"sect": person.sect, "gender": person.gender, "arts": arts, "power": snappedf(power, 0.01), "bonus": bonus, "element": str(best.element),
-		"realm": int(person.realm), "school": Schools.of(content, person.loadout.get("methods", [])),
+		"realm": int(person.realm), "school": Schools.of(content, person.loadout.get("methods", [])), "methods": person.loadout.get("methods", []).duplicate(),
 	}

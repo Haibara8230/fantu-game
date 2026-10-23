@@ -50,6 +50,8 @@ static func options(s, person_id: String) -> Array[Dictionary]:
 	var result: Array[Dictionary] = []
 	var favor: int = s.favor(person_id)
 	var rules := data(s)
+	if favor >= int(s.content.dao_data.debate.favor):
+		result.append({"id": "debate", "label": "论道（三日，积累感悟与悟道点）", "cooldown_days": int(s.content.dao_data.debate.cooldown)})
 	if favor >= int(rules.consult.favor) and _above_or_level(s, person_id):
 		result.append({"id": "consult", "label": "请教（%d 日，得历练与心境）" % int(rules.consult.days), "cooldown_days": int(rules.consult.cooldown_days)})
 	if favor >= int(rules.teach.favor) and s.is_generated(person_id):
@@ -99,6 +101,8 @@ static func teachable(s, person_id: String) -> String:
 static func interact(s, person_id: String, option_id: String) -> String:
 	var rules := data(s)
 	match option_id:
+		"debate":
+			return s.Dao.debate(s, person_id)
 		"consult":
 			var passed: Dictionary = s.advance_days(int(rules.consult.days))
 			var texts: Array[String] = [s.log_event("consult", {"npc": person_id, "days": passed.elapsed})]

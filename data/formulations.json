@@ -1,0 +1,16 @@
+{
+  "calibration": "可组合药性借鉴原作；沿用本项目药材，药性强度为项目适配数值。",
+  "properties": {
+    "huichun_grass": {"life": 2, "qi": 1},
+    "ninglu_grass": {"life": 1, "qi": 2},
+    "chiyan_flower": {"power": 2},
+    "lingzhi": {"life": 8, "qi": 4, "power": 4, "foundation": 1}
+  },
+  "names": {"life": "生机", "qi": "聚元", "power": "凝练", "foundation": "筑基"},
+  "maximum_herbs": 30,
+  "forge_affinities": {"metal": ["sharp", "guard"], "cloth": ["tough", "calm"], "jade": ["spirit", "attune", "gather", "bind"]},
+  "sigils": {
+    "vermilion": {"name": "朱雀", "dao": "sigil_vermilion", "threshold": 0.5, "scale": 2.0, "text": "自身低于半血时，祭出伤害翻倍。"},
+    "tiger": {"name": "白虎", "dao": "sigil_tiger", "scale": 1.5, "self_damage": 5, "text": "祭出伤害提高 50%，同时自身失去 5 点气血，至少保留 1 点。"}
+  }
+}

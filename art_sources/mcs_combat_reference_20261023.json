@@ -1,0 +1,16 @@
+{
+  "source": "https://store.steampowered.com/app/1189490/",
+  "movie_id": 256924900,
+  "label": "官方 1.0 发布期实机演示；确切补丁版本与录制速度不可见",
+  "sha256": "17a4bd3fd5b5f9b935b10074ff16ad92ce943f9cbd0e5380e6ff64cdf173399e",
+  "decoded_video": {"width": 1920, "height": 1080, "fps": 60, "seconds": 141.466667},
+  "local_evidence": ".tmp/mcs_combat_reference_20261023/",
+  "landmarks": {
+    "reserve_water_5": {"wheel_appears": 101.15, "pool_8_to_3_and_center_5": 101.366667, "tail_faded_approximately": 102.35, "total_stays": 14},
+    "spend_metal_5": {"wheel_shrinks_and_total_9_to_4": 103.766667, "wheel_icon_gone": 103.8, "tail_faded_approximately": 104.383333}
+  },
+  "observed": ["池中大图标固定，流动部分为细长彩色光迹", "多颗同时呈现，非逐颗排队", "获得灵气时光迹下落进入气池"],
+  "not_verified": ["取消配气", "手动散气", "吸气完整起点", "精确贝塞尔路径", "独立音效", "实际游戏补丁及播放速度"],
+  "retained_user_choice": "保留已确认的左右布局及十个神通槽；原片部分镜头为十二槽",
+  "distribution": "原视频与截图仅作本地分析，未作为游戏素材分发"
+}

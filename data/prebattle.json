@@ -1,0 +1,13 @@
+{
+  "reference": "https://wiki.biligame.com/mcs/丹药",
+  "calibration": "药效按图鉴核对；商店价格适配项目经济。相同药力组不叠加，不新增战中服丹入口。",
+  "items": {
+    "ningshen_dan": {"name": "凝神丹", "category": "pill", "price": 35, "rarity": 1, "toxin": 5, "use": [], "description": "战前服用，下一场斗法中神识加 1。", "battle_preparation": {"group": "sense", "sense": 1}},
+    "longhu_dan": {"name": "龙虎丹", "category": "pill", "price": 40, "rarity": 1, "toxin": 5, "use": [], "description": "战前服用，下一场斗法的第一回合神通伤害加 1。", "battle_preparation": {"group": "opening_damage", "first_turn_damage": 1}},
+    "jujia_dan": {"name": "聚甲丹", "category": "pill", "price": 45, "rarity": 1, "toxin": 5, "use": [], "description": "战前服用，下一场开战时获得 5 点护罩。", "battle_preparation": {"group": "opening_shield", "opening_shield": 5}},
+    "bingyuan_dan": {"name": "冰元丹", "category": "pill", "price": 160, "rarity": 2, "toxin": 5, "use": [], "description": "战前服用，下一场斗法的前三回合免疫灼烧。", "battle_preparation": {"group": "burn_immunity", "burn_immune_turns": 3}},
+    "houtu_dan": {"name": "厚土丹", "category": "pill", "price": 65, "rarity": 1, "toxin": 4, "use": [], "description": "战前服用，下一场斗法中土系神通伤害加 1。", "battle_preparation": {"group": "earth_damage", "damage": ["earth", 1]}},
+    "leidie_dan": {"name": "磊叠丹", "category": "pill", "price": 320, "rarity": 3, "toxin": 3, "use": [], "description": "战前服用，下一场斗法每回合额外吸收一颗土灵气。", "battle_preparation": {"group": "earth_draw", "turn_orbs": ["earth", 1]}}
+  },
+  "shop": "market"
+}

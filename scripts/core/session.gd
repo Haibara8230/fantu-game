@@ -3,6 +3,8 @@ extends RefCounted
 ## The state, time and the core actions live here; each system's rules live in its own module, which
 ## operates on this Session. The forwarders below keep one public interface for the interface and tests.
 const Content = preload("res://scripts/core/content.gd")
+const Dao = preload("res://scripts/core/dao.gd")
+const Prebattle = preload("res://scripts/core/prebattle.gd")
 const Calendar = preload("res://scripts/core/calendar.gd")
 const Chronicle = preload("res://scripts/core/chronicle.gd")
 const Combat = preload("res://scripts/core/combat.gd")
@@ -140,6 +142,7 @@ func new_game(character_name: String = "无名", seed_value: int = -1, roots: Ar
 		player.learned.append(skill_id)
 		player.arts.append(skill_id)
 		Layers.begin(self, skill_id)
+	player.dao = Dao.initial(self)
 	refresh_realm_stats()
 	player.hp = player.max_hp
 	player.qi = player.max_qi
@@ -403,7 +406,7 @@ func stat_caps(holder: Dictionary) -> Dictionary:
 	var extra := bonuses(holder)
 	var grade := int(Breakthrough.grade_of(self, holder).get("stats", 0))
 	return {
-		"max_hp": maxi(1, (int(current.max_hp) + int(extra.max_hp)) * (100 + int(extra.max_hp_percent) + grade) / 100),
+		"max_hp": maxi(1, (int(current.max_hp) + int(extra.max_hp)) * (100 + int(extra.max_hp_percent) + grade) / 100) + int(Dao.value_for(content, holder.get("dao", {}), "max_hp")),
 		"max_qi": maxi(1, (int(current.max_qi) + int(extra.max_qi)) * (100 + int(extra.max_qi_percent) + grade) / 100),
 	}
 
@@ -873,7 +876,7 @@ func talents_visible(person_id: String) -> bool:
 ## 神识: the stage's, plus the talents' (`sense`, flat). It sees through people (their talents), the
 ## traps and hidden things of the old cave (caves.gd), the riverbed at the ferry and the 灵眼.
 func sense() -> int:
-	return maxi(0, int(stage_stats().sense) + Talents.flat(content, talent_modifier("sense"), int(player.realm)))
+	return maxi(0, int(stage_stats().sense) + Talents.flat(content, talent_modifier("sense"), int(player.realm)) + int(Dao.value(self, "sense")) + Prebattle.value(self, "sense"))
 
 ## A generated person's 神识, by the same rule.
 func person_sense(person_id: String) -> int:

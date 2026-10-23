@@ -116,6 +116,9 @@ static func learn_block(s, technique_id: String) -> String:
 	# A tier up to two realms beyond can be begun, its layers capped (layers.gd); three is too far.
 	if Layers.cap(s.content, t, int(s.player.realm)) < 1:
 		return "%s之法，境界相差太远，需达到%s方可参悟。" % [t.tier_name, s.content.realm_title(int(t.min_realm) - int(Layers.rule(s.content).blocked_gap) + 1, 0)]
+	var understanding: String = s.Dao.learning_block(s, t)
+	if not understanding.is_empty():
+		return understanding
 	return s.blocked()
 
 ## Studies a technique for its tier's days; the new technique goes into a free slot if there is one.
@@ -125,6 +128,7 @@ static func _study(s, technique_id: String) -> Dictionary:
 	Layers.Cultivation.pay_rent(s, int(passed.elapsed))
 	if not s.ended.is_empty():
 		return passed
+	s.Dao.after_learning(s, t)
 	s.player.learned.append(technique_id)
 	Layers.begin(s, technique_id)
 	var slots: Array = s.player.arts if t.slot == "art" else s.player.methods
@@ -288,6 +292,7 @@ static func take_lineage(s, sect_id: String) -> void:
 	s.player.arts = []
 	for skill_id: String in s.content.sects[sect_id].skills:
 		if not skill_id in s.player.learned:
+			s.Dao.after_learning(s, s.content.technique(skill_id))
 			s.player.learned.append(skill_id)
 		Layers.begin(s, skill_id)
 		s.player.arts.append(skill_id)

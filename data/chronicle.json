@@ -1,5 +1,9 @@
 {
   "legacy": "{text}",
+  "dao_pick": "你领悟了【{dao_name}】。",
+  "dao_forget": "你散去【{dao_name}】的领悟，归还相应悟道点。",
+  "dao_reflect": "闭关感悟{dao_name}道，理解加深 {amount} 点。",
+  "dao_debate": "与{npc_name}坐而论道，积累{dao_name}道感悟 {amount} 点。",
   "start": "你带着三十块灵石和一片旧镜背，在青石镇的客栈落了脚，从此踏上仙途。",
   "start_items": "离家时，家里给你带上了{loot_text}。",
   "start_stones": "家里另塞给你 {stones} 灵石作盘缠。",

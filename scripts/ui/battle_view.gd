@@ -10,7 +10,7 @@ const FOE_COLOR := Color("#f0b49a")
 static func render(ui) -> void:
 	var session = ui.session
 	var center: VBoxContainer = ui.center
-	var selector: bool = ui.preview_mode and not "--battle-v6-preview" in OS.get_cmdline_user_args()
+	var selector: bool = ui.preview_mode and not "--battle-v6-preview" in OS.get_cmdline_user_args() and not "--dust-flow-preview" in OS.get_cmdline_user_args()
 	if selector:
 		PlaceView.sect_choices(ui, center, true)
 	var b: Dictionary = session.battle
@@ -118,6 +118,11 @@ static func render(ui) -> void:
 			_small(pick)
 			side.add_child(pick)
 	var allies: Array[String] = session.duel_allies()
+	if bool(session.battle.get("array", false)) and session.Dao.value(session, "array_drive") > 0:
+		var drive: Button = ui.button("驱阵", func() -> void: ui.battle_action("drive_array"), "本回合驱动一次现有阵法，触发护罩。")
+		drive.disabled = int(session.battle.get("array_driven", 0)) == int(session.battle.turn)
+		_small(drive)
+		side.add_child(drive)
 	if not allies.is_empty():
 		var friend: String = allies[0]
 		var call: Button = ui.button("传音求援", func() -> void: ui.battle_action("aid:" + friend), "以传音符请%s出手一击（每场一次，不占回合）" % session.person(friend).name)
@@ -166,9 +171,17 @@ static func _corners(ui, stage: Control) -> void:
 	var session = ui.session
 	var b: Dictionary = session.battle
 	var mine := _effect_entries(int(b.get("shield", 0)), b.get("player_status", {}))
-	var prepared := str(b.get("prepared_pill", ""))
-	if not prepared.is_empty():
-		mine.append({"key": "focus", "short": "药", "long": "%s · 战前药力已在开场吸气时生效" % session.content.item(prepared).name})
+	mine.append_array(_resource_entries(b.get("resources", {})))
+	var medicines: Array = b.get("prepared_pills", [])
+	if medicines.is_empty() and b.has("prepared_pill"):
+		medicines = [b.prepared_pill]
+	for prepared: String in medicines:
+		var effect: Dictionary = session.content.item(prepared).battle_preparation
+		if effect.has("burn_immune_turns") and not session.Prebattle.burn_immune(session):
+			continue
+		if effect.has("first_turn_damage") and int(b.turn) > 1:
+			continue
+		mine.append({"key": "focus", "short": str(session.content.item(prepared).name), "long": session.Prebattle.describe(session, prepared, true)})
 	if not mine.is_empty():
 		var left := _corner(ui, stage, "", Color("#cfe9e1"), mine)
 		left.set_anchors_and_offsets_preset(Control.PRESET_TOP_LEFT)
@@ -185,7 +198,9 @@ static func _corners(ui, stage: Control) -> void:
 		lines.append("地利 · " + ground)
 	if not b.get("foe", {}).get("arts", []).is_empty():
 		lines.append("灵气 %d" % b.get("foe_orbs", []).size())
-	var right := _corner(ui, stage, "\n".join(lines), FOE_COLOR, _effect_entries(int(b.get("foe_shield", 0)), b.get("status", {})))
+	var foe_effects := _effect_entries(int(b.get("foe_shield", 0)), b.get("status", {}))
+	foe_effects.append_array(_resource_entries(b.get("foe_resources", {})))
+	var right := _corner(ui, stage, "\n".join(lines), FOE_COLOR, foe_effects)
 	right.set_anchors_and_offsets_preset(Control.PRESET_TOP_RIGHT)
 	right.grow_horizontal = Control.GROW_DIRECTION_BEGIN
 	right.offset_right = -16
@@ -193,6 +208,15 @@ static func _corners(ui, stage: Control) -> void:
 
 ## A panel over a corner of the stage: lines of text, then the lingering effects as badges
 ## (assets/art/ui/status), each with its figure and turns, the full words when the pointer rests on it.
+static func _resource_entries(resources: Dictionary) -> Array:
+	var entries: Array = []
+	for key: String in ["dust", "sand"]:
+		var count := int(resources.get(key, 0))
+		if count > 0:
+			var name := "尘" if key == "dust" else "沙"
+			entries.append({"key": key, "short": "%s %d" % [name, count], "long": "【%s】%d 层。%s" % [name, count, "可化沙，或供绝尘消耗；跨回合保留。" if key == "dust" else "对手可用还尘收回；跨回合保留。"]})
+	return entries
+
 static func _corner(ui, stage: Control, text: String, color: Color, effects: Array = []) -> PanelContainer:
 	var box := PanelContainer.new()
 	box.mouse_filter = Control.MOUSE_FILTER_IGNORE
