@@ -19,8 +19,6 @@ static func defeat_advice(s, entry: Dictionary) -> String:
 		return "开战气血不足七成；先到静室或客栈恢复气血，再准备下一战。"
 	if str(facts.get("enemy", "")) == "serpent" and not s.has_flag("serpent_weakened") and bool(s.world.people.get("shen_mo", {}).get("met", false)):
 		return "妖蟒鳞甲尚未削弱，可回云溪药铺向沈墨打听准备之法。"
-	if int(facts.get("guards", 0)) == 0:
-		return "本场未曾守御；对手蓄势重击时可用守御减伤，再检查神通与装备。"
 	return "先休整伤势，再检查神通克制与装备；也可暂缓挑战，处理别的托付。"
 
 static func notice(s, message: String) -> String:

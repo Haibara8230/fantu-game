@@ -47,8 +47,8 @@
     "category": "pill",
     "price": 7,
     "rarity": 0,
-    "description": "服下恢复 20 点灵力；斗法中服下可多得两颗灵气。",
-    "duel": {"orbs": 2},
+    "description": "服下恢复 20 点灵力；战前服用，下一场开战时额外吸收两颗灵气，同类药力不能叠加；开战后不可服丹。",
+    "battle_preparation": {"opening_orbs": 2},
     "use": [{"qi": 20}]
   },
   "liaoshang_pill": {
@@ -57,7 +57,6 @@
     "price": 10,
     "rarity": 0,
     "description": "服下恢复 40 点气血，也能治好斗法留下的外伤。",
-    "duel": {"heal": true},
     "use": [{"hp": 40}, {"mend_wound": true}]
   },
   "ningqi_pill": {
@@ -84,7 +83,6 @@
     "rarity": 1,
     "fine_of": "liaoshang_pill",
     "description": "丹纹圆润的上品疗伤丹，服下恢复 70 点气血，也能治好斗法留下的外伤。",
-    "duel": {"heal": true},
     "use": [{"hp": 70}, {"mend_wound": true}]
   },
   "huiqi_pill_fine": {
@@ -93,8 +91,8 @@
     "price": 14,
     "rarity": 1,
     "fine_of": "huiqi_pill",
-    "description": "丹香清冽的上品回气丹，服下恢复 35 点灵力；斗法中服下可多得三颗灵气。",
-    "duel": {"orbs": 3},
+    "description": "丹香清冽的上品回气丹，服下恢复 35 点灵力；战前服用，下一场开战时额外吸收三颗灵气，同类药力不能叠加；开战后不可服丹。",
+    "battle_preparation": {"opening_orbs": 3},
     "use": [{"qi": 35}]
   },
   "ningqi_pill_fine": {
@@ -592,7 +590,6 @@
     "category": "quest",
     "price": 0,
     "rarity": 3,
-    "duel_pills": 1,
-    "description": "无相子的储物袋，灰扑扑的不起眼，里头却多出一格：带在身上，斗法时可多服一枚丹药。"
+    "description": "无相子的储物袋，灰扑扑的不起眼，是一同寻回宝录的信物。丹药须在战前服用。"
   }
 }

@@ -2585,15 +2585,14 @@ func _validate_item(item: Variant) -> String:
 		return "品类未知"
 	if not _whole(item.get("price")):
 		return "价格无效"
+	if item.has("battle_preparation") and (not item.battle_preparation is Dictionary or not _whole(item.battle_preparation.get("opening_orbs")) or int(item.battle_preparation.opening_orbs) < 1 or item.category != "pill"):
+		return "战前药力无效"
 	if item.has("duel") and (not item.duel is Dictionary or item.duel.is_empty() or (item.duel.has("orbs") and (not _whole(item.duel.orbs) or int(item.duel.orbs) < 1)) or (item.duel.has("heal") and not item.duel.heal is bool) or ["damage", "shield"].any(func(key: String) -> bool: return item.duel.has(key) and (not _whole(item.duel[key]) or int(item.duel[key]) < 1)) or (item.duel.has("bind") and (not item.duel.bind is Array or item.duel.bind.size() != 2)) or (item.duel.has("escape") and not item.duel.escape is bool)):
 		return "斗法中服用的配置无效"
 	if item.has("rarity") and (not _whole(item.rarity) or int(item.rarity) >= talent_data.tiers.size()):
 		return "品级无效"
 	if item.has("toxin") and (not _whole(item.toxin) or int(item.toxin) < 1):
 		return "丹毒无效"
-	# 无相袋: carried, one more pill a duel (combat.gd pill_block).
-	if item.has("duel_pills") and (not _whole(item.duel_pills) or int(item.duel_pills) < 1):
-		return "斗法服丹之数无效"
 	if item.has("breakthrough") and (not item.breakthrough is Dictionary or not _whole(item.breakthrough.get("bonus")) or not _whole(item.breakthrough.get("grade", 0))):
 		return "突破之用无效"
 	return _validate_effects(item.get("use", []))
@@ -2724,7 +2723,7 @@ func _validate_arsenal() -> String:
 		if skill.has("weapon") and str(equipment_data.get("bases", {}).get(str(skill.weapon), {}).get("art", "")) != skill_id:
 			return "兵刃神通须由那种兵刃带出：" + skill_id
 	var duel: Variant = rules.get("duel")
-	if not duel is Dictionary or ["first_extra", "root_weight", "other_weight", "hand_least", "pills", "guard_orbs"].any(func(key: String) -> bool: return not _whole(duel.get(key))):
+	if not duel is Dictionary or ["first_extra", "root_weight", "other_weight", "hand_least"].any(func(key: String) -> bool: return not _whole(duel.get(key))):
 		return "斗法规则配置无效。"
 	for key: String in ["draw", "foe_draw", "speed"]:
 		if not duel.get(key) is Array or duel[key].size() != realms.size() or duel[key].any(func(value: Variant) -> bool: return not _whole(value) or int(value) < 1):

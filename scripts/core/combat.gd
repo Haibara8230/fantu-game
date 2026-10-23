@@ -58,7 +58,6 @@ static func begin_battle(s, enemy_id: String, context: String = "", opponent_sec
 		s.battle.context = context
 	s.battle.opening_percent = int(s.player.hp) * 100 / maxi(1, int(s.player.max_hp))
 	s.battle.old_wound = int(s.player.get("wound_until", 0)) > int(s.world.day) or int(s.player.get("injury_until", 0)) > int(s.world.day)
-	s.battle.guarded_turns = 0
 	s.combat_events.clear()
 	open_hand(s)
 	return s.log_event("battle_start", {"enemy": enemy_id})
@@ -229,7 +228,13 @@ static func open_hand(s) -> void:
 	s.battle.player_status = {}
 	s.battle.pills = 0
 	s.battle.cooldowns = {}
-	var extra := int(rules(s).first_extra) + int(s.orb_bonus("orb_first"))
+	# A swallowed preparation belongs to the next battle only, regardless of its entry/context.
+	var prepared := str(s.player.get("prepared_pill", ""))
+	s.player.erase("prepared_pill")
+	var preparation: Dictionary = s.content.item(prepared).get("battle_preparation", {})
+	if not preparation.is_empty():
+		s.battle.prepared_pill = prepared
+	var extra := int(rules(s).first_extra) + int(s.orb_bonus("orb_first")) + int(preparation.get("opening_orbs", 0))
 	var tide := tide_orbs(s)
 	if foe_leads(s):
 		s.battle.foe_led = true
@@ -240,7 +245,7 @@ static func open_hand(s) -> void:
 		s.combat_events.append({"type": "lead", "actor": "enemy", "speed": foe_speed(s), "player_speed": speed(s)})
 		# The opening cannot fell the player: whoever starts a duel finds it still open after it.
 		s.battle.leading = true
-		_enemy_turn(s, false)
+		_enemy_turn(s)
 		s.battle.erase("leading")
 		s.battle.turn = 1
 		return
@@ -340,7 +345,38 @@ static func linked_combo(s, t: Dictionary) -> Dictionary:
 			return link
 	return {}
 
-static func use_skill(s, skill_id: String) -> String:
+static func payment_valid(orbs: Array, cost: Dictionary, payment: Array) -> bool:
+	if payment.size() != _orbs_in(cost):
+		return false
+	var remaining := orbs.duplicate()
+	for element: Variant in payment:
+		var at := remaining.find(element)
+		if at < 0:
+			return false
+		remaining.remove_at(at)
+	return affordable(payment, cost)
+
+static func payment_plan(s, skill_id: String, cycle: bool = false, current: Array = []) -> Array:
+	var art: Dictionary = s.held_technique(skill_id)
+	if s.battle.is_empty() or art.is_empty() or not affordable(s.battle.orbs, art.cost):
+		return []
+	var remembered: Array = s.battle.get("payment_memory", {}).get(skill_id, [])
+	if not cycle and payment_valid(s.battle.orbs, art.cost, remembered):
+		return remembered.duplicate()
+	# Rotating the stable hand order gives another legal automatic choice without touching RNG.
+	var plans: Array = []
+	for shift: int in maxi(1, s.battle.orbs.size()):
+		var hand: Array = s.battle.orbs.slice(shift) + s.battle.orbs.slice(0, shift)
+		var plan := _pay(hand, art.cost)
+		plan.sort()
+		if not plan in plans:
+			plans.append(plan)
+	var sorted := current.duplicate()
+	sorted.sort()
+	var at := plans.find(sorted)
+	return plans[(at + 1) % plans.size()].duplicate() if cycle else plans[0].duplicate()
+
+static func use_skill(s, skill_id: String, payment: Variant = null) -> String:
 	s.combat_events.clear()
 	var t: Dictionary = s.held_technique(skill_id)
 	if s.battle.is_empty() or t.is_empty() or t.slot != "art":
@@ -349,7 +385,16 @@ static func use_skill(s, skill_id: String) -> String:
 		return "此神通未在运转。"
 	if not affordable(s.battle.orbs, t.cost):
 		return "灵气不足：%s需要%s。" % [t.name, s.Arsenal.cost_text(s.content, t.cost)]
-	var spent := _pay(s.battle.orbs, t.cost)
+	if payment != null and (not payment is Array or not payment_valid(s.battle.orbs, t.cost, payment)):
+		return "配气不符：请按神通所需重新选择灵气。"
+	var spent: Array = _pay(s.battle.orbs, t.cost) if payment == null else payment.duplicate()
+	if payment != null:
+		for element: String in spent:
+			s.battle.orbs.remove_at(s.battle.orbs.find(element))
+	if not s.battle.has("payment_memory"):
+		s.battle.payment_memory = {}
+	s.battle.payment_memory[skill_id] = spent.duplicate()
+	s.combat_events.append({"type": "spend", "actor": "player", "orbs": spent.duplicate()})
 	# 连击: the art before it was of the element its combo names, or a linked one (linked_combo).
 	var link := linked_combo(s, t)
 	var partner := str(s.battle.get("last", ""))
@@ -707,7 +752,7 @@ static func begin_demon(s) -> void:
 	open_hand(s)
 
 ## 天劫 (B7): rounds of lightning to weather (the foe's health counts the bolts left). The player's
-## attack arts disperse a third of what they would deal from the coming bolt (`dispel`), guarding and
+## attack arts disperse a third of what they would deal from the coming bolt (`dispel`), spells and
 ## shields take the rest; there is no fleeing.
 const DISPEL_PERCENT := 33
 static func begin_tribulation(s, trial: String) -> void:
@@ -792,12 +837,12 @@ static func _next_foe(s) -> String:
 	return text
 
 ## The others of the pack strike, each once. True when they fell the player.
-static func _pack_strikes(s, guarding: bool) -> bool:
+static func _pack_strikes(s) -> bool:
 	var factor: float = (1.0 - s.defense()) * PACK_BLOW
 	for member: Dictionary in s.battle.get("pack", []):
 		var enemy: Dictionary = s.content.enemies[str(member.enemy_id)]
 		var name: String = str(enemy.moves[0].name) if enemy.has("moves") else "围攻"
-		if _hurt_player(s, s.combat_rng.randi_range(int(enemy.damage_min), int(enemy.damage_max)), factor, guarding, {"style": "enemy", "name": "%s · %s" % [enemy.name, name]}):
+		if _hurt_player(s, s.combat_rng.randi_range(int(enemy.damage_min), int(enemy.damage_max)), factor, {"style": "enemy", "name": "%s · %s" % [enemy.name, name]}):
 			return true
 	return false
 
@@ -818,9 +863,8 @@ static func over_cap(s) -> int:
 
 ## 结束回合: with more orbs than the cap, the player first chooses which to let go (discard_orb); when
 ## `auto_release` (the plain policy, quick duels, tests) the most plentiful go. Then the opponent acts.
-static func end_turn(s, guarding: bool = false, auto_release: bool = true) -> String:
-	if not guarding:
-		s.combat_events.clear()
+static func end_turn(s, auto_release: bool = true) -> String:
+	s.combat_events.clear()
 	if s.battle.is_empty():
 		return "当前没有对手。"
 	if not auto_release and over_cap(s) > 0:
@@ -840,27 +884,15 @@ static func end_turn(s, guarding: bool = false, auto_release: bool = true) -> St
 	for status: String in ["weaken", "sunder", "slow", "entangle", "wound"]:
 		if lingering.has(status):
 			_count_down(lingering, status)
-	return _enemy_turn(s, guarding)
+	return _enemy_turn(s)
 
-## 守御: the turn ends at once, the next blows are halved and one more orb comes next turn. Orbs over the
-## cap must be let go first, as for any end of turn.
-static func defend(s, auto_release: bool = true) -> String:
-	s.combat_events.clear()
-	if s.battle.is_empty():
-		return "当前没有对手。"
-	if not auto_release and over_cap(s) > 0:
-		return "灵气只能留 %d 颗：先点选要散去的 %d 颗灵气，再守御。" % [hand_cap(s), over_cap(s)]
-	s.combat_events.append({"type": "guard", "amount": 0, "sect": str(s.player.get("sect", "wanderer"))})
-	s.battle.guarded_turns = int(s.battle.get("guarded_turns", 0)) + 1
-	s.log_event("guard_turn", {"amount": int(rules(s).guard_orbs)})
-	return end_turn(s, true)
-
-## Why a pill or a talisman cannot be used in the duel now (`duel` in data/items.json), or "". Pills and
-## 符箓 are counted apart, each within its own limit a duel.
+## Compatibility entry for battle items. Pills are refused; talismans keep their per-duel limit.
 static func pill_block(s, item_id: String) -> String:
 	if s.battle.is_empty():
 		return "当前没有对手。"
 	var item: Dictionary = s.content.item(item_id)
+	if str(item.get("category", "")) == "pill":
+		return "丹药须在战前服用，斗法中不能服丹。"
 	if not item.has("duel"):
 		return "斗法中用不得此物。"
 	if s.item_count(item_id) < 1:
@@ -871,19 +903,9 @@ static func pill_block(s, item_id: String) -> String:
 		if bool(item.duel.get("escape", false)) and s.battle.get("context", "") in ["spar", "tournament", "summit", "arena", "tianji", "tribulation"]:
 			return "比斗之中遁走，与认输无异；不必用符。"
 		return ""
-	if int(s.battle.get("pills", 0)) >= pill_limit(s):
-		return "这一场已服了 %d 枚丹药，药力再难化开。" % pill_limit(s)
-	return ""
+	return "斗法中只能使用符箓。"
 
-## Pills a duel takes: the rule's, and one more for each thing carried that holds them (无相袋).
-static func pill_limit(s) -> int:
-	var limit := int(rules(s).pills)
-	for item_id: String in s.player.get("items", {}):
-		if s.content.items.has(item_id) and s.item_count(item_id) > 0:
-			limit += int(s.content.items[item_id].get("duel_pills", 0))
-	return limit
-
-## Takes a pill in the duel without ending the turn: 回气丹 brings orbs, 疗伤丹 heals.
+## The legacy public name now accepts talismans only; pills are rejected before inventory changes.
 static func take_pill(s, item_id: String) -> String:
 	s.combat_events.clear()
 	var reason := pill_block(s, item_id)
@@ -891,21 +913,7 @@ static func take_pill(s, item_id: String) -> String:
 		return reason
 	var item: Dictionary = s.content.item(item_id)
 	s.remove_item(item_id, 1)
-	if str(item.get("category", "")) == "talisman":
-		return _use_talisman(s, item_id, item)
-	s.battle.pills = int(s.battle.get("pills", 0)) + 1
-	var effect: Dictionary = item.duel
-	if effect.has("orbs"):
-		_gain(s, _draw(s, int(effect.orbs), player_weights(s)))
-	if bool(effect.get("heal", false)):
-		for granted: Dictionary in s.Inventory.pill_effects(s, item):
-			if granted.has("hp"):
-				var recovered := mini(_healed(s.battle.get("player_status", {}), int(granted.hp)), int(s.player.max_hp) - int(s.player.hp))
-				s.player.hp += recovered
-				s.combat_events.append({"type": "heal", "style": "pill", "name": str(item.name), "vfx": "heal", "amount": recovered, "hp_after": int(s.player.hp)})
-	var text: String = s.log_event("duel_pill", {"item": item_id})
-	s.changed.emit()
-	return text
+	return _use_talisman(s, item_id, item)
 
 ## Presentation fields travel with each event, so generated techniques need no lookup tables.
 static func _event(fields: Dictionary, look: Dictionary) -> Dictionary:
@@ -1133,10 +1141,15 @@ static func _foe_prepare(s) -> void:
 		return
 	var orbs: Array = s.battle.get("foe_orbs", [])
 	var short := int(s.battle.status.slow[0]) if s.battle.get("status", {}).has("slow") else 0
-	orbs.append_array(_draw(s, maxi(1, _by_realm(s, "foe_draw", int(foe.get("realm", 0))) - short), _foe_weights(s)))
+	var drawn := _draw(s, maxi(1, _by_realm(s, "foe_draw", int(foe.get("realm", 0))) - short), _foe_weights(s))
+	orbs.append_array(drawn)
+	s.combat_events.append({"type": "draw", "actor": "enemy", "orbs": drawn.duplicate()})
 	# As for the player: what it kept (at most hand_least) and what it just drew.
+	var released: Array = []
 	while orbs.size() > int(rules(s).hand_least) + _by_realm(s, "foe_draw", int(foe.get("realm", 0))):
-		orbs.remove_at(0)
+		released.append(orbs.pop_front())
+	if not released.is_empty():
+		s.combat_events.append({"type": "discard", "actor": "enemy", "orbs": released})
 	s.battle.foe_orbs = orbs
 	var left := orbs.duplicate()
 	var plan: Array = []
@@ -1280,7 +1293,7 @@ static func _enter_phase(s, enemy: Dictionary) -> void:
 		s.log_event("enemy_phase", {"phase_text": str(phase.text)})
 
 ## Carries out a planned move of a handwritten opponent. True when it fells the player.
-static func _do_move(s, planned: Dictionary, factor: float, guarding: bool) -> bool:
+static func _do_move(s, planned: Dictionary, factor: float) -> bool:
 	var enemy: Dictionary = s.content.enemies[s.battle.enemy_id]
 	var move := _move(enemy, str(planned.move))
 	var status: Dictionary = s.battle.status
@@ -1321,7 +1334,7 @@ static func _do_move(s, planned: Dictionary, factor: float, guarding: bool) -> b
 			var blow := {"style": "enemy" if not bool(enemy.get("human", false)) else _counter_style(s), "name": str(move.name), "wound_up": bool(planned.get("landing", false))}
 			for hit: int in int(planned.get("hits", 1)):
 				var before := int(s.player.hp)
-				if _hurt_player(s, s.combat_rng.randi_range(int(planned.min), int(planned.max)), strength, guarding, blow):
+				if _hurt_player(s, s.combat_rng.randi_range(int(planned.min), int(planned.max)), strength, blow):
 					return true
 				if move.has("drain"):
 					var drained := mini(_healed(status, int(round(float(before - int(s.player.hp)) * float(move.drain)))), int(enemy.hp) - int(s.battle.hp))
@@ -1331,7 +1344,7 @@ static func _do_move(s, planned: Dictionary, factor: float, guarding: bool) -> b
 					_inflict_player(s, lingering, move.inflict[lingering])
 	return false
 
-static func _enemy_turn(s, guarding: bool) -> String:
+static func _enemy_turn(s) -> String:
 	var arrived := false
 	var soul_done := false
 	var foe_swords := 0
@@ -1361,12 +1374,12 @@ static func _enemy_turn(s, guarding: bool) -> String:
 	var foe: Dictionary = s.battle.get("foe", {})
 	# Helpers it called (召唤) strike before it does.
 	if status.has("minions"):
-		if _hurt_player(s, int(status.minions[0]), factor, guarding, {"style": "enemy", "name": "%s的帮手" % s.content.enemies[enemy_id].name}):
+		if _hurt_player(s, int(status.minions[0]), factor, {"style": "enemy", "name": "%s的帮手" % s.content.enemies[enemy_id].name}):
 			return _lose(s)
 		_count_down(status, "minions")
 	for planned: Dictionary in (s.battle.get("intent", []) if not arrived else []):
 		if planned.has("move"):
-			if _do_move(s, planned, factor, guarding):
+			if _do_move(s, planned, factor):
 				return _lose(s)
 			continue
 		if not planned.has("art"):
@@ -1382,7 +1395,7 @@ static func _enemy_turn(s, guarding: bool) -> String:
 					roll = maxi(1, roll - int(s.battle.get("dispel", 0)) * DISPEL_PERCENT / 100)
 					s.battle.dispel = 0
 					blow = {"style": "enemy", "name": str(stats.name), "vfx": "sword_rain", "tier": 3}
-				if _hurt_player(s, roll, strength, guarding, blow):
+				if _hurt_player(s, roll, strength, blow):
 					return _lose(s)
 				if s.battle.get("context", "") == "tribulation":
 					s.battle.hp = int(s.battle.hp) - 1
@@ -1393,6 +1406,7 @@ static func _enemy_turn(s, guarding: bool) -> String:
 		if art.is_empty() or not affordable(s.battle.foe_orbs, art.cost):
 			continue
 		var spent := _pay(s.battle.foe_orbs, art.cost)
+		s.combat_events.append({"type": "spend", "actor": "enemy", "orbs": spent.duplicate()})
 		var look := {"style": str(art.id), "name": str(art.name), "vfx": str(art.vfx), "tier": int(art.tier), "element": str(art.element), "spent": spent}
 		# Their 流派 too: 剑意 across their metal arts, 魂修 shaking the player's next draw.
 		var foe_school: String = s.Schools.foe(s)
@@ -1415,9 +1429,9 @@ static func _enemy_turn(s, guarding: bool) -> String:
 				for lingering: String in LINGERING:
 					if art.has(lingering):
 						_inflict_player(s, lingering, art[lingering])
-				if _hurt_player(s, s.combat_rng.randi_range(int(planned.min), int(planned.max)), factor * ground(s, str(art.element), true) * school_force, guarding, look):
+				if _hurt_player(s, s.combat_rng.randi_range(int(planned.min), int(planned.max)), factor * ground(s, str(art.element), true) * school_force, look):
 					return _lose(s)
-	if _pack_strikes(s, guarding):
+	if _pack_strikes(s):
 		return _lose(s)
 	# The player's turn: the shield has done its work, burning bites, new orbs come and the opponent
 	# shows its next intent.
@@ -1442,7 +1456,7 @@ static func _enemy_turn(s, guarding: bool) -> String:
 	var short := (int(burning.slow[0]) if burning.has("slow") else 0) + (int(burning.entangle[0]) if burning.has("entangle") else 0)
 	var gathered := int(s.battle.get("next_draw", 0))
 	s.battle.erase("next_draw")
-	var hand := _draw(s, maxi(1, draw_count(s) - short + formation + gathered + (int(rules(s).guard_orbs) if guarding else 0)), player_weights(s))
+	var hand := _draw(s, maxi(1, draw_count(s) - short + formation + gathered), player_weights(s))
 	# The tide's orbs held back when the opponent moved first (open_hand).
 	for count: int in int(s.battle.get("tide", 0)):
 		hand.append("water")
@@ -1456,8 +1470,8 @@ static func _enemy_turn(s, guarding: bool) -> String:
 	s.changed.emit()
 	return "轮到你出招。"
 
-## One blow at the player through defense, a weakening, a guard and the shield. True when it fells them.
-static func _hurt_player(s, roll: int, factor: float, guarding: bool, look: Dictionary) -> bool:
+## One blow at the player through defense, weakening and the shield. True when it fells them.
+static func _hurt_player(s, roll: int, factor: float, look: Dictionary) -> bool:
 	var sundered: Dictionary = s.battle.get("player_status", {})
 	if sundered.has("sunder"):
 		factor *= 1.0 + float(sundered.sunder[0])
@@ -1465,8 +1479,6 @@ static func _hurt_player(s, roll: int, factor: float, guarding: bool, look: Dict
 	if s.Schools.player(s) == "body":
 		factor *= s.Schools.value(s, "body", "countered")
 	var damage := maxi(1, int(round(float(roll) * factor)))
-	if guarding:
-		damage = maxi(1, damage / 2)
 	damage = _gear_traits(s, damage, look)
 	var absorbed := mini(int(s.battle.get("shield", 0)), damage)
 	s.battle.shield = int(s.battle.get("shield", 0)) - absorbed
@@ -1557,7 +1569,7 @@ static func _lose(s) -> String:
 	var robbery := str(s.battle.get("robbery", ""))
 	var deadly := bool(s.battle.get("deadly", false))
 	var killer := str(s.battle.get("title", s.content.enemies[str(s.battle.enemy_id)].name))
-	var review := {"enemy":str(s.battle.enemy_id), "turns":int(s.battle.turn), "guards":int(s.battle.get("guarded_turns", 0)), "opening_percent":int(s.battle.get("opening_percent", 100)), "old_wound":bool(s.battle.get("old_wound", false))}
+	var review := {"enemy":str(s.battle.enemy_id), "turns":int(s.battle.turn), "opening_percent":int(s.battle.get("opening_percent", 100)), "old_wound":bool(s.battle.get("old_wound", false))}
 	s.battle.clear()
 	s.record_deed("duel")
 	# 死斗 (part one, stage five): marked before it began, lost, it ends the life.

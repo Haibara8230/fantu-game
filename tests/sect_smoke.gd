@@ -60,7 +60,7 @@ func _run() -> void:
 	check(legacy.snapshot() == before, "unlearned skill rejected without consuming resources")
 	legacy.battle.orbs = ["water", "water", "metal"]
 	legacy.use_skill("ice_lance")
-	var cast: Dictionary = legacy.combat_events[0]
+	var cast: Dictionary = legacy.combat_events.filter(func(e: Dictionary) -> bool: return not e.type in ["spend", "draw", "discard"])[0]
 	legacy.end_turn()
 	var answer: Array = legacy.combat_events.filter(func(event: Dictionary) -> bool: return event.get("actor", "") == "enemy" and event.type == "attack")
 	check(cast.style == "ice_lance" and not answer.is_empty() and answer[0].style == "flame_bolt", "player and enemy retain distinct elemental styles")
@@ -123,10 +123,11 @@ func _run() -> void:
 			# 克制 can make one strong art fell the preview's opponent; it stands for the checks.
 			main.session.battle.hp = 200
 			await main.skill(id)
+			await main.confirm_battle_selection()
 			check(main.session.battle.get("orbs", []).size() <= 1 and main.session.combat_events.size() > 0, "orb cost " + id)
 			if definition.kind == "attack":
 				check(cue_types.count("impact") == int(definition.get("hits", 1)), "impact count " + id)
-				check(hit_sum == int(main.session.combat_events[0].amount), "displayed damage sum " + id)
+				check(hit_sum == int(main.session.combat_events.filter(func(e: Dictionary) -> bool: return not e.type in ["spend", "draw", "discard"])[0].amount), "displayed damage sum " + id)
 				check(last_visual_hp[0] == int(main.session.battle.hp), "displayed final HP " + id)
 			else:
 				check(cue_types[0] == ("heal" if definition.kind == "heal" else "guard"), "support cue " + id)

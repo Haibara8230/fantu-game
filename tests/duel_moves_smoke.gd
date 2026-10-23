@@ -84,9 +84,9 @@ func _charge() -> void:
 	plain.end_turn()
 	var guard_hp := int(guarded.player.hp)
 	var plain_hp := int(plain.player.hp)
-	guarded.defend()
+	guarded.end_turn()
 	plain.end_turn()
-	check(guard_hp - int(guarded.player.hp) < plain_hp - int(plain.player.hp), "守御 against the wound-up blow takes far less of it")
+	check(guard_hp - int(guarded.player.hp) == plain_hp - int(plain.player.hp), "ending a turn has no hidden guarding damage reduction")
 
 func _bleed_and_wound() -> void:
 	var game := _duel("wolf", "rend")
@@ -345,17 +345,17 @@ func _gear_and_talismans() -> void:
 	guarded.player.hp = guarded.player.max_hp
 	var heavy := int(guarded.player.max_hp) / 2
 	var before := int(guarded.player.hp)
-	Combat._hurt_player(guarded, heavy, 1.0, false, {"style": "enemy"})
+	Combat._hurt_player(guarded, heavy, 1.0, {"style": "enemy"})
 	check(before - int(guarded.player.hp) == heavy - int(round(heavy * 0.5)), "护心 halves the first heavy blow (%d of %d)" % [before - int(guarded.player.hp), heavy])
 	before = int(guarded.player.hp)
-	Combat._hurt_player(guarded, 20, 1.0, false, {"style": "enemy"})
+	Combat._hurt_player(guarded, 20, 1.0, {"style": "enemy"})
 	check(before - int(guarded.player.hp) == 20, "only once a duel")
 	var foe_before := int(guarded.battle.hp)
 	before = int(guarded.player.hp)
-	Combat._hurt_player(guarded, 20, 1.0, false, {"style": "enemy", "wound_up": true})
+	Combat._hurt_player(guarded, 20, 1.0, {"style": "enemy", "wound_up": true})
 	check(before - int(guarded.player.hp) == 10 and foe_before - int(guarded.battle.hp) == 10, "反照 turns half a wound-up blow back")
 	before = int(guarded.player.hp)
-	Combat._hurt_player(guarded, 20, 1.0, false, {"style": "fire_burst", "spent": []})
+	Combat._hurt_player(guarded, 20, 1.0, {"style": "fire_burst", "spent": []})
 	check(before - int(guarded.player.hp) == 20, "and only once")
 	var rung := _duel("wolf", "", 1)
 	var bell := rung.Arsenal.equipment_id("bell", 1, "none", [], 0)
@@ -716,12 +716,12 @@ func _terms_and_schools() -> void:
 	var body := _duel("wolf", "bite", 1)
 	body.player.methods = [body.Arsenal.technique_id("body", "earth", 2, [], 0)]
 	check(body.Schools.player(body) == "body", "a 炼体 心法 makes a 体修")
-	Combat._hurt_player(body, int(body.player.max_hp) / 5, 1.0, false, {"style": "enemy"})
+	Combat._hurt_player(body, int(body.player.max_hp) / 5, 1.0, {"style": "enemy"})
 	check(bool(body.battle.get("body_ready", false)) and is_equal_approx(Combat._school_force(body, "fire"), 1.25) and not body.battle.has("body_ready"), "a heavy blow taken readies 反震, once")
 	body.battle.enemy_id = "wolf"
 	body.battle.shield = 0
 	var sturdy_from := int(body.player.hp)
-	Combat._hurt_player(body, 50, 1.0, false, {"style": "enemy"})
+	Combat._hurt_player(body, 50, 1.0, {"style": "enemy"})
 	check(sturdy_from - int(body.player.hp) == 45, "a 体修's body takes every blow a tenth lighter")
 	var soul := _duel("wolf", "bite", 1)
 	soul.player.methods = [soul.Arsenal.technique_id("focus", "water", 2, [], 0)]
@@ -810,7 +810,7 @@ func _demon_and_tribulation() -> void:
 	while not core.battle.is_empty() and bolts < 6:
 		bolts += 1
 		core.player.hp = core.player.max_hp
-		core.defend()
+		core.end_turn()
 	check(bolts == 3 and int(core.player.realm) == 2 and int(core.player.core_grade) >= 0 and core.journal_lines().any(func(line: String) -> bool: return line.contains("渡过了天劫")), "three bolts weathered, the core is formed (%d)" % bolts)
 	var struck := Session.new()
 	struck.encounters_enabled = false
@@ -823,7 +823,7 @@ func _demon_and_tribulation() -> void:
 	struck.fortune = {"demon": 0.99, "breakthrough": 0.0}
 	struck.act("breakthrough")
 	struck.player.hp = 1
-	struck.defend()
+	struck.end_turn()
 	check(struck.battle.is_empty() and int(struck.player.realm) == 1 and int(struck.player.injury_until) - int(struck.world.day) == 2 * int(struck.content.rules.breakthrough.failure.injury_days), "struck down, the attempt fails with twice the injury")
 
 ## Part one, stage five: 禁忌秘术 (a burst for lifespan, an injury or a 妖丹, costs kept for good) and

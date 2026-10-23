@@ -13,6 +13,9 @@ static func render(ui) -> void:
 	worn.add_theme_constant_override("separation", 8)
 	columns.add_child(worn)
 	worn.add_child(ui.label("宝 物", 18, ui.GOLD))
+	var prepared := str(session.player.get("prepared_pill", ""))
+	if not prepared.is_empty():
+		worn.add_child(ui.paragraph("已服药力 · %s\n下一场开战时额外吸收 %d 颗灵气，开战后药力耗尽。" % [session.content.item(prepared).name, int(session.content.item(prepared).battle_preparation.opening_orbs)], ui.GOLD))
 	for slot: String in session.content.equipment_data.slots:
 		var item_id: String = str(session.player.equipment.get(slot, ""))
 		var row := HBoxContainer.new()

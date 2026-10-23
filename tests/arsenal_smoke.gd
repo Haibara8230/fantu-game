@@ -135,10 +135,16 @@ func _learning() -> void:
 	check(game.active_skills().size() == 6, "the sixth art slot fills")
 	game.add_item("j:t:bolt:earth:1::0", 1)
 	game.study_manual("j:t:bolt:earth:1::0")
-	check(game.active_skills().size() == 6 and "t:bolt:earth:1::0" in game.player.learned, "a seventh art is learned but waits outside the slots")
-	check(game.equip_technique("t:bolt:earth:1::0").contains("栏位已满"), "a full row needs a choice")
-	game.equip_technique("t:bolt:earth:1::0", "seal_metal")
-	check("t:bolt:earth:1::0" in game.active_skills() and not "seal_metal" in game.active_skills(), "swapping an art")
+	check(game.active_skills().size() == 7 and "t:bolt:earth:1::0" in game.player.learned, "the approved second row now permits a seventh art")
+	for salt: int in range(1, 4):
+		var extra := "t:bolt:wood:1::%d" % salt
+		game.player.learned.append(extra)
+		game.equip_technique(extra)
+	var waiting := "t:ward:metal:1::0"
+	game.player.learned.append(waiting)
+	check(game.active_skills().size() == 10 and game.equip_technique(waiting).contains("栏位已满"), "a full ten-slot grid needs a choice")
+	game.equip_technique(waiting, "seal_metal")
+	check(waiting in game.active_skills() and not "seal_metal" in game.active_skills(), "swapping an art in the full grid")
 	for art: String in game.active_skills().duplicate():
 		game.unequip_technique(art)
 	check(game.active_skills().size() == 1, "at least one art always stays")
@@ -216,7 +222,7 @@ func _fight(technique_id: String) -> Session:
 func _effects() -> void:
 	var burn := _fight("t:bolt:fire:2:burn:0")
 	burn.use_skill("t:bolt:fire:2:burn:0")
-	var first: Dictionary = burn.combat_events[0]
+	var first: Dictionary = burn.combat_events.filter(func(e: Dictionary) -> bool: return not e.type in ["spend", "draw", "discard"])[0]
 	check(first.name == "赤焰诀" and first.vfx == "flame_bolt" and first.tier == 2 and first.style == "t:bolt:fire:2:burn:0", "events carry the generated art's name, effect and tier")
 	burn.end_turn()
 	check(burn.combat_events.any(func(event: Dictionary) -> bool: return event.get("style", "") == "burn"), "burning ticks before the opponent strikes")
@@ -227,11 +233,11 @@ func _effects() -> void:
 	disciple.start_battle("disciple")
 	disciple.battle.orbs = ["metal", "metal", "metal"]
 	disciple.use_skill("sword_rain")
-	check(disciple.combat_events[0].get("legacy", "") == "qingyun", "a sect's own art cast by its disciple carries the lineage's layer")
+	check(disciple.combat_events.filter(func(e: Dictionary) -> bool: return not e.type in ["spend", "draw", "discard"])[0].get("legacy", "") == "qingyun", "a sect's own art cast by its disciple carries the lineage's layer")
 	var wanderer := _game(["metal"])
 	wanderer.start_battle("disciple")
 	_sword(wanderer)
-	check(not wanderer.combat_events[0].has("legacy"), "a wanderer's arts have no lineage")
+	check(not wanderer.combat_events.filter(func(e: Dictionary) -> bool: return not e.type in ["spend", "draw", "discard"])[0].has("legacy"), "a wanderer's arts have no lineage")
 	var chill := _fight("t:bolt:water:2:chill:0")
 	chill.use_skill("t:bolt:water:2:chill:0")
 	chill.end_turn()
@@ -264,7 +270,7 @@ func _effects() -> void:
 	check(drain.combat_events.filter(func(event: Dictionary) -> bool: return event.type == "heal").size() == 1, "draining heals the caster")
 	var echo := _fight("t:bolt:metal:2:echo:0")
 	echo.use_skill("t:bolt:metal:2:echo:0")
-	check(int(echo.combat_events[0].hits) == 2, "an echoing art hits twice")
+	check(int(echo.combat_events.filter(func(e: Dictionary) -> bool: return not e.type in ["spend", "draw", "discard"])[0].hits) == 2, "an echoing art hits twice")
 	var renew := _fight("t:mend:wood:2:renew:0")
 	renew.player.hp = 20
 	var wood_before: int = renew.battle.orbs.count("wood")
@@ -272,15 +278,15 @@ func _effects() -> void:
 	check(renew.battle.orbs.count("wood") == wood_before - 2 + 1 and int(renew.player.hp) > 20, "a renewing heal brings back an orb of its element")
 	var guarded := _fight("t:ward:earth:1::0")
 	guarded.use_skill("t:ward:earth:1::0")
-	check(guarded.combat_events[0].type == "guard" and int(guarded.battle.shield) == int(round(float(guarded.content.technique("t:ward:earth:1::0").shield) * guarded.Combat.realm_power(guarded, 0) * (1.3 if guarded.combat_events.any(func(event: Dictionary) -> bool: return event.type == "combo") else 1.0))), "a ward raises a shield")
+	check(guarded.combat_events.filter(func(e: Dictionary) -> bool: return not e.type in ["spend", "draw", "discard"])[0].type == "guard" and int(guarded.battle.shield) == int(round(float(guarded.content.technique("t:ward:earth:1::0").shield) * guarded.Combat.realm_power(guarded, 0) * (1.3 if guarded.combat_events.any(func(event: Dictionary) -> bool: return event.type == "combo") else 1.0))), "a ward raises a shield")
 	var hp_before := int(guarded.player.hp)
 	guarded.end_turn()
 	var soaked: int = guarded.combat_events.filter(func(event: Dictionary) -> bool: return event.get("actor", "") == "enemy").reduce(func(sum: int, event: Dictionary) -> int: return sum + int(event.get("absorbed", 0)), 0)
-	check(soaked > 0 and int(guarded.player.hp) == hp_before - guarded.combat_events.filter(func(event: Dictionary) -> bool: return event.get("actor", "") == "enemy").reduce(func(sum: int, event: Dictionary) -> int: return sum + int(event.amount), 0), "the shield takes the blows before health")
+	check(soaked > 0 and int(guarded.player.hp) == hp_before - guarded.combat_events.filter(func(event: Dictionary) -> bool: return event.get("actor", "") == "enemy").reduce(func(sum: int, event: Dictionary) -> int: return sum + int(event.get("amount", 0)), 0), "the shield takes the blows before health")
 	var plain := _fight("t:bolt:metal:1::0")
 	var bolt: Dictionary = plain.content.technique("t:bolt:metal:1::0")
 	plain.use_skill("t:bolt:metal:1::0")
-	var plain_damage: int = plain.combat_events[0].amount
+	var plain_damage: int = plain.combat_events.filter(func(e: Dictionary) -> bool: return not e.type in ["spend", "draw", "discard"])[0].amount
 	var share := int(round(float(plain.attack_bonus()) * 2.0 / 2.0))
 	var factor: float = plain.element_multiplier(bolt)
 	check(plain_damage >= int(round((int(bolt.damage_min) + share) * factor)) and plain_damage <= int(round((int(bolt.damage_max) + share) * factor)), "a 凡品 bolt hits for its base damage (%d)" % plain_damage)

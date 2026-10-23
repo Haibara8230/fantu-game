@@ -62,6 +62,12 @@ var impact_until := 0
 var overlay := Node2D.new()
 # 天劫's clouds and bolts (storm.gd), only for a tribulation.
 var storm: Control = null
+var qi_view: Control
+var hero_qi := 0
+var enemy_qi := 0
+var qi_cap := 4
+var hero_element := "fire"
+var enemy_element := "fire"
 var busy := false
 var motion_enabled := true
 var last_cue := ""
@@ -99,6 +105,12 @@ func configure(snapshot: Dictionary, enemy_definition: Dictionary) -> void:
 	if snapshot.battle.has("title"):
 		enemy_name = "%s · %s" % [snapshot.battle.title, enemy_definition.name]
 	hero_hp = int(snapshot.player.hp)
+	hero_qi = snapshot.battle.get("orbs", []).size()
+	enemy_qi = snapshot.battle.get("foe_orbs", []).size()
+	hero_element = str(snapshot.player.get("roots", ["fire"])[0]) if not snapshot.player.get("roots", []).is_empty() else "fire"
+	enemy_element = str(snapshot.battle.get("foe", {}).get("element", enemy_definition.get("element", "fire")))
+	if not enemy_element in ["metal", "water", "wood", "fire", "earth"]:
+		enemy_element = "fire"
 	hero_max_hp = int(snapshot.player.max_hp)
 	enemy_hp = int(snapshot.battle.hp)
 	enemy_max_hp = int(enemy_definition.hp)
@@ -163,10 +175,10 @@ func _enemy_art(id: String, battle: Dictionary) -> Dictionary:
 func _layout() -> void:
 	if not is_instance_valid(hero):
 		return
-	hero.set_height(minf(size.y * float(art.actors.hero.height_ratio), maxf(0.0, size.y - 70.0)))
-	enemy.set_height(minf(size.y * float(enemy_art.height_ratio), maxf(0.0, size.y - 70.0)))
-	hero.position = Vector2(size.x * 0.24, size.y * 0.94)
-	enemy.position = Vector2(size.x * 0.76, size.y * 0.94)
+	hero.set_height(size.y * 0.30)
+	enemy.set_height(size.y * (0.30 if human_enemy else minf(0.4, float(enemy_art.height_ratio) * 0.5)))
+	hero.position = Vector2(size.x * 0.24, size.y * 0.66)
+	enemy.position = Vector2(size.x * 0.76, size.y * 0.66)
 	if storm != null:
 		storm.fit(size)
 	queue_redraw()
@@ -239,9 +251,11 @@ func _draw() -> void:
 		draw_set_transform(actor.position + Vector2(0, -5), 0, Vector2(1, 0.22))
 		draw_circle(Vector2.ZERO, width, Color(0.1, 0.18, 0.14, 0.22))
 	draw_set_transform(Vector2.ZERO)
-	draw_rect(Rect2(0, 0, size.x, 54), Color(0.05, 0.12, 0.12, 0.8))
-	_draw_health(Vector2(16, 9), size.x * 0.36, hero_name, hero_hp, hero_max_hp, Color("#90c49d"), hero_chip)
-	_draw_health(Vector2(size.x * 0.64 - 16, 9), size.x * 0.36, enemy_name, enemy_hp, enemy_max_hp, Color("#d59075"), enemy_chip)
+	var header_scale := size.x / 1280.0
+	draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE * header_scale)
+	_draw_health(Vector2(12, 4), 410, hero_name, hero_hp, hero_max_hp, Color("#bd3320"), hero_chip)
+	_draw_health(Vector2(858, 4), 410, enemy_name, enemy_hp, enemy_max_hp, Color("#bd3320"), enemy_chip, true)
+	draw_set_transform(Vector2.ZERO)
 	if not banner.is_empty():
 		var text_size := effect_font.get_string_size(banner, HORIZONTAL_ALIGNMENT_LEFT, -1, 18)
 		draw_rect(Rect2(size.x * 0.5 - text_size.x * 0.5 - 14, 62, text_size.x + 28, 32), Color(0.05, 0.12, 0.12, 0.72))
@@ -254,12 +268,30 @@ func _draw() -> void:
 	if flash_alpha > 0:
 		draw_rect(Rect2(Vector2.ZERO, size), Color(1, 0.89, 0.65, flash_alpha))
 
-func _draw_health(origin: Vector2, width: float, title: String, hp: int, maximum: int, color: Color, chip: float = -1.0) -> void:
-	draw_string(effect_font, origin + Vector2(0, 15), "%s   %d / %d" % [title, hp, maximum], HORIZONTAL_ALIGNMENT_LEFT, -1, 15, Color("#f3eddd"))
-	draw_rect(Rect2(origin + Vector2(0, 23), Vector2(width, 6)), Color("#243f3c"))
+func _draw_health(origin: Vector2, width: float, title: String, hp: int, maximum: int, color: Color, chip: float = -1.0, foe: bool = false) -> void:
+	var bar := Rect2(origin + Vector2(45 if not foe else 14, 29), Vector2(width - 60, 15))
+	draw_rect(bar, Color("#302c22"))
 	if chip > hp:
-		draw_rect(Rect2(origin + Vector2(0, 23), Vector2(width * clampf(chip / maximum, 0.0, 1.0), 6)), Color("#f6e6c4"))
-	draw_rect(Rect2(origin + Vector2(0, 23), Vector2(width * maxf(0, float(hp) / maximum), 6)), color)
+		draw_rect(Rect2(bar.position, Vector2(bar.size.x * clampf(chip / maximum, 0.0, 1.0), 15)), Color("#f6e6c4"))
+	var fraction := clampf(float(hp) / maxi(1, maximum), 0.0, 1.0)
+	var fill := Rect2(bar.position, Vector2(bar.size.x * fraction, 15))
+	if foe:
+		fill.position.x += bar.size.x * (1.0 - fraction)
+	draw_rect(fill, color)
+	var frame := ArtLibrary.ui_icon("battle/health_frame")
+	if frame != null:
+		draw_texture_rect(frame, Rect2(origin + Vector2(width if foe else 0, 0), Vector2(-width if foe else width, 64)), false)
+	var emblem := ArtLibrary.ui_icon("orbs/" + (enemy_element if foe else hero_element))
+	if emblem != null:
+		draw_texture_rect(emblem, Rect2(origin + Vector2(width - 46 if foe else 14, 13), Vector2(32, 32)), false)
+	var name_at := origin + Vector2(76 if not foe else 38, 22)
+	var name_width := 230.0
+	draw_string(effect_font, name_at, title, HORIZONTAL_ALIGNMENT_LEFT, name_width, 15, Color("#efe1b6"))
+	var qi_text := "%d/%d" % [enemy_qi if foe else hero_qi, qi_cap]
+	draw_string(effect_font, origin + Vector2(298 if not foe else 270, 22), qi_text, HORIZONTAL_ALIGNMENT_LEFT, 70, 15, Color("#dbd7a6"))
+	var hp_text := "%d/%d" % [hp, maximum]
+	var text_width := effect_font.get_string_size(hp_text, HORIZONTAL_ALIGNMENT_LEFT, -1, 13).x
+	draw_string(effect_font, Vector2(bar.get_center().x - text_width * 0.5, bar.position.y + 12), hp_text, HORIZONTAL_ALIGNMENT_LEFT, -1, 13, Color("#fff0cc"))
 
 ## A beat of the duel: `kind` for the duel's own watchers, and a sound — `voice` when it has its own
 ## (an element's release or impact), else the beat's.
@@ -329,6 +361,9 @@ func play(events: Array[Dictionary]) -> void:
 	_layout()
 	for event: Dictionary in events:
 		match event.type:
+			"draw", "discard", "spend":
+				if is_instance_valid(qi_view):
+					await qi_view.play_event(event)
 			"attack":
 				await _attack(event)
 			"phase":
@@ -362,7 +397,7 @@ func play(events: Array[Dictionary]) -> void:
 				var guarding = enemy if foe_guard else hero
 				var guard_skill: Dictionary = skills.get(event.get("style", ""), {})
 				var sect: Dictionary = sects[enemy_sect if foe_guard else hero_sect]
-				banner = str(event.get("name", guard_skill.get("name", "凝神守御")))
+				banner = str(event.get("name", guard_skill.get("name", "护体神通")))
 				guarding.set_pose("guard")
 				_effect(sect.guard_vfx, guarding.chest(), guarding.chest(), 1.6, Color(sect.color), 0, int(event.get("tier", 1)))
 				SpriteFx.play(world, guarding.chest(), SpriteFx.recipes().get("guard", []), Color(sect.color))

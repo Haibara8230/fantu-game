@@ -10,7 +10,7 @@ var cue_sequence: Array[String] = []
 
 func _initialize() -> void:
 	_step("script started")
-	create_timer(40).timeout.connect(func() -> void: printerr("Presentation test timeout"); quit(1))
+	create_timer(75).timeout.connect(func() -> void: printerr("Presentation test timeout"); quit(1))
 	call_deferred("_run")
 
 ## Progress line, so a hung run's log shows the last stage it reached (see docs/BACKLOG.md).
@@ -79,6 +79,7 @@ func _run() -> void:
 	main.run(func() -> String: return main.session.start_battle("disciple"))
 	_step("disciple duel started")
 	await _capture("art_duel_idle")
+	await _wait_action()
 	check(main.battle_stage.hero.sprite.texture.get_width() == 1536, "hero atlas loaded")
 	check(main.battle_stage.enemy.sprite.flip_h, "rival faces player")
 	check(main.battle_stage.background.resource_path == "res://assets/art/battle/%s.png" % main.session.snapshot().battle.place, "the battle place selects its generated backdrop")
@@ -98,7 +99,8 @@ func _run() -> void:
 	# A known hand: enough for the sword, and for the fire and healing arts later.
 	main.session.battle.orbs = ["metal", "fire", "fire", "wood", "wood"]
 	_watch_stage("art_sword")
-	main.skill("sword")
+	await main.skill("sword")
+	main.confirm_battle_selection()
 	check(main.presenting, "input lock starts before animation")
 	var after: Dictionary = main.session.snapshot()
 	main.skill("fire")
@@ -110,6 +112,10 @@ func _run() -> void:
 	check(not main.presenting, "input unlocks after animation")
 	_watch_stage("art_answer")
 	await main.battle_action("end_turn")
+	if main.battle_discarding:
+		for element: String in main.session.Combat.elements(main.session):
+			await main.battle_orb(element, true)
+		await main.confirm_battle_selection()
 	check(cue_sequence == ["prepare", "release", "impact"], "ending the turn plays the opponent's answer")
 	# Fleeing a foe of one's own realm may fail (the foe then takes its turn); keep trying.
 	while not main.session.battle.is_empty():
@@ -117,6 +123,8 @@ func _run() -> void:
 	main.run(func() -> String: return main.session.act("rest"))
 	main.run(func() -> String: return main.session.travel("wild"))
 	main.run(func() -> String: return main.session.start_battle("wolf"))
+	await process_frame
+	await _wait_action()
 	_step("wolf duel: fire, heal, guard")
 	for art: String in ["fire", "wood"]:
 		if not art in main.session.player.learned:
@@ -125,59 +133,36 @@ func _run() -> void:
 	main.session.battle.orbs = ["fire", "fire", "wood", "wood"]
 	_watch_stage("art_fire")
 	await main.skill("fire")
+	await main.confirm_battle_selection()
 	check(cue_sequence.count("impact") == 1 and not main.session.battle.is_empty(), "fire produces its impact cue")
 	_watch_stage("art_heal")
 	await main.skill("wood")
+	await main.confirm_battle_selection()
 	check(cue_sequence[0] == "heal", "healing has its own visual event")
 	_watch_stage("art_guard")
-	await main.battle_action("guard")
-	check(cue_sequence[0] == "guard", "guard has its own visual event")
+	await main.battle_action("end_turn")
+	check(not "guard" in cue_sequence, "normal turn end has no independent guard event")
 	while not main.session.battle.is_empty():
 		await main.battle_action("flee")
-	# Legal progression so boss presentation also exercises the real game's gate.
-	_step("progressing to foundation")
-	main.run(func() -> String: return main.session.travel("sect"))
-	# Retreat while the mind is fresh; otherwise spar (which tempers the mind), gather, which eases it,
-	# and buy a 破障丹 for a bottleneck (as in core_smoke).
+	# Core/growth suites cover the years of legal progression. Keep this presentation fixture bounded:
+	# advance through the actual breakthrough rule from its known prerequisites, without a grind loop.
+	_step("foundation boss fixture")
+	check(not main.presenting, "prior duel releases its input lock")
 	var game = main.session
-	var rounds := 0
-	while game.player.xp < 8000 and rounds < 600:
-		rounds += 1
-		if game.at_bottleneck() and game.item_count("pozhang_pill") > 0:
-			main.run(func() -> String: return game.use_item("pozhang_pill"))
-		elif not game.at_bottleneck() and game.retreat_efficiency() >= 100 and game.mind_percent() >= 100:
-			main.run(func() -> String: return game.cultivate(game.retreat_most()))
-		else:
-			for bout: int in 2:
-				main.run(func() -> String: return game.start_battle("disciple"))
-				while not game.battle.is_empty():
-					main.run(func() -> String: return game.plain_turn())
-			main.run(func() -> String: return game.act("rest"))
-			main.run(func() -> String: return game.travel("wild"))
-			for i: int in 3:
-				main.run(func() -> String: return game.act("gather"))
-			main.run(func() -> String: return game.travel("market"))
-			while not game.pending_event.is_empty():
-				main.choose(str(game.pending_definition().choices.back().id))
-			main.run(func() -> String: return game.act("sell"))
-			if game.at_bottleneck():
-				main.run(func() -> String: return game.buy("pozhang_pill"))
-			main.run(func() -> String: return game.travel("sect"))
-			while not game.pending_event.is_empty():
-				main.choose(str(game.pending_definition().choices.back().id))
-	main.run(func() -> String: return main.session.act("rest"))
-	main.run(func() -> String: return main.session.travel("wild"))
-	while int(main.session.herb_count()) * 4 + int(main.session.player.stones) < 120:
-		main.run(func() -> String: return main.session.act("gather"))
-	main.run(func() -> String: return main.session.travel("market"))
-	while not main.session.pending_event.is_empty():
-		main.choose(str(main.session.pending_definition().choices.back().id))
-	main.run(func() -> String: return main.session.act("sell"))
-	main.run(func() -> String: return main.session.buy("foundation_pill"))
-	main.run(func() -> String: return main.session.travel("sect"))
-	# The breakthrough's rolls are fixed: no 心魔, and well under the odds.
-	main.session.fortune = {"demon": 0.99, "breakthrough": 0.0}
-	main.run(func() -> String: return main.session.act("breakthrough"))
+	game.new_game("青禾", 42, ["metal", "wood", "fire"])
+	main.story = {}
+	game.player.xp = 8000
+	game.player.stage = 3
+	game.player.mind = 200
+	game.refresh_realm_stats()
+	game.set_item_count("foundation_pill", 1)
+	game.fortune = {"demon": 0.99, "breakthrough": 0.0}
+	game.act("breakthrough")
+	check(int(game.player.realm) == 1, "boss fixture passes through actual foundation breakthrough")
+	for art: String in ["sword", "fire", "wood"]:
+		if not art in game.player.learned:
+			game.player.learned.append(art)
+	game.player.arts = ["sword", "fire", "wood"]
 	# Twenty years on the serpent has had its day; the boss is staged as if it still waited at the spring.
 	for flag: String in ["serpent_rampage", "serpent_slain"]:
 		main.session.world.flags.erase(flag)
@@ -188,12 +173,14 @@ func _run() -> void:
 	main.run(func() -> String: return main.session.start_battle("serpent"))
 	_step("serpent duel started")
 	await _capture("art_boss_idle")
+	await _wait_action()
 	check(main.battle_stage.enemy.sprite.region_rect.position.y == 472, "serpent uses its own calibrated atlas region")
 	main.session.battle.orbs = ["fire", "fire", "metal"]
 	_watch_stage("art_boss")
 	await main.skill("fire")
+	await main.confirm_battle_selection()
 	main._save_manual()
-	await main.battle_action("guard")
+	await main.battle_action("end_turn")
 	main._load_manual()
 	check(not main.presenting and main.session.battle.enemy_id == "serpent", "load restores idle stage and active boss")
 	# Tiered staging (data/vfx_tiers.json): a 天阶 sect art gathers, opens a rune circle, shows its

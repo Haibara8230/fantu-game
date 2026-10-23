@@ -1271,16 +1271,11 @@ func begin_spar(person_id: String) -> void:
 func begin_tournament(round: int) -> void:
 	Combat.begin_tournament(self, round)
 
-func use_skill(skill_id: String) -> String:
-	return Combat.use_skill(self, skill_id)
+func use_skill(skill_id: String, payment: Variant = null) -> String:
+	return Combat.use_skill(self, skill_id, payment)
 
-## 守御; `let_go` lets the orbs over the cap go on their own (the interface asks the player instead).
-func defend(let_go: bool = true) -> String:
-	return Combat.defend(self, let_go)
-
-## 结束回合; `let_go` as for defend.
 func end_turn(let_go: bool = true) -> String:
-	return Combat.end_turn(self, false, let_go)
+	return Combat.end_turn(self, let_go)
 
 ## 散去 one orb of an element, without taking the turn.
 func discard_orb(element: String) -> String:

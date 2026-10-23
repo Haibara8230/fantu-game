@@ -1,0 +1,14 @@
+{
+  "date": "2026-10-23",
+  "tool": "built-in image_gen",
+  "source": ".tmp/battle_layout_20261023/battle_layout_v6.png",
+  "output": "assets/art/ui/battle/dock_v6.png",
+  "sha256": "33d762b41a75f068a376c6e0d25b4c260166277726aaf9cf6f76638772c21b27",
+  "size": [
+    1672,
+    941
+  ],
+  "mode": "RGBA",
+  "prompt": "Use case: background-extraction / production game UI asset. Edit target: attached approved battle screenshot, exact layout must be preserved. Deliver ONLY the decorative bottom jade-and-gold UI dock with genuine transparent background, as a full-frame 16:9 1672x941 PNG, keep the bottom dock at its exact original screenshot pixel positions and proportions. Preserve the two left jade wings, attached sword silhouette, gold contours, left 5x2 skill-frame bank and single weapon slot, CENTRAL circular muted taiji/bagua wheel with two upper arc tabs (left teal blue / right burnt orange), right jade circular five-element pool and right curling jade flourish. Clean painted 2D game UI, flat color with restrained hand-painted shading exactly like source, not photorealistic, no redesign. Remove ALL scene/background/characters, sky, floor, top HUD bars, ALL visible text, Chinese characters, numbers, skill icons, weapon icon, element icons, qi counters and auxiliary menu icons. Keep skill slot frames with EMPTY dark green interiors; keep weapon slot with EMPTY dark jade interior. Keep central wheel EMPTY except faint taiji/bagua decorative lines, both colored arc tabs blank with NO letters. Keep right circular pool EMPTY except quiet jade background pattern. All area outside this continuous bottom decorative panel must be alpha=0, no checkerboard painted in image, no white border, no drop shadow outside dock, no margins added, no moving/recentering/enlarging the dock. The result is a reusable decoration layer underneath engine-rendered text and controls, not a screenshot, not a new mockup.",
+  "notes": "Generated bottom ornament extraction. Runtime controls aligned to output; text and icons remain engine-rendered. Sparse alpha pixels above dock are excluded by runtime clipping. No pixel-exact extraction claim."
+}

@@ -244,7 +244,7 @@ func _failed_trial() -> void:
 	while not game.battle.is_empty() and guard < 30:
 		guard += 1
 		game.player.hp = 1
-		game.defend()
+		game.end_turn()
 	check(game.ended.is_empty() and game.ascend_block().contains("伤"), "struck down, the body must heal first")
 	game.world.day = int(game.player.injury_until) + 1
 	check(game.ascend_block().is_empty(), "healed, the crossing waits again")

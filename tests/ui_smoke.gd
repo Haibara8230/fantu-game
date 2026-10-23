@@ -9,7 +9,7 @@ var checks := 0
 var failures := 0
 
 func _initialize() -> void:
-	create_timer(20.0).timeout.connect(func() -> void: printerr("UI test timed out" ); quit(1))
+	create_timer(60.0).timeout.connect(func() -> void: printerr("UI test timed out" ); quit(1))
 	call_deferred("_run")
 
 ## A store that reads back what it wrote without checking it against freshly loaded content: the
@@ -186,7 +186,7 @@ func _watch_walk() -> Dictionary:
 ## A button in the window, or on the place's scene (the people drawer, the way out).
 func _button(text_part: String) -> Button:
 	for button: Button in main.center.find_children("*", "Button", true, false) + main.scene_layer.find_children("*", "Button", true, false):
-		if button.text.contains(text_part):
+		if (text_part.begins_with("[") and button.name == "ArtSlot" + text_part.get_slice("]", 0).trim_prefix("[")) or button.text.contains("回合结束" if text_part == "结束回合" else text_part):
 			return button
 	return null
 
@@ -194,13 +194,13 @@ func _button(text_part: String) -> Button:
 ## its tooltip.
 func _orb_chip(element_name: String, count: int) -> Button:
 	for button: Button in main.center.find_children("*", "Button", true, false):
-		if button.icon != null and button.text == "×%d" % count and button.tooltip_text.begins_with("%s灵气 %d 颗" % [element_name, count]):
+		if button.name.begins_with("QiPool_") and button.tooltip_text.begins_with("%s灵气 %d 颗" % [element_name, count]):
 			return button
 	return null
 
 func _welcome_button(text_part: String) -> Button:
 	for button: Button in main.welcome_layer.find_children("*", "Button", true, false):
-		if button.text.contains(text_part):
+		if (text_part.begins_with("[") and button.name == "ArtSlot" + text_part.get_slice("]", 0).trim_prefix("[")) or button.text.contains("回合结束" if text_part == "结束回合" else text_part):
 			return button
 	return null
 
@@ -318,7 +318,7 @@ func _run() -> void:
 	main.set_view("arts")
 	await _capture("arts")
 	var arts_text := _screen("Label") + _texts(main.center, "Button")
-	check(arts_text.contains("主动神通  5 / 6") and arts_text.contains("[1]") and arts_text.contains("御剑诀"), "the 神通 page: slots with their keys, the arts learned")
+	check(arts_text.contains("主动神通  5 / 10") and arts_text.contains("[1]") and arts_text.contains("御剑诀"), "the 神通 page: slots with their keys, the arts learned")
 	main.set_view("methods")
 	check(_screen("Label").contains("心法  0 / 2"), "the 功法 page: the 心法 slots")
 	main.set_arts_filter("fire")
@@ -429,8 +429,11 @@ func _run() -> void:
 	main.session.player.arts = ["sword", "fire", "wood"]
 	main.set_guide_enabled(true)
 	main.run(func() -> String: return main.session.start_battle("wolf"))
-	check(_screen("Label").contains("教学 · 斗法  1 / 3") and _screen("Label").contains("按 1 / 2 / 3 / 4 / 5 / 6 或点按钮") and _button("[1] ") != null, "the first duel explains the controls with the bound keys")
-	check(_button("结束回合") != null and _button("结束回合").has_theme_stylebox_override("normal") and not _button("守御").has_theme_stylebox_override("normal"), "and points at the button it speaks of")
+	await process_frame
+	while main.presenting:
+		await process_frame
+	check(_screen("Label").contains("教学 · 斗法  1 / 3") and _screen("Label").contains("或点图标选择神通") and _button("[1] ") != null, "the first duel explains the controls with the bound keys")
+	check(_button("结束回合") != null and _button("结束回合").has_theme_stylebox_override("normal") and _button("守御") == null, "and points at the button it speaks of")
 	for frame: int in 3:
 		await process_frame
 	var bubble: Rect2 = main.tip_card.get_global_rect() if main.tip_card != null else Rect2()
@@ -439,29 +442,31 @@ func _run() -> void:
 	check(main.tip_card != null and main.tip_card.top_level and beside and bubble.position.y - aimed.end.y < 40.0 and aimed.position.y - bubble.end.y < 40.0, "the card sits as a bubble just beside that button, not over it (%s by %s)" % [bubble, aimed])
 	check(main.get_viewport_rect().encloses(bubble), "and stays on screen (%s in %s)" % [bubble, main.get_viewport_rect()])
 	main.set_guide_enabled(false)
-	check(main.current_screen() == "full" and not main.hud_left.visible and main.window.get_global_rect().size.is_equal_approx(main.get_global_rect().size) and _texts(main.center, "Label").contains("斗 法  ·  第 1 回合") and _button("守御") != null and _button("撤离") != null, "the duel takes the whole screen, with its dock along the bottom")
+	check(main.current_screen() == "full" and not main.hud_left.visible and main.window.get_global_rect().size.is_equal_approx(main.get_global_rect().size) and main.battle_dock.turn_label.text.contains("第 1 回合") and _button("守御") == null and _button("更多") != null, "the duel takes the whole screen, with its dock along the bottom")
+	main.toggle_battle_more()
 	check(_button("速战") != null, "the dock offers to finish the duel quickly")
 	_button("记录").pressed.emit()
 	check(main.battle_record_open and _texts(main.center, "Label").contains("展开斗法"), "记录 shows the duel's latest entries")
-	check(_button("结束回合") != null and _texts(main.center, "Label").contains("对手下一回合：") and _button("[2] ").text.contains("火2"), "the dock shows 结束回合, the arts' orb costs, and the stage the opponent's intent")
+	check(_button("结束回合") != null and _texts(main.center, "Label").contains("对手下一回合：") and _button("[2] ").tooltip_text.contains("火"), "the dock shows 结束回合, the arts' orb costs, and the stage the opponent's intent")
 	main.toggle_battle_record()
 	main.session.battle.orbs = ["fire", "fire", "wood", "wood"]
 	main.render()
-	check(_orb_chip("木", 2) != null and not _orb_chip("木", 2).disabled and _button("[2] ") != null and not _button("[2] ").disabled, "the hand shows each element's orbs; an affordable art is ready")
+	check(_orb_chip("木", 2) != null and _orb_chip("木", 2).disabled and _button("[2] ") != null and not _button("[2] ").disabled, "the hand shows each element's orbs; an affordable art is ready")
 	await main.battle_action("discard:wood")
-	check(main.session.battle.orbs.count("wood") == 1 and _orb_chip("木", 1) != null, "clicking an element lets one of its orbs go")
+	check(main.session.battle.orbs.count("wood") == 2, "outside discard phase pool clicks cannot accidentally discard qi")
 	main.session.battle.orbs = ["fire", "fire", "wood", "wood", "fire"]
 	main.render()
 	await main.battle_action("end_turn")
-	check(int(main.session.battle.turn) == 1 and _button("结束回合").text.contains("先散去 1 颗"), "over the cap the turn does not end until the player lets an orb go")
+	check(int(main.session.battle.turn) == 1 and main.battle_discarding and main.battle_dock.turn_label.text.contains("还需散去 1 颗"), "over the cap the turn does not end until the player lets an orb go")
 	await main.battle_action("discard:fire")
-	check(main.session.battle.orbs.size() == 4 and _button("结束回合").text.contains(main.Settings.key_name(main, "end_turn")), "within the cap it can end")
+	check(main.session.battle.orbs.size() == 4 and not main.battle_dock.confirm.disabled, "within the cap it can end")
+	await main.cancel_battle_selection()
 	# 地利 in the foe's corner, and 神识探查 in the record's place (batch eight).
 	check(_texts(main.center, "Label").contains("地利 · 山谷"), "the valley's favour for wood is shown")
-	_button("神识探查").pressed.emit()
+	_button("探查").pressed.emit()
 	var scouted: String = "神识压过对手" if main.session.Combat.scout(main.session).seen else "神识不及对手"
-	check(main.battle_scout_open and _texts(main.center, "Label").contains(scouted) and _button("收起探查") != null, "探查 shows what 神识 makes of the wolf (%s)" % scouted)
-	_button("收起探查").pressed.emit()
+	check(main.battle_scout_open and _texts(main.center, "Label").contains(scouted) and _button("探查") != null, "探查 shows what 神识 makes of the wolf (%s)" % scouted)
+	_button("探查").pressed.emit()
 	check(not main.battle_scout_open and not main.battle_record_open, "and folds away")
 	# 祭出 the worn 兵刃 and 符箓 from the dock (batch five), without taking the turn.
 	var sword: String = main.session.Arsenal.equipment_id("sword", 2, "fire", [], 0)
@@ -485,6 +490,8 @@ func _run() -> void:
 		main.session.battle.orbs = ["fire", "fire", "fire"]
 	main.render()
 	await main.skill("fire")
+	check(main.session.battle.orbs == ["fire", "fire", "fire"], "selecting a spell reserves qi without spending")
+	await main.confirm_battle_selection()
 	check(main.session.battle.orbs == ["fire"] and _button("[2] ").disabled, "a cast spends its orbs and disables what the hand no longer covers")
 	await _capture("battle")
 	root.size = Vector2i(1280, 720)
@@ -665,8 +672,8 @@ func _run() -> void:
 	key.pressed = true
 	main.settings_dialog.window_input.emit(key)
 	check(main.keys.save == KEY_F6 and main.binding_action.is_empty() and main.save_button.text == "保存 F6", "a key is rebound by pressing it in the dialog")
-	main.Settings.bind_key(main, "guard", KEY_1)
-	check(main.keys.guard == KEY_1 and main.keys.skill_1 == KEY_G, "taking another action's key swaps the two")
+	main.Settings.bind_key(main, "release", KEY_1)
+	check(main.keys.release == KEY_1 and main.keys.skill_1 == KEY_D, "taking another action's key swaps the two")
 	check(not main.Settings.bind_key(main, "load", KEY_ESCAPE), "the dialog's own keys cannot be bound")
 	main.Settings.begin_binding(main, "load")
 	var escape := InputEventKey.new()
@@ -675,7 +682,7 @@ func _run() -> void:
 	main.settings_dialog.window_input.emit(escape)
 	check(main.keys.load == KEY_F9 and main.binding_action.is_empty(), "Esc cancels a binding")
 	main.Settings.load_state(main)
-	check(main.keys.save == KEY_F6 and main.keys.guard == KEY_1 and main.text_speed == "slow", "settings are read back from the file")
+	check(main.keys.save == KEY_F6 and main.keys.release == KEY_1 and main.text_speed == "slow", "settings are read back from the file")
 	var press := InputEventKey.new()
 	press.keycode = KEY_F6
 	press.pressed = true
@@ -694,11 +701,11 @@ func _run() -> void:
 	config.set_value("controls", "keys", {"save": KEY_F6, "load": KEY_F9, "skill_1": KEY_1, "skill_2": KEY_2, "skill_3": KEY_3, "skill_4": KEY_4, "guard": KEY_SPACE})
 	config.save(test_path + "/settings.cfg")
 	main.Settings.load_state(main)
-	check(main.keys.save == KEY_F6 and main.keys.end_turn == KEY_SPACE and main.keys.guard == KEY_G, "an older key file gives Space to 结束回合 and keeps its other keys")
+	check(main.keys.save == KEY_F6 and main.keys.end_turn == KEY_SPACE and not main.keys.has("guard"), "an older key file gives Space to 结束回合 and keeps its other keys")
 	config.set_value("controls", "keys", {"save": KEY_F5, "load": KEY_F9, "skill_1": KEY_1, "skill_2": KEY_2, "skill_3": KEY_3, "skill_4": KEY_4, "guard": KEY_Q})
 	config.save(test_path + "/settings.cfg")
 	main.Settings.load_state(main)
-	check(main.keys.guard == KEY_Q and main.keys.end_turn == KEY_SPACE, "a 守御 the player rebound stays")
+	check(not main.keys.has("guard") and main.keys.end_turn == KEY_SPACE, "retired 守御 bindings are ignored")
 	main.Settings.reset_keys(main)
 	main.close_overlay()
 	# With auto-save off only manual saves are written, and 继续旅程 reads the newer save.

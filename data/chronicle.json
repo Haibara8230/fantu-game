@@ -263,7 +263,7 @@
   "field_plant": "在洞府灵田种下一株{item_name}，约 {duration} 后可收。",
   "field_harvest": "灵田收获{loot_text}。",
   "field_upgrade": "灵田重新翻整、引来灵泉，如今已是{field}。",
-  "battle_review": "战后回顾：与{enemy_name}交手 {turns} 回合，开战气血 {opening_percent}%，守御 {guards} 次。",
+  "battle_review": "战后回顾：与{enemy_name}交手 {turns} 回合，开战气血 {opening_percent}%。",
   "story_gather_help": "{npc_name}同行指草，额外找到{item_name}×{count}；这次认药相助已用过。",
   "duanjian_ling_down": "剑灵首散成一地碎剑，断剑林里的剑气平息下来，往草庐与剑冢的路露了出来。",
   "archive_seized": "守川司巡使败退，被你夺下的半卷残页上，赫然是那枚城徽，旁边是一幅古画像。",

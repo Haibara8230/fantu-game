@@ -133,13 +133,13 @@ func _initialize() -> void:
 	copy.plain_turn()
 	check(game.snapshot() == copy.snapshot(), "RNG continues identically after loading")
 	var held: int = game.battle.orbs.size()
-	game.defend()
+	game.end_turn()
 	# A coil (缠绕) or a freeze (冰封) put on the player in the serpent's turn draws fewer.
 	var held_back := 0
 	for binding: String in ["slow", "entangle"]:
 		if not game.battle.is_empty() and game.battle.player_status.has(binding):
 			held_back += int(game.battle.player_status[binding][0])
-	check(game.battle.is_empty() or game.battle.orbs.size() == mini(held, game.Combat.hand_cap(game)) + maxi(1, game.Combat.draw_count(game) - held_back + int(game.content.rules.duel.guard_orbs)), "guarding ends the turn and brings one more orb")
+	check(game.battle.is_empty() or game.battle.orbs.size() == mini(held, game.Combat.hand_cap(game)) + maxi(1, game.Combat.draw_count(game) - held_back), "ending the turn brings the normal draw without guard bonuses")
 	var rounds := 0
 	while not game.battle.is_empty() and rounds < 40:
 		rounds += 1
@@ -158,7 +158,7 @@ func _initialize() -> void:
 	defeated.new_game("落败测试", 3)
 	defeated.player.hp = 1
 	defeated.start_battle("disciple")
-	defeated.defend()
+	defeated.end_turn()
 	check(defeated.battle.is_empty() and defeated.player.location == "sect" and defeated.player.hp > 0, "defeat recovers into playable state")
 	check(defeated.player.stones == 20, "defeat penalty bounded")
 	var hasty = Session.new()

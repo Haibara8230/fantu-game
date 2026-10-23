@@ -63,6 +63,20 @@ static func restore(s, data: Variant) -> bool:
 		return false
 	if not saved_player.get("name") is String or not saved_player.get("location") is String or not content.locations.has(saved_player.location):
 		return false
+	var prepared_pill: Variant = saved_player.get("prepared_pill", "")
+	if not prepared_pill is String or (not prepared_pill.is_empty() and not content.item(prepared_pill).has("battle_preparation")):
+		return false
+	var memory: Variant = saved_battle.get("payment_memory", {})
+	if not memory is Dictionary or memory.size() > 256:
+		return false
+	for art_id: Variant in memory:
+		if not art_id is String or content.technique(art_id).is_empty() or not memory[art_id] is Array or memory[art_id].size() > 64:
+			return false
+		if memory[art_id].any(func(e: Variant) -> bool: return not e is String or not content.technique_data.elements.has(e)):
+			return false
+	var battle_pill: Variant = saved_battle.get("prepared_pill", "")
+	if not battle_pill is String or (not battle_pill.is_empty() and not content.item(battle_pill).has("battle_preparation")):
+		return false
 	for key: String in PLAYER_COUNTS:
 		if not _whole_nonnegative(saved_player.get(key)):
 			return false

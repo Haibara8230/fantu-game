@@ -78,6 +78,11 @@ var scene_layer: Control
 # The state of the screens: the duel's record shown, the retreat's chosen length and its playback,
 # the breakthrough just achieved, the open person's details, the people drawer, the filters of the
 # 神通 / 功法 and 行囊 pages, and what is laid out on the trading table.
+var battle_selection := ""
+var battle_payment: Array = []
+var battle_discarding := false
+var battle_more_open := false
+var battle_dock
 var battle_record_open := false
 var battle_scout_open := false
 var battle_secret_open := false
@@ -217,12 +222,15 @@ func _ready() -> void:
 	session.new_game()
 	session.changed.connect(_on_changed)
 	render()
-	preview_mode = "--art-preview" in OS.get_cmdline_user_args() or "--sect-preview" in OS.get_cmdline_user_args()
+	preview_mode = "--art-preview" in OS.get_cmdline_user_args() or "--sect-preview" in OS.get_cmdline_user_args() or "--battle-v6-preview" in OS.get_cmdline_user_args()
 	if preview_mode:
-		manual_store = SaveStore.new("user://art_preview/manual")
-		auto_store = SaveStore.new("user://art_preview/auto")
-		trial_store = SaveStore.new("user://art_preview/trial")
-		choice_store = SaveStore.new("user://art_preview/choice")
+		manual_store = SaveStore.new("res://.tmp/art_preview/manual")
+		auto_store = SaveStore.new("res://.tmp/art_preview/auto")
+		trial_store = SaveStore.new("res://.tmp/art_preview/trial")
+		choice_store = SaveStore.new("res://.tmp/art_preview/choice")
+		settings_path = "res://.tmp/art_preview/settings.cfg"
+		guide_path = "res://.tmp/art_preview/guide.cfg"
+		audio.settings_path = settings_path
 		guide_enabled = false
 		started = true
 		reset_preview()
@@ -392,7 +400,7 @@ func _build_layout() -> void:
 	new_game_dialog.confirmed.connect(_show_welcome)
 	add_child(new_game_dialog)
 	Settings.build(self)
-	notice("鼠标选择行动 · {save} 保存 · {load} 读取 · 斗法中按 {skills} 施法，{end_turn}结束回合，{guard}守御".format(Settings.key_hints(self)))
+	notice("鼠标选择行动 · {save} 保存 · {load} 读取 · 斗法中按 {skills} 选招，{end_turn}确认或结束回合，Esc 取消".format(Settings.key_hints(self)))
 
 ## Which screen the state calls for: "full" while an ending, a breakthrough, a story moment, an event
 ## or a duel holds the player; the scroll a view belongs to ("panel", "scroll", "retreat", "trade");
@@ -556,6 +564,10 @@ func render() -> void:
 	clear(scene_layer)
 	if screen == "place":
 		PlaceView.render_scene(self, scene_layer)
+	if session.battle.is_empty():
+		battle_selection = ""
+		battle_payment = []
+		battle_discarding = false
 	clear(center)
 	center.alignment = BoxContainer.ALIGNMENT_BEGIN
 	var scene := "%s|%s|%s|%s|%s|%s" % [view, session.player.location, session.pending_event.get("id", ""), story.get("event", ""), session.battle.is_empty(), selected_npc]
@@ -1150,19 +1162,99 @@ func choose(choice_id: String) -> void:
 	_breakthrough_outcome(mark, before)
 
 func skill(skill_id: String) -> void:
-	await battle_action(skill_id)
+	if presenting or session.battle.is_empty() or battle_discarding:
+		return
+	var art: Dictionary = session.held_technique(skill_id)
+	if art.is_empty() or skill_id not in session.active_skills() or not session.Combat.affordable(session.battle.orbs, art.cost):
+		return
+	var payment: Array = session.Combat.payment_plan(session, skill_id, battle_selection == skill_id, battle_payment)
+	battle_selection = skill_id
+	battle_payment = payment
+	presenting = true
+	await battle_dock.set_payment(skill_id, payment)
+	presenting = false
+	battle_dock.refresh()
+
+func cancel_battle_selection() -> void:
+	if presenting:
+		return
+	battle_selection = ""
+	battle_payment = []
+	battle_discarding = false
+	presenting = true
+	if is_instance_valid(battle_dock):
+		await battle_dock.set_payment("", [])
+	presenting = false
+	if is_instance_valid(battle_dock):
+		battle_dock.refresh()
+
+func confirm_battle_selection() -> void:
+	if presenting or session.battle.is_empty():
+		return
+	if not battle_selection.is_empty():
+		if not session.Combat.payment_valid(session.battle.orbs, session.held_technique(battle_selection).cost, battle_payment):
+			notice("配气不符，请调整后确认。")
+			return
+		await battle_action("confirm")
+	else:
+		await battle_action("end_turn")
+
+func battle_unreserve(element: String) -> void:
+	if presenting or battle_selection.is_empty() or not element in battle_payment:
+		return
+	battle_payment.erase(element)
+	presenting = true
+	await battle_dock.set_payment(battle_selection, battle_payment)
+	presenting = false
+	battle_dock.refresh()
+
+func battle_orb(element: String, batch: bool = false) -> void:
+	if presenting or session.battle.is_empty():
+		return
+	if not battle_selection.is_empty():
+		if session.battle.orbs.count(element) <= battle_payment.count(element):
+			return
+		var required: int = session.Combat._orbs_in(session.held_technique(battle_selection).cost)
+		if battle_payment.size() >= required:
+			notice("先点击中央灵气退回，再配入新的灵气。")
+			return
+		battle_payment.append(element)
+		presenting = true
+		await battle_dock.set_payment(battle_selection, battle_payment)
+		presenting = false
+		battle_dock.refresh()
+	elif battle_discarding:
+		var count: int = mini(session.battle.orbs.count(element), session.Combat.over_cap(session)) if batch else mini(1, session.Combat.over_cap(session))
+		for index: int in count:
+			await battle_action("discard:" + element)
+
+func toggle_battle_more() -> void:
+	if presenting:
+		return
+	battle_more_open = not battle_more_open
+	render()
 
 ## A duel turn: the input stays locked while the stage plays the turn's events.
 func battle_action(action: String) -> void:
 	if presenting or session.battle.is_empty():
 		return
+	if action == "end_turn" and session.Combat.over_cap(session) > 0:
+		if not battle_selection.is_empty():
+			await cancel_battle_selection()
+		battle_discarding = true
+		battle_dock.refresh()
+		return
+	if action.begins_with("discard:") and (not battle_discarding or session.Combat.over_cap(session) <= 0):
+		return
+	if action != "confirm" and not battle_selection.is_empty():
+		await cancel_battle_selection()
 	presenting = true
 	_lock_buttons(self)
 	var held := GainsCard.snapshot(session)
 	var message: String
 	# The player chooses what qi to let go (散去) before the turn ends; quick duels let it go themselves.
-	if action == "guard":
-		message = session.defend(false)
+	if action == "confirm":
+		message = session.use_skill(battle_selection, battle_payment)
 	elif action == "end_turn":
 		message = session.end_turn(false)
 	elif action == "quick":
@@ -1186,16 +1278,23 @@ func battle_action(action: String) -> void:
 	else:
 		message = session.use_skill(action)
 	var events: Array[Dictionary] = session.combat_events.duplicate(true)
+	if action == "quick":
+		# Quick resolution skips intermediate turns; only the final outcome belongs to this screen.
+		events = events.filter(func(event: Dictionary) -> bool: return event.type == "end")
 	if is_instance_valid(battle_stage) and not events.is_empty():
 		await battle_stage.play(events)
 	for event: Dictionary in events:
 		if event.get("type") == "end" and event.get("result") in ["win", "lose"]:
 			audio.cue("victory" if event.result == "win" else "defeat")
+	battle_selection = ""
+	battle_payment = []
+	if action == "end_turn" or session.battle.is_empty():
+		battle_discarding = false
 	presenting = false
 	_unlock_buttons()
 	render()
 	notice(message + (" 自动存档失败：" + autosave_error if not autosave_error.is_empty() else ""))
-	# The spoils, once the duel is over (a pill taken mid-duel is no gain).
+	# Show the spoils after the authoritative duel ends.
 	if session.battle.is_empty():
 		GainsCard.show(self, GainsCard.gains(session, held))
 
@@ -1287,8 +1386,7 @@ func _cue_changes(before: Dictionary) -> void:
 	elif after.battle and not before.battle:
 		audio.cue("prepare")
 		# A quicker opponent has already struck (遁速): its opening plays on the stage once it is up.
-		if bool(session.battle.get("foe_led", false)):
-			_play_opening.call_deferred()
+		_play_opening.call_deferred()
 	elif after.location != before.location:
 		audio.cue("arrive")
 	elif not before.pending.is_empty() and after.pending.is_empty():
@@ -1301,6 +1399,22 @@ func _play_opening() -> void:
 		return
 	presenting = true
 	_lock_buttons(self)
+	if is_instance_valid(battle_dock):
+		# The snapshot already contains the opening hand; replay starts from before its draws.
+		var reverse_events := events.duplicate()
+		reverse_events.reverse()
+		for event: Dictionary in reverse_events:
+			if not event.get("type") in ["draw", "spend", "discard"]:
+				continue
+			if event.get("actor", "player") == "player":
+				for element: String in event.orbs:
+					if event.type == "draw":
+						battle_dock.held.erase(element)
+					else:
+						battle_dock.held.append(element)
+			else:
+				battle_stage.enemy_qi += event.orbs.size() * (-1 if event.type == "draw" else 1)
+		battle_dock.refresh()
 	await battle_stage.play(events)
 	presenting = false
 	_unlock_buttons()
@@ -1350,6 +1464,9 @@ func _save_manual() -> void:
 func _load_manual() -> void:
 	if not started or presenting:
 		return
+	battle_selection = ""
+	battle_payment = []
+	battle_discarding = false
 	story = {}
 	dialogue = {}
 	if manual_store.load_game(session):
@@ -1363,6 +1480,9 @@ func _load_manual() -> void:
 func load_trial() -> void:
 	if not started or presenting:
 		return
+	battle_selection = ""
+	battle_payment = []
+	battle_discarding = false
 	story = {}
 	dialogue = {}
 	if trial_store.load_game(session):
@@ -1446,6 +1566,22 @@ func _unhandled_key_input(event: InputEvent) -> void:
 		return
 	if presenting or is_instance_valid(welcome_layer) or new_game_dialog.visible or settings_dialog.visible:
 		return
+	if not session.battle.is_empty():
+		if event.keycode == KEY_ESCAPE:
+			if not battle_selection.is_empty() or battle_discarding:
+				cancel_battle_selection()
+			elif battle_record_open:
+				battle_record_open = false
+				battle_scout_open = false
+				battle_secret_open = false
+				render()
+			elif battle_more_open:
+				battle_more_open = false
+				render()
+			else:
+				battle_action("end_turn")
+			get_viewport().set_input_as_handled()
+			return
 	if event.keycode == KEY_ESCAPE and gains_card != null and is_instance_valid(gains_card):
 		GainsCard.close(self)
 		get_viewport().set_input_as_handled()
@@ -1464,15 +1600,18 @@ func _unhandled_key_input(event: InputEvent) -> void:
 			_save_manual()
 		"load":
 			_load_manual()
-		"skill_1", "skill_2", "skill_3", "skill_4", "skill_5", "skill_6":
+		"skill_1", "skill_2", "skill_3", "skill_4", "skill_5", "skill_6", "skill_7", "skill_8", "skill_9", "skill_10":
 			if not session.battle.is_empty():
 				var ids := session.active_skills()
-				var index := int(action.right(1)) - 1
+				var index := int(action.trim_prefix("skill_")) - 1
 				if index < ids.size():
 					skill(ids[index])
-		"guard", "end_turn":
+		"end_turn":
 			if not session.battle.is_empty():
-				battle_action(action)
+				confirm_battle_selection()
+		"release":
+			if not session.battle.is_empty():
+				battle_action("release")
 		_:
 			return
 	get_viewport().set_input_as_handled()
@@ -1488,7 +1627,7 @@ func reset_preview(sect_id: String = "qingyun", opponent_id: String = "qingyun")
 	session.Loadout.take_lineage(session, sect_id)
 	session.player.hp = maxi(1, int(session.player.max_hp) - 20)
 	session.start_battle("disciple", opponent_id)
-	notice("门派试演 · {skills} 施法，{end_turn}结束回合，{guard}守御；切换传承会重置试演，正常旅程不受影响。".format(Settings.key_hints(self)))
+	notice("斗法试演 · {skills} 选招，{end_turn}确认或结束回合，Esc 取消；使用独立试演存档。".format(Settings.key_hints(self)))
 
 ## Fit a short telling after labels have wrapped, including the scroll frame's real padding.
 func _fit_story_scroll() -> void:

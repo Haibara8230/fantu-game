@@ -107,7 +107,7 @@ func _stages() -> void:
 	stronger.refresh_realm_stats()
 	stronger.start_battle("disciple")
 	_sword(stronger)
-	var hit: int = stronger.combat_events[0].amount
+	var hit: int = stronger.combat_events.filter(func(e: Dictionary) -> bool: return not e.type in ["spend", "draw", "discard"])[0].amount
 	var boost: float = stronger.element_multiplier(stronger.content.technique("sword"))
 	# The stage's attack bonus counts half for each of the two orbs a 剑诀 spends.
 	var held: Dictionary = stronger.held_technique("sword")
@@ -472,7 +472,7 @@ func _weather(game) -> void:
 	while not game.battle.is_empty() and str(game.battle.get("context", "")) == "tribulation" and bolts < 12:
 		bolts += 1
 		game.player.hp = game.player.max_hp
-		game.defend()
+		game.end_turn()
 
 ## Casts 御剑诀 with the orbs it asks (金×1、任意×1): a journey begins with it only on a metal root.
 func _sword(game) -> String:

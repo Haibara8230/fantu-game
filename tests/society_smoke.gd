@@ -81,7 +81,7 @@ func _summit() -> void:
 	out.player.hp = 1
 	for turn: int in 8:
 		if not out.battle.is_empty():
-			out.defend()
+			out.end_turn()
 	check(out.battle.is_empty() and out.player.location == "canglan" and out.journal_lines().any(func(line: String) -> bool: return line.contains("下台")), "a loss ends the run without penalty")
 	var young := _game(7)
 	_jump(young, 60, 8, 29)
@@ -198,7 +198,7 @@ func _sparring() -> void:
 		check(not _game().restore(bad), "a duel with a broken place or look is rejected")
 	_sword(game)
 	game.end_turn()
-	var counter: Dictionary = game.combat_events.filter(func(event: Dictionary) -> bool: return event.get("actor", "") == "enemy")[0]
+	var counter: Dictionary = game.combat_events.filter(func(event: Dictionary) -> bool: return event.get("actor", "") == "enemy" and event.type == "attack")[0]
 	check(counter.style in game.battle.foe.arts and counter.has("vfx"), "they answer with their own arts")
 	game.battle.hp = 1
 	var xp := int(game.player.xp)
@@ -211,7 +211,7 @@ func _sparring() -> void:
 	var other := _a_disciple(loser)
 	loser.interact(other, "spar")
 	loser.player.hp = 1
-	loser.defend()
+	loser.end_turn()
 	check(loser.battle.is_empty() and int(loser.player.hp) >= 1 and loser.player.location == "sect" and int(loser.player.stones) == 30 and loser.favor(other) == 2, "losing a spar costs nothing")
 
 func _rampage() -> void:
@@ -410,7 +410,7 @@ func _tournament() -> void:
 	# They may gather qi or guard before they strike.
 	for turn: int in 6:
 		if not out.battle.is_empty():
-			out.defend()
+			out.end_turn()
 	check(out.battle.is_empty() and out.player.location == "market" and int(out.player.stones) == before_loss_stones and out.journal_lines().any(func(line: String) -> bool: return line.contains("止步")), "losing a round ends the run without penalty")
 	out.wait(1)
 	check(out.pending_event.is_empty(), "one entry each time it is held")

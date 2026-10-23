@@ -180,7 +180,7 @@ static func render(ui, where: String, parent: Control = null) -> void:
 	if pages.size() > 1:
 		title += "  %d / %d" % [page + 1, pages.size()]
 	words.add_child(ui.label(title, 17, ui.GOLD))
-	# Cards that name keys say {save}, {load}, {skills}, {end_turn} or {guard}, filled in with the current bindings.
+	# Cards that name keys say {save}, {load}, {skills} or {end_turn}, filled in with the current bindings.
 	words.add_child(ui.paragraph(str(pages[page]).format(Settings.key_hints(ui)), ui.INK))
 	var buttons := VBoxContainer.new()
 	buttons.add_theme_constant_override("separation", 6)

@@ -144,6 +144,14 @@
       ],
       "volume": -8
     },
+    "qi_transfer": {
+      "files": ["res://assets/audio/sfx/synth/small_bell.ogg"],
+      "volume": -21
+    },
+    "qi_dissolve": {
+      "files": ["res://assets/audio/sfx/synth/stone_chime.ogg"],
+      "volume": -21
+    },
     "choice": {
       "files": [
         "res://assets/audio/sfx/synth/wooden_fish_1.ogg",

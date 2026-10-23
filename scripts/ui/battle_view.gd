@@ -1,22 +1,17 @@
 extends RefCounted
-## Duel screen: the stage fills the screen, with the opponent's intent and both sides' shields and
-## lingering effects laid over its top corners. Along the bottom a dock: the turn, the hand of qi orbs
-## (click an element to let one of its orbs go; over the cap, that must be done before the turn ends) and
-## the pills that may be taken; below, the active arts with their keys, orb costs and 连击, 结束回合, 守御,
-## retreat and the duel's record.
+## Approved V6 layout: full stage, two rows of arts, central payment wheel and five-element pool.
 const BattleStage = preload("res://scripts/presentation/battle_stage.gd")
 const PlaceView = preload("res://scripts/ui/place_view.gd")
-const Settings = preload("res://scripts/ui/settings.gd")
 const ArtLibrary = preload("res://scripts/ui/art_library.gd")
 const RECORD_LINES := 6
-const DOCK_HEIGHT := 178.0
 const STATUS_NAMES := {"burn": "灼烧", "weaken": "寒蚀", "sunder": "破甲", "slow": "冰封", "bleed": "流血", "entangle": "缠绕", "wound": "禁疗", "focus": "蓄势", "minions": "帮手", "fervor": "秘术"}
 const FOE_COLOR := Color("#f0b49a")
 
 static func render(ui) -> void:
 	var session = ui.session
 	var center: VBoxContainer = ui.center
-	if ui.preview_mode:
+	var selector: bool = ui.preview_mode and not "--battle-v6-preview" in OS.get_cmdline_user_args()
+	if selector:
 		PlaceView.sect_choices(ui, center, true)
 	var b: Dictionary = session.battle
 	var enemy: Dictionary = session.content.enemies[b.enemy_id].duplicate()
@@ -25,60 +20,65 @@ static func render(ui) -> void:
 		enemy.hp = b.foe.hp
 	var battle_stage = BattleStage.new()
 	ui.battle_stage = battle_stage
-	# The stage fills the screen above the dock (and the record when it is open).
-	var room: float = ui.get_viewport_rect().size.y - DOCK_HEIGHT - (170.0 if ui.battle_record_open else 0.0)
-	battle_stage.custom_minimum_size.y = 245 if ui.preview_mode else maxf(260.0, room)
+	battle_stage.custom_minimum_size.y = 520 if selector else ui.get_viewport_rect().size.y
 	battle_stage.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	battle_stage.configure(session.snapshot(), enemy)
 	center.add_child(battle_stage)
 	battle_stage.sound.connect(ui.audio.cue)
 	_corners(ui, battle_stage)
+	var dock = preload("res://scripts/ui/battle_dock.gd").new()
+	ui.battle_dock = dock
+	dock.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	battle_stage.add_child(dock)
+	dock.configure(ui)
+	battle_stage.qi_view = dock
 	if ui.battle_record_open:
 		var record := PanelContainer.new()
-		record.add_theme_stylebox_override("panel", ui.style(Color(0.03, 0.07, 0.08, 0.86), Color("#41615e"), 10))
+		record.position = Vector2(24, 165)
+		record.custom_minimum_size = Vector2(540, 160)
+		record.add_theme_stylebox_override("panel", ui.style(Color(0.03, 0.07, 0.08, 0.94), Color("#8d915d"), 10))
 		if ui.battle_secret_open:
 			record.add_child(_secret_row(ui))
 		else:
 			var shown: Array = session.Combat.scout(session).lines if ui.battle_scout_open else session.journal_lines().slice(-RECORD_LINES)
 			var lines: Label = ui.label("\n".join(shown), 14, ui.INK)
 			lines.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+			lines.custom_minimum_size.x = 500
 			record.add_child(lines)
-		center.add_child(record)
-	var dock := PanelContainer.new()
-	dock.add_theme_stylebox_override("panel", ui.style(Color(0.05, 0.11, 0.12, 0.94), Color("#5d7a6f"), 10))
-	center.add_child(dock)
-	var rows := VBoxContainer.new()
-	rows.add_theme_constant_override("separation", 6)
-	dock.add_child(rows)
-	rows.add_child(_hand_row(ui))
-	var row := HBoxContainer.new()
-	row.add_theme_constant_override("separation", 8)
-	rows.add_child(row)
-	var arts := HBoxContainer.new()
-	arts.add_theme_constant_override("separation", 8)
-	arts.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	row.add_child(arts)
-	var index := 1
-	for skill_id: String in session.active_skills():
-		arts.add_child(_art_button(ui, skill_id, index))
-		index += 1
-	var over: int = session.Combat.over_cap(session)
-	var end: Button = ui.button(("结束回合\n" + Settings.key_name(ui, "end_turn")) if over == 0 else "结束回合\n先散去 %d 颗" % over, func() -> void: ui.battle_action("end_turn"), "把回合交给对手。回合末手中灵气最多留 %d 颗，多的要先点选散去。" % session.Combat.hand_cap(session))
-	ui.tint(end, ui.GOLD)
-	end.custom_minimum_size = Vector2(104, 62)
-	row.add_child(end)
-	var guard: Button = ui.button("守御\n" + Settings.key_name(ui, "guard"), func() -> void: ui.battle_action("guard"), "凝神守御并结束回合：对手这一回合的出手减半，下回合多抽 %d 颗灵气。" % int(session.content.rules.duel.guard_orbs))
-	guard.custom_minimum_size = Vector2(84, 62)
-	row.add_child(guard)
-	var quick: Button = ui.button("速战", func() -> void: ui.battle_action("quick"), "按简单的出法自动打完这一场：气血低时疗伤，否则出最强的神通（能连击的优先），回合末多余的灵气自动散去。对付弱敌省事，强敌还是亲手来。")
-	quick.custom_minimum_size = Vector2(72, 62)
-	row.add_child(quick)
+		battle_stage.add_child(record)
+	if not ui.battle_more_open and b.get("pack", []).is_empty():
+		return
+	var panel := PanelContainer.new()
+	panel.set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_RIGHT)
+	panel.offset_left = -360
+	panel.offset_right = -24
+	panel.offset_top = -410
+	panel.offset_bottom = -200
+	panel.add_theme_stylebox_override("panel", ui.style(Color(0.03, 0.08, 0.07, 0.96), Color("#8d915d"), 10))
+	battle_stage.add_child(panel)
 	# The lesser controls (撤离, 祭出, targets, 求援, 记录, 探查) two abreast, so the dock stays low.
 	var side := GridContainer.new()
 	side.columns = 2
 	side.add_theme_constant_override("h_separation", 4)
 	side.add_theme_constant_override("v_separation", 4)
-	row.add_child(side)
+	panel.add_child(side)
+	var quick: Button = ui.button("速战", func() -> void: ui.battle_action("quick"), "自动施展可用神通并结束回合")
+	_small(quick)
+	side.add_child(quick)
+	for skill_id: String in session.active_skills().slice(10):
+		var skill: Dictionary = session.held_technique(skill_id)
+		var extra: Button = ui.button(skill.name, func() -> void: ui.skill(skill_id), skill.description)
+		extra.disabled = not session.Combat.affordable(b.orbs, skill.cost)
+		_small(extra)
+		side.add_child(extra)
+	for item_id: String in session.content.items:
+		var item: Dictionary = session.content.item(item_id)
+		if item.get("category", "") != "talisman" or session.item_count(item_id) <= 0:
+			continue
+		var charm: Button = ui.button("%s ×%d" % [item.name, session.item_count(item_id)], func() -> void: ui.battle_action("pill:" + item_id), item.description + "（符箓）")
+		charm.disabled = not session.duel_pill_block(item_id).is_empty()
+		_small(charm)
+		side.add_child(charm)
 	var odds := "比斗中随时可认输" if session.battle.get("context", "") in ["spar", "tournament", "summit", "arena", "tianji"] else "约 %d%% 能脱身，脱不了身便挨对手一回合" % int(round(session.Combat.flee_chance(session) * 100.0))
 	var flee: Button = ui.button("撤离 · " + ui.duration("flee"), func() -> void: ui.battle_action("flee"), "保留资源，耗时 %s；%s；被缠住时走不了" % [ui.duration("flee"), odds])
 	# 天劫 cannot be fled; turning from 心魔 is evading it.
@@ -157,93 +157,6 @@ static func _small(target: Button) -> void:
 	target.add_theme_font_size_override("font_size", 14)
 	target.size_flags_vertical = Control.SIZE_EXPAND_FILL
 
-## The turn, the qi orbs in hand by element (each lets one orb go) and the pills for the duel.
-static func _hand_row(ui) -> HBoxContainer:
-	var session = ui.session
-	var b: Dictionary = session.battle
-	var row := HBoxContainer.new()
-	row.add_theme_constant_override("separation", 6)
-	var turn: Label = ui.label("斗 法  ·  第 %d 回合" % int(b.turn), 16, ui.GOLD)
-	turn.custom_minimum_size.x = 150
-	row.add_child(turn)
-	var orbs: Array = b.get("orbs", [])
-	var cap: int = session.Combat.hand_cap(session)
-	var count: Label = ui.label("灵气 %d / %d" % [orbs.size(), cap], 15, Color("#ffb08a") if orbs.size() > cap else Color("#8fd0d2"))
-	count.tooltip_text = "每回合吸收 %d 颗灵气，按灵根而来；回合末最多留 %d 颗，多的须点选散去。" % [session.Combat.draw_count(session), cap]
-	count.mouse_filter = Control.MOUSE_FILTER_PASS
-	row.add_child(count)
-	var elements: Dictionary = session.content.technique_data.elements
-	var duel: Dictionary = session.content.rules.duel
-	var over: int = session.Combat.over_cap(session)
-	for element: String in elements:
-		var held := orbs.count(element)
-		if held == 0:
-			continue
-		var chip: Button = ui.button("×%d" % held, func() -> void: ui.battle_action("discard:" + element), "%s灵气 %d 颗。%s" % [elements[element].name, held, "超出上限：点击散去一颗。" if over > 0 else "点击散去一颗（不占回合）。"])
-		_orb_style(ui, chip, Color(elements[element].color))
-		# The element's own orb (assets/art/ui/orbs) says which it is; its name is in the tooltip.
-		ui.with_icon(chip, ArtLibrary.ui_icon("orbs/" + element), 24)
-		# Over the cap the hand glows: choosing what to let go comes first.
-		if over > 0:
-			chip.add_theme_stylebox_override("normal", ui.style(Color(elements[element].color).darkened(0.5), Color("#ffb08a"), 4))
-		row.add_child(chip)
-	if orbs.is_empty():
-		row.add_child(ui.label("手中无灵气", 14, ui.MUTED))
-	var gap := Control.new()
-	gap.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	row.add_child(gap)
-	var taken := int(b.get("pills", 0))
-	for item_id: String in _duel_pills(session):
-		var item: Dictionary = session.content.item(item_id)
-		var limit := "每场至多 %d 张符箓，已用 %d 张" % [int(duel.get("talismans", 3)), int(b.get("talismans", 0))] if str(item.get("category", "")) == "talisman" else "每场至多 %d 枚，已服 %d 枚" % [session.Combat.pill_limit(session), taken]
-		var pill: Button = ui.button("%s ×%d" % [item.name, session.item_count(item_id)], func() -> void: ui.battle_action("pill:" + item_id), "%s（不占回合；%s）" % [item.description, limit])
-		ui.tint(pill, ui.grade_color(item))
-		ui.with_icon(pill, ui.grade_icon(item), 16)
-		pill.add_theme_font_size_override("font_size", 14)
-		pill.custom_minimum_size = Vector2(0, 34)
-		pill.disabled = not session.duel_pill_block(item_id).is_empty()
-		row.add_child(pill)
-	return row
-
-## The pills in the pack that can be taken in a duel, in the data's order.
-static func _duel_pills(session) -> Array[String]:
-	var pills: Array[String] = []
-	for item_id: String in session.content.items:
-		if session.content.items[item_id].has("duel") and session.item_count(item_id) > 0:
-			pills.append(item_id)
-	return pills
-
-static func _orb_style(ui, chip: Button, color: Color) -> void:
-	chip.custom_minimum_size = Vector2(54, 34)
-	chip.add_theme_font_size_override("font_size", 15)
-	chip.add_theme_stylebox_override("normal", ui.style(color.darkened(0.62), color, 4))
-	chip.add_theme_stylebox_override("hover", ui.style(color.darkened(0.45), color.lightened(0.3), 4))
-	chip.add_theme_stylebox_override("pressed", ui.style(color.darkened(0.3), color.lightened(0.3), 4))
-	chip.add_theme_stylebox_override("disabled", ui.style(color.darkened(0.62), color.darkened(0.2), 4))
-	ui.tint(chip, color.lightened(0.15))
-	chip.add_theme_color_override("font_disabled_color", color)
-
-static func _art_button(ui, skill_id: String, index: int) -> Button:
-	var session = ui.session
-	var skill: Dictionary = session.held_technique(skill_id)
-	var cost_text: String = session.Arsenal.cost_short(session.content, skill.cost)
-	# 连击 ready: the art cast last was of the element this one's combo names.
-	var combo: bool = session.Combat.combo_holds(session, skill)
-	var tooltip := "%s · %s\n耗灵气：%s\n%s%s" % [skill.tier_name, session.content.element_info(str(skill.element)).get("name", ""), session.Arsenal.cost_text(session.content, skill.cost), skill.description, _realm_bonus_text(session)]
-	if combo:
-		tooltip += "\n连击已就绪。"
-	var cast: Button = ui.button("[%s] %s\n%s%s" % [Settings.key_name(ui, "skill_%d" % index), skill.name, cost_text, " · 连击" if combo else ""], func() -> void: ui.skill(skill_id), tooltip)
-	ui.tint(cast, ui.grade_color(skill))
-	ui.with_icon(cast, ArtLibrary.technique_icon(skill), 44)
-	cast.disabled = not session.Combat.affordable(session.battle.get("orbs", []), skill.cost)
-	# Six arts share the dock: a long name is cut short on the button and read whole in the tooltip.
-	cast.custom_minimum_size = Vector2(96, 62)
-	cast.clip_text = true
-	cast.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
-	cast.add_theme_font_size_override("font_size", 15)
-	cast.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	return cast
-
 static func _number(value: float) -> String:
 	return str(snappedf(value, 0.01))
 
@@ -253,6 +166,9 @@ static func _corners(ui, stage: Control) -> void:
 	var session = ui.session
 	var b: Dictionary = session.battle
 	var mine := _effect_entries(int(b.get("shield", 0)), b.get("player_status", {}))
+	var prepared := str(b.get("prepared_pill", ""))
+	if not prepared.is_empty():
+		mine.append({"key": "focus", "short": "药", "long": "%s · 战前药力已在开场吸气时生效" % session.content.item(prepared).name})
 	if not mine.is_empty():
 		var left := _corner(ui, stage, "", Color("#cfe9e1"), mine)
 		left.set_anchors_and_offsets_preset(Control.PRESET_TOP_LEFT)
@@ -280,7 +196,7 @@ static func _corners(ui, stage: Control) -> void:
 static func _corner(ui, stage: Control, text: String, color: Color, effects: Array = []) -> PanelContainer:
 	var box := PanelContainer.new()
 	box.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	box.add_theme_stylebox_override("panel", ui.style(Color(0.04, 0.09, 0.1, 0.78), Color(color, 0.5), 8))
+	box.add_theme_stylebox_override("panel", ui.style(Color(0.04, 0.09, 0.08, 0.65), Color(color, 0.2), 4))
 	var column := VBoxContainer.new()
 	column.add_theme_constant_override("separation", 6)
 	column.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -319,7 +235,7 @@ static func intent_text(session) -> String:
 				var hits := " ×%d" % int(entry.hits) if int(entry.get("hits", 1)) > 1 else ""
 				parts.append("%s %d–%d%s" % [entry.name, int(entry.min), int(entry.max), hits])
 			"charge":
-				parts.append("蓄力：%s（下回合 %d–%d，可守御）" % [entry.name, int(entry.min), int(entry.max)])
+				parts.append("蓄力：%s（下回合 %d–%d，可用护盾神通抵挡）" % [entry.name, int(entry.min), int(entry.max)])
 			"focus":
 				parts.append("%s（下一击 +%d%%）" % [entry.name, int(entry.amount)])
 			"summon":

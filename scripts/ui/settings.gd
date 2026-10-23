@@ -13,9 +13,9 @@ const TEXT_SPEEDS := {"instant": 0, "fast": 60, "normal": 30, "slow": 15}
 const TEXT_SPEED_NAMES := {"instant": "即时", "fast": "快", "normal": "中", "slow": "慢"}
 const DEFAULT_TEXT_SPEED := "fast"
 # The rebindable keys, in the order the dialog lists them.
-const ACTIONS := ["save", "load", "skill_1", "skill_2", "skill_3", "skill_4", "skill_5", "skill_6", "end_turn", "guard"]
-const ACTION_NAMES := {"save": "保存", "load": "读取", "skill_1": "第一门神通", "skill_2": "第二门神通", "skill_3": "第三门神通", "skill_4": "第四门神通", "skill_5": "第五门神通", "skill_6": "第六门神通", "end_turn": "结束回合", "guard": "守御"}
-const DEFAULT_KEYS := {"save": KEY_F5, "load": KEY_F9, "skill_1": KEY_1, "skill_2": KEY_2, "skill_3": KEY_3, "skill_4": KEY_4, "skill_5": KEY_5, "skill_6": KEY_6, "end_turn": KEY_SPACE, "guard": KEY_G}
+const ACTIONS := ["save", "load", "skill_1", "skill_2", "skill_3", "skill_4", "skill_5", "skill_6", "skill_7", "skill_8", "skill_9", "skill_10", "end_turn", "release"]
+const ACTION_NAMES := {"save": "保存", "load": "读取", "skill_1": "第一门神通", "skill_2": "第二门神通", "skill_3": "第三门神通", "skill_4": "第四门神通", "skill_5": "第五门神通", "skill_6": "第六门神通", "skill_7": "第七门神通", "skill_8": "第八门神通", "skill_9": "第九门神通", "skill_10": "第十门神通", "end_turn": "确认／结束回合", "release": "祭出兵刃"}
+const DEFAULT_KEYS := {"save": KEY_F5, "load": KEY_F9, "skill_1": KEY_1, "skill_2": KEY_2, "skill_3": KEY_3, "skill_4": KEY_4, "skill_5": KEY_5, "skill_6": KEY_Q, "skill_7": KEY_W, "skill_8": KEY_E, "skill_9": KEY_R, "skill_10": KEY_T, "end_turn": KEY_SPACE, "release": KEY_D}
 # Keys the dialogs need themselves, and modifiers that are no key on their own.
 const RESERVED_KEYS := [KEY_ESCAPE, KEY_ENTER, KEY_KP_ENTER, KEY_TAB, KEY_SHIFT, KEY_CTRL, KEY_ALT, KEY_META, KEY_CAPSLOCK]
 
@@ -47,20 +47,31 @@ static func load_state(ui) -> void:
 	ui.session.auto_release = release is bool and release
 	var saved: Variant = config.get_value("controls", "keys", {})
 	if saved is Dictionary:
-		var keys: Dictionary = DEFAULT_KEYS.duplicate()
+		var keys := {}
+		var used := {}
+		var malformed := false
 		for action: String in ACTIONS:
 			var code: Variant = saved.get(action)
 			if code is int and code > 0 and not code in RESERVED_KEYS:
+				if used.has(code):
+					malformed = true
 				keys[action] = code
-		# Files from before 结束回合 had 守御 on Space: Space now ends the turn and 守御 moves to its
-		# new default; a 守御 the player rebound stays where it is.
-		if not saved.has("end_turn") and int(keys.guard) == KEY_SPACE:
-			keys.guard = DEFAULT_KEYS.guard
-		# A file with one key on two actions falls back to the defaults.
-		var codes := {}
+				used[code] = true
+		# Keep valid old bindings. Only new actions move when a new default collides with them.
+		var spare := [KEY_6, KEY_7, KEY_8, KEY_9, KEY_0, KEY_Y, KEY_U, KEY_I, KEY_O, KEY_P, KEY_H, KEY_J, KEY_K, KEY_L, KEY_Z, KEY_X, KEY_C, KEY_V, KEY_B, KEY_N, KEY_M]
 		for action: String in ACTIONS:
-			codes[keys[action]] = true
-		if codes.size() == ACTIONS.size():
+			if keys.has(action):
+				continue
+			var code: int = DEFAULT_KEYS[action]
+			if used.has(code):
+				for candidate: int in spare:
+					if not used.has(candidate):
+						code = candidate
+						break
+			keys[action] = code
+			used[code] = true
+		# Retired guard mappings are ignored; malformed duplicate bindings fall back to defaults.
+		if not malformed and used.size() == ACTIONS.size():
 			ui.keys = keys
 
 ## Writes this module's sections, keeping whatever else the file holds (the volumes).
@@ -145,12 +156,12 @@ static func key_name(ui, action: String) -> String:
 	return "空格" if code == KEY_SPACE else OS.get_keycode_string(code)
 
 ## Key names for texts that mention the controls (the guide's tips): {save}, {load}, {skills},
-## {end_turn}, {guard}.
+## {end_turn}.
 static func key_hints(ui) -> Dictionary:
 	var skills: Array[String] = []
-	for index: int in range(1, 7):
+	for index: int in range(1, 11):
 		skills.append(key_name(ui, "skill_%d" % index))
-	return {"save": key_name(ui, "save"), "load": key_name(ui, "load"), "skills": " / ".join(skills), "end_turn": key_name(ui, "end_turn"), "guard": key_name(ui, "guard")}
+	return {"save": key_name(ui, "save"), "load": key_name(ui, "load"), "skills": " / ".join(skills), "end_turn": key_name(ui, "end_turn")}
 
 ## Binds `keycode` to `action`; an action that had the key takes the action's old key instead.
 static func bind_key(ui, action: String, keycode: int) -> bool:

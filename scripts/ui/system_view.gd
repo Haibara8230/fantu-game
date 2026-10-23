@@ -16,7 +16,7 @@ static func render(ui) -> void:
 		entry.custom_minimum_size.x = 220
 		grid.add_child(entry)
 	var hints: Dictionary = Settings.key_hints(ui)
-	center.add_child(ui.paragraph("%s 保存 · %s 读取 · Esc 关闭面板 · 斗法中按 %s 施法，%s 守御。自动存档%s。" % [hints.save, hints.load, hints.skills, hints.guard, "开启" if ui.autosave_enabled else "已关闭"]))
+	center.add_child(ui.paragraph("%s 保存 · %s 读取 · Esc 取消配气／关闭面板 · 斗法中按 %s 选招，%s 确认／结束回合。自动存档%s。" % [hints.save, hints.load, hints.skills, hints.end_turn, "开启" if ui.autosave_enabled else "已关闭"]))
 
 	if not ui.audio.library.get("music_credits", []).is_empty():
 		center.add_child(ui.button("配乐鸣谢", func() -> void: _show_music_credits(ui)))
