@@ -189,9 +189,13 @@ static func render_breakthrough(ui) -> void:
 	for part: Array in chances.parts:
 		parts.append("%s %+d" % [part[0], int(part[1])])
 	# 结丹 is a stage (forming.gd): the odds become its 道基, the pearls condensed grade the core.
+	# 结婴 likewise (nascent.gd): the odds become its 意志.
 	var forming: bool = session.Forming.applies(int(session.player.realm) + 1)
+	var nascent: bool = session.Nascent.applies(int(session.player.realm) + 1)
 	if forming:
 		right.add_child(ui.label("道基  %d" % int(chances.total) if not chances.certain else "道基  %d（残魂灌顶，不会崩散）" % int(chances.total), 22, ui.GOLD))
+	elif nascent:
+		right.add_child(ui.label("意志  %d" % int(chances.total) if not chances.certain else "意志  %d（残魂灌顶，不会溃散）" % int(chances.total), 22, ui.GOLD))
 	else:
 		right.add_child(ui.label("成功率  %d%%" % int(chances.total) if not chances.certain else "成功率  十成（残魂灌顶）", 22, ui.GOLD))
 	right.add_child(ui.paragraph("　".join(parts)))
@@ -199,8 +203,17 @@ static func render_breakthrough(ui) -> void:
 		var d: Dictionary = session.Forming.data(session)
 		var known: Array = session.Forming.known_arts(session).map(func(art_id: String) -> String: return str(d.arts[art_id].name))
 		right.add_child(ui.paragraph("闭关期满后亲手结丹：共 %d 回合，按灵根吸纳灵气，第 %d 回合起三颗同属灵气凝一颗灵珠。灵珠的数目定金丹品级，五行配比定金丹属性（纯属性、双属性、混元），各有斗法开场之利。道基即上面的把握：灵压、散气与相克的灵珠会消磨它，耗尽则失败。可运转的秘术：%s%s。" % [int(d.rounds), int(d.condense_from), "、".join(known), "" if session.has_flag("ningdan_known") else "（懂得凝丹之法另有大周天吐纳、抱元守一）"], ui.INK))
+	if nascent:
+		var nd: Dictionary = session.Nascent.data(session)
+		var arts: Array = session.Nascent.known_arts(session).map(func(art_id: String) -> String: return str(nd.arts[art_id].name))
+		var grade := clampi(int(session.player.get("core_grade", 0)), 0, nd.cap_by_core.size() - 1)
+		var missing: Array[String] = []
+		for art_id: String in nd.arts:
+			if not art_id in session.Nascent.known_arts(session):
+				missing.append("%s（%s）" % [nd.arts[art_id].name, session.Nascent._lore_name(session, str(nd.arts[art_id].requires))])
+		right.add_child(ui.paragraph("闭关期满后亲手结婴：共 %d 回合。先碎丹，%s丹坚 %d，碎后化回 %d 颗灵气；再应对心魔诸念，心境 %d、元婴需 %d，魔势 %d，每应对一念 -%d，降到零即刻成婴。经脉可存 %d 颗灵气。意志即上面的把握，耗尽则失败，成婴时剩下几成定元婴品质。可运转的秘术：%s%s。" % [int(nd.rounds), str(session.core_grade().get("name", "金丹")), session.Nascent.core_strength(session), int(nd.release.base) + grade / int(nd.release.per_grades), int(session.player.get("mind", 0)), session.Breakthrough.demon_mind(session), session.Nascent.demon_of(session, str(plan.get("treasure", ""))), int(nd.demon.answer), int(nd.cap_by_core[grade]), "、".join(arts), "（另有" + "、".join(missing) + "）" if not missing.is_empty() else ""], ui.INK))
 	if not chances.steps.is_empty():
-		right.add_child(ui.paragraph(("金丹可望再提品级：" if forming else "根基可望更上一层：") + "、".join(chances.steps), ui.INK))
+		right.add_child(ui.paragraph(("金丹可望再提品级：" if forming else ("元婴可望再提一档：" if nascent else "根基可望更上一层：")) + "、".join(chances.steps), ui.INK))
 	# From the 金丹 on, Heaven's lightning tests the breakthrough (combat.gd 天劫).
 	var trial: String = session.Breakthrough.tribulation_of(int(session.player.realm) + 1, session)
 	if not trial.is_empty():
@@ -259,8 +272,12 @@ static func _treasure_controls(ui, parent: VBoxContainer, plan: Dictionary) -> v
 	for item_id: String in session.breakthrough_treasures():
 		var use := CheckBox.new()
 		var item: Dictionary = session.content.item(item_id)
-		var gift: Dictionary = session.Forming.data(session).get("treasures", {}).get(item_id, {}) if session.Forming.applies(int(session.player.realm) + 1) else {}
-		use.text = "服下%s（%s +%d%s%s）" % [item.name, "道基" if session.Forming.applies(int(session.player.realm) + 1) else "成功率", int(item.breakthrough.bonus), ("，金丹再提一品" if session.Forming.applies(int(session.player.realm) + 1) else "，根基更稳") if int(item.breakthrough.get("grade", 0)) > 0 else "", "；" + str(gift.text) if not gift.is_empty() else ""]
+		var target := int(session.player.realm) + 1
+		var stage: Variant = session.Forming if session.Forming.applies(target) else (session.Nascent if session.Nascent.applies(target) else null)
+		var gift: Dictionary = stage.data(session).get("treasures", {}).get(item_id, {}) if stage != null else {}
+		var measure := "成功率" if stage == null else str(stage.MEASURE)
+		var step := "，根基更稳" if stage == null else ("，金丹再提一品" if stage == session.Forming else "，元婴再提一档")
+		use.text = "服下%s（%s +%d%s%s）" % [item.name, measure, int(item.breakthrough.bonus), step if int(item.breakthrough.get("grade", 0)) > 0 else "", "；" + str(gift.text) if not gift.is_empty() else ""]
 		use.button_pressed = plan.treasure == item_id
 		use.toggled.connect(func(on: bool) -> void: ui.breakthrough_plan.treasure = item_id if on else ""; ui.render())
 		parent.add_child(use)

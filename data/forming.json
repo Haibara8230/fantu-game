@@ -31,5 +31,39 @@
       "xiaguang_lingsui": {"draw": 1, "text": "霞光灵髓化开：每回合多吸一颗灵气。"},
       "dixin_huolian": {"opening": {"fire": 3}, "text": "地心火莲入腹：开始时多得三颗火灵气。"}
     }
+  },
+  "nascent_calibration": "仿《觅长生》化婴：先碎丹，再结婴，回合中心魔诸念轮番而来，各有应对，「意志」是这一关的命，「经脉」定丹田能存多少灵气（Wiki「萌新元婴篇」、秘术条目与攻略）。按用户定案不用丹药：原作的锻脉丹、护脉丹、结婴丹去掉，碎丹、清心、分神、逆周天结婴术改为秘术，裂丹诀随凝婴之法、逆周天结婴术随《无相凝婴诀》而得；养魂木、千年朱果在关卡中另有效果。原作「心魔伤害降到零即可结婴」保留为魔势：每应对一念魔势 -2，降到零即刻成婴。回合数、丹坚、魔势、各秘术数值为项目适配值。",
+  "nascent": {
+    "name": "结婴",
+    "rounds": 9,
+    "draw": 3,
+    "cap_by_core": [4, 4, 5, 5, 5, 6, 6, 6, 7],
+    "discard": 1,
+    "core": {"base": 8, "per_grade": 1, "strain": 3},
+    "release": {"base": 2, "per_grades": 2},
+    "demon": {"base": 8, "per_mind": 10, "least": 4, "most": 12, "answer": 2},
+    "phases": {
+      "shatter": {"name": "碎丹", "text": "以秘术震击金丹，丹坚耗尽即碎；金丹未碎的回合，每回合末意志 -%d。碎丹时灵珠化回灵气，随金丹属性而来。"},
+      "infant": {"name": "结婴", "text": "心魔诸念轮番而来：照它的要求应对，魔势 -%d；应对不了，回合末意志按魔势受损。魔势降到零即刻成婴。"}
+    },
+    "thoughts": {
+      "fear": {"name": "惧念", "need": {"art": "qingxin"}, "text": "惧意攀上心头：本回合运转清心咒。"},
+      "greed": {"name": "贪念", "need": {"quiet": true, "most": 0}, "text": "贪恋手中灵气：本回合不运秘术，回合末丹田一颗灵气也不留。"},
+      "pride": {"name": "傲念", "need": {"art": "fenshen"}, "text": "傲气冲顶：本回合运转分神术，把心神分出去。"},
+      "sorrow": {"name": "悲念", "need": {"most": 2}, "text": "悲从中来：回合末丹田灵气不超过两颗。"},
+      "longing": {"name": "思念", "need": {"elements": 3}, "text": "思绪纷飞：回合末丹田里至少留三种属性的灵气。"}
+    },
+    "arts": {
+      "suidan": {"name": "碎丹诀", "cost": {"same": 3}, "phase": "shatter", "effect": {"crack": 6}, "text": "三颗同属灵气震击金丹：丹坚 -6。"},
+      "xieling": {"name": "卸灵术", "cost": {"any": 2}, "phase": "shatter", "effect": {"crack": 2}, "text": "卸下两颗灵气撞向金丹：丹坚 -2。"},
+      "liedan": {"name": "裂丹诀", "cost": {"same": 4}, "phase": "shatter", "once": true, "requires": "ningying_known", "effect": {"crack": 14, "will": -6}, "text": "裂开金丹：丹坚 -14，意志 -6。须懂凝婴之法。"},
+      "qingxin": {"name": "清心咒", "cost": {"same": 3}, "per_round": true, "effect": {"will": 5}, "on_payment": {"generate": {"heal": 2}}, "text": "清心定神：意志 +5；三颗相生再 +2。每回合一次。"},
+      "fenshen": {"name": "分神术", "cost": {"any": 3}, "phase": "infant", "per_round": true, "effect": {"ward": 3, "later": 2}, "text": "分出心神：本回合心魔伤害 -3，下回合 +2。每回合一次。"},
+      "nizhoutian": {"name": "逆周天结婴术", "cost": {"same": 5}, "phase": "infant", "once": true, "requires": "wuxiang_ningying", "effect": {"subdue": 3, "cap": -1, "will": -4}, "text": "逆转周天强行结婴：魔势 -3；经脉受损，丹田少存一颗灵气，意志 -4。须得《无相凝婴诀》。"}
+    },
+    "treasures": {
+      "yanghun_mu": {"demon": -2, "text": "养魂木护住神魂：心魔魔势 -2。"},
+      "qiannian_zhuguo": {"cap": 2, "text": "千年朱果化开生机：经脉更宽，丹田多存两颗灵气。"}
+    }
   }
 }

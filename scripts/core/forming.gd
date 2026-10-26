@@ -191,13 +191,17 @@ static func block(s, art_id: String) -> String:
 ## A payment chosen for the player: the remembered one (`current`) while it still fits, else the
 ## named elements first, then 同 from the most plentiful, then any. `cycle` steps to the next choice.
 static func plan(s, art_id: String, cycle: bool = false, current: Array = []) -> Array:
-	var cost := cost_of(s, art_id)
-	if s.forming.is_empty() or not s.Combat.affordable(s.forming.orbs, cost):
+	if s.forming.is_empty():
 		return []
-	if not cycle and not current.is_empty() and s.Combat.payment_valid(s.forming.orbs, cost, current):
+	return plan_from(s, s.forming.orbs, cost_of(s, art_id), cycle, current)
+
+## The same for any qi held (`orbs`) and `cost`, shared with 结婴 (nascent.gd).
+static func plan_from(s, orbs: Array, cost: Dictionary, cycle: bool, current: Array) -> Array:
+	if not s.Combat.affordable(orbs, cost):
+		return []
+	if not cycle and not current.is_empty() and s.Combat.payment_valid(orbs, cost, current):
 		return current.duplicate()
 	var plans: Array = []
-	var orbs: Array = s.forming.orbs
 	for shift: int in maxi(1, orbs.size()):
 		var hand: Array = orbs.slice(shift) + orbs.slice(0, shift)
 		var choice: Array = s.Combat._pay(hand, cost)
@@ -227,6 +231,41 @@ static func preview(s, art_id: String, payment: Array) -> Dictionary:
 	result.stability = int(art.effect.get("stability", 0)) + int(QiRelations.effect(art, payment, cycle).get("heal", 0))
 	result.triggers = QiRelations.triggers(art, payment, cycle)
 	return result
+
+## What the stage's screen asks of a stage (stage_panels.gd, shared with nascent.gd): the measure that
+## qi let go wears down and what it costs, the choices to pay for, a payment's outcome in words, and
+## whether this is the last round.
+const MEASURE := "道基"
+
+static func state(s) -> Dictionary:
+	return s.forming
+
+static func discard_cost(s) -> int:
+	return int(data(s).discard)
+
+## 凝珠 and the 秘术: [{"id", "art" ({"name", "cost", "text"}), "known"}].
+static func entries(s) -> Array:
+	var d := data(s)
+	var result: Array = [{"id": PEARL, "art": {"name": "凝珠", "cost": d.pearl.cost, "text": "三颗同属灵气凝成一颗灵珠。与上一颗相生，道基 +%d；相克，道基 %d。" % [int(d.link.generate), int(d.link.overcome)]}, "known": true}]
+	result.append_array(all_arts(s))
+	return result
+
+static func preview_words(s, art_id: String, payment: Array) -> String:
+	var found := preview(s, art_id, payment)
+	var parts: Array[String] = []
+	for key: String in found.triggers:
+		parts.append("【%s】" % QiRelations.LABELS[key])
+	if art_id == PEARL and not str(found.relation).is_empty():
+		parts.append("与上一颗%s" % {"generate": "相生", "same": "同属", "overcome": "相克"}[found.relation])
+	if int(found.stability) != 0:
+		parts.append("道基 %+d" % int(found.stability))
+	return " ".join(parts)
+
+static func last_round(s) -> bool:
+	return int(s.forming.get("round", 1)) >= int(data(s).rounds)
+
+static func end_words(s) -> Array:
+	return ["收功成丹", "九回合已尽：以已凝的灵珠成丹"] if last_round(s) else ["回合结束", "承受本回合灵压，进入下一回合"]
 
 ## How a pearl of `element` meets the last pearl: "generate", "same", "overcome", or "" for the first.
 static func link_of(s, element: String) -> String:

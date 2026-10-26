@@ -53,7 +53,7 @@ var mijing_data: Dictionary = {}
 var guishi_data: Dictionary = {}
 var wuxiang_data: Dictionary = {}
 var opening_data: Dictionary = {}
-# 结丹 as a stage (forming.gd).
+# 结丹 and 结婴 as stages (forming.gd `core`, nascent.gd `nascent`).
 var forming_data: Dictionary = {}
 # 炼器's materials and costs (forge.gd).
 var forge_data: Dictionary = {}
@@ -80,6 +80,7 @@ const Dao = preload("res://scripts/core/dao.gd")
 const Prebattle = preload("res://scripts/core/prebattle.gd")
 const Formulation = preload("res://scripts/core/formulation.gd")
 const Forming = preload("res://scripts/core/forming.gd")
+const Nascent = preload("res://scripts/core/nascent.gd")
 
 func load_data() -> bool:
 	var parsed: Variant = _read_json("res://data/world.json")
@@ -253,6 +254,8 @@ func _validate() -> String:
 		return "悟道配置无效。"
 	if not Forming.valid_data(self):
 		return "结丹配置无效。"
+	if not Nascent.valid_data(self):
+		return "结婴配置无效。"
 	# 禁忌秘术 (combat.gd).
 	for art_id: String in rules.get("duel", {}).get("secret_arts", {}):
 		var art: Variant = rules.duel.secret_arts[art_id]
@@ -559,6 +562,13 @@ func _validate_breakthrough() -> String:
 	var core: Variant = r.get("core")
 	if not core is Dictionary or not core.get("grades") is Array or core.grades.size() < 2 or core.grades.any(func(grade: Variant) -> bool: return not grade is Dictionary or not grade.get("name") is String or not _signed(grade.get("stats")) or not _signed(grade.get("speed"))):
 		return "金丹品级配置无效。"
+	# 元婴 grades (nascent.gd): by the share of 意志 kept, rising.
+	var nascent: Variant = r.get("nascent")
+	if not nascent is Dictionary or not nascent.get("grades") is Array or nascent.grades.size() < 2 or nascent.grades.any(func(grade: Variant) -> bool: return not grade is Dictionary or not grade.get("name") is String or not _signed(grade.get("stats")) or not _signed(grade.get("speed")) or not _signed(grade.get("share"))):
+		return "元婴品级配置无效。"
+	for index: int in range(1, nascent.grades.size()):
+		if int(nascent.grades[index].share) <= int(nascent.grades[index - 1].share) or int(nascent.grades[index].share) > 100:
+			return "元婴品级配置无效。"
 	for realm: Dictionary in realms:
 		var step: Variant = realm.get("breakthrough")
 		# Only 筑基 asks a pill; later realms rest on the cultivator, a 天材地宝 or fortune adding to it.

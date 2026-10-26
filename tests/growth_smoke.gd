@@ -423,9 +423,13 @@ func _golden_core() -> void:
 	game.refresh_realm_stats()
 	game.fortune = {"demon": 0.99, "breakthrough": 0.0, "grade": 0.99}
 	game.act("breakthrough")
+	# The 元婴 is formed in a stage too (nascent.gd), played out the plain way.
+	check(not game.nascent.is_empty() and game.battle.is_empty(), "the 元婴 is formed in a stage, not by a roll")
+	game.nascent.certain = true
+	game.nascent_auto()
 	_weather(game)
 	check(game.player.realm == 3 and game.realm_name() == "元婴初期" and int(game.player.core_grade) == core_before and game.lifespan() >= 700, "元婴 is reached, the core's grade kept, seven hundred years")
-	check(game.journal_lines().any(func(line: String) -> bool: return line.contains("元婴初期")) and not game.journal_lines().back().contains("金丹品级"), "the record names the realm without regrading the core")
+	check(game.journal_lines().any(func(line: String) -> bool: return line.contains("元婴初期") and line.contains("元婴品质")) and not game.journal_lines().back().contains("金丹品级"), "the record names the realm and the 元婴's grade without regrading the core")
 	# 化神, then the crossing at the ferry from 480.
 	game.player.stage = 3
 	game.player.xp = 200000

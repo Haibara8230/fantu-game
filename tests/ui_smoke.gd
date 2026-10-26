@@ -875,6 +875,49 @@ func _run() -> void:
 	main.ceremony = {}
 	main.session.refresh_realm_stats()
 	main.set_view("place")
+	# 结婴 (nascent.gd, nascent_view.gd): the odds become the 意志; the core is shattered, then 心魔.
+	var infant_realm_was := int(main.session.player.realm)
+	var infant_lessons_was := int(main.session.player.get("lessons", 0))
+	main.session.player.realm = 2
+	main.session.player.stage = 3
+	main.session.player.core_grade = 4
+	main.session.player["core_kind"] = {"id": "pure", "elements": ["fire"]}
+	main.session.player.xp = 80000
+	main.session.player.mind = 210
+	main.session.refresh_realm_stats()
+	main.session.player.hp = main.session.player.max_hp
+	main.set_view("breakthrough")
+	check(_texts(main.center, "Label").contains("意志  ") and _texts(main.center, "Label").contains("亲手结婴") and not _texts(main.center, "Label").contains("心魔丛生"), "the 突破 tab for 元婴 tells of the stage and its 意志, no 心魔 before it")
+	_button("开始突破").pressed.emit()
+	while not main.story.is_empty():
+		main.close_story()
+	var infant_text := _texts(main.center, "Label")
+	check(main.current_screen() == "full" and not main.session.nascent.is_empty() and infant_text.contains("结婴 · 第 1 / 9 回合") and infant_text.contains("意志 ") and infant_text.contains("金丹丹坚") and _button("回合结束") != null, "the stage takes the screen: the round, the 意志, the core and the 丹田")
+	await _capture("nascent")
+	main.session.nascent.orbs = ["fire", "fire", "fire"]
+	main.session.nascent.core = 1
+	main.render()
+	_button("碎丹诀").pressed.emit()
+	check(main.forming_selection == "suidan" and main.forming_payment.size() == 3 and not _button("确定").disabled, "picking 碎丹诀 chooses its qi")
+	_button("确定").pressed.emit()
+	infant_text = _texts(main.center, "Label")
+	check(main.session.Nascent.shattered(main.session) and infant_text.contains("心魔魔势") and infant_text.contains(str(main.session.Nascent.thought(main.session).name)), "the core shattered, the 心魔 and its 念 show (%s)" % str(main.session.nascent.thought))
+	await _capture("nascent_demon")
+	_button("顺其自然").pressed.emit()
+	check(main.session.nascent.is_empty() and (str(main.session.battle.get("context", "")) == "tribulation" or main.ceremony.get("failed", false)), "played out, the 元婴 waits on its 天劫, or the attempt failed")
+	main.session.battle.clear()
+	main.session.player.erase("tribulation")
+	main.session.player.erase("core_kind")
+	main.session.player.realm = infant_realm_was
+	main.session.player.core_grade = 0
+	main.session.player.xp = xp_was
+	main.session.player.stage = 0
+	main.session.player["injury_until"] = 0
+	main.session.player["lessons"] = infant_lessons_was
+	main.ceremony = {}
+	main.session.refresh_realm_stats()
+	main.session.player.hp = main.session.player.max_hp
+	main.set_view("place")
 	# 客卿 at a sect's gate (guest.gd): offered there, open to a 青云 disciple too (the sects do not clash).
 	main.session.world.flags["tiannan_known"] = true
 	main.session.world.flags["guest_invite_chixiao"] = true

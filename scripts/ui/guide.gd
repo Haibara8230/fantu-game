@@ -10,7 +10,7 @@ const TIPS_PATH := "res://data/guide.json"
 const DEFAULT_PATH := "user://guide.cfg"
 const Settings = preload("res://scripts/ui/settings.gd")
 # The cards whose situation applies() knows; every card in the data must be one of them.
-const TIP_IDS := ["retreat", "people", "map", "battle", "event", "gather", "trade", "commissions", "lineage", "mind", "fatigue", "bottleneck", "stories", "letters", "breakthrough", "sect", "bonds", "fortune", "talents", "arts", "alchemy", "field", "cave", "sense", "auction", "forge", "forming"]
+const TIP_IDS := ["retreat", "people", "map", "battle", "event", "gather", "trade", "commissions", "lineage", "mind", "fatigue", "bottleneck", "stories", "letters", "breakthrough", "sect", "bonds", "fortune", "talents", "arts", "alchemy", "field", "cave", "sense", "auction", "forge", "forming", "nascent"]
 static var _tips: Array = []
 # A card beside its button: its width, the gap to the button and the margin kept from the screen's edge.
 const BUBBLE_WIDTH := 460.0
@@ -71,7 +71,7 @@ static func applies(ui, tip_id: String) -> bool:
 			return session.player.get("boons", {}).keys().any(func(id: String) -> bool: return not id.begins_with("humble_") or session.has_talent(str(session.content.rules.fortune[id].talent)))
 		"breakthrough":
 			return int(session.player.realm) == 0 and int(session.player.stage) >= session.content.realm(0).stages.size() - 1
-		"alchemy", "field", "sense", "auction", "forge", "forming":
+		"alchemy", "field", "sense", "auction", "forge", "forming", "nascent":
 			return true
 		"cave":
 			return not session.cave_here().is_empty()

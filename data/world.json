@@ -972,7 +972,12 @@
         {"id": "fourth", "name": "四品金丹", "stats": 15, "speed": 15},
         {"id": "third", "name": "三品金丹", "stats": 20, "speed": 20},
         {"id": "second", "name": "二品金丹", "stats": 30, "speed": 30},
-        {"id": "first", "name": "一品金丹", "stats": 40, "speed": 40}]}
+        {"id": "first", "name": "一品金丹", "stats": 40, "speed": 40}]},
+      "nascent": {"grades": [
+        {"id": "hollow", "name": "虚婴", "share": 0, "stats": -5, "speed": -5},
+        {"id": "formed", "name": "成婴", "share": 25, "stats": 0, "speed": 0},
+        {"id": "solid", "name": "实婴", "share": 50, "stats": 5, "speed": 5},
+        {"id": "pure", "name": "无垢元婴", "share": 75, "stats": 10, "speed": 10}]}
     },
     "mind": {"gain": {"battle_win": 2, "spar": 1, "commission": 4, "event": 2, "consult": 3}, "short_percent": 50, "ample_margin": 10, "ample_percent": 120},
     "rest_full_days": 12,

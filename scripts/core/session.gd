@@ -42,6 +42,7 @@ const Feuds = preload("res://scripts/core/feuds.gd")
 const Schools = preload("res://scripts/core/schools.gd")
 const Breakthrough = preload("res://scripts/core/breakthrough.gd")
 const Forming = preload("res://scripts/core/forming.gd")
+const Nascent = preload("res://scripts/core/nascent.gd")
 const Fortune = preload("res://scripts/core/fortune.gd")
 const Sect = preload("res://scripts/core/sect.gd")
 const Bonds = preload("res://scripts/core/bonds.gd")
@@ -65,6 +66,8 @@ var battle: Dictionary = {}
 var auction: Dictionary = {}
 # 结丹 under way (forming.gd), {} otherwise.
 var forming: Dictionary = {}
+# 结婴 under way (nascent.gd), {} otherwise.
+var nascent: Dictionary = {}
 # A location event waiting for the player's choice: {"id", "day"}.
 var pending_event: Dictionary = {}
 # Set when this life is over: {"kind", "day"}.
@@ -151,6 +154,7 @@ func new_game(character_name: String = "无名", seed_value: int = -1, roots: Ar
 	player.qi = player.max_qi
 	battle.clear()
 	forming = {}
+	nascent = {}
 	pending_event = {}
 	ended = {}
 	combat_events.clear()
@@ -428,6 +432,8 @@ func blocked() -> String:
 		return "拍卖尚未结束。"
 	if not forming.is_empty():
 		return "结丹尚未了结。"
+	if not nascent.is_empty():
+		return "结婴尚未了结。"
 	return ""
 
 func act(action: String) -> String:
@@ -670,7 +676,7 @@ func location_visible(location_id: String) -> bool:
 func snapshot() -> Dictionary:
 	return {
 		"version": SAVE_VERSION, "world": Storylines.saved_world(self), "player": player.duplicate(true),
-		"battle": battle.duplicate(true), "pending_event": pending_event.duplicate(true), "ended": ended.duplicate(true), "auction": auction.duplicate(true), "forming": forming.duplicate(true),
+		"battle": battle.duplicate(true), "pending_event": pending_event.duplicate(true), "ended": ended.duplicate(true), "auction": auction.duplicate(true), "forming": forming.duplicate(true), "nascent": nascent.duplicate(true),
 		"chronicle": chronicle.to_save(), "rng": {"combat": str(combat_rng.state), "world": str(world_rng.state)}
 	}
 
@@ -815,6 +821,28 @@ func forming_end_round(auto_release: bool = false) -> String:
 func forming_auto() -> String:
 	return Forming.auto(self)
 
+## 结婴 (nascent.gd): a 秘术 with the qi chosen, a qi let go, the round ended, or the rest played by the
+## plain policy.
+func nascent_cast(art_id: String, payment: Array = []) -> String:
+	return Nascent.cast(self, art_id, payment)
+
+func nascent_discard(element: String) -> String:
+	return Nascent.discard(self, element)
+
+func nascent_end_round(auto_release: bool = false) -> String:
+	return Nascent.end_round(self, auto_release)
+
+func nascent_auto() -> String:
+	return Nascent.auto(self)
+
+## The breakthrough stage under way (forming.gd or nascent.gd), null when none.
+func stage() -> Variant:
+	if not forming.is_empty():
+		return Forming
+	if not nascent.is_empty():
+		return Nascent
+	return null
+
 func breakthrough_plan() -> Dictionary:
 	return Breakthrough.default_plan(self)
 
@@ -840,6 +868,9 @@ func foundation_grade() -> Dictionary:
 
 func core_grade() -> Dictionary:
 	return Breakthrough.core_of(self)
+
+func nascent_grade() -> Dictionary:
+	return Breakthrough.nascent_of(self)
 
 ## Whether a failed breakthrough still hurts.
 func injured() -> bool:

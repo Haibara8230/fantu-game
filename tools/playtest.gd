@@ -170,6 +170,13 @@ func _step() -> void:
 		else:
 			_do("act", "FORMING", s.forming_end_round(true))
 		return
+	# 结婴 (nascent.gd) likewise.
+	if not s.nascent.is_empty():
+		if s.Nascent.plain_step(s):
+			_do("act", "NASCENT", "")
+		else:
+			_do("act", "NASCENT", s.nascent_end_round(true))
+		return
 	if not s.player.journey.is_empty():
 		_do("travel", "ONWARD", s.continue_journey())
 		return

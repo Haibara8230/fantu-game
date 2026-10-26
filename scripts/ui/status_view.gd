@@ -128,7 +128,10 @@ static func _cultivation(ui, parent: VBoxContainer) -> void:
 	if not grade.is_empty():
 		_row(ui, parent, "根基", str(grade.name), "筑基时的根基品质；结丹前影响体魄与修炼速度，结丹时决定金丹品级的大半")
 	if not core.is_empty():
-		_row(ui, parent, "金丹", str(core.name), "结丹时由根基、心法品阶与把握定下，影响体魄与修炼速度")
+		_row(ui, parent, "金丹", str(core.name), "结丹时凝成的灵珠数定下，影响体魄与修炼速度")
+	var nascent: Dictionary = session.nascent_grade()
+	if not nascent.is_empty():
+		_row(ui, parent, "元婴", str(nascent.name), "结婴时剩下的意志定下，与金丹品级一并影响体魄与修炼速度")
 
 static func _body(ui, parent: VBoxContainer) -> void:
 	var session = ui.session

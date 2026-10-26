@@ -356,6 +356,10 @@ func _pause(seconds: float) -> void:
 
 func play(events: Array[Dictionary]) -> void:
 	busy = true
+	# A stage already taken down (the duel cleared before its first frame) has nothing to play.
+	if not is_inside_tree():
+		busy = false
+		return
 	# Container layout settles one frame after this stage is inserted.
 	await get_tree().process_frame
 	_layout()

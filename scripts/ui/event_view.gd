@@ -83,10 +83,11 @@ static func render_ceremony(ui) -> void:
 	stage.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	center.add_child(stage)
 	var core: Dictionary = session.core_grade()
-	var grade: Dictionary = core if not core.is_empty() else session.foundation_grade()
+	var nascent: Dictionary = session.nascent_grade()
+	var grade: Dictionary = nascent if not nascent.is_empty() else (core if not core.is_empty() else session.foundation_grade())
 	if int(ui.ceremony.get("grade", -1)) >= 0 and not grade.is_empty():
-		var top := 7 if not core.is_empty() else 3
-		var named: Label = ui.label(("金丹 · %s" if not core.is_empty() else "根基 · %s") % grade.name, 26, Color("#e59d52") if int(ui.ceremony.grade) >= top else ui.INK)
+		var top := 3 if not nascent.is_empty() else (7 if not core.is_empty() else 3)
+		var named: Label = ui.label(("元婴 · %s" if not nascent.is_empty() else ("金丹 · %s" if not core.is_empty() else "根基 · %s")) % grade.name, 26, Color("#e59d52") if int(ui.ceremony.grade) >= top else ui.INK)
 		named.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		center.add_child(named)
 	var gains: Label = ui.label("气血上限 %d → %d　·　灵力上限 %d → %d　·　寿元 %d → %d 年" % [int(before.max_hp), int(session.player.max_hp), int(before.max_qi), int(session.player.max_qi), int(before.lifespan), session.lifespan()], 17)

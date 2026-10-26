@@ -11,11 +11,13 @@ extends RefCounted
 ## A mind short of the next realm's need, unguarded, may meet 心魔 first: a choice, slain or evaded.
 ## Success enters the realm with a 品质 (grade) from how far the roll fell under the odds, raised by
 ## fortune; 无瑕 only by fortune. Forming the 金丹 is no roll: the odds become the 道基 of a stage played
-## with qi (forming.gd), whose pearls grade the core (九品 to 一品). Failure costs the pills, some xp and months of injury, never the life,
+## with qi (forming.gd), whose pearls grade the core (九品 to 一品); nor the 元婴: the odds become the
+## 意志 of a stage that shatters the core and meets 心魔 (nascent.gd), the 意志 kept grading it. Failure
+## costs the pills, some xp and months of injury, never the life,
 ## and leaves a lesson for the next attempt. A 残魂灌顶 accepted makes the next attempt certain, without
 ## pills, at a middling grade.
-## player.attempt holds an attempt waiting on 心魔; player.foundation_grade and player.core_grade the
-## grades reached;
+## player.attempt holds an attempt waiting on 心魔; player.foundation_grade, player.core_grade and
+## player.nascent_grade the grades reached;
 ## player.injury_until the day the injury heals; player.lessons the failures learned from; player.boons
 ## the fortune met in this life ({id: "ready" | "spent"}).
 const Talents = preload("res://scripts/core/talents.gd")
@@ -221,9 +223,10 @@ static func demon_mind(s) -> int:
 static func demon_chance(s) -> float:
 	return clampf(float(rules(s).demon.chance) * (1.0 - float(s.talent_modifier("demon")) / 100.0), 0.0, 1.0)
 
-## Whether 心魔 may come: the mind falls short of the next realm and nobody stands guard.
+## Whether 心魔 may come: the mind falls short of the next realm and nobody stands guard. The 元婴's
+## stage (nascent.gd) has its 心魔 within, so none comes before it.
 static func demon_threatens(s, guard: String) -> bool:
-	return guard.is_empty() and int(s.player.get("mind", 0)) < demon_mind(s)
+	return guard.is_empty() and int(s.player.get("mind", 0)) < demon_mind(s) and not s.Nascent.applies(int(s.player.realm) + 1)
 
 ## Starts an attempt: pays for it, then either meets 心魔 (the choice becomes pending) or goes straight
 ## on to the retreat. Returns the texts.
@@ -328,15 +331,18 @@ static func resolve(s, told: String) -> String:
 	var certain := bool(attempt_state.get("certain", false))
 	if certain:
 		boons["remnant"] = "spent"
-	# The 金丹 is formed in a stage of nine rounds (forming.gd), the odds its 道基.
+	# The 金丹 is formed in a stage of nine rounds (forming.gd), the odds its 道基; the 元婴 likewise
+	# (nascent.gd), the odds its 意志.
 	if s.Forming.applies(int(s.player.realm) + 1):
 		return s.Forming.begin(s, attempt_state, passed, texts)
+	if s.Nascent.applies(int(s.player.realm) + 1):
+		return s.Nascent.begin(s, attempt_state, passed, texts)
 	if certain or roll < float(attempt_state.odds):
 		var grade := 1 if certain else _grade(s, float(attempt_state.odds) - roll, int(attempt_state.steps))
 		return _trial_or_ascend(s, grade, int(passed.elapsed), int(attempt_state.xp), str(attempt_state.get("staked", "")), texts, passed)
 	return _fail(s, int(attempt_state.xp), texts, passed, 1, str(attempt_state.get("staked", "")))
 
-## The 金丹 formed in its stage (forming.gd) with `grade`: its 天劫 next.
+## The 金丹 (forming.gd) or the 元婴 (nascent.gd) formed in its stage with `grade`: its 天劫 next.
 static func core_formed(s, grade: int, days: int, xp: int, staked: String, texts: Array) -> String:
 	return _trial_or_ascend(s, grade, days, xp, staked, texts, {})
 
@@ -361,14 +367,16 @@ static func _ascend(s, grade: int, days: int, texts: Array, passed: Dictionary) 
 		s.player["foundation_grade"] = grade
 	elif int(s.player.realm) == 2:
 		s.player["core_grade"] = grade
+	elif int(s.player.realm) == 3:
+		s.player["nascent_grade"] = grade
 	s.player["lessons"] = 0
 	s.player["injury_until"] = 0
 	s.refresh_realm_stats()
 	s.player.hp = s.player.max_hp
 	s.player.qi = s.player.max_qi
 	var reached := {"days": days, "realm": int(s.player.realm), "stage": 0}
-	# Foundation and the core are graded; later realms keep the core's grade.
-	if int(s.player.realm) <= 2:
+	# Foundation, the core and the 元婴 are graded; 化神 keeps theirs.
+	if int(s.player.realm) <= 3:
 		reached.grade = grade
 	texts.append(s.log_event("breakthrough", reached, true))
 	# A realm entered at the 灵眼 draws its qi into the strongest root: that element's 道脉, once.
@@ -444,10 +452,26 @@ static func core_of(s, holder: Dictionary = {}) -> Dictionary:
 	var grades: Array = rules(s).core.grades
 	return grades[clampi(int(holder.get("core_grade", 0)), 0, grades.size() - 1)]
 
-## The grade that shapes the body and cultivation now: the 金丹's once formed, else the foundation's.
+## The 元婴's grade entry ({"name", "share", "stats", "speed"}), or {} before it is formed. A 元婴
+## formed before its stage counts as 成婴.
+static func nascent_of(s, holder: Dictionary = {}) -> Dictionary:
+	if holder.is_empty():
+		holder = s.player
+	if int(holder.get("realm", 0)) < 3:
+		return {}
+	var grades: Array = rules(s).nascent.grades
+	return grades[clampi(int(holder.get("nascent_grade", 1)), 0, grades.size() - 1)]
+
+## The grade that shapes the body and cultivation now: the 金丹's once formed (the 元婴's adding to it),
+## else the foundation's.
 static func grade_of(s, holder: Dictionary = {}) -> Dictionary:
 	var core := core_of(s, holder)
-	return core if not core.is_empty() else foundation_of(s, holder)
+	if core.is_empty():
+		return foundation_of(s, holder)
+	var nascent := nascent_of(s, holder)
+	if nascent.is_empty():
+		return core
+	return {"name": core.name, "stats": int(core.stats) + int(nascent.stats), "speed": int(core.speed) + int(nascent.speed)}
 
 ## Whether an earlier failure still hurts on `day`.
 static func injured(s, day: int = -1) -> bool:

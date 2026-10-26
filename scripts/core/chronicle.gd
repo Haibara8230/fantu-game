@@ -59,10 +59,11 @@ func format(entry: Dictionary, content) -> String:
 			template = str(content.chronicle.get(entry.id, "（失传的记载）"))
 	# Breakthroughs since grades also tell the foundation's grade, or the 金丹's.
 	var forming_core: bool = entry.id == "breakthrough" and int(entry.args.get("realm", 1)) == 2
+	var forming_nascent: bool = entry.id == "breakthrough" and int(entry.args.get("realm", 1)) == 3
 	if entry.id == "travel" and bool(entry.args.get("fly", false)):
 		template = str(content.chronicle.get("fly", template))
 	if entry.id == "breakthrough" and entry.args.has("grade"):
-		template += str(content.chronicle.get("breakthrough_core_grade" if forming_core else "breakthrough_grade", ""))
+		template += str(content.chronicle.get("breakthrough_core_grade" if forming_core else ("breakthrough_nascent_grade" if forming_nascent else "breakthrough_grade"), ""))
 	var values: Dictionary = entry.args.duplicate()
 	for key: String in NAMED_ARGS:
 		if values.has(key):
@@ -105,6 +106,8 @@ func format(entry: Dictionary, content) -> String:
 		var grades: Array = content.rules.get("breakthrough", {}).get("grades", [])
 		if forming_core:
 			grades = content.rules.breakthrough.core.grades
+		elif forming_nascent:
+			grades = content.rules.breakthrough.nascent.grades
 		var grade := int(values.grade)
 		values["grade_name"] = str(grades[grade].name) if grade >= 0 and grade < grades.size() else str(values.grade)
 	# A sect's business names the sect (`faction`, `old`); entries from before there were many sects

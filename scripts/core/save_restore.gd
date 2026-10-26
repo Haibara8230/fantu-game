@@ -10,6 +10,7 @@ const Gear = preload("res://scripts/core/gear.gd")
 const Layers = preload("res://scripts/core/layers.gd")
 const Wuxiang = preload("res://scripts/core/wuxiang.gd")
 const Forming = preload("res://scripts/core/forming.gd")
+const Nascent = preload("res://scripts/core/nascent.gd")
 # More 祭炼 steps than any piece could use; a save above it is malformed.
 const MAX_REFINE := 20
 const PLAYER_COUNTS := ["realm", "xp", "hp", "qi", "stones", "cultivation_carry", "fatigue", "fatigue_day", "insight"]
@@ -39,6 +40,10 @@ static func restore(s, data: Variant) -> bool:
 	# 结丹 under way (optional: forming.gd); it holds the player apart from any duel, choice or attempt.
 	var forming: Variant = Forming.valid_state(content, saved.get("forming", {}))
 	if forming == null or (not forming.is_empty() and (not saved_battle.is_empty() or not saved_pending.is_empty() or saved_player.has("attempt") or int(saved_player.get("realm", -1)) != 1)):
+		return false
+	# 结婴 under way (optional: nascent.gd), likewise apart, and never beside a 结丹.
+	var nascent: Variant = Nascent.valid_state(content, saved.get("nascent", {}))
+	if nascent == null or (not nascent.is_empty() and (not forming.is_empty() or not saved_battle.is_empty() or not saved_pending.is_empty() or saved_player.has("attempt") or int(saved_player.get("realm", -1)) != 2)):
 		return false
 	# The kind of 金丹 formed (optional: forming.gd).
 	if not Forming.valid_kind(content, saved_player.get("core_kind", {})):
@@ -264,6 +269,8 @@ static func restore(s, data: Variant) -> bool:
 	# Health and qi within the caps the save was made with (before any talents awakened).
 	var holder: Dictionary = loadout.duplicate()
 	holder.merge({"realm": int(saved_player.realm), "stage": saved_stage, "talents": [] if awakened else born.talents, "flaws": [] if awakened else born.flaws, "foundation_grade": int(progress.foundation_grade), "core_grade": int(progress.core_grade)}, true)
+	if progress.has("nascent_grade"):
+		holder["nascent_grade"] = int(progress.nascent_grade)
 	holder["dao"] = saved_player.get("dao", {})
 	var saved_caps: Dictionary = s.stat_caps(holder)
 	if int(saved_player.hp) <= 0 or int(saved_player.hp) > int(saved_caps.max_hp) or int(saved_player.qi) > int(saved_caps.max_qi):
@@ -578,6 +585,7 @@ static func restore(s, data: Variant) -> bool:
 	s.battle = battle
 	s.auction = _normalized_auction(saved_auction)
 	s.forming = forming
+	s.nascent = nascent
 	s.pending_event = {} if saved_pending.is_empty() else {"id": saved_pending.id, "day": int(saved_pending.day)}
 	if not saved_pending.get("values", {}).is_empty():
 		s.pending_event["values"] = saved_pending.values.duplicate()
@@ -616,6 +624,11 @@ static func _valid_breakthrough(content, saved_player: Dictionary, saved_pending
 	if not _whole_nonnegative(core) or int(core) >= rules.core.grades.size():
 		return null
 	result["core_grade"] = int(core)
+	# The 元婴's grade (optional: nascent.gd; a 元婴 formed before it counts as 成婴).
+	if saved_player.has("nascent_grade"):
+		if not Nascent.valid_grade(content, saved_player.nascent_grade):
+			return null
+		result["nascent_grade"] = int(saved_player.nascent_grade)
 	var injury: Variant = saved_player.get("injury_until", 0)
 	var lessons: Variant = saved_player.get("lessons", 0)
 	if not _whole_nonnegative(injury) or not _whole_nonnegative(lessons) or int(lessons) > int(rules.lesson.most):
