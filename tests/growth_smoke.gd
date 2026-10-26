@@ -374,8 +374,8 @@ func _static_checks() -> void:
 
 ## Fixes the breakthrough's rolls: no 心魔, and a roll twenty points under the odds (a 中品 foundation,
 ## whose numbers are the plain ones).
-## 金丹: foundation's end asks a 凝元丹 and is harder; the core is graded by the foundation, the 心法
-## and the margin; the treasures of foundation do not serve; the grade survives a save.
+## 金丹: foundation's end asks no pill and is harder; the core is formed in a stage (forming.gd) whose
+## pearls grade it; the treasures of foundation do not serve; the grade survives a save.
 func _golden_core() -> void:
 	var game := _game()
 	game.player.realm = 1
@@ -399,10 +399,15 @@ func _golden_core() -> void:
 	game.player.methods = [method]
 	game.fortune = {"demon": 0.99, "breakthrough": 0.0, "grade": 0.99}
 	game.act("breakthrough")
+	check(not game.forming.is_empty() and game.battle.is_empty(), "the core is formed in a stage, not by a roll")
+	# Nine pearls of one element: the stage's best.
+	game.forming.round = int(game.Forming.data(game).rounds)
+	game.forming.pearls = ["wood", "wood", "wood", "wood", "wood", "wood", "wood", "wood", "wood"]
+	game.forming.orbs = []
+	game.forming_end_round(true)
 	_weather(game)
 	check(game.player.realm == 2 and game.realm_name() == "金丹初期" and game.lifespan() >= 400, "the core is formed: 金丹初期, four hundred years")
-	# Foundation 上品 (2 × 2) + a 玄阶 心法 (3) + a wide margin (2) = 9 → clamped to 一品 (8).
-	check(int(game.player.core_grade) == 8 and game.core_grade().name == "一品金丹", "a fine foundation, a 玄阶 心法 and a wide margin make an 一品金丹 (%s)" % game.core_grade().get("name", ""))
+	check(int(game.player.core_grade) == 8 and game.core_grade().name == "一品金丹" and game.player.core_kind == {"id": "pure", "elements": ["wood"]}, "nine pearls make an 一品金丹, of wood (%s)" % game.core_grade().get("name", ""))
 	check(int(game.player.max_hp) > int(game.content.stage(2, 0).max_hp), "and a fine core strengthens the body")
 	var copy := Session.new()
 	check(copy.restore(JSON.parse_string(JSON.stringify(game.snapshot()))) and copy.core_grade() == game.core_grade(), "the core's grade survives a save")
@@ -457,10 +462,14 @@ func _golden_core() -> void:
 	plain.player.foundation_grade = 0
 	plain.refresh_realm_stats()
 	plain.travel("sect")
-	plain.fortune = {"demon": 0.99, "breakthrough": float(plain.breakthrough_odds(plain.breakthrough_plan()).total - 1) / 100.0, "grade": 0.99}
+	plain.fortune = {"demon": 0.99, "grade": 0.99}
 	plain.act("breakthrough")
+	plain.forming.round = int(plain.Forming.data(plain).rounds)
+	plain.forming.pearls = ["metal"]
+	plain.forming.orbs = []
+	plain.forming_end_round(true)
 	_weather(plain)
-	check(plain.player.realm == 2 and int(plain.player.core_grade) == 0 and plain.core_grade().name == "九品金丹", "a poor foundation, no 心法 and a narrow margin make a 九品金丹")
+	check(plain.player.realm == 2 and int(plain.player.core_grade) == 0 and plain.core_grade().name == "九品金丹" and str(plain.player.core_kind.id) == "mixed", "a single pearl makes a 九品金丹")
 
 func _steady(game) -> void:
 	game.fortune = {"demon": 0.99, "breakthrough": maxf(0.0, float(game.breakthrough_odds(game.breakthrough_plan()).total - 20) / 100.0)}

@@ -35,6 +35,7 @@ const ArtsView = preload("res://scripts/ui/arts_view.gd")
 const DaoView = preload("res://scripts/ui/dao_view.gd")
 const BattleView = preload("res://scripts/ui/battle_view.gd")
 const AuctionView = preload("res://scripts/ui/auction_view.gd")
+const FormingView = preload("res://scripts/ui/forming_view.gd")
 const ForgeView = preload("res://scripts/ui/forge_view.gd")
 const EventView = preload("res://scripts/ui/event_view.gd")
 const WelcomeScreen = preload("res://scripts/ui/welcome_screen.gd")
@@ -85,6 +86,9 @@ var scene_layer: Control
 var battle_selection := ""
 var battle_payment: Array = []
 var battle_discarding := false
+# 结丹 (forming_view.gd): the 秘术 or pearl picked and the qi chosen for it; nothing is spent until 确定.
+var forming_selection := ""
+var forming_payment: Array = []
 var battle_more_open := false
 var battle_dock
 var battle_record_open := false
@@ -226,7 +230,7 @@ func _ready() -> void:
 	session.new_game()
 	session.changed.connect(_on_changed)
 	render()
-	preview_mode = "--art-preview" in OS.get_cmdline_user_args() or "--sect-preview" in OS.get_cmdline_user_args() or "--battle-v6-preview" in OS.get_cmdline_user_args() or "--dust-flow-preview" in OS.get_cmdline_user_args()
+	preview_mode = "--art-preview" in OS.get_cmdline_user_args() or "--sect-preview" in OS.get_cmdline_user_args() or "--battle-v6-preview" in OS.get_cmdline_user_args() or "--dust-flow-preview" in OS.get_cmdline_user_args() or "--forming-preview" in OS.get_cmdline_user_args()
 	if preview_mode:
 		manual_store = SaveStore.new("res://.tmp/art_preview/manual")
 		auto_store = SaveStore.new("res://.tmp/art_preview/auto")
@@ -410,7 +414,7 @@ func _build_layout() -> void:
 ## or a duel holds the player; the scroll a view belongs to ("panel", "scroll", "retreat", "trade");
 ## otherwise the world, "place" or "map".
 func current_screen() -> String:
-	if not session.ended.is_empty() or not ceremony.is_empty() or not story.is_empty() or not session.pending_event.is_empty() or not session.battle.is_empty() or not session.auction.is_empty():
+	if not session.ended.is_empty() or not ceremony.is_empty() or not story.is_empty() or not session.pending_event.is_empty() or not session.battle.is_empty() or not session.auction.is_empty() or not session.forming.is_empty():
 		return "full"
 	var group := _tab_group(view)
 	if not group.is_empty():
@@ -467,6 +471,12 @@ func _arrange(screen: String) -> void:
 			if dueling:
 				# The duel's stage is the screen; its dock runs along the bottom.
 				_place_window(0.0, 1.0, 0.0, 0.0)
+			elif not session.forming.is_empty() and session.pending_event.is_empty() and story.is_empty() and ceremony.is_empty():
+				# 结丹 over the darkened room of the retreat.
+				backdrop.texture = ArtLibrary.texture(ArtLibrary.fullscreen_location_path(str(session.player.location)))
+				backdrop.visible = true
+				shade.color.a = 0.72
+				_place_window(0.08, 0.92, 48.0, -80.0)
 			elif not session.auction.is_empty() and session.pending_event.is_empty() and story.is_empty() and ceremony.is_empty():
 				# The auction sits over the darkened market.
 				backdrop.texture = ArtLibrary.texture(ArtLibrary.fullscreen_location_path(str(session.player.location)))
@@ -572,6 +582,9 @@ func render() -> void:
 		battle_selection = ""
 		battle_payment = []
 		battle_discarding = false
+	if session.forming.is_empty():
+		forming_selection = ""
+		forming_payment = []
 	clear(center)
 	center.alignment = BoxContainer.ALIGNMENT_BEGIN
 	var scene := "%s|%s|%s|%s|%s|%s" % [view, session.player.location, session.pending_event.get("id", ""), story.get("event", ""), session.battle.is_empty(), selected_npc]
@@ -603,6 +616,8 @@ func render() -> void:
 		EventView.render_event(self)
 	elif not session.battle.is_empty():
 		BattleView.render(self)
+	elif not session.forming.is_empty():
+		FormingView.render(self)
 	elif not session.auction.is_empty():
 		AuctionView.render(self)
 	else:
@@ -677,6 +692,8 @@ func _guide_place() -> String:
 		return "battle"
 	if not session.auction.is_empty():
 		return "auction"
+	if not session.forming.is_empty():
+		return "forming"
 	if view == "place" and not selected_npc.is_empty():
 		return ""
 	return view
@@ -1142,7 +1159,7 @@ func _update_audio() -> void:
 		audio.play_music("ending")
 	elif not session.battle.is_empty():
 		audio.play_music("battle")
-	elif not session.pending_event.is_empty():
+	elif not session.pending_event.is_empty() or not session.forming.is_empty():
 		audio.play_music("event")
 	elif view == "map":
 		audio.play_music("map")
@@ -1170,6 +1187,73 @@ func choose(choice_id: String) -> void:
 	run(func() -> String: return session.choose_event(choice_id))
 	await _breakthrough_rite(mark)
 	_breakthrough_outcome(mark, before)
+
+# --- 结丹 (forming_view.gd) --------------------------------------------------------------------------
+
+## Picks a 秘术 or the pearl; picked again, the next way of paying for it.
+func forming_select(art_id: String) -> void:
+	if presenting or session.forming.is_empty() or not session.Forming.block(session, art_id).is_empty():
+		return
+	var cycle := forming_selection == art_id
+	forming_payment = session.Forming.plan(session, art_id, cycle, forming_payment)
+	forming_selection = art_id
+	audio.cue("page")
+	render()
+
+## A qi clicked in the 丹田: into the payment when something is picked, else let go.
+func forming_orb(element: String) -> void:
+	if presenting or session.forming.is_empty():
+		return
+	if forming_selection.is_empty():
+		forming_run(func() -> String: return session.forming_discard(element))
+		return
+	var needed: int = session.Combat._orbs_in(session.Forming.cost_of(session, forming_selection))
+	if session.forming.orbs.count(element) <= forming_payment.count(element):
+		return
+	if forming_payment.size() >= needed:
+		notice("先点击已配的灵气退回，再配入新的灵气。")
+		return
+	forming_payment.append(element)
+	render()
+
+func forming_unreserve(element: String) -> void:
+	if presenting or not element in forming_payment:
+		return
+	forming_payment.erase(element)
+	render()
+
+func forming_cancel() -> void:
+	forming_selection = ""
+	forming_payment = []
+	render()
+
+func forming_confirm() -> void:
+	if presenting or forming_selection.is_empty():
+		return
+	var art_id := forming_selection
+	var payment := forming_payment.duplicate()
+	forming_run(func() -> String: return session.forming_cast(art_id, payment))
+
+func forming_end() -> void:
+	forming_run(func() -> String: return session.forming_end_round())
+
+func forming_auto() -> void:
+	forming_run(session.forming_auto)
+
+## Runs a step of the stage; when the stage closes, its outcome is staged as a breakthrough's is (a
+## failure, or the 天劫's duel that follows).
+func forming_run(action: Callable) -> void:
+	if presenting or session.forming.is_empty():
+		return
+	var mark: int = session.chronicle.added
+	var before := _breakthrough_before()
+	forming_selection = ""
+	forming_payment = []
+	run(action, false)
+	if session.forming.is_empty():
+		await _breakthrough_rite(mark)
+		_breakthrough_outcome(mark, before)
+	render()
 
 func skill(skill_id: String) -> void:
 	if presenting or session.battle.is_empty() or battle_discarding:
@@ -1635,6 +1719,24 @@ func reset_preview(sect_id: String = "qingyun", opponent_id: String = "qingyun")
 	preview_opponent = opponent_id
 	story = {}
 	dialogue = {}
+	# The 结丹 preview (preview_forming.cmd): a 筑基圆满 at the sect's 静室, the stage just begun.
+	if "--forming-preview" in OS.get_cmdline_user_args():
+		ceremony = {}
+		session.new_game("青禾", -1, ["fire", "wood", "metal"])
+		session.player.realm = 1
+		session.player.stage = 3
+		session.player.xp = int(session.next_breakthrough().get("xp", 30000))
+		session.player.mind = 200
+		session.refresh_realm_stats()
+		session.player.hp = session.player.max_hp
+		session.player.stones = 5000
+		session.world.flags["ningdan_known"] = true
+		session.fortune = {"demon": 0.99}
+		session.breakthrough(session.breakthrough_plan())
+		session.fortune = {}
+		render()
+		notice("结丹试演：点秘术或「凝珠」配气后确定；不选时点灵气即散去；「顺其自然」交给寻常路数走完。使用独立试演存档。")
+		return
 	session.new_game("青禾")
 	session.Loadout.take_lineage(session, sect_id)
 	session.player.hp = maxi(1, int(session.player.max_hp) - 20)
@@ -1659,7 +1761,7 @@ func reset_preview(sect_id: String = "qingyun", opponent_id: String = "qingyun")
 
 ## Fit a short telling after labels have wrapped, including the scroll frame's real padding.
 func _fit_story_scroll() -> void:
-	if current_screen() != "full" or not ceremony.is_empty() or not session.ended.is_empty() or not session.battle.is_empty() or not session.auction.is_empty() or not _telling_art().is_empty():
+	if current_screen() != "full" or not ceremony.is_empty() or not session.ended.is_empty() or not session.battle.is_empty() or not session.auction.is_empty() or not session.forming.is_empty() or not _telling_art().is_empty():
 		return
 	var height := clampf(center.get_combined_minimum_size().y + window_style.get_minimum_size().y + 12.0, 260.0, size.y - 100.0)
 	window.offset_top = -height / 2.0

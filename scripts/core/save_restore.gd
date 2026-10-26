@@ -9,6 +9,7 @@ const Talents = preload("res://scripts/core/talents.gd")
 const Gear = preload("res://scripts/core/gear.gd")
 const Layers = preload("res://scripts/core/layers.gd")
 const Wuxiang = preload("res://scripts/core/wuxiang.gd")
+const Forming = preload("res://scripts/core/forming.gd")
 # More 祭炼 steps than any piece could use; a save above it is malformed.
 const MAX_REFINE := 20
 const PLAYER_COUNTS := ["realm", "xp", "hp", "qi", "stones", "cultivation_carry", "fatigue", "fatigue_day", "insight"]
@@ -34,6 +35,13 @@ static func restore(s, data: Variant) -> bool:
 		if not part is Dictionary:
 			return false
 	if not saved_auction.is_empty() and not _valid_auction(s, content, saved_auction):
+		return false
+	# 结丹 under way (optional: forming.gd); it holds the player apart from any duel, choice or attempt.
+	var forming: Variant = Forming.valid_state(content, saved.get("forming", {}))
+	if forming == null or (not forming.is_empty() and (not saved_battle.is_empty() or not saved_pending.is_empty() or saved_player.has("attempt") or int(saved_player.get("realm", -1)) != 1)):
+		return false
+	# The kind of 金丹 formed (optional: forming.gd).
+	if not Forming.valid_kind(content, saved_player.get("core_kind", {})):
 		return false
 	if not _whole_nonnegative(saved_world.get("day")) or not saved_world.get("flags") is Dictionary:
 		return false
@@ -295,6 +303,10 @@ static func restore(s, data: Variant) -> bool:
 			if not skill_id is String or content.technique(skill_id).is_empty() or not _whole_nonnegative(saved_battle.cooldowns[skill_id]):
 				return false
 		if saved_battle.has("context") and not saved_battle.context in ["event", "spar", "tournament", "summit", "arena", "demon", "tribulation", "tianji", "mijing", "guishi"]:
+			return false
+		# The 金丹's opening qi held back while a quicker foe moved first (combat.gd open_hand).
+		var held_back: Variant = saved_battle.get("core_orbs", [])
+		if not held_back is Array or held_back.size() > 20 or held_back.any(func(element: Variant) -> bool: return not content.technique_data.elements.has(element)):
 			return false
 		# A duel with someone met in a 秘境 (mijing.gd), and robbers at its door.
 		if saved_battle.get("context", "") == "mijing" and (not content.mijing_data.realms.has(str(saved_battle.get("mijing", ""))) or not saved_battle.get("foe") is Dictionary):
@@ -565,6 +577,7 @@ static func restore(s, data: Variant) -> bool:
 				foe_stats[key] = int(foe_stats[key])
 	s.battle = battle
 	s.auction = _normalized_auction(saved_auction)
+	s.forming = forming
 	s.pending_event = {} if saved_pending.is_empty() else {"id": saved_pending.id, "day": int(saved_pending.day)}
 	if not saved_pending.get("values", {}).is_empty():
 		s.pending_event["values"] = saved_pending.values.duplicate()
@@ -648,7 +661,9 @@ static func _valid_breakthrough(content, saved_player: Dictionary, saved_pending
 	if attempt != null:
 		if not attempt is Dictionary or not _whole_nonnegative(attempt.get("odds")) or int(attempt.odds) > 100 or not attempt.get("certain") is bool or not _whole_nonnegative(attempt.get("steps")) or not _whole_nonnegative(attempt.get("xp")) or not attempt.get("guard") is String or not attempt.get("staked", "") is String:
 			return null
-		result["attempt"] = {"odds": int(attempt.odds), "certain": attempt.certain, "steps": int(attempt.steps), "xp": int(attempt.xp), "guard": attempt.guard, "staked": str(attempt.get("staked", ""))}
+		if not attempt.get("treasure", "") is String or (not str(attempt.get("treasure", "")).is_empty() and content.item(str(attempt.treasure)).is_empty()):
+			return null
+		result["attempt"] = {"odds": int(attempt.odds), "certain": attempt.certain, "steps": int(attempt.steps), "xp": int(attempt.xp), "guard": attempt.guard, "staked": str(attempt.get("staked", "")), "treasure": str(attempt.get("treasure", ""))}
 	return result
 
 ## Friends' open appointments and requests, silver lent, and the last period letters were written in

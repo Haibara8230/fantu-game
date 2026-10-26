@@ -163,6 +163,13 @@ func _step() -> void:
 	if not s.auction.is_empty():
 		_do("act", "AUCTION", s.auction_leave())
 		return
+	# 结丹 (forming.gd): one decision of the plain policy at a time, as a player clicks through it.
+	if not s.forming.is_empty():
+		if s.Forming.plain_step(s):
+			_do("act", "FORMING", "")
+		else:
+			_do("act", "FORMING", s.forming_end_round(true))
+		return
 	if not s.player.journey.is_empty():
 		_do("travel", "ONWARD", s.continue_journey())
 		return

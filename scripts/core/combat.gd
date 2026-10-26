@@ -206,7 +206,7 @@ static func _by_realm(s, key: String, realm: int) -> int:
 static func player_weights(s) -> Dictionary:
 	var weights := {}
 	for element: String in elements(s):
-		weights[element] = (int(rules(s).root_weight) if element in s.player.get("roots", []) else int(rules(s).other_weight)) + int(s.orb_bonus("orb_" + element))
+		weights[element] = (int(rules(s).root_weight) if element in s.player.get("roots", []) else int(rules(s).other_weight)) + int(s.orb_bonus("orb_" + element)) + s.Forming.weight(s, element)
 	return weights
 
 ## Draw weights for a generated opponent, whose roots nobody knows: the elements of its arts heavier,
@@ -252,11 +252,15 @@ static func open_hand(s) -> void:
 	s.battle.shield = int(preparation.get("opening_shield", 0))
 	var extra := int(rules(s).first_extra) + int(s.orb_bonus("orb_first")) + int(preparation.get("opening_orbs", 0)) + int(s.Dao.value(s, "opening_draw"))
 	var tide := tide_orbs(s)
+	# The 金丹's kind opens the duel with more qi (forming.gd).
+	var core_orbs: Array = s.Forming.opening_orbs(s)
 	if foe_leads(s):
 		s.battle.foe_led = true
 		s.battle.next_draw = extra
 		if tide > 0:
 			s.battle.tide = tide
+		if not core_orbs.is_empty():
+			s.battle.core_orbs = core_orbs
 		_foe_prepare(s)
 		s.combat_events.append({"type": "lead", "actor": "enemy", "speed": foe_speed(s), "player_speed": speed(s)})
 		# The opening cannot fell the player: whoever starts a duel finds it still open after it.
@@ -269,6 +273,7 @@ static func open_hand(s) -> void:
 	drawn.append_array(_dao_draw(s))
 	for count: int in tide:
 		drawn.append("water")
+	drawn.append_array(core_orbs)
 	s.battle.orbs = drawn
 	s.combat_events.append({"type": "draw", "actor": "player", "orbs": drawn.duplicate()})
 	_foe_prepare(s)
@@ -1670,6 +1675,8 @@ static func _enemy_turn(s) -> String:
 	for count: int in int(s.battle.get("tide", 0)):
 		hand.append("water")
 	s.battle.erase("tide")
+	hand.append_array(s.battle.get("core_orbs", []))
+	s.battle.erase("core_orbs")
 	_gain(s, hand)
 	_foe_prepare(s)
 	# The opponent's sunder, slow, entangle, wound and focus last through its turns.

@@ -53,6 +53,8 @@ var mijing_data: Dictionary = {}
 var guishi_data: Dictionary = {}
 var wuxiang_data: Dictionary = {}
 var opening_data: Dictionary = {}
+# 结丹 as a stage (forming.gd).
+var forming_data: Dictionary = {}
 # 炼器's materials and costs (forge.gd).
 var forge_data: Dictionary = {}
 # Lore heard in teahouses about the wider world (rumors.gd).
@@ -77,6 +79,7 @@ const Combat = preload("res://scripts/core/combat.gd")
 const Dao = preload("res://scripts/core/dao.gd")
 const Prebattle = preload("res://scripts/core/prebattle.gd")
 const Formulation = preload("res://scripts/core/formulation.gd")
+const Forming = preload("res://scripts/core/forming.gd")
 
 func load_data() -> bool:
 	var parsed: Variant = _read_json("res://data/world.json")
@@ -114,7 +117,7 @@ func load_data() -> bool:
 	for item_id: String in items:
 		if items[item_id] is Dictionary:
 			items[item_id].id = item_id
-	for pair: Array in [["techniques", "res://data/techniques.json"], ["equipment", "res://data/equipment.json"], ["vfx_tiers", "res://data/vfx_tiers.json"], ["vfx", "res://data/vfx.json"], ["population", "res://data/population.json"], ["commissions", "res://data/commissions.json"], ["storylines", "res://data/storylines.json"], ["talents", "res://data/talents.json"], ["sect", "res://data/sect.json"], ["bonds", "res://data/bonds.json"], ["alchemy", "res://data/alchemy.json"], ["caves", "res://data/caves.json"], ["auctions", "res://data/auctions.json"], ["summit", "res://data/summit.json"], ["forge", "res://data/forge.json"], ["lore", "res://data/lore.json"], ["guests", "res://data/guests.json"], ["league", "res://data/league.json"], ["tianji", "res://data/tianji.json"], ["mijing", "res://data/mijing.json"], ["guishi", "res://data/guishi.json"], ["wuxiang", "res://data/wuxiang.json"], ["opening", "res://data/opening.json"]]:
+	for pair: Array in [["techniques", "res://data/techniques.json"], ["equipment", "res://data/equipment.json"], ["vfx_tiers", "res://data/vfx_tiers.json"], ["vfx", "res://data/vfx.json"], ["population", "res://data/population.json"], ["commissions", "res://data/commissions.json"], ["storylines", "res://data/storylines.json"], ["talents", "res://data/talents.json"], ["sect", "res://data/sect.json"], ["bonds", "res://data/bonds.json"], ["alchemy", "res://data/alchemy.json"], ["caves", "res://data/caves.json"], ["auctions", "res://data/auctions.json"], ["summit", "res://data/summit.json"], ["forge", "res://data/forge.json"], ["lore", "res://data/lore.json"], ["guests", "res://data/guests.json"], ["league", "res://data/league.json"], ["tianji", "res://data/tianji.json"], ["mijing", "res://data/mijing.json"], ["guishi", "res://data/guishi.json"], ["wuxiang", "res://data/wuxiang.json"], ["opening", "res://data/opening.json"], ["forming", "res://data/forming.json"]]:
 		var loaded: Variant = _read_json(pair[1])
 		if not loaded is Dictionary:
 			error_message = "配置格式错误：" + pair[1]
@@ -169,6 +172,8 @@ func load_data() -> bool:
 				wuxiang_data = loaded
 			"opening":
 				opening_data = loaded
+			"forming":
+				forming_data = loaded
 	map = parsed.map
 	regions = parsed.get("regions", {})
 	locations = parsed.locations
@@ -246,6 +251,8 @@ func _validate() -> String:
 		return "丹器配方配置无效。"
 	if not Dao.valid_data(self):
 		return "悟道配置无效。"
+	if not Forming.valid_data(self):
+		return "结丹配置无效。"
 	# 禁忌秘术 (combat.gd).
 	for art_id: String in rules.get("duel", {}).get("secret_arts", {}):
 		var art: Variant = rules.duel.secret_arts[art_id]
@@ -550,7 +557,7 @@ func _validate_breakthrough() -> String:
 	if not r.get("method_tier") is Dictionary:
 		return "心法品阶加成无效。"
 	var core: Variant = r.get("core")
-	if not core is Dictionary or not _whole(core.get("foundation")) or not core.get("margins") is Array or core.margins.is_empty() or core.margins.any(func(value: Variant) -> bool: return not _whole(value)) or not core.get("grades") is Array or core.grades.size() < 2 or core.grades.any(func(grade: Variant) -> bool: return not grade is Dictionary or not grade.get("name") is String or not _signed(grade.get("stats")) or not _signed(grade.get("speed"))):
+	if not core is Dictionary or not core.get("grades") is Array or core.grades.size() < 2 or core.grades.any(func(grade: Variant) -> bool: return not grade is Dictionary or not grade.get("name") is String or not _signed(grade.get("stats")) or not _signed(grade.get("speed"))):
 		return "金丹品级配置无效。"
 	for realm: Dictionary in realms:
 		var step: Variant = realm.get("breakthrough")

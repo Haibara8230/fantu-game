@@ -1,0 +1,35 @@
+{
+  "calibration": "仿《觅长生》结丹：九回合运转灵气，第七回合起凝液成丹，灵珠的五行配比定金丹属性、数目定品级（Wiki「萌新九品金丹篇」与攻略）。按用户定案，金丹以上不用丹药：原作的聚顶丹、朝元丹、凝X丹改为结丹秘术与天材地宝；回合数、吸气数、上限、道基与各秘术数值为项目适配值。",
+  "core": {
+    "name": "结丹",
+    "rounds": 9,
+    "condense_from": 7,
+    "draw": 3,
+    "cap": 6,
+    "cap_by_foundation": [-1, 0, 1, 2],
+    "pearl": {"cost": {"same": 3}, "most": 9},
+    "discard": 3,
+    "strain": [0, 1, 2, 3, 4, 5, 6, 7, 8],
+    "link": {"generate": 3, "same": 0, "overcome": -8},
+    "phases": [
+      {"from": 1, "name": "聚气养丹", "text": "吸纳灵气、运转周天，先把根基铺好；此时还凝不成灵珠。"},
+      {"from": 7, "name": "凝液成丹", "text": "灵液可凝成灵珠：三颗同属灵气凝一颗，与上一颗相生则道基更稳，相克则受冲撞。"}
+    ],
+    "kinds": {
+      "pure": {"name": "纯属性金丹", "least": 5, "opening": 2, "weight": 1, "text": "同一属性的灵珠至少五颗。斗法开场多吸两颗该属性灵气，此后该属性灵气也来得更勤。"},
+      "dual": {"name": "双属性金丹", "least": 4, "opening": 1, "text": "两种属性的灵珠各至少四颗。斗法开场两种灵气各多吸一颗。"},
+      "mixed": {"name": "混元金丹", "opening": 2, "text": "五行驳杂。斗法开场多吸两颗随灵根而来的灵气。"}
+    },
+    "arts": {
+      "tiaoxi": {"name": "调息", "cost": {"any": 2}, "per_round": true, "effect": {"stability": 4}, "on_payment": {"generate": {"heal": 2}}, "text": "散去两颗灵气，平复灵压：道基 +4；两颗相生再 +2。每回合一次。"},
+      "xiao_zhoutian": {"name": "小周天吐纳", "cost": {"same": 2}, "once": true, "effect": {"condense_draw": 1}, "text": "凝液成丹的回合，每回合多吸一颗灵气。"},
+      "nixing": {"name": "逆行经脉", "cost": {"same": 2}, "once": true, "effect": {"absorb": 5, "stability": -6}, "text": "逆转经脉，立刻多吸五颗灵气；经脉受冲撞，道基 -6。"},
+      "da_zhoutian": {"name": "大周天吐纳", "cost": {"same": 4, "any": 2}, "once": true, "requires": "ningdan_known", "effect": {"draw": 1}, "text": "此后每回合多吸一颗灵气。须懂凝丹之法。"},
+      "baoyuan": {"name": "抱元守一", "cost": {"same": 2, "any": 2}, "once": true, "requires": "ningdan_known", "effect": {"cap": 3, "next": 3}, "text": "丹田可多存三颗灵气，下回合多吸三颗。须懂凝丹之法。"}
+    },
+    "treasures": {
+      "xiaguang_lingsui": {"draw": 1, "text": "霞光灵髓化开：每回合多吸一颗灵气。"},
+      "dixin_huolian": {"opening": {"fire": 3}, "text": "地心火莲入腹：开始时多得三颗火灵气。"}
+    }
+  }
+}

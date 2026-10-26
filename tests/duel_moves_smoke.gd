@@ -794,6 +794,9 @@ func _demon_and_tribulation() -> void:
 	core.player.hp = core.player.max_hp
 	core.fortune = {"demon": 0.99, "breakthrough": 0.0, "grade": 0.5}
 	core.act("breakthrough")
+	# 结丹 is a stage first (forming.gd); played out plainly, made certain so the 天劫 is what is tested.
+	core.forming.certain = true
+	core.forming_auto()
 	check(str(core.battle.get("context", "")) == "tribulation" and str(core.battle.enemy_id) == "tribulation_core" and int(core.battle.hp) == 3 and int(core.player.realm) == 1 and core.player.has("tribulation"), "the 金丹 waits on 三九雷劫: three bolts")
 	check(core.flee().contains("无处可逃") and not core.battle.is_empty(), "there is no fleeing it")
 	check(str(core.battle.intent[0].name) == "第 1 道天雷", "the bolts are counted")
@@ -822,6 +825,9 @@ func _demon_and_tribulation() -> void:
 	struck.refresh_realm_stats()
 	struck.fortune = {"demon": 0.99, "breakthrough": 0.0}
 	struck.act("breakthrough")
+	# 结丹 is a stage first (forming.gd); played out plainly, made certain so the 天劫 is what is tested.
+	struck.forming.certain = true
+	struck.forming_auto()
 	struck.player.hp = 1
 	struck.end_turn()
 	check(struck.battle.is_empty() and int(struck.player.realm) == 1 and int(struck.player.injury_until) - int(struck.world.day) == 2 * int(struck.content.rules.breakthrough.failure.injury_days), "struck down, the attempt fails with twice the injury")

@@ -951,7 +951,7 @@
       "guard": {"favor": 140, "bonus": 5, "mentor": "gu_changgeng", "mentor_bonus": 10, "mentor_story": "lineage", "mentor_step": "foundation"},
       "eye": {"location": "wild", "flag": "spirit_eye_found", "bonus": 10, "dimmed_by": "chixiao_divert", "dimmed_bonus": 5, "veins": {"metal": "vein_metal", "wood": "vein_wood", "water": "vein_water", "fire": "vein_fire", "earth": "vein_earth"}},
       "boons": [{"id": "epiphany", "name": "顿悟", "bonus": 15, "grade": 1}, {"id": "brink", "name": "生死之间", "bonus": 10}],
-      "lore": [{"flag": "ningdan_known", "name": "凝丹之法", "realm": 2, "bonus": 10, "grade": 1}, {"flag": "ningying_known", "name": "凝婴之法", "realm": 3, "bonus": 10}, {"flag": "wuxiang_ningying", "name": "《无相凝婴诀》", "realm": 3, "bonus": 15}],
+      "lore": [{"flag": "ningdan_known", "name": "凝丹之法", "realm": 2, "bonus": 10}, {"flag": "ningying_known", "name": "凝婴之法", "realm": 3, "bonus": 10}, {"flag": "wuxiang_ningying", "name": "《无相凝婴诀》", "realm": 3, "bonus": 15}],
       "lesson": {"bonus": 5, "most": 3},
       "least": 5, "most": 95,
       "failure": {"xp_percent": 98, "injury_days": 90, "injury_percent": 50, "mind": 4},
@@ -963,7 +963,7 @@
         {"id": "high", "name": "上品", "margin": 30, "stats": 10, "speed": 10},
         {"id": "flawless", "name": "无瑕", "stats": 25, "speed": 25}
       ],
-      "core": {"foundation": 2, "margins": [0, 10, 30], "grades": [
+      "core": {"grades": [
         {"id": "ninth", "name": "九品金丹", "stats": -5, "speed": -10},
         {"id": "eighth", "name": "八品金丹", "stats": 0, "speed": -5},
         {"id": "seventh", "name": "七品金丹", "stats": 0, "speed": 0},

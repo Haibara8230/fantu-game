@@ -840,6 +840,41 @@ func _run() -> void:
 	check(main.current_screen() == "full" and _texts(main.center, "Label").contains("筑基") and _texts(main.center, "Label").contains("寿元 120 → 220 年") and _texts(main.center, "Label").contains("根基 · "), "a realm reached is shown on its own screen, with its grade")
 	_button("确定").pressed.emit()
 	check(main.ceremony.is_empty() and main.view == "place" and main.session.player.realm == 1, "确定 returns to the place")
+	# 结丹 (forming.gd, forming_view.gd): the odds become the 道基 of a stage played with qi.
+	var xp_was := int(main.session.player.xp)
+	main.session.player.stage = 3
+	main.session.player.xp = 30000
+	main.session.player.mind = 200
+	main.session.refresh_realm_stats()
+	main.session.fortune = {"demon": 0.99, "grade": 0.99}
+	main.set_view("breakthrough")
+	check(_texts(main.center, "Label").contains("道基  ") and _texts(main.center, "Label").contains("亲手结丹"), "the 突破 tab for 金丹 tells of the stage and its 道基")
+	_button("开始突破").pressed.emit()
+	# Words that came during the retreat's months are read first.
+	while not main.story.is_empty():
+		main.close_story()
+	var stage_text := _texts(main.center, "Label")
+	check(main.current_screen() == "full" and not main.session.forming.is_empty() and stage_text.contains("结丹 · 第 1 / 9 回合") and stage_text.contains("道基 ") and _button("回合结束") != null and _button("顺其自然") != null, "the stage takes the screen: the round, the 道基, the core and the 丹田")
+	await _capture("forming")
+	main.session.forming.orbs = ["metal", "wood", "fire"]
+	main.render()
+	_button("调息").pressed.emit()
+	check(main.forming_selection == "tiaoxi" and main.forming_payment.size() == 2 and _button("确定") != null and not _button("确定").disabled, "picking 调息 chooses its qi, ready to confirm")
+	var steady_before := int(main.session.forming.stability)
+	main.session.forming.stability = int(main.session.forming.most) - 10
+	_button("确定").pressed.emit()
+	check(main.forming_selection.is_empty() and main.session.forming.orbs.size() == 1 and int(main.session.forming.stability) > int(main.session.forming.most) - 10, "confirmed, the qi is spent and the 道基 shored up (%d)" % steady_before)
+	_button("顺其自然").pressed.emit()
+	check(main.session.forming.is_empty() and (str(main.session.battle.get("context", "")) == "tribulation" or main.ceremony.get("failed", false)), "played out, the core waits on its 天劫, or the attempt failed")
+	main.session.battle.clear()
+	main.session.player.erase("tribulation")
+	main.session.player.erase("core_kind")
+	main.session.player.xp = xp_was
+	main.session.player.stage = 0
+	main.session.player["injury_until"] = 0
+	main.ceremony = {}
+	main.session.refresh_realm_stats()
+	main.set_view("place")
 	# 客卿 at a sect's gate (guest.gd): offered there, open to a 青云 disciple too (the sects do not clash).
 	main.session.world.flags["tiannan_known"] = true
 	main.session.world.flags["guest_invite_chixiao"] = true

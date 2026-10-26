@@ -10,8 +10,8 @@ extends RefCounted
 ## before the attempt (`odds`).
 ## A mind short of the next realm's need, unguarded, may meet 心魔 first: a choice, slain or evaded.
 ## Success enters the realm with a 品质 (grade) from how far the roll fell under the odds, raised by
-## fortune; 无瑕 only by fortune. Forming the 金丹 grades the core instead (九品 to 一品): the
-## foundation's grade counts twice, then the best 心法's tier, the margin and fortune. Failure costs the pills, some xp and months of injury, never the life,
+## fortune; 无瑕 only by fortune. Forming the 金丹 is no roll: the odds become the 道基 of a stage played
+## with qi (forming.gd), whose pearls grade the core (九品 to 一品). Failure costs the pills, some xp and months of injury, never the life,
 ## and leaves a lesson for the next attempt. A 残魂灌顶 accepted makes the next attempt certain, without
 ## pills, at a middling grade.
 ## player.attempt holds an attempt waiting on 心魔; player.foundation_grade and player.core_grade the
@@ -246,7 +246,7 @@ static func attempt(s, plan: Dictionary) -> String:
 	if not str(plan.get("treasure", "")).is_empty():
 		s.remove_item(str(plan.treasure), 1)
 	s.player.xp = int(s.player.xp) - int(need.xp)
-	s.player["attempt"] = {"odds": int(chances.total), "certain": bool(chances.certain), "steps": chances.steps.size(), "xp": int(need.xp), "guard": str(plan.get("guard", "")), "staked": "、".join(staked)}
+	s.player["attempt"] = {"odds": int(chances.total), "certain": bool(chances.certain), "steps": chances.steps.size(), "xp": int(need.xp), "guard": str(plan.get("guard", "")), "staked": "、".join(staked), "treasure": str(plan.get("treasure", ""))}
 	if bool(chances.demon) and not chances.certain and s.fortune_roll("demon") < demon_chance(s):
 		s.pending_event = {"id": DEMON_EVENT, "day": int(s.world.day)}
 		return s.finish(s.log_event("heart_demon", {}, true))
@@ -328,22 +328,30 @@ static func resolve(s, told: String) -> String:
 	var certain := bool(attempt_state.get("certain", false))
 	if certain:
 		boons["remnant"] = "spent"
+	# The 金丹 is formed in a stage of nine rounds (forming.gd), the odds its 道基.
+	if s.Forming.applies(int(s.player.realm) + 1):
+		return s.Forming.begin(s, attempt_state, passed, texts)
 	if certain or roll < float(attempt_state.odds):
 		var grade := 1 if certain else _grade(s, float(attempt_state.odds) - roll, int(attempt_state.steps))
-		if int(s.player.realm) + 1 == 2:
-			grade = _core_grade(s, float(attempt_state.odds) - roll, int(attempt_state.steps))
-		# From the 金丹 on, Heaven tests the breakthrough with its lightning first.
-		var trial := tribulation_of(int(s.player.realm) + 1, s)
-		if not trial.is_empty():
-			# The months of the attempt's retreat leave body and qi full for the trial.
-			s.player.hp = s.player.max_hp
-			s.player.qi = s.player.max_qi
-			s.player["tribulation"] = {"grade": grade, "days": int(passed.elapsed), "xp": int(attempt_state.xp), "staked": str(attempt_state.get("staked", ""))}
-			s.Combat.begin_tribulation(s, trial)
-			texts.append(s.log_event("tribulation_start", {"enemy": trial, "rounds": int(s.content.enemies[trial].hp)}, true))
-			return s.conclude(" ".join(texts), passed)
-		return _ascend(s, grade, int(passed.elapsed), texts, passed)
+		return _trial_or_ascend(s, grade, int(passed.elapsed), int(attempt_state.xp), str(attempt_state.get("staked", "")), texts, passed)
 	return _fail(s, int(attempt_state.xp), texts, passed, 1, str(attempt_state.get("staked", "")))
+
+## The 金丹 formed in its stage (forming.gd) with `grade`: its 天劫 next.
+static func core_formed(s, grade: int, days: int, xp: int, staked: String, texts: Array) -> String:
+	return _trial_or_ascend(s, grade, days, xp, staked, texts, {})
+
+## From the 金丹 on, Heaven tests the breakthrough with its lightning first; else the realm is entered.
+static func _trial_or_ascend(s, grade: int, days: int, xp: int, staked: String, texts: Array, passed: Dictionary) -> String:
+	var trial := tribulation_of(int(s.player.realm) + 1, s)
+	if not trial.is_empty():
+		# The months of the attempt's retreat leave body and qi full for the trial.
+		s.player.hp = s.player.max_hp
+		s.player.qi = s.player.max_qi
+		s.player["tribulation"] = {"grade": grade, "days": days, "xp": xp, "staked": staked}
+		s.Combat.begin_tribulation(s, trial)
+		texts.append(s.log_event("tribulation_start", {"enemy": trial, "rounds": int(s.content.enemies[trial].hp)}, true))
+		return s.conclude(" ".join(texts), passed)
+	return _ascend(s, grade, days, texts, passed)
 
 ## The realm entered: its grade kept, health and qi made whole, the news sent.
 static func _ascend(s, grade: int, days: int, texts: Array, passed: Dictionary) -> String:
@@ -393,6 +401,9 @@ static func _fail(s, xp: int, texts: Array, passed: Dictionary, injury_factor: i
 	s.player["lessons"] = mini(int(rules(s).lesson.most), int(s.player.get("lessons", 0)) + 1)
 	s.gain_mind(int(failure.mind))
 	s.player.hp = maxi(1, int(s.player.max_hp) / 3)
+	# A core whose 天劫 struck it down was never formed.
+	if int(s.player.realm) < 2:
+		s.player.erase("core_kind")
 	var lost := "%s随之散尽，" % staked if not staked.is_empty() else ""
 	texts.append(s.log_event("breakthrough_failed", {"days": int(passed.get("elapsed", 0)), "xp": int(s.player.xp), "injury": injury, "lost": lost}, true))
 	return s.conclude(" ".join(texts), passed)
@@ -405,30 +416,15 @@ static func _grade(s, margin: float, steps: int) -> int:
 	for index: int in grades.size():
 		if grades[index].has("margin") and margin >= float(grades[index].margin):
 			grade = index
-	var chance: int = s.talent_modifier("grade")
-	steps += chance / 100
-	if chance % 100 > 0 and s.fortune_roll("grade") * 100.0 < float(chance % 100):
-		steps += 1
-	return mini(grades.size() - 1, grade + steps)
+	return mini(grades.size() - 1, grade + steps + talent_steps(s))
 
-## The 金丹's grade: twice the foundation's grade, the best 心法's tier, the margin under the odds (0, 1
-## or 2 by `core.margins`), fortune's steps and the talents for a better grade; 九品 at worst (0),
-## 一品 at best.
-static func _core_grade(s, margin: float, steps: int) -> int:
-	var core: Dictionary = rules(s).core
-	var score := int(s.player.get("foundation_grade", 1)) * int(core.foundation)
-	var best_tier := 0
-	for method_id: Variant in s.player.get("methods", []):
-		best_tier = maxi(best_tier, int(s.content.technique(str(method_id)).get("tier", 0)))
-	score += best_tier
-	for index: int in range(1, core.margins.size()):
-		if margin >= float(core.margins[index]):
-			score += 1
+## The grade steps talents add (`grade`): a whole step per hundred, the rest a chance.
+static func talent_steps(s) -> int:
 	var chance: int = s.talent_modifier("grade")
-	steps += chance / 100
+	var steps := chance / 100
 	if chance % 100 > 0 and s.fortune_roll("grade") * 100.0 < float(chance % 100):
 		steps += 1
-	return clampi(score + steps, 0, core.grades.size() - 1)
+	return steps
 
 ## The foundation's grade entry ({"name", "stats", "speed"}), or {} before foundation.
 static func foundation_of(s, holder: Dictionary = {}) -> Dictionary:

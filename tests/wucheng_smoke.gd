@@ -476,7 +476,7 @@ func _jindan() -> void:
 	game.player.xp = 200000
 	game.player.location = "canglan"
 	var odds: Dictionary = game.Breakthrough.odds(game, {"pills": 0, "treasure": "", "guard": ""})
-	check(odds.parts.any(func(part: Array) -> bool: return str(part[0]) == "凝丹之法" and int(part[1]) == 10) and "凝丹之法" in odds.steps, "凝丹之法 adds ten and a grade to forming the 金丹")
+	check(odds.parts.any(func(part: Array) -> bool: return str(part[0]) == "凝丹之法" and int(part[1]) == 10) and "da_zhoutian" in game.Forming.known_arts(game), "凝丹之法 adds ten to forming the 金丹 and teaches its 秘术")
 	var low := _game()
 	_found(low, 2)
 	low.world.flags["ningdan_known"] = true

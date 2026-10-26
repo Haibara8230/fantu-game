@@ -41,6 +41,7 @@ const Ascension = preload("res://scripts/core/ascension.gd")
 const Feuds = preload("res://scripts/core/feuds.gd")
 const Schools = preload("res://scripts/core/schools.gd")
 const Breakthrough = preload("res://scripts/core/breakthrough.gd")
+const Forming = preload("res://scripts/core/forming.gd")
 const Fortune = preload("res://scripts/core/fortune.gd")
 const Sect = preload("res://scripts/core/sect.gd")
 const Bonds = preload("res://scripts/core/bonds.gd")
@@ -62,6 +63,8 @@ var player: Dictionary = {}
 var battle: Dictionary = {}
 # An auction under way (auctions.gd), {} otherwise.
 var auction: Dictionary = {}
+# 结丹 under way (forming.gd), {} otherwise.
+var forming: Dictionary = {}
 # A location event waiting for the player's choice: {"id", "day"}.
 var pending_event: Dictionary = {}
 # Set when this life is over: {"kind", "day"}.
@@ -147,6 +150,7 @@ func new_game(character_name: String = "无名", seed_value: int = -1, roots: Ar
 	player.hp = player.max_hp
 	player.qi = player.max_qi
 	battle.clear()
+	forming = {}
 	pending_event = {}
 	ended = {}
 	combat_events.clear()
@@ -422,6 +426,8 @@ func blocked() -> String:
 		return "斗法中无法进行此操作。"
 	if not auction.is_empty():
 		return "拍卖尚未结束。"
+	if not forming.is_empty():
+		return "结丹尚未了结。"
 	return ""
 
 func act(action: String) -> String:
@@ -664,7 +670,7 @@ func location_visible(location_id: String) -> bool:
 func snapshot() -> Dictionary:
 	return {
 		"version": SAVE_VERSION, "world": Storylines.saved_world(self), "player": player.duplicate(true),
-		"battle": battle.duplicate(true), "pending_event": pending_event.duplicate(true), "ended": ended.duplicate(true), "auction": auction.duplicate(true),
+		"battle": battle.duplicate(true), "pending_event": pending_event.duplicate(true), "ended": ended.duplicate(true), "auction": auction.duplicate(true), "forming": forming.duplicate(true),
 		"chronicle": chronicle.to_save(), "rng": {"combat": str(combat_rng.state), "world": str(world_rng.state)}
 	}
 
@@ -794,6 +800,20 @@ func breakthrough(plan: Dictionary) -> String:
 	if not reason.is_empty():
 		return reason
 	return Breakthrough.attempt(self, plan)
+
+## 结丹 (forming.gd): a 秘术 or a pearl ("pearl") with the qi chosen, a qi let go, the round ended, or
+## the rest played by the plain policy.
+func forming_cast(art_id: String, payment: Array = []) -> String:
+	return Forming.cast(self, art_id, payment)
+
+func forming_discard(element: String) -> String:
+	return Forming.discard(self, element)
+
+func forming_end_round(auto_release: bool = false) -> String:
+	return Forming.end_round(self, auto_release)
+
+func forming_auto() -> String:
+	return Forming.auto(self)
 
 func breakthrough_plan() -> Dictionary:
 	return Breakthrough.default_plan(self)
