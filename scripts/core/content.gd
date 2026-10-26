@@ -53,7 +53,7 @@ var mijing_data: Dictionary = {}
 var guishi_data: Dictionary = {}
 var wuxiang_data: Dictionary = {}
 var opening_data: Dictionary = {}
-# 结丹 and 结婴 as stages (forming.gd `core`, nascent.gd `nascent`).
+# 筑基, 结丹 and 结婴 as stages (founding.gd `foundation`, forming.gd `core`, nascent.gd `nascent`).
 var forming_data: Dictionary = {}
 # 炼器's materials and costs (forge.gd).
 var forge_data: Dictionary = {}
@@ -81,6 +81,7 @@ const Prebattle = preload("res://scripts/core/prebattle.gd")
 const Formulation = preload("res://scripts/core/formulation.gd")
 const Forming = preload("res://scripts/core/forming.gd")
 const Nascent = preload("res://scripts/core/nascent.gd")
+const Founding = preload("res://scripts/core/founding.gd")
 
 func load_data() -> bool:
 	var parsed: Variant = _read_json("res://data/world.json")
@@ -256,6 +257,8 @@ func _validate() -> String:
 		return "结丹配置无效。"
 	if not Nascent.valid_data(self):
 		return "结婴配置无效。"
+	if not Founding.valid_data(self):
+		return "筑基关卡配置无效。"
 	# 禁忌秘术 (combat.gd).
 	for art_id: String in rules.get("duel", {}).get("secret_arts", {}):
 		var art: Variant = rules.duel.secret_arts[art_id]

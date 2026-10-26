@@ -192,7 +192,11 @@ static func render_breakthrough(ui) -> void:
 	# 结婴 likewise (nascent.gd): the odds become its 意志.
 	var forming: bool = session.Forming.applies(int(session.player.realm) + 1)
 	var nascent: bool = session.Nascent.applies(int(session.player.realm) + 1)
-	if forming:
+	# 筑基 too (founding.gd): the odds, the 筑基丹 among them, become its 真元.
+	var founding: bool = session.Founding.applies(int(session.player.realm) + 1)
+	if founding:
+		right.add_child(ui.label("真元  %d" % int(chances.total) if not chances.certain else "真元  %d（残魂灌顶，不会耗尽）" % int(chances.total), 22, ui.GOLD))
+	elif forming:
 		right.add_child(ui.label("道基  %d" % int(chances.total) if not chances.certain else "道基  %d（残魂灌顶，不会崩散）" % int(chances.total), 22, ui.GOLD))
 	elif nascent:
 		right.add_child(ui.label("意志  %d" % int(chances.total) if not chances.certain else "意志  %d（残魂灌顶，不会溃散）" % int(chances.total), 22, ui.GOLD))
@@ -203,6 +207,12 @@ static func render_breakthrough(ui) -> void:
 		var d: Dictionary = session.Forming.data(session)
 		var known: Array = session.Forming.known_arts(session).map(func(art_id: String) -> String: return str(d.arts[art_id].name))
 		right.add_child(ui.paragraph("闭关期满后亲手结丹：共 %d 回合，按灵根吸纳灵气，第 %d 回合起三颗同属灵气凝一颗灵珠。灵珠的数目定金丹品级，五行配比定金丹属性（纯属性、双属性、混元），各有斗法开场之利。道基即上面的把握：灵压、散气与相克的灵珠会消磨它，耗尽则失败。可运转的秘术：%s%s。" % [int(d.rounds), int(d.condense_from), "、".join(known), "" if session.has_flag("ningdan_known") else "（懂得凝丹之法另有大周天吐纳、抱元守一）"], ui.INK))
+	if founding:
+		var fd: Dictionary = session.Founding.data(session)
+		var lines: Array[String] = []
+		for index: int in fd.grades.size():
+			lines.append("%d 为%s" % [int(fd.grades[index]), session.content.rules.breakthrough.grades[index].name])
+		right.add_child(ui.paragraph("闭关期满后亲手筑基：共 %d 回合，按灵根吸纳灵气，用凝液、化气、压缩灵液把灵气压成灵液。九回合后灵液满 %d 即成，凝得越多根基越好：%s；无瑕要靠天材地宝或机缘再提。真元即上面的把握：灵压、散气与几门耗力的秘术会消磨它，耗尽则失败。" % [int(fd.rounds), int(fd.goal), "，".join(lines)], ui.INK))
 	if nascent:
 		var nd: Dictionary = session.Nascent.data(session)
 		var arts: Array = session.Nascent.known_arts(session).map(func(art_id: String) -> String: return str(nd.arts[art_id].name))
@@ -273,10 +283,10 @@ static func _treasure_controls(ui, parent: VBoxContainer, plan: Dictionary) -> v
 		var use := CheckBox.new()
 		var item: Dictionary = session.content.item(item_id)
 		var target := int(session.player.realm) + 1
-		var stage: Variant = session.Forming if session.Forming.applies(target) else (session.Nascent if session.Nascent.applies(target) else null)
+		var stage: Variant = session.Founding if session.Founding.applies(target) else (session.Forming if session.Forming.applies(target) else (session.Nascent if session.Nascent.applies(target) else null))
 		var gift: Dictionary = stage.data(session).get("treasures", {}).get(item_id, {}) if stage != null else {}
 		var measure := "成功率" if stage == null else str(stage.MEASURE)
-		var step := "，根基更稳" if stage == null else ("，金丹再提一品" if stage == session.Forming else "，元婴再提一档")
+		var step := "，根基更稳" if stage == null or stage == session.Founding else ("，金丹再提一品" if stage == session.Forming else "，元婴再提一档")
 		use.text = "服下%s（%s +%d%s%s）" % [item.name, measure, int(item.breakthrough.bonus), step if int(item.breakthrough.get("grade", 0)) > 0 else "", "；" + str(gift.text) if not gift.is_empty() else ""]
 		use.button_pressed = plan.treasure == item_id
 		use.toggled.connect(func(on: bool) -> void: ui.breakthrough_plan.treasure = item_id if on else ""; ui.render())

@@ -11,6 +11,7 @@ const Layers = preload("res://scripts/core/layers.gd")
 const Wuxiang = preload("res://scripts/core/wuxiang.gd")
 const Forming = preload("res://scripts/core/forming.gd")
 const Nascent = preload("res://scripts/core/nascent.gd")
+const Founding = preload("res://scripts/core/founding.gd")
 # More 祭炼 steps than any piece could use; a save above it is malformed.
 const MAX_REFINE := 20
 const PLAYER_COUNTS := ["realm", "xp", "hp", "qi", "stones", "cultivation_carry", "fatigue", "fatigue_day", "insight"]
@@ -41,9 +42,13 @@ static func restore(s, data: Variant) -> bool:
 	var forming: Variant = Forming.valid_state(content, saved.get("forming", {}))
 	if forming == null or (not forming.is_empty() and (not saved_battle.is_empty() or not saved_pending.is_empty() or saved_player.has("attempt") or int(saved_player.get("realm", -1)) != 1)):
 		return false
+	# 筑基 under way (optional: founding.gd), likewise apart, and never beside another stage.
+	var founding: Variant = Founding.valid_state(content, saved.get("founding", {}))
+	if founding == null or (not founding.is_empty() and (not forming.is_empty() or not saved_battle.is_empty() or not saved_pending.is_empty() or saved_player.has("attempt") or int(saved_player.get("realm", -1)) != 0)):
+		return false
 	# 结婴 under way (optional: nascent.gd), likewise apart, and never beside a 结丹.
 	var nascent: Variant = Nascent.valid_state(content, saved.get("nascent", {}))
-	if nascent == null or (not nascent.is_empty() and (not forming.is_empty() or not saved_battle.is_empty() or not saved_pending.is_empty() or saved_player.has("attempt") or int(saved_player.get("realm", -1)) != 2)):
+	if nascent == null or (not nascent.is_empty() and (not forming.is_empty() or not founding.is_empty() or not saved_battle.is_empty() or not saved_pending.is_empty() or saved_player.has("attempt") or int(saved_player.get("realm", -1)) != 2)):
 		return false
 	# The kind of 金丹 formed (optional: forming.gd).
 	if not Forming.valid_kind(content, saved_player.get("core_kind", {})):
@@ -584,6 +589,7 @@ static func restore(s, data: Variant) -> bool:
 				foe_stats[key] = int(foe_stats[key])
 	s.battle = battle
 	s.auction = _normalized_auction(saved_auction)
+	s.founding = founding
 	s.forming = forming
 	s.nascent = nascent
 	s.pending_event = {} if saved_pending.is_empty() else {"id": saved_pending.id, "day": int(saved_pending.day)}

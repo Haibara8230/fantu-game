@@ -815,7 +815,7 @@ func _run() -> void:
 	main.session.refresh_realm_stats()
 	main.set_view("breakthrough")
 	var plan_text := _texts(main.center, "Label")
-	check(plan_text.contains("✓  修为  8000 / 8000") and plan_text.contains("服筑基丹 1 枚") and plan_text.contains("成功率  ") and plan_text.contains("资质 · ") and not _button("开始突破").disabled, "the 突破 tab lays out the plan and its odds")
+	check(plan_text.contains("✓  修为  8000 / 8000") and plan_text.contains("服筑基丹 1 枚") and plan_text.contains("真元  ") and plan_text.contains("亲手筑基") and plan_text.contains("资质 · ") and not _button("开始突破").disabled, "the 突破 tab lays out the plan and its odds")
 	check(plan_text.contains("若失败") and plan_text.contains("性命无碍"), "and what failing would cost")
 	main.session.set_item_count("foundation_pill", 2)
 	main.render()
@@ -823,20 +823,45 @@ func _run() -> void:
 	_button("＋").pressed.emit()
 	check(_texts(main.center, "Label").contains("服筑基丹 2 枚") and _texts(main.center, "Label").contains("筑基丹 ×2 +40") and _texts(main.center, "Label") != odds_one, "a second pill raises the odds by less than the first")
 	_button("－").pressed.emit()
-	# A failed attempt: the pill is spent, xp falls back, and the outcome has its own screen.
-	main.session.fortune = {"demon": 0.99, "breakthrough": 0.99}
+	# 筑基 (founding.gd, founding_view.gd): the odds become the 真元 of a stage that presses qi into 灵液.
+	main.session.fortune = {"demon": 0.99}
 	_button("开始突破").pressed.emit()
+	while not main.story.is_empty():
+		main.close_story()
+	var laying := _texts(main.center, "Label")
+	check(main.current_screen() == "full" and not main.session.founding.is_empty() and laying.contains("筑基 · 第 1 / 9 回合") and laying.contains("真元 ") and laying.contains("灵液 0 / 100") and _button("回合结束") != null, "the stage takes the screen: the round, the 真元, the 灵液 and the 丹田")
+	await _capture("founding")
+	main.session.founding.orbs = ["metal", "metal", "wood"]
+	main.render()
+	_button("凝液").pressed.emit()
+	check(main.forming_selection == "ningye" and main.forming_payment == ["metal", "metal"] and not _button("确定").disabled, "picking 凝液 chooses two of a kind")
+	_button("确定").pressed.emit()
+	check(int(main.session.founding.liquid) == 9 and main.session.founding.orbs == ["wood"] and _texts(main.center, "Label").contains("灵液 9 / 100"), "confirmed, the qi becomes 灵液")
+	# A failed attempt: the 灵液 short at the last round; the pill is spent, xp falls back, and the
+	# outcome has its own screen.
+	main.session.founding.round = 9
+	main.session.founding.orbs = []
+	main.render()
+	_button("收功筑基").pressed.emit()
 	check(main.current_screen() == "full" and _texts(main.center, "Label").contains("冲 关 失 败") and int(main.session.player.xp) == 7840 and main.session.injured() and main.session.player.realm == 0, "a failed breakthrough is shown on its own screen")
 	_button("确定").pressed.emit()
 	# 心魔 first, then success.
 	main.session.player.xp = 8000
 	main.session.player.mind = 10
-	main.session.fortune = {"demon": 0.0, "breakthrough": 0.0}
+	main.session.fortune = {"demon": 0.0}
 	main.set_view("breakthrough")
 	check(_texts(main.center, "Label").contains("前车之鉴") and _texts(main.center, "Label").contains("心魔"), "a lesson learned and the threat of 心魔 show in the odds")
 	_button("开始突破").pressed.emit()
 	check(main.current_screen() == "full" and not main.session.pending_event.is_empty() and _button("紧守灵台") != null, "心魔 comes as a choice")
 	_button("紧守灵台").pressed.emit()
+	while not main.story.is_empty():
+		main.close_story()
+	check(not main.session.founding.is_empty(), "past 心魔, the stage opens")
+	main.session.founding.round = 9
+	main.session.founding.liquid = 125
+	main.session.founding.orbs = []
+	main.render()
+	_button("收功筑基").pressed.emit()
 	check(main.current_screen() == "full" and _texts(main.center, "Label").contains("筑基") and _texts(main.center, "Label").contains("寿元 120 → 220 年") and _texts(main.center, "Label").contains("根基 · "), "a realm reached is shown on its own screen, with its grade")
 	_button("确定").pressed.emit()
 	check(main.ceremony.is_empty() and main.view == "place" and main.session.player.realm == 1, "确定 returns to the place")

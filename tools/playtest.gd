@@ -170,7 +170,13 @@ func _step() -> void:
 		else:
 			_do("act", "FORMING", s.forming_end_round(true))
 		return
-	# 结婴 (nascent.gd) likewise.
+	# 筑基 (founding.gd) and 结婴 (nascent.gd) likewise.
+	if not s.founding.is_empty():
+		if s.Founding.plain_step(s):
+			_do("act", "FOUNDING", "")
+		else:
+			_do("act", "FOUNDING", s.founding_end_round(true))
+		return
 	if not s.nascent.is_empty():
 		if s.Nascent.plain_step(s):
 			_do("act", "NASCENT", "")

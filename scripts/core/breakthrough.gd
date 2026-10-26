@@ -9,8 +9,9 @@ extends RefCounted
 ## lessons of earlier failures, and talents; 丹毒 still in the body takes a little off. They are shown
 ## before the attempt (`odds`).
 ## A mind short of the next realm's need, unguarded, may meet 心魔 first: a choice, slain or evaded.
-## Success enters the realm with a 品质 (grade) from how far the roll fell under the odds, raised by
-## fortune; 无瑕 only by fortune. Forming the 金丹 is no roll: the odds become the 道基 of a stage played
+## No breakthrough before 化神 is a roll. The foundation is laid in a stage played with qi (founding.gd):
+## the odds become its 真元, the 灵液 pressed past the goal its 品质 (grade), raised by fortune; 无瑕
+## only by fortune. A roll's margin under the odds grades the rest. Forming the 金丹 is no roll either: the odds become the 道基 of a stage played
 ## with qi (forming.gd), whose pearls grade the core (九品 to 一品); nor the 元婴: the odds become the
 ## 意志 of a stage that shatters the core and meets 心魔 (nascent.gd), the 意志 kept grading it. Failure
 ## costs the pills, some xp and months of injury, never the life,
@@ -331,8 +332,10 @@ static func resolve(s, told: String) -> String:
 	var certain := bool(attempt_state.get("certain", false))
 	if certain:
 		boons["remnant"] = "spent"
-	# The 金丹 is formed in a stage of nine rounds (forming.gd), the odds its 道基; the 元婴 likewise
-	# (nascent.gd), the odds its 意志.
+	# The foundation is laid in a stage of nine rounds (founding.gd), the odds its 真元; the 金丹 is
+	# formed likewise (forming.gd), the odds its 道基; and the 元婴 (nascent.gd), the odds its 意志.
+	if s.Founding.applies(int(s.player.realm) + 1):
+		return s.Founding.begin(s, attempt_state, passed, texts)
 	if s.Forming.applies(int(s.player.realm) + 1):
 		return s.Forming.begin(s, attempt_state, passed, texts)
 	if s.Nascent.applies(int(s.player.realm) + 1):
@@ -342,7 +345,8 @@ static func resolve(s, told: String) -> String:
 		return _trial_or_ascend(s, grade, int(passed.elapsed), int(attempt_state.xp), str(attempt_state.get("staked", "")), texts, passed)
 	return _fail(s, int(attempt_state.xp), texts, passed, 1, str(attempt_state.get("staked", "")))
 
-## The 金丹 (forming.gd) or the 元婴 (nascent.gd) formed in its stage with `grade`: its 天劫 next.
+## The foundation (founding.gd), the 金丹 (forming.gd) or the 元婴 (nascent.gd) formed in its stage with
+## `grade`: its 天劫 next, from the 金丹 on.
 static func core_formed(s, grade: int, days: int, xp: int, staked: String, texts: Array) -> String:
 	return _trial_or_ascend(s, grade, days, xp, staked, texts, {})
 

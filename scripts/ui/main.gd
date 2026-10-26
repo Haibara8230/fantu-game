@@ -37,6 +37,7 @@ const BattleView = preload("res://scripts/ui/battle_view.gd")
 const AuctionView = preload("res://scripts/ui/auction_view.gd")
 const FormingView = preload("res://scripts/ui/forming_view.gd")
 const NascentView = preload("res://scripts/ui/nascent_view.gd")
+const FoundingView = preload("res://scripts/ui/founding_view.gd")
 const ForgeView = preload("res://scripts/ui/forge_view.gd")
 const EventView = preload("res://scripts/ui/event_view.gd")
 const WelcomeScreen = preload("res://scripts/ui/welcome_screen.gd")
@@ -87,7 +88,7 @@ var scene_layer: Control
 var battle_selection := ""
 var battle_payment: Array = []
 var battle_discarding := false
-# 结丹 and 结婴 (forming_view.gd, nascent_view.gd): the 秘术 or pearl picked and the qi chosen for it;
+# 筑基, 结丹 and 结婴 (founding_view.gd, forming_view.gd, nascent_view.gd): the 秘术 or pearl picked and the qi chosen for it;
 # nothing is spent until 确定.
 var forming_selection := ""
 var forming_payment: Array = []
@@ -232,7 +233,7 @@ func _ready() -> void:
 	session.new_game()
 	session.changed.connect(_on_changed)
 	render()
-	preview_mode = "--art-preview" in OS.get_cmdline_user_args() or "--sect-preview" in OS.get_cmdline_user_args() or "--battle-v6-preview" in OS.get_cmdline_user_args() or "--dust-flow-preview" in OS.get_cmdline_user_args() or "--forming-preview" in OS.get_cmdline_user_args() or "--nascent-preview" in OS.get_cmdline_user_args()
+	preview_mode = "--art-preview" in OS.get_cmdline_user_args() or "--sect-preview" in OS.get_cmdline_user_args() or "--battle-v6-preview" in OS.get_cmdline_user_args() or "--dust-flow-preview" in OS.get_cmdline_user_args() or "--forming-preview" in OS.get_cmdline_user_args() or "--nascent-preview" in OS.get_cmdline_user_args() or "--founding-preview" in OS.get_cmdline_user_args()
 	if preview_mode:
 		manual_store = SaveStore.new("res://.tmp/art_preview/manual")
 		auto_store = SaveStore.new("res://.tmp/art_preview/auto")
@@ -474,7 +475,7 @@ func _arrange(screen: String) -> void:
 				# The duel's stage is the screen; its dock runs along the bottom.
 				_place_window(0.0, 1.0, 0.0, 0.0)
 			elif session.stage() != null and session.pending_event.is_empty() and story.is_empty() and ceremony.is_empty():
-				# 结丹 or 结婴 over the darkened room of the retreat.
+				# 筑基, 结丹 or 结婴 over the darkened room of the retreat.
 				backdrop.texture = ArtLibrary.texture(ArtLibrary.fullscreen_location_path(str(session.player.location)))
 				backdrop.visible = true
 				shade.color.a = 0.72
@@ -618,6 +619,8 @@ func render() -> void:
 		EventView.render_event(self)
 	elif not session.battle.is_empty():
 		BattleView.render(self)
+	elif not session.founding.is_empty():
+		FoundingView.render(self)
 	elif not session.forming.is_empty():
 		FormingView.render(self)
 	elif not session.nascent.is_empty():
@@ -696,6 +699,8 @@ func _guide_place() -> String:
 		return "battle"
 	if not session.auction.is_empty():
 		return "auction"
+	if not session.founding.is_empty():
+		return "founding"
 	if not session.forming.is_empty():
 		return "forming"
 	if not session.nascent.is_empty():
@@ -1195,8 +1200,8 @@ func choose(choice_id: String) -> void:
 	await _breakthrough_rite(mark)
 	_breakthrough_outcome(mark, before)
 
-# --- 结丹 and 结婴 (forming_view.gd, nascent_view.gd) -----------------------------------------------
-# The stage under way answers for itself (session.stage(): forming.gd or nascent.gd).
+# --- 筑基, 结丹 and 结婴 (founding_view.gd, forming_view.gd, nascent_view.gd) ------------------------
+# The stage under way answers for itself (session.stage(): founding.gd, forming.gd or nascent.gd).
 
 ## Picks a 秘术 or the pearl; picked again, the next way of paying for it.
 func forming_select(art_id: String) -> void:
@@ -1739,6 +1744,24 @@ func reset_preview(sect_id: String = "qingyun", opponent_id: String = "qingyun")
 	preview_opponent = opponent_id
 	story = {}
 	dialogue = {}
+	# The 筑基 preview (preview_founding.cmd): a 炼气圆满 with a 筑基丹 at the sect's 静室, the stage
+	# just begun.
+	if "--founding-preview" in OS.get_cmdline_user_args():
+		ceremony = {}
+		session.new_game("青禾", -1, ["fire", "wood", "metal"])
+		session.player.stage = 3
+		session.player.xp = int(session.next_breakthrough().get("xp", 8000))
+		session.player.mind = 40
+		session.refresh_realm_stats()
+		session.player.hp = session.player.max_hp
+		session.player.stones = 2000
+		session.set_item_count("foundation_pill", 2)
+		session.fortune = {"demon": 0.99}
+		session.breakthrough(session.breakthrough_plan())
+		session.fortune = {}
+		render()
+		notice("筑基试演：点秘术配气后确定，把灵气压成灵液；不选时点灵气即散去；「顺其自然」交给寻常路数走完。使用独立试演存档。")
+		return
 	# The 结丹 preview (preview_forming.cmd): a 筑基圆满 at the sect's 静室, the stage just begun.
 	if "--forming-preview" in OS.get_cmdline_user_args():
 		ceremony = {}

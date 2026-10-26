@@ -88,6 +88,11 @@ func _initialize() -> void:
 	var before_breakthrough: int = game.player.xp
 	_steady(game)
 	game.act("breakthrough")
+	# The foundation is laid in a stage (founding.gd): played out with a 中品's 灵液.
+	game.founding.round = int(game.Founding.data(game).rounds)
+	game.founding.liquid = 125
+	game.founding.orbs = []
+	game.founding_end_round(true)
 	check(game.player.realm == 1 and game.player.stage == 0 and game.player.hp == 140 and game.item_count("foundation_pill") == 0 and game.player.xp == before_breakthrough - 8000, "breakthrough consumes resources and upgrades stats")
 	game.travel("wild")
 	game.start_battle("serpent")

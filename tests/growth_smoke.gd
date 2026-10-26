@@ -479,8 +479,14 @@ func _steady(game) -> void:
 	game.fortune = {"demon": 0.99, "breakthrough": maxf(0.0, float(game.breakthrough_odds(game.breakthrough_plan()).total - 20) / 100.0)}
 
 ## 天劫 (combat.gd): from the 金丹 on a breakthrough is tested by lightning; weathered here by guarding
-## at full health. Nothing when no 天劫 comes.
+## at full health. Nothing when no 天劫 comes. A 筑基 stage under way (founding.gd) is first played out
+## with a 中品 foundation's 灵液, as _steady's roll once made it.
 func _weather(game) -> void:
+	if not game.founding.is_empty():
+		game.founding.round = int(game.Founding.data(game).rounds)
+		game.founding.liquid = 125
+		game.founding.orbs = []
+		game.founding_end_round(true)
 	var bolts := 0
 	while not game.battle.is_empty() and str(game.battle.get("context", "")) == "tribulation" and bolts < 12:
 		bolts += 1

@@ -43,6 +43,7 @@ const Schools = preload("res://scripts/core/schools.gd")
 const Breakthrough = preload("res://scripts/core/breakthrough.gd")
 const Forming = preload("res://scripts/core/forming.gd")
 const Nascent = preload("res://scripts/core/nascent.gd")
+const Founding = preload("res://scripts/core/founding.gd")
 const Fortune = preload("res://scripts/core/fortune.gd")
 const Sect = preload("res://scripts/core/sect.gd")
 const Bonds = preload("res://scripts/core/bonds.gd")
@@ -64,6 +65,8 @@ var player: Dictionary = {}
 var battle: Dictionary = {}
 # An auction under way (auctions.gd), {} otherwise.
 var auction: Dictionary = {}
+# 筑基 under way (founding.gd), {} otherwise.
+var founding: Dictionary = {}
 # 结丹 under way (forming.gd), {} otherwise.
 var forming: Dictionary = {}
 # 结婴 under way (nascent.gd), {} otherwise.
@@ -153,6 +156,7 @@ func new_game(character_name: String = "无名", seed_value: int = -1, roots: Ar
 	player.hp = player.max_hp
 	player.qi = player.max_qi
 	battle.clear()
+	founding = {}
 	forming = {}
 	nascent = {}
 	pending_event = {}
@@ -430,6 +434,8 @@ func blocked() -> String:
 		return "斗法中无法进行此操作。"
 	if not auction.is_empty():
 		return "拍卖尚未结束。"
+	if not founding.is_empty():
+		return "筑基尚未了结。"
 	if not forming.is_empty():
 		return "结丹尚未了结。"
 	if not nascent.is_empty():
@@ -676,7 +682,7 @@ func location_visible(location_id: String) -> bool:
 func snapshot() -> Dictionary:
 	return {
 		"version": SAVE_VERSION, "world": Storylines.saved_world(self), "player": player.duplicate(true),
-		"battle": battle.duplicate(true), "pending_event": pending_event.duplicate(true), "ended": ended.duplicate(true), "auction": auction.duplicate(true), "forming": forming.duplicate(true), "nascent": nascent.duplicate(true),
+		"battle": battle.duplicate(true), "pending_event": pending_event.duplicate(true), "ended": ended.duplicate(true), "auction": auction.duplicate(true), "founding": founding.duplicate(true), "forming": forming.duplicate(true), "nascent": nascent.duplicate(true),
 		"chronicle": chronicle.to_save(), "rng": {"combat": str(combat_rng.state), "world": str(world_rng.state)}
 	}
 
@@ -807,6 +813,20 @@ func breakthrough(plan: Dictionary) -> String:
 		return reason
 	return Breakthrough.attempt(self, plan)
 
+## 筑基 (founding.gd): a 秘术 with the qi chosen, a qi let go, the round ended, or the rest played by
+## the plain policy.
+func founding_cast(art_id: String, payment: Array = []) -> String:
+	return Founding.cast(self, art_id, payment)
+
+func founding_discard(element: String) -> String:
+	return Founding.discard(self, element)
+
+func founding_end_round(auto_release: bool = false) -> String:
+	return Founding.end_round(self, auto_release)
+
+func founding_auto() -> String:
+	return Founding.auto(self)
+
 ## 结丹 (forming.gd): a 秘术 or a pearl ("pearl") with the qi chosen, a qi let go, the round ended, or
 ## the rest played by the plain policy.
 func forming_cast(art_id: String, payment: Array = []) -> String:
@@ -835,8 +855,10 @@ func nascent_end_round(auto_release: bool = false) -> String:
 func nascent_auto() -> String:
 	return Nascent.auto(self)
 
-## The breakthrough stage under way (forming.gd or nascent.gd), null when none.
+## The breakthrough stage under way (founding.gd, forming.gd or nascent.gd), null when none.
 func stage() -> Variant:
+	if not founding.is_empty():
+		return Founding
 	if not forming.is_empty():
 		return Forming
 	if not nascent.is_empty():

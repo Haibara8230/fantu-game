@@ -767,7 +767,10 @@ func _demon_and_tribulation() -> void:
 	check(kept.restore(JSON.parse_string(JSON.stringify(game.snapshot()))) and str(kept.battle.context) == "demon" and kept.player.has("attempt"), "a 心魔 duel survives a save")
 	game.battle.hp = 0
 	game.Combat._win(game)
-	check(game.battle.is_empty() and int(game.player.realm) == 1 and game.journal_lines().any(func(line: String) -> bool: return line.contains("心魔")), "slain, the breakthrough goes on (筑基 has no 天劫)")
+	check(game.battle.is_empty() and not game.founding.is_empty() and game.journal_lines().any(func(line: String) -> bool: return line.contains("心魔")), "slain, the breakthrough goes on to its stage (founding.gd)")
+	game.founding.certain = true
+	game.founding_auto()
+	check(game.battle.is_empty() and int(game.player.realm) == 1, "and the foundation is laid: 筑基 has no 天劫")
 	var lost := _ready_to_found(64, 0)
 	lost.fortune = {"demon": 0.0, "breakthrough": 0.0}
 	lost.act("breakthrough")

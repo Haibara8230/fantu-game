@@ -156,8 +156,11 @@ func _run() -> void:
 	game.player.mind = 200
 	game.refresh_realm_stats()
 	game.set_item_count("foundation_pill", 1)
-	game.fortune = {"demon": 0.99, "breakthrough": 0.0}
+	game.fortune = {"demon": 0.99}
 	game.act("breakthrough")
+	# The foundation is laid in a stage (founding.gd), played out the plain way.
+	game.founding.certain = true
+	game.founding_auto()
 	check(int(game.player.realm) == 1, "boss fixture passes through actual foundation breakthrough")
 	for art: String in ["sword", "fire", "wood"]:
 		if not art in game.player.learned:

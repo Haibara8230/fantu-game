@@ -48,6 +48,10 @@ func _act(game) -> String:
 	if not game.auction.is_empty():
 		game.auction_leave()
 		return "auction"
+	# A breakthrough's stage (筑基, 结丹, 结婴) played out the plain way.
+	if game.stage() != null:
+		game.stage().auto(game)
+		return "stage"
 	if game.at_brink():
 		game.accept_end()
 		return "end"
