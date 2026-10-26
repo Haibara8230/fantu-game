@@ -943,6 +943,46 @@ func _run() -> void:
 	main.session.refresh_realm_stats()
 	main.session.player.hp = main.session.player.max_hp
 	main.set_view("place")
+	# 化神 (deifying.gd, deifying_view.gd): a 道 merged with; 仙性 raced against 凡性.
+	main.session.player.realm = 3
+	main.session.player.stage = 3
+	main.session.player.xp = 200000
+	main.session.player.mind = 420
+	main.session.refresh_realm_stats()
+	main.session.player.hp = main.session.player.max_hp
+	main.set_view("breakthrough")
+	check(_texts(main.center, "Label").contains("合道") and _button("开始突破").disabled, "the 突破 tab for 化神 asks a 道 far enough along")
+	main.session.Dao.ensure(main.session).xp["fire"] = 30000
+	main.render()
+	var merge_text := _texts(main.center, "Label")
+	check(merge_text.contains("开局仙性  ") and merge_text.contains("亲手化神") and _button("火道 · 融会贯通") != null and not _button("开始突破").disabled, "with one, it offers the 道 and tells the opening 仙性")
+	_button("开始突破").pressed.emit()
+	while not main.story.is_empty():
+		main.close_story()
+	var deity_text := _texts(main.center, "Label")
+	check(main.current_screen() == "full" and not main.session.deifying.is_empty() and deity_text.contains("化神 · 第 1 回合 · 以火道合道") and deity_text.contains("仙性 ") and deity_text.contains("淬体 0") and _button("感应法") != null, "the stage takes the screen: the round, the 道, the race and the 丹田")
+	await _capture("deifying")
+	main.session.deifying.orbs = ["metal", "wood", "earth"]
+	main.render()
+	var immortal_before := int(main.session.deifying.immortal)
+	_button("感应法").pressed.emit()
+	_button("确定").pressed.emit()
+	check(int(main.session.deifying.immortal) == immortal_before + 7, "感应法 confirmed raises the 仙性")
+	_button("顺其自然").pressed.emit()
+	check(main.session.deifying.is_empty() and (str(main.session.battle.get("context", "")) == "tribulation" or main.ceremony.get("failed", false)), "played out, the 化神 waits on its 天劫, or the attempt failed")
+	main.session.battle.clear()
+	main.session.player.erase("tribulation")
+	main.session.player.erase("deity")
+	main.session.Dao.ensure(main.session).xp.erase("fire")
+	main.session.player.realm = infant_realm_was
+	main.session.player.xp = xp_was
+	main.session.player.stage = 0
+	main.session.player["injury_until"] = 0
+	main.session.player["lessons"] = infant_lessons_was
+	main.ceremony = {}
+	main.session.refresh_realm_stats()
+	main.session.player.hp = main.session.player.max_hp
+	main.set_view("place")
 	# 客卿 at a sect's gate (guest.gd): offered there, open to a 青云 disciple too (the sects do not clash).
 	main.session.world.flags["tiannan_known"] = true
 	main.session.world.flags["guest_invite_chixiao"] = true

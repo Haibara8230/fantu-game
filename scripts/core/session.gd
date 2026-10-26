@@ -44,6 +44,7 @@ const Breakthrough = preload("res://scripts/core/breakthrough.gd")
 const Forming = preload("res://scripts/core/forming.gd")
 const Nascent = preload("res://scripts/core/nascent.gd")
 const Founding = preload("res://scripts/core/founding.gd")
+const Deifying = preload("res://scripts/core/deifying.gd")
 const Fortune = preload("res://scripts/core/fortune.gd")
 const Sect = preload("res://scripts/core/sect.gd")
 const Bonds = preload("res://scripts/core/bonds.gd")
@@ -71,6 +72,8 @@ var founding: Dictionary = {}
 var forming: Dictionary = {}
 # 结婴 under way (nascent.gd), {} otherwise.
 var nascent: Dictionary = {}
+# 化神 under way (deifying.gd), {} otherwise.
+var deifying: Dictionary = {}
 # A location event waiting for the player's choice: {"id", "day"}.
 var pending_event: Dictionary = {}
 # Set when this life is over: {"kind", "day"}.
@@ -159,6 +162,7 @@ func new_game(character_name: String = "无名", seed_value: int = -1, roots: Ar
 	founding = {}
 	forming = {}
 	nascent = {}
+	deifying = {}
 	pending_event = {}
 	ended = {}
 	combat_events.clear()
@@ -418,7 +422,7 @@ func stat_caps(holder: Dictionary) -> Dictionary:
 	var extra := bonuses(holder)
 	var grade := int(Breakthrough.grade_of(self, holder).get("stats", 0))
 	return {
-		"max_hp": maxi(1, (int(current.max_hp) + int(extra.max_hp)) * (100 + int(extra.max_hp_percent) + grade) / 100) + int(Dao.value_for(content, holder.get("dao", {}), "max_hp")),
+		"max_hp": maxi(1, (int(current.max_hp) + int(extra.max_hp)) * (100 + int(extra.max_hp_percent) + grade) / 100) + int(Dao.value_for(content, holder.get("dao", {}), "max_hp")) + int(Deifying.gains(content, holder).max_hp),
 		"max_qi": maxi(1, (int(current.max_qi) + int(extra.max_qi)) * (100 + int(extra.max_qi_percent) + grade) / 100),
 	}
 
@@ -440,6 +444,8 @@ func blocked() -> String:
 		return "结丹尚未了结。"
 	if not nascent.is_empty():
 		return "结婴尚未了结。"
+	if not deifying.is_empty():
+		return "化神尚未了结。"
 	return ""
 
 func act(action: String) -> String:
@@ -682,7 +688,7 @@ func location_visible(location_id: String) -> bool:
 func snapshot() -> Dictionary:
 	return {
 		"version": SAVE_VERSION, "world": Storylines.saved_world(self), "player": player.duplicate(true),
-		"battle": battle.duplicate(true), "pending_event": pending_event.duplicate(true), "ended": ended.duplicate(true), "auction": auction.duplicate(true), "founding": founding.duplicate(true), "forming": forming.duplicate(true), "nascent": nascent.duplicate(true),
+		"battle": battle.duplicate(true), "pending_event": pending_event.duplicate(true), "ended": ended.duplicate(true), "auction": auction.duplicate(true), "founding": founding.duplicate(true), "forming": forming.duplicate(true), "nascent": nascent.duplicate(true), "deifying": deifying.duplicate(true),
 		"chronicle": chronicle.to_save(), "rng": {"combat": str(combat_rng.state), "world": str(world_rng.state)}
 	}
 
@@ -855,6 +861,20 @@ func nascent_end_round(auto_release: bool = false) -> String:
 func nascent_auto() -> String:
 	return Nascent.auto(self)
 
+## 化神 (deifying.gd): a 法 with the qi chosen, a qi let go, the round ended, or the rest played by the
+## plain policy.
+func deifying_cast(art_id: String, payment: Array = []) -> String:
+	return Deifying.cast(self, art_id, payment)
+
+func deifying_discard(element: String) -> String:
+	return Deifying.discard(self, element)
+
+func deifying_end_round(auto_release: bool = false) -> String:
+	return Deifying.end_round(self, auto_release)
+
+func deifying_auto() -> String:
+	return Deifying.auto(self)
+
 ## The breakthrough stage under way (founding.gd, forming.gd or nascent.gd), null when none.
 func stage() -> Variant:
 	if not founding.is_empty():
@@ -863,6 +883,8 @@ func stage() -> Variant:
 		return Forming
 	if not nascent.is_empty():
 		return Nascent
+	if not deifying.is_empty():
+		return Deifying
 	return null
 
 func breakthrough_plan() -> Dictionary:
@@ -949,7 +971,7 @@ func talents_visible(person_id: String) -> bool:
 ## 神识: the stage's, plus the talents' (`sense`, flat). It sees through people (their talents), the
 ## traps and hidden things of the old cave (caves.gd), the riverbed at the ferry and the 灵眼.
 func sense() -> int:
-	return maxi(0, int(stage_stats().sense) + Talents.flat(content, talent_modifier("sense"), int(player.realm)) + int(Dao.value(self, "sense")) + Prebattle.value(self, "sense"))
+	return maxi(0, int(stage_stats().sense) + Talents.flat(content, talent_modifier("sense"), int(player.realm)) + int(Dao.value(self, "sense")) + Prebattle.value(self, "sense") + int(Deifying.gains(content, player).sense))
 
 ## A generated person's 神识, by the same rule.
 func person_sense(person_id: String) -> int:

@@ -9,7 +9,7 @@ extends RefCounted
 ## lessons of earlier failures, and talents; 丹毒 still in the body takes a little off. They are shown
 ## before the attempt (`odds`).
 ## A mind short of the next realm's need, unguarded, may meet 心魔 first: a choice, slain or evaded.
-## No breakthrough before 化神 is a roll. The foundation is laid in a stage played with qi (founding.gd):
+## No breakthrough is a roll any more. The foundation is laid in a stage played with qi (founding.gd):
 ## the odds become its 真元, the 灵液 pressed past the goal its 品质 (grade), raised by fortune; 无瑕
 ## only by fortune. A roll's margin under the odds grades the rest. Forming the 金丹 is no roll either: the odds become the 道基 of a stage played
 ## with qi (forming.gd), whose pearls grade the core (九品 to 一品); nor the 元婴: the odds become the
@@ -44,12 +44,19 @@ static func treasures(s) -> Array[String]:
 	found.sort()
 	return found
 
-## The plan a plain 突破 uses: one pill if there is one, else the first treasure.
+## The plan a plain 突破 uses: one pill if there is one, else the first treasure; for 化神 the 道
+## furthest along to merge with (deifying.gd).
 static func default_plan(s) -> Dictionary:
+	var plan := {"pills": 0, "treasure": "", "guard": ""}
+	if s.Deifying.applies(int(s.player.realm) + 1):
+		var paths: Array[String] = s.Deifying.paths(s)
+		plan["dao"] = paths[0] if not paths.is_empty() else ""
 	if not pill_of(s).is_empty() and s.pill_count(pill_of(s)) > 0:
-		return {"pills": 1, "treasure": "", "guard": ""}
+		plan.pills = 1
+		return plan
 	var owned := treasures(s)
-	return {"pills": 0, "treasure": owned[0] if not owned.is_empty() else "", "guard": ""}
+	plan.treasure = owned[0] if not owned.is_empty() else ""
+	return plan
 
 ## Who can stand guard: the mentor once he has given his teaching on foundation (his storyline past that
 ## step), and anyone trusted (信赖).
@@ -124,6 +131,10 @@ static func block(s, plan: Dictionary) -> String:
 	var guard := str(plan.get("guard", ""))
 	if not guard.is_empty() and not guard in guards(s):
 		return "此人无法为你护法。"
+	# 化神 merges with a 道 (deifying.gd).
+	if s.Deifying.applies(int(s.player.realm) + 1):
+		var paths: Array[String] = s.Deifying.paths(s)
+		return s.Deifying.path_block(s, str(plan.get("dao", paths[0] if not paths.is_empty() else "")))
 	return ""
 
 ## The odds of a plan: {"total", "parts": [[label, points]], "certain", "steps": [labels of grade steps
@@ -251,6 +262,8 @@ static func attempt(s, plan: Dictionary) -> String:
 		s.remove_item(str(plan.treasure), 1)
 	s.player.xp = int(s.player.xp) - int(need.xp)
 	s.player["attempt"] = {"odds": int(chances.total), "certain": bool(chances.certain), "steps": chances.steps.size(), "xp": int(need.xp), "guard": str(plan.get("guard", "")), "staked": "、".join(staked), "treasure": str(plan.get("treasure", ""))}
+	if s.Deifying.applies(int(s.player.realm) + 1):
+		s.player.attempt["dao"] = str(plan.get("dao", s.Deifying.paths(s)[0]))
 	if bool(chances.demon) and not chances.certain and s.fortune_roll("demon") < demon_chance(s):
 		s.pending_event = {"id": DEMON_EVENT, "day": int(s.world.day)}
 		return s.finish(s.log_event("heart_demon", {}, true))
@@ -336,6 +349,9 @@ static func resolve(s, told: String) -> String:
 	# formed likewise (forming.gd), the odds its 道基; and the 元婴 (nascent.gd), the odds its 意志.
 	if s.Founding.applies(int(s.player.realm) + 1):
 		return s.Founding.begin(s, attempt_state, passed, texts)
+	# 化神 too (deifying.gd): the odds turned to 仙性, raced against 凡性.
+	if s.Deifying.applies(int(s.player.realm) + 1):
+		return s.Deifying.begin(s, attempt_state, passed, texts)
 	if s.Forming.applies(int(s.player.realm) + 1):
 		return s.Forming.begin(s, attempt_state, passed, texts)
 	if s.Nascent.applies(int(s.player.realm) + 1):

@@ -102,7 +102,7 @@ func _initialize() -> void:
 	_say("END", "%s · %s · 灵石 %d · 现实约 %d 分钟、%d 次点击、%d 场斗法 · 结局 %s" % [s.time_name(), s.realm_name(), int(s.player.stones), seconds / 60, clicks, duels, str(s.ended.get("kind", "无"))])
 	for key: String in marks:
 		print("MARK %s: %s" % [key, marks[key]])
-	print("PLAYTEST_RESULT ", JSON.stringify({"seed":seed_value,"opening":opening,"strategy":strategy,"route":route,"day":int(s.world.day),"realm":int(s.player.realm),"stones":int(s.player.stones),"estimated_minutes":float(seconds)/60.0,"clicks":clicks,"duels":duels,"steps":guard,"guard_exhausted":guard>=4000,"milestone_days":milestone_days,"losses":losses,"breakthrough_failures":breakthrough_failures,"early_serpent":s.Storylines.deed_count(s,"win:serpent")>0,"aftermath":s.story_state("valley_aftermath"),"recovery":s.story_state("valley_recovery"),"flags":REPORTED.filter(func(flag: String) -> bool: return s.has_flag(flag)),"mirror":str(s.Storylines.current_step(s, "mirror").get("id", s.story_state("mirror")))}))
+	print("PLAYTEST_RESULT ", JSON.stringify({"seed":seed_value,"opening":opening,"strategy":strategy,"route":route,"day":int(s.world.day),"realm":int(s.player.realm),"stones":int(s.player.stones),"estimated_minutes":float(seconds)/60.0,"clicks":clicks,"duels":duels,"steps":guard,"guard_exhausted":guard>=4000,"milestone_days":milestone_days,"losses":losses,"breakthrough_failures":breakthrough_failures,"early_serpent":s.Storylines.deed_count(s,"win:serpent")>0,"aftermath":s.story_state("valley_aftermath"),"recovery":s.story_state("valley_recovery"),"flags":REPORTED.filter(func(flag: String) -> bool: return s.has_flag(flag)),"mirror":str(s.Storylines.current_step(s, "mirror").get("id", s.story_state("mirror"))),"dao":s.Dao.state(s).xp}))
 	quit(0)
 
 # --- Reporting ------------------------------------------------------------------------------------
@@ -163,25 +163,18 @@ func _step() -> void:
 	if not s.auction.is_empty():
 		_do("act", "AUCTION", s.auction_leave())
 		return
-	# 结丹 (forming.gd): one decision of the plain policy at a time, as a player clicks through it.
-	if not s.forming.is_empty():
-		if s.Forming.plain_step(s):
-			_do("act", "FORMING", "")
+	# A breakthrough's stage (筑基 founding.gd, 结丹 forming.gd, 结婴 nascent.gd, 化神 deifying.gd): one
+	# decision of the plain policy at a time, as a player clicks through it; the stage closing with the
+	# realm not entered nor its 天劫 begun is a failed breakthrough.
+	var stage: Variant = s.stage()
+	if stage != null:
+		var realm_before := int(s.player.realm)
+		if stage.plain_step(s):
+			_do("act", "STAGE", "")
 		else:
-			_do("act", "FORMING", s.forming_end_round(true))
-		return
-	# 筑基 (founding.gd) and 结婴 (nascent.gd) likewise.
-	if not s.founding.is_empty():
-		if s.Founding.plain_step(s):
-			_do("act", "FOUNDING", "")
-		else:
-			_do("act", "FOUNDING", s.founding_end_round(true))
-		return
-	if not s.nascent.is_empty():
-		if s.Nascent.plain_step(s):
-			_do("act", "NASCENT", "")
-		else:
-			_do("act", "NASCENT", s.nascent_end_round(true))
+			_do("act", "STAGE", stage.end_round(s, true))
+		if s.stage() == null and int(s.player.realm) == realm_before and s.battle.is_empty():
+			breakthrough_failures += 1
 		return
 	if not s.player.journey.is_empty():
 		_do("travel", "ONWARD", s.continue_journey())
@@ -744,6 +737,18 @@ func _breakthrough() -> bool:
 	if has_pill:
 		if _go(_home()):
 			return true
+		# 化神 merges with a 道 (deifying.gd): short of one far enough along, its insight is reflected on,
+		# or gathered in duels first.
+		if s.Deifying.applies(int(s.player.realm) + 1) and s.Deifying.paths(s).is_empty():
+			var deepest := ""
+			for path: String in s.Dao.state(s).pending:
+				if deepest.is_empty() or int(s.Dao.state(s).pending[path]) > int(s.Dao.state(s).pending[deepest]):
+					deepest = path
+			if not deepest.is_empty() and int(s.Dao.state(s).pending[deepest]) > 0:
+				_do("retreat", "REFLECT", s.Dao.reflect(s, deepest, 30))
+			else:
+				_outing()
+			return true
 		# The room for the days of the attempt is paid first: out to earn when the purse falls short.
 		var blocked: String = s.breakthrough_block(plan)
 		if not blocked.is_empty():
@@ -755,7 +760,8 @@ func _breakthrough() -> bool:
 		var odds: Dictionary = s.breakthrough_odds(plan)
 		var realm_before := int(s.player.realm)
 		_say("BREAKTHROUGH", "成功率 %s → %s" % [str(odds.get("total", "?")), s.breakthrough(plan)])
-		if int(s.player.realm) == realm_before and s.battle.is_empty() and s.pending_event.is_empty():
+		# A stage opened (筑基 to 化神) is no failure yet; its end is counted below.
+		if int(s.player.realm) == realm_before and s.battle.is_empty() and s.pending_event.is_empty() and s.stage() == null:
 			breakthrough_failures += 1
 		if int(s.player.realm) >= 1:
 			_mark("筑基")

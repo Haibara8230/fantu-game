@@ -132,6 +132,10 @@ static func _cultivation(ui, parent: VBoxContainer) -> void:
 	var nascent: Dictionary = session.nascent_grade()
 	if not nascent.is_empty():
 		_row(ui, parent, "元婴", str(nascent.name), "结婴时剩下的意志定下，与金丹品级一并影响体魄与修炼速度")
+	var deity: Dictionary = session.player.get("deity", {})
+	if int(session.player.realm) >= 4 and not deity.is_empty():
+		var gains: Dictionary = session.Deifying.gains(session.content, session.player)
+		_row(ui, parent, "合道", "%s道 · 淬体 %d · 塑魂 %d" % [session.content.dao_data.paths[str(deity.dao)], int(deity.temper), int(deity.soul)], "化神时合道之道与关卡中的淬体、塑魂：气血上限 +%d、神识 +%d" % [int(gains.max_hp), int(gains.sense)])
 
 static func _body(ui, parent: VBoxContainer) -> void:
 	var session = ui.session

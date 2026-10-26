@@ -4,11 +4,17 @@
 
 M0–M3 的系统与内容、M4 的界面改版与演出、斗法扩充九个批次、世界扩展阶段一与阶段二（天南）已完成，阶段三做了功法层数与宝物实例（见 `docs/ROADMAP.md`、`docs/DESIGN_BASELINE.md`、`docs/COMBAT_PLAN.md`、`docs/WORLD_EXPANSION.md`）。现行完成状态见 `CURRENT_STATUS.md`，审计提醒归类见 `CONTENT_AUDIT_20261017.md`。本文只列尚未完成的功能、素材与已知问题，按优先级排列；完成一项就从这里删去，并在路线图或设计基线中记下结果。
 
+## 2026-10-26：化神关卡（觅长生对照 A1 第四步，突破全部改完）
+
+- 已做：冲击化神改为合道关卡（`scripts/core/deifying.gd`、`data/forming.json` 的 `deity`、`scripts/ui/deifying_view.gd`、`tests/deifying_smoke.gd`）：须一条悟道达到略有小成方可合道，道境越高开局仙性越多；仙性先于凡性满 100 即成；淬体、塑魂化神后加气血上限与神识。
+- 待用户：运行 `preview_deifying.cmd` 试玩；确认「略有小成」的门槛是否合适（原作要大道已成）。
+- 待做：化神领域（合道之道已记在 `player.deity.dao`，斗法尚未用到）；化神秘术目前人人都会，可再接功法、宗门兑换。
+
 ## 2026-10-26：筑基关卡（觅长生对照 A1 第三步）
 
 - 已做：冲击筑基改为九回合凝液关卡（`scripts/core/founding.gd`、`data/forming.json` 的 `foundation`、`scripts/ui/founding_view.gd`、`tests/founding_smoke.gd`）：把握（含筑基丹）成为真元，凝液、化气、压缩灵液把灵气压成灵液，满 100 筑基，125 中品、150 上品根基。
 - 待用户：运行 `preview_founding.cmd` 试玩，确认手感、数值与界面。
-- 待做：筑基丹仍只加把握，未改成原作建议的「开场多给灵气或多一回合」；化神仍是掷骰。
+- 待做：筑基丹仍只加把握，未改成原作建议的「开场多给灵气或多一回合」。
 
 ## 2026-10-26：元婴关卡（觅长生对照 A1 第二步）
 

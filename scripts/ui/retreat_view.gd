@@ -194,7 +194,12 @@ static func render_breakthrough(ui) -> void:
 	var nascent: bool = session.Nascent.applies(int(session.player.realm) + 1)
 	# 筑基 too (founding.gd): the odds, the 筑基丹 among them, become its 真元.
 	var founding: bool = session.Founding.applies(int(session.player.realm) + 1)
-	if founding:
+	# 化神 (deifying.gd): the odds turn to the opening 仙性.
+	var deifying: bool = session.Deifying.applies(int(session.player.realm) + 1)
+	if deifying:
+		var opening: int = session.Deifying.opening(session, int(chances.total), str(plan.get("dao", "")), str(plan.get("treasure", "")), chances.steps.size())
+		right.add_child(ui.label("开局仙性  %d" % opening, 22, ui.GOLD))
+	elif founding:
 		right.add_child(ui.label("真元  %d" % int(chances.total) if not chances.certain else "真元  %d（残魂灌顶，不会耗尽）" % int(chances.total), 22, ui.GOLD))
 	elif forming:
 		right.add_child(ui.label("道基  %d" % int(chances.total) if not chances.certain else "道基  %d（残魂灌顶，不会崩散）" % int(chances.total), 22, ui.GOLD))
@@ -213,6 +218,10 @@ static func render_breakthrough(ui) -> void:
 		for index: int in fd.grades.size():
 			lines.append("%d 为%s" % [int(fd.grades[index]), session.content.rules.breakthrough.grades[index].name])
 		right.add_child(ui.paragraph("闭关期满后亲手筑基：共 %d 回合，按灵根吸纳灵气，用凝液、化气、压缩灵液把灵气压成灵液。九回合后灵液满 %d 即成，凝得越多根基越好：%s；无瑕要靠天材地宝或机缘再提。真元即上面的把握：灵压、散气与几门耗力的秘术会消磨它，耗尽则失败。" % [int(fd.rounds), int(fd.goal), "，".join(lines)], ui.INK))
+	if deifying:
+		var dd: Dictionary = session.Deifying.data(session)
+		var arts: Array = session.Deifying.known_arts(session).map(func(art_id: String) -> String: return str(dd.arts[art_id].name))
+		right.add_child(ui.paragraph("闭关期满后亲手化神：每回合按灵根吸纳灵气，运转诸法推高仙性；每回合末凡性上涨（%s）。仙性先满 %d 即化神，凡性先满则失败。上面的把握每 %d 点折一点开局仙性，合道之道越深、天材地宝与机缘越多，开局仙性越高。淬体、塑魂会多涨凡性，化神后每点淬体气血上限 +%d、每点塑魂神识 +%d。可运转的法：%s。" % ["、".join(dd.strain.map(func(value: Variant) -> String: return str(int(value)))) + "……", int(dd.goal), int(dd.odds_per), int(dd.rewards.temper_hp), int(dd.rewards.soul_sense), "、".join(arts)], ui.INK))
 	if nascent:
 		var nd: Dictionary = session.Nascent.data(session)
 		var arts: Array = session.Nascent.known_arts(session).map(func(art_id: String) -> String: return str(nd.arts[art_id].name))
@@ -223,7 +232,7 @@ static func render_breakthrough(ui) -> void:
 				missing.append("%s（%s）" % [nd.arts[art_id].name, session.Nascent._lore_name(session, str(nd.arts[art_id].requires))])
 		right.add_child(ui.paragraph("闭关期满后亲手结婴：共 %d 回合。先碎丹，%s丹坚 %d，碎后化回 %d 颗灵气；再应对心魔诸念，心境 %d、元婴需 %d，魔势 %d，每应对一念 -%d，降到零即刻成婴。经脉可存 %d 颗灵气。意志即上面的把握，耗尽则失败，成婴时剩下几成定元婴品质。可运转的秘术：%s%s。" % [int(nd.rounds), str(session.core_grade().get("name", "金丹")), session.Nascent.core_strength(session), int(nd.release.base) + grade / int(nd.release.per_grades), int(session.player.get("mind", 0)), session.Breakthrough.demon_mind(session), session.Nascent.demon_of(session, str(plan.get("treasure", ""))), int(nd.demon.answer), int(nd.cap_by_core[grade]), "、".join(arts), "（另有" + "、".join(missing) + "）" if not missing.is_empty() else ""], ui.INK))
 	if not chances.steps.is_empty():
-		right.add_child(ui.paragraph(("金丹可望再提品级：" if forming else ("元婴可望再提一档：" if nascent else "根基可望更上一层：")) + "、".join(chances.steps), ui.INK))
+		right.add_child(ui.paragraph(("金丹可望再提品级：" if forming else ("元婴可望再提一档：" if nascent else ("开局仙性每样再 +%d：" % session.Deifying.STEP if deifying else "根基可望更上一层："))) + "、".join(chances.steps), ui.INK))
 	# From the 金丹 on, Heaven's lightning tests the breakthrough (combat.gd 天劫).
 	var trial: String = session.Breakthrough.tribulation_of(int(session.player.realm) + 1, session)
 	if not trial.is_empty():
@@ -251,6 +260,11 @@ static func plan_of(ui) -> Dictionary:
 		plan.treasure = ""
 	if not str(plan.get("guard", "")) in session.breakthrough_guards():
 		plan.guard = ""
+	# 化神 merges with a 道 far enough along (deifying.gd).
+	if session.Deifying.applies(int(session.player.realm) + 1):
+		var paths: Array[String] = session.Deifying.paths(session)
+		if not str(plan.get("dao", "")) in paths:
+			plan["dao"] = paths[0] if not paths.is_empty() else ""
 	ui.breakthrough_plan = plan
 	return plan
 
@@ -260,6 +274,7 @@ static func _plan_controls(ui, parent: VBoxContainer, plan: Dictionary) -> void:
 	var pill_id: String = session.Breakthrough.pill_of(session)
 	if pill_id.is_empty():
 		parent.add_child(ui.paragraph("此番突破不靠丹药，全凭自身修为、心境与准备；天材地宝与机缘可添几分把握。", ui.INK))
+		_dao_controls(ui, parent, plan)
 		_treasure_controls(ui, parent, plan)
 		_guard_controls(ui, parent, plan)
 		return
@@ -277,16 +292,38 @@ static func _plan_controls(ui, parent: VBoxContainer, plan: Dictionary) -> void:
 	_treasure_controls(ui, parent, plan)
 	_guard_controls(ui, parent, plan)
 
+## 化神 (deifying.gd): the 道 to merge with, each far enough along offered with what it adds to the
+## opening 仙性; none far enough, what is missing.
+static func _dao_controls(ui, parent: VBoxContainer, plan: Dictionary) -> void:
+	var session = ui.session
+	if not session.Deifying.applies(int(session.player.realm) + 1):
+		return
+	var paths: Array[String] = session.Deifying.paths(session)
+	if paths.is_empty():
+		parent.add_child(ui.paragraph(session.Deifying.path_block(session, "") + "参悟（闭关页「悟道」）或斗法积累感悟，再来冲关。", Color("#e3c08a")))
+		return
+	parent.add_child(ui.label("合道", 17, ui.GOLD))
+	var row := HFlowContainer.new()
+	row.add_theme_constant_override("h_separation", 8)
+	parent.add_child(row)
+	var bonus: Array = session.Deifying.data(session).dao.bonus
+	for path: String in paths:
+		var stage: int = session.Dao.stage_of(session, path)
+		var pick: Button = ui.button(session.Deifying.path_title(session, path), func() -> void: ui.breakthrough_plan["dao"] = path; ui.render(), "以此道合道：开局仙性 +%d；化神后以此道为本" % int(bonus[clampi(stage, 0, bonus.size() - 1)]))
+		if str(plan.get("dao", "")) == path:
+			ui.tint(pick, Color("#ffe5a4"))
+		row.add_child(pick)
+
 static func _treasure_controls(ui, parent: VBoxContainer, plan: Dictionary) -> void:
 	var session = ui.session
 	for item_id: String in session.breakthrough_treasures():
 		var use := CheckBox.new()
 		var item: Dictionary = session.content.item(item_id)
 		var target := int(session.player.realm) + 1
-		var stage: Variant = session.Founding if session.Founding.applies(target) else (session.Forming if session.Forming.applies(target) else (session.Nascent if session.Nascent.applies(target) else null))
+		var stage: Variant = session.Founding if session.Founding.applies(target) else (session.Forming if session.Forming.applies(target) else (session.Nascent if session.Nascent.applies(target) else (session.Deifying if session.Deifying.applies(target) else null)))
 		var gift: Dictionary = stage.data(session).get("treasures", {}).get(item_id, {}) if stage != null else {}
-		var measure := "成功率" if stage == null else str(stage.MEASURE)
-		var step := "，根基更稳" if stage == null or stage == session.Founding else ("，金丹再提一品" if stage == session.Forming else "，元婴再提一档")
+		var measure := "成功率" if stage == null else ("把握" if stage == session.Deifying else str(stage.MEASURE))
+		var step := "，根基更稳" if stage == null or stage == session.Founding else ("，金丹再提一品" if stage == session.Forming else ("，元婴再提一档" if stage == session.Nascent else "，开局仙性再 +%d" % session.Deifying.STEP))
 		use.text = "服下%s（%s +%d%s%s）" % [item.name, measure, int(item.breakthrough.bonus), step if int(item.breakthrough.get("grade", 0)) > 0 else "", "；" + str(gift.text) if not gift.is_empty() else ""]
 		use.button_pressed = plan.treasure == item_id
 		use.toggled.connect(func(on: bool) -> void: ui.breakthrough_plan.treasure = item_id if on else ""; ui.render())

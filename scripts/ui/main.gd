@@ -38,6 +38,7 @@ const AuctionView = preload("res://scripts/ui/auction_view.gd")
 const FormingView = preload("res://scripts/ui/forming_view.gd")
 const NascentView = preload("res://scripts/ui/nascent_view.gd")
 const FoundingView = preload("res://scripts/ui/founding_view.gd")
+const DeifyingView = preload("res://scripts/ui/deifying_view.gd")
 const ForgeView = preload("res://scripts/ui/forge_view.gd")
 const EventView = preload("res://scripts/ui/event_view.gd")
 const WelcomeScreen = preload("res://scripts/ui/welcome_screen.gd")
@@ -233,7 +234,7 @@ func _ready() -> void:
 	session.new_game()
 	session.changed.connect(_on_changed)
 	render()
-	preview_mode = "--art-preview" in OS.get_cmdline_user_args() or "--sect-preview" in OS.get_cmdline_user_args() or "--battle-v6-preview" in OS.get_cmdline_user_args() or "--dust-flow-preview" in OS.get_cmdline_user_args() or "--forming-preview" in OS.get_cmdline_user_args() or "--nascent-preview" in OS.get_cmdline_user_args() or "--founding-preview" in OS.get_cmdline_user_args()
+	preview_mode = "--art-preview" in OS.get_cmdline_user_args() or "--sect-preview" in OS.get_cmdline_user_args() or "--battle-v6-preview" in OS.get_cmdline_user_args() or "--dust-flow-preview" in OS.get_cmdline_user_args() or "--forming-preview" in OS.get_cmdline_user_args() or "--nascent-preview" in OS.get_cmdline_user_args() or "--founding-preview" in OS.get_cmdline_user_args() or "--deifying-preview" in OS.get_cmdline_user_args()
 	if preview_mode:
 		manual_store = SaveStore.new("res://.tmp/art_preview/manual")
 		auto_store = SaveStore.new("res://.tmp/art_preview/auto")
@@ -475,7 +476,7 @@ func _arrange(screen: String) -> void:
 				# The duel's stage is the screen; its dock runs along the bottom.
 				_place_window(0.0, 1.0, 0.0, 0.0)
 			elif session.stage() != null and session.pending_event.is_empty() and story.is_empty() and ceremony.is_empty():
-				# 筑基, 结丹 or 结婴 over the darkened room of the retreat.
+				# A breakthrough's stage over the darkened room of the retreat.
 				backdrop.texture = ArtLibrary.texture(ArtLibrary.fullscreen_location_path(str(session.player.location)))
 				backdrop.visible = true
 				shade.color.a = 0.72
@@ -625,6 +626,8 @@ func render() -> void:
 		FormingView.render(self)
 	elif not session.nascent.is_empty():
 		NascentView.render(self)
+	elif not session.deifying.is_empty():
+		DeifyingView.render(self)
 	elif not session.auction.is_empty():
 		AuctionView.render(self)
 	else:
@@ -705,6 +708,8 @@ func _guide_place() -> String:
 		return "forming"
 	if not session.nascent.is_empty():
 		return "nascent"
+	if not session.deifying.is_empty():
+		return "deifying"
 	if view == "place" and not selected_npc.is_empty():
 		return ""
 	return view
@@ -1201,7 +1206,8 @@ func choose(choice_id: String) -> void:
 	_breakthrough_outcome(mark, before)
 
 # --- 筑基, 结丹 and 结婴 (founding_view.gd, forming_view.gd, nascent_view.gd) ------------------------
-# The stage under way answers for itself (session.stage(): founding.gd, forming.gd or nascent.gd).
+# The stage under way answers for itself (session.stage(): founding.gd, forming.gd, nascent.gd or
+# deifying.gd).
 
 ## Picks a 秘术 or the pearl; picked again, the next way of paying for it.
 func forming_select(art_id: String) -> void:
@@ -1744,6 +1750,26 @@ func reset_preview(sect_id: String = "qingyun", opponent_id: String = "qingyun")
 	preview_opponent = opponent_id
 	story = {}
 	dialogue = {}
+	# The 化神 preview (preview_deifying.cmd): a 元婴圆满 whose 火道 is 道之真境, the stage just begun.
+	if "--deifying-preview" in OS.get_cmdline_user_args():
+		ceremony = {}
+		session.new_game("青禾", -1, ["fire", "wood", "metal"])
+		session.player.realm = 3
+		session.player.stage = 3
+		session.player.core_grade = 4
+		session.player.core_kind = {"id": "pure", "elements": ["fire"]}
+		session.player.xp = int(session.next_breakthrough().get("xp", 200000))
+		session.player.mind = 420
+		session.Dao.ensure(session).xp["fire"] = 70000
+		session.refresh_realm_stats()
+		session.player.hp = session.player.max_hp
+		session.player.stones = 5000
+		session.fortune = {"demon": 0.99}
+		session.breakthrough(session.breakthrough_plan())
+		session.fortune = {}
+		render()
+		notice("化神试演：用感应法推高仙性，守心诀压住凡性，有余力再淬体、塑魂；不选时点灵气即散去；「顺其自然」交给寻常路数走完。使用独立试演存档。")
+		return
 	# The 筑基 preview (preview_founding.cmd): a 炼气圆满 with a 筑基丹 at the sect's 静室, the stage
 	# just begun.
 	if "--founding-preview" in OS.get_cmdline_user_args():

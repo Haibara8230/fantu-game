@@ -70,6 +70,9 @@ func _act(game) -> String:
 		var pill: String = game.Breakthrough.pill_of(game)
 		game.set_item_count(pill, 1)
 		game.player.mind = maxi(int(game.player.mind), game.Breakthrough.demon_mind(game))
+		# 化神 merges with a 道 (deifying.gd): the measure grants one far enough along, as it grants the pill.
+		if game.Deifying.applies(int(game.player.realm) + 1) and game.Deifying.paths(game).is_empty():
+			game.Dao.gain(game, "qi", int(game.content.dao_data.stages[int(game.Deifying.data(game).dao.least) - 1].xp))
 		game.act("breakthrough")
 		return "breakthrough"
 	if game.retreat_efficiency() < 100 or game.mind_percent() < 100:

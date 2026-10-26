@@ -12,6 +12,7 @@ const Wuxiang = preload("res://scripts/core/wuxiang.gd")
 const Forming = preload("res://scripts/core/forming.gd")
 const Nascent = preload("res://scripts/core/nascent.gd")
 const Founding = preload("res://scripts/core/founding.gd")
+const Deifying = preload("res://scripts/core/deifying.gd")
 # More 祭炼 steps than any piece could use; a save above it is malformed.
 const MAX_REFINE := 20
 const PLAYER_COUNTS := ["realm", "xp", "hp", "qi", "stones", "cultivation_carry", "fatigue", "fatigue_day", "insight"]
@@ -49,6 +50,13 @@ static func restore(s, data: Variant) -> bool:
 	# 结婴 under way (optional: nascent.gd), likewise apart, and never beside a 结丹.
 	var nascent: Variant = Nascent.valid_state(content, saved.get("nascent", {}))
 	if nascent == null or (not nascent.is_empty() and (not forming.is_empty() or not founding.is_empty() or not saved_battle.is_empty() or not saved_pending.is_empty() or saved_player.has("attempt") or int(saved_player.get("realm", -1)) != 2)):
+		return false
+	# 化神 under way (optional: deifying.gd), likewise apart.
+	var deifying: Variant = Deifying.valid_state(content, saved.get("deifying", {}))
+	if deifying == null or (not deifying.is_empty() and (not forming.is_empty() or not founding.is_empty() or not nascent.is_empty() or not saved_battle.is_empty() or not saved_pending.is_empty() or saved_player.has("attempt") or int(saved_player.get("realm", -1)) != 3)):
+		return false
+	# What the 化神 kept (optional: deifying.gd).
+	if not Deifying.valid_deity(content, saved_player.get("deity", {})):
 		return false
 	# The kind of 金丹 formed (optional: forming.gd).
 	if not Forming.valid_kind(content, saved_player.get("core_kind", {})):
@@ -276,6 +284,7 @@ static func restore(s, data: Variant) -> bool:
 	holder.merge({"realm": int(saved_player.realm), "stage": saved_stage, "talents": [] if awakened else born.talents, "flaws": [] if awakened else born.flaws, "foundation_grade": int(progress.foundation_grade), "core_grade": int(progress.core_grade)}, true)
 	if progress.has("nascent_grade"):
 		holder["nascent_grade"] = int(progress.nascent_grade)
+	holder["deity"] = saved_player.get("deity", {})
 	holder["dao"] = saved_player.get("dao", {})
 	var saved_caps: Dictionary = s.stat_caps(holder)
 	if int(saved_player.hp) <= 0 or int(saved_player.hp) > int(saved_caps.max_hp) or int(saved_player.qi) > int(saved_caps.max_qi):
@@ -471,6 +480,9 @@ static func restore(s, data: Variant) -> bool:
 	var player: Dictionary = saved_player.duplicate(true)
 	for key: String in PLAYER_COUNTS:
 		player[key] = int(player[key])
+	# What the 化神 kept (deifying.gd), its counts whole again.
+	if not player.get("deity", {}).is_empty():
+		player.deity = {"dao": str(player.deity.dao), "temper": int(player.deity.temper), "soul": int(player.deity.soul)}
 	player.birth_day = int(birth)
 	player.stage = saved_stage
 	# Journeys from before the mind start with what their stage asks, so nothing they had slows down.
@@ -592,6 +604,7 @@ static func restore(s, data: Variant) -> bool:
 	s.founding = founding
 	s.forming = forming
 	s.nascent = nascent
+	s.deifying = deifying
 	s.pending_event = {} if saved_pending.is_empty() else {"id": saved_pending.id, "day": int(saved_pending.day)}
 	if not saved_pending.get("values", {}).is_empty():
 		s.pending_event["values"] = saved_pending.values.duplicate()
@@ -683,6 +696,11 @@ static func _valid_breakthrough(content, saved_player: Dictionary, saved_pending
 		if not attempt.get("treasure", "") is String or (not str(attempt.get("treasure", "")).is_empty() and content.item(str(attempt.treasure)).is_empty()):
 			return null
 		result["attempt"] = {"odds": int(attempt.odds), "certain": attempt.certain, "steps": int(attempt.steps), "xp": int(attempt.xp), "guard": attempt.guard, "staked": str(attempt.get("staked", "")), "treasure": str(attempt.get("treasure", ""))}
+		# The 道 a 化神 attempt merges with (optional: deifying.gd).
+		if attempt.has("dao"):
+			if not content.dao_data.paths.has(attempt.dao):
+				return null
+			result.attempt["dao"] = str(attempt.dao)
 	return result
 
 ## Friends' open appointments and requests, silver lent, and the last period letters were written in

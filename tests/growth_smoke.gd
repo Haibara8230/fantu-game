@@ -436,7 +436,13 @@ func _golden_core() -> void:
 	game.player.mind = 600
 	game.refresh_realm_stats()
 	game.fortune = {"demon": 0.99, "breakthrough": 0.0, "grade": 0.99}
+	# 化神 merges with a 道 far enough along (deifying.gd), and is formed in a stage played out.
+	check(game.breakthrough_block(game.breakthrough_plan()).contains("合道"), "化神 asks a 道 to merge with")
+	game.Dao.ensure(game).xp["wood"] = 30000
 	game.act("breakthrough")
+	check(not game.deifying.is_empty() and game.battle.is_empty(), "the 化神 is formed in a stage, not by a roll")
+	game.deifying.certain = true
+	game.deifying_auto()
 	_weather(game)
 	check(game.player.realm == 4 and game.realm_name() == "化神初期" and game.lifespan() >= 1200, "化神 is reached: twelve hundred years")
 	game.player.mind = 600
