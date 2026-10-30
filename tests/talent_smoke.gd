@@ -50,10 +50,10 @@ func _content() -> void:
 	var counts := {}
 	for id: String in content.talent_data.talents:
 		var talent: Dictionary = content.talent_data.talents[id]
-		if not talent.get("gained", false):
+		if not talent.get("gained", false) and not talent.get("opening_only", false):
 			counts[talent.tier] = int(counts.get(talent.tier, 0)) + 1
 	check(counts == {"white": 90, "green": 76, "blue": 60, "purple": 40, "orange": 20, "red": 10}, "talents in six tiers, white to red: %s" % counts)
-	var flaws: Array = content.talent_data.flaws.keys().filter(func(id: String) -> bool: return not content.talent_data.flaws[id].get("gained", false))
+	var flaws: Array = content.talent_data.flaws.keys().filter(func(id: String) -> bool: return not content.talent_data.flaws[id].get("gained", false) and not content.talent_data.flaws[id].get("opening_only", false))
 	check(flaws.size() == 40, "forty flaws to be born with")
 	var tiers: Array = content.talent_data.tiers.map(func(tier: Dictionary) -> String: return tier.name)
 	check(tiers == ["寻常", "不凡", "出众", "稀世", "绝世", "天命"], "the tiers are named")
@@ -579,6 +579,8 @@ func _fortune() -> void:
 func _talent_stories() -> void:
 	var content = Session.new().content
 	for id: String in content.talent_data.talents:
+		if bool(content.talent_data.talents[id].get("opening_only", false)):
+			continue
 		var tier := str(content.talent_data.talents[id].tier)
 		if tier == "orange":
 			check(content.events.has("talent_" + id), "the orange talent %s has an event of its own" % id)
@@ -608,26 +610,22 @@ func _opening() -> void:
 	for page: Dictionary in data.pages:
 		for id: Variant in page.talents + page.flaws:
 			listed[id] = true
-	var unlisted: Array = content.talent_data.talents.keys().filter(func(id: String) -> bool: return not listed.has(id) and not bool(content.talent_data.talents[id].get("gained", false)) and not id in data.earned)
-	check(unlisted.is_empty(), "every talent one may be born with is on a page (%s)" % str(unlisted.slice(0, 5)))
+	check(listed.size() == 30 and not listed.has("hundun") and not listed.has("xianren_zhuanshi"), "new opening has its own bounded catalogue; legacy jackpots are not for sale")
 	var choice: Dictionary = Opening.fresh(content)
-	check(Opening.points(content, choice) == 20 and Opening.left(content, choice) == 20, "修士: twenty points, three roots for nothing")
-	check(not Opening.block(content, choice).is_empty(), "the roots must be chosen first")
+	check(Opening.points(content, choice) == 20 and Opening.left(content, choice) == 14, "twenty-point role reserves six for three roots")
+	check(not Opening.block(content, choice).is_empty(), "roots must be chosen")
 	Opening.set_root_count(content, choice, 1)
 	Opening.toggle_root(content, choice, "water")
-	check(Opening.left(content, choice) == 12 and Opening.block(content, choice).is_empty(), "a 天灵根 costs eight")
-	check("body_water" in Opening.offered(content, "body", choice.roots) and not "body_fire" in Opening.offered(content, "body", choice.roots) and not "yinyang" in Opening.offered(content, "body", choice.roots), "element talents need their roots (阴阳同体 both water and fire)")
-	check(not "vein_water" in Opening.offered(content, "body", choice.roots) and not "jiantai" in Opening.offered(content, "body", choice.roots), "道脉 and 先天剑胎 are left for play")
-	check(Opening.pick_block(content, choice, "body", "hundun").contains("不够"), "a red talent is beyond 修士's points")
-	choice.picks["body"] = "body_water"
-	choice.picks["gift"] = "lansan"
-	check(Opening.left(content, choice) == 12 - 6 + 4 and Opening.born(content, choice) == {"talents": ["body_water"], "flaws": ["lansan"]}, "a blue talent for six, a heavy flaw gives four back")
+	check(Opening.left(content, choice) == 6 and Opening.block(content, choice).is_empty(), "heaven root costs fourteen")
+	Opening.toggle(content, choice, "body", "mcs_body_water")
+	Opening.toggle(content, choice, "body", "mcs_dao_body")
+	check(Opening.selected(choice, "body").size() == 2 and Opening.left(content, choice) == 2, "compatible bodies can coexist")
+	check(not Opening.pick_block(content, choice, "body", "mcs_blocked_meridians").is_empty(), "opposing cultivation bodies conflict")
 	Opening.toggle_root(content, choice, "water")
-	Opening.toggle_root(content, choice, "fire")
-	check(not choice.picks.has("body") and choice.picks.has("gift"), "changing the root drops what it no longer allows")
+	check(Opening.selected(choice, "body") == ["mcs_dao_body"], "root change only removes root-bound bodies")
 	var five: Dictionary = Opening.fresh(content)
 	Opening.set_root_count(content, five, 5)
-	check(five.roots.size() == 5 and Opening.left(content, five) == 24, "伪灵根: all five, four points back")
+	check(five.roots.size() == 5 and Opening.left(content, five) == 20, "five roots are free without granting points")
 	# Earned in play: the 道脉 at the 灵眼, 先天剑胎 from 万剑冢, 百毒不侵 from 毒泽's old garden.
 	var game := _ripe()
 	game.world.flags["spirit_eye_found"] = true

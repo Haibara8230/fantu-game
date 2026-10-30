@@ -1,5 +1,6 @@
 extends RefCounted
-## 天赋: what everyone is born with, after 鬼谷八荒's 先天气运. Definitions live in data/talents.json:
+## 天赋 definitions live in data/talents.json. New openings use the separate `opening_only` catalogue
+## with explicit prices; legacy saves and generated people retain the original birth tables below.
 ## six tiers from 寻常 (white) to 天命 (red), and 先天缺陷 (flaws) apart from them. Birth tables decide
 ## how often each tier is born: around 青云山 most people have none or a white one and nobody rises
 ## above blue; only the protagonist may be born with more, very rarely. A talent changes the
@@ -8,7 +9,7 @@ extends RefCounted
 ## fortune (机缘) bestows them later.
 ## The player's talents are rolled at creation (player.talents, player.flaws); the generated
 ## population's follow from the world seed and the life, so nothing about them is saved.
-## 资质 (aptitude) sums the spirit roots' score with every tier's score and grades it.
+## Legacy 资质 sums roots and tier scores; new opening rarity is visual and contributes no hidden score.
 
 ## Every modifier a talent may carry; all whole numbers. Percentages unless noted: cultivation speed,
 ## max_hp/max_qi (of the stage's), attack (flat), defense, damage_<element> and damage_all, lifespan
@@ -28,7 +29,7 @@ const MODIFIERS := [
 	"breakthrough", "pill", "pill_cooldown", "alchemy", "grade", "demon", "boon",
 	"study", "gather", "sell", "buy", "favor", "travel", "encounter", "rest", "stones",
 	"orb_draw", "orb_cap", "orb_first", "orb_metal", "orb_wood", "orb_water", "orb_fire", "orb_earth",
-	"sense",
+	"sense", "comprehension", "hp_flat", "hp_growth", "sense_flat", "speed_flat", "dao_realm", "immortal_start",
 ]
 ## The duel modifiers (qi orbs), summed as they are wherever they come from.
 const ORB_KEYS := ["orb_draw", "orb_cap", "orb_first", "orb_metal", "orb_wood", "orb_water", "orb_fire", "orb_earth"]
@@ -65,9 +66,9 @@ static func _pools(content) -> Dictionary:
 		ids.sort()
 		for id: String in ids:
 			var talent: Dictionary = data(content).talents[id]
-			if not bool(talent.get("gained", false)):
+			if not bool(talent.get("gained", false)) and not bool(talent.get("opening_only", false)):
 				content.talent_pools[talent.tier].append(id)
-		var flaws: Array = data(content).flaws.keys().filter(func(id: String) -> bool: return not bool(data(content).flaws[id].get("gained", false)))
+		var flaws: Array = data(content).flaws.keys().filter(func(id: String) -> bool: return not bool(data(content).flaws[id].get("gained", false)) and not bool(data(content).flaws[id].get("opening_only", false)))
 		flaws.sort()
 		content.talent_pools["_flaw"] = flaws
 	return content.talent_pools
@@ -203,7 +204,8 @@ static func speed_score(content, speed: int) -> int:
 static func score(content, base: int, ids: Array) -> int:
 	var total := base
 	for id: Variant in ids:
-		total += int(tier_of(content, str(id)).get("score", 0))
+		if not bool(definition(content, str(id)).get("opening_only", false)):
+			total += int(tier_of(content, str(id)).get("score", 0))
 	return total
 
 ## The aptitude grade of a score: {"index", "name", "color"}.

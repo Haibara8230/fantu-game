@@ -96,7 +96,7 @@ static func path_block(s, path: String) -> String:
 static func opening(s, odds: int, path: String, treasure_id: String, steps: int) -> int:
 	var d := data(s)
 	var stage: int = clampi(s.Dao.stage_of(s, path), 0, d.dao.bonus.size() - 1)
-	return odds / int(d.odds_per) + int(d.dao.bonus[stage]) + int(d.get("treasures", {}).get(treasure_id, {}).get("immortal", 0)) + steps * STEP
+	return int(s.talent_modifier("immortal_start")) + odds / int(d.odds_per) + int(d.dao.bonus[stage]) + int(d.get("treasures", {}).get(treasure_id, {}).get("immortal", 0)) + steps * STEP
 
 # --- The stage --------------------------------------------------------------------------------------
 

@@ -5,6 +5,8 @@ const Talents = preload("res://scripts/core/talents.gd")
 
 ## Modifier names and how their numbers read: "%" percentages, "" plain numbers, "年" years, "点" points.
 const WORDS := {
+	"comprehension": ["悟性", "点"], "hp_flat": ["气血底子", ""], "hp_growth": ["境界气血增长", "%"],
+	"sense_flat": ["神识底子", ""], "speed_flat": ["遁速", ""], "dao_realm": ["每大境界额外悟道", "点"], "immortal_start": ["化神起始仙性", "点"],
 	"cultivation": ["修炼速度", "%"], "max_hp": ["气血上限", "%"], "max_qi": ["灵力上限", "%"], "attack": ["攻击", ""],
 	"defense": ["减伤", "%"], "damage_metal": ["金系神通", "%"], "damage_wood": ["木系神通", "%"], "damage_water": ["水系神通", "%"],
 	"damage_fire": ["火系神通", "%"], "damage_earth": ["土系神通", "%"], "damage_all": ["神通威力", "%"], "lifespan": ["寿元", "年"],

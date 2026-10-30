@@ -105,40 +105,39 @@ func _guided() -> void:
 	main.intro_finished_once = false
 	main.welcome_choice = {}
 	main._show_welcome()
-	# The journey is chosen page by page after 觅长生: difficulty, roots, then a talent on each page.
-	check(_welcome_button("修士 · 20 点") != null and _welcome_button("修士 · 20 点").button_pressed and _texts(main.welcome_layer, "Label").contains("天赋点 · 剩余 20 / 20"), "the welcome opens on the difficulty, 修士's twenty points chosen")
-	_welcome_button("天骄 · 40 点").pressed.emit()
-	check(_texts(main.welcome_layer, "Label").contains("剩余 40 / 40"), "天骄 gives forty points")
+	check(_welcome_button("天命主角 · 20 点") != null and _welcome_button("天命主角 · 20 点").button_pressed and _texts(main.welcome_layer, "Label").contains("天赋点 · 剩余 14 / 20"), "default budget reserves the three-root cost")
+	_welcome_button("异世傲天 · 40 点").pressed.emit()
+	check(_texts(main.welcome_layer, "Label").contains("剩余 34 / 40"), "forty-point role")
 	_welcome_button("下一页").pressed.emit()
-	_welcome_button("天灵根（8").pressed.emit()
+	_welcome_button("天灵根（14").pressed.emit()
 	_welcome_button("金").pressed.emit()
-	check(main.welcome_roots == ["metal"] and _texts(main.welcome_layer, "Label").contains("剩余 32 / 40"), "a 金 天灵根 for eight points")
+	check(main.welcome_roots == ["metal"] and _texts(main.welcome_layer, "Label").contains("剩余 26 / 40"), "heaven root costs fourteen")
 	_welcome_button("下一页").pressed.emit()
+	_welcome_button("商贾富豪").pressed.emit()
+	_welcome_button("魂穿异世").pressed.emit()
+	check(_welcome_button("书香门第").disabled and _welcome_button("商贾富豪").button_pressed and _welcome_button("魂穿异世").button_pressed, "family exclusivity and soul coexistence")
 	_welcome_button("下一页").pressed.emit()
-	check(_welcome_button("锐金之体") != null and _welcome_button("青木之体") == null, "on the body page only the roots' own element is offered")
-	_welcome_button("锐金之体").pressed.emit()
-	check(main.welcome_born.talents == ["body_metal"] and _texts(main.welcome_layer, "Label").contains("剩余 26 / 40"), "taken for its tier's price")
-	# A long page is filtered by grade, by kind of effect, and by what the points still allow.
+	check(_welcome_button("庚金之体") != null and _welcome_button("乙木灵体") == null, "only root-compatible bodies are offered")
+	_welcome_button("庚金之体").pressed.emit()
+	_welcome_button("先天道体").pressed.emit()
+	check(main.welcome_born.talents.has("mcs_body_metal") and main.welcome_born.talents.has("mcs_dao_body") and _welcome_button("玄阴绝脉").disabled, "two bodies coexist and their opposite is disabled")
+	check(_texts(main.welcome_layer, "Label").contains("修炼速度 +10%"), "effects visible without hovering")
+	_welcome_button("先天道体").pressed.emit()
+	check(not main.welcome_born.talents.has("mcs_dao_body") and not _welcome_button("玄阴绝脉").disabled, "second click removes talent and unlocks opposite")
 	_welcome_button("缺陷").pressed.emit()
-	check(_welcome_button("体弱多病") != null and _welcome_button("铁骨") == null and _welcome_button("锐金之体") != null, "only the flaws, and what is taken stays in sight")
+	check(_welcome_button("羸弱多病") != null and _welcome_button("转世仙人") == null and _welcome_button("庚金之体") != null, "filter retains selected talent")
 	_welcome_button("全部品级").pressed.emit()
-	_welcome_button("寿元养伤").pressed.emit()
-	check(_welcome_button("长寿相") != null and _welcome_button("铁骨") == null and _texts(main.welcome_layer, "Label").contains("显示 "), "by kind of effect, with the count shown")
-	_welcome_button("全部效果").pressed.emit()
-	check(_welcome_button("混沌灵体") != null, "a red talent is within 天骄's points")
 	main.welcome_choice.difficulty = "fanren"
 	main.WelcomeScreen.goto(main, main.welcome_page)
 	var affordable: CheckBox = main.welcome_layer.find_children("*", "CheckBox", true, false).filter(func(box: CheckBox) -> bool: return box.text == "只看点数够的")[0]
 	affordable.button_pressed = true
-	check(_welcome_button("混沌灵体") == null and _welcome_button("体健") != null, "only what the points allow")
+	check(_welcome_button("转世仙人") == null and _welcome_button("羸弱多病") != null, "defects remain available while over budget")
 	affordable.button_pressed = false
+	_welcome_button("总览").pressed.emit()
+	check(_welcome_button("踏入仙途").disabled, "changing budget cannot bypass final validation")
 	main.welcome_choice.difficulty = "tianjiao"
 	main.WelcomeScreen.goto(main, main.welcome_page)
-	_welcome_button("体弱多病").pressed.emit()
-	check(main.welcome_born.talents.is_empty() and main.welcome_born.flaws == ["tiruo"] and _texts(main.welcome_layer, "Label").contains("剩余 35 / 40"), "one per page: a flaw instead gives three points back")
-	main.welcome_choice.picks["origin"] = "tiejiang"
-	_welcome_button("总览").pressed.emit()
-	check(_texts(main.welcome_layer, "Label").contains("开局所带：灵石 30、") and _texts(main.welcome_layer, "Label").contains("青钢锭 ×1"), "the overview spells out what the 出身 brings")
+	check(_texts(main.welcome_layer, "Label").contains("开局所带：灵石 120") and _texts(main.welcome_layer, "Label").contains("悟性 20"), "overview shows actual starting resources and learning")
 	check(main.skip_intro == null, "no skipping before the opening was finished once")
 	check(_texts(main.welcome_layer, "Label").contains("资质 · ") and not _welcome_button("踏入仙途").disabled, "the overview shows the aptitude and lets the journey begin")
 	main.name_input.text = "新人"
@@ -172,6 +171,35 @@ func _guided() -> void:
 	main.close_overlay()
 
 ## Waits out a journey played on the map: whether the traveller's mark showed, and how many dates passed.
+func _task_details() -> void:
+	main.started = false
+	main.session.new_game("任务说明", 7, ["metal", "wood", "fire"], "free")
+	main.started = true
+	main.story = {}
+	main.dialogue = {}
+	main.tip_page = {}
+	main.selected_npc = ""
+	main.session.player.location = "sect"
+	main.session.world.storylines.errands = {"state": "active", "step": 1, "since": 0, "begun": true, "base": {}}
+	main.set_view("stories")
+	check(_texts(main.center, "Label").contains("执事堂") and _texts(main.center, "Label").contains("此地人物") and _texts(main.center, "Label").contains("持有 0"), "story panel gives delivery entrance and shortages")
+	main.set_view("goals")
+	check(_texts(main.center, "Label").contains("执事堂") and _texts(main.center, "Label").contains("交付"), "goals share the same actionable instructions")
+	main.session.world.flags.tiannan_known = true
+	main.session.player.location = "nanming"
+	main.session.world.storylines.tingchao = {"state": "active", "step": 1, "since": 0, "begun": true, "base": {}, "asked": 0}
+	main.set_view("stories")
+	var resume_button := _button("继续此事")
+	check(resume_button != null and _texts(main.center, "Label").contains("无需换地图或等一天"), "deferred choice has a visible resume button")
+	if resume_button != null:
+		resume_button.pressed.emit()
+	check(main.session.pending_event.get("id", "") == "tingchao_mend1" and int(main.session.world.day) == 0, "resume opens real repair choice without travel or time")
+	main.choose("later")
+	check(main.session.pending_event.is_empty(), "deferring again leaves the task closed")
+	main.set_view("stories")
+	check(_button("继续此事") != null, "resume remains available after another deferral")
+	main.set_view("place")
+
 func _watch_walk() -> Dictionary:
 	var marked := false
 	var dates := {}
@@ -1123,6 +1151,7 @@ func _run() -> void:
 	main._ask_new_game()
 	await process_frame
 	main.new_game_dialog.hide()
+	_task_details()
 	_guided()
 	print("UI: %d checks, %d failures; %d captures" % [checks, failures, captures])
 	main.queue_free()

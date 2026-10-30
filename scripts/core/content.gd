@@ -1152,21 +1152,21 @@ func _validate_wuxiang() -> String:
 func _validate_opening() -> String:
 	var data := opening_data
 	var difficulties: Variant = data.get("difficulties")
-	if not difficulties is Array or difficulties.is_empty() or difficulties.any(func(entry: Variant) -> bool: return not entry is Dictionary or not entry.get("id") is String or not entry.get("name") is String or not _whole(entry.get("points"))):
+	if not difficulties is Array or difficulties.is_empty() or difficulties.any(func(entry: Variant) -> bool: return not entry is Dictionary or not entry.get("id") is String or not entry.get("name") is String or not _signed(entry.get("points"))):
 		return "开局难度配置无效。"
 	var counts: Array = rules.spirit_roots.grades.map(func(grade: Dictionary) -> int: return int(grade.count))
 	if not data.get("roots") is Array or data.roots.size() != counts.size() or data.roots.any(func(entry: Variant) -> bool: return not entry is Dictionary or not int(entry.get("count", 0)) in counts or not (entry.get("cost") is float or entry.get("cost") is int)):
 		return "开局灵根的点数须按灵根品类逐一给出。"
 	if not int(data.get("default_roots", 0)) in counts:
 		return "开局默认灵根数无效。"
-	if not data.get("tier_costs") is Dictionary or talent_data.tiers.any(func(tier: Dictionary) -> bool: return not _whole(data.tier_costs.get(str(tier.id)))):
-		return "开局天赋价格须按品级逐一给出。"
+	if not data.get("costs") is Dictionary or data.costs.values().any(func(price: Variant) -> bool: return not _whole(price)):
+		return "开局天赋须有明确的非负整数价格。"
 	var seen := {}
 	for entry: Variant in data.get("pages", []):
 		if not entry is Dictionary or not entry.get("id") is String or not entry.get("name") is String or not entry.get("plain") is String or not entry.get("talents") is Array or not entry.get("flaws") is Array:
 			return "开局页面配置无效。"
 		for id: Variant in entry.talents:
-			if not talent_data.talents.has(id) or bool(talent_data.talents[id].get("gained", false)) or seen.has(id) or id in data.get("earned", []):
+			if not talent_data.talents.has(id) or bool(talent_data.talents[id].get("gained", false)) or seen.has(id) or id in data.get("earned", []) or not data.costs.has(id) or not bool(talent_data.talents[id].get("opening_only", false)):
 				return "开局页面的天赋无效或重复：" + str(id)
 			seen[id] = true
 		for id: Variant in entry.flaws:
@@ -1661,9 +1661,11 @@ func _validate_talents() -> String:
 	for table: String in ["talents", "flaws"]:
 		for id: String in data[table]:
 			var talent: Variant = data[table][id]
-			if not talent is Dictionary or not talent.get("name") is String or not talent.get("description") is String or names.has(talent.name):
+			if not talent is Dictionary or not talent.get("name") is String or not talent.get("description") is String or names.has(str(talent.name) + str(talent.get("opening_only", false))):
 				return "天赋缺少名称、描述或重名：%s" % id
-			names[talent.name] = true
+			names[str(talent.name) + str(talent.get("opening_only", false))] = true
+			if talent.has("opening_only") and not talent.opening_only is bool:
+				return "开局天赋来源无效：%s" % id
 			if table == "talents" and (not tiers.has(talent.get("tier", "")) or talent.tier == "flaw"):
 				return "天赋等级未知：%s" % id
 			if table == "talents" and data.flaws.has(id):

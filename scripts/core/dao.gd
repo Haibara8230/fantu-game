@@ -64,7 +64,11 @@ static func earned(s) -> int:
 	return earned_for(s.content, s.player, state(s))
 
 static func earned_for(content, player: Dictionary, current: Dictionary) -> int:
-	var total := 2
+	# Restore checks dao before validating talent arrays. Never trust their saved types here.
+	var talents: Variant = player.get("talents", [])
+	var flaws: Variant = player.get("flaws", [])
+	var mods := preload("res://scripts/core/talents.gd").sum(content, talents + flaws) if talents is Array and flaws is Array else {}
+	var total := 2 + int(mods.get("dao_realm", 0)) * int(player.get("realm", 0))
 	for realm: int in mini(int(player.get("realm", 0)), content.realms.size()):
 		total += (realm + 1) * content.realms[realm].stages.size()
 	total += (int(player.get("realm", 0)) + 1) * int(player.get("stage", 0))

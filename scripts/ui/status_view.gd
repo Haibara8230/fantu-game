@@ -150,6 +150,7 @@ static func _body(ui, parent: VBoxContainer) -> void:
 		var way: Dictionary = session.content.technique_data.schools[school]
 		_row(ui, parent, "流派", str(way.name), str(way.text))
 	_row(ui, parent, "神识", str(session.sense()), "随境界与天赋增长：识破洞府机关、看见暗格，看穿神识不及你的人的天赋")
+	_row(ui, parent, "悟性", str(session.comprehension()), "基础为 20。功法参悟和层数修习耗时乘以 20／悟性，至少一天；不直接提高打坐修为或突破把握。")
 	var medicines: Array = session.Prebattle.pending(session)
 	if not medicines.is_empty():
 		_row(ui, parent, "战前药力", "、".join(medicines.map(func(id: String) -> String: return session.content.item(id).name)), "\n".join(medicines.map(func(id: String) -> String: return session.Prebattle.describe(session, id))), ui.GOLD)

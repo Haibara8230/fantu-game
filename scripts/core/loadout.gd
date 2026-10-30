@@ -59,6 +59,7 @@ static func _add_talents(s, total: Dictionary, ids: Array, realm: int) -> void:
 	total.attack = int(total.attack) + Talents.flat(s.content, int(mods.get("attack", 0)), realm)
 	total.defense = float(total.defense) + float(mods.get("defense", 0)) / 100.0
 	total.cultivation = float(total.cultivation) + float(mods.get("cultivation", 0)) / 100.0
+	total.max_hp += int(mods.get("hp_flat", 0))
 	total.max_hp_percent = int(mods.get("max_hp", 0))
 	total.max_qi_percent = int(mods.get("max_qi", 0))
 	for key: String in Talents.ORB_KEYS:

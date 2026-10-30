@@ -5,6 +5,7 @@ extends RefCounted
 const Calendar = preload("res://scripts/core/calendar.gd")
 const Goals = preload("res://scripts/ui/goals.gd")
 const Chronicle = preload("res://scripts/core/chronicle.gd")
+const StoryHints = preload("res://scripts/ui/story_hints.gd")
 
 # Turn-by-turn duel records stay in the 编年史; 消息 keeps what happened.
 const QUIET := ["skill_attack", "skill_heal", "skill_guard", "defend", "enemy_attack", "battle_start", "spar_start"]
@@ -39,6 +40,8 @@ static func render_goals(ui) -> void:
 		center.add_child(ui.label(("暂缓 · " if goal.get("state", "ready") == "waiting" else "") + goal.title, 18, ui.GOLD))
 		center.add_child(ui.paragraph(goal.text, ui.INK))
 		var goal_id := str(goal.id)
+		if goal_id.begins_with("story:"):
+			_story_actions(ui, goal_id.trim_prefix("story:"))
 		center.add_child(ui.button("取消追踪" if ui.tracked_goal == goal_id else "追踪此目标", func() -> void:
 			ui.tracked_goal = "" if ui.tracked_goal == goal_id else goal_id
 			ui.render(), "追踪目标置前，其他目标仍然保留"))
@@ -61,7 +64,9 @@ static func render_quests(ui) -> void:
 		elif quest.has("place"):
 			progress = " · 已巡视" if int(quest.progress) > 0 else " · 未去"
 		center.add_child(ui.label(session.commission_text(quest).title + progress, 18, ui.GOLD))
-		center.add_child(ui.paragraph("限 %s · 交付于%s" % [Calendar.short_text(int(quest.deadline)), session.content.commission_data.boards[quest.board].name], ui.INK))
+		var board: Dictionary = session.content.commission_data.boards[quest.board]
+		center.add_child(ui.paragraph(str(session.commission_text(quest).text), ui.INK))
+		center.add_child(ui.paragraph("限 %s · 回%s → %s，在该处选择「交付：%s」。" % [Calendar.short_text(int(quest.deadline)), StoryHints.place_name(session, str(board.location)), board.name, session.commission_text(quest).title], ui.INK))
 
 ## 剧情: the storylines under way with the step at hand (or what they wait for), then those finished.
 static func render_stories(ui) -> void:
@@ -79,23 +84,21 @@ static func render_stories(ui) -> void:
 			continue
 		var step: Dictionary = Goals.described_step(session, session.story_step(story_id))
 		var giver: String = session.content.people[definition.giver].name
-		var line := ""
-		if session.story_at(story_id, str(step.id)) and step.has("goal"):
-			line = str(step.goal)
-			if step.has("place"):
-				line += "\n去处 · " + session.content.locations[step.place].name
-		elif step.has("wait_days"):
-			line = "暂无吩咐。%s若有事，自会传音。" % giver
-		else:
-			line = "时机未到。"
+		var line := str(StoryHints.describe(session, story_id, step).text)
 		any = true
 		center.add_child(ui.label("%s · %s" % [definition.title, giver], 18, ui.GOLD))
 		center.add_child(ui.paragraph(line, ui.INK))
+		_story_actions(ui, story_id)
 	if not any:
 		center.add_child(ui.paragraph("眼下没有托付在身的事。与重要人物多打交道，或许会有人求到你头上。"))
 	if not finished.is_empty():
 		center.add_child(ui.label("已了之事", 16, ui.MUTED))
 		center.add_child(ui.paragraph("、".join(finished)))
+
+static func _story_actions(ui, story_id: String) -> void:
+	if StoryHints.can_resume(ui.session, story_id):
+		ui.center.add_child(ui.button("继续此事", func() -> void:
+			ui.run(func() -> String: return ui.session.Storylines.resume_choice(ui.session, story_id)), "在原地继续这段任务，不消耗时间"))
 
 ## 传音: the letters received, newest first; those unread when the inbox was opened are marked.
 static func render_letters(ui) -> void:

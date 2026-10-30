@@ -169,6 +169,7 @@ static func update(s) -> Array[String]:
 				# A step overtaken by events (a question about foundation once past it) passes unspoken.
 				if _any_met(s, step.get("skip_if", [])):
 					saved.step = int(saved.step) + 1
+					saved.erase("asked")
 					if int(saved.step) >= definition.steps.size():
 						saved.state = "done"
 					moved = true
@@ -183,7 +184,7 @@ static func update(s) -> Array[String]:
 			# A step decided by a choice asks it at the step's place, once a day: put off ("later"), it
 			# asks again on another day there. One already done another way (a fight its choice began,
 			# won) is not asked again.
-			if step.has("choice_event") and s.pending_event.is_empty() and s.battle.is_empty() and (not step.has("place") or str(step.place) == str(s.player.location)) and int(saved.get("asked", -1)) != int(s.world.day):
+			if step.has("choice_event") and s.blocked().is_empty() and (not step.has("place") or str(step.place) == str(s.player.location)) and int(saved.get("asked", -1)) != int(s.world.day):
 				saved.asked = int(s.world.day)
 				s.pending_event = {"id": str(step.choice_event), "day": int(s.world.day)}
 		if not moved:
@@ -247,6 +248,8 @@ static func complete_step(s, story_id: String) -> Array[String]:
 	var saved: Dictionary = s.world.storylines[story_id]
 	saved.step = int(saved.step) + 1
 	saved.begun = false
+	# Deferring a choice suppresses only that step today, never the next step's question.
+	saved.erase("asked")
 	saved.base = {}
 	saved.since = int(s.world.day)
 	if step.has("after"):
@@ -262,6 +265,24 @@ static func advance(s, story_id: String) -> Array[String]:
 	if state(s, story_id) != "active" or not bool(progress(s, story_id).get("begun", false)):
 		return [] as Array[String]
 	return complete_step(s, story_id)
+
+## Reopen an explicitly deferred question without travelling or consuming a day.
+static func resume_block(s, story_id: String) -> String:
+	var step := current_step(s, story_id)
+	if step.is_empty() or not step.has("choice_event") or not bool(progress(s, story_id).get("begun", false)):
+		return "此事没有待继续的抉择。"
+	if not s.blocked().is_empty():
+		return s.blocked()
+	if step.has("place") and str(step.place) != str(s.player.location):
+		return "请先到%s。" % s.content.locations[step.place].name
+	return ""
+
+static func resume_choice(s, story_id: String) -> String:
+	var reason := resume_block(s, story_id)
+	if not reason.is_empty():
+		return reason
+	s.world.storylines[story_id].erase("asked")
+	return s.finish("继续「%s」。" % definitions(s)[story_id].title)
 
 ## Who speaks for a step: its own speaker, else the storyline's giver.
 static func giver(s, story_id: String, step: Dictionary = {}) -> String:

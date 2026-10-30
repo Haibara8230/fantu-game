@@ -560,18 +560,21 @@ static func fire(s, due: Dictionary) -> Dictionary:
 ## Fires location events available where the player stands. At most one choice event becomes pending.
 ## When only passing through a node on a journey, choice events wait until the player stops there.
 ## Returns the chronicle texts produced.
-static func check_location(s, passing: bool = false) -> Array[String]:
+static func check_location(s, passing: bool = false, visited: Dictionary = {}) -> Array[String]:
 	var messages: Array[String] = []
-	if not s.pending_event.is_empty() or not s.ended.is_empty() or not s.battle.is_empty():
+	if not s.blocked().is_empty():
 		return messages
 	var day: int = s.world.day
-	var used_groups := {}
 	for event_id: String in s.content.location_events(s.player.location):
+		if not s.blocked().is_empty():
+			break
 		var definition: Dictionary = s.content.events[event_id]
+		if visited.has(event_id):
+			continue
 		if passing and definition.has("choices"):
 			continue
 		var group: String = definition.get("group", "")
-		if not group.is_empty() and used_groups.has(group):
+		if not group.is_empty() and visited.has("group:" + group):
 			continue
 		var window := window_at(definition, day)
 		if window.is_empty() or venue(definition, window) != str(s.player.location) or not open_for(s, event_id, window, day) or not all_met(s, definition.get("conditions", [])):
@@ -579,7 +582,8 @@ static func check_location(s, passing: bool = false) -> Array[String]:
 		if definition.has("choices") and not s.pending_event.is_empty():
 			continue
 		if not group.is_empty():
-			used_groups[group] = true
+			visited["group:" + group] = true
+		visited[event_id] = true
 		_mark_fired(s, event_id, window, day)
 		apply(s, definition.get("effects", []))
 		if definition.has("choices"):
@@ -588,7 +592,8 @@ static func check_location(s, passing: bool = false) -> Array[String]:
 			messages.append(s.log_event("event", {"event": event_id, "part": "chronicle"}, bool(definition.get("major", false))))
 	# Stopping somewhere means seeing who is there (after first-meeting stories have had their say), and
 	# perhaps finding an outlaw the player hunts (feuds.gd).
-	if not passing:
+	if not passing and not bool(visited.get("arrived", false)):
+		visited["arrived"] = true
 		s.meet_present()
 		s.Feuds.update(s)
 		s.Feuds.collect_stash(s)
@@ -629,8 +634,8 @@ static func choose(s, choice_id: String) -> String:
 		var milestones: Array[String] = []
 		if not (event_id.begins_with("humble_") and choice_id == "later"):
 			milestones = s.gain_insight("event")
-		var follow := check_location(s)
-		return " ".join([text] + milestones + follow)
+		# Session settles the updated story step before checking its newly unlocked local events.
+		return " ".join([text] + milestones)
 	return "没有这个选项。"
 
 ## Danger left after the player's realm: each realm above the first takes one level off.

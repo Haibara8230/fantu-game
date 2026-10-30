@@ -5,6 +5,7 @@ extends RefCounted
 ## the numbers in it are worked out here.
 const Calendar = preload("res://scripts/core/calendar.gd")
 const Sources = preload("res://scripts/core/sources.gd")
+const StoryHints = preload("res://scripts/ui/story_hints.gd")
 const GOALS_PATH := "res://data/goals.json"
 # The goals whose situation applies() knows; every goal in the data must be one of them.
 const GOAL_IDS := ["bottleneck", "azhi_return", "auction", "serpent", "tournament", "summit", "contest", "foundation_breach", "foundation_pill", "foundation_xp", "core_breach", "azhi_token", "ruin", "sealed", "cultivate", "promotion", "rank"]
@@ -56,24 +57,17 @@ static func displayed(ui) -> Array[Dictionary]:
 	return result
 
 ## The steps of active storylines that ask something of the player now: {"id", "title", "text", "guide"}.
-## Steps still waiting (for days to pass or for the player to reach a stage) ask nothing yet.
+## Waiting steps remain visible with the exact time or requirement instead of vanishing from goals.
 static func story_goals(session) -> Array[Dictionary]:
 	var result: Array[Dictionary] = []
 	for story_id: String in session.content.storylines:
 		var definition: Dictionary = session.content.storylines[story_id]
 		var step: Dictionary = session.story_step(story_id)
-		if step.is_empty() or not step.has("goal") or not session.story_at(story_id, str(step.id)):
+		if step.is_empty():
 			continue
 		var shown := described_step(session, step)
-		var text := str(shown.goal)
-		if shown.has("place") and str(shown.place) != str(session.player.location):
-			text += "（%s）" % session.content.locations[shown.place].name
-		var needs: Dictionary = session.Storylines.required_items(session, story_id)
-		for item_id: String in needs:
-			text += "\n%s %d/%d" % [session.content.item(item_id).name, session.pill_count(item_id), int(needs[item_id])]
-			if session.pill_count(item_id) < int(needs[item_id]):
-				text += " " + Sources.line(session, item_id)
-		result.append({"id": "story:" + story_id, "title": str(definition.title), "text": text, "guide": bool(definition.get("guide", false))})
+		var hint := StoryHints.describe(session, story_id, shown)
+		result.append({"id": "story:" + story_id, "title": str(definition.title), "text": hint.text, "state": hint.state, "place": hint.place, "guide": bool(definition.get("guide", false))})
 	return result
 
 static func applies(session, goal_id: String) -> bool:
@@ -271,9 +265,10 @@ static func actionable(session, goals_list: Array[Dictionary]) -> Array[Dictiona
 			reason = "%s暂时封锁，可先在松风岭采药、处理别处托付。" % session.content.locations[place].name
 		elif id == "serpent" and int(session.player.realm) < 1:
 			reason = "需先筑基；眼下可修行、筹备丹药与神通。"
-		goal["state"] = "waiting" if not reason.is_empty() else "ready"
+		goal["state"] = "waiting" if not reason.is_empty() or goal.get("state", "ready") == "waiting" else "ready"
 		if not reason.is_empty():
 			goal.text += "\n" + reason
+		if goal.state == "waiting":
 			waiting.append(goal)
 		else:
 			ready.append(goal)

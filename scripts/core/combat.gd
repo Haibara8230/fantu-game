@@ -1122,7 +1122,7 @@ static func speed(s) -> int:
 	var hidden := float(s.bonuses().dun_speed)
 	if not s.battle.is_empty() and bool(s.content.enemies.get(str(s.battle.get("enemy_id", "")), {}).get("seeker", false)):
 		hidden = 0.0
-	return maxi(1, int(round(float(_by_realm(s, "speed", int(s.player.realm))) * float(100 - int(s.talent_modifier("travel"))) / 100.0 * (1.0 + hidden))))
+	return maxi(1, int(s.talent_modifier("speed_flat")) + int(round(float(_by_realm(s, "speed", int(s.player.realm))) * float(100 - int(s.talent_modifier("travel"))) / 100.0 * (1.0 + hidden))))
 
 ## The opponent's 遁速: its own (`speed` in its data), else its realm's.
 static func foe_speed(s) -> int:

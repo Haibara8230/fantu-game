@@ -1,6 +1,6 @@
 extends RefCounted
 ## The title screen over the interface: a new journey chosen page by page after 觅长生 (opening.gd) —
-## difficulty, spirit roots, then one entry on each page of talents — with the name and an overview at
+## point budget, spirit roots, then compatible combinations of talents — with a name and overview at
 ## the end; or continuing a saved one.
 const Talents = preload("res://scripts/core/talents.gd")
 const TalentCards = preload("res://scripts/ui/talent_cards.gd")
@@ -8,8 +8,8 @@ const Opening = preload("res://scripts/core/opening.gd")
 ## The kinds of effect a talent page can be filtered by, each by the modifiers that make it.
 const EFFECTS := {
 	"修炼": ["cultivation", "retreat_days", "fresh_days", "breakthrough", "grade", "mind_need"],
-	"斗法": ["attack", "defense", "damage_all", "damage_metal", "damage_wood", "damage_water", "damage_fire", "damage_earth", "max_hp", "max_qi", "orb_draw", "orb_cap", "orb_first", "orb_metal", "orb_wood", "orb_water", "orb_fire", "orb_earth"],
-	"悟性心境": ["insight", "study", "mind_gain", "demon", "sense"],
+	"斗法": ["attack", "defense", "damage_all", "damage_metal", "damage_wood", "damage_water", "damage_fire", "damage_earth", "max_hp", "hp_flat", "hp_growth", "speed_flat", "max_qi", "orb_draw", "orb_cap", "orb_first", "orb_metal", "orb_wood", "orb_water", "orb_fire", "orb_earth"],
+	"悟性心境": ["insight", "study", "mind_gain", "demon", "sense", "comprehension", "sense_flat", "dao_realm", "immortal_start"],
 	"寿元养伤": ["lifespan", "rest"],
 	"机缘行路": ["boon", "encounter", "travel", "favor"],
 	"丹药采集": ["pill", "pill_cooldown", "alchemy", "gather"],
@@ -76,7 +76,7 @@ static func build(ui) -> void:
 
 ## The pages in order: difficulty, roots, the talent pages, the overview.
 static func pages(content) -> Array[Dictionary]:
-	var found: Array[Dictionary] = [{"id": "difficulty", "name": "难度"}, {"id": "roots", "name": "灵根"}]
+	var found: Array[Dictionary] = [{"id": "difficulty", "name": "角色点数"}, {"id": "roots", "name": "灵根"}]
 	for entry: Dictionary in Opening.data(content).pages:
 		found.append({"id": str(entry.id), "name": str(entry.name)})
 	found.append({"id": "summary", "name": "总览"})
@@ -131,7 +131,7 @@ static func _render(ui) -> void:
 
 static func _difficulty(ui, body: VBoxContainer) -> void:
 	var content = ui.session.content
-	body.add_child(ui.paragraph("难度只决定开局的天赋点，不改别的规则。"))
+	body.add_child(ui.paragraph("选择角色的开局点数预算。点数更多只允许组合更多特长，不提高敌人强度，也不赠送修为。负点数角色须选择缺陷才能启程。"))
 	for entry: Dictionary in Opening.data(content).difficulties:
 		var id := str(entry.id)
 		var choice: Button = ui.button("%s · %d 点　%s" % [entry.name, int(entry.points), entry.get("text", "")], func() -> void:
@@ -145,7 +145,7 @@ static func _difficulty(ui, body: VBoxContainer) -> void:
 static func _roots(ui, body: VBoxContainer) -> void:
 	var content = ui.session.content
 	var spec: Dictionary = content.rules.spirit_roots
-	body.add_child(ui.paragraph("先选品类，再点选对应个数的五行。灵根越少修炼越快，花的点数也越多；四灵根、伪灵根反倒返还点数。"))
+	body.add_child(ui.paragraph("先选品类，再点选对应个数的五行。灵根越少修炼越快，花的点数也越多；五灵根不消耗点数。选天灵根也意味着少选其他经历。"))
 	var kinds := HFlowContainer.new()
 	kinds.add_theme_constant_override("h_separation", 8)
 	body.add_child(kinds)
@@ -182,10 +182,10 @@ static func _talents(ui, body: VBoxContainer, page_id: String) -> void:
 	var content = ui.session.content
 	var page: Dictionary = Opening.page(content, page_id)
 	var roots: Array = ui.welcome_choice.get("roots", [])
-	var picked := str(ui.welcome_choice.picks.get(page_id, ""))
-	body.add_child(ui.paragraph("此页只选一样，或什么都不选。鼠标停留可看效果；缺陷返还点数，与灵根相关的只在有那一行灵根时出现。"))
+	var picked: Array = Opening.selected(ui.welcome_choice, page_id)
+	body.add_child(ui.paragraph("可组合多项，点击已选项可取消；家庭出身彼此互斥，魂穿异世可并选。缺陷会真实影响后续成长，冲突项须先取消。"))
 	var all: Array[String] = Opening.offered(content, page_id, roots)
-	var shown: Array = all.filter(func(id: String) -> bool: return id == picked or _passes(ui, page_id, id))
+	var shown: Array = all.filter(func(id: String) -> bool: return id in picked or _passes(ui, page_id, id))
 	_filters(ui, body, all.size(), shown.size())
 	var flow := HFlowContainer.new()
 	flow.add_theme_constant_override("h_separation", 8)
@@ -200,16 +200,24 @@ static func _talents(ui, body: VBoxContainer, page_id: String) -> void:
 	for id: String in shown:
 		var entry := id
 		var price: int = Opening.cost(content, id)
-		var reason: String = "" if id == picked else Opening.pick_block(content, ui.welcome_choice, page_id, id)
+		var reason: String = "" if id in picked else Opening.pick_block(content, ui.welcome_choice, page_id, id)
 		var tip: String = TalentCards.tooltip(content, id) + ("\n" + reason if not reason.is_empty() else "")
 		var option: Button = ui.button("%s（%s）" % [Talents.definition(content, id).get("name", id), _price_text(price)], func() -> void:
-			ui.welcome_choice.picks[page_id] = entry
+			Opening.toggle(content, ui.welcome_choice, page_id, entry)
 			_render(ui), tip)
 		option.toggle_mode = true
-		option.button_pressed = id == picked
+		option.button_pressed = id in picked
 		option.disabled = not reason.is_empty()
 		option.add_theme_color_override("font_color", Color(str(Talents.tier_of(content, id).get("color", "#d6d0c2"))))
-		flow.add_child(option)
+		var card := VBoxContainer.new()
+		card.custom_minimum_size.x = 400
+		flow.add_child(card)
+		card.add_child(option)
+		var description: String = TalentCards.effects_text(Talents.definition(content, id).get("mods", {}))
+		var brought: String = TalentCards.start_text(content, Talents.definition(content, id).get("start", []))
+		if not brought.is_empty():
+			description = "开局带：" + brought
+		card.add_child(ui.paragraph(description, ui.MUTED))
 
 ## The filter row: by grade (缺陷 among them), by kind of effect, only what the points still allow.
 static func _filters(ui, body: VBoxContainer, total: int, shown: int) -> void:
@@ -283,6 +291,11 @@ static func _summary(ui, body: VBoxContainer) -> void:
 	body.add_child(ui.label("%s · 灵根 %s" % [Opening.difficulty(content, str(choice.get("difficulty", ""))).get("name", ""), content.root_title(roots) if roots.size() == int(choice.root_count) else "未选全"], 18, ui.GOLD))
 	var born: Dictionary = ui.welcome_born
 	body.add_child(TalentCards.row(ui, content, born))
+	var modifiers := Talents.sum(content, born.talents + born.flaws)
+	var comprehension := maxi(1, 20 + int(modifiers.get("comprehension", 0)))
+	var pace := float(content.root_grade(roots).speed) * (1.0 + float(modifiers.get("cultivation", 0)) / 100.0) if roots.size() == int(choice.root_count) else 0.0
+	body.add_child(ui.paragraph("开局成长：修炼速度 ×%.2f · 悟性 %d · 参悟耗时约为基础的 %.0f%%\n悟性缩短功法与层数学习；修炼仍需时间，突破仍需材料、心境与仪式。" % [pace, comprehension, 2000.0 / float(comprehension)], ui.INK))
+	body.add_child(ui.paragraph("天赋合计：" + TalentCards.effects_text(modifiers), ui.INK))
 	# What the 出身 and the rest bring from home, spelled out before the journey begins.
 	var brought: Array[String] = []
 	for id: Variant in born.talents:

@@ -81,6 +81,16 @@ static func describe(s, condition: Dictionary) -> String:
 				for effect: Dictionary in event.get("effects", []):
 					if effect.get("flag", "") == str(value):
 						return "需经历「%s」" % event.title
+				for choice: Dictionary in event.get("choices", []):
+					if choice.get("effects", []).has({"flag": value}):
+						var place := str(s.content.locations.get(str(event.get("location", "")), {}).get("name", ""))
+						return "需%s在「%s」中选择「%s」" % ["到" + place + "，" if not place.is_empty() else "", event.title, choice.label]
+			for person_id: String in s.content.people:
+				var person: Dictionary = s.person(person_id)
+				for option: Dictionary in person.get("interactions", []):
+					if option.get("effects", []).has({"flag": value}):
+						var place: String = s.npc_location(person_id)
+						return "需%s找%s，选择「%s」" % ["到" + str(s.content.locations[place].name) if not place.is_empty() else "", person.name, option.label]
 			return {"rushi_done":"需走完入世经历", "found_ruin":"需打听到古修洞府", "azhi_promised":"需答应阿芷的托付", "tiannan_known":"需听顾长庚说起天南", "spirit_eye_found":"需发现谷中灵眼", "hanjin_heard":"需听完韩烬的陈述", "archive_pass":"需拿到进北岳旧档库的门路（阵师会馆）"}.get(str(value), "需先推进相关剧情，见任务·剧情")
 		"talent":
 			return "需天赋「%s」" % s.Talents.definition(s.content, str(value)).name

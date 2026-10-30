@@ -195,6 +195,29 @@
   }
  ],
  "talents": {
+  "mcs_martial_family": {"name": "练武世家", "description": "从小练拳，气血底子稍厚。", "opening_only": true, "mods": {"hp_flat": 10}, "tier": "green", "group": "mcs_origin"},
+  "mcs_merchant": {"name": "商贾富豪", "description": "带着家中的九十灵石上路。花完便需自己谋生。", "opening_only": true, "mods": {"stones": 90}, "tier": "green", "group": "mcs_origin"},
+  "mcs_soul": {"name": "魂穿异世", "description": "异世记忆令神识多三点；可与一种家庭出身并选。", "opening_only": true, "mods": {"sense_flat": 3}, "tier": "green"},
+  "mcs_family": {"name": "修真家族", "description": "家传一本与首灵根相合的黄阶心法玉简，仍须花时间参悟。", "opening_only": true, "mods": {}, "tier": "green", "group": "mcs_origin", "start": [{"method": 1}]},
+  "mcs_scholar": {"name": "书香门第", "description": "悟性提高，参悟功法和修习层数更快；不直接提高打坐收益。", "opening_only": true, "mods": {"comprehension": 10}, "tier": "green", "group": "mcs_origin"},
+  "mcs_body_metal": {"name": "庚金之体", "description": "对应灵气的抽取权重增加五；改变配气，不增加伤害或每回合吸气总数。", "opening_only": true, "mods": {"orb_metal": 5}, "tier": "green"},
+  "mcs_body_wood": {"name": "乙木灵体", "description": "对应灵气的抽取权重增加五；改变配气，不增加伤害或每回合吸气总数。", "opening_only": true, "mods": {"orb_wood": 5}, "tier": "green"},
+  "mcs_body_water": {"name": "水灵之体", "description": "对应灵气的抽取权重增加五；改变配气，不增加伤害或每回合吸气总数。", "opening_only": true, "mods": {"orb_water": 5}, "tier": "green"},
+  "mcs_body_fire": {"name": "离火道体", "description": "对应灵气的抽取权重增加五；改变配气，不增加伤害或每回合吸气总数。", "opening_only": true, "mods": {"orb_fire": 5}, "tier": "green"},
+  "mcs_body_earth": {"name": "戊土之体", "description": "对应灵气的抽取权重增加五；改变配气，不增加伤害或每回合吸气总数。", "opening_only": true, "mods": {"orb_earth": 5}, "tier": "green"},
+  "mcs_dao_body": {"name": "先天道体", "description": "修炼速度提高一成，材料、心境与渡劫仍需逐步准备。", "opening_only": true, "mods": {"cultivation": 10}, "tier": "blue", "group": "mcs_cultivation"},
+  "mcs_god_blood": {"name": "神魔血脉", "description": "初始气血加五，境界阶段带来的基础气血增长额外提高两成。", "opening_only": true, "mods": {"hp_flat": 5, "hp_growth": 20}, "tier": "purple", "group": "mcs_health"},
+  "mcs_reborn": {"name": "转世仙人", "description": "保有前世悟性。每跨越一个大境界多一悟道点，化神仪式起始仙性加二；不赠修为、伤害或突破概率。", "opening_only": true, "mods": {"comprehension": 30, "dao_realm": 1, "immortal_start": 2}, "tier": "orange"},
+  "mcs_longevity": {"name": "修身养性", "description": "养生得法，寿元多十年。", "opening_only": true, "mods": {"lifespan": 10}, "tier": "green", "group": "mcs_lifespan"},
+  "mcs_steady": {"name": "道心坚定", "description": "历练积累心境更快，仍需亲自经历世事。", "opening_only": true, "mods": {"mind_gain": 20}, "tier": "green", "group": "mcs_mind"},
+  "mcs_spring": {"name": "神奇温泉", "description": "曾受温泉滋养，气血底子多十点。", "opening_only": true, "mods": {"hp_flat": 10}, "tier": "green"},
+  "mcs_memory": {"name": "过目不忘", "description": "悟性多二十点，缩短参悟功法与修习层数的时间。", "opening_only": true, "mods": {"comprehension": 20}, "tier": "blue", "group": "mcs_memory"},
+  "mcs_swift": {"name": "轻功高手", "description": "习得轻身术，遁速多三点，利于先手与脱身。", "opening_only": true, "mods": {"speed_flat": 3}, "tier": "green", "group": "mcs_mobility"},
+  "mcs_apprentice": {"name": "药堂学徒", "description": "熟识草药，采集收获增加两成。", "opening_only": true, "mods": {"gather": 20}, "tier": "green"},
+  "mcs_cave": {"name": "后山洞窟", "description": "在洞窟中捡到一件凡品法袍；穿戴后才提供防护。", "opening_only": true, "mods": {}, "tier": "green", "start": [{"gear": "e:robe:1:none::0"}]},
+  "mcs_warrior": {"name": "先天武者", "description": "多年武学打熬，气血底子多二十点。", "opening_only": true, "mods": {"hp_flat": 20}, "tier": "green"},
+  "mcs_cliff": {"name": "坠崖奇遇", "description": "在崖底采得一株百年灵芝，可留作筑基丹材料，也可变卖。", "opening_only": true, "mods": {}, "tier": "green", "start": [{"item": ["lingzhi", 1]}]},
+  "mcs_friends": {"name": "命犯桃花", "description": "更易与人亲近；仍需交往，不会直接获得道侣。", "opening_only": true, "mods": {"favor": 20}, "tier": "green"},
     "xisui_yulu": {"name": "洗髓玉露", "tier": "blue", "gained": true, "description": "偶得崖底石泉凝成的玉露，后天疏通经脉，修炼速度 +60%。先天灵根不变。", "mods": {"cultivation": 60}},
     "guxiu_tiaoxi": {"name": "古修调息", "tier": "blue", "gained": true, "description": "偶悟无名古修调息法，修炼速度 +30%，历练所得 +35%。", "mods": {"cultivation": 30, "insight": 35}},
     "fanqu_bailian": {"name": "凡躯百炼", "tier": "blue", "gained": true, "description": "生死斗法中悟得淬体之道：气血上限 +35%，灵力上限 +20%，攻击 +4，受伤 -8%。", "mods": {"max_hp": 35, "max_qi": 20, "attack": 4, "defense": 8}},
@@ -1052,7 +1075,7 @@
     "gather": 5
    },
    "group": "origin",
-   "start": [{"item": ["huichun_grass", 4]}]
+   "start": [{"item": ["lingzhi", 1]}]
   },
   "liehu": {
    "name": "猎户之子",
@@ -1827,7 +1850,7 @@
     "gather": 30
    },
    "group": "origin",
-   "start": [{"item": ["lingzhi", 1]}, {"item": ["huichun_grass", 4]}]
+   "start": [{"item": ["lingzhi", 1]}, {"item": ["lingzhi", 1]}]
   },
   "zhishui": {
    "name": "心如止水",
@@ -3135,6 +3158,13 @@
   }
  },
  "flaws": {
+  "mcs_orphan": {"name": "流浪孤儿", "description": "幼时颠沛流离，少了十点气血底子。", "opening_only": true, "mods": {"hp_flat": -10}, "group": "mcs_origin"},
+  "mcs_blocked_meridians": {"name": "玄阴绝脉", "description": "修炼速度降低一成，以时间代价换取开局点数。", "opening_only": true, "mods": {"cultivation": -10}, "group": "mcs_cultivation"},
+  "mcs_frail": {"name": "羸弱多病", "description": "初始气血少五，境界阶段的基础气血增长减少两成。", "opening_only": true, "mods": {"hp_flat": -5, "hp_growth": -20}, "group": "mcs_health"},
+  "mcs_sick": {"name": "大病一场", "description": "早年折寿三十载，修炼与出行的时间更须珍惜。", "opening_only": true, "mods": {"lifespan": -30}, "group": "mcs_lifespan"},
+  "mcs_impaired": {"name": "心智有损", "description": "悟性少五点，参悟功法更费时。", "opening_only": true, "mods": {"comprehension": -5}, "group": "mcs_memory"},
+  "mcs_disabled": {"name": "先天残疾", "description": "遁速少三点，斗法先手与逃离更加吃紧。", "opening_only": true, "mods": {"speed_flat": -3}, "group": "mcs_mobility"},
+  "mcs_rejected": {"name": "惨遭退婚", "description": "心结难解，后续心境积累减少三成。", "opening_only": true, "mods": {"mind_gain": -30}, "group": "mcs_mind"},
   "tiruo": {
    "name": "体弱多病",
    "description": "自小体弱，三天两头生病。",

@@ -91,6 +91,8 @@ var fortune: Dictionary = {}
 var acting_npc := ""
 # 传音 sent since this session began; a storyline wait that sends one ends a retreat. Not saved.
 var letters_sent := 0
+# One action may settle several local story steps, but nested effects must not start another pump.
+var _settling_story_events := false
 # Population caches kept by people.gd, rebuilt from the world seed and never saved: who can be found
 # where today and the people indexes it comes from; seats of built regions, their lives, and per-day
 # views and per-realm loadouts.
@@ -202,8 +204,7 @@ func new_game(character_name: String = "无名", seed_value: int = -1, roots: Ar
 		# ...and leaves what the opening hands on (温照衡's note): rules.opening.follow.
 		for story_id: Variant in content.rules.opening.get("follow", []):
 			Storylines.start(self, str(story_id))
-	Storylines.update(self)
-	Events.check_location(self)
+	settle_story_events()
 	changed.emit()
 
 ## The single entry point that moves world time. Every due item inside the span is fired on its own day,
@@ -253,8 +254,7 @@ func conclude(text: String, passed: Dictionary = {}) -> String:
 	parts.append_array(passed.get("messages", []))
 	parts.append_array(Commissions.expire(self))
 	parts.append_array(Bonds.expire(self))
-	parts.append_array(Events.check_location(self))
-	parts.append_array(Storylines.update(self))
+	parts.append_array(settle_story_events())
 	changed.emit()
 	return " ".join(parts.filter(func(part: String) -> bool: return not part.is_empty()))
 
@@ -263,9 +263,34 @@ func log_event(id: String, args: Dictionary = {}, major: bool = false) -> String
 	return chronicle.format(chronicle.add(int(world.day), id, args, major, str(player.get("location", ""))), content)
 
 func finish(message: String) -> String:
-	var told := Storylines.update(self)
+	var told := settle_story_events(false)
 	changed.emit()
 	return message if told.is_empty() else " ".join([message] + told)
+
+## Settle story progress and local triggers in the same action, without travel or time passing.
+## A pending choice, fight, auction or breakthrough always retains control. Per-action visits
+## preserve event groups and prevent zero-cooldown events rewarding the player twice in this pump.
+func settle_story_events(scan_location: bool = true) -> Array[String]:
+	var texts: Array[String] = []
+	if _settling_story_events or player.is_empty() or not ended.is_empty():
+		return texts
+	_settling_story_events = true
+	var visited := {"arrived": false}
+	for pass_index: int in Storylines.MAX_ROUNDS:
+		var before: Dictionary = world.get("storylines", {}).duplicate(true)
+		var seen := visited.size()
+		# A local-only finish (equipment, bidding, etc.) need not replay arrival side effects
+		# unless it actually unlocked a story step. Actions and choices explicitly scan once.
+		if scan_location:
+			texts.append_array(Events.check_location(self, false, visited))
+		scan_location = true
+		texts.append_array(Storylines.update(self))
+		if not blocked().is_empty() or (before == world.get("storylines", {}) and seen == visited.size()):
+			break
+		if pass_index == Storylines.MAX_ROUNDS - 1:
+			push_error("Local story events did not settle")
+	_settling_story_events = false
+	return texts
 
 func journal_lines() -> Array[String]:
 	return chronicle.lines(content)
@@ -421,8 +446,10 @@ func stat_caps(holder: Dictionary) -> Dictionary:
 	var current: Dictionary = content.stage(int(holder.get("realm", 0)), int(holder.get("stage", 0)))
 	var extra := bonuses(holder)
 	var grade := int(Breakthrough.grade_of(self, holder).get("stats", 0))
+	var born_mods := Talents.sum(content, holder.get("talents", []) + holder.get("flaws", []))
+	var hp_growth := int(round(float(int(current.max_hp) - int(content.stage(0, 0).max_hp)) * float(born_mods.get("hp_growth", 0)) / 100.0))
 	return {
-		"max_hp": maxi(1, (int(current.max_hp) + int(extra.max_hp)) * (100 + int(extra.max_hp_percent) + grade) / 100) + int(Dao.value_for(content, holder.get("dao", {}), "max_hp")) + int(Deifying.gains(content, holder).max_hp),
+		"max_hp": maxi(1, (int(current.max_hp) + int(extra.max_hp) + hp_growth) * (100 + int(extra.max_hp_percent) + grade) / 100) + int(Dao.value_for(content, holder.get("dao", {}), "max_hp")) + int(Deifying.gains(content, holder).max_hp),
 		"max_qi": maxi(1, (int(current.max_qi) + int(extra.max_qi)) * (100 + int(extra.max_qi_percent) + grade) / 100),
 	}
 
@@ -652,7 +679,7 @@ func choose_event(choice_id: String) -> String:
 	# A breakthrough that met 心魔 goes on once it is faced.
 	if pending_event.is_empty() and player.has("attempt") and ended.is_empty() and battle.is_empty():
 		message = Breakthrough.resolve(self, message)
-	var told := Storylines.update(self)
+	var told := settle_story_events()
 	if not told.is_empty():
 		message = " ".join([message] + told)
 	changed.emit()
@@ -971,7 +998,7 @@ func talents_visible(person_id: String) -> bool:
 ## 神识: the stage's, plus the talents' (`sense`, flat). It sees through people (their talents), the
 ## traps and hidden things of the old cave (caves.gd), the riverbed at the ferry and the 灵眼.
 func sense() -> int:
-	return maxi(0, int(stage_stats().sense) + Talents.flat(content, talent_modifier("sense"), int(player.realm)) + int(Dao.value(self, "sense")) + Prebattle.value(self, "sense") + int(Deifying.gains(content, player).sense))
+	return maxi(0, int(stage_stats().sense) + talent_modifier("sense_flat") + Talents.flat(content, talent_modifier("sense"), int(player.realm)) + int(Dao.value(self, "sense")) + Prebattle.value(self, "sense") + int(Deifying.gains(content, player).sense))
 
 ## A generated person's 神识, by the same rule.
 func person_sense(person_id: String) -> int:
@@ -987,7 +1014,11 @@ func study_days(technique: Dictionary) -> int:
 	var percent := talent_modifier("study") + Sect.duty_value(self, "study")
 	if str(technique.get("element", "")) in player.get("roots", []):
 		percent -= int(content.rules.root_study)
-	return Talents.scaled(int(technique.study_days), percent, 1)
+	return maxi(1, int(ceil(float(Talents.scaled(int(technique.study_days), percent, 1)) * 20.0 / float(comprehension()))))
+
+## Base comprehension is twenty. Unlike the old study percentage, this cannot reach zero days.
+func comprehension() -> int:
+	return maxi(1, 20 + talent_modifier("comprehension"))
 
 ## Days on the road along a path, after talents.
 func path_days(path: Array[String]) -> int:
